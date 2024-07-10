@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.achievements.views.summary.dog_tag_mod
 class OtherPlayerInfoModel(ViewModel):
     __slots__ = ('onOpenProfile',)
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(OtherPlayerInfoModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -47,6 +47,12 @@ class OtherPlayerInfoModel(ViewModel):
     def setClanJoiningTime(self, value):
         self._setString(5, value)
 
+    def getShowClanButton(self):
+        return self._getBool(6)
+
+    def setShowClanButton(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(OtherPlayerInfoModel, self)._initialize()
         self._addViewModelProperty('dogTagModel', DogTagModel())
@@ -55,4 +61,5 @@ class OtherPlayerInfoModel(ViewModel):
         self._addStringProperty('clanName', '')
         self._addStringProperty('clanPost', '')
         self._addStringProperty('clanJoiningTime', '')
+        self._addBoolProperty('showClanButton', True)
         self.onOpenProfile = self._addCommand('onOpenProfile')

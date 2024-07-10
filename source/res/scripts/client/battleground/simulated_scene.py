@@ -199,11 +199,11 @@ class SimulatedScene(object):
         shellCompDecr = self.__rawSimulationData['projectile']['shellCompDescr'] if 'shellCompDescr' in self.__rawSimulationData['projectile'] else []
         projectileData = self.__rawSimulationData['projectile']
         if segments:
-            simulatedVehicle.showKillingSticker(shellCompDecr, projectileData['hasProjectilePierced'], segments)
+            simulatedVehicle.showKillingSticker(shellCompDecr, projectileData['hasProjectilePierced'], projectileData['hasNonPiercedDamage'], segments)
             decodedHitPoint = calculateWorldHitPoint(simulatedVehicle, segments)
             if decodedHitPoint:
                 self.__trajectoryPoints[-1] = decodedHitPoint
-        self.__effectsController.displayKillCamEffects(simulatedVehicle.appearance, simulatedVehicle.getMaxComponentIndex(), projectileData['hasProjectilePierced'], self.__isAttackerSPG(), self.__rawSimulationData['attacker']['spotted'], projectileData['shellKind'] == SHELL_TYPES.HIGH_EXPLOSIVE, projectileData['explosionRadius'], self.__trajectoryPoints, segments, projectileData['impactPoint'], projectileData['ricochetCount'] > 0)
+        self.__effectsController.displayKillCamEffects(simulatedVehicle.appearance, simulatedVehicle.getMaxComponentIndex(), projectileData['hasProjectilePierced'], projectileData['hasNonPiercedDamage'], self.__isAttackerSPG(), self.__rawSimulationData['attacker']['spotted'], projectileData['shellKind'] == SHELL_TYPES.HIGH_EXPLOSIVE, projectileData['explosionRadius'], self.__trajectoryPoints, segments, projectileData['impactPoint'], projectileData['ricochetCount'] > 0)
 
     def saveKillSnapshot(self):
         self.__movementTracker.saveSnapshot(isKill=True)

@@ -40,7 +40,6 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view im
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
-from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
@@ -1416,15 +1415,6 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
         content.append(formatters.packBuildUpBlockData(blocks))
         return content
-
-
-class SquadBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(SquadBonusTooltipWindowData, self).__init__(context, TOOLTIP_TYPE.SQUAD_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(SquadBonusTooltipContent())
 
 
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):

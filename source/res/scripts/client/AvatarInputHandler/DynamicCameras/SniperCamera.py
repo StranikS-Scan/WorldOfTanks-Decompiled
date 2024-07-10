@@ -141,6 +141,7 @@ class SniperCamera(CameraWithSettings, CallbackDelayer):
             BigWorld.cancelCallback(self.__waitVehicleCallbackId)
             self.__waitVehicleCallbackId = None
         self.__showVehicle(True)
+        self.__applyZoom(1.0)
         self.stopCallback(self.__cameraUpdate)
         if self.__aimingSystem is not None:
             self.__aimingSystem.disable()

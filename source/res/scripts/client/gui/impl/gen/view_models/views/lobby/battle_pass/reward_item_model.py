@@ -8,56 +8,56 @@ class RewardItemModel(BonusModel):
     SIZE_SMALL = 1
     SIZE_BIG = 2
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(RewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
-        return self._getString(7)
-
-    def setItem(self, value):
-        self._setString(7, value)
-
-    def getUserName(self):
         return self._getString(8)
 
-    def setUserName(self, value):
+    def setItem(self, value):
         self._setString(8, value)
 
-    def getIcon(self):
+    def getUserName(self):
         return self._getString(9)
 
-    def setIcon(self, value):
+    def setUserName(self, value):
         self._setString(9, value)
 
-    def getType(self):
+    def getIcon(self):
         return self._getString(10)
 
-    def setType(self, value):
+    def setIcon(self, value):
         self._setString(10, value)
 
-    def getBigIcon(self):
+    def getType(self):
         return self._getString(11)
 
-    def setBigIcon(self, value):
+    def setType(self, value):
         self._setString(11, value)
 
-    def getOverlayType(self):
+    def getBigIcon(self):
         return self._getString(12)
 
-    def setOverlayType(self, value):
+    def setBigIcon(self, value):
         self._setString(12, value)
 
+    def getOverlayType(self):
+        return self._getString(13)
+
+    def setOverlayType(self, value):
+        self._setString(13, value)
+
     def getIsCollectionEntity(self):
-        return self._getBool(13)
+        return self._getBool(14)
 
     def setIsCollectionEntity(self, value):
-        self._setBool(13, value)
+        self._setBool(14, value)
 
     def getItemType(self):
-        return self._getNumber(14)
+        return self._getNumber(15)
 
     def setItemType(self, value):
-        self._setNumber(14, value)
+        self._setNumber(15, value)
 
     def _initialize(self):
         super(RewardItemModel, self)._initialize()

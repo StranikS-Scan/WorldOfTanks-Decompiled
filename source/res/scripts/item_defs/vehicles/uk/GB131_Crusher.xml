@@ -61,6 +61,8 @@
       <armor_17>	30	</armor_17>
       <armor_18>	80	</armor_18>
       <armor_19>	110	</armor_19>
+      <armor_20>	110	</armor_20>
+      <armor_21>	160	</armor_21>
       <armor_25>	38	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_25>
       <armor_26>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -70,7 +72,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	37000	</weight>
-    <maxHealth>	1200	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1023,12 +1025,12 @@
       <weight>	16000	</weight>
       <maxLoad>	75000	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
-      <brakeForce>	65000	</brakeForce>
+      <brakeForce>	72000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.15	</vehicleMovement>
-        <vehicleRotation>	0.15	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1801,13 +1803,12 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	230	</armor_1>
-        <armor_3>	100	</armor_3>
+        <armor_3>	130	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	50	</armor_5>
         <armor_6>	30	</armor_6>
-        <armor_7>	150	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	150	</armor_9>
+        <armor_9>	160	</armor_9>
         <armor_10>	150	</armor_10>
         <armor_11>	50	</armor_11>
         <armor_12>	150	</armor_12>
@@ -1818,16 +1819,23 @@
         <armor_17>	100	</armor_17>
         <armor_18>	95	</armor_18>
         <armor_19>	70	</armor_19>
-        <armor_20>	150	</armor_20>
+        <armor_20>	100	</armor_20>
         <armor_21>	50	</armor_21>
         <armor_22>	200	</armor_22>
         <armor_23>	50	</armor_23>
         <armor_24>	50	</armor_24>
+        <armor_25>	75	</armor_25>
+        <armor_26>	130	</armor_26>
+        <armor_27>	60	</armor_27>
+        <armor_28>	50	</armor_28>
+        <armor_29>	50	</armor_29>
+        <armor_30>	130	</armor_30>
+        <armor_31>	170	</armor_31>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14400	</weight>
-      <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	35	</rotationSpeed>
+      <maxHealth>	280	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -1860,14 +1868,14 @@
             </armor_7>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	7.8	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	8.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>

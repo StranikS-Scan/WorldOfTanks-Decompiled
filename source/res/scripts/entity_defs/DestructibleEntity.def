@@ -83,15 +83,13 @@
       <Arg>	INT32	</Arg>
     </onHealthChanged>
     <showDamageFromShot>
-      <Arg>	ARRAY	  <of>	UINT64	</of>
-      </Arg>
+      <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
     </showDamageFromShot>
     <showDamageFromExplosion>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
     </showDamageFromExplosion>
   </ClientMethods>
   <CellMethods>

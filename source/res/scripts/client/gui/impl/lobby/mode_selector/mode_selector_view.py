@@ -74,7 +74,7 @@ def _getTooltipByContentIdMap():
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())
 
 class ModeSelectorView(ViewImpl, LobbyHeaderVisibility):
-    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isClickProcessing', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback', '__isContentVisible')
+    __slots__ = ('__blur', '__dataProvider', '__prevAppBackgroundAlpha', '__isClickProcessing', '__isContentVisible', '__prevOptimizationEnabled', '__isGraphicsRestored', '__tooltipConstants', '__subSelectorCallback')
     _COMMON_SOUND_SPACE = MODE_SELECTOR_SOUND_SPACE
     __appLoader = dependency.descriptor(IAppLoader)
     __lobbyContext = dependency.descriptor(ILobbyContext)

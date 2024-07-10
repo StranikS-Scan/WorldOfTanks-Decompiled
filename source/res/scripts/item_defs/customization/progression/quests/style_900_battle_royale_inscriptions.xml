@@ -1,0 +1,124 @@
+<style_900_battle_royale_inscriptions.xml>
+  <quests>
+    <battleQuest>
+      <id>	900_shoot_loot_repeat	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_6/condition	</key>
+            </description>
+            <sum>
+              <kills></kills>
+            </sum>
+            <greaterOrEqual>	100	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_2	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	900_steel_your_heart	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <conditions>
+        <description>
+          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_7/condition	</key>
+        </description>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+        <postBattle>
+          <and>
+            <bonusTypes>	29 30	</bonusTypes>
+            <results>
+              <key>	brPosInBattle	</key>
+              <lessOrEqual>	1	</lessOrEqual>
+            </results>
+            <vehicleKills>
+              <greaterOrEqual>	7	</greaterOrEqual>
+            </vehicleKills>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_3	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	900_survivor	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_8/condition	</key>
+            </description>
+            <sum>
+              <damageBlockedByArmor></damageBlockedByArmor>
+            </sum>
+            <greaterOrEqual>	100000	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_4	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_900_battle_royale_inscriptions.xml>

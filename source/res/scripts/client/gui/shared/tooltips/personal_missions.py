@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from gui import GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
-from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HANGAR_HEADER_QUESTS_TO_PM_BRANCH
+from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.personal_mission_flags import HANGAR_HEADER_QUESTS_TO_PM_BRANCH
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import TooltipOperationAwardComposer, TooltipPostponedOperationAwardComposer
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getNationsForChain

@@ -187,6 +187,10 @@
       <module>	client.cgf_components.on_death_components	</module>
       <module>	client.cgf_components.shot_color_transmission_component	</module>
       <module>	client.cgf_components.bunkers	</module>
+      <module>	client.cgf_components.auto_shoot_gun_components	</module>
+      <module>	client.cgf_components.gun_spin_animator_component	</module>
+      <module>	client.cgf_components.gun_audition_component	</module>
+      <module>	client.cgf_components.rtpc_component_manager	</module>
       <module>	common.cgf_components_common.shots_receiver	</module>
       <module>	common.cgf_components_common.state_components	</module>
       <module>	common.cgf_components_common.vehicle_components	</module>
@@ -194,6 +198,8 @@
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
       <module>	common.cgf_components_common.bunkers	</module>
+      <module>	cell.ai.cgf_ai.navmesh_patching	</module>
+      <module>	cell.ai.cgf_ai.zones_patching	</module>
       <module>	cell.cgf_cell.damage.shot_damage	</module>
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>
@@ -229,20 +235,6 @@
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_ally.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_enemy.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/lightning_ally.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/lightning_enemy.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/death_zones_rules.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/kamikaze_activated.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/corroding_hit.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/traparea_ally.prefab	</path>
-      <path>	content/CGFPrefabs/steel_hunter/traparea_enemy.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/Ch49_BZ_68_Rocket.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_bridge_bombing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_city_firing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_facades_bombardment.prefab	</path>
@@ -257,8 +249,36 @@
       <path>	content/CGFPrefabs/Onboarding/14_plane_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/14_09a_Planes_out_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/thunder_strike_zone_enemy.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/lightning_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/lightning_enemy.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/death_zones_rules.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/kamikaze_activated.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/corroding_hit.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/traparea_ally.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/traparea_enemy.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/player_loot_sensor.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/fire_ring.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/fire_ring_segment.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/fire_ring_static_decal.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/segment_influence_zone_center.prefab	</path>
+      <path>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/segment_influence_zone_center_alt.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch48_BZ_75_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch49_BZ_68_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch50_BZ_166_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch51_BZ_58_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch47_BZ_176_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch54_BZ_72_1_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Cz35_T56_G_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch61_DZT_159_Rocket.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_23mm_AZP23x4_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_37mm_T250_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_40mm_Mle51_EBR_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_50mm_MK_46_ROTARY_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_57mm_C68x2_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_75mm_XM247_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_88mm_Flakzwilling_FEP.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

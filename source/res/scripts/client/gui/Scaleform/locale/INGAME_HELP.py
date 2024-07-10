@@ -96,6 +96,8 @@ class INGAME_HELP(object):
     DETAILSHELP_ROCKETACCELERATION_PAGE2 = '#ingame_help:detailsHelp/rocketAcceleration/page2'
     DETAILSHELP_DUALACCURACY_MECHANICS_TITLE = '#ingame_help:detailsHelp/dualAccuracy/mechanics/title'
     DETAILSHELP_DUALACCURACY_MECHANICS = '#ingame_help:detailsHelp/dualAccuracy/mechanics'
+    DETAILSHELP_AUTOSHOOTGUN_MECHANICS_TITLE = '#ingame_help:detailsHelp/autoShootGun/mechanics/title'
+    DETAILSHELP_AUTOSHOOTGUN_MECHANICS = '#ingame_help:detailsHelp/autoShootGun/mechanics'
     DETAILSHELP_NOKEYSWARNING = '#ingame_help:detailsHelp/noKeysWarning'
     DETAILSHELP_BATTLEROYALE_RADAR_TITLE = '#ingame_help:detailsHelp/battleRoyale/radar/title'
     DETAILSHELP_BATTLEROYALE_RADAR_DESCRIPTION = '#ingame_help:detailsHelp/battleRoyale/radar/description'

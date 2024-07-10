@@ -155,9 +155,9 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
 
             if needHeaderResync:
                 self.onHeaderProgressesUpdate()
-            for progressID, condProgress in storage.getChangedConditions().iteritems():
-                condProgress.markAsVisited()
-                self.onConditionProgressUpdate(progressID, condProgress.getProgress())
+            for changedCondition in storage.sortProgresses(storage.getChangedConditions().itervalues()):
+                changedCondition.markAsVisited()
+                self.onConditionProgressUpdate(changedCondition.getProgressID(), changedCondition.getProgress())
 
         return
 

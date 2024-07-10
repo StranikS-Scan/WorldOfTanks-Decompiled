@@ -153,6 +153,7 @@ class _GunControlMode(IControlMode):
     camera = property(lambda self: self._cam)
     curVehicleID = property(lambda self: self.__curVehicleID)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('_aih', '_defaultOffset', '_cameraTransitionDurations', '_gunMarker', '_isEnabled', '_cam', '_aimingMode', '_canShot', '_currentMode', '_lockedDown', '__curVehicleID')
 
     def __init__(self, dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.ARCADE, isStrategic=False):
@@ -235,6 +236,21 @@ class _GunControlMode(IControlMode):
 
     def updateShootingStatus(self, canShot):
         self._canShot = canShot
+
+    def _handleShootCmd(self):
+        player = BigWorld.player()
+        if player is None:
+            return
+        else:
+            vehicle = player.getVehicleAttached()
+            if vehicle is None or vehicle.typeDescriptor is None:
+                return
+            autoShootCtrl = self.__sessionProvider.shared.autoShootCtrl
+            if autoShootCtrl is not None and vehicle.typeDescriptor.isAutoShootGunVehicle:
+                self.__sessionProvider.shared.autoShootCtrl.processShootCmd()
+                return
+            player.shoot()
+            return
 
 
 class CameraLocationPoint(object):
@@ -465,7 +481,7 @@ class ArcadeControlMode(_GunControlMode):
                     if self.__lockKeyUpTime - self.__lockKeyPressedTime <= MagneticAimSettings.KEY_DELAY_SEC:
                         self.__magneticAimTarget = magneticAimProcessor(self.__simpleAimTarget, self.__magneticAimTarget)
             if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-                BigWorld.player().shoot()
+                self._handleShootCmd()
                 return True
             elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
                 BigWorld.player().autoAim(None)
@@ -658,7 +674,7 @@ class _TrajectoryControlMode(_GunControlMode):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         cmdMap = CommandMapping.g_instance
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-            BigWorld.player().shoot()
+            self._handleShootCmd()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, key) and isDown:
             self._aih.switchAutorotation(True)
@@ -1005,7 +1021,7 @@ class SniperControlMode(_GunControlMode):
             if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-            BigWorld.player().shoot()
+            self._handleShootCmd()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
             BigWorld.player().autoAim(None)

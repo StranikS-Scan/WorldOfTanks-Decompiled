@@ -12,6 +12,8 @@ class ModsStatisticLogger(Logger):
     FEATURE_NAME = 'mods_statistic'
     GROUP_NAME = 'mods_statistic'
     ACTION = 'collected'
+    MAX_JSON_STR_LEN = 10000
+    MD5_LEN = 32
     __alreadyLogged = False
 
     def __init__(self):
@@ -28,6 +30,17 @@ class ModsStatisticLogger(Logger):
         if not mods:
             _logger.debug('There are not mods.')
             return
-        modsJson = json.dumps(mods)
-        super(ModsStatisticLogger, self)._log(self.ACTION, mods_statistic_json=modsJson)
+        jsonStrLen = 2
+        tmpMods = {}
+        for modName, md5 in mods.iteritems():
+            rowStrLen = 0
+            rowStrLen += 5 + self.MD5_LEN
+            rowStrLen += len(modName)
+            if jsonStrLen + rowStrLen <= self.MAX_JSON_STR_LEN:
+                tmpMods[modName] = md5
+                jsonStrLen += rowStrLen + 1
+            break
+
+        modsJson = json.dumps(tmpMods)
+        super(ModsStatisticLogger, self)._log(self.ACTION, mods_statistic_json=modsJson, total_mods=len(mods))
         ModsStatisticLogger.__alreadyLogged = True

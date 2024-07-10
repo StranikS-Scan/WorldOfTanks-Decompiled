@@ -3,6 +3,7 @@
 import logging
 import typing
 from account_helpers.settings_core.settings_constants import GAME
+from constants import Configs
 from frameworks.wulf import ViewEvent, View
 from gui.impl.pub.view_impl import ViewImpl
 from frameworks.wulf import ViewSettings
@@ -98,7 +99,7 @@ class TiersLimitSubview(ViewImpl):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
 
     def __onServerSettingsChange(self, diff):
-        if 'unit_assembler_config' in diff:
+        if Configs.UNIT_ASSEMBLER_CONFIG.value in diff:
             self.update()
 
     def __updateViewModel(self):

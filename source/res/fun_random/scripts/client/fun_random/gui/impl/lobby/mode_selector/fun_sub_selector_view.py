@@ -2,6 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/mode_selector/fun_sub_selector_view.py
 import logging
 import typing
+from fun_random_common.fun_constants import UNKNOWN_EVENT_ID, DEFAULT_ASSETS_PACK
 from adisp import adisp_process
 from battle_modifiers_ext.constants_ext import ClientDomain
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
@@ -11,16 +12,17 @@ from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgre
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasMultipleSubModes, avoidSubModesStates
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_random_sub_selector_card_model import FunRandomSubSelectorCardModel, CardState
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.mode_selector.fun_random_sub_selector_model import FunRandomSubSelectorModel
-from fun_random.gui.impl.lobby.common.fun_view_helpers import getFormattedTimeLeft, getConditionText
-from fun_random.gui.impl.lobby.common.fun_view_helpers import packAdditionalRewards, packProgressionActiveStage, packProgressionCondition, packProgressionState, defineProgressionStatus
+from fun_random.gui.impl.lobby.common.fun_view_helpers import getFormattedTimeLeft, getConditionText, packProgressionConditions, packInfiniteProgressionState, packInfiniteProgressionStage, packInfiniteProgressionConditions
+from fun_random.gui.impl.lobby.common.fun_view_helpers import packAdditionalRewards, packProgressionActiveStage, packProgressionState, defineProgressionStatus
 from fun_random.gui.impl.lobby.tooltips.fun_random_domain_tooltip_view import FunRandomDomainTooltipView
+from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import FunRandomLootBoxTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
-from fun_random_common.fun_constants import UNKNOWN_EVENT_ID, DEFAULT_ASSETS_PACK
+from fun_random.gui.impl.lobby.tooltips.fun_random_reward_box_tooltip_views import NearestAdditionalRewardsTooltip
 from gui.impl import backport
 from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
-from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
+from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.shared import events, g_eventBus
 from gui.shared.events import ModeSubSelectorEvent, FullscreenModeSelectorEvent
@@ -54,7 +56,11 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
     def viewModel(self):
         return super(FunModeSubSelectorView, self).getViewModel()
 
+    @createBackportTooltipDecorator()
     def createToolTip(self, event):
+        return super(FunModeSubSelectorView, self).createToolTip(event)
+
+    def getTooltipData(self, event):
         tooltipID = event.getArgument('tooltipId')
         if tooltipID == ModeSelectorTooltipsConstants.FUN_RANDOM_CALENDAR_TOOLTIP:
             subMode = self.__getSubModeByEvent(event)
@@ -67,7 +73,7 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
                 return createSimpleTooltip(self.getParentWindow(), event, body=backport.text(R.strings.fun_random.modeSubSelector.disabledCard.tooltip.body()))
             return
         else:
-            return self.__createBackportTooltip(self.__tooltips[tooltipID]) if tooltipID in self.__tooltips else super(FunModeSubSelectorView, self).createToolTip(event)
+            return None if tooltipID is None else self.__tooltips.get(tooltipID)
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.fun_random.lobby.tooltips.FunRandomProgressionTooltipView():
@@ -75,14 +81,21 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
         elif contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
             progression, showCount = self.getActiveProgression(), int(event.getArgument('showCount'))
             stageIdx = progression.activeStage.stageIndex if progression else -1
-            packedRewards = packAdditionalRewards(progression, stageIdx, showCount) if progression else []
+            packedRewards = packAdditionalRewards(progression, stageIdx, showCount, True) if progression else []
             if packedRewards:
-                return AdditionalRewardsTooltip(packedRewards)
-            return None
+                return NearestAdditionalRewardsTooltip(packedRewards)
+            return
         elif contentID == R.views.battle_modifiers.lobby.tooltips.ModifiersDomainTooltipView():
             subModeID = int(event.getArgument('subModeId', UNKNOWN_EVENT_ID))
             modifiersDomain = event.getArgument('modifiersDomain', ClientDomain.UNDEFINED)
             return FunRandomDomainTooltipView(modifiersDomain, subModeID)
+        elif contentID == R.views.fun_random.lobby.tooltips.FunRandomLootBoxTooltipView():
+            tooltipId = event.getArgument('tooltipId')
+            tooltipData = None if tooltipId is None else self.__tooltips.get(tooltipId)
+            lootboxID = tooltipData.specialArgs[0] if tooltipData and tooltipData.specialArgs else None
+            if lootboxID:
+                return FunRandomLootBoxTooltipView(lootboxID)
+            return
         else:
             return super(FunModeSubSelectorView, self).createToolTipContent(event, contentID)
 
@@ -211,7 +224,7 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
 
     @hasActiveProgression()
     def __invalidateProgressionTimer(self, *_):
-        self.viewModel.state.setResetTimer(self.getActiveProgression().condition.resetTimer)
+        self.viewModel.state.setStatusTimer(self.getActiveProgression().statusTimer)
 
     @hasMultipleSubModes()
     def __invalidateSubModesCards(self, cards):
@@ -231,9 +244,14 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
     def __fillProgression(self, model):
         self.__tooltips.clear()
         progression = self.getActiveProgression()
-        packProgressionState(progression, model.state)
-        packProgressionCondition(progression, model.condition)
-        packProgressionActiveStage(progression, model.currentStage, self.__tooltips)
+        if progression.isInUnlimitedProgression:
+            packInfiniteProgressionState(progression, model.state)
+            packInfiniteProgressionStage(progression, model.currentStage, tooltips=self.__tooltips)
+            packInfiniteProgressionConditions(progression, model.condition)
+        else:
+            packProgressionState(progression, model.state)
+            packProgressionConditions(progression, model.condition)
+            packProgressionActiveStage(progression, model.currentStage, tooltips=self.__tooltips)
 
     def __toggleSelectorClickProcessing(self, isClickProcessing):
         ctx = {'isClickProcessing': isClickProcessing}

@@ -7,7 +7,7 @@ from collections import namedtuple, deque
 import BigWorld
 import BattleReplay
 from WeakMethod import WeakMethodProxy
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from chat_commands_consts import INVALID_VEHICLE_POSITION
 from constants import PREBATTLE_TYPE, ARENA_BONUS_TYPE
 from gui import GUI_SETTINGS
@@ -420,7 +420,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
                 if decorator.isEnemyTarget():
                     self.__targetIDs.append(decorator.getTargetID())
                 if _ACTIONS.isBattleChatAction(command.id):
-                    cooldownConfig = getCoolDownConfig(self.__sessionProvider.arenaVisitor.getArenaBonusType())
+                    cooldownConfig = getCoolDownConfig(self.__sessionProvider.arenaVisitor.bonus.hasBonusCap)
                     provider.setBattleActionCoolDown(reqID, command.id, decorator.getTargetID(), cooldownConfig)
                 else:
                     provider.setActionCoolDown(command.id, command.cooldownPeriod)
@@ -553,7 +553,7 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
         self.__isEnabled = bool(battleCommunicationEnabled)
 
     def __startAntispamHandler(self):
-        self.__spamProtection = ARENA_BONUS_TYPE_CAPS.checkAny(self.__sessionProvider.arenaVisitor.getArenaBonusType(), ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION)
+        self.__spamProtection = self.__sessionProvider.arenaVisitor.bonus.hasBonusCap(BONUS_CAPS.SPAM_PROTECTION)
         if not self.__spamProtection:
             self.__antispamHandler.start()
 
@@ -680,8 +680,8 @@ class AntispamHandler(CallbackDelayer):
         return self.__SEND_COMMAND_TICK_DELAY
 
 
-def getCoolDownConfig(bonusType):
-    if ARENA_BONUS_TYPE_CAPS.checkAny(bonusType, ARENA_BONUS_TYPE_CAPS.SPAM_PROTECTION):
+def getCoolDownConfig(bonusChecker):
+    if bonusChecker(BONUS_CAPS.SPAM_PROTECTION):
         teamInfo = BigWorld.player().arena.teamInfo
         spamProtection = teamInfo.dynamicComponents.get('spamProtection') if teamInfo else None
         if spamProtection is not None:

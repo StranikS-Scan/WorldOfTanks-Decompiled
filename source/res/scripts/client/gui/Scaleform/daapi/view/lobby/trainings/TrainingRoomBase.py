@@ -170,7 +170,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         if isinstance(self.prbEntity, TrainingEntity) and accountInfo.isCurrentPlayer():
             if self._isObserverModeEnabled():
                 self.as_setObserverS(self.prbEntity.storage.isObserver)
-        self.__currentPlayerEntered()
+        self.__currentPlayerEntered(accountInfo.isReady())
         self._updateStartButton(entity)
 
     def onPlayerTeamNumberChanged(self, entity, team):
@@ -473,11 +473,12 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self._updateStartButton(self.prbEntity)
 
     @adisp_process
-    def __currentPlayerEntered(self):
+    def __currentPlayerEntered(self, playerReadyState=True):
         if self.__currentPlayerIsOut:
             if self.prbEntity.storage.isObserver:
                 yield self.prbDispatcher.sendPrbRequest(SetPlayerObserverStateCtx(isObserver=True, isReadyState=True, waitingID='prebattle/change_user_status'))
             else:
-                yield self.prbDispatcher.sendPrbRequest(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'))
+                waitingID = 'prebattle/player_ready' if playerReadyState else 'prebattle/player_not_ready'
+                yield self.prbDispatcher.sendPrbRequest(SetPlayerStateCtx(playerReadyState, waitingID=waitingID))
             self.as_setObserverS(self.prbEntity.storage.isObserver)
             self.__currentPlayerIsOut = False

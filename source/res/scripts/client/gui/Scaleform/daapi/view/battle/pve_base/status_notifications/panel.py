@@ -34,7 +34,8 @@ class PveStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         link = _LINKS.DESTROY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.FIRE, _LINKS.FIRE_ICON, link)
         self._addNotificationTimerSetting(data, _TYPES.DROWN, _LINKS.DROWN_ICON, link)
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
+        player = BigWorld.player()
+        liftOverEnabled = player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER) if player else False
         if liftOverEnabled:
             overturnedIcon = _LINKS.OVERTURNED_GREEN_ICON
             overturnedColor = _COLORS.GREEN

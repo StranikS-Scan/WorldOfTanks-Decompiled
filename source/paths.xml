@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.25.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.25.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.25.1.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.25.1.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -27,7 +27,6 @@
       <Package type="hd">./res/packages/06_ensk_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/07_lakeville.pkg</Package>
       <Package type="hd">./res/packages/07_lakeville_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/07_lakeville_nb.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg.pkg</Package>
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
@@ -46,7 +45,6 @@
       <Package type="hd">./res/packages/114_czech_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/115_sweden.pkg</Package>
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/115_sweden_nb.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
@@ -89,14 +87,12 @@
       <Package type="hd">./res/packages/252_br_battle_city4_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
       <Package type="hd">./res/packages/28_desert_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/28_desert_nb.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf.pkg</Package>
       <Package type="hd">./res/packages/29_el_hallouf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/31_airfield.pkg</Package>
       <Package type="hd">./res/packages/31_airfield_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/33_fjord.pkg</Package>
       <Package type="hd">./res/packages/33_fjord_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/33_fjord_nb.pkg</Package>
       <Package type="sd,hd">./res/packages/34_redshire.pkg</Package>
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
@@ -133,13 +129,15 @@
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_modifiers.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale_progression.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/common_ext.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/comp7_light_progression.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_lootboxes.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>

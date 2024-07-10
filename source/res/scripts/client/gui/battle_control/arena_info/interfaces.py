@@ -572,7 +572,7 @@ class IAimingSoundsCtrl(IBattleController):
     def stopControl(self):
         pass
 
-    def updateDispersion(self, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
+    def updateDispersion(self, shotFactor, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
         raise NotImplementedError
 
 
@@ -591,4 +591,31 @@ class IVSEHUDSettingsController(IBattleController):
         raise NotImplementedError
 
     def getItemSettings(self, settingsID, itemID):
+        raise NotImplementedError
+
+
+class IAutoShootController(IBattleController):
+
+    def startControl(self, *_):
+        pass
+
+    def isBurstActive(self):
+        raise NotImplementedError
+
+    def processShootCmd(self):
+        raise NotImplementedError
+
+
+class IBattleSpamController(IBattleController):
+
+    def filterAllyHitMessage(self, targetID):
+        raise NotImplementedError
+
+    def filterAutoShootTracerSound(self, attackerID):
+        raise NotImplementedError
+
+    def filterFullscreenEffects(self, attackerID):
+        raise NotImplementedError
+
+    def filterMarkersHitState(self, targetID, stateKey):
         raise NotImplementedError

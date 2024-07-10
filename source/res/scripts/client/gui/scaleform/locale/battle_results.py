@@ -54,6 +54,9 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_ASSIST_PART1 = '#battle_results:common/tooltip/assist/part1'
     COMMON_TOOLTIP_ASSIST_PART2 = '#battle_results:common/tooltip/assist/part2'
     COMMON_TOOLTIP_ASSIST_TOTAL = '#battle_results:common/tooltip/assist/total'
+    COMMON_TOTALTOOLTIP_ASSIST_PART1 = '#battle_results:common/totalTooltip/assist/part1'
+    COMMON_TOTALTOOLTIP_ASSIST_PART2 = '#battle_results:common/totalTooltip/assist/part2'
+    COMMON_TOTALTOOLTIP_ASSIST_TOTAL = '#battle_results:common/totalTooltip/assist/total'
     COMMON_PROGRESSTITLE = '#battle_results:common/progressTitle'
     COMMON_VEHICLE_RESEARCH = '#battle_results:common/vehicle/research'
     COMMON_VEHICLE_PURCHASE = '#battle_results:common/vehicle/purchase'
@@ -70,6 +73,8 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_DAMAGE_DESCRIPTION = '#battle_results:common/tooltip/damage/description'
     COMMON_TOOLTIP_DAMAGE_PART1 = '#battle_results:common/tooltip/damage/part1'
     COMMON_TOOLTIP_DAMAGE_PART2 = '#battle_results:common/tooltip/damage/part2'
+    COMMON_TOTALTOOLTIP_DAMAGE_PART1 = '#battle_results:common/totalTooltip/damage/part1'
+    COMMON_TOTALTOOLTIP_DAMAGE_PART2 = '#battle_results:common/totalTooltip/damage/part2'
     COMMON_TOOLTIP_SPOTTED_HEADER = '#battle_results:common/tooltip/spotted/header'
     COMMON_TOOLTIP_SPOTTED_DESCRIPTION = '#battle_results:common/tooltip/spotted/description'
     COMMON_TOOLTIP_ARMOR_HEADER = '#battle_results:common/tooltip/armor/header'
@@ -77,11 +82,17 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_ARMOR_PART1 = '#battle_results:common/tooltip/armor/part1'
     COMMON_TOOLTIP_ARMOR_PART2 = '#battle_results:common/tooltip/armor/part2'
     COMMON_TOOLTIP_ARMOR_PART3 = '#battle_results:common/tooltip/armor/part3'
+    COMMON_TOTALTOOLTIP_ARMOR_PART1 = '#battle_results:common/totalTooltip/armor/part1'
+    COMMON_TOTALTOOLTIP_ARMOR_PART2 = '#battle_results:common/totalTooltip/armor/part2'
+    COMMON_TOTALTOOLTIP_ARMOR_PART3 = '#battle_results:common/totalTooltip/armor/part3'
     COMMON_TOOLTIP_STUN_HEADER = '#battle_results:common/tooltip/stun/header'
     COMMON_TOOLTIP_STUN_DESCRIPTION = '#battle_results:common/tooltip/stun/description'
     COMMON_TOOLTIP_STUN_PART1 = '#battle_results:common/tooltip/stun/part1'
     COMMON_TOOLTIP_STUN_PART2 = '#battle_results:common/tooltip/stun/part2'
     COMMON_TOOLTIP_STUN_PART3 = '#battle_results:common/tooltip/stun/part3'
+    COMMON_TOTALTOOLTIP_STUN_PART1 = '#battle_results:common/totalTooltip/stun/part1'
+    COMMON_TOTALTOOLTIP_STUN_PART2 = '#battle_results:common/totalTooltip/stun/part2'
+    COMMON_TOTALTOOLTIP_STUN_PART3 = '#battle_results:common/totalTooltip/stun/part3'
     COMMON_TOOLTIP_DEFENCE_HEADER = '#battle_results:common/tooltip/defence/header'
     COMMON_TOOLTIP_DEFENCE_DESCRIPTION = '#battle_results:common/tooltip/defence/description'
     COMMON_TOOLTIP_DEFENCE_TOTALPOINTS = '#battle_results:common/tooltip/defence/totalPoints'
@@ -89,7 +100,7 @@ class BATTLE_RESULTS(object):
     COMMON_TOOLTIP_CAPTURE_DESCRIPTION = '#battle_results:common/tooltip/capture/description'
     COMMON_TOOLTIP_CAPTURE_TOTALPOINTS = '#battle_results:common/tooltip/capture/totalPoints'
     COMMON_TOOLTIP_KILL_HEADER = '#battle_results:common/tooltip/kill/header'
-    COMMON_TOOLTIP_KILL_1_DESCRIPTION = '#battle_results:common/tooltip/kill-1/description'
+    COMMON_TOOLTIP_KILLCOMMON_DESCRIPTION = '#battle_results:common/tooltip/killCommon/description'
     COMMON_TOOLTIP_KILL0_DESCRIPTION = '#battle_results:common/tooltip/kill0/description'
     COMMON_TOOLTIP_KILL1_DESCRIPTION = '#battle_results:common/tooltip/kill1/description'
     COMMON_TOOLTIP_KILL2_DESCRIPTION = '#battle_results:common/tooltip/kill2/description'
@@ -229,6 +240,8 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_INFOTIP_XPOTHER_BODY = '#battle_results:team/stats/infotip_xpOther/body'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
+    TEAM_STATS_LABELS_DIRECTHITS = '#battle_results:team/stats/labels_directHits'
+    TEAM_STATS_LABELS_PIERCINGHITS = '#battle_results:team/stats/labels_piercingHits'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
     TEAM_STATS_LABELS_DAMAGEDEALT = '#battle_results:team/stats/labels_damageDealt'
     TEAM_STATS_LABELS_SNIPERDAMAGEDEALT = '#battle_results:team/stats/labels_sniperDamageDealt'
@@ -294,6 +307,9 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_TACTICALTRAINING = '#battle_results:details/calculations/tacticalTraining'
     DETAILS_CALCULATIONS_MILITARYMANEUVERS = '#battle_results:details/calculations/militaryManeuvers'
     DETAILS_CALCULATIONS_HEAVYTRUCKS = '#battle_results:details/calculations/heavyTrucks'
+    DETAILS_CALCULATIONS_TITLE_BASE = '#battle_results:details/calculations/title/base'
+    DETAILS_CALCULATIONS_TITLE_EXPENSES = '#battle_results:details/calculations/title/expenses'
+    DETAILS_CALCULATIONS_TITLE_TOTAL = '#battle_results:details/calculations/title/total'
     DETAILS_CALCULATIONS_INTERMEDIATETOTAL = '#battle_results:details/calculations/intermediateTotal'
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
     DETAILS_CALCULATIONS_WOTPLUS = '#battle_results:details/calculations/wotPlus'
@@ -325,8 +341,10 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_PIGGYBANKINFO = '#battle_results:details/calculations/piggyBankInfo'
     DETAILS_CALCULATIONS_FIRSTWIN = '#battle_results:details/calculations/firstWin'
     DETAILS_CALCULATIONS_IGRBONUS = '#battle_results:details/calculations/igrBonus'
+    DETAILS_CALCULATIONS_IGRBONUS_SIMPLELABEL = '#battle_results:details/calculations/igrBonus/simpleLabel'
     DETAILS_CALCULATIONS_FORTORDER = '#battle_results:details/calculations/fortOrder'
     DETAILS_CALCULATIONS_REFERRALBONUS = '#battle_results:details/calculations/referralBonus'
+    DETAILS_CALCULATIONS_REFERRALBONUS_SIMPLELABEL = '#battle_results:details/calculations/referralBonus/simpleLabel'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER = '#battle_results:details/calculations/multiplierInfo/header'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY = '#battle_results:details/calculations/multiplierInfo/body'
     DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR = '#battle_results:details/calculations/multiplierInfo/vehicleSeparator'
@@ -370,6 +388,28 @@ class BATTLE_RESULTS(object):
     PRESTIGE_TITLE = '#battle_results:prestige/title'
     PRESTIGE_COMMON_DESCRIPTION = '#battle_results:prestige/common/description'
     PRESTIGE_MAX_DESCRIPTION = '#battle_results:prestige/max/description'
+    TEAM_STATS_PARAMETER_SHOTS = '#battle_results:team/stats/parameter/shots'
+    TEAM_STATS_PARAMETER_HITS = '#battle_results:team/stats/parameter/hits'
+    TEAM_STATS_PARAMETER_EXPLOSIONHITS = '#battle_results:team/stats/parameter/explosionHits'
+    TEAM_STATS_PARAMETER_DAMAGEDEALT = '#battle_results:team/stats/parameter/damageDealt'
+    TEAM_STATS_PARAMETER_SNIPERDAMAGEDEALT = '#battle_results:team/stats/parameter/sniperDamageDealt'
+    TEAM_STATS_PARAMETER_DIRECTHITSRECEIVED = '#battle_results:team/stats/parameter/directHitsReceived'
+    TEAM_STATS_PARAMETER_PIERCINGSRECEIVED = '#battle_results:team/stats/parameter/piercingsReceived'
+    TEAM_STATS_PARAMETER_NODAMAGEDIRECTHITSRECEIVED = '#battle_results:team/stats/parameter/noDamageDirectHitsReceived'
+    TEAM_STATS_PARAMETER_EXPLOSIONHITSRECEIVED = '#battle_results:team/stats/parameter/explosionHitsReceived'
+    TEAM_STATS_PARAMETER_DAMAGEBLOCKEDBYARMOR = '#battle_results:team/stats/parameter/damageBlockedByArmor'
+    TEAM_STATS_PARAMETER_TEAMHITSDAMAGE = '#battle_results:team/stats/parameter/teamHitsDamage'
+    TEAM_STATS_PARAMETER_SPOTTED = '#battle_results:team/stats/parameter/spotted'
+    TEAM_STATS_PARAMETER_DAMAGEDKILLED = '#battle_results:team/stats/parameter/damagedKilled'
+    TEAM_STATS_PARAMETER_DAMAGEASSISTED = '#battle_results:team/stats/parameter/damageAssisted'
+    TEAM_STATS_PARAMETER_DAMAGEASSISTEDSELF = '#battle_results:team/stats/parameter/damageAssistedSelf'
+    TEAM_STATS_PARAMETER_STUNDURATION = '#battle_results:team/stats/parameter/stunDuration'
+    TEAM_STATS_PARAMETER_DAMAGEASSISTEDSTUN = '#battle_results:team/stats/parameter/damageAssistedStun'
+    TEAM_STATS_PARAMETER_DAMAGEASSISTEDSTUNSELF = '#battle_results:team/stats/parameter/damageAssistedStunSelf'
+    TEAM_STATS_PARAMETER_STUNNUM = '#battle_results:team/stats/parameter/stunNum'
+    TEAM_STATS_PARAMETER_CAPTUREPOINTSVAL = '#battle_results:team/stats/parameter/capturePointsVal'
+    TEAM_STATS_PARAMETER_MILEAGE = '#battle_results:team/stats/parameter/mileage'
+    TOOLTIPS_STATS_FOOTER_TEXT = '#battle_results:tooltips/stats/footer/text'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,
@@ -381,6 +421,9 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_TACTICALTRAINING,
      DETAILS_CALCULATIONS_MILITARYMANEUVERS,
      DETAILS_CALCULATIONS_HEAVYTRUCKS,
+     DETAILS_CALCULATIONS_TITLE_BASE,
+     DETAILS_CALCULATIONS_TITLE_EXPENSES,
+     DETAILS_CALCULATIONS_TITLE_TOTAL,
      DETAILS_CALCULATIONS_INTERMEDIATETOTAL,
      DETAILS_CALCULATIONS_BASE,
      DETAILS_CALCULATIONS_WOTPLUS,
@@ -412,8 +455,10 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_PIGGYBANKINFO,
      DETAILS_CALCULATIONS_FIRSTWIN,
      DETAILS_CALCULATIONS_IGRBONUS,
+     DETAILS_CALCULATIONS_IGRBONUS_SIMPLELABEL,
      DETAILS_CALCULATIONS_FORTORDER,
      DETAILS_CALCULATIONS_REFERRALBONUS,
+     DETAILS_CALCULATIONS_REFERRALBONUS_SIMPLELABEL,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY,
      DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,
@@ -426,6 +471,8 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_XPOTHER,
      TEAM_STATS_LABELS_SHOTS,
      TEAM_STATS_LABELS_HITS,
+     TEAM_STATS_LABELS_DIRECTHITS,
+     TEAM_STATS_LABELS_PIERCINGHITS,
      TEAM_STATS_LABELS_EXPLOSIONHITS,
      TEAM_STATS_LABELS_DAMAGEDEALT,
      TEAM_STATS_LABELS_SNIPERDAMAGEDEALT,

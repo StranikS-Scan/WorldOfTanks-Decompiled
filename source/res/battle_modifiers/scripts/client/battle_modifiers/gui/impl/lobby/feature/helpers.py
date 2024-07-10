@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/client/battle_modifiers/gui/impl/lobby/feature/helpers.py
-from typing import TYPE_CHECKING, Union, Optional
+from typing import TYPE_CHECKING, Optional
 from battle_modifiers.gui.impl.lobby.feature.constants import MOD_TYPE_MAP, PHYS_TYPE_MAP, USE_TYPE_MAP, GAMEPLAY_IMPACT_MAP
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.modifier_model import ModifierModel
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.limit_model import LimitModel, LimitType
 if TYPE_CHECKING:
-    from battle_modifiers_ext.battle_modifiers import BattleModifier, FakeBattleModifier
+    from battle_modifiers_ext.battle_modifiers import ModifierBase
     from frameworks.wulf import Array
 
 def packModifierModel(modifier):

@@ -61,8 +61,9 @@ class ProjectileMover(object):
             if startPoint.distTo(refStartPoint) > ProjectileMover.__START_POINT_MAX_DIFF:
                 startPoint = refStartPoint
             artID = effectsDescr.get('artilleryID')
-            if artID is not None and not helpers.isShowingKillCam():
-                self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
+            if artID is not None:
+                if not helpers.isShowingKillCam():
+                    self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
             projectileMotor, collisionTime, _ = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
@@ -149,9 +150,7 @@ class ProjectileMover(object):
             self.__delProjectile(shotID)
 
     def __notifyProjectileHit(self, hitPosition, proj):
-        caliber = proj['effectsDescr']['caliber']
-        isOwnShot = proj['autoScaleProjectile']
-        BigWorld.player().inputHandler.onProjectileHit(hitPosition, caliber, isOwnShot)
+        BigWorld.player().inputHandler.onProjectileHit(hitPosition, proj['effectsDescr']['caliber'], proj['effectsDescr']['targetCameraSensitivity'], proj['autoScaleProjectile'])
         FlockManager.getManager().onProjectile(hitPosition)
 
     def __addExplosionEffect(self, position, proj, velocityDir):

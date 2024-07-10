@@ -51,13 +51,13 @@ class NeedRepairMainContent(BaseSubModelView):
     def __init__(self, viewModel, repairPercentage, vehicle):
         super(NeedRepairMainContent, self).__init__(viewModel)
         self._repairPercentage = repairPercentage
-        self.__vehicle = vehicle
+        self.vehicle = vehicle
 
     def onLoading(self, *args, **kwargs):
         super(NeedRepairMainContent, self).onLoading(*args, **kwargs)
         with self._viewModel.transaction() as model:
             model.setRepairPercentage(self._repairPercentage)
-            model.setFreeAutoRepair(self.__vehicle.level == 1 and self.__vehicle.repairCost == 0)
+            model.setFreeAutoRepair(self.vehicle.level == 1 and self.vehicle.repairCost == 0)
 
     def update(self, repairPercentage=None):
         if repairPercentage is not None:

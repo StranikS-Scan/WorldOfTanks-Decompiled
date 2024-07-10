@@ -71,7 +71,8 @@ class HierarchyModifier(object):
 
     def __connect(self, rootObject, sourceObj):
         _updateTransform(sourceObj, rootObject)
-        CGF.changeHierarchy(self.root, sourceObj.name, rootObject.name)
+        hierarchy = CGF.HierarchyManager(self.root.spaceID)
+        hierarchy.changeParent(sourceObj, rootObject)
 
     def __connectToRoot(self, sourceObj):
         _updateTransform(sourceObj, self.root)
@@ -107,25 +108,33 @@ class HierarchyModifier2(object):
     cameraTransform = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Camera Transform', value=GenericComponents.TransformComponent)
     areaTrigger = ComponentProperty(type=CGFMetaTypes.LINK, editorName='Area Trigger', value=Triggers.AreaTriggerComponent)
 
+    def changeHierarchy(self, hierarchy, go, childName, newParentName):
+        parent = hierarchy.findFirstNode(go, newParentName)
+        child = hierarchy.findFirstNode(go, childName)
+        if parent.isValid() and child.isValid():
+            hierarchy.changeParent(child, parent)
+
     def unwrapFigure(self, where):
         _logger.debug('HierarchyModifier2. Trigger entered')
-        CGF.changeHierarchy(where, 'Head', self.top.name)
-        CGF.changeHierarchy(where, 'Back', self.bottom.name)
-        CGF.changeHierarchy(where, 'Camera', self.top.name)
-        CGF.changeHierarchy(where, 'LH', 'TL')
-        CGF.changeHierarchy(where, 'RH', 'TR')
-        CGF.changeHierarchy(where, 'LL', 'BL')
-        CGF.changeHierarchy(where, 'RL', 'BR')
+        hierarchy = CGF.HierarchyManager(where.spaceID)
+        self.changeHierarchy(hierarchy, where, 'Head', self.top.name)
+        self.changeHierarchy(hierarchy, where, 'Back', self.bottom.name)
+        self.changeHierarchy(hierarchy, where, 'Camera', self.top.name)
+        self.changeHierarchy(hierarchy, where, 'LH', 'TL')
+        self.changeHierarchy(hierarchy, where, 'RH', 'TR')
+        self.changeHierarchy(hierarchy, where, 'LL', 'BL')
+        self.changeHierarchy(hierarchy, where, 'RL', 'BR')
 
     def wrapFigure(self, where):
         _logger.debug('HierarchyModifier2. Trigger exited')
-        CGF.changeHierarchy(where, 'Head', self.box.name)
-        CGF.changeHierarchy(where, 'Back', self.box.name)
-        CGF.changeHierarchy(where, 'Camera', 'Bot')
-        CGF.changeHierarchy(where, 'LH', self.box.name)
-        CGF.changeHierarchy(where, 'RH', self.box.name)
-        CGF.changeHierarchy(where, 'LL', self.box.name)
-        CGF.changeHierarchy(where, 'RL', self.box.name)
+        hierarchy = CGF.HierarchyManager(where.spaceID)
+        self.changeHierarchy(hierarchy, where, 'Head', self.box.name)
+        self.changeHierarchy(hierarchy, where, 'Back', self.box.name)
+        self.changeHierarchy(hierarchy, where, 'Camera', 'Bot')
+        self.changeHierarchy(hierarchy, where, 'LH', self.box.name)
+        self.changeHierarchy(hierarchy, where, 'RH', self.box.name)
+        self.changeHierarchy(hierarchy, where, 'LL', self.box.name)
+        self.changeHierarchy(hierarchy, where, 'RL', self.box.name)
 
 
 @autoregister(presentInAllWorlds=False, category=DEMO_CATEGORY)

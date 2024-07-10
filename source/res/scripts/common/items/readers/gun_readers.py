@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/readers/gun_readers.py
+import typing
 import ResMgr
 from items import _xml
 from items.components import component_constants
@@ -13,22 +14,25 @@ if TYPE_CHECKING:
     from items.vehicles import Cache
 
 def readRecoilEffect(xmlCtx, section, cache):
-    effName = _xml.readStringOrNone(xmlCtx, section, 'recoil/recoilEffect')
-    if effName is not None:
-        recoilEff = cache.getGunRecoilEffects(effName)
-        if recoilEff is not None:
-            backoffTime = recoilEff[0]
-            returnTime = recoilEff[1]
-        else:
-            backoffTime = component_constants.ZERO_FLOAT
-            returnTime = component_constants.ZERO_FLOAT
+    if not section.has_key('recoil'):
+        return
     else:
-        backoffTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime')
-        returnTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')
-    recoil = gun_components.RecoilEffect(lodDist=shared_readers.readLodDist(xmlCtx, section, 'recoil/lodDist', cache), amplitude=_xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'), backoffTime=backoffTime, returnTime=returnTime)
-    if IS_EDITOR:
-        recoil.effectName = effName
-    return recoil
+        effName = _xml.readStringOrNone(xmlCtx, section, 'recoil/recoilEffect')
+        if effName is not None:
+            recoilEff = cache.getGunRecoilEffects(effName)
+            if recoilEff is not None:
+                backoffTime = recoilEff[0]
+                returnTime = recoilEff[1]
+            else:
+                backoffTime = component_constants.ZERO_FLOAT
+                returnTime = component_constants.ZERO_FLOAT
+        else:
+            backoffTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/backoffTime')
+            returnTime = _xml.readNonNegativeFloat(xmlCtx, section, 'recoil/returnTime')
+        recoil = gun_components.RecoilEffect(lodDist=shared_readers.readLodDist(xmlCtx, section, 'recoil/lodDist', cache), amplitude=_xml.readNonNegativeFloat(xmlCtx, section, 'recoil/amplitude'), backoffTime=backoffTime, returnTime=returnTime)
+        if IS_EDITOR:
+            recoil.effectName = effName
+        return recoil
 
 
 def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):

@@ -44,6 +44,7 @@ class AvatarPostmortemComponent(object):
         pass
 
     def onBecomeNonPlayer(self):
+        self.settingsCore.serverSettings.settingsCache.onSyncCompleted -= self.__onSettingsSyncCompleted
         self.destroy()
 
     def canSwitchToAllyVehicle(self):

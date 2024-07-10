@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, AVG_DAMAGE_PER_SECOND, CONTINUOUS_SHOTS_PER_MINUTE
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -42,6 +42,7 @@ class _Highlight(object):
 
 def _highlightsMap(settings, vehicle=None):
     config = (((AUTO_RELOAD_PROP_NAME,), _Highlight(lambda : settings.checkAutoReloadHighlights(increase=True))),
+     ((AVG_DAMAGE_PER_SECOND, CONTINUOUS_SHOTS_PER_MINUTE), _Highlight(lambda : settings.checkAutoShootHighlights(increase=True))),
      ((TURBOSHAFT_ENGINE_POWER,
        TURBOSHAFT_SPEED_MODE_SPEED,
        TURBOSHAFT_SWITCH_TIME,

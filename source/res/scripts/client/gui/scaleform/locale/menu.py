@@ -515,11 +515,13 @@ class MENU(object):
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
     TANK_PARAMS_RELOADTIME = '#menu:tank_params/reloadTime'
+    TANK_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:tank_params/continuousShotsPerMinute'
     TANK_PARAMS_AUTORELOADTIME = '#menu:tank_params/autoReloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
     TANK_PARAMS_DAMAGE = '#menu:tank_params/damage'
     TANK_PARAMS_AVGDAMAGE = '#menu:tank_params/avgDamage'
+    TANK_PARAMS_AVGDAMAGEPERSECOND = '#menu:tank_params/avgDamagePerSecond'
     TANK_PARAMS_SHOTSPEED = '#menu:tank_params/shotSpeed'
     TANK_PARAMS_AVGPIERCINGPOWER = '#menu:tank_params/avgPiercingPower'
     TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER = '#menu:tank_params/shortened/avgPiercingPower'
@@ -533,6 +535,7 @@ class MENU(object):
     TANK_PARAMS_PITCHLIMITS = '#menu:tank_params/pitchLimits'
     TANK_PARAMS_GUNYAWLIMITS = '#menu:tank_params/gunYawLimits'
     TANK_PARAMS_CLIPFIRERATE = '#menu:tank_params/clipFireRate'
+    TANK_PARAMS_AUTOSHOOTCLIPFIRERATE = '#menu:tank_params/autoShootClipFireRate'
     TANK_PARAMS_BURSTFIRERATE = '#menu:tank_params/burstFireRate'
     TANK_PARAMS_TURBOSHAFTBURSTFIRERATE = '#menu:tank_params/turboshaftBurstFireRate'
     TANK_PARAMS_RELATIVEPOWER = '#menu:tank_params/relativePower'
@@ -576,6 +579,7 @@ class MENU(object):
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
+    TANK_PARAMS_VPS = '#menu:tank_params/vps'
     TANK_PARAMS_QPT = '#menu:tank_params/qpt'
     TANK_PARAMS_M = '#menu:tank_params/m'
     TANK_PARAMS_H = '#menu:tank_params/h'
@@ -586,6 +590,7 @@ class MENU(object):
     TANK_PARAMS_KG = '#menu:tank_params/kg'
     TANK_PARAMS_MPS = '#menu:tank_params/mps'
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
+    TANK_PARAMS_AUTOSHOOTCLIPSEC = '#menu:tank_params/autoShootClipSec'
     TANK_PARAMS_BURSTSEC = '#menu:tank_params/burstSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
@@ -646,6 +651,7 @@ class MENU(object):
     EXTRAPARAMS_NAME_ENEMYMODULESCREWCRITCHANCE = '#menu:extraParams/name/enemyModulesCrewCritChance'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
+    DESCRIPTIONS_VEHICLEGUN_AUTOSHOOT = '#menu:descriptions/vehicleGun/autoShoot'
     DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
     DESCRIPTIONS_VEHICLEGUN_DUALGUN = '#menu:descriptions/vehicleGun/dualGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
@@ -810,12 +816,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/rentalIsOver/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_HEADER = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_TELECOMRENTALISOVER_BODY = '#menu:headerButtons/fightBtn/tooltip/telecomRentalIsOver/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomDisabled/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMNOTSET_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomNotSet/body'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_HEADER = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_FUNRANDOMVEHLIMITS_BODY = '#menu:headerButtons/fightBtn/tooltip/funRandomVehLimits/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7OFFLINE_BODY = '#menu:headerButtons/fightBtn/tooltip/comp7Offline/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7NOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/comp7NotSet/header'
@@ -1102,6 +1102,8 @@ class MENU(object):
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
     MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
     MODULEINFO_DAMAGEMUTABLEGUNLABEL = '#menu:moduleInfo/damageMutableGunLabel'
+    MODULEINFO_AUTOSHOOTGUNLABEL = '#menu:moduleInfo/autoShootGunLabel'
+    MODULEINFO_NONPIERCINGDAMAGELABEL = '#menu:moduleInfo/nonPiercingDamageLabel'
     MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
@@ -1139,6 +1141,7 @@ class MENU(object):
     MODULEINFO_PARAMS_AUTORELOADTIME = '#menu:moduleInfo/params/autoReloadTime'
     MODULEINFO_PARAMS_AUTORELOADTIME_BOOST = '#menu:moduleInfo/params/autoReloadTime/boost'
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
+    MODULEINFO_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:moduleInfo/params/continuousShotsPerMinute'
     MODULEINFO_PARAMS_RELOADTIMESECS = '#menu:moduleInfo/params/reloadTimeSecs'
     MODULEINFO_PARAMS_CHARGETIME = '#menu:moduleInfo/params/chargeTime'
     MODULEINFO_PARAMS_RATETIME = '#menu:moduleInfo/params/rateTime'
@@ -1151,6 +1154,8 @@ class MENU(object):
     MODULEINFO_PARAMS_MINAVGMUTABLEDAMAGELIST = '#menu:moduleInfo/params/minAvgMutableDamageList'
     MODULEINFO_PARAMS_AVGDAMAGE = '#menu:moduleInfo/params/avgDamage'
     MODULEINFO_PARAMS_AVGMUTABLEDAMAGE = '#menu:moduleInfo/params/avgMutableDamage'
+    MODULEINFO_PARAMS_AVGDAMAGEPERSECOND = '#menu:moduleInfo/params/avgDamagePerSecond'
+    MODULEINFO_PARAMS_CONTINUOUSDAMAGEPERSECOND = '#menu:moduleInfo/params/continuousDamagePerSecond'
     MODULEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:moduleInfo/params/avgDamagePerMinute'
     MODULEINFO_PARAMS_ARMOR = '#menu:moduleInfo/params/armor'
     MODULEINFO_PARAMS_ROTATIONSPEED = '#menu:moduleInfo/params/rotationSpeed'
@@ -1208,10 +1213,12 @@ class MENU(object):
     VEHICLEINFO_PARAMS_HULLARMOR = '#menu:vehicleInfo/params/hullArmor'
     VEHICLEINFO_PARAMS_TURRETARMOR = '#menu:vehicleInfo/params/turretArmor'
     VEHICLEINFO_PARAMS_RELOADTIME = '#menu:vehicleInfo/params/reloadTime'
+    VEHICLEINFO_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:vehicleInfo/params/continuousShotsPerMinute'
     VEHICLEINFO_PARAMS_AUTORELOADTIME = '#menu:vehicleInfo/params/autoReloadTime'
     VEHICLEINFO_PARAMS_AUTORELOADTIMEBOOST = '#menu:vehicleInfo/params/autoReloadTimeBoost'
     VEHICLEINFO_PARAMS_PIERCINGPOWER = '#menu:vehicleInfo/params/piercingPower'
     VEHICLEINFO_PARAMS_AVGDAMAGE = '#menu:vehicleInfo/params/avgDamage'
+    VEHICLEINFO_PARAMS_AVGDAMAGEPERSECOND = '#menu:vehicleInfo/params/avgDamagePerSecond'
     VEHICLEINFO_PARAMS_SHOTSPEED = '#menu:vehicleInfo/params/shotSpeed'
     VEHICLEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:vehicleInfo/params/avgPiercingPower'
     VEHICLEINFO_PARAMS_TURRETROTATIONSPEED = '#menu:vehicleInfo/params/turretRotationSpeed'
@@ -1225,6 +1232,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:vehicleInfo/params/avgDamagePerMinute'
     VEHICLEINFO_PARAMS_ENGINEPOWERPERTON = '#menu:vehicleInfo/params/enginePowerPerTon'
     VEHICLEINFO_PARAMS_CLIPFIRERATE = '#menu:vehicleInfo/params/clipFireRate'
+    VEHICLEINFO_PARAMS_AUTOSHOOTCLIPFIRERATE = '#menu:vehicleInfo/params/autoShootClipFireRate'
     VEHICLEINFO_PARAMS_BURSTFIRERATE = '#menu:vehicleInfo/params/burstFireRate'
     VEHICLEINFO_PARAMS_TURBOSHAFTBURSTFIRERATE = '#menu:vehicleInfo/params/turboshaftBurstFireRate'
     VEHICLEINFO_PARAMS_TURRETYAWLIMITS = '#menu:vehicleInfo/params/turretYawLimits'
@@ -2633,11 +2641,13 @@ class MENU(object):
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,
      TANK_PARAMS_RELOADTIME,
+     TANK_PARAMS_CONTINUOUSSHOTSPERMINUTE,
      TANK_PARAMS_AUTORELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
      TANK_PARAMS_DAMAGE,
      TANK_PARAMS_AVGDAMAGE,
+     TANK_PARAMS_AVGDAMAGEPERSECOND,
      TANK_PARAMS_SHOTSPEED,
      TANK_PARAMS_AVGPIERCINGPOWER,
      TANK_PARAMS_SHORTENED_AVGPIERCINGPOWER,
@@ -2651,6 +2661,7 @@ class MENU(object):
      TANK_PARAMS_PITCHLIMITS,
      TANK_PARAMS_GUNYAWLIMITS,
      TANK_PARAMS_CLIPFIRERATE,
+     TANK_PARAMS_AUTOSHOOTCLIPFIRERATE,
      TANK_PARAMS_BURSTFIRERATE,
      TANK_PARAMS_TURBOSHAFTBURSTFIRERATE,
      TANK_PARAMS_RELATIVEPOWER,
@@ -2694,6 +2705,7 @@ class MENU(object):
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
+     TANK_PARAMS_VPS,
      TANK_PARAMS_QPT,
      TANK_PARAMS_M,
      TANK_PARAMS_H,
@@ -2704,6 +2716,7 @@ class MENU(object):
      TANK_PARAMS_KG,
      TANK_PARAMS_MPS,
      TANK_PARAMS_CLIPSEC,
+     TANK_PARAMS_AUTOSHOOTCLIPSEC,
      TANK_PARAMS_BURSTSEC,
      TANK_PARAMS_STUNMAXDURATION,
      TANK_PARAMS_STUNMINDURATION,

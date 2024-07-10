@@ -41,11 +41,8 @@ class PLAYER_TEAM_RESULT(object):
 
 class FACTOR_VALUE(object):
     BASE_CREDITS_FACTOR = 100
-    PREMUIM_CREDITS_FACTOR = 150
-    PREMUIM_PLUS_CREDITS_FACTOR = 150
     BASE_XP_FACTOR = 100
-    PREMUIM_XP_FACTOR = 150
-    PREMUIM_PLUS_XP_FACTOR = 150
+    BASE_TMEN_XP_FACTOR = 100
     ADDITIONAL_BONUS_ZERO_FACTOR = 0
     ADDITIONAL_BONUS_ONE_FACTOR = 10
 
@@ -57,3 +54,14 @@ class EMBLEM_TYPE(object):
 class UI_VISIBILITY(object):
     SHOW_SQUAD = 1
     SHOW_RESOURCES = 2
+
+
+class CurrenciesConstants(object):
+    GOLD = 'gold'
+    CREDITS = 'credits'
+    CRYSTAL = 'crystal'
+    XP_COST = 'xp'
+    FREE_XP = 'freeXP'
+    MULTY_XP = 'multyXp'
+    MULTY_FREE_XP = 'multyFreeXp'
+    TMEN_XP = 'tankmenXP'

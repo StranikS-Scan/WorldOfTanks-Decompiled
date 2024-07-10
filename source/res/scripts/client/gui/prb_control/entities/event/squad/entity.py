@@ -6,7 +6,6 @@ from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getEventTooltipData
 from gui.prb_control.entities.base.unit.ctx import SetVehicleUnitCtx, SetReadyUnitCtx
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
@@ -96,9 +95,6 @@ class EventBattleSquadEntity(SquadEntity):
             return None
         else:
             return super(EventBattleSquadEntity, self).getConfirmDialogMeta(ctx)
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getEventTooltipData(), False) if isStateDisabled else super(EventBattleSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
 
     @vehicleAmmoCheck
     def togglePlayerReadyAction(self, launchChain=False):

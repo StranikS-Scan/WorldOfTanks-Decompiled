@@ -4,6 +4,7 @@ import copy
 import random
 import time
 import typing
+from itertools import izip
 from account_shared import getCustomizationItem
 from battle_pass_common import NON_VEH_CD
 from dog_tags_common.components_config import componentConfigAdapter
@@ -718,14 +719,25 @@ class StripVisitor(NodeVisitor):
         self.__needProbabilitiesInfo = needProbabilitiesInfo
         super(StripVisitor, self).__init__(self.ValuesMerger(), tuple())
 
+    def __getShownProbability(self, probability, prevProbability=None):
+        if self.__needProbabilitiesInfo:
+            if prevProbability and probability != [0.0] * len(probability):
+                return [ currProb - prevProb for currProb, prevProb in izip(probability, prevProbability) ]
+            return probability
+        else:
+            return [-1]
+
     def onOneOf(self, storage, values):
         strippedValues = []
         _, values = values
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
-        for probability, bonusProbability, refGlobalID, bonusValue in values:
+        for index, (probability, bonusProbability, refGlobalID, bonusValue) in enumerate(values):
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            prevProbability = values[index - 1][0] if index > 0 else None
+            bonusValueName = bonusValue.get('properties', {}).get('name', None)
+            if bonusValueName:
+                stippedValue['properties'] = {'name': bonusValueName}
+            strippedValues.append((self.__getShownProbability(probability, prevProbability),
              -1,
              None,
              stippedValue))
@@ -735,11 +747,13 @@ class StripVisitor(NodeVisitor):
 
     def onAllOf(self, storage, values):
         strippedValues = []
-        needProbabilitiesInfo = self.__needProbabilitiesInfo
         for probability, bonusProbability, refGlobalID, bonusValue in values:
             stippedValue = {}
             self._walkSubsection(stippedValue, bonusValue)
-            strippedValues.append(([probability if needProbabilitiesInfo else -1],
+            bonusValueName = bonusValue.get('properties', {}).get('name', None)
+            if bonusValueName:
+                stippedValue['properties'] = {'name': bonusValueName}
+            strippedValues.append((self.__getShownProbability(probability),
              -1,
              None,
              stippedValue))

@@ -61,8 +61,9 @@ quest_progress = globals().get('quest_progress')
 
 filter = globals().get('BattleResults')
 
-PROGRESS_ID_MAIN = 'hitsInBattle'  # take from personal_missions_config
-PROGRESS_ID_MAIN_SERIES = 'hitsInBattleSeries'
+PROGRESS_ID_HITS = 'hitsInBattle'  # take from personal_missions_config
+PROGRESS_ID_HITS_SERIES = 'hitsInBattleSeries'
+PROGRESS_ID_DAMAGE = 'damageInBattle'
 PROGRESS_ID_ADD = "killsInBattle"
 PROGRESS_SERIES = 'killsInBattleSeries'  # take from personal_missions_config
 
@@ -80,14 +81,18 @@ def onFinishBattle(eventType, eventData, quest, processor):
     if addCondition:
         questProgress.setCompleted(PROGRESS_ID_ADD)
         questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
-    countdown = questProgress.getProgress(PROGRESS_ID_MAIN).getParam('countdown')
-    method = questProgress.getProgress(PROGRESS_ID_MAIN).getParam('attackReasons')
-    goal = questProgress.getProgress(PROGRESS_ID_MAIN).getGoal()
-    mainCondition = sum([len(shots) for shots in brfilter.filterDamageTo(time=countdown, method=method,
-                                                                         result=['damaged']).itervalues()]) &gt;= goal
-    if mainCondition:
-        questProgress.setCompleted(PROGRESS_ID_MAIN)
-        questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_SERIES, 1)
+
+    method = questProgress.getProgress(PROGRESS_ID_HITS).getParam('attackReasons')
+
+    countdownHits = questProgress.getProgress(PROGRESS_ID_HITS).getParam('countdown')
+    hits = brfilter.sumHitsCount(brfilter.filterDamageTo(time=countdownHits, method=method, result=['damaged']))
+    questProgress.increaseUntilComplete(PROGRESS_ID_HITS, hits)
+
+    countdownDamage = questProgress.getProgress(PROGRESS_ID_DAMAGE).getParam('countdown')
+    totalDamage = brfilter.sumDamage(brfilter.filterDamageTo(time=countdownDamage, method=method, result=['damaged']))
+    questProgress.increaseUntilComplete(PROGRESS_ID_DAMAGE, totalDamage)
+    if questProgress.isCompleted(PROGRESS_ID_HITS) and questProgress.isCompleted(PROGRESS_ID_DAMAGE):
+        questProgress.increaseUntilComplete(PROGRESS_ID_HITS_SERIES, 1)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_SERIES))
 

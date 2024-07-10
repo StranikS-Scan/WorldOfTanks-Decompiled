@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_action_model imp
 class AmmunitionPanelViewModel(ViewModel):
     __slots__ = ('onEscKeyDown',)
 
-    def __init__(self, properties=6, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(AmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -35,30 +35,44 @@ class AmmunitionPanelViewModel(ViewModel):
     def getRoleSkillSlotType():
         return RoleSkillSlotModel
 
+    def getVehicleCD(self):
+        return self._getNumber(3)
+
+    def setVehicleCD(self, value):
+        self._setNumber(3, value)
+
     def getIsMaintenanceEnabled(self):
-        return self._getBool(3)
-
-    def setIsMaintenanceEnabled(self, value):
-        self._setBool(3, value)
-
-    def getIsDisabled(self):
         return self._getBool(4)
 
-    def setIsDisabled(self, value):
+    def setIsMaintenanceEnabled(self, value):
         self._setBool(4, value)
 
-    def getIsReady(self):
+    def getIsDisabled(self):
         return self._getBool(5)
 
-    def setIsReady(self, value):
+    def setIsDisabled(self, value):
         self._setBool(5, value)
+
+    def getIsReady(self):
+        return self._getBool(6)
+
+    def setIsReady(self, value):
+        self._setBool(6, value)
+
+    def getModeName(self):
+        return self._getString(7)
+
+    def setModeName(self, value):
+        self._setString(7, value)
 
     def _initialize(self):
         super(AmmunitionPanelViewModel, self)._initialize()
         self._addViewModelProperty('ammunitionPanel', AmmunitionPanelModel())
         self._addViewModelProperty('lastSlotAction', TankSetupActionModel())
         self._addViewModelProperty('roleSkillSlot', RoleSkillSlotModel())
+        self._addNumberProperty('vehicleCD', -1)
         self._addBoolProperty('isMaintenanceEnabled', True)
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isReady', False)
+        self._addStringProperty('modeName', '')
         self.onEscKeyDown = self._addCommand('onEscKeyDown')

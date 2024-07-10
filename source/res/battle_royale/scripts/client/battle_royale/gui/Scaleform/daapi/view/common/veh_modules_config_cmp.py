@@ -77,8 +77,6 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
             else:
                 self._refresh()
                 self.__inited = True
-        else:
-            _logger.warning('Attempt to set the same level %s', level)
 
     def getAvailableLevel(self):
         return self.__availableLevel

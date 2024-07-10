@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/battle_results.py
+import typing
 from Event import Event
+if typing.TYPE_CHECKING:
+    from gui.battle_results.stats_ctrl import IBattleResultStatsCtrl
 
 class IBattleResultsService(object):
     __slots__ = ()
@@ -30,7 +33,7 @@ class IBattleResultsService(object):
     def getResultsVO(self, arenaUniqueID):
         raise NotImplementedError
 
-    def popResultsAnimation(self, arenaUniqueID):
+    def getPresenter(self, arenaUniqueID):
         raise NotImplementedError
 
     def saveStatsSorting(self, bonusType, iconType, sortDirection):

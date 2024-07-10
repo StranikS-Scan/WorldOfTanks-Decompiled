@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/constants.py
 ROYALE_POSTBATTLE_REWARDS_COUNT = 8
+BR_AMMO_PANEL_TYPE = 'BattleRoyaleAmmunitionPanelView'
 
 class BattleRoyaleEquipments(object):
     LARGE_REPAIRKIT = 'large_repairkit_battle_royale'

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/ingame_help/fun_random_pages.py
-from constants import ARENA_GUI_TYPE
+from fun_random_common.fun_constants import ARENA_GUI_TYPE
 from fun_random.gui.ingame_help import HelpPagePriority
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasBattleSubMode

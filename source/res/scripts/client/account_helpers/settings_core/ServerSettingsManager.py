@@ -98,6 +98,8 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     IS_CONFIRM_EMAIL_OVERLAY_ALLOWED = 'is_confirm_email_overlay_allowed'
     LIMITED_UI_ALL_NOVICE_RULES_COMPLETED = 'limited_ui_all_novice_rules_completed'
     MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN = 'mutable_damage_shell_mark_is_shown'
+    AUTO_SHOOT_HIGHLIGHTS_COUNTER = 'auto_shoot_highlights_count'
+    AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN = 'auto_shot_npd_shells_mark_is_shown'
 
 
 class ADVANCED_ACHIEVEMENTS_STORAGE_KEYS(CONST_CONTAINER):
@@ -609,8 +611,10 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.UI_STORAGE_2: Section(masks={UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN: 0,
                                       UI_STORAGE_KEYS.ACHIEVEMENT_EDIT_VIEW_VISITED: 4,
                                       UI_STORAGE_KEYS.STEAM_ADD_EMAIL_OVERLAY_SHOWN: 9,
-                                      UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED: 10}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
-                                      UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224)}),
+                                      UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED: 10,
+                                      UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN: 14}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
+                                      UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224),
+                                      UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER: Offset(11, 14336)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -813,6 +817,7 @@ class ServerSettingsManager(object):
      'reloaderTimer': 3,
      'zoomIndicator': 4}
     _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
+    _MAX_AUTO_SHOOT_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
     _MAX_ROCKET_ACCELERATION_HIGHLIGHTS_COUNT = 5
@@ -913,6 +918,9 @@ class ServerSettingsManager(object):
 
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
+
+    def checkAutoShootHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER, self._MAX_AUTO_SHOOT_HIGHLIGHTS_COUNT, increase)
 
     def checkDualGunHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.DUAL_GUN_HIGHLIGHTS_COUNTER, self._MAX_DUAL_GUN_HIGHLIGHTS_COUNT, increase)

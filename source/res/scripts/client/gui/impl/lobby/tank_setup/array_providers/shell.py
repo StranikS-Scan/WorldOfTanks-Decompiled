@@ -6,10 +6,16 @@ from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvi
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParameter
+from gui.shared.utils import AVG_DAMAGE_PER_SECOND
 from post_progression_common import TankSetupGroupsId
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
-_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList')
+_SHELLS_INFO_PARAMS = ('avgDamage',
+ AVG_DAMAGE_PER_SECOND,
+ 'avgPiercingPower',
+ 'shotSpeed',
+ 'explosionRadius',
+ 'stunDurationList')
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)

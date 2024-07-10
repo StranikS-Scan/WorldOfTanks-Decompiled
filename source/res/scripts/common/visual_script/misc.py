@@ -53,19 +53,23 @@ def readVisualScriptPlanParams(section, commonParams={}):
     return params
 
 
+def readVisualScriptPlan(section, commonParams={}):
+    planDef = {}
+    if section.has_key('name'):
+        planDef['name'] = section['name'].asString
+        planDef['params'] = readVisualScriptPlanParams(section, commonParams)
+        planDef['plan_id'] = section['plan_id'].asString if section.has_key('plan_id') else ''
+    else:
+        planDef['name'] = section.asString
+        planDef['params'] = dict(commonParams)
+        planDef['plan_id'] = ''
+    return planDef
+
+
 def readVisualScriptPlans(section, commonParams={}):
     plans = []
     for name, subsection in section.items():
         if name == 'plan':
-            planDef = {}
-            if subsection.has_key('name'):
-                planDef['name'] = subsection['name'].asString
-                planDef['params'] = readVisualScriptPlanParams(subsection, commonParams)
-                planDef['plan_id'] = subsection['plan_id'].asString if subsection.has_key('plan_id') else ''
-            else:
-                planDef['name'] = subsection.asString
-                planDef['params'] = dict(commonParams)
-                planDef['plan_id'] = ''
-            plans.append(planDef)
+            plans.append(readVisualScriptPlan(subsection, commonParams))
 
     return plans

@@ -13,18 +13,20 @@ USE_VEHICLE_CACHE = True
 USE_CONSTANTS_CACHE = True
 MAX_VEHICLE_CACHE_LAYER_COUNT = 5
 MAX_CONSTANTS_CACHE_LAYER_COUNT = 5
-FAKE_MODIFIER_NAME = 'fakeModifier'
 FAKE_PARAM_NAME = 'fakeParam'
 DEBUG_MODIFIERS = IS_DEVELOPMENT
-ERROR_TEMPLATE = "[BattleModifiers] {} for param '{}'"
+ERROR_TEMPLATE = '[BattleModifiers] {} for param {}'
 
 class DataType(object):
     INT = 0
     FLOAT = 1
     STRING = 2
+    DICT = 3
+    HASHABLE_TYPES = (INT, FLOAT, STRING)
     ID_TO_NAME = {INT: 'int',
      FLOAT: 'float',
-     STRING: 'string'}
+     STRING: 'string',
+     DICT: 'dict'}
     NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
     ALL = set(NAME_TO_ID.itervalues())
     NAMES = set(ID_TO_NAME.itervalues())
@@ -101,6 +103,8 @@ class ModifierDomain(object):
     HULL = 2048
     VEHICLE = 4096
     CONSTANTS = 8192
+    VSE = 16384
+    FAKE = 32768
     SHELL_COMPONENTS = SHELL | SHELL_TYPE
     SHOT_COMPONENTS = SHOT | SHELL_COMPONENTS
     GUN_COMPONENTS = GUN | SHOT_COMPONENTS
@@ -121,7 +125,9 @@ class ModifierDomain(object):
      ENGINE: 'engine',
      HULL: 'hull',
      VEHICLE: 'vehicle',
-     CONSTANTS: 'constants'}
+     CONSTANTS: 'constants',
+     VSE: 'vse',
+     FAKE: 'fake'}
     NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.items()))
     ALL = set(NAME_TO_ID.itervalues())
     NAMES = set(ID_TO_NAME.itervalues())
@@ -224,18 +230,33 @@ class ShellKind(object):
 
 class ModifiersWithRemapping(object):
     GUN_EFFECTS = 'gunEffects'
+    GUN_MAIN_PREFAB = 'gunMainPrefab'
     SHOT_EFFECTS = 'shotEffects'
     SOUND_NOTIFICATIONS = 'soundNotifications'
-    ALL = {GUN_EFFECTS, SHOT_EFFECTS, SOUND_NOTIFICATIONS}
+    ALL = {GUN_EFFECTS,
+     GUN_MAIN_PREFAB,
+     SHOT_EFFECTS,
+     SOUND_NOTIFICATIONS}
 
 
 class RemappingConditionNames(object):
+    REMAPPING_NAME = 'remappingName'
+    NATION = 'nation'
+    OUTFIT = 'outfit'
     CALIBER = 'caliber'
+    GUN_NAME = 'gunName'
     SHELL_KIND = 'shellKind'
-    ALL = {CALIBER, SHELL_KIND}
+    SHELL_SHOTS_COUNT = 'shellShotsCount'
+    ALL = {REMAPPING_NAME,
+     NATION,
+     OUTFIT,
+     CALIBER,
+     GUN_NAME,
+     SHELL_KIND,
+     SHELL_SHOTS_COUNT}
 
 
 class RemappingNames(object):
     TEST = 'test'
-    FEP_NIGHT_BATTLES = 'fep_nb'
-    ALL = set((FEP_NIGHT_BATTLES,) + ((TEST,) if IS_DEVELOPMENT else ()))
+    AUTO_SHOOT_GUNS = 'auto_shoot_guns'
+    ALL = set((AUTO_SHOOT_GUNS,) + ((TEST,) if IS_DEVELOPMENT else ()))

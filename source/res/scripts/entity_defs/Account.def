@@ -198,6 +198,7 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
+      <IgnoreIfNoClient>	True	</IgnoreIfNoClient>
     </onEnqueueFailure>
     <onDequeued>
       <Arg>	UINT8	</Arg>

@@ -38,6 +38,23 @@ class Event(list):
         return 'Event(%s)(%s):%s' % (self.__class__.__name__, len(self), repr(self[:]))
 
 
+class LateEvent(Event):
+    __slots__ = ('__lateCallback',)
+
+    def __init__(self, lateCallback, manager=None):
+        super(LateEvent, self).__init__(manager)
+        self.__lateCallback = lateCallback
+
+    def lateAdd(self, delegate):
+        self.__lateCallback(delegate)
+        self.__iadd__(delegate)
+
+    def clear(self):
+        self.__lateCallback = None
+        super(LateEvent, self).clear()
+        return
+
+
 class SafeEvent(Event):
     __slots__ = ()
 

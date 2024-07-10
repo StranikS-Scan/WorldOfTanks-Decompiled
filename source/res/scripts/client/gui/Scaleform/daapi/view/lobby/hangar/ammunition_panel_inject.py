@@ -5,18 +5,14 @@ from shared_utils import nextTick
 from frameworks.wulf import ViewFlags
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelInjectMeta import AmmunitionPanelInjectMeta
 from gui.impl.lobby.tank_setup.ammunition_panel.hangar_view import HangarAmmunitionPanelView
-from gui.impl.lobby.tank_setup.frontline.ammunition_panel import FrontlineAmmunitionPanelView
-from battle_royale.gui.impl.lobby.tank_setup.ammunition_panel import BattleRoyaleAmmunitionPanelView
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.system_factory import collectAmmunitionPanelView
 from helpers import dependency
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IFunRandomController, IHangarGuiController, IBattleRoyaleController
+from skeletons.gui.game_control import IHangarGuiController
 
 class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
-    __epicController = dependency.descriptor(IEpicBattleMetaGameController)
-    __hangarComponentsCtrl = dependency.descriptor(IHangarGuiController)
-    __funRandomCtrl = dependency.descriptor(IFunRandomController)
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def onPrbEntitySwitching(self):
         self.getInjectView().setPrbSwitching(True)
@@ -32,13 +28,13 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
 
     def _populate(self):
         super(AmmunitionPanelInject, self)._populate()
-        self.__funRandomCtrl.subscription.addSubModesWatcher(self.__invalidateInjectView, True)
+        self.addListener(events.AmmunitionInjectEvent.INVALIDATE_INJECT_VIEW, self.__invalidateInjectView, EVENT_BUS_SCOPE.LOBBY)
 
     def _onPopulate(self):
         self._createInjectView()
 
     def _dispose(self):
-        self.__funRandomCtrl.subscription.removeSubModesWatcher(self.__invalidateInjectView, True)
+        self.removeListener(events.AmmunitionInjectEvent.INVALIDATE_INJECT_VIEW, self.__invalidateInjectView, EVENT_BUS_SCOPE.LOBBY)
         super(AmmunitionPanelInject, self)._dispose()
 
     def _makeInjectView(self):
@@ -67,13 +63,8 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
         self.as_clearHelpLayoutS()
 
     def __getInjectViewClass(self):
-        if self.__epicController.isEpicPrbActive():
-            return FrontlineAmmunitionPanelView
-        elif self.__battleRoyaleController.isBattleRoyaleMode():
-            return BattleRoyaleAmmunitionPanelView
-        else:
-            ammunitionPanelViewCls = collectAmmunitionPanelView(self.__hangarComponentsCtrl.getAmmoInjectViewAlias())
-            return ammunitionPanelViewCls if ammunitionPanelViewCls is not None else HangarAmmunitionPanelView
+        ammunitionPanelViewCls = collectAmmunitionPanelView(self.__hangarGuiCtrl.getAmmoInjectViewAlias())
+        return ammunitionPanelViewCls if ammunitionPanelViewCls is not None else HangarAmmunitionPanelView
 
     def __invalidateInjectView(self, *_):
         injectView = self.getInjectView()

@@ -43,7 +43,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
      'detonation': DeathReason.DETONATION}
     __IMPACT_MODES = {IMPACT_TYPES.PENETRATION: ImpactMode.PENETRATION,
      IMPACT_TYPES.LEGACY_HE: ImpactMode.LEGACYHE,
-     IMPACT_TYPES.MODERN_HE: ImpactMode.MODERNHE}
+     IMPACT_TYPES.MODERN_HE: ImpactMode.MODERNHE,
+     IMPACT_TYPES.NON_PENETRATION_DAMAGE: ImpactMode.NONPENETRATIONDAMAGE}
 
     def __init__(self, viewModel, parentView):
         super(DeathCamMarkerView, self).__init__(viewModel, parentView)
@@ -149,6 +150,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         self.__updateViewModelSettings(Phase.TRAJECTORY, 0, phaseDuration, True)
 
     def __updateGunMarkerParameters(self, projectileData, shellType):
+        impactType = self.__IMPACT_MODES[projectileData['impactType']]
+        self.viewModel.setImpactMode(impactType)
         self.viewModel.setShellType(shellType)
         self.viewModel.setShellIcon(projectileData['shellIcon'])
         self.viewModel.setShellCaliber(projectileData['shellCaliber'])
@@ -194,8 +197,7 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         if projectileData['is3CaliberRuleActive']:
             ricochetAngle = maxPenetrationAngle = 90
         else:
-            ricochetAngle = self.__guiSessionProvider.arenaVisitor.modifiers.getShellRicochetCos(shellKind)
-            ricochetAngle = math.degrees(math.acos(ricochetAngle))
+            ricochetAngle = math.degrees(math.acos(projectileData['ricochetAngleCos']))
             maxPenetrationAngle = min(projectileData['maxPenetrationAngle'], ricochetAngle)
         self.viewModel.setAngleFailure(maxPenetrationAngle)
         self.viewModel.setAngleRicochet(ricochetAngle)

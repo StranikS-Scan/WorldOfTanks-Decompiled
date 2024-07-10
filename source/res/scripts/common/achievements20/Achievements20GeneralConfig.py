@@ -23,9 +23,6 @@ class Achievements20GeneralConfig(object):
     def isLogSettingLayoutEnabled(self):
         return self._config.get(Achievements20GeneralConst.IS_LOG_SETTING_LAYOUT_ENABLED, False)
 
-    def isLogRequestPlayerInfoEnabled(self):
-        return self._config.get(Achievements20GeneralConst.IS_LOG_REQUEST_PLAYER_INFO_ENABLED, False)
-
     def getRequiredCountOfBattles(self):
         return self._config.get(Achievements20GeneralConst.REQUIRED_COUNT_OF_BATTLES)
 

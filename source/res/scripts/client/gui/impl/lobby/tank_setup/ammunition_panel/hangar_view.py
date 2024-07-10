@@ -2,10 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/ammunition_panel/hangar_view.py
 import logging
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from frameworks.wulf import ViewStatus
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.tank_setup.ammunition_panel.base_view import BaseAmmunitionPanelView
+from gui.impl.lobby.tank_setup.ammunition_panel.hangar_shells_counter_mapping import ShellCounterMapping
 from gui.impl.lobby.tank_setup.intro_ammunition_setup_view import showIntro
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AmmunitionPanelViewEvent
@@ -41,9 +41,11 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     @wg_async
     def _onPanelSectionSelected(self, args):
         selectedSection = args['selectedSection']
-        if selectedSection == TankSetupConstants.SHELLS and self.vehItem and self.vehItem.gun.isDamageMutable():
-            if not self._settingsCore.serverSettings.getUIStorage2().get(UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN):
-                self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN: True})
+        if selectedSection == TankSetupConstants.SHELLS and self.vehItem:
+            for checkVehicleFunction, uiKey in ShellCounterMapping(self.vehItem).items():
+                if checkVehicleFunction() and not self._settingsCore.serverSettings.getUIStorage2().get(uiKey):
+                    self._settingsCore.serverSettings.saveInUIStorage2({uiKey: True})
+
         yield showIntro(selectedSection, self.getParentWindow())
         if self.viewStatus != ViewStatus.LOADED:
             return

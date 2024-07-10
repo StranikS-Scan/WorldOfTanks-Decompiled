@@ -94,6 +94,9 @@ class MessageTemplates(templates.XMLCollection):
             data['filters'].append({'name': subSec.readString('name'),
              'color': subSec.readString('color')})
 
+        section = source['bgIconHeight']
+        if section is not None:
+            data['bgIconHeight'] = source.readInt('bgIconHeight')
         section = source['buttonsLayout']
         if section is not None:
             layout = data['buttonsLayout']

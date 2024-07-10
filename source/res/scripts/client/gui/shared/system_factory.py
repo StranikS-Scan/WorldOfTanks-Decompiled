@@ -32,7 +32,7 @@ INGAME_HELP_PAGES_BUILDERS = 28
 QUEST_BUILDERS = 29
 AWARD_CONTROLLER_HANDLERS = 30
 CAN_SELECT_PRB_ENTITY = 31
-BATTLE_RESULTS_COMPOSER = 32
+BATTLE_RESULT_STATS_CONTROLLER = 32
 SEASON_PROVIDER_HANDLER = 33
 MESSENGER_SERVER_FORMATTERS = 34
 CAROUSEL_EVENTS_ENTRIES = 35
@@ -55,6 +55,10 @@ BATTLE_CHANEL_CONTROLLER = 51
 HIT_DIRECTION_CONTROLLER = 52
 CUSTOMIZATION_HANGAR_AVAILABLE = 53
 OPTIMIZED_VIEWS = 54
+REPLAY_MODE_TAG = 55
+QUEST_FLAGS = 56
+BATTLE_RESULTS_STATS_SORTING = 57
+LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
 
 class _CollectEventsManager(object):
 
@@ -402,6 +406,26 @@ def collectTokenQuestsSubFormatters():
     return __collectEM.handleEvent(TOKEN_QUEST_SUBFORMATTERS, ctx={'formatters': []}).get('formatters')
 
 
+def registerLootBoxAutoOpenSubFormatter(formatter):
+
+    def onCollect(ctx):
+        ctx['formatters'].append(formatter)
+
+    __collectEM.addListener(LOOTBOX_AUTOOPEN_SUBFORMATTERS, onCollect)
+
+
+def registerLootBoxAutoOpenSubFormatters(formatters):
+
+    def onCollect(ctx):
+        ctx['formatters'].extend(formatters)
+
+    __collectEM.addListener(LOOTBOX_AUTOOPEN_SUBFORMATTERS, onCollect)
+
+
+def collectLootBoxAutoOpenSubFormatters():
+    return __collectEM.handleEvent(LOOTBOX_AUTOOPEN_SUBFORMATTERS, ctx={'formatters': []}).get('formatters')
+
+
 def registerPrbInviteHtmlFormatter(prbType, formatterCls):
 
     def onCollect(ctx):
@@ -634,16 +658,16 @@ def collectCanSelectPrbEntity(queueType):
     return __collectEM.handleEvent((CAN_SELECT_PRB_ENTITY, queueType), ctx={}).get('itemFun', lambda *args, **kwargs: False)
 
 
-def registerBattleResultsComposer(bonusType, itemCls):
+def registerBattleResultStatsCtrl(bonusType, itemCls):
 
     def onCollect(ctx):
         ctx['item'] = itemCls
 
-    __collectEM.addListener((BATTLE_RESULTS_COMPOSER, bonusType), onCollect)
+    __collectEM.addListener((BATTLE_RESULT_STATS_CONTROLLER, bonusType), onCollect)
 
 
-def collectBattleResultsComposer(bonusType):
-    return __collectEM.handleEvent((BATTLE_RESULTS_COMPOSER, bonusType), ctx={}).get('item', None)
+def collectBattleResultStatsCtrl(bonusType):
+    return __collectEM.handleEvent((BATTLE_RESULT_STATS_CONTROLLER, bonusType), ctx={}).get('item', None)
 
 
 def registerSeasonProviderHandler(seasonType, seasonControllerHandler):
@@ -822,3 +846,39 @@ def registerOptimizedViews(optimizedViewsSettings):
 
 def collectOptimizedViews():
     return __collectEM.handleEvent(OPTIMIZED_VIEWS, ctx={'optimizedViewsSettings': {}})['optimizedViewsSettings']
+
+
+def registerReplayModeTag(guiType, replayModeTag):
+
+    def onCollect(ctx):
+        ctx['replayModeTag'] = replayModeTag
+
+    __collectEM.addListener((REPLAY_MODE_TAG, guiType), onCollect)
+
+
+def collectReplayModeTag(guiType):
+    return __collectEM.handleEvent((REPLAY_MODE_TAG, guiType), ctx={}).get('replayModeTag', '')
+
+
+def registerQuestFlag(questFlagType, flagCls):
+
+    def onCollect(ctx):
+        ctx['questFlags'][questFlagType] = flagCls
+
+    __collectEM.addListener(QUEST_FLAGS, onCollect)
+
+
+def collectQuestFlags():
+    return __collectEM.handleEvent(QUEST_FLAGS, {'questFlags': {}})['questFlags']
+
+
+def registerBattleResultsStatsSorting(bonusType, sortingKey):
+
+    def onCollect(ctx):
+        ctx['sortingKey'][bonusType] = sortingKey
+
+    __collectEM.addListener(BATTLE_RESULTS_STATS_SORTING, onCollect)
+
+
+def collectBattleResultsStatsSorting():
+    return __collectEM.handleEvent(BATTLE_RESULTS_STATS_SORTING, {'sortingKey': {}})['sortingKey']

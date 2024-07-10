@@ -113,7 +113,10 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
             self._onUnregisterFlashComponent(viewPy, alias)
             self.__fireRegisteringEvent(events.ComponentEvent.COMPONENT_UNREGISTERED, viewPy, alias)
             viewPy.setPyReloading(pyReloading)
-            viewPy.destroy()
+            try:
+                viewPy.destroy()
+            except Exception as ex:
+                _logger.exception(ex)
 
     def __fireRegisteringEvent(self, event, componentPy, alias):
         g_eventBus.handleEvent(events.ComponentEvent(event, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)

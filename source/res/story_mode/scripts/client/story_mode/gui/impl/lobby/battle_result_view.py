@@ -26,7 +26,7 @@ from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
 from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgName
 from story_mode.gui.shared.event_dispatcher import showCongratulationsWindow
 from story_mode.gui.shared.utils import getTasksCount
-from story_mode.gui.story_mode_gui_constants import POST_BATTLE_MUSIC, POST_BATTLE_MUSIC_EVENT_WIN, POST_BATTLE_MUSIC_EVENT_LOSE
+from story_mode.gui.story_mode_gui_constants import POST_BATTLE_MUSIC_WIN, POST_BATTLE_MUSIC_LOSE
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode.uilogging.story_mode.consts import LogButtons
@@ -71,13 +71,10 @@ class BattleResultView(ViewImpl):
     def _onLoaded(self, *args, **kwargs):
         super(BattleResultView, self)._onLoaded(*args, **kwargs)
         viewModel = self.getViewModel()
-        if viewModel.getIsEvent():
-            if viewModel.getIsVictory():
-                SoundGroups.g_instance.playSound2D(POST_BATTLE_MUSIC_EVENT_WIN)
-            else:
-                SoundGroups.g_instance.playSound2D(POST_BATTLE_MUSIC_EVENT_LOSE)
+        if viewModel.getIsVictory():
+            SoundGroups.g_instance.playSound2D(POST_BATTLE_MUSIC_WIN)
         else:
-            SoundGroups.g_instance.playSound2D(POST_BATTLE_MUSIC)
+            SoundGroups.g_instance.playSound2D(POST_BATTLE_MUSIC_LOSE)
         self._uiLogger.logOpen(missionId=viewModel.getMissionId() if viewModel else None, win=viewModel.getIsVictory() if viewModel else False)
         return
 

@@ -19,7 +19,7 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-from vehicle_systems.tankStructure import TankSoundObjectsIndexes
+from vehicle_systems.sound_objects import getGunSoundObject, getGunSoundObjectDistance
 from constants import IS_EDITOR
 from wrapped_reflection_framework import reflectedNamedTuple
 if not IS_EDITOR:
@@ -129,6 +129,9 @@ class EffectsList(object):
                 return
             del data['_EffectsList_effects']
             return
+
+    def descriptors(self):
+        return self.__effectDescList
 
 
 class EffectsListPlayer(object):
@@ -351,13 +354,14 @@ class _PixieEffectDesc(_EffectDesc):
         return self._files
 
     def reattach(self, elem, model):
+        newPos = elem['newPos']
         nodePos = self._nodeName
         elem['model'] = model
-        if elem['newPos'] is not None:
-            nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
+        if newPos is not None:
+            nodePos = string.split(newPos[0], '/') if newPos[0] else []
         if elem['pixie'].pixie is not None and elem['node'] is not None:
             elem['node'].detach(elem['pixie'].pixie)
-            elem['node'] = _findTargetNode(model, nodePos, elem['newPos'][1] if elem['newPos'] else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
+            elem['node'] = _findTargetNode(model, nodePos, newPos[1] if newPos and len(newPos) > 1 else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
             elem['node'].attach(elem['pixie'].pixie)
         else:
             elem['node'] = _findTargetNode(model, nodePos, None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
@@ -367,10 +371,10 @@ class _PixieEffectDesc(_EffectDesc):
         elem = {}
         node = args.get('node', None)
         if node is None:
-            elem['newPos'] = args.get('position', None)
+            elem['newPos'] = newPos = args.get('position', None)
             nodePos = self._nodeName
-            if elem['newPos'] is not None:
-                nodePos = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
+            if newPos is not None:
+                nodePos = string.split(newPos[0], '/') if newPos[0] else []
             scale = args.get('scale')
             if scale is not None:
                 elem['scale'] = scale
@@ -379,7 +383,7 @@ class _PixieEffectDesc(_EffectDesc):
             if surfaceMatKind is not None and self._surfaceMatKinds is not None:
                 if surfaceMatKind not in self._surfaceMatKinds:
                     return
-            elem['node'] = _findTargetNode(model, nodePos, elem['newPos'][1] if elem['newPos'] else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
+            elem['node'] = _findTargetNode(model, nodePos, newPos[1] if newPos and len(newPos) > 1 else None, self._orientByClosestSurfaceNormal, elem['surfaceNormal'])
         else:
             elem['node'] = node
         elem['model'] = model
@@ -523,10 +527,11 @@ class _ModelEffectDesc(_EffectDesc):
 
     def reattach(self, elem, model):
         elem['node'].detach(elem['attachment'])
+        newPos = elem['newPos']
         nodeName = self._nodeName
-        if elem['newPos'] is not None:
-            nodeName = string.split(elem['newPos'][0], '/') if elem['newPos'][0] else []
-        targetNode = _findTargetNode(model, nodeName, elem['newPos'][1] if elem['newPos'] else None)
+        if newPos is not None:
+            nodeName = string.split(newPos[0], '/') if newPos[0] else []
+        targetNode = _findTargetNode(model, nodeName, newPos[1] if newPos and len(newPos) > 1 else None)
         targetNode.attach(model)
         return
 
@@ -536,7 +541,7 @@ class _ModelEffectDesc(_EffectDesc):
         nodeName = self._nodeName
         if newPos is not None:
             nodeName = string.split(newPos[0], '/') if newPos[0] else []
-        targetNode = _findTargetNode(model, nodeName, newPos[1] if newPos else None)
+        targetNode = _findTargetNode(model, nodeName, newPos[1] if newPos and len(newPos) > 1 else None)
         targetNode.attach(currentModel)
         animator = None
         if self._animation:
@@ -642,18 +647,14 @@ class _ShotSoundEffectDesc(_BaseSoundEvent):
     def create(self, model, effects, args):
         vehicle = args.get('entity', None)
         if vehicle is not None and vehicle.isAlive() and vehicle.isStarted:
-            soundObject = vehicle.appearance.engineAudition.getSoundObject(TankSoundObjectsIndexes.GUN)
-            if soundObject is not None:
-                isPlayer, _ = self._isPlayer(args)
-                soundName = self._soundName[0 if isPlayer else 1]
-                if IS_EDITOR:
-                    distance = vehicle.position.length
-                else:
-                    distance = (BigWorld.camera().position - vehicle.position).length
-                for sndName in soundName:
-                    soundObject.play(sndName)
+            isPlayer, _ = self._isPlayer(args)
+            soundName = self._soundName[0 if isPlayer else 1]
+            soundObject = getGunSoundObject(vehicle)
+            for sndName in soundName:
+                soundObject.play(sndName)
 
-                soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
+            distance = getGunSoundObjectDistance(vehicle)
+            soundObject.setRTPC('RTPC_ext_control_reflections_priority', distance)
         return
 
 
@@ -733,12 +734,15 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         return (self._soundName[0 if isPlayer else 1], id)
 
     def create(self, model, effects, args):
-        isPlayer, _ = self._isPlayer(args)
-        self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
-        soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
-        if soundObject is not None and self.__tracerDelaySound is not None:
-            self.__tracerDelaySound.create(soundObject, args)
-        return soundObject
+        isPlayer, attackerID = self._isPlayer(args)
+        if not self._canCreateSoundObject(attackerID):
+            return
+        else:
+            self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
+            soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
+            if soundObject is not None and self.__tracerDelaySound is not None:
+                self.__tracerDelaySound.create(soundObject, args)
+            return soundObject
 
     def delete(self, elem, reason):
         if self.__tracerDelaySound is not None:
@@ -755,7 +759,23 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
     def _isPlayer(self, args):
         attackerID = args.get('attackerID', None)
         avatar = BigWorld.player()
-        return (attackerID == BigWorld.player().playerVehicleID, attackerID) if not avatar.isVehicleAlive and attackerID is not None else super(_TracerSoundEffectDesc, self)._isPlayer(args)
+        if not avatar.isVehicleAlive and attackerID is not None:
+            return (attackerID == BigWorld.player().playerVehicleID, attackerID)
+        else:
+            isPlayerVehicle, entityID = super(_TracerSoundEffectDesc, self)._isPlayer(args)
+            return (isPlayerVehicle, attackerID or entityID)
+
+    def _canCreateSoundObject(self, attackerID):
+        return True
+
+
+class _AutoShootTracerSoundEffectDesc(_TracerSoundEffectDesc):
+    __slots__ = ()
+    TYPE = '_AutoShootTracerSoundEffectDesc'
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def _canCreateSoundObject(self, attackerID):
+        return self.__sessionProvider.shared.battleSpamCtrl.filterAutoShootTracerSound(attackerID) if attackerID is not None and self.__sessionProvider.shared.battleSpamCtrl is not None else super(_AutoShootTracerSoundEffectDesc, self)._canCreateSoundObject(attackerID)
 
 
 class _CollisionSoundEffectDesc(_BaseSoundEvent):
@@ -1115,6 +1135,7 @@ class _FlashBangEffectDesc(_EffectDesc):
     __slots__ = ('_duration', '_keyframes', '__fba', '__clbackId')
     TYPE = '_FlashBangEffectDesc'
     renderSettings = BigWorld.WGRenderSettings()
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, dataSection):
         super(_FlashBangEffectDesc, self).__init__(dataSection)
@@ -1136,7 +1157,11 @@ class _FlashBangEffectDesc(_EffectDesc):
         if not IS_EDITOR:
             inputHandler = getattr(BigWorld.player(), 'inputHandler')
             isFlashBangAllowed = bool(inputHandler is None or inputHandler.isFlashBangAllowed)
-        if self._isMarkedForPlay(args) and isFlashBangAllowed:
+        attackerID = args.get('attackerID', None)
+        isFlashBangAllowed = isFlashBangAllowed and self._isMarkedForPlay(args)
+        if isFlashBangAllowed and attackerID is not None and self.__sessionProvider.shared.battleSpamCtrl is not None:
+            isFlashBangAllowed = self.__sessionProvider.shared.battleSpamCtrl.filterFullscreenEffects(attackerID)
+        if isFlashBangAllowed:
             if self.__fba is not None:
                 self.renderSettings.removeFlashBangAnimation(self.__fba)
                 BigWorld.cancelCallback(self.__clbackId)
@@ -1349,7 +1374,8 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
  'destructionSound': _DestructionSoundEffectDesc,
- 'lifetimeSound': _DestructionSoundEffectDesc}
+ 'lifetimeSound': _DestructionSoundEffectDesc,
+ 'autoShootTracerSound': _AutoShootTracerSoundEffectDesc}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

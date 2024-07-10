@@ -18,7 +18,8 @@ class PlayerDataComponent(ClientArenaComponent):
         self.__playerGroupsEnabled = componentSystem.arenaType.numPlayerGroups > 0
         LOG_DEBUG_DEV('PlayerDataComponent.__playerGroupsEnabled ', self.__playerGroupsEnabled, componentSystem.arenaType.numPlayerGroups > 0)
         self.onPlayerGroupsUpdated = Event.Event(self._eventManager)
-        self.__playerIngameRanksEnabled = BONUS_CAPS.checkAny(componentSystem.bonusType, BONUS_CAPS.PLAYER_RANK_MECHANICS)
+        arena = componentSystem.arena()
+        self.__playerIngameRanksEnabled = arena.hasBonusCap(BONUS_CAPS.PLAYER_RANK_MECHANICS)
         self.__playerRank = None
         self.onCrewRolesFactorUpdated = Event.Event(self._eventManager)
         self.onPlayerRankUpdated = Event.Event(self._eventManager)

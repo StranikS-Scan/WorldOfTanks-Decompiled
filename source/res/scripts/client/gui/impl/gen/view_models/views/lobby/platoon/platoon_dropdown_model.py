@@ -12,39 +12,39 @@ class Type(Enum):
 class PlatoonDropdownModel(ViewModel):
     __slots__ = ('onOutsideClick',)
 
-    def __init__(self, properties=9, commands=1):
+    def __init__(self, properties=11, commands=1):
         super(PlatoonDropdownModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def btnFind(self):
+    def findPlatoon(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getBtnFindType():
+    def getFindPlatoonType():
         return ButtonModel
 
     @property
-    def btnCreate(self):
+    def createPlatoon(self):
         return self._getViewModel(1)
 
     @staticmethod
-    def getBtnCreateType():
+    def getCreatePlatoonType():
         return ButtonModel
 
     @property
-    def btnCreateForTwo(self):
+    def createPlatoonForTwo(self):
         return self._getViewModel(2)
 
     @staticmethod
-    def getBtnCreateForTwoType():
+    def getCreatePlatoonForTwoType():
         return ButtonModel
 
     @property
-    def btnCreateForSeven(self):
+    def createPlatoonForSeven(self):
         return self._getViewModel(3)
 
     @staticmethod
-    def getBtnCreateForSevenType():
+    def getCreatePlatoonForSevenType():
         return ButtonModel
 
     def getType(self):
@@ -65,27 +65,41 @@ class PlatoonDropdownModel(ViewModel):
     def setIsSettingsVisible(self, value):
         self._setBool(6, value)
 
-    def getIsRibbonVisible(self):
+    def getHasXpBonus(self):
         return self._getBool(7)
 
-    def setIsRibbonVisible(self, value):
+    def setHasXpBonus(self, value):
         self._setBool(7, value)
 
+    def getHasCreditsBonus(self):
+        return self._getBool(8)
+
+    def setHasCreditsBonus(self, value):
+        self._setBool(8, value)
+
+    def getIsRibbonVisible(self):
+        return self._getBool(9)
+
+    def setIsRibbonVisible(self, value):
+        self._setBool(9, value)
+
     def getBackgroundImage(self):
-        return self._getString(8)
+        return self._getString(10)
 
     def setBackgroundImage(self, value):
-        self._setString(8, value)
+        self._setString(10, value)
 
     def _initialize(self):
         super(PlatoonDropdownModel, self)._initialize()
-        self._addViewModelProperty('btnFind', ButtonModel())
-        self._addViewModelProperty('btnCreate', ButtonModel())
-        self._addViewModelProperty('btnCreateForTwo', ButtonModel())
-        self._addViewModelProperty('btnCreateForSeven', ButtonModel())
+        self._addViewModelProperty('findPlatoon', ButtonModel())
+        self._addViewModelProperty('createPlatoon', ButtonModel())
+        self._addViewModelProperty('createPlatoonForTwo', ButtonModel())
+        self._addViewModelProperty('createPlatoonForSeven', ButtonModel())
         self._addStringProperty('type')
         self._addStringProperty('battleType', '')
         self._addBoolProperty('isSettingsVisible', False)
+        self._addBoolProperty('hasXpBonus', False)
+        self._addBoolProperty('hasCreditsBonus', False)
         self._addBoolProperty('isRibbonVisible', False)
         self._addStringProperty('backgroundImage', '')
         self.onOutsideClick = self._addCommand('onOutsideClick')

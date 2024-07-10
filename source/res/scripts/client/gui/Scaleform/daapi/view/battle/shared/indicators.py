@@ -131,6 +131,10 @@ _EXTENDED_BLIND_MARKER_TYPE_TO_BG = {_MARKER_TYPE.HP_DAMAGE: {_MARKER_SIZE_TYPE.
  _MARKER_TYPE.CRITICAL_DAMAGE: {_MARKER_SIZE_TYPE.SMALL: DAMAGEINDICATOR.CRIT_BLIND,
                                 _MARKER_SIZE_TYPE.MEDIUM: DAMAGEINDICATOR.CRIT_BLIND,
                                 _MARKER_SIZE_TYPE.LARGE: DAMAGEINDICATOR.CRIT_BLIND}}
+_MARKER_TYPE_TO_PRIORITY = {_MARKER_TYPE.HP_DAMAGE: 3,
+ _MARKER_TYPE.HP_ALLAY_DAMAGE: 3,
+ _MARKER_TYPE.BLOCKED_DAMAGE: 1,
+ _MARKER_TYPE.CRITICAL_DAMAGE: 2}
 
 class _MarkerData(object):
 
@@ -158,7 +162,8 @@ class _MarkerVOBuilder(object):
     def buildVO(self, markerData):
         return {'itemIdx': markerData.idx,
          'frame': markerData.timeLeft * self._getIndicatorFrameRate(),
-         'bgStr': self._getBackground(markerData)}
+         'bgStr': self._getBackground(markerData),
+         'priority': _MARKER_TYPE_TO_PRIORITY[markerData.markerType]}
 
     def _getIndicatorFrameRate(self):
         return _DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
@@ -304,11 +309,11 @@ class DamageIndicatorMeta(Flash):
     def as_updateSettingsS(self, isStandard, isWithTankInfo, isWithAnimation, isWithValue):
         return self._as_updateSettings(isStandard, isWithTankInfo, isWithAnimation, isWithValue)
 
-    def as_showStandardS(self, itemIdx, bgStr, frame):
-        return self._as_showStandard(itemIdx, bgStr, frame)
+    def as_showStandardS(self, itemIdx, bgStr, frame, priority):
+        return self._as_showStandard(itemIdx, bgStr, frame, priority)
 
-    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire):
-        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire)
+    def as_showExtendedS(self, itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, priority):
+        return self._as_showExtended(itemIdx, bgStr, circleStr, frame, tankName, tankTypeStr, damageValue, isFriendlyFire, priority)
 
     def as_hideS(self, itemIdx):
         return self._as_hide(itemIdx)
@@ -451,7 +456,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.as_showS()
 
     def hide(self):
-        self.as_hideS()
+        self.as_hideS(False)
 
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
@@ -465,6 +470,8 @@ class SixthSenseIndicator(SixthSenseMeta):
 
     def _dispose(self):
         self.__cancelCallback()
+        if self.sessionProvider.isReplayPlaying and self._getPyReloading():
+            self.as_hideS(True)
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -493,7 +500,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         if not self.__enabled:
             return
         else:
-            self.as_hideS()
+            self.as_hideS(False)
             return
 
     def __cancelCallback(self):

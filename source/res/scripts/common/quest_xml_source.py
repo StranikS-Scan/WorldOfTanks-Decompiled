@@ -370,6 +370,7 @@ class Source(object):
          'bonusLimit': self.__readCondition_int,
          'isBattleMattersEnabled': self.__readCondition_bool,
          'isWinbackQuestsEnabled': self.__readCondition_bool,
+         'isDailyQuestsEnabled': self.__readCondition_bool,
          'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'lastLogout': self.__readBattleResultsConditionList,

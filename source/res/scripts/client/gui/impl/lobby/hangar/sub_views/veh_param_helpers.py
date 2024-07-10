@@ -5,22 +5,8 @@ from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_param_group_v
 from gui.shared.gui_items import KPI, kpiFormatValue
 from gui.shared.items_parameters import MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, KPI_FORMATTERS
+from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, KPI_FORMATTERS, SMART_ROUND_PARAMS
 from gui.shared.items_parameters.params_helper import hasPositiveEffect, hasNegativeEffect, hasGroupPenalties
-from gui.shared.utils import DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME
-_SMART_ROUND_PARAMS = ('damage',
- 'piercingPower',
- 'bombDamage',
- 'shellsCount',
- 'shellReloadingTime',
- 'reloadMagazineTime',
- 'reloadTime',
- 'dispertionRadius',
- 'aimingTime',
- 'weight',
- DUAL_GUN_RATE_TIME,
- DUAL_GUN_CHARGE_TIME,
- 'crewRolesFactor')
 _EQUAL_TO_ZERO_LITERAL = '~0'
 _NUMBER_DIGITS = 2
 
@@ -89,7 +75,7 @@ def formatParameterValue(parameterName, paramValue, parameterState=None, formatS
      'separator': '/'}
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
-    doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
+    doSmartRound = allowSmartRound and parameterName in SMART_ROUND_PARAMS
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)

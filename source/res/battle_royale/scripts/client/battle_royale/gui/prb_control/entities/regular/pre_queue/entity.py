@@ -5,11 +5,6 @@ import BigWorld
 import typing
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getRoyaleFightBtnTooltipData
-from gui.Scaleform.settings import TOOLTIP_TYPES
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control.entities.base.pre_queue.ctx import JoinPreQueueModeCtx
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -25,7 +20,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.periodic_battles.models import PrimeTimeStatus
-from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 _logger = logging.getLogger(__name__)
 
@@ -129,18 +123,6 @@ class BattleRoyaleEntity(PreQueueEntity):
 
     def getPermissions(self, pID=None, **kwargs):
         return BattleRoyalePermissions(self.isInQueue())
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        if isStateDisabled:
-            return (getRoyaleFightBtnTooltipData(self.canPlayerDoAction()), False)
-        return (TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED, True) if g_currentVehicle.isOnlyForBattleRoyaleBattles() else super(BattleRoyaleEntity, self).getFightBtnTooltipData(isStateDisabled)
-
-    def getSquadBtnTooltipData(self):
-        if self.getPermissions().canCreateSquad():
-            header = backport.text(R.strings.platoon.headerButton.tooltips.battleRoyaleSquad.header())
-            body = backport.text(R.strings.platoon.headerButton.tooltips.battleRoyaleSquad.body())
-            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
-        return super(BattleRoyaleEntity, self).getSquadBtnTooltipData()
 
     def _createActionsValidator(self):
         return BattleRoyaleActionsValidator(self)

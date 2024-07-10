@@ -34,9 +34,9 @@ class EULAProps(object):
         return self.__url
 
 
-def _readMacros(xmlCtx, section, valueName='value'):
+def _readMacros(xmlCtx, section, valueName='value', nameFromSection=True):
     result = {}
-    name = resource_helper.readItemName(xmlCtx, section)
+    name = resource_helper.readItemName(xmlCtx, section, nameFromSection=nameFromSection)
     macros = _readItemMacros(xmlCtx, section)
     subCtx, subSection = resource_helper.getSubSection(xmlCtx, section, valueName)
     for nextCtx, nextSection in resource_helper.getIterator(subCtx, subSection):
@@ -144,7 +144,7 @@ class GuiSettings(object):
     def __init__(self):
         self.__settings = _DEFAULT_SETTINGS.copy()
         settings = {}
-        for item in resource_helper.root_iterator(GUI_SETTINGS_FILE_PATH, customReaders={'macros': _readMacros}):
+        for item in resource_helper.root_iterator(GUI_SETTINGS_FILE_PATH, customReaders={'macros': _readMacros}, nameFromSection=True):
             if item.name in _SETTING_CONVERTERS:
                 setting = _DEFAULT_SETTINGS[item.name]
                 converter = _SETTING_CONVERTERS[item.name]

@@ -1,20 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/clan_supply/bonus_packers.py
+import logging
 from collections import defaultdict
 from copy import deepcopy
 import typing
 from adisp import adisp_process
-from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.backport import TooltipData
+from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.lobby.awards.packers import MultiAwardVehiclesBonusUIPacker
 from gui.server_events.bonuses import mergeBonuses, splitBonuses, getNonQuestBonuses
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, Customization3Dand2DbonusUIPacker
+from gui.server_events.recruit_helper import getRecruitInfo
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, Customization3Dand2DbonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID
 from gui.shared.money import Currency
 from helpers.dependency import replace_none_kwargs
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Optional
-    from gui.server_events.bonuses import CustomizationsBonus, SimpleBonus
+    from gui.server_events.bonuses import CustomizationsBonus, SimpleBonus, TmanTemplateTokensBonus
+_logger = logging.getLogger(__name__)
 
 class QuestReward(CONST_CONTAINER):
     INDUSTRIAL_RESOURCE = 'industrial_resource'
@@ -77,6 +83,56 @@ class CustomizationsBonusPacker(Customization3Dand2DbonusUIPacker):
         customizationItem = bonus.getC11nItem(item)
         model.setValue(str(customizationItem.id))
         return model
+
+
+class TmanTemplateBonusPacker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                packed = cls._packTmanTemplateToken(tokenID, bonus)
+                if packed is not None:
+                    result.append(packed)
+
+        return result
+
+    @classmethod
+    def _packTmanTemplateToken(cls, tokenID, bonus):
+        recruitInfo = getRecruitInfo(tokenID)
+        if recruitInfo is None:
+            _logger.error('Received wrong tman_template token from server: %s', tokenID)
+            return
+        else:
+            model = IconBonusModel()
+            cls._packCommon(bonus, model)
+            model.setIcon(cls.__getBonusImageName(recruitInfo))
+            model.setLabel(recruitInfo.getFullUserName())
+            return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
+
+    @classmethod
+    def __getBonusImageName(cls, recruitInfo):
+        baseName = 'tank{}man'.format('wo' if recruitInfo.isFemale() else '')
+        return baseName
 
 
 def getClanSupplyBonusPacker(isProgression=False):

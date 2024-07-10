@@ -1,10 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/util/fun_helpers.py
 import typing
+from fun_random.gui.feature.fun_constants import FEP_PROGRESSION_TRIGGER_QUEST_ID, FEP_PROGRESSION_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_TRIGGER_QUEST_ID, FEP_PROGRESSION_UNLIMITED_ALT_TRIGGER_QUEST_ID, FEP_PROGRESSION_COUNTER_ID, FEP_PROGRESSION_UNLIMITED_COUNTER_ID
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
+from helpers import dependency
+from skeletons.gui.game_control import IFunRandomController
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
+
+def isFunProgressionTrigger(qID):
+    return qID.startswith(FEP_PROGRESSION_TRIGGER_QUEST_ID) or qID.startswith(FEP_PROGRESSION_ALT_TRIGGER_QUEST_ID)
+
+
+def isFunProgressionUnlimitedTrigger(qID):
+    return qID.startswith(FEP_PROGRESSION_UNLIMITED_TRIGGER_QUEST_ID) or qID.startswith(FEP_PROGRESSION_UNLIMITED_ALT_TRIGGER_QUEST_ID)
+
+
+def isFunProgressionCounter(qID):
+    return qID.startswith(FEP_PROGRESSION_COUNTER_ID) or qID.startswith(FEP_PROGRESSION_UNLIMITED_COUNTER_ID)
+
+
+@dependency.replace_none_kwargs(funRandomCtrl=IFunRandomController)
+def canSelectFunRandomPrbEntity(funRandomCtrl=None):
+    desiredSubMode = funRandomCtrl.subModesHolder.getDesiredSubMode()
+    return funRandomCtrl.isEnabled() and desiredSubMode is not None and desiredSubMode.isAvailable()
+
 
 def getProgressionInfoByExecutor(executorQuestID):
     progressionName, counterAmount = executorQuestID.split('_')[-2:]
@@ -12,6 +33,10 @@ def getProgressionInfoByExecutor(executorQuestID):
 
 
 def getProgressionNameByTrigger(triggerQuestID):
+    return triggerQuestID.split('_')[-2]
+
+
+def getIdByTrigger(triggerQuestID):
     return triggerQuestID.split('_')[-1]
 
 

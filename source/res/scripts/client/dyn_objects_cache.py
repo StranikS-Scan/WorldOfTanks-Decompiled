@@ -162,12 +162,21 @@ class _BerserkerTurretEffect(_SimpleEffect):
     _SECTION_NAME = 'berserkerTurretEffect'
 
 
-class _VehicleRespawnEffect(object):
-    _SECTION_NAME = 'VehicleRespawn'
+class _PrefabsReader(object):
+    _SECTION_NAME = None
+    prefabs = property(lambda self: self.__prefabs)
 
     def __init__(self, dataSection):
-        super(_VehicleRespawnEffect, self).__init__()
-        self.effectPrefabPath = dataSection[self._SECTION_NAME].readString('prefab')
+        super(_PrefabsReader, self).__init__()
+        self.__prefabs = dataSection[self._SECTION_NAME].readStrings('prefab')
+
+
+class _VehicleRespawnEffects(_PrefabsReader):
+    _SECTION_NAME = 'VehicleRespawn'
+
+
+class _FireCircleEffects(_PrefabsReader):
+    _SECTION_NAME = 'FireCircleEffect'
 
 
 class DynObjectsBase(object):
@@ -317,13 +326,14 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__repairPoint = None
         self.__botDeliveryEffect = None
         self.__botClingDeliveryEffect = None
-        self.__vehicleRespawnEffect = None
+        self.__vehicleRespawnEffects = None
         self.__botDeliveryMarker = None
         self.__dropPlane = None
         self.__airDrop = None
         self.__loots = {}
         self.__minesEffects = None
         self.__berserkerEffects = None
+        self.__fireCircleEffects = None
         self.__resourcesCache = None
         return
 
@@ -338,8 +348,12 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__botDeliveryMarker = _BattleRoyaleBotDeliveryMarkerArea(dataSection)
             self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), placeMinesEffect='minesDecalEffect', blowUpEffectName='minesBlowUpEffect', activationEffect=None)
             self.__berserkerEffects = _BerserkerEffects(turretEffect=_BerserkerTurretEffect(dataSection), hullEffect=_BerserkerHullEffect(dataSection), transformPath=dataSection.readString('berserkerTransformPath'))
-            self.__vehicleRespawnEffect = _VehicleRespawnEffect(dataSection)
-            CGF.cacheGameObjects([self.__vehicleRespawnEffect.effectPrefabPath], False)
+            self.__fireCircleEffects = _FireCircleEffects(dataSection)
+            self.__vehicleRespawnEffects = _VehicleRespawnEffects(dataSection)
+            precacheCandidates = set()
+            precacheCandidates.update(self.__fireCircleEffects.prefabs)
+            precacheCandidates.update(self.__vehicleRespawnEffects.prefabs)
+            CGF.cacheGameObjects(list(precacheCandidates), False)
             prerequisites = set()
             self.__dropPlane = _createDropPlane(dataSection['dropPlane'], prerequisites)
             self.__airDrop = _createAirDrop(dataSection['airDrop'], prerequisites)
@@ -385,7 +399,8 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         return self.__berserkerEffects
 
     def getVehicleRespawnEffect(self):
-        return self.__vehicleRespawnEffect
+        paths = self.__vehicleRespawnEffects.prefabs
+        return str() if not paths else paths[0]
 
     def clear(self):
         pass

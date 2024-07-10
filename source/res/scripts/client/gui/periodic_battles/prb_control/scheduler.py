@@ -26,6 +26,12 @@ class PeriodicScheduler(BaseScheduler):
     def _hasConfiguredNotification(self):
         return True
 
+    def _checkEventEnding(self):
+        return False
+
+    def _isEventEnded(self):
+        return False
+
     def _getController(self):
         raise NotImplementedError
 
@@ -91,7 +97,8 @@ class PeriodicScheduler(BaseScheduler):
             if not self.__isConfigured and self._hasConfiguredNotification():
                 SystemMessages.pushMessage(backport.text(self._getResRoot().notification.notSet(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.notSet.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesNotSet)
             elif not self.__isPrimeTime:
-                SystemMessages.pushMessage(backport.text(self._getResRoot().notification.primeTime(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.primeTime.title())}, type=SystemMessages.SM_TYPE.PrimeTime)
+                msgPath = self._getResRoot().notification.modeEnded() if self._checkEventEnding() and self._isEventEnded() else self._getResRoot().notification.primeTime()
+                SystemMessages.pushMessage(backport.text(msgPath, **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.primeTime.title())}, type=SystemMessages.SM_TYPE.PrimeTime)
             elif not isInit:
                 SystemMessages.pushMessage(backport.text(self._getResRoot().notification.available(), **self._getMessageParams()), messageData={'title': backport.text(self._getResRoot().notification.available.title())}, type=SystemMessages.SM_TYPE.PeriodicBattlesAvailable)
             return

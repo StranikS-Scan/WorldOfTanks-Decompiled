@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/full_stats.py
+import BigWorld
+from gui.shared.utils.functions import getArenaShortName
 from helpers import dependency
 from constants import ARENA_BONUS_TYPE
 from gui.impl.gen.resources import R
@@ -71,7 +73,8 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
                     'description': backport.text(R.strings.battle_royale.fullStats.description())},
          'aliveBlock': self.__getScoreBlock('fullStatsAlive', playersCount, backport.text(R.strings.battle_royale.fullStats.alive()), squads),
          'destroyedBlock': self.__getScoreBlock('fullStatsDestroyed', frags, backport.text(R.strings.battle_royale.fullStats.destroyed())),
-         'minimapItems': self.__getMinimapItems()}
+         'minimapItems': self.__getMinimapItems(),
+         'mapName': getArenaShortName(BigWorld.player().arenaTypeID)}
         self.as_setDataS(data)
 
     def __getScoreBlock(self, icon, count, descr, squads=''):

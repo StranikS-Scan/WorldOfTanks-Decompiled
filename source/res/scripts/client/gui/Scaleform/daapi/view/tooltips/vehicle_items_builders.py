@@ -21,7 +21,8 @@ def _shellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(intCD, *_):
         item = context.buildItem(intCD)
-        return (item.type, item.isModernMechanics, item.isDamageMutable()) in advanced.SHELL_MOVIES
+        icon = item.descriptor.icon[0]
+        return False if icon.startswith('AUTOCANNON') else item.getAdvancedTooltipKey() in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 
@@ -29,8 +30,7 @@ def _shellAdvancedBlockCondition(context):
 def _nationChangeShellAdvancedBlockCondition(context):
 
     def advancedTooltipExist(vehCD, intCD, *_):
-        item = context.buildItem(vehCD, intCD)
-        return (item.type, item.isModernMechanics, item.isDamageMutable()) in advanced.SHELL_MOVIES
+        return context.buildItem(vehCD, intCD).getAdvancedTooltipKey() in advanced.SHELL_MOVIES
 
     return advancedTooltipExist
 

@@ -302,6 +302,10 @@ class MissionsEvent(HasCtxEvent):
     PAGE_INVALIDATE = 'pageInvalidate'
 
 
+class MissionsViewEvent(SharedEvent):
+    EVENTS_FULL_UPDATE = 'missionsView/onEventsUpdate'
+
+
 class PersonalMissionsEvent(HasCtxEvent):
     ON_DETAILS_VIEW_OPEN = 'onDetailsViewOpen'
     ON_DETAILS_VIEW_CLOSE = 'onDetailsViewClose'
@@ -340,6 +344,7 @@ class FightButtonEvent(LobbySimpleEvent):
 
 
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
+    UPDATE_PREBATTLE_CONTROLS = 'updateControlsHeaderMenu'
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
 
@@ -724,6 +729,10 @@ class AmmunitionPanelViewEvent(HasCtxEvent):
     CLOSE_VIEW = 'ammunitionPanelViewEvent/closeView'
 
 
+class AmmunitionInjectEvent(SharedEvent):
+    INVALIDATE_INJECT_VIEW = 'AmmunitionInjectEvent/invalidateInjectView'
+
+
 class RadialMenuEvent(SharedEvent):
     RADIAL_MENU_ACTION = 'radialMenuAction'
 
@@ -842,3 +851,20 @@ class BattleRoyalePlatoonEvent(SharedEvent):
 class ScalableBattleMinimapEvent(HasCtxEvent):
     BORDERS_UPDATED = 'ScalableBattleMinimapEvent/BORDERS_UPDATED'
     ZOOM_UPDATED = 'ScalableBattleMinimapEvent/ZOOM_UPDATED'
+
+
+class BoostersControllerEvent(SharedEvent):
+    UPDATE_GAMEMODE_STATUS = 'boostersControllerEvent/updateGameModeStatus'
+
+
+class DailyQuestWidgetEvent(SharedEvent):
+    UPDATE_QUESTS_VISIBILITY = 'dailyQuestWidgetEvent/updateQuestsVisibility'
+
+
+class HangarEvent(SharedEvent):
+    UPDATE_ALERT_MESSAGE = 'hangar/updateAlertMessage'
+    UPDATE_PREBATTLE_ENTITY = 'hangar/prebattleEntityUpdated'
+
+
+class GameSessionEvent(SharedEvent):
+    UPDATE_KICK_NOTIFICATION = 'gameSession/updateKickNotification'

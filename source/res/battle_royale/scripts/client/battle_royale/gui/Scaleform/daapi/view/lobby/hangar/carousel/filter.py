@@ -12,3 +12,6 @@ class RoyaleCarouselFilter(carousel_filter.CarouselFilter):
 
     def _setCriteriaGroups(self):
         self._criteriesGroups = (carousel_filter.EventCriteriesGroup(), carousel_filter.BasicCriteriesGroup())
+
+    def _getFromServerStorage(self, defaultFilters):
+        return defaultFilters

@@ -62,6 +62,7 @@ ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
 ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
 ROYALE_CAROUSEL_FILTER_CLIENT_1 = 'ROYALE_CAROUSEL_FILTER_CLIENT_1'
 ROYALE_INTRO_VIDEO_SHOWN = 'ROYALE_INTRO_VIDEO_SHOWN'
+ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON = 'ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON'
 ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON = 'ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON'
 MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
 MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
@@ -133,6 +134,7 @@ STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
 STATS_SORTIE_SORTING = 'statsSortingSortie'
 STATS_COMP7_SORTING = 'statsSortingComp7'
+STATS_FUN_RANDOM_SORTING = 'statsSortingFunRandom'
 MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
@@ -151,6 +153,7 @@ WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 FREE_CAM_USES_COUNT = 'killCamBattlesCount'
 LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
 BR_PROGRESSION_POINTS_SEEN = 'brProgressionPointsSeen'
+COMP7_LIGHT_PROGRESSION_POINTS_SEEN = 'comp7LightProgressionPointsSeen'
 IS_BATTLE_PASS_EXTRA_STARTED = 'isBattlePassExtraStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
@@ -235,6 +238,7 @@ CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
 MINIMAP_SIZE = 'minimapSize'
+COMP7_LIGHT_INTRO_SHOWN = 'comp7LightIntroShown'
 COMP7_UI_SECTION = 'comp7'
 COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT = 'comp7WeeklyQuestsPageTokensCount'
 COMP7_SHOP_SEEN_PRODUCTS = 'comp7ShopSeenProducts'
@@ -311,6 +315,12 @@ MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
 EPIC_LAST_CYCLE_ID = 'epicLastCycleID'
 FUN_RANDOM_LAST_PRESET = 'funRandomLastPreset'
+FUN_RANDOM_PROGRESSION_OPENED = 'funRandomProgressionOpened'
+FUN_RANDOM_INF_PROGRESSION_OPENED = 'funRandomInfProgressionOpened'
+FUN_RANDOM_PROGRESSION = 'funRandomProgression'
+FUN_RANDOM_PROGR_PREV_COUNTER = 'funRandomProgressionPrevCounter'
+FUN_RANDOM_INF_PROGR_PREV_COUNTER = 'funRandomInfProgressionPrevCounter'
+FUN_RANDOM_INF_PROGR_PREV_COMPLETE_COUNT = 'funRandomInfProgressionPrevCompleteCount'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
                'scroll_to_item': None,
@@ -931,6 +941,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                        'sortDirection': 'descending'},
                 'statsSortingComp7': {'iconType': 'prestigePoints',
                                       'sortDirection': 'descending'},
+                STATS_FUN_RANDOM_SORTING: {'iconType': 'xp',
+                                           'sortDirection': 'descending'},
                 'backDraftInvert': False,
                 QUESTS: {'lastVisitTime': -1,
                          'visited': [],
@@ -1139,6 +1151,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_LAST_CYCLE_ID: None,
                 EPIC_LAST_CYCLE_ID: None,
                 FUN_RANDOM_LAST_PRESET: 'undefined',
+                FUN_RANDOM_PROGRESSION_OPENED: False,
+                FUN_RANDOM_INF_PROGRESSION_OPENED: False,
+                FUN_RANDOM_PROGRESSION: {},
                 SHOW_DEMO_ACC_REGISTRATION: False,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
                 CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
@@ -1149,7 +1164,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.LAST_QUEST_PROGRESS: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
-                ROYALE_INTRO_VIDEO_SHOWN: False,
+                ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON: 0,
+                COMP7_LIGHT_PROGRESSION_POINTS_SEEN: 0,
+                COMP7_LIGHT_INTRO_SHOWN: False,
                 ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON: 0,
                 LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
                                                 LOOT_BOXES_WAS_FINISHED: False,
@@ -1387,7 +1404,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 76
+    version = 78
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2081,10 +2098,18 @@ class AccountSettings(object):
                         accSettings.write(SHOWN_WOT_PLUS_INTRO, _pack(False))
 
             if currVersion < 76:
+                pass
+            if currVersion < 77:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    defaultSorting = DEFAULT_VALUES[KEY_SETTINGS]['statsSortingFunRandom'].copy()
+                    accSettings.write('statsSortingFunRandom', _pack(defaultSorting))
+
+            if currVersion < 78:
                 for _, section in _filterAccountSection(ads):
                     accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if ROYALE_INTRO_VIDEO_SHOWN in accSettings.keys():
-                        accSettings.write(ROYALE_INTRO_VIDEO_SHOWN, _pack(False))
+                        accSettings.deleteSection(ROYALE_INTRO_VIDEO_SHOWN)
 
             ads.writeInt('version', AccountSettings.version)
         return

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/formatters/numbers.py
+from typing import Optional, Callable
 from gui.impl import backport
 
 def formatInt(value, negativeOrZero=None, formatter=backport.getIntegralFormat):

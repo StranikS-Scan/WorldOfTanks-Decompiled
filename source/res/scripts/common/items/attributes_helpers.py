@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     import ResMgr
 STATIC_ATTR_PREFIX = 'miscAttrs/'
 DYNAMIC_ATTR_PREFIX = 'dynAttrs/'
+AUTOSHOOT_ATTR_PREFIX = 'autoShootAttrs/'
 ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'ammoBayHealthFactor',
  'ammoBayReduceFineFactor',
@@ -59,7 +60,9 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'surveyingDeviceHealthFactor',
  'turretRotationSpeed',
  'turretRotatorHealthFactor',
- 'vehicleByChassisDamageFactor'}
+ 'vehicleByChassisDamageFactor',
+ 'hullMaxHealth',
+ 'turretMaxHealth'}
 ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'chassis/shotDispersionFactors/movement',
  'chassis/shotDispersionFactors/rotation',
@@ -80,6 +83,7 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'gun/shotDispersionFactors/turretRotation',
  'healthBurnPerSecLossFraction',
  'healthFactor',
+ 'multShotDispersionFactor',
  'radio/distance',
  'ramming',
  'repairSpeed',
@@ -93,8 +97,10 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'vehicle/rotationSpeed',
  'vehicle/bkMaxSpeedBonus',
  'vehicle/fwMaxSpeedBonus'}
+AUTOSHOOT_DYNAMIC_ATTRS = {'rate/multiplier', 'shotDispersionPerSecFactor', 'maxShotDispersionFactor'}
 ALLOWED_ATTRS = {STATIC_ATTR_PREFIX: ALLOWED_STATIC_ATTRS,
- DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS}
+ DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS,
+ AUTOSHOOT_ATTR_PREFIX: AUTOSHOOT_DYNAMIC_ATTRS}
 ALLOWED_ATTR_PREFIXES = set(ALLOWED_ATTRS.keys())
 
 class MODIFIER_TYPE:

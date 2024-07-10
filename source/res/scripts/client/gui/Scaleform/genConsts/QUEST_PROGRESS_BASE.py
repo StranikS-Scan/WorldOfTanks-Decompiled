@@ -25,6 +25,7 @@ class QUEST_PROGRESS_BASE(object):
     QP_VIEW_RENDERER_TAB = 'QuestProgressItemRendererTabViewUI'
     QP_VIEW_RENDERER_TOP = 'QuestProgressItemRendererTopViewUI'
     QP_VIEW_RENDERER_QUEST_AWARD = 'QuestProgressItemRendererQuestAwardViewUI'
+    QP_VIEW_RENDERER_CONDITION_AWARD = 'QuestProgressItemRendererConditionAwardViewUI'
     QP_TAB_ALERT_LABEL = 'TabAlertLabelUI'
     QP_OR_CONDITION_ICON_TAB = 'QuestProgressOrConditionTabUI'
     QP_OR_CONDITION_ICON_TOP = 'QuestProgressOrConditionTopUI'

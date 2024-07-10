@@ -3,7 +3,7 @@
 from battle_modifiers_common.battle_modifiers import BattleParams
 from battle_modifiers_ext.constants_ext import UseType, PhysicalType, GameplayImpact
 from battle_modifiers.gui.impl.gen.view_models.views.lobby.feature.modifier_model import ModType, ModPhysType, ModUseType, ModGameplayImpact
-MOD_TYPE_MAP = {BattleParams.FAKE_PARAM: ModType.FAKE_MODIFIER,
+MOD_TYPE_MAP = {BattleParams.FAKE_MODIFIER: ModType.FAKE_MODIFIER,
  BattleParams.VEHICLE_HEALTH: ModType.VEHICLE_HEALTH,
  BattleParams.GRAVITY_FACTOR: ModType.GRAVITY_FACTOR,
  BattleParams.DISP_FACTOR_CHASSIS_MOVEMENT: ModType.DISP_FACTOR_CHASSIS_MOVEMENT,

@@ -414,8 +414,7 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateMainTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.DESTROY_TIMER_UI
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        if liftOverEnabled:
+        if BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER):
             overturnedIcon = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.OVERTURNED_GREEN_ICON
             overturnedColor = BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN
             iconOffsetY = -11

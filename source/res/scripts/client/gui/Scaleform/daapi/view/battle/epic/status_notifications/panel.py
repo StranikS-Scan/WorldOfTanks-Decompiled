@@ -52,8 +52,7 @@ class EpicStatusNotificationTimerPanel(StatusNotificationTimerPanel):
 
     def _generateNotificationTimerSettings(self):
         data = super(EpicStatusNotificationTimerPanel, self)._generateNotificationTimerSettings()
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        if liftOverEnabled:
+        if BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER):
             overturnedIcon = _LINKS.OVERTURNED_GREEN_ICON
             overturnedColor = _COLORS.GREEN
             iconOffsetY = 1

@@ -349,7 +349,9 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             for component in self._viewComponents:
                 component.showSetupsView(self.__vehicle, self.__arenaLoaded)
 
+            factors = self.__updateGuiVehicle()
             self.__updateAmmoCtrl()
+            self.__updateAmmoCtrlParams(factors)
         if addMask == _States.SELECTION_STOPPED and self.isSelectionStarted():
             self.__state |= _States.SELECTION_AWAIT_HIDING
             self.__state &= ~_States.SELECTION_STARTED

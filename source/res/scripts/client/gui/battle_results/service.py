@@ -9,12 +9,13 @@ from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
-from gui.battle_results import composer, context, emblems, reusable, stored_sorting
-from gui.battle_results.composer import StatsComposer
+from gui.battle_results import context, emblems, reusable, stored_sorting
+from gui.battle_results.pbs_helpers.common import pushNoBattleResultsDataMessage
+from gui.battle_results.composer import RegularStatsComposer
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
+from gui.shared.system_factory import collectBattleResultStatsCtrl
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -22,23 +23,31 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.battle_results.stats_ctrl import IBattleResultStatsCtrl
 _logger = logging.getLogger(__name__)
+
+def createStatsCtrl(reusableInfo):
+    bonusType = reusableInfo.common.arenaBonusType
+    statsCtrl = collectBattleResultStatsCtrl(bonusType)
+    if statsCtrl is None:
+        statsCtrl = RegularStatsComposer
+    return statsCtrl(reusableInfo)
+
 
 class BattleResultsService(IBattleResultsService):
     battleMatters = dependency.descriptor(IBattleMattersController)
-    eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     wotPlusController = dependency.descriptor(IWotPlusController)
-    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
+    __slots__ = ('__battleResults', '__statsCtrls', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
-        self.__composers = {}
+        self.__statsCtrls = {}
         self.__buy = set()
         self.__appliedAddXPBonus = set()
         self.__eventsManager = Event.EventManager()
@@ -54,8 +63,8 @@ class BattleResultsService(IBattleResultsService):
         self.clear()
 
     def clear(self):
-        while self.__composers:
-            _, item = self.__composers.popitem()
+        while self.__statsCtrls:
+            _, item = self.__statsCtrls.popitem()
             item.clear()
 
         self.__eventsManager.clear()
@@ -66,7 +75,7 @@ class BattleResultsService(IBattleResultsService):
         arenaUniqueID = ctx.getArenaUniqueID()
         if ctx.needToShowImmediately():
             event_dispatcher.showBattleResultsWindow(arenaUniqueID)
-        if not ctx.resetCache() and arenaUniqueID in self.__composers:
+        if not ctx.resetCache() and arenaUniqueID in self.__statsCtrls:
             isSuccess = True
 
             def dummy(callback=None):
@@ -82,7 +91,7 @@ class BattleResultsService(IBattleResultsService):
                 results = yield self.waitForBattleResults(arenaUniqueID)
             isSuccess = results.success
             if not isSuccess or not self.postResult(results.auxData, ctx.needToShowIfPosted()):
-                self.__composers.pop(arenaUniqueID, None)
+                self.__statsCtrls.pop(arenaUniqueID, None)
                 event_dispatcher.hideBattleResults()
         if callback is not None:
             callback(isSuccess)
@@ -102,37 +111,36 @@ class BattleResultsService(IBattleResultsService):
     def postResult(self, result, needToShowUI=True):
         reusableInfo = reusable.createReusableInfo(result)
         if reusableInfo is None:
-            SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
+            pushNoBattleResultsDataMessage()
             return False
         else:
             self.__updateReusableInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
-            composerObj = composer.createComposer(reusableInfo)
-            composerObj.setResults(result, reusableInfo)
-            self.__composers[arenaUniqueID] = composerObj
+            statsCtrl = createStatsCtrl(reusableInfo)
+            statsCtrl.setResults(result, reusableInfo)
+            self.__statsCtrls[arenaUniqueID] = statsCtrl
             resultsWindow = self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
-            self.onResultPosted(reusableInfo, composerObj, resultsWindow)
+            self.onResultPosted(reusableInfo, statsCtrl, resultsWindow)
             self.__postStatistics(reusableInfo, result)
             return True
 
     def areResultsPosted(self, arenaUniqueID):
-        return arenaUniqueID in self.__composers
+        return arenaUniqueID in self.__statsCtrls
 
     def getResultsVO(self, arenaUniqueID):
-        if arenaUniqueID in self.__composers:
-            found = self.__composers[arenaUniqueID]
+        if arenaUniqueID in self.__statsCtrls:
+            found = self.__statsCtrls[arenaUniqueID]
             vo = found.getVO()
         else:
             vo = None
         return vo
 
-    def popResultsAnimation(self, arenaUniqueID):
-        if arenaUniqueID in self.__composers:
-            found = self.__composers[arenaUniqueID]
-            vo = found.popAnimation()
+    def getPresenter(self, arenaUniqueID):
+        if arenaUniqueID not in self.__statsCtrls:
+            _logger.error('Missing suitable battle results presenter.')
+            return None
         else:
-            vo = None
-        return vo
+            return self.__statsCtrls[arenaUniqueID]
 
     def saveStatsSorting(self, bonusType, iconType, sortDirection):
         stored_sorting.writeStatsSorting(bonusType, iconType, sortDirection)
@@ -148,16 +156,17 @@ class BattleResultsService(IBattleResultsService):
                 SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
             if result.success:
                 self.__appliedAddXPBonus.add(arenaUniqueID)
-                yield self.__updateComposer(arenaUniqueID, arenaInfo)
-                self.__onAddXPBonusChanged()
+                yield self.__updateStatsCtrl(arenaUniqueID, arenaInfo)
+            self.__onAddXPBonusChanged(bool(result and result.success))
             return
 
     def isAddXPBonusApplied(self, arenaUniqueID):
         return arenaUniqueID in self.__appliedAddXPBonus
 
     def isAddXPBonusEnabled(self, arenaUniqueID):
+        arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         isWotPlusEnabled = self.lobbyContext.getServerSettings().isRenewableSubEnabled()
-        return arenaUniqueID in self.__getAdditionalXPBattles() and (self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and isWotPlusEnabled)
+        return arenaInfo is not None and (bool(PREMIUM_TYPE.activePremium(arenaInfo.premMask) & PREMIUM_TYPE.PLUS) or self.itemsCache.items.stats.isPremium or self.wotPlusController.isEnabled() and isWotPlusEnabled)
 
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
@@ -203,11 +212,11 @@ class BattleResultsService(IBattleResultsService):
         self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI)
 
     def __notifyBattleResultsPosted(self, arenaUniqueID, needToShowUI=False):
-        composerObj = self.__composers[arenaUniqueID]
+        statsCtrl = self.__statsCtrls[arenaUniqueID]
         window = None
         if needToShowUI:
-            window = composerObj.onShowResults(arenaUniqueID)
-        composerObj.onResultsPosted(arenaUniqueID)
+            window = statsCtrl.onShowResults(arenaUniqueID)
+        statsCtrl.onResultsPosted(arenaUniqueID)
         return window
 
     def __handleLobbyViewLoaded(self, _):
@@ -226,19 +235,19 @@ class BattleResultsService(IBattleResultsService):
 
     @adisp_async
     @adisp_process
-    def __updateComposer(self, arenaUniqueID, xpBonusData, callback):
+    def __updateStatsCtrl(self, arenaUniqueID, xpBonusData, callback):
         results = yield BattleResultsGetter(arenaUniqueID).request()
         if results.success:
             result = results.auxData
             reusableInfo = reusable.createReusableInfo(result)
             if reusableInfo is None:
-                SystemMessages.pushI18nMessage(BATTLE_RESULTS.NODATA, type=SystemMessages.SM_TYPE.Warning)
+                pushNoBattleResultsDataMessage()
                 callback(False)
             self.__updateReusableInfo(reusableInfo, xpBonusData)
             arenaUniqueID = reusableInfo.arenaUniqueID
-            composerObj = composer.createComposer(reusableInfo)
-            composerObj.setResults(result, reusableInfo)
-            self.__composers[arenaUniqueID] = composerObj
+            statsCtrl = createStatsCtrl(reusableInfo)
+            statsCtrl.setResults(result, reusableInfo)
+            self.__statsCtrls[arenaUniqueID] = statsCtrl
         callback(True)
         return
 
@@ -272,8 +281,8 @@ class BattleResultsService(IBattleResultsService):
             state |= PREMIUM_STATE.BOUGHT
         return state
 
-    def __onAddXPBonusChanged(self):
-        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED))
+    def __onAddXPBonusChanged(self, isBonusApplied=True):
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, ctx={'isBonusApplied': isBonusApplied}))
 
     @adisp_async
     @adisp_process

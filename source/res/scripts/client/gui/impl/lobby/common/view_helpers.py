@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/view_helpers.py
+import logging
 import typing
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 if typing.TYPE_CHECKING:
@@ -9,6 +10,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.missions.packers.bonus import BonusUIPacker
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
     BonusModelType = TypeVar('BonusModelType', bound=BonusModel)
+_logger = logging.getLogger(__name__)
 
 def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None):
     packer = packer or getDefaultBonusPacker()
@@ -18,6 +20,10 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
         withTooltips = bonusList and tooltipData is not None
         bTooltipList = packer.getToolTip(bonus) if withTooltips else []
         bContentIdList = packer.getContentId(bonus) if withTooltips else []
+        if len(bonusList) != len(bTooltipList) and withTooltips:
+            _logger.warning('bonusList and bTooltipList mismatch! Bonus: %s', bonus)
+        if len(bonusList) != len(bContentIdList) and withTooltips:
+            _logger.warning('bonusList and bContentIdList mismatch! Bonus: %s', bonus)
         for bIndex, bModel in enumerate(bonusList):
             bModel.setIndex(bIndex)
             tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)

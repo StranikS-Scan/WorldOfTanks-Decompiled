@@ -13,7 +13,7 @@ from skeletons.gui.game_control import IBattleRoyaleController
 
 @dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
 def isBattleRoyaleEntryPointAvailable(battleRoyaleController=None):
-    return battleRoyaleController.isEnabled()
+    return battleRoyaleController.isActive()
 
 
 class BattleRoyaleEntryPoint(ViewImpl):
@@ -39,11 +39,13 @@ class BattleRoyaleEntryPoint(ViewImpl):
         self.viewModel.onClick += self.__onClick
         self.__battleRoyaleController.onUpdated += self.__onUpdate
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.__onUpdate
+        self.__battleRoyaleController.onEntryPointUpdated += self.__onUpdate
 
     def _finalize(self):
         self.viewModel.onClick -= self.__onClick
         self.__battleRoyaleController.onUpdated -= self.__onUpdate
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.__onUpdate
+        self.__battleRoyaleController.onEntryPointUpdated -= self.__onUpdate
         super(BattleRoyaleEntryPoint, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
@@ -69,11 +71,7 @@ class BattleRoyaleEntryPoint(ViewImpl):
         actualTime = None
         if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
             actualTime = periodInfo.cycleBorderRight.timestamp
-        elif periodInfo.periodType in (PeriodType.AFTER_SEASON,
-         PeriodType.AFTER_CYCLE,
-         PeriodType.ALL_NOT_AVAILABLE_END,
-         PeriodType.NOT_AVAILABLE_END,
-         PeriodType.STANDALONE_NOT_AVAILABLE_END):
+        elif periodInfo.periodType in (PeriodType.STANDALONE_NOT_AVAILABLE_END, PeriodType.ALL_NOT_AVAILABLE_END, PeriodType.NOT_AVAILABLE_END):
             status = State.POSTEVENT
             actualTime = periodInfo.cycleBorderRight.timestamp
         elif periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):

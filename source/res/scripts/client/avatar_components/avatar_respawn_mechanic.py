@@ -11,7 +11,7 @@ class AvatarRespawnMechanic(object):
         self.__enabled = False
 
     def onBecomePlayer(self):
-        self.__enabled = BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.RESPAWN)
+        self.__enabled = self.hasBonusCap(BONUS_CAPS.RESPAWN)
         return None if not self.__enabled else None
 
     def handleKey(self, isDown, key, mods):

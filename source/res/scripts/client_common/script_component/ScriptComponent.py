@@ -4,7 +4,6 @@ import logging
 import BigWorld
 import Avatar
 from PlayerEvents import g_playerEvents
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from helpers import dependency, isPlayerAvatar
 from shared_utils import nextTick
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -45,7 +44,7 @@ class ScriptComponent(BigWorld.StaticScriptComponent):
             return True
         else:
             if isinstance(self.entity, Avatar.PlayerAvatar):
-                arenaBonusType = self.entity.arenaBonusType
+                capsChecker = self.entity.hasBonusCap
             else:
-                arenaBonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
-            return ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, self.REQUIRED_BONUS_CAP)
+                capsChecker = self.__sessionProvider.arenaVisitor.bonus.hasBonusCap
+            return capsChecker(self.REQUIRED_BONUS_CAP)

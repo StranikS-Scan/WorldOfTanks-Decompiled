@@ -3,7 +3,7 @@
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import IVehCompareView, VehCompareBasketParamsCache
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import CMP_HIDDEN_PARAMETERS, IVehCompareView, VehCompareBasketParamsCache
 from gui.Scaleform.daapi.view.meta.VehicleCompareViewMeta import VehicleCompareViewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
@@ -90,7 +90,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
     def _populate(self):
         super(VehicleCompareView, self)._populate()
         self.as_setStaticDataS({'header': self.__getHeaderData()})
-        self.as_setVehicleParamsDataS(getAllParametersTitles())
+        self.as_setVehicleParamsDataS(getAllParametersTitles(CMP_HIDDEN_PARAMETERS))
         self._setViewData()
         self.comparisonBasket.onChange += self.__updateUI
         self.comparisonBasket.onSwitchChange += self.__onVehCmpBasketStateChanged

@@ -3,6 +3,7 @@
 from constants import ARENA_GUI_TYPE, FINISH_REASON
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.battle_results.pbs_helpers.common import getArenaNameStr, getRegularFinishResultResource
 from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
@@ -23,12 +24,6 @@ def makeArenaFullName(arenaTypeName, i18nKey):
 
 def makeRegularFinishResultLabel(finishReason, teamResult):
     return backport.text(getRegularFinishResultResource(finishReason, teamResult))
-
-
-def getRegularFinishResultResource(finishReason, teamResult):
-    isExtermination = finishReason == FINISH_REASON.EXTERMINATION
-    reasonKey = 'c_{}{}'.format(finishReason, teamResult) if isExtermination else 'c_{}'.format(finishReason)
-    return R.strings.battle_results.finish.reason.dyn(reasonKey)()
 
 
 def makeEpicBattleFinishResultLabel(finishReason, teamResult):
@@ -71,7 +66,7 @@ class ArenaNameItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return backport.text(R.strings.arenas.dyn('c_{}'.format(reusable.common.arenaType.getGeometryName())).name())
+        return getArenaNameStr(reusable)
 
 
 class ArenaIconItem(base.StatsItem):

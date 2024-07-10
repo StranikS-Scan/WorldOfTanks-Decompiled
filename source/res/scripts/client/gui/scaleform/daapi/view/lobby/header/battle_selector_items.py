@@ -44,7 +44,6 @@ _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
 _R_BATTLE_MENU = R.strings.menu.headerButtons.battle.menu
 _R_ICONS = R.images.gui.maps.icons
 _R_BR_TOURNAMENT_BUTTON = R.strings.battle_royale.tournament.fightButton
-_HIGHLIGHT_ORANGE_LINKAGE = 'BGAnimOrangeUI'
 
 @total_ordering
 class SelectorItem(object):
@@ -103,18 +102,20 @@ class SelectorItem(object):
     def getSpecialBGIcon(self):
         pass
 
-    def getHighlightLinkage(self):
-        return (_HIGHLIGHT_ORANGE_LINKAGE, '', '')
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.dyn('squad')())
+    def getHighlightLinkage(self, isNewbie, defaultLinkage=''):
+        return defaultLinkage
 
     def getFightButtonLabel(self, state, playerInfo):
         label = _R_HEADER_BUTTONS.battle
         if not playerInfo.isCreator and state.isReadyActionSupported():
             label = _R_HEADER_BUTTONS.notReady if playerInfo.isReady else _R_HEADER_BUTTONS.ready
         return backport.text(label())
+
+    def getFightButtonHighlight(self, isNewbie):
+        pass
+
+    def hasSparksAnimation(self, isNewbie, hasEventIndication):
+        return not isNewbie and hasEventIndication
 
     def isLocked(self):
         return self._isLocked
@@ -124,9 +125,6 @@ class SelectorItem(object):
 
     def isRandomBattle(self):
         return False
-
-    def isInSquad(self, state):
-        return any((state.isInUnit(prbType) for prbType in PREBATTLE_TYPE.SQUAD_PREBATTLES))
 
     def setLocked(self, value):
         self._isLocked = value
@@ -147,14 +145,11 @@ class SelectorItem(object):
          'isNew': self.isShowNewIndicator(),
          'specialBgIcon': self.getSpecialBGIcon()}
 
+    def isShowEventIndication(self):
+        return False
+
     def isShowNewIndicator(self):
         return self._isNew
-
-    def isShowActiveModeState(self):
-        return False
-
-    def isIgnoreSelectorNewbieRuleInMode(self):
-        return False
 
     def getFormattedLabel(self):
         return text_styles.middleTitle(self.getLabel())
@@ -183,27 +178,6 @@ class SelectorItem(object):
     @adisp_process
     def _doSelect(self, dispatcher):
         yield dispatcher.doSelectAction(PrbAction(self.getData()))
-
-
-class _SelectorExtraItem(SelectorItem):
-
-    def __init__(self, label, data, order, selectorType=None, isVisible=True):
-        super(_SelectorExtraItem, self).__init__(label, data, order, selectorType, isVisible, isExtra=True)
-
-    def getVO(self):
-        vo = super(_SelectorExtraItem, self).getVO()
-        vo.update({'mainLabel': self.getMainLabel(),
-         'infoLabel': self.getInfoLabel()})
-        return vo
-
-    def getMainLabel(self):
-        raise NotImplementedError
-
-    def getInfoLabel(self):
-        raise NotImplementedError
-
-    def _update(self, state):
-        raise NotImplementedError
 
 
 class _MapsTrainingItem(SelectorItem):
@@ -241,11 +215,11 @@ class _DisabledSelectorItem(SelectorItem):
     def update(self, state):
         pass
 
-    def _update(self, state):
-        pass
-
     def select(self):
         _logger.warning('That routine can not be invoked')
+
+    def _update(self, state):
+        pass
 
 
 class _RandomQueueItem(SelectorItem):
@@ -277,14 +251,11 @@ class _WinbackQueueItem(_RandomQueueItem):
     def isDemoButtonDisabled(self):
         return True
 
-    def isInSquad(self, state):
-        return False
-
-    def isShowActiveModeState(self):
-        return self._winbackController.isModeAvailable()
-
     def isVisible(self):
         return self._winbackController.isModeAvailable()
+
+    def isShowEventIndication(self):
+        return self.isVisible()
 
     def isShowNewIndicator(self):
         return False
@@ -300,9 +271,6 @@ class _CommandItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
-    def isInSquad(self, state):
-        return False
-
     def _update(self, state):
         isCommandBattleEnabled = self.lobbyContext.getServerSettings().isCommandBattleEnabled()
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.UNIT) or state.isInUnit(PREBATTLE_TYPE.E_SPORT_COMMON)
@@ -314,9 +282,6 @@ class _StrongholdsItem(SelectorItem):
 
     def isRandomBattle(self):
         return True
-
-    def isInSquad(self, state):
-        return False
 
     def _update(self, state):
         self._isSelected = state.isInUnit(PREBATTLE_TYPE.STRONGHOLD)
@@ -369,13 +334,6 @@ class _EpicTrainingItem(SelectorItem):
     def getFightButtonLabel(self, state, playerInfo):
         return backport.text(_R_HEADER_BUTTONS.battle())
 
-    def _update(self, state):
-        settings = self.lobbyContext.getServerSettings()
-        self._isSelected = state.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING)
-        self._isDisabled = state.hasLockedState
-        self._isVisible = settings is not None and settings.frontline.isEpicTrainingEnabled
-        return
-
     def getFormattedLabel(self):
         title = super(_EpicTrainingItem, self).getFormattedLabel()
         descr = text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.epicTraining.descr()))
@@ -385,6 +343,13 @@ class _EpicTrainingItem(SelectorItem):
         super(_EpicTrainingItem, self).select()
         selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
+    def _update(self, state):
+        settings = self.lobbyContext.getServerSettings()
+        self._isSelected = state.isInLegacy(PREBATTLE_TYPE.EPIC_TRAINING)
+        self._isDisabled = state.hasLockedState
+        self._isVisible = settings is not None and settings.frontline.isEpicTrainingEnabled
+        return
+
 
 class _EventBattlesItem(SelectorItem):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
@@ -392,7 +357,7 @@ class _EventBattlesItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         return self.__eventBattlesCtrl.isEnabled()
 
     def _update(self, state):
@@ -480,9 +445,6 @@ class _BattleSelectorItems(object):
     def getItems(self):
         return self.__items
 
-    def _getDefaultPAN(self):
-        return PREBATTLE_ACTION_NAME.WINBACK if self._winbackController.isModeAvailable() else _DEFAULT_PAN
-
     def isSelected(self, action):
         if action in self.__items:
             return self.__items[action].isSelected()
@@ -494,8 +456,8 @@ class _BattleSelectorItems(object):
     def hasNew(self):
         return any((item.isShowNewIndicator() and item.isVisible() and not item.isDisabled() for item in self.allItems))
 
-    def hasAnyActiveModeState(self):
-        return any((item.isShowActiveModeState() and item.isVisible() for item in self.allItems))
+    def hasEventIndication(self):
+        return any((item.isShowEventIndication() and item.isVisible() for item in self.allItems))
 
     @property
     def isDemoButtonEnabled(self):
@@ -504,6 +466,9 @@ class _BattleSelectorItems(object):
     @property
     def isDemonstrator(self):
         return self.__isDemonstrator
+
+    def _getDefaultPAN(self):
+        return PREBATTLE_ACTION_NAME.WINBACK if self._winbackController.isModeAvailable() else _DEFAULT_PAN
 
 
 class _SquadSelectorItems(_BattleSelectorItems):
@@ -523,12 +488,18 @@ class _SquadItem(SelectorItem):
         self._prebattleType = None
         return
 
+    def getPrebattleType(self):
+        return self._prebattleType
+
     def getFormattedLabel(self):
         title = text_styles.middleTitle(backport.text(R.strings.menu.headerButtons.battle.types.dyn(self._data)()))
         if self._isDescription:
             description = text_styles.main(backport.text(R.strings.menu.headerButtons.battle.types.dyn(self._data).description()))
             return ''.join((title, '\n', description))
         return title
+
+    def getSmallIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.squad())
 
     def getVO(self):
         vo = super(_SquadItem, self).getVO()
@@ -537,13 +508,6 @@ class _SquadItem(SelectorItem):
 
     def _createTooltip(self):
         return makeTooltip(backport.text(R.strings.platoon.headerButton.tooltips.dyn(self._data).header()), backport.text(R.strings.platoon.headerButton.tooltips.dyn(self._data).body()))
-
-    def getPrebattleType(self):
-        return self._prebattleType
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.squad())
 
 
 class _SimpleSquadItem(_SquadItem):
@@ -584,8 +548,7 @@ class _EventSquadItem(SpecialSquadItem):
         self._isSpecialBgIcon = True
         self._isDescription = False
 
-    @property
-    def squadIcon(self):
+    def getSmallIcon(self):
         return backport.image(_R_ICONS.battleTypes.c_40x40.eventSquad())
 
 
@@ -599,19 +562,18 @@ class _BattleRoyaleSquadItem(SpecialSquadItem):
         self._isVisible = self.__battleRoyaleController.isEnabled() and self.__battleRoyaleController.isInPrimeTime()
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.lobby.eventPopoverBtnBG())
+
+    def getSmallIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.royaleSquad())
+
     def _update(self, state):
         super(_BattleRoyaleSquadItem, self)._update(state)
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.BATTLE_ROYALE)
         primeTimeStatus, _, _ = self.__battleRoyaleController.getPrimeTimeStatus()
         self._isVisible = self.__battleRoyaleController.isEnabled() and self.__battleRoyaleController.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.BATTLE_ROYALE)
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
-
-    def getSpecialBGIcon(self):
-        return backport.image(_R_ICONS.lobby.eventPopoverBtnBG())
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.royaleSquad())
 
 
 class _MapboxSquadItem(SpecialSquadItem):
@@ -624,16 +586,15 @@ class _MapboxSquadItem(SpecialSquadItem):
         self._isVisible = self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.isInPrimeTime()
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
+    def getSmallIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.mapboxSquad())
+
     def _update(self, state):
         super(_MapboxSquadItem, self)._update(state)
         self._isSelected = self.__mapboxCtrl.isMapboxMode()
         primeTimeStatus, _, _ = self.__mapboxCtrl.getPrimeTimeStatus()
         self._isVisible = self.__mapboxCtrl.isEnabled() and self.__mapboxCtrl.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.MAPBOX)
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.mapboxSquad())
 
 
 class _Comp7SquadItem(SpecialSquadItem):
@@ -646,16 +607,15 @@ class _Comp7SquadItem(SpecialSquadItem):
         self._isVisible = self.__controller.isEnabled() and self.__controller.isInPrimeTime()
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
+    def getSmallIcon(self):
+        return backport.image(_R_ICONS.battleTypes.c_40x40.comp7Squad())
+
     def _update(self, state):
         super(_Comp7SquadItem, self)._update(state)
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.COMP7)
         primeTimeStatus, _, _ = self.__controller.getPrimeTimeStatus()
         self._isVisible = self.__controller.isEnabled() and self.__controller.isInPrimeTime() and state.isInPreQueue(queueType=QUEUE_TYPE.COMP7)
         self._isDisabled = self._isDisabled or primeTimeStatus != PrimeTimeStatus.AVAILABLE
-
-    @property
-    def squadIcon(self):
-        return backport.image(_R_ICONS.battleTypes.c_40x40.comp7Squad())
 
 
 class _RankedItem(SelectorItem):
@@ -668,7 +628,7 @@ class _RankedItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         return self.rankedController.isAvailable()
 
     def getFormattedLabel(self):
@@ -726,7 +686,7 @@ class _BattleRoyaleItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         _, isBrCycle = self.__battleRoyaleController.getCurrentCycleInfo()
         return isBrCycle and self.__battleRoyaleController.isEnabled()
 
@@ -813,7 +773,7 @@ class _MapboxItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         return self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
 
     def getVO(self):
@@ -861,9 +821,6 @@ class EpicBattleItem(SelectorItem):
         super(EpicBattleItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isDisabled = not self.__epicController.isEnabled()
 
-    def isShowActiveModeState(self):
-        return self.__epicController.isEnabled() and self.__epicController.isCurrentCycleActive()
-
     def getFormattedLabel(self):
         battleTypeName = text_styles.middleTitle(self.getLabel())
         availabilityStr = self.__getPerformanceAlarmStr() or self.__getScheduleStr()
@@ -872,10 +829,12 @@ class EpicBattleItem(SelectorItem):
     def isRandomBattle(self):
         return True
 
+    def isShowEventIndication(self):
+        return self.__epicController.isEnabled() and self.__epicController.isCurrentCycleActive()
+
     @adisp_process
     def _doSelect(self, dispatcher):
         currentSeason = self.__epicController.getCurrentSeason()
-        isActiveCycle = False
         if currentSeason is not None:
             isActiveCycle = self.__epicController.getCurrentCycleInfo()[1]
             nextCycle = currentSeason.getNextByTimeCycle(time_utils.getCurrentLocalServerTimestamp())
@@ -936,9 +895,6 @@ class EpicBattleItem(SelectorItem):
 
 class _Comp7Item(SelectorItem):
     __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.COMP7)
 
     def isRandomBattle(self):
         return True

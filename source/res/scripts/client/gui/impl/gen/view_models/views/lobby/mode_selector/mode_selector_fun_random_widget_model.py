@@ -27,10 +27,10 @@ class ModeSelectorFunRandomWidgetModel(ModeSelectorBaseWidgetModel):
     def setCurrentStage(self, value):
         self._setNumber(2, value)
 
-    def getResetTimer(self):
+    def getStatusTimer(self):
         return self._getNumber(3)
 
-    def setResetTimer(self, value):
+    def setStatusTimer(self, value):
         self._setNumber(3, value)
 
     def getStageCurrentPoints(self):
@@ -55,7 +55,7 @@ class ModeSelectorFunRandomWidgetModel(ModeSelectorBaseWidgetModel):
         super(ModeSelectorFunRandomWidgetModel, self)._initialize()
         self._addStringProperty('status')
         self._addNumberProperty('currentStage', -1)
-        self._addNumberProperty('resetTimer', -1)
+        self._addNumberProperty('statusTimer', -1)
         self._addNumberProperty('stageCurrentPoints', -1)
         self._addNumberProperty('stageMaximumPoints', -1)
         self._addStringProperty('conditionText', '')

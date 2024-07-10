@@ -1,0 +1,40 @@
+<ArenaInfoBRComponent.def>
+  <ClientMethods>
+    <notifyLaunchPosition>
+      <Arg>	INT32	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+    </notifyLaunchPosition>
+  </ClientMethods>
+  <Properties>
+    <nextDropWave>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </nextDropWave>
+    <defeatedTeams>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </defeatedTeams>
+    <isRespawnTimeFinished>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isRespawnTimeFinished>
+    <respawnPeriod>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </respawnPeriod>
+    <timeToRessurect>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </timeToRessurect>
+    <xpConfig>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </xpConfig>
+  </Properties>
+  <DefaultKeyName>	arenaInfoBRComponent	</DefaultKeyName>
+</ArenaInfoBRComponent.def>

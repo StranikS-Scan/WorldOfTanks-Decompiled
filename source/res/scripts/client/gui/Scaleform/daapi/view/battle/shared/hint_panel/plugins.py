@@ -478,7 +478,7 @@ class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
         self.__isObserver = arenaDP.getVehicleInfo().isObserver() if arenaDP is not None else False
         arena = BigWorld.player().arena
         if arena is not None:
-            self.__isEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR)
+            self.__isEnabled = arena.hasBonusCap(ARENA_BONUS_TYPE_CAPS.RADAR)
         radarCtrl = self._sessionProvider.dynamic.radar
         if radarCtrl:
             radarCtrl.addRuntimeView(self)
@@ -719,7 +719,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy:
+            if self._hasVehicleHelpHint(vTypeDesc):
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__canDisplayVehicleHelpHint(vTypeDesc) or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -763,8 +763,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__hintInQueue = None
         return
 
-    def __canDisplayVehicleHelpHint(self, typeDescriptor):
-        return (typeDescriptor.isWheeledVehicle or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+    def _hasVehicleHelpHint(self, vTypeDesc):
+        return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy or vTypeDesc.isAutoShootGunVehicle
+
+    def __canDisplayVehicleHelpHint(self, vTypeDesc):
+        return self.__isInDisplayPeriod and self._hasVehicleHelpHint(vTypeDesc) and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
         battleCommunications = dependency.instance(IBattleCommunicationsSettings)
@@ -773,7 +776,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def __canDisplayPersonalReservesActivationHint(self):
         battleBoostersCache = dependency.instance(IBoostersStateProvider)
-        supported = ARENA_BONUS_TYPE_CAPS.checkAny(self.sessionProvider.arenaVisitor.getArenaBonusType(), ARENA_BONUS_TYPE_CAPS.BOOSTERS)
+        supported = self.sessionProvider.arenaVisitor.bonus.hasBonusCap(ARENA_BONUS_TYPE_CAPS.BOOSTERS)
         return self.__isInDisplayPeriod and self._haveHintsLeft(self.__reservesHintSettings) and not battleBoostersCache.getActiveResources() and battleBoostersCache.getBoosters(criteria=REQ_CRITERIA.BOOSTER.IN_ACCOUNT) and supported and self.lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled
 
     def __canDisplayQuestHint(self):
@@ -817,7 +820,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             if viewCtx.get('hasUniqueVehicleHelpScreen', False):
                 vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
                 vTypeDesc = vehicle.typeDescriptor
-                if vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vehicle.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy:
+                if self._hasVehicleHelpHint(vTypeDesc):
                     hintStats = self.__helpHintSettings[self.__vehicleId]
                     self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return

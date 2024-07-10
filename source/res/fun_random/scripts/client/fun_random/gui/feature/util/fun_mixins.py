@@ -86,18 +86,20 @@ class FunSubModesWatcher(object):
         return cls._funRandomCtrl.subModesHolder.getBattleSubMode(arenaVisitor)
 
     @classmethod
+    def getDesiredSubMode(cls):
+        return cls._funRandomCtrl.subModesHolder.getDesiredSubMode()
+
+    @classmethod
+    def getSubMode(cls, subModeID):
+        return cls._funRandomCtrl.subModesHolder.getSubMode(subModeID)
+
+    @classmethod
     def getSubModes(cls, subModesIDs=None, isOrdered=False):
         return cls._funRandomCtrl.subModesHolder.getSubModes(subModesIDs=subModesIDs, isOrdered=isOrdered)
 
     @classmethod
     def getSubModesStatus(cls, subModesIDs=None):
         return cls._funRandomCtrl.subModesInfo.getSubModesStatus(subModesIDs)
-
-    def getDesiredSubMode(self):
-        return self._funRandomCtrl.subModesHolder.getDesiredSubMode()
-
-    def getSubMode(self, subModeID):
-        return self._funRandomCtrl.subModesHolder.getSubMode(subModeID)
 
     def startSubSelectionListening(self, method):
         self._funRandomCtrl.subscription.addListener(FunEventType.SUB_SELECTION, method)

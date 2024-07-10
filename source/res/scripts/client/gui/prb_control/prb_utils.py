@@ -166,3 +166,7 @@ def initBattleCtrlIDs(guiConstants, personality):
     extraAttrs = guiConstants.BATTLE_CTRL_ID.getExtraAttrs()
     guiConstants.BATTLE_CTRL_ID.inject(personality)
     BATTLE_CTRL_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
+
+
+def initHangarGuiConsts(guiConstants, personality):
+    guiConstants.QuestFlagTypes.inject(personality)

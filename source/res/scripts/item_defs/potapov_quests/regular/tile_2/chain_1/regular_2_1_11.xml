@@ -13,6 +13,10 @@
               <eventCount></eventCount>
               <greaterOrEqual>	6	</greaterOrEqual>
             </vehicleDamage>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <greaterOrEqual>	300	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -65,10 +69,10 @@
               <eventCount></eventCount>
               <greaterOrEqual>	6	</greaterOrEqual>
             </vehicleDamage>
-            <results>
-              <key>	damageDealt	</key>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
               <greaterOrEqual>	1500	</greaterOrEqual>
-            </results>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -105,10 +109,10 @@
               <eventCount></eventCount>
               <greaterOrEqual>	6	</greaterOrEqual>
             </vehicleDamage>
-            <results>
-              <key>	damageDealt	</key>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
               <greaterOrEqual>	1500	</greaterOrEqual>
-            </results>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>

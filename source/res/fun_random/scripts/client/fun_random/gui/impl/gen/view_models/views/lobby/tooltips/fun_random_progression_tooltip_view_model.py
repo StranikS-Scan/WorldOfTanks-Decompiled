@@ -8,7 +8,7 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 class FunRandomProgressionTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(FunRandomProgressionTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,9 +41,16 @@ class FunRandomProgressionTooltipViewModel(ViewModel):
     def setAssetsPointer(self, value):
         self._setString(3, value)
 
+    def getIsMultipleSubModes(self):
+        return self._getBool(4)
+
+    def setIsMultipleSubModes(self, value):
+        self._setBool(4, value)
+
     def _initialize(self):
         super(FunRandomProgressionTooltipViewModel, self)._initialize()
         self._addViewModelProperty('state', FunRandomProgressionState())
         self._addViewModelProperty('condition', FunRandomProgressionCondition())
         self._addViewModelProperty('currentStage', FunRandomProgressionStage())
         self._addStringProperty('assetsPointer', 'undefined')
+        self._addBoolProperty('isMultipleSubModes', True)

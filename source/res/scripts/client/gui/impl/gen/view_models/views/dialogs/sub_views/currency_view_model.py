@@ -16,6 +16,7 @@ class CurrencyType(Enum):
     XP = 'xp'
     FREEXP = 'freeXP'
     EQUIPCOIN = 'equipCoin'
+    ELITEXP = 'eliteXP'
 
 
 class CurrencyViewModel(ViewModel):

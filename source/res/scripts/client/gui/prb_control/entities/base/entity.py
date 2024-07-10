@@ -4,8 +4,6 @@ import typing
 from adisp import adisp_process
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control.entities.base.actions_validator import IActionsValidator
 from gui.prb_control.entities.base.actions_validator import NotSupportedActionsValidator, BaseActionsValidator
 from gui.prb_control.entities.base.permissions import IPrbPermissions
@@ -15,8 +13,6 @@ from gui.prb_control.items import SelectResult, ValidationResult
 from gui.prb_control.prb_getters import getQueueTypeFromPrbEntity
 from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE
 from gui.shared.utils.listeners_collection import IListenersCollection
-from gui.shared.utils.functions import makeTooltip
-from gui.Scaleform.settings import TOOLTIP_TYPES
 if typing.TYPE_CHECKING:
     from gui.prb_control.entities.base.ctx import PrbAction, PrbCtrlRequestCtx
     from gui.prb_control.entities.base.cooldown import PrbCooldownManager
@@ -143,14 +139,6 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
     def showGUI(self, ctx=None):
         return False
 
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return ('', False)
-
-    def getSquadBtnTooltipData(self):
-        header = backport.text(R.strings.platoon.headerButton.tooltips.squad.header())
-        body = backport.text(R.strings.platoon.headerButton.tooltips.squad.body())
-        return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
-
     def getConfirmDialogMeta(self, ctx):
         return None
 
@@ -179,6 +167,9 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         self._previous = entity
 
     def hasLockedState(self):
+        return False
+
+    def hasSpecialVehicles(self):
         return False
 
     def getPermissions(self, pID=None, **kwargs):
@@ -214,7 +205,7 @@ class BasePrbEntity(IActionsValidator, PrbFunctionalFlags):
         return None
 
     def _goToHangar(self):
-        if getQueueTypeFromPrbEntity(self) == getQueueTypeFromPrbEntity(self._previous):
+        if getQueueTypeFromPrbEntity(self) == getQueueTypeFromPrbEntity(self._previous) or self.isInQueue():
             return
         g_eventDispatcher.loadHangar()
 

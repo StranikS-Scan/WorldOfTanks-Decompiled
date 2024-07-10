@@ -18,7 +18,7 @@ from nation_change.nation_change_helpers import NationalGroupDataAccumulator
 if typing.TYPE_CHECKING:
     from typing import List, Tuple
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
-_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
+_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan', 'premMask'))
 
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)

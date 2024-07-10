@@ -24,6 +24,7 @@ from AvatarInfo import AvatarInfo
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
+from gui.shared.system_factory import registerReplayModeTag, collectReplayModeTag
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
@@ -51,8 +52,6 @@ _FORWARD_INPUT_CTRL_MODES = (CTRL_MODE_NAME.VIDEO,
  CTRL_MODE_NAME.DEBUG,
  CTRL_MODE_NAME.DEATH_FREE_CAM,
  CTRL_MODE_NAME.KILL_CAM)
-_ARENA_GUI_TYPE_TO_MODE_TAG = {ARENA_GUI_TYPE.COMP7: 'Onslaught',
- ARENA_GUI_TYPE.FUN_RANDOM: 'Arcade'}
 _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.ARCADE,
  CTRL_MODE_NAME.ARTY,
@@ -62,6 +61,7 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
+registerReplayModeTag(ARENA_GUI_TYPE.COMP7, 'Onslaught')
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -243,6 +243,7 @@ class BattleReplay(object):
         self.__serverSettings = dict()
         if isPlayerAccount():
             self.__playerDatabaseID = BigWorld.player().databaseID
+        self.__arenaStartTime = None
         self.__playbackSpeedModifiers = (0.0, 0.0625, 0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0)
         self.__playbackSpeedModifiersStr = ('0', '1/16', '1/8', '1/4', '1/2', '1', '2', '4', '8', '16')
         self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
@@ -784,51 +785,51 @@ class BattleReplay(object):
             if not self.isServerSideReplay:
                 self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED)
         if self.isRecording:
-            player = BigWorld.player()
-            arena = player.arena
-            arenaName = arena.arenaType.geometry
-            i = arenaName.find('/')
-            if i != -1:
-                arenaName = arenaName[i + 1:]
             now = datetime.datetime.now()
-            now = '%02d.%02d.%04d %02d:%02d:%02d' % (now.day,
+            self.__arenaStartTime = '%02d.%02d.%04d %02d:%02d:%02d' % (now.day,
              now.month,
              now.year,
              now.hour,
              now.minute,
              now.second)
-            vehicleName = BigWorld.entities[player.playerVehicleID].typeDescriptor.name
-            vehicleName = vehicleName.replace(':', '-')
-            vehicles = self.__getArenaVehiclesInfo()
-            gameplayID = player.arenaTypeID >> 16
-            clientVersionFromXml = getFullClientVersion()
-            clientVersionFromExe = BigWorld.wg_getProductVersion()
-            arenaInfo = {'dateTime': now,
-             'playerName': player.name,
-             'playerID': self.__playerDatabaseID,
-             'playerVehicle': vehicleName,
-             'mapName': arenaName,
-             'mapDisplayName': arena.arenaType.name,
-             'gameplayID': ArenaType.getGameplayName(gameplayID) or gameplayID,
-             'vehicles': vehicles,
-             'battleType': arena.bonusType,
-             'clientVersionFromExe': clientVersionFromExe,
-             'clientVersionFromXml': clientVersionFromXml,
-             'serverName': self.connectionMgr.serverUserName,
-             'regionCode': constants.AUTH_REALM,
-             'serverSettings': self.__serverSettings,
-             'hasMods': self.__replayCtrl.hasMods}
-            if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
-                arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
-            self.__replayCtrl.recMapName = arenaName
-            self.__replayCtrl.recPlayerVehicleName = vehicleName
-            self.__replayCtrl.recBattleModeTag = _ARENA_GUI_TYPE_TO_MODE_TAG.get(arena.guiType, '')
-            self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
+            self.updateArenaInfo()
         else:
             self.__showInfoMessages()
             if self.replayTimeout > 0:
                 LOG_DEBUG('replayTimeout set for %.2f' % float(self.replayTimeout))
                 BigWorld.callback(float(self.replayTimeout), BigWorld.quit)
+
+    def updateArenaInfo(self, vehicleName=None):
+        if not self.isRecording:
+            return
+        player = BigWorld.player()
+        arena = player.arena
+        vehicleName = vehicleName or BigWorld.entities[player.playerVehicleID].typeDescriptor.name
+        vehicleName = vehicleName.replace(':', '-')
+        arenaName = arena.arenaType.geometry
+        i = arenaName.find('/')
+        if i != -1:
+            arenaName = arenaName[i + 1:]
+        gameplayID = player.arenaTypeID >> 16
+        arenaInfo = {'dateTime': self.__arenaStartTime,
+         'playerName': player.name,
+         'playerID': self.__playerDatabaseID,
+         'playerVehicle': vehicleName,
+         'mapName': arenaName,
+         'mapDisplayName': arena.arenaType.name,
+         'gameplayID': ArenaType.getGameplayName(gameplayID) or gameplayID,
+         'vehicles': self.__getArenaVehiclesInfo(),
+         'battleType': arena.bonusType,
+         'clientVersionFromExe': BigWorld.wg_getProductVersion(),
+         'clientVersionFromXml': getFullClientVersion(),
+         'serverName': self.connectionMgr.serverUserName,
+         'regionCode': constants.AUTH_REALM,
+         'serverSettings': self.__serverSettings,
+         'hasMods': self.__replayCtrl.hasMods}
+        self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
+        self.__replayCtrl.recPlayerVehicleName = vehicleName
+        self.__replayCtrl.recMapName = arenaName
+        self.__replayCtrl.recBattleModeTag = collectReplayModeTag(arena.guiType)
 
     def bindToVehicleForServerSideReplay(self, vehicleID):
         LOG_DEBUG('Avatar.bindToVehicleForServerSideReplay: vehicleID=%s' % vehicleID)

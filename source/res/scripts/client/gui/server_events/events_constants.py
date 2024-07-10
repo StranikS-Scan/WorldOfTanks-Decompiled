@@ -12,6 +12,7 @@ MAPS_TRAINING_QUEST_PREFIX = 'mt_battle_quest_'
 BATTLE_MATTERS_COMPENSATION_QUEST_ID = 'compensation_battle_matters'
 RANKED_DAILY_GROUP_ID = 'ranked_daily'
 RANKED_PLATFORM_GROUP_ID = 'ranked_platform'
+COMP7_LIGHT_GROUP_ID = 'comp7_light_group'
 FUN_RANDOM_GROUP_ID = 'fun_random'
 DAILY_QUEST_ID_PREFIX = DailyQuestsTokensPrefixes.QUEST_TOKEN
 DAILY_QUEST_TOKEN_PREFIX = DailyQuestsTokensPrefixes.QUEST_TICKET

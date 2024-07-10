@@ -4,13 +4,14 @@ import cPickle
 import zlib
 import weakref
 from collections import namedtuple, defaultdict
+from typing import Dict
 import ArenaType
 import BigWorld
 import CGF
 import Event
 import Math
 import arena_component_system.client_arena_component_assembler as assembler
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_modifiers_common import BattleModifiers, EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, ARENA_UPDATE, ATTACK_REASON
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
@@ -139,9 +140,9 @@ class ClientArena(object):
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
-        self.extraData = arenaExtraData
-        battleModifiersDescr = arenaExtraData.get('battleModifiersDescr', ()) if arenaExtraData else ()
-        self.battleModifiers = BattleModifiers(battleModifiersDescr)
+        self.extraData = arenaExtraData or {}
+        self.battleModifiers = BattleModifiers(self.extraData.get('battleModifiersDescr', ()))
+        self.bonusCapsOverrides = self.extraData.get('bonusCapsOverrides')
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
         if spaceID == 0:
@@ -162,7 +163,7 @@ class ClientArena(object):
     viewPoints = property(lambda self: self.__viewPoints)
     isFogOfWarEnabled = property(lambda self: self.__isFogOfWarEnabled)
     hasFogOfWarHiddenVehicles = property(lambda self: self.__hasFogOfWarHiddenVehicles)
-    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)) or ARENA_BONUS_TYPE_CAPS.checkAny(self.bonusType, ARENA_BONUS_TYPE_CAPS.SSR))
+    hasObservers = property(lambda self: any(('observer' in v['vehicleType'].type.tags for v in self.__vehicles.itervalues() if v['vehicleType'] is not None)) or self.hasBonusCap(BONUS_CAPS.SSR))
     teamBasesData = property(lambda self: self.__teamBasesData)
     arenaInfo = property(lambda self: self.__arenaInfo)
     arenaObserverInfo = property(lambda self: self.__arenaObserverInfo)
@@ -170,6 +171,8 @@ class ClientArena(object):
 
     def destroy(self):
         self.__eventManager.clear()
+        self.battleModifiers = None
+        self.bonusCapsOverrides = None
         assembler.destroyComponentSystem(self.componentSystem)
         self._vsePlans.destroy()
         self._vsePlans = None
@@ -247,6 +250,9 @@ class ClientArena(object):
             self.onTeamInfoUnregistered(teamInfo)
             return
 
+    def hasBonusCap(self, bonusCap):
+        return BONUS_CAPS.checkAny(self.bonusType, bonusCap, specificOverrides=self.bonusCapsOverrides)
+
     def __setupBBColliders(self):
         if BigWorld.wg_getSpaceBounds().length == 0.0:
             return False
@@ -305,6 +311,7 @@ class ClientArena(object):
 
     def __getArenaPlans(self):
         arenaPlans = list(self.arenaType.visualScript[ASPECT.CLIENT])
+        arenaPlans.extend(self.battleModifiers.getVsePlansByAspect(ASPECT.CLIENT))
         vscriptsConfig = arenaVScriptsConfig.getInstance()
         if vscriptsConfig:
             arenaPlans.extend(vscriptsConfig.getPlansForLoader(ASPECT.CLIENT, self.bonusType, self.arenaType.gameplayName))

@@ -5,7 +5,6 @@
     <Interface>	ClientCommandsPort	</Interface>
     <Interface>	InvitationsClient	</Interface>
     <Interface>	AccountAuthTokenProviderClient	</Interface>
-    <Interface>	AvatarClientProxy	</Interface>
     <Interface>	AvatarObserver	</Interface>
     <Interface>	TeamHealthBar_Avatar	</Interface>
     <Interface>	ProtectionZoneController_Avatar	</Interface>
@@ -271,7 +270,6 @@
     <_Avatar__visibilityHandler></_Avatar__visibilityHandler>
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
-    <_avatarClientProxy></_avatarClientProxy>
     <ammoStateInited></ammoStateInited>
     <questProgresses></questProgresses>
     <arenaCell></arenaCell>
@@ -674,6 +672,7 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	BOOL	</Arg>
     </setSendKillCamSimulationData>
+    <onSendSyncObjectsTo></onSendSyncObjectsTo>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>
@@ -814,5 +813,12 @@
     <updateGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
     </updateGoodiesSnapshot>
+    <onXPUpdatedNotification>
+      <Arg>	INT16	</Arg>
+    </onXPUpdatedNotification>
+    <showDevelopmentInfo>
+      <Arg>	UINT8	</Arg>
+      <Arg>	STRING	</Arg>
+    </showDevelopmentInfo>
   </BaseMethods>
 </Avatar.def>

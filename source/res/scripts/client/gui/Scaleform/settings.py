@@ -13,6 +13,7 @@ class TOOLTIP_TYPES(object):
 class ICONS_SIZES(CONST_CONTAINER):
     X550 = '550x550'
     X320 = '320x320'
+    X232 = '232x174'
     X220 = '220x220'
     X110 = '110x110'
     X80 = '80x80'

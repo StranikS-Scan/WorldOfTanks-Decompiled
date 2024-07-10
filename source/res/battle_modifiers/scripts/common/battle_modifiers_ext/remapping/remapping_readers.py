@@ -44,10 +44,10 @@ def readConditions(config, remappingName):
         conditionClass = getConditionClass(conditionName)
         if conditionClass is None:
             raise SoftException(ERR_TEMPLATE.format("Unsupported condition class for '{}'".format(conditionName)), remappingName)
-        regularRules = _readRemappingRules(conditionSection, remappingName, conditionName, 'remappings')
-        if not regularRules:
-            raise SoftException(ERR_TEMPLATE.format("Regular rules are unfilled for condition '{}'".format(conditionName)), remappingName)
-        conditions[conditionName] = conditionClass(regularRules)
+        regularRules = {}
+        if conditionSection.has_key('remappings'):
+            regularRules = _readRemappingRules(conditionSection, remappingName, conditionName, 'remappings')
+        conditions[conditionName] = conditionClass(remappingName, regularRules)
 
     return conditions
 

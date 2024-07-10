@@ -18,7 +18,6 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, GOLD_MISSION, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel, CREW_BONUS_X3_TOKEN
-from gui.server_events.bonuses import formatBlueprint
 from gui.server_events.formatters import COMPLEX_TOKEN, TokenComplex, parseComplexToken
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -203,30 +202,39 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         tooltipPackers = cls._getTooltipsPackers()
         result = []
         for tokenID, token in bonusTokens.iteritems():
+            if not cls._isTokenForTooltipValid(tokenID):
+                continue
             complexToken = parseComplexToken(tokenID)
             tokenType = cls._getTokenBonusType(tokenID, complexToken)
-            if tokenType == '':
-                continue
-            tooltipPacker = tooltipPackers.get(tokenType)
-            if tooltipPacker is None:
-                _logger.warning('There is not a tooltip creator for a token bonus %s', tokenType)
-                continue
-            tooltip = tooltipPacker(complexToken, token)
-            result.append(tooltip)
+            result.append(tooltipPackers.get(tokenType)(complexToken, token))
 
         return result
 
     @classmethod
     def _getContentId(cls, bonus):
         result = []
-        bonusTokens = bonus.getTokens()
-        for token in bonusTokens:
-            name = token.split(':')[0]
+        for tokenID in bonus.getTokens():
+            if not cls._isTokenForTooltipValid(tokenID):
+                continue
+            name = tokenID.split(':')[0]
             if name.endswith(GOLD_MISSION):
                 result.append(R.views.lobby.battle_pass.tooltips.BattlePassGoldMissionTooltipView())
             result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
+
+    @classmethod
+    def _isTokenForTooltipValid(cls, tokenID):
+        complexToken = parseComplexToken(tokenID)
+        tokenType = cls._getTokenBonusType(tokenID, complexToken)
+        if tokenType == '':
+            return False
+        else:
+            tooltipPacker = cls._getTooltipsPackers().get(tokenType)
+            if tooltipPacker is None:
+                _logger.warning('There is not a tooltip creator for a token bonus %s', tokenType)
+                return False
+            return True
 
     @classmethod
     def _getTokenBonusPackers(cls):
@@ -472,8 +480,7 @@ class ExtendedBlueprintBonusUIPacker(BlueprintBonusUIPacker):
         models = super(ExtendedBlueprintBonusUIPacker, cls)._pack(bonus)
         model = first(models)
         if model:
-            label = formatBlueprint(bonus)
-            model.setLabel(label)
+            model.setLabel(bonus.getLabel())
         return models
 
 
@@ -745,10 +752,14 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         return cls._packTooltips(bonus, bonus.getVehicles())
 
     @classmethod
+    def _getCompensation(cls, vehicle, bonus):
+        return bonus.compensation(vehicle, bonus)
+
+    @classmethod
     def _packVehicles(cls, bonus, vehicles):
         packedVehicles = []
         for vehicle, vehInfo in vehicles:
-            compensation = bonus.compensation(vehicle, bonus)
+            compensation = cls._getCompensation(vehicle, bonus)
             if compensation:
                 packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
@@ -762,7 +773,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
     def _packTooltips(cls, bonus, vehicles):
         packedTooltips = []
         for vehicle, vehInfo in vehicles:
-            compensation = bonus.compensation(vehicle, bonus)
+            compensation = cls._getCompensation(vehicle, bonus)
             if compensation:
                 for bonusComp in compensation:
                     packedTooltips.extend(cls._packCompensationTooltip(bonusComp, vehicle))

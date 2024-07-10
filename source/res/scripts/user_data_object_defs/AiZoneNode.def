@@ -2,6 +2,11 @@
   <Domain>	NONE	</Domain>
   <NonChunk>	True	</NonChunk>
   <Properties>
+    <zonesMap>
+      <Type>	STRING	</Type>
+      <Default></Default>
+      <Editable>	true	</Editable>
+    </zonesMap>
     <zoneNodes>
       <Type>	ARRAY	  <of>	UDO_REF	</of>
       </Type>
@@ -17,5 +22,10 @@
       <Editable>	True	</Editable>
       <Default>	100	</Default>
     </desirability>
+    <priority>
+      <Type>	UINT8	</Type>
+      <Editable>	True	</Editable>
+      <Default>	100	</Default>
+    </priority>
   </Properties>
 </AiZoneNode.def>

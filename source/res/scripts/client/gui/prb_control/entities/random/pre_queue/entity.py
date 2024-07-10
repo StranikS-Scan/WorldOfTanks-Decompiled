@@ -6,7 +6,6 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import gameplay_ctx
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getRandomTooltipData
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdBrowserEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
@@ -50,9 +49,6 @@ class RandomEntity(PreQueueEntity):
     def doSelectAction(self, action):
         name = action.actionName
         return SelectResult(True) if name == PREBATTLE_ACTION_NAME.RANDOM else super(RandomEntity, self).doSelectAction(action)
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getRandomTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(RandomEntity, self).getFightBtnTooltipData(isStateDisabled)
 
     def _doQueue(self, ctx):
         mmData = ctx.getDemoArenaTypeID()

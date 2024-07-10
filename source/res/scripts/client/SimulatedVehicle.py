@@ -349,14 +349,13 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         for sticker in segments:
             self.__decodeAndAddSticker(sticker, maxComponentIdx)
 
-    def showKillingSticker(self, shellCompactDescr, hasProjectilePierced, segments):
+    def showKillingSticker(self, shellCompactDescr, hasProjectilePierced, hasNonPiercedDamage, segments):
         if not segments:
             return
         else:
             shellDescr = vehicles.getItemByCompactDescr(shellCompactDescr)
-            hasProjectilePierced = 'armorPierced' if hasProjectilePierced else 'armorResisted'
-            shellStickers = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]['targetStickers']
-            stickerID = shellStickers[hasProjectilePierced]
+            targetSticker = 'armorPierced' if hasProjectilePierced or hasNonPiercedDamage else 'armorResisted'
+            stickerID = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]['targetStickers'][targetSticker]
             if stickerID is not None:
                 maxComponentID = self.getMaxComponentIndex()
                 for segment in segments:

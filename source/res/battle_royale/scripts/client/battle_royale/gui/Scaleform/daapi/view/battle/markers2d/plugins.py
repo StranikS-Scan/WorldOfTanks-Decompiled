@@ -5,8 +5,7 @@ from collections import defaultdict
 import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from aih_constants import CTRL_MODE_NAME
-from arena_bonus_type_caps import ARENA_BONUS_TYPE
-from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin, settings as commonSettings
+from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin
 from items.battle_royale import isSpawnedBot, isHunterBot
 import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import settings
@@ -16,6 +15,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import VehicleMarkerPlugin
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE
+from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
@@ -30,16 +30,6 @@ _BATTLE_ROYALE_STATUS_EFFECTS_PRIORITY = ((BATTLE_MARKER_STATES.FIRE_CIRCLE_STAT
  (BATTLE_MARKER_STATES.INSPIRING_STATE,),
  (BATTLE_MARKER_STATES.INSPIRED_STATE,))
 _MARKERS_WITH_TIMER = (BATTLE_MARKER_STATES.INSPIRING_STATE, BATTLE_MARKER_STATES.HEALING_STATE)
-_SQUAD_COLOR_MAP = [1,
- 2,
- 4,
- 5,
- 7,
- 8,
- 9,
- 11,
- 13,
- 14]
 
 class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -48,6 +38,9 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         super(BattleRoyaleVehicleMarkerPlugin, self).__init__(parentObj, clazz)
         self.__markersStatesExtended = defaultdict(list)
         self.__cache = {}
+        self.__isCurrentObserverFPV = False
+        brSettings = getBattleRoyaleSettings()
+        self.__observerMarkersVisibilityDistance = brSettings.observerBotMarkersVisibilityDistance
 
     def start(self):
         super(BattleRoyaleVehicleMarkerPlugin, self).start()
@@ -66,12 +59,6 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         super(BattleRoyaleVehicleMarkerPlugin, self).stop()
         self.__cache = {}
         return
-
-    def _invokeMarker(self, markerID, function, *args):
-        if function == 'updateHealth':
-            if args[1] == commonSettings.DAMAGE_TYPE.FROM_ALLY:
-                args = args[:1] + (commonSettings.DAMAGE_TYPE.FROM_SQUAD,) + args[2:]
-        super(BattleRoyaleVehicleMarkerPlugin, self)._invokeMarker(markerID, function, *args)
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
         if not vInfo.isAlive() and (isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)):
@@ -108,6 +95,17 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
 
         except ValueError:
             return -1
+
+    def _getCullDistanceForVehicle(self, vInfo):
+        player = BigWorld.player()
+        return self.__observerMarkersVisibilityDistance if player.observerSeesAll() and not player.isObserverFPV and self.__shouldSetCullDistanceForObserver(vInfo) else super(BattleRoyaleVehicleMarkerPlugin, self)._getCullDistanceForVehicle(vInfo)
+
+    def __shouldSetCullDistanceForObserver(self, vInfo):
+        vehicleID = vInfo.vehicleID
+        if vehicleID == self._playerVehicleID or vInfo.isObserver():
+            return False
+        isBot = isSpawnedBot(vInfo.vehicleType.tags) or isHunterBot(vInfo.vehicleType.tags)
+        return False if not vInfo.isAlive() or not isBot else True
 
     def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         super(BattleRoyaleVehicleMarkerPlugin, self)._onVehicleFeedbackReceived(eventID, vehicleID, value)
@@ -179,15 +177,13 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
             self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
 
     def _getGuiPropsName(self, vInfo, guiProps):
-        arenaBonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
         isBot = vInfo.team == 21
         if guiProps.isFriend:
             entryName = 'ally' if isSpawnedBot(vInfo.vehicleType.tags) else 'squadman'
         else:
             entryName = 'enemy'
         if avatar_getter.isVehiclesColorized() and not isBot:
-            team = _SQUAD_COLOR_MAP[vInfo.team - 1] if arenaBonusType == ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD and len(_SQUAD_COLOR_MAP) >= vInfo.team else vInfo.team
-            entryName = 'team{}'.format(team)
+            entryName = 'team{}'.format(vInfo.team)
         return entryName
 
     def __statusInActive(self, vehicleID, statusID):
@@ -217,7 +213,7 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
             vehicle = BigWorld.entities.get(currentVehicleId)
             if vehicle is None:
                 return
-            if cameraName == 'video':
+            if cameraName == CTRL_MODE_NAME.VIDEO:
                 if self.__hasRepairingMarker(currentVehicleId):
                     self.__updateRepairingMarker(currentVehicleId)
                 if vehicle.stunInfo:
@@ -228,6 +224,16 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
                 if self.__hasRepairingMarker(currentVehicleId):
                     self.__updateRepairingMarker(currentVehicleId, isShow=False)
                 vehicle.updateStunInfo()
+            player = BigWorld.player()
+            isObserverFPV = player.isObserverFPV
+            if player.observerSeesAll() and self.__isCurrentObserverFPV != isObserverFPV:
+                for vInfo in self.sessionProvider.getArenaDP().getVehiclesInfoIterator():
+                    marker = self._markers.get(vInfo.vehicleID)
+                    if marker is not None:
+                        cullDistance = self._getCullDistanceForVehicle(vInfo)
+                        self._setMarkerRenderInfoWithArguments(marker.getMarkerID(), cullDistance=cullDistance)
+
+                self.__isCurrentObserverFPV = isObserverFPV
             return
 
     def _onUpdateObservedVehicleData(self, vehicleID, _):

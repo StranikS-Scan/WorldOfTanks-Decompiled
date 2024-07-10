@@ -51,7 +51,7 @@ from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
-from gui.shared.money import Currency, Money
+from gui.shared.money import Currency, Money, ZERO_MONEY
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from helpers import dependency, getLocalizedData, i18n, time_utils
@@ -2291,6 +2291,9 @@ class VehicleBlueprintBonus(SimpleBonus):
           'name': self.getBlueprintTooltipName(),
           'description': self._getDescription()}]
 
+    def getLabel(self):
+        return self.getBlueprintTooltipName()
+
     def _getWrappedBonusList(self):
         result = []
         result.append({'id': self._getFragmentCD(),
@@ -2399,6 +2402,9 @@ class NationalBlueprintBonus(VehicleBlueprintBonus):
 
     def getLightViewModelData(self):
         return (self.getName() + '_' + self.getImageCategory(),)
+
+    def getLabel(self):
+        return backport.text(R.strings.blueprints.nations.dyn(self.getImageCategory())())
 
     def _getDescription(self):
         return i18n.makeString(TOOLTIPS.BLUEPRINT_BLUEPRINTFRAGMENTTOOLTIP_NATIONALDESCRIPTION, nation=self._localizedNationName())
@@ -2989,6 +2995,33 @@ def getMergedBonusesFromDicts(bonusesList):
             _logger.warning('BONUS_MERGERS has not bonus %s', bonusName)
 
     return result
+
+
+def getMergedCompensatedBonuses(rewardsDicts):
+    rewards = getMergedBonusesFromDicts(rewardsDicts)
+    vehiclesList = rewards.get('vehicles', [])
+    compValue = getCompensationValue(vehiclesList)
+    for currency in Currency.ALL:
+        if compValue.get(currency, 0) > 0:
+            currencyValue = rewards.pop(currency, None)
+            if currency is not None:
+                newCurrencyValue = currencyValue - compValue.get(currency, 0)
+                if newCurrencyValue:
+                    rewards[currency] = newCurrencyValue
+
+    return rewards
+
+
+def getCompensationValue(vehiclesList):
+    comp = ZERO_MONEY
+    for vehicleDict in vehiclesList:
+        for _, vehData in vehicleDict.iteritems():
+            if 'rentCompensation' in vehData:
+                comp += Money.makeFromMoneyTuple(vehData['rentCompensation'])
+            if 'customCompensation' in vehData:
+                comp += Money.makeFromMoneyTuple(vehData['customCompensation'])
+
+    return comp
 
 
 def splitBonuses(bonuses):

@@ -1,12 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/vehicle_builders.py
+from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced, contexts, vehicle, vehicle_roles
+from gui.impl.auxiliary.tooltips.compensation_tooltip import VehicleCompensationTooltipContent
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.loot_box_vehicle_compensation_tooltip_model import LootBoxVehicleCompensationTooltipModel
+from gui.shared.tooltips import advanced, contexts, vehicle, vehicle_roles, ToolTipBaseData
 from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder, TooltipWindowBuilder, AdvancedTooltipWindowBuilder
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.CarouselContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.HANGAR_CAROUSEL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.HangarCarouselContext())),
      InventoryVehicleBuilder(TOOLTIPS_CONSTANTS.INVENTORY_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.TechTreeContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_STATUS, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleStatusTooltipData(contexts.TechTreeContext())),
@@ -30,7 +36,8 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.DEFAULT_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.DefaultCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext())),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_COMPENSATION, None, VehicleCompensationBuilder(contexts.ToolTipContext(None))))
 
 
 class InventoryVehicleBuilder(DataBuilder):
@@ -41,3 +48,13 @@ class InventoryVehicleBuilder(DataBuilder):
 
     def _buildData(self, _advanced, intCD, *args, **kwargs):
         return super(InventoryVehicleBuilder, self)._buildData(_advanced, intCD)
+
+
+class VehicleCompensationBuilder(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(VehicleCompensationBuilder, self).__init__(context, TOOLTIPS_CONSTANTS.VEHICLE_COMPENSATION)
+
+    def getDisplayableData(self, data, *args, **kwargs):
+        settings = ViewSettings(R.views.lobby.awards.tooltips.RewardCompensationTooltip(), model=LootBoxVehicleCompensationTooltipModel(), kwargs=dict(data))
+        return DecoratedTooltipWindow(VehicleCompensationTooltipContent(settings), useDecorator=False)

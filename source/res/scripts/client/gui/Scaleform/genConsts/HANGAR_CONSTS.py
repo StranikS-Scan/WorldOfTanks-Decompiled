@@ -18,3 +18,8 @@ class HANGAR_CONSTS(object):
     COMP7_TOURNAMENT_BANNER = 'comp7TournamentBanner'
     MINI_CLIENT = 'miniClient'
     BR_PANELS = 'battleRoyalePanels'
+    PRESTIGE_WIDGET = 'prestigeWidget'
+    BATTLE_ROYALE_TOURNAMENT_BANNER = 'battleRoyaleTournamentBanner'
+    HEADER_WIDGET = 'headerWidget'
+    HEADER_QUEST_FLAGS = 'headerQuestFlags'
+    STRENGTHS_WEAKNESSES = 'StrengthsWeaknesses'

@@ -19,7 +19,7 @@ from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, GUN_CAN_BE_AUTO_SHOOT, GUN_AUTO_SHOOT, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -45,6 +45,7 @@ _IMG_EXTRA_PATH = R.images.gui.maps.icons.modules
 class _ModuleExtraStatuses(CONST_CONTAINER):
     AUTOLOADER_GUN = 'autoreloadGun'
     AUTOLOADER_WITH_BOOST_GUN = 'autoReloadWithBoostGun'
+    AUTO_SHOOT_GUN = 'autoShootGun'
     CLIP_GUN = 'clipGun'
     DUAL_GUN = 'dualGun'
     DUAL_ACCURACY_GUN = 'dualAccuracyGun'
@@ -63,6 +64,7 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
  _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
  _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
  _ModuleExtraStatuses.DAMAGE_MUTABLE_GUN: (_STR_EXTRA_PATH.damageMutableGunLabel, _IMG_EXTRA_PATH.damageMutable),
+ _ModuleExtraStatuses.AUTO_SHOOT_GUN: (_STR_EXTRA_PATH.autoShootGunLabel, _IMG_EXTRA_PATH.autoShootGun),
  _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
  _ModuleExtraStatuses.ROCKET_ACCELERATION_ENGINE: (_STR_EXTRA_PATH.rocketAccelerationEngine, _IMG_EXTRA_PATH.rocketAccelerationIcon),
  _ModuleExtraStatuses.HYDRO_CHASSIS: (_STR_EXTRA_PATH.hydraulicChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
@@ -170,6 +172,7 @@ class ModuleTooltipBlockConstructor(object):
     MAX_INSTALLED_LIST_LEN = 10
     CLIP_GUN_MODULE_PARAM = 'vehicleClipGun'
     AUTO_RELOAD_GUN_MODULE_PARAM = 'autoReloadGun'
+    AUTO_SHOOT_GUN_MODULE_PARAM = 'autoShootGun'
     DUAL_GUN_MODULE_PARAM = 'dualGun'
     WEIGHT_MODULE_PARAM = 'weight'
     TURBOSHAFT_ENGINE_MODULE_PARAM = 'turboshaftEngine'
@@ -225,6 +228,19 @@ class ModuleTooltipBlockConstructor(object):
                                     DUAL_ACCURACY_COOLING_DELAY,
                                     'maxShotDistance',
                                     AIMING_TIME_PROP_NAME),
+     AUTO_SHOOT_GUN_MODULE_PARAM: ('avgDamageList',
+                                   CONTINUOUS_DAMAGE_PER_SECOND,
+                                   'avgPiercingPower',
+                                   SHELLS_COUNT_PROP_NAME,
+                                   RELOAD_MAGAZINE_TIME_PROP_NAME,
+                                   CONTINUOUS_SHOTS_PER_MINUTE,
+                                   'avgDamagePerMinute',
+                                   'stunMinDurationList',
+                                   'stunMaxDurationList',
+                                   DISPERSION_RADIUS,
+                                   DUAL_ACCURACY_COOLING_DELAY,
+                                   'maxShotDistance',
+                                   AIMING_TIME_PROP_NAME),
      DUAL_GUN_MODULE_PARAM: ('avgDamageList',
                              'avgPiercingPower',
                              RELOAD_TIME_SECS_PROP_NAME,
@@ -267,7 +283,8 @@ class ModuleTooltipBlockConstructor(object):
                      DUAL_GUN_RATE_TIME,
                      TURBOSHAFT_ENGINE_POWER,
                      ROCKET_ACCELERATION_ENGINE_POWER),
-     DUAL_ACCURACY_MODULE_PARAM: (DUAL_ACCURACY_COOLING_DELAY, DISPERSION_RADIUS)}
+     DUAL_ACCURACY_MODULE_PARAM: (DUAL_ACCURACY_COOLING_DELAY, DISPERSION_RADIUS),
+     AUTO_SHOOT_GUN_MODULE_PARAM: (CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND)}
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=_DEFAULT_PADDING, rightPadding=_DEFAULT_PADDING):
@@ -604,31 +621,34 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         paramsKeyName = module.itemTypeID
         if params:
             highlightPossible = False
+            increaseHighlights = vehicle is not None
             serverSettings = dependency.instance(ISettingsCore).serverSettings
             if module.itemTypeID == GUI_ITEM_TYPE.GUN:
                 reloadingType = module.getReloadingType(vehicle.descriptor if vehicle is not None else None)
                 if reloadingType == GUN_CLIP or reloadingType == GUN_CAN_BE_CLIP:
                     paramsKeyName = self.CLIP_GUN_MODULE_PARAM
                 elif reloadingType == GUN_CAN_BE_AUTO_RELOAD or reloadingType == GUN_AUTO_RELOAD:
-                    highlightPossible = serverSettings.checkAutoReloadHighlights(increase=True)
+                    highlightPossible = serverSettings.checkAutoReloadHighlights(increase=increaseHighlights)
                     paramsKeyName = self.AUTO_RELOAD_GUN_MODULE_PARAM
+                elif reloadingType == GUN_CAN_BE_AUTO_SHOOT or reloadingType == GUN_AUTO_SHOOT:
+                    highlightPossible = serverSettings.checkAutoShootHighlights(increase=increaseHighlights)
+                    paramsKeyName = self.AUTO_SHOOT_GUN_MODULE_PARAM
                 elif reloadingType == GUN_CAN_BE_DUAL_GUN or reloadingType == GUN_DUAL_GUN:
-                    highlightPossible = serverSettings.checkDualGunHighlights(increase=True)
+                    highlightPossible = serverSettings.checkDualGunHighlights(increase=increaseHighlights)
                     paramsKeyName = self.DUAL_GUN_MODULE_PARAM
                 elif vehicle is not None and vehicle.descriptor.hasDualAccuracy:
-                    highlightPossible = serverSettings.checkDualAccuracyHighlights(increase=True)
+                    highlightPossible = serverSettings.checkDualAccuracyHighlights(increase=increaseHighlights)
                     paramsKeyName = self.DUAL_ACCURACY_MODULE_PARAM
                 elif vehicle is not None and module.isDamageMutable():
                     paramsKeyName = self.MUTABLE_DAMAGE_MODULE_PARAM
             elif paramsKeyName == GUI_ITEM_TYPE.ENGINE:
                 if vehicle is not None and vehicle.descriptor.hasTurboshaftEngine:
-                    highlightPossible = serverSettings.checkTurboshaftHighlights(increase=True)
+                    highlightPossible = serverSettings.checkTurboshaftHighlights(increase=increaseHighlights)
                     paramsKeyName = self.TURBOSHAFT_ENGINE_MODULE_PARAM
                 if vehicle is not None and vehicle.descriptor.hasRocketAcceleration:
-                    highlightPossible = serverSettings.checkRocketAccelerationHighlights(increase=True)
+                    highlightPossible = serverSettings.checkRocketAccelerationHighlights(increase=increaseHighlights)
                     paramsKeyName = self.ROCKET_ACCELERATION_ENGINE_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
-            highlightParamsList = self.HIGHLIGHT_MODULE_PARAMS.get(paramsKeyName, []) if paramsKeyName in self.HIGHLIGHT_MODULE_PARAMS else self.HIGHLIGHT_MODULE_PARAMS[self.DEFAULT_PARAM]
             if vehicle is not None:
                 if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
                     currModule = module
@@ -636,12 +656,12 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName)
                     currModule = self.itemsCache.items.getItemByCD(currModuleDescr.compactDescr)
                 comparator = params_helper.itemsComparator(module, currModule, vehicle.descriptor)
-                for paramName in paramsList:
-                    if paramName in moduleParams:
-                        paramInfo = comparator.getExtendedData(paramName)
-                        fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
-                        if fmtValue is not None:
-                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=19, highlight=highlightPossible and paramName in highlightParamsList))
+                highlightParamsList = self.HIGHLIGHT_MODULE_PARAMS.get(paramsKeyName, []) if paramsKeyName in self.HIGHLIGHT_MODULE_PARAMS else self.HIGHLIGHT_MODULE_PARAMS[self.DEFAULT_PARAM]
+                for paramName in (p for p in paramsList if p in moduleParams):
+                    paramInfo = comparator.getExtendedData(paramName)
+                    fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
+                    if fmtValue is not None:
+                        block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=fmtValue, valueWidth=self._valueWidth, gap=19, highlight=highlightPossible and paramName in highlightParamsList))
 
             else:
                 formattedModuleParameters = params_formatters.getFormattedParamsList(module.descriptor, moduleParams)
@@ -690,6 +710,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     hasBoost = gun.autoreloadHasBoost
 
             result.append(_ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN if hasBoost else _ModuleExtraStatuses.AUTOLOADER_GUN)
+        elif module.isAutoShoot(vDescr):
+            result.append(_ModuleExtraStatuses.AUTO_SHOOT_GUN)
         elif module.isDualGun(vDescr):
             result.append(_ModuleExtraStatuses.DUAL_GUN)
         if module.hasDualAccuracy(vDescr):

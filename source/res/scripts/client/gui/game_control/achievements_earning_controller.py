@@ -192,7 +192,7 @@ class CommandBuilder(object):
     __limitedUICtrl = dependency.descriptor(ILimitedUIController)
 
     def _isTrophy(self, achievementsData):
-        return not any((not self.__advAchmntCtrl.getAchievementByID(idx, category).isDeprecated for idx, category, _ in achievementsData))
+        return not any((not self.__advAchmntCtrl.getAchievementByID(idx, category).isDeprecated for idx, category, _, _ in achievementsData))
 
     def _isMultiple(self, achievementsData):
         return len(achievementsData) > 1
@@ -204,20 +204,13 @@ class CommandBuilder(object):
         return 'trophy' if isTrophy else 'common'
 
     def _getNewAchievementIterator(self, achievementsData):
-        earningTimeStamp = self.__settingsCore.serverSettings.getAdvancedAchievementsEarningTimestamp()
-        for id, category, _ in achievementsData:
-            achievement = self.__advAchmntCtrl.getAchievementByID(id, category)
-            stageID = achievement.getCurrentStageID()
-            if not earningTimeStamp:
-                for stage in xrange(1, stageID):
-                    yield achievement.getFakeAchievementForStage(stage)
-
-            yield achievement.getFakeAchievementForStage(stageID)
+        for id, category, stage, _ in achievementsData:
+            yield self.__advAchmntCtrl.getAchievementByID(id, category).getFakeAchievementForStage(stage)
 
     def _createAchievementDataDebugCommand(self, receiver, achievementData):
         message = ''
-        for id, category, _ in achievementData:
-            message += ' \n ------  Achievement: {} Category: {}'.format(id, category)
+        for id, category, stage, _ in achievementData:
+            message += ' \n ------  Achievement: {} Category: {} Stage: {}'.format(id, category, stage)
 
         args = {'receiver': receiver,
          'message': message}
@@ -229,26 +222,19 @@ class CommandBuilder(object):
         return PrintCommand(args)
 
     def _createTimeStampUpdateCommand(self, receiver, achievementsData):
-        maxTimestamp = max((timestamp for _, _, timestamp in achievementsData))
+        maxTimestamp = max((timestamp for _, _, _, timestamp in achievementsData))
         args = {'receiver': receiver,
          'timestamp': maxTimestamp}
         return TimeStampUpdateCommand(args)
 
     def _createNotificationCommand(self, receiver, achievementsData):
-        earningTimeStamp = self.__settingsCore.serverSettings.getAdvancedAchievementsEarningTimestamp()
         isMultiple = self._isMultiple(achievementsData)
         isTrophy = self._isTrophy(achievementsData)
         targetData = None
         if isMultiple:
-            if earningTimeStamp:
-                value = len(achievementsData)
-            else:
-                value = 0
-                for id, category, _ in achievementsData:
-                    value += self.__advAchmntCtrl.getAchievementByID(id, category).getCurrentStageID()
-
+            value = len(achievementsData)
         else:
-            id, category, _ = achievementsData[0]
+            id, category, _, _ = achievementsData[0]
             key = self.__advAchmntCtrl.getAchievementByID(id, category).getStringKey()
             value = backport.text(R.strings.advanced_achievements.name.dyn(key)())
             targetData = (id, category)

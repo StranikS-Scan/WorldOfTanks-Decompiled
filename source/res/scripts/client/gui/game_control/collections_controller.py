@@ -40,12 +40,14 @@ class CollectionsSystemController(ICollectionsSystemController, EventsHandler):
 
     def onLobbyInited(self, event):
         self.__updateAvailability()
-        self.__cdnCacheMgr = makeCacheMgr()
+        if self.__cdnCacheMgr is None:
+            self.__cdnCacheMgr = makeCacheMgr()
         if self.isEnabled():
             self.__entitlementsCache.updateAll(self.__onCacheUpdated)
             self.__updateRelatedItems()
             self.__cdnCacheMgr.startSync()
         self._subscribe()
+        return
 
     def onDisconnected(self):
         if self.__cdnCacheMgr is not None:

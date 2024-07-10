@@ -9,7 +9,7 @@ from Vehicle import SegmentCollisionResultExt
 from VehicleEffects import DamageFromShotDecoder
 from helpers.EffectsList import effectsFromSection, EffectsListPlayer
 from constants import VEHICLE_HIT_EFFECT
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_ID
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from vehicle_systems.tankStructure import ColliderTypes
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 import helpers
@@ -92,29 +92,32 @@ class DestructibleEntity(BigWorld.Entity):
             destructibleEntityComponent.updateDestructibleEntityHealth(self, self.health, attackerID, attackReasonID, hitFlags)
         return
 
-    def showDamageFromShot(self, points, effectsIndex):
-        hasPiercedHit = DamageFromShotDecoder.hasDamaged(effectsIndex)
-        eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
-        if effectsIndex is not None:
-            if effectsIndex in VEHICLE_HIT_EFFECT.RICOCHETS:
-                eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
-            elif effectsIndex == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
-                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
+    def showDamageFromShot(self, attackerID, hitEffectCode, damage):
+        if hitEffectCode is None or not self.isAlive() or attackerID != BigWorld.player().playerVehicleID:
+            return
+        else:
+            hasPiercedHit = DamageFromShotDecoder.hasDamaged(hitEffectCode)
+            if hitEffectCode in VEHICLE_HIT_EFFECT.RICOCHETS:
+                eventID = _FET.VEHICLE_RICOCHET
+            elif hitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
+                eventID = _FET.VEHICLE_CRITICAL_HIT
             elif hasPiercedHit:
-                eventID = _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED
+                eventID = _FET.VEHICLE_ARMOR_PIERCED
             else:
-                eventID = _GUI_EVENT_ID.VEHICLE_HIT
+                eventID = _FET.VEHICLE_HIT
             destructibleEntityComponent = BigWorld.player().arena.componentSystem.destructibleEntityComponent
             if destructibleEntityComponent is not None:
-                destructibleEntityComponent.updateDestructibleEntityFeedback(self, eventID)
-        return
+                destructibleEntityComponent.updateDestructibleEntityFeedback(self, eventID, damage)
+            return
 
-    def showDamageFromExplosion(self, attackerID, center, effectsIndex, damageFactor):
-        if attackerID == BigWorld.player().playerVehicleID:
+    def showDamageFromExplosion(self, attackerID, damage):
+        if not self.isAlive() or attackerID != BigWorld.player().playerVehicleID:
+            return
+        else:
             destructibleEntityComponent = BigWorld.player().arena.componentSystem.destructibleEntityComponent
             if destructibleEntityComponent is not None:
-                destructibleEntityComponent.updateDestructibleEntityFeedback(self, _GUI_EVENT_ID.VEHICLE_ARMOR_PIERCED)
-        return
+                destructibleEntityComponent.updateDestructibleEntityFeedback(self, _FET.VEHICLE_ARMOR_PIERCED, damage)
+            return
 
     def set_health(self, oldValue):
         self.__checkStateTriggers()

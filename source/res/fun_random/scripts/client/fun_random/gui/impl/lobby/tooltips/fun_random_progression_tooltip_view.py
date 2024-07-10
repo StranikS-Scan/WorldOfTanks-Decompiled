@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/tooltips/fun_random_progression_tooltip_view.py
 from frameworks.wulf import ViewSettings
-from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_progression_tooltip_view_model import FunRandomProgressionTooltipViewModel
-from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher
+from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression
-from fun_random.gui.impl.lobby.common.fun_view_helpers import packProgressionActiveStage, packProgressionCondition, packProgressionState
+from fun_random.gui.impl.gen.view_models.views.lobby.tooltips.fun_random_progression_tooltip_view_model import FunRandomProgressionTooltipViewModel
+from fun_random.gui.impl.lobby.common.fun_view_helpers import packProgressionActiveStage, packProgressionState, packInfiniteProgressionState, packInfiniteProgressionStage, packInfiniteProgressionConditions, packProgressionConditions
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 
-class FunRandomProgressionTooltipView(ViewImpl, FunAssetPacksMixin, FunProgressionWatcher):
+class FunRandomProgressionTooltipView(ViewImpl, FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher):
     __slots__ = ()
 
     def __init__(self):
@@ -32,10 +32,16 @@ class FunRandomProgressionTooltipView(ViewImpl, FunAssetPacksMixin, FunProgressi
         progression = self.getActiveProgression()
         with self.viewModel.transaction() as model:
             model.setAssetsPointer(self.getModeAssetsPointer())
-            packProgressionActiveStage(progression, model.currentStage)
-            packProgressionCondition(progression, model.condition)
-            packProgressionState(progression, model.state)
+            model.setIsMultipleSubModes(len(self.getSubModes()) > 1)
+            if progression.isInUnlimitedProgression:
+                packInfiniteProgressionState(progression, model.state)
+                packInfiniteProgressionStage(progression, model.currentStage, isSpecial=True)
+                packInfiniteProgressionConditions(progression, model.condition)
+            else:
+                packProgressionState(progression, model.state)
+                packProgressionActiveStage(progression, model.currentStage, isSpecial=True)
+                packProgressionConditions(progression, model.condition)
 
     @hasActiveProgression()
     def __invalidateTimer(self, *_):
-        self.viewModel.state.setResetTimer(self.getActiveProgression().condition.resetTimer)
+        self.viewModel.state.setStatusTimer(self.getActiveProgression().statusTimer)

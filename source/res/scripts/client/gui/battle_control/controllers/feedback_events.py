@@ -76,9 +76,9 @@ def _getShellType(shellTypeID):
 
 
 class _DamageExtra(object):
-    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID', '__isRoleAction')
+    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID', '__isRoleAction', '__isAutoShoot')
 
-    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isRoleAction=False):
+    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isRoleAction=False, isAutoShoot=False):
         super(_DamageExtra, self).__init__()
         self.__damage = damage
         self.__attackReasonID = attackReasonID
@@ -87,6 +87,7 @@ class _DamageExtra(object):
         self.__isShellGold = bool(shellIsGold)
         self.__secondaryAttackReasonID = secondaryAttackReasonID
         self.__isRoleAction = bool(isRoleAction)
+        self.__isAutoShoot = bool(isAutoShoot)
         _logger.debug('_DamageExtra isRoleAction = %s', isRoleAction)
 
     def getDamage(self):
@@ -196,6 +197,9 @@ class _DamageExtra(object):
     def isClingBranderRam(self):
         return self.isAttackReason(ATTACK_REASON.CLING_BRANDER_RAM)
 
+    def isAutoShoot(self):
+        return self.__isAutoShoot
+
 
 class _VisibilityExtra(object):
     __slots__ = ('__isVisible', '__isDirect', '__isRoleAction')
@@ -234,15 +238,16 @@ class _MultiStunExtra(object):
 
 
 class _CritsExtra(object):
-    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID')
+    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID', '__isAutoShoot')
 
-    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0):
+    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isAutoShoot=False):
         super(_CritsExtra, self).__init__()
         self.__critsCount = critsCount
         self.__attackReasonID = attackReasonID
         self.__shellType = _getShellType(shellTypeID)
         self.__isShellGold = bool(shellIsGold)
         self.__secondaryAttackReasonID = secondaryAttackReasonID
+        self.__isAutoShoot = isAutoShoot
 
     def getCritsCount(self):
         return self.__critsCount
@@ -326,6 +331,9 @@ class _CritsExtra(object):
 
     def isClingBranderRam(self):
         return self.isAttackReason(ATTACK_REASON.CLING_BRANDER_RAM)
+
+    def isAutoShoot(self):
+        return self.__isAutoShoot
 
 
 class _FeedbackEvent(object):

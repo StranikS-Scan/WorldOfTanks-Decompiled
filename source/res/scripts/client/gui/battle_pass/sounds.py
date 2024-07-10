@@ -44,6 +44,8 @@ class BattlePassSounds(CONST_CONTAINER):
     REGULAR_VOICEOVER_STOP = 'bp_regular_voiceovers_stop'
     HOLIDAY_VOICEOVER_STOP = 'bp_holiday_voiceovers_stop'
     HOLIDAY_REWARD_SCREEN = 'bp_holiday_reward_screen'
+    TASKS_ENTER = 'tasks_enter'
+    TASKS_EXIT = 'tasks_exit'
     SPECIAL_TASKS_ENTER = 'tasks_special_enter'
     SPECIAL_TASKS_EXIT = 'tasks_special_exit'
 

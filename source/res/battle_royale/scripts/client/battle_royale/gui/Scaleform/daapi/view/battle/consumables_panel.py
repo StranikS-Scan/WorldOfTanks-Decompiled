@@ -2,8 +2,8 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/consumables_panel.py
 import BigWorld
 from Event import EventsSubscriber
-from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import RespawnAbility
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
+from battle_royale_artefacts import BattleDescriptionConfigReader
 from constants import EQUIPMENT_STAGES, ARENA_BONUS_TYPE, ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel, TOOLTIP_FORMAT
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
@@ -35,7 +35,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__es.subscribeToEvent(vehStateCtrl.onVehicleStateUpdated, self.__onVehicleLootAction)
         self.__es.subscribeToEvent(BigWorld.player().onObserverVehicleChanged, self.__onObserverVehicleChanged)
-        self.__updateRespawnSkill()
+        self.__addRespawnSlot()
 
     def _dispose(self):
         self.__es.unsubscribeFromAllEvents()
@@ -106,7 +106,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
 
     def _buildEquipmentSlotTooltipText(self, item):
         descriptor = item.getDescriptor()
-        body = descriptor.description
+        if isinstance(descriptor, BattleDescriptionConfigReader):
+            body = descriptor.battleDescription
+        else:
+            body = descriptor.description
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)
         return toolTip
 
@@ -202,15 +205,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         super(BattleRoyaleConsumablesPanel, self)._onVehicleStateUpdated(state, value)
 
     def __updateRespawnSkill(self):
-        bwKey, sfKey = self._genKey(self._RESPAWN_EQUIPMENT_IDX)
-        header = backport.text(RespawnAbility.name)
-        body = self.__buildRespawnEquipmentTooltipText()
-        tooltip = TOOLTIP_FORMAT.format(header, body)
         arena = BigWorld.player().arena
         period = arena.period
         count = 0
         isAvailable = False
-        needToRemove = False
         if period == ARENA_PERIOD.BATTLE:
             vehicle = BigWorld.player().getVehicleAttached()
             if vehicle and vehicle.isAlive():
@@ -219,20 +217,28 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
                     count = vehicleBRRespawnComponent.lives
                     isAvailable = True
             else:
-                needToRemove = True
-        if needToRemove:
-            self.__removeRespawnSlot()
-        else:
-            self.as_addRespawnSlotS(self._RESPAWN_EQUIPMENT_IDX, bwKey, sfKey, count, tooltip, False, isAvailable)
+                self.__removeRespawnSlot()
+                return
+        self.__addRespawnSlot(count, isAvailable)
         return
 
     def __removeRespawnSlot(self):
         self.as_resetS([self._RESPAWN_EQUIPMENT_IDX])
 
+    def __addRespawnSlot(self, count=0, isAvailable=False):
+        bwKey, sfKey = self._genKey(self._RESPAWN_EQUIPMENT_IDX)
+        header = backport.text(R.strings.artefacts.br_respawn.name())
+        body = self.__buildRespawnEquipmentTooltipText()
+        tooltip = TOOLTIP_FORMAT.format(header, body)
+        self.as_addRespawnSlotS(self._RESPAWN_EQUIPMENT_IDX, bwKey, sfKey, count, tooltip, False, isAvailable)
+
     def __buildRespawnEquipmentTooltipText(self):
         bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
         isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
-        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=RespawnAbility().platoonRespawnPeriod / ONE_MINUTE, timeToResurrect=RespawnAbility().platoonTimeToRessurect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=RespawnAbility().soloRespawnPeriod / ONE_MINUTE)
+        arenaInfo = BigWorld.player().arena.arenaInfo
+        respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
+        timeToRessurect = arenaInfo.arenaInfoBRComponent.timeToRessurect if arenaInfo else 0
+        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=respawnPeriod / ONE_MINUTE, timeToResurrect=timeToRessurect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=respawnPeriod / ONE_MINUTE)
 
     def _onRespawnBaseMoving(self):
         super(BattleRoyaleConsumablesPanel, self)._onRespawnBaseMoving()

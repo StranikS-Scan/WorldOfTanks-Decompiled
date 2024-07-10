@@ -239,13 +239,13 @@ class AvatarObserver(CallbackDelayer):
         self.setRemoteCamera(self.remoteCamera)
 
     def observerSeesAll(self):
-        return self.guiSessionProvider.getCtx().isObserver(self.playerVehicleID) and BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.OBSERVER_SEES_ALL)
+        return self.guiSessionProvider.getCtx().isObserver(self.playerVehicleID) and self.hasBonusCap(BONUS_CAPS.OBSERVER_SEES_ALL)
 
     def isBecomeObserverAfterDeath(self):
-        return BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.BECOME_AN_OBSERVER_AFTER_DEATH)
+        return self.hasBonusCap(BONUS_CAPS.BECOME_AN_OBSERVER_AFTER_DEATH)
 
     def isFollowWinner(self):
-        return BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.FOLLOW_WINNER)
+        return self.hasBonusCap(BONUS_CAPS.FOLLOW_WINNER)
 
     def __resetFPVModeSwitching(self):
         self.__isFPVModeSwitching = False

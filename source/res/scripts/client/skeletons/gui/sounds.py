@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/sounds.py
-
+import typing
+from gui.battle_control.controllers.interfaces import IBattleController
 
 class ISoundsController(object):
 
@@ -33,7 +34,13 @@ class ISoundsController(object):
         raise NotImplementedError
 
 
-class IVehicleHitSound(object):
+class IShotsResultSoundController(IBattleController):
 
-    def getSoundStringFromHitFlags(self, enemyVehID, hitFlags, enemiesHitCount):
+    def getBestSoundEventName(self, bestSound):
+        raise NotImplementedError
+
+    def getBestShotResultSound(self, currBest, newSoundName, otherData):
+        raise NotImplementedError
+
+    def getVehicleHitResultSound(self, enemyVehID, hitFlags, enemiesHitCount):
         raise NotImplementedError

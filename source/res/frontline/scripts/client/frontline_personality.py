@@ -4,13 +4,16 @@ from frontline_common.constants import ACCOUNT_DEFAULT_SETTINGS
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, HAS_DEV_RESOURCES
 from constants_utils import AbstractBattleMode
+from frontline.gui import gui_constants
 from frontline.gui.Scaleform import registerFLBattlePackages, registerFLTooltipsBuilders
 from frontline.gui.battle_control.controllers.consumables import registerFLEquipmentController
 from frontline.gui.battle_control.controllers.equipment_items import registerFLEquipmentsItems
 from frontline.gui.battle_control.controllers.repositories import registerFLBattleRepositories
 from frontline.gui.prb_control import registerFLPrebattles, extendIntroByType
+from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import registerQuestFlags
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
+from gui.prb_control.prb_utils import initHangarGuiConsts
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 LOBBY_EXT_PACKAGES = ['frontline.gui.Scaleform.daapi.view.lobby', 'frontline.gui.Scaleform.daapi.view.lobby.hangar', 'frontline.gui.Scaleform.daapi.view.lobby.epicBattleTraining']
 
@@ -37,15 +40,34 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
         from frontline.gui.Scaleform.daapi.view.lobby.battle_queue_provider import EpicQueueProvider
         return EpicQueueProvider
 
+    @property
+    def _client_ammunitionPanelViews(self):
+        from gui.impl.lobby.tank_setup.frontline.ammunition_panel import FrontlineAmmunitionPanelView
+        return [FrontlineAmmunitionPanelView]
+
+    @property
+    def _client_hangarPresetsReader(self):
+        from frontline.gui.hangar_presets.frontline_presets_reader import FrontlinePresetsReader
+        return FrontlinePresetsReader
+
+    @property
+    def _client_hangarPresetsGetter(self):
+        from frontline.gui.hangar_presets.frontline_presets_getter import FrontlinePresetsGetter
+        return FrontlinePresetsGetter
+
 
 def preInit():
+    initHangarGuiConsts(gui_constants, __name__)
     battleMode = ClientFrontlineBattleMode(__name__)
+    battleMode.registerClientHangarPresets()
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerBannerEntryPointLUIRule()
+    battleMode.registerAmmunitionPanelViews()
     battleMode.registerProviderBattleQueue()
     registerFLBattlePackages()
     registerFLBattleRepositories()
     registerFLTooltipsBuilders()
+    registerQuestFlags()
     extendIntroByType()
     registerFLEquipmentController()
     registerFLEquipmentsItems()

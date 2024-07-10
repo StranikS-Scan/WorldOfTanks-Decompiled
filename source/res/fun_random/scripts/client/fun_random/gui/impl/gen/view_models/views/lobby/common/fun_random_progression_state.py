@@ -9,6 +9,8 @@ class FunRandomProgressionStatus(Enum):
     ACTIVE_RESETTABLE = 'activeResettable'
     COMPLETED_FINAL = 'completedFinal'
     COMPLETED_RESETTABLE = 'completedResettable'
+    ACTIVE_INFINITE_RESETTABLE = 'activeInfiniteResettable'
+    ACTIVE_INFINITE_FINAL = 'activeInfiniteFinal'
 
 
 class FunRandomProgressionState(ViewModel):
@@ -35,10 +37,10 @@ class FunRandomProgressionState(ViewModel):
     def setMaximumStage(self, value):
         self._setNumber(2, value)
 
-    def getResetTimer(self):
+    def getStatusTimer(self):
         return self._getNumber(3)
 
-    def setResetTimer(self, value):
+    def setStatusTimer(self, value):
         self._setNumber(3, value)
 
     def _initialize(self):
@@ -46,4 +48,4 @@ class FunRandomProgressionState(ViewModel):
         self._addStringProperty('status')
         self._addNumberProperty('currentStage', -1)
         self._addNumberProperty('maximumStage', -1)
-        self._addNumberProperty('resetTimer', -1)
+        self._addNumberProperty('statusTimer', -1)

@@ -1,40 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/composer.py
+import typing
 from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
+from gui.battle_results.stats_ctrl import IBattleResultStatsCtrl
 from gui.shared import event_dispatcher
-from gui.shared.system_factory import collectBattleResultsComposer, registerBattleResultsComposer
+from gui.shared.system_factory import registerBattleResultStatsCtrl
 from helpers import dependency
 from skeletons.gui.game_control import IMapsTrainingController
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import ViewModel
+    BattleResultsModelType = typing.TypeVar('BattleResultsModelType', bound=ViewModel)
+    TooltipModelType = typing.TypeVar('TooltipModelType', bound=ViewModel)
 
-class IStatsComposer(object):
+class StatsComposer(IBattleResultStatsCtrl):
+    __slots__ = ('_block',)
 
-    def clear(self):
-        raise NotImplementedError
-
-    def setResults(self, results, reusable):
-        raise NotImplementedError
-
-    def getVO(self):
-        raise NotImplementedError
-
-    def popAnimation(self):
-        raise NotImplementedError
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        raise NotImplementedError
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        raise NotImplementedError
-
-
-class StatsComposer(IStatsComposer):
-    __slots__ = ('_block', '_animation')
-
-    def __init__(self, reusable, common, personal, teams, text, animation=None):
+    def __init__(self, reusable, common, personal, teams, text):
         super(StatsComposer, self).__init__()
         self._block = base.StatsBlock(templates.TOTAL_VO_META)
         self._registerTabs(reusable)
@@ -47,31 +30,15 @@ class StatsComposer(IStatsComposer):
         self._block.addNextComponent(common)
         self._block.addNextComponent(personal)
         self._block.addNextComponent(teams)
-        self._animation = animation
 
     def clear(self):
         self._block.clear()
-        if self._animation is not None:
-            self._animation.clear()
-        return
 
     def setResults(self, results, reusable):
         self._block.setRecord(results, reusable)
-        if self._animation is not None:
-            self._animation.setRecord(results, reusable)
-        return
 
     def getVO(self):
         return self._block.getVO()
-
-    def popAnimation(self):
-        if self._animation is not None:
-            animation = self._animation.getVO()
-            self._animation.clear()
-            self._animation = None
-        else:
-            animation = None
-        return animation
 
     @staticmethod
     def onShowResults(arenaUniqueID):
@@ -146,38 +113,7 @@ class RankedBattlesStatsComposer(StatsComposer):
         return self.__resultsTeamsBlock.getVO()
 
 
-class BattleRoyaleStatsComposer(IStatsComposer):
-
-    def __init__(self, _):
-        super(BattleRoyaleStatsComposer, self).__init__()
-        self._block = base.StatsBlock(templates.BR_TOTAL_VO_META)
-        self._block.addNextComponent(templates.BR_TABS_BLOCK.clone())
-        self._block.addNextComponent(templates.BR_TEAM_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.BR_COMMON_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.BR_PERSONAL_STATS_BLOCK.clone())
-
-    def clear(self):
-        self._block.clear()
-
-    def setResults(self, results, reusable):
-        self._block.setRecord(results, reusable)
-
-    def getVO(self):
-        return self._block.getVO()
-
-    def popAnimation(self):
-        pass
-
-    @staticmethod
-    def onShowResults(arenaUniqueID):
-        return None
-
-    @staticmethod
-    def onResultsPosted(arenaUniqueID):
-        event_dispatcher.showBattleRoyaleResultsView({'arenaUniqueID': arenaUniqueID})
-
-
-class MapsTrainingStatsComposer(IStatsComposer):
+class MapsTrainingStatsComposer(IBattleResultStatsCtrl):
     _fromNotifications = set()
     mapsTrainingController = dependency.descriptor(IMapsTrainingController)
 
@@ -193,9 +129,6 @@ class MapsTrainingStatsComposer(IStatsComposer):
 
     def getVO(self):
         return self._block.getVO()
-
-    def popAnimation(self):
-        pass
 
     @staticmethod
     def onShowResults(arenaUniqueID):
@@ -245,23 +178,12 @@ class TrainingComp7StatsComposer(StatsComposer):
         return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
 
 
-def createComposer(reusable):
-    bonusType = reusable.common.arenaBonusType
-    composer = collectBattleResultsComposer(bonusType)
-    if composer is None:
-        composer = RegularStatsComposer
-    return composer(reusable)
-
-
-registerBattleResultsComposer(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.CYBERSPORT, CyberSportStatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleStatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
-for bt in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
-    registerBattleResultsComposer(bt, BattleRoyaleStatsComposer)
-
-registerBattleResultsComposer(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
-registerBattleResultsComposer(ARENA_BONUS_TYPE.TRAINING_COMP7, TrainingComp7StatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.CYBERSPORT, CyberSportStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
+registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TRAINING_COMP7, TrainingComp7StatsComposer)

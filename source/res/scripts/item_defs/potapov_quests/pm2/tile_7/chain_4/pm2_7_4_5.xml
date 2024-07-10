@@ -78,8 +78,10 @@ filter = globals().get('BattleResults')
 """:type: battle_result_filters"""
 
 PROGRESS_ID_MAIN = 'blockedHits'
+PROGRESS_ID_MAIN_BLOCKED = 'blockedDamage'
 PROGRESS_ID_MAIN_SERIES = 'battlesSeries'
 PROGRESS_ID_ADD = 'blockedHitsAdv'
+PROGRESS_ID_ADD_BLOCKED = 'blockedDamageAdv'
 PROGRESS_ID_ADD_SERIES = 'battlesSeriesAdv'
 
 def onInit(eventType, eventData, quest, processor):
@@ -91,11 +93,15 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
     brfilter = filter.BattleResultsFilter(eventData)
-    result = sum([len(shots) for shots in (brfilter.filterDamageFrom(hitBlocked=True).itervalues())])
-    questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, result)
-    questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, result, PROGRESS_ID_MAIN)
+    damageFromFiltered = brfilter.filterDamageFrom(hitBlocked=True)
 
-    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD))
+    result = brfilter.sumBlockedHitsCount(damageFromFiltered)
+    blockedDamage = brfilter.sumBlockedDamage(damageFromFiltered)
+
+    questProgress.increaseSumProgress((PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_BLOCKED), PROGRESS_ID_MAIN_SERIES, (result, blockedDamage))
+    questProgress.increaseSumProgress((PROGRESS_ID_ADD, PROGRESS_ID_ADD_BLOCKED), PROGRESS_ID_ADD_SERIES, (result, blockedDamage), (PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_BLOCKED))
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID))
 
     processor.setQuestProgress(quest.progressID, questProgress.save())
 

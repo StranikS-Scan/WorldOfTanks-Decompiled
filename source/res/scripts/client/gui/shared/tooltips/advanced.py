@@ -110,17 +110,24 @@ class ComplexAdvanced(BaseAdvancedTooltip):
 
 class HangarShellAdvanced(BaseAdvancedTooltip):
     _MODERN_SUFFIX = '_MODERN'
+    _NOT_PIERCING_DAMAGE = '_NOT_PIERCING_DAMAGE'
     _TRAY = '_TRAY'
 
     def _getBlocksList(self, *args, **kwargs):
-        movie = SHELL_MOVIES.get((self._item.type, self._item.isModernMechanics, self._item.isDamageMutable()), None)
+        movie = SHELL_MOVIES.get(self._item.getAdvancedTooltipKey(), None)
         header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(self._item.type, default=R.invalid)())
-        description = self._item.type
-        if self._item.isModernMechanics:
-            description += self._MODERN_SUFFIX
-        if self._item.isDamageMutable():
-            description += self._TRAY
+        description = self._item.type + self._getDescriptionSuffix()
         return self._packAdvancedBlocks(movie, header, description)
+
+    def _getDescriptionSuffix(self):
+        suffix = ''
+        if self._item.isModernMechanics:
+            suffix = self._MODERN_SUFFIX
+        elif self._item.isNonPiercingDamageMechanics:
+            suffix = self._NOT_PIERCING_DAMAGE
+        elif self._item.isDamageMutable():
+            suffix = self._TRAY
+        return suffix
 
 
 class HangarBoosterAdvanced(BaseAdvancedTooltip):
@@ -318,10 +325,39 @@ TANKMAN_MOVIES = {'commander': 'crewCommander',
  'gunner': 'crewGunner',
  'loader': 'crewLoader',
  'radioman': 'crewRadioOperator'}
-SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False, False): 'bulletAP',
- (SHELL_TYPES.HOLLOW_CHARGE, False, False): 'bulletHEAT',
- (SHELL_TYPES.HIGH_EXPLOSIVE, False, False): 'bulletHE',
- (SHELL_TYPES.ARMOR_PIERCING_CR, False, False): 'bulletAPCR',
- (SHELL_TYPES.HIGH_EXPLOSIVE, True, False): 'bulletHEModern',
- (SHELL_TYPES.ARMOR_PIERCING, False, True): 'bulletAPMutable',
- (SHELL_TYPES.ARMOR_PIERCING_CR, False, True): 'bulletAPCRMutable'}
+SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING,
+ False,
+ False,
+ False): 'bulletAP',
+ (SHELL_TYPES.HOLLOW_CHARGE,
+ False,
+ False,
+ False): 'bulletHEAT',
+ (SHELL_TYPES.HIGH_EXPLOSIVE,
+ False,
+ False,
+ False): 'bulletHE',
+ (SHELL_TYPES.ARMOR_PIERCING_CR,
+ False,
+ False,
+ False): 'bulletAPCR',
+ (SHELL_TYPES.HIGH_EXPLOSIVE,
+ True,
+ False,
+ False): 'bulletHEModern',
+ (SHELL_TYPES.ARMOR_PIERCING,
+ False,
+ True,
+ False): 'bulletAP',
+ (SHELL_TYPES.ARMOR_PIERCING_CR,
+ False,
+ True,
+ False): 'bulletAPCR',
+ (SHELL_TYPES.ARMOR_PIERCING,
+ False,
+ False,
+ True): 'bulletAPMutable',
+ (SHELL_TYPES.ARMOR_PIERCING_CR,
+ False,
+ False,
+ True): 'bulletAPCRMutable'}

@@ -35,15 +35,14 @@ IS_STORY_MODE_FADE_IN_OUT_ON = True
 STORY_MODE_FADE_IN_DURATION = 0.4
 STORY_MODE_FADE_OUT_DURATION = 0.4
 SOUND_REMAPPING = 'story_mode'
-POST_BATTLE_MUSIC = 'sm_lobby_pbs'
 COMMON_SOUND_SPACE = 'Lobby_music_garage_story_mode'
 GAMEMODE_GROUP = 'STATE_gamemode'
 GAMEMODE_STATE = 'STATE_gamemode_story_mode'
 GAMEMODE_DEFAULT = 'STATE_gamemode_default'
 HANGAR_GROUP = 'STATE_hangar_place'
 HANGAR_STATE = 'STATE_hangar_place_garage'
-POST_BATTLE_MUSIC_EVENT_WIN = 'gui_reward_v1_special'
-POST_BATTLE_MUSIC_EVENT_LOSE = 'reward_tank_marathon_A122_TS_5'
+POST_BATTLE_MUSIC_WIN = 'gui_reward_v1_special'
+POST_BATTLE_MUSIC_LOSE = 'reward_tank_marathon_A122_TS_5'
 CONGRATULATION_MUSIC = 'gui_reward_v1_special'
 STORY_MODE_SOUND_SPACE = CommonSoundSpaceSettings(name=COMMON_SOUND_SPACE, entranceStates={GAMEMODE_GROUP: GAMEMODE_STATE,
  HANGAR_GROUP: HANGAR_STATE}, exitStates={GAMEMODE_GROUP: GAMEMODE_DEFAULT}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')

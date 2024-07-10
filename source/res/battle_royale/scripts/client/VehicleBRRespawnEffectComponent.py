@@ -18,7 +18,9 @@ class VehicleBRRespawnEffectComponent(DynamicScriptComponent):
         self.onRespawned(self.entity.id)
 
     def __playEffect(self):
-        prefabPath = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleRespawnEffect().effectPrefabPath
+        prefabPath = self.__dynObjectsCache.getConfig(self.__sessionProvider.arenaVisitor.getArenaGuiType()).getVehicleRespawnEffect()
+        if not prefabPath:
+            return
         vehGO = self.entity.entityGameObject
         transformComponent = vehGO.findComponentByType(GenericComponents.TransformComponent)
         CGF.loadGameObject(prefabPath, vehGO.spaceID, transformComponent.worldPosition)

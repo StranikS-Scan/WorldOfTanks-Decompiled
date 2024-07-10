@@ -109,7 +109,11 @@ class BattlePassProgressionsView(ViewImpl):
     def deactivate(self):
         if not self.__exitSoundsIsPlayed:
             self.__stopSounds()
+            self.__startCommonSound()
         self._unsubscribe()
+
+    def onViewSwitch(self):
+        self.__startCommonSound()
 
     def setChapter(self, chapterID):
         chapterChanged = chapterID != self.__chapterID
@@ -746,8 +750,13 @@ class BattlePassProgressionsView(ViewImpl):
 
     def __startSounds(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
+            self.soundManager.playInstantSound(BattlePassSounds.TASKS_EXIT)
             self.soundManager.playInstantSound(BattlePassSounds.SPECIAL_TASKS_ENTER)
         self.__exitSoundsIsPlayed = False
+
+    def __startCommonSound(self):
+        if self.__battlePass.isExtraChapter(self.__chapterID):
+            self.soundManager.playInstantSound(BattlePassSounds.TASKS_ENTER)
 
     def __stopVoiceovers(self):
         if self.__battlePass.getSpecialTankmen():

@@ -76,7 +76,7 @@ class TestBridgeManager(CGF.ComponentManager):
         if bridge.moverTransform1() is not None:
             transform1 = bridge.moverTransform1()
             if transform1 is not None and bridge.moveDirection1 != 0:
-                rotation = transform1.rotation
+                rotation = transform1.rotationYPR
                 pitch = rotation[1] - bridge.moveDirection1 * speed
                 if math.fabs(pitch) >= bridge.limit:
                     pitch = -bridge.limit
@@ -84,11 +84,11 @@ class TestBridgeManager(CGF.ComponentManager):
                     bridge.moveDirection1 = 0
                     pitch = 0.0
                 rotation[1] = pitch
-                transform1.rotation = rotation
+                transform1.rotationYPR = rotation
         if bridge.moverTransform2() is not None:
             transform2 = bridge.moverTransform2()
             if bridge.moverTransform2 is not None and bridge.moveDirection2 != 0:
-                rotation = transform2.rotation
+                rotation = transform2.rotationYPR
                 pitch = rotation[1] + bridge.moveDirection2 * speed
                 if math.fabs(pitch) >= bridge.limit:
                     pitch = bridge.limit
@@ -96,5 +96,5 @@ class TestBridgeManager(CGF.ComponentManager):
                     bridge.moveDirection2 = 0
                     pitch = 0.0
                 rotation[1] = pitch
-                transform2.rotation = rotation
+                transform2.rotationYPR = rotation
         return

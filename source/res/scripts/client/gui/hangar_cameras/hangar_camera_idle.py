@@ -133,6 +133,8 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
 
     def __updateIdleMovement(self):
         dt = min(self.measureDeltaTime(), self.MAX_DT)
+        if dt == 0:
+            return 0.0
         self.__currentIdleTime += dt
         cameraMatrix = Math.Matrix(self.__camera.source)
         if self.__yawPeriod > 0:

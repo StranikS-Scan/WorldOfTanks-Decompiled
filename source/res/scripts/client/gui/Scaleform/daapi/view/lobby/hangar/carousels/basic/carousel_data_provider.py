@@ -3,10 +3,13 @@
 import typing
 import BigWorld
 from account_helpers.telecom_rentals import TelecomRentals
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import MENU
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import getStatusStrings
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles
@@ -15,7 +18,7 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.game_control import IWotPlusController, IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
 from telecom_rentals_common import ROSTER_EXPIRATION_TOKEN_NAME, PARTNERSHIP_TOKEN_NAME
 if typing.TYPE_CHECKING:
@@ -36,43 +39,20 @@ class _SUPPLY_ITEMS(object):
 class HangarCarouselDataProvider(CarouselDataProvider):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def __init__(self, carouselFilter, itemsCache):
         super(HangarCarouselDataProvider, self).__init__(carouselFilter, itemsCache)
         self._serverSettings = self._lobbyContext.getServerSettings()
-        self._setBaseCriteria()
         self._frontSupplyItems = []
         self._telecomRentalsVehicles = []
         self._supplyItems = []
         self._emptySlotsCount = 0
         self._restorableVehiclesCount = 0
         self._telecomRentals = None
-        return
-
-    def _populate(self):
-        self._wotPlusCtrl.onDataChanged += self._onWotPlusDataChanged
-        self._telecomRentals = BigWorld.player().telecomRentals
-        self._telecomRentals.onPendingRentChanged += self._onTelecomPendingRentChanged
-        g_clientUpdateManager.addCallback('tokens', self._onTelecomRentalsChanged)
-        super(HangarCarouselDataProvider, self)._populate()
-
-    def _dispose(self):
-        self._wotPlusCtrl.onDataChanged -= self._onWotPlusDataChanged
-        self._telecomRentals.onPendingRentChanged -= self._onTelecomPendingRentChanged
-        g_clientUpdateManager.removeObjectCallbacks(self, True)
-        super(HangarCarouselDataProvider, self)._dispose()
-
-    def _onWotPlusDataChanged(self, diff):
-        if 'exclusiveVehicle' in diff:
-            self.buildList()
-
-    def _onTelecomRentalsChanged(self, diff):
-        if PARTNERSHIP_TOKEN_NAME in diff or ROSTER_EXPIRATION_TOKEN_NAME in diff:
-            self.buildList()
-
-    def _onTelecomPendingRentChanged(self, vehCD):
-        if vehCD is not None:
-            self.buildList()
+        self._dynamicFiltersState = {}
+        self._setBaseCriteria()
+        self.updateDynamicFilters()
         return
 
     @property
@@ -83,6 +63,20 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         frontItems = len(self._getFrontAdditionalItemsIndexes())
         backItems = len(self._getAdditionalItemsIndexes())
         return len(self._filteredIndices) - backItems - frontItems
+
+    def getHiddenDynamicFilters(self):
+        return sorted((key for key, state in self._dynamicFiltersState.iteritems() if not state))
+
+    def clear(self):
+        super(HangarCarouselDataProvider, self).clear()
+        self._supplyItems = []
+        self._frontSupplyItems = []
+
+    def updateDynamicFilters(self):
+        prevHiddenDynamicFilters = self.getHiddenDynamicFilters()
+        self._updateDynamicFilters()
+        newHiddenDynamicFilters = self.getHiddenDynamicFilters()
+        self.filter.reset(keys=newHiddenDynamicFilters, save=prevHiddenDynamicFilters != newHiddenDynamicFilters)
 
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
         rentalVehicles = self._telecomRentalsVehicles
@@ -109,15 +103,70 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self.flashObject.invalidateItems(self._getSupplyIndices(), self._supplyItems)
         self.applyFilter()
 
-    def clear(self):
-        super(HangarCarouselDataProvider, self).clear()
-        self._supplyItems = []
-        self._frontSupplyItems = []
+    @staticmethod
+    def _isSuitableForQueue(vehicle):
+        return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
+
+    def _populate(self):
+        self._wotPlusCtrl.onDataChanged += self._onWotPlusDataChanged
+        self._telecomRentals = BigWorld.player().telecomRentals
+        self._telecomRentals.onPendingRentChanged += self._onTelecomPendingRentChanged
+        g_clientUpdateManager.addCallback('tokens', self._onTelecomRentalsChanged)
+        super(HangarCarouselDataProvider, self)._populate()
+
+    def _dispose(self):
+        self._wotPlusCtrl.onDataChanged -= self._onWotPlusDataChanged
+        self._telecomRentals.onPendingRentChanged -= self._onTelecomPendingRentChanged
+        g_clientUpdateManager.removeObjectCallbacks(self, True)
+        super(HangarCarouselDataProvider, self)._dispose()
+
+    def _isTelecomRentalsEnabled(self):
+        hasTelecomRentalsActive = self._telecomRentals.isActive()
+        isRentalEnabled = self._serverSettings.isTelecomRentalsEnabled()
+        return hasTelecomRentalsActive and isRentalEnabled
+
+    def _getAdditionalItemsIndexes(self):
+        supplyIndices = self._getSupplyIndices()
+        restoreEnabled = self._serverSettings.isVehicleRestoreEnabled()
+        storageEnabled = self._serverSettings.isStorageEnabled()
+        pruneIndices = set()
+        if not self._emptySlotsCount:
+            pruneIndices.add(_SUPPLY_ITEMS.BUY_TANK)
+        if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled:
+            pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
+        return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
+
+    def _getFrontIndices(self):
+        previousItemsCount = len(self._vehicles) + len(_SUPPLY_ITEMS.ALL)
+        return [ previousItemsCount + idx for idx in _FRONT_SUPPLY_ITEMS.ALL ]
+
+    def _getFrontAdditionalItemsIndexes(self):
+        frontIndices = self._getFrontIndices()
+        pruneIndices = set()
+        if not self._isTelecomRentalsEnabled() or self._telecomRentals.getAvailableRentCount() == 0:
+            pruneIndices.add(_FRONT_SUPPLY_ITEMS.RENT_TANK)
+        return [ suppIdx for suppIdx in frontIndices if frontIndices.index(suppIdx) not in pruneIndices ]
+
+    def _getSupplyIndices(self):
+        return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
 
     def _setBaseCriteria(self):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+
+    def _onTelecomRentalsChanged(self, diff):
+        if PARTNERSHIP_TOKEN_NAME in diff or ROSTER_EXPIRATION_TOKEN_NAME in diff:
+            self.buildList()
+
+    def _onTelecomPendingRentChanged(self, vehCD):
+        if vehCD is not None:
+            self.buildList()
+        return
+
+    def _onWotPlusDataChanged(self, diff):
+        if 'exclusiveVehicle' in diff:
+            self.buildList()
 
     def _buildTelecomRentalVehicleItems(self):
         self._telecomRentalsVehicles = []
@@ -132,30 +181,33 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         rentPromotionCriteria = REQ_CRITERIA.VEHICLE.RENT_PROMOTION | ~self._baseCriteria
         self._addVehicleItemsByCriteria(rentPromotionCriteria)
 
+    def _buildFrontSupplyItems(self):
+        self._frontSupplyItems = []
+        if self._isTelecomRentalsEnabled() and not self._telecomRentals.getAvailableRentCount() == 0:
+            text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE
+            if self._telecomRentals.getRentsPending():
+                text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONPENDING
+            self._frontSupplyItems.append({'isWotPlusSlot': True,
+             'infoText': text_styles.vehicleStatusInfoText(text),
+             'infoHoverText': text_styles.vehicleStatusInfoText(text),
+             'smallInfoText': text_styles.vehicleStatusSimpleText(text),
+             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
+             'extraImage': RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG,
+             'tooltip': TOOLTIPS.TANKS_CAROUSEL_WOT_PLUS_SLOT})
+
+    def _buildVehicle(self, vehicle):
+        vo = super(HangarCarouselDataProvider, self)._buildVehicle(vehicle)
+        vo['isEarnCrystals'] = vo['isEarnCrystals'] and self._dynamicFiltersState[FILTER_KEYS.CRYSTALS]
+        vo['xpImgSource'] = vo['xpImgSource'] if self._dynamicFiltersState[FILTER_KEYS.BONUS] else ''
+        vo['tooltip'] = TOOLTIPS_CONSTANTS.HANGAR_CAROUSEL_VEHICLE
+        return vo
+
     def _buildVehicleItems(self):
         super(HangarCarouselDataProvider, self)._buildVehicleItems()
         self._buildTelecomRentalVehicleItems()
         self._buildRentPromitionVehicleItems()
         self._buildSupplyItems()
         self._buildFrontSupplyItems()
-
-    def _getFrontAdditionalItemsIndexes(self):
-        frontIndices = self._getFrontIndices()
-        pruneIndices = set()
-        if not self._isTelecomRentalsEnabled() or self._telecomRentals.getAvailableRentCount() == 0:
-            pruneIndices.add(_FRONT_SUPPLY_ITEMS.RENT_TANK)
-        return [ suppIdx for suppIdx in frontIndices if frontIndices.index(suppIdx) not in pruneIndices ]
-
-    def _getAdditionalItemsIndexes(self):
-        supplyIndices = self._getSupplyIndices()
-        restoreEnabled = self._serverSettings.isVehicleRestoreEnabled()
-        storageEnabled = self._serverSettings.isStorageEnabled()
-        pruneIndices = set()
-        if not self._emptySlotsCount:
-            pruneIndices.add(_SUPPLY_ITEMS.BUY_TANK)
-        if self._restorableVehiclesCount == 0 or not restoreEnabled or not storageEnabled:
-            pruneIndices.add(_SUPPLY_ITEMS.RESTORE_TANK)
-        return [ suppIdx for suppIdx in supplyIndices if supplyIndices.index(suppIdx) not in pruneIndices ]
 
     def _buildSupplyItems(self):
         self._supplyItems = []
@@ -200,32 +252,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._supplyItems.append(buySlotVO)
         return
 
-    def _buildFrontSupplyItems(self):
-        self._frontSupplyItems = []
-        if self._isTelecomRentalsEnabled() and not self._telecomRentals.getAvailableRentCount() == 0:
-            text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE
-            if self._telecomRentals.getRentsPending():
-                text = MENU.TANKCAROUSEL_WOTPLUSSELECTIONPENDING
-            self._frontSupplyItems.append({'isWotPlusSlot': True,
-             'infoText': text_styles.vehicleStatusInfoText(text),
-             'infoHoverText': text_styles.vehicleStatusInfoText(text),
-             'smallInfoText': text_styles.vehicleStatusSimpleText(text),
-             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK,
-             'extraImage': RES_ICONS.MAPS_ICONS_LIBRARY_RENT_ICO_BIG,
-             'tooltip': TOOLTIPS.TANKS_CAROUSEL_WOT_PLUS_SLOT})
-
-    @staticmethod
-    def _isSuitableForQueue(vehicle):
-        return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
-
-    def _getFrontIndices(self):
-        previousItemsCount = len(self._vehicles) + len(_SUPPLY_ITEMS.ALL)
-        return [ previousItemsCount + idx for idx in _FRONT_SUPPLY_ITEMS.ALL ]
-
-    def _getSupplyIndices(self):
-        return [ len(self._vehicles) + idx for idx in _SUPPLY_ITEMS.ALL ]
-
-    def _isTelecomRentalsEnabled(self):
-        hasTelecomRentalsActive = self._telecomRentals.isActive()
-        isRentalEnabled = self._serverSettings.isTelecomRentalsEnabled()
-        return hasTelecomRentalsActive and isRentalEnabled
+    def _updateDynamicFilters(self):
+        state, hangarGuiCtrl = self._dynamicFiltersState, self.__hangarGuiCtrl
+        state[FILTER_KEYS.CRYSTALS] = hangarGuiCtrl.checkCurrentCrystalRewards(default=True)
+        state[FILTER_KEYS.BONUS] = hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=True)

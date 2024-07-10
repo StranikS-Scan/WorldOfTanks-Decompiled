@@ -318,6 +318,7 @@ class SummaryView(SubModelPresenter):
                 model.otherPlayerInfo.setClanPost(getClanRoleString(clanInfo.getMembersFlags()))
                 model.otherPlayerInfo.setClanJoiningTime(backport.getLongDateFormat(clanInfo.getJoiningTime()))
                 model.otherPlayerInfo.setClanEmblem(getClanEmblemURL(clanDBID, EmblemSize.SIZE_32))
+                model.otherPlayerInfo.setShowClanButton(self.__lobbyContext.getServerSettings().clanProfile.isEnabled())
             self.__fillDogTagModel(model.otherPlayerInfo.dogTagModel)
         return
 

@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.common.missions.bonuses.blueprint_bonus_model impo
 class WinbackBlueprintBonusModel(BlueprintBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(WinbackBlueprintBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getAmountInStorage(self):
-        return self._getNumber(9)
+        return self._getNumber(10)
 
     def setAmountInStorage(self, value):
-        self._setNumber(9, value)
+        self._setNumber(10, value)
 
     def getIsSelected(self):
-        return self._getBool(10)
+        return self._getBool(11)
 
     def setIsSelected(self, value):
-        self._setBool(10, value)
+        self._setBool(11, value)
 
     def _initialize(self):
         super(WinbackBlueprintBonusModel, self)._initialize()

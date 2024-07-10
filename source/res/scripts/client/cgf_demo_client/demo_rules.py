@@ -7,6 +7,7 @@ from cgf_demo_client.test_state_machine_trigger import StateMachineActivatorMana
 from cgf_demo_client.test_triggers import EntranceModifierManager, TestHealthMonitoringManager
 from cgf_script.managers_registrator import Rule, registerManager, registerRule
 from cgf_demo_client.test_physical_debris_spawner import EntranceSpawnerManager
+from cgf_demo_client.test_gun_effects_controller import EntranceSingleShotManager, EntranceContinuousBurstManager
 from constants import IS_CLIENT
 if IS_CLIENT:
     from TestReplicableComponent import DisplayReplicableValuesManager
@@ -39,6 +40,14 @@ class TestClientDemoRules(Rule):
 
     @registerManager(EntranceSpawnerManager)
     def registerEntranceSpawner(self):
+        return None
+
+    @registerManager(EntranceSingleShotManager)
+    def registerEntranceSingleShotManager(self):
+        return None
+
+    @registerManager(EntranceContinuousBurstManager)
+    def registerEntranceContinuousBurstManager(self):
         return None
 
     @registerManager(TestHealthMonitoringManager)

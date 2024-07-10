@@ -92,6 +92,9 @@ class StoryModeEntity(PreQueueEntity):
     def getConfirmDialogMeta(self, ctx):
         return None
 
+    def hasSpecialVehicles(self):
+        return True
+
     @tasksAvailableCheck
     def queue(self, ctx, callback=None):
         super(StoryModeEntity, self).queue(ctx, callback=callback)

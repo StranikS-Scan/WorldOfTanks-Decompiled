@@ -384,7 +384,7 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	INT8	</Arg>
     </showShooting>
     <updateLaserSight>
       <Arg>	OBJECT_ID	</Arg>
@@ -396,6 +396,7 @@
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
     </showDamageFromShot>
@@ -403,6 +404,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
       <Arg>	UINT8	</Arg>
     </showDamageFromExplosion>
     <showAmmoBayEffect>

@@ -15,20 +15,18 @@ class BattlePassTankCarousel(TankCarousel):
         self._carouselDPCls = BattlePassCarouselDataProvider
         self._carouselFilterCls = BattlePassCarouselFilter
 
-    def _getInitialFilterVO(self, contexts):
-        filtersVO = super(BattlePassTankCarousel, self)._getInitialFilterVO(contexts)
-        filtersVO.update({'popoverAlias': VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER})
-        return filtersVO
+    def _getFiltersPopoverAlias(self):
+        return VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER
 
     def _populate(self):
         super(BattlePassTankCarousel, self)._populate()
         self._battlePassController.onPointsUpdated += self.__onPointsUpdated
-        self._battlePassController.onBattlePassSettingsChange += self.__onServerSettingChanged
+        self._battlePassController.onBattlePassSettingsChange += self.__onBattlePassSettingsChanged
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
 
     def _dispose(self):
         self._battlePassController.onPointsUpdated -= self.__onPointsUpdated
-        self._battlePassController.onBattlePassSettingsChange -= self.__onServerSettingChanged
+        self._battlePassController.onBattlePassSettingsChange -= self.__onBattlePassSettingsChanged
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(BattlePassTankCarousel, self)._dispose()
 
@@ -40,13 +38,13 @@ class BattlePassTankCarousel(TankCarousel):
                 carouselFilter.save()
         return
 
+    def __onBattlePassSettingsChanged(self, *_):
+        self.updateVehicles()
+        self._updateFilter()
+
     def __onPointsUpdated(self):
         self.updateVehicles()
 
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == VIEW_ALIAS.BATTLEPASS_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)
-
-    def __onServerSettingChanged(self, *_):
-        self.updateVehicles()
-        self._updateFilter()

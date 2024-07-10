@@ -17,7 +17,7 @@ class AvatarRecoveryMechanic(object):
         return
 
     def onBecomePlayer(self):
-        self.__enabled = BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.RECOVERY_MECHANIC)
+        self.__enabled = self.hasBonusCap(BONUS_CAPS.RECOVERY_MECHANIC)
         if not self.__enabled:
             return
         else:

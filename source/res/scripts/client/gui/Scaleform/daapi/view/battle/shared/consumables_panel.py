@@ -555,16 +555,19 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             shellParams = ShellParams(descriptor, vehicleDescriptor)
             piercingPowerTable = shellParams.piercingPowerTable
             isDistanceDependent = piercingPowerTable is not None
+            params = []
             damageValue = backport.getNiceNumberFormat(shellParams.avgDamage)
-            note = ''
             showDistanceAsterisk = False
+            note = ''
             footNotes = []
             if descriptor.isDamageMutable:
-                showDistanceAsterisk = True
                 damageValue = '%s-%s' % (backport.getNiceNumberFormat(shellParams.avgMutableDamage[0]), backport.getNiceNumberFormat(shellParams.avgMutableDamage[1]))
+                showDistanceAsterisk = True
                 note = ASTERISK
                 footNotes.append(ASTERISK + backport.text(R.strings.menu.moduleInfo.params.piercingDistance.footnote(), minDist=int(DAMAGE_INTERPOLATION_DIST_FIRST), maxDist=int(min(vehicleDescriptor.shot.maxDistance, DAMAGE_INTERPOLATION_DIST_LAST))))
-            params = [backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=damageValue) + note]
+            params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.damage(), value=damageValue) + note)
+            if vehicleDescriptor is not None and vehicleDescriptor.isAutoShootGunVehicle:
+                params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.damagePerSecond(), value=backport.getIntegralFormat(int(round(descriptor.armorDamage[0] / vehicle.typeDescriptor.gun.clip[1])))))
             if piercingPower != 0:
                 value = backport.getNiceNumberFormat(piercingPower)
                 if piercingPowerTable != NO_DATA and isDistanceDependent:

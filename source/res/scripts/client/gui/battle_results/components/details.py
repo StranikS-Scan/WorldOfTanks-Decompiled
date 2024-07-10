@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/details.py
 import operator
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import IGR_TYPE, PREMIUM_TYPE
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from gui import makeHtmlString
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import style
+from gui.battle_results.pbs_helpers.additional_bonuses import isWotPlusBonusEnabledInConfig, isGoldPiggyBankAvailaible, getAdditionalXpBonusStatus, getLeftAdditionalBonus, getAdditionalXPFactor10FromResult
 from gui.battle_results.reusable.records import convertFactorToPercent
 from gui.impl import backport
 from gui.impl.backport.backport_system_locale import getIntegralFormat
-from gui.impl.gen.resources import R
 from gui.impl.lobby.premacc import premacc_helpers
+from gui.impl.gen.resources import R
+from gui.impl.gen.view_models.views.lobby.battle_results.premium_plus_model import PremiumXpBonusRestriction
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.icons import makeImageTag
 from gui.shared.money import Currency
@@ -236,8 +238,7 @@ class _EconomicsDetailsBlock(base.StatsBlock):
             else:
                 self._addStatsRow('aogasFactor', column1=value, column3=value)
             return True
-        else:
-            return False
+        return False
 
 
 class MoneyDetailsBlock(_EconomicsDetailsBlock):
@@ -285,7 +286,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self._addEmptyRow()
         self.__addTotalResults(baseCreditsToUse, premiumCreditsToUse, goldRecords, additionalRecords)
         self._addEmptyRow()
-        if self.__isProperBonusType(reusable) or self.__isGoldPiggyBankAvailable(reusable):
+        isCreditsPiggyBankAvailable = reusable.common.checkBonusCaps(_CAPS.PIGGY_BANK_CREDITS)
+        if isCreditsPiggyBankAvailable or isGoldPiggyBankAvailaible(reusable):
             self.__addPiggyBankInfo(premiumCreditsToUse, additionalRecords, reusable)
         return
 
@@ -421,14 +423,6 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
          'column2': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=not self.hasAnyPremium),
          'column4': style.makeGoldLabel(goldRecords.getRecord('gold') + autoGold, canBeFaded=self.hasAnyPremium)}
         self._addStatsRow('total', htmlKey='lightText', **columns)
-
-    def __isProperBonusType(self, reusable):
-        arenaTypes = self._lobbyContext.getServerSettings().getPiggyBankConfig().get('arena', tuple())
-        return reusable.common.arenaBonusType in arenaTypes
-
-    def __isGoldPiggyBankAvailable(self, reusable):
-        arenaTypes = self._lobbyContext.getServerSettings().getArenaTypesWithGoldReserve()
-        return reusable.common.arenaBonusType in arenaTypes
 
     def __addWotPlusBattleBonusCredits(self, baseRecords, premiumRecords, baseCreditsWithWotPlus, premiumCreditsWithWotPlus):
         names = ('wotPlusCredits', 'wotPlusCreditsFactor100')
@@ -740,7 +734,7 @@ class TotalCrystalDetailsBlock(base.StatsBlock):
 
 
 class PremiumBonusDetailsBlock(base.StatsBlock):
-    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'statusBonusTooltip', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__xpFactor', '__vehicleCD', 'detailsLink', 'additionalBonusLeft', 'wotPlusBonusLeft', 'premiumAndPlusExhausted', 'hasWotPremium', 'hasWotPlus')
+    __slots__ = ('description', 'bonusLeft', 'xpValue', 'statusBonusLabel', 'statusBonusTooltip', 'bonusIcon', '__isPersonalTeamWin', '__arenaUniqueID', '__arenaBonusType', '__isBonusAvailable', '__xpFactor', '__vehicleCD', 'detailsLink', 'additionalBonusLeft', 'wotPlusBonusLeft', 'premiumAndPlusExhausted', 'hasWotPremium', 'hasWotPlus')
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResults = dependency.descriptor(IBattleResultsService)
     __wotPlusController = dependency.descriptor(IWotPlusController)
@@ -751,6 +745,7 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.__arenaUniqueID = 0
         self.__isPersonalTeamWin = False
         self.__arenaBonusType = None
+        self.__isBonusAvailable = False
         self.__xpFactor = 1
         self.__vehicleCD = None
         self.bonusIcon = ''
@@ -773,17 +768,12 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         self.__arenaUniqueID = reusable.arenaUniqueID
-        self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
         self.__arenaBonusType = reusable.common.arenaBonusType
-        self.__xpFactor = self.__getAdditionalXPFactor10FromResult(result, reusable)
+        self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
+        self.__isBonusAvailable = reusable.common.checkBonusCaps(_CAPS.ADDITIONAL_XP_POSTBATTLE)
+        self.__xpFactor = getAdditionalXPFactor10FromResult(result, reusable)
         _, vehicle = first(reusable.personal.getVehicleItemsIterator())
         self.__vehicleCD = vehicle.intCD
-
-    def __getAdditionalXPFactor10FromResult(self, result, reusable):
-        vehicleId = reusable.vehicles.getVehicleID(reusable.getPlayerInfo().dbID)
-        vehicleInfo = reusable.vehicles.getVehicleInfo(vehicleId)
-        additionalXPFactor10 = result.get(vehicleInfo.intCD, {}).get('additionalXPFactor10', 1)
-        return int(additionalXPFactor10 / 10) if additionalXPFactor10 else 1
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
@@ -793,25 +783,23 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         if self.__arenaUniqueID == 0:
             return
         self.__setBaseState()
-        if self.__getIsApplied():
+        addXpStatus = getAdditionalXpBonusStatus(self.__arenaUniqueID, self.__isPersonalTeamWin, self.__vehicleCD, self.__isBonusAvailable)
+        if addXpStatus == PremiumXpBonusRestriction.ISAPPLIED:
             self.__setAppliedState()
-        elif self.__isBlockedByArenaType():
+        elif addXpStatus == PremiumXpBonusRestriction.INVALIDBATTLETYPE:
             self.__setBlockedByArenaType()
         elif not self.__isPersonalTeamWin:
             self.__setLostBattleState()
-        elif not self.__battleResults.isAddXPBonusEnabled(self.__arenaUniqueID):
+        elif addXpStatus == PremiumXpBonusRestriction.DEPRECATEDRESULTS:
             self.__setExcludedState()
-        elif self.__isBlockedByVehicle():
+        elif addXpStatus == PremiumXpBonusRestriction.NOVEHICLE:
             self.__setBlockedByVehicle()
-        elif self.__isBlockedByXPToTman():
-            self.__setBlockedByXPToTman()
-        elif self.__isBlockedByCrew():
+        elif addXpStatus in (PremiumXpBonusRestriction.FASTEREDUCATIONCREWNOTACTIVE, PremiumXpBonusRestriction.FASTEREDUCATIONCREWACTIVE):
+            self.__setBlockedByXPToTman(addXpStatus)
+        elif addXpStatus == PremiumXpBonusRestriction.NOCREW:
             self.__setBlockedByCrew()
         else:
             self.__setShowButtonState()
-
-    def __isBlockedByArenaType(self):
-        return not ARENA_BONUS_TYPE_CAPS.checkAny(self.__arenaBonusType, ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE)
 
     def __setBlockedByArenaType(self):
         self.xpValue = ''
@@ -819,29 +807,19 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.bonusIcon = self.__getAddXPBonusIcon(premacc_helpers.BattleResultsBonusConstants.LOST_BATTLE_BACKGROUND_MULTIPLIER)
         self.statusBonusLabel = '{}{}'.format(makeImageTag(source=backport.image(R.images.gui.maps.icons.library.alertIcon()), vSpace=-3), text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.unavailable())))
 
-    def __isBlockedByVehicle(self):
-        item = self.__itemsCache.items.getItemByCD(self.__vehicleCD)
-        return not item.isInInventory or not item.activeInNationGroup
-
     def __setBlockedByVehicle(self):
         self.xpValue = ''
         self.statusBonusLabel = text_styles.neutral(backport.text(R.strings.battle_results.common.premiumBonus.tankStateChanged()))
         self.statusBonusTooltip = TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_TANKSTATECHANGED
 
-    def __isBlockedByXPToTman(self):
-        return not self.__battleResults.isXPToTManSameForArena(self.__arenaUniqueID)
-
-    def __setBlockedByXPToTman(self):
+    def __setBlockedByXPToTman(self, status):
         self.xpValue = ''
-        if self.__battleResults.getVehicleForArena(self.__arenaUniqueID).isXPToTman:
+        if status == PremiumXpBonusRestriction.FASTEREDUCATIONCREWACTIVE:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenEnabled()
         else:
             textKey = R.strings.battle_results.common.premiumBonus.isXPToTmenDisabled()
         self.statusBonusLabel = text_styles.neutral(backport.text(textKey))
         self.statusBonusTooltip = makeTooltip(body=TOOLTIPS.BATTLERESULTS_PREMIUMBONUS_XPTOTMENCHANGED_BODY)
-
-    def __isBlockedByCrew(self):
-        return not self.__battleResults.isCrewSameForArena(self.__arenaUniqueID)
 
     def __setBlockedByCrew(self):
         self.xpValue = ''
@@ -853,19 +831,10 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
         self.description = text_styles.highlightText(backport.text(R.strings.battle_results.common.premiumBonus.description()))
 
     def __setBonusLeft(self):
-        serverSettings = self.__lobbyContext.getServerSettings()
-        isWotPlusBonusEnabled = serverSettings.getAdditionalWoTPlusXPCount() > 0 and serverSettings.isAdditionalWoTPlusEnabled()
-        isPremiumPlusBonusEnabled = serverSettings.getAdditionalBonusConfig().get('enabled', False)
+        isWotPlusBonusEnabled = isWotPlusBonusEnabledInConfig()
         hasWotPlus = self.__wotPlusController.isEnabled()
         hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        applyAdditionalXPCount = 0
-        hasAccessToAdditionalBonus = False
-        if hasPremiumPlus and isPremiumPlusBonusEnabled:
-            applyAdditionalXPCount += self.__itemsCache.items.stats.applyAdditionalXPCount
-            hasAccessToAdditionalBonus = True
-        if hasWotPlus and isWotPlusBonusEnabled:
-            applyAdditionalXPCount += self.__itemsCache.items.stats.applyAdditionalWoTPlusXPCount
-            hasAccessToAdditionalBonus = True
+        hasAccessToAdditionalBonus, applyAdditionalXPCount, _ = getLeftAdditionalBonus(hasWotPlus, hasPremiumPlus)
         if hasAccessToAdditionalBonus:
             self.bonusLeft = self.__getBonusLeftStr(applyAdditionalXPCount)
         else:
@@ -901,37 +870,41 @@ class PremiumBonusDetailsBlock(base.StatsBlock):
 
     def __getAddXPBonusIcon(self, multiplier):
         multiplier = premacc_helpers.validateAdditionalBonusMultiplier(multiplier)
-        serverSettings = self.__lobbyContext.getServerSettings()
-        isWotPlusBonusEnabled = serverSettings.getAdditionalWoTPlusXPCount() > 0 and serverSettings.isAdditionalWoTPlusEnabled()
+        isWotPlusBonusEnabled = isWotPlusBonusEnabledInConfig()
         if isWotPlusBonusEnabled:
             icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn('plus_bonus_x{}'.format(multiplier))())
         else:
             icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn('bonus_x{}'.format(multiplier))())
         return icon
 
-    def __getBonusLeftStr(self, applyAdditionalXPCount):
+    @staticmethod
+    def __getBonusLeftStr(applyAdditionalXPCount):
         return text_styles.main(backport.text(R.strings.battle_results.common.premiumBonus.bonusLeft(), count=text_styles.stats(applyAdditionalXPCount)))
 
-    def __getAdditionalBonusLeftStr(self, hasPremiumPlus, hasWotPlus, isWotPlusBonusEnabled):
+    @staticmethod
+    def __getAdditionalBonusLeftStr(hasPremiumPlus, hasWotPlus, isWotPlusBonusEnabled):
         additionalBonusLeftStr = ''
         if isWotPlusBonusEnabled:
             if hasWotPlus and not hasPremiumPlus:
-                additionalBonusLeftStr = text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.bonusLeftAdditionalText()))
+                additionalBonusLeftStr = style.LINE_BRAKE_STR + text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.bonusLeftAdditionalText()))
             elif not hasWotPlus and hasPremiumPlus:
-                additionalBonusLeftStr = text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.bonusLeftAdditionalText()))
+                additionalBonusLeftStr = style.LINE_BRAKE_STR + text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.bonusLeftAdditionalText()))
         return additionalBonusLeftStr
 
-    def __getWotPlusBonusEarningsStr(self, applyWoTPlusAdditionalXPCount):
+    @staticmethod
+    def __getWotPlusBonusEarningsStr(applyWoTPlusAdditionalXPCount):
         return style.LINE_BRAKE_STR + text_styles.main(backport.text(R.strings.battle_results.common.plusBonus.earningsInformation(), count=text_styles.earningsInformation(backport.getIntegralFormat(int(applyWoTPlusAdditionalXPCount)))))
 
-    def __getPremiumAndPlusExhaustedStr(self):
+    @staticmethod
+    def __getPremiumAndPlusExhaustedStr():
         return text_styles.goldColor(backport.text(R.strings.battle_results.common.plusBonus.youRock()))
 
-    def __getDetailsLinkStr(self, hasPremiumPlus, hasWotPlus, isWotPlusBonusEnabled):
+    @staticmethod
+    def __getDetailsLinkStr(hasPremiumPlus, hasWotPlus, isWotPlusBonusEnabled):
         detailsLinkStr = ''
         if isWotPlusBonusEnabled:
             if hasWotPlus and not hasPremiumPlus:
-                detailsLinkStr = text_styles.linkText(backport.text(R.strings.battle_results.common.plusBonus.wotPremium()))
+                detailsLinkStr = ' ' + text_styles.linkText(backport.text(R.strings.battle_results.common.plusBonus.wotPremium()))
             elif not hasWotPlus and hasPremiumPlus:
-                detailsLinkStr = text_styles.linkText(backport.text(R.strings.battle_results.common.plusBonus.wotPlus()))
+                detailsLinkStr = ' ' + text_styles.linkText(backport.text(R.strings.battle_results.common.plusBonus.wotPlus()))
         return detailsLinkStr

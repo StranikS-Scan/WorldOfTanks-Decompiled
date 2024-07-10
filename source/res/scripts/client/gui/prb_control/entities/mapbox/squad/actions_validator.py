@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/mapbox/squad/actions_validator.py
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
 from gui.prb_control.entities.base.unit.actions_validator import CommanderValidator
-from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, SPGForbiddenSquadVehiclesValidator, ScoutForbiddenSquadVehiclesValidator
+from gui.prb_control.entities.base.unit.actions_validator import UnitStateValidator
+from gui.prb_control.entities.random.squad.actions_validator import BalancedSquadVehiclesValidator, RoleForbiddenSquadVehiclesValidator
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import UNIT_RESTRICTION
-from gui.prb_control.entities.base.unit.actions_validator import UnitStateValidator
 from helpers import dependency
 from skeletons.gui.game_control import IMapboxController
-from gui.periodic_battles.models import PrimeTimeStatus
 
 class _MapboxStateValidator(UnitStateValidator):
 
@@ -30,10 +30,7 @@ class _UnitSlotsValidator(CommanderValidator):
 class MapboxSquadActionsValidator(SquadActionsValidator):
 
     def _createVehiclesValidator(self, entity):
-        return ActionsValidatorComposite(entity, validators=[BalancedSquadVehiclesValidator(entity),
-         SquadVehiclesValidator(entity),
-         SPGForbiddenSquadVehiclesValidator(entity),
-         ScoutForbiddenSquadVehiclesValidator(entity)])
+        return ActionsValidatorComposite(entity, validators=[BalancedSquadVehiclesValidator(entity), SquadVehiclesValidator(entity), RoleForbiddenSquadVehiclesValidator(entity)])
 
     def _createStateValidator(self, entity):
         return _MapboxStateValidator(entity)

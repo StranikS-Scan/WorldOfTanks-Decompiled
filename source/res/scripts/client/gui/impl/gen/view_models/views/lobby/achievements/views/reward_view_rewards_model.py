@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.views.lobby.achievements.views.catalog.rewards_mod
 class RewardViewRewardsModel(RewardsModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(RewardViewRewardsModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentProgress(self):
-        return self._getNumber(13)
+        return self._getNumber(14)
 
     def setCurrentProgress(self, value):
-        self._setNumber(13, value)
+        self._setNumber(14, value)
 
     def getAnimation(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setAnimation(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def _initialize(self):
         super(RewardViewRewardsModel, self)._initialize()

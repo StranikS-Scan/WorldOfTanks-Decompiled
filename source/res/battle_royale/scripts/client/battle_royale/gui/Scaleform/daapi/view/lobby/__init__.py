@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/__init__.py
+from battle_royale.gui.Scaleform.daapi.view.lobby.tournament_banner_inject import TournamentBannerComponent
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -18,7 +19,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from commander_cmp import CommanderComponent
     from tech_parameters_cmp import TechParametersComponent
-    from hangar_bottom_panel_cmp import HangarBottomPanelComponent
+    from battle_royale.gui.impl.lobby.views.tank_setup_panel_view import TankSetupPanelComponent
     from proxy_currency_panel import ProxyCurrencyComponentInject
     from hangar_vehicle_info_view import HangarVehicleModulesConfigurator
     from hangar_vehicle_info_view import HangarVehicleInfo
@@ -35,11 +36,12 @@ def getViewSettings():
      ComponentSettings(BATTLEROYALE_ALIASES.VEH_MODULES_CONFIGURATOR_CMP, HangarVehicleModulesConfigurator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.COMMANDER_COMPONENT, CommanderComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.TECH_PARAMETERS_COMPONENT, TechParametersComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ComponentSettings(BATTLEROYALE_ALIASES.BOTTOM_PANEL_COMPONENT, HangarBottomPanelComponent, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(BATTLEROYALE_ALIASES.BOTTOM_PANEL_COMPONENT, TankSetupPanelComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.PROXY_CURRENCY_PANEL_COMPONENT, ProxyCurrencyComponentInject, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(BATTLEROYALE_ALIASES.BATTLE_TYPE_SELECTOR, BattleTypeSelectorInject, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ROYALE_TANK_CAROUSEL, RoyaleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.BR_ENTRY_POINT, BattleRoyaleEntryPointInject, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.BR_ENTRY_POINT, BattleRoyaleEntryPointInject, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.BATTLE_ROYALE_TOURNAMENT_BANNER, TournamentBannerComponent, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

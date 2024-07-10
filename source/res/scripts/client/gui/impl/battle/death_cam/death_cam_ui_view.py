@@ -88,6 +88,8 @@ class DeathCamUIView(SubModelPresenter):
         impactType = markerData.impactType
         if impactType == IMPACT_TYPES.PENETRATION:
             self.viewModel.setImpactMode(ImpactMode.PENETRATION)
+        elif impactType == IMPACT_TYPES.NON_PENETRATION_DAMAGE:
+            self.viewModel.setImpactMode(ImpactMode.NONPENETRATIONDAMAGE)
         elif impactType == IMPACT_TYPES.LEGACY_HE:
             self.viewModel.setImpactMode(ImpactMode.LEGACYHE)
         else:

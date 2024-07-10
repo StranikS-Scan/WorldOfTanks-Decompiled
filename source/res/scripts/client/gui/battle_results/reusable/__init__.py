@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/__init__.py
 import weakref
 import typing
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from account_helpers import getAccountDatabaseID
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
@@ -52,13 +53,14 @@ def createReusableInfo(results):
         return
     else:
         bonusType = record['bonusType']
+        bonusCapsOverrides = record.get('bonusCapsOverrides', {})
         commonInfoCls = ReusableInfoFactory.commonInfoForBonusType(bonusType)
         commonInfo = _checkInfo(commonInfoCls(vehicles=results[_RECORD.VEHICLES], **record), _RECORD.COMMON)
         record = _fetchRecord(results, _RECORD.PERSONAL)
         if record is None:
             return
         personalInfoCls = ReusableInfoFactory.personalInfoForBonusType(bonusType)
-        personalInfo = _checkInfo(personalInfoCls(bonusType, record), _RECORD.PERSONAL)
+        personalInfo = _checkInfo(personalInfoCls(bonusType, record, bonusCapsOverrides), _RECORD.PERSONAL)
         record = _fetchRecord(results, _RECORD.PLAYERS)
         if record is None:
             return
@@ -372,7 +374,7 @@ class _ReusableInfo(object):
 
     def getPersonalSquadFlags(self):
         playerInfo = self.getPlayerInfo()
-        showSquadLabels = playerInfo.squadIndex and self.__common.canTakeAnySquadBonus()
+        showSquadLabels = playerInfo.squadIndex and self.__common.checkBonusCaps(_CAPS.SQUAD_XP, _CAPS.PREM_SQUAD_CREDITS)
         squadHasBonus = False
         if showSquadLabels:
             showSquadLabels, squadHasBonus = self.__personal.avatar.getPersonalSquadFlags(self.__vehicles)

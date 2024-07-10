@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_progress/formatters.py
+import typing
 from collections import namedtuple
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
@@ -7,6 +8,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.personal_progress.storage import PostBattleProgressStorage, LobbyProgressStorage
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
@@ -22,15 +24,7 @@ class ProgressesFormatter(object):
         self._dummyHeaderType = dummyHeaderType
 
     def bodyFormat(self, isMain=None):
-        result = []
-        if self._storage:
-            progresses = self._storage.getBodyProgresses(isMain)
-            if progresses:
-                sortedProgresses = self._sortedBodyProgresses(progresses)
-                for progress in sortedProgresses:
-                    result.append(self._makeBodyProgressData(progress))
-
-        return result
+        return self._bodyFormat(True) + self._bodyFormat(False) if isMain is None else self._bodyFormat(isMain)
 
     def headerFormat(self, isMain=None):
         result = []
@@ -60,12 +54,19 @@ class ProgressesFormatter(object):
         return result
 
     @classmethod
-    def _makeBodyProgressData(cls, progress):
+    def _makeBodyProgressData(cls, progress, isLastProgress=False):
         return progress.getFullData()
 
-    @classmethod
-    def _sortedBodyProgresses(cls, progresses):
-        return sorted(progresses.itervalues(), key=lambda p: (not p.isMain(), p.getPriority()))
+    def _bodyFormat(self, isMain):
+        result = []
+        if not self._storage:
+            return result
+        progresses = self._storage.getBodyProgresses(isMain)
+        lastProgressIdx = len(progresses) - 1
+        for index, progress in enumerate(self._storage.sortProgresses(progresses.itervalues())):
+            result.append(self._makeBodyProgressData(progress, index == lastProgressIdx))
+
+        return result
 
     def __addDummyHeaderProgress(self, isMain):
         orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
@@ -76,18 +77,6 @@ class ProgressesFormatter(object):
         return {'progressType': self._dummyHeaderType,
          'orderType': orderType,
          'header': i18n.makeString(key)}
-
-
-def _packCondition(title, strConditions):
-    return '%s\n%s' % (text_styles.leadingText(text_styles.middleTitle(title), 1), text_styles.main(strConditions))
-
-
-def _areMainConditionsCompleted(mainProgresses):
-    return all((progress.getState() == QUEST_PROGRESS_STATE.COMPLETED for progress in mainProgresses.itervalues()))
-
-
-def _hasChangedMainProgresses(mainProgresses):
-    return any((progress.isChanged() for progress in mainProgresses.itervalues()))
 
 
 class DetailedProgressFormatter(ProgressesFormatter):
@@ -101,6 +90,13 @@ class DetailedProgressFormatter(ProgressesFormatter):
             if progresses:
                 return any((progress.hasProgressForReset() for progress in progresses.itervalues()))
         return False
+
+    @classmethod
+    def _makeBodyProgressData(cls, progress, isLastProgress=False):
+        bodyProgressData = super(DetailedProgressFormatter, cls)._makeBodyProgressData(progress, isLastProgress)
+        if not isLastProgress:
+            bodyProgressData['initData']['multiplier'] = ''
+        return bodyProgressData
 
 
 class PostBattleConditionsFormatter(object):
@@ -116,8 +112,11 @@ class PostBattleConditionsFormatter(object):
         return
 
     def getConditionsData(self, isMain):
-        return {'statusText': self.__getStatusText(isMain),
-         'text': self.__getQuestDescrText(isMain)}
+        conditions = self.__getPureConditionsData(isMain)
+        resRoot = R.strings.personal_missions.taskDetailsView
+        titleText = backport.text(resRoot.mainConditions() if isMain else resRoot.additionalConditions())
+        titleStatusValues = None if any((c['statusText'] for c in conditions)) else self.__getTitleStatusValues(isMain)
+        return [self.__packTitle(titleText, titleStatusValues)] + conditions
 
     def getMultiplierDescription(self):
         if self.__wasMultiplied:
@@ -134,37 +133,35 @@ class PostBattleConditionsFormatter(object):
                 if progress.getProgressID() in self.__wasFailed:
                     return text_styles.concatStylesToSingleLine(text_styles.alert(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_ATTENTION)), ' ', text_styles.main(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_DESCR)))
 
-    def __getQuestDescrText(self, isMain):
-        if isMain:
-            title = PERSONAL_MISSIONS.TASKDETAILSVIEW_MAINCONDITIONS
-        else:
-            title = PERSONAL_MISSIONS.TASKDETAILSVIEW_ADDITIONALCONDITIONS
-        return _packCondition(title, self.__getStrConditions(isMain))
+    def __getPureConditionsData(self, isMain):
+        return [ self.__packCondition(progress.getDescription(), self.__getPureConditionStatusValues(progress)) for progress in self.__storage.sortProgresses(self.__storage.getBodyProgresses(isMain).itervalues()) ]
 
-    def __getStrConditions(self, isMain):
-        return '\n'.join([ progress.getDescription() for progress in self.__storage.getBodyProgresses(isMain).itervalues() ])
+    def __getPureConditionStatusValues(self, progress):
+        return (progress.getCurrent(), progress.getGoal(), progress.getState()) if progress.isCumulative() else None
 
-    def __getStatusText(self, isMain):
-        statusConditionValues = self.__getStatusConditionValues(isMain)
-        if statusConditionValues:
-            current, goal, state = statusConditionValues
-            currentStr = backport.getNiceNumberFormat(current)
-            goalStr = backport.getIntegralFormat(goal)
-            if state == QUEST_PROGRESS_STATE.COMPLETED:
-                return ''.join([text_styles.bonusAppliedText(currentStr), text_styles.success(' / %s' % goalStr)])
-            if state == QUEST_PROGRESS_STATE.FAILED:
-                return ''.join([text_styles.error(currentStr), text_styles.failedStatusText(' / %s' % goalStr)])
-            return ''.join([text_styles.stats(currentStr), text_styles.main(' / %s' % goalStr)])
-
-    def __getStatusConditionValues(self, isMain):
-        for progress in self.__storage.getBodyProgresses(isMain).itervalues():
-            if progress.isCumulative():
-                return (progress.getCurrent(), progress.getGoal(), progress.getState())
-
+    def __getTitleStatusValues(self, isMain):
         for progress in self.__storage.getHeaderProgresses(isMain).itervalues():
             return (progress.getCurrent(), progress.getGoal(), progress.getState())
 
         return None
+
+    def __packBlock(self, text, statusValues=None):
+        return {'text': text,
+         'statusText': self.__packStatusText(statusValues) if statusValues else ''}
+
+    def __packCondition(self, conditionText, statusValues=None):
+        return self.__packBlock(text_styles.main(conditionText), statusValues)
+
+    def __packTitle(self, titleText, titleStatusValues=None):
+        return self.__packBlock(text_styles.leadingText(text_styles.middleTitle(titleText), 1), titleStatusValues)
+
+    def __packStatusText(self, statusConditionValues):
+        current, goal, state = statusConditionValues
+        currentStr = backport.getNiceNumberFormat(current)
+        goalStr = backport.getIntegralFormat(goal)
+        if state == QUEST_PROGRESS_STATE.COMPLETED:
+            return ''.join([text_styles.bonusAppliedText(currentStr), text_styles.success(' / %s' % goalStr)])
+        return ''.join([text_styles.error(currentStr), text_styles.failedStatusText(' / %s' % goalStr)]) if state == QUEST_PROGRESS_STATE.FAILED else ''.join([text_styles.stats(currentStr), text_styles.main(' / %s' % goalStr)])
 
 
 class PMTooltipConditionsFormatters(object):
@@ -172,8 +169,7 @@ class PMTooltipConditionsFormatters(object):
 
     def format(self, event, isMain=None):
         storage = LobbyProgressStorage(event.getGeneralQuestID(), event.getConditionsConfig(), event.getConditionsProgress(), event.isOneBattleQuest())
-        sortedProgresses = sorted(storage.getBodyProgresses(isMain).itervalues(), key=lambda p: (not p.isMain(), p.getPriority()))
-        return [ self._CONDITION(RES_ICONS.get90ConditionIcon(c.getIconID()), text_styles.main(c.getDescription()), c.isInOrGroup()) for c in sortedProgresses ]
+        return [ self._CONDITION(RES_ICONS.get90ConditionIcon(c.getIconID()), text_styles.main(c.getDescription()), c.isInOrGroup()) for c in storage.sortProgresses(storage.getBodyProgresses(isMain).itervalues()) ]
 
 
 class PMAwardScreenConditionsFormatter(ProgressesFormatter):
@@ -194,8 +190,7 @@ class PMAwardScreenConditionsFormatter(ProgressesFormatter):
             bodyProgresses = self._storage.getBodyProgresses()
             mainBodyProgresses, addBodyProgresses = [], []
             if bodyProgresses:
-                sortedProgresses = self._sortedBodyProgresses(bodyProgresses)
-                for progress in sortedProgresses:
+                for progress in self._storage.sortProgresses(bodyProgresses.itervalues()):
                     if progress.isMain():
                         mainBodyProgresses.append(progress)
                     addBodyProgresses.append(progress)
@@ -205,9 +200,9 @@ class PMAwardScreenConditionsFormatter(ProgressesFormatter):
                 mainHeaderProgress = findFirst(lambda p: p.isMain(), headerProgresses.itervalues())
                 addHeaderProgress = findFirst(lambda p: not p.isMain(), headerProgresses.itervalues())
                 if mainHeaderProgress:
-                    mainIterateProgressData = self._getIterateData(mainHeaderProgress, first(mainBodyProgresses))
+                    mainIterateProgressData = self._getIterateData(mainHeaderProgress, mainBodyProgresses)
                 if addHeaderProgress:
-                    addIterateProgressData = self._getIterateData(addHeaderProgress, first(addBodyProgresses))
+                    addIterateProgressData = self._getIterateData(addHeaderProgress, addBodyProgresses)
                 if main and mainIterateProgressData:
                     result[self.MAIN_PROGRESS_DATA] = mainIterateProgressData
                 if add and addIterateProgressData:
@@ -218,11 +213,12 @@ class PMAwardScreenConditionsFormatter(ProgressesFormatter):
                 result[self.ADD_VALUE_DATA] = self._getValueData(addBodyProgresses)
         return result
 
-    def _getIterateData(self, headerProgress, bodyProgress):
+    def _getIterateData(self, headerProgress, bodyProgresses):
         if headerProgress.getDisplayType() in (DISPLAY_TYPE.BIATHLON, DISPLAY_TYPE.SERIES, DISPLAY_TYPE.COUNTER):
             headerData = headerProgress.getHeaderData()
-            headerData['valueTitle'] = bodyProgress.getTitle()
-            headerData['conditionIcon'] = self._getIcon(bodyProgress.getIconID())
+            headerData['valueTitle'] = first(bodyProgresses).getTitle()
+            headerData['conditions'] = [ {'icon': self._getIcon(progress.getIconID()),
+             'tooltip': makeTooltip(progress.getTitle(), progress.getDescription())} for progress in bodyProgresses ]
             return headerData
         return {}
 
@@ -238,7 +234,7 @@ class PMAwardScreenConditionsFormatter(ProgressesFormatter):
         return RES_ICONS.get90ConditionIcon(key)
 
     @classmethod
-    def _makeBodyProgressData(cls, progress):
+    def _makeBodyProgressData(cls, progress, isLastProgress=False):
         state = progress.getState()
         if not progress.isCumulative() and state != QUEST_PROGRESS_STATE.COMPLETED:
             state = QUEST_PROGRESS_STATE.FAILED

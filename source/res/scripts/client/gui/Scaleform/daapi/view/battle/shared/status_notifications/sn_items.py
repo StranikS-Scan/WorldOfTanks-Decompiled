@@ -349,8 +349,7 @@ class _OverturnedBaseSN(LocalizationProvider, DestroyMiscTimerSN):
         return VEHICLE_MISC_STATUS.VEHICLE_IS_OVERTURNED
 
     def _getDescription(self, value=None):
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        return backport.text(R.strings.ingame_gui.destroyTimer.liftOver()) if liftOverEnabled else ''
+        return backport.text(R.strings.ingame_gui.destroyTimer.liftOver()) if BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER) else ''
 
 
 class OverturnedSN(_OverturnedBaseSN):

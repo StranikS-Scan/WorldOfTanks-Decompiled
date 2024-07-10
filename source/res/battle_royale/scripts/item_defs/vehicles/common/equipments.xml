@@ -11,7 +11,8 @@
     </price>
     <notInShop>	true	</notInShop>
     <tags>	notForSale regenerationKit	</tags>
-    <script>	battle_royale_artefacts.RegenerationKit	  <consumeAmmo>	true	</consumeAmmo>
+    <script>	battle_royale_artefacts.RegenerationKit	  <battleDescription>	#artefacts:brRegenerationKit/battleDescr	</battleDescription>
+      <consumeAmmo>	true	</consumeAmmo>
       <healthRegenPerTick>	0.036	</healthRegenPerTick>
       <initialHeal>	0	</initialHeal>
       <healTime>	7	</healTime>
@@ -32,7 +33,8 @@
     <improved>	true	</improved>
     <notInShop>	true	</notInShop>
     <tags>	notForSale repairkit medkit repairKitBattleRoyale	</tags>
-    <script>	battle_royale_artefacts.RepairkitBattleRoyale	  <consumeAmmo>	true	</consumeAmmo>
+    <script>	battle_royale_artefacts.RepairkitBattleRoyale	  <battleDescription>	#artefacts:brRepairkit/battleDescr	</battleDescription>
+      <consumeAmmo>	true	</consumeAmmo>
       <repairAll>	true	</repairAll>
       <bonusValue>	0	</bonusValue>
       <cooldownSeconds>	15	</cooldownSeconds>
@@ -60,6 +62,7 @@
     <script>	battle_royale_artefacts.SelfBuff	  <consumeAmmo>	true	</consumeAmmo>
       <shortDescription>	#artefacts:selfBuff/shortDescr	</shortDescription>
       <longDescription>	#artefacts:selfBuff/longDescr	</longDescription>
+      <battleDescription>	#artefacts:selfBuff/battleDescr	</battleDescription>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
       <cooldownTime>	30.0	</cooldownTime>
       <duration>	20	</duration>
@@ -95,6 +98,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.BRHealPoint	  <shortDescription>	#artefacts:healPoint/shortDescr	</shortDescription>
       <longDescription>	#artefacts:healPoint/longDescr	</longDescription>
+      <battleDescription>	#artefacts:healPoint/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
@@ -130,12 +134,13 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	battle_royale_artefacts.AfterburningBattleRoyale	  <consumeAmmo>	true	</consumeAmmo>
+    <script>	battle_royale_artefacts.AfterburningBattleRoyale	  <battleDescription>	#artefacts:nitro/battleDescr	</battleDescription>
+      <consumeAmmo>	true	</consumeAmmo>
       <cooldownSeconds>	30	</cooldownSeconds>
       <consumeSeconds>	15	</consumeSeconds>
       <enginePowerFactor>	1.5	</enginePowerFactor>
-      <maxSpeedFactor>	1.9	</maxSpeedFactor>
-      <vehicleRotationSpeed>	1.12	</vehicleRotationSpeed>
+      <maxSpeedFactor>	2	</maxSpeedFactor>
+      <vehicleRotationSpeed>	1.10	</vehicleRotationSpeed>
     </script>
   </afterburning_battle_royale>
   <trappoint>
@@ -159,6 +164,7 @@
     <usagePrefab>	content/CGFPrefabs/steel_hunter/traparea_ally.prefab	</usagePrefab>
     <usagePrefabEnemy>	content/CGFPrefabs/steel_hunter/traparea_enemy.prefab	</usagePrefabEnemy>
     <script>	battle_royale_artefacts.TrapPoint	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:trappoint/battleDescr	</battleDescription>
       <cooldownSeconds>	60	</cooldownSeconds>
       <influenceZone>
         <radius>	35.0	</radius>
@@ -177,7 +183,7 @@
           <gun-aimingTime>	1.8	</gun-aimingTime>
           <vehicle-rotationSpeed>	0.7	</vehicle-rotationSpeed>
           <vehicle-maxSpeed>	0.70	</vehicle-maxSpeed>
-          <engine-power>	0.75	</engine-power>
+          <engine-power>	0.70	</engine-power>
         </debuffFactors>
       </influenceZone>
     </script>
@@ -203,6 +209,7 @@
     <script>	battle_royale_artefacts.Berserker	  <consumeAmmo>	true	</consumeAmmo>
       <shortDescription>	#artefacts:berserker/shortDescr	</shortDescription>
       <longDescription>	#artefacts:berserker/longDescr	</longDescription>
+      <battleDescription>	#artefacts:berserker/battleDescr	</battleDescription>
       <tooltips>	cooldownTime minDelay totalDuration	</tooltips>
       <cooldownTime>	60.0	</cooldownTime>
       <duration>	14	</duration>
@@ -247,6 +254,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.ConsumableSpawnBot	  <shortDescription>	#artefacts:spawn_kamikaze/shortDescr	</shortDescription>
       <longDescription>	#artefacts:spawn_kamikaze/longDescr	</longDescription>
+      <battleDescription>	#artefacts:spawn_kamikaze/battleDescr	</battleDescription>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
       <cooldownSeconds>	60	</cooldownSeconds>
       <cooldownFactors></cooldownFactors>
@@ -278,7 +286,6 @@
       <explosionByShoot>	false	</explosionByShoot>
       <damageReductionRate>	10	</damageReductionRate>
       <botXRayFactor>	2	</botXRayFactor>
-      <vehicleRemoveDelay>	0	</vehicleRemoveDelay>
       <clientRemovalNotificationDelay>	0	</clientRemovalNotificationDelay>
     </script>
   </spawn_kamikaze>
@@ -301,6 +308,7 @@
       </include>
     </vehicleFilter>
     <script>	battle_royale_artefacts.TrapPoint	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:repairpoint/battleDescr	</battleDescription>
       <cooldownSeconds>	60	</cooldownSeconds>
       <influenceZone>
         <radius>	18.0	</radius>
@@ -340,6 +348,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.BomberArcade	  <shortDescription>	#artefacts:br_bomber/shortDescr	</shortDescription>
       <longDescription>	#artefacts:br_bomber/longDescr	</longDescription>
+      <battleDescription>	#artefacts:br_bomber/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
@@ -394,6 +403,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.BomberArcadeWithOwnDamage	  <shortDescription>	#artefacts:br_bomber/shortDescr	</shortDescription>
       <longDescription>	#artefacts:br_bomber/longDescr	</longDescription>
+      <battleDescription>	#artefacts:br_bomber/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
@@ -455,8 +465,9 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <script>	battle_royale_artefacts.Minefield	  <shortDescription>	#artefacts:br_minefield/shortDescr	</shortDescription>
+    <script>	battle_royale_artefacts.BRMinefield	  <shortDescription>	#artefacts:br_minefield/shortDescr	</shortDescription>
       <longDescription>	#artefacts:br_minefield/longDescr	</longDescription>
+      <battleDescription>	#artefacts:br_minefield/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime delay areaLength_areaWidth-dropArea bombsNumber shellCompactDescr	</tooltips>
@@ -519,6 +530,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.SmokeArcade	  <shortDescription>	#artefacts:br_smoke/shortDescr	</shortDescription>
       <longDescription>	#artefacts:br_smoke/longDescr	</longDescription>
+      <battleDescription>	#artefacts:br_smoke/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
@@ -584,6 +596,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.SmokeArcade	  <shortDescription>	#artefacts:br_smoke_with_damage/shortDescr	</shortDescription>
       <longDescription>	#artefacts:br_smoke_with_damage/longDescr	</longDescription>
+      <battleDescription>	#artefacts:br_smoke_with_damage/battleDescr	</battleDescription>
       <shortFilterAlert></shortFilterAlert>
       <longFilterAlert></longFilterAlert>
       <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration	</tooltips>
@@ -654,9 +667,10 @@
         </vehicle>
       </include>
     </vehicleFilter>
-    <usagePrefab>	content/CGFPrefabs/steel_hunter/Fire_ring.prefab	</usagePrefab>
+    <usagePrefab>	content/CGFPrefabs/steel_hunter/abilities/fire_ring/fire_ring.prefab	</usagePrefab>
     <ownerPrefab></ownerPrefab>
     <script>	battle_royale_artefacts.FireCircle	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:fireCircle/battleDescr	</battleDescription>
       <cooldownSeconds>	30	</cooldownSeconds>
       <radius>	18	</radius>
       <zonesCount>	12	</zonesCount>
@@ -711,6 +725,7 @@
       </include>
     </vehicleFilter>
     <script>	battle_royale_artefacts.CorrodingShot	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:corrodingShot/battleDescr	</battleDescription>
       <tooltipMovie></tooltipMovie>
       <cooldownSeconds>	30	</cooldownSeconds>
       <damagePercentAfterShot>	0.05	</damagePercentAfterShot>
@@ -746,6 +761,7 @@
     </vehicleFilter>
     <script>	battle_royale_artefacts.ConsumableSpawnBot	  <shortDescription>	#artefacts:clingBrander/shortDescr	</shortDescription>
       <longDescription>	#artefacts:clingBrander/longDescr	</longDescription>
+      <battleDescription>	#artefacts:clingBrander/battleDescr	</battleDescription>
       <consumeAmmo>	true	</consumeAmmo>
       <cooldownSeconds>	60	</cooldownSeconds>
       <botLifeTime>	30	</botLifeTime>
@@ -762,7 +778,6 @@
       <explosionByShoot>	false	</explosionByShoot>
       <damageReductionRate>	10	</damageReductionRate>
       <botXRayFactor>	2	</botXRayFactor>
-      <vehicleRemoveDelay>	0	</vehicleRemoveDelay>
       <clientRemovalNotificationDelay>	0	</clientRemovalNotificationDelay>
       <areaRadius>	4	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
@@ -801,6 +816,7 @@
       </include>
     </vehicleFilter>
     <script>	battle_royale_artefacts.AdaptationHealthRestore	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:adaptationHealthRestore/battleDescr	</battleDescription>
       <cooldownSeconds>	60	</cooldownSeconds>
       <duration>	8	</duration>
       <immediatelyRestore>	200	</immediatelyRestore>
@@ -834,6 +850,7 @@
     <script>	battle_royale_artefacts.ThunderStrike	  <consumeAmmo>	true	</consumeAmmo>
       <shortDescription>	#artefacts:thunderStrike/shortDescr	</shortDescription>
       <longDescription>	#artefacts:thunderStrike/longDescr	</longDescription>
+      <battleDescription>	#artefacts:thunderStrike/battleDescr	</battleDescription>
       <cooldownSeconds>	30	</cooldownSeconds>
       <delay>	1.0	</delay>
       <thunderCount>	6	</thunderCount>
@@ -883,6 +900,7 @@
     <usagePrefab>	content/CGFPrefabs/steel_hunter/shot_passion.prefab	</usagePrefab>
     <ownerPrefab></ownerPrefab>
     <script>	battle_royale_artefacts.ShotPassion	  <consumeAmmo>	true	</consumeAmmo>
+      <battleDescription>	#artefacts:shotPassion/battleDescr	</battleDescription>
       <cooldownSeconds>	60	</cooldownSeconds>
       <duration>	20	</duration>
       <damageIncreasePerShot>	0.15	</damageIncreasePerShot>

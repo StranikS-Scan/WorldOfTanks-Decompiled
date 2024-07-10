@@ -10,7 +10,7 @@ from CurrentVehicle import g_currentVehicle
 import CGF
 from shared_utils import findFirst
 from UnitBase import UNIT_ROLE, UnitAssemblerSearchFlags, extendTiersFilter
-from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from constants import EPlatoonButtonState, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, Configs
 from PlatoonTank import PlatoonTank, PlatoonTankInfo
 from account_helpers.AccountSettings import AccountSettings, UNIT_FILTER, GUI_START_BEHAVIOR
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
@@ -51,6 +51,7 @@ from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from gui.prb_control.entities.base.unit.entity import UnitEntity
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
@@ -164,6 +165,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__executeQueue = False
         self.__areOtherMembersReady = False
         self.__availableTiersForSearch = 0
+        self.__availableTiersInventory = None
         self.__alreadyJoinedAccountDBIDs = set()
         self.currentPlatoonLayouts = buildCurrentLayouts()
         self.onFilterUpdate = Event.Event()
@@ -189,7 +191,6 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def onLobbyStarted(self, ctx):
         self.resetUnitTierFilter()
-        self.__cacheAvailableVehicles()
 
     def onPrbEntitySwitching(self):
         queueType = self.getQueueType()
@@ -205,6 +206,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.clearCallbacks()
         self.__startAutoSearchOnUnitJoin = False
         self.__channelCtrl = None
+        self.__availableTiersInventory = None
         self.__tankDisplayPosition.clear()
         return
 
@@ -244,7 +246,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         if prevQueueType != self.getQueueType() and self.hasSearchSupport():
             self.resetUnitTierFilter()
         self.currentPlatoonLayouts = buildCurrentLayouts(self.getPrbEntityType())
-        self.__cacheAvailableVehicles()
+        self.__cacheAvailableVehicles(checkVehicles=True)
         if not self.__executeQueue:
             return
         self.__executeQueue = False
@@ -487,6 +489,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     def canSelectSquadSize(self):
         prbType = self.getPrbEntityType()
         return prbType in [PREBATTLE_TYPE.COMP7]
+
+    def hasSelectorPopover(self):
+        return self.hasWelcomeWindow() or self.canSelectSquadSize() or self.getPermissions().hasSquadArrow()
 
     def hasSearchSupport(self):
         prbType = self.getPrbEntityType()
@@ -774,6 +779,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.startGlobalListening()
         self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.__settingsCore.onSettingsApplied += self.__onSettingsApplied
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.__hangarSpace.onSpaceCreate += self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy += self.hsSpaceDestroy
         self.__itemsCache.onSyncCompleted += self.__onVehicleStateChanged
@@ -781,6 +787,11 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         g_eventBus.addListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def __onServerSettingsChanged(self, diff):
+        if Configs.UNIT_ASSEMBLER_CONFIG.value in diff:
+            self.__cacheAvailableVehicles(checkVehicles=False)
+            self.__updateUserSearchFlagsOnAvailableTiers()
 
     def __onChannelControllerInited(self, event):
         ctx = event.ctx
@@ -806,11 +817,15 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __onHangarSpaceCreate(self):
         self.__currentlyDisplayedTanks = 0
-        if self.isInPlatoon() and self.__getNotReadyPlayersCount() < self.__getPlayerCount() - 1:
-            self.__updatePlatoonTankInfo()
-            cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
-            if cameraManager:
-                cameraManager.enablePlatoonMode(True)
+        if not self.isInPlatoon():
+            return
+        needToShowOtherPlayers = bool([ player for player in self.prbEntity.getPlayers().values() if player.isReady and not player.isInArena() and not player.isCurrentPlayer() ])
+        if not needToShowOtherPlayers:
+            return
+        self.__updatePlatoonTankInfo()
+        cameraManager = CGF.getManager(self.__hangarSpace.spaceID, HangarCameraManager)
+        if cameraManager:
+            cameraManager.enablePlatoonMode(True)
 
     def __stopListening(self):
         _logger.debug('PlatoonController: stop listening')
@@ -824,6 +839,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreate
         self.__hangarSpace.onSpaceDestroy -= self.hsSpaceDestroy
         self.__itemsCache.onSyncCompleted -= self.__onVehicleStateChanged
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self.__platoonTankLoaded, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self.__platoonTankDestroyed, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.MessengerEvent.PRB_CHANNEL_CTRL_INITED, self.__onChannelControllerInited, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -1091,46 +1107,45 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
         return
 
-    def __onVehicleStateChanged(self, updateReason, _):
+    def __onVehicleStateChanged(self, updateReason, diff):
+        if updateReason == CACHE_SYNC_REASON.CLIENT_UPDATE and (not diff or GUI_ITEM_TYPE.VEHICLE not in diff):
+            return
         if updateReason in (CACHE_SYNC_REASON.CLIENT_UPDATE, CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC):
             self.__cacheAvailableVehicles()
-            searchFlags = self.getUserSearchFlags()
-            tierSearchFlags = searchFlags & UnitAssemblerSearchFlags.ALL_VEH_TIERS
-            validTierFlags = tierSearchFlags & self.__availableTiersForSearch
-            if tierSearchFlags != validTierFlags:
-                searchFlags = searchFlags & ~UnitAssemblerSearchFlags.ALL_VEH_TIERS | validTierFlags
-                self.saveUserSearchFlags(searchFlags)
 
-    def __cacheAvailableVehicles(self):
+    def __cacheAvailableVehicles(self, checkVehicles=True):
         if not self.hasSearchSupport():
             return
-        if not self.isSearchingForPlayersEnabled():
+        elif not self.isSearchingForPlayersEnabled():
             if self.__availableTiersForSearch != 0:
                 self.__availableTiersForSearch = 0
                 self.onAvailableTiersForSearchChanged()
             return
-        prebattleType = self.getPrbEntityType()
-        allowedLevels = self.getAllowedTankLevels(prebattleType)
-        criteria = REQ_CRITERIA.INVENTORY
-        criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
-        criteria |= PREBATTLE_TYPE_TO_VEH_CRITERIA.get(prebattleType, REQ_CRITERIA.EMPTY)
-        allowedList = [ lvl for lvl in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) if allowedLevels & 1 << lvl ]
-        criteria |= REQ_CRITERIA.VEHICLE.LEVELS(allowedList)
-        vehicles = self.__itemsCache.items.getVehicles(criteria)
-        availableTiers = 0
-        for v in vehicles.itervalues():
-            state, vStateLvl = v.getState()
-            if state in (Vehicle.VEHICLE_STATE.LOCKED, Vehicle.VEHICLE_STATE.IN_PREBATTLE) and v.checkUndamagedState(Vehicle.VEHICLE_STATE.UNDAMAGED) == Vehicle.VEHICLE_STATE.UNDAMAGED or vStateLvl not in (Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
-             Vehicle.VEHICLE_STATE_LEVEL.WARNING,
-             Vehicle.VEHICLE_STATE_LEVEL.RENTABLE,
-             Vehicle.VEHICLE_STATE_LEVEL.ATTENTION):
-                availableTiers |= 1 << v.level
+        else:
+            prebattleType = self.getPrbEntityType()
+            allowedLevels = self.getAllowedTankLevels(prebattleType)
+            if checkVehicles or self.__availableTiersInventory is None:
+                criteria = REQ_CRITERIA.INVENTORY
+                criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
+                criteria |= PREBATTLE_TYPE_TO_VEH_CRITERIA.get(prebattleType, REQ_CRITERIA.EMPTY)
+                allowedList = [ lvl for lvl in range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1) if allowedLevels & 1 << lvl ]
+                criteria |= REQ_CRITERIA.VEHICLE.LEVELS(allowedList)
+                vehicles = self.__itemsCache.items.getVehicles(criteria)
+                self.__availableTiersInventory = 0
+                for v in vehicles.itervalues():
+                    state, vStateLvl = v.getState()
+                    if state in (Vehicle.VEHICLE_STATE.LOCKED, Vehicle.VEHICLE_STATE.IN_PREBATTLE) and v.checkUndamagedState(Vehicle.VEHICLE_STATE.UNDAMAGED) == Vehicle.VEHICLE_STATE.UNDAMAGED or vStateLvl not in (Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
+                     Vehicle.VEHICLE_STATE_LEVEL.WARNING,
+                     Vehicle.VEHICLE_STATE_LEVEL.RENTABLE,
+                     Vehicle.VEHICLE_STATE_LEVEL.ATTENTION):
+                        self.__availableTiersInventory |= 1 << v.level
 
-        availableTiers &= allowedLevels
-        if availableTiers != self.__availableTiersForSearch:
-            self.__availableTiersForSearch = availableTiers
-            self.__updateUserSearchFlagsOnAvailableTiers()
-            self.onAvailableTiersForSearchChanged()
+            availableTiers = self.__availableTiersInventory & allowedLevels
+            if availableTiers != self.__availableTiersForSearch:
+                self.__availableTiersForSearch = availableTiers
+                self.__updateUserSearchFlagsOnAvailableTiers()
+                self.onAvailableTiersForSearchChanged()
+            return
 
     def __updateUserSearchFlagsOnAvailableTiers(self):
         userSearchFlags = self.getUserSearchFlags()

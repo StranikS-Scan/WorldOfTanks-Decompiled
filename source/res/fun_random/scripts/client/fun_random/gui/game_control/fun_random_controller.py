@@ -4,8 +4,7 @@ import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import FUN_RANDOM_LAST_PRESET
 from adisp import adisp_async, adisp_process
-from constants import Configs
-from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, DEFAULT_SETTINGS_KEY
+from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, FUN_GAME_PARAMS_KEY, DEFAULT_SETTINGS_KEY
 from fun_random.gui.feature.sub_systems.fun_hidden_vehicles import FunHiddenVehicles
 from fun_random.gui.feature.sub_systems.fun_notifications import FunNotifications
 from fun_random.gui.feature.sub_systems.fun_progressions import FunProgressions
@@ -71,6 +70,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         return
 
     def onLobbyInited(self, event=None):
+        self.__subscription.startCoreNotifications()
         self.__hiddenVehicles.startVehiclesListening()
         self.__notifications.startNotificationPushing()
         self.__subModesHolder.startNotification()
@@ -146,18 +146,19 @@ class FunRandomController(IFunRandomController, IGlobalListener):
         self.__serverSettings = serverSettings
         self.__serverSettings.onServerSettingsChange += self.__onServerSettingsUpdate
         prevFunSettings = self.__funRandomSettings or FunRandomConfig()
-        rawNewFunSettings = serverSettings.getSettings().get(Configs.FUN_RANDOM_CONFIG.value, {})
+        rawNewFunSettings = serverSettings.getSettings().get(FUN_GAME_PARAMS_KEY, {})
         self.__funRandomSettings = FunRandomConfig(**rawNewFunSettings)
         self.__updateFunRandomSettings(prevFunSettings, self.__funRandomSettings)
         return
 
     def __onServerSettingsUpdate(self, diff):
-        if Configs.FUN_RANDOM_CONFIG.value in diff:
+        if FUN_GAME_PARAMS_KEY in diff:
             prevFunSettings = self.__funRandomSettings or FunRandomConfig()
-            self.__funRandomSettings = self.__funRandomSettings.replace(diff[Configs.FUN_RANDOM_CONFIG.value].copy())
+            self.__funRandomSettings = self.__funRandomSettings.replace(diff[FUN_GAME_PARAMS_KEY].copy())
             self.__updateFunRandomSettings(prevFunSettings, self.__funRandomSettings)
 
     def __clearListening(self):
+        self.__subscription.clear()
         self.__progressions.stopProgressListening()
         self.__notifications.stopNotificationPushing()
         self.__hiddenVehicles.stopVehiclesListening()

@@ -66,6 +66,10 @@
         <lifeTime>	25	</lifeTime>
         <trianglesCount>	2500	</trianglesCount>
       </fast>
+      <autocannons>
+        <lifeTime>	6	</lifeTime>
+        <trianglesCount>	2500	</trianglesCount>
+      </autocannons>
     </groups>
     <textures>
       <explosion_ground_AM>
@@ -213,22 +217,6 @@
       <url_token>	login2.p4.worldoftanks.eu:20016	</url_token>
       <public_key_path>	loginapp_wot.pubkey	</public_key_path>
       <periphery_id>	204	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT EU5	</name>
-      <short_name>	EU5	</short_name>
-      <url>	login.p5.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p5.worldoftanks.eu:20016	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	205	</periphery_id>
-    </host>
-    <host>
-      <name>	WOT EU6	</name>
-      <short_name>	EU6	</short_name>
-      <url>	login.p6.worldoftanks.eu:20016	</url>
-      <url_token>	login2.p6.worldoftanks.eu:20016	</url_token>
-      <public_key_path>	loginapp_wot.pubkey	</public_key_path>
-      <periphery_id>	206	</periphery_id>
     </host>
   </login>
   <csisUrl>	http://csis.worldoftanks.eu/csis/woteu/	</csisUrl>

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
 import typing
 if typing.TYPE_CHECKING:
-    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IComp7PrebattleSetupController, IComp7VOIPController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController
+    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IComp7PrebattleSetupController, IComp7VOIPController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
 
 class ISharedControllersLocator(object):
@@ -116,6 +116,14 @@ class ISharedControllersLocator(object):
     def aimingSounds(self):
         raise NotImplementedError
 
+    @property
+    def autoShootCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def battleSpamCtrl(self):
+        raise NotImplementedError
+
 
 class IDynamicControllersLocator(object):
     __slots__ = ()
@@ -224,7 +232,7 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def vehicleHitSound(self):
+    def shotsResultSound(self):
         raise NotImplementedError
 
 

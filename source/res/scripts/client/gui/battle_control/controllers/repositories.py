@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/repositories.py
 import logging
-from typing import TYPE_CHECKING
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
@@ -12,6 +11,7 @@ from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers.battle_hints import controller as battle_hints_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
+from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_ctrl import AutoShootControllerFactory
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
@@ -20,12 +20,11 @@ from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
-from gui.battle_control.controllers.sound_ctrls.vehicle_hit_sound_ctrl import VehicleHitSound
+from gui.battle_control.controllers.spam_protection import battle_spam_ctrl
+from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
 from gui.battle_control.controllers.vse_hud_settings_ctrl import vse_hud_settings_ctrl
 from gui.shared.system_factory import registerBattleControllerRepo
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
-if TYPE_CHECKING:
-    from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
 _logger = logging.getLogger(__name__)
 
 class BattleSessionSetup(object):
@@ -202,6 +201,14 @@ class SharedControllersLocator(_ControllersLocator, ISharedControllersLocator):
     def aimingSounds(self):
         return self._repository.getController(BATTLE_CTRL_ID.AIMING_SOUNDS_CTRL)
 
+    @property
+    def autoShootCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.AUTO_SHOOT_CTRL)
+
+    @property
+    def battleSpamCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_SPAM_CTRL)
+
 
 class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator):
     __slots__ = ()
@@ -318,8 +325,8 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.OVERRIDE_SETTINGS)
 
     @property
-    def vehicleHitSound(self):
-        return self._repository.getController(BATTLE_CTRL_ID.VEHICLE_HIT_SOUND)
+    def shotsResultSound(self):
+        return self._repository.getController(BATTLE_CTRL_ID.SHOTS_RESULT_SOUND)
 
     @property
     def vseHUDSettings(self):
@@ -430,8 +437,10 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addViewController(spectator_ctrl.SpectatorViewController(), setup)
         repository.addArenaController(cls.getAreaMarkersController(), setup)
         repository.addArenaController(deathzones_ctrl.DeathZonesController(), setup)
+        repository.addController(AutoShootControllerFactory.createAutoShootController(setup))
         repository.addController(ingame_help_ctrl.IngameHelpController(setup))
         repository.addController(map_zones_ctrl.MapZonesController(setup))
+        repository.addController(battle_spam_ctrl.BattleSpamController())
         repository.addController(aiming_sounds_ctrl.AimingSoundsCtrl())
         return repository
 
@@ -480,7 +489,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(battle_hints_ctrl.BattleHintsController(), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
-        repository.addController(VehicleHitSound())
+        repository.addController(ShotsResultSoundController())
         return repository
 
     @staticmethod
@@ -501,7 +510,7 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(perk_ctrl.PerksController(), setup)
         repository.addViewController(battle_hints_ctrl.BattleHintsController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
-        repository.addController(VehicleHitSound())
+        repository.addController(ShotsResultSoundController())
         return repository
 
 
@@ -517,7 +526,7 @@ class MapsTrainingControllerRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
-        repository.addController(VehicleHitSound())
+        repository.addController(ShotsResultSoundController())
         repository.addViewController(battle_hints_ctrl.BattleHintsController(), setup)
         repository.addArenaController(MapsTrainingAppearanceCacheController(setup), setup)
         return repository

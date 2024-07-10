@@ -38,26 +38,30 @@ def createBackportTooltipContent(specialAlias=None, specialArgs=None, isSpecial=
 
 class _BackportTooltipContent(ViewImpl):
     appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ('__tooltipData',)
+    __slots__ = ('__tooltipData', '__mousePosX', '__mousePosY')
 
     def __init__(self, tooltipData, event=None):
         self.__tooltipData = tooltipData
         settings = ViewSettings(R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent())
         settings.model = ViewModel()
         settings.args = (tooltipData, event)
+        self.__mousePosX = 0
+        self.__mousePosY = 0
+        if event is not None:
+            self.__mousePosX = event.mouse.positionX
+            self.__mousePosY = event.mouse.positionY
         super(_BackportTooltipContent, self).__init__(settings)
+        return
 
-    def _initialize(self, tooltipData, event=None, *args, **kwargs):
-        super(_BackportTooltipContent, self)._initialize(*args, **kwargs)
+    def _onShown(self):
         toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         if toolTipMgr is not None:
-            if tooltipData.isWulfTooltip:
-                posX, posY = event and (event.mouse.positionX, event.mouse.positionY) or (0, 0)
-                toolTipMgr.onCreateWulfTooltip(tooltipData.tooltip, tooltipData.specialArgs, posX, posY, parent=self.getParentWindow())
-            elif tooltipData.isSpecial:
-                toolTipMgr.onCreateTypedTooltip(tooltipData.specialAlias, tooltipData.specialArgs, _STATE_TYPE_INFO)
+            if self.__tooltipData.isWulfTooltip:
+                toolTipMgr.onCreateWulfTooltip(self.__tooltipData.tooltip, self.__tooltipData.specialArgs, self.__mousePosX, self.__mousePosY, parent=self.getParentWindow())
+            elif self.__tooltipData.isSpecial:
+                toolTipMgr.onCreateTypedTooltip(self.__tooltipData.specialAlias, self.__tooltipData.specialArgs, _STATE_TYPE_INFO)
             else:
-                toolTipMgr.onCreateComplexTooltip(tooltipData.tooltip, _STATE_TYPE_INFO)
+                toolTipMgr.onCreateComplexTooltip(self.__tooltipData.tooltip, _STATE_TYPE_INFO)
         return
 
     def _onHidden(self):

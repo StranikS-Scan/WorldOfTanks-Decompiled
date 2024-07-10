@@ -3280,7 +3280,7 @@
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
-            <afterShot>	2	</afterShot>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	1.8	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
@@ -3548,7 +3548,7 @@
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
-            <afterShot>	2	</afterShot>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	1.8	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
@@ -3624,7 +3624,7 @@
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
-            <afterShot>	1.2	</afterShot>
+            <afterShot>	1.3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
@@ -3688,13 +3688,13 @@
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_CN_105_57_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	8	</reloadTime>
           <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <shotDispersionRadius>	0.30	</shotDispersionRadius>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
@@ -3702,8 +3702,8 @@
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	9 9	</reloadTimes>
-            <rateTime>	6	</rateTime>
+            <reloadTimes>	8 8	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3967,7 +3967,7 @@
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.04	</turretRotation>
-            <afterShot>	2	</afterShot>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	1.8	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
@@ -4046,13 +4046,13 @@
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_F3M_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	8	</reloadTime>
           <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.30	</shotDispersionRadius>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
@@ -4060,8 +4060,8 @@
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	9 9	</reloadTimes>
-            <rateTime>	6	</rateTime>
+            <reloadTimes>	8 8	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>

@@ -305,7 +305,7 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         items = super(AdditionalAwardTooltipData, self)._packBlocks()
-        items.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_ADDITIONAL_HEADER), padding=formatters.packPadding(top=8, bottom=8)))
+        items.append(self._packTitle())
         for bonus in args:
             bonusDict = flashObject2Dict(bonus)
             bonusName = bonusDict.get('name', '')
@@ -331,6 +331,9 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
                 break
 
         return items
+
+    def _packTitle(self):
+        return formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_ADDITIONAL_HEADER), padding=formatters.packPadding(top=8, bottom=8))
 
 
 class RentVehicleAwardTooltipData(BlocksTooltipData):

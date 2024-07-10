@@ -11,26 +11,26 @@ class ClaimState(Enum):
 class FrontlineRewardModel(IconBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(FrontlineRewardModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
-        return self._getString(8)
+        return self._getString(9)
 
     def setId(self, value):
-        self._setString(8, value)
+        self._setString(9, value)
 
     def getClaimState(self):
-        return ClaimState(self._getString(9))
+        return ClaimState(self._getString(10))
 
     def setClaimState(self, value):
-        self._setString(9, value.value)
+        self._setString(10, value.value)
 
     def getType(self):
-        return self._getString(10)
+        return self._getString(11)
 
     def setType(self, value):
-        self._setString(10, value)
+        self._setString(11, value)
 
     def _initialize(self):
         super(FrontlineRewardModel, self)._initialize()

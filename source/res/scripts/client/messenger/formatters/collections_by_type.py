@@ -2,17 +2,17 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
-from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter
+from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerLootBoxAutoOpenSubFormatters
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import personal_reserves as _prFormatters
 from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-_AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
+registerLootBoxAutoOpenSubFormatters((auto_boxes_subformatters.EventBoxesFormatter(),
  auto_boxes_subformatters.EventLootBoxesFormatter(),
  auto_boxes_subformatters.NYPostEventBoxesFormatter(),
  auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
- auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter())
+ auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter()))
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -74,13 +74,11 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
  _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
  _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
- _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
  _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS),
- _SM_TYPE.prbVehicleMaxScoutKick.index(): _sc.PrbVehicleMaxScoutKickFormatter(),
  _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
  _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
  _SM_TYPE.customizationChanged.index(): _sc.CustomizationChangedFormatter(),
- _SM_TYPE.lootBoxesAutoOpenReward.index(): _sc.LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS),
+ _SM_TYPE.lootBoxesAutoOpenReward.index(): _sc.LootBoxAutoOpenFormatter(),
  _SM_TYPE.progressiveReward.index(): _sc.ProgressiveRewardFormatter(),
  _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
  _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
@@ -173,13 +171,11 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.vehicleGroupUnlocked.index(), _sc.RotationGroupUnlockFormatter())
     registerMessengerServerFormatter(_SM_TYPE.rankedQuests.index(), _sc.RankedQuestFormatter())
     registerMessengerServerFormatter(_SM_TYPE.royaleQuests.index(), _sc.BRQuestsFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxSpgKick.index(), _sc.PrbVehicleMaxSpgKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.hangarQuests.index(), _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS))
-    registerMessengerServerFormatter(_SM_TYPE.prbVehicleMaxScoutKick.index(), _sc.PrbVehicleMaxScoutKickFormatter())
     registerMessengerServerFormatter(_SM_TYPE.currencyUpdate.index(), _sc.CurrencyUpdateFormatter())
     registerMessengerServerFormatter(_SM_TYPE.personalMissionFailed.index(), _sc.PersonalMissionFailedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customizationChanged.index(), _sc.CustomizationChangedFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.lootBoxesAutoOpenReward.index(), _sc.LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS))
+    registerMessengerServerFormatter(_SM_TYPE.lootBoxesAutoOpenReward.index(), _sc.LootBoxAutoOpenFormatter())
     registerMessengerServerFormatter(_SM_TYPE.progressiveReward.index(), _sc.ProgressiveRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.piggyBankSmashed.index(), _sc.PiggyBankSmashedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.blackMapRemoved.index(), _sc.BlackMapRemovedFormatter())
@@ -252,3 +248,4 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SUBSCRIBERS_ONBOARDING, _wotPlusFormatters.WotPlusSubscribersOnboardingFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH, _wotPlusFormatters.WotPlusSwitchFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_EARNING_SM_TYPE, _sc.AchievementsEarningSMFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.prbVehicleKickFromSquad.index(), _sc.PrbVehicleMaxTypeKickFormatter())

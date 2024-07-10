@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class BonusModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(BonusModel, self).__init__(properties=properties, commands=commands)
 
     def getIndex(self):
@@ -50,6 +50,12 @@ class BonusModel(ViewModel):
     def setLabel(self, value):
         self._setString(6, value)
 
+    def getProbability(self):
+        return self._getNumber(7)
+
+    def setProbability(self, value):
+        self._setNumber(7, value)
+
     def _initialize(self):
         super(BonusModel, self)._initialize()
         self._addNumberProperty('index', 0)
@@ -59,3 +65,4 @@ class BonusModel(ViewModel):
         self._addStringProperty('tooltipId', '')
         self._addStringProperty('tooltipContentId', '')
         self._addStringProperty('label', '')
+        self._addNumberProperty('probability', 0)

@@ -112,26 +112,27 @@ class IClientDescription(object):
 
 
 class RegularDescription(IClientDescription):
-    __slots__ = ('iconID', 'limiterID', 'isInOrGroup')
+    __slots__ = ('iconID', 'limiterID', 'isInOrGroup', 'priority')
 
-    def __init__(self, iconID, limiterID=None, isInOrGroup=False):
+    def __init__(self, iconID, limiterID=None, isInOrGroup=False, priority=0):
         self.iconID = iconID
         self.limiterID = limiterID
         self.isInOrGroup = isInOrGroup
+        self.priority = priority
 
     @classmethod
     def getContainerType(cls):
         return CONTAINER.BODY
 
     def __repr__(self):
-        return self.__class__.__name__ + ': ' + str(self.iconID) + ' ' + str(self.limiterID) + ' ' + str(self.isInOrGroup)
+        return self.__class__.__name__ + ': ' + str(self.iconID) + ' ' + str(self.limiterID) + ' ' + str(self.isInOrGroup) + ' ' + str(self.priority)
 
 
 class AverageDescription(RegularDescription):
     __slots__ = RegularDescription.__slots__ + ('counterID',)
 
-    def __init__(self, iconID, counterID, limiterID=None, isInOrGroup=False):
-        super(AverageDescription, self).__init__(iconID, limiterID, isInOrGroup)
+    def __init__(self, iconID, counterID, limiterID=None, isInOrGroup=False, priority=0):
+        super(AverageDescription, self).__init__(iconID, limiterID, isInOrGroup, priority)
         self.counterID = counterID
 
     def __repr__(self):

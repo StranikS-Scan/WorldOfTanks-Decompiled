@@ -877,6 +877,7 @@ class DIALOGS(object):
     SESSIONSTATS_CONFIRMRESET_CANCEL = '#dialogs:sessionStats/confirmReset/cancel'
     EDITABLESTYLES_CONFIRMRESET_TITLE = '#dialogs:editableStyles/confirmReset/title'
     EDITABLESTYLES_CONFIRMRESET_MESSAGE = '#dialogs:editableStyles/confirmReset/message'
+    EDITABLESTYLES_CONFIRMRESET_FORMATTEDPARTOFMESSAGESTYLE = '#dialogs:editableStyles/confirmReset/formattedPartOfMessageStyle'
     EDITABLESTYLES_CONFIRMRESET_FORMATTEDPARTOFMESSAGE = '#dialogs:editableStyles/confirmReset/formattedPartOfMessage'
     EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL = '#dialogs:editableStyles/confirmReset/checkboxLabel'
     EDITABLESTYLES_CONFIRMRESET_SUBMIT = '#dialogs:editableStyles/confirmReset/submit'
@@ -965,7 +966,6 @@ class DIALOGS(object):
     PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
     PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
     COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
-    COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
     COMP7_DESERTER_SUBMIT = '#dialogs:comp7/deserter/submit'
     COMP7_DESERTER_CANCEL = '#dialogs:comp7/deserter/cancel'
@@ -1923,6 +1923,7 @@ class DIALOGS(object):
      SESSIONSTATS_CONFIRMRESET_CANCEL,
      EDITABLESTYLES_CONFIRMRESET_TITLE,
      EDITABLESTYLES_CONFIRMRESET_MESSAGE,
+     EDITABLESTYLES_CONFIRMRESET_FORMATTEDPARTOFMESSAGESTYLE,
      EDITABLESTYLES_CONFIRMRESET_FORMATTEDPARTOFMESSAGE,
      EDITABLESTYLES_CONFIRMRESET_CHECKBOXLABEL,
      EDITABLESTYLES_CONFIRMRESET_SUBMIT,
@@ -2011,7 +2012,6 @@ class DIALOGS(object):
      PERKLEARNCONFIRM_DESC,
      PERKLEARNCONFIRM_LEARN,
      COMP7_DESERTER_TITLE,
-     COMP7_DESERTER_MSGTITLE,
      COMP7_DESERTER_MESSAGE,
      COMP7_DESERTER_SUBMIT,
      COMP7_DESERTER_CANCEL,

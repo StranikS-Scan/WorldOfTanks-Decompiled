@@ -12,7 +12,6 @@ from gui.battle_control.controllers.sound_ctrls.common import SoundPlayersContro
 from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from helpers import dependency
 from helpers.time_utils import ONE_MINUTE
-from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import RespawnAbility
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, TIMER_VIEW_STATE, COUNTDOWN_STATE
 from helpers.CallbackDelayer import CallbackDelayer
@@ -320,7 +319,8 @@ class RevivalSoundPlayer(CallbackDelayer):
 
     def __onPeriodChange(self, period, endTime, length, additionalInfo):
         if not self.__respawnTimestampSent and period == ARENA_PERIOD.BATTLE:
-            respawnPeriod = RespawnAbility().soloRespawnPeriod if not self.__isSquad else RespawnAbility().platoonRespawnPeriod
+            arenaInfo = BigWorld.player().arena.arenaInfo
+            respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
             secondsLeft = max(respawnPeriod - self.__getTimeGoneFromStart(endTime, length), 0)
             self.__respawnTimestampSent = True
             timeToNotification = max(secondsLeft - ONE_MINUTE, 0)

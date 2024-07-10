@@ -38,3 +38,6 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
      9,
      12]
     DISPERSION_CIRCLE_RELOADING_TYPES = [0, 1, 2]
+    AIM_DAMAGE_STAGE_0 = 'stage0'
+    AIM_DAMAGE_STAGE_1 = 'stage1'
+    AIM_DAMAGE_STAGE_2 = 'stage2'

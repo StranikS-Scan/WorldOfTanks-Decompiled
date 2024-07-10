@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/avatar_epic_data.py
+import logging
 import BigWorld
 import CommandMapping
 import Event
@@ -7,7 +8,6 @@ import constants
 from ReservesEvents import randomReservesEvents
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME, _MISSION_SECTOR_ID_MAPPING
-from avatar_helpers import getBestShotResultSound
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import DEATH_ZONES, SECTOR_STATE, VEHICLE_HIT_FLAGS as VHF
 from debug_utils import LOG_DEBUG_DEV
@@ -15,6 +15,7 @@ from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.sounds.epic_sound_constants import EPIC_SOUND
+_logger = logging.getLogger(__name__)
 _KB_MAPPING = {'EPIC_GLOBAL_SAVETANKS': CommandMapping.EPIC_GLOBAL_MSG_SAVE_TANKS,
  'EPIC_GLOBAL_TIME': CommandMapping.EPIC_GLOBAL_MSG_TIME,
  'EPIC_GLOBAL_HQ': CommandMapping.EPIC_GLOBAL_MSG_FOCUS_HQ,
@@ -69,39 +70,22 @@ class AvatarEpicData(object):
                 return
         else:
             return
-        bestSoundsSequence = None
-        for hitFlags in hitFlagsList:
-            if hitFlags & VHF.VEHICLE_KILLED or hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
-                return
-            sound = None
-            if hitFlags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
-                if hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                    sound = 'enemy_hp_damaged_by_near_explosion_by_player'
-                elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
-                    sound = 'enemy_no_hp_damage_by_near_explosion_by_player'
-            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
-                if hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_hp_damaged_by_projectile_and_gun_damaged_by_player'
-                elif hitFlags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
-                    sound = 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'
-                else:
-                    sound = 'enemy_hp_damaged_by_projectile_by_player'
-            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
-                sound = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
-            elif hitFlags & VHF.RICOCHET and not hitFlags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
-                sound = 'enemy_ricochet_by_player'
-            elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
-                sound = 'enemy_no_hp_damage_at_attempt_by_player'
-            elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
-                sound = 'enemy_no_hp_damage_at_no_attempt_by_player'
-            else:
-                sound = 'enemy_no_piercing_by_player'
-            if sound is not None:
-                bestSoundsSequence = getBestShotResultSound(bestSoundsSequence, sound, None)
+        bestSound = None
+        shotsResultSound = self.guiSessionProvider.dynamic.shotsResultSound
+        if not shotsResultSound:
+            _logger.warning('IShotsResultSoundController is missing, add it to allow sounds on hit.')
+            return
+        else:
+            for hitFlags in hitFlagsList:
+                if hitFlags & VHF.VEHICLE_KILLED or hitFlags & VHF.VEHICLE_WAS_DEAD_BEFORE_ATTACK:
+                    return
+                sound = shotsResultSound.getDestructibleHitResultSound(hitFlags)
+                if sound is not None:
+                    bestSound = shotsResultSound.getBestShotResultSound(bestSound, sound, None)
 
-        if bestSoundsSequence is not None:
-            self.soundNotifications.play(bestSoundsSequence[0])
-        return
+            if bestSound is not None:
+                self.soundNotifications.play(shotsResultSound.getBestSoundEventName(bestSound))
+            return
 
     def onDestructibleDestroyed(self, destructibleEntityID, shooterID):
         self.guiSessionProvider.shared.messages.showDestructibleEntityDestroyedMessage(self, destructibleEntityID, shooterID)

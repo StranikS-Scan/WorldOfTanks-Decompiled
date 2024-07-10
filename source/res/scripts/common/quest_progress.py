@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_progress.py
 from collections import Counter
+from itertools import izip
 from constants import QUEST_PROGRESS_STATE
 from personal_missions_constants import PROGRESS_TEMPLATE
 
@@ -36,6 +37,7 @@ class Progress(IProgress):
         self.__visibleScope = None
         self.__isChanged = False
         self.__isCumulative = False
+        self.__dependsOnProgressID = None
         self._setCfg(**config)
         return
 
@@ -75,13 +77,14 @@ class Progress(IProgress):
     def getState(self):
         return self.__state
 
-    def _setCfg(self, isMain=False, countdown=None, visibleScope=(), isCumulative=False, params=None, isAward=False):
+    def _setCfg(self, isMain=False, countdown=None, visibleScope=(), isCumulative=False, params=None, isAward=False, dependsOnProgressID=None):
         self.__isMain = isMain
         self.__isAward = isAward
         self.__countDown = countdown
         self.__visibleScope = visibleScope
         self.__isCumulative = isCumulative
         self.__params = params or {}
+        self.__dependsOnProgressID = dependsOnProgressID
 
     def getVisibleScope(self):
         return self.__visibleScope
@@ -94,6 +97,9 @@ class Progress(IProgress):
 
     def markAsVisited(self):
         self.__isChanged = False
+
+    def getDependsOnProgressID(self):
+        return self.__dependsOnProgressID
 
 
 class BinaryProgress(Progress):
@@ -423,6 +429,9 @@ class ProgressStorage(object):
     def getMainProgress(self):
         return [ value for value in self.__progresses.itervalues() if value.isMain() and value.isAward() ]
 
+    def getAdditionalProgressIDs(self):
+        return [ progress.getProgressID() for progress in self.__progresses.itervalues() if not progress.isMain() and progress.isAward() ]
+
     def save(self):
         return self._collectProgressInfo(CumulativeOnlyProgressCollector())
 
@@ -477,6 +486,9 @@ class BaseQuestProgress(object):
 
     def getMainProgress(self):
         return self._progressStorage.getMainProgress()
+
+    def getAdditionalProgressIDs(self):
+        return self._progressStorage.getAdditionalProgressIDs()
 
     def updateIfConditionsAreAlreadySolved(self):
         progresses = self._progressStorage.getMainProgress()
@@ -641,17 +653,29 @@ class BaseQuestProgress(object):
                 self.setZero(progressID)
         return self.isCompleted(progressID)
 
-    def increaseSumProgress(self, progressID, attemptsID, value, mainProgressID=None):
-        progressCompleted = self.increaseUntilComplete(progressID, value)
-        isMainOrMainCompleted = True if not mainProgressID else (True if self.isCompleted(mainProgressID) else False)
-        if progressCompleted and not self.isFinished(attemptsID) and isMainOrMainCompleted:
-            self.setCompleted(progressID)
+    def increaseSumProgress(self, progressIDs, attemptsID, values, mainProgressIDs=None):
+        if not isinstance(progressIDs, (tuple, list)):
+            progressIDs = (progressIDs,)
+        if not isinstance(values, (tuple, list)):
+            values = (values,)
+        if mainProgressIDs is not None and not isinstance(mainProgressIDs, (tuple, list)):
+            mainProgressIDs = (mainProgressIDs,)
+        progressesCompleted = [ self.increaseUntilComplete(p, v) for p, v in izip(progressIDs, values) ]
+        isProgressesCompleted = all(progressesCompleted)
+        isMainOrMainCompleted = True if not mainProgressIDs else all((self.isCompleted(p) for p in mainProgressIDs))
+        if isProgressesCompleted and not self.isFinished(attemptsID) and isMainOrMainCompleted:
+            for progressID in progressIDs:
+                self.setCompleted(progressID)
+
             self.setCompleted(attemptsID)
-        elif self.increaseUntilComplete(attemptsID, 1) and not self.isCompleted(progressID):
-            self.setWasFailed(progressID, True)
+        elif self.increaseUntilComplete(attemptsID, 1) and not isProgressesCompleted:
+            for progressID in progressIDs:
+                self.setWasFailed(progressID, True)
+                self.setZero(progressID)
+
             self.setWasFailed(attemptsID, True)
-            self.setZero(progressID)
             self.setZero(attemptsID)
+        return
 
     def increaseEveryProgress(self, attemptsID, value, mainProgressID=None):
         if mainProgressID:

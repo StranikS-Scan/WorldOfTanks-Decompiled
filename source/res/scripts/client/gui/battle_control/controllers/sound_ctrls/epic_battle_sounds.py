@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/sound_ctrls/epic_battle_sounds.py
 import SoundGroups
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
-from constants import EQUIPMENT_STAGES
+from constants import EQUIPMENT_STAGES, VEHICLE_HIT_FLAGS as VHF
 from frontline_common.frontline_constants import FLBattleReservesModifier
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, PROGRESS_CIRCLE_TYPE
-from gui.battle_control.controllers.sound_ctrls.common import BaseEfficiencySoundPlayer, SoundPlayersController, VehicleStateSoundPlayer
+from gui.battle_control.controllers.sound_ctrls.common import BaseEfficiencySoundPlayer, SoundPlayersController, VehicleStateSoundPlayer, ShotsResultSoundController
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from helpers import dependency
 from items import vehicles
@@ -31,6 +31,37 @@ class EpicBattleSoundController(SoundPlayersController):
         soundNotifications = getSoundNotifications()
         if soundNotifications:
             soundNotifications.play(eventName)
+
+
+class EpicShotsResultSoundsController(ShotsResultSoundController):
+
+    def getDestructibleHitResultSound(self, hitFlags):
+        sound = None
+        if hitFlags & VHF.ATTACK_IS_EXTERNAL_EXPLOSION:
+            if hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
+                sound = self.ENEMY_DAMAGED_BY_NEAR_EXPLOSION
+            elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
+                sound = self.ENEMY_NOT_DAMAGED_BY_NEAR_EXPLOSION
+        elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_PROJECTILE:
+            if hitFlags & (VHF.GUN_DAMAGED_BY_PROJECTILE | VHF.GUN_DAMAGED_BY_EXPLOSION):
+                sound = self.ENEMY_AND_GUN_DAMAGED_BY_PROJECTILE
+            elif hitFlags & (VHF.CHASSIS_DAMAGED_BY_PROJECTILE | VHF.CHASSIS_DAMAGED_BY_EXPLOSION):
+                sound = self.ENEMY_AND_CHASSIS_DAMAGED_BY_PROJECTILE
+            else:
+                sound = self.ENEMY_DAMAGED_BY_PROJECTILE
+        elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_WITH_DAMAGE_BY_PROJECTILE:
+            sound = self.ENEMY_DAMAGED_BY_NOT_PIERCING
+        elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_PIERCED_BY_EXPLOSION:
+            sound = self.ENEMY_DAMAGED_BY_DIRECT_EXPLOSION
+        elif hitFlags & VHF.RICOCHET and not hitFlags & VHF.DEVICE_PIERCED_BY_PROJECTILE:
+            sound = self.ENEMY_RICOCHET
+        elif hitFlags & VHF.MATERIAL_WITH_POSITIVE_DF_NOT_PIERCED_BY_PROJECTILE:
+            sound = self.ENEMY_NOT_DAMAGED_ATTEMPT
+        elif hitFlags & VHF.IS_ANY_PIERCING_MASK:
+            sound = self.ENEMY_NOT_DAMAGED_NO_ATTEMPT
+        else:
+            sound = self.ENEMY_NOT_DAMAGED_AND_NOT_PIERCED
+        return sound
 
 
 class _EquipmentSoundPlayer(object):

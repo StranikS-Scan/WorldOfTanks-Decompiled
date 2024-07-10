@@ -69,9 +69,11 @@ filter = globals().get('BattleResults')
 
 PROGRESS_ID_MAIN = 'piercings'
 PROGRESS_ID_MAIN_LIMITATION = 'piercingsInBattle'
+PROGRESS_ID_MAIN_DAMAGE = 'damage'
 PROGRESS_ID_MAIN_SERIES = 'battlesSeries'
 PROGRESS_ID_ADD = 'piercingsAdv'
 PROGRESS_ID_ADD_LIMITATION = 'piercingsInBattleAdv'
+PROGRESS_ID_ADD_DAMAGE = 'damageAdv'
 PROGRESS_ID_ADD_SERIES = 'battlesSeriesAdv'
 
 def onInit(eventType, eventData, quest, processor):
@@ -83,13 +85,16 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
     brfilter = filter.BattleResultsFilter(eventData)
-    piercings = sum([len(shots) for shots in (brfilter.filterDamageTo(result=['pierced']).itervalues())])
+    piercings = brfilter.sumHitsCount(brfilter.filterDamageTo(result=['pierced']))
     piercingsMain = piercings if questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_LIMITATION, piercings) else 0
     piercingsAdv = piercings if questProgress.increaseUntilComplete(PROGRESS_ID_ADD_LIMITATION, piercings) else 0
-    questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, piercingsMain)
-    questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, piercingsAdv, PROGRESS_ID_MAIN)
 
-    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD))
+    totalDamage = brfilter.sumDamage(brfilter.filterDamageTo())
+
+    questProgress.increaseSumProgress((PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_DAMAGE), PROGRESS_ID_MAIN_SERIES, (piercingsMain, totalDamage))
+    questProgress.increaseSumProgress((PROGRESS_ID_ADD, PROGRESS_ID_ADD_DAMAGE), PROGRESS_ID_ADD_SERIES, (piercingsAdv, totalDamage), (PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_DAMAGE))
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID))
 
     processor.setQuestProgress(quest.progressID, questProgress.save())
 

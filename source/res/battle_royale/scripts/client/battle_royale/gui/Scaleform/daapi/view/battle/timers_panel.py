@@ -3,14 +3,13 @@
 import weakref
 import math
 import BigWorld
-from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import RespawnAbility
 from gui.Scaleform.daapi.view.meta.BattleRoyaleTimersPanelMeta import BattleRoyaleTimersPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import AirDropEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE
+from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
 
 def _setRespawnTime(panel, timeLeft):
@@ -67,13 +66,13 @@ class TimersPanelPanel(BattleRoyaleTimersPanelMeta, IAbstractPeriodView):
     def _populate(self):
         super(TimersPanelPanel, self)._populate()
         g_eventBus.addListener(AirDropEvent.AIR_DROP_NXT_SPAWNED, self.__onAirDropLootSpawned, scope=EVENT_BUS_SCOPE.BATTLE)
-        bonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
-        isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
-        self._respawnPeriod = RespawnAbility().soloRespawnPeriod if not isSquadMode else RespawnAbility().platoonRespawnPeriod
+        arenaInfo = BigWorld.player().arena.arenaInfo
+        self._respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
         self.as_setIsReplayS(self.__sessionProvider.isReplayPlaying)
         self._airDroptimer = self._respawnTimer = None
         if self.__sessionProvider.isReplayPlaying:
-            self.setPeriod(ARENA_PERIOD.BATTLE)
+            period = self.__sessionProvider.arenaVisitor.getArenaPeriod()
+            self.setPeriod(period)
         return
 
     def _dispose(self):

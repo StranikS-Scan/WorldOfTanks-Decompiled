@@ -109,14 +109,14 @@ class ObserverPlayersPanel(IBattleFieldListener, IArenaVehiclesController, Battl
 
     def __init(self):
         self.__playerList = self.__getInitialPlayersList()
-        abilityNotifierComponent = BigWorld.player().arena.arenaInfo.abilityNotifierComponent
-        self.__updateRanks(abilityNotifierComponent.defeatedTeams)
+        arenaInfoBRComponent = BigWorld.player().arena.arenaInfo.arenaInfoBRComponent
+        self.__updateRanks(arenaInfoBRComponent.defeatedTeams)
         arenaObserverInfo = BigWorld.player().arena.arenaObserverInfo
         if arenaObserverInfo:
             brObserverInfoComponent = arenaObserverInfo.dynamicComponents.get('battleRoyaleObserverInfoComponent')
             if brObserverInfoComponent:
                 self.__updateTeamRespawns(brObserverInfoComponent.teamsMayRespawn)
-        self.as_setRespawnVisibilityS(not abilityNotifierComponent.isRespawnTimeFinished)
+        self.as_setRespawnVisibilityS(not arenaInfoBRComponent.isRespawnTimeFinished)
         isSquadMode = BigWorld.player().arenaBonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
         self.as_setIsSquadModeS(isSquadMode)
         self.__panelUpdate()

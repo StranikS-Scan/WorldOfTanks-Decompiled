@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/achievements_controller.py
 from Event import Event, EventManager
 from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES, ROOT_ACHIEVEMENT_IDS
-from advanced_achievements_client.items import SteppedAchievement
 from chat_shared import SYS_MESSAGE_TYPE
 from account_helpers import AccountSettings
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -186,7 +185,7 @@ class AchievementsController(IAchievementsController, EventsHandler):
 
     def initUnseenAdvancedAchievements(self, achievementsData):
         unseenAchievements = {}
-        for id, category, _ in achievementsData:
+        for id, category, _, _ in achievementsData:
             if unseenAchievements.get(category) is None:
                 unseenAchievements[category] = []
             unseenAchievements[category].append(id)
@@ -237,11 +236,11 @@ class AchievementsController(IAchievementsController, EventsHandler):
                 achievedValue, stage, timestapm = value
                 if stage > 0:
                     currentAchievement = self.getAchievementByID(id, category)
-                    if isinstance(currentAchievement, SteppedAchievement):
-                        if achievedValue == currentAchievement.getFakeAchievementForStage(stage).getProgress().total:
-                            achievementIDs.append((id, category, timestapm))
-                    else:
-                        achievementIDs.append((id, category, timestapm))
+                    if achievedValue == 1 or achievedValue == currentAchievement.getFakeAchievementForStage(stage).getProgress().total:
+                        achievementIDs.append((id,
+                         category,
+                         stage,
+                         timestapm))
 
         return achievementIDs
 
@@ -262,7 +261,7 @@ class AchievementsController(IAchievementsController, EventsHandler):
 
     def __addUnseenAdvancedAchievements(self, achievementsData):
         unseenAchievements = {}
-        for id, category, _ in achievementsData:
+        for id, category, _, _ in achievementsData:
             if unseenAchievements.get(category) is None:
                 unseenAchievements[category] = []
             unseenAchievements[category].append(id)

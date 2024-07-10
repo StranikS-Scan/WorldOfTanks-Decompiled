@@ -1,10 +1,10 @@
 <AreaDestructibles.def>
-  <Implements>
-    <Interface>	ArtilleryController	</Interface>
-    <Interface>	BomberController	</Interface>
-    <Interface>	ProjectileController	</Interface>
-  </Implements>
+  <Implements></Implements>
   <Properties>
+    <arenaID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </arenaID>
     <chunkID>
       <Type>	UINT16	</Type>
       <Flags>	CELL_PUBLIC	</Flags>
@@ -80,7 +80,6 @@
   <TempProperties>
     <_components></_components>
     <_AreaDestructibles__wgDestructibles></_AreaDestructibles__wgDestructibles>
-    <_AreaDestructibles__pendingJobs></_AreaDestructibles__pendingJobs>
     <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
     <_ProximityManager__data></_ProximityManager__data>
   </TempProperties>

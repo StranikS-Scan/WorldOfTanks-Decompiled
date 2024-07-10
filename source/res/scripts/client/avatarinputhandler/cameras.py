@@ -99,6 +99,9 @@ class FreeCamera(object):
     def set(self, matrix):
         self.__cam.set(matrix)
 
+    def getReasonsAffectCameraDirectly(self):
+        pass
+
 
 def readBool(dataSec, name, defaultVal):
     return defaultVal if dataSec is None else dataSec.readBool(name, defaultVal)

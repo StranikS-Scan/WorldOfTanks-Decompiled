@@ -1,119 +1,27 @@
 <remapping.xml>
-  <fep_nb>
-    <conditions>
-      <condition>
-        <conditionName>	caliber	</conditionName>
-        <remappings>
-          <remapping>
-            <source>	auto small medium main mainext	</source>
-            <target>	main	</target>
-          </remapping>
-          <remapping>
-            <source>	large largeext	</source>
-            <target>	large	</target>
-          </remapping>
-          <remapping>
-            <source>	huge superhuge	</source>
-            <target>	huge	</target>
-          </remapping>
-        </remappings>
-      </condition>
-    </conditions>
+  <auto_shoot_guns>
+    <conditions></conditions>
     <composers>
-      <gunEffects>
-        <conditions>	caliber	</conditions>
-        <targetTemplate>	fep_nb_shot_{caliber}	</targetTemplate>
+      <soundNotifications>
         <specialRules>
           <rule>
-            <source>	shot_large shot_largeext	</source>
-            <target>	fep_nb_shot_large	</target>
+            <source>	track_damaged	</source>
+            <target>	fep_track_damaged	</target>
           </rule>
           <rule>
-            <source>	shot_huge shot_huge2 shot_superhuge	</source>
-            <target>	fep_nb_shot_huge	</target>
+            <source>	track_destroyed	</source>
+            <target>	fep_track_destroyed	</target>
           </rule>
           <rule>
-            <source>	shot_small_mb shot_medium_mb shot_main_mb shot_mainext_mb	</source>
-            <target>	fep_nb_shot_main_mb	</target>
+            <source>	track_functional	</source>
+            <target>	fep_track_functional	</target>
           </rule>
           <rule>
-            <source>	shot_large_mb shot_largeext_mb	</source>
-            <target>	fep_nb_shot_large_mb	</target>
-          </rule>
-          <rule>
-            <source>	shot_huge_mb shot_superhuge_mb	</source>
-            <target>	fep_nb_shot_huge_mb	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_main_L shot_dualgun1_mainext_L	</source>
-            <target>	fep_nb_shot_dualgun1_main_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_main_R shot_dualgun1_mainext_R	</source>
-            <target>	fep_nb_shot_dualgun1_main_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_main_mb_L shot_dualgun1_mainext_mb_L	</source>
-            <target>	fep_nb_shot_dualgun1_main_mb_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_main_mb_R shot_dualgun1_mainext_mb_R	</source>
-            <target>	fep_nb_shot_dualgun1_main_mb_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_main_L shot_dualgun_mainext_L	</source>
-            <target>	fep_nb_shot_dualgun_main_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_main_R shot_dualgun_mainext_R	</source>
-            <target>	fep_nb_shot_dualgun_main_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_main_mb_L shot_dualgun_mainext_mb_L	</source>
-            <target>	fep_nb_shot_dualgun_main_mb_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_main_mb_R shot_dualgun_mainext_mb_R	</source>
-            <target>	fep_nb_shot_dualgun_main_mb_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_large_L	</source>
-            <target>	fep_nb_shot_dualgun1_large_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_large_R	</source>
-            <target>	fep_nb_shot_dualgun1_large_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_large_mb_L	</source>
-            <target>	fep_nb_shot_dualgun1_large_mb_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun1_large_mb_R	</source>
-            <target>	fep_nb_shot_dualgun1_large_mb_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_large_L	</source>
-            <target>	fep_nb_shot_dualgun_large_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_large_R	</source>
-            <target>	fep_nb_shot_dualgun_large_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_large_mb_L	</source>
-            <target>	fep_nb_shot_dualgun_large_mb_L	</target>
-          </rule>
-          <rule>
-            <source>	shot_dualgun_large_mb_R	</source>
-            <target>	fep_nb_shot_dualgun_large_mb_R	</target>
-          </rule>
-          <rule>
-            <source>	shot_env_artillery	</source>
-            <target>	shot_env_artillery	</target>
+            <source>	track_functional_can_move	</source>
+            <target>	fep_track_functional_can_move	</target>
           </rule>
         </specialRules>
-      </gunEffects>
+      </soundNotifications>
     </composers>
-  </fep_nb>
+  </auto_shoot_guns>
 </remapping.xml>

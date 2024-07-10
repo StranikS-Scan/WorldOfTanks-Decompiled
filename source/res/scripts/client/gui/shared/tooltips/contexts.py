@@ -4,10 +4,11 @@ import typing
 import constants
 import gui
 import nations
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
@@ -28,7 +29,7 @@ from helpers import dependency
 from items import vehicles
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IComp7Controller
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IComp7Controller, IHangarGuiController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -443,7 +444,6 @@ class ModuleInfoContext(ToolTipContext):
 
 
 class CarouselContext(InventoryContext):
-    __rankedController = dependency.descriptor(IRankedBattlesController)
 
     def __init__(self, fieldsToExclude=None):
         super(InventoryContext, self).__init__(fieldsToExclude)
@@ -456,16 +456,29 @@ class CarouselContext(InventoryContext):
 
     def getStatsConfiguration(self, item):
         value = super(CarouselContext, self).getStatsConfiguration(item)
-        if self.__rankedController.isRankedPrbActive():
-            suitResult = self.__rankedController.isSuitableVehicle(item)
-            hasRankedBonus = self.__rankedController.hasVehicleRankedBonus(item.intCD)
-            value.showRankedBonusBattle = hasRankedBonus and suitResult is None
-        value.rentals = True
-        value.buyPrice = True
+        value.rentals = value.buyPrice = True
         return value
 
     def buildItem(self, intCD):
         return self.itemsCache.items.getItemByCD(int(intCD))
+
+
+class HangarCarouselContext(CarouselContext):
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def getStatsConfiguration(self, item):
+        value = super(HangarCarouselContext, self).getStatsConfiguration(item)
+        value.showEarnCrystals = self.__hangarGuiCtrl.checkCurrentCrystalRewards(default=value.showEarnCrystals)
+        value.dailyXP = self.__hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.DAILY_MULTIPLIED_XP, default=value.dailyXP)
+        return self.__applyRankedStatsConfiguration(item, value)
+
+    def __applyRankedStatsConfiguration(self, item, value):
+        if self.__rankedController.isRankedPrbActive():
+            suitResult = self.__rankedController.isSuitableVehicle(item)
+            hasRankedBonus = self.__rankedController.hasVehicleRankedBonus(item.intCD)
+            value.showRankedBonusBattle = hasRankedBonus and suitResult is None
+        return value
 
 
 class PotapovQuestsChainContext(ToolTipContext):

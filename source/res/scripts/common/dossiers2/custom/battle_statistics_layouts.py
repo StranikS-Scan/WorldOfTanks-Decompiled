@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/dossiers2/custom/battle_statistics_layouts.py
 from dossiers2.common.DossierBlockBuilders import *
 from dossiers2.custom.dependencies import VEH_TYPE_FRAGS_DEPENDENCIES
+from dossiers2.custom.dependencies import TOTAL_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import A15X15_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import CLAN_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import A7X7_STATS_DEPENDENCIES

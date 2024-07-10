@@ -221,6 +221,7 @@
     <_100mm_D-10T2S_FL>	501	</_100mm_D-10T2S_FL>
     <_122mm_M62-T2_7x7>	503	</_122mm_M62-T2_7x7>
     <_152mm_M_53_A_7x7>	504	</_152mm_M_53_A_7x7>
+    <_23mm_AZP23x4_FEP>	601	</_23mm_AZP23x4_FEP>
     <_37mm_automatic_SH-37_MapsTraining_Dummy_LT_1>	45	</_37mm_automatic_SH-37_MapsTraining_Dummy_LT_1>
     <_152mm_mortar_NM_mod1931_MapsTraining_Dummy_SPG_1>	48	</_152mm_mortar_NM_mod1931_MapsTraining_Dummy_SPG_1>
     <_76mm_S-54_MapsTraining_Player_MT_1>	51	</_76mm_S-54_MapsTraining_Player_MT_1>
@@ -13050,5 +13051,50 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_107mm_ZiS-6_MapsTraining_Dummy_HT_2>
+    <_23mm_AZP23x4_FEP>
+      <userString>	#ussr_vehicles:_23mm_AZP23x4_FEP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33.25	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	50000	</maxAmmo>
+      <aimingTime>	2.1	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	0.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_23mm_BZT_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	180 150	</piercingPower>
+        </_23mm_BZT_FEP>
+        <_23mm_BZK_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 200	</piercingPower>
+        </_23mm_BZK_FEP>
+      </shots>
+    </_23mm_AZP23x4_FEP>
   </shared>
 </guns.xml>

@@ -6,6 +6,13 @@ from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
 _SECONDS_IN_DAY = 86400
+TOTAL_STATS_DEPENDENCIES = {}
+
+def _set_TOTAL_STATS_DEPENDENCIES():
+    global TOTAL_STATS_DEPENDENCIES
+    TOTAL_STATS_DEPENDENCIES.update({'treesCut': [_updateLumberjack]})
+
+
 A15X15_STATS_DEPENDENCIES = {}
 
 def _set_A15X15_STATS_DEPENDENCIES():
@@ -800,6 +807,12 @@ def _updateSteamForBonecrusherMedal(dossierDescr, dossierBlockDescr, key, value,
         dossierDescr['steamAchievements']['steamForBonecrusherMedal'] = True
 
 
+def _updateLumberjack(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= RECORD_CONFIGS['lumberjack'] and not dossierDescr['achievements']['lumberjack']:
+        dossierDescr['achievements']['lumberjack'] = 1
+        dossierDescr.addPopUp('achievements', 'lumberjack', 1)
+
+
 def _updateSteamOrderMedal(dossierDescr, dossierBlockDescr, key, value, prevValue):
     if value >= RECORD_CONFIGS['steamOrderMedal']:
         dossierDescr['steamAchievements']['steamOrderMedal'] = True
@@ -1096,6 +1109,7 @@ def _processAchievementDependency(achievement, requiredAchievements, dossierDesc
 
 
 def init():
+    _set_TOTAL_STATS_DEPENDENCIES()
     _set_A15X15_STATS_DEPENDENCIES()
     _set_A7X7_STATS_DEPENDENCIES()
     _set_ACHIEVEMENT15X15_DEPENDENCIES()

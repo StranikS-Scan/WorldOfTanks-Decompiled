@@ -3,7 +3,7 @@
 import typing
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, ServerSettingsManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.utils import TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER
+from gui.shared.utils import TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, CONTINUOUS_SHOTS_PER_MINUTE
 from gui.shared.gui_items.vehicle_modules import VehicleEngine, VehicleGun
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -67,6 +67,21 @@ class AutoReloadParamsExtender(ReplaceModuleParamsExtender):
         return settings.checkAutoReloadHighlights()
 
 
+class AutoShootParamsExtender(ReplaceModuleParamsExtender):
+
+    def __init__(self):
+        super(AutoShootParamsExtender, self).__init__(UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER, (_ModuleParamExtendInfo('reloadTime', CONTINUOUS_SHOTS_PER_MINUTE),))
+
+    def check(self, vehicleModule, vehicleDescriptor):
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:
+            gun = typing.cast(VehicleGun, vehicleModule)
+            return gun.isAutoShoot(vehicleDescriptor)
+        return False
+
+    def highlightCheck(self, settings):
+        return False
+
+
 class DualGunParamsExtender(ReplaceModuleParamsExtender):
 
     def __init__(self):
@@ -126,6 +141,7 @@ class RocketAccelerationParamsExtender(ModuleParamsExtender):
 
 def fittingSelectModuleExtenders():
     return (AutoReloadParamsExtender(),
+     AutoShootParamsExtender(),
      DualGunParamsExtender(),
      TurboshaftParamsExtender(),
      RocketAccelerationParamsExtender())

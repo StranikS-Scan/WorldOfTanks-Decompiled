@@ -543,7 +543,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         impulseDir = super(CompoundAppearance, self)._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
         node = self.compoundModel.node(gunFireNodeName)
         gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
+        BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, ShakeReason.OWN_SHOT_DELAYED, gunPos, impulseDir, self.typeDescriptor.shot.shell.caliber)
         return impulseDir
 
     def __applyVehicleOutfit(self):
@@ -609,7 +609,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def __reattachComponents(self, model):
         self.boundEffects.reattachTo(model)
         if self.engineAudition is not None:
-            self.engineAudition.setWeaponEnergy(self._weaponEnergy)
+            self.engineAudition.setWeaponEnergy(self.weaponEnergy)
             self.engineAudition.attachToModel(model)
         return
 

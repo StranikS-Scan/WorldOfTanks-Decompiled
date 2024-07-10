@@ -7,15 +7,9 @@ from gui.Scaleform.daapi.view.meta.BattleRoyaleTechParametersComponent import Ba
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.doc_loaders.battle_royale_settings_loader import getVehicleProperties
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.battle_royale.br_vehicle_specifications_model import BrVehicleSpecificationsModel
 from gui.impl.gen.view_models.views.battle_royale.tech_parameters_cmp_view_model import TechParametersCmpViewModel
 from gui.impl.pub import ViewImpl
 from gui.shared import event_dispatcher
-
-class _Properties(object):
-    GOOD = 'good'
-    BAD = 'bad'
-
 
 class TechParametersComponent(BattleRoyaleTechParametersComponent, InjectComponentAdaptor):
 
@@ -40,20 +34,26 @@ class TechParametersView(ViewImpl):
     def viewModel(self):
         return super(TechParametersView, self).getViewModel()
 
-    def _initialize(self):
-        super(TechParametersView, self)._initialize()
-        g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
-        self.viewModel.onModulesBtnClick += self.__onModulesBtnClick
-        self.viewModel.onResized += self.__onResized
+    def _onLoading(self, *args, **kwargs):
+        super(TechParametersView, self)._onLoading(args, kwargs)
+        self.__addListeners()
         self.__updateModel()
 
     def _finalize(self):
-        g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
-        self.viewModel.onModulesBtnClick -= self.__onModulesBtnClick
-        self.viewModel.onResized -= self.__onResized
+        self.__removeListeners()
         super(TechParametersView, self)._finalize()
 
-    def __onModulesBtnClick(self):
+    def __addListeners(self):
+        g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+        self.viewModel.onClick += self.__onClick
+        self.viewModel.onResized += self.__onResized
+
+    def __removeListeners(self):
+        g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+        self.viewModel.onClick -= self.__onClick
+        self.viewModel.onResized -= self.__onResized
+
+    def __onClick(self):
         event_dispatcher.showHangarVehicleConfigurator()
 
     def __onResized(self, value):
@@ -67,17 +67,10 @@ class TechParametersView(ViewImpl):
         if br_helpers.isIncorrectVehicle(vehicle):
             return
         nationName = vehicle.nationName
-        props = getVehicleProperties(nationName)
-        with self.viewModel.transaction() as model:
-            self.__createPropsGroup(props.strengths, model.getVehicleGoodSpec(), _Properties.GOOD)
-            self.__createPropsGroup(props.weaknesses, model.getVehicleBadSpec(), _Properties.BAD)
-
-    def __createPropsGroup(self, properties, groupModel, paramKey):
-        groupModel.clear()
-        for prop in properties:
-            propModel = BrVehicleSpecificationsModel()
-            propModel.setIconSource(R.images.gui.maps.icons.battleRoyale.hangar.vehicle_props.dyn('_'.join((paramKey, prop)))())
-            propModel.setSpecName(R.strings.battle_royale.vehicleFeatures.spec.dyn(prop)())
-            groupModel.addViewModel(propModel)
-
-        groupModel.invalidate()
+        params = getVehicleProperties(nationName)
+        with self.viewModel.transaction() as tx:
+            tx.setSpotting(params.spotting)
+            tx.setDifficulty(params.difficulty)
+            tx.setSurvivability(params.survivability)
+            tx.setMobility(params.mobility)
+            tx.setDamage(params.damage)

@@ -1,0 +1,13 @@
+<SpinGunController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <stateStatus>
+      <Type>	SPIN_GUN_STATE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+  </Properties>
+  <DefaultKeyName>	spinGunController	</DefaultKeyName>
+</SpinGunController.def>

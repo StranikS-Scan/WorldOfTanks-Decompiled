@@ -14,26 +14,26 @@ class VehicleType(Enum):
 class VehicleModel(RewardModel):
     __slots__ = ()
 
-    def __init__(self, properties=14, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(VehicleModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
-        return self._getString(11)
+        return self._getString(12)
 
     def setName(self, value):
-        self._setString(11, value)
+        self._setString(12, value)
 
     def getType(self):
-        return VehicleType(self._getString(12))
+        return VehicleType(self._getString(13))
 
     def setType(self, value):
-        self._setString(12, value.value)
+        self._setString(13, value.value)
 
     def getLevel(self):
-        return self._getNumber(13)
+        return self._getNumber(14)
 
     def setLevel(self, value):
-        self._setNumber(13, value)
+        self._setNumber(14, value)
 
     def _initialize(self):
         super(VehicleModel, self)._initialize()

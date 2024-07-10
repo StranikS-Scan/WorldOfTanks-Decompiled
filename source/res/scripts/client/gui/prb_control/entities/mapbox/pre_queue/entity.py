@@ -5,10 +5,6 @@ import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getMapboxFightBtnTooltipData
-from gui.Scaleform.settings import TOOLTIP_TYPES
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
@@ -22,7 +18,6 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.periodic_battles.models import PrimeTimeStatus
-from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.game_control import IMapboxController
 if typing.TYPE_CHECKING:
@@ -83,16 +78,6 @@ class MapboxEntity(PreQueueEntity):
 
     def getPermissions(self, pID=None, **kwargs):
         return MapboxPermissions(self.isInQueue())
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getMapboxFightBtnTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(MapboxEntity, self).getFightBtnTooltipData(isStateDisabled)
-
-    def getSquadBtnTooltipData(self):
-        if self.getPermissions().canCreateSquad():
-            header = backport.text(R.strings.platoon.headerButton.tooltips.mapboxSquad.header())
-            body = backport.text(R.strings.platoon.headerButton.tooltips.mapboxSquad.body())
-            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
-        return super(MapboxEntity, self).getSquadBtnTooltipData()
 
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID

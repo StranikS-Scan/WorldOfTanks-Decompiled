@@ -7,17 +7,17 @@ import BigWorld
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import DEATH_REASON_ALIVE, PREMIUM_TYPE, ARENA_GUI_TYPE, ATTACK_REASON_INDICES, ATTACK_REASON
 from debug_utils import LOG_ERROR
-from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS_PREMIUM_STATES as BRPS
+from gui.battle_results.components import base
+from gui.battle_results.components import shared
+from gui.battle_results.components import style
+from gui.battle_results.pbs_helpers.additional_bonuses import isWotPlusBonusEnabledInConfig, getAccountStatusToBRPS
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.premacc import premacc_helpers
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.battle_results.components import base
-from gui.battle_results.components import shared
-from gui.battle_results.components import style
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.impl.lobby.premacc import premacc_helpers
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
 from gui.shared.formatters import numbers, icons
 from gui.shared.formatters import text_styles
@@ -25,7 +25,6 @@ from gui.shared.gui_items.Vehicle import getSmallIconPath, getTypeBigIconPath, g
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _UNDEFINED_EFFICIENCY_VALUE = '-'
@@ -47,105 +46,30 @@ class PremiumPlusFlag(base.StatsItem):
         return reusable.isPostBattlePremiumPlus
 
 
-ACCOUNT_STATUS_TO_BRPS = {(False, False, False): {(True, True): BRPS.PLUS_INFO,
-                         (False, True): BRPS.PLUS_INFO,
-                         (True, False): BRPS.PREMIUM_INFO,
-                         (False, False): BRPS.PREMIUM_INFO},
- (True, False, False): {(True, True): BRPS.PREMIUM_ADVERTISING,
-                        (False, True): BRPS.PREMIUM_ADVERTISING,
-                        (True, False): BRPS.PREMIUM_ADVERTISING,
-                        (False, False): BRPS.PREMIUM_ADVERTISING},
- (False, True, False): {(True, True): BRPS.PREMIUM_BONUS,
-                        (False, True): BRPS.PLUS_EARNINGS,
-                        (True, False): BRPS.PREMIUM_BONUS,
-                        (False, False): BRPS.PREMIUM_EARNINGS},
- (False, False, True): {(True, True): BRPS.PREMIUM_BONUS,
-                        (False, True): BRPS.PLUS_EARNINGS,
-                        (True, False): BRPS.PREMIUM_INFO,
-                        (False, False): BRPS.PREMIUM_INFO},
- (True, True, False): {(True, True): BRPS.PREMIUM_BONUS,
-                       (False, True): BRPS.PLUS_EARNINGS,
-                       (True, False): BRPS.PREMIUM_BONUS,
-                       (False, False): BRPS.PREMIUM_EARNINGS},
- (True, False, True): {(True, True): BRPS.PREMIUM_BONUS,
-                       (False, True): BRPS.PLUS_EARNINGS,
-                       (True, False): BRPS.PREMIUM_ADVERTISING,
-                       (False, False): BRPS.PREMIUM_ADVERTISING},
- (False, True, True): {(True, True): BRPS.PREMIUM_BONUS,
-                       (False, True): BRPS.PLUS_YOU_ROCK,
-                       (True, False): BRPS.PREMIUM_BONUS,
-                       (False, False): BRPS.PREMIUM_EARNINGS},
- (True, True, True): {(True, True): BRPS.PREMIUM_BONUS,
-                      (False, True): BRPS.PLUS_YOU_ROCK,
-                      (True, False): BRPS.PREMIUM_BONUS,
-                      (False, False): BRPS.PREMIUM_EARNINGS}}
-
-def accountStatusToBRPS(arenaBonusType, isPersonalTeamWin, negativeImpact, hasBasicPremium, hadPremiumPlus, hasPremiumPlus, isPremiumPlusBonusEnabled, premiumPlusBonusesLeft, hasWotPlus, isWotPlusBonusEnabled, wotPlusBonusesLeft, isBonusAppliedAlready):
-    if isWotPlusBonusEnabled and premiumPlusBonusesLeft <= 0 and wotPlusBonusesLeft <= 0:
-        return BRPS.PLUS_YOU_ROCK
-    if isBonusAppliedAlready:
-        return BRPS.PREMIUM_BONUS
-    if not ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.XP):
-        state = BRPS.PREMIUM_BONUS
-    elif not ARENA_BONUS_TYPE_CAPS.checkAny(arenaBonusType, ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE):
-        if isWotPlusBonusEnabled:
-            state = BRPS.PREMIUM_BONUS
-        elif hasPremiumPlus:
-            state = BRPS.PREMIUM_EARNINGS
-        else:
-            state = BRPS.PREMIUM_INFO
-    else:
-        bonusesAvailable = hasPremiumPlus and isPremiumPlusBonusEnabled and premiumPlusBonusesLeft > 0 or hasWotPlus and isWotPlusBonusEnabled and wotPlusBonusesLeft > 0
-        states = ACCOUNT_STATUS_TO_BRPS[hasBasicPremium, hasPremiumPlus, hasWotPlus]
-        state = states[bonusesAvailable, isWotPlusBonusEnabled]
-    if state in (BRPS.PREMIUM_INFO, BRPS.PREMIUM_ADVERTISING) and hadPremiumPlus:
-        state = BRPS.PREMIUM_EARNINGS
-    if state in (BRPS.PREMIUM_INFO,) and negativeImpact:
-        state = BRPS.PREMIUM_ADVERTISING
-    return state
-
-
 class DynamicPremiumState(base.StatsItem):
-    __slots__ = ('__arenaBonusType', '__arenaUniqueID', '__postBattlePremium', '__postBattlePremiumPlus', '__xpDiff', '__creditsDiff', '__isPersonalTeamWin')
-    __itemsCache = dependency.descriptor(IItemsCache)
+    __slots__ = ('__arenaUniqueID', '__postBattlePremiumPlus', '__xpDiff', '__creditsDiff', '__hasXpBonusInBonusCaps', '__hasXpInBonusCaps')
     __battleResults = dependency.descriptor(IBattleResultsService)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    __wotPlusController = dependency.descriptor(IWotPlusController)
 
     def __init__(self, field, *path):
         super(DynamicPremiumState, self).__init__(field, *path)
-        self.__arenaBonusType = None
         self.__arenaUniqueID = 0
-        self.__postBattlePremium = False
         self.__postBattlePremiumPlus = False
-        self.__isPersonalTeamWin = False
         self.__xpDiff = 0
         self.__creditsDiff = 0
-        return
+        self.__hasXpInBonusCaps = False
+        self.__hasXpBonusInBonusCaps = False
 
     def setRecord(self, record, reusable):
-        self.__arenaBonusType = reusable.common.arenaBonusType
         self.__arenaUniqueID = reusable.arenaUniqueID
-        self.__postBattlePremium = reusable.isPostBattlePremium
         self.__postBattlePremiumPlus = reusable.isPostBattlePremiumPlus
         self.__xpDiff = reusable.personal.getXPDiff()
         self.__creditsDiff = reusable.personal.getCreditsDiff()
-        self.__isPersonalTeamWin = reusable.isPersonalTeamWin()
+        self.__hasXpInBonusCaps = reusable.common.checkBonusCaps(ARENA_BONUS_TYPE_CAPS.XP)
+        self.__hasXpBonusInBonusCaps = reusable.common.checkBonusCaps(ARENA_BONUS_TYPE_CAPS.ADDITIONAL_XP_POSTBATTLE)
 
     def getVO(self):
-        negativeImpact = self.__xpDiff < 0 or self.__creditsDiff < 0
-        hasBasicPremium = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC)
-        hasPremiumPlus = self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
-        isPremiumPlusBonusEnabled = self.__lobbyContext.getServerSettings().getAdditionalBonusConfig().get('enabled', False)
-        premiumPlusBonusLeft = self.__itemsCache.items.stats.applyAdditionalXPCount
-        hasWotPlus = self.__wotPlusController.isEnabled()
-        isWotPlusBonusEnabled = self.__isWotPlusBonusEnabled()
-        wotPlusBonusLeft = self.__itemsCache.items.stats.applyAdditionalWoTPlusXPCount
-        self._value = accountStatusToBRPS(self.__arenaBonusType, self.__isPersonalTeamWin, negativeImpact, hasBasicPremium, self.__postBattlePremiumPlus, hasPremiumPlus, isPremiumPlusBonusEnabled, premiumPlusBonusLeft, hasWotPlus, isWotPlusBonusEnabled, wotPlusBonusLeft, self.__getIsApplied())
+        self._value = getAccountStatusToBRPS(hadPremiumPlus=self.__postBattlePremiumPlus, isBonusAppliedAlready=self.__getIsApplied(), hasXpInBonusCaps=self.__hasXpInBonusCaps, hasXpBonusInBonusCaps=self.__hasXpBonusInBonusCaps, negativeImpact=self.__xpDiff < 0 or self.__creditsDiff < 0)
         return super(DynamicPremiumState, self).getVO()
-
-    def __isWotPlusBonusEnabled(self):
-        return self.__lobbyContext.getServerSettings().getAdditionalWoTPlusXPCount() > 0 and self.__lobbyContext.getServerSettings().isAdditionalWoTPlusEnabled()
 
     def __getIsApplied(self):
         return self.__battleResults.isAddXPBonusApplied(self.__arenaUniqueID)
@@ -208,9 +132,6 @@ class PremiumInfoBlock(base.StatsBlock):
         self.inBattleQueue = player.isInBattleQueue()
         return super(PremiumInfoBlock, self).getVO()
 
-    def __isWotPlusBonusEnabled(self):
-        return self.__lobbyContext.getServerSettings().getAdditionalWoTPlusXPCount() > 0 and self.__lobbyContext.getServerSettings().isAdditionalWoTPlusEnabled()
-
     def __setPremiumBonusData(self):
         value = ''
         icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.premium())
@@ -224,7 +145,7 @@ class PremiumInfoBlock(base.StatsBlock):
             if self.__itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.BASIC):
                 value = backport.text(R.strings.battle_results.common.details.premiumPlus.dyn(self.__adsCase)(), bonusCredits=text_styles.concatStylesToSingleLine(text_styles.credits(backport.getGoldFormat(piggyBankMaxAmount)), icons.makeImageTag(backport.image(R.images.gui.maps.icons.library.CreditsIcon_2()), vSpace=-5)), durationInDays=periodInDays, multiplier=multiplier)
                 iconName = 'bonus_x{}'.format(multiplier) if self.__adsCase == 'bonus' else self.__adsCase
-                if self.__isWotPlusBonusEnabled():
+                if isWotPlusBonusEnabledInConfig():
                     iconName = 'plus_bonus_x{}'.format(multiplier) if self.__adsCase == 'bonus' else self.__adsCase
                 icon = backport.image(R.images.gui.maps.icons.premacc.battleResult.dyn(iconName)())
             elif self.__creditsDiff < 0 or self.__xpDiff < 0:

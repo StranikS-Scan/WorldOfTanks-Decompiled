@@ -5008,21 +5008,21 @@
       <shots>
         <_105mm_APDS_L_28P>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	1478	</speed>
+          <speed>	1540	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	268 258	</piercingPower>
         </_105mm_APDS_L_28P>
         <_105mm_HEAT_L7_VD>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1173	</speed>
+          <speed>	1240	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	330 330	</piercingPower>
         </_105mm_HEAT_L7_VD>
         <_105mm_HESH_P35>
           <defaultPortion>	0.1	</defaultPortion>
-          <speed>	1173	</speed>
+          <speed>	1240	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	105 105	</piercingPower>
@@ -5493,8 +5493,8 @@
     <OQF_55_pdr_CG>
       <userString>	#gb_vehicles:OQF_55_pdr_CG	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	125000	</price>
+      <level>	9	</level>
+      <price>	180000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.48	</impulse>
       <recoil>
@@ -5503,7 +5503,7 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_large	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
+      <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
         <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
@@ -5511,12 +5511,12 @@
       <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	35.0	</rotationSpeed>
       <reloadTime>	7.5	</reloadTime>
-      <maxAmmo>	70	</maxAmmo>
+      <maxAmmo>	50	</maxAmmo>
       <aimingTime>	2	</aimingTime>
       <weight>	3500	</weight>
-      <maxHealth>	208	</maxHealth>
-      <maxRegenHealth>	104	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.34	</shotDispersionRadius>
       <shotDispersionFactors>
@@ -5527,24 +5527,24 @@
       <shots>
         <_55pdr_APSA>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	1010	</speed>
+          <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	230 220	</piercingPower>
         </_55pdr_APSA>
         <_55pdr_CRSA>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1180	</speed>
+          <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	260 250	</piercingPower>
         </_55pdr_CRSA>
         <_55pdr_HESA>
           <defaultPortion>	0.1	</defaultPortion>
-          <speed>	1010	</speed>
+          <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	54 54	</piercingPower>
+          <piercingPower>	90 90	</piercingPower>
         </_55pdr_HESA>
       </shots>
     </OQF_55_pdr_CG>

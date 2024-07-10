@@ -11,7 +11,7 @@ import Event
 import season_common
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN
+from account_helpers.AccountSettings import ROYALE_VEHICLE, CURRENT_VEHICLE, ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from adisp import adisp_process
 from battle_royale.gui.constants import AmmoTypes, BattleRoyalePerfProblems, BattleRoyaleSubMode
@@ -44,7 +44,7 @@ from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier
+from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, PeriodicNotifier, TimerNotifier
 from helpers import dependency, time_utils
 from helpers.statistics import HARDWARE_SCORE_PARAMS
 from items.battle_royale import isBattleRoyale
@@ -107,6 +107,8 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.onSubModeUpdated = Event.Event()
         self.onBattleRoyaleSpaceLoaded = Event.Event()
         self.onStatusTick = Event.Event()
+        self.onTournamentBannerStateChanged = Event.Event()
+        self.onEntryPointUpdated = Event.Event()
         self.__balance = None
         self.__clientValuesInited = False
         self.__clientShields = {}
@@ -126,6 +128,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__profStatSelectBattlesTypeInited = False
         self.__profTechSelectBattlesTypeInited = False
         self.__callbackID = None
+        self.__isTournamentBannerEnabled = None
         self.__currentSubModeID = BattleRoyaleSubMode.SOLO_MODE_ID
         return
 
@@ -135,8 +138,10 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__voControl = BRVoiceOverController()
         self.__voControl.init()
         self.__urlMacros = URLMacros()
+        self.addNotificator(SimpleNotifier(self.__getTournamentBannerTimerDelta, self.__updateTournamentBannerState))
         self.addNotificator(SimpleNotifier(self.getTimer, self.__timerUpdate))
         self.addNotificator(PeriodicNotifier(self.getTimer, self.__timerTick))
+        self.addNotificator(TimerNotifier(self.getTimer, self.__updateEntryPointState))
         self.__spaceSwitchController.onCheckSceneChange += self.__onCheckSceneChange
 
     def fini(self):
@@ -147,6 +152,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__urlMacros = None
         self.onUpdated.clear()
         self.onPrimeTimeStatusUpdated.clear()
+        self.onEntryPointUpdated.clear()
         self.__spaceSwitchController.onCheckSceneChange -= self.__onCheckSceneChange
         self.clearNotification()
         if self.__callbackID is not None:
@@ -439,6 +445,20 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
 
         return (gameModes, gameModeLists)
 
+    def getTournamentBannerData(self):
+        currentTime = time_utils.getCurrentLocalServerTimestamp()
+        for bannerData in self.getModeSettings().tournamentsWidget.get('widgets', []):
+            if bannerData['startDate'] <= currentTime < bannerData['endDate']:
+                return bannerData
+
+        return None
+
+    @property
+    def isTournamentBannerEnabled(self):
+        if self.__isTournamentBannerEnabled is None:
+            self.__isTournamentBannerEnabled = self.__getTournamentBannerAvailability()
+        return self.__isTournamentBannerEnabled
+
     def __progressionPointsConfig(self):
         return self.__battleRoyaleSettings.progressionTokenAward
 
@@ -458,13 +478,17 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __modeEntered(self):
         if not self.isBattleRoyaleMode():
             return
-        if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
-            SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
-        introVideoUrl = self.getIntroVideoURL()
-        if AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN) or not introVideoUrl:
+        else:
+            if not SelectorBattleTypesUtils.isKnownBattleType(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE):
+                SelectorBattleTypesUtils.setBattleTypeAsKnown(SELECTOR_BATTLE_TYPES.BATTLE_ROYALE)
+            introVideoUrl = self.getIntroVideoURL()
+            season = self.getCurrentSeason()
+            storedSeasonID = AccountSettings.getSettings(ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON)
+            if season is None or season.getSeasonID() == storedSeasonID or not introVideoUrl:
+                return
+            AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON, season.getSeasonID())
+            showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
             return
-        AccountSettings.setSettings(ROYALE_INTRO_VIDEO_SHOWN, True)
-        showBrowserOverlayView(introVideoUrl, VIEW_ALIAS.BROWSER_OVERLAY, forcedSkipEscape=True)
 
     def __selectRoyaleBattle(self, extData=None, **kwargs):
         dispatcher = g_prbLoader.getDispatcher()
@@ -615,6 +639,9 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         if self.isBattleRoyaleMode():
             self.onWidgetUpdate()
 
+    def __updateEntryPointState(self):
+        self.onEntryPointUpdated()
+
     def __resetTimer(self):
         self.startNotification()
         self.__timerUpdate()
@@ -638,6 +665,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             self.__battleRoyaleSettings = self.__getBattleRoyaleSettings()
             self.__brProgression.setSettings(self.getModeSettings().eventProgression)
             self.__updateEquipmentCount()
+            self.__updateTournamentBannerState()
             self.__divisions = None
             self.onUpdated()
             self.__resetTimer()
@@ -706,6 +734,7 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         g_eventBus.removeListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
         self.__defaultHangars = {}
         self.__balance = None
+        self.__isTournamentBannerEnabled = None
         g_clientUpdateManager.removeObjectCallbacks(self)
         return
 
@@ -783,3 +812,27 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
     def __tokenIsValid(self, quest):
         tokens = quest.accountReqs.getTokens()
         return False if tokens and not tokens[0].isAvailable() else True
+
+    def __updateTournamentBannerState(self):
+        self.__isTournamentBannerEnabled = self.__getTournamentBannerAvailability()
+        self.onTournamentBannerStateChanged()
+
+    def __getTournamentBannerAvailability(self):
+        return self.getModeSettings().tournamentsWidget['isWidgetEnabled'] and self.getTournamentBannerData() is not None
+
+    def __getTournamentBannerTimerDelta(self):
+        if self.getModeSettings().tournamentsWidget['isWidgetEnabled']:
+            currentTime = time_utils.getCurrentLocalServerTimestamp()
+            prevBannerData = None
+            for bannerData in self.getModeSettings().tournamentsWidget.get('widgets', []):
+                if currentTime < bannerData['startDate'] and prevBannerData:
+                    if currentTime < prevBannerData['endDate'] < bannerData['startDate']:
+                        startDate = prevBannerData['endDate']
+                    else:
+                        startDate = bannerData['startDate']
+                    return max(0, startDate - time_utils.getCurrentLocalServerTimestamp())
+                prevBannerData = bannerData
+
+            if prevBannerData:
+                return max(0, prevBannerData['endDate'] - time_utils.getCurrentLocalServerTimestamp())
+        return 0

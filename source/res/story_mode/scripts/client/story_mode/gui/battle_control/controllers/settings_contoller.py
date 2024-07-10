@@ -35,7 +35,8 @@ class OverrideSettingsController(IOverrideSettingsController):
 
     def stopControl(self):
         self.settingsCache.onSyncCompleted -= self.__onSettingsReady
-        self.settingsCore.unsetOverrideSettings()
+        if self.settingsCache.settings.isSynced():
+            self.settingsCore.unsetOverrideSettings()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.OVERRIDE_SETTINGS

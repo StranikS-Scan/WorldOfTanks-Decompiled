@@ -7,5 +7,5 @@ class SixthSenseMeta(BaseDAAPIComponent):
     def as_showS(self):
         return self.flashObject.as_show() if self._isDAAPIInited() else None
 
-    def as_hideS(self):
-        return self.flashObject.as_hide() if self._isDAAPIInited() else None
+    def as_hideS(self, force):
+        return self.flashObject.as_hide(force) if self._isDAAPIInited() else None

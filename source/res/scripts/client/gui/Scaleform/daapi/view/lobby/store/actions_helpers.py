@@ -14,18 +14,18 @@ from gui.server_events.events_helpers import EventInfoModel
 from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, formatGoldPriceNormalCard, formatCreditPriceNormalCard, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES
-from gui.shared.gui_items.Vehicle import getTypeBigIconPath, VEHICLE_CLASS_NAME, getTypeSmallIconPath
+from gui.shared.gui_items.Vehicle import getTypeBigIconPath, getTypeSmallIconPath
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.tooltips.common import CURRENCY_SETTINGS, _getCurrencySetting
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared.tooltips import formatters, contexts
+from gui.shared.tooltips.vehicle import CommonStatsBlockConstructor
 from gui.shared.formatters import text_styles
 from helpers.i18n import makeString as _ms
 from gui.shared.items_parameters import formatters as param_formatter, params_helper
@@ -531,32 +531,11 @@ class VehPriceActionInfo(ActionInfo):
         return block
 
     def __getCommonStatsBlock(self, vehicle):
-        _params = {VEHICLE_CLASS_NAME.LIGHT_TANK: ('enginePowerPerTon',
-                                         'speedLimits',
-                                         WHEELED_SPEED_MODE_SPEED,
-                                         'chassisRotationSpeed',
-                                         'circularVisionRadius',
-                                         MAX_STEERING_LOCK_ANGLE,
-                                         WHEELED_SWITCH_ON_TIME,
-                                         WHEELED_SWITCH_OFF_TIME),
-         VEHICLE_CLASS_NAME.MEDIUM_TANK: ('avgDamagePerMinute',
-                                          'enginePowerPerTon',
-                                          'speedLimits',
-                                          'chassisRotationSpeed',
-                                          TURBOSHAFT_SPEED_MODE_SPEED,
-                                          TURBOSHAFT_ENGINE_POWER),
-         VEHICLE_CLASS_NAME.HEAVY_TANK: ('avgDamage',
-                                         'avgPiercingPower',
-                                         'hullArmor',
-                                         'turretArmor',
-                                         DUAL_GUN_CHARGE_TIME),
-         VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
-         VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime'),
-         'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
         block = []
+        params = CommonStatsBlockConstructor.PARAMS
         paramsDict = params_helper.getParameters(vehicle)
         comparator = params_helper.similarCrewComparator(vehicle)
-        for paramName in _params.get(vehicle.type, 'default'):
+        for paramName in params.get(vehicle.type, ()):
             if paramName in paramsDict:
                 paramInfo = comparator.getExtendedData(paramName)
                 fmtValue = param_formatter.colorizedFormatParameter(paramInfo, None)

@@ -83,7 +83,7 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
         return ArenaDescription
 
     @property
-    def _client_battleResultsComposerClass(self):
+    def _client_battleResultStatsCtrlClass(self):
         from story_mode.gui.battle_results.composer import StoryModeStatsComposer
         return StoryModeStatsComposer
 
@@ -144,7 +144,7 @@ def preInit():
     battleMode.registerGameControllers()
     battleMode.registerDynamicObjectCache()
     battleMode.registerBattleResultsConfig()
-    battleMode.registerClientBattleResultsComposer()
+    battleMode.registerClientBattleResultsCtrl()
     battleMode.registerSystemMessagesTypes()
     battleMode.registerBattleResultSysMsgType()
     battleMode.registerMessengerServerFormatters()
@@ -155,7 +155,7 @@ def preInit():
     onboardingBattleMode.registerGuiType()
     onboardingBattleMode.registerScaleformRequiredLibraries()
     onboardingBattleMode.registerBattleResultsConfig()
-    onboardingBattleMode.registerClientBattleResultsComposer()
+    onboardingBattleMode.registerClientBattleResultsCtrl()
     onboardingBattleMode.registerBattleResultSysMsgType()
     onboardingBattleMode.registerBattleControllersRepository()
     observers.preInit()

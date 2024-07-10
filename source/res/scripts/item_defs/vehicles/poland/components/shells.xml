@@ -4,6 +4,9 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_npd>	ARMOR_PIERCING_NPD.png 0 0	</ap_npd>
+    <ap_cr_npd>	ARMOR_PIERCING_CR_NPD.png 0 0	</ap_cr_npd>
+    <ap_cr_premium_npd>	ARMOR_PIERCING_CR_NPD_PREMIUM.png 0 0	</ap_cr_premium_npd>
     <ap_tray>	ARMOR_PIERCING_TRAY.png 0 0	</ap_tray>
     <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
     <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
@@ -30,6 +33,8 @@
       <armor>	11	</armor>
       <devices>	27	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_20mm_z_pociskiem_wybuchowo>
   <_20mm_z_pociskiem_wybuchowo_ulepszony>
     <id>	1	</id>
@@ -45,6 +50,8 @@
       <armor>	11	</armor>
       <devices>	27	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_20mm_z_pociskiem_wybuchowo_ulepszony>
   <_20mm_z_pociskiem_wybuchowo_B>
     <id>	69	</id>
@@ -59,6 +66,8 @@
       <armor>	11	</armor>
       <devices>	27	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_20mm_z_pociskiem_wybuchowo_B>
   <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
     <id>	70	</id>
@@ -74,6 +83,8 @@
       <armor>	11	</armor>
       <devices>	27	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_20mm_z_pociskiem_wybuchowo_ulepszony_B>
   <_37mm_AP_Bofors>
     <id>	48	</id>
@@ -88,6 +99,8 @@
       <armor>	40	</armor>
       <devices>	50	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_37mm_AP_Bofors>
   <_37mm_APCR_Bofors>
     <id>	49	</id>
@@ -103,6 +116,8 @@
       <armor>	40	</armor>
       <devices>	50	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_37mm_APCR_Bofors>
   <_37mm_HE_Bofors>
     <id>	50	</id>
@@ -141,6 +156,8 @@
       <armor>	55	</armor>
       <devices>	54	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_40mm_AP>
   <_40mm_APCR>
     <id>	58	</id>
@@ -156,6 +173,8 @@
       <armor>	55	</armor>
       <devices>	54	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_40mm_APCR>
   <_40mm_HE>
     <id>	59	</id>
@@ -194,6 +213,8 @@
       <armor>	50	</armor>
       <devices>	54	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_40mm_pocisk_przeciwpancerny_wz_36>
   <_40mm_pocisk_podkalibrowy>
     <id>	3	</id>
@@ -209,6 +230,8 @@
       <armor>	50	</armor>
       <devices>	54	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_40mm_pocisk_podkalibrowy>
   <_40mm_pocisk_wybuchowy_wz_36>
     <id>	4	</id>
@@ -247,6 +270,8 @@
       <armor>	55	</armor>
       <devices>	64	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_47mm_AP>
   <_47mm_APCR>
     <id>	46	</id>
@@ -262,6 +287,8 @@
       <armor>	55	</armor>
       <devices>	64	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_47mm_APCR>
   <_47mm_HE>
     <id>	47	</id>
@@ -300,6 +327,8 @@
       <armor>	75	</armor>
       <devices>	64	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_47mm_slpprj_m_38>
   <_47mm_slpprj_m_39>
     <id>	55	</id>
@@ -315,6 +344,8 @@
       <armor>	75	</armor>
       <devices>	64	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_47mm_slpprj_m_39>
   <_47mm_sgr_m_38>
     <id>	56	</id>
@@ -353,6 +384,8 @@
       <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr39L>
   <_75mm_Pzgr.40L>
     <id>	25	</id>
@@ -368,6 +401,8 @@
       <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr.40L>
   <_75mm_Sprg.18L>
     <id>	26	</id>
@@ -406,6 +441,8 @@
       <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr39L_K>
   <_75mm_Pzgr.40L_K>
     <id>	34	</id>
@@ -421,6 +458,8 @@
       <armor>	135	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr.40L_K>
   <_75mm_Sprg.18L_K>
     <id>	35	</id>
@@ -459,6 +498,8 @@
       <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_pocisk_przeciwpancerny_wz_36_38>
   <_75mm_pocisk_podkalibrowy_wz_36_38>
     <id>	128	</id>
@@ -474,6 +515,8 @@
       <armor>	150	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_pocisk_podkalibrowy_wz_36_38>
   <_75mm_pocisk_wybuchowy_wz_36_38>
     <id>	129	</id>
@@ -512,6 +555,8 @@
       <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_APCBC_K>
   <_Gr_38_HL_A_K>
     <id>	37	</id>
@@ -527,6 +572,7 @@
       <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
+    <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_Gr_38_HL_A_K>
   <_75mm_Sprg.18_K>
@@ -566,6 +612,8 @@
       <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr39_K>
   <_75mm_Pzgr.40_K>
     <id>	40	</id>
@@ -581,6 +629,8 @@
       <armor>	110	</armor>
       <devices>	100	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr.40_K>
   <_75mm_Sprg.18_K2>
     <id>	41	</id>
@@ -619,6 +669,8 @@
       <armor>	180	</armor>
       <devices>	115	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_85mm_UBR-365KBM>
   <_85mm_UBR-365PBM>
     <id>	72	</id>
@@ -634,6 +686,8 @@
       <armor>	180	</armor>
       <devices>	115	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_85mm_UBR-365PBM>
   <_85mm_UOF-365BM>
     <id>	73	</id>
@@ -672,6 +726,8 @@
       <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_AP>
   <_90mm_APCR>
     <id>	43	</id>
@@ -687,6 +743,8 @@
       <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_APCR>
   <_90mm_HE>
     <id>	44	</id>
@@ -725,6 +783,8 @@
       <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_pocisk_przeciwpancerny_wz_39>
   <_90mm_pocisk_podkalibrowy_wz_39>
     <id>	119	</id>
@@ -740,6 +800,8 @@
       <armor>	240	</armor>
       <devices>	122	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_pocisk_podkalibrowy_wz_39>
   <_90mm_pocisk_wybuchowy_wz_39>
     <id>	120	</id>
@@ -778,6 +840,8 @@
       <armor>	250	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_slpgr_m_43>
   <_100mm_pocisk_kumulacyjny_w43>
     <id>	99	</id>
@@ -793,6 +857,7 @@
       <armor>	250	</armor>
       <devices>	135	</devices>
     </damage>
+    <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_pocisk_kumulacyjny_w43>
   <_100mm_pocisk_wybuchowy>
@@ -833,6 +898,8 @@
       <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_pocisk_przeciwpancerny>
   <_100mm_slpgr_m_49>
     <id>	82	</id>
@@ -847,6 +914,8 @@
       <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_slpgr_m_49>
   <_100mm_pocisk_kumulacyjny_w49>
     <id>	83	</id>
@@ -862,6 +931,7 @@
       <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_pocisk_kumulacyjny_w49>
   <_100mm_pocisk_przeciwpancerny_DAP>
@@ -877,6 +947,8 @@
       <armor>	280	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_pocisk_przeciwpancerny_DAP>
   <_100mm_pocisk_podkalibrowy_DAP>
     <id>	122	</id>
@@ -892,6 +964,8 @@
       <armor>	280	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_pocisk_podkalibrowy_DAP>
   <_100mm_pocisk_wybuchowy_DAP>
     <id>	123	</id>
@@ -930,6 +1004,8 @@
       <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_slpgr_m_53>
   <_100mm_pocisk_kumulacyjny_w53>
     <id>	85	</id>
@@ -945,6 +1021,7 @@
       <armor>	300	</armor>
       <devices>	135	</devices>
     </damage>
+    <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_pocisk_kumulacyjny_w53>
   <_105mm_slpgr_m_43_1>
@@ -960,6 +1037,8 @@
       <armor>	320	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpgr_m_43_1>
   <_105mm_slpprj_fm_49>
     <id>	64	</id>
@@ -975,6 +1054,8 @@
       <armor>	320	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_fm_49>
   <_105mm_tung_sgr_m_34>
     <id>	65	</id>
@@ -1013,6 +1094,8 @@
       <armor>	320	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpgr_m_52>
   <_105mm_slpprj_m_59>
     <id>	75	</id>
@@ -1028,6 +1111,8 @@
       <armor>	320	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_slpprj_m_59>
   <_105mm_sgr_m_50_B>
     <id>	76	</id>
@@ -1066,6 +1151,8 @@
       <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_PP_15>
   <_105mm_3PPod_21>
     <id>	78	</id>
@@ -1081,6 +1168,8 @@
       <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_3PPod_21>
   <_105mm_POB_6M>
     <id>	79	</id>
@@ -1119,6 +1208,8 @@
       <armor>	390	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_UBR-471_PB>
   <_122mm_UBR-471_PBP>
     <id>	6	</id>
@@ -1134,6 +1225,8 @@
       <armor>	390	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_UBR-471_PBP>
   <_122mm_UOF-471_P>
     <id>	7	</id>
@@ -1172,6 +1265,8 @@
       <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_UBR-471P_P>
   <_122mm_UBR-471P_PB>
     <id>	9	</id>
@@ -1187,6 +1282,8 @@
       <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_UBR-471P_PB>
   <_122mm_UOF-471P_P>
     <id>	10	</id>
@@ -1225,6 +1322,8 @@
       <armor>	440	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_BR-471_B>
   <_122mm_BR-471_D>
     <id>	28	</id>
@@ -1240,6 +1339,8 @@
       <armor>	440	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_BR-471_D>
   <_122mm_OF-471>
     <id>	29	</id>
@@ -1278,6 +1379,8 @@
       <armor>	390	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_BR-471_M>
   <_122mm_BR-471_DM>
     <id>	113	</id>
@@ -1293,6 +1396,8 @@
       <armor>	390	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_BR-471_DM>
   <_122mm_OF-471M>
     <id>	114	</id>
@@ -1331,6 +1436,8 @@
       <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_pocisk_przeciwpancerny_wz_59>
   <_122mm_pocisk_podkalibrowy_wz_59>
     <id>	134	</id>
@@ -1346,6 +1453,8 @@
       <armor>	420	</armor>
       <devices>	165	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_pocisk_podkalibrowy_wz_59>
   <_122mm_pocisk_wybuchowy_wz_59>
     <id>	135	</id>
@@ -1384,6 +1493,8 @@
       <armor>	560	</armor>
       <devices>	180	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_130mm_AZ_PB_46>
   <_130mm_AZ_PB_46_A>
     <id>	12	</id>
@@ -1399,6 +1510,8 @@
       <armor>	560	</armor>
       <devices>	180	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_130mm_AZ_PB_46_A>
   <_130mm_AZ_OF_46>
     <id>	13	</id>
@@ -1437,6 +1550,8 @@
       <armor>	750	</armor>
       <devices>	203	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_152mm_pocisk_przeciwpancerny>
   <_152mm_pocisk_kumulacyjny>
     <id>	31	</id>
@@ -1452,6 +1567,7 @@
       <armor>	750	</armor>
       <devices>	203	</devices>
     </damage>
+    <ricochetAngle>	85	</ricochetAngle>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_152mm_pocisk_kumulacyjny>
   <_152mm_pocisk_wybuchowy>
@@ -1491,6 +1607,8 @@
       <armor>	800 300	</armor>
       <devices>	203 76	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PP_GG_m85_175>
   <PPrz_GG_m85_175>
     <id>	101	</id>
@@ -1506,6 +1624,8 @@
       <armor>	800 300	</armor>
       <devices>	203 76	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PPrz_GG_m85_175>
   <PW_GG_m85_175>
     <id>	102	</id>
@@ -1544,6 +1664,8 @@
       <armor>	700 350	</armor>
       <devices>	203 101	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PP_GG_m100_162>
   <PPrz_GG_m100_162>
     <id>	104	</id>
@@ -1559,6 +1681,8 @@
       <armor>	700 350	</armor>
       <devices>	203 101	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PPrz_GG_m100_162>
   <PW_GG_m100_162>
     <id>	105	</id>
@@ -1584,6 +1708,63 @@
       </damage>
     </armorSpalls>
   </PW_GG_m100_162>
+  <PP_GG_m100_162_K>
+    <id>	109	</id>
+    <userString>	#poland_vehicles:PP_GG_m100_162_K	</userString>
+    <icon>	ap_cr_tray	</icon>
+    <price>	1450	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	700 350	</armor>
+      <devices>	203 101	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PP_GG_m100_162_K>
+  <PPrz_GG_m100_162_K>
+    <id>	110	</id>
+    <userString>	#poland_vehicles:PPrz_GG_m100_162_K	</userString>
+    <icon>	ap_cr_premium_tray	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	700 350	</armor>
+      <devices>	203 101	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </PPrz_GG_m100_162_K>
+  <PW_GG_m100_162_K>
+    <id>	111	</id>
+    <userString>	#poland_vehicles:PW_GG_m100_162_K	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1030	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	3.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	350	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </PW_GG_m100_162_K>
   <PP_GG_m85_150>
     <id>	130	</id>
     <userString>	#poland_vehicles:PP_GG_m85_150	</userString>
@@ -1597,6 +1778,8 @@
       <armor>	600 400	</armor>
       <devices>	203 135	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PP_GG_m85_150>
   <PPrz_GG_m85_150>
     <id>	131	</id>
@@ -1612,6 +1795,8 @@
       <armor>	600 400	</armor>
       <devices>	203 135	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </PPrz_GG_m85_150>
   <PW_GG_m85_150>
     <id>	132	</id>
@@ -1651,6 +1836,8 @@
       <armor>	8	</armor>
       <devices>	17	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </Development_Shell>
   <_105mm_wz_22_24_G1_HEAT_SH>
     <id>	86	</id>
@@ -1667,6 +1854,8 @@
       <armor>	210	</armor>
       <devices>	17	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_wz_22_24_G1_HEAT_SH>
   <_105mm_wz_22_24_G1_APCR_SH>
     <id>	87	</id>
@@ -1683,6 +1872,8 @@
       <armor>	170	</armor>
       <devices>	17	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_105mm_wz_22_24_G1_APCR_SH>
   <_75mm_wz_36_37_G2_HEAT_SH>
     <id>	88	</id>
@@ -1699,6 +1890,8 @@
       <armor>	190	</armor>
       <devices>	20	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_wz_36_37_G2_HEAT_SH>
   <_75mm_wz_36_37_G2_APCR_SH>
     <id>	89	</id>
@@ -1715,6 +1908,8 @@
       <armor>	150	</armor>
       <devices>	21	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_75mm_wz_36_37_G2_APCR_SH>
   <_90mm_armata_wz_46_G3_HEAT_SH>
     <id>	90	</id>
@@ -1731,6 +1926,8 @@
       <armor>	240	</armor>
       <devices>	23	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_armata_wz_46_G3_HEAT_SH>
   <_90mm_armata_wz_46_G3_APCR_SH>
     <id>	91	</id>
@@ -1747,6 +1944,8 @@
       <armor>	190	</armor>
       <devices>	23	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_90mm_armata_wz_46_G3_APCR_SH>
   <_100mm_armata_wz_62_G4_HEAT_SH>
     <id>	92	</id>
@@ -1763,6 +1962,8 @@
       <armor>	230	</armor>
       <devices>	24	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_armata_wz_62_G4_HEAT_SH>
   <_100mm_armata_wz_62_G4_APCR_SH>
     <id>	93	</id>
@@ -1779,6 +1980,8 @@
       <armor>	180	</armor>
       <devices>	24	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_armata_wz_62_G4_APCR_SH>
   <_100mm_armata_wz_58_G5_HEAT_SH>
     <id>	94	</id>
@@ -1795,6 +1998,8 @@
       <armor>	360	</armor>
       <devices>	39	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_armata_wz_58_G5_HEAT_SH>
   <_100mm_armata_wz_58_G5_APCR_SH>
     <id>	95	</id>
@@ -1811,6 +2016,8 @@
       <armor>	290	</armor>
       <devices>	39	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_100mm_armata_wz_58_G5_APCR_SH>
   <_122mm_wz_43_50_G6_HEAT_SH>
     <id>	96	</id>
@@ -1827,6 +2034,8 @@
       <armor>	320	</armor>
       <devices>	36	</devices>
     </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_wz_43_50_G6_HEAT_SH>
   <_122mm_wz_43_50_G6_APCR_SH>
     <id>	97	</id>
@@ -1843,5 +2052,7 @@
       <armor>	260	</armor>
       <devices>	36	</devices>
     </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
   </_122mm_wz_43_50_G6_APCR_SH>
 </shells.xml>

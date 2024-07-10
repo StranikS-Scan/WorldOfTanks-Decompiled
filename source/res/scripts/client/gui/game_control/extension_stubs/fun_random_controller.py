@@ -63,6 +63,12 @@ class _FunProgressions(IFunRandomController.IFunProgressions):
 
 class _FunSubscription(IFunRandomController.IFunSubscription):
 
+    def resume(self):
+        pass
+
+    def suspend(self):
+        pass
+
     def addListener(self, eventType, handler, scope=None):
         pass
 
@@ -72,16 +78,7 @@ class _FunSubscription(IFunRandomController.IFunSubscription):
     def handleEvent(self, event, scope=None):
         pass
 
-    def addSubModesWatcher(self, method, desiredOnly=False, withTicks=False):
-        pass
-
-    def removeSubModesWatcher(self, method, desiredOnly=False, withTicks=False):
-        pass
-
-    def resume(self):
-        pass
-
-    def suspend(self):
+    def startCoreNotifications(self):
         pass
 
 

@@ -3,8 +3,9 @@
 import logging
 import typing
 import account_helpers
+from UnitBase import UNIT_ERROR
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID
+from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID, CLIENT_UNIT_CMD
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.fun_gui_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, REQUEST_TYPE
 from fun_random.gui.prb_control.entities.pre_queue.vehicles_watcher import FunRandomVehiclesWatcher
@@ -12,20 +13,18 @@ from fun_random.gui.prb_control.entities.squad.actions_validator import FunRando
 from fun_random.gui.prb_control.entities.squad.ctx import FunSquadSettingsCtx, FunSquadChangeSubModeCtx
 from fun_random.gui.prb_control.entities.squad.scheduler import FunRandomSquadScheduler
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getFunRandomFightBtnTooltipData
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
-from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
+from gui.prb_control.entities.base.squad.mixins import RestrictedRoleTagMixin
 from gui.prb_control.entities.random.squad.actions_handler import BalancedSquadActionsHandler
 from gui.prb_control.entities.random.squad.entity import BalancedSquadDynamicRosterSettings
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, Vehicle
+from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from UnitBase import UNIT_ERROR, CLIENT_UNIT_CMD
 _logger = logging.getLogger(__name__)
 
 class FunRandomSquadEntryPoint(SquadEntryPoint):
@@ -67,25 +66,20 @@ class FunRandomSquadEntryPoint(SquadEntryPoint):
         g_prbCtrlEvents.onUnitCreationFailure(reason)
 
 
-class FunRandomSquadEntity(SquadEntity):
+class FunRandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
     __eventsCache = dependency.descriptor(IEventsCache)
     __funRandomController = dependency.descriptor(IFunRandomController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self._isBalancedSquad = False
-        self._isUseSPGValidateRule = True
-        self._isUseScoutValidateRule = True
         self.__watcher = None
-        self.__restrictedSPGDataProvider = RestrictedSPGDataProvider()
-        self.__restrictedScoutDataProvider = RestrictedScoutDataProvider()
         super(FunRandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.FUN_RANDOM, PREBATTLE_TYPE.FUN_RANDOM)
         return
 
     def init(self, ctx=None):
         self._isBalancedSquad = self.isBalancedSquadEnabled()
-        self.__restrictedSPGDataProvider.init(self)
-        self.__restrictedScoutDataProvider.init(self)
+        self.initRestrictedRoleDataProvider(self)
         self.__funRandomController.setDesiredSubModeID(self.__getUnitSubModeID(), trustedSource=True)
         funRandomSquadEntity = super(FunRandomSquadEntity, self).init(ctx)
         self._switchActionsValidator()
@@ -102,10 +96,7 @@ class FunRandomSquadEntity(SquadEntity):
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self.__eventsCache.onSyncCompleted -= self.__onServerSettingChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
-        self.__restrictedScoutDataProvider.fini()
-        self.__restrictedSPGDataProvider.fini()
-        self._isUseScoutValidateRule = False
-        self._isUseSPGValidateRule = False
+        self.finiRestrictedRoleDataProvider()
         self.invalidateVehicleStates()
         if self.__watcher is not None:
             self.__watcher.stop()
@@ -115,39 +106,20 @@ class FunRandomSquadEntity(SquadEntity):
     def isBalancedSquadEnabled(self):
         return self.__eventsCache.isBalancedSquadEnabled()
 
-    def hasSlotForScout(self):
-        return self.__restrictedScoutDataProvider.hasSlotForVehicle()
-
-    def hasSlotForSPG(self):
-        return self.__restrictedSPGDataProvider.hasSlotForVehicle()
-
     def getConfirmDialogMeta(self, ctx):
         desiredSubMode = self.__funRandomController.subModesHolder.getDesiredSubMode()
         return None if desiredSubMode is None or not desiredSubMode.isAvailable() else super(FunRandomSquadEntity, self).getConfirmDialogMeta(ctx)
 
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getFunRandomFightBtnTooltipData(self.canPlayerDoAction(), True), False) if isStateDisabled else super(FunRandomSquadEntity, self).getFightBtnTooltipData(isStateDisabled)
-
-    def getCurrentSPGCount(self):
-        return self.__restrictedSPGDataProvider.getCurrentVehiclesCount()
-
-    def getCurrentScoutCount(self):
-        return self.__restrictedScoutDataProvider.getCurrentVehiclesCount()
-
     def getQueueType(self):
         return QUEUE_TYPE.FUN_RANDOM
 
-    def getMaxScoutCount(self):
-        return self.__restrictedScoutDataProvider.getMaxPossibleVehicles()
-
-    def getMaxScoutLevels(self):
-        return self.__restrictedScoutDataProvider.getRestrictionLevels()
-
-    def getMaxSPGCount(self):
-        return self.__restrictedSPGDataProvider.getMaxPossibleVehicles()
-
     def getSquadLevelBounds(self):
         return self.__eventsCache.getBalancedSquadBounds()
+
+    @property
+    def squadRestrictions(self):
+        desiredSubMode = self.__funRandomController.subModesHolder.getDesiredSubMode()
+        return desiredSubMode.getSettings().filtration.squadRestrictions if desiredSubMode else {}
 
     def setReserve(self, ctx, callback=None):
         pass
@@ -226,9 +198,7 @@ class FunRandomSquadEntity(SquadEntity):
             result = v.level in self._rosterSettings.getLevelsRange()
             if not result:
                 return False
-        if self._isUseScoutValidateRule and v.isScout and v.level in self.getMaxScoutLevels():
-            return self.__restrictedScoutDataProvider.isTagVehicleAvailable()
-        return self.__restrictedSPGDataProvider.isTagVehicleAvailable() if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG else super(FunRandomSquadEntity, self)._vehicleStateCondition(v)
+        return self.isTagVehicleAvailable(v.tags) if self.isRoleRestrictionValid() else super(FunRandomSquadEntity, self)._vehicleStateCondition(v)
 
     def __getUnitSubModeID(self):
         extraData = self.getExtra()

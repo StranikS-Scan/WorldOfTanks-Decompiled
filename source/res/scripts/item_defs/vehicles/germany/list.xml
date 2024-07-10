@@ -859,6 +859,19 @@
     <tags>	mediumTank role_MT_sniper HD siegeMode autoSiege improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G164_Kpz_Pr_68_P>
+  <G171_E77>
+    <id>	147	</id>
+    <userString>	#germany_vehicles:G171_E77	</userString>
+    <shortUserString>	#germany_vehicles:G171_E77_short	</shortUserString>
+    <description>	#germany_vehicles:G171_E77_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G171_E77_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G171_E77_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </G171_E77>
   <G42_Maus_7x7>
     <id>	148	</id>
     <userString>	#germany_vehicles:Maus_7x7	</userString>
@@ -2113,4 +2126,24 @@
     <notInShop>	True	</notInShop>
     <price>	1	</price>
   </G00_Pillbox_Gun_7_5cm_SM24>
+  <G42_Maus_FEP23>
+    <id>	103	</id>
+    <userString>	#germany_vehicles:G42_Maus_FEP23	</userString>
+    <shortUserString>	#germany_vehicles:G42_Maus_FEP23_short	</shortUserString>
+    <description>	#germany_vehicles:G42_Maus_FEP23_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD fun_random mode_hidden heavyTank1 autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </G42_Maus_FEP23>
+  <G72_JagdPz_E100_FEP23>
+    <id>	91	</id>
+    <userString>	#germany_vehicles:G72_JagdPz_E100_FEP23	</userString>
+    <description>	#germany_vehicles:G72_JagdPz_E100_FEP23_descr	</description>
+    <shortUserString>	#germany_vehicles:G72_JagdPz_E100_FEP23_short	</shortUserString>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD fun_random mode_hidden heavyAT-SPG AT-SPG2 autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
+    <level>	10	</level>
+  </G72_JagdPz_E100_FEP23>
 </list.xml>

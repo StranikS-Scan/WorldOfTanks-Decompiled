@@ -111,11 +111,12 @@ class _SeasonPresenter(object):
 
     @classmethod
     def setSeasonInfo(cls, model, season):
+        formattedServerTimestamp = round(getServerUTCTime())
         if season is not None:
             model.setName(getSeasonNameEnum(season))
             model.setStartTimestamp(season.getStartDate())
             model.setEndTimestamp(season.getEndDate())
-            model.setServerTimestamp(getServerUTCTime())
+            model.setServerTimestamp(formattedServerTimestamp)
             model.setHasTentativeDates(season.hasTentativeDates())
         model.setState(cls.__getSeasonState(season))
         return

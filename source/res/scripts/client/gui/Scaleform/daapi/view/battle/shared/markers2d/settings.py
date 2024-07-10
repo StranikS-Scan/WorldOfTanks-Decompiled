@@ -27,14 +27,6 @@ class MARKER_SYMBOL_NAME(object):
     SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
 
 
-class DAMAGE_TYPE(object):
-    FROM_UNKNOWN = 0
-    FROM_ALLY = 1
-    FROM_ENEMY = 2
-    FROM_SQUAD = 3
-    FROM_PLAYER = 4
-
-
 class CommonMarkerType(IntEnum):
     NORMAL = 0
     BASE = 1

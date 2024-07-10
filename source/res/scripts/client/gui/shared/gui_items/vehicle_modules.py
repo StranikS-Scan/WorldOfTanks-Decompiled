@@ -10,7 +10,7 @@ from gui.impl.gen import R
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT
 from gui.shared.money import Currency
 import nations
 from items import vehicles as veh_core
@@ -180,12 +180,19 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_AUTO_RELOAD if vehicleDescr is not None else GUN_CAN_BE_AUTO_RELOAD
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def isAutoShoot(self, vehicleDescr=None):
+        typeToCheck = GUN_AUTO_SHOOT if vehicleDescr is not None else GUN_CAN_BE_AUTO_SHOOT
+        return self.getReloadingType(vehicleDescr) == typeToCheck
+
     def isDualGun(self, vehicleDescr=None):
         typeToCheck = GUN_DUAL_GUN if vehicleDescr is not None else GUN_CAN_BE_DUAL_GUN
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
     def isDamageMutable(self):
         return self.descriptor.isDamageMutable
+
+    def isNonPiercingDamage(self):
+        return any((shell.isNonPiercingDamageMechanics for shell in self.defaultAmmo))
 
     def hasDualAccuracy(self, vehicleDescr=None):
         return vehicleDescr is not None and g_paramsCache.hasDualAccuracy(self.intCD, vehicleDescr.type.compactDescr)
@@ -228,6 +235,8 @@ class VehicleGun(VehicleModule):
                         return backport.image(R.images.gui.maps.icons.modules.autoLoaderGunBoost())
 
             return backport.image(R.images.gui.maps.icons.modules.autoLoaderGun())
+        elif self.isAutoShoot(vehDescr):
+            return backport.image(R.images.gui.maps.icons.modules.autoShootGun())
         elif self.isDualGun(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.dualGun())
         elif self.hasDualAccuracy(vehDescr):
@@ -253,6 +262,8 @@ class VehicleGun(VehicleModule):
         key = super(VehicleGun, self)._getShortInfoKey()
         if self.isAutoReloadable(vehicleDescr):
             return '/'.join((key, 'autoReload'))
+        if self.isAutoShoot(vehicleDescr):
+            return '/'.join((key, 'autoShoot'))
         return '/'.join((key, 'dualGun')) if self.isDualGun(vehicleDescr) else key
 
 
@@ -351,11 +362,82 @@ class Shell(FittingItem):
         pass
 
     @property
+    def count(self):
+        return self._count
+
+    @count.setter
+    def count(self, value):
+        self._count = value
+
+    @property
+    def type(self):
+        return self.descriptor.kind
+
+    @property
+    def mechanics(self):
+        return self.descriptor.type.mechanics
+
+    @property
     def isModernMechanics(self):
-        return self.type in (SHELL_TYPES.HIGH_EXPLOSIVE,) and self.descriptor.type.mechanics == SHELL_MECHANICS_TYPE.MODERN
+        return self.type == SHELL_TYPES.HIGH_EXPLOSIVE and self.mechanics == SHELL_MECHANICS_TYPE.MODERN
+
+    @property
+    def isNonPiercingDamageMechanics(self):
+        return self.mechanics == SHELL_MECHANICS_TYPE.NON_PIERCING_DAMAGE
+
+    @property
+    def longUserName(self):
+        return self._getFormatLongUserName('kinds')
+
+    @property
+    def longUserNameAbbr(self):
+        return self._getFormatLongUserName('kindsAbbreviation')
+
+    @property
+    def icon(self):
+        return ICONS_MASK[:-4] % {'type': self.itemTypeName,
+         'subtype': 'small/',
+         'unicName': self.descriptor.icon[0]}
+
+    @property
+    def defaultLayoutValue(self):
+        return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.count)
 
     def isDamageMutable(self):
         return self.descriptor.isDamageMutable
+
+    def getAdvancedTooltipKey(self):
+        return (self.type,
+         self.isModernMechanics,
+         self.isNonPiercingDamageMechanics,
+         self.isDamageMutable())
+
+    def getBonusIcon(self, size='small'):
+        sizeFldr = R.images.gui.maps.icons.shell.dyn(size)
+        if not sizeFldr:
+            _logger.warn('Shell %s icon for size %s doesnt exists!', self.descriptor.iconName, size)
+            return ''
+        return backport.image(sizeFldr.dyn(self.descriptor.iconName)())
+
+    def getGUIEmblemID(self):
+        return self.descriptor.iconName
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        resID = R.images.gui.maps.shop.shells.num(size).dyn(replaceHyphenToUnderscore(self.descriptor.iconName))()
+        return backport.image(resID) if resID != -1 else ''
+
+    def isInstalled(self, vehicle, slotIdx=None):
+        for shell in vehicle.shells.installed.getItems():
+            if self.intCD == shell.intCD:
+                return True
+
+        return super(Shell, self).isInstalled(vehicle, slotIdx)
+
+    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
+        return vehicle.shells.setupLayouts.containsIntCD(self.intCD, setupIndex, slotIdx)
+
+    def isInOtherLayout(self, vehicle):
+        return vehicle.shells.setupLayouts.isInOtherLayout(self)
 
     def _getAltPrice(self, buyPrice, proxy):
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
@@ -372,65 +454,8 @@ class Shell(FittingItem):
             dimension = backport.text(R.strings.item_types.shell.dimension.mm())
         return backport.text(R.strings.item_types.shell.name(), kind=backport.text(R.strings.item_types.shell.dyn(kind).dyn(self.descriptor.kind)()), name=self.userName, caliber=backport.getNiceNumberFormat(caliber), dimension=dimension)
 
-    @property
-    def count(self):
-        return self._count
-
-    @count.setter
-    def count(self, value):
-        self._count = value
-
-    @property
-    def type(self):
-        return self.descriptor.kind
-
-    @property
-    def longUserName(self):
-        return self._getFormatLongUserName('kinds')
-
-    @property
-    def longUserNameAbbr(self):
-        return self._getFormatLongUserName('kindsAbbreviation')
-
-    @property
-    def icon(self):
-        return ICONS_MASK[:-4] % {'type': self.itemTypeName,
-         'subtype': 'small/',
-         'unicName': self.descriptor.icon[0]}
-
-    def getBonusIcon(self, size='small'):
-        sizeFldr = R.images.gui.maps.icons.shell.dyn(size)
-        if not sizeFldr:
-            _logger.warn('Shell %s icon for size %s doesnt exists!', self.descriptor.iconName, size)
-            return ''
-        return backport.image(sizeFldr.dyn(self.descriptor.iconName)())
-
-    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        resID = R.images.gui.maps.shop.shells.num(size).dyn(replaceHyphenToUnderscore(self.descriptor.iconName))()
-        return backport.image(resID) if resID != -1 else ''
-
-    def getGUIEmblemID(self):
-        return self.descriptor.iconName
-
-    @property
-    def defaultLayoutValue(self):
-        return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.count)
-
-    def isInstalled(self, vehicle, slotIdx=None):
-        for shell in vehicle.shells.installed.getItems():
-            if self.intCD == shell.intCD:
-                return True
-
-        return super(Shell, self).isInstalled(vehicle, slotIdx)
-
-    def isInSetup(self, vehicle, setupIndex=None, slotIdx=None):
-        return vehicle.shells.setupLayouts.containsIntCD(self.intCD, setupIndex, slotIdx)
-
-    def isInOtherLayout(self, vehicle):
-        return vehicle.shells.setupLayouts.isInOtherLayout(self)
+    def _getShortInfoKey(self):
+        return '#menu:descriptions/mutableDamageShell' if self.isDamageMutable() else super(Shell, self)._getShortInfoKey()
 
     def _sortByType(self, other):
         return SHELL_TYPES_ORDER_INDICES[self.type] - SHELL_TYPES_ORDER_INDICES[other.type]
-
-    def _getShortInfoKey(self):
-        return '#menu:descriptions/mutableDamageShell' if self.isDamageMutable() else super(Shell, self)._getShortInfoKey()

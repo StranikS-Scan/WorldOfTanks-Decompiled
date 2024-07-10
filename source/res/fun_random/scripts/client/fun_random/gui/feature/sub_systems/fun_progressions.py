@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/feature/sub_systems/fun_progressions.py
 import typing
-from fun_random.helpers.server_settings import FunMetaProgressionConfig, FunProgressionConfig
-from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_TRIGGER_TEMPLATE, PROGRESSION_EXECUTOR_TEMPLATE, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FunTimersShifts
+from fun_random.gui.feature.fun_constants import PROGRESSION_COUNTER_TEMPLATE, PROGRESSION_TRIGGER_TEMPLATE, PROGRESSION_EXECUTOR_TEMPLATE, FEP_PROGRESSION_EXECUTOR_QUEST_ID, FunTimersShifts, PROGRESSION_UNLIMITED_TRIGGER_TEMPLATE, PROGRESSION_UNLIMITED_EXECUTOR_TEMPLATE, PROGRESSION_UNLIMITED_COUNTER_TEMPLATE
 from fun_random.gui.feature.models.progressions import FunProgression
 from fun_random.gui.shared.events import FunEventType
+from fun_random.helpers.server_settings import FunMetaProgressionConfig, FunProgressionConfig
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.event_bus import SharedEvent
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from helpers import dependency, time_utils
-from skeletons.gui.game_control import IFunRandomController
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.server_events import IEventsCache
 from shared_utils import first
+from skeletons.gui.game_control import IFunRandomController
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared.utils.requesters import ITokensRequester
 
@@ -73,13 +73,22 @@ class FunProgressions(IFunRandomController.IFunProgressions, Notifiable):
         if self.__activeProgression is None:
             return
         else:
-            activeCounterName = self.__activeProgression.condition.counterName
-            if activeCounterName not in diff:
-                return
-            activeCounterAmount = self.__itemsCache.items.tokens.getTokenCount(activeCounterName)
-            if activeCounterAmount == self.__activeProgression.condition.counter:
-                return
-            self.__activeProgression.updateCounter(self.__itemsCache.items.tokens.getTokenCount(activeCounterName))
+            if self.__activeProgression.state.isCompleted and self.__activeProgression.hasUnlimitedProgression:
+                activeCounterName = self.__activeProgression.unlimitedProgression.counterName
+                if activeCounterName not in diff:
+                    return
+                activeCounterAmount = self.__itemsCache.items.tokens.getTokenCount(activeCounterName)
+                if activeCounterAmount == self.__activeProgression.unlimitedProgression.counter:
+                    return
+                self.__activeProgression.unlimitedProgression.setCounter(self.__itemsCache.items.tokens.getTokenCount(activeCounterName))
+            else:
+                activeCounterName = self.__activeProgression.conditions.counterName
+                if activeCounterName not in diff:
+                    return
+                activeCounterAmount = self.__itemsCache.items.tokens.getTokenCount(activeCounterName)
+                if activeCounterAmount == self.__activeProgression.conditions.counter:
+                    return
+                self.__activeProgression.updateCounter(self.__itemsCache.items.tokens.getTokenCount(activeCounterName))
             self.__onProgressionUpdate()
             return
 
@@ -100,12 +109,24 @@ class FunProgressions(IFunRandomController.IFunProgressions, Notifiable):
 
     def __buildProgression(self, pConfig, isFirst, isLast, quests, tokens):
         executors = tuple((quests.get(PROGRESSION_EXECUTOR_TEMPLATE.format(pConfig.name, amount)) for amount in pConfig.executors))
-        trigger = quests.get(PROGRESSION_TRIGGER_TEMPLATE.format(pConfig.name))
-        if trigger is None or not executors or not all(executors):
+        triggers = tuple((quests.get(PROGRESSION_TRIGGER_TEMPLATE.format(pConfig.name, trigger['id'])) for trigger in pConfig.triggers))
+        for t in triggers:
+            if t is not None:
+                t.findAndSaveAltQuest(quests)
+
+        if not triggers or not executors or not all(executors) or not all(triggers):
             return
         else:
+            unlimitedProgress = None
+            if pConfig.unlimitedTrigger and pConfig.unlimitedExecutor:
+                unlimitedCounter = tokens.getTokenCount(PROGRESSION_UNLIMITED_COUNTER_TEMPLATE.format(pConfig.name))
+                uTrigger = quests.get(PROGRESSION_UNLIMITED_TRIGGER_TEMPLATE.format(pConfig.name, pConfig.unlimitedTrigger['id']))
+                if uTrigger is not None:
+                    uTrigger.findAndSaveAltQuest(quests)
+                uExecutor = quests.get(PROGRESSION_UNLIMITED_EXECUTOR_TEMPLATE.format(pConfig.name, pConfig.unlimitedExecutor))
+                unlimitedProgress = (uTrigger, uExecutor, unlimitedCounter) if uTrigger and uExecutor else None
             counter = tokens.getTokenCount(PROGRESSION_COUNTER_TEMPLATE.format(pConfig.name))
-            return FunProgression(pConfig, isFirst, isLast, counter, trigger, executors)
+            return FunProgression(pConfig, isFirst, isLast, counter, triggers, executors, unlimitedProgress)
 
     def __invalidateProgressions(self):
         isEnabled = self.__settings.isEnabled and self.__eventsCache.isStarted
@@ -117,10 +138,25 @@ class FunProgressions(IFunRandomController.IFunProgressions, Notifiable):
         return
 
     def __recalculateProgressionTimer(self, quests, newProgression):
-        now = time_utils.getCurrentTimestamp()
-        progressionNames = (pConfig.name for pConfig in self.__settings.progressions)
-        progressionReset = newProgression.condition.resetTimestamp if newProgression is not None else 0
-        triggers = (quests.get(PROGRESSION_TRIGGER_TEMPLATE.format(name)) for name in progressionNames)
-        triggersStarts = tuple((trigger.getStartTimeRaw() for trigger in triggers if trigger is not None))
-        allTimers = tuple((timer for timer in triggersStarts + (progressionReset,) if timer > now))
-        return min(allTimers) + FunTimersShifts.PROGRESSION if allTimers else 0
+        if newProgression and newProgression.state.isLastProgression:
+            progressionReset = newProgression.conditions.finishTimestamp if newProgression is not None else 0
+            progressionReset = progressionReset + FunTimersShifts.PROGRESSION if progressionReset else 0
+            newProgression.setResetTimestamp(progressionReset)
+            return progressionReset
+        else:
+            now = time_utils.getCurrentTimestamp()
+            progressionNames = [ pConfig.name for pConfig in self.__settings.progressions ]
+            triggers = [ pConfig.triggers[0] for pConfig in self.__settings.progressions ]
+            triggersQuests = []
+            for name in progressionNames:
+                for trigger in triggers:
+                    triggersQuests.append(quests.get(PROGRESSION_TRIGGER_TEMPLATE.format(name, trigger['id'])))
+
+            triggersStarts = tuple((trigger.getStartTimeRaw() for trigger in triggersQuests if trigger is not None))
+            startTimers = tuple((timer for timer in triggersStarts if timer > now))
+            minStartTimer = min(startTimers) if startTimers else 0
+            progressionReset = minStartTimer
+            if newProgression:
+                newProgression.setResetTimestamp(minStartTimer + FunTimersShifts.PROGRESSION if minStartTimer else 0)
+                progressionReset = min(minStartTimer, newProgression.conditions.finishTimestamp)
+            return progressionReset + FunTimersShifts.PROGRESSION if progressionReset else 0

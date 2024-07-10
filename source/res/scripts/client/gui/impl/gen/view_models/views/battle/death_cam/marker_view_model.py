@@ -12,6 +12,7 @@ class Phase(Enum):
 
 class ImpactMode(Enum):
     PENETRATION = 'penetration'
+    NONPENETRATIONDAMAGE = 'nonPenetrationDamage'
     LEGACYHE = 'legacyHE'
     MODERNHE = 'modernHE'
 
@@ -131,10 +132,10 @@ class MarkerViewModel(ViewModel):
         self._setString(12, value.value)
 
     def getShellDamageBasic(self):
-        return self._getNumber(13)
+        return self._getReal(13)
 
     def setShellDamageBasic(self, value):
-        self._setNumber(13, value)
+        self._setReal(13, value)
 
     def getShellVelocityBasic(self):
         return self._getNumber(14)
@@ -197,22 +198,22 @@ class MarkerViewModel(ViewModel):
         self._setNumber(23, value)
 
     def getShellDamageEffective(self):
-        return self._getNumber(24)
+        return self._getReal(24)
 
     def setShellDamageEffective(self, value):
-        self._setNumber(24, value)
+        self._setReal(24, value)
 
     def getShellDamageRandomizationFactor(self):
-        return self._getNumber(25)
+        return self._getReal(25)
 
     def setShellDamageRandomizationFactor(self, value):
-        self._setNumber(25, value)
+        self._setReal(25, value)
 
     def getDamageDistanceModifier(self):
-        return self._getNumber(26)
+        return self._getReal(26)
 
     def setDamageDistanceModifier(self, value):
-        self._setNumber(26, value)
+        self._setReal(26, value)
 
     def getHasDistanceFalloff(self):
         return self._getBool(27)
@@ -265,7 +266,7 @@ class MarkerViewModel(ViewModel):
         self._addStringProperty('shellIcon', '')
         self._addNumberProperty('shellCaliber', 0)
         self._addStringProperty('caliberRule')
-        self._addNumberProperty('shellDamageBasic', 0)
+        self._addRealProperty('shellDamageBasic', 0.0)
         self._addNumberProperty('shellVelocityBasic', 0)
         self._addNumberProperty('shootDistance', 0)
         self._addNumberProperty('shellPenetrationEffective', 0)
@@ -276,9 +277,9 @@ class MarkerViewModel(ViewModel):
         self._addNumberProperty('angleRicochet', 0)
         self._addNumberProperty('angleFailure', 0)
         self._addNumberProperty('angleImpact', 0)
-        self._addNumberProperty('shellDamageEffective', 0)
-        self._addNumberProperty('shellDamageRandomizationFactor', 0)
-        self._addNumberProperty('damageDistanceModifier', 0)
+        self._addRealProperty('shellDamageEffective', 0.0)
+        self._addRealProperty('shellDamageRandomizationFactor', 0.0)
+        self._addRealProperty('damageDistanceModifier', 0.0)
         self._addBoolProperty('hasDistanceFalloff', False)
         self._addNumberProperty('shellDamageBurst', 0)
         self._addNumberProperty('shellDamageLossDistance', 0)

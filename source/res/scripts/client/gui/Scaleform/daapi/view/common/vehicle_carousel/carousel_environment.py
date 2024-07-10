@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/common/vehicle_carousel/carousel_environment.py
-import constants
+from constants import Configs, IS_KOREA, RENEWABLE_SUBSCRIPTION_CONFIG
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
@@ -22,9 +22,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IRentalsController, IIGRController, IClanLockController, IEpicBattleMetaGameController, IRankedBattlesController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-_CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
-if constants.IS_KOREA:
-    _CAROUSEL_FILTERS += ('igr',)
 
 def formatCountString(currentVehiclesCount, totalVehiclesCount):
     style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
@@ -77,13 +74,14 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     rankedController = dependency.descriptor(IRankedBattlesController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-    __battleSession = dependency.descriptor(IBattleSessionProvider)
     wotPlusController = dependency.descriptor(IWotPlusController)
+    __battleSession = dependency.descriptor(IBattleSessionProvider)
     _DISABLED_FILTERS = []
+    _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium') + (('igr',) if IS_KOREA else ())
 
     def __init__(self):
         super(CarouselEnvironment, self).__init__()
-        self._usedFilters = self._getFilters()
+        self._usedFilters = ()
         self._carouselDPConfig = {'carouselFilter': None,
          'itemsCache': None}
         self._carouselDPCls = CarouselDataProvider
@@ -98,26 +96,26 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
         if accountInfo.isCurrentPlayer():
-            self.updateAviability()
+            self.updateAvailability()
 
     def onUnitPlayerStateChanged(self, pInfo):
         if pInfo.isCurrentPlayer():
-            self.updateAviability()
+            self.updateAvailability()
 
     def onPrbEntitySwitched(self):
-        self.updateAviability()
+        self.updateAvailability()
 
     def onEnqueued(self, queueType, *args):
-        self.updateAviability()
+        self.updateAvailability()
 
     def onDequeued(self, queueType, *args):
-        self.updateAviability()
+        self.updateAvailability()
 
     def onUnitAutoSearchStarted(self, timeLeft):
-        self.updateAviability()
+        self.updateAvailability()
 
     def onUnitAutoSearchFinished(self):
-        self.updateAviability()
+        self.updateAvailability()
 
     @property
     def filter(self):
@@ -171,7 +169,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
             self.applyFilter()
         return
 
-    def updateAviability(self):
+    def updateAvailability(self):
         if not self.isDisposed():
             state = self._currentVehicle.getViewState()
             self.as_setEnabledS(not state.isLocked())
@@ -180,6 +178,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         super(CarouselEnvironment, self)._populate()
         self._currentVehicle = g_currentVehicle
         self._initDataProvider()
+        self._usedFilters = self._getFilters()
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
         self._carouselDP.setShowStats(setting.get())
         self._carouselDP.setEnvironment(self.app)
@@ -194,12 +193,12 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.rankedController.onUpdated += self.__updateRankedBonusBattles
         self.wotPlusController.onDataChanged += self.__onWotPlusChanged
         self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
-        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingChanged
         g_playerEvents.onVehicleBecomeElite += self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         self.startGlobalListening()
         self.applyFilter()
-        self.updateAviability()
+        self.updateAvailability()
         self.as_setInitDataS({'counterCloseTooltip': makeTooltip('#tooltips:tanksFilter/counter/close/header', '#tooltips:tanksFilter/counter/close/body')})
 
     def _dispose(self):
@@ -211,7 +210,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.epicController.onUpdated -= self.__updateEpicSeasonRent
         self.rankedController.onUpdated -= self.__updateRankedBonusBattles
         self.wotPlusController.onDataChanged -= self.__onWotPlusChanged
-        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingChanged
         self.settingsCore.onSettingsChanged -= self._onCarouselSettingsChange
         g_playerEvents.onVehicleBecomeElite -= self.__onVehicleBecomeElite
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
@@ -220,7 +219,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self._carouselDP.fini()
         self._carouselDP = None
         self._carouselDPConfig.clear()
-        self.__callPopoverCallback()
+        self._callPopoverCallback()
         super(CarouselEnvironment, self)._dispose()
         return
 
@@ -229,11 +228,27 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
          'itemsCache': self.itemsCache})
         self._carouselDP = self._carouselDPCls(**self._carouselDPConfig)
 
+    def _getFilters(self):
+        return self._CAROUSEL_FILTERS
+
     def _onCarouselSettingsChange(self, diff):
         if settings_constants.GAME.VEHICLE_CAROUSEL_STATS in diff:
             setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
             self._carouselDP.setShowStats(setting.get())
             self._carouselDP.updateVehicles()
+
+    def _onServerSettingChanged(self, diff, skipVehicles=False):
+        if not skipVehicles and (Configs.CRYSTAL_REWARDS_CONFIG in diff or RENEWABLE_SUBSCRIPTION_CONFIG in diff):
+            self.updateVehicles()
+        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+            self.updateAvailability()
+
+    def _callPopoverCallback(self):
+        if callable(self.__filterPopoverRemoveCallback):
+            callback = self.__filterPopoverRemoveCallback
+            self.__filterPopoverRemoveCallback = None
+            callback()
+        return
 
     @classmethod
     def _makeFilterVO(cls, filterID, contexts, filters):
@@ -262,24 +277,18 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         else:
             self.updateVehicles(vehicles)
 
-    def __onServerSettingChanged(self, diff):
-        if constants.Configs.CRYSTAL_REWARDS_CONFIG in diff or constants.RENEWABLE_SUBSCRIPTION_CONFIG in diff:
-            self.updateVehicles()
-        if constants.RENEWABLE_SUBSCRIPTION_CONFIG in diff:
-            self.updateAviability()
-
     def __onCacheResync(self, reason, diff):
         if reason in (CACHE_SYNC_REASON.SHOP_RESYNC, CACHE_SYNC_REASON.DOSSIER_RESYNC):
             self.updateVehicles()
-            self.updateAviability()
+            self.updateAvailability()
             return
         if reason in (CACHE_SYNC_REASON.STATS_RESYNC, CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-            self.updateAviability()
+            self.updateAvailability()
         if GUI_ITEM_TYPE.VEHICLE in diff:
             self.updateVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
 
     def __onCurrentVehicleChanged(self):
-        self.updateAviability()
+        self.updateAvailability()
         if self._carouselDP is not None:
             filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
@@ -295,14 +304,4 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
     def __onWotPlusChanged(self, diff):
         if 'isEnabled' in diff:
             self.updateVehicles()
-            self.updateAviability()
-
-    def __callPopoverCallback(self):
-        if callable(self.__filterPopoverRemoveCallback):
-            callback = self.__filterPopoverRemoveCallback
-            self.__filterPopoverRemoveCallback = None
-            callback()
-        return
-
-    def _getFilters(self):
-        return _CAROUSEL_FILTERS
+            self.updateAvailability()

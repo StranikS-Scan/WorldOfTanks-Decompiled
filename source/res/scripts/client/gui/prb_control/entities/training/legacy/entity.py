@@ -7,7 +7,6 @@ from CurrentVehicle import g_currentVehicle
 from constants import ARENA_GUI_TYPE, PREBATTLE_STATE, PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getRandomTooltipData
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
@@ -108,9 +107,6 @@ class TrainingIntroEntity(LegacyIntroEntity):
 
     def getPermissions(self, pID=None):
         return TrainingIntroPermissions()
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getRandomTooltipData(self.canPlayerDoAction()), False) if isStateDisabled else super(TrainingIntroEntity, self).getFightBtnTooltipData(isStateDisabled)
 
     def _createActionsValidator(self):
         return TrainingIntroActionsValidator(self)

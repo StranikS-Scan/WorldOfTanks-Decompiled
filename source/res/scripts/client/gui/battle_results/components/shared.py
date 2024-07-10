@@ -98,13 +98,6 @@ class RegularSortingBlock(SortingBlock):
         super(RegularSortingBlock, self).__init__(stored_sorting.STATS_REGULAR_SORTING, meta, field, *path)
 
 
-class SortieSortingBlock(SortingBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(SortieSortingBlock, self).__init__(stored_sorting.STATS_SORTIE_SORTING, meta, field, *path)
-
-
 class Comp7SortingBlock(SortingBlock):
     __slots__ = ()
 

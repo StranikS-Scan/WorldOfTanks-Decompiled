@@ -378,6 +378,7 @@ class ElementTooltip(BlocksTooltipData):
             if quests:
                 delimitersToPost = len(quests) - 1
                 for quest in quests:
+                    conditionsDescription = quest.getConditionsDescription()
                     vehCond = getDefaultVehicleCondFormatter().format(quest.vehicleReqs, quest)
                     postBattleCond = getDefaultPostBattleCondFormatter().format(quest.postBattleCond, quest)
                     bonusCond = getDefaultMissionsBonusConditionsFormatter().format(quest.bonusCond, quest)
@@ -385,9 +386,9 @@ class ElementTooltip(BlocksTooltipData):
                     isLevelCompleted = isLevelCompleted or isCompleted
                     battleCountCondition = quest.bonusCond.getConditions().find('battles')
                     battlesCount = None
-                    hasBattleConditions = False
                     if battleCountCondition is not None:
                         battlesCount = first(BattlesCountFormatter(bool(postBattleCond)).format(battleCountCondition, quest))
+                    conditionsBlocks = []
                     for orItem in postBattleCond:
                         progress = 0
                         andItems = orItem + first(vehCond, []) + first(bonusCond, [])
@@ -403,15 +404,18 @@ class ElementTooltip(BlocksTooltipData):
                             current = int(andItem.current or 0 if battlesCount is None else battlesCount.current)
                             total = int(andItem.total or 1 if battlesCount is None else battlesCount.total)
                             progress += int(round(current * 100.0 / total))
-                            blocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
-                            hasBattleConditions = True
+                            conditionsBlocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
 
                         if andItems:
                             progress /= len(andItems)
                         progressPercents.append(progress)
 
-                    if quest.accountReqs.getTokens() and not hasBattleConditions:
+                    if quest.accountReqs.getTokens() and not conditionsBlocks:
                         blocks.append(formatCondition(quest, isCompleted, isAvailable, 0, 1, quest.getDescription()))
+                    elif conditionsDescription:
+                        blocks.append(formatCondition(quest, isCompleted, isAvailable, 0 if battlesCount is None else battlesCount.current, 1 if battlesCount is None else battlesCount.total, conditionsDescription))
+                    elif conditionsBlocks:
+                        blocks.extend(conditionsBlocks)
                     if delimitersToPost:
                         blocks.append(formatters.packQuestOrConditionBlockData(padding=formatters.packPadding(bottom=-22, right=17)))
                         delimitersToPost -= 1
@@ -574,7 +578,7 @@ class ElementTooltip(BlocksTooltipData):
         tooltipKey = TOOLTIPS.getItemBoxTooltip(self._item.itemTypeName)
         if tooltipKey:
             title = _ms(tooltipKey, group=self._item.userType, value=self._item.userName)
-        return formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, imgPadding=formatters.packPadding(top=15, left=8), padding=formatters.packPadding(top=-20, left=-19, bottom=-7), txtPadding=formatters.packPadding(top=20, left=-8), descPadding=formatters.packPadding(top=25, left=-8)) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(title), descPadding=formatters.packPadding(top=-5))
+        return formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, imgPadding=formatters.packPadding(top=5, left=8), padding=formatters.packPadding(top=-10, left=-19, bottom=-7), txtPadding=formatters.packPadding(top=10, left=-8), descPadding=formatters.packPadding(top=25, left=-8)) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(title), descPadding=formatters.packPadding(top=-5))
 
     def _packInventoryBlock(self, showBuyPrice, showSellPrice, showInventoryCount):
         subBlocks = []

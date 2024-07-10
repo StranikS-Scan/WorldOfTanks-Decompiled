@@ -102,6 +102,7 @@
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	STRING	</Arg>
+      <IgnoreIfNoClient>	True	</IgnoreIfNoClient>
     </onCmdResponse>
     <onCmdResponseExt>
       <Arg>	INT16	</Arg>
@@ -110,6 +111,7 @@
       <Arg>	STRING	</Arg>
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
+      <IgnoreIfNoClient>	True	</IgnoreIfNoClient>
     </onCmdResponseExt>
   </ClientMethods>
 </ClientCommandsPort.def>

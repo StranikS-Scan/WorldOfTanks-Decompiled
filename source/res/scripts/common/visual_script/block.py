@@ -107,12 +107,13 @@ class Block(Meta):
     def captionText(self):
         pass
 
-    @classmethod
-    def hasValidation(cls):
-        return cls.validate != Block.validate
-
     def validate(self):
         pass
+
+    def validateAllRequired(self):
+        for item in self._getSlots():
+            if hasattr(item, 'hasValue') and not item.hasValue():
+                return item.name() + ' value is required'
 
     @classmethod
     def isOnFinishScriptCallRequired(cls):
@@ -130,6 +131,9 @@ class Block(Meta):
 
     def _getInitParams(self):
         return self.__agent.getInitParams()
+
+    def _getSlots(self):
+        return self.__agent.getSlots()
 
     def _makeDataInputSlot(self, name, slotType, editorType=-1):
         return self.__agent.makeDataInputSlot(name, slotType, editorType)

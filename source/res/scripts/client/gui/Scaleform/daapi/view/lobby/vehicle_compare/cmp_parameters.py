@@ -12,13 +12,14 @@ from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData, PARAMS_NORMALIZATION_MAP
-from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, shotDispersionAnglePreprocessor
+from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, clipFireRatePreprocessor, shotDispersionAnglePreprocessor
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, isValidEmptyValue
-from gui.shared.utils import SHOT_DISPERSION_ANGLE
+from gui.shared.utils import SHOT_DISPERSION_ANGLE, AUTO_SHOOT_CLIP_FIRE_RATE
 from helpers import dependency
 from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket
+CMP_HIDDEN_PARAMETERS = frozenset([AUTO_SHOOT_CLIP_FIRE_RATE])
 _HEADER_PARAM_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleBonusTitle, text_styles.middleTitle)
 _HEADER_PARAM_NO_COLOR_SCHEME = (text_styles.middleTitle, text_styles.middleTitle, text_styles.middleTitle)
 _PARAM_COLOR_SCHEME = (text_styles.main, text_styles.bonusAppliedText, text_styles.main)
@@ -29,7 +30,9 @@ _COLOR_SCHEMES = (_HEADER_PARAM_COLOR_SCHEME, _PARAM_COLOR_SCHEME)
 
 def _generateFormatSettings():
     settings = copy(FORMAT_SETTINGS)
-    settings.update({SHOT_DISPERSION_ANGLE: {'preprocessor': shotDispersionAnglePreprocessor,
+    settings.update({'clipFireRate': {'preprocessor': clipFireRatePreprocessor,
+                      'rounder': backport.getNiceNumberFormat},
+     SHOT_DISPERSION_ANGLE: {'preprocessor': shotDispersionAnglePreprocessor,
                              'rounder': backport.getNiceNumberFormat,
                              'skipNone': True}})
     return settings
@@ -71,6 +74,8 @@ def _hasNormalizeParameters(cache):
         if vehicle is None:
             continue
         if vehicle.descriptor.hasDualAccuracy:
+            return True
+        if vehicle.descriptor.isAutoShootGunVehicle:
             return True
 
     return False
@@ -132,6 +137,13 @@ class _VehParamsValuesGenerator(VehParamsBaseGenerator):
         else:
             data['text'] = getUndefinedParam()
         return data
+
+
+class _CmpVehicleParams(VehicleParams):
+
+    @property
+    def clipFireRate(self):
+        return super(_CmpVehicleParams, self).clipFireRate or self.autoShootClipFireRate
 
 
 class _VehCompareParametersData(object):
@@ -294,7 +306,7 @@ class _VehCompareParametersData(object):
     def getParams(self):
         if self.__isCurrVehParamsInvalid:
             self.__isCurrVehParamsInvalid = False
-            self.__currentVehParams = VehicleParams(self.__vehicle).getParamsDict()
+            self.__currentVehParams = _CmpVehicleParams(self.__vehicle).getParamsDict()
         return self.__currentVehParams
 
     def getDeltaParams(self, paramName, paramValue, hasNormalization=False):

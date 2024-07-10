@@ -20,7 +20,7 @@ from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params import PIERCING_DISTANCES
-from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
+from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, AUTO_SHOOT_CLIP_FIRE_RATE, isRomanNumberForbidden
 from helpers import i18n
 from items import perks, vehicles, tankmen, parseIntCompactDescr
 from post_progression_common import ACTION_TYPES
@@ -85,7 +85,8 @@ _MULTI_KPI_PARAMS = frozenset(['vehicleRepairSpeed',
  'turretRotationSpeed',
  'rocketAccelerationEnginePower',
  'vehicleEnemySpottingTime',
- DUAL_ACCURACY_COOLING_DELAY])
+ DUAL_ACCURACY_COOLING_DELAY,
+ AUTO_SHOOT_CLIP_FIRE_RATE])
 AUTORELOAD_TIME = 'autoReloadTime'
 _PARAMS_WITH_AGGREGATED_PENALTIES = {DUAL_ACCURACY_COOLING_DELAY}
 _CREW_ICON = 'all'

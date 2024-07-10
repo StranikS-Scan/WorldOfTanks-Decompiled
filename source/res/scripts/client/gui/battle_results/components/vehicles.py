@@ -286,7 +286,7 @@ class StrongholdVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
 
 
 class EpicVehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum')
+    __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'directHits', 'piercingHits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum')
 
     def __init__(self, meta=None, field='', *path):
         super(EpicVehicleStatValuesBlock, self).__init__(meta, field, *path)
@@ -311,7 +311,8 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         if self.__rawStunNum == 0:
             self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
-        self.hits = (result.directEnemyHits, result.piercingEnemyHits)
+        self.directHits = style.getIntegralFormatIfNoEmpty(result.directEnemyHits)
+        self.piercingHits = style.getIntegralFormatIfNoEmpty(result.piercingEnemyHits)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
         self.damageDealt = style.getIntegralFormatIfNoEmpty(result.damageDealt)
         self.sniperDamageDealt = style.getIntegralFormatIfNoEmpty(result.sniperDamageDealt)

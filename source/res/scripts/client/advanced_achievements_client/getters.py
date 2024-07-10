@@ -184,7 +184,17 @@ def getAchievementsEarnedBeforeTime(dossierDescr, requestedTimestamp):
         for achievementId in dossierDescr[achievementCategory]:
             _, stage, timestamp = dossierDescr[achievementCategory].get(achievementId)
             if timestamp != 0 and stage > 0 and timestamp > requestedTimestamp:
-                achievements.append((achievementId, achievementCategory, timestamp))
+                if not requestedTimestamp:
+                    for currStage in xrange(1, stage):
+                        achievements.append((achievementId,
+                         achievementCategory,
+                         currStage,
+                         timestamp))
+
+                achievements.append((achievementId,
+                 achievementCategory,
+                 stage,
+                 timestamp))
 
     return achievements
 

@@ -47,7 +47,7 @@ class TermsItemPacker(HeaderItemPacker):
 class KillItemPacker(TermsItemPacker):
 
     def __init__(self):
-        super(KillItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_KILL_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DESTRUCTION, BATTLE_RESULTS.COMMON_TOOLTIP_KILL_1_DESCRIPTION)
+        super(KillItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_KILL_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DESTRUCTION, BATTLE_RESULTS.COMMON_TOOLTIP_KILLCOMMON_DESCRIPTION)
 
     def pack(self, data):
         items = super(KillItemPacker, self).pack(data)

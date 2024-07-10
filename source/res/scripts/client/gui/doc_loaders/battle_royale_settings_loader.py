@@ -8,16 +8,15 @@ import resource_helper
 from battle_royale.gui.constants import ParamTypes
 from gui.impl import backport
 from gui.impl.gen import R
-from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import VehicleModule
 _BATTLE_ROYALE_CONFIG_XML_PATH = 'gui/battle_royale_settings.xml'
 _BATTLE_ROYALE_SETTINGS = None
 _logger = logging.getLogger(__name__)
 ModuleData = namedtuple('ModuleData', ('titleText', 'icon', 'deltaParams', 'priorityParams', 'params', 'constParams'))
-VehicleProperties = namedtuple('VehicleParameters', ('strengths', 'weaknesses'))
+VehicleProperties = namedtuple('VehicleProperties', ('difficulty', 'survivability', 'mobility', 'damage', 'spotting'))
 _PriorityParameter = namedtuple('PriorityParameter', ('name', 'type'))
-_BRSettings = namedtuple('_BRSettings', ('radar', 'spawn', 'techTree', 'vehicleProperties', 'upgradeAttentionTime', 'sounds'))
+_BRSettings = namedtuple('_BRSettings', ('radar', 'spottedLoot', 'spawn', 'techTree', 'vehicleProperties', 'upgradeAttentionTime', 'observerBotMarkersVisibilityDistance', 'sounds'))
 _SpawnSettings = namedtuple('_SpawnSettings', ('selectEndingSoonTime',))
 _SoundsSettings = namedtuple('_SoundsSettings', ('finalEnemiesCount', 'middleAverageLevel'))
 _TechTreeSettings = namedtuple('_TechTreeSettings', ('modules', 'vehicleParams'))
@@ -36,7 +35,7 @@ def _getModuleText(txtPath):
 
 def _readBattleRoyaleSettings():
     _, section = resource_helper.getRoot(_BATTLE_ROYALE_CONFIG_XML_PATH)
-    result = _BRSettings(_readRadarSettings(section['radar']), _readSpawnSettings(section['spawn']), _readTechTreeSettings(section['techTree']), _readVehicleProperties(section['vehicleProperties']), section['upgradeAttentionTime'].asFloat, _readSoundSettings(section['sounds']))
+    result = _BRSettings(_readRadarSettings(section['radar']), _readRadarSettings(section['spottedLoot']), _readSpawnSettings(section['spawn']), _readTechTreeSettings(section['techTree']), _readVehicleProperties(section['vehicleProperties']), section['upgradeAttentionTime'].asFloat, section['observerBotMarkersVisibilityDistance'].asInt, _readSoundSettings(section['sounds']))
     resource_helper.purgeResource(_BATTLE_ROYALE_CONFIG_XML_PATH)
     return result
 
@@ -60,21 +59,11 @@ def _readSoundSettings(section):
 
 
 def _readVehicleProperties(section):
-    allProperties = frozenset([ subsection.asString for subsection in section['properties'].values() ])
     vehicleProperties = {}
     for nation, properties in section['vehicles'].items():
-        vehicleProperties[nation] = VehicleProperties(strengths=_parseProperties(properties['strengths'], allProperties), weaknesses=_parseProperties(properties['weaknesses'], allProperties))
+        vehicleProperties[nation] = VehicleProperties(difficulty=properties['difficulty'].asInt, survivability=properties['survivability'].asInt, mobility=properties['mobility'].asInt, damage=properties['damage'].asInt, spotting=properties['spotting'].asInt)
 
     return vehicleProperties
-
-
-def _parseProperties(section, allProperties):
-    properties = section.asString.split(' ')
-    for vehProperty in properties:
-        if vehProperty not in allProperties:
-            raise SoftException('There is incorrect vehicle property "%s" in the battle royale settings' % vehProperty)
-
-    return properties
 
 
 def _readModuleParams(section, priorityParams, paramTypes):
@@ -152,7 +141,7 @@ def getVehicleProperties(nationName):
     data = getBattleRoyaleSettings().vehicleProperties.get(nationName)
     if data is None:
         _logger.error('There is not vehicle properties for the nation=%s', nationName)
-        return VehicleProperties(strengths=(), weaknesses=())
+        return VehicleProperties(difficulty=(), survivability=(), mobility=(), damage=(), spotting=())
     else:
         return data
 

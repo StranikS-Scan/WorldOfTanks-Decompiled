@@ -10,9 +10,10 @@ class AlertMessageBlock(AlertMessageBlockMeta):
         self.__onBlockClickCallback = None
         return
 
-    def update(self, alertMsgData, onBtnClickCallback=None, onBlockClickCallback=None):
-        self.__onBtnClickCallback = onBtnClickCallback
-        self.__onBlockClickCallback = onBlockClickCallback
+    def update(self, alertMsgData, callbacks=None):
+        callbacks = callbacks or {}
+        self.__onBtnClickCallback = callbacks.get('onButtonClick')
+        self.__onBlockClickCallback = callbacks.get('onBlockClick')
         self.as_setDataS(alertMsgData)
 
     def onBlockClick(self):

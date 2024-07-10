@@ -87,10 +87,6 @@
       <type>	include	</type>
     </rule>
     <rule>
-      <pattern>	.*/server_xml/personal_reserves_config\.xml$	</pattern>
-      <type>	merge	</type>
-    </rule>
-    <rule>
       <pattern>	.*/server_xml/deathzones_config\.xml$	</pattern>
       <type>	include	</type>
     </rule>

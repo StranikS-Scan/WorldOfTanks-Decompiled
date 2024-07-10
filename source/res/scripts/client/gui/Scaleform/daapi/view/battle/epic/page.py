@@ -10,8 +10,8 @@ from gui.battle_control.controllers.sound_ctrls.epic_battle_sounds import EpicBa
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.Scaleform.daapi.view.battle.epic import markers2d
-from gui.Scaleform.daapi.view.battle.shared import crosshair
 from gui.Scaleform.daapi.view.battle.epic import finish_sound_player, drone_music_player
+from gui.Scaleform.daapi.view.battle.epic.crosshair import EpicCrosshairPanelContainer
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 import CommandMapping
 from constants import ARENA_PERIOD
@@ -159,7 +159,7 @@ _STATE_TO_UI = {PageStates.GAME: _GAME_UI.union({BATTLE_VIEW_ALIASES.UPGRADE_PAN
                         BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR,
                         BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR,
                         BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL})}
-_EPIC_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.EpicMarkersManager, KillCamMarkersManager)
+_EPIC_EXTERNAL_COMPONENTS = (EpicCrosshairPanelContainer, markers2d.EpicMarkersManager, KillCamMarkersManager)
 
 class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
 

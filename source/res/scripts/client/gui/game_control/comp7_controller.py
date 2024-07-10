@@ -9,6 +9,7 @@ import typing
 import Event
 from Event import EventManager
 from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS, qualificationTokenBySeasonNumber, ratingEntNameBySeasonNumber, eliteRankEntNameBySeasonNumber, activityPointsEntNameBySeasonNumber, maxRankEntNameBySeasonNumber, COMP7_YEARLY_REWARD_TOKEN, COMP7_OFFER_PREFIX, COMP7_OFFER_GIFT_PREFIX
+from comp7_light_progression.skeletons.game_controller import IComp7LightProgressionOnTokensController
 from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
@@ -47,6 +48,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __eventsCache = dependency.descriptor(IEventsCache)
+    __progressionController = dependency.descriptor(IComp7LightProgressionOnTokensController)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
     __settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -59,7 +61,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__viewData = {}
         self.__isOffline = False
         self.__qualificationBattlesStatuses = []
-        self.__qualificationState = None
+        self.__qualificationState = Comp7QualificationState.COMPLETED
         self.__rating = 0
         self.__isElite = False
         self.__activityPoints = 0
@@ -162,8 +164,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         g_clientUpdateManager.addCallbacks({'cache.entitlements': self.__onEntitlementsChanged,
          'cache.comp7.isOnline': self.__onOfflineStatusChanged,
          'stats.restrictions': self.__onRestrictionsChanged,
-         'cache.comp7.qualification.battles': self.__onQualificationBattlesChanged,
-         'cache.comp7.qualification.state': self.__onQualificationStateChanged})
+         'cache.comp7.qualification.battles': self.__onQualificationBattlesChanged})
 
     def fini(self):
         self.clearNotification()
@@ -171,7 +172,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__eventsManager.clear()
         self.__viewData = None
         self.__qualificationBattlesStatuses = None
-        self.__qualificationState = None
         self.__banTimer.clearCallbacks()
         self.__banTimer = None
         self.__entitlementsCache.clear()
@@ -300,7 +300,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def vehicleIsAvailableForBuy(self):
         criteria = self.__filterEnabledVehiclesCriteria(REQ_CRITERIA.UNLOCKED)
-        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN
+        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM
         vUnlocked = self.__itemsCache.items.getVehicles(criteria)
         return len(vUnlocked) > 0
 
@@ -328,10 +328,11 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         else:
             visible = not self.isInPrimeTime() and self.isEnabled()
             buttonCallback = event_dispatcher.showComp7PrimeTimeWindow
-        alertData = None
-        if visible:
-            alertData = self._getAlertBlockData()
-        return (buttonCallback, alertData or self._ALERT_DATA_CLASS(), visible and alertData is not None)
+        alertData = self._getAlertBlockData() if visible else None
+        return (alertData is not None, alertData, self._ALERT_DATA_CLASS.packCallbacks(buttonCallback))
+
+    def isComp7LightProgressionActive(self):
+        return self.__progressionController.isEnabled and not self.__progressionController.isFinished
 
     def isComp7PrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COMP7)
@@ -481,6 +482,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__serverSettings.onServerSettingsChange += self.__onUpdateComp7Settings
         self.__comp7RanksConfig = self.__serverSettings.comp7RanksConfig
         self.__updateMainConfig()
+        self.__progressionController.setSettings(self.__serverSettings.comp7Config.progression)
         self.__roleEquipmentsCache = None
         return
 
@@ -514,7 +516,6 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__updateArenaBans()
         self.__updateOfflineStatus()
         self.__updateQualificationBattles()
-        self.__updateQualificationState()
 
     def __onEntitlementsChanged(self, entitlements):
         if self.__getActualEntitlements() & set(entitlements.keys()):
@@ -559,17 +560,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def __onQualificationBattlesChanged(self, _):
         self.__updateQualificationBattles()
 
-    def __onQualificationStateChanged(self, _):
-        self.__updateQualificationState()
-
     def __updateQualificationBattles(self):
         self.__qualificationBattlesStatuses = self.__itemsCache.items.stats.comp7.get('qualification', {}).get('battles', [None])
         self.onQualificationBattlesUpdated()
         return
-
-    def __updateQualificationState(self):
-        self.__qualificationState = self.__itemsCache.items.stats.comp7.get('qualification', {}).get('state', Comp7QualificationState.NOT_STARTED)
-        self.onQualificationStateUpdated()
 
     def __onEntitlementsCacheUpdated(self, isSuccess):
         if isSuccess:

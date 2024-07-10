@@ -210,12 +210,13 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
             callToAction = modeStrings.dyn('callToAction')
             self.viewModel.setStatusActive(backport.text(callToAction()) if callToAction.exists() else '')
 
-    def _addReward(self, rewardID, locParams=None, **params):
+    def _addReward(self, rewardID, locParams=None, icon=None, **params):
         if locParams is None:
             locParams = {}
         rewardIDValue = rewardID.value
+        iconName = icon or rewardIDValue
         item = ModeSelectorRewardModel()
-        item.setIconName(rewardIDValue)
+        item.setIconName(iconName)
         rReward = R.strings.mode_selector.reward.dyn(rewardIDValue)
         item.setName(rReward.name())
         item.setDescription(backport.text(rReward.description(), **locParams))

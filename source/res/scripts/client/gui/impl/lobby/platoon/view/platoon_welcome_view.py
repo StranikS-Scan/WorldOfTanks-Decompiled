@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/platoon/view/platoon_welcome_view.py
 import logging
+from gui.impl.lobby.platoon.platoon_helpers import getPlatoonBonusState, BonusState
 from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
@@ -13,7 +14,7 @@ from gui.impl.lobby.platoon.view.subview.platoon_tiers_filter_subview import Tie
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
 from gui.shared.events import PlatoonDropdownEvent
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, Configs
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
 from gui.shared import g_eventBus
@@ -68,16 +69,19 @@ class WelcomeView(ViewImpl):
 
     def _initButtons(self):
         with self.viewModel.transaction() as model:
-            model.btnFind.setCaption(backport.text(strButtons.findPlayers.caption()))
-            model.btnFind.setDescription(backport.text(strButtons.findPlayers.descriptionDropdown()))
-            model.btnFind.setIsEnabled(self.__platoonCtrl.canStartSearch())
-            model.btnCreate.setCaption(backport.text(strButtons.createPlatoon.caption()))
-            model.btnCreate.setDescription(backport.text(strButtons.createPlatoon.description()))
+            model.findPlatoon.setCaption(backport.text(strButtons.findPlayers.caption()))
+            model.findPlatoon.setDescription(backport.text(strButtons.findPlayers.descriptionDropdown()))
+            model.findPlatoon.setIsEnabled(self.__platoonCtrl.canStartSearch())
+            model.createPlatoon.setCaption(backport.text(strButtons.createPlatoon.caption()))
+            model.createPlatoon.setDescription(backport.text(strButtons.createPlatoon.description()))
+            bonusState = getPlatoonBonusState(False)
+            model.setHasXpBonus(BonusState.hasAnyBitSet(BonusState.XP_BONUS, bonusState))
+            model.setHasCreditsBonus(BonusState.hasAnyBitSet(BonusState.SQUAD_CREDITS_BONUS | BonusState.PREM_CREDITS_BONUS, bonusState))
 
     def _addListeners(self):
         with self.viewModel.transaction() as model:
-            model.btnFind.onClick += self.__onFind
-            model.btnCreate.onClick += self.__onCreate
+            model.findPlatoon.onClick += self.__onFind
+            model.createPlatoon.onClick += self.__onCreate
             model.onOutsideClick += self._onOutsideClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.__platoonCtrl.onAvailableTiersForSearchChanged += self.__onAvailableTiersForSearchChanged
@@ -85,8 +89,8 @@ class WelcomeView(ViewImpl):
 
     def _removeListeners(self):
         with self.viewModel.transaction() as model:
-            model.btnFind.onClick -= self.__onFind
-            model.btnCreate.onClick -= self.__onCreate
+            model.findPlatoon.onClick -= self.__onFind
+            model.createPlatoon.onClick -= self.__onCreate
             model.onOutsideClick -= self._onOutsideClick
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.__platoonCtrl.onAvailableTiersForSearchChanged -= self.__onAvailableTiersForSearchChanged
@@ -99,10 +103,10 @@ class WelcomeView(ViewImpl):
 
     def __updateFindButton(self, *args):
         with self.viewModel.transaction() as model:
-            model.btnFind.setIsEnabled(self.__platoonCtrl.canStartSearch() and not self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH))
+            model.findPlatoon.setIsEnabled(self.__platoonCtrl.canStartSearch() and not self.__platoonCtrl.isInCoolDown(REQUEST_TYPE.AUTO_SEARCH))
 
     def __onServerSettingsChange(self, diff):
-        if 'unit_assembler_config' in diff:
+        if Configs.UNIT_ASSEMBLER_CONFIG.value in diff:
             self.update(updateTiersLimitSubview=False)
 
     def __showSettingsCallback(self, state):
@@ -127,7 +131,7 @@ class WelcomeView(ViewImpl):
                 body = R.strings.platoon.buttons.findPlayers.tooltip.noSuitableTank.body()
             return AlertTooltip(header, body)
         else:
-            return SquadBonusTooltipContent() if contentID == R.views.lobby.premacc.squad_bonus_tooltip_content.SquadBonusTooltipContent() else super(WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
+            return SquadBonusTooltipContent(bonusState=getPlatoonBonusState(False)) if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip() else super(WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
 
     def __setBattleTypeRelatedProps(self):
         queueType = self.__platoonCtrl.getQueueType()

@@ -117,8 +117,8 @@ class AgateAccessor(BaseAccessor):
     def agate_v4_fetch_product_list_state(self, callback, params, fields=None):
         return self._data_source.agate_v4_fetch_product_list_state(callback, params, fields=fields)
 
-    def agate_v6_get_user_subscriptions2(self, callback, params, fields=None):
-        return self._data_source.agate_v6_get_user_subscriptions2(callback, params, fields=fields)
+    def agate_v6_get_user_subscriptions3(self, callback, params, fields=None):
+        return self._data_source.agate_v6_get_user_subscriptions3(callback, params, fields=fields)
 
     def get_inventory_entitlements(self, callback, entitlement_codes):
         return self._data_source.get_inventory_entitlements(callback, entitlement_codes)

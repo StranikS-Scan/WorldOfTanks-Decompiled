@@ -19,6 +19,8 @@ class NetworkEntity(BigWorld.Entity):
             LOG_DEBUG_DEV('New NetworkEntity [{}][{}] position {} rotation {} scale {}'.format(self.id, self.unique_id, self.position, direction, self.scale))
 
     def onLeaveWorld(self):
+        if self.entityGameObject and self.prefab_path:
+            CGF.removeGameObject(self.entityGameObject)
         self.entityGameObject = None
         if CGF.removeNetworkEntity(self.spaceID, self, self.unique_id):
             LOG_DEBUG_DEV('Removed NetworkEntity [{}]'.format(self.id))

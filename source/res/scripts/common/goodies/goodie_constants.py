@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/goodie_constants.py
 from enum import Enum, IntEnum, unique
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 MAX_ACTIVE_PERSONAL_BOOSTERS = 3
 MAX_ACTIVE_EVENT_BOOSTERS = 1
 MAX_ACTIVE_BOOSTERS = MAX_ACTIVE_PERSONAL_BOOSTERS + MAX_ACTIVE_EVENT_BOOSTERS
@@ -117,3 +118,8 @@ class BoosterCategory(Enum):
     PERSONAL = 'personal'
     CLAN = 'clan'
     EVENT = 'event'
+
+
+BOOSTER_CATEGORY_TO_BONUS_CAPS = {BoosterCategory.PERSONAL: ARENA_BONUS_TYPE_CAPS.BOOSTERS,
+ BoosterCategory.CLAN: ARENA_BONUS_TYPE_CAPS.CLAN_BOOSTERS,
+ BoosterCategory.EVENT: ARENA_BONUS_TYPE_CAPS.EVENT_BOOSTERS}

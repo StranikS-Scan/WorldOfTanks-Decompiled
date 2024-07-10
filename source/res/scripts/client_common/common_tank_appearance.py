@@ -109,7 +109,7 @@ class CommonTankAppearance(ScriptGameObject):
     transmissionScroll = property(lambda self: self._commonScroll)
     vehicleStickers = property(lambda self: self._vehicleStickers)
     isTurretDetached = property(lambda self: self._isTurretDetached)
-    _weaponEnergy = property(lambda self: self.__weaponEnergy)
+    weaponEnergy = property(lambda self: self.__weaponEnergy)
     filter = AutoProperty()
     areaTriggerTarget = ComponentDescriptor()
     burnoutProcessor = ComponentDescriptor()
@@ -421,15 +421,15 @@ class CommonTankAppearance(ScriptGameObject):
         self._initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
 
     def multiGunRecoil(self, indexes):
-        if self.gunAnimators is None or self.isDestroyed:
+        if self.isDestroyed:
             return
         else:
+            gunAnimators = self.gunAnimators
             for index in indexes:
                 typeDescr = self.typeDescriptor
                 gunNodeName = typeDescr.turret.multiGun[index].node
                 gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
-                gunAnimator = self.gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator)
-                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator) if gunAnimators else None)
 
             return
 
@@ -448,7 +448,8 @@ class CommonTankAppearance(ScriptGameObject):
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.typeDescriptor.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        gunAnimator.recoil()
+        if gunAnimator is not None:
+            gunAnimator.recoil()
         return impulseDir
 
     def _connectCollider(self):
@@ -572,7 +573,7 @@ class CommonTankAppearance(ScriptGameObject):
                 self.trackScrollController.activate()
                 self.trackScrollController.setData(self.filter)
             if self.engineAudition is not None:
-                self.engineAudition.setWeaponEnergy(self._weaponEnergy)
+                self.engineAudition.setWeaponEnergy(self.weaponEnergy)
                 self.engineAudition.attachToModel(self.compoundModel)
             if self.hullAimingController is not None:
                 self.hullAimingController.setData(self.filter, self.typeDescriptor)

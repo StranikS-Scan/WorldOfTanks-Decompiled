@@ -243,7 +243,9 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     @noexcept
     def update_battleEventsSummary(self, data):
         avatar = self._avatar()
-        return None if not avatar else None
+        if not avatar:
+            return
+        avatar.battleEventsSummary(data)
 
     @noexcept
     def update_remoteCamera(self, data):

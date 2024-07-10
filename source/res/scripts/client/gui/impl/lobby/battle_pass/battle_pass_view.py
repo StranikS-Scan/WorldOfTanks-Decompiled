@@ -104,6 +104,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
             if isProgressionView:
                 self._injectView.setChapter(chapterID)
             else:
+                if self._injectView is not None:
+                    self.__safeCall(self._injectView, 'onViewSwitch')
                 self._destroyInjected()
                 self._createInjectView(layoutID, chapterID)
             return

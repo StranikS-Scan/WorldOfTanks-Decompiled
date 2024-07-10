@@ -51,6 +51,17 @@ class MoonSphereAchievement(RegularAchievement, NoProgressBar):
         return validators.alreadyAchieved(cls, name, block, dossier)
 
 
+class LumberjackAchievement(RegularAchievement, NoProgressBar):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(LumberjackAchievement, self).__init__('lumberjack', _AB.TOTAL, dossier, value)
+
+    @classmethod
+    def checkIsValid(cls, block, name, dossier):
+        return validators.alreadyAchieved(cls, name, block, dossier)
+
+
 class ReferralProgramSingleAchievement(RegularAchievement):
     __slots__ = ()
 

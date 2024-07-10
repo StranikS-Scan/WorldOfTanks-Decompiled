@@ -47,6 +47,7 @@ EPIC_AWARD_SIZE = 's360x270'
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
+    S232X174 = 's232x174'
 
 
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
@@ -65,6 +66,7 @@ BATTLE_BONUS_X5_TOKEN = 'battle_bonus_x5'
 CREW_BONUS_X3_TOKEN = 'crew_bonus_x3'
 GOLD_MISSION = 'goldmission'
 BR_PROGRESSION_TOKEN = 'img:battle_royale:progression'
+COMP7_LIGHT_PROGRESSION_TOKEN = 'img:comp7_light:progression'
 AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
                       Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
                       Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CRYSTAL,
@@ -92,7 +94,21 @@ AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUES
                     'tankmenXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_TANKMENXP,
                     'xp': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
                     'xpFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_EXP,
-                    'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP}}
+                    'dailyXPFactor': RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_FREEXP},
+ AWARDS_SIZES.S232X174: {Currency.CREDITS: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.CREDITS),
+                         Currency.GOLD: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.GOLD),
+                         Currency.CRYSTAL: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.CRYSTAL),
+                         Currency.EVENT_COIN: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.EVENT_COIN),
+                         Currency.BPCOIN: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.BPCOIN),
+                         Currency.EQUIP_COIN: RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.EQUIP_COIN),
+                         'creditsFactor': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.CREDITS),
+                         'freeXP': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.FREE_XP),
+                         'freeXPFactor': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.FREE_XP),
+                         'tankmenXP': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, 'tankmenXP'),
+                         'tankmenXPFactor': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, 'tankmenXP'),
+                         'xp': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, 'exp'),
+                         'xpFactor': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, 'exp'),
+                         'dailyXPFactor': RES_ICONS.getBonusIcon(AWARDS_SIZES.S232X174, Currency.FREE_XP)}}
 
 def getRecertificationFormImages():
     result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.recertification.common_48x48()),
@@ -264,8 +280,8 @@ def getBattlePassFormatterMap():
     mapping.update({'blueprints': BlueprintGroupBonusFormatter(),
      'finalBlueprints': BlueprintGroupBonusFormatter(),
      'items': EpicItemsBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.BASIC: BattlePassPremiumDaysBonusFormatter(),
-     PREMIUM_ENTITLEMENTS.PLUS: BattlePassPremiumDaysBonusFormatter()})
+     PREMIUM_ENTITLEMENTS.BASIC: UniversalPremiumDaysBonusFormatter(),
+     PREMIUM_ENTITLEMENTS.PLUS: UniversalPremiumDaysBonusFormatter()})
     return mapping
 
 
@@ -688,7 +704,7 @@ class PremiumDaysEpicBonusFormatter(PremiumDaysBonusFormatter):
         return {size: RES_ICONS.getPremiumDaysAwardIcon(size, bonus.getName(), bonus.getValue())}
 
 
-class BattlePassPremiumDaysBonusFormatter(SimpleBonusFormatter):
+class UniversalPremiumDaysBonusFormatter(SimpleBonusFormatter):
     __PREMIUM_DAYS_ICONS = (1, 2, 3, 7, 14, 30, 90, 180, 360)
 
     def _format(self, bonus):
@@ -738,6 +754,8 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         complexToken = parseComplexToken(tokenID)
         if tokenID.startswith(BR_PROGRESSION_TOKEN):
             return self._formatBRComplexToken(complexToken, token, bonus)
+        elif tokenID.startswith(COMP7_LIGHT_PROGRESSION_TOKEN):
+            return self._formatComp7LightComplexToken(complexToken, token, bonus)
         else:
             if complexToken.isDisplayable:
                 formatted = self._formatComplexToken(complexToken, token, bonus)
@@ -754,6 +772,10 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     def _formatBRComplexToken(self, complexToken, token, bonus):
         formatted = self._formatComplexToken(complexToken, token, bonus)
         return formatted._replace(tooltip=self.__getBRProgressionTooltip())
+
+    def _formatComp7LightComplexToken(self, complexToken, token, bonus):
+        formatted = self._formatComplexToken(complexToken, token, bonus)
+        return formatted._replace(tooltip=self.__getComp7LightProgressionTooltip())
 
     def _formatBonusLabel(self, count):
         return formatCountLabel(count)
@@ -802,9 +824,15 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         else:
             images = {}
             for size in AWARDS_SIZES.ALL():
-                images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getType())
+                images[size] = self._getLootboxIcon(lootBox, size)
 
-            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getLootboxUserName(lootBox), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=self._getLootboxUserName(lootBox), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    def _getLootboxUserName(self, lootBox):
+        return lootBox.getUserName()
+
+    def _getLootboxIcon(self, lootBox, size):
+        return RES_ICONS.getLootBoxBonusIcon(size, lootBox.getType())
 
     def _formatBonusToken(self, name, token, bonus):
         return None if token.count <= 0 else PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=bonus.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=self.__getBonusFactorImages(name), tooltip=self.getBonusFactorTooltip(name), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
@@ -821,6 +849,11 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     @staticmethod
     def __getBRProgressionTooltip():
         tokenBase = R.strings.battle_royale_progression.quests.bonuses.progressionToken
+        return makeTooltip(backport.text(tokenBase.header()), backport.text(tokenBase.body()))
+
+    @staticmethod
+    def __getComp7LightProgressionTooltip():
+        tokenBase = R.strings.comp7_light_progression.quests.bonuses.progressionToken
         return makeTooltip(backport.text(tokenBase.header()), backport.text(tokenBase.body()))
 
 
@@ -1421,7 +1454,8 @@ class GoodiesBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getDemountKitImages(cls, demountKit):
         return {AWARDS_SIZES.SMALL: demountKit.getIcon(ICONS_SIZES.X48),
-         AWARDS_SIZES.BIG: demountKit.getIcon(ICONS_SIZES.X80)}
+         AWARDS_SIZES.BIG: demountKit.getIcon(ICONS_SIZES.X80),
+         AWARDS_SIZES.S232X174: demountKit.getIcon(ICONS_SIZES.X232)}
 
     @classmethod
     def _getUserName(cls, booster):

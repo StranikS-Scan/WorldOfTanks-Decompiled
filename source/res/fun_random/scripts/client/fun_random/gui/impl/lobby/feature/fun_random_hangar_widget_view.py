@@ -5,7 +5,7 @@ import typing
 from frameworks.wulf import ViewFlags, ViewSettings
 from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher, FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasDesiredSubMode
-from fun_random.gui.impl.lobby.common.fun_view_helpers import defineProgressionStatus, packProgressionState, packProgressionActiveStage
+from fun_random.gui.impl.lobby.common.fun_view_helpers import defineProgressionStatus, packProgressionState, packProgressionActiveStage, packInfiniteProgressionState, packInfiniteProgressionStage
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.fun_random_hangar_widget_view_model import FunRandomHangarWidgetViewModel
 from fun_random.gui.impl.lobby.tooltips.fun_random_domain_tooltip_view import FunRandomDomainTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
@@ -83,5 +83,9 @@ class FunRandomHangarWidgetView(ViewImpl, FunSubModesWatcher, FunProgressionWatc
     @hasActiveProgression()
     def __invalidateProgression(self, state, currStage):
         progression = self.getActiveProgression()
-        packProgressionState(progression, state)
-        packProgressionActiveStage(progression, currStage)
+        if progression.isInUnlimitedProgression:
+            packInfiniteProgressionState(progression, state)
+            packInfiniteProgressionStage(progression, currStage)
+        else:
+            packProgressionState(progression, state)
+            packProgressionActiveStage(progression, currStage)

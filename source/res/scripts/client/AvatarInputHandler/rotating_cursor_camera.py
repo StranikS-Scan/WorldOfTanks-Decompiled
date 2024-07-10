@@ -49,13 +49,17 @@ class RotatingCoursorCamera(object):
         return
 
     def handleMouseEvent(self, dx, dy, dz):
-        currYaw, currPitch = self.__camera.source.yaw, self.__camera.source.pitch
-        newYaw = (currYaw + math.radians(dx * self.__sensitivity)) % (2 * math.pi)
-        newPitch = currPitch + math.radians(-dy * self.__sensitivity)
-        newPitch = math_utils.clamp(-self.__maxPitch, -self.__minPitch, newPitch)
-        self.__camera.source = math_utils.createRotationMatrix((newYaw, newPitch, 0))
-        self.__camera.pivotMaxDist = self.clampDistance(self.__camera.pivotMaxDist - dz)
-        self.__camera.forceUpdate()
+        if self.__camera is None:
+            return
+        else:
+            currYaw, currPitch = self.__camera.source.yaw, self.__camera.source.pitch
+            newYaw = (currYaw + math.radians(dx * self.__sensitivity)) % (2 * math.pi)
+            newPitch = currPitch + math.radians(-dy * self.__sensitivity)
+            newPitch = math_utils.clamp(-self.__maxPitch, -self.__minPitch, newPitch)
+            self.__camera.source = math_utils.createRotationMatrix((newYaw, newPitch, 0))
+            self.__camera.pivotMaxDist = self.clampDistance(self.__camera.pivotMaxDist - dz)
+            self.__camera.forceUpdate()
+            return
 
     def clampDistance(self, value):
         return math_utils.clamp(self.__minDist, self.__maxDist, value)

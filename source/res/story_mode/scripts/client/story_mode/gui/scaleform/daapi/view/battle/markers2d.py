@@ -5,22 +5,18 @@ import BigWorld
 import CGF
 from BunkerLogicComponent import BunkerLogicComponent
 from Math import Vector4, Vector2, Matrix
-from constants import VEHICLE_HIT_FLAGS
 from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.markers import BaseMarker
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import RespawnableVehicleMarkerPlugin
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, PLAYER_GUI_PROPS
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, MARKER_EMPTY_HIT_STATE
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from story_mode.skeletons.voiceover_controller import IVoiceoverManager
 from story_mode_common.story_mode_constants import LOGGER_NAME
-_MARKER_CRITICAL_HIT_STATES = {FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT,
- FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_DAMAGE,
- FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS,
- FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED}
+_MARKER_CRITICAL_HIT_STATES = {FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT, FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS, FEEDBACK_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED}
 _logger = getLogger(LOGGER_NAME)
 _MEDIUM_MARKER_MIN_SCALE = 100
 _MAX_CULL_DISTANCE = 1000000.0
@@ -52,7 +48,6 @@ class StoryModeVehicleMarkerPlugin(RespawnableVehicleMarkerPlugin):
 
     def start(self):
         super(StoryModeVehicleMarkerPlugin, self).start()
-        self._hiddenEvents = _MARKER_CRITICAL_HIT_STATES
         self._voiceoverManager.onStarted += self._voiceoverHandler
         self._voiceoverManager.onStopped += self._voiceoverHandler
         if self._voiceoverManager.isPlaying:
@@ -62,6 +57,9 @@ class StoryModeVehicleMarkerPlugin(RespawnableVehicleMarkerPlugin):
         self._voiceoverManager.onStarted -= self._voiceoverHandler
         self._voiceoverManager.onStopped -= self._voiceoverHandler
         super(StoryModeVehicleMarkerPlugin, self).stop()
+
+    def _getHitState(self, eventID):
+        return MARKER_EMPTY_HIT_STATE if eventID in _MARKER_CRITICAL_HIT_STATES else super(StoryModeVehicleMarkerPlugin, self)._getHitState(eventID)
 
     def _voiceoverHandler(self):
         ctx = self._voiceoverManager.currentCtx
@@ -195,9 +193,13 @@ class BunkersPlugin(MarkerPlugin):
         if marker is None:
             return
         else:
+            hasImpactMask = True
+            battleSpamCtrl = self.sessionProvider.shared.battleSpamCtrl
             aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
-            self.__entitiesDamageType[entityId] = self.__getVehicleDamageType(aInfo)
-            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
+            if battleSpamCtrl is not None and aInfo and aInfo.isAutoShootGunVehicle():
+                hasImpactMask = battleSpamCtrl.filterMarkersHitState(entityId, 'impact{}'.format(attackerID))
+            self.__entitiesDamageType[entityId] = bool(aInfo and aInfo.vehicleID == BigWorld.player().playerVehicleID)
+            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hasImpactMask)
             return
 
     def _updateDistanceToEntity(self, entityId, entity):
@@ -227,16 +229,3 @@ class BunkersPlugin(MarkerPlugin):
 
             self._distanceUpdateCallback = BigWorld.callback(self._DISTANCE_UPDATE_TIME, self._distanceUpdate)
             return
-
-    def __getVehicleDamageType(self, attackerInfo):
-        if not attackerInfo:
-            return settings.DAMAGE_TYPE.FROM_UNKNOWN
-        attackerID = attackerInfo.vehicleID
-        if attackerID == BigWorld.player().playerVehicleID:
-            return settings.DAMAGE_TYPE.FROM_PLAYER
-        entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
-        if entityName == PLAYER_GUI_PROPS.squadman:
-            return settings.DAMAGE_TYPE.FROM_SQUAD
-        if entityName == PLAYER_GUI_PROPS.ally:
-            return settings.DAMAGE_TYPE.FROM_ALLY
-        return settings.DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else settings.DAMAGE_TYPE.FROM_UNKNOWN

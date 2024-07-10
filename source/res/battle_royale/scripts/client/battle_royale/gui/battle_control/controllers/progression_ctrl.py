@@ -21,7 +21,6 @@ from helpers import dependency
 from items import getTypeOfCompactDescr
 from items.battle_royale import ModulesInstaller
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -69,7 +68,6 @@ class IProgressionListener(object):
 
 
 class _BattleRoyaleArenaLevel(object):
-    __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __slots__ = ('__xp', '__level', '__percent', '__baseXP', '__targetXP', '__diffXp', '__diffXpAfterLevel', '__xpToLevel', '__maxLevel', '__levelIsChanged', '__xpIsChanged', '__isMaxLvlAchieved', '__currentObservedVehicleID', '__observedVehicleIsChanged')
 
     def __init__(self):
@@ -91,9 +89,10 @@ class _BattleRoyaleArenaLevel(object):
 
     def updateXP(self, xp, observedVehicleID):
         if not self.__xpToLevel:
-            battleXP = self.__battleRoyaleController.getModeSettings().battleXP
-            if battleXP and 'xpToLvl' in battleXP:
-                self.__xpToLevel = battleXP['xpToLvl']
+            arenaInfo = BigWorld.player().arena.arenaInfo
+            xpConfig = arenaInfo.arenaInfoBRComponent.xpConfig if arenaInfo else None
+            if xpConfig:
+                self.__xpToLevel = xpConfig
                 self.__maxLevel = len(self.__xpToLevel)
                 self.__reInitData()
         self.__observedVehicleIsChanged = observedVehicleID != self.__currentObservedVehicleID
@@ -103,35 +102,37 @@ class _BattleRoyaleArenaLevel(object):
         if not self.__xpToLevel or self.__isMaxLvlAchieved:
             self.__levelIsChanged = False
             return
-        self.__levelIsChanged = self.__observedVehicleIsChanged
-        self.__xpIsChanged = xp > self.__xp
-        newLevel = self.__getLevelByXp(xp)
-        self.__isMaxLvlAchieved = newLevel >= self.__maxLevel
-        if self.__isMaxLvlAchieved:
-            self.__percent = IProgressionListener.MAX_PERCENT_AMOUNT
-            self.__diffXp = self.__targetXP - self.__xp
-            self.__diffXpAfterLevel = 0
-            self.__baseXP = self.__xpToLevel[self.__maxLevel - 1]
-            self.__targetXP = self.__xpToLevel[self.__maxLevel - 1]
-            self.__xp = xp
-            self.__level = self.__maxLevel
-            self.__levelIsChanged = True
+        else:
+            self.__levelIsChanged = self.__observedVehicleIsChanged
+            self.__xpIsChanged = xp > self.__xp
+            newLevel = self.__getLevelByXp(xp)
+            self.__isMaxLvlAchieved = newLevel >= self.__maxLevel
+            if self.__isMaxLvlAchieved:
+                self.__percent = IProgressionListener.MAX_PERCENT_AMOUNT
+                self.__diffXp = self.__targetXP - self.__xp
+                self.__diffXpAfterLevel = 0
+                self.__baseXP = self.__xpToLevel[self.__maxLevel - 1]
+                self.__targetXP = self.__xpToLevel[self.__maxLevel - 1]
+                self.__xp = xp
+                self.__level = self.__maxLevel
+                self.__levelIsChanged = True
+                return
+            if newLevel > self.__level:
+                self.__level = newLevel
+                self.__diffXp = self.__targetXP - self.__xp
+                self.__baseXP = self.__xpToLevel[self.__level - 1]
+                self.__targetXP = self.__xpToLevel[self.__level]
+                self.__xp = xp
+                self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
+                self.__diffXpAfterLevel = self.__xp - self.__baseXP
+                self.__levelIsChanged = True
+                return
+            if xp > self.__xp:
+                self.__diffXp = xp - self.__xp
+                self.__diffXpAfterLevel = 0
+                self.__xp = xp
+                self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
             return
-        if newLevel > self.__level:
-            self.__level = newLevel
-            self.__diffXp = self.__targetXP - self.__xp
-            self.__baseXP = self.__xpToLevel[self.__level - 1]
-            self.__targetXP = self.__xpToLevel[self.__level]
-            self.__xp = xp
-            self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
-            self.__diffXpAfterLevel = self.__xp - self.__baseXP
-            self.__levelIsChanged = True
-            return
-        if xp > self.__xp:
-            self.__diffXp = xp - self.__xp
-            self.__diffXpAfterLevel = 0
-            self.__xp = xp
-            self.__percent = self.__getPercent(self.__xp, self.__baseXP, self.__targetXP)
 
     def resetXpChangedFlag(self):
         self.__xpIsChanged = False

@@ -163,6 +163,7 @@ class WebBrowser(object):
         self.__ctrlDown = False
         self.__shiftDown = False
         self.__isReady = False
+        self._enableUpdate = False
         self.__eventMgr = EventManager()
         self.onLoadStart = Event(self.__eventMgr)
         self.onLoadEnd = Event(self.__eventMgr)
@@ -298,7 +299,7 @@ class WebBrowser(object):
         _logger.info('READY success: %r %s id: %s', success, self.__baseUrl, self.__browserID)
         self.__readyToShow = False
         self.__successfulLoad = False
-        self.enableUpdate = True
+        self._enableUpdate = True
         self.__isMouseDown = False
         self.__isWaitingForUnfocus = False
         if success:
@@ -433,7 +434,7 @@ class WebBrowser(object):
             return False
         if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
             return False
-        if not (self.hasBrowser and self.enableUpdate):
+        if not (self.hasBrowser and self._enableUpdate):
             return False
         if not self.allowMiddleClick and e.key == Keys.KEY_MIDDLEMOUSE:
             return False
@@ -457,7 +458,7 @@ class WebBrowser(object):
         return True
 
     def browserMove(self, x, y, z):
-        if not (self.hasBrowser and self.enableUpdate and self.isFocused):
+        if not (self.hasBrowser and self._enableUpdate and self.isFocused):
             return
         if z != 0:
             if self.allowMouseWheel:
@@ -466,7 +467,7 @@ class WebBrowser(object):
         self.__browser.injectMouseMoveEvent(x, y)
 
     def browserDown(self, x, y, z):
-        if not (self.hasBrowser and self.enableUpdate):
+        if not (self.hasBrowser and self._enableUpdate):
             return
         if self.__isMouseDown:
             return
@@ -478,7 +479,7 @@ class WebBrowser(object):
         self.__isMouseDown = True
 
     def browserUp(self, x, y, z):
-        if not (self.hasBrowser and self.enableUpdate):
+        if not (self.hasBrowser and self._enableUpdate):
             return
         if not self.__isMouseDown:
             return
@@ -493,21 +494,21 @@ class WebBrowser(object):
         self.unfocus()
 
     def browserAction(self, action):
-        if self.hasBrowser and self.enableUpdate:
+        if self.hasBrowser and self._enableUpdate:
             if action == 'reload' and self.isNavigationComplete:
                 self.refresh()
             elif action == 'loading' and not self.isNavigationComplete:
                 self.navigateStop()
 
     def onBrowserShow(self, needRefresh):
-        self.enableUpdate = True
+        self._enableUpdate = True
         if needRefresh and self.baseUrl != self.url:
             self.navigate(self.url)
         self.focus()
 
     def onBrowserHide(self):
         self.navigate(self.__baseUrl)
-        self.enableUpdate = False
+        self._enableUpdate = False
         self.unfocus()
 
     def addFilter(self, handler):

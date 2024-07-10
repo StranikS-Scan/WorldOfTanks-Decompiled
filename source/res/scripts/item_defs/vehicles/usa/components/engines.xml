@@ -125,6 +125,7 @@
     <AOI_1195D>	149	</AOI_1195D>
     <Ford_GAA_BPXIV>	153	</Ford_GAA_BPXIV>
     <Wright_Continental_R-975C1_Crab>	152	</Wright_Continental_R-975C1_Crab>
+    <Continental_AVI_1790_8XM>	154	</Continental_AVI_1790_8XM>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>	60003	</Continental_AV-1790-3A1_IGR>
@@ -141,6 +142,8 @@
     <Continental_AV-1790-7B_7x7>	503	</Continental_AV-1790-7B_7x7>
     <Continental_AOSI-895-5A_FL>	504	</Continental_AOSI-895-5A_FL>
     <AOI-1490_7x7>	505	</AOI-1490_7x7>
+    <Continental_AOSI_1195_5_Y_V_FEP>	601	</Continental_AOSI_1195_5_Y_V_FEP>
+    <General_Motors_6V53T_FEP>	602	</General_Motors_6V53T_FEP>
     <Development_Engine>	65535	</Development_Engine>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>	6	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>
     <Ford_GAC_1_MapsTraining_Player_HT_1>	8	</Ford_GAC_1_MapsTraining_Player_HT_1>
@@ -474,8 +477,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <rpm_min>	343	</rpm_min>
+      <rpm_max>	2701	</rpm_max>
     </Wright_Continental_R-975C1_Crab>
     <Wright_Continental_R-975C1L>
       <userString>	#usa_vehicles:Wright_Continental_R-975C1L	</userString>
@@ -1883,6 +1886,24 @@
       <rpm_min>	280	</rpm_min>
       <rpm_max>	2901	</rpm_max>
     </Continental_AVI_1790_8RM>
+    <Continental_AVI_1790_8XM>
+      <userString>	#usa_vehicles:Continental_AVI_1790_8XM	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AVI_1790_8XM_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	1349	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
+    </Continental_AVI_1790_8XM>
     <AOI_1195D>
       <userString>	#usa_vehicles:AOI_1195D	</userString>
       <tags>	diesel	</tags>
@@ -2382,6 +2403,42 @@
       <rpm_min>	337	</rpm_min>
       <rpm_max>	2721	</rpm_max>
     </Wright_Continental_R_975_C4_858>
+    <Continental_AOSI_1195_5_Y_V_FEP>
+      <userString>	#usa_vehicles:Continental_AOSI_1195_5_Y_V_FEP	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AOSI_1195_5_Y_V_FEP_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	998	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+    </Continental_AOSI_1195_5_Y_V_FEP>
+    <General_Motors_6V53T_FEP>
+      <userString>	#usa_vehicles:General_Motors_6V53T_FEP	</userString>
+      <shortUserString>	#usa_vehicles:General_Motors_6V53T_FEP_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	495	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </General_Motors_6V53T_FEP>
     <Continental_AOI-628-2_IGR>
       <userString>	#igr_vehicles:Continental_AOI-628-2_IGR	</userString>
       <shortUserString>	#igr_vehicles:Continental_AOI-628-2_IGR_short	</shortUserString>

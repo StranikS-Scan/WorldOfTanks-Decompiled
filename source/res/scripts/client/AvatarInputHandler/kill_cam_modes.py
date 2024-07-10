@@ -456,6 +456,7 @@ class KillCamMode(IControlMode, CallbackDelayer):
         projectileData = self.__rawSimulationData['projectile']
         self.__cam.projectileTriNorm = self.__rawSimulationData['projectile']['triNormal']
         self.__cam.hasProjectilePierced = self.__rawSimulationData['projectile']['hasProjectilePierced']
+        self.__cam.hasNonPiercedDamage = self.__rawSimulationData['projectile']['hasNonPiercedDamage']
         self.__cam.isSPG = self.__rawSimulationData['attacker']['vehicleType'] == 'SPG'
         impactType = self.__rawSimulationData['projectile']['impactType']
         if impactType == constants.IMPACT_TYPES.LEGACY_HE:

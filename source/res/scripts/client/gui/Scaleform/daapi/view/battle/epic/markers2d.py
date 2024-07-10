@@ -18,7 +18,6 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
 from gui.battle_control.battle_constants import ENTITY_IN_FOCUS_TYPE
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
-from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE
 from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
 from gui.battle_control.controllers.game_notification_ctrl import EPIC_NOTIFICATION
@@ -689,9 +688,13 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
         if marker is None:
             return
         else:
+            hasImpactMask = hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_IMPACT_MASK
+            battleSpamCtrl = self.sessionProvider.shared.battleSpamCtrl
             aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
-            self.__entitiesDamageType[entityId] = self.__getVehicleDamageType(aInfo)
-            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hitFlags & VEHICLE_HIT_FLAGS.IS_ANY_PIERCING_MASK)
+            if hasImpactMask and battleSpamCtrl is not None and aInfo and aInfo.isAutoShootGunVehicle():
+                hasImpactMask = battleSpamCtrl.filterMarkersHitState(entityId, 'impact{}'.format(attackerID))
+            self.__entitiesDamageType[entityId] = bool(aInfo and aInfo.vehicleID == BigWorld.player().playerVehicleID)
+            self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hasImpactMask)
             return
 
     def __activateDestructibleMarker(self, entityId, isActive):
@@ -699,19 +702,6 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
         if marker is not None:
             self._setMarkerActive(marker.getMarkerID(), isActive)
         return
-
-    def __getVehicleDamageType(self, attackerInfo):
-        if not attackerInfo:
-            return settings.DAMAGE_TYPE.FROM_UNKNOWN
-        attackerID = attackerInfo.vehicleID
-        if attackerID == BigWorld.player().playerVehicleID:
-            return settings.DAMAGE_TYPE.FROM_PLAYER
-        entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
-        if entityName == PLAYER_GUI_PROPS.squadman:
-            return settings.DAMAGE_TYPE.FROM_SQUAD
-        if entityName == PLAYER_GUI_PROPS.ally:
-            return settings.DAMAGE_TYPE.FROM_ALLY
-        return settings.DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else settings.DAMAGE_TYPE.FROM_UNKNOWN
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == _EVENT_ID.MINIMAP_MARK_OBJECTIVE:

@@ -41,7 +41,7 @@ class PostProgressionResearchConfirm(FullScreenDialogView[ResearchStepsDialog]):
             self._onCancel()
             return
         self._buyContent = PostProgressionResearchBottomContent(viewModel=self.viewModel.dealPanel)
-        self._buyContent.onLoading(self.__price, self.__xpBalance)
+        self._buyContent.onLoading(self.__price, self.__xpBalance, self.__vehicle)
         self._mainContent = PostProgressionResearchMainContent(viewModel=self.viewModel.mainContent)
         self._mainContent.onLoading(self.__steps, self.__postProgression)
 
@@ -98,11 +98,11 @@ class PostProgressionResearchConfirm(FullScreenDialogView[ResearchStepsDialog]):
 
 class PostProgressionResearchBottomContent(BaseSubModelView):
 
-    def onLoading(self, price, balance):
+    def onLoading(self, price, balance, vehicle):
         super(PostProgressionResearchBottomContent, self).onLoading()
-        self.update(price, balance)
+        self.update(price, balance, vehicle)
 
-    def update(self, price, balance):
+    def update(self, price, balance, vehicle):
         super(PostProgressionResearchBottomContent, self).update()
         mayConsume = PurchaseProvider.mayConsume(balance, price).result
         with self._viewModel.transaction() as viewModel:
@@ -110,6 +110,7 @@ class PostProgressionResearchBottomContent(BaseSubModelView):
             BuyPriceModelBuilder.fillPriceModel(viewModel, convertPrice(mayConsume, balance, price), balance=balance)
             viewModel.getPrice().invalidate()
             viewModel.setIsDisabled(not mayConsume)
+            viewModel.setIsEliteOrPremium(vehicle.isPremium or vehicle.isElite)
 
 
 class PostProgressionResearchMainContent(BaseSubModelView):

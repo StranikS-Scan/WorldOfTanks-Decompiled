@@ -9,8 +9,19 @@ from items.stun import g_cfg as stunConfig
 if IS_CLIENT:
     from helpers import i18n
     from gui.impl.backport import text
-    from gui.impl.backport.backport_system_locale import getNiceNumberFormat
+    from gui.impl.backport.backport_system_locale import getNiceNumberFormat, getIntegralFormat
     from gui.impl.gen import R
+
+class BattleDescriptionConfigReader(object):
+    _BATTLE_DESCRIPTION_SLOTS = ('battleDescription',)
+
+    def initBattleDescriptionSlots(self):
+        self.battleDescription = component_constants.EMPTY_STRING
+
+    def readBattleDescriptionConfig(self, xmlCtx, section):
+        if IS_CLIENT:
+            self.battleDescription = _xml.readString(xmlCtx, section, 'battleDescription')
+
 
 class RepairkitBattleRoyale(Repairkit, CountableConsumableConfigReader):
 
@@ -23,8 +34,8 @@ class RepairkitBattleRoyale(Repairkit, CountableConsumableConfigReader):
         self.readCountableConsumableConfig(xmlCtx, section)
 
 
-class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader):
-    __slots__ = ('consumeSeconds', 'enginePowerFactor', 'maxSpeedFactor', 'vehicleRotationSpeed', 'deploySeconds', 'rechargeSeconds')
+class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = ('consumeSeconds', 'enginePowerFactor', 'maxSpeedFactor', 'vehicleRotationSpeed', 'deploySeconds', 'rechargeSeconds') + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS
 
     def __init__(self):
         super(AfterburningBattleRoyale, self).__init__()
@@ -35,6 +46,7 @@ class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader):
         self.deploySeconds = component_constants.ZERO_FLOAT
         self.rechargeSeconds = component_constants.ZERO_FLOAT
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, section):
         self.consumeSeconds = _xml.readInt(xmlCtx, section, 'consumeSeconds', 0)
@@ -42,6 +54,9 @@ class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader):
         self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
         self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, section, 'vehicleRotationSpeed')
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
@@ -52,7 +67,12 @@ class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader):
 
     def _getDescription(self, descr):
         localizeDescr = super(AfterburningBattleRoyale, self)._getDescription(descr)
-        return i18n.makeString(localizeDescr, duration=self.consumeSeconds)
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        enginePowerFactor = getNiceNumberFormat(100 * self.enginePowerFactor - 100)
+        return i18n.makeString(descr, enginePowerFactor=enginePowerFactor + percentSymbol, maxSpeedFactor=int(self.maxSpeedFactor), consumeSeconds=int(self.consumeSeconds))
 
 
 class InfluenceZone(object):
@@ -96,8 +116,8 @@ class InfluenceZone(object):
             self.hotParams._readConfig(xmlCtx, section['hotParams'])
 
 
-class TrapPoint(Equipment, CountableConsumableConfigReader):
-    __slots__ = ('influenceZone',)
+class TrapPoint(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('influenceZone',)
 
     def __init__(self):
         super(TrapPoint, self).__init__()
@@ -105,26 +125,39 @@ class TrapPoint(Equipment, CountableConsumableConfigReader):
         self.zonesCount = component_constants.ZERO_FLOAT
         self.influenceZone = InfluenceZone()
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, section):
         super(TrapPoint, self)._readConfig(xmlCtx, section)
         self.influenceZone._readConfig(xmlCtx, section['influenceZone'])
         self.radius = self.influenceZone.radius
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
         localizeDescr = super(TrapPoint, self)._getDescription(descr)
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
         if self.influenceZone.debuffFactors:
-            return i18n.makeString(localizeDescr, duration=int(self.influenceZone.timer), power=int((1 - self.influenceZone.debuffFactors['engine/power']) * 100), maxSpeed=int((1 - self.influenceZone.debuffFactors['vehicle/maxSpeed']) * 100), rotationSpeed=int((1 - self.influenceZone.debuffFactors['vehicle/rotationSpeed']) * 100), chassisRotationSpeed=int((1 - self.influenceZone.debuffFactors['chassis/shotDispersionFactors/rotation']) * 100), turretRotationSpeed=int((1 - self.influenceZone.debuffFactors['turret/rotationSpeed']) * 100))
-        return i18n.makeString(localizeDescr, duration=int(self.influenceZone.timer), healPerSecond=int(self.influenceZone.hotParams.healPerTick * 100 / self.influenceZone.hotParams.tickInterval)) if self.influenceZone.hotParams else None
+            vehicleMaxSpeed = getNiceNumberFormat(100 - self.influenceZone.debuffFactors['vehicle/maxSpeed'] * 100)
+            gunReloadTime = getNiceNumberFormat(self.influenceZone.debuffFactors['gun/reloadTime'] * 100 - 100)
+            return i18n.makeString(descr, duration=int(self.influenceZone.timer), vehicleMaxSpeed=vehicleMaxSpeed + percentSymbol, gunReloadTime=gunReloadTime + percentSymbol)
+        if self.influenceZone.hotParams:
+            healPerTick = getNiceNumberFormat(self.influenceZone.hotParams.healPerTick * 100)
+            return i18n.makeString(descr, healPerTick=healPerTick + percentSymbol, timer=int(self.influenceZone.timer))
 
 
-class BomberArcade(Bomber, ArcadeEquipmentConfigReader):
-    __slots__ = Bomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+class BomberArcade(Bomber, ArcadeEquipmentConfigReader, BattleDescriptionConfigReader):
+    __slots__ = Bomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS
 
     def __init__(self):
         super(BomberArcade, self).__init__()
         self.initArcadeInformation()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
         super(BomberArcade, self)._readConfig(xmlCtx, scriptSection)
@@ -132,20 +165,26 @@ class BomberArcade(Bomber, ArcadeEquipmentConfigReader):
             self.influenceZone = InfluenceZone()
             self.influenceZone._readConfig(xmlCtx, scriptSection['influenceZone'])
         self.readArcadeInformation(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
 
 
-class BomberArcadeWithOwnDamage(Bomber, ArcadeEquipmentConfigReader):
-    __slots__ = Bomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + ('abilityRadius', 'directHitRadius', 'stunRadius', 'maxDamage', 'minDamage', 'maxModuleDamage', 'minModuleDamage', 'damageSpread', 'stunTime', 'minStunTime')
+class BomberArcadeWithOwnDamage(Bomber, ArcadeEquipmentConfigReader, BattleDescriptionConfigReader):
+    __slots__ = Bomber.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('abilityRadius', 'directHitRadius', 'stunRadius', 'maxDamage', 'minDamage', 'maxModuleDamage', 'minModuleDamage', 'damageSpread', 'stunTime', 'minStunTime')
 
     def __init__(self):
         super(BomberArcadeWithOwnDamage, self).__init__()
         self.initArcadeInformation()
         self.initOwnDamageParams()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
         super(BomberArcadeWithOwnDamage, self)._readConfig(xmlCtx, scriptSection)
         self.readArcadeInformation(xmlCtx, scriptSection)
         self._readOwnDamageConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
+        if IS_CLIENT and self.longDescription:
+            self.longDescription = self._prepareDescription(self.longDescription)
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def initOwnDamageParams(self):
         self.abilityRadius = component_constants.ZERO_FLOAT
@@ -171,22 +210,46 @@ class BomberArcadeWithOwnDamage(Bomber, ArcadeEquipmentConfigReader):
         self.stunTime = _xml.readPositiveInt(xmlCtx, scriptSection, 'stunTime')
         self.minStunTime = _xml.readPositiveInt(xmlCtx, scriptSection, 'minStunTime')
 
+    def _getDescription(self, descr):
+        localizeDescr = super(BomberArcadeWithOwnDamage, self)._getDescription(descr)
+        return self._prepareDescription(localizeDescr)
 
-class SmokeArcade(Smoke, ArcadeEquipmentConfigReader):
-    __slots__ = Smoke.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS
+    def _prepareDescription(self, descr):
+        return i18n.makeString(descr, minDamage=int(self.minDamage), maxDamage=int(self.maxDamage), delay=int(self.delay))
+
+
+class SmokeArcade(Smoke, ArcadeEquipmentConfigReader, BattleDescriptionConfigReader):
+    __slots__ = Smoke.__slots__ + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS
 
     def __init__(self):
         super(SmokeArcade, self).__init__()
         self.orthogonalDir = True
         self.initArcadeInformation()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
-        super(SmokeArcade, self)._readConfig(xmlCtx, scriptSection)
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readSmokeConfig(xmlCtx, scriptSection)
+        self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds')
         self.readArcadeInformation(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
+        if IS_CLIENT and self.longDescription:
+            self.longDescription = self._prepareDescription(self.longDescription)
+            self.battleDescription = self._prepareDescription(self.battleDescription)
+
+    def _prepareDescription(self, descr):
+        if self.dotParams:
+            percentSymbol = text(R.strings.common.common.percent())
+            damagePerTick = getNiceNumberFormat(self.dotParams.damagePerTick * 100)
+            preparedDescr = i18n.makeString(descr, damagePerTick=damagePerTick + percentSymbol, duration=int(self.totalDuration))
+        else:
+            preparedDescr = i18n.makeString(self.longDescription, duration=int(self.totalDuration))
+        return preparedDescr
 
 
-class SelfBuff(Equipment, TooltipConfigReader, CountableConsumableConfigReader):
-    __slots__ = ('duration', 'increaseFactors', 'longDescription', 'cooldownTime') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS
+class SelfBuff(Equipment, TooltipConfigReader, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = ('duration', 'increaseFactors', 'longDescription', 'cooldownTime') + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS
 
     def __init__(self):
         super(SelfBuff, self).__init__()
@@ -195,18 +258,25 @@ class SelfBuff(Equipment, TooltipConfigReader, CountableConsumableConfigReader):
         self.increaseFactors = {}
         self.initTooltipInformation()
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.cooldownTime = _xml.readFloat(xmlCtx, scriptSection, 'cooldownTime', 0.0)
         self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
         self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'increaseFactors')
         self.readTooltipInformation(xmlCtx, scriptSection)
-        if IS_CLIENT and self.longDescription:
-            self.longDescription = i18n.makeString(self.longDescription, duration=int(self.duration))
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
-        return i18n.makeString(self.longDescription, duration=int(self.duration))
+        return self._prepareDescription(self.longDescription)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        gunAimingTime = getNiceNumberFormat(100 - self.increaseFactors['gun/aimingTime'] * 100)
+        return i18n.makeString(descr, duration=int(self.duration), gunAimingTime=gunAimingTime + percentSymbol)
 
 
 class Berserker(SelfBuff):
@@ -217,8 +287,22 @@ class Berserker(SelfBuff):
         self.dotParams = DOTParams(ATTACK_REASON_INDICES[ATTACK_REASON.BERSERKER])
 
     def _readConfig(self, xmlCtx, scriptSection):
-        super(Berserker, self)._readConfig(xmlCtx, scriptSection)
+        self.cooldownTime = _xml.readFloat(xmlCtx, scriptSection, 'cooldownTime', 0.0)
+        self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'increaseFactors')
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         self.dotParams._readConfig(xmlCtx, scriptSection['dotParams'])
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        gunPiercing = getIntegralFormat(self.increaseFactors['gun/piercing'])
+        gunAimingTime = getNiceNumberFormat(100 - self.increaseFactors['gun/aimingTime'] * 100)
+        healthDebuff = getIntegralFormat(self.duration / self.dotParams.tickInterval * self.dotParams.damagePerTick * 100)
+        return i18n.makeString(descr, gunPiercing=gunPiercing, gunAimingTime=gunAimingTime + percentSymbol, healthDebuff=healthDebuff + percentSymbol, duration=int(self.duration))
 
 
 class _ClientSpawnBotVisuals(object):
@@ -232,8 +316,8 @@ class _ClientSpawnBotVisuals(object):
         self.highlightDelay = _xml.readFloat(xmlCtx, scriptSection, 'highlightDelay', 0.0)
 
 
-class BRHealPoint(Equipment, TooltipConfigReader, CountableConsumableConfigReader, HealPointConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + HealPointConfigReader._HEAL_POINT_SLOTS + ('cooldownTime',)
+class BRHealPoint(Equipment, TooltipConfigReader, CountableConsumableConfigReader, HealPointConfigReader, BattleDescriptionConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + HealPointConfigReader._HEAL_POINT_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('cooldownTime',)
 
     def __init__(self):
         super(BRHealPoint, self).__init__()
@@ -241,17 +325,25 @@ class BRHealPoint(Equipment, TooltipConfigReader, CountableConsumableConfigReade
         self.initCountableConsumableSlots()
         self.cooldownTime = component_constants.ZERO_FLOAT
         self.initHealPointSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, scriptSection):
         self.readTooltipInformation(xmlCtx, scriptSection)
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
         self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'cooldownTime')
         self.readHealPointConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT and self.longDescription:
-            self.longDescription = i18n.makeString(self.longDescription, duration=int(self.duration), count=int(self.healPerTick * 100 / self.tickInterval))
+            self.longDescription = self._prepareDescription(self.longDescription)
+            self.battleDescription = self._prepareDescription(self.battleDescription)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        healPerTick = getNiceNumberFormat(100 * self.healPerTick)
+        return i18n.makeString(descr, healPerTick=healPerTick + percentSymbol, duration=int(self.duration))
 
 
-class RegenerationKit(Equipment, CountableConsumableConfigReader):
+class RegenerationKit(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
     __slots__ = ('healthRegenPerTick', 'initialHeal', 'healTime', 'healGroup', 'tickInterval')
 
     def __init__(self):
@@ -262,6 +354,7 @@ class RegenerationKit(Equipment, CountableConsumableConfigReader):
         self.healGroup = None
         self.tickInterval = 1.0
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
         return
 
     def _readConfig(self, xmlCtx, section):
@@ -271,18 +364,36 @@ class RegenerationKit(Equipment, CountableConsumableConfigReader):
         self.healGroup = _xml.readIntOrNone(xmlCtx, section, 'healGroup')
         self.tickInterval = _xml.readPositiveFloat(xmlCtx, section, 'tickInterval', 1.0)
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
         localizeDescr = super(RegenerationKit, self)._getDescription(descr)
-        return i18n.makeString(localizeDescr, count=int(self.healthRegenPerTick * 100 / self.tickInterval), duration=int(self.healTime))
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        healPerTickDuration = getIntegralFormat(self.healthRegenPerTick * self.healTime * 100)
+        return i18n.makeString(descr, healPerTickDuration=healPerTickDuration + percentSymbol, duration=int(self.healTime))
 
 
-class BRMinefield(Minefield):
-    pass
+class BRMinefield(Minefield, BattleDescriptionConfigReader):
+    __slots__ = Minefield.__slots__ + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS
+
+    def __init__(self):
+        super(BRMinefield, self).__init__()
+        self.initBattleDescriptionSlots()
+
+    def _readConfig(self, xmlCtx, section):
+        super(BRMinefield, self)._readConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = i18n.makeString(self.battleDescription, duration=int(self.mineParams.lifetime))
 
 
-class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConfigReader, AreaMarkerConfigReader, ArcadeEquipmentConfigReader):
-    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + AreaMarkerConfigReader._MARKER_SLOTS_ + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay', 'cooldownTime', 'disableAllyDamage')
+class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConfigReader, AreaMarkerConfigReader, ArcadeEquipmentConfigReader, BattleDescriptionConfigReader):
+    __slots__ = TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + CountableConsumableConfigReader._CONSUMABLE_SLOTS + ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + AreaMarkerConfigReader._MARKER_SLOTS_ + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('botType', 'botVehCompDescr', 'botLifeTime', 'botSpawnPointOffset', 'botXRayFactor', 'clientVisuals', 'explosionRadius', 'explosionDamage', 'explosionByShoot', 'damageReductionRate', 'delay', 'cooldownTime', 'disableAllyDamage')
 
     def __init__(self):
         super(ConsumableSpawnBot, self).__init__()
@@ -290,6 +401,7 @@ class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConf
         self.initCountableConsumableSlots()
         self.initArcadeInformation()
         self.initMarkerInformation()
+        self.initBattleDescriptionSlots()
         self.botType = component_constants.EMPTY_STRING
         self.botVehCompDescr = component_constants.EMPTY_STRING
         self.botLifeTime = component_constants.ZERO_FLOAT
@@ -310,6 +422,7 @@ class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConf
         self.readCountableConsumableConfig(xmlCtx, scriptSection)
         self.readArcadeInformation(xmlCtx, scriptSection)
         self.readMarkerConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         self.botType = _xml.readString(xmlCtx, scriptSection, 'botType')
         self.botVehCompDescr = _xml.readString(xmlCtx, scriptSection, 'botVehCompDescr')
         self.delay = _xml.readFloat(xmlCtx, scriptSection, 'delay', 0.0)
@@ -320,15 +433,18 @@ class ConsumableSpawnBot(Equipment, TooltipConfigReader, CountableConsumableConf
         self.explosionDamage = _xml.readFloat(xmlCtx, scriptSection, 'explosionDamage', 0.0)
         self.explosionByShoot = _xml.readBool(xmlCtx, scriptSection, 'explosionByShoot', False)
         self.damageReductionRate = _xml.readFloat(xmlCtx, scriptSection, 'damageReductionRate', 0.0)
-        self.vehicleRemoveDelay = _xml.readInt(xmlCtx, scriptSection, 'vehicleRemoveDelay', 0.0)
         self.clientRemovalNotificationDelay = _xml.readInt(xmlCtx, scriptSection, 'clientRemovalNotificationDelay', 0.0)
         self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds')
         self.disableAllyDamage = _xml.readBool(xmlCtx, scriptSection, 'disableAllyDamage', True)
         if IS_CLIENT:
             if scriptSection['clientVisuals'] is not None:
                 self.clientVisuals = _ClientSpawnBotVisuals(scriptSection, scriptSection['clientVisuals'])
-            self.longDescription = i18n.makeString(self.longDescription, duration=int(self.botLifeTime))
+                self.longDescription = self._prepareDescription(self.longDescription)
+                self.battleDescription = self._prepareDescription(self.battleDescription)
         return
+
+    def _prepareDescription(self, descr):
+        return i18n.makeString(descr, botLifeTime=int(self.botLifeTime))
 
 
 class ZonesCircle(Equipment):
@@ -353,32 +469,46 @@ class ZonesCircle(Equipment):
         return i18n.makeString(localizeDescr, duration=int(self.influenceZone.timer))
 
 
-class FireCircle(ZonesCircle, CountableConsumableConfigReader):
+class FireCircle(ZonesCircle, CountableConsumableConfigReader, BattleDescriptionConfigReader):
 
     def __init__(self):
         super(FireCircle, self).__init__()
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, section):
         super(FireCircle, self)._readConfig(xmlCtx, section)
         self.influenceZone.dotParams.attackReasonID = ATTACK_REASON_INDICES[ATTACK_REASON.FIRE_CIRCLE]
         self.influenceZone.componentName = 'VehicleFireCircleEffectComponent'
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
+
+    def _getDescription(self, descr):
+        localizeDescr = super(FireCircle, self)._getDescription(descr)
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        dotParams = self.influenceZone.dotParams
+        damagePerTickForInterval = getNiceNumberFormat(self.influenceZone.timer / dotParams.tickInterval * dotParams.damagePerTick * 100)
+        return i18n.makeString(descr, damagePerTickForInterval=damagePerTickForInterval + percentSymbol, timer=int(self.influenceZone.timer))
 
 
-class CorrodingShot(Equipment, CountableConsumableConfigReader):
-    __slots__ = ('damagePercentAfterShot', 'canBeStoppedRepairKit', 'increaseFactors', 'dotEffectDuration', 'dotParams', 'tooltipMovie', 'effectsIndex')
+class CorrodingShot(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('damagePercentAfterShot', 'canBeStoppedRepairKit', 'increaseFactors', 'dotEffectDuration', 'dotParams', 'tooltipMovie', 'effectsIndex')
 
     def __init__(self):
         super(CorrodingShot, self).__init__()
         self.damagePercentAfterShot = component_constants.ZERO_FLOAT
         self.canBeStoppedRepairKit = component_constants.ZERO_INT
         self.increaseFactors = {}
-        self.dotEffectDuration = component_constants.ZERO_INT
         self.dotParams = DOTParams(ATTACK_REASON_INDICES[ATTACK_REASON.CORRODING_SHOT])
         self.dotEffectDuration = component_constants.ZERO_INT
         self.tooltipMovie = component_constants.EMPTY_STRING
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readConfig(self, xmlCtx, section):
         self.damagePercentAfterShot = _xml.readFloat(xmlCtx, section, 'damagePercentAfterShot', 0.0)
@@ -389,14 +519,22 @@ class CorrodingShot(Equipment, CountableConsumableConfigReader):
         self.tooltipMovie = _xml.readStringOrEmpty(xmlCtx, section, 'tooltipMovie')
         self.effectsIndex = vehicles.g_cache.shotEffectsIndexes[_xml.readString(xmlCtx, section, 'shotEffect')]
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
         localizeDescr = super(CorrodingShot, self)._getDescription(descr)
-        return i18n.makeString(localizeDescr, duration=self.dotEffectDuration)
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        percentSymbol = text(R.strings.common.common.percent())
+        damagePerDotEffectDuration = getIntegralFormat(self.dotEffectDuration / self.dotParams.tickInterval * self.dotParams.damagePerTick * 100)
+        return i18n.makeString(descr, damagePerDotEffectDuration=damagePerDotEffectDuration + percentSymbol, dotEffectDuration=int(self.dotEffectDuration))
 
 
-class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader):
-    __slots__ = ('duration', 'areaVisual', 'immediatelyRestore', 'posteffectPrefab', 'restoringCoefficient', 'restoringCoefficientTeamMates', 'teamMateRestoringRadius')
+class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('duration', 'areaVisual', 'immediatelyRestore', 'posteffectPrefab', 'restoringCoefficient', 'restoringCoefficientTeamMates', 'teamMateRestoringRadius')
 
     def __init__(self):
         super(AdaptationHealthRestore, self).__init__()
@@ -407,6 +545,7 @@ class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader):
         self.areaVisual = None
         self.posteffectPrefab = None
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
         return
 
     def _readBasicConfig(self, xmlCtx, section):
@@ -421,14 +560,20 @@ class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader):
         self.teamMateRestoringRadius = _xml.readInt(xmlCtx, section, 'teamMateRestoringRadius', 0)
         self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
         localizeDescr = super(AdaptationHealthRestore, self)._getDescription(descr)
-        return i18n.makeString(localizeDescr, ownPercent=int(self.restoringCoefficient * 100), teamMatesPercent=int(self.restoringCoefficientTeamMates * 100))
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
+        return i18n.makeString(descr, immediatelyRestore=int(self.immediatelyRestore), duration=int(self.duration))
 
 
-class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader, CountableConsumableConfigReader):
-    __slots__ = ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + ('noOwner', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'delay', 'duration', 'damage', 'thunderCount', 'thunderPeriod', 'deployTime', 'cooldownTime', 'decreaseFactors', 'isDamageAll', 'canBeStoppedRepairKit')
+class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = ArcadeEquipmentConfigReader._SHARED_ARCADE_SLOTS + TooltipConfigReader._SHARED_TOOLTIPS_CONSUMABLE_SLOTS + BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('noOwner', 'areaLength', 'areaWidth', 'areaVisual', 'areaColor', 'delay', 'duration', 'damage', 'thunderCount', 'thunderPeriod', 'deployTime', 'cooldownTime', 'decreaseFactors', 'isDamageAll', 'canBeStoppedRepairKit')
 
     def __init__(self):
         super(ThunderStrike, self).__init__()
@@ -449,6 +594,7 @@ class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader,
         self.decreaseFactors = {}
         self.isDamageAll = False
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
         return
 
     def _readConfig(self, xmlCtx, section):
@@ -468,15 +614,17 @@ class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader,
         self.readArcadeInformation(xmlCtx, section)
         self.readTooltipInformation(xmlCtx, section)
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT and self.longDescription:
+            self.longDescription = self._prepareDescription(self.longDescription)
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
-    def readTooltipInformation(self, xmlCtx, section):
-        super(ThunderStrike, self).readTooltipInformation(xmlCtx, section)
-        if IS_CLIENT:
-            self.longDescription = i18n.makeString(self.longDescription, duration=self.duration)
+    def _prepareDescription(self, descr):
+        return i18n.makeString(descr, thunderCount=int(self.thunderCount), damage=int(self.damage), delay=int(self.delay))
 
 
-class ShotPassion(Equipment, CountableConsumableConfigReader):
-    __slots__ = ('duration', 'increaseFactors', 'enableRamDamage', 'enableHEDamage', 'damageIncreasePerShot', 'maxDamageIncreasePerShot', 'affectingAbilities', 'cooldownTime', 'enableThunderStrikeDamageIncrease', 'posteffectPrefab')
+class ShotPassion(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
+    __slots__ = BattleDescriptionConfigReader._BATTLE_DESCRIPTION_SLOTS + ('duration', 'increaseFactors', 'enableRamDamage', 'enableHEDamage', 'damageIncreasePerShot', 'maxDamageIncreasePerShot', 'affectingAbilities', 'cooldownTime', 'enableThunderStrikeDamageIncrease', 'posteffectPrefab')
 
     def __init__(self):
         super(ShotPassion, self).__init__()
@@ -485,6 +633,7 @@ class ShotPassion(Equipment, CountableConsumableConfigReader):
         self.maxDamageIncreasePerShot = component_constants.ZERO_FLOAT
         self.cooldownTime = component_constants.ZERO_INT
         self.initCountableConsumableSlots()
+        self.initBattleDescriptionSlots()
 
     def _readBasicConfig(self, xmlCtx, section):
         super(ShotPassion, self)._readBasicConfig(xmlCtx, section)
@@ -497,8 +646,16 @@ class ShotPassion(Equipment, CountableConsumableConfigReader):
         self.maxDamageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
         self.cooldownTime = _xml.readInt(xmlCtx, section, 'cooldownSeconds', component_constants.ZERO_INT)
         self.readCountableConsumableConfig(xmlCtx, section)
+        self.readBattleDescriptionConfig(xmlCtx, section)
+        if IS_CLIENT:
+            self.battleDescription = self._prepareDescription(self.battleDescription)
 
     def _getDescription(self, descr):
         localizeDescr = super(ShotPassion, self)._getDescription(descr)
+        return self._prepareDescription(localizeDescr)
+
+    def _prepareDescription(self, descr):
         percentSymbol = text(R.strings.common.common.percent())
-        return i18n.makeString(localizeDescr, duration=getNiceNumberFormat(self.duration), dmgPerShot=getNiceNumberFormat(self.damageIncreasePerShot * 100) + percentSymbol, maxDmgPerShot=getNiceNumberFormat(self.maxDamageIncreasePerShot * 100) + percentSymbol)
+        gunAimingTime = getNiceNumberFormat(100 * self.increaseFactors['gun/aimingTime'] - 100)
+        damageIncreasePerShot = getNiceNumberFormat(self.damageIncreasePerShot * 100)
+        return i18n.makeString(descr, duration=getNiceNumberFormat(self.duration), gunAimingTime=gunAimingTime + percentSymbol, damageIncreasePerShot=damageIncreasePerShot + percentSymbol)

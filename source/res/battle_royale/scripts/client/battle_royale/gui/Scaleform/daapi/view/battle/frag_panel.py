@@ -15,7 +15,7 @@ class FragPanel(IVehicleCountListener, FragPanelMeta):
         self.as_setRightFieldS(frags)
 
     def setTotalCount(self, vehicles, teams):
-        isSquad = ARENA_BONUS_TYPE_CAPS.checkAny(getArena().bonusType, ARENA_BONUS_TYPE_CAPS.SQUADS)
+        isSquad = getArena().hasBonusCap(ARENA_BONUS_TYPE_CAPS.SQUADS)
         countText = str(vehicles)
         if isSquad:
             countText = ' '.join((countText, self.__ADDITIONAL_FRAG_TEMPLATE.format(backport.text(R.strings.battle_royale.fragPanel.squadsCount(), squadsCount=str(teams)))))

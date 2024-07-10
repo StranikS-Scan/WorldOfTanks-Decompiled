@@ -244,7 +244,6 @@ class AbstractBattleMode(object):
     _UNIT_MGR_NAME = None
     _UNIT_MGR_FLAGS = None
     _ROSTER_TYPE = None
-    _ROSTER_CLASS = None
     _GAME_PARAMS_KEY = None
     _REQUIRED_VEHICLE_TAGS = tuple()
     _FORBIDDEN_VEHICLE_TAGS = BATTLE_MODE_VEHICLE_TAGS
@@ -257,6 +256,7 @@ class AbstractBattleMode(object):
     _CLIENT_PRB_ACTION_NAME = None
     _CLIENT_PRB_ACTION_NAME_SQUAD = None
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = None
+    _CLIENT_REPLAY_MODE_TAG = ''
     _BATTLE_RESULTS_CONFIG = None
     _VSE_BATTLE_RESULTS_PARSER = None
     _CLIENT_GAME_SEASON_TYPE = None
@@ -270,6 +270,10 @@ class AbstractBattleMode(object):
 
     def __init__(self, personality):
         self._personality = personality
+
+    @property
+    def _rosterClass(self):
+        return None
 
     @property
     def _battleMgrConfig(self):
@@ -360,7 +364,7 @@ class AbstractBattleMode(object):
         return None
 
     @property
-    def _client_battleResultsComposerClass(self):
+    def _client_battleResultStatsCtrlClass(self):
         return None
 
     @property
@@ -393,6 +397,10 @@ class AbstractBattleMode(object):
 
     @property
     def _client_tokenQuestsSubFormatters(self):
+        return []
+
+    @property
+    def _client_lootBoxAutoOpenSubFormatters(self):
         return []
 
     @property
@@ -456,11 +464,19 @@ class AbstractBattleMode(object):
     def _client_customizationHangarDisabled(self):
         return lambda *args, **kwargs: True
 
+    @property
+    def _client_hangarPresetsReader(self):
+        return None
+
+    @property
+    def _client_hangarPresetsGetter(self):
+        return None
+
     def registerSquadTypes(self):
         addQueueTypeByUnitMgrRoster(self._QUEUE_TYPE, self._ROSTER_TYPE, self._personality)
         addPrbTypeByUnitMgrRoster(self._PREBATTLE_TYPE, self._ROSTER_TYPE, self._personality)
         addPrbTypeByUnitMgrRosterExt(self._PREBATTLE_TYPE, self._ROSTER_TYPE, self._personality)
-        addRosterTypeToClass(self._ROSTER_TYPE, self._ROSTER_CLASS, self._personality)
+        addRosterTypeToClass(self._ROSTER_TYPE, self._rosterClass, self._personality)
         addUnitMgrFlagToPrbType(self._PREBATTLE_TYPE, self._UNIT_MGR_FLAGS, self._personality)
         addUnitMgrFlagToInvitationType(self._UNIT_MGR_FLAGS, self._PREBATTLE_TYPE, self._personality)
         addInvitationTypeFromArenaBonusTypeMapping(self._ARENA_BONUS_TYPE, self._INVITATION_TYPE, self._personality)
@@ -549,8 +565,12 @@ class AbstractBattleMode(object):
         prb_utils.addSupportedUnitEntryByType(self._PREBATTLE_TYPE, self._client_prbSquadEntryPointClass, self._personality)
         prb_utils.addSupportedUnitByType(self._PREBATTLE_TYPE, self._client_prbSquadEntityClass, self._personality)
         prb_utils.addBattleSelectorSquadItem(self._CLIENT_PRB_ACTION_NAME_SQUAD, self._client_selectorSquadItemsCreator, self._personality)
-        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._ROSTER_CLASS, self._personality)
+        prb_utils.addSquadFinder(self._ARENA_GUI_TYPE, self._client_squadFinderClass, self._rosterClass, self._personality)
         prb_utils.addPrbClientCombinedIds(self._PREBATTLE_TYPE, PREBATTLE_TYPE.UNIT, self._personality)
+
+    def registerClientReplay(self):
+        from gui.shared.system_factory import registerReplayModeTag
+        registerReplayModeTag(self._ARENA_GUI_TYPE, self._CLIENT_REPLAY_MODE_TAG)
 
     def registerGameControllers(self):
         from gui.shared.system_factory import registerGameControllers
@@ -569,9 +589,9 @@ class AbstractBattleMode(object):
             addBattleResultsConfig(self._ARENA_BONUS_TYPE, self._BATTLE_RESULTS_CONFIG)
         return
 
-    def registerClientBattleResultsComposer(self):
-        from gui.shared.system_factory import registerBattleResultsComposer
-        registerBattleResultsComposer(self._ARENA_BONUS_TYPE, self._client_battleResultsComposerClass)
+    def registerClientBattleResultsCtrl(self):
+        from gui.shared.system_factory import registerBattleResultStatsCtrl
+        registerBattleResultStatsCtrl(self._ARENA_BONUS_TYPE, self._client_battleResultStatsCtrlClass)
 
     def registerClientBattleResultReusabled(self):
         from gui.battle_results.reusable import ReusableInfoFactory
@@ -596,8 +616,7 @@ class AbstractBattleMode(object):
     def registerBaseSeasonManager(self):
         if self._SEASON_MANAGER_TYPE is not None:
             import season_helpers
-            season_helpers.SEASON_MANAGERS.append(season_helpers.SeasonManager(*self._SEASON_MANAGER_TYPE))
-            season_helpers._SEASON_MANAGERS_BY_TYPE = {mgr.type:mgr for mgr in season_helpers.SEASON_MANAGERS}
+            season_helpers.registerSeasonManager(*self._SEASON_MANAGER_TYPE)
         return
 
     def registerScaleformRequiredLibraries(self):
@@ -659,6 +678,10 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerTokenQuestsSubFormatters
         registerTokenQuestsSubFormatters(self._client_tokenQuestsSubFormatters)
 
+    def registerClientLootBoxAutoOpenSubFormatters(self):
+        from gui.shared.system_factory import registerLootBoxAutoOpenSubFormatters
+        registerLootBoxAutoOpenSubFormatters(self._client_lootBoxAutoOpenSubFormatters)
+
     def registerLimitedUITokens(self):
         tokensInfos = self._client_limitedUITokensInfos
         if tokensInfos:
@@ -694,3 +717,11 @@ class AbstractBattleMode(object):
     def registerFairplayVehicleBattleStats(self):
         from server_constants_utils import addFairplayVehicleBattleStats
         addFairplayVehicleBattleStats(self._ARENA_BONUS_TYPE, self._FAIRPLAY_VEHICLE_BATTLE_STATS_COMPONENT, self._personality)
+
+    def registerClientHangarPresets(self):
+        if self._client_hangarPresetsReader:
+            from gui.shared.system_factory import registerHangarPresetsReader
+            registerHangarPresetsReader(self._client_hangarPresetsReader)
+        if self._client_hangarPresetsGetter:
+            from gui.shared.system_factory import registerHangarPresetGetter
+            registerHangarPresetGetter(self._QUEUE_TYPE, self._client_hangarPresetsGetter)

@@ -421,8 +421,11 @@ class _NationValidator(object):
 
     @staticmethod
     def validate(tipFilter, ctx):
+        vehicleNationId = ctx['vehicleType'].nationID
+        if vehicleNationId == nations.NONE_INDEX:
+            return False
         possibleNations = tipFilter['nations']
-        nation = nations.NAMES[ctx['vehicleType'].nationID]
+        nation = nations.NAMES[vehicleNationId]
         return not possibleNations or nation in possibleNations
 
 

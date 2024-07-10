@@ -16,9 +16,9 @@ class IModifierValidator(object):
 
     def __call__(self, modificationNode):
         if not self._validate(modificationNode):
-            paramName = modificationNode.param.name
+            paramId = modificationNode.param.id
             errorMsg = self._errorMessage(modificationNode)
-            raise SoftException("[BattleModifier] Validation error for param '{}': {}".format(paramName, errorMsg))
+            raise SoftException('[BattleModifier] Validation error for param {}: {}'.format(paramId, errorMsg))
 
     def _readConfig(self, config, paramId):
         return None

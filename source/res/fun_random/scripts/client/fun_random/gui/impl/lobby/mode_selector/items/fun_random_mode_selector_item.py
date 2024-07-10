@@ -18,6 +18,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_fun_random
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
+from gui.server_events.bonuses import LootBoxTokensBonus
 from helpers import time_utils
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
@@ -26,6 +27,8 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_fun_random_widget_model import ModeSelectorFunRandomWidgetModel
 _PROGRESSION_STATUS_MAP = {FunRandomProgressionStatus.ACTIVE_RESETTABLE: SimpleFunProgressionStatus.ACTIVE,
  FunRandomProgressionStatus.ACTIVE_FINAL: SimpleFunProgressionStatus.ACTIVE,
+ FunRandomProgressionStatus.ACTIVE_INFINITE_RESETTABLE: SimpleFunProgressionStatus.ACTIVE,
+ FunRandomProgressionStatus.ACTIVE_INFINITE_FINAL: SimpleFunProgressionStatus.ACTIVE,
  FunRandomProgressionStatus.COMPLETED_RESETTABLE: SimpleFunProgressionStatus.RESETTABLE,
  FunRandomProgressionStatus.COMPLETED_FINAL: SimpleFunProgressionStatus.DISABLED,
  FunRandomProgressionStatus.DISABLED: SimpleFunProgressionStatus.DISABLED}
@@ -115,7 +118,7 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
 
     @hasActiveProgression()
     def __invalidateProgressionTimer(self, *_):
-        self.viewModel.widget.setResetTimer(self.getActiveProgression().condition.resetTimer)
+        self.viewModel.widget.setStatusTimer(self.getActiveProgression().statusTimer)
 
     @hasAnySubMode()
     def __invalidateSubModesTimer(self, *_):
@@ -142,19 +145,27 @@ class FunRandomSelectorItem(ModeSelectorLegacyItem, FunAssetPacksMixin, FunSubMo
     def __fillProgression(self, model):
         progression = self.getActiveProgression()
         status = _PROGRESSION_STATUS_MAP.get(defineProgressionStatus(progression), SimpleFunProgressionStatus.DISABLED)
-        condition, activeStage = progression.condition, progression.activeStage
-        maximumPoints = activeStage.requiredCounter - activeStage.prevRequiredCounter
-        currentPoints = condition.counter - activeStage.prevRequiredCounter
+        maximumPoints = progression.conditions.maximumCounter
+        currentPoints = progression.conditions.counter
+        condition = progression.conditions
+        conditionText = condition.text
+        if progression.isInUnlimitedProgression:
+            conditionText = progression.unlimitedProgression.unlimitedTrigger.getDescription()
+            maximumPoints = progression.unlimitedProgression.maximumCounter
+            currentPoints = progression.unlimitedProgression.counter
         model.setStatus(status)
-        model.setCurrentStage(progression.state.currentStageIndex + 1)
-        model.setConditionText(condition.text)
+        model.setConditionText(conditionText)
         model.setStageCurrentPoints(math_utils.clamp(0, maximumPoints, currentPoints))
         model.setStageMaximumPoints(maximumPoints)
-        model.setResetTimer(condition.resetTimer)
+        model.setStatusTimer(progression.statusTimer)
 
     @hasActiveProgression()
     def __fillProgressionReward(self):
-        self._addReward(ModeSelectorRewardID.OTHER, tooltipID=ModeSelectorTooltipsConstants.FUN_RANDOM_REWARDS)
+        progression = self.getActiveProgression()
+        rewardID = ModeSelectorRewardID.OTHER
+        if progression.isInUnlimitedProgression and all([ isinstance(b, LootBoxTokensBonus) for b in progression.unlimitedProgression.bonuses ]):
+            rewardID = ModeSelectorRewardID.RANDOM
+        self._addReward(rewardID, icon=ModeSelectorRewardID.OTHER.value, tooltipID=ModeSelectorTooltipsConstants.FUN_RANDOM_REWARDS)
 
     def __reloadModeHelper(self):
         if self.__subModesHelper is not None:

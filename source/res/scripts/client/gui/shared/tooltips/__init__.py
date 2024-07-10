@@ -69,7 +69,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     BATTLE_ROYALE_SELECTOR_CALENDAR_INFO = 'battleRoyaleSelectorCalendarInfo'
     BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
-    SQUAD_BONUS = 'squadBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'

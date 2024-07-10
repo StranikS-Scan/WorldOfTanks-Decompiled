@@ -16,7 +16,7 @@ from gui.shared.gui_items import KPI, kpiFormatValue, kpiFormatNoSignValue
 from gui.shared.items_parameters import RELATIVE_PARAMS
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import hasGroupPenalties, getCommonParam, isValidEmptyValue, PARAMS_GROUPS
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_SIZE, BURST_COUNT
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CHASSIS_REPAIR_TIME_YOH, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_SIZE, BURST_COUNT, AVG_DAMAGE_PER_SECOND, AUTO_SHOOT_CLIP_FIRE_RATE, CONTINUOUS_SHOTS_PER_MINUTE, CONTINUOUS_DAMAGE_PER_SECOND
 from helpers.i18n import makeString
 from items import vehicles, artefacts, getTypeOfCompactDescr, ITEM_TYPES
 from web_stubs import i18n
@@ -36,6 +36,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'chassisRotationSpeed': MENU.TANK_PARAMS_GPS,
  'circularVisionRadius': MENU.TANK_PARAMS_M,
  'clipFireRate': MENU.TANK_PARAMS_CLIPSEC,
+ AUTO_SHOOT_CLIP_FIRE_RATE: MENU.TANK_PARAMS_AUTOSHOOTCLIPSEC,
  BURST_FIRE_RATE: MENU.TANK_PARAMS_BURSTSEC,
  'turboshaftBurstFireRate': MENU.TANK_PARAMS_BURSTSEC,
  BURST_TIME_INTERVAL: MENU.TANK_PARAMS_S,
@@ -44,6 +45,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'avgDamage': MENU.TANK_PARAMS_VAL,
  'avgMutableDamage': MENU.TANK_PARAMS_VAL,
  'avgDamagePerMinute': MENU.TANK_PARAMS_VPM,
+ AVG_DAMAGE_PER_SECOND: MENU.TANK_PARAMS_VPS,
+ CONTINUOUS_DAMAGE_PER_SECOND: MENU.TANK_PARAMS_VPS,
  'fireStartingChance': MENU.TANK_PARAMS_PERCENT,
  'maxHealth': MENU.TANK_PARAMS_VAL,
  'flyDelayRange': MENU.TANK_PARAMS_S,
@@ -68,6 +71,7 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'forwardMaxSpeed': MENU.TANK_PARAMS_MPH,
  'reloadMagazineTime': MENU.TANK_PARAMS_S,
  'reloadTime': MENU.TANK_PARAMS_SPM,
+ CONTINUOUS_SHOTS_PER_MINUTE: MENU.TANK_PARAMS_SPM,
  'reloadTimeSecs': MENU.TANK_PARAMS_S,
  'rotationSpeed': MENU.TANK_PARAMS_GPS,
  'chassisModuleRotationSpeed': MENU.TANK_PARAMS_GPS,
@@ -158,9 +162,21 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                         artefacts.AttackArtilleryFortEquipment: ('maxDamage', 'areaRadius', 'duration', 'commonDelay'),
                         artefacts.FortConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration'),
                         artefacts.ConsumableInspire: ('crewRolesFactor', 'commonAreaRadius', 'inactivationDelay', 'duration')},
- ITEM_TYPES.shell: ('caliber', 'avgDamage', 'avgMutableDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList'),
+ ITEM_TYPES.shell: ('caliber',
+                    'avgDamage',
+                    'avgMutableDamage',
+                    AVG_DAMAGE_PER_SECOND,
+                    'avgPiercingPower',
+                    'shotSpeed',
+                    'explosionRadius',
+                    'stunDurationList'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
+                         'avgDamageList',
+                         'maxAvgDamageList',
+                         'minAvgDamageList',
+                         CONTINUOUS_DAMAGE_PER_SECOND,
+                         'avgPiercingPower',
                          'shellsCount',
                          'reloadTimeSecs',
                          'shellReloadingTime',
@@ -169,16 +185,13 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
                          'reloadTime',
                          'rateTime',
                          'chargeTime',
-                         'avgPiercingPower',
-                         'avgDamageList',
-                         'maxAvgDamageList',
-                         'minAvgDamageList',
+                         CONTINUOUS_SHOTS_PER_MINUTE,
                          'stunMinDurationList',
                          'stunMaxDurationList',
                          DISPERSION_RADIUS,
                          DUAL_ACCURACY_COOLING_DELAY,
-                         'aimingTime',
                          'maxShotDistance',
+                         'aimingTime',
                          'weight')}
 FORMAT_NAME_C_S_VALUE_S_UNITS = '{paramName} {paramValue} {paramUnits}'
 _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO = 5
@@ -338,6 +351,13 @@ def _autoReloadPreprocessor(reloadTimes, rowStates):
         return (times, _SLASH, states if states else None)
 
 
+def clipFireRatePreprocessor(values, states):
+    internalClipState, internalClipStateDiff = states[1]
+    internalClipState = PARAM_STATE.WORSE if values[1] is None else internalClipState
+    states = [states[0], (internalClipState, internalClipStateDiff), states[2]]
+    return (values, _SLASH, states)
+
+
 def shotDispersionAnglePreprocessor(values, states):
     _, dualAccuracyParamDiff = states[0]
     states = [(PARAM_STATE.WORSE, dualAccuracyParamDiff)] + [states[1]] if len(states) > 1 else states
@@ -356,12 +376,14 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'maxPiercingPower': _niceRangeFormat,
  'minPiercingPower': _niceRangeFormat,
  'reloadTime': _niceRangeFormat,
+ CONTINUOUS_SHOTS_PER_MINUTE: _niceRangeFormat,
  'reloadTimeSecs': _niceListFormat,
  'turretRotationSpeed': _niceListFormat,
  'turretYawLimits': _niceListFormat,
  'gunYawLimits': _niceListFormat,
  'pitchLimits': _niceListFormat,
  'clipFireRate': _niceListFormat,
+ AUTO_SHOOT_CLIP_FIRE_RATE: _niceListFormat,
  BURST_FIRE_RATE: _niceListFormat,
  BURST_TIME_INTERVAL: _niceFormat,
  BURST_COUNT: _integralFormat,
@@ -372,6 +394,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'relativeArmor': _integralFormat,
  'avgDamage': _niceFormat,
  'avgMutableDamage': _niceRangeFormat,
+ AVG_DAMAGE_PER_SECOND: _niceFormat,
+ CONTINUOUS_DAMAGE_PER_SECOND: _niceRangeFormat,
  'maxHealth': _integralFormat,
  'hullArmor': _listFormat,
  'turretArmor': _listFormat,
@@ -473,7 +497,7 @@ def _getDeltaSettings():
 
 
 DELTA_PARAMS_SETTING = _getDeltaSettings()
-_SMART_ROUND_PARAMS = ('damage',
+SMART_ROUND_PARAMS = {'damage',
  'piercingPower',
  'bombDamage',
  'shellsCount',
@@ -485,7 +509,9 @@ _SMART_ROUND_PARAMS = ('damage',
  'weight',
  DUAL_GUN_RATE_TIME,
  DUAL_GUN_CHARGE_TIME,
- 'crewRolesFactor')
+ 'crewRolesFactor',
+ CONTINUOUS_SHOTS_PER_MINUTE,
+ CONTINUOUS_DAMAGE_PER_SECOND}
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
@@ -544,7 +570,7 @@ def _applyFormat(value, state, settings, doSmartRound, colorScheme):
 def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True, showZeroDiff=False):
     formatSettings = formatSettings or FORMAT_SETTINGS
     settings = formatSettings.get(parameterName, _listFormat)
-    doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
+    doSmartRound = allowSmartRound and parameterName in SMART_ROUND_PARAMS
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
@@ -644,7 +670,7 @@ def getGroupPenaltyIcon(parameter, comparator):
     return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE if hasGroupPenalties(parameter.name, comparator) else ''
 
 
-def getAllParametersTitles():
+def getAllParametersTitles(hiddenParams=()):
     result = []
     for _, groupName in enumerate(RELATIVE_PARAMS):
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
@@ -652,7 +678,7 @@ def getAllParametersTitles():
         data['isEnabled'] = True
         data['tooltip'] = TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
         result.append(data)
-        for paramName in PARAMS_GROUPS[groupName]:
+        for paramName in (p for p in PARAMS_GROUPS[groupName] if p not in hiddenParams):
             data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName, groupName)
             data['iconSource'] = getParameterSmallIconPath(paramName)
             data['titleText'] = formatVehicleParamName(paramName)

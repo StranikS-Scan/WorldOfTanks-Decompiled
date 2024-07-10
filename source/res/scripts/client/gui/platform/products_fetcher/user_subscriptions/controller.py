@@ -21,20 +21,18 @@ if typing.TYPE_CHECKING:
 __doc__ = '\nModule takes care of player subscriptions from platform.\n\nUsers can buy two types types of subscriptions. One from Steam, one from platform.\n\nOur workflow with this subscriptions is:\n1. if player has payed wot+, we will download from platform list of his subscriptions.\n2. we will create a list of his subscriptions as list of UserSubscriptions\n   in UserSubscriptionsFetchController._fetchResult.products.\n2. we will set the state of subscription - active, cancelled.\n\nSubscriptions are updated during lobby/hangar load. Cache is set to 5 minutes.\n'
 
 class PlatformGetUserSubscriptionsParams(object):
-    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
-        serverSettings = self._lobbyContext.getServerSettings()
         self.status = [SubscriptionStatus.ACTIVE.value, SubscriptionStatus.INACTIVE.value]
-        self.productCode = serverSettings.getWotPlusProductCode()
 
     def __str__(self):
-        return 'product_code: {product_code}, status: {status}'.format(product_code=self.productCode, status=self.status)
+        return 'status: {status}'.format(status=self.status)
 
 
 class UserSubscriptionsFetchController(IUserSubscriptionsFetchController):
     _webCtrl = dependency.descriptor(IWebController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
     platformFetchCtx = PlatformGetUserSubscriptionsCtx
 
     def __init__(self):
@@ -56,9 +54,13 @@ class UserSubscriptionsFetchController(IUserSubscriptionsFetchController):
         self._fetchResult.reset()
         subscriptionParams = PlatformGetUserSubscriptionsParams()
         requestSuccess, subscriptionsData = yield wg_async.await_callback(partial(self._requestSubscriptions, subscriptionParams))()
+        serverSettings = self._lobbyContext.getServerSettings()
+        subscriptionProductCodes = serverSettings.getWotPlusProductCodes()
         if requestSuccess and subscriptionsData:
             _logger.debug('Subscriptions request from %s has been successfully processed.', str(subscriptionParams))
             for subscriptionData in subscriptionsData:
+                if subscriptionData.get('product_code') not in subscriptionProductCodes:
+                    continue
                 userSubscription = UserSubscription(subscriptionData)
                 hasSubscription = any([ subscription.subscriptionId == userSubscription.subscriptionId for subscription in self._fetchResult.products ])
                 if not hasSubscription:

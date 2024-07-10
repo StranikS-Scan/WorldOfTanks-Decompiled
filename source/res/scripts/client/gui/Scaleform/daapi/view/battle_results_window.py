@@ -149,7 +149,7 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
 
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
         g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
@@ -163,7 +163,7 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
             self.__setBattleResults()
 
     def _dispose(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__onPremiumXpBonusChanged)
         g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -215,6 +215,10 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
 
     def __onPremiumStateChanged(self, *_):
         self.__updateVO()
+
+    def __onPremiumXpBonusChanged(self, event):
+        if event.ctx.get('isBonusApplied', False):
+            self.__updateVO()
 
     def __onBattleResultWindowShowQuest(self, event):
         ctx = event.ctx if event is not None else None

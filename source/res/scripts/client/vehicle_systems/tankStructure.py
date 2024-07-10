@@ -63,6 +63,10 @@ class TankPartNames(object):
 
         return None
 
+    @staticmethod
+    def getActualNodeNameByPartName(partName, isAlive=True):
+        return TankNodeNames.GUN_INCLINATION if isAlive and partName == TankPartNames.GUN else partName
+
 
 class DetachedTurretPartNames(object):
     ALL = (TankPartNames.TURRET, TankPartNames.GUN)

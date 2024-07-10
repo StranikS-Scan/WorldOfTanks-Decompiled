@@ -191,6 +191,9 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         if not self.sessionProvider.isReplayPlaying:
             if arenaPeriod <= ARENA_PERIOD.PREBATTLE:
                 self.app.enterGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE, enableAiming=False)
+                inputHandler = avatar_getter.getInputHandler()
+                if inputHandler is not None:
+                    inputHandler.getTargeting().detach(False)
             elif arenaPeriod == ARENA_PERIOD.BATTLE:
                 self.app.leaveGuiControlMode(VIEW_ALIAS.COMP7_BATTLE_PAGE)
         self.__visibilityManager.updatePeriod(arenaPeriod)

@@ -3,8 +3,7 @@
 import logging
 import typing
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
+from account_helpers.AccountSettings import COMP7_LIGHT_INTRO_SHOWN
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow
@@ -85,14 +84,7 @@ class IntroScreen(ViewImpl, IGlobalListener):
             vm.setQualificationBattlesCount(self.__comp7Controller.qualificationBattlesNumber)
 
     def __setComp7IntroShown(self):
-        if not self.__settingsCore.isReady:
-            _logger.error('Can not save Comp7IntroShown settings: settings are not ready')
-            return
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        stateFlags = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        stateFlags[GuiSettingsBehavior.COMP7_INTRO_SHOWN] = True
-        stateFlags[GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = True
-        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, stateFlags)
+        AccountSettings.setSettings(COMP7_LIGHT_INTRO_SHOWN, True)
 
     def __onClose(self):
         event_dispatcher.showHangar()

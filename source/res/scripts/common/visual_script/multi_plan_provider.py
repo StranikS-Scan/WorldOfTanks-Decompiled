@@ -10,6 +10,7 @@ from plan_holder import PlanHolder
 
 class MultiPlanProvider(object):
     PLAN_KEY_SEPARATOR = '#'
+    LOAD_OVER_TIME = 'loadOverTime'
 
     def __init__(self, aspect, arenaBonusType=0):
         self._plans = {}
@@ -71,11 +72,20 @@ class MultiPlanProvider(object):
         self.reset()
         for entry in planNames:
             if isinstance(entry, dict):
-                self._loadPlan(entry['name'], dict(entry['params']), False, entry.get('plan_id', ''))
+                loadOverTime, params = self.__convertParams(entry['params'])
+                self._loadPlan(entry['name'], params, False, entry.get('plan_id', ''), loadOverTime=loadOverTime)
             self._loadPlan(entry)
 
-    def startPlan(self, planName, params={}, key='', contextInstance=None):
-        self._loadPlan(planName, params, True, key, contextInstance)
+    def __convertParams(self, inputParams):
+        loadOverTime = False
+        params = dict(inputParams)
+        if self.LOAD_OVER_TIME in params:
+            loadOverTime = params[self.LOAD_OVER_TIME] == 'true'
+            del params[self.LOAD_OVER_TIME]
+        return (loadOverTime, params)
+
+    def startPlan(self, planName, params={}, key='', contextInstance=None, loadOverTime=False):
+        self._loadPlan(planName, params, True, key, contextInstance, loadOverTime)
 
     def stopPlan(self, planName, key=''):
         nameWithKey = self.getPlanNameWithKey(planName, key)
@@ -84,6 +94,12 @@ class MultiPlanProvider(object):
             if holder.isLoaded:
                 holder.plan.stop()
             holder.autoStart = False
+
+    def removePlan(self, planName, key=''):
+        nameWithKey = self.getPlanNameWithKey(planName, key)
+        if nameWithKey in self._plans.keys():
+            self.stopPlan(planName, key)
+            del self._plans[nameWithKey]
 
     def setOptionalInputParam(self, name, value):
         for holder in self._plans.itervalues():
@@ -99,7 +115,7 @@ class MultiPlanProvider(object):
 
         self._context = context
 
-    def _loadPlan(self, planName, params={}, autoStart=False, key='', contextInstance=None):
+    def _loadPlan(self, planName, params={}, autoStart=False, key='', contextInstance=None, loadOverTime=False):
         nameWithKey = self.getPlanNameWithKey(planName, key)
         holder = None
         if nameWithKey in self._plans.keys():
@@ -115,7 +131,10 @@ class MultiPlanProvider(object):
                 holder.plan.setContext(contextInstance)
             elif self._context is not None:
                 holder.plan.setContext(self._context)
-            holder.load(planName, self._aspect, self._planTags.tags)
+            if loadOverTime:
+                holder.loadOverTime(planName, self._aspect, self._planTags.tags)
+            else:
+                holder.load(planName, self._aspect, self._planTags.tags)
             self._plans[nameWithKey] = holder
         return holder
 
@@ -151,7 +170,8 @@ if IS_DEVELOPMENT:
             if self._name in self.plansOnLoad:
                 for entry in self.plansOnLoad[self._name]:
                     if isinstance(entry, dict):
-                        self._loadPlan(entry['name'], dict(entry['params']), autoStart)
+                        loadOverTime, params = self.__convertParams(entry['params'])
+                        self._loadPlan(entry['name'], params, autoStart, loadOverTime=loadOverTime)
                     self._loadPlan(entry, {}, autoStart)
 
 
@@ -159,11 +179,18 @@ if IS_DEVELOPMENT:
         CallablePlanProvider.plansOnLoad[name] = planNames
 
 
-    def startPlan(name, planName, params={}):
+    def startPlan(name, planName, params={}, loadOverTime=False):
         if name not in CallablePlanProvider.providers:
             raise SoftException('Wrong provider name')
         for provider in CallablePlanProvider.providers[name]:
-            provider.startPlan(planName, params)
+            provider.startPlan(planName, params, loadOverTime=loadOverTime)
+
+
+    def removePlan(name, planName):
+        if name not in CallablePlanProvider.providers:
+            raise SoftException('Wrong provider name')
+        for provider in CallablePlanProvider.providers[name]:
+            provider.removePlan(planName)
 
 
 def makeMultiPlanProvider(aspect, name, arenaBonusType=0):

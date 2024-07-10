@@ -14,7 +14,7 @@ from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, rep
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, FunRandomRoster, Comp7Roster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, Comp7Roster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -312,6 +312,7 @@ class UNIT_NOTIFY_CMD:
     REMOVED_VEHICLE_MAX_SCOUT_EXCEED = 18
     CHANGE_SQUAD_SIZE = 19
     PLAYER_LIMITS_EXPIRED = 20
+    REMOVED_VEHICLE_FROM_SQUAD = 21
 
 
 class CLIENT_UNIT_CMD:
@@ -340,7 +341,6 @@ class CLIENT_UNIT_CMD:
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
     SET_SQUAD_SIZE = 28
-    CHANGE_FUN_EVENT_ID = 29
     SET_RANDOM_FLAGS = 30
 
 
@@ -364,7 +364,6 @@ class UNIT_MGR_FLAGS:
     BATTLE_ROYALE = 16384
     MAPBOX = 32768
     RTS = 65536
-    FUN_RANDOM = 131072
     COMP7 = 262144
 
 
@@ -515,9 +514,8 @@ class ROSTER_TYPE:
     EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
     BATTLE_ROYALE_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BATTLE_ROYALE
     MAPBOX_ROSTER = UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.SQUAD
-    FUN_RANDOM_ROSTER = UNIT_MGR_FLAGS.FUN_RANDOM | UNIT_MGR_FLAGS.SQUAD
     COMP7_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.COMP7
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.FUN_RANDOM | COMP7_ROSTER
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX | COMP7_ROSTER
 
 
 class EXTRAS_HANDLER_TYPE:

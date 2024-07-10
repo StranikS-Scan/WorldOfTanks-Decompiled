@@ -7,7 +7,7 @@ from battle_modifiers_ext.constants_ext import USE_VEHICLE_CACHE, MAX_VEHICLE_CA
 from battle_modifiers_ext.modification_cache.modification_cache import ModificationCache
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
-from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH
+from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
 from Math import Vector2
 from debug_utils import LOG_DEBUG
@@ -34,7 +34,7 @@ class VehicleModifier(object):
     def _modifyVehType(cls, vehType, modifiers):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify vehicle '{}'".format(vehType.name))
-        modifiers.vehicle = vehType
+        modifiers.modificationCtx['vehType'] = vehType
         vehType = copy.copy(vehType)
         if modifiers.haveDomain(ModifierDomain.VEH_TYPE):
             invisibility = vehType.invisibility
@@ -84,7 +84,7 @@ class VehicleModifier(object):
     def __modifyGun(cls, gun, modifiers):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify gun '{}'".format(gun.name))
-        modifiers.gun = gun
+        modifiers.modificationCtx['gun'] = gun
         gun = copy.copy(gun)
         if modifiers.haveDomain(ModifierDomain.GUN):
             gun.rotationSpeed = modifiers(BattleParams.GUN_ROTATION_SPEED, gun.rotationSpeed)
@@ -114,7 +114,19 @@ class VehicleModifier(object):
                     gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
                 else:
                     gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
+                if gun.prefabs:
+                    gunPrefabs = copy.deepcopy(gun.prefabs)
+                    for outfit, prefabs in gunPrefabs.iteritems():
+                        modifiers.modificationCtx['outfit'] = outfit
+                        prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, path) for path in prefabs['main']))
+
+                    gun.prefabs = gunPrefabs
+                    modifiers.modificationCtx.pop('outfit', None)
             gun.invisibilityFactorAtShot = modifiers(BattleParams.INVISIBILITY_FACTOR_AT_SHOT, gun.invisibilityFactorAtShot)
+            if gun.forcedReloadTime != ZERO_FLOAT:
+                gun.forcedReloadTime = modifiers(BattleParams.FORCED_RELOAD_TIME, gun.forcedReloadTime)
+            if gun.autoShoot != DEFAULT_GUN_AUTOSHOOT:
+                gun.autoShoot = gun.autoShoot._replace(shotDispersionPerSec=modifiers(BattleParams.AUTO_SHOOT_DISPERSION_PER_SEC, gun.autoShoot.shotDispersionPerSec), maxShotDispersion=modifiers(BattleParams.AUTO_SHOOT_MAX_SHOT_DISPERSION_FACTOR, gun.autoShoot.maxShotDispersion))
         if modifiers.haveDomain(ModifierDomain.SHOT_COMPONENTS):
             gun.shots = tuple((cls.__modifyShot(shot, modifiers) for shot in gun.shots))
         return gun
@@ -123,7 +135,7 @@ class VehicleModifier(object):
     def __modifyShot(cls, shot, modifiers):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify shell '{}'".format(shot.shell.name))
-        modifiers.shell = shot.shell
+        modifiers.modificationCtx['shell'] = shot.shell
         shot = copy.copy(shot)
         if modifiers.haveDomain(ModifierDomain.SHOT):
             from items import vehicles
@@ -145,14 +157,23 @@ class VehicleModifier(object):
     def __modifyShell(cls, shell, modifiers):
         shell = copy.copy(shell)
         if modifiers.haveDomain(ModifierDomain.SHELL):
-            if BattleParams.DAMAGE_RANDOMIZATION in modifiers:
-                shell.useAltDamageRandomization = True
-                shell.damageRandomization = modifiers(BattleParams.DAMAGE_RANDOMIZATION, shell.damageRandomization)
+            shell.damageRandomization = modifiers(BattleParams.DAMAGE_RANDOMIZATION, shell.damageRandomization)
+            shell.damageRandomizationType = modifiers(BattleParams.DAMAGE_RANDOMIZATION_TYPE, shell.damageRandomizationType)
             shell.piercingPowerRandomization = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION, shell.piercingPowerRandomization)
+            shell.piercingPowerRandomizationType = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION_TYPE, shell.piercingPowerRandomizationType)
             shell.armorDamage = (modifiers(BattleParams.ARMOR_DAMAGE_FIRST, shell.armorDamage[0]), modifiers(BattleParams.ARMOR_DAMAGE_LAST, shell.armorDamage[1]))
             shell.deviceDamage = (modifiers(BattleParams.DEVICE_DAMAGE_FIRST, shell.deviceDamage[0]), modifiers(BattleParams.DEVICE_DAMAGE_LAST, shell.deviceDamage[1]))
             effectsIndex = shell.effectsIndex
+            modifiers.modificationCtx['shotsCount'] = 1 if shell.dynamicEffectsIndexes else 0
             shell.effectsIndex = modifiers(BattleParams.SHOT_EFFECTS, effectsIndex)
+            newDynamicEffectsIndexes = []
+            dynamicEffectsIndexes = shell.dynamicEffectsIndexes
+            for dynamicEffect in dynamicEffectsIndexes:
+                modifiers.modificationCtx['shotsCount'] = dynamicEffect.minShotsCount
+                newDynamicEffectsIndexes.append(DynamicShotEffect(effectsIndex=modifiers(BattleParams.SHOT_EFFECTS, dynamicEffect.effectsIndex), minShotsCount=dynamicEffect.minShotsCount, maxShotsCount=dynamicEffect.maxShotsCount))
+
+            shell.dynamicEffectsIndexes = tuple(newDynamicEffectsIndexes)
+            modifiers.modificationCtx.pop('shotsCount')
         if modifiers.haveDomain(ModifierDomain.SHELL_TYPE):
             shell.type = cls.__modifyShellType(shell.type, modifiers)
         return shell

@@ -5,7 +5,6 @@ import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
-from gui.Scaleform.settings import TOOLTIP_TYPES
 from fun_random_common.fun_constants import FUN_EVENT_ID_KEY, UNKNOWN_EVENT_ID
 from fun_random.gui.feature.util.fun_helpers import notifyCaller
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
@@ -16,16 +15,12 @@ from fun_random.gui.prb_control.entities.pre_queue.permissions import FunRandomP
 from fun_random.gui.prb_control.entities.pre_queue.scheduler import FunRandomScheduler
 from fun_random.gui.prb_control.entities.pre_queue.vehicles_watcher import FunRandomVehiclesWatcher
 from fun_random.gui.prb_control.entities.squad.entity import FunRandomSquadEntryPoint
-from gui.Scaleform.daapi.view.lobby.header.fight_btn_tooltips import getFunRandomFightBtnTooltipData
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntryPoint, PreQueueSubscriber, PreQueueEntity
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PRE_QUEUE_JOIN_ERRORS
-from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.game_control import IFunRandomController
 _logger = logging.getLogger(__name__)
@@ -89,16 +84,6 @@ class FunRandomEntity(PreQueueEntity, FunAssetPacksMixin):
 
     def getPermissions(self, pID=None, **kwargs):
         return FunRandomPermissions(self.isInQueue())
-
-    def getFightBtnTooltipData(self, isStateDisabled):
-        return (getFunRandomFightBtnTooltipData(self.canPlayerDoAction(), False), False) if isStateDisabled else super(FunRandomEntity, self).getFightBtnTooltipData(isStateDisabled)
-
-    def getSquadBtnTooltipData(self):
-        if self.getPermissions().canCreateSquad():
-            header = backport.text(R.strings.fun_random.headerButton.tooltips.funRandomSquad.header())
-            body = backport.text(R.strings.fun_random.headerButton.tooltips.funRandomSquad.body(), modeName=self.getModeUserName())
-            return (makeTooltip(header, body), TOOLTIP_TYPES.COMPLEX)
-        return super(FunRandomEntity, self).getSquadBtnTooltipData()
 
     def doSelectAction(self, action):
         if action.actionName in (PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD, PREBATTLE_ACTION_NAME.SQUAD):

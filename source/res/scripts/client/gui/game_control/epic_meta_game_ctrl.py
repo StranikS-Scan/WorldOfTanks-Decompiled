@@ -3,11 +3,11 @@
 import logging
 from bisect import insort_right
 from operator import itemgetter
+import typing
 import BigWorld
 import Event
 import WWISE
 import adisp
-import typing
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR, EPIC_LAST_CYCLE_ID
 from account_helpers.client_epic_meta_game import skipResponse
@@ -16,15 +16,19 @@ from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, Configs
 from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_CHOICE_REWARD_OFFER_GIFT_TOKENS, LEVELUP_TOKEN_TEMPLATE, CATEGORIES_ORDER
 from frontline.frontline_account_settings import isWelcomeScreenViewed, setWelcomeScreenViewed
+from frontline.gui.impl.gen.view_models.views.lobby.views.info_page_scroll_to_section import InfoPageScrollToSection
 from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
+from gui.Scaleform.daapi.view.lobby.epicBattle import epic_helpers
+from gui.server_events.events_helpers import isDailyEpic
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showFrontlineContainerWindow
-from gui.shared.event_dispatcher import showFrontlineWelcomeWindow
+from gui.shared.event_dispatcher import showFrontlineContainerWindow, showEpicBattlesPrimeTimeWindow
+from gui.shared.event_dispatcher import showFrontlineWelcomeWindow, showFrontlineInfoWindow
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -38,13 +42,16 @@ from player_ranks import getSettings as getRankSettings
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_results import IBattleResultsService
-from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.game_control import IEpicBattleMetaGameController, ILimitedUIController, IQuestsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from uilogging.epic_battle.constants import EpicBattleLogKeys, EpicBattleLogActions, EpicBattleLogButtons
+from uilogging.epic_battle.loggers import EpicBattleLogger
 from season_provider import SeasonProvider
 if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
     from helpers.server_settings import EpicGameConfig
     from season_common import GameSeasonCycle
 _logger = logging.getLogger(__name__)
@@ -127,6 +134,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battleResultsService = dependency.descriptor(IBattleResultsService)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __questController = dependency.descriptor(IQuestsController)
     MAX_STORED_ARENAS_RESULTS = 20
     DAILY_QUEST_ID = 'front_line'
     FINAL_BADGE_QUEST_ID = 'epicmetagame:progression_finish'
@@ -265,6 +274,23 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
             periodTimeLeft = periodTimeEnd - time_utils.getCurrentLocalServerTimestamp()
             return periodTimeLeft > time_utils.getDayTimeLeft()
         return False
+
+    def getAlertBlock(self):
+
+        def showFLInfoWindow():
+            EpicBattleLogger().log(EpicBattleLogActions.CLICK, item=EpicBattleLogButtons.INFO_PAGE, parentScreen=EpicBattleLogKeys.HANGAR)
+            showFrontlineInfoWindow(autoscrollSection=InfoPageScrollToSection.BATTLE_SCENARIOS)
+
+        alertData = epic_helpers.getAlertStatusVO()
+        blockCallback = showFLInfoWindow if self.isInPrimeTime() else None
+        return (self.isEnabled(), alertData, alertData.packCallbacks(showEpicBattlesPrimeTimeWindow, blockCallback))
+
+    def getDailyBattleQuests(self):
+        if not self.isEnabled() or not self.__limitedUIController.isRuleCompleted(LuiRules.BATTLE_MISSIONS):
+            return None
+        else:
+            quests = [ q for q in self.__questController.getQuestForVehicle(g_currentVehicle.item) if isDailyEpic(q.getGroupID()) ]
+            return quests
 
     def getPerformanceGroup(self):
         if not self.__performanceGroup:

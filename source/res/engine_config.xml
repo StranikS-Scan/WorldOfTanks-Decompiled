@@ -216,6 +216,7 @@
     <assetLogPath>	asset.log	</assetLogPath>
     <enableColorFill>	false	</enableColorFill>
     <remotePythonConsole>	true	</remotePythonConsole>
+    <timePerFrameWarningThreshold>	1000.0	</timePerFrameWarningThreshold>
   </debug>
   <hitchDetector>
     <numTimeSamples>	10	</numTimeSamples>
@@ -509,6 +510,18 @@
       </SFX_soundbanks_login>
       <SFX_soundbanks_arena>
         <bank>
+          <name>	fast_guns.bnk	</name>
+        </bank>
+        <bank>
+          <name>	fast_guns.pck	</name>
+        </bank>
+        <bank>
+          <name>	ev_fep_fast_gun.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_fep_fast_gun.pck	</name>
+        </bank>
+        <bank>
           <name>	ambient.bnk	</name>
         </bank>
         <bank>
@@ -747,6 +760,12 @@
         </bank>
         <bank>
           <name>	mechanisms.bnk	</name>
+        </bank>
+        <bank>
+          <name>	fast_guns.bnk	</name>
+        </bank>
+        <bank>
+          <name>	fast_guns.pck	</name>
         </bank>
         <bank>
           <name>	inbattle_communication_npc.bnk	</name>

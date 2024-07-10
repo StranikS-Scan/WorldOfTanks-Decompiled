@@ -11,38 +11,38 @@ class DogTagType(IntEnum):
 class RewardsModel(IconBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=14, commands=0):
         super(RewardsModel, self).__init__(properties=properties, commands=commands)
 
     def getId(self):
-        return self._getNumber(8)
+        return self._getNumber(9)
 
     def setId(self, value):
-        self._setNumber(8, value)
+        self._setNumber(9, value)
 
     def getPurpose(self):
-        return self._getString(9)
+        return self._getString(10)
 
     def setPurpose(self, value):
-        self._setString(9, value)
+        self._setString(10, value)
 
     def getDogTagType(self):
-        return DogTagType(self._getNumber(10))
+        return DogTagType(self._getNumber(11))
 
     def setDogTagType(self, value):
-        self._setNumber(10, value.value)
+        self._setNumber(11, value.value)
 
     def getBackgroundId(self):
-        return self._getNumber(11)
-
-    def setBackgroundId(self, value):
-        self._setNumber(11, value)
-
-    def getEngravingId(self):
         return self._getNumber(12)
 
-    def setEngravingId(self, value):
+    def setBackgroundId(self, value):
         self._setNumber(12, value)
+
+    def getEngravingId(self):
+        return self._getNumber(13)
+
+    def setEngravingId(self, value):
+        self._setNumber(13, value)
 
     def _initialize(self):
         super(RewardsModel, self)._initialize()

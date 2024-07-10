@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from BonusCaps import BonusCapsConst
+from constants import Configs
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -14,10 +16,14 @@ from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
-from helpers import dependency
+from helpers import dependency, server_settings
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+
+def _removeFilterByNames(filters, filterNames):
+    return tuple((f for f in filters if f not in filterNames))
+
 
 class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -28,8 +34,25 @@ class TankCarousel(TankCarouselMeta):
         super(TankCarousel, self).__init__()
         self._carouselDPCls = HangarCarouselDataProvider
 
+    def hasRoles(self):
+        return True
+
+    def getCarouselAlias(self):
+        return self.getAlias()
+
+    def setFilter(self, idx):
+        self.filter.switch(self._usedFilters[idx])
+        self.blinkCounter()
+        self.applyFilter()
+
     def setRowCount(self, value):
         self.as_rowCountS(value)
+
+    def buyRentPromotion(self, intCD):
+        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE, intCD)
+
+    def buySlot(self):
+        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
     def buyTank(self):
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE)), EVENT_BUS_SCOPE.LOBBY)
@@ -37,17 +60,12 @@ class TankCarousel(TankCarouselMeta):
     def restoreTank(self):
         showStorage(STORAGE_CONSTANTS.IN_HANGAR, STORAGE_CONSTANTS.VEHICLES_TAB_RESTORE)
 
-    def buySlot(self):
-        self.__buySlot()
-
-    def buyRentPromotion(self, intCD):
-        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE, intCD)
-
     def selectTelecomRentalVehicle(self, intCD):
         showTelecomRentalPage()
 
-    def getCarouselAlias(self):
-        return self.getAlias()
+    def updateAvailability(self):
+        super(TankCarousel, self).updateAvailability()
+        self.updateParams()
 
     def updateParams(self):
         if self._carouselDP:
@@ -58,18 +76,6 @@ class TankCarousel(TankCarouselMeta):
         if vehicles is None and filterCriteria is None:
             self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
         return
-
-    def updateAviability(self):
-        super(TankCarousel, self).updateAviability()
-        self.updateParams()
-
-    def setFilter(self, idx):
-        self.filter.switch(self._usedFilters[idx])
-        self.blinkCounter()
-        self.applyFilter()
-
-    def hasRoles(self):
-        return True
 
     def _populate(self):
         super(TankCarousel, self)._populate()
@@ -96,6 +102,28 @@ class TankCarousel(TankCarouselMeta):
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(TankCarousel, self)._dispose()
 
+    def _getFilters(self):
+        return _removeFilterByNames(super(TankCarousel, self)._getFilters(), self._carouselDP.getHiddenDynamicFilters() if self._carouselDP else ())
+
+    def _getFiltersVisible(self):
+        return True
+
+    def _getFiltersPopoverAlias(self):
+        return VIEW_ALIAS.HANGAR_TANK_CAROUSEL_FILTER_POPOVER
+
+    def _getInitialFilterVO(self, contexts):
+        filtersVO = {'isVisible': self._getFiltersVisible(),
+         'popoverAlias': self._getFiltersPopoverAlias(),
+         'mainBtn': {'value': getButtonsAssetPath('params'),
+                     'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
+         'hotFilters': []}
+        if self.filter is not None:
+            filters = self.filter.getFilters(self._usedFilters)
+            for entry in self._usedFilters:
+                filtersVO['hotFilters'].append(self._makeFilterVO(entry, contexts, filters))
+
+        return filtersVO
+
     def _onCarouselSettingsChange(self, diff):
         if settings_constants.GAME.CAROUSEL_TYPE in diff:
             setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
@@ -105,28 +133,24 @@ class TankCarousel(TankCarouselMeta):
             self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
         super(TankCarousel, self)._onCarouselSettingsChange(diff)
 
-    def _getFiltersVisible(self):
-        return True
+    def _onServerSettingChanged(self, diff, skipVehicles=False):
+        super(TankCarousel, self)._onServerSettingChanged(diff, skipVehicles=self.__onServerSettingChanged(diff))
 
-    def _getInitialFilterVO(self, contexts):
-        filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
-                     'tooltip': TANK_CAROUSEL_FILTER.TOOLTIP_PARAMS},
-         'hotFilters': [],
-         'isVisible': self._getFiltersVisible(),
-         'isFrontline': False}
-        if self.filter is not None:
-            filters = self.filter.getFilters(self._usedFilters)
-            for entry in self._usedFilters:
-                filtersVO['hotFilters'].append(self._makeFilterVO(entry, contexts, filters))
-
-        return filtersVO
-
-    def __buySlot(self):
-        ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
+    def _updateDynamicFilters(self):
+        if self._carouselDP is not None:
+            self._carouselDP.updateDynamicFilters()
+        self._callPopoverCallback()
+        self._usedFilters = self._getFilters()
+        self.updateVehicles()
+        return
 
     def __onFittingUpdate(self, *args):
         self.updateParams()
 
+    @server_settings.serverSettingsChangeListener(BonusCapsConst.CONFIG_NAME, Configs.CRYSTAL_REWARDS_CONFIG.value)
+    def __onServerSettingChanged(self, diff):
+        self._updateDynamicFilters()
+
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
+        if view.alias == VIEW_ALIAS.HANGAR_TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)

@@ -34,6 +34,7 @@ from AvatarInputHandler import AimingSystems, keys_handlers
 from AvatarInputHandler import aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler import steel_hunter_control_modes
 from BigWorld import SniperAimingSystem
+from AvatarInputHandler.commands.auto_shoot_gun_control import createAutoShootGunControl
 from AvatarInputHandler.commands.dualgun_control import DualGunController
 from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetupsControl
 from AvatarInputHandler.commands.radar_control import RadarControl
@@ -286,19 +287,23 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.dualGunControl = DualGunController(typeDescr)
             elif not typeDescr.isDualgunVehicle:
                 self.dualGunControl = None
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):
+            if typeDescr.isAutoShootGunVehicle:
+                self.__commands.append(createAutoShootGunControl())
+            if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.RADAR):
                 self.__commands.append(RadarControl())
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
+            if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE):
                 self.__commands.append(VehicleUpdateControl())
                 self.__commands.append(VehicleUpgradePanelControl())
                 self.__detachedCommands.append(VehicleUpgradePanelControl())
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.EPIC):
+            if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC):
                 self.__detachedCommands.append(FLRandomReserves())
-            if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
+            if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
             if vehicle.appearance:
                 vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
                 vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+            player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
+            player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             return
 
     def prerequisites(self):
@@ -653,6 +658,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if vehicle is not None and vehicle.appearance is not None:
                 vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
                 vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(eMode))
+            player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
+            player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             BigWorld.setEdgeDrawerRenderMode(1 if eMode in aih_constants.MAP_CASE_MODES else 0)
             return
 
@@ -683,9 +690,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     def onMinimapClicked(self, worldPos):
         return self.__curCtrl.onMinimapClicked(worldPos)
 
-    def onVehicleShaken(self, vehicle, impulsePosition, impulseDir, caliber, shakeReason):
+    def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0):
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
-            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, impulsePosition, impulseDir, caliber, _ShakeReason.OWN_SHOT)
+            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
             self.delayCallback(delayTime, shakeFuncBound)
             return
@@ -693,7 +700,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             camera = getattr(self.ctrl, 'camera', None)
             if camera is None:
                 return
-            impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber)
+            impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber) * sensitivity
             vehicleSensitivity = 0.0
             avatarVehicle = BigWorld.player().getVehicleAttached()
             if avatarVehicle is None or not avatarVehicle.isAlive():
@@ -776,14 +783,14 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             camera.applyDistantImpulse(position, impulseValue, cameras.ImpulseReason.HE_EXPLOSION)
             return
 
-    def onProjectileHit(self, position, caliber, isOwnShot):
+    def onProjectileHit(self, position, caliber, sensitivity, isOwnShot):
         if not isOwnShot:
             return
         else:
             camera = getattr(self.ctrl, 'camera', None)
             if camera is None:
                 return
-            impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber)
+            impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber) * sensitivity
             vehicleSensitivity = 1.0
             avatarVehicle = BigWorld.player().getVehicleAttached()
             if avatarVehicle is not None:
@@ -963,7 +970,7 @@ class _Targeting(object):
         target.maxDistance = 710.0
         target.skeletonCheckEnabled = True
         BigWorld.target.isEnabled = False
-        self.__mouseMatProv = BigWorld.MouseTargettingMatrix()
+        self.__mouseMatProv = BigWorld.MouseTargetingMatrix()
 
     def isEnabled(self):
         return BigWorld.target.isEnabled

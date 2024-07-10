@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/lobby/header/battle_selector_items.py
 from __future__ import absolute_import
-from constants import PREBATTLE_TYPE, QUEUE_TYPE
+from constants import QUEUE_TYPE
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from story_mode.gui.story_mode_gui_constants import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
@@ -36,10 +36,7 @@ class _StoryModeItem(battle_selector_items.SelectorItem):
     def getLargerIcon(self):
         return backport.image(R.images.story_mode.gui.maps.icons.battleTypes.c_64x64.story_mode())
 
-    def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.STORY_MODE)
-
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         return self.storyModeCtrl.isShowActiveModeState()
 
     def _update(self, state):

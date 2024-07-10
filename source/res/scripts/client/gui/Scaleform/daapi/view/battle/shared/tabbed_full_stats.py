@@ -86,4 +86,4 @@ class _TabsBuilder(object):
         return self.__tabs
 
     def __isBoosterProcessingAvailable(self):
-        return self.__lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled and ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.BOOSTERS)
+        return self.__lobbyContext.getServerSettings().personalReservesConfig.isReservesInBattleActivationEnabled and BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.BOOSTERS)

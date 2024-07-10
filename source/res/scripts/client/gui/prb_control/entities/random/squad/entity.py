@@ -5,17 +5,16 @@ from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE, QUEU
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
-from gui.prb_control.entities.base.squad.components import RestrictedSPGDataProvider, RestrictedScoutDataProvider
+from gui.prb_control.entities.base.squad.mixins import RestrictedRoleTagMixin
+from gui.prb_control.entities.random.squad.actions_handler import RandomSquadActionsHandler, BalancedSquadActionsHandler
+from gui.prb_control.entities.random.squad.actions_validator import VehTypeForbiddenSquadActionsValidator, VehTypeForbiddenBalancedSquadActionsValidator
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from .actions_handler import BalancedSquadActionsHandler, RandomSquadActionsHandler
-from .actions_validator import VehTypeForbiddenSquadActionsValidator, VehTypeForbiddenBalancedSquadActionsValidator
 
 class BalancedSquadDynamicRosterSettings(DynamicRosterSettings):
 
@@ -60,24 +59,19 @@ class RandomSquadEntryPoint(SquadEntryPoint):
         unitMgr.createSquad()
 
 
-class RandomSquadEntity(SquadEntity):
+class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         self._isBalancedSquad = False
-        self._isUseSPGValidateRule = True
-        self._isUseScoutValidateRule = True
-        self.__restrictedSPGDataProvider = RestrictedSPGDataProvider()
-        self.__restrictedScoutDataProvider = RestrictedScoutDataProvider()
         self._mmData = 0
         self.__watcher = None
         super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
         return
 
     def init(self, ctx=None):
-        self.__restrictedSPGDataProvider.init(self)
-        self.__restrictedScoutDataProvider.init(self)
+        self.initRestrictedRoleDataProvider(self)
         rv = super(RandomSquadEntity, self).init(ctx)
         self._isBalancedSquad = self.isBalancedSquadEnabled()
         self._switchActionsValidator()
@@ -95,14 +89,11 @@ class RandomSquadEntity(SquadEntity):
         self.eventsCache.onSyncCompleted -= self._onServerSettingChanged
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self._isBalancedSquad = False
-        self._isUseSPGValidateRule = False
-        self._isUseScoutValidateRule = False
         self.invalidateVehicleStates()
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
-        self.__restrictedSPGDataProvider.fini()
-        self.__restrictedScoutDataProvider.fini()
+        self.finiRestrictedRoleDataProvider()
         return super(RandomSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def getQueueType(self):
@@ -124,26 +115,9 @@ class RandomSquadEntity(SquadEntity):
     def getSquadLevelBounds(self):
         return self.eventsCache.getBalancedSquadBounds()
 
-    def getMaxSPGCount(self):
-        return self.__restrictedSPGDataProvider.getMaxPossibleVehicles()
-
-    def getMaxScoutCount(self):
-        return self.__restrictedScoutDataProvider.getMaxPossibleVehicles()
-
-    def hasSlotForSPG(self):
-        return self.__restrictedSPGDataProvider.hasSlotForVehicle()
-
-    def hasSlotForScout(self):
-        return self.__restrictedScoutDataProvider.hasSlotForVehicle()
-
-    def getCurrentSPGCount(self):
-        return self.__restrictedSPGDataProvider.getCurrentVehiclesCount()
-
-    def getCurrentScoutCount(self):
-        return self.__restrictedScoutDataProvider.getCurrentVehiclesCount()
-
-    def getMaxScoutLevels(self):
-        return self.__restrictedScoutDataProvider.getRestrictionLevels()
+    @property
+    def squadRestrictions(self):
+        return self.lobbyContext.getServerSettings().getSquadRestrictions()
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
         super(RandomSquadEntity, self).unit_onUnitVehicleChanged(dbID, vehInvID, vehTypeCD)
@@ -192,9 +166,7 @@ class RandomSquadEntity(SquadEntity):
         if self._isBalancedSquad:
             if v.level not in self._rosterSettings.getLevelsRange():
                 return False
-        if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG:
-            return self.__restrictedSPGDataProvider.isTagVehicleAvailable()
-        return self.__restrictedScoutDataProvider.isTagVehicleAvailable() if self._isUseScoutValidateRule and v.isScout and v.level in self.getMaxScoutLevels() else super(RandomSquadEntity, self)._vehicleStateCondition(v)
+        return self.isTagVehicleAvailable(v.tags) if self.isRoleRestrictionValid() else super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         balancedEnabled = self.isBalancedSquadEnabled()

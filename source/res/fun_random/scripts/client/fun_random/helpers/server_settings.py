@@ -4,24 +4,24 @@ from collections import namedtuple
 from fun_random_common.fun_constants import DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, UNKNOWN_EVENT_ID, FunSubModeImpl
 from shared_utils import makeTupleByDict
 
-class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl', 'assetsPointer', 'settingsKey', 'priority', 'wwiseRemapping', 'battleModifiersDescr', 'infoPageUrl'))):
+class FunSubModeClientConfig(namedtuple('_FunSubModeClientConfig', ('subModeImpl', 'assetsPointer', 'settingsKey', 'priority', 'wwiseRemapping', 'battleModifiersDescr', 'postbattle', 'infoPageUrl'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(subModeImpl=FunSubModeImpl.DEFAULT, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, priority=DEFAULT_PRIORITY, wwiseRemapping=UNKNOWN_WWISE_REMAPPING, battleModifiersDescr=(), infoPageUrl='')
+        defaults = dict(subModeImpl=FunSubModeImpl.DEFAULT, assetsPointer=DEFAULT_ASSETS_PACK, settingsKey=DEFAULT_SETTINGS_KEY, priority=DEFAULT_PRIORITY, wwiseRemapping=UNKNOWN_WWISE_REMAPPING, battleModifiersDescr=(), postbattle={}, infoPageUrl='')
         defaults.update(kwargs)
         return super(FunSubModeClientConfig, cls).__new__(cls, **defaults)
 
     @classmethod
     def defaults(cls):
-        return cls(FunSubModeImpl.DEFAULT, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, (), '')
+        return cls(FunSubModeImpl.DEFAULT, DEFAULT_ASSETS_PACK, DEFAULT_SETTINGS_KEY, DEFAULT_PRIORITY, UNKNOWN_WWISE_REMAPPING, (), {}, '')
 
 
-class FunSubModeFiltrationConfig(namedtuple('FunSubModeFiltrationConfig', ('levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'allowedVehTypes'))):
+class FunSubModeFiltrationConfig(namedtuple('FunSubModeFiltrationConfig', ('levels', 'forbiddenClassTags', 'forbiddenVehTypes', 'allowedVehTypes', 'squadRestrictions'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set(), allowedVehTypes=set())
+        defaults = dict(levels=(), forbiddenClassTags=set(), forbiddenVehTypes=set(), allowedVehTypes=set(), squadRestrictions={})
         defaults.update(kwargs)
         return super(FunSubModeFiltrationConfig, cls).__new__(cls, **defaults)
 
@@ -78,17 +78,17 @@ class FunSubModeConfig(namedtuple('_FunSubModeConfig', ('eventID', 'isEnabled', 
         data[configPartName] = makeTupleByDict(configPartCls, data)
 
 
-class FunProgressionConfig(namedtuple('_FunProgressionConfig', ('name', 'executors', 'conditions'))):
+class FunProgressionConfig(namedtuple('_FunProgressionConfig', ('name', 'executors', 'triggers', 'unlimitedTrigger', 'unlimitedExecutor', 'visibleLBAwardsNames'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(name='', executors=(), conditions=())
+        defaults = dict(name='', executors=(), triggers=(), unlimitedTrigger=None, unlimitedExecutor=None, visibleLBAwardsNames=())
         defaults.update(kwargs)
         return super(FunProgressionConfig, cls).__new__(cls, **defaults)
 
     @classmethod
     def defaults(cls):
-        return cls('', (), ())
+        return cls('', (), (), None, None, ())
 
 
 class FunMetaProgressionConfig(namedtuple('_FunMetaProgressionConfig', ('isEnabled', 'progressions'))):

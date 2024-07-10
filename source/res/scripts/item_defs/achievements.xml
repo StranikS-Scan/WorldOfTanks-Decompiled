@@ -62,7 +62,6 @@
       <item>	ironMan	</item>
       <item>	sturdy	</item>
       <item>	alaric	</item>
-      <item>	lumberjack	</item>
       <item>	medalMonolith	</item>
       <item>	medalAntiSpgFire	</item>
       <item>	medalGore	</item>
@@ -2733,6 +2732,21 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1418.11	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:lumberjack	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1469.0	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

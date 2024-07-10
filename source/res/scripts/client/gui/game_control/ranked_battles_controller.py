@@ -35,7 +35,7 @@ from gui.ranked_battles.ranked_models import BattleRankInfo, Division, Rank, Ran
 from gui.selectable_reward.common import RankedSelectableRewardManager
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.event_items import RankedQuest
-from gui.server_events.events_helpers import EventInfoModel
+from gui.server_events.events_helpers import EventInfoModel, isRankedDaily
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -59,6 +59,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.constants import YearAwardsNames
     from gui.ranked_battles.ranked_helpers.web_season_provider import WebSeasonInfo
     from gui.ranked_battles.ranked_models import PostBattleRankInfo
+    from gui.server_events.event_items import Quest
     from season_common import GameSeason
     from helpers.server_settings import RankedBattlesConfig
 _logger = logging.getLogger(__name__)
@@ -303,11 +304,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         return not bonusUsed and self.getStatsComposer().bonusBattlesCount > 0
 
     def getAlertBlock(self):
-        alertData = self._getAlertBlockData()
         buttonCallback = event_dispatcher.showRankedPrimeTimeWindow
         if not self.hasSuitableVehicles():
             buttonCallback = g_eventDispatcher.loadRankedUnreachable
-        return (buttonCallback, alertData or self._ALERT_DATA_CLASS(), alertData is not None)
+        alertData = self._getAlertBlockData()
+        return (alertData is not None, alertData, self._ALERT_DATA_CLASS.packCallbacks(buttonCallback))
 
     def getAwardTypeByPoints(self, points):
         pointMap = self.getYearAwardsPointsMap()
@@ -379,6 +380,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
             return self._createSeason(seasonInfo, self.__rankedSettings.seasons.get(seasonID, {}))
         else:
             return None
+
+    def getDailyBattleQuests(self):
+        return self.__eventsCache.getActiveQuests(lambda q: isRankedDaily(q.getID()))
 
     def getDivision(self, rankID):
         if rankID == ZERO_RANK_ID:

@@ -25,7 +25,6 @@ from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import FILTER_KEYS
 _logger = logging.getLogger(__name__)
-_DISABLED_FILTERS = [FILTER_KEYS.BONUS]
 _CAROUSEL_FILTERS = (FILTER_KEYS.FAVORITE, FILTER_KEYS.PREMIUM)
 
 class BattleCarouselFilter(CarouselFilter):
@@ -316,7 +315,7 @@ class BattleTankCarousel(BattleTankCarouselMeta):
 
     def latePopulate(self):
         self.updateVehicles(self.__vehicleData.getVehicles())
-        self.updateAviability()
+        self.updateAvailability()
 
     def getCustomParams(self):
         return {'vehicleLevelsFilter': self._carouselDP.getAvailableLevels()}

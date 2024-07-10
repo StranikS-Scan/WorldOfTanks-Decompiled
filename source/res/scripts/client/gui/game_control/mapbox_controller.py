@@ -17,18 +17,20 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.mapbox.mapbox_helpers import formatMapboxBonuses, convertTimeFromISO
 from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUNCTIONAL_FLAG
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import caches
-from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey
+from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey, showMapboxPrimeTimeWindow
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
 from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
 from helpers import dependency, server_settings, time_utils
+from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from season_provider import SeasonProvider
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -169,6 +171,12 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         else:
             yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.MAPBOX))
             return
+
+    def getAlertBlock(self):
+        status, _, _ = self.getPrimeTimeStatus()
+        alertData = mapbox_helpers.getPrimeTimeStatusVO()
+        isBlockedStatus = status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
+        return (isBlockedStatus, alertData, alertData.packCallbacks(showMapboxPrimeTimeWindow))
 
     def getProgressionData(self):
         return self.__progressionDataProvider.getProgressionData()

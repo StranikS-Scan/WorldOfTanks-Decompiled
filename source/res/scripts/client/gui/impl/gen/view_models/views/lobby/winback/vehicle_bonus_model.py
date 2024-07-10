@@ -5,62 +5,62 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 class VehicleBonusModel(ItemBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(VehicleBonusModel, self).__init__(properties=properties, commands=commands)
 
     def getIsElite(self):
-        return self._getBool(9)
-
-    def setIsElite(self, value):
-        self._setBool(9, value)
-
-    def getIsFromStorage(self):
         return self._getBool(10)
 
-    def setIsFromStorage(self, value):
+    def setIsElite(self, value):
         self._setBool(10, value)
 
+    def getIsFromStorage(self):
+        return self._getBool(11)
+
+    def setIsFromStorage(self, value):
+        self._setBool(11, value)
+
     def getVehicleName(self):
-        return self._getString(11)
-
-    def setVehicleName(self, value):
-        self._setString(11, value)
-
-    def getUserName(self):
         return self._getString(12)
 
-    def setUserName(self, value):
+    def setVehicleName(self, value):
         self._setString(12, value)
 
-    def getVehicleType(self):
+    def getUserName(self):
         return self._getString(13)
 
-    def setVehicleType(self, value):
+    def setUserName(self, value):
         self._setString(13, value)
 
-    def getNation(self):
+    def getVehicleType(self):
         return self._getString(14)
 
-    def setNation(self, value):
+    def setVehicleType(self, value):
         self._setString(14, value)
 
+    def getNation(self):
+        return self._getString(15)
+
+    def setNation(self, value):
+        self._setString(15, value)
+
     def getVehicleLvl(self):
-        return self._getNumber(15)
-
-    def setVehicleLvl(self, value):
-        self._setNumber(15, value)
-
-    def getPriceDiscount(self):
         return self._getNumber(16)
 
-    def setPriceDiscount(self, value):
+    def setVehicleLvl(self, value):
         self._setNumber(16, value)
 
-    def getExpDiscount(self):
+    def getPriceDiscount(self):
         return self._getNumber(17)
 
-    def setExpDiscount(self, value):
+    def setPriceDiscount(self, value):
         self._setNumber(17, value)
+
+    def getExpDiscount(self):
+        return self._getNumber(18)
+
+    def setExpDiscount(self, value):
+        self._setNumber(18, value)
 
     def _initialize(self):
         super(VehicleBonusModel, self)._initialize()

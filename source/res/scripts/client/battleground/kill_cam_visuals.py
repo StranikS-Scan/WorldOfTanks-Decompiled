@@ -38,12 +38,12 @@ class EffectsController(CallbackDelayer):
     def hideEdges(self):
         self.__removeEdgeDrawer()
 
-    def displayKillCamEffects(self, vehicleAppearance, maxComponentIndex, hasProjectilePierced, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint, isRicochet):
-        _logger.info('displayKillCamEffects (params): %s %s %s %s %s %s %s %s %s %s', vehicleAppearance, maxComponentIndex, hasProjectilePierced, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint)
+    def displayKillCamEffects(self, vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint, isRicochet):
+        _logger.info('displayKillCamEffects (params): %s %s %s %s %s %s %s %s %s %s %s', vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint)
         if trajectoryPoints[-1] != impactPoint:
             self.__spawnSpacedArmorLine(trajectoryPoints[-1], impactPoint)
             self.__spawnSpacedArmorImpactPoint(trajectoryPoints[-1])
-        if not hasProjectilePierced and not isShellHE:
+        if not hasProjectilePierced and not hasNonPiercedDamage and not isShellHE:
             _logger.error('Unexpected shell data.')
             return False
         if not hasProjectilePierced:
@@ -164,8 +164,8 @@ class EffectsController(CallbackDelayer):
         CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbImpactZone)
 
     @staticmethod
-    def __setTransformToGameObject(go, scale, rotation, position):
+    def __setTransformToGameObject(go, scale, rotationYPR, position):
         transformComponent = go.findComponentByType(GenericComponents.TransformComponent)
         transformComponent.position = position
         transformComponent.scale = scale
-        transformComponent.rotation = rotation
+        transformComponent.rotationYPR = rotationYPR

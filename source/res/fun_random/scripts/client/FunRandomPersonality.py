@@ -1,42 +1,34 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/FunRandomPersonality.py
-from UnitBase import UNIT_MGR_FLAGS, ROSTER_TYPE
-from constants import PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INVITATION_TYPE
-from constants_utils import AbstractBattleMode
 from fun_random.gui.battle_control import registerFunRandomBattle
 from fun_random.gui.game_control import registerFunRandomAwardControllers
-from fun_random.gui.hangar_presets import registerFunRandomHangarPresets
 from fun_random.gui.prb_control import registerFunRandomOthersPrbParams
 from fun_random.gui.Scaleform import registerFunRandomScaleform
 from fun_random.gui.server_events import registerFunRandomQuests
 from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
 from fun_random.gui import fun_gui_constants
+from fun_random_common import injectConsts, injectSquadConsts
+from fun_random_common.fun_battle_mode import FunRandomBattleMode
 from gui.prb_control.prb_utils import initGuiTypes, initRequestType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 
-class ClientFunRandomBattleMode(AbstractBattleMode):
-    _PREBATTLE_TYPE = PREBATTLE_TYPE.FUN_RANDOM
-    _QUEUE_TYPE = QUEUE_TYPE.FUN_RANDOM
-    _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.FUN_RANDOM
-    _ARENA_GUI_TYPE = ARENA_GUI_TYPE.FUN_RANDOM
-    _UNIT_MGR_FLAGS = UNIT_MGR_FLAGS.FUN_RANDOM
-    _ROSTER_TYPE = ROSTER_TYPE.FUN_RANDOM_ROSTER
-    _INVITATION_TYPE = INVITATION_TYPE.FUN_RANDOM
+class ClientFunRandomBattleMode(FunRandomBattleMode):
     _CLIENT_BATTLE_PAGE = VIEW_ALIAS.CLASSIC_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = PREBATTLE_ACTION_NAME.FUN_RANDOM
     _CLIENT_PRB_ACTION_NAME_SQUAD = PREBATTLE_ACTION_NAME.FUN_RANDOM_SQUAD
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT
-
-    @property
-    def _ROSTER_CLASS(self):
-        from unit_roster_config import FunRandomRoster
-        return FunRandomRoster
+    _CLIENT_REPLAY_MODE_TAG = 'Arcade'
 
     @property
     def _client_prbEntityClass(self):
         from fun_random.gui.prb_control.entities.pre_queue.entity import FunRandomEntity
         return FunRandomEntity
+
+    @property
+    def _client_canSelectPrbEntity(self):
+        from fun_random.gui.feature.util.fun_helpers import canSelectFunRandomPrbEntity
+        return canSelectFunRandomPrbEntity
 
     @property
     def _client_prbEntryPointClass(self):
@@ -143,33 +135,59 @@ class ClientFunRandomBattleMode(AbstractBattleMode):
         return (FunProgressionRewardsAsyncFormatter(), FunModeItemsQuestAsyncFormatter())
 
     @property
+    def _client_lootBoxAutoOpenSubFormatters(self):
+        from fun_random.messenger.formatters.loot_box_auto_open_subformatters import FunRandomLootboxAutoOpenFormatter
+        return [FunRandomLootboxAutoOpenFormatter()]
+
+    @property
+    def _client_ammunitionPanelViews(self):
+        from fun_random.gui.impl.lobby.tank_setup.qfg_ammunition_panel import FunRandomQuickFireGunsAmmunitionPanelView
+        return (FunRandomQuickFireGunsAmmunitionPanelView,)
+
+    @property
     def _client_vehicleViewStates(self):
         from fun_random.gui.vehicle_view_states import FunRandomVehicleViewState
         return (FunRandomVehicleViewState,)
 
+    @property
+    def _client_hangarPresetsReader(self):
+        from fun_random.gui.hangar_presets.fun_hangar_presets_reader import FunRandomPresetsReader
+        return FunRandomPresetsReader
+
+    @property
+    def _client_hangarPresetsGetter(self):
+        from fun_random.gui.hangar_presets.fun_hangar_presets_getter import FunRandomPresetsGetter
+        return FunRandomPresetsGetter
+
 
 def preInit():
+    injectConsts(__name__)
+    injectSquadConsts(__name__)
     initGuiTypes(fun_gui_constants, __name__)
     initRequestType(fun_gui_constants, __name__)
     battleMode = ClientFunRandomBattleMode(__name__)
     battleMode.registerCommon()
     battleMode.registerClient()
     battleMode.registerClientSelector()
+    battleMode.registerClientHangarPresets()
     battleMode.registerBannerEntryPointValidatorMethod()
     battleMode.registerBannerEntryPointLUIRule()
     battleMode.registerProviderBattleQueue()
+    battleMode.registerBattleResultsConfig()
     battleMode.registerSquadTypes()
     battleMode.registerClientPlatoon()
     battleMode.registerClientSquadSelector()
+    battleMode.registerClientReplay()
     battleMode.registerGameControllers()
     battleMode.registerBattleControllersRepository()
     battleMode.registerClientNotificationHandlers()
     battleMode.registerMessengerClientFormatters(fun_gui_constants)
     battleMode.registerClientTokenQuestsSubFormatters()
+    battleMode.registerClientLootBoxAutoOpenSubFormatters()
+    battleMode.registerAmmunitionPanelViews()
     battleMode.registerVehicleViewStates()
     registerFunRandomOthersPrbParams()
     registerFunRandomAwardControllers()
-    registerFunRandomHangarPresets()
     registerFunRandomScaleform()
     registerFunRandomBattle()
     registerFunRandomQuests()

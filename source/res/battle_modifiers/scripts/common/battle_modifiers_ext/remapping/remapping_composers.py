@@ -33,10 +33,7 @@ class _BaseComposer(IComposer):
         else:
             resStr = self._targetTemplate
             for condition in self._conditions:
-                part = condition(ctx)
-                if part is None:
-                    continue
-                resStr = resStr.replace(''.join((_START_PATTERN, condition.getName(), _END_PATTERN)), part)
+                resStr = resStr.replace(''.join((_START_PATTERN, condition.getName(), _END_PATTERN)), condition(ctx))
 
             return resStr
 

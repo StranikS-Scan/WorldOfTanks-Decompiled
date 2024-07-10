@@ -26,7 +26,7 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
         super(_FunRandomItem, self).__init__('', data, order, selectorType, isVisible)
         self._isVisible = self.__getIsVisible()
 
-    def isShowActiveModeState(self):
+    def isShowEventIndication(self):
         return self._funRandomCtrl.subModesInfo.isAvailable()
 
     def getLabel(self):
@@ -37,10 +37,6 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
 
     def getSmallIcon(self):
         return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.dyn(self._data)())
-
-    @property
-    def squadIcon(self):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
 
     def _update(self, state):
         self._isVisible, self._isDisabled = self.__getIsVisible(), state.hasLockedState
@@ -56,19 +52,18 @@ class _FunRandomItem(SelectorItem, FunAssetPacksMixin, FunSubModesWatcher):
 
 
 class _FunRandomSquadItem(SpecialSquadItem, FunAssetPacksMixin, FunSubModesWatcher):
-    _RES_SHORTCUT = R.strings.fun_random.headerButton
+    _RES_SHORTCUT = R.strings.fun_random.headerButtons
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_FunRandomSquadItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isVisible = self._funRandomCtrl.isFunRandomPrbActive()
         self._prebattleType = PREBATTLE_TYPE.FUN_RANDOM
 
-    @property
-    def squadIcon(self):
-        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
-
     def getFormattedLabel(self):
         pass
+
+    def getSmallIcon(self):
+        return backport.image(self.getModeIconsResRoot().battle_type.c_40x40.fun_random_squad())
 
     def _createTooltip(self):
         return makeTooltip(backport.text(self._RES_SHORTCUT.tooltips.funRandomSquad.header()), backport.text(self._RES_SHORTCUT.tooltips.funRandomSquad.body(), modeName=self.getModeUserName()))

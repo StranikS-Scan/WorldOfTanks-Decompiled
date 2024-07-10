@@ -2,23 +2,15 @@
   <Domain>	NONE	</Domain>
   <NonChunk>	True	</NonChunk>
   <Properties>
+    <zonesMap>
+      <Type>	STRING	</Type>
+      <Default></Default>
+      <Editable>	true	</Editable>
+    </zonesMap>
     <team>
       <Type>	UINT8	</Type>
       <Editable>	true	</Editable>
     </team>
-    <radius>
-      <Type>	FLOAT	</Type>
-      <Default>	10.0	</Default>
-      <Editable>	true	</Editable>
-      <Widget>	RADIUS	  <colour>	255 0 0 192	</colour>
-        <gizmoRadius>	10.0	</gizmoRadius>
-      </Widget>
-    </radius>
-    <preferableTankType>
-      <Type>	STRING	</Type>
-      <Default>	&lt;any&gt;	</Default>
-      <Editable>	True	</Editable>
-    </preferableTankType>
     <preferenceLightTank>
       <Type>	UINT8	</Type>
       <Default>	100	</Default>

@@ -185,7 +185,7 @@ class BattleSessionProvider(IBattleSessionProvider):
                 isDeserter = not vStats.stopRespawn
             else:
                 player = BigWorld.player()
-                hasLiftOver = ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER) if player else False
+                hasLiftOver = player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER) if player else False
                 isDeserter = avatar_getter.isVehicleAlive() and (not avatar_getter.isVehicleOverturned() or hasLiftOver)
             return BattleExitResult(isDeserter, vInfo.player)
 

@@ -1,0 +1,28 @@
+<AutoShootGunController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <defaultShotRate>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </defaultShotRate>
+    <stateStatus>
+      <Type>	AUTO_SHOOT_GUN_STATE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+  </Properties>
+  <ClientMethods>
+    <onDiscreteShot></onDiscreteShot>
+  </ClientMethods>
+  <CellMethods>
+    <activateShooting>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </activateShooting>
+    <deactivateShooting>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </deactivateShooting>
+  </CellMethods>
+  <DefaultKeyName>	autoShootGunController	</DefaultKeyName>
+</AutoShootGunController.def>

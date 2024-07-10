@@ -27,6 +27,9 @@ class FunRandomPreBattleHintPlugin(PreBattleHintPlugin, FunSubModesWatcher):
         funRandomSettings = AccountSettings.getSettings(FUN_RANDOM_HINT_SECTION)
         return settingsKey in funRandomSettings and funRandomSettings[settingsKey][HINTS_LEFT] <= 0
 
+    def _hasVehicleHelpHint(self, vTypeDesc):
+        return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy
+
 
 class FunRandomHelpPlugin(HelpPlugin, FunSubModesWatcher):
 

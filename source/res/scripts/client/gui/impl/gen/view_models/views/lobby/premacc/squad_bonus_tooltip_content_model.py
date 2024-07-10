@@ -1,11 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/premacc/squad_bonus_tooltip_content_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
+
+class SquadBonusTooltipType(Enum):
+    COMMON = 'common'
+    SIMPLE = 'simple'
+    SIMPLEWITHBONUS = 'simpleWithBonus'
+
 
 class SquadBonusTooltipContentModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(SquadBonusTooltipContentModel, self).__init__(properties=properties, commands=commands)
 
     def getCreditsBonusWithPremium(self):
@@ -32,9 +39,16 @@ class SquadBonusTooltipContentModel(ViewModel):
     def setBattleType(self, value):
         self._setString(3, value)
 
+    def getType(self):
+        return SquadBonusTooltipType(self._getString(4))
+
+    def setType(self, value):
+        self._setString(4, value.value)
+
     def _initialize(self):
         super(SquadBonusTooltipContentModel, self)._initialize()
         self._addNumberProperty('creditsBonusWithPremium', 0)
         self._addNumberProperty('creditsBonusWithoutPremium', 0)
         self._addNumberProperty('experienceBonus', 0)
         self._addStringProperty('battleType', '')
+        self._addStringProperty('type')

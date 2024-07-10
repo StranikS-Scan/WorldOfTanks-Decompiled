@@ -2,62 +2,49 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/base/squad/components.py
 import typing
 import account_helpers
+from constants import PLATOON_RESTRICTED_VEHICLE_TAGS
 from items import vehicles
-from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
-from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from gui.prb_control.entities.base.squad.entity import SquadEntity
-    from typing import Optional, List
 
-class RestrictedVehicleTagDataProvider(object):
-    __slots__ = ('__unitEntity',)
-    _VEHICLE_TAG = ''
+def getRestrictedVehicleClassTag(vehicleTags):
+    for tag in PLATOON_RESTRICTED_VEHICLE_TAGS:
+        if tag in vehicleTags:
+            return tag
+
+    return None
+
+
+class RestrictedRoleTagDataProvider(object):
+    __slots__ = ('_unitEntity',)
 
     def __init__(self):
-        self.__unitEntity = None
+        self._unitEntity = None
         return
 
     def init(self, unitEntity):
-        self.__unitEntity = unitEntity
+        self._unitEntity = unitEntity
 
     def fini(self):
-        self.__unitEntity = None
+        self._unitEntity = None
         return
 
-    def getMaxPossibleVehicles(self):
-        raise NotImplementedError
+    def isValid(self):
+        return self._unitEntity is not None
 
-    def getRestrictionLevels(self):
-        raise NotImplementedError
+    def getRestrictionLevels(self, roleTag):
+        return self.squadRestrictions.get(roleTag, {}).get('levels', [])
 
-    def isTagVehicleAvailable(self):
+    def getMaxPossibleVehicles(self, roleTag):
+        return self.squadRestrictions.get(roleTag, {}).get('maxCount', 0)
+
+    def hasSlotForVehicle(self, roleTag):
         accountDbID = account_helpers.getAccountDatabaseID()
-        availableVehicles = self.getMaxPossibleVehicles() - self.getCurrentVehiclesCount()
-        if self.getMaxPossibleVehicles() == 0:
-            return False
-        elif self.__unitEntity.isCommander(accountDbID):
-            return True
-        elif availableVehicles == 0:
-            _, _ = self.__unitEntity.getUnit()
-            vInfos = self.__unitEntity.getVehiclesInfo()
-            for vInfo in vInfos:
-                if self.getRestrictionLevels() is not None and vInfo.vehLevel not in self.getRestrictionLevels():
-                    continue
-                if self._VEHICLE_TAG in vehicles.getVehicleType(vInfo.vehTypeCD).tags:
-                    return True
+        return self.getMaxPossibleVehicles(roleTag) > 0 and (self.getCurrentVehiclesCount(roleTag) < self.getMaxPossibleVehicles(roleTag) or self._unitEntity.isCommander(accountDbID))
 
-            return False
-        else:
-            return availableVehicles > 0
-
-    def hasSlotForVehicle(self):
-        accountDbID = account_helpers.getAccountDatabaseID()
-        return self.getMaxPossibleVehicles() > 0 and (self.getCurrentVehiclesCount() < self.getMaxPossibleVehicles() or self.__unitEntity.isCommander(accountDbID))
-
-    def getCurrentVehiclesCount(self):
+    def getCurrentVehiclesCount(self, roleTag):
         enableVehicleCount = 0
-        _, unit = self.__unitEntity.getUnit(safe=True)
+        _, unit = self._unitEntity.getUnit(safe=True)
         if unit is None:
             return enableVehicleCount
         else:
@@ -65,31 +52,38 @@ class RestrictedVehicleTagDataProvider(object):
             for _, vInfos in unitVehicles.iteritems():
                 for vInfo in vInfos:
                     vehType = vehicles.getVehicleType(vInfo.vehTypeCompDescr)
-                    if self.getRestrictionLevels() is not None and vehType.level not in self.getRestrictionLevels():
+                    if self.getRestrictionLevels(roleTag) and vehType.level not in self.getRestrictionLevels(roleTag):
                         continue
-                    if self._VEHICLE_TAG in vehType.tags:
+                    vehicleTag = getRestrictedVehicleClassTag(vehType.tags)
+                    if roleTag == vehicleTag:
                         enableVehicleCount += 1
 
             return enableVehicleCount
 
+    def isTagVehicleAvailable(self, tags):
+        accountDbID = account_helpers.getAccountDatabaseID()
+        roleTag = getRestrictedVehicleClassTag(tags)
+        if roleTag is None or roleTag not in self.squadRestrictions:
+            return True
+        availableVehicles = self.getMaxPossibleVehicles(roleTag) - self.getCurrentVehiclesCount(roleTag)
+        if self.getMaxPossibleVehicles(roleTag) == 0:
+            return False
+        elif self._unitEntity.isCommander(accountDbID):
+            return True
+        elif availableVehicles == 0:
+            _, _ = self._unitEntity.getUnit()
+            vInfos = self._unitEntity.getVehiclesInfo()
+            for vInfo in vInfos:
+                if self.getRestrictionLevels(roleTag) is not None and vInfo.vehLevel not in self.getRestrictionLevels(roleTag):
+                    continue
+                vehicleTag = getRestrictedVehicleClassTag(vehicles.getVehicleType(vInfo.vehTypeCD).tags)
+                if roleTag == vehicleTag:
+                    return True
 
-class RestrictedSPGDataProvider(RestrictedVehicleTagDataProvider):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    _VEHICLE_TAG = VEHICLE_CLASS_NAME.SPG
+            return False
+        else:
+            return availableVehicles > 0
 
-    def getRestrictionLevels(self):
-        return None
-
-    def getMaxPossibleVehicles(self):
-        return self.__lobbyContext.getServerSettings().getMaxSPGinSquads()
-
-
-class RestrictedScoutDataProvider(RestrictedVehicleTagDataProvider):
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    _VEHICLE_TAG = 'scout'
-
-    def getRestrictionLevels(self):
-        return self.__lobbyContext.getServerSettings().getMaxScoutInSquadsLevels()
-
-    def getMaxPossibleVehicles(self):
-        return self.__lobbyContext.getServerSettings().getMaxScoutInSquads()
+    @property
+    def squadRestrictions(self):
+        return self._unitEntity.squadRestrictions

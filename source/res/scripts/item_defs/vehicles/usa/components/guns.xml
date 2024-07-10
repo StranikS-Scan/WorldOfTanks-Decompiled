@@ -145,6 +145,7 @@
     <_105mm_Gun_T140E5>	292	</_105mm_Gun_T140E5>
     <_76mm_Gun_M1A2_BPXIV>	296	</_76mm_Gun_M1A2_BPXIV>
     <_75mm_Gun_M3_L37_Crab>	295	</_75mm_Gun_M3_L37_Crab>
+    <_155mm_Gun_T7XM>	297	</_155mm_Gun_T7XM>
     <_76mm_Gun_T185E_IGR>	60001	</_76mm_Gun_T185E_IGR>
     <_90mm_Gun_T178_IGR>	60002	</_90mm_Gun_T178_IGR>
     <_120mm_Gun_T53A1_IGR>	60003	</_120mm_Gun_T53A1_IGR>
@@ -166,6 +167,8 @@
     <_105mm_Gun_M68_7x7>	503	</_105mm_Gun_M68_7x7>
     <_76mm_Gun_M32_late_FL>	504	</_76mm_Gun_M32_late_FL>
     <_155mm_AT_Gun_T7E2_7x7>	505	</_155mm_AT_Gun_T7E2_7x7>
+    <_75mm_XM247_FEP>	601	</_75mm_XM247_FEP>
+    <_37mm_T250_FEP>	602	</_37mm_T250_FEP>
     <_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>	18	</_75mm_Howitzer_M3T_MapsTraining_Dummy_MT_1>
     <_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>	26	</_75mm_Gun_M3_L37A_MapsTraining_Player_HT_1>
     <_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>	53	</_76mm_Gun_M1A2L_MapsTraining_Dummy_LT_2>
@@ -8283,6 +8286,64 @@
         </_155mm_HE_M101E1>
       </shots>
     </_155mm_AT_Gun_T7E2_7x7>
+    <_155mm_Gun_T7XM>
+      <userString>	#usa_vehicles:_155mm_Gun_T7XM	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	335000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.2	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_mb	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	18	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	3371	</weight>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_155mm_AP_M111_XM57>
+          <defaultPortion>	0.85	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	270 254	</piercingPower>
+        </_155mm_AP_M111_XM57>
+        <_155mm_AP_M112_XM57>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	315 278	</piercingPower>
+        </_155mm_AP_M112_XM57>
+        <_155mm_HE_M101_XM57>
+          <defaultPortion>	0.15	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_155mm_HE_M101_XM57>
+      </shots>
+    </_155mm_Gun_T7XM>
     <_155mm_Howitzer_M1>
       <userString>	#usa_vehicles:_155mm_Howitzer_M1	</userString>
       <tags></tags>
@@ -9992,5 +10053,96 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_76mm_Gun_M1A2_StoryModeHard>
+    <_75mm_XM247_FEP>
+      <userString>	#usa_vehicles:_75mm_XM247_FEP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.3	</impulse>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	9	</reloadTime>
+      <maxAmmo>	46	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2177	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	0.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_75mm_HVAP_M45A3_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	240 200	</piercingPower>
+        </_75mm_HVAP_M45A3_FEP>
+        <_75mm_HEAT_T0305_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	300 280	</piercingPower>
+        </_75mm_HEAT_T0305_FEP>
+      </shots>
+    </_75mm_XM247_FEP>
+    <_37mm_T250_FEP>
+      <userString>	#usa_vehicles:_37mm_T250_FEP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_small	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	0.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_37mm_M1305_AP_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	170 160	</piercingPower>
+        </_37mm_M1305_AP_FEP>
+        <_37mm_M1305_HEAT_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	220 200	</piercingPower>
+        </_37mm_M1305_HEAT_FEP>
+      </shots>
+    </_37mm_T250_FEP>
   </shared>
 </guns.xml>

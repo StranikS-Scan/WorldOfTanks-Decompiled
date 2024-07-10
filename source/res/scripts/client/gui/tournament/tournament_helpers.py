@@ -25,7 +25,7 @@ def isTournamentEnabled():
 def showTournaments(url=None):
     from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
     alias = VIEW_ALIAS.LOBBY_TOURNAMENTS
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': _getIgbHost() or url,
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, getUniqueViewName(alias)), ctx={'url': url or getIgbHost(),
      'webHandlers': createStrongholdsWebHandlers(),
      'returnAlias': VIEW_ALIAS.LOBBY_HANGAR,
      'onServerSettingsChange': _serverSettingChanged}), EVENT_BUS_SCOPE.LOBBY)
@@ -38,5 +38,5 @@ def _serverSettingChanged(browser, diff):
         browser.onCloseView()
 
 
-def _getIgbHost():
+def getIgbHost():
     return getTournamentsConfig().igbHostUrl

@@ -8,8 +8,14 @@ from gui.periodic_battles.prb_control.scheduler import PeriodicScheduler
 
 class FunRandomScheduler(PeriodicScheduler, FunAssetPacksMixin, FunSubModesWatcher):
 
+    def _checkEventEnding(self):
+        return True
+
     def _hasConfiguredNotification(self):
         return False
+
+    def _isEventEnded(self):
+        return self.getDesiredSubMode().isLastActiveCycleEnded()
 
     def _getController(self):
         return self.getDesiredSubMode()

@@ -100,7 +100,7 @@ class AvatarChatKeyHandling(object):
             return calloutCtrl.handleCalloutAndRadialMenuKeyPress(key, isDown)
 
     def __isBattleRoyaleSolo(self):
-        return self.guiSessionProvider.arenaVisitor.getArenaBonusType() in (ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO)
+        return self.guiSessionProvider.arenaVisitor.bonus.hasAnyBonusCap(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO)
 
     def __activateHandling(self):
         ctrl = self.guiSessionProvider.shared.feedback

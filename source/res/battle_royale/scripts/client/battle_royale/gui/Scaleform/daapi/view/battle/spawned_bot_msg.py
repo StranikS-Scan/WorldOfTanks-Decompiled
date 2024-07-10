@@ -18,10 +18,11 @@ class SpawnedBotMsgPlayerMsgs(IProgressionListener, IViewComponentsCtrlListener)
         self.__initialized = False
         self.__started = False
 
-    def setVehicleChanged(self, vehicle, newModuleIntCD, vehicleRecreated):
-        if not self.__initialized and 'observer' not in vehicle.descriptor.type.tags:
+    def setVehicleChanged(self, guiVehicle, newModuleIntCD, vehicleRecreated):
+        vehicle = BigWorld.player().vehicle
+        if not self.__initialized and vehicle and 'observer' not in vehicle.typeDescriptor.type.tags:
             self.__initialized = True
-            self.__started = canVehicleSpawnBot(vehicle.name)
+            self.__started = canVehicleSpawnBot(vehicle)
             if self.__started:
                 arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
                 if arena:

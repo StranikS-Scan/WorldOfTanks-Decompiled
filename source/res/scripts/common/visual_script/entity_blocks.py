@@ -259,4 +259,5 @@ class IsEntityDestroyed(Block, EntityMeta):
             else:
                 self._isDestroyed.setValue(True)
         except (AttributeError, ReferenceError):
+            errorVScript(self, 'Dead weakref')
             self._isDestroyed.setValue(True)

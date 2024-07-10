@@ -39,6 +39,7 @@
     <_24_mm_Panzerwagen_Kanone_1938>	39	</_24_mm_Panzerwagen_Kanone_1938>
     <_130mm_59-130T_56G>	41	</_130mm_59-130T_56G>
     <_122mm_vz_122_L52>	47	</_122mm_vz_122_L52>
+    <_57mm_C68x2_FEP>	601	</_57mm_C68x2_FEP>
   </ids>
   <shared>
     <_37mm_Pechotni_delo_Skoda_L_27>
@@ -2274,5 +2275,50 @@
         </_130mm_Narazovy_vz_55>
       </shots>
     </_130mm_vz_54_2A_CN>
+    <_57mm_C68x2_FEP>
+      <userString>	#czech_vehicles:_57mm_C68x2_FEP	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_57mm_BR-281_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	190 180	</piercingPower>
+        </_57mm_BR-281_FEP>
+        <_57mm_BR-281U_FEP>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	250 230	</piercingPower>
+        </_57mm_BR-281U_FEP>
+      </shots>
+    </_57mm_C68x2_FEP>
   </shared>
 </guns.xml>

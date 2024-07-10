@@ -885,9 +885,9 @@ def __readBonus_optionalData(config, bonusReaders, section, eventType):
         properties['compensation'] = section['compensation'].asBool
     if section.has_key('shouldCompensated'):
         properties['shouldCompensated'] = section['shouldCompensated'].asBool
-    if IS_DEVELOPMENT:
-        if section.has_key('name'):
-            properties['name'] = section['name'].asString
+    name = section.readString('name', '')
+    if name:
+        properties['name'] = name
     if section.has_key('limitID'):
         limitID = section['limitID'].asString
         limitConfig = config.get('limits', {}).get(limitID, {})

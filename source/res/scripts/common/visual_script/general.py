@@ -29,10 +29,6 @@ class GenerateUniqueString(Block):
         self._res = self._makeDataOutputSlot('res', SLOT_TYPE.STR, self._getData)
 
     @classmethod
-    def hasValidation(cls):
-        return True
-
-    @classmethod
     def blockIcon(cls):
         pass
 

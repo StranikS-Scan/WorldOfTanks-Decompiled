@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/tournaments_widget.py
 import logging
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.Scaleform.daapi.view.meta.Comp7TournamentBannerInjectMeta import Comp7TournamentBannerInjectMeta
+from gui.Scaleform.daapi.view.meta.EventTournamentBannerInjectMeta import EventTournamentBannerInjectMeta
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.tournaments_widget_model import TournamentsWidgetModel, TournamentsState
 from gui.impl.pub import ViewImpl
@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 WIDGET_TO_TOURNAMENT_STATE = {'active': TournamentsState.ACTIVE,
  'registration': TournamentsState.REGISTRATION}
 
-class TournamentsWidgetComponent(Comp7TournamentBannerInjectMeta):
+class TournamentsWidgetComponent(EventTournamentBannerInjectMeta):
     __slots__ = ('__view',)
 
     def __init__(self):
@@ -74,7 +74,7 @@ class TournamentsWidget(ViewImpl):
             _logger.warning('Trying to open tournaments when isTournamentEnabled = False')
 
     def __updateState(self):
-        with self.viewModel.transaction() as tx:
+        if self.__comp7Controller.getTournamentBannerAvailability():
             widgetData = self.__comp7Controller.getTournamentBannerData()
             if not widgetData:
                 logging.warning('No widget data to show')
@@ -83,5 +83,6 @@ class TournamentsWidget(ViewImpl):
             if not tournamentState:
                 logging.warning('Incorrect widget state=%s', widgetData['state'])
                 return
-            tx.setIsEnabled(True)
-            tx.setState(tournamentState)
+            with self.viewModel.transaction() as tx:
+                tx.setIsEnabled(True)
+                tx.setState(tournamentState)

@@ -262,6 +262,11 @@ class AlertData(object):
         tooltipValue = tooltip if tooltip is not None else makeTooltip(body=backport.text(reason, levels=levelsStr))
         return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonLabel=backport.text(cls._RES_ROOT.button.moreInfo()), buttonVisible=True, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.unsuitableVehicles(), levels=levelsStr)), shadowFilterVisible=True, tooltip=tooltipValue, isSimpleTooltip=tooltip is None)
 
+    @classmethod
+    def packCallbacks(cls, onBtnClickCallback=None, onBlockClickCallback=None):
+        return {'onButtonClick': onBtnClickCallback,
+         'onBlockClick': onBlockClickCallback}
+
     def asDict(self):
         return {'state': self.state,
          'alertIcon': self.alertIcon,

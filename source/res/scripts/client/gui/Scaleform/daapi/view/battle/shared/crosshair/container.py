@@ -61,6 +61,9 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__isFaded = False
         return
 
+    def getPlugins(self):
+        return self.__plugins
+
     def getViewID(self):
         return self.__viewID
 
@@ -100,7 +103,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
             zoomString = i18n.makeString(INGAME_GUI.AIM_ZOOM, zoom=zoomFactor)
         else:
             zoomString = ''
-        self.as_setZoomS(zoomString)
+        self.as_setZoomS(zoomString, zoomFactor)
 
     def getDistance(self):
         return self.__distance

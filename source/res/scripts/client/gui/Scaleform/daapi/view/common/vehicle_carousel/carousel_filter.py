@@ -83,11 +83,13 @@ class _CarouselFilter(object):
         for section in self._clientSections:
             defaultFilters.update(AccountSettings.getFilterDefault(section))
 
-        keys = keys or defaultFilters.iterkeys()
+        keys = keys if keys is not None else defaultFilters.iterkeys()
         exceptions = exceptions or []
         keys = [ key for key in keys if key not in exceptions ]
         defaultFilters = _filterDict(defaultFilters, keys)
-        self.update(defaultFilters, save)
+        hasChanges = bool(defaultFilters)
+        self.update(defaultFilters, save and hasChanges)
+        return
 
     def switch(self, key, save=True):
         self.update({key: not self._filters[key]}, save)

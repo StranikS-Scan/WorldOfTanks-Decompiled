@@ -12,6 +12,10 @@
               <eventCount></eventCount>
               <greaterOrEqual>	12	</greaterOrEqual>
             </vehicleDamage>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <greaterOrEqual>	600	</greaterOrEqual>
+            </vehicleDamage>
           </and>
         </postBattle>
       </conditions>
@@ -63,6 +67,10 @@
               <eventCount></eventCount>
               <greaterOrEqual>	12	</greaterOrEqual>
             </vehicleDamage>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <greaterOrEqual>	600	</greaterOrEqual>
+            </vehicleDamage>
             <vehicleKills>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
@@ -100,6 +108,10 @@
               <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	12	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleDamage>
+              <attackReason>	0	</attackReason>
+              <greaterOrEqual>	600	</greaterOrEqual>
             </vehicleDamage>
             <vehicleKills>
               <greaterOrEqual>	3	</greaterOrEqual>

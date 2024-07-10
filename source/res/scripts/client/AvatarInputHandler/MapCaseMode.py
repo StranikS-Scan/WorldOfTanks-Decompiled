@@ -784,11 +784,12 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
 
     def handleMouseEvent(self, dx, dy, dz):
         GUI.mcursor().position = Math.Vector2(0, 0)
-        self.__cam.update(dx, dy, dz)
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying:
-            return True
-        self.__activeSelector.processHover(self.__getDesiredShotPoint())
+        if not self.__aih.isObserverFPV:
+            self.__cam.update(dx, dy, dz)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isPlaying:
+                return True
+            self.__activeSelector.processHover(self.__getDesiredShotPoint())
         return True
 
     def onMinimapClicked(self, worldPos):

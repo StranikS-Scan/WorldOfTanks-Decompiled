@@ -2,12 +2,17 @@
 # Embedded file name: scripts/client/gui/impl/lobby/platoon/platoon_helpers.py
 import logging
 from collections import namedtuple
-from helpers import i18n
 from UnitBase import BitfieldHelper
-from items import vehicles
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
+from frameworks.wulf import WindowFlags, WindowLayer
 from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.impl.pub import WindowImpl
-from frameworks.wulf import WindowFlags, WindowLayer
+from helpers import dependency
+from helpers import i18n
+from items import vehicles
+from shared_utils import BitmaskHelper
+from skeletons.gui.game_control import IPlatoonController, IHangarGuiController
+from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 Position = namedtuple('Position', ['x', 'y'])
 
@@ -83,3 +88,29 @@ def formatSearchEstimatedTime(seconds):
     else:
         seconds = 60
     return i18n.makeString(PLATOON.SEARCHING_ESTIMATED_LESSTHAN) % {'seconds': seconds}
+
+
+class BonusState(BitmaskHelper):
+    NO_BONUS = 0
+    XP_BONUS = 1
+    SQUAD_CREDITS_BONUS = 2
+    PREM_CREDITS_BONUS = 4
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, hangarGuiCtrl=IHangarGuiController, platoonCtrl=IPlatoonController)
+def getPlatoonBonusState(isPlatoonCreated, lobbyCtx=None, hangarGuiCtrl=None, platoonCtrl=None):
+    bonusState = BonusState.NO_BONUS
+    if lobbyCtx.getServerSettings().squadPremiumBonus.isEnabled:
+        if hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.PREM_SQUAD_CREDITS):
+            if isPlatoonCreated:
+                playerInfo = platoonCtrl.getPlayerInfo()
+                if playerInfo and playerInfo.hasPremium:
+                    bonusState = BonusState.addIfNot(bonusState, BonusState.PREM_CREDITS_BONUS)
+                if platoonCtrl.isUnitWithPremium():
+                    bonusState = BonusState.addIfNot(bonusState, BonusState.SQUAD_CREDITS_BONUS)
+            else:
+                bonusState = BonusState.addIfNot(bonusState, BonusState.PREM_CREDITS_BONUS)
+                bonusState = BonusState.addIfNot(bonusState, BonusState.SQUAD_CREDITS_BONUS)
+    if hangarGuiCtrl.checkCurrentBonusCaps(_CAPS.SQUAD_XP):
+        bonusState = BonusState.addIfNot(bonusState, BonusState.XP_BONUS)
+    return bonusState

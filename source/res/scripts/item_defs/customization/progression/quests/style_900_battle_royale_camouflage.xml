@@ -1,0 +1,220 @@
+<style_900_battle_royale_camouflage.xml>
+  <quests>
+    <battleQuest>
+      <id>	br_summer_style_900_2	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <description>
+          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_2/condition	</key>
+        </description>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+        <postBattle>
+          <or>
+            <and>
+              <bonusTypes>	29	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	7	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+            <and>
+              <bonusTypes>	30	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	5	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	br_summer_style_900_3	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <description>
+          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_3/condition	</key>
+        </description>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	20	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+        <postBattle>
+          <or>
+            <and>
+              <bonusTypes>	29	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	5	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+            <and>
+              <bonusTypes>	30	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	3	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	br_summer_style_900_4	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <description>
+          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_4/condition	</key>
+        </description>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	25	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+        <postBattle>
+          <or>
+            <and>
+              <bonusTypes>	29	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	3	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+            <and>
+              <bonusTypes>	30	</bonusTypes>
+              <results>
+                <key>	brPosInBattle	</key>
+                <lessOrEqual>	2	</lessOrEqual>
+              </results>
+              <isNotLeaver></isNotLeaver>
+            </and>
+          </or>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	br_summer_style_900_5	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <description>
+          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_5/condition	</key>
+        </description>
+        <preBattle>
+          <account>
+            <token>
+              <id>	cust_progress_900_1	</id>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </token>
+          </account>
+          <battle>
+            <bonusTypes>	29 30	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	25	</count>
+          </battles>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+        <postBattle>
+          <and>
+            <bonusTypes>	29 30	</bonusTypes>
+            <results>
+              <key>	brPosInBattle	</key>
+              <lessOrEqual>	1	</lessOrEqual>
+            </results>
+            <vehicleDamage>
+              <greaterOrEqual>	10000	</greaterOrEqual>
+            </vehicleDamage>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_900_1	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	5	</count>
+          <limit>	5	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_900_battle_royale_camouflage.xml>

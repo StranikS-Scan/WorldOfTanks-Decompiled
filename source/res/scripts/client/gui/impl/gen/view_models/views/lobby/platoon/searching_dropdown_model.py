@@ -6,15 +6,15 @@ from gui.impl.gen.view_models.views.lobby.platoon.button_model import ButtonMode
 class SearchingDropdownModel(ViewModel):
     __slots__ = ('onOutsideClick',)
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=7, commands=1):
         super(SearchingDropdownModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def btnCancelSearch(self):
+    def cancelSearch(self):
         return self._getViewModel(0)
 
     @staticmethod
-    def getBtnCancelSearchType():
+    def getCancelSearchType():
         return ButtonModel
 
     def getBackgroundImage(self):
@@ -41,11 +41,25 @@ class SearchingDropdownModel(ViewModel):
     def setEstimatedTime(self, value):
         self._setString(4, value)
 
+    def getHasXpBonus(self):
+        return self._getBool(5)
+
+    def setHasXpBonus(self, value):
+        self._setBool(5, value)
+
+    def getHasCreditsBonus(self):
+        return self._getBool(6)
+
+    def setHasCreditsBonus(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(SearchingDropdownModel, self)._initialize()
-        self._addViewModelProperty('btnCancelSearch', ButtonModel())
+        self._addViewModelProperty('cancelSearch', ButtonModel())
         self._addStringProperty('backgroundImage', '')
         self._addNumberProperty('seekers', 0)
         self._addNumberProperty('searchStartTime', 0)
         self._addStringProperty('estimatedTime', '')
+        self._addBoolProperty('hasXpBonus', False)
+        self._addBoolProperty('hasCreditsBonus', False)
         self.onOutsideClick = self._addCommand('onOutsideClick')

@@ -46,7 +46,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, IFunRandomController, ILimitedUIController, IWinbackController, ILiveOpsWebEventsController
+from skeletons.gui.game_control import IBattlePassController, IHangarSpaceSwitchController, IGameSessionController, IMapboxController, IMarathonEventsController, IRankedBattlesController, ILimitedUIController, IWinbackController, ILiveOpsWebEventsController
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -610,7 +610,6 @@ class MissionView(MissionViewBase):
     gameSession = dependency.descriptor(IGameSessionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
-    __funRandomController = dependency.descriptor(IFunRandomController)
 
     def __init__(self):
         super(MissionView, self).__init__()
@@ -644,8 +643,8 @@ class MissionView(MissionViewBase):
         self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         self.__rankedController.onUpdated += self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated += self._onEventsUpdate
-        self.__funRandomController.subscription.addSubModesWatcher(self._onEventsUpdate)
         self.__spaceSwitchController.onSpaceUpdated += self._onEventsUpdate
+        self.addListener(events.MissionsViewEvent.EVENTS_FULL_UPDATE, self._onEventsUpdate, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'inventory.1': self._onEventsUpdate,
          'stats.unlocks': self.__onUnlocksUpdate})
 
@@ -656,7 +655,7 @@ class MissionView(MissionViewBase):
         self.__rankedController.onUpdated -= self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated -= self._onEventsUpdate
         self.__spaceSwitchController.onSpaceUpdated -= self._onEventsUpdate
-        self.__funRandomController.subscription.removeSubModesWatcher(self._onEventsUpdate)
+        self.removeListener(events.MissionsViewEvent.EVENTS_FULL_UPDATE, self._onEventsUpdate, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(MissionView, self)._dispose()
 

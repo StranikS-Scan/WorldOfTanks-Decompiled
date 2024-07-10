@@ -308,7 +308,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     @staticmethod
     def _hasBonusCap(cap):
         player = BigWorld.player()
-        return False if player is None else ARENA_BONUS_TYPE_CAPS.checkAny(player.arenaBonusType, cap)
+        return False if player is None else player.hasBonusCap(cap)
 
     def _setHealthPercent(self, health):
         self.__healthPercent = normalizeHealthPercent(health, self._maxHealth)
@@ -491,6 +491,9 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             self.as_fadePostmortemPanelOutS()
         elif killCamState is DeathCamEvent.State.FINISHED:
             self.as_setInDeathCamS(False)
+            respawnCtrl = self.sessionProvider.dynamic.respawn
+            if respawnCtrl and respawnCtrl.playerLives > 0:
+                return
             self.as_togglePostmortemInfoPanelS(True)
             self.as_resetPostmortemPositionS()
 

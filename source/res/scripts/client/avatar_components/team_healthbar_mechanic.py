@@ -13,7 +13,7 @@ class TeamHealthbarMechanic(object):
         return False
 
     def onBecomePlayer(self):
-        self.__enabled = BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.TEAM_HEALTH_BAR)
+        self.__enabled = self.hasBonusCap(BONUS_CAPS.TEAM_HEALTH_BAR)
         if not self.__enabled:
             return
         else:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/gun_components.py
 from typing import TYPE_CHECKING, Tuple, Optional
+from collections import namedtuple
 from items.components import legacy_stuff
 from soft_exception import SoftException
 from wrapped_reflection_framework import reflectedNamedTuple
@@ -29,3 +30,21 @@ class GunShot(legacy_stuff.LegacyStuff):
 
     def copy(self):
         raise SoftException('Operation "GunShot.copy" is not allowed')
+
+
+class TemperatureGunParams(object):
+    TemperatureGunState = namedtuple('TemperatureGunState', ['temperature', 'modifiers', 'isOverheated'])
+    __slots__ = ('states', 'heatingPerSec', 'heatingPerShot', 'coolingDelay', 'coolingPerSec', 'coolingOverheatPerSec', 'thermalStateHysteresis', 'temperatureSegmentSize')
+
+    def __init__(self, states, heatingPerSec, heatingPerShot, coolingDelay, coolingPerSec, coolingOverheatPerSec, thermalStateHysteresis, temperatureSegmentSize):
+        self.states = states
+        self.heatingPerSec = heatingPerSec
+        self.heatingPerShot = heatingPerShot
+        self.coolingDelay = coolingDelay
+        self.coolingPerSec = coolingPerSec
+        self.coolingOverheatPerSec = coolingOverheatPerSec
+        self.thermalStateHysteresis = thermalStateHysteresis
+        self.temperatureSegmentSize = temperatureSegmentSize
+
+    def __repr__(self):
+        return 'TemperatureGunParams(states = {}, heatingPerSec = {}, heatingPerShot = {}, coolingDelay = {}, coolingPerSec = {}, coolingOverheatPerSec = {}, thermalStateHysteresis = {}, temperatureSegmentSize = {}))'.format(self.states, self.heatingPerSec, self.heatingPerShot, self.coolingDelay, self.coolingPerSec, self.coolingOverheatPerSec, self.thermalStateHysteresis, self.temperatureSegmentSize)

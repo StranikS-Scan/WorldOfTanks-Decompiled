@@ -50,9 +50,9 @@ class TriggerListener(TriggersManager.ITriggerListener):
         triggerType = params.get('type')
         if triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_OBSERVED:
             self.onPlayerDetected(True)
-        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOOT:
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_DISCRETE_SHOOT:
             aimingInfo = params['aimingInfo']
-            self.onPlayerShoot(aimingInfo)
+            self.onPlayerDiscreteShoot(aimingInfo)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED:
             self.onPlayerShotMissed()
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_HIT:
@@ -62,6 +62,10 @@ class TriggerListener(TriggersManager.ITriggerListener):
             self.onPlayerShotHit(target, flags)
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_IN_FIRE:
             self.onPlayerVehicleFireEvent(True)
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_CONTINUOUS_BURST_START:
+            self.onPlayerContinuousBurstStart()
+        elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_CONTINUOUS_BURST_STOP:
+            self.onPlayerContinuousBurstStop()
         elif triggerType == TriggersManager.TRIGGER_TYPE.PLAYER_TANKMAN_SHOOTED:
             tankmanName = params['tankmanName']
             isHealed = params['isHealed']
@@ -110,7 +114,7 @@ class TriggerListener(TriggersManager.ITriggerListener):
         elif triggerType == TriggersManager.TRIGGER_TYPE.AREA:
             self.onPlayerEnterTrigger(params['name'], False)
 
-    def onPlayerShoot(self, aimInfo):
+    def onPlayerDiscreteShoot(self, aimInfo):
         pass
 
     def onPlayerShotMissed(self):
@@ -138,6 +142,12 @@ class TriggerListener(TriggersManager.ITriggerListener):
         pass
 
     def onPlayerMove(self, modeCommands):
+        pass
+
+    def onPlayerContinuousBurstStart(self):
+        pass
+
+    def onPlayerContinuousBurstStop(self):
         pass
 
     def onAutoAim(self, isOn):

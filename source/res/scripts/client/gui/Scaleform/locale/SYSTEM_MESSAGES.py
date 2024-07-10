@@ -178,8 +178,7 @@ class SYSTEM_MESSAGES(object):
     SQUAD_KICKEDFROMQUEUE = '#system_messages:squad/kickedFromQueue'
     SQUAD_NOTVALIDDELETED = '#system_messages:squad/notValidDeleted'
     SQUAD_NOTVALIDDELETEDFILTER = '#system_messages:squad/notValidDeletedFilter'
-    SQUAD_NOTVALIDMAXSPGDELETED = '#system_messages:squad/notValidMaxSpgDeleted'
-    SQUAD_NOTVALIDMAXSCOUTDELETED = '#system_messages:squad/notValidMaxScoutDeleted'
+    SQUAD_NOTVALIDMAXVEHTYPEDELETED = '#system_messages:squad/notValidMaxVehTypeDeleted'
     SQUAD_NOTVALIDENQUEUEDATA = '#system_messages:squad/notValidEnqueueData'
     BATTLESESSION_KICKEDFROMQUEUE = '#system_messages:battleSession/kickedFromQueue'
     MEMBERROSTERCHANGEDMAIN = '#system_messages:memberRosterChangedMain'
@@ -1682,8 +1681,7 @@ class SYSTEM_MESSAGES(object):
      SQUAD_KICKEDFROMQUEUE,
      SQUAD_NOTVALIDDELETED,
      SQUAD_NOTVALIDDELETEDFILTER,
-     SQUAD_NOTVALIDMAXSPGDELETED,
-     SQUAD_NOTVALIDMAXSCOUTDELETED,
+     SQUAD_NOTVALIDMAXVEHTYPEDELETED,
      SQUAD_NOTVALIDENQUEUEDATA,
      BATTLESESSION_KICKEDFROMQUEUE,
      MEMBERROSTERCHANGEDMAIN,

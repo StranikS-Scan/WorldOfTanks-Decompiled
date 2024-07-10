@@ -116,6 +116,7 @@ class KillCamera(ArcadeCamera):
         self.__originalVehicleProvider = None
         self.__projectileTriNorm = None
         self.__hasProjectilePierced = None
+        self.__hasNonPiercedDamage = None
         self.__isSPG = False
         self.__projectileData = None
         self.__isRicochet = False
@@ -196,6 +197,10 @@ class KillCamera(ArcadeCamera):
         return self.__hasProjectilePierced
 
     @property
+    def hasNonPiercedDamage(self):
+        return self.__hasNonPiercedDamage
+
+    @property
     def currentState(self):
         return self.__currentState
 
@@ -206,6 +211,10 @@ class KillCamera(ArcadeCamera):
     @hasProjectilePierced.setter
     def hasProjectilePierced(self, value):
         self.__hasProjectilePierced = value
+
+    @hasNonPiercedDamage.setter
+    def hasNonPiercedDamage(self, value):
+        self.__hasNonPiercedDamage = value
 
     @property
     def isSPG(self):
@@ -417,7 +426,7 @@ class KillCamera(ArcadeCamera):
         else:
             center = lastPoint
         cameraLength = self.__getCameraLength()
-        if not self.hasProjectilePierced:
+        if not self.hasProjectilePierced and not self.hasNonPiercedDamage:
             center = self.__getPointBeforeCollision(center, cameraLength)
         center = self.__getPointAboveWater(center, cameraLength)
         dirVec = lastPoint - firstPoint
@@ -505,7 +514,7 @@ class KillCamera(ArcadeCamera):
 
     def __setCursorCollision(self):
         collisionPhases = [DeathCamEvent.EventType.LAST_ROTATION]
-        if self.hasProjectilePierced:
+        if self.hasProjectilePierced or self.hasNonPiercedDamage:
             collisionPhases += [DeathCamEvent.EventType.ROTATING_KILLER, DeathCamEvent.EventType.UNSPOTTED_PHASE_ONE, DeathCamEvent.EventType.UNSPOTTED_PHASE_TWO]
         isCollisionPhase = self.__currentState in collisionPhases
         if isCollisionPhase and not self.__isPaused:

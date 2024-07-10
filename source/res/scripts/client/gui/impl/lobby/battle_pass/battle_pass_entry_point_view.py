@@ -312,7 +312,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
             if not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType()):
                 queueType = self._getQueueType()
-                if queueType:
+                if isinstance(queueType, int):
                     tx.setBattleType(getPreQueueName(queueType, True))
         self._saveLastState(isNotChosenRewardCount)
 

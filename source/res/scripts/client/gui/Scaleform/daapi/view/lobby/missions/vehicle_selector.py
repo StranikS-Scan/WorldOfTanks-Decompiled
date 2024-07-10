@@ -14,10 +14,11 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.requesters import REQ_CRITERIA
 
 class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
+    _CAROUSEL_FILTERS = ('inventory',)
 
     def __init__(self):
         super(MissionVehicleSelectorCarousel, self).__init__()
-        self._usedFilters = ('inventory',)
+        self._usedFilters = self._CAROUSEL_FILTERS
         self._carouselDPCls = _MissionsCarouselDataProvider
 
     def setFilter(self, idx, selected):

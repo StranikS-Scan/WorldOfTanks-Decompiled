@@ -40,12 +40,11 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.template_settings.default_dialog_template_settings import DisplayFlags
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
-from gui.impl.lobby.battle_royale import BATTLE_ROYALE_LOCK_SOURCE_NAME
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
 from gui.impl.lobby.tank_setup.dialogs.confirm_dialog import TankSetupConfirmDialog, TankSetupExitConfirmDialog
 from gui.impl.lobby.tank_setup.dialogs.refill_shells import ExitFromShellsConfirm, RefillShells
 from gui.impl.pub.lobby_window import LobbyNotificationWindow, LobbyWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand, NonPersistentEventNotificationCommand, NotificationEvent, EventNotificationCommand
+from gui.impl.pub.notification_commands import WindowNotificationCommand, NotificationEvent, EventNotificationCommand
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.resource_well.resource import Resource
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
@@ -55,7 +54,6 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.Vehicle import getNationLessName, getUserName, NO_VEHICLE_ID
 from gui.shared.gui_items.processors.goodies import BoosterActivator
-from gui.shared.lock_overlays import lockNotificationManager
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getUniqueViewName, getViewName
@@ -161,25 +159,6 @@ def showBattleRoyaleLevelUpWindow(reusableInfo, parent=None):
 
 def showBattleRoyalePrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLEROYALE_ALIASES.BATTLE_ROYALE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(notificationsMgr=INotificationWindowController)
-def showBattleRoyaleResultsView(ctx, notificationsMgr=None):
-    notificationsMgr.append(NonPersistentEventNotificationCommand(NotificationEvent(method=showBattleRoyaleResultsInfo, ctx=ctx)))
-
-
-def showBattleRoyaleResultsInfo(ctx):
-    lockNotificationManager(True, source=BATTLE_ROYALE_LOCK_SOURCE_NAME)
-    from gui.impl.lobby.battle_royale.battle_result_view import BrBattleResultsViewInLobby
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.battle_royale.BattleResultView()
-    battleResultView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if battleResultView is not None:
-        if battleResultView.arenaUniqueID == ctx.get('arenaUniqueID', -1):
-            return
-        g_eventBus.handleEvent(events.DestroyGuiImplViewEvent(layoutID=contentResId))
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, BrBattleResultsViewInLobby, scope=ScopeTemplates.LOBBY_SUB_SCOPE), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
-    return
 
 
 def showHangarVehicleConfigurator():
@@ -1201,7 +1180,7 @@ def tryToShowReplaceExistingStyleDialog(parent=None):
     context.mode.unselectSlot()
     builder = WarningDialogBuilder()
     builder.setTitleArgs([newStyleName])
-    builder.setMessageArgs(fmtArgs=[UserFormatStringArgModel('{} {}'.format(styleToReplaceName, backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessage())), 'formatted_message', R.styles.AlertBigTextStyle())])
+    builder.setMessageArgs(fmtArgs=[UserFormatStringArgModel(backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessageStyle()), 'style', R.styles.AlertBigTextStyle()), UserFormatStringArgModel(styleToReplaceName, 'formatted_message', None), UserFormatStringArgModel(backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessage()), 'reset', R.styles.AlertBigTextStyle())])
     builder.setMessagesAndButtons(R.strings.dialogs.editableStyles.confirmReset, focused=DialogButtons.CANCEL)
     result, dontShowAgain = yield wg_await(dialogs.showSimpleWithResultData(builder.build(parent=parent)))
     if result and dontShowAgain:

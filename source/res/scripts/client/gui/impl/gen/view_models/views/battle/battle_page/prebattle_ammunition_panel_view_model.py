@@ -13,28 +13,28 @@ class State(IntEnum):
 class PrebattleAmmunitionPanelViewModel(AmmunitionPanelViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=1):
+    def __init__(self, properties=11, commands=1):
         super(PrebattleAmmunitionPanelViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def ammunitionPanel(self):
-        return self._getViewModel(6)
+        return self._getViewModel(8)
 
     @staticmethod
     def getAmmunitionPanelType():
         return PrebattleAmmunitionPanelModel
 
     def getTimeTillBattleStart(self):
-        return self._getNumber(7)
+        return self._getNumber(9)
 
     def setTimeTillBattleStart(self, value):
-        self._setNumber(7, value)
+        self._setNumber(9, value)
 
     def getState(self):
-        return State(self._getNumber(8))
+        return State(self._getNumber(10))
 
     def setState(self, value):
-        self._setNumber(8, value.value)
+        self._setNumber(10, value.value)
 
     def _initialize(self):
         super(PrebattleAmmunitionPanelViewModel, self)._initialize()

@@ -13,80 +13,80 @@ class RentTypeEnum(IntEnum):
 class RewardModel(ItemBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=21, commands=0):
+    def __init__(self, properties=22, commands=0):
         super(RewardModel, self).__init__(properties=properties, commands=commands)
 
     def getItem(self):
-        return self._getString(9)
-
-    def setItem(self, value):
-        self._setString(9, value)
-
-    def getIcon(self):
         return self._getString(10)
 
-    def setIcon(self, value):
+    def setItem(self, value):
         self._setString(10, value)
 
-    def getIconSmall(self):
+    def getIcon(self):
         return self._getString(11)
 
-    def setIconSmall(self, value):
+    def setIcon(self, value):
         self._setString(11, value)
 
-    def getIconBig(self):
+    def getIconSmall(self):
         return self._getString(12)
 
-    def setIconBig(self, value):
+    def setIconSmall(self, value):
         self._setString(12, value)
 
-    def getUserName(self):
+    def getIconBig(self):
         return self._getString(13)
 
-    def setUserName(self, value):
+    def setIconBig(self, value):
         self._setString(13, value)
 
-    def getVehicleType(self):
+    def getUserName(self):
         return self._getString(14)
 
-    def setVehicleType(self, value):
+    def setUserName(self, value):
         self._setString(14, value)
 
+    def getVehicleType(self):
+        return self._getString(15)
+
+    def setVehicleType(self, value):
+        self._setString(15, value)
+
     def getVehicleLevel(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setVehicleLevel(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
 
     def getVehicleRentType(self):
-        return RentTypeEnum(self._getNumber(16))
+        return RentTypeEnum(self._getNumber(17))
 
     def setVehicleRentType(self, value):
-        self._setNumber(16, value.value)
+        self._setNumber(17, value.value)
 
     def getVehicleRentValue(self):
-        return self._getNumber(17)
+        return self._getNumber(18)
 
     def setVehicleRentValue(self, value):
-        self._setNumber(17, value)
+        self._setNumber(18, value)
 
     def getIsFromStorage(self):
-        return self._getBool(18)
-
-    def setIsFromStorage(self, value):
-        self._setBool(18, value)
-
-    def getIsVehicleOnChoice(self):
         return self._getBool(19)
 
-    def setIsVehicleOnChoice(self, value):
+    def setIsFromStorage(self, value):
         self._setBool(19, value)
 
+    def getIsVehicleOnChoice(self):
+        return self._getBool(20)
+
+    def setIsVehicleOnChoice(self, value):
+        self._setBool(20, value)
+
     def getItemID(self):
-        return self._getNumber(20)
+        return self._getNumber(21)
 
     def setItemID(self, value):
-        self._setNumber(20, value)
+        self._setNumber(21, value)
 
     def _initialize(self):
         super(RewardModel, self)._initialize()

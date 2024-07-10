@@ -650,8 +650,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
                                      'turretArmor',
                                      DUAL_GUN_CHARGE_TIME),
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
-     VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime'),
-     'default': ('speedLimits', 'enginePower', 'chassisRotationSpeed')}
+     VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime')}
     __CONDITIONAL_PARAMS = ((ROCKET_ACCELERATION_SPEED_LIMITS, ('speedLimits', ROCKET_ACCELERATION_SPEED_LIMITS)),)
 
     def __init__(self, vehicle, configuration, valueWidth, leftPadding, rightPadding):
@@ -689,7 +688,7 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         return params
 
     def __getShownParameters(self, paramsDict):
-        return chain([ p for p in self.PARAMS.get(self.vehicle.type, 'default') if p in paramsDict ], [ p for group in self.__CONDITIONAL_PARAMS if group[0] in paramsDict for p in group[1] ])
+        return chain([ p for p in self.PARAMS.get(self.vehicle.type, ()) if p in paramsDict ], [ p for group in self.__CONDITIONAL_PARAMS if group[0] in paramsDict for p in group[1] ])
 
 
 class VehicleAdditionalItems(VehicleTooltipBlockConstructor):

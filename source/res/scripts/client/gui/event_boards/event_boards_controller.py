@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/event_boards/event_boards_controller.py
 import logging
+import typing
+import constants
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ELEN_NOTIFICATIONS
 from adisp import adisp_process, adisp_async
@@ -10,8 +12,9 @@ from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.SystemMessages import SM_TYPE
 from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, PLAYER_STATE_REASON as _psr
-from gui.event_boards.event_boards_items import EventSettings
 from gui.event_boards.listener import IEventBoardsListener
+from gui.prb_control import prb_getters
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.utils.requesters.abstract import Response
 from gui.wgcg import IWebController
 from gui.wgcg.elen.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
@@ -23,8 +26,10 @@ from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 SUCCESS_STATUSES = (200, 201, 304)
+if typing.TYPE_CHECKING:
+    from gui.event_boards.event_boards_items import EventSettings
 
-class EventBoardsController(IEventBoardController, IEventBoardsListener):
+class EventBoardsController(IEventBoardController, IEventBoardsListener, IGlobalListener):
     clanController = dependency.descriptor(IWebController)
     connectionMgr = dependency.descriptor(IConnectionManager)
     itemsCache = dependency.descriptor(IItemsCache)
@@ -37,6 +42,18 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
 
     def fini(self):
         self.__eventBoardsSettings.fini()
+
+    def isElenQuestsStatusWrong(self, currentEvent):
+        wrongBattleType = self.prbEntity.getEntityType() != currentEvent.getBattleType()
+        inSquadState = False
+        if self.prbDispatcher is not None:
+            inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
+            if inSquadState:
+                unit = prb_getters.getUnit(safe=True)
+                if len(unit.getMembers()) == 1:
+                    inSquadState = False
+        wrongSquadState = inSquadState and not currentEvent.getIsSquadAllowed()
+        return (wrongBattleType, wrongSquadState)
 
     def getPlayerEventsData(self):
         return self.__eventBoardsSettings.getPlayerEventsData() if self.__eventBoardsSettings is not None else None

@@ -4,20 +4,22 @@ import logging
 from typing import TYPE_CHECKING
 import Event
 from adisp import adisp_process
-from constants import Configs, QUEUE_TYPE
-from goodies.goodie_constants import BoosterCategory
+from BonusCaps import BonusCapsConst
+from constants import Configs
+from goodies.goodie_constants import BoosterCategory, BOOSTER_CATEGORY_TO_BONUS_CAPS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.prb_getters import getQueueTypeFromEntityType, isDevTraining
+from gui.prb_control.prb_getters import isDevTraining
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.server_events import settings
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency, time_utils
 from helpers.server_settings import serverSettingsChangeListener
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from skeletons.gui.game_control import IBoostersController
+from skeletons.gui.game_control import IBoostersController, IHangarGuiController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -25,9 +27,6 @@ from skeletons.gui.system_messages import ISystemMessages
 if TYPE_CHECKING:
     from typing import Dict, TypeVar
     from helpers.server_settings import ServerSettings
-    from gui.lobby_context import LobbyContext
-    from gui.shared.items_cache import ItemsCache
-    from gui.goodies.goodies_cache import GoodiesCache
     from gui.prb_control.entities.base.entity import BasePrbEntity
     from gui.prb_control.entities.base.legacy.entity import LegacyEntity
     from gui.server_events.settings import _PersonalReservesSettings
@@ -39,6 +38,7 @@ class BoostersController(IBoostersController, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     goodiesCache = dependency.descriptor(IGoodiesCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     systemMessages = dependency.descriptor(ISystemMessages)
 
     def __init__(self):
@@ -66,13 +66,17 @@ class BoostersController(IBoostersController, IGlobalListener):
     def onPrbEntitySwitched(self):
         self.updateGameModeStatus()
 
-    def updateGameModeStatus(self):
+    def updateGameModeStatus(self, *_):
         if self.prbDispatcher is not None:
             enabledCategories = set()
-            queueType = self.__getQueueType(self.prbDispatcher.getEntity())
+            queueType = self.prbEntity.getQueueType()
             isDevTrainingBattle = isDevTraining()
             for category in BoosterCategory:
-                if queueType in self.__supportedQueueTypes[category.name] or isDevTrainingBattle:
+                enabledCategory = queueType in self.__supportedQueueTypes[category.name]
+                bonusCaps = BOOSTER_CATEGORY_TO_BONUS_CAPS.get(category)
+                if bonusCaps is not None:
+                    enabledCategory = self.__hangarGuiCtrl.checkCurrentBonusCaps(bonusCaps, default=enabledCategory)
+                if enabledCategory or isDevTrainingBattle:
                     enabledCategories.add(category)
 
             isChanged = enabledCategories != self.__enabledCategories
@@ -104,12 +108,13 @@ class BoostersController(IBoostersController, IGlobalListener):
         return self.goodiesCache.getBoosters(criteria=criteria)
 
     def onLobbyInited(self, event):
+        g_eventBus.addListener(events.BoostersControllerEvent.UPDATE_GAMEMODE_STATUS, self.updateGameModeStatus, EVENT_BUS_SCOPE.LOBBY)
+        g_clientUpdateManager.addCallbacks({'cache.activeOrders': self._update,
+         'goodies': self._update})
         self.startGlobalListening()
         self.itemsCache.onSyncCompleted += self._update
         self.__notificatorManager.addNotificators(PeriodicNotifier(self.__timeTillNextClanReserveTick, self.onClanReserveTick, (time_utils.ONE_MINUTE,)), PeriodicNotifier(self.__timeTillNextPersonalReserveTick, self.__notifyBoosterTime, (time_utils.ONE_MINUTE,)))
         self.__notificatorManager.startNotification()
-        g_clientUpdateManager.addCallbacks({'cache.activeOrders': self._update,
-         'goodies': self._update})
         self.updateGameModeStatus()
 
     def onAccountBecomePlayer(self):
@@ -128,10 +133,11 @@ class BoostersController(IBoostersController, IGlobalListener):
         self.__boostersForUpdate = None
         self.__eventManager.clear()
         self.itemsCache.onSyncCompleted -= self._update
-        g_clientUpdateManager.removeObjectCallbacks(self)
+        self.stopGlobalListening()
         if self.__serverSettings is not None:
             self.__serverSettings.onServerSettingsChange -= self.__onServerSettingsUpdate
-        self.stopGlobalListening()
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        g_eventBus.removeListener(events.BoostersControllerEvent.UPDATE_GAMEMODE_STATUS, self.updateGameModeStatus, EVENT_BUS_SCOPE.LOBBY)
         return
 
     def _update(self, *args):
@@ -147,7 +153,7 @@ class BoostersController(IBoostersController, IGlobalListener):
         self.__updateSettings()
         return
 
-    @serverSettingsChangeListener(Configs.PERSONAL_RESERVES_CONFIG.value)
+    @serverSettingsChangeListener(BonusCapsConst.CONFIG_NAME, Configs.PERSONAL_RESERVES_CONFIG.value)
     def __onServerSettingsUpdate(self, _):
         self.__updateSettings()
 
@@ -165,9 +171,6 @@ class BoostersController(IBoostersController, IGlobalListener):
     def __timeTillNextClanReserveTick(self):
         clanReserves = self.goodiesCache.getClanReserves().values()
         return min((reserve.getUsageLeftTime() for reserve in clanReserves)) + 1 if clanReserves else 0
-
-    def __getQueueType(self, prbEntity):
-        return prbEntity.getQueueType() if prbEntity.getQueueType() > QUEUE_TYPE.UNKNOWN else getQueueTypeFromEntityType(prbEntity.getEntityType())
 
     def __processNotifications(self):
         with settings.personalReservesSettings() as prSettings:

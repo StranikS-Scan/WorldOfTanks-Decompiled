@@ -8,7 +8,6 @@ from Event import EventsSubscriber
 from ReplayEvents import g_replayEvents
 from VehicleBRRespawnEffectComponent import VehicleBRRespawnEffectComponent
 from battle_royale.gui.Scaleform.daapi.view.battle.respawn_messages_formatters import formatRespawnActivatedMessage, formatRespawnFinishedMessage, formatRespawnNotAvailableMessage, formatAllyInBattleMessage, formatStayInCoverMessage, formatPickUpSphereMessage, formatAllyRespawnedMessage, formatRespawnNotAvailableSoonMessage, formatRespawnActivatedSquadMessage, formatRespawnedMessage
-from battle_royale.gui.Scaleform.daapi.view.common.respawn_ability import RespawnAbility
 from battle_royale.gui.battle_control.controllers.notification_manager import INotificationManagerListener, MessageType
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from constants import ARENA_BONUS_TYPE, ARENA_PERIOD
@@ -171,9 +170,8 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
 
     def __onPeriodChange(self, period, timesGoneFromStart):
         if period == ARENA_PERIOD.BATTLE and not self.__respawnTimestampSent:
-            bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
-            isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
-            respawnPeriod = RespawnAbility().soloRespawnPeriod if not isSquadMode else RespawnAbility().platoonRespawnPeriod
+            arenaInfo = BigWorld.player().arena.arenaInfo
+            respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
             secondsLeft = max(respawnPeriod - timesGoneFromStart, 0)
             self.__respawnTimestampSent = True
             timeToNotification = max(secondsLeft - ONE_MINUTE, 0)

@@ -1,37 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_modifiers/scripts/common/battle_modifiers_ext/battle_params.py
-from battle_modifiers_common.battle_modifiers import BattleParams
+from typing import Any, Optional, Set, Tuple, Union, TYPE_CHECKING
+from battle_modifiers_common.battle_modifiers import BattleParams, ModifierScope
 from battle_modifiers_ext.battle_modifier.modifier_appliers import registerParamAppliers
+from battle_modifiers_ext.battle_modifier.modifier_helpers import Serializable
 from battle_modifiers_ext.battle_modifier.modifier_restrictions import readRestrictions
 from battle_modifiers_ext.battle_modifier.modifier_readers import registerParamReaders
-from battle_modifiers_ext.constants_ext import BATTLE_PARAMS_XML_PATH, FAKE_PARAM_NAME, DataType, UseType, PhysicalType, ModifierDomain, ClientDomain
+from battle_modifiers_ext.constants_ext import BATTLE_PARAMS_XML_PATH, DataType, UseType, PhysicalType, ModifierDomain, ClientDomain
 from constants import IS_CLIENT
 from extension_utils import ResMgr
-from typing import Optional, Set, Tuple, Iterable, Union
-from ResMgr import DataSection
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from ResMgr import DataSection
 _ERR_TEMPLATE = "[BattleParams] {} for param '{}'"
 g_cache = None
 
-class ClientParamData(object):
+class BaseClientParamData(Serializable):
     __slots__ = ('resName', 'domain', 'physicalType', 'useTypes')
 
     def __init__(self, source, techName):
-        if isinstance(source, DataSection):
-            self._readConfig(techName, source)
-        else:
-            self._initFromDescr(source)
+        self.resName = ''
+        self.domain = ClientDomain.UNDEFINED
+        self.physicalType = PhysicalType.UNDEFINED
+        self.useTypes = set()
+        super(BaseClientParamData, self).__init__(source, techName)
+
+
+class ClientParamData(BaseClientParamData):
+    __slots__ = ()
 
     def __repr__(self):
         return 'ClientParamData(resName={}, domain = {}, physicalTypeName={}, useTypesName={})'.format(self.resName, self.domain, PhysicalType.ID_TO_NAME[self.physicalType], (UseType.ID_TO_NAME[useType] for useType in self.useTypes))
 
-    def descr(self):
-        raise SoftException('ClientParamData can not be serialized')
-
-    def _initFromDescr(self, descr):
-        raise SoftException('ClientParamData can be constructed only from DataSection')
-
-    def _readConfig(self, techName, clientConfig):
+    def _initFromConfig(self, clientConfig, techName=''):
         self.resName = self._readResName(techName, clientConfig)
         self.physicalType = self.__readPhysicalType(techName, clientConfig)
         self.useTypes = self._readUseTypes(techName, self.physicalType, clientConfig)
@@ -77,6 +78,16 @@ class ClientParamData(object):
         return PhysicalType.NAME_TO_ID[physTypeName]
 
 
+class DefaultClientParamData(BaseClientParamData):
+    __slots__ = ()
+
+    def _initFromDescr(self, descr):
+        pass
+
+    def _initFromConfig(self, source, *args):
+        pass
+
+
 class FakeClientParamData(ClientParamData):
     __slots__ = ('__descr',)
 
@@ -106,6 +117,7 @@ class FakeClientParamData(ClientParamData):
     def _initFromDescr(self, descr):
         self.resName, self.domain, self.physicalType = descr
         self.useTypes = self.__getUseTypes(self.physicalType)
+        self.__descr = descr
 
     @classmethod
     def __getUseTypes(cls, physicalType):
@@ -115,56 +127,32 @@ class FakeClientParamData(ClientParamData):
         return (self.resName, self.domain, self.physicalType)
 
 
-class BaseBattleParam(object):
+class BaseBattleParam(Serializable):
+    __slots__ = ('id', 'scope', 'domain', 'clientData')
 
     def __init__(self, source):
-        if isinstance(source, DataSection):
-            self._readConfig(source)
-        else:
-            self._initFromDescr(source)
+        self.id = ''
+        self.scope = 0
+        self.domain = ModifierDomain.DEFAULT
+        self.clientData = DefaultClientParamData(source, self.id)
+        super(BaseBattleParam, self).__init__(source)
 
-    def descr(self):
-        raise NotImplementedError
-
-    def _initFromDescr(self, descr):
-        raise NotImplementedError
-
-    def _readConfig(self, config):
-        raise NotImplementedError
+    def isHashable(self):
+        return False
 
 
 class BattleParam(BaseBattleParam):
-    __slots__ = ('id', 'name', 'clientData', 'dataType', 'domain', 'validators', 'minValue', 'maxValue')
+    __slots__ = ('dataType', 'validators', 'minValue', 'maxValue')
 
     def __repr__(self):
-        return "BattleParam(id = {}, name = '{}', dataTypeName = {}, clientData={})".format(self.id, self.name, DataType.ID_TO_NAME[self.dataType], self.clientData)
-
-    def descr(self):
-        raise SoftException('BattleParam can not be serialized')
-
-    def _initFromDescr(self, descr):
-        raise SoftException('BattleParam can only be constructed from DataSection')
-
-    def _readConfig(self, config):
-        paramId = self.__readId(config)
-        dataType = self.__readDataType(config)
-        registerParamReaders(paramId, dataType)
-        registerParamAppliers(paramId, dataType)
-        self.name = config.name
-        self.id = paramId
-        self.dataType = dataType
-        self.domain = self.__readDomain(config)
-        self.clientData = self.__readClientData(config)
-        self.validators, self.minValue, self.maxValue = readRestrictions(config, self.id)
+        return 'BattleParam(id = {}, dataTypeName = {}, clientData={})'.format(self.id, DataType.ID_TO_NAME[self.dataType], self.clientData)
 
     @staticmethod
-    def __readId(config):
-        if not config.has_key('id'):
-            raise SoftException(_ERR_TEMPLATE.format('Missing id', config.name))
-        return config['id'].asInt
+    def readId(config):
+        return config.name
 
     @staticmethod
-    def __readDataType(config):
+    def readDataType(config):
         if not config.has_key('dataType'):
             raise SoftException(_ERR_TEMPLATE.format('Missing data type', config.name))
         dataTypeName = config['dataType'].asString
@@ -173,7 +161,19 @@ class BattleParam(BaseBattleParam):
         return DataType.NAME_TO_ID[dataTypeName]
 
     @staticmethod
-    def __readDomain(config):
+    def readScope(config):
+        if not config.has_key('scope'):
+            raise SoftException(_ERR_TEMPLATE.format('Missing scope', config.name))
+        scope = 0
+        for scopeName in config['scope'].asString.split():
+            if scopeName not in ModifierScope.NAMES:
+                raise SoftException(_ERR_TEMPLATE.format("Unknown scope '{}'".format(scopeName), config.name))
+            scope |= ModifierScope.NAME_TO_ID[scopeName]
+
+        return scope
+
+    @staticmethod
+    def readDomain(config):
         if not config.has_key('domain'):
             return ModifierDomain.DEFAULT
         domain = 0
@@ -185,16 +185,43 @@ class BattleParam(BaseBattleParam):
         return domain
 
     @staticmethod
-    def __readClientData(config):
+    def readClientData(config):
         if not IS_CLIENT:
             return None
         else:
             clientSection = config['client'] if config.has_key('client') else config
             return ClientParamData(clientSection, config.name)
 
+    def isHashable(self):
+        return self.dataType in DataType.HASHABLE_TYPES
+
+    def _initFromConfig(self, config, *args):
+        paramId = self.readId(config)
+        dataType = self.readDataType(config)
+        registerParamReaders(paramId, dataType)
+        registerParamAppliers(paramId, dataType)
+        self.id = paramId
+        self.dataType = dataType
+        self.scope = self.readScope(config)
+        self.domain = self.readDomain(config)
+        self.clientData = self.readClientData(config)
+        self.validators, self.minValue, self.maxValue = readRestrictions(config, self.id)
+
+
+class BattleParamStub(BaseBattleParam):
+    __slots__ = ()
+
+    def __repr__(self):
+        return 'BattleParamStub(id = {})'.format(self.id)
+
+    def _initFromConfig(self, config, *args):
+        self.id = BattleParam.readId(config)
+        self.scope = BattleParam.readScope(config)
+        self.domain = BattleParam.readDomain(config)
+
 
 class FakeBattleParam(BaseBattleParam):
-    __slots__ = ('id', 'name', 'clientData', '__descr')
+    __slots__ = ('__descr',)
 
     def __init__(self, source):
         super(FakeBattleParam, self).__init__(source)
@@ -211,24 +238,28 @@ class FakeBattleParam(BaseBattleParam):
 
     def _initFromDescr(self, descr):
         self.__initialize(descr)
+        self.__descr = descr
 
-    def _readConfig(self, config):
+    def _initFromConfig(self, config, *args):
         self.__initialize(config)
 
     def __initialize(self, source):
-        self.name = FAKE_PARAM_NAME
-        self.id = BattleParams.FAKE_PARAM
-        self.clientData = FakeClientParamData(source, self.name)
+        global g_cache
+        fakeParamStub = g_cache[BattleParams.FAKE_MODIFIER]
+        self.id = fakeParamStub.id
+        self.scope = fakeParamStub.scope
+        self.domain = fakeParamStub.domain
+        self.clientData = FakeClientParamData(source, self.id)
 
     def __makeDescr(self):
         return self.clientData.descr()
 
 
 class BattleParamsCache(object):
-    __slots__ = ('__params', '__nameToId')
+    __slots__ = ('__params',)
 
     def __init__(self):
-        self.__readConfig()
+        self.__initFromConfig()
 
     def __iter__(self):
         return self.__params.iteritems()
@@ -248,28 +279,18 @@ class BattleParamsCache(object):
     def get(self, id):
         return self.__params.get(id)
 
-    def idToName(self, id):
-        return self.__params[id].name
-
-    def nameToId(self, name):
-        return self.__nameToId.get(name)
-
-    def __readConfig(self):
+    def __initFromConfig(self):
         config = ResMgr.openSection(BATTLE_PARAMS_XML_PATH)
         if config is None:
             raise SoftException("[BattleParams] Cannot open or read '{}'".format(BATTLE_PARAMS_XML_PATH))
         self.__params = params = {}
-        self.__nameToId = nameToId = {}
-        for paramName, paramSection in config.items():
-            if paramName == 'xmlns:xmlref':
+        for paramId, paramSection in config.items():
+            if paramId == 'xmlns:xmlref':
                 continue
-            param = BattleParam(paramSection)
+            param = BattleParamStub(paramSection) if paramId in BattleParams.DYNAMIC else BattleParam(paramSection)
             if param.id in params:
                 raise SoftException('[BattleParams] Not unique id {}'.format(param.id))
-            if param.name in nameToId:
-                raise SoftException("[BattleParams] Not unique name '{}'".format(param.id))
             params[param.id] = param
-            nameToId[param.name] = param.id
 
         return
 

@@ -35,6 +35,9 @@ class ClientProgressStorage(quest_progress.ProgressStorage):
     def getBodyProgresses(self, isMain=None):
         raise NotImplementedError
 
+    def sortProgresses(self, progresses):
+        return sorted(progresses, key=lambda p: (not p.isMain(), p.getPriority()))
+
     def _createProgress(self, progressID, configData):
         progress = super(ClientProgressStorage, self)._createProgress(progressID, configData)
         if progress.getContainerType() == CONTAINER.HEADER:

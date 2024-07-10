@@ -2,12 +2,11 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_visitor.py
 import functools
 import weakref
-import math
 import BigWorld
 import win_points
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from battle_modifiers_common import BattleParams, BattleModifiers
-from constants import ARENA_GUI_TYPE as _GUI_TYPE, ARENA_GUI_TYPE_LABEL as _GUI_TYPE_LABEL, ARENA_BONUS_TYPE as _BONUS_TYPE, ARENA_PERIOD as _PERIOD, QUEUE_TYPE, TEAMS_IN_ARENA, VISIBILITY, SHELL_TYPES
+from constants import ARENA_GUI_TYPE as _GUI_TYPE, ARENA_GUI_TYPE_LABEL as _GUI_TYPE_LABEL, ARENA_BONUS_TYPE as _BONUS_TYPE, ARENA_PERIOD as _PERIOD, QUEUE_TYPE, TEAMS_IN_ARENA, VISIBILITY
 from gui import GUI_SETTINGS
 from skeletons.gui.battle_session import IClientArenaVisitor
 
@@ -56,6 +55,7 @@ class _ClientArenaSkeleton(object):
     arenaUniqueID = 0
     guiType = _GUI_TYPE.UNKNOWN
     bonusType = _BONUS_TYPE.UNKNOWN
+    bonusCapsOverrides = None
     arenaType = None
     componentSystem = None
     battleModifiers = BattleModifiers()
@@ -323,74 +323,77 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
 
 
 class _ArenaBonusTypeVisitor(IArenaVisitor):
-    __slots__ = ('_bonusType',)
+    __slots__ = ('_bonusType', '_specificOverrides')
 
-    def __init__(self, bonusType=_BONUS_TYPE.UNKNOWN):
+    def __init__(self, bonusType=_BONUS_TYPE.UNKNOWN, specificOverrides=None):
         super(_ArenaBonusTypeVisitor, self).__init__()
+        self._specificOverrides = specificOverrides
         self._bonusType = bonusType
 
     def clear(self):
         self._bonusType = _BONUS_TYPE.UNKNOWN
+        self._specificOverrides = None
+        return
+
+    def hasBonusCap(self, bonusCap):
+        return _CAPS.checkAny(self._bonusType, bonusCap, specificOverrides=self._specificOverrides)
+
+    def hasAnyBonusCap(self, *caps):
+        return _CAPS.checkAny(self._bonusType, specificOverrides=self._specificOverrides, *caps)
 
     def hasRage(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.RAGE_MECHANICS)
+        return self.hasAnyBonusCap(_CAPS.RAGE_MECHANICS)
 
     def hasRespawns(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.RESPAWN)
+        return self.hasAnyBonusCap(_CAPS.RESPAWN)
 
     def isSquadSupported(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SQUADS)
+        return self.hasAnyBonusCap(_CAPS.SQUADS)
 
     def isDynSquadsSupported(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.DYN_SQUADS)
+        return self.hasAnyBonusCap(_CAPS.DYN_SQUADS)
 
     def canTakeSquadXP(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP)
-
-    def canTakeSquadCredits(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_CREDITS)
-
-    def canTakeAnySquadBonus(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SQUAD_XP, _CAPS.SQUAD_CREDITS)
+        return self.hasAnyBonusCap(_CAPS.SQUAD_XP)
 
     def hasHealthBar(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.TEAM_HEALTH_BAR)
+        return self.hasAnyBonusCap(_CAPS.TEAM_HEALTH_BAR)
 
     def hasGameEndMessage(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.VICTORY_DEFEAT_MESSAGE)
+        return self.hasAnyBonusCap(_CAPS.VICTORY_DEFEAT_MESSAGE)
 
     def hasCustomAllyDamageEffect(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.CUSTOM_ALLY_DAMAGE_EFFECT)
+        return self.hasAnyBonusCap(_CAPS.CUSTOM_ALLY_DAMAGE_EFFECT)
 
     def hasSectors(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SECTOR_MECHANICS)
+        return self.hasAnyBonusCap(_CAPS.SECTOR_MECHANICS)
 
     def hasDestructibleEntities(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.DESTRUCTIBLE_ENTITIES)
+        return self.hasAnyBonusCap(_CAPS.DESTRUCTIBLE_ENTITIES)
 
     def hasStepRepairPoints(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.STEP_REPAIR_MECHANIC)
+        return self.hasAnyBonusCap(_CAPS.STEP_REPAIR_MECHANIC)
 
     def hasPlayerRanks(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.PLAYER_RANK_MECHANICS)
+        return self.hasAnyBonusCap(_CAPS.PLAYER_RANK_MECHANICS)
 
     def hasInBattleUpgrade(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
+        return self.hasAnyBonusCap(_CAPS.IN_BATTLE_UPGRADES)
 
     def hasDogTag(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)
+        return self.hasAnyBonusCap(_CAPS.DOG_TAG)
 
     def isFriendlyFireMode(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.NO_ALLY_DAMAGE)
+        return self.hasAnyBonusCap(_CAPS.NO_ALLY_DAMAGE)
 
     def hasBattleNotifier(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.BATTLE_NOTIFIER)
+        return self.hasAnyBonusCap(_CAPS.BATTLE_NOTIFIER)
 
     def hasPointsOfInterest(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.POINTS_OF_INTEREST)
+        return self.hasAnyBonusCap(_CAPS.POINTS_OF_INTEREST)
 
     def hasSwitchSetups(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.SWITCH_SETUPS)
+        return self.hasAnyBonusCap(_CAPS.SWITCH_SETUPS)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -459,24 +462,12 @@ class _ArenaModifiersVisitor(IArenaVisitor):
 
     def __init__(self, modifiers=None):
         super(_ArenaModifiersVisitor, self).__init__()
-        self._modifiers = modifiers = BattleModifiers() if modifiers is None else modifiers
-        self._shellData = {SHELL_TYPES.ARMOR_PIERCING: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(5.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
-         SHELL_TYPES.ARMOR_PIERCING_CR: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(2.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
-         SHELL_TYPES.ARMOR_PIERCING_HE: (modifiers(BattleParams.NORMALIZATION_ANGLE, 0.0), 0.0),
-         SHELL_TYPES.HOLLOW_CHARGE: (0.0, math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(85.0)))),
-         SHELL_TYPES.HIGH_EXPLOSIVE: (0.0, 0.0)}
+        self._modifiers = BattleModifiers() if modifiers is None else modifiers
         return
 
     def clear(self):
         self._modifiers = None
-        self._shellData.clear()
         return
-
-    def getShellNormalization(self, shellKind):
-        return self._shellData[shellKind][0]
-
-    def getShellRicochetCos(self, shellKind):
-        return self._shellData[shellKind][1]
 
     def getConstantsModification(self):
         return self._modifiers.getConstantsModification()
@@ -489,12 +480,12 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         super(_ClientArenaVisitor, self).__init__()
         self._arena = arena
         self._canSubscribe = canSubscribe
-        self._gui = _ArenaGuiTypeVisitor(guiType=self.getArenaGuiType())
-        self._bonus = _ArenaBonusTypeVisitor(bonusType=self.getArenaBonusType())
         self._type = _ArenaTypeVisitor(arenaType=self.getArenaType())
+        self._gui = _ArenaGuiTypeVisitor(guiType=self.getArenaGuiType())
         self._extra = _ArenaExtraDataVisitor(extra=self.getArenaExtraData())
         self._vehicles = _ArenaVehiclesVisitor(vehicles=self.getArenaVehicles())
         self._modifiers = _ArenaModifiersVisitor(modifiers=self.getArenaModifiers())
+        self._bonus = _ArenaBonusTypeVisitor(bonusType=self.getArenaBonusType(), specificOverrides=self.getArenaBonusCapsOverrides())
 
     @classmethod
     def createByArena(cls, arena=None):
@@ -655,6 +646,10 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     @catch_attribute_exception(default=_ClientArenaSkeleton.bonusType)
     def getArenaBonusType(self):
         return self._arena.bonusType
+
+    @catch_attribute_exception(default=_ClientArenaSkeleton.bonusCapsOverrides)
+    def getArenaBonusCapsOverrides(self):
+        return self._arena.bonusCapsOverrides
 
     @catch_attribute_exception(default=_ClientArenaSkeleton.arenaType)
     def getArenaType(self):

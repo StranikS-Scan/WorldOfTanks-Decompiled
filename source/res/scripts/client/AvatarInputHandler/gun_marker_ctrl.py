@@ -178,7 +178,7 @@ class _CrosshairShotResults(object):
         armor = matInfo.armor
         if armor == 0:
             return False
-        if hitAngleCos <= cls.__sessionProvider.arenaVisitor.modifiers.getShellRicochetCos(shell.kind):
+        if hitAngleCos <= shell.type.ricochetAngleCos:
             if not matInfo.checkCaliberForRichet:
                 return True
             if not shellExtraData.checkCaliberForRicochet:
@@ -195,7 +195,7 @@ class _CrosshairShotResults(object):
         normalizationAngle = 0.0
         shellExtraData = cls._SHELL_EXTRA_DATA[shell.kind]
         if shellExtraData.hasNormalization:
-            normalizationAngle = cls.__sessionProvider.arenaVisitor.modifiers.getShellNormalization(shell.kind)
+            normalizationAngle = shell.type.normalizationAngle
         if normalizationAngle > 0.0 and hitAngleCos < 1.0:
             if matInfo.checkCaliberForHitAngleNorm:
                 if shell.caliber > armor * 2 > 0:

@@ -301,7 +301,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_EVENTCOIN = '#messenger:serviceChannelMessages/battleResults/eventCoin'
     SERVICECHANNELMESSAGES_BATTLERESULTS_BPCOIN = '#messenger:serviceChannelMessages/battleResults/bpcoin'
     SERVICECHANNELMESSAGES_BATTLERESULTS_EQUIPCOIN = '#messenger:serviceChannelMessages/battleResults/equipCoin'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_RATINGPOINTS = '#messenger:serviceChannelMessages/battleResults/ratingPoints'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_COMP7LIGHTPROGRESSIONPOINTS = '#messenger:serviceChannelMessages/battleResults/comp7LightProgressionPoints'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DOUBLEXPFACTOR = '#messenger:serviceChannelMessages/battleResults/doubleXpFactor'
     SERVICECHANNELMESSAGES_BATTLERESULTS_PENALTYFORDAMAGEALLIES = '#messenger:serviceChannelMessages/battleResults/penaltyForDamageAllies'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CONTRIBUTIONFORDAMAGEALLIES = '#messenger:serviceChannelMessages/battleResults/contributionForDamageAllies'

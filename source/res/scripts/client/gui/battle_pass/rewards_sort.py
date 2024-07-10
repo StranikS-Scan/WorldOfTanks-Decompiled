@@ -2,11 +2,9 @@
 # Embedded file name: scripts/client/gui/battle_pass/rewards_sort.py
 import logging
 import re
-from functools import partial
 from enum import Enum, unique
+from functools import partial
 from gui import GUI_NATIONS, GUI_NATIONS_ORDER_INDEX
-from gui.impl.gen import R
-from gui.impl import backport
 from nations import NONE_INDEX
 from shared_utils import safeIndexOf
 _logger = logging.getLogger(__name__)
@@ -31,7 +29,6 @@ class _RewardType(_Enum):
     GUIDE = 'guide'
     MODERNIZED_DEVICE = 'modernized_device'
     TROPHY = 'trophy'
-    FRONTLINE_BATTLE_BOOSTER = 'battleBooster'
 
 
 @unique
@@ -137,16 +134,6 @@ def _compareRewardsByType(rewardType, first, second):
     return cmp(safeIndexOf(_Reward.makeValue(_extractRewardName(first[0], extractor)), order), safeIndexOf(_Reward.makeValue(_extractRewardName(second[0], extractor)), order))
 
 
-def _compareRewardsByArtifactName(first, second):
-    artefacts = R.strings.artefacts
-
-    def _safeExtract(path):
-        folder = artefacts.dyn(path)
-        return backport.text(folder.name()) if folder else ''
-
-    return cmp(_safeExtract(first[0]), _safeExtract(second[0]))
-
-
 def _defaultComparator(first, second):
     return cmp(first[0], second[0])
 
@@ -157,8 +144,7 @@ _REWARDS_COMPARATORS = {_RewardType.TROPHY: partial(_compareRewardsByType, _Rewa
  _RewardType.BROCHURE: _compareRewardsByNation,
  _RewardType.BLUEPRINT: _compareRewardsByNation,
  _RewardType.BATTLE_BOOSTER: partial(_compareRewardsByType, _RewardType.BATTLE_BOOSTER),
- _RewardType.MODERNIZED_DEVICE: partial(_compareRewardsByType, _RewardType.MODERNIZED_DEVICE),
- _RewardType.FRONTLINE_BATTLE_BOOSTER: _compareRewardsByArtifactName}
+ _RewardType.MODERNIZED_DEVICE: partial(_compareRewardsByType, _RewardType.MODERNIZED_DEVICE)}
 
 def getRewardTypesComparator():
     return _rewardTypeComparator

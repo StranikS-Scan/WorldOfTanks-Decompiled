@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 class RewardItemModel(ItemBonusModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(RewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getIcon(self):
-        return self._getString(9)
-
-    def setIcon(self, value):
-        self._setString(9, value)
-
-    def getType(self):
         return self._getString(10)
 
-    def setType(self, value):
+    def setIcon(self, value):
         self._setString(10, value)
+
+    def getType(self):
+        return self._getString(11)
+
+    def setType(self, value):
+        self._setString(11, value)
 
     def _initialize(self):
         super(RewardItemModel, self)._initialize()

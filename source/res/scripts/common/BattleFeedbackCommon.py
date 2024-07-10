@@ -90,8 +90,8 @@ class BATTLE_EVENT_TYPE:
      VEHICLE_HEALTH_ADDED])
 
     @staticmethod
-    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False):
-        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isRoleAction else 0) << 41
+    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False, isAutoShoot=False):
+        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isRoleAction else 0) << 41 | (1 if isAutoShoot else 0) << 42
 
     @staticmethod
     def unpackDamage(packedDamage):
@@ -101,15 +101,16 @@ class BATTLE_EVENT_TYPE:
          packedDamage >> 9 & 127,
          packedDamage >> 8 & 1,
          packedDamage & 255,
-         packedDamage >> 41 & 1)
+         packedDamage >> 41 & 1,
+         packedDamage >> 42 & 1)
 
     @staticmethod
     def unpackAttackReason(packedDamage):
         return packedDamage >> 17 & 255
 
     @staticmethod
-    def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE]):
-        return (int(critsCount) & 65535) << 24 | (int(attackReasonID) & 255) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255
+    def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isAutoShoot=False):
+        return (int(critsCount) & 65535) << 24 | (int(attackReasonID) & 255) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isAutoShoot else 0) << 40
 
     @staticmethod
     def unpackCrits(packedCrits):
@@ -117,7 +118,8 @@ class BATTLE_EVENT_TYPE:
          packedCrits >> 16 & 255,
          packedCrits >> 9 & 127,
          packedCrits >> 8 & 1,
-         packedCrits & 255)
+         packedCrits & 255,
+         packedCrits >> 40 & 1)
 
     @staticmethod
     def packVisibility(isVisible, isDirect, isRoleAction):

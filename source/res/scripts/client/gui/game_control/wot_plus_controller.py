@@ -152,7 +152,7 @@ class WotPlusController(IWotPlusController):
         fetchResult = self._userSubscriptionsFetchController._fetchResult
         if fetchResult.isProductsReady:
             for subscriptionProduct in fetchResult.products:
-                if subscriptionProduct.nextBillingTime:
+                if subscriptionProduct.nextBillingTime and subscriptionProduct.status == SubscriptionStatus.ACTIVE:
                     return subscriptionProduct.nextBillingTime
 
         return None

@@ -20,10 +20,10 @@ class AimingSoundsCtrl(IAimingSoundsCtrl):
     def getControllerID(self):
         return BATTLE_CTRL_ID.AIMING_SOUNDS_CTRL
 
-    def updateDispersion(self, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
-        isGunReloading = self.__sessionProvider.shared.ammo.isGunReloading()
-        self.__updateDispersion(multFactor, aimingFactor, idealFactor, self.__setAimingEnded, _DUAL_ACC_SOUND if hasDualAcc else _AIMING_SOUND, self.__isAimingEnded or isGunReloading)
-        self.__updateDispersion(dualAccMultFactor, dualAccFactor, idealDualAccFactor, self.__setDualAimingEnded, _AIMING_SOUND if hasDualAcc else _EMPTY_SOUND, self.__isDualAimingEnded or isGunReloading)
+    def updateDispersion(self, shotFactor, multFactor, aimingFactor, idealFactor, dualAccMultFactor, dualAccFactor, idealDualAccFactor, hasDualAcc):
+        isGunInUse = shotFactor > 0 or self.__sessionProvider.shared.ammo.isGunReloading()
+        self.__updateDispersion(multFactor, aimingFactor, idealFactor, self.__setAimingEnded, _DUAL_ACC_SOUND if hasDualAcc else _AIMING_SOUND, self.__isAimingEnded or isGunInUse)
+        self.__updateDispersion(dualAccMultFactor, dualAccFactor, idealDualAccFactor, self.__setDualAimingEnded, _AIMING_SOUND if hasDualAcc else _EMPTY_SOUND, self.__isDualAimingEnded or isGunInUse)
 
     def __setAimingEnded(self, value):
         self.__isAimingEnded = value

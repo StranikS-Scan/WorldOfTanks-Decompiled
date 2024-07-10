@@ -44,7 +44,7 @@ class DamageStickerManager(CGF.ComponentManager):
         m.setIdentity()
         stickerModel = damageSticker.stickerModel
         stickerModel.setupSuperModel(geometryLink, m)
-        node = shotDamage.compound.node(shotDamage.partName)
+        node = shotDamage.compound.node(TankPartNames.getActualNodeNameByPartName(shotDamage.partName))
         node.attach(damageSticker.stickerModel)
         stickerModel.setLODDistance(damageSticker.lodDistance)
         stickerId = vehicles.g_cache.damageStickers['ids'][damageSticker.damageSticker]
@@ -58,6 +58,6 @@ class DamageStickerManager(CGF.ComponentManager):
         if damageSticker.stickerModel is None:
             return
         else:
-            node = shotDamage.compound.node(shotDamage.partName)
+            node = shotDamage.compound.node(TankPartNames.getActualNodeNameByPartName(shotDamage.partName))
             node.detach(damageSticker.stickerModel)
             return

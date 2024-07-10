@@ -77,8 +77,7 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
         data = super(Comp7StatusNotificationTimerPanel, self)._generateNotificationTimerSettings()
         link = _LINKS.DESTROY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.DROWN, _LINKS.DROWN_ICON, link)
-        liftOverEnabled = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arenaBonusType, ARENA_BONUS_TYPE_CAPS.LIFT_OVER)
-        if liftOverEnabled:
+        if BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.LIFT_OVER):
             overturnedIcon = _LINKS.OVERTURNED_GREEN_ICON
             overturnedColor = _COLORS.GREEN
             iconOffsetY = 1

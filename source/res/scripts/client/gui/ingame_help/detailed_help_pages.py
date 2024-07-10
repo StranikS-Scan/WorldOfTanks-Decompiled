@@ -28,13 +28,14 @@ class HelpPagePriority(object):
     ROCKET_ACCELERATION = 3
     TURBOSHAFT_ENGINE = 4
     DUAL_ACCURACY = 5
-    BATTLE_ROYALE = 6
-    DUAL_GUN = 7
-    WHEELED = 8
-    BURNOUT = 9
-    SIEGE_MODE = 10
-    ROLE_TYPE = 11
-    COMP7 = 12
+    AUTO_SHOOT_GUN = 6
+    BATTLE_ROYALE = 7
+    DUAL_GUN = 8
+    WHEELED = 9
+    BURNOUT = 10
+    SIEGE_MODE = 11
+    ROLE_TYPE = 12
+    COMP7 = 13
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -313,6 +314,27 @@ class DualAccuracyPagesBuilder(DetailedHelpPagesBuilder):
         hasDualAccuracy = vehicle is not None and vehicle.typeDescriptor.hasDualAccuracy
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasDualAccuracy
         ctx['hasDualAccuracy'] = hasDualAccuracy
+        return
+
+
+class AutoShootGunPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isAutoShootGunVehicle',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.AUTO_SHOOT_GUN
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, buildTitle(ctx), backport.text(R.strings.ingame_help.detailsHelp.autoShootGun.mechanics.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.autoShootGun.mechanics())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.autoShootGun.mechanics()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        isAutoShootGunVehicle = vehicle is not None and vehicle.typeDescriptor.isAutoShootGunVehicle
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isAutoShootGunVehicle
+        ctx['isAutoShootGunVehicle'] = isAutoShootGunVehicle
         return
 
 

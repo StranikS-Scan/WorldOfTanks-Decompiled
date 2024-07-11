@@ -514,6 +514,43 @@
       </damage>
     </armorSpalls>
   </_75mm_OE_mle_1939>
+  <_75mm_OE_mle_1939_03_R>
+    <id>	40001	</id>
+    <userString>	#france_vehicles:_75mm_OE_mle_1939	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	RacesPushingShot	</effects>
+    <damage>
+      <armor>	10	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_75mm_OE_mle_1939_03_R>
+  <_75mm_OE_mle_1939_03_R_special>
+    <id>	40000	</id>
+    <userString>	#france_vehicles:_75mm_OE_mle_1939_03_R_special	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	RacesPushingShot	</effects>
+    <damage>
+      <armor>	25	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_75mm_OE_mle_1939_03_R_special>
   <_75mm_Prf1930>
     <id>	3	</id>
     <userString>	#france_vehicles:_75mm_Prf1930	</userString>
@@ -2742,7 +2779,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
-      <armor>	650	</armor>
+      <armor>	490	</armor>
       <devices>	60	</devices>
     </damage>
   </_127mm_OE_127_Mle_55_SH>
@@ -2759,7 +2796,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeHighExplosive	</effects>
     <damage>
-      <armor>	400	</armor>
+      <armor>	390	</armor>
       <devices>	60	</devices>
     </damage>
   </_127mm_OE_127_D_700_SH>

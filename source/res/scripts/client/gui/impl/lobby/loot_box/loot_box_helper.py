@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/lobby/loot_box/loot_box_helper.py
 import typing
 from collections import namedtuple
-from constants import LOOTBOX_TOKEN_PREFIX
+from constants import LOOTBOX_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from helpers import dependency
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
+from lootboxes_common import makeLBKeyTokenID
 if typing.TYPE_CHECKING:
     from typing import Optional
 BonusInfo = namedtuple('SlotBonusInfo', ['probabilitiesList',
@@ -56,3 +58,32 @@ def isAllVehiclesObtainedInSlot(slot, itemsCache=None):
 
 def getLootBoxIDFromToken(token):
     return token.split(':')[1] if token.startswith(LOOTBOX_TOKEN_PREFIX) else None
+
+
+def getLootBoxKeyIDFromToken(token):
+    return token.split(':')[1] if token.startswith(LOOTBOX_KEY_PREFIX) else None
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
+def getKeyByTokenID(tokenID, itemsCache=None, lobbyContext=None):
+    from gui.shared.gui_items.loot_box import LootBoxKey
+    _, keyID = tokenID.split(':')
+    keyID = int(keyID)
+    keyConfig = lobbyContext.getServerSettings().getLootBoxKeyConfig().get(keyID, {})
+    if keyConfig:
+        keyToken = makeLBKeyTokenID(keyID)
+        return LootBoxKey(keyToken, itemsCache.items.tokens.getTokenCount(keyToken), keyConfig)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, lobbyContext=ILobbyContext)
+def getKeyByID(keyID, itemsCache=None, lobbyContext=None):
+    from gui.shared.gui_items.loot_box import LootBoxKey
+    keyConfig = lobbyContext.getServerSettings().getLootBoxKeyConfig().get(keyID, {})
+    if keyConfig:
+        keyToken = makeLBKeyTokenID(keyID)
+        return LootBoxKey(keyToken, itemsCache.items.tokens.getTokenCount(keyToken), keyConfig)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def hasInfiniteLootBoxes(itemsCache=None):
+    return any((lb.isActiveHiddenCount() for lb in itemsCache.items.tokens.getLootBoxes().values()))

@@ -13,6 +13,7 @@ _logger = logging.getLogger(__name__)
 class LootBoxesStorageEventEnum(str, Enum):
     GOTO_REQUEST = 'GOTO_REQUEST'
     GOTO_OPENING = 'GOTO_OPENING'
+    GOTO_LOSE_OPENING = 'GOTO_LOSE_OPENING'
     GOTO_ERROR = 'GOTO_ERROR'
     GOTO_UNIQUE_REWARDING = 'GOTO_UNIQUE_REWARDING'
     GOTO_REWARDING = 'GOTO_REWARDING'
@@ -74,15 +75,19 @@ class LootBoxesStorageStateMachineDescription(object):
         storageViewing = cls.__getStateFromStateId(States.STORAGE_VIEWING.value)
         requestToOpen = cls.__getStateFromStateId(States.REQUEST_TO_OPEN.value)
         opening = cls.__getStateFromStateId(States.OPENING.value)
+        loseOpening = cls.__getStateFromStateId(States.LOSE_OPENING.value)
         openingError = cls.__getStateFromStateId(States.OPENING_ERROR.value)
         uniqueRewarding = cls.__getStateFromStateId(States.UNIQUE_REWARDING.value)
         rewarding = cls.__getStateFromStateId(States.REWARDING.value)
         storageViewing.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_REQUEST), target=requestToOpen)
         requestToOpen.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_OPENING), target=opening)
+        requestToOpen.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_LOSE_OPENING), target=loseOpening)
         requestToOpen.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_ERROR), target=openingError)
         opening.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_UNIQUE_REWARDING), target=uniqueRewarding)
         opening.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_REWARDING), target=rewarding)
+        loseOpening.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_REWARDING), target=rewarding)
         rewarding.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_STORAGE), target=storageViewing)
+        rewarding.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_REQUEST), target=requestToOpen)
         uniqueRewarding.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_STORAGE), target=storageViewing)
         uniqueRewarding.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_REWARDING), target=rewarding)
         openingError.addTransition(StringEventTransition(LootBoxesStorageEventEnum.GOTO_STORAGE), target=storageViewing)
@@ -91,4 +96,5 @@ class LootBoxesStorageStateMachineDescription(object):
          opening,
          openingError,
          uniqueRewarding,
-         rewarding)
+         rewarding,
+         loseOpening)

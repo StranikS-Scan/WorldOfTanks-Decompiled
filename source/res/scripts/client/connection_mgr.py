@@ -12,7 +12,7 @@ from debug_utils import LOG_DEBUG, LOG_NOTE, LOG_WARNING
 from shared_utils import nextTick
 from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_URL
 from helpers import getClientLanguage, uniprof
-from account_shared import isValidClientVersion
+from version_utils import isValidClientVersion
 from skeletons.connection_mgr import IConnectionManager
 _MIN_RECONNECTION_TIMEOUT = 5
 _RECONNECTION_TIMEOUT_INCREMENT = 5

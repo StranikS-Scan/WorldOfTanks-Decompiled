@@ -203,6 +203,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     COMP7_BATTLE_PAGE = 'comp7BattlePage'
     WINBACK_BATTLE_PAGE = 'winbackBattlePage'
     COSMIC_BATTLE_PAGE = 'cosmicBattlePage'
+    RACES_BATTLE_PAGE = 'racesBattlePage'
     INGAME_MENU = 'ingameMenu'
     INGAME_HELP = 'ingameHelp'
     INGAME_DETAILS_HELP = 'ingameDetailsHelp'

@@ -133,8 +133,8 @@
         <exploded>	vehicles/chinese/Ch19_121/crash/lod0/Chassis.model	</exploded>
       </models>
       <traces>
-        <lodDist>	FAR	</lodDist>
-        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
         <textureSet>	ussr_02	</textureSet>
         <size>	0.48 0.62	</size>
       </traces>
@@ -144,7 +144,131 @@
           <trackPairIdx>	0	</trackPairIdx>
           <leftMaterial>	track_mat_L_skinned	</leftMaterial>
           <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	-1.65	</textureScale>
+          <textureScale>	-1.85	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.023435	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.131849	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.537232	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	4	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.281065	</groupRadius>
+                  <groupInnerOffset>	0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	-0.288562	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.408701	</groupRadius>
+                  <groupInnerOffset>	0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	-0.288562	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.259386	</groupRadius>
+                  <groupInnerOffset>	0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	-0.288562	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.032978 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.034419 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.507956	</row2>
+                  <row3>	0.000000 1.002910 -0.050200	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358153 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299978 -0.003668	</row1>
+                  <row2>	0.000000 0.074947 6.129990	</row2>
+                  <row3>	0.000000 1.308060 0.093720	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358150 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.202280 0.221547	</row1>
+                  <row2>	0.000000 -0.383318 0.349981	</row2>
+                  <row3>	0.000000 1.105680 3.199455	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358151 -0.000001 -0.000002	</row0>
+                  <row1>	0.000000 0.206663 -0.217464	</row1>
+                  <row2>	0.000000 0.507415 0.482214	</row2>
+                  <row3>	-0.000002 1.055650 -3.237793	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.023681	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.131849	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.537211	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	4	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.281242	</groupRadius>
+                  <groupInnerOffset>	-0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	0.288562	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.408701	</groupRadius>
+                  <groupInnerOffset>	-0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	0.288562	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.258153	</groupRadius>
+                  <groupInnerOffset>	-0.388562	</groupInnerOffset>
+                  <groupOuterOffset>	0.288562	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	2.032980 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.034420 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.507960	</row2>
+                  <row3>	0.000000 1.002910 -0.050200	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358150 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.299978 -0.003668	</row1>
+                  <row2>	0.000000 0.074947 6.129990	</row2>
+                  <row3>	0.000000 1.308060 0.093720	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358150 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.202280 0.221547	</row1>
+                  <row2>	0.000000 -0.383318 0.349981	</row2>
+                  <row3>	0.000000 1.105680 3.199460	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.358150 -0.000001 -0.000002	</row0>
+                  <row1>	0.000000 0.206663 -0.217464	</row1>
+                  <row2>	0.000000 0.507415 0.482214	</row2>
+                  <row3>	-0.000002 1.055650 -3.237790	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
         </trackPair>
       </tracks>
       <wheels>
@@ -221,192 +345,190 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.1	</maxAmplitude>
-        <maxOffset>	0.1	</maxOffset>
+        <maxAmplitude>	0.08	</maxAmplitude>
+        <maxOffset>	0.08	</maxOffset>
         <gravity>	-9.8	</gravity>
-        <elasticity>	1100	</elasticity>
+        <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.2	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <rightSibling>	Track_VT_L1	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.3	</backwardElastK>
-          <offset>	-0.176	</offset>
-          <leftSibling>	Track_VT_L0	</leftSibling>
-          <rightSibling>	Track_VT_L2	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_L1	</leftSibling>
-          <rightSibling>	Track_VT_L3	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-          <offset>	-0.155	</offset>
-          <leftSibling>	Track_VT_L2	</leftSibling>
-          <rightSibling>	Track_VT_L4	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_L3	</leftSibling>
-          <rightSibling>	Track_VT_L5	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L5	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.176	</offset>
-          <leftSibling>	Track_VT_L4	</leftSibling>
-          <rightSibling>	Track_VT_L6	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L6	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_L5	</leftSibling>
-          <rightSibling>	Track_VT_L7	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L7	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.162	</offset>
-          <leftSibling>	Track_VT_L6	</leftSibling>
-          <rightSibling>	Track_VT_L8	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L8	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_L7	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
+          <forwardElastK>	0.6	</forwardElastK>
+          <offset>	-0.09	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.11	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <offset>	-0.09	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.11	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.14	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L10	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.08	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.35	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.19	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.39	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.16	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.54	</backwardElastK>
+          <offset>	-0.18	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.52	</backwardElastK>
+          <offset>	-0.15	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.52	</backwardElastK>
+          <offset>	-0.18	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L7	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.15	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L8	</name>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+          <offset>	-0.17	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L9	</name>
+          <forwardElastK>	0.45	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <offset>	-0.15	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.2	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <rightSibling>	Track_VT_R1	</rightSibling>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.05	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.3	</backwardElastK>
-          <offset>	-0.176	</offset>
-          <leftSibling>	Track_VT_R0	</leftSibling>
-          <rightSibling>	Track_VT_R2	</rightSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.14	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R10	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.08	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_R1	</leftSibling>
-          <rightSibling>	Track_VT_R3	</rightSibling>
+          <forwardElastK>	0.35	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.19	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-          <offset>	-0.155	</offset>
-          <leftSibling>	Track_VT_R2	</leftSibling>
-          <rightSibling>	Track_VT_R4	</rightSibling>
+          <forwardElastK>	0.39	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.16	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R4	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_R3	</leftSibling>
-          <rightSibling>	Track_VT_R5	</rightSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.54	</backwardElastK>
+          <offset>	-0.18	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R5	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.176	</offset>
-          <leftSibling>	Track_VT_R4	</leftSibling>
-          <rightSibling>	Track_VT_R6	</rightSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.52	</backwardElastK>
+          <offset>	-0.15	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R6	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_R5	</leftSibling>
-          <rightSibling>	Track_VT_R7	</rightSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.52	</backwardElastK>
+          <offset>	-0.18	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R7	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.162	</offset>
-          <leftSibling>	Track_VT_R6	</leftSibling>
-          <rightSibling>	Track_VT_R8	</rightSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.15	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R8	</name>
-          <forwardElastK>	0.85	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.123	</offset>
-          <leftSibling>	Track_VT_R7	</leftSibling>
+          <forwardElastK>	0.4	</forwardElastK>
+          <backwardElastK>	0.57	</backwardElastK>
+          <offset>	-0.17	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R9	</name>
+          <forwardElastK>	0.45	</forwardElastK>
+          <backwardElastK>	0.68	</backwardElastK>
+          <offset>	-0.15	</offset>
         </node>
       </trackNodes>
       <groundNodes>
@@ -435,7 +557,7 @@
           <left>	vehicles/chinese/Ch19_121/track/left.track	</left>
           <right>	vehicles/chinese/Ch19_121/track/right.track	</right>
           <segmentLength>	0.135	</segmentLength>
-          <segmentOffset>	0.132	</segmentOffset>
+          <segmentOffset>	0.04	</segmentOffset>
           <atlas>
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
@@ -452,7 +574,7 @@
           <springsLength>
             <backwardMovement>
               <back>	0.134929	</back>
-              <top>	0.114129	</top>
+              <top>	0.107	</top>
               <front>	0.126984	</front>
               <bottom>	0.102094	</bottom>
             </backwardMovement>
@@ -527,12 +649,12 @@
             <segmentSyncPivotOffset>	-1.32233	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L1	</name>
-              <startAngle>	-388.699005	</startAngle>
+              <startAngle>	5	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-392.054993	</startAngle>
+              <startAngle>	5	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -644,7 +766,7 @@
           <springsLength>
             <backwardMovement>
               <back>	0.134929	</back>
-              <top>	0.114129	</top>
+              <top>	0.107	</top>
               <front>	0.126984	</front>
               <bottom>	0.102094	</bottom>
             </backwardMovement>
@@ -719,12 +841,12 @@
             <segmentSyncPivotOffset>	1.32233	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R1	</name>
-              <startAngle>	-394.691986	</startAngle>
+              <startAngle>	5	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-391.753998	</startAngle>
+              <startAngle>	5	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -916,9 +1038,9 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.002163 -0.00004 1.22782	</rayStart>
-              <rayEnd>	-0.002163 -0.00004 1.93882	</rayEnd>
-              <rayUp>	0.141 0.141 5	</rayUp>
+              <rayStart>	0 0 1.22782	</rayStart>
+              <rayEnd>	0 0 1.93882	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
               <size>	0.711	</size>
             </slot>
           </customizationSlots>
@@ -945,8 +1067,8 @@
         <collisionModelServer>	vehicles/chinese/Ch19_121/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch19_121/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.032249 0.267913 1.12918	</gunPosition>
-      <physicsShape>	0.961 0 1.099 0 0.661 0.179 0.789 0.335 0.453 0.5 0.309 0.5 0.146 0.464 0.3	</physicsShape>
+      <gunPosition>	0.030086 0.267913 1.129181	</gunPosition>
+      <physicsShape>	1.031 0 1.088 0.004 1.015 -0.006 0.695 0.385 0.465 0.5 0.309 0.5 0.146 0.464 0.3	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <customizationSlots>
         <slot>

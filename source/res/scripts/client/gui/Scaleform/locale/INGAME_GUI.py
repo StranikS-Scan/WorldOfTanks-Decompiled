@@ -36,6 +36,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
+    PLAYER_ERRORS_CANT_SWITCH_ASSAULT_SPG_CAMERA_CAN_NOT_SPAWN = '#ingame_gui:player_errors/cant_switch/assault_spg/camera_can_not_spawn'
     PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'

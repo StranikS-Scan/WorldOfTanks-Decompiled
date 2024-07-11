@@ -1,0 +1,579 @@
+<F00_AMD_Panhard_178B_02.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman
+			loader
+			gunner
+			driver	</commander>
+  </crew>
+  <supplySlots>	8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	120	</forward>
+    <backward>	70	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.01	</moving>
+    <still>	0.01	</still>
+    <camouflageBonus>	0.00	</camouflageBonus>
+    <camouflageNetBonus>	0.0	</camouflageNetBonus>
+    <firePenalty>	1.0	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <density>	0.892992 0.892992	</density>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	300	</armor_1>
+    </armor>
+    <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+    <weight>	3000	</weight>
+    <maxHealth>	9000	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/french/F00_AMD_Panhard_178B_02/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
+      <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.518301 0.313397	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	-0.000004 0.251392 1.70277	</rayStart>
+        <rayEnd>	-0.000004 0.070608 1.61723	</rayEnd>
+        <rayUp>	0 0.4277 -0.90392	</rayUp>
+        <size>	0.3	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0 0 0	</anchorPosition>
+        <anchorDirection>	0 1 0	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <hangarShadowTexture>	vehicles/french/F00_AMD_Panhard_178B_02/AMD_Panhard_178B_02_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <density>	100.962227 99.414078	</density>
+      <aoTextureSize>	512 256	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_F00_AMD_Panhard_178B_02>
+      <userString>	#france_vehicles:Chassis_F00_AMD_Panhard_178B_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <unlocks></unlocks>
+      <armor>
+        <armor_9>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <weight>	2500	</weight>
+      <terrainResistance>	1 1 1	</terrainResistance>
+      <brakeForce>	35000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	30	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.05	</vehicleMovement>
+        <vehicleRotation>	0.05	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	1.0	</bulkHealthFactor>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	30000	</maxRegenHealth>
+      <repairCost>	0.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F00_AMD_Panhard_178B_02/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_04	</textureSet>
+        <size>	0.5 0.4	</size>
+        <activePostmortem>	true	</activePostmortem>
+      </traces>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.424440 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.631480	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <index>	2	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_L0_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272035	</width>
+            <pivotXOffset>	-0.235672	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Wheel_L_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Wheel_L_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.741 0.580 1.564	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	0	</index>
+          <isLeft>	true	</isLeft>
+          <name>	WD_L1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_L1_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272035	</width>
+            <pivotXOffset>	-0.075505	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Wheel_L_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Wheel_L_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	-0.901 0.580 -1.563	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	3	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R0	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <steeringProcessor>	true	</steeringProcessor>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_R0_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272622	</width>
+            <pivotXOffset>	0.236000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Wheel_R_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Wheel_R_01.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.741 0.580 1.564	</wheelPos>
+        </wheel>
+        <wheel>
+          <index>	1	</index>
+          <isLeft>	false	</isLeft>
+          <name>	WD_R1	</name>
+          <nonTrack>	true	</nonTrack>
+          <isLeading>	true	</isLeading>
+          <deflatable>	true	</deflatable>
+          <scrollProcessor>
+            <connectedToEngine>	true	</connectedToEngine>
+            <nodeOverride>	WD_R1_SCR	</nodeOverride>
+          </scrollProcessor>
+          <rollProcessor>
+            <maxDamageAngle>	0.3	</maxDamageAngle>
+          </rollProcessor>
+          <geometry>
+            <radius>	0.578063	</radius>
+            <width>	0.272622	</width>
+            <pivotXOffset>	0.076000	</pivotXOffset>
+          </geometry>
+          <proceduralCollisionBody>	true	</proceduralCollisionBody>
+          <deflation>
+            <maxYShift>	0.25	</maxYShift>
+            <explodedRadius>	0.476	</explodedRadius>
+          </deflation>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Wheel_R_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Wheel_R_02.model	</collisionModelClient>
+          </hitTester>
+          <armor>
+            <wheel>	5	</wheel>
+          </armor>
+          <wheelPos>	0.901 0.580 -1.563	</wheelPos>
+        </wheel>
+        <generalWheels>	true	</generalWheels>
+        <globalDeflationShaderParams>
+          <wheelRadius>	0.61	</wheelRadius>
+          <rimRadius>	0.35	</rimRadius>
+          <sideShift>	0.2	</sideShift>
+          <peakShift>	0.95	</peakShift>
+        </globalDeflationShaderParams>
+        <traces>
+          <wheelTrace>
+            <name>	WD_L0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_L1	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R0	</name>
+          </wheelTrace>
+          <wheelTrace>
+            <name>	WD_R1	</name>
+          </wheelTrace>
+        </traces>
+        <activePostmortem>	true	</activePostmortem>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	medium4WheelsMud	</mud>
+      </effects>
+      <wwsoundPC>	wheels_suspension_pc	</wwsoundPC>
+      <wwsoundNPC>	wheels_suspension_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.202150 0.000000	</hullPosition>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.980844 1.609928	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <node>
+          <name>	Track_L0	</name>
+          <affectedWheelName>	WD_L0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <affectedWheelName>	WD_L1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <affectedWheelName>	WD_R0	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <affectedWheelName>	WD_R1	</affectedWheelName>
+          <collisionSamplesCount>	5	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </node>
+        <activePostmortem>	true	</activePostmortem>
+        <lodSettings>
+          <maxLodDistance>	LEVERED_SUSPENSION	</maxLodDistance>
+          <maxPriority>	5	</maxPriority>
+        </lodSettings>
+      </groundNodes>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <camouflage>
+        <density>	100.962227 99.414078	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
+      <repairTime>	0.100000001	</repairTime>
+    </Chassis_F00_AMD_Panhard_178B_02>
+  </chassis>
+  <turrets0>
+    <Turret_1_F00_AMD_Panhard_178B_02>
+      <userString>	#france_vehicles:Turret_1_F00_AMD_Panhard_178B_02	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	300	</armor_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
+      <weight>	1000	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <rotationSpeed>	100	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	1000	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30000	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
+        <repairCost>	0.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_75mm_SA49_EBR_03>	shared	  <maxAmmo>	5000	</maxAmmo>
+          <unlocks></unlocks>
+          <armor>
+            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	7	</reloadTime>
+          <aimingTime>	1	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <shotDispersionFactors>
+            <turretRotation>	0.05	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0 0 0	</anchorPosition>
+              <anchorDirection>	0 1 0	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <models>
+            <undamaged>	vehicles/french/F00_AMD_Panhard_178B_02/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <density>	194.1371 201.842468	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_75mm_SA49_EBR_03>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F00_AMD_Panhard_178B_02/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F00_AMD_Panhard_178B_02/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F00_AMD_Panhard_178B_02/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.103655 0.285347 0.632136	</gunPosition>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.025 0.001 1.029 0 1.034 0.01 0.5 0.5 0.5 0.5 0.025 0.5 0.021 0.086 0	</physicsShape>
+      <camouflage>
+        <density>	100.962227 99.414078	</density>
+        <aoTextureSize>	512 256	</aoTextureSize>
+      </camouflage>
+    </Turret_1_F00_AMD_Panhard_178B_02>
+  </turrets0>
+  <engines>
+    <Panhard_4E_02>	shared	</Panhard_4E_02>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <ER_29_03>	shared	</ER_29_03>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Panhard_4E_02>
+          <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	120	</smplFwMaxSpeed>
+        </Panhard_4E_02>
+      </engines>
+      <chassis>
+        <Chassis_F00_AMD_Panhard_178B_02>
+          <axleCount>	2	</axleCount>
+          <axleSteeringLockAngles>	0 24	</axleSteeringLockAngles>
+          <axleSteeringAngles>	0 14	</axleSteeringAngles>
+          <wheelRiseSpeed>	2	</wheelRiseSpeed>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.3	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.18	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0	</rollingFriction>
+            </firm>
+          </grounds>
+          <isWheeledOnSpotRotation>	False	</isWheeledOnSpotRotation>
+        </Chassis_F00_AMD_Panhard_178B_02>
+      </chassis>
+    </detailed>
+  </physics>
+  <extras>
+    <wheel_Health>	wheelHealths : WheelHealths	  <sounds>
+        <destroyed></destroyed>
+        <critical></critical>
+        <functional></functional>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/wheel	</deviceUserString>
+    </wheel_Health>
+  </extras>
+  <deviceExtras>
+    <devices>
+      <wheel_Health>	track	  <multiple></multiple>
+      </wheel_Health>
+    </devices>
+    <tankmen></tankmen>
+  </deviceExtras>
+  <useHullZSize>	True	</useHullZSize>
+  <useHullZOffset>	True	</useHullZOffset>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15504	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1.0	</alpha>
+  </emblems>
+</F00_AMD_Panhard_178B_02.xml>

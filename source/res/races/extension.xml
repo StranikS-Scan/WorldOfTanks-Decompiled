@@ -1,0 +1,38 @@
+<extension.xml>
+  <FeatureName>	races	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	RacesPersonality	</Personality>
+  <EditorPersonality>	editor_races_personality	</EditorPersonality>
+  <Components>
+    <StaticComponents>
+      <AccountRacesComponent></AccountRacesComponent>
+      <ArenaRacesComponent></ArenaRacesComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <RacesArenaVehicleShieldsController></RacesArenaVehicleShieldsController>
+      <RaceVehicleComponent></RaceVehicleComponent>
+      <ArenaInfoRacesComponent></ArenaInfoRacesComponent>
+      <ArenaInfoRacesScoreSystemComponent></ArenaInfoRacesScoreSystemComponent>
+      <ArenaRaceControllerComponent></ArenaRaceControllerComponent>
+      <ArenaRacesLootComponent></ArenaRacesLootComponent>
+      <RacesVehicleLoot></RacesVehicleLoot>
+      <RacesImpulseScheduler></RacesImpulseScheduler>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <RacesBattlesMgr></RacesBattlesMgr>
+    </ServerOnlyEntities>
+    <ClientServerEntities>
+      <RacesLoot></RacesLoot>
+      <RacesPlacement></RacesPlacement>
+    </ClientServerEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.races_cgf_mechanics	</module>
+      <module>	common.races_common.races_common_cgf.races_path_mechanics	</module>
+    </script>
+  </cgf>
+</extension.xml>

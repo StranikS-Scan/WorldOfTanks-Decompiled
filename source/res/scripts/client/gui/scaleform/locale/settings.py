@@ -586,6 +586,7 @@ class SETTINGS(object):
     MOUSE_SENSITIVITY_HEADER = '#settings:mouse/sensitivity/header'
     MOUSE_SENSITIVITY_MAIN = '#settings:mouse/sensitivity/main'
     MOUSE_SENSITIVITY_SNIPER = '#settings:mouse/sensitivity/sniper'
+    MOUSE_SENSITIVITY_ASSAULT = '#settings:mouse/sensitivity/assault'
     MOUSE_SENSITIVITY_ART = '#settings:mouse/sensitivity/art'
     MOUSE_SENSITIVITY_ART2 = '#settings:mouse/sensitivity/art2'
     MOUSE_STARTDIST = '#settings:mouse/startDist'

@@ -67,4 +67,6 @@ class ShopSalesMainWindow(LobbyWindow):
     def __init__(self, url):
         webHandlers = webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, ShopSalesOpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, VehiclesWebApi, ReactiveCommunicationWebApi, RewardsWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
         settings = makeSettings(url=url, isClosable=False, webHandlers=webHandlers, viewFlags=ViewFlags.VIEW, restoreBackground=True)
-        super(ShopSalesMainWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=ShopSalesMainView(R.views.lobby.common.BrowserView(), settings), layer=WindowLayer.FULLSCREEN_WINDOW)
+        shopSalesMainView = ShopSalesMainView(R.views.lobby.common.BrowserView(), settings)
+        shopSalesMainView.browser.skipEscape = False
+        super(ShopSalesMainWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=shopSalesMainView, layer=WindowLayer.FULLSCREEN_WINDOW)

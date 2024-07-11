@@ -348,6 +348,7 @@ class VehCompareBasketParamsCache(object):
         super(VehCompareBasketParamsCache, self).__init__()
         self.__cache = []
         self.__view = view
+        self._isDisposed = False
         self.comparisonBasket.onChange += self.__onVehCountChanged
         self.comparisonBasket.onParametersChange += self.__onVehParamsChanged
         self.comparisonBasket.onNationChange += self.__onNationChange
@@ -357,6 +358,7 @@ class VehCompareBasketParamsCache(object):
         self.__rebuildList()
 
     def dispose(self):
+        self._isDisposed = True
         self.__view = None
         while self.__cache:
             self.__cache.pop().dispose()
@@ -395,6 +397,8 @@ class VehCompareBasketParamsCache(object):
             self.__view.buildList([])
 
     def __onVehCountChanged(self, changedData):
+        if self._isDisposed:
+            return
         if changedData.removedIDXs:
             for i in changedData.removedIDXs:
                 self.__cache[i].dispose()
@@ -407,23 +411,28 @@ class VehCompareBasketParamsCache(object):
         self.__rebuildList()
 
     def __onVehParamsChanged(self, data):
-        isBestScoreInvalid = False
-        for index in data:
-            basketVehData = self.comparisonBasket.getVehicleAt(index)
-            paramsVehData = self.__cache[index]
-            paramsVehData.setIsInInventory(basketVehData.isInInventory())
-            paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
-            crewChanged = paramsVehData.setCrewData(*basketVehData.getCrewData())
-            vehicleChanged = paramsVehData.setVehicleData(basketVehData)
-            isBestScoreInvalid = isBestScoreInvalid or vehicleChanged or crewChanged
+        if self._isDisposed:
+            return
+        else:
+            isBestScoreInvalid = False
+            for index in data:
+                basketVehData = self.comparisonBasket.getVehicleAt(index)
+                paramsVehData = self.__cache[index]
+                paramsVehData.setIsInInventory(basketVehData.isInInventory())
+                paramsVehData.setConfigurationType(basketVehData.getConfigurationType())
+                crewChanged = paramsVehData.setCrewData(*basketVehData.getCrewData())
+                vehicleChanged = paramsVehData.setVehicleData(basketVehData)
+                isBestScoreInvalid = isBestScoreInvalid or vehicleChanged or crewChanged
 
-        if self.__cache:
-            bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None
-            params = [ paramData.getFormattedParameters(bestParams) for paramData in self.__cache ]
-            self.__view.updateItems(params)
-        return
+            if self.__cache:
+                bestParams = _reCalcBestParameters(self.__cache) if isBestScoreInvalid else None
+                params = [ paramData.getFormattedParameters(bestParams) for paramData in self.__cache ]
+                self.__view.updateItems(params)
+            return
 
     def __onNationChange(self, vehicleIDxs):
+        if self._isDisposed:
+            return
         for i in vehicleIDxs:
             self.__cache[i].dispose()
             del self.__cache[i]

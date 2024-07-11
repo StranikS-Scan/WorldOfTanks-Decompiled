@@ -20,6 +20,7 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.gui_helpers import detectBonusType
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip import LootboxKeyTooltip
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lb_bonus_type_model import BonusType
 from skeletons.gui.shared import IItemsCache
 SLOT_BONUSES_PROCESSORS = []
@@ -92,6 +93,11 @@ class BonusProbabilitiesView(ViewImpl):
             lootBoxID = tooltipData.get('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
             return LootboxTooltip(lootBox)
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxKeyTooltip():
+            tooltipData = self.getTooltipData(event)
+            lootBoxKeyID = tooltipData.get('lootBoxKeyID')
+            lootBoxKey = self.__guiLootBoxes.getKeyByID(lootBoxKeyID)
+            return LootboxKeyTooltip(lootBoxKey)
         return super(BonusProbabilitiesView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):

@@ -2,20 +2,21 @@
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/storage_context/context.py
 import typing
 from enum import IntEnum
-import Event
-from gui.Scaleform.Waiting import Waiting
-from gui.shared.utils.decorators import adisp_process
 from gui_lootboxes.gui.bonuses.bonuses_helpers import prepareOpenResult
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootboxes_storage_view_model import States
 from gui_lootboxes.gui.storage_context.lootboxes_state_machine import LootBoxesStorageStateMachine, LootBoxesStorageStateObserver, LootBoxesStorageStateMachineDescription, LootBoxesStorageEventEnum
+import Event
 from frameworks.state_machine import StringEvent
+from gui.Scaleform.Waiting import Waiting
 from gui.shared.gui_items.processors.loot_boxes import LootBoxOpenProcessor
+from gui.shared.utils.decorators import adisp_process
 from helpers import dependency
 from skeletons.gui.game_control import IGuiLootBoxesController
 from wg_async import AsyncScope
 if typing.TYPE_CHECKING:
     from gui.SystemMessages import ResultMsg
     from gui.shared.gui_items.loot_box import LootBox
+    from typing import Optional
 
 class ViewEvents(IntEnum):
     ON_OPEN_CLICK = 1
@@ -34,39 +35,60 @@ class ReturnPlaces(IntEnum):
     TO_NY_CUSTOMIZATION = 2
     TO_SHARDS = 3
     TO_REFERRAL = 4
+    TO_CUSTOM = 5
 
 
 def _handlerOnOpenClick(eventData):
-    lootBox, count = eventData
-    return StringEvent(LootBoxesStorageEventEnum.GOTO_REQUEST, lootBox=lootBox, count=count)
+    keyID = 0
+    if len(eventData) == 2:
+        lootBox, count = eventData
+    else:
+        lootBox, count, keyID = eventData
+    return StringEvent(LootBoxesStorageEventEnum.GOTO_REQUEST, lootBox=lootBox, count=count, keyID=keyID)
 
 
 def _handlerOpenningFinished(eventData):
-    uniqueRewardsHandler, rewards = eventData
-    return StringEvent(LootBoxesStorageEventEnum.GOTO_UNIQUE_REWARDING, uniqueRewardsHandler=uniqueRewardsHandler, rewards=rewards) if uniqueRewardsHandler else StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards)
+    uniqueRewardsHandler, rewards, clientData = eventData
+    return StringEvent(LootBoxesStorageEventEnum.GOTO_UNIQUE_REWARDING, uniqueRewardsHandler=uniqueRewardsHandler, rewards=rewards, clientData=clientData) if uniqueRewardsHandler else StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards, clientData=clientData)
+
+
+def _handlerOpenningLoseFinished(eventData):
+    _, rewards, clientData = eventData
+    return StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards, clientData=clientData)
 
 
 def _handlerResponseReceived(result):
-    return StringEvent(LootBoxesStorageEventEnum.GOTO_OPENING, result=result) if result and result.success else StringEvent(LootBoxesStorageEventEnum.GOTO_ERROR)
+    if result and result.success:
+        if result.auxData and result.auxData.get('clientData', {}).get('countOfOpened', 0) == 0:
+            return StringEvent(LootBoxesStorageEventEnum.GOTO_LOSE_OPENING, result=result)
+        return StringEvent(LootBoxesStorageEventEnum.GOTO_OPENING, result=result)
+    return StringEvent(LootBoxesStorageEventEnum.GOTO_ERROR)
 
 
 _VIEW_EVENTS_HANDLERS_MAP = {(ViewEvents.ON_OPEN_CLICK, States.STORAGE_VIEWING): _handlerOnOpenClick,
+ (ViewEvents.ON_OPEN_CLICK, States.REWARDING): _handlerOnOpenClick,
  (ViewEvents.ON_OPENING_FINISH, States.OPENING): _handlerOpenningFinished,
+ (ViewEvents.ON_OPENING_FINISH, States.LOSE_OPENING): _handlerOpenningLoseFinished,
  (ViewEvents.ON_CHILD_VIEW_CLOSED, States.OPENING_ERROR): lambda *_: StringEvent(LootBoxesStorageEventEnum.GOTO_STORAGE),
  (ViewEvents.ON_CHILD_VIEW_CLOSED, States.REWARDING): lambda *_: StringEvent(LootBoxesStorageEventEnum.GOTO_STORAGE),
- (ViewEvents.ON_CHILD_VIEW_CLOSED, States.UNIQUE_REWARDING): lambda rewards: StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards),
+ (ViewEvents.ON_CHILD_VIEW_CLOSED, States.UNIQUE_REWARDING): lambda (rewards, clientData): StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards, clientData=clientData),
  (ViewEvents.ON_CHILD_VIEW_SKIP, States.REWARDING): lambda *_: StringEvent(LootBoxesStorageEventEnum.GOTO_STORAGE),
- (ViewEvents.ON_CHILD_VIEW_SKIP, States.UNIQUE_REWARDING): lambda rewards: StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards)}
+ (ViewEvents.ON_CHILD_VIEW_SKIP, States.UNIQUE_REWARDING): lambda (rewards, clientData): StringEvent(LootBoxesStorageEventEnum.GOTO_REWARDING, rewards=rewards, clientData=clientData)}
 _GLOBAL_EVENT_HANDLERS_MAP = {(GlobalEvents.OPEN_RESPONSE_RECEIVED, States.REQUEST_TO_OPEN): _handlerResponseReceived}
 
 @adisp_process('lootboxOpeninig')
 @dependency.replace_none_kwargs(eventLootBoxesCtrl=IGuiLootBoxesController)
 def _handleRequestToOpen(context, event, eventLootBoxesCtrl=None):
-    lootBox, count = event.getArgument('lootBox'), event.getArgument('count')
+    lootBox, count, keyID = event.getArgument('lootBox'), event.getArgument('count'), event.getArgument('keyID')
     result = None
     if eventLootBoxesCtrl.isEnabled() and lootBox is not None and lootBox.isEnabled:
-        result = yield LootBoxOpenProcessor(lootBox, count).request()
-        prepareOpenResult(result)
+        result = yield LootBoxOpenProcessor(lootBox, count, keyID).request()
+        if result and result.success:
+            auxData = result.auxData
+            auxData['clientData'] = {'openWithKey': True if keyID else False}
+            auxData['clientData'].update({'usedKeys': {keyID: count}})
+            auxData['clientData']['countOfOpened'] = auxData.get('extData', {}).get('openedLootBoxes', {}).get(lootBox.getID(), count)
+            prepareOpenResult(result)
     context.postGlobalEvent(GlobalEvents.OPEN_RESPONSE_RECEIVED, result)
     return
 

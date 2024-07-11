@@ -58,6 +58,7 @@ class INVITES(object):
     INVITES_STATE_REVOKED = '#invites:invites/state/REVOKED'
     INVITES_STATE_EXPIRED = '#invites:invites/state/EXPIRED'
     INVITES_STATE_ERROR = '#invites:invites/state/ERROR'
+    INVITES_STATE_PENDING = '#invites:invites/state/PENDING'
     INVITES_NOTE_SERVERSELECTIONISREMEMBERED = '#invites:invites/note/serverSelectionIsRemembered'
     INVITES_NOTE_SERVER_CHANGE = '#invites:invites/note/server_change'
     INVITES_NOTE_CHANGE_AND_LEAVE_QUEUE_EVENT_BATTLES = '#invites:invites/note/change_and_leave/QUEUE_EVENT_BATTLES'

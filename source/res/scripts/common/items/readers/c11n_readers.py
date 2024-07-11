@@ -12,7 +12,7 @@ import nations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS, parseArenaBonusType
 from constants import IS_CLIENT, IS_EDITOR, IS_UE_EDITOR, IS_WEB, IS_LOAD_GLOSSARY, DEFAULT_QUEST_FINISH_TIME
 from items.components import shared_components
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, ProjectionDecalFormTags, CustomizationNamesToTypes, CustomizationDisplayType, EMPTY_ITEM_ID, SeasonType, ApplyArea, DecalType, ModificationType, RENT_DEFAULT_BATTLES, ItemTags, ProjectionDecalType, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, DEFAULT_NORMAL_MAP_FACTOR, DEFAULT_NORMAL_MAX_LOD
 from realm_utils import ResMgr
 from typing import Dict, Type, Tuple, Any, TypeVar
 from contextlib import contextmanager
@@ -230,12 +230,12 @@ class AttachmentXmlReader(BaseCustomizationItemXmlReader):
 
     def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(AttachmentXmlReader, self)._readFromXml(target, xmlCtx, section)
-        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
+        target.modelName = ix.readStringOrEmpty(xmlCtx, section, 'modelName')
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(AttachmentXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
-        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
-        target.hangarModelName = ix.readStringOrNone(xmlCtx, section, 'hangarModelName')
+        target.modelName = ix.readStringOrEmpty(xmlCtx, section, 'modelName')
+        target.hangarModelName = ix.readStringOrEmpty(xmlCtx, section, 'hangarModelName')
         target.sequenceId = ix.readIntOrNone(xmlCtx, section, 'sequenceId')
         target.attachmentLogic = ix.readStringOrNone(xmlCtx, section, 'attachmentLogic')
         target.initialVisibility = ix.readBool(xmlCtx, section, 'initialVisibility', True)
@@ -283,6 +283,9 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
          'forwardEmissionBrightness': section.readFloat('forwardEmissionBrightness', DEFAULT_FORWARD_EMISSION),
          'deferredEmissionBrightness': section.readFloat('deferredEmissionBrightness', DEFAULT_DEFERRED_EMISSION),
          'emissionAnimationSpeed': section.readFloat('emissionAnimationSpeed', DEFAULT_EMISSION_ANIMATION_SPEED)}
+        target.normalSettings = {'normalMap': section.readString('normalMap', ''),
+         'normalMapFactor': section.readFloat('normalMapFactor', DEFAULT_NORMAL_MAP_FACTOR),
+         'normalMaxLod': section.readInt('normalMaxLod', DEFAULT_NORMAL_MAX_LOD)}
         if IS_EDITOR:
             if target.camoTypeIndex == -1 and callable(getattr(target, 'setCamoType', None)):
                 try:

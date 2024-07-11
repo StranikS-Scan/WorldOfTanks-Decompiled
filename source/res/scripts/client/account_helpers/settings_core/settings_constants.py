@@ -178,6 +178,7 @@ class SOUND(CONST_CONTAINER):
 class CONTROLS(CONST_CONTAINER):
     MOUSE_ARCADE_SENS = 'mouseArcadeSens'
     MOUSE_SNIPER_SENS = 'mouseSniperSens'
+    MOUSE_ASSAULT_SENS = 'mouseAssaultSens'
     MOUSE_STRATEGIC_SENS = 'mouseStrategicSens'
     MOUSE_ASSIST_AIM_SENS = 'mouseAssistAimSens'
     MOUSE_HORZ_INVERSION = 'mouseHorzInvert'

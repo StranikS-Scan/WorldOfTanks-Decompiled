@@ -3,6 +3,7 @@
 import itertools
 import typing
 import logging
+from copy import copy
 from enum import Enum
 from constants import LootBoxTiers, LOOTBOX_LIMIT_ITEM_PREFIX
 from gui.impl import backport
@@ -11,6 +12,8 @@ from gui.impl.gen.view_models.constants.loot_box_bonus_group import LootBoxBonus
 from gui.impl.lobby.loot_box.loot_box_bonus_parsers.default_parser import parseAllOfBonusInfoSection
 from gui.impl.lobby.loot_box.loot_box_bonus_parsers.rotation_parser import parseBonusSection
 from gui.shared.gui_items.gui_item import GUIItem
+from helpers import time_utils
+from lootboxes_common import makeLBKeyID
 from shared_utils import CONST_CONTAINER
 from web.web_client_api.common import ItemPackType as ipType, ItemPackTypeGroup as ipTypeGroup
 if typing.TYPE_CHECKING:
@@ -84,7 +87,10 @@ _BONUS_GROUPS = {BonusGroup.VEHICLE: ipTypeGroup.VEHICLE,
                                     ipType.SINGLE_ACHIEVEMENTS,
                                     ipType.PLAYER_BADGE,
                                     ipType.CUSTOM_DOG_TAG),
- BonusGroup.FEATUREITEMS: (ipType.CUSTOM_COLLECTION_ENTITLEMENT, ipType.CUSTOM_ANY_COLLECTION_ITEM, ipType.CUSTOM_LOOTBOX)}
+ BonusGroup.FEATUREITEMS: (ipType.CUSTOM_COLLECTION_ENTITLEMENT,
+                           ipType.CUSTOM_ANY_COLLECTION_ITEM,
+                           ipType.CUSTOM_LOOTBOX,
+                           ipType.CUSTOM_LOOTBOXKEY)}
 _GROUP_PRIORITIES = [BonusGroup.LOOTBOX_STAGE_ROTATION,
  BonusGroup.VEHICLE,
  BonusGroup.PREMIUM,
@@ -96,12 +102,17 @@ _GROUP_PRIORITIES = [BonusGroup.LOOTBOX_STAGE_ROTATION,
  BonusGroup.ACCOUNTCUSTOMIZATIONS,
  BonusGroup.FEATUREITEMS]
 
+class ClientLootBoxTags(Enum):
+    HIDDEN_COUNT = 'hiddenCount'
+    HIDDEN = 'hidden'
+
+
 def addBonusesToGroup(bonusGroup, bonuses):
     _BONUS_GROUPS[bonusGroup] += bonuses
 
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage', '__tags', '__unlockKeys')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -118,6 +129,24 @@ class LootBox(GUIItem):
             return 1
         else:
             return cmp((not self.isEnabled(), -self.getWeight()), (not other.isEnabled(), -other.getWeight())) if isinstance(other, LootBox) else super(LootBox, self).__cmp__(other)
+
+    def isActiveHiddenCount(self):
+        return self.isHiddenCount() and self.__getTimeToAutoOpen() > 0
+
+    def isHiddenCount(self):
+        return ClientLootBoxTags.HIDDEN_COUNT.value in self.__tags
+
+    def isVisible(self):
+        return ClientLootBoxTags.HIDDEN.value not in self.__tags
+
+    def isVisibleInStorage(self):
+        return self.isVisible() and (self.getInventoryCount() > 0 or self.isActiveHiddenCount())
+
+    def openedWithKey(self, keyID=None):
+        return keyID in self.__unlockKeys if keyID else bool(self.__unlockKeys)
+
+    def getUnlockKeyIDs(self):
+        return copy(self.__unlockKeys)
 
     def updateCount(self, invCount):
         self.__invCount = invCount
@@ -222,6 +251,9 @@ class LootBox(GUIItem):
     def getRotationStage(self):
         return self.__rotationStage
 
+    def __getTimeToAutoOpen(self):
+        return max(self.__autoOpenTime - time_utils.getServerUTCTime(), 0) if self.__autoOpenTime else float('inf')
+
     def __updateByConfig(self, lootBoxConfig):
         self.__autoOpenTime = lootBoxConfig.get('autoOpenTime', None)
         self.__type = lootBoxConfig.get('type', '')
@@ -244,6 +276,8 @@ class LootBox(GUIItem):
         self.__iconName = iconName if iconName else 'default'
         self.__description = assetsConfig.get('description', self.__type)
         self.__videoKey = assetsConfig.get('video', '')
+        self.__tags = assetsConfig.get('tags', set())
+        self.__unlockKeys = lootBoxConfig.get('unlockKeys', set())
         return
 
     def __iterateAllSlots(self):
@@ -313,3 +347,47 @@ class LootBox(GUIItem):
                     return True
 
         return False
+
+
+class LootBoxKeyType(Enum):
+    SIMPLE = 'simpleKey'
+    LOCKPICK = 'lockpick'
+
+
+class LootBoxKey(object):
+    __slots__ = ('__token', '__id', '__keyData', '__count')
+
+    def __init__(self, token, count, lootBoxKeyConfig):
+        super(LootBoxKey, self).__init__()
+        self.__token = token
+        self.__id = makeLBKeyID(token)
+        self.__count = count
+        self.__keyData = lootBoxKeyConfig
+
+    @property
+    def keyID(self):
+        return self.__id
+
+    @property
+    def tokenID(self):
+        return self.__token
+
+    @property
+    def iconName(self):
+        return self.__keyData.get('assets', {}).get('iconName', '')
+
+    @property
+    def userName(self):
+        return self.__keyData.get('assets', {}).get('userName', '')
+
+    @property
+    def openProbability(self):
+        return self.__keyData.get('openProbability', 100.0)
+
+    @property
+    def keyType(self):
+        return LootBoxKeyType.SIMPLE if self.openProbability >= 100.0 else LootBoxKeyType.LOCKPICK
+
+    @property
+    def count(self):
+        return self.__count

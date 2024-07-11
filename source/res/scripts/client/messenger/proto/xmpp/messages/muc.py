@@ -131,7 +131,7 @@ class _RoomAction(ClientHolder):
 
     def _getUserJID(self):
         jid = jid_entity.JID(self._room.getID())
-        jid.setResource(utils.getPlayerName())
+        jid.setResource(str(utils.getPlayerDatabaseID()))
         return jid
 
     def _sendIQ(self, query):

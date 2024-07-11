@@ -6,11 +6,12 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 class Tokens(object):
 
-    def __init__(self, syncData):
+    def __init__(self, syncData, commandsProxy):
         self.__account = None
         self.__syncData = syncData
         self.__cache = {}
         self.__ignore = True
+        self.__commandsProxy = commandsProxy
         return
 
     def onAccountBecomePlayer(self):
@@ -40,7 +41,15 @@ class Tokens(object):
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
+        self.__commandsProxy.perform(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
+        return
+
+    def openLootBoxByKey(self, boxID, count, keyID, callback):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__commandsProxy.perform(AccountCommands.CMD_LOOTBOX_OPEN_BY_KEY, boxID, count, keyID, proxy)
         return
 
     def getInfoLootBox(self, boxIDs, callback):
@@ -48,7 +57,7 @@ class Tokens(object):
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         else:
             proxy = None
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
+        self.__commandsProxy.perform(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
         return
 
     def __onGetCacheResponse(self, callback, resultID):

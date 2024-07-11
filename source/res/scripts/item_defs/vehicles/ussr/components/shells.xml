@@ -701,6 +701,59 @@
       <devices>	76	</devices>
     </damage>
   </_6pdr_APCR_MK_1T>
+  <_75mm_Pzgr_39_42_SU>
+    <id>	31048	</id>
+    <userString>	#ussr_vehicles:_75mm_Pzgr_39_42_SU	</userString>
+    <icon>	ap	</icon>
+    <price>	109	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Pzgr_39_42_SU>
+  <_75mm_Pzgr_40_42_SU>
+    <id>	31049	</id>
+    <userString>	#ussr_vehicles:_75mm_Pzgr_40_42_SU	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	135	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Pzgr_40_42_SU>
+  <_75mm_Sprgr_34_SU>
+    <id>	31050	</id>
+    <userString>	#ussr_vehicles:_75mm_Sprgr_34_SU	</userString>
+    <icon>	he_modern	</icon>
+    <price>	98	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Sprgr_34_SU>
   <_76mm_UBR-354A>
     <id>	28	</id>
     <userString>	#ussr_vehicles:_76mm_UBR-354A	</userString>
@@ -4754,7 +4807,7 @@
     <caliber>	152	</caliber>
     <explosionRadius>	12	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
+    <effects>	largeSFA	</effects>
     <damage>
       <armor>	600	</armor>
       <devices>	50	</devices>
@@ -4771,7 +4824,7 @@
     <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	152	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeHollowCharge	</effects>
+    <effects>	largeSCA	</effects>
     <damage>
       <armor>	440	</armor>
       <devices>	152	</devices>
@@ -4935,7 +4988,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeArmorPiercing	</effects>
     <damage>
-      <armor>	270	</armor>
+      <armor>	290	</armor>
       <devices>	23	</devices>
     </damage>
   </_122mm_BP450SO_SH>
@@ -4951,7 +5004,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	215	</armor>
+      <armor>	235	</armor>
       <devices>	23	</devices>
     </damage>
   </_122mm_UBR_472PM_SH>

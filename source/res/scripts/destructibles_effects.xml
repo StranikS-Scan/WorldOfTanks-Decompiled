@@ -1386,24 +1386,6 @@
         </effects>
       </variant1>
     </inf_tree_apple_flowers_fall_med>
-    <tree_Live_Apple_16m_Flowers2_fall>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/environment/trees/broadleaves/tree_live_apple_16m_flowers2_fall.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak_small	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_Live_Apple_16m_Flowers2_fall>
     <inf_sunflower_fall>
       <variant1>
         <stages>
@@ -17074,6 +17056,31 @@
         </effects>
       </variant1>
     </inf_envAM_004_WaterTower_Big>
+    <hd_env_AM_069_WaterTower>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_069_WaterTower.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	86.000000	</metal_1>
+              <metal_2>	56.000000	</metal_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	10000.000000	</weight>
+              <stone_2>	24	</stone_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_069_WaterTower>
     <hd_env_AM_069_WaterTowerBig>
       <variant1>
         <stages>
@@ -29398,6 +29405,24 @@
         </effects>
       </variant1>
     </inf_fuel_envAF_006_BarellFuel2>
+    <fuel_barrel_explosion_race>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/fuel_barrel_explosion_race.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	inf_fuel_envAF_006_BarellFuel2	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </fuel_barrel_explosion_race>
     <inf_fuel_envAM_011_Truck_01>
       <variant1>
         <stages>

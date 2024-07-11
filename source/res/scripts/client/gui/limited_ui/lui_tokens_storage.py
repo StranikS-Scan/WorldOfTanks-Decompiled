@@ -9,6 +9,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, UI_STORAGE_KEYS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, BATTLE_MODE_VEHICLE_TAGS
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.impl.lobby.loot_box.loot_box_helper import hasInfiniteLootBoxes
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.system_factory import collectLimitedUITokens, registerLimitedUITokens
@@ -276,11 +277,12 @@ class _WereRealMoneyExpenses(LimitedUICondition):
 class _LootboxesAvailability(LimitedUICondition):
     __slots__ = ()
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):
         uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
         isEntryPointEnabled = uiStorage.get(UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT)
-        return isEntryPointEnabled
+        return isEntryPointEnabled or hasInfiniteLootBoxes(itemsCache=self.__itemsCache)
 
     def _getEvents(self):
         return ((self.__settingsCore.onSettingsChanged, self._updateLootBoxes),)

@@ -352,6 +352,9 @@ class IClientArenaVisitor(object):
     def getArenaStatistics(self):
         raise NotImplementedError
 
+    def getArenaInfo(self):
+        raise NotImplementedError
+
     def isArenaFogOfWarEnabled(self):
         raise NotImplementedError
 

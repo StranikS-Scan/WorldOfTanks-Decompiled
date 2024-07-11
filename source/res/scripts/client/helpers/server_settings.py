@@ -1471,6 +1471,28 @@ class EarlyAccessConfig(namedtuple('EarlyAccessConfig', ('isEnabled',
         return self.seasons.get(seasonID, {}).get('tokenCost', {})
 
 
+class RacesConfig(namedtuple('RacesConfig', ('isEnabled',
+ 'isBattleEnabled',
+ 'peripheryIDs',
+ 'primeTimes',
+ 'seasons',
+ 'cycleTimes',
+ 'rewardSettings',
+ 'racesVehicles',
+ 'scoreSystem'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isBattleEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, rewardSettings={}, racesVehicles={}, scoreSystem={})
+        defaults.update(kwargs)
+        return super(RacesConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1526,6 +1548,7 @@ class ServerSettings(object):
         self.__versusAISettings = VersusAIConfig()
         self.__debutBoxesConfig = DebutBoxesConfig()
         self.__earlyAccessConfig = EarlyAccessConfig()
+        self.__racesConfig = RacesConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1695,6 +1718,8 @@ class ServerSettings(object):
             self.__debutBoxesConfig = DebutBoxesConfig.defaults()
         if Configs.EARLY_ACCESS_CONFIG.value in self.__serverSettings:
             self.__earlyAccessConfig = makeTupleByDict(EarlyAccessConfig, self.__serverSettings[Configs.EARLY_ACCESS_CONFIG.value])
+        if Configs.RACES_CONFIG.value in self.__serverSettings:
+            self.__racesConfig = makeTupleByDict(RacesConfig, self.__serverSettings[Configs.RACES_CONFIG.value])
         self.__schemaManager.set(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
@@ -1818,6 +1843,11 @@ class ServerSettings(object):
             self.__updateDebutBoxesConfig(serverSettingsDiff)
         if Configs.EARLY_ACCESS_CONFIG.value in serverSettingsDiff:
             self.__updateEarlyAccessConfig(serverSettingsDiff)
+        lbKeyConfig = Configs.LOOTBOX_KEYS_CONFIG.value
+        if lbKeyConfig in serverSettingsDiff:
+            self.__serverSettings[lbKeyConfig] = serverSettingsDiff[lbKeyConfig]
+        if Configs.RACES_CONFIG.value in serverSettingsDiff:
+            self.__racesConfig = self.__racesConfig.replace(serverSettingsDiff[Configs.RACES_CONFIG.value])
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2018,6 +2048,10 @@ class ServerSettings(object):
     def earlyAccessConfig(self):
         return self.__earlyAccessConfig
 
+    @property
+    def racesConfig(self):
+        return self.__racesConfig
+
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
 
@@ -2112,6 +2146,9 @@ class ServerSettings(object):
 
     def getLootBoxConfig(self):
         return self.__getGlobalSetting('lootBoxes_config', {})
+
+    def getLootBoxKeyConfig(self):
+        return self.__getGlobalSetting(Configs.LOOTBOX_KEYS_CONFIG.value, {})
 
     def getPiggyBankConfig(self):
         return self.__getGlobalSetting(PremiumConfigs.PIGGYBANK, {})

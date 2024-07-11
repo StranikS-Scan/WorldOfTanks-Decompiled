@@ -1,0 +1,106 @@
+<equipments.xml>
+  <races_shield>
+    <id>	35242	</id>
+    <userString>	#artefacts:races_shield/name	</userString>
+    <icon>	shield 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_race_ability_ready	</soundNotification>
+    <script>	races_common.items.artefacts.RacesShieldEquipment	  <visualScript>
+        <client>
+          <plan>	races_abilities/races_shield_client	</plan>
+        </client>
+        <server>
+          <plan>	races_abilities/races_shield_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <duration>	3	  <exports>	vse tooltip	</exports>
+      </duration>
+      <gravityFactor>	100.0	  <exports>	vse	</exports>
+      </gravityFactor>
+    </script>
+  </races_shield>
+  <races_rapidshelling>
+    <id>	35243	</id>
+    <userString>	#artefacts:races_rapidshelling/name	</userString>
+    <icon>	rapid_shelling 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_race_ability_ready	</soundNotification>
+    <script>	races_common.items.artefacts.RacesRapidShellingEquipment	  <visualScript>
+        <client>
+          <plan>	races_abilities/rapid_shelling_client	</plan>
+        </client>
+        <server>
+          <plan>	races_abilities/rapid_shelling_server	</plan>
+        </server>
+      </visualScript>
+      <duration>	1.0	  <exports>	vse	</exports>
+      </duration>
+      <shellID>	10240042	  <exports>	vse	</exports>
+      </shellID>
+      <shotSpeed>	800	  <exports>	vse	</exports>
+      </shotSpeed>
+      <gunReloadTime>	7.0	  <exports>	vse	</exports>
+      </gunReloadTime>
+      <shellingTotalTime>	1.0	  <exports>	vse	</exports>
+      </shellingTotalTime>
+    </script>
+  </races_rapidshelling>
+  <races_power_impulse>
+    <id>	35244	</id>
+    <userString>	#artefacts:races_power_impulse/name	</userString>
+    <icon>	power_impulse 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_race_ability_ready	</soundNotification>
+    <script>	races_common.items.artefacts.RacesPowerImpulseEquipment	  <visualScript>
+        <client>
+          <plan>	races_abilities/races_power_impulse_client	</plan>
+        </client>
+        <server>
+          <plan>	races_abilities/races_power_impulse_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <duration>	0.5	  <exports>	vse tooltip	</exports>
+      </duration>
+      <radius>	22	  <exports>	vse tooltip	</exports>
+      </radius>
+      <power>	440	  <exports>	vse	</exports>
+      </power>
+    </script>
+  </races_power_impulse>
+  <races_rocket_booster>
+    <id>	35245	</id>
+    <userString>	#artefacts:races_rocket_booster/name	</userString>
+    <icon>	acceleration 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	ev_race_ability_ready	</soundNotification>
+    <script>	races_common.items.artefacts.RacesRocketBoosterEquipment	  <visualScript>
+        <client>
+          <plan>	races_abilities/races_booster_client	</plan>
+        </client>
+        <server>
+          <plan>	races_abilities/races_booster_server	</plan>
+        </server>
+      </visualScript>
+      <cooldownSeconds>	3	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	2	  <exports>	vse tooltip	</exports>
+      </duration>
+    </script>
+  </races_rocket_booster>
+</equipments.xml>

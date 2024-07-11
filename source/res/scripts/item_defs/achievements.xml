@@ -4870,6 +4870,21 @@
       </value>
     </achievement>
     <achievement>
+      <name>	singleAchievements:BattlePassCommonPr_14_Marathon	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1442.017	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	achievements:collectorVehicle	</name>
       <type>	dict	</type>
       <value>
@@ -6831,6 +6846,36 @@
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:races24FirstPlace	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1446.41	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:races24Progression	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1446.42	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

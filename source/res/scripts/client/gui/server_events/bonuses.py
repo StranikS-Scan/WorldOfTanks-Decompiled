@@ -12,7 +12,7 @@ from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHA
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID, COMP7_TOKEN_COUPON_REWARD_NAME, COMP7_TOKEN_COUPON_REWARD_ID
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -37,6 +37,7 @@ from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
+from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.events_helpers import parseC11nProgressToken
@@ -870,6 +871,68 @@ class LootBoxTokensBonus(TokensBonus):
         return ''
 
 
+class LootBoxKeyTokensBonus(TokensBonus):
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('battleToken', value, isCompensation, ctx)
+
+    def isShowInGUI(self):
+        return True
+
+    def format(self):
+        return ', '.join(self.formattedList())
+
+    def formattedList(self):
+        result = []
+        for tokenID, tokenVal in self._value.iteritems():
+            lootBoxKey = getKeyByTokenID(tokenID)
+            if lootBoxKey is not None:
+                text = backport.text(R.strings.lootboxes.userName.dyn(lootBoxKey.userName)())
+                result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'lootBoxKey', {'name': text,
+                 'count': int(tokenVal['count'])}))
+
+        return result
+
+    def getWrappedLootBoxesBonusList(self):
+        return self._getWrappedBonusList()
+
+    def _getWrappedBonusList(self):
+        return [{'id': self.__getLootBoxKeyTokenID(),
+          'type': ItemPackType.CUSTOM_LOOTBOXKEY,
+          'value': 1,
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
+          'count': self.__getLootBoxKeyCount(),
+          'expires': self.__getLootBoxExpires()}]
+
+    def getIconBySize(self, size):
+        iconName = RES_ICONS.getBonusIcon(size, self.__getLootBoxKeyIconName())
+        if iconName is None:
+            iconName = RES_ICONS.getBonusIcon(size, 'default')
+        return iconName
+
+    def __getLootBoxKeyTokenID(self):
+        for tokenID in self._value.keys():
+            if tokenID.startswith(LOOTBOX_KEY_PREFIX):
+                return tokenID
+
+    def __getLootBoxKeyIconName(self):
+        for tokenID in self._value.keys():
+            lootBoxKey = getKeyByTokenID(tokenID)
+            if lootBoxKey is not None:
+                return lootBoxKey.iconName
+
+        return ''
+
+    def __getLootBoxKeyCount(self):
+        for token in self._value.values():
+            return token.get('count', 0)
+
+    def __getLootBoxExpires(self):
+        for token in self._value.values():
+            return token.get('expires')
+
+
 class TmanTemplateTokensBonus(TokensBonus):
 
     def __init__(self, value, isCompensation=False, ctx=None):
@@ -1206,6 +1269,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
             result.append(LootBoxTokensBonus({tID: tValue}, isCompensation, ctx))
+        if tID.startswith(LOOTBOX_KEY_PREFIX):
+            result.append(LootBoxKeyTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
             result.append(TmanTemplateTokensBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(BATTLE_BONUS_X5_TOKEN):
@@ -3021,27 +3086,6 @@ def _getItemTooltip(name):
     return makeTooltip(header or None, body or None) if header or body else ''
 
 
-def mergeBonuses(bonuses):
-    merged = copy.deepcopy(bonuses)
-    if len(merged) > 1:
-        i = 0
-        while i < len(merged) - 1:
-            j = i + 1
-            while j < len(merged):
-                mergFunc = getMergeBonusFunction(merged[i], merged[j])
-                if mergFunc and merged[i].getName() == merged[j].getName():
-                    merged[i], needPop = mergFunc(merged[i], merged[j])
-                    if needPop:
-                        merged.pop(j)
-                    else:
-                        j += 1
-                j += 1
-
-            i += 1
-
-    return merged
-
-
 def getMergeBonusFunction(lhv, rhv):
 
     def hasOneBaseClass(l, r, cls):
@@ -3062,6 +3106,27 @@ def getMergeBonusFunction(lhv, rhv):
         return None
     else:
         return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
+
+
+def mergeBonuses(bonuses, getMergeFunc=getMergeBonusFunction):
+    merged = copy.deepcopy(bonuses)
+    if len(merged) > 1:
+        i = 0
+        while i < len(merged) - 1:
+            j = i + 1
+            while j < len(merged):
+                mergFunc = getMergeFunc(merged[i], merged[j])
+                if mergFunc and merged[i].getName() == merged[j].getName():
+                    merged[i], needPop = mergFunc(merged[i], merged[j])
+                    if needPop:
+                        merged.pop(j)
+                    else:
+                        j += 1
+                j += 1
+
+            i += 1
+
+    return merged
 
 
 def mergeItemsBonuses(lhv, rhv):

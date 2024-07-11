@@ -1192,6 +1192,71 @@ def _migrateTo122(core, data, initialized):
     clearEarlyAccess(SETTINGS_SECTIONS.CAROUSEL_FILTER_2)
 
 
+def _migrateTo123(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, 0)
+    clear = data['clear']
+    settingOffset = 16384
+    if storedValue & settingOffset:
+        clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
+
+
+def _migrateTo124(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED] = False
+    data['rankedCarouselFilter1'] = {'ussr': False,
+     'germany': False,
+     'usa': False,
+     'china': False,
+     'france': False,
+     'uk': False,
+     'japan': False,
+     'czech': False,
+     'sweden': False,
+     'poland': False,
+     'italy': False,
+     'lightTank': False,
+     'mediumTank': False,
+     'heavyTank': False,
+     'SPG': False,
+     'AT-SPG': False,
+     'level_1': False,
+     'level_2': False,
+     'level_3': False,
+     'level_4': False,
+     'level_5': False,
+     'level_6': False,
+     'level_7': False,
+     'level_8': False,
+     'level_9': False,
+     'level_10': False}
+    data['rankedCarouselFilter2'] = {'premium': False,
+     'elite': False,
+     'igr': False,
+     'rented': True,
+     'event': True,
+     'gameMode': False,
+     'favorite': False,
+     'bonus': False,
+     'crystals': False,
+     'ranked': True,
+     'role_HT_assault': False,
+     'role_HT_break': False,
+     'role_HT_universal': False,
+     'role_HT_support': False,
+     'role_MT_assault': False,
+     'role_MT_universal': False,
+     'role_MT_sniper': False,
+     'role_MT_support': False,
+     'role_ATSPG_assault': False,
+     'role_ATSPG_universal': False,
+     'role_ATSPG_sniper': False,
+     'role_ATSPG_support': False,
+     'role_LT_universal': False,
+     'role_LT_wheeled': False,
+     'role_SPG': False}
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1674,6 +1739,14 @@ _versions = ((1,
   False),
  (122,
   _migrateTo122,
+  False,
+  False),
+ (123,
+  _migrateTo123,
+  False,
+  False),
+ (124,
+  _migrateTo124,
   False,
   False))
 

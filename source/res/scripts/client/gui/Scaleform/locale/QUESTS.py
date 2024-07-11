@@ -55,6 +55,8 @@ class QUESTS(object):
     BONUSES_ITEM_PREMIUMPLUS = '#quests:bonuses/item/premiumPlus'
     BONUSES_ITEM_CREWSKIN = '#quests:bonuses/item/crewSkin'
     BONUSES_ITEM_LOOTBOXES = '#quests:bonuses/item/lootBoxes'
+    BONUSES_ITEM_LOCKPICK = '#quests:bonuses/item/lockpick'
+    BONUSES_ITEM_LOOTBOXKEY = '#quests:bonuses/item/lootBoxKey'
     BONUSES_ITEM_EARLYACCESSTOKEN = '#quests:bonuses/item/earlyAccessToken'
     BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSES_CREWBOOK_TEXT = '#quests:bonuses/crewBook/text'

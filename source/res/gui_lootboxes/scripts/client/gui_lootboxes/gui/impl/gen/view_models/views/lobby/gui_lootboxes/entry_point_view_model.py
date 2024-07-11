@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class EntryPointViewModel(ViewModel):
     __slots__ = ('onOpenStorage',)
 
-    def __init__(self, properties=3, commands=1):
+    def __init__(self, properties=4, commands=1):
         super(EntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBoxesCount(self):
@@ -26,9 +26,16 @@ class EntryPointViewModel(ViewModel):
     def setIsLootBoxesEnabled(self, value):
         self._setBool(2, value)
 
+    def getHasInfinite(self):
+        return self._getBool(3)
+
+    def setHasInfinite(self, value):
+        self._setBool(3, value)
+
     def _initialize(self):
         super(EntryPointViewModel, self)._initialize()
         self._addNumberProperty('boxesCount', 0)
         self._addBoolProperty('hasNew', False)
         self._addBoolProperty('isLootBoxesEnabled', True)
+        self._addBoolProperty('hasInfinite', False)
         self.onOpenStorage = self._addCommand('onOpenStorage')

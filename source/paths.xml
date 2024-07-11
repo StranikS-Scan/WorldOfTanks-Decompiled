@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.27.0.0</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.27.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.28.0.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.28.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -31,6 +31,8 @@
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
       <Package type="hd">./res/packages/101_dday_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/102_race_2024.pkg</Package>
+      <Package type="hd">./res/packages/102_race_2024_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/105_germany.pkg</Package>
       <Package type="hd">./res/packages/105_germany_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/108_normandy_nom.pkg</Package>
@@ -129,8 +131,10 @@
       <Package type="hd">./res/packages/h00_armory_yard_ep3_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h01_victory_day_2024.pkg</Package>
       <Package type="hd">./res/packages/h01_victory_day_2024_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h07_mt_summerday_2024.pkg</Package>
-      <Package type="hd">./res/packages/h07_mt_summerday_2024_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h02_tmday_2015.pkg</Package>
+      <Package type="hd">./res/packages/h02_tmday_2015_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h09_mt_bday_2024.pkg</Package>
+      <Package type="hd">./res/packages/h09_mt_bday_2024_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
@@ -156,6 +160,7 @@
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/races.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/scripts.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/server_side_replay.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/story_mode.pkg</Package>

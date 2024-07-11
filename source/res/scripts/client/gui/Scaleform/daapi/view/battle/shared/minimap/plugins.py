@@ -4,16 +4,19 @@ import logging
 import math
 from collections import defaultdict, namedtuple
 from functools import partial
-from enum import Enum
-import BattleReplay
 import BigWorld
 import Keys
 import Math
+from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
+from enum import Enum
+import BattleReplay
 import aih_constants
+import math_utils
 from AvatarInputHandler import AvatarInputHandler
+from AvatarInputHandler.AimingSystems import getShotTargetInfo
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
+from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT, MINIMAP_SIZE
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import MinimapArtyHitSetting
 from battleground.location_point_manager import g_locationPointManager
@@ -21,6 +24,7 @@ from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerTy
 from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS, InputHandler
+from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import entries
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
@@ -29,14 +33,13 @@ from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController, IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
-from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.utils.TimeInterval import TimeInterval
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from ids_generators import SequenceIDGenerator
 from shared_utils import findFirst
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 _logger = logging.getLogger(__name__)
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
@@ -58,9 +61,10 @@ _MINIMAP_LOCATION_MARKER_MIN_SCALE = 1.0
 _MINIMAP_LOCATION_MARKER_MAX_SCALE = 0.72
 _AOI_ESTIMATE_RADIUS = 450.0
 _AOI_RADIUS_MARGIN = 50.0
+_UPDATE_INTERVAL = 0.2
 
 class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
-    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize')
+    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__currentCameraIDs', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize', '__interval')
 
     def __init__(self, parentObj):
         super(PersonalEntriesPlugin, self).__init__(parentObj)
@@ -70,16 +74,18 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         self.__viewPointID = 0
         self.__animationID = 0
         self.__deadPointID = 0
-        self.__cameraID = 0
+        self.__currentCameraIDs = []
         self.__cameraIDs = defaultdict(lambda : 0)
         self.__yawLimits = None
         self.__circlesID = None
         self.__circlesVisibilityState = 0
         self.__killerVehicleID = 0
         self.__defaultViewRangeCircleSize = None
+        self.__interval = None
         return
 
     def start(self):
+        self.__interval = TimeInterval(_UPDATE_INTERVAL, self, '_update')
         self.__playerVehicleID = self._arenaDP.getPlayerVehicleID()
         vInfo = self._arenaDP.getVehicleInfo()
         self.__isAlive = vInfo.isAlive()
@@ -119,8 +125,24 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         if isinstance(handler, AvatarInputHandler):
             handler.onPostmortemKillerVisionEnter -= self.__onKillerVisionEnter
             handler.onPostmortemKillerVisionExit -= self.__onKillerVisionExit
+        if self.__interval is not None:
+            self.__interval.stop()
+            self.__interval = None
         super(PersonalEntriesPlugin, self).stop()
         return
+
+    def _update(self):
+        handler = avatar_getter.getInputHandler()
+        if handler is None or not handler.isStarted or not handler.isAssaultSPG:
+            return
+        else:
+            entryID = self.__cameraIDs[_S_NAME.DIRECTION_ENTRY]
+            if entryID:
+                vehicle = BigWorld.player().getVehicleAttached()
+                shotPoint = handler.getDesiredShotPoint(ignoreAimingMode=True, ignoreDetached=True)
+                hitPoint, _ = getShotTargetInfo(vehicle, shotPoint + math_utils.VectorConstant.Vector3J.scale(25), BigWorld.player().gunRotator)
+                self._invoke(entryID, 'as_updateShotDistance', vehicle.position.distTo(hitPoint))
+            return
 
     def initControlMode(self, mode, available):
         super(PersonalEntriesPlugin, self).initControlMode(mode, available)
@@ -129,7 +151,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         for entryID, name, active in iterator:
             self.__cameraIDs[name] = entryID
             if active:
-                self.__cameraID = entryID
+                self.__currentCameraIDs.append(entryID)
 
         self.__updateViewPointEntry()
         self.__updateViewRangeCircle()
@@ -141,11 +163,14 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         self.__updateViewPointEntry(vehicleID)
         self._updateDeadPointEntry()
         self._invalidateMarkup()
+        self.__updateDistanceIndicatorSettings()
 
     def clearCamera(self):
-        if self.__cameraID:
-            self._setActive(self.__cameraID, False)
-            self.__cameraID = 0
+        if self.__currentCameraIDs:
+            self.__currentCameraIDs = []
+        for entryID in self.__cameraIDs.itervalues():
+            self._setActive(entryID, False)
+
         if self.__viewPointID:
             self._setActive(self.__viewPointID, False)
             self._setActive(self.__animationID, False)
@@ -176,6 +201,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
                 if self._canShowMinSpottingRangeCircle():
                     self.__addMinSpottingRangeCircle()
                 self._updateCirlcesState()
+                self.__updateDistanceIndicatorSettings()
             return
 
     def updateSettings(self, diff):
@@ -215,6 +241,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
                 else:
                     self.__removeViewRangeCircle()
             self._updateCirlcesState()
+            self.__updateInterval()
 
     def setDefaultViewRangeCircleSize(self, size):
         self.__defaultViewRangeCircleSize = size
@@ -258,18 +285,18 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             else:
                 matrix = None
                 active = False
-            name = _S_NAME.ARCADE_CAMERA
+            name = _S_NAME.DIRECTION_ENTRY
             entryID = add(name, container, matrix=matrix, active=active)
             if entryID:
                 yield (entryID, name, active)
         if _CTRL_MODE.STRATEGIC in modes or _CTRL_MODE.ARTY in modes or _CTRL_MODE.SPG_ONLY_ARTY_MODE in modes or _CTRL_MODE.ASSAULT_SPG in modes:
-            if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode():
+            if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode() or self._isInAssaultSpg():
                 matrix = matrix_factory.makeStrategicCameraMatrix()
                 active = True
             else:
                 matrix = None
                 active = False
-            name = _S_NAME.STRATEGIC_CAMERA
+            name = _S_NAME.RECTANGLE_AREA
             entryID = add(name, container, matrix=matrix, active=active, transformProps=settings.TRANSFORM_FLAG.FULL)
             if entryID:
                 yield (entryID, name, active)
@@ -287,31 +314,32 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         return
 
     def __updateCameraEntries(self):
-        activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode() or self._isInAssaultSpg():
-            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
-            matrix = matrix_factory.makeStrategicCameraMatrix()
+        for entryID in self.__cameraIDs.itervalues():
+            self._setActive(entryID, False)
+
+        if not self._enableCameraEntryInCtrlMode(self._ctrlMode):
+            return
+        if self._isInAssaultSpg():
+            activateIDs = [(self.__cameraIDs[_S_NAME.DIRECTION_ENTRY], matrix_factory.makeArcadeCameraMatrix()), (self.__cameraIDs[_S_NAME.RECTANGLE_AREA], matrix_factory.makeStrategicCameraMatrix())]
+        elif self._isInStrategicMode() or self._isInArtyMode() or self._isInOnlyArtyMode() or self._isInAssaultSpg():
+            activateIDs = [(self.__cameraIDs[_S_NAME.RECTANGLE_AREA], matrix_factory.makeStrategicCameraMatrix())]
         elif self._isInArcadeMode():
-            matrix = matrix_factory.makeArcadeCameraMatrix()
+            activateIDs = [(self.__cameraIDs[_S_NAME.DIRECTION_ENTRY], matrix_factory.makeArcadeCameraMatrix())]
         elif self._isInPostmortemMode():
             if self.__killerVehicleID:
                 matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
             else:
                 matrix = matrix_factory.makePostmortemCameraMatrix()
+            activateIDs = [(self.__cameraIDs[_S_NAME.DIRECTION_ENTRY], matrix)]
         elif self._isInVideoMode():
-            activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
-            matrix = matrix_factory.makeDefaultCameraMatrix()
+            activateIDs = [(self.__cameraIDs[_S_NAME.VIDEO_CAMERA], matrix_factory.makeDefaultCameraMatrix())]
             self._hideMarkup()
         else:
-            matrix = matrix_factory.makeDefaultCameraMatrix()
-        enableCameraEntry = self._enableCameraEntryInCtrlMode(self._ctrlMode)
-        for entryID in self.__cameraIDs.itervalues():
-            if activateID == entryID and enableCameraEntry:
-                self._setMatrix(entryID, matrix)
-                if self.__cameraID != entryID:
-                    self._setActive(entryID, True)
-                    self.__cameraID = entryID
-            self._setActive(entryID, False)
+            activateIDs = [(self.__cameraIDs[_S_NAME.DIRECTION_ENTRY], matrix_factory.makeDefaultCameraMatrix())]
+        for entryID, matrix in activateIDs:
+            self._setMatrix(entryID, matrix)
+            self._setActive(entryID, True)
+            self.__currentCameraIDs.append(entryID)
 
     def __updateViewPointEntry(self, vehicleID=0):
         isActive = self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
@@ -365,8 +393,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     def _getViewRangeCirclesID(self):
         return self.__circlesID
 
-    def _getSelectedCameraID(self):
-        return self.__cameraID
+    def _getSelectedCameraIDs(self):
+        return self.__currentCameraIDs
 
     def _getCameraIDs(self):
         return self.__cameraIDs
@@ -549,12 +577,12 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         return
 
     def __showDirectionLine(self):
-        entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
+        entryID = self.__cameraIDs[_S_NAME.DIRECTION_ENTRY]
         if entryID:
             self._invoke(entryID, 'showDirectionLine')
 
     def __hideDirectionLine(self):
-        entryID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
+        entryID = self.__cameraIDs[_S_NAME.DIRECTION_ENTRY]
         if entryID:
             self._invoke(entryID, 'hideDirectionLine')
 
@@ -567,6 +595,27 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         if self.__viewPointID and self.__yawLimits is not None:
             self._invoke(self.__viewPointID, 'clearYawLimit')
         return
+
+    def __updateInterval(self):
+        if self.__interval is not None:
+            self.__interval.stop()
+            if self.__isNeedDistanceIndicator():
+                self.__interval.start()
+        return
+
+    def __updateDistanceIndicatorSettings(self):
+        self.__updateInterval()
+        entryID = self.__cameraIDs[_S_NAME.DIRECTION_ENTRY]
+        minimapSizeIdx = AccountSettings.getSettings(MINIMAP_SIZE)
+        (left, top), (right, bottom) = self.sessionProvider.arenaVisitor.type.getBoundingBox()
+        mapMaxSize = max(abs(right - left), abs(bottom - top))
+        self._invoke(entryID, 'as_setDistanceIndicatorSettings', self.__isNeedDistanceIndicator(), mapMaxSize, minimapSizeIdx)
+
+    def __isNeedDistanceIndicator(self):
+        vehicleID = self._arenaDP.getAttachedVehicleID()
+        vectorOnMapIsEnabled = self.settingsCore.getSetting(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
+        distanceIndicatorEnabled = self._arenaDP.getVehicleInfo(vehicleID).vehicleType.isAssaultVehicle
+        return distanceIndicatorEnabled and vectorOnMapIsEnabled and self.__isAlive
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):

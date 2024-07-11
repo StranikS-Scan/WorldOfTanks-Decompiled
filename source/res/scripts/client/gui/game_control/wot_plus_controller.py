@@ -106,7 +106,8 @@ class WotPlusController(IWotPlusController):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self._onServerSettingsChange
         self.processSwitchNotifications()
         self._validSessionStarted = False if g_bootcamp.isRunning() else True
-        self.resolveState()
+        if self._userSubscriptionFetchCtrl.isUndefined():
+            self.resolveState()
 
     def onAccountBecomePlayer(self):
         self._account = BigWorld.player()
@@ -117,6 +118,7 @@ class WotPlusController(IWotPlusController):
         return
 
     def onDisconnected(self):
+        self._userSubscriptionFetchCtrl.resetFetch()
         self._validSessionStarted = False
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingsChange
 
@@ -340,7 +342,8 @@ class WotPlusController(IWotPlusController):
             itemDiff[PIGGY_BANK_PDATA_KEY] = diff[PIGGY_BANK_PDATA_KEY]
         if itemDiff:
             synchronizeDicts(itemDiff, self._cache)
-            yield wg_await(self.resolveState())
+            if RS_PDATA_KEY in diff:
+                yield wg_await(self.resolveState())
             self.onDataChanged(itemDiff)
 
     def _getStrategy(self):

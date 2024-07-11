@@ -1887,11 +1887,11 @@
           <reloadTime>	8.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
-            <afterShot>	20.0	</afterShot>
+            <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <aimingTime>	4.0	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A151_TS_60/normal/lod0/Gun_01.model	</undamaged>
@@ -2470,28 +2470,6 @@
       </chassis>
     </detailed>
   </physics>
-  <siege_mode>
-    <switchOnTime>	2	</switchOnTime>
-    <switchOffTime>	2	</switchOffTime>
-    <engineDamageCoeff>	2	</engineDamageCoeff>
-    <soundStateChange>
-      <on>	strv_siege_mode_on_PC	</on>
-      <off>	strv_siege_mode_off_PC	</off>
-    </soundStateChange>
-  </siege_mode>
-  <hull_aiming>
-    <pitch>
-      <isFlexible>	True	</isFlexible>
-      <wheelCorrectionCenterZ>	1.165	</wheelCorrectionCenterZ>
-      <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
-      <wheelsCorrectionAngles>
-        <pitchMin>	0	</pitchMin>
-        <pitchMax>	0	</pitchMax>
-      </wheelsCorrectionAngles>
-    </pitch>
-    <yawDisabled></yawDisabled>
-  </hull_aiming>
-  <useHullZSize>	True	</useHullZSize>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

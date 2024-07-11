@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -528,6 +529,9 @@
         </bank>
         <bank>
           <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
+        </bank>
+        <bank>
+          <name>	bp14_red_fury_vo.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>

@@ -162,7 +162,7 @@
         </armor>
         <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
         <weight>	11300	</weight>
-        <maxHealth>	1300	</maxHealth>
+        <maxHealth>	1200	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
@@ -3041,7 +3041,7 @@
         </turret>
       </unlocks>
       <weight>	3780	</weight>
-      <maxHealth>	300	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <armor>
         <armor_1>	20	</armor_1>
         <armor_2>	30	</armor_2>
@@ -3075,7 +3075,7 @@
       <guns>
         <Canon_de_105_court_mle_1934S_SH>	shared	  <maxAmmo>	95	</maxAmmo>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <reloadTime>	3.2	</reloadTime>
+          <reloadTime>	2.9	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
@@ -3172,7 +3172,7 @@
             <maxPitch>	0 9.5 1 9.5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_main_L shot_dualgun1_main_R	</multiGunEffects>
@@ -3180,8 +3180,8 @@
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	7.5 7.5	</reloadTimes>
-            <rateTime>	5	</rateTime>
+            <reloadTimes>	5 5	</reloadTimes>
+            <rateTime>	3	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3273,7 +3273,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 9.5 1 9.5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	6.9	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3463,7 +3463,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
@@ -3471,8 +3471,8 @@
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	7.5 7.5	</reloadTimes>
-            <rateTime>	5	</rateTime>
+            <reloadTimes>	5 5	</reloadTimes>
+            <rateTime>	3	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3544,7 +3544,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	6.9	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -3617,7 +3617,7 @@
         </_90mm_F3M_SH>
         <_105mm_CN_105_57_SH>	shared	  <maxAmmo>	273	</maxAmmo>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	11	</reloadTime>
+          <reloadTime>	10	</reloadTime>
           <aimingTime>	1.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -3692,7 +3692,7 @@
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_CN_105_57_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	6.3	</reloadTime>
           <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -3706,8 +3706,8 @@
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	9 9	</reloadTimes>
-            <rateTime>	6	</rateTime>
+            <reloadTimes>	6.3 6.3	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3837,7 +3837,7 @@
         </gun>
       </unlocks>
       <weight>	6780	</weight>
-      <maxHealth>	700	</maxHealth>
+      <maxHealth>	600	</maxHealth>
       <armor>
         <armor_1>	70	</armor_1>
         <armor_2>	35	</armor_2>
@@ -3872,7 +3872,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
@@ -3880,8 +3880,8 @@
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	7.5 7.5	</reloadTimes>
-            <rateTime>	5	</rateTime>
+            <reloadTimes>	5 5	</reloadTimes>
+            <rateTime>	3	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -3968,7 +3968,7 @@
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	6.9	</reloadTime>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
@@ -4054,7 +4054,7 @@
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_F3M_SH>
-        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	9	</reloadTime>
+        <_90mm_canon_DCA_45_AC_A_dualgun_SH>	shared	  <reloadTime>	6.3	</reloadTime>
           <maxAmmo>	65	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
@@ -4068,8 +4068,8 @@
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
             <reloadLockTime>	0.0	</reloadLockTime>
-            <reloadTimes>	9 9	</reloadTimes>
-            <rateTime>	6	</rateTime>
+            <reloadTimes>	6.3 6.3	</reloadTimes>
+            <rateTime>	5	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -4151,7 +4151,7 @@
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_canon_DCA_45_AC_A_dualgun_SH>
-        <_127mm_54_Model_1948_SH>	shared	  <reloadTime>	13	</reloadTime>
+        <_127mm_54_Model_1948_SH>	shared	  <reloadTime>	14	</reloadTime>
           <maxAmmo>	46	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
@@ -4167,7 +4167,7 @@
           </shotDispersionFactors>
           <clip>
             <count>	3	</count>
-            <rate>	40	</rate>
+            <rate>	60	</rate>
           </clip>
           <armor>
             <armor_1>	60	</armor_1>

@@ -2100,19 +2100,12 @@
       </surveyingDeviceHealth>
       <guns>
         <_152mm_ZIK-20>	shared	  <maxAmmo>	40	</maxAmmo>
-          <reloadTime>	22	</reloadTime>
-          <clip>
-            <count>	2	</count>
-            <rate>	10	</rate>
-          </clip>
-          <autoreload>
-            <reloadTime>	26 22	</reloadTime>
-          </autoreload>
+          <reloadTime>	21	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.95	</shotDispersionRadius>
+          <shotDispersionRadius>	0.8	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
             <afterShot>	10	</afterShot>
@@ -2147,7 +2140,7 @@
             </armor_13>
             <gun>	50	</gun>
           </armor>
-          <aimingTime>	4.5	</aimingTime>
+          <aimingTime>	4.0	</aimingTime>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <customizationSlots>

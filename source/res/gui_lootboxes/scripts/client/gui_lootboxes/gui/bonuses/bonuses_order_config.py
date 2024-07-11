@@ -30,6 +30,7 @@ class BonusesSortTags(object):
     NARRATIVE_CLLC_ITEM = 'narrativeCollectionItem'
     CLLC_ITEM_COMP = 'collectionItemCompensation'
     CUSTOM_LOOTBOX = 'customLootBox'
+    CUSTOM_LOOTBOXKEY = 'customLootBoxKey'
     RANGE = (UNSORTABLE,
      VEHICLE,
      UNIQUE_CUSTOMIZATION,
@@ -51,7 +52,8 @@ class BonusesSortTags(object):
      BLUEPRINT,
      NARRATIVE_CLLC_ITEM,
      CLLC_ITEM_COMP,
-     CUSTOM_LOOTBOX)
+     CUSTOM_LOOTBOX,
+     CUSTOM_LOOTBOXKEY)
 
 
 BonusesConfig = namedtuple('BonusesConfig', ['orders', 'defaultOrder'])

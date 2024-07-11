@@ -2198,11 +2198,15 @@
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
-    <shellCasingsEjectionPrefab>	vehicles/czech/Cz21_TST/Cz21_TST_animations.prefab	</shellCasingsEjectionPrefab>
   </effects>
   <emblems>
     <default>	15514	</default>
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.8	</alpha>
   </emblems>
+  <prefabAttachments>
+    <shellCasingsEjection>
+      <attachmentId>	31022	</attachmentId>
+    </shellCasingsEjection>
+  </prefabAttachments>
 </Cz21_TST.xml>

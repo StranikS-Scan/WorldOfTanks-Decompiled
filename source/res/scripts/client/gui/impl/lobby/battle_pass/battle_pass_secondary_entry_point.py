@@ -69,15 +69,18 @@ class BattlePassSecondaryEntryPointWidget(SecondaryEntryPointMeta, BaseBattlePas
         return self.__arenaBonusType
 
     def __getIcon(self):
-        if self.isBought or self.isCompleted:
-            shieldTemplate = 'shield_blue{}{}'
-            color = '_gold' if self.isBought else '_silver'
-            postfix = ''
-            if self.isCompleted and self.freePoints == 0 or not self.isCompleted and not self.__battlePass.hasActiveChapter():
-                postfix = '_closed'
-            icon = _R_IMAGES.dyn(shieldTemplate.format(color, postfix))()
-        else:
-            icon = _R_IMAGES.shield_silver() if self.chapterID != 0 else _R_IMAGES.shield_silver_empty()
+        isCompleted = self.isCompleted
+        isBought = self.isBought
+        isMarathonChapter = self.__battlePass.isMarathonChapter(self.chapterID)
+        shieldTemplate = 'shield{}{}{}'
+        plateColor = '_normal'
+        borderColor = '_gold' if isBought else '_silver'
+        postfix = '' if self.__battlePass.hasActiveChapter() or isCompleted and self.freePoints > 0 else '_closed'
+        if isMarathonChapter:
+            plateColor = '_marathon'
+        elif isBought or isCompleted:
+            plateColor = '_blue'
+        icon = _R_IMAGES.dyn(shieldTemplate.format(plateColor, borderColor, postfix))()
         return backport.image(icon)
 
     def __getAltIcon(self, isEnabled):

@@ -37,7 +37,8 @@ from account_helpers.gift_system import GiftSystem
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
 from account_helpers.referral_program import ReferralProgram
-from account_shared import NotificationItem, readClientServerVersion
+from account_shared import NotificationItem
+from version_utils import readClientServerVersion
 from gui.prb_control import prbEntityProperty
 from items import tankmen
 from adisp import adisp_process
@@ -48,8 +49,7 @@ from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_D
 from gui.Scaleform.Waiting import Waiting
 from gui.clans.clan_cache import g_clanCache
 from gui.wgnc import g_wgncProvider
-from helpers import dependency
-from helpers import uniprof
+from helpers import dependency, uniprof, clientVersionGetter
 from messenger import MessengerEntry
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
@@ -1495,7 +1495,7 @@ class _AccountRepository(object):
         self.ranked = client_ranked.ClientRanked(self.syncData)
         self.battleRoyale = ClientBattleRoyale.ClientBattleRoyale(self.syncData)
         self.badges = ClientBadges.ClientBadges(self.syncData)
-        self.tokens = tokens.Tokens(self.syncData)
+        self.tokens = tokens.Tokens(self.syncData, self.commandProxy)
         self.epicMetaGame = client_epic_meta_game.ClientEpicMetaGame(self.syncData)
         self.blueprints = client_blueprints.ClientBlueprints(self.syncData)
         self.festivities = FestivityManager(self.syncData, self.commandProxy)
@@ -1540,5 +1540,5 @@ def delAccountRepository():
         return
 
 
-_CLIENT_SERVER_VERSION = readClientServerVersion()
+_CLIENT_SERVER_VERSION = readClientServerVersion(clientVersionGetter)
 g_accountRepository = None

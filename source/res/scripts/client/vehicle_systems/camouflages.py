@@ -23,7 +23,7 @@ from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
-from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, DEFAULT_NORMAL_MAP_FACTOR, DEFAULT_NORMAL_MAX_LOD, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
 from helpers import newFakeModel
@@ -45,7 +45,7 @@ RepaintParams.__new__.__defaults__ = (False,
  Math.Vector4(0.0),
  0.0,
  0.0)
-CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'exclusionImpact', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3', 'gloss', 'metallic', 'useGMTexture', 'glossMetallicMap', 'useEmission', 'forwardEmissionBrightness', 'deferredEmissionBrightness', 'emissionMap', 'emissionAnimationSpeed', 'emissionPatternMap'))
+CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'exclusionImpact', 'tiling', 'rotation', 'weights', 'c0', 'c1', 'c2', 'c3', 'gloss', 'metallic', 'useGMTexture', 'glossMetallicMap', 'useEmission', 'forwardEmissionBrightness', 'deferredEmissionBrightness', 'emissionMap', 'emissionAnimationSpeed', 'emissionPatternMap', 'useNormalMap', 'normalMap', 'normalMapFactor', 'normalMaxLod'))
 CamoParams.__new__.__defaults__ = ('',
  '',
  1.0,
@@ -65,7 +65,11 @@ CamoParams.__new__.__defaults__ = ('',
  DEFAULT_DEFERRED_EMISSION,
  '',
  DEFAULT_EMISSION_ANIMATION_SPEED,
- '')
+ '',
+ False,
+ '',
+ DEFAULT_NORMAL_MAP_FACTOR,
+ DEFAULT_NORMAL_MAX_LOD)
 ProjectionDecalGenericParams = namedtuple('ProjectionDecalGenericParams', ('tintColor', 'position', 'rotation', 'scale', 'decalMap', 'glossDecalMap', 'applyAreas', 'clipAngle', 'mirroredHorizontally', 'mirroredVertically', 'doubleSided', 'scaleBySlotSize', 'useEmission', 'forwardEmissionBrightness', 'deferredEmissionBrightness', 'emissionMap', 'emissionAnimationSpeed', 'emissionPatternMap'))
 ProjectionDecalGenericParams.__new__.__defaults__ = (Math.Vector4(0.0),
  Math.Vector3(0.0),
@@ -390,8 +394,12 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             forwardEmissionBrightness = camouflage.emissionSettings['forwardEmissionBrightness']
             deferredEmissionBrightness = camouflage.emissionSettings['deferredEmissionBrightness']
             emissionAnimationSpeed = camouflage.emissionSettings['emissionAnimationSpeed']
+            normalMap = camouflage.normalSettings['normalMap']
+            useNormalMap = bool(normalMap)
+            normalMapFactor = camouflage.normalSettings['normalMapFactor']
+            normalMaxLod = camouflage.normalSettings['normalMaxLod']
             camoAngle = camouflage.rotation[descId]
-            result = CamoParams(camouflage.texture, exclusionMap or '', exclusionImpact, tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3], gloss, metallic, useGMTexture, glossMetallicMap, useEmission, forwardEmissionBrightness, deferredEmissionBrightness, emissionMap, emissionAnimationSpeed, emissionPatternMap)
+            result = CamoParams(camouflage.texture, exclusionMap or '', exclusionImpact, tiling, camoAngle, weights, palette[0], palette[1], palette[2], palette[3], gloss, metallic, useGMTexture, glossMetallicMap, useEmission, forwardEmissionBrightness, deferredEmissionBrightness, emissionMap, emissionAnimationSpeed, emissionPatternMap, useNormalMap, normalMap, normalMapFactor, normalMaxLod)
         return result
 
 

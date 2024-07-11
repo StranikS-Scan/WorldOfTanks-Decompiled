@@ -20,6 +20,10 @@
     <R_123_1>	19	</R_123_1>
     <RT10_26P_A>	23	</RT10_26P_A>
     <R_123M>	25	</R_123M>
+    <R_123_02>	31001	</R_123_02>
+    <R_123_T>	31002	</R_123_T>
+    <R_113_P_T>	31003	</R_113_P_T>
+    <R_123P_T>	31004	</R_123P_T>
     <Development_Radio>	65000	</Development_Radio>
     <N2_C_SH>	20	</N2_C_SH>
     <R_113_P_SH>	21	</R_113_P_SH>
@@ -209,6 +213,42 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_123>
+    <R_123P_T>
+      <userString>	#poland_vehicles:R_123P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123P_T>
+    <R_123_T>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_T>
+    <R_123_02>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_02>
     <R_123M>
       <userString>	#poland_vehicles:R_123M	</userString>
       <tags></tags>
@@ -243,6 +283,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_113_P>
+    <R_113_P_T>
+      <userString>	#poland_vehicles:R_113_P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_P_T>
     <_9RM_O>
       <userString>	#poland_vehicles:_9RM	</userString>
       <tags></tags>

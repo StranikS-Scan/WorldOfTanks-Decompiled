@@ -2265,7 +2265,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	400	</maxHealth>
+      <maxHealth>	700	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2279,7 +2279,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_127mm_OTO_Melara>	shared	  <maxAmmo>	33	</maxAmmo>
+        <_127mm_OTO_Melara>	shared	  <maxAmmo>	39	</maxAmmo>
           <armor>
             <armor_1>	280	</armor_1>
             <armor_2>	70	</armor_2>
@@ -2314,9 +2314,9 @@
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	15.7 17 20	</reloadTime>
+            <reloadTime>	14 15.7 17	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
-            <boostStartTime>	1	</boostStartTime>
+            <boostStartTime>	0	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
           </autoreload>
           <models>

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/loot_boxes/__init__.py
 from helpers import dependency
+from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.game_control import IReferralProgramController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api import Field, W2CSchema, w2c, w2capi
 from web.web_client_api.common import ItemPackType, sanitizeResPath, ItemPackTypeGroup
@@ -37,6 +39,8 @@ def addBonusAlias(bonusAliases):
 @w2capi(name='loot_box', key='action')
 class LootBoxWebApi(object):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
 
     @w2c(_LootBoxSchema, 'get_loot_box_info')
     def getLootBoxInfo(self, cmd):
@@ -93,6 +97,23 @@ class LootBoxWebApi(object):
     @staticmethod
     def __isExistingVehicle(bonusEntry, bonuses):
         return bonusEntry['type'] in ItemPackTypeGroup.VEHICLE and bonusEntry['id'] in (b['id'] for b in bonuses)
+
+    @w2c(W2CSchema, name='get_loot_boxes_key_info')
+    def getLootBoxesKeyInfo(self, _):
+        lootBoxes = self.__guiLootBoxes.getGuiLootBoxes()
+        keysForLootBoxes = {}
+        for lootBox in lootBoxes:
+            unlockKeys = lootBox.getUnlockKeyIDs()
+            for unlockKey in unlockKeys:
+                keysForLootBoxes.setdefault(unlockKey, set()).add(lootBox.getID())
+
+        configInfo = self.__lobbyContext.getServerSettings().getLootBoxKeyConfig().values()
+        for config in configInfo:
+            keyID = config['id']
+            config.update({'count': self.__guiLootBoxes.getKeyByID(keyID).count,
+             'lootBoxes': list(keysForLootBoxes[keyID])})
+
+        return {'keyConfig': configInfo}
 
 
 class LootBoxesWindowWebApiMixin(object):

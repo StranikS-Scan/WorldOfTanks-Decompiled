@@ -7,6 +7,9 @@ class IProductFetchController(IPlatformRequestController):
     def getProducts(self, showWaiting=True):
         raise NotImplementedError
 
+    def isUndefined(self):
+        raise NotImplementedError
+
 
 class ISubscriptionsFetchController(IProductFetchController):
 

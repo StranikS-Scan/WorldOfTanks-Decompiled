@@ -1,0 +1,18 @@
+<ArenaInfoRacesComponent.def>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <Properties>
+    <raceEndTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0.0	</Default>
+    </raceEndTime>
+    <rankList>
+      <Type>	ARRAY	  <of>	RACE_ITEM	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </rankList>
+  </Properties>
+  <DefaultKeyName>	arenaInfoRacesComponent	</DefaultKeyName>
+</ArenaInfoRacesComponent.def>

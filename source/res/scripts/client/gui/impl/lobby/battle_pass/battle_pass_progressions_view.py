@@ -255,12 +255,14 @@ class BattlePassProgressionsView(ViewImpl):
         extraReward = findFirst(lambda b: b.getName() == BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, rewards)
         if extraReward is not None:
             model.widget3dStyle.setMarathonRewardId(extraReward.tokenID)
+        if self.__battlePass.isMarathonChapter(self.__chapterID):
+            self.__setCharacterWidget(model, awardType=BattlePassConsts.REWARD_BOTH)
         return
 
-    def __setCharacterWidget(self, model):
+    def __setCharacterWidget(self, model, awardType=BattlePassConsts.REWARD_FREE):
         _, maxLevel = self.__battlePass.getChapterLevelInterval(self.__chapterID)
-        freeRewards = self.__battlePass.getSingleAward(chapterId=self.__chapterID, level=maxLevel)
-        characterBonus = findFirst(lambda b: b.getName() == TANKMAN_BONUS_NAME, freeRewards)
+        rewards = self.__battlePass.getSingleAward(chapterId=self.__chapterID, level=maxLevel, awardType=awardType)
+        characterBonus = findFirst(lambda b: b.getName() == TANKMAN_BONUS_NAME, rewards)
         if characterBonus is None:
             self.__clearChapterCharacter(model)
             return

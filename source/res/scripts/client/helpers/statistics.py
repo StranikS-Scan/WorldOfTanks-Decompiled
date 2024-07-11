@@ -5,7 +5,6 @@ import ResMgr
 import Settings
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core.settings_constants import GRAPHICS
-from gui.shared.utils import monitor_settings
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from helpers import dependency, isPlayerAvatar
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -222,6 +221,7 @@ class StatisticsCollector(IStatisticsCollector):
          BigWorld.WindowModeExclusiveFullscreen: 1,
          BigWorld.WindowModeBorderless: 2}
         stat['windowMode'] = windowModeLUT.get(windowMode, 0)
+        from gui.shared.utils import monitor_settings
         monitorSettings = monitor_settings.g_monitorSettings
         resolutionContainer = monitorSettings.currentWindowSize
         if windowMode == BigWorld.WindowModeExclusiveFullscreen:

@@ -106,6 +106,8 @@ class INGAME_HELP(object):
     DETAILSHELP_ASSAULTTANK = '#ingame_help:detailsHelp/assaultTank'
     DETAILSHELP_ASSAULTTANK_PROSCONS_TITLE = '#ingame_help:detailsHelp/assaultTank/prosCons/title'
     DETAILSHELP_ASSAULTTANK_PROSCONS = '#ingame_help:detailsHelp/assaultTank/prosCons'
+    DETAILSHELP_ASSAULTTANK_AIMING_TITLE = '#ingame_help:detailsHelp/assaultTank/aiming/title'
+    DETAILSHELP_ASSAULTTANK_AIMING = '#ingame_help:detailsHelp/assaultTank/aiming'
     DETAILSHELP_BATTLEROYALE_RADAR_TITLE = '#ingame_help:detailsHelp/battleRoyale/radar/title'
     DETAILSHELP_BATTLEROYALE_RADAR_DESCRIPTION = '#ingame_help:detailsHelp/battleRoyale/radar/description'
     DETAILSHELP_BATTLEROYALE_CONEVISIBILITY_TITLE = '#ingame_help:detailsHelp/battleRoyale/coneVisibility/title'

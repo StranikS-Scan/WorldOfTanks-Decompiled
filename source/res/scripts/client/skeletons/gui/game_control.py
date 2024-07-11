@@ -44,7 +44,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.artefacts import OptionalDevice
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.shared.gui_items.gui_item_economics import ItemPrice
-    from gui.shared.gui_items.loot_box import LootBox, EventLootBoxes
+    from gui.shared.gui_items.loot_box import LootBox, LootBoxKey
     from gui.shared.gui_items.Tankman import TankmanSkill
     from gui.shared.money import Money, DynamicMoney, CURRENCY_TYPE
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
@@ -2449,15 +2449,12 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     onStatusChange = None
     onAvailabilityChange = None
     onBoxesCountChange = None
-    onBoxesUpdate = None
+    onKeysUpdate = None
+    onBoxesHistoryUpdate = None
     onBoxInfoUpdated = None
 
     @property
     def isConsumesEntitlements(self):
-        raise NotImplementedError
-
-    @property
-    def boxCountToGuaranteedBonus(self):
         raise NotImplementedError
 
     def getSetting(self, setting):
@@ -2484,13 +2481,7 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     def getDayLimit(self):
         raise NotImplementedError
 
-    def getGuaranteedBonusLimit(self, boxType):
-        raise NotImplementedError
-
     def openShop(self, lootboxID=None):
-        raise NotImplementedError
-
-    def getBoxInfo(self, boxType):
         raise NotImplementedError
 
     def getStoreInfo(self, category):
@@ -2502,10 +2493,13 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     def getBoxesCount(self):
         raise NotImplementedError
 
-    def getBoxesInfo(self):
+    def getBoxKeysCount(self):
         raise NotImplementedError
 
-    def getVehicleLevels(self, boxType):
+    def getKeyByID(self, keyID):
+        raise NotImplementedError
+
+    def getKeyByTokenID(self, tokenID):
         raise NotImplementedError
 
     def getBonusesOrder(self, category=None):
@@ -2515,6 +2509,18 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
     def addShopWindowHandler(self, keyHandler, handler):
+        raise NotImplementedError
+
+    def hasLootboxKey(self):
+        raise NotImplementedError
+
+    def hasInfiniteLootboxes(self):
+        raise NotImplementedError
+
+    def getGuiLootBoxes(self):
+        raise NotImplementedError
+
+    def getGuiLootBoxByTokenID(self, tokenID):
         raise NotImplementedError
 
 
@@ -3710,3 +3716,69 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
 
     def isPostProgressionQueueSelected(self):
         raise NotImplementedError
+
+
+class IRacesBattleController(IGameController, ISeasonProvider):
+    onRacesConfigChanged = None
+    onPrimeTimeStatusUpdated = None
+    onStatusTick = None
+
+    def isRacesMode(self):
+        raise NotImplementedError
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isRacesPrbActive(self):
+        raise NotImplementedError
+
+    def isBattleAvailable(self):
+        raise NotImplementedError
+
+    def isInQueue(self):
+        raise NotImplementedError
+
+    def selectRandomBattle(self):
+        raise NotImplementedError
+
+    def selectRaces(self):
+        raise NotImplementedError
+
+    def onPrbEnter(self):
+        raise NotImplementedError
+
+    def onPrbLeave(self):
+        raise NotImplementedError
+
+    def openEventLobby(self):
+        raise NotImplementedError
+
+    def getRacesVehiclesInfo(self):
+        raise NotImplementedError
+
+    def getRacesVehicles(self):
+        raise NotImplementedError
+
+    def getSelectedRacesVehicleDescr(self):
+        raise NotImplementedError
+
+    def openQueueView(self):
+        raise NotImplementedError
+
+    def getRacesAccountSettings(self, name):
+        raise NotImplementedError
+
+    def setRacesAccountSettings(self, name, value):
+        raise NotImplementedError
+
+    def closeRewardScreen(self):
+        raise NotImplementedError
+
+    def closePostBattleScreen(self):
+        raise NotImplementedError
+
+
+class IRacesVisibilityLayerController(IGameController):
+    pass

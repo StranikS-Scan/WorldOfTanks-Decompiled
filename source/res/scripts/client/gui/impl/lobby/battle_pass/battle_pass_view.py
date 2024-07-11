@@ -171,7 +171,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         ctrl = self.__battlePass
 
         def isExtraActiveFirstTime():
-            return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown
+            return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown and isExtraIntroVideoExist()
 
         if not _hasTrueInBPStorage(_INTRO_SHOWN):
             return _R_VIEWS.BattlePassIntroView()

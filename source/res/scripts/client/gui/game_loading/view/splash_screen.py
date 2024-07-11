@@ -6,7 +6,7 @@ import typing
 import BigWorld
 import ScaleformFileLoader
 import Settings
-import account_shared
+import version_utils
 import game_loading_bindings
 import gui
 from SoundGroups import MASTER_VOLUME_DEFAULT
@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.SplashScreenMeta import SplashScreenMeta
 from gui.Scaleform.genConsts.SPLASHSCREENCONSTANTS import SPLASHSCREENCONSTANTS
 from gui.doc_loaders.GuiDirReader import GuiDirReader
-from helpers import uniprof
+from helpers import uniprof, clientVersionGetter
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
 _logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ def getCompulsoryVideoSettings(path):
 def versionChanged(userPrefs):
     if userPrefs.readBool(ALWAYS_SHOW_SPLASH_SCREEN):
         return True
-    mainVersion = account_shared.getClientMainVersion()
+    mainVersion = version_utils.getClientMainVersion(clientVersionGetter)
     lastVideoVersion = userPrefs.readString(Settings.INTRO_VIDEO_VERSION, '')
     return lastVideoVersion != mainVersion
 
@@ -148,7 +148,7 @@ class SplashScreen(ExternalFlashComponent, SplashScreenMeta):
 
     def _allVideosComplete(self):
         if self._writeSetting:
-            self._userPrefs.writeString(Settings.INTRO_VIDEO_VERSION, account_shared.getClientMainVersion())
+            self._userPrefs.writeString(Settings.INTRO_VIDEO_VERSION, version_utils.getClientMainVersion(clientVersionGetter))
         self.as_fadeOutS(VIDEO_FADE_OUT_TIME)
 
     def _getVideoVolume(self):

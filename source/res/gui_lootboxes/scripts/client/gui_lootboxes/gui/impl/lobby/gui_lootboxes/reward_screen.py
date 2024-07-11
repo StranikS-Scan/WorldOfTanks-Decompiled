@@ -1,50 +1,56 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/impl/lobby/gui_lootboxes/reward_screen.py
 import logging
-from constants import LOOTBOX_TOKEN_PREFIX
-from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
-from gui.impl.gen import R
-from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
-from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.shared.event_dispatcher import selectVehicleInHangar
-from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
-from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses
 from gui_lootboxes.gui.bonuses.bonuses_packers import getRewardsBonusPacker, getMainRewardsBonusPacker
 from gui_lootboxes.gui.bonuses.bonuses_sorter import sortBonuses
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootboxes_rewards_view_model import LootboxesRewardsViewModel
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.sound import LOOT_BOXES_OVERLAY_SOUND_SPACE
-from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.compensation_tooltip import LootBoxesCompensationTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_key_tooltip import LootboxKeyTooltip
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+from constants import LOOTBOX_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
+from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings
+from gui.impl.gen import R
+from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
+from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
+from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses
+from gui.shared.event_dispatcher import selectVehicleInHangar
 from helpers import dependency
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 SECONDARY_REWARDS_PROCESSORS = []
 
 class LootBoxesRewardScreen(ViewImpl):
-    __slots__ = ('__rewards', '__tooltipData', '__mainVehicleCd', '__lootbox', '__bonusData')
+    __slots__ = ('__rewards', '__tooltipData', '__mainVehicleCd', '__lootbox', '__clientData', '__bonusData', '__key')
     __itemsCache = dependency.descriptor(IItemsCache)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
     _COMMON_SOUND_SPACE = LOOT_BOXES_OVERLAY_SOUND_SPACE
 
-    def __init__(self, layoutID, rewards, lootbox):
+    def __init__(self, layoutID, rewards, lootbox, clientData):
         settings = ViewSettings(layoutID)
         settings.model = LootboxesRewardsViewModel()
         self.__tooltipData = {}
         self.__mainVehicleCd = None
         self.__rewards = rewards
         self.__lootbox = lootbox
+        self.__clientData = clientData
         self.__bonusData = []
+        self.__key = None
+        if clientData and clientData.get('openWithKey'):
+            self.__key = self.__guiLootBoxes.getKeyByID(first(clientData.get('usedKeys', {}).keys()))
         for rewardDict in self.__rewards:
-            for token, value in rewardDict.get('tokens', {}).iteritems():
+            for token, value in rewardDict.get('tokens', {}).items():
                 if token.startswith(LOOTBOX_TOKEN_PREFIX) and value.get('count') < 0:
                     rewardDict['tokens'].pop(token)
-                    break
+                if token.startswith(LOOTBOX_KEY_PREFIX) and value.get('count', 0) == 0:
+                    rewardDict['tokens'].pop(token)
 
         super(LootBoxesRewardScreen, self).__init__(settings)
         return
@@ -59,6 +65,10 @@ class LootBoxesRewardScreen(ViewImpl):
             lootBoxID = tooltipData.get('lootBoxID')
             lootBox = self.__itemsCache.items.tokens.getLootBoxByID(int(lootBoxID))
             return LootboxTooltip(lootBox)
+        if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxKeyTooltip() and tooltipData:
+            lootBoxKeyID = tooltipData.get('lootBoxKeyID')
+            lootBoxKey = self.__guiLootBoxes.getKeyByID(lootBoxKeyID)
+            return LootboxKeyTooltip(lootBoxKey)
         if tooltipData and isinstance(tooltipData.tooltip, dict):
             if contentID in tooltipData.tooltip:
                 return tooltipData.tooltip[contentID](*tooltipData.specialArgs)
@@ -90,7 +100,10 @@ class LootBoxesRewardScreen(ViewImpl):
             if self.__lootbox is not None:
                 vm.setLootBoxName(R.strings.lootboxes.userName.dyn(self.__lootbox.getUserNameKey(), R.invalid)())
                 vm.setLootBoxIconName(self.__lootbox.getIconName())
+            if self.__key is not None:
+                vm.keyType.setValue(self.__key.keyType)
             self.__fillRewardsModel(self.__rewards, model=vm)
+            vm.setLootBoxOpenCount(self.__clientData.get('countOfOpened', 0))
         return
 
     def __onClose(self):
@@ -139,5 +152,5 @@ class LootBoxesRewardScreen(ViewImpl):
 class LootBoxesRewardScreenWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, lootBox=None, rewards=None, parent=None):
-        super(LootBoxesRewardScreenWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesRewardScreen(R.views.gui_lootboxes.lobby.gui_lootboxes.LootboxRewardsView(), rewards=rewards, lootbox=lootBox), layer=WindowLayer.OVERLAY, parent=parent)
+    def __init__(self, rewards=None, lootBox=None, clientData=None, parent=None):
+        super(LootBoxesRewardScreenWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=LootBoxesRewardScreen(R.views.gui_lootboxes.lobby.gui_lootboxes.LootboxRewardsView(), rewards=rewards, lootbox=lootBox, clientData=clientData), layer=WindowLayer.OVERLAY, parent=parent)

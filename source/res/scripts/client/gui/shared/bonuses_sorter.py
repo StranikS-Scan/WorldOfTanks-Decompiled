@@ -12,25 +12,26 @@ from shared_utils import first
 class BonusesSortWeights(IntEnum):
     DEMOUNT_KIT = 0
     UNSORTABLE = 1
-    BOOSTER_GOODIE = 2
-    CREW_BATTLE_BOOSTER = 3
-    BATTLE_BOOSTER = 4
-    RECERTIFICATION_FORM = 5
-    CREDITS = 6
-    BOOSTER_CREDITS = 7
-    CREW_BOOK = 8
-    TMAN = 9
-    FREE_XP = 10
-    CRYSTALS = 11
-    SLOTS = 12
-    PREMUIM_PLUS = 13
-    STYLE = 14
-    OPTIONAL_DEVICE = 15
-    LOOTBOX = 16
-    VEHICLE = 17
+    SLOTS = 2
+    BOOSTER_GOODIE = 3
+    CREW_BATTLE_BOOSTER = 4
+    BATTLE_BOOSTER = 5
+    RECERTIFICATION_FORM = 6
+    CREDITS = 7
+    BOOSTER_CREDITS = 8
+    CREW_BOOK = 9
+    TMAN = 10
+    FREE_XP = 11
+    GOLD = 12
+    CRYSTALS = 13
+    PREMUIM_PLUS = 14
+    STYLE = 15
+    OPTIONAL_DEVICE = 16
+    LOOTBOX = 17
+    VEHICLE = 18
 
 
-def _itemsBonusKeyFunc(bonus):
+def itemsBonusKeyFunc(bonus):
     item = first(bonus.getItems().keys())
     if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
         if 'crewSkillBattleBooster' in item.tags:
@@ -44,7 +45,7 @@ def _itemsBonusKeyFunc(bonus):
     return (BonusesSortWeights.UNSORTABLE, bonus.getName())
 
 
-def _goodieBonusKeyFunc(bonus):
+def goodieBonusKeyFunc(bonus):
     booster = first(bonus.getBoosters().keys())
     if booster is not None:
         if booster.boosterGuiType == 'booster_credits':
@@ -58,28 +59,45 @@ def _goodieBonusKeyFunc(bonus):
         return (-BonusesSortWeights.RECERTIFICATION_FORM, 0) if recertificationForms is not None else (BonusesSortWeights.UNSORTABLE, bonus.getName())
 
 
-def _vehiclesBonusKeyFunc(bonus):
+def vehiclesBonusKeyFunc(bonus):
     vehicle = first(bonus.getVehicles())
     return (-BonusesSortWeights.VEHICLE, -vehicle[0].level) if vehicle is not None else (-BonusesSortWeights.VEHICLE, 0)
 
 
-def _tokensBonusKeyFunc(bonus):
+def tokensBonusKeyFunc(bonus):
     tokenId = first(bonus.getTokens().iterkeys())
     return (-BonusesSortWeights.LOOTBOX, 0) if tokenId.startswith(constants.LOOTBOX_TOKEN_PREFIX) else (BonusesSortWeights.UNSORTABLE, 0)
 
 
-_BONUSES_KEYS_FUNC = {VehiclesBonus.VEHICLES_BONUS: _vehiclesBonusKeyFunc,
- 'items': _itemsBonusKeyFunc,
+_BONUSES_KEYS_FUNC = {VehiclesBonus.VEHICLES_BONUS: vehiclesBonusKeyFunc,
+ 'items': itemsBonusKeyFunc,
  constants.PREMIUM_ENTITLEMENTS.PLUS: lambda b: (-BonusesSortWeights.PREMUIM_PLUS, 0),
  'slots': lambda b: (-BonusesSortWeights.SLOTS, 0),
  Currency.CREDITS: lambda b: (-BonusesSortWeights.CREDITS, 0),
+ Currency.GOLD: lambda b: (-BonusesSortWeights.GOLD, 0),
  Currency.CRYSTAL: lambda b: (-BonusesSortWeights.CRYSTALS, 0),
  'freeXP': lambda b: (-BonusesSortWeights.FREE_XP, 0),
- 'goodies': _goodieBonusKeyFunc,
+ 'goodies': goodieBonusKeyFunc,
  'tmanToken': lambda b: (-BonusesSortWeights.TMAN, 0),
  'crewBooks': lambda b: (-BonusesSortWeights.CREW_BOOK, 0),
  'customizations': lambda b: (-BonusesSortWeights.STYLE, 0),
- 'battleToken': _tokensBonusKeyFunc}
+ 'battleToken': tokensBonusKeyFunc}
+
+def _getBonusesKeysFuncMapping(extraKeysFuncs=None):
+    keysFuncs = _BONUSES_KEYS_FUNC.copy()
+    if extraKeysFuncs is not None:
+        keysFuncs.update(extraKeysFuncs)
+    return keysFuncs
+
+
+def getBonusesSortKeyFunc(extraKeysFuncs=None):
+    keysFuncs = _getBonusesKeysFuncMapping(extraKeysFuncs)
+
+    def sortKeyFunc(bonus):
+        return keysFuncs.get(bonus.getName(), lambda b: (BonusesSortWeights.UNSORTABLE, bonus.getName()))(bonus)
+
+    return sortKeyFunc
+
 
 def bonusesSortKeyFunc(bonus):
     return _BONUSES_KEYS_FUNC.get(bonus.getName(), lambda b: (BonusesSortWeights.UNSORTABLE, bonus.getName()))(bonus)

@@ -150,6 +150,8 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
 
     def __onVehicleParamsChanged(self, _):
         self.__updateDifferenceAttention()
+        self.__clearParamsCache()
+        self.__paramsCache = VehCompareBasketParamsCache(self.__vehDP)
 
     def __onNationChange(self, _):
         self.__updateUI()

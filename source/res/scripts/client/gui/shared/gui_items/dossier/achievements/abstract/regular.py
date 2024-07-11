@@ -159,17 +159,10 @@ class RegularAchievement(GUIItem):
         return self.getIcons()[self.ICON_TYPE.IT_32X32]
 
     def getUserName(self):
-        resource = dyn_or_num(R.strings.achievements, self._getActualName())
-        return backport.text(resource())
+        return self.__getAchievementText(self._getActualName())
 
     def getUserDescription(self):
-        resource = R.strings.achievements.dyn('{}_descr'.format(self._getActualName()))
-        if resource.isValid():
-            return backport.text(resource())
-        else:
-            print_stack(limit=2)
-            _logger.error('Invalid key "#achievements:{}_descr"'.format(self._getActualName()))
-            return ''
+        return self.__getAchievementText('{}_descr'.format(self._getActualName()))
 
     def getUserWebDescription(self):
         return self.getUserDescription()
@@ -230,6 +223,15 @@ class RegularAchievement(GUIItem):
         if value is None:
             value = getter(achievements.makeAchievesStorageName(self._block))
         return value
+
+    def __getAchievementText(self, key):
+        resource = R.strings.achievements.dyn(key.format(self._getActualName()))
+        if resource.isValid():
+            return backport.text(resource())
+        else:
+            print_stack(limit=2)
+            _logger.error('Invalid key "#achievements:{}"'.format(key))
+            return ''
 
     def __repr__(self):
         return '%s<name=%s; value=%s; levelUpValue=%s levelUpTotalValue=%s isDone=%s>' % (self.__class__.__name__,

@@ -11,7 +11,7 @@ import items.vehicles as iv
 from items import _xml, parseIntCompactDescr
 from serializable_types.types import C11nSerializationTypes as _C11nSerializationTypes
 from soft_exception import SoftException
-from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED
+from items.components.c11n_constants import SeasonType, DecalType, CamouflageTilingType, CustomizationType, RENT_DEFAULT_BATTLES, EMPTY_ITEM_ID, ProjectionDecalType, CustomizationTypeNames, DEFAULT_SCALE_FACTOR_ID, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_SCALE, DEFAULT_ROTATION, DEFAULT_POSITION, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, DEFAULT_NORMAL_MAP_FACTOR, DEFAULT_NORMAL_MAX_LOD
 from items.components.c11n_components import StyleItem, ApplyArea
 from items.customizations import FieldTypes, FieldFlags, FieldType, SerializableComponent, SerializationException
 from items.type_traits import equalComparator
@@ -548,6 +548,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteCamouflageTilingSettings(section, item)
             changed |= rewriteCamouflageGlossMetallicSettings(section, item)
             changed |= rewriteEmissionSettings(section, item.emissionSettings)
+            changed |= rewriteNormalSettings(section, item.normalSettings)
         return changed
 
 
@@ -919,7 +920,7 @@ class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteString(section, 'name', item, 'name', '')
             changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
             changed |= rewriteString(section, 'modelName', item, 'modelName', '')
-            changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '')
+            changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '', writeEmptySections=False)
             changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
             changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
         changed |= self.writeBaseGroup(item, section)
@@ -989,7 +990,7 @@ def _rewriteFn(tp):
         r = getattr(section, readTp)
         return r(name) if defaultValue is None else r(name, defaultValue)
 
-    def rewrite(section, subsectionName, item, propertyPath, defaultValue=None):
+    def rewrite(section, subsectionName, item, propertyPath, defaultValue=None, writeEmptySections=True):
         if not _needWrite(item, propertyPath):
             return section.deleteSection(subsectionName)
         else:
@@ -1000,6 +1001,8 @@ def _rewriteFn(tp):
 
             if value is None:
                 return False
+            if not writeEmptySections and str(value) is '':
+                return section.deleteSection(subsectionName)
             if eq(read(section, subsectionName, defaultValue), value):
                 return False
             w = getattr(section, writeTp)
@@ -1181,6 +1184,13 @@ def rewriteEmissionSettings(section, emissionSettings):
     changed |= _xml.rewriteFloat(section, 'forwardEmissionBrightness', emissionSettings['forwardEmissionBrightness'], DEFAULT_FORWARD_EMISSION)
     changed |= _xml.rewriteFloat(section, 'deferredEmissionBrightness', emissionSettings['deferredEmissionBrightness'], DEFAULT_DEFERRED_EMISSION)
     changed |= _xml.rewriteFloat(section, 'emissionAnimationSpeed', emissionSettings['emissionAnimationSpeed'], DEFAULT_EMISSION_ANIMATION_SPEED)
+    return changed
+
+
+def rewriteNormalSettings(section, normalSettings):
+    changed = _xml.rewriteString(section, 'normalMap', normalSettings['normalMap'], '')
+    changed |= _xml.rewriteFloat(section, 'normalMapFactor', normalSettings['normalMapFactor'], DEFAULT_NORMAL_MAP_FACTOR)
+    changed |= _xml.rewriteInt(section, 'normalMaxLod', normalSettings['normalMaxLod'], DEFAULT_NORMAL_MAX_LOD)
     return changed
 
 

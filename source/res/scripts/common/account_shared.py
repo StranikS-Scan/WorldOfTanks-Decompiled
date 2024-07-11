@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/account_shared.py
 import collections
-import re
 from items import vehicles, ITEM_TYPES
 from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from items.components.c11n_constants import CustomizationType
 from debug_utils import *
 from typing import Union, Tuple
-from soft_exception import SoftException
 
 class AmmoIterator(object):
 
@@ -172,69 +170,3 @@ class NotificationItem(object):
 
     def __hash__(self):
         return hash(self.asString)
-
-
-_VERSION_REGEXP = re.compile('^([a-z]{2,4}_)?(([0-9]+\\.){2,4}[0-9]+)(_[0-9]+)?$')
-
-def parseVersion(version):
-    result = _VERSION_REGEXP.search(version)
-    if result is None:
-        return
-    else:
-        realmCode, mainVersion, _, patchVersion = result.groups()
-        if mainVersion:
-            realmCode = realmCode.replace('_', '') if realmCode else ''
-            patchVersion = int(patchVersion.replace('_', '')) if patchVersion else 0
-            return (realmCode, mainVersion, patchVersion)
-        return
-
-
-def isValidClientVersion(clientVersion, serverVersion):
-    if clientVersion != serverVersion:
-        if clientVersion is None or serverVersion is None:
-            return False
-        clientParsedVersion = parseVersion(clientVersion)
-        serverParsedVersion = parseVersion(serverVersion)
-        if clientParsedVersion is None or serverParsedVersion is None:
-            return False
-        clientRealmCode, clientMainVersion, clientPatchVersion = clientParsedVersion
-        serverRealmCode, serverMainVersion, serverPatchVersion = serverParsedVersion
-        if clientRealmCode != serverRealmCode:
-            return False
-        if clientMainVersion != serverMainVersion:
-            return False
-        if clientPatchVersion < serverPatchVersion:
-            return False
-    return True
-
-
-def getClientMainVersion():
-    mainVersion = None
-    try:
-        _, clentVersion = readClientServerVersion()
-        parsedVersion = parseVersion(clentVersion)
-        _, mainVersion, _ = parsedVersion
-    except:
-        LOG_ERROR('Can not read or parse client-server version')
-
-    return mainVersion
-
-
-def readClientServerVersion():
-    import ResMgr
-    fileName = 'scripts/entity_defs/interfaces/AccountVersion.def'
-    section = ResMgr.openSection(fileName)
-    if section is None:
-        raise SoftException('Cannot open ' + fileName)
-    for attrName, section in section['Properties'].items():
-        if not attrName.startswith('requiredVersion_'):
-            continue
-        version = section.readString('Default')
-        if not version:
-            raise SoftException('Subsection AccountVersion.def/Properties/%s/Default is missing or empty' % attrName)
-        section = None
-        ResMgr.purge(fileName)
-        return (attrName, version)
-
-    raise SoftException('Field AccountVersion.def/Properties/requiredVersion_* is not found')
-    return

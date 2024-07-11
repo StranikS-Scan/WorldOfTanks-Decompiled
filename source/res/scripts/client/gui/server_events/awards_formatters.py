@@ -4,7 +4,7 @@ import logging
 from collections import namedtuple
 from math import ceil
 from typing import TYPE_CHECKING
-from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX
+from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -14,6 +14,7 @@ from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
+from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -374,7 +375,7 @@ def formatTimeLabel(hours):
     return str(int(time)) + ' ' + timeMetric
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType highlightIcon overlayIcon compensationReason postProcessTags isWulfTooltip')
 
 class PostProcessTags(CONST_CONTAINER):
     IS_SUFFIX_BADGE = 'isSuffixBadge'
@@ -428,7 +429,8 @@ PreformattedBonus.__new__.__defaults__ = (None,
  None,
  None,
  None,
- tuple())
+ tuple(),
+ False)
 
 class QuestsBonusComposer(object):
 
@@ -741,6 +743,8 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 formatted = self._formatComplexToken(complexToken, token, bonus)
             elif tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
                 formatted = self._formatLootBoxToken(tokenID, token, bonus)
+            elif tokenID.startswith(LOOTBOX_KEY_PREFIX):
+                formatted = self._formatLootBoxKey(tokenID, token, bonus)
             elif tokenID.startswith(BATTLE_BONUS_X5_TOKEN):
                 formatted = self._formatBonusToken(BATTLE_BONUS_X5_TOKEN, token, bonus)
             elif tokenID.startswith(CREW_BONUS_X3_TOKEN):
@@ -803,6 +807,21 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 images[size] = RES_ICONS.getLootBoxBonusIcon(size, lootBox.getIconName())
 
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=lootBox.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=lootBox.getUserName(), body=lootBox.getDescriptionText()), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
+
+    def _formatLootBoxKey(self, tokenID, token, bonus):
+        key = getKeyByTokenID(tokenID)
+        if key is None or token.count <= 0:
+            return
+        else:
+            images = {}
+            iconName = key.iconName
+            for size in AWARDS_SIZES.ALL():
+                resId = R.images.gui.maps.icons.quests.bonuses.dyn(size).dyn(iconName)
+                if resId.isValid():
+                    images[size] = backport.image(resId())
+                _logger.warning('Resouce is invalid gui/maps/icons/quests/bonuses/%s/%s', size, iconName)
+
+            return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=backport.text(R.strings.lootboxes.userName.dyn(key.userName)()), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=TOOLTIPS_CONSTANTS.LOOT_BOX_KEY_TOOLTIP, specialArgs=[key.keyID], isWulfTooltip=True, align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
     def _formatBonusToken(self, name, token, bonus):
         return None if token.count <= 0 else PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=bonus.getUserName(), labelFormatter=self._getLabelFormatter(bonus), images=self.__getBonusFactorImages(name), tooltip=self.getBonusFactorTooltip(name), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))

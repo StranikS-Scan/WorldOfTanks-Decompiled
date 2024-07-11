@@ -79,12 +79,13 @@ def startDebug(isStartUp=False, host=None, port=None, ide=None):
     port = port or BWConfig.readInt('pydevd/port', 5678)
     suspend = BWConfig.readBool('pydevd/suspend', False)
     traceOnlyCurrentThread = BWConfig.readBool('pydevd/traceOnlyCurrentThread', False)
-    startPyDevD(ide, host, port, suspend, traceOnlyCurrentThread)
+    inspectDoubleUnderscore = BWConfig.readBool('pydevd/inspectDoubleUnderscore', True)
+    startPyDevD(ide, host, port, suspend, traceOnlyCurrentThread, inspectDoubleUnderscore)
 
 
 bwPyDevDStarted = False
 
-def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurrentThread=False):
+def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurrentThread=False, inspectDoubleUnderscore=False):
     global bwPyDevDStarted
     if not bwPyDevDStarted:
         bwPyDevDStarted = True
@@ -96,7 +97,7 @@ def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurren
         try:
             import pydevd
             bwdebug.INFO_MSG('PyDevD connecting to %s:%d' % (host, port))
-            pydevd.settrace(host=host, port=port, suspend=suspend, stdoutToServer=True, stderrToServer=True, trace_only_current_thread=traceOnlyCurrentThread)
+            pydevd.settrace(host=host, port=port, suspend=suspend, stdoutToServer=True, stderrToServer=True, trace_only_current_thread=traceOnlyCurrentThread, inspect_double_underscore=inspectDoubleUnderscore)
             threading.currentThread().__pydevd_id__ = BigWorld.component
         except Exception as e:
             from traceback import print_exc

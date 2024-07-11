@@ -206,6 +206,7 @@ class AssaultTankPagesBuilder(DetailedHelpPagesBuilder):
         pages = []
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.assaultTank.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.assaultTank())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.assaultSPGHelp.assault_tank()), hintCtx=HelpHintContext.MECHANICS)
         addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.assaultTank.prosCons.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.assaultTank.prosCons())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.assaultSPGHelp.assault_tank_pros_cons()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.assaultTank.aiming.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.assaultTank.aiming())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.assaultSPGHelp.assault_tank_aiming()), hintCtx=HelpHintContext.MECHANICS)
         return pages
 
     @classmethod

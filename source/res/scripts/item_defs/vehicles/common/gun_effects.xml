@@ -5414,4 +5414,119 @@
       </groundWave>
     </relatedEffects>
   </shot_Gravizapa>
+  <shot_races_pushing>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/102_race_24_shot.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	100	</innerRadius>
+        <outerRadius>	600	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_medium_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_races_pushing>
 </gun_effects.xml>

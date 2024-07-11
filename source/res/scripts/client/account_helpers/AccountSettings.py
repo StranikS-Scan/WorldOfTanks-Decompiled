@@ -13,7 +13,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS
+from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS, CONTROLS
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -243,8 +243,15 @@ GUI_LOOT_BOXES = 'guiLootBoxes'
 LOOT_BOXES_INTRO_SHOWN = 'lootBoxesIntroShown'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
 LOOT_BOXES_VIEWED_COUNT = 'lootBoxesViewedCount'
+LOOT_BOXES_KEY_VIEWED_COUNT = 'lootBoxesKeyViewedCount'
+LOOT_BOXES_VIEWED_HAS_INFINITE = 'lootBoxesViewedHasInfinite'
 LOOT_BOXES_COUNT = 'lootBoxesCount'
 LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
+KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
+BIRTHDAY_2024 = 'birthday2024'
+RACES_INTRO_SCREEN_SHOWN = 'racesIntroScreenShown'
+RACES_F1_HELPER_SHOWN = 'racesF1HelperShown'
+RACES_STARTED_NOTIFICATION_VIEWED = 'races_started_notification_viewed'
 BIRTHDAY_2023_INTRO_SHOWN = 'birthday2023IntroShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
@@ -1137,7 +1144,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                             'chargeFire': True,
                                                             'affirmative': True,
                                                             'negative': True,
-                                                            'showPersonalReserves': True},
+                                                            'showPersonalReserves': True,
+                                                            CONTROLS.MOUSE_ASSAULT_SENS: True},
                                        'AimSettings': {AIM.SPG: {SPGAim.AUTO_CHANGE_AIM_MODE: True,
                                                                  SPGAim.SPG_SCALE_WIDGET: True,
                                                                  SPGAim.SPG_STRATEGIC_CAM_MODE: True,
@@ -1276,8 +1284,14 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 GUI_LOOT_BOXES: {LOOT_BOXES_INTRO_SHOWN: False,
                                  LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
                                  LOOT_BOXES_VIEWED_COUNT: 0,
+                                 LOOT_BOXES_KEY_VIEWED_COUNT: 0,
+                                 LOOT_BOXES_VIEWED_HAS_INFINITE: False,
                                  LOOT_BOXES_COUNT: {},
-                                 LOOT_BOXES_LAST_ADDED_ID: 0},
+                                 LOOT_BOXES_LAST_ADDED_ID: 0,
+                                 KEY_LOOTBOX_TRIGGER_HINT_SHOWN: False},
+                BIRTHDAY_2024: {RACES_INTRO_SCREEN_SHOWN: False,
+                                RACES_F1_HELPER_SHOWN: False,
+                                RACES_STARTED_NOTIFICATION_VIEWED: False},
                 BIRTHDAY_2023_INTRO_SHOWN: False,
                 NEW_YEAR: {NY_DAILY_QUESTS_VISITED: False,
                            NY_BONUS_DAILY_QUEST_VISITED: False,
@@ -1521,7 +1535,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 71
+    version = 73
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2196,6 +2210,22 @@ class AccountSettings(object):
                     keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
                     if WOT_PLUS in keySettings.keys():
                         keySettings.deleteSection(WOT_PLUS)
+
+            if currVersion < 72:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if GUI_LOOT_BOXES in accSettings.keys():
+                        lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
+                        lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = False
+                        accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
+
+            if currVersion < 73:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
+                    if COMP7_UI_SECTION in keySettings.keys():
+                        comp7UiSection = _unpack(keySettings[COMP7_UI_SECTION].asString)
+                        comp7UiSection[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = 0
+                        keySettings.write(COMP7_UI_SECTION, _pack(comp7UiSection))
 
             ads.writeInt('version', AccountSettings.version)
         return

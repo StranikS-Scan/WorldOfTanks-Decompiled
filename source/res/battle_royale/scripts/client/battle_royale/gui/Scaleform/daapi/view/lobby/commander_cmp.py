@@ -15,7 +15,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.app_loader import IAppLoader
 _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
-_IGNORED_SKILL_NAMES = ('commander_sixthSense',)
+_IGNORED_SKILL_NAMES = ()
 
 class CommanderComponent(InjectComponentAdaptor):
 

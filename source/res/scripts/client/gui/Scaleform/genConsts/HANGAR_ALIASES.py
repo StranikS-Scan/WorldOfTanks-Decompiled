@@ -82,3 +82,4 @@ class HANGAR_ALIASES(object):
     HE20_EVENT_ENTRY_POINT = 'he20EventEntryPoint'
     CAROUSEL_EVENT_ENTRY_HOLDER = 'carouselEventEntryHolder'
     COLLECTION_ENTRY_POINT = 'CollectionEntryPoint'
+    RACES_BANNER_ENTRY_POINT = 'RacesBannerEntryPoint'

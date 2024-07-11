@@ -59,6 +59,7 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
          'imgSource': bonus.getImage(size),
          'tooltip': bonus.tooltip,
          'isSpecial': bonus.isSpecial,
+         'isWulfTooltip': bonus.isWulfTooltip,
          'specialAlias': bonus.specialAlias,
          'specialArgs': bonus.specialArgs,
          'hasCompensation': bonus.isCompensation,

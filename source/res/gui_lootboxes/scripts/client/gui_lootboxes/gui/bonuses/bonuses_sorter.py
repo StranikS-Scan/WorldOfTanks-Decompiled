@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/bonuses/bonuses_sorter.py
 import typing
-from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS
+from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX
 from gui.server_events.bonuses import VehiclesBonus, splitBonuses
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from gui_lootboxes.gui.bonuses.bonuses_helpers import TOKEN_COMPENSATION_PREFIX, parseCompenstaionToken
 from gui_lootboxes.gui.bonuses.bonuses_order_config import BonusesSortTags
+from helpers import dependency
 from shared_utils import first
+from skeletons.gui.game_control import IGuiLootBoxesController
 VEHICLE_MAX_LEVEL = 10
 
 def _getCustomizationTag(bonus):
@@ -56,7 +58,9 @@ def _getTokensTag(bonus):
         _, _, item, _ = parseCompenstaionToken(tokenId)
         if item == 'cllc':
             return BonusesSortTags.CLLC_ITEM_COMP
-    return BonusesSortTags.CUSTOM_LOOTBOX if tokenId.startswith(LOOTBOX_TOKEN_PREFIX) else BonusesSortTags.UNSORTABLE
+    if tokenId.startswith(LOOTBOX_TOKEN_PREFIX):
+        return BonusesSortTags.CUSTOM_LOOTBOX
+    return BonusesSortTags.CUSTOM_LOOTBOXKEY if tokenId.startswith(LOOTBOX_KEY_PREFIX) else BonusesSortTags.UNSORTABLE
 
 
 BONUS_TAG_HANDLER_MAP = {Currency.CREDITS: lambda b: BonusesSortTags.CURRENCY,
@@ -94,9 +98,24 @@ def getVehBonusSortKey(bonus):
     return (hasCompensation, -vehicle.level, vehicle)
 
 
+@dependency.replace_none_kwargs(guiLootBoxController=IGuiLootBoxesController)
+def getTokensSortKey(bonus, guiLootBoxController=None):
+    tokenId = first(bonus.getTokens().iterkeys())
+    if tokenId.startswith(LOOTBOX_KEY_PREFIX) and guiLootBoxController is not None:
+        lbKey = guiLootBoxController.getKeyByTokenID(tokenId)
+        if lbKey is not None:
+            return -lbKey.openProbability
+    if tokenId.startswith(LOOTBOX_TOKEN_PREFIX) and guiLootBoxController is not None:
+        lb = guiLootBoxController.getGuiLootBoxByTokenID(tokenId)
+        if lb is not None:
+            return -lb.getWeight()
+    return bonus.getName()
+
+
 BONUSES_KEY_FUNC = {'items': lambda b: first(b.getItems()),
  'crewBooks': lambda b: first(b.getItems()),
- 'vehicles': getVehBonusSortKey}
+ 'vehicles': getVehBonusSortKey,
+ 'battleToken': getTokensSortKey}
 
 def _defaultBonusKeyFunc(bonus):
     return bonus.getName()

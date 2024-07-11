@@ -253,6 +253,7 @@ CMD_RP_INCREMENT_RECRUIT_DELTA = 31007
 CMD_RP_RESET_RECRUIT_DELTA = 31008
 CMD_BUY_EARLY_ACCESS_TOKENS = 31011
 CMD_EARLY_ACCESS_COMPLETE_CYCLE_DEV = 31012
+CMD_LOOTBOX_OPEN_BY_KEY = 31013
 PLAYER_CMD_NAMES = dict([ (v, k) for k, v in globals().items() if k.startswith('CMD_') ])
 KEYS_ARE_UNIQUE = len(PLAYER_CMD_NAMES) == len(set((key for key in globals() if key.startswith('CMD_'))))
 

@@ -1020,6 +1020,10 @@ class DIALOGS(object):
     PERKLEARNCONFIRM_TITLE = '#dialogs:perkLearnConfirm/title'
     PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
     PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
+    RACES_DESERTER_TITLE = '#dialogs:races/deserter/title'
+    RACES_DESERTER_SUBMIT = '#dialogs:races/deserter/submit'
+    RACES_DESERTER_CANCEL = '#dialogs:races/deserter/cancel'
+    RACES_DESERTER_DESCRIPTIONALIVE = '#dialogs:races/deserter/descriptionAlive'
     COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
     COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
@@ -2112,6 +2116,10 @@ class DIALOGS(object):
      PERKLEARNCONFIRM_TITLE,
      PERKLEARNCONFIRM_DESC,
      PERKLEARNCONFIRM_LEARN,
+     RACES_DESERTER_TITLE,
+     RACES_DESERTER_SUBMIT,
+     RACES_DESERTER_CANCEL,
+     RACES_DESERTER_DESCRIPTIONALIVE,
      COMP7_DESERTER_TITLE,
      COMP7_DESERTER_MSGTITLE,
      COMP7_DESERTER_MESSAGE,

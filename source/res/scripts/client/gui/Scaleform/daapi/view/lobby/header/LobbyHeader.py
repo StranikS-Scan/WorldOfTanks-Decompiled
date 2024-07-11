@@ -79,7 +79,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IWinbackController, IAchievements20Controller, IEarlyAccessController
-from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.game_control import IWotPlusController, IRacesBattleController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -252,7 +252,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         TOURNAMENTS = VIEW_ALIAS.LOBBY_TOURNAMENTS
 
     ACCOUNT_SETTINGS_COUNTERS = (TABS.STORE,)
-    DESELECT_TAB_ALIASES = (VIEW_ALIAS.WIKI_VIEW, R.views.lobby.maps_training.MapsTrainingPage())
+    DESELECT_TAB_ALIASES = {VIEW_ALIAS.WIKI_VIEW, R.views.lobby.maps_training.MapsTrainingPage()}
     _WULF_TO_TAB = {R.views.lobby.crew.BarracksView(): TABS.BARRACKS}
     _TAB_ALIAS_TO_RULE_ID = {TABS.STORE: LuiRules.LOBBY_HEADER_COUNTERS_STORE,
      TABS.MISSIONS: LuiRules.LOBBY_HEADER_COUNTERS_MISSIONS,
@@ -1131,9 +1131,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
         from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
         isCosmicEvtAvailable = dependency.instance(ICosmicEventBattleController).isEnabled
+        isRacesAvailable = dependency.instance(IRacesBattleController).isEnabled
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
         winbackAvailable = self.__winbackController.isModeAvailable()
-        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable or isCosmicEvtAvailable)
+        return not self.bootcampController.isInBootcamp() and (self.rankedController.isAvailable() or self.__funRandomCtrl.subModesInfo.isAvailable() or isEpicBattleAvailabe or brAvailable or mapboxAvailable or isEventBattlesAvailable or winbackAvailable or isCosmicEvtAvailable or isRacesAvailable)
 
     def _updatePrebattleControls(self, *_):
         if self._isLobbyHeaderControlsDisabled:

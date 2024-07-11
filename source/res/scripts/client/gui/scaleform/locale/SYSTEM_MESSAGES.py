@@ -1240,8 +1240,8 @@ class SYSTEM_MESSAGES(object):
     BATTLEPASS_MARATHONSTARTED_BODY = '#system_messages:battlePass/marathonStarted/body'
     BATTLEPASS_MARATHONFINISH_HEADER = '#system_messages:battlePass/marathonFinish/header'
     BATTLEPASS_MARATHONFINISH_BODY = '#system_messages:battlePass/marathonFinish/body'
-    BATTLEPASS_EXTRAWILLENDSOON_HEADER = '#system_messages:battlePass/extraWillEndSoon/header'
-    BATTLEPASS_EXTRAWILLENDSOON_BODY = '#system_messages:battlePass/extraWillEndSoon/body'
+    BATTLEPASS_MARATHONWILLENDSOON_HEADER = '#system_messages:battlePass/marathonWillEndSoon/header'
+    BATTLEPASS_MARATHONWILLENDSOON_BODY = '#system_messages:battlePass/marathonWillEndSoon/body'
     BATTLEPASS_GAMEMODEENABLED_HEADER = '#system_messages:battlePass/gameModeEnabled/header'
     BATTLEPASS_GAMEMODEENABLED_BODY_22 = '#system_messages:battlePass/gameModeEnabled/body/22'
     BATTLEPASS_GAMEMODEENABLED_BODY_27 = '#system_messages:battlePass/gameModeEnabled/body/27'
@@ -2715,8 +2715,8 @@ class SYSTEM_MESSAGES(object):
      BATTLEPASS_MARATHONSTARTED_BODY,
      BATTLEPASS_MARATHONFINISH_HEADER,
      BATTLEPASS_MARATHONFINISH_BODY,
-     BATTLEPASS_EXTRAWILLENDSOON_HEADER,
-     BATTLEPASS_EXTRAWILLENDSOON_BODY,
+     BATTLEPASS_MARATHONWILLENDSOON_HEADER,
+     BATTLEPASS_MARATHONWILLENDSOON_BODY,
      BATTLEPASS_GAMEMODEENABLED_HEADER,
      BATTLEPASS_GAMEMODEENABLED_BODY_22,
      BATTLEPASS_GAMEMODEENABLED_BODY_27,

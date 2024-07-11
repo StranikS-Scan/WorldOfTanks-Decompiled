@@ -43,7 +43,7 @@
       <hull2>
         <chassis>	Chassis_VK4502A_SH	</chassis>
         <weight>	36300	</weight>
-        <maxHealth>	1600	</maxHealth>
+        <maxHealth>	2000	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
@@ -130,7 +130,7 @@
       <hull3>
         <chassis>	Chassis_E-100_SH	</chassis>
         <weight>	48800	</weight>
-        <maxHealth>	1200	</maxHealth>
+        <maxHealth>	1500	</maxHealth>
         <ammoBayHealth>
           <maxHealth>	103	</maxHealth>
           <maxRegenHealth>	65	</maxRegenHealth>
@@ -232,7 +232,7 @@
       </hull3>
     </variants>
     <weight>	18800	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	103	</maxHealth>
       <maxRegenHealth>	65	</maxRegenHealth>
@@ -2888,7 +2888,7 @@
         </turret>
       </unlocks>
       <weight>	11280	</weight>
-      <maxHealth>	500	</maxHealth>
+      <maxHealth>	600	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
@@ -2932,7 +2932,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 5 0.583333 5 0.646995 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6.4	</reloadTime>
           <maxAmmo>	50	</maxAmmo>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
@@ -3005,7 +3005,7 @@
         </_105mm_StuH42_L28Pz_SH>
         <_105mm_KwK45_L52_SH>	shared	  <maxAmmo>	61	</maxAmmo>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6.5	</reloadTime>
           <unlocks>
             <chassis>	Chassis_VK4502A_SH	  <cost>	30550	</cost>
             </chassis>
@@ -3086,7 +3086,7 @@
           </camouflage>
         </_105mm_KwK45_L52_SH>
         <_128mm_L50_SH>	shared	  <maxAmmo>	43	</maxAmmo>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	9	</reloadTime>
           <unlocks>
             <chassis>	Chassis_VK4502A_SH	  <cost>	30550	</cost>
             </chassis>
@@ -3217,7 +3217,7 @@
         </gun>
       </unlocks>
       <weight>	21780	</weight>
-      <maxHealth>	1000	</maxHealth>
+      <maxHealth>	1500	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
@@ -3266,7 +3266,7 @@
       <guns>
         <_105mm_KwK45_L52_SH>	shared	  <maxAmmo>	61	</maxAmmo>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6.5	</reloadTime>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
@@ -3347,7 +3347,7 @@
           </camouflage>
         </_105mm_KwK45_L52_SH>
         <_128mm_L50_SH>	shared	  <maxAmmo>	43	</maxAmmo>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	9	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 0.353005 9 0.416667 7 0.583333 7 0.646995 7 1 9	</maxPitch>
@@ -3434,7 +3434,7 @@
           <invisibilityFactorAtShot>	0.188	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
-            <rate>	24	</rate>
+            <rate>	22	</rate>
           </clip>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3645,7 +3645,7 @@
         </gun>
       </unlocks>
       <weight>	29280	</weight>
-      <maxHealth>	800	</maxHealth>
+      <maxHealth>	1200	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	103	</maxHealth>
@@ -3692,7 +3692,7 @@
       <guns>
         <_105mm_KwK45_L52_SH>	shared	  <maxAmmo>	61	</maxAmmo>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <reloadTime>	7	</reloadTime>
+          <reloadTime>	6.5	</reloadTime>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
@@ -3777,7 +3777,7 @@
           </camouflage>
         </_105mm_KwK45_L52_SH>
         <_128mm_L50_SH>	shared	  <maxAmmo>	43	</maxAmmo>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	9	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.353005 10 0.416667 5 0.583333 5 0.646995 10 1 10	</maxPitch>
@@ -3954,7 +3954,7 @@
             <maxPitch>	0 9 0.353005 9 0.416667 7 0.583333 7 0.646995 7 1 9	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	11.5	</reloadTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>

@@ -1,26 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
+import logging
 import math
 from collections import namedtuple
-import logging
-import Vehicular
-import DataLinks
-import WWISE
 import BigWorld
+import CGF
+import DataLinks
+import GenericComponents
 import Math
+import Vehicular
+import WWISE
 import WoT
 import material_kinds
-import CGF
-import GenericComponents
-from constants import IS_DEVELOPMENT, IS_EDITOR, IS_UE_EDITOR
-from skeletons.gui.shared.utils import IHangarSpace
-from soft_exception import SoftException
 import math_utils
+from constants import IS_DEVELOPMENT, IS_EDITOR, IS_UE_EDITOR
 from helpers import DecalMap, dependency
 from items.components import shared_components, component_constants
-from vehicle_systems.vehicle_damage_state import VehicleDamageState
-from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames, TankSoundObjectsIndexes
+from skeletons.gui.shared.utils import IHangarSpace
+from soft_exception import SoftException
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
+from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames, TankSoundObjectsIndexes
+from vehicle_systems.vehicle_damage_state import VehicleDamageState
 _logger = logging.getLogger(__name__)
 DEFAULT_MAX_LOD_PRIORITY = None
 _INFINITY = 10000
@@ -862,6 +862,8 @@ def assembleBurnoutProcessor(appearance):
 
 def assembleCustomLogicComponents(appearance, typeDescriptor, attachments, modelAnimators):
     assemblers = [('flagAnimation', __assembleAnimationFlagComponent), ('prefab', __assemblePrefabComponent)]
+    if IS_EDITOR:
+        attachments = [ attachment for attachment in attachments if attachment in typeDescriptor.type.prefabAttachments ]
     for assemblerName, assembler in assemblers:
         for attachment in attachments:
             if attachment.attachmentLogic == assemblerName:
@@ -880,15 +882,51 @@ def assembleCustomLogicComponents(appearance, typeDescriptor, attachments, model
         loadAppearancePrefab(prefab, appearance)
 
 
-def addShellCasingsEjectionPrefab(appearance, typeDescriptor, force=False):
-    if typeDescriptor.hasShellCasingsEjection:
-        from cgf_components.on_shot_components import ShellCasingsEjectionController
-        hasComponent = appearance.findComponentByType(ShellCasingsEjectionController)
-        if hasComponent and force:
-            appearance.removeComponentByType(ShellCasingsEjectionController)
-            appearance.createComponent(ShellCasingsEjectionController, appearance, typeDescriptor.type.shellCasingsEjectionPrefab)
-        elif not hasComponent:
-            appearance.createComponent(ShellCasingsEjectionController, appearance, typeDescriptor.type.shellCasingsEjectionPrefab)
+def getTankStyle(typeDescriptor):
+    from items.vehicles import g_cache
+    from items.components.c11n_constants import CustomizationType, SLOT_TYPE_NAMES
+    chassis = typeDescriptor.type.edChassis.source
+    for item in chassis:
+        slots = item.edCustomizationSlots.anchorSlots
+        for slot in slots:
+            if slot is None:
+                continue
+            if slot.type == SLOT_TYPE_NAMES.STYLE and slot.edResourceId is not 0:
+                return g_cache.customization20().itemTypes[CustomizationType.STYLE][slot.edResourceId]
+
+    return
+
+
+def getStyleAttachments(styleOutfit):
+    from items.vehicles import g_cache
+    attachments = []
+    for element in styleOutfit.attachments:
+        attachments.append(g_cache.customization20().attachments[element.id])
+
+    return attachments
+
+
+def updatePrefabAttachments(editorTank):
+    appearance = editorTank.appearance
+    typeDescriptor = editorTank.typeDescriptor
+    if appearance is None or typeDescriptor is None:
+        return
+    else:
+        newPrefabAttachments = []
+        shouldOverrideDefault = False
+        tankStyle = getTankStyle(typeDescriptor)
+        if tankStyle is not None:
+            modelsSet = tankStyle.modelsSet
+            if modelsSet == '' or modelsSet == typeDescriptor.type.edModelsSets.activeModelsSet:
+                outfit = tankStyle.outfitsProxyList[tankStyle.editorData.selectedOutfitIndex]
+                shouldOverrideDefault = outfit.overrideDefault
+                newPrefabAttachments = getStyleAttachments(outfit)
+        if not shouldOverrideDefault:
+            newPrefabAttachments = newPrefabAttachments + typeDescriptor.type.edModelsSets.getPrefabAttachments()
+        typeDescriptor.type.prefabAttachments = newPrefabAttachments
+        from prefab_attachment_utils import addPrefabAttachments
+        addPrefabAttachments(appearance, typeDescriptor, True)
+        return
 
 
 def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelAnimators):

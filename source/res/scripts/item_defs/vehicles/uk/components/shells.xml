@@ -377,6 +377,43 @@
       <devices>	54	</devices>
     </damage>
   </_2pdr_AP_Mk.XB>
+  <_2pdr_AP_Mk.XB_02_R>
+    <id>	40000	</id>
+    <userString>	#gb_vehicles:_2pdr_AP_Mk.XB	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	RacesPushingShot	</effects>
+    <damage>
+      <armor>	10	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_2pdr_AP_Mk.XB_02_R>
+  <_2pdr_AP_Mk.XB_02_R_special>
+    <id>	40001	</id>
+    <userString>	#gb_vehicles:_2pdr_AP_Mk.XB	</userString>
+    <icon>	he	</icon>
+    <price>	0	</price>
+    <improved>	true	</improved>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	380	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	RacesPushingShot	</effects>
+    <damage>
+      <armor>	25	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.0	</piercingPowerLossFactorByDistance>
+    <explosionRadius>	20	</explosionRadius>
+    <explosionDamageFactor>	0.0	</explosionDamageFactor>
+  </_2pdr_AP_Mk.XB_02_R_special>
   <_2pdr_APCNR_Mk.1B>
     <id>	235	</id>
     <userString>	#gb_vehicles:_2pdr_APCNR_Mk.1B	</userString>
@@ -2521,31 +2558,22 @@
       </damage>
     </armorSpalls>
   </_105mm_HESH_L7>
-  <_105mm_HESH_L7_AL>
+  <_105mm_HEAT_L7_AL>
     <id>	31011	</id>
-    <userString>	#gb_vehicles:_105mm_HESH_L7	</userString>
-    <icon>	he_modern_premium	</icon>
-    <price>	5200	</price>
+    <userString>	#gb_vehicles:_105mm_HEAT_L7_AL	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
     <improved>	true	</improved>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	105	</caliber>
-    <explosionRadius>	1.91	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
+    <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	480	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
-    <armorSpalls>
-      <impactRadius>	1.91	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	240	</armor>
-        <devices>	75	</devices>
-      </damage>
-    </armorSpalls>
-  </_105mm_HESH_L7_AL>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT_L7_AL>
   <QF_105mm_AP>
     <id>	150	</id>
     <userString>	#gb_vehicles:QF_105mm_AP	</userString>
@@ -3822,7 +3850,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRmainArmorPiercing	</effects>
     <damage>
-      <armor>	260	</armor>
+      <armor>	300	</armor>
       <devices>	28	</devices>
     </damage>
   </_20pdr_AP_Mk1_SH>
@@ -3838,7 +3866,7 @@
     <isTracer>	true	</isTracer>
     <effects>	BRlargeAPCR	</effects>
     <damage>
-      <armor>	210	</armor>
+      <armor>	240	</armor>
       <devices>	28	</devices>
     </damage>
   </_20pdr_APC_Mk4ST_SH>

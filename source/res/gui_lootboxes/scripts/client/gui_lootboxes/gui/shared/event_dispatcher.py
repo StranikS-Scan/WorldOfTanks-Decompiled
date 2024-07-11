@@ -62,9 +62,13 @@ def showBonusProbabilitiesWindow(lootBox, parent=None):
     window.load()
 
 
-def showRewardScreenWindow(rewards, lootBox=None, parent=None):
+def showRewardScreenWindow(rewards, lootBox=None, clientData=None, parent=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.reward_screen import LootBoxesRewardScreenWindow
-    window = LootBoxesRewardScreenWindow(rewards=rewards, lootBox=lootBox, parent=parent)
+    from gui_lootboxes.gui.impl.lobby.gui_lootboxes.loot_boxes_lose_reward_screen import LootBoxesLoseRewardScreenWindow
+    if clientData.get('countOfOpened', 0) == 0:
+        window = LootBoxesLoseRewardScreenWindow(rewards=rewards, lootBox=lootBox, clientData=clientData, parent=parent)
+    else:
+        window = LootBoxesRewardScreenWindow(rewards=rewards, lootBox=lootBox, clientData=clientData, parent=parent)
     window.load()
 
 

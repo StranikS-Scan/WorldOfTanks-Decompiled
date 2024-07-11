@@ -655,6 +655,59 @@
       </damage>
     </armorSpalls>
   </_90mm_HE>
+  <_90mm_AP_90>
+    <id>	118	</id>
+    <userString>	#poland_vehicles:_90mm_AP_90	</userString>
+    <icon>	ap	</icon>
+    <price>	290	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_AP_90>
+  <_90mm_APCR_90>
+    <id>	119	</id>
+    <userString>	#poland_vehicles:_90mm_APCR_90	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	122	</devices>
+    </damage>
+  </_90mm_APCR_90>
+  <_90mm_HE_90>
+    <id>	120	</id>
+    <userString>	#poland_vehicles:_90mm_HE_90	</userString>
+    <icon>	he_modern	</icon>
+    <price>	240	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_HE_90>
   <_100mm_slpgr_m_43>
     <id>	98	</id>
     <userString>	#poland_vehicles:_100mm_slpgr_m_43	</userString>
@@ -712,31 +765,56 @@
   <_100_162mm_slpgr_fm>
     <id>	109	</id>
     <userString>	#poland_vehicles:_100_162mm_slpgr_fm	</userString>
-    <icon>	ap	</icon>
-    <price>	1120	</price>
-    <kind>	ARMOR_PIERCING	</kind>
+    <icon>	ap_cr	</icon>
+    <price>	540	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
+    <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	530	</armor>
+      <armor>	320	</armor>
       <devices>	162	</devices>
     </damage>
   </_100_162mm_slpgr_fm>
   <_100_162mm_slpprj_m>
     <id>	110	</id>
     <userString>	#poland_vehicles:_100_162mm_slpprj_m	</userString>
-    <icon>	ap_cr	</icon>
-    <price>	980	</price>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	100	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	390	</armor>
+      <armor>	320	</armor>
       <devices>	162	</devices>
     </damage>
   </_100_162mm_slpprj_m>
+  <_100_162mm_sgr>
+    <id>	111	</id>
+    <userString>	#poland_vehicles:_100_162mm_sgr	</userString>
+    <icon>	he_modern	</icon>
+    <price>	325	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	2.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100_162mm_sgr>
   <_100mm_pocisk_przeciwpancerny>
     <id>	81	</id>
     <userString>	#poland_vehicles:_100mm_pocisk_przeciwpancerny	</userString>
@@ -932,6 +1010,20 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_PP_15>
+  <_105mm_PP_15_02>
+    <id>	31001	</id>
+    <userString>	#poland_vehicles:_105mm_PP_15	</userString>
+    <icon>	ap	</icon>
+    <price>	1040	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_PP_15_02>
   <_105mm_3PPod_21>
     <id>	78	</id>
     <userString>	#poland_vehicles:_105mm_3PPod_21	</userString>
@@ -947,6 +1039,21 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_3PPod_21>
+  <_105mm_3PPod_21_02>
+    <id>	31002	</id>
+    <userString>	#poland_vehicles:_105mm_3PPod_21	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_3PPod_21_02>
   <_105mm_POB_6M>
     <id>	79	</id>
     <userString>	#poland_vehicles:_105mm_POB_6M	</userString>
@@ -971,6 +1078,30 @@
       </damage>
     </armorSpalls>
   </_105mm_POB_6M>
+  <_105mm_POB_6M_02>
+    <id>	31003	</id>
+    <userString>	#poland_vehicles:_105mm_POB_6M	</userString>
+    <icon>	he_modern	</icon>
+    <price>	745	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_POB_6M_02>
   <_122mm_UBR-471_PB>
     <id>	5	</id>
     <userString>	#poland_vehicles:_122mm_UBR-471_PB	</userString>
@@ -1290,6 +1421,59 @@
       </damage>
     </armorSpalls>
   </_152mm_pocisk_wybuchowy>
+  <_175mm_AP>
+    <id>	100	</id>
+    <userString>	#poland_vehicles:_175mm_AP	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1480	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeAPCR	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	175	</devices>
+    </damage>
+  </_175mm_AP>
+  <_175mm_APCR>
+    <id>	101	</id>
+    <userString>	#poland_vehicles:_175mm_APCR	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	85	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeAPCR	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	175	</devices>
+    </damage>
+  </_175mm_APCR>
+  <_175mm_HE>
+    <id>	102	</id>
+    <userString>	#poland_vehicles:_175mm_HE	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1370	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	85	</caliber>
+    <explosionRadius>	2.66	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	670	</armor>
+      <devices>	175	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.66	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	340	</armor>
+        <devices>	88	</devices>
+      </damage>
+    </armorSpalls>
+  </_175mm_HE>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

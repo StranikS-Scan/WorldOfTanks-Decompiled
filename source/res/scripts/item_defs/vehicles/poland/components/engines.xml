@@ -37,6 +37,10 @@
     <W_12_5_P_1>	39	</W_12_5_P_1>
     <GTD_M11>	40	</GTD_M11>
     <_2x_GTD-F>	44	</_2x_GTD-F>
+    <SGT_3Cz_M_02>	31001	</SGT_3Cz_M_02>
+    <GTD_2T6x2_T>	31002	</GTD_2T6x2_T>
+    <MT_50T_T>	31003	</MT_50T_T>
+    <GTD_2T5x2_T>	31004	</GTD_2T5x2_T>
     <Development_Engine>	65000	</Development_Engine>
     <Maybach_VL_2_SH>	36	</Maybach_VL_2_SH>
     <SGT_3Cz_SH>	37	</SGT_3Cz_SH>
@@ -467,6 +471,23 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Maybach_HL_157_P>
+    <MT_50T_T>
+      <userString>	#poland_vehicles:MT_50T	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	34000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	800	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </MT_50T_T>
     <J_V12>
       <userString>	#poland_vehicles:J_V12	</userString>
       <tags>	gasoline	</tags>
@@ -629,6 +650,57 @@
       <rpm_min>	510	</rpm_min>
       <rpm_max>	2632	</rpm_max>
     </SGT_3Cz_M>
+    <SGT_3Cz_M_02>
+      <userString>	#poland_vehicles:SGT_3Cz_M	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	131000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	740	</power>
+      <weight>	1950	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	510	</rpm_min>
+      <rpm_max>	2632	</rpm_max>
+    </SGT_3Cz_M_02>
+    <GTD_2T6x2_T>
+      <userString>	#poland_vehicles:GTD_2T6x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	132000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	2400	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </GTD_2T6x2_T>
+    <GTD_2T5x2_T>
+      <userString>	#poland_vehicles:GTD_2T5x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	940	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	477	</rpm_min>
+      <rpm_max>	2071	</rpm_max>
+    </GTD_2T5x2_T>
     <V-2-34_B>
       <userString>	#poland_vehicles:V-2-34_B	</userString>
       <tags>	diesel	</tags>
@@ -652,16 +724,16 @@
       <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	1	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	376	</rpm_min>
-      <rpm_max>	2072	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	3000	</rpm_max>
     </Development_Engine>
     <Maybach_VL_2_SH>
       <userString>	#poland_vehicles:Maybach_VL_2_SH	</userString>

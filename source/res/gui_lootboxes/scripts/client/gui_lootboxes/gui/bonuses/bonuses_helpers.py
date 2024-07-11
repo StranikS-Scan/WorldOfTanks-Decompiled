@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: gui_lootboxes/scripts/client/gui_lootboxes/gui/bonuses/bonuses_helpers.py
 import logging
-from constants import LOOTBOX_TOKEN_PREFIX
+from gui_lootboxes.gui.lb_gui_constants import SCH_CLIENT_MSG_TYPE
+from constants import LOOTBOX_KEY_PREFIX
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.money import ZERO_MONEY, Currency, Money
 from helpers import dependency
 from skeletons.gui.system_messages import ISystemMessages
-from gui_lootboxes.gui.lb_gui_constants import SCH_CLIENT_MSG_TYPE
 TOKEN_COMPENSATION_TEMPLATE = 'lb_comp:{}:{}:{}:{}'
 TOKEN_COMPENSATION_PREFIX = 'lb_comp:'
 _logger = logging.getLogger(__name__)
@@ -54,23 +54,29 @@ def preformatStyle(rewards):
             rewards.pop('customizations')
 
 
+def preformatKey(rewards, dataUsedKeys, dataFaildKey):
+    for token in rewards.get('tokens', {}).iterkeys():
+        _, keyID = token.split(':')
+        if token.startswith(LOOTBOX_KEY_PREFIX) and (int(keyID) in dataUsedKeys.keys() or int(keyID) in dataFaildKey.keys()):
+            rewards['tokens'][token]['count'] += 1
+
+
 def prepareOpenResult(result):
     if result and result.success and result.auxData:
         bonus = result.auxData.get('bonus', [])
+        dataUsedKeys = result.auxData.get('clientData', {}).get('usedKeys', {})
+        dataFaildKey = result.auxData.get('extData', {}).get('failedKeys', {})
         for rewards in bonus:
             preformatCompensationValue(rewards)
             preformatStyle(rewards)
+            preformatKey(rewards, dataUsedKeys, dataFaildKey)
 
         rewards = getMergedBonusesFromDicts(bonus)
-        boxesData = {}
-        for token in rewards.get('tokens', {}).keys():
-            if token.startswith(LOOTBOX_TOKEN_PREFIX):
-                _, boxID = token.split(':')
-                count = abs(rewards['tokens'][token].get('count', 1))
-                boxesData[boxID] = count
-
+        openedLootBoxesData = result.auxData.get('extData', {}).get('openedLootBoxes', {})
         message = {'rewards': rewards,
-         'boxesData': boxesData}
+         'failedKeys': dataFaildKey,
+         'usedKeys': dataUsedKeys,
+         'openedLootBoxes': openedLootBoxesData}
         systemMessages = dependency.instance(ISystemMessages)
         systemMessages.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.LB_OPENED)
 

@@ -1,0 +1,13 @@
+<ArenaInfoRacesScoreSystemComponent.def>
+  <Properties>
+    <totalScore>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </totalScore>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+</ArenaInfoRacesScoreSystemComponent.def>

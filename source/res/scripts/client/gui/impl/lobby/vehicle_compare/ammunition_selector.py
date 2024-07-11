@@ -15,13 +15,14 @@ from gui.impl.lobby.tank_setup.tooltips.setup_tab_tooltip_view import SetupTabTo
 from gui.impl.pub import ViewImpl
 
 class CompareAmmunitionSelectorView(ViewImpl):
-    __slots__ = ('_vehItem', '_selectedSlotID', '_tankSetup')
+    __slots__ = ('_vehItem', '_selectedSlotID', '_tankSetup', '_isClosed')
 
     def __init__(self, layoutID, **kwargs):
         settings = ViewSettings(layoutID)
         settings.model = VehicleCompareAmmunitionSetupModel()
         settings.flags = ViewFlags.LOBBY_TOP_SUB_VIEW
         settings.kwargs = kwargs.get('ctx', {})
+        self._isClosed = True
         super(CompareAmmunitionSelectorView, self).__init__(settings)
 
     @property
@@ -76,15 +77,16 @@ class CompareAmmunitionSelectorView(ViewImpl):
         return
 
     def __onViewRendered(self):
-        if not self.viewModel.getShow():
-            self.viewModel.setShow(True)
+        self.viewModel.setShow(self._isClosed)
 
     def __onAnimationEnd(self):
-        if not self.viewModel.getShow():
+        if not self.viewModel.getShow() or not self._isClosed:
             self.destroyWindow()
 
     def __onClose(self):
+        self._isClosed = False
         self.viewModel.setShow(False)
 
     def __onItemSelected(self, *_):
+        self._isClosed = False
         self.viewModel.setShow(False)

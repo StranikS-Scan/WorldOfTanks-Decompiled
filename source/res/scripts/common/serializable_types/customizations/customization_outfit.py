@@ -107,10 +107,11 @@ class CustomizationOutfit(SerializableComponent):
      ('sequences', customArrayField(SequenceComponent.customType)),
      ('attachments', customArrayField(AttachmentComponent.customType)),
      ('styleProgressionLevel', intField()),
-     ('serial_number', strField())))
-    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers', 'sequences', 'attachments', 'styleProgressionLevel', 'serial_number')
+     ('serial_number', strField()),
+     ('overrideDefaultAttachments', intField())))
+    __slots__ = ('modifications', 'paints', 'camouflages', 'decals', 'styleId', 'projection_decals', 'insignias', 'personal_numbers', 'sequences', 'overrideDefaultAttachments', 'attachments', 'styleProgressionLevel', 'serial_number')
 
-    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None, sequences=None, attachments=None, styleProgressionLevel=0, serial_number=None):
+    def __init__(self, modifications=None, paints=None, camouflages=None, decals=None, projection_decals=None, personal_numbers=None, styleId=0, insignias=None, sequences=None, overrideDefaultAttachments=0, attachments=None, styleProgressionLevel=0, serial_number=None):
         self.modifications = modifications or []
         self.paints = paints or []
         self.camouflages = camouflages or []
@@ -120,6 +121,7 @@ class CustomizationOutfit(SerializableComponent):
         self.projection_decals = projection_decals or []
         self.personal_numbers = personal_numbers or []
         self.sequences = sequences or []
+        self.overrideDefaultAttachments = overrideDefaultAttachments or 0
         self.attachments = attachments or []
         self.styleProgressionLevel = styleProgressionLevel or 0
         self.serial_number = serial_number or ''

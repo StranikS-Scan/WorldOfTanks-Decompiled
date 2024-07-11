@@ -18,4 +18,4 @@ class UserSubscriptionDescriptor(object):
 
     @property
     def nextBilling(self):
-        return int(calendar.timegm(time.strptime(self._params.get('next_billing_time'), '%Y-%m-%dT%H:%M:%SZ')))
+        return 0 if self._params.get('next_billing_time') is None else int(calendar.timegm(time.strptime(self._params.get('next_billing_time'), '%Y-%m-%dT%H:%M:%SZ')))

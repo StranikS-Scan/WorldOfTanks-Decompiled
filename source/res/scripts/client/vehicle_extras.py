@@ -315,6 +315,7 @@ class BlinkingLaserSight(EntityExtra):
 
     def _start(self, data, args):
         vehicle = data['entity']
+        data['v_id'] = vehicle.id
         data['bindNodeRef'] = vehicle.model.node(self._bindNode)
         if data['bindNodeRef'] is not None:
             data['beamMP'] = LaserSightMatrixProvider()
@@ -373,7 +374,7 @@ class BlinkingLaserSight(EntityExtra):
 
     @staticmethod
     def __onSequenceLoaded(seqName, data, resourceRefs):
-        if data['entity'].id == BigWorld.player().vehicle.id:
+        if data['v_id'] == BigWorld.player().vehicle.id:
             return
         else:
             if seqName not in resourceRefs.failedIDs and data['beamModelRef'] is not None:

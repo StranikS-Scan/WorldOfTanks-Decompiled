@@ -136,6 +136,9 @@ class ProductsFetchController(IProductFetchController):
     def isProductsReady(self):
         return self._fetchResult.isProductsReady
 
+    def isUndefined(self):
+        return self._fetchResult.isUndefined
+
     @wg_async.wg_async
     def getProducts(self, showWaiting=True):
         _logger.debug('Trying to fetch products')

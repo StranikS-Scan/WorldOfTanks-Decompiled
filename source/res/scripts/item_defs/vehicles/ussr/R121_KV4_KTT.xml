@@ -1158,8 +1158,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.17	</vehicleMovement>
+        <vehicleRotation>	0.17	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2083,7 +2083,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2111,11 +2111,11 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	8.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R121_KV4_KTT/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R121_KV4_KTT/crash/lod0/Gun_01.model	</destroyed>

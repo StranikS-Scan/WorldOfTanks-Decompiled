@@ -145,6 +145,8 @@ class ARENAS(object):
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
+    C_102_RACE_2024_NAME = '#arenas:102_race_2024/name'
+    C_102_RACE_2024_DESCRIPTION = '#arenas:102_race_2024/description'
     C_105_GERMANY_NAME = '#arenas:105_germany/name'
     C_105_GERMANY_DESCRIPTION = '#arenas:105_germany/description'
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
@@ -172,6 +174,16 @@ class ARENAS(object):
     C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
     TYPE_MAPS_TRAINING_NAME = '#arenas:type/maps_training/name'
     TYPE_MAPS_TRAINING_DESCRIPTION = '#arenas:type/maps_training/description'
+    C_1003_CGF_TEST_NAME = '#arenas:1003_cgf_test/name'
+    C_1003_CGF_TEST_DESCRIPTION = '#arenas:1003_cgf_test/description'
+    C_1005_AI_TEST_AUTOMATION_NAME = '#arenas:1005_ai_test_automation/name'
+    C_1005_AI_TEST_AUTOMATION_DESCRIPTION = '#arenas:1005_ai_test_automation/description'
+    C_1006_3D_STYLES_TEST_NAME = '#arenas:1006_3d_styles_test/name'
+    C_1006_3D_STYLES_TEST_DESCRIPTION = '#arenas:1006_3d_styles_test/description'
+    C_1007_NEXTGEN_TEST_NAME = '#arenas:1007_nextgen_test/name'
+    C_1007_NEXTGEN_TEST_DESCRIPTION = '#arenas:1007_nextgen_test/description'
+    H00_ARMORY_YARD_EP3_XML_NAME = '#arenas:h00_armory_yard_ep3.xml/name'
+    H00_ARMORY_YARD_EP3_XML_DESCRIPTION = '#arenas:h00_armory_yard_ep3.xml/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -314,6 +326,8 @@ class ARENAS(object):
      C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
      C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
+     C_102_RACE_2024_NAME,
+     C_102_RACE_2024_DESCRIPTION,
      C_105_GERMANY_NAME,
      C_105_GERMANY_DESCRIPTION,
      C_60_ASIA_MIAO_NAME,
@@ -340,7 +354,17 @@ class ARENAS(object):
      C_500_STALINGRAD_NAME,
      C_500_STALINGRAD_DESCRIPTION,
      TYPE_MAPS_TRAINING_NAME,
-     TYPE_MAPS_TRAINING_DESCRIPTION)
+     TYPE_MAPS_TRAINING_DESCRIPTION,
+     C_1003_CGF_TEST_NAME,
+     C_1003_CGF_TEST_DESCRIPTION,
+     C_1005_AI_TEST_AUTOMATION_NAME,
+     C_1005_AI_TEST_AUTOMATION_DESCRIPTION,
+     C_1006_3D_STYLES_TEST_NAME,
+     C_1006_3D_STYLES_TEST_DESCRIPTION,
+     C_1007_NEXTGEN_TEST_NAME,
+     C_1007_NEXTGEN_TEST_DESCRIPTION,
+     H00_ARMORY_YARD_EP3_XML_NAME,
+     H00_ARMORY_YARD_EP3_XML_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

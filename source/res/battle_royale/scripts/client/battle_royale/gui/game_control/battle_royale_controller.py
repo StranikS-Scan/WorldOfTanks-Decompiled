@@ -271,13 +271,18 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
             return result
 
     @staticmethod
-    def getBrCommanderSkills():
-        result = []
+    def _getFullLearnedSkill(skillName):
+        return TankmanSkill(skillName, skillLevel=100)
+
+    def getBrCommanderSkills(self):
+        ignoredSkillNames = ('commander_sixthSense',)
+        result = [ self._getFullLearnedSkill(skillName) for skillName in ignoredSkillNames ]
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
             for _, tankman in vehicle.crew:
                 if tankman is not None:
-                    for skill in tankman.skills:
+                    skills = (skill for skill in tankman.skills if skill.name not in ignoredSkillNames)
+                    for skill in skills:
                         result.append(skill)
 
         return result

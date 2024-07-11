@@ -211,6 +211,9 @@ class UtilWebApiMixin(object):
                 if lootBox:
                     self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=lootBox.getUserName(), body=lootBox.getDescriptionText()), 'INFO')
                 return
+            if itemType == ItemPackType.CUSTOM_LOOTBOXKEY:
+                self.__getTooltipMgr().onCreateWulfTooltip(TC.LOOT_BOX_KEY_TOOLTIP, [cmd.id], cmd.extra['x'], cmd.extra['y'])
+                return
             itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)

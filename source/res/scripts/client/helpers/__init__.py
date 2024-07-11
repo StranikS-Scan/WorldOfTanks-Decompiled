@@ -5,7 +5,7 @@ import BigWorld
 import ResMgr
 import i18n
 import constants
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from soft_exception import SoftException
 VERSION_FILE_PATH = '../version.xml'
 _CLIENT_VERSION = None
@@ -106,6 +106,25 @@ def getFullClientVersion():
     else:
         version = i18n.makeString(sec.readString('appname')) + ' ' + sec.readString('version')
         return version
+
+
+__DEFAULT_CLIENT_VERSION = 0
+__CLIENT_VERSION = None
+
+def clientVersionGetter():
+    global __CLIENT_VERSION
+    if __CLIENT_VERSION is None:
+        __CLIENT_VERSION = __DEFAULT_CLIENT_VERSION
+        try:
+            clientVersion = getClientVersion()
+            splitted = clientVersion.split('#')
+            if len(splitted) != 2:
+                raise SoftException('Invalid format of version tag in version.xml')
+            __CLIENT_VERSION = int(splitted[1])
+        except:
+            LOG_WARNING('Invalid format of version tag in version.xml. Right format for example "1.11.1 # XYZ" where XYZ is integer. The client version is set to default {}.'.format(__CLIENT_VERSION))
+
+    return __CLIENT_VERSION
 
 
 def newFakeModel():

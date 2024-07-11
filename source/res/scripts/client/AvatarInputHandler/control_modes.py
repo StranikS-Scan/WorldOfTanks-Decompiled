@@ -641,7 +641,7 @@ class ArcadeControlMode(_GunControlMode):
         vecToPivot = pivotPos - wpoint
         if vecToPivot.x != 0:
             wpoint += ray * (vecToPivot.x / ray.x)
-        res = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 0, BigWorld.player().playerVehicleID, -1, 0)
+        res = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 1, BigWorld.player().playerVehicleID, -1, 0)
         if res is not None:
             pos = res[0]
             normal = res[6]
@@ -666,6 +666,11 @@ class ArcadeControlMode(_GunControlMode):
             pos = self.camera.aimingSystem.getDesiredShotPoint()
             vehicle = BigWorld.player().getVehicleAttached()
             hitPoint, projectileDir = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
+            shotPosition, velocity, gravity = BigWorld.player().gunRotator.getShotParams(hitPoint, ignoreYawLimits=True)
+            result = BigWorld.wg_simulateProjectileTrajectory(shotPosition, velocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT, 4)
+            if result is not None:
+                hitPoint = result[1]
+                projectileDir = result[2]
             checkHitPoint = True
             if ownVehicle.model is not None:
                 gunNode = ownVehicle.model.node('gun')
@@ -677,7 +682,7 @@ class ArcadeControlMode(_GunControlMode):
                 pos = hitPoint
                 projectileDir.normalise()
                 checkWaterDirection = projectileDir
-                hit = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 128, BigWorld.player().playerVehicleID, -1, 0)
+                hit = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 1, BigWorld.player().playerVehicleID, -1, 0)
                 if hit is not None:
                     normal = hit[6]
             if checkWaterDirection.y < 0.0:
@@ -1166,7 +1171,12 @@ class AssaultControlMode(_TrajectoryControlMode):
             safePos = self.__generateSafeTargetPoint(preferredPos)
             if safePos is not None:
                 canEnable = self._cam.setup(safePos)
+        if not canEnable:
+            self.__showFailedSpawnMsg()
         return canEnable
+
+    def __showFailedSpawnMsg(self):
+        self.__sessionProvider.shared.messages.showVehicleError('cantSpawnAssaultSpgCamera')
 
     def __getVehicleTargetPoint(self, targetPoint, normal):
         direction = self._cam.getMinStateDirection(targetPoint)

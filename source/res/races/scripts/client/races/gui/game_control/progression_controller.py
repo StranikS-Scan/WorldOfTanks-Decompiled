@@ -111,6 +111,13 @@ class RacesProgressionController(IRacesProgressionController):
         quests = self.eventsCache.getAllQuests(lambda quest: bool(WELCOME_QUEST_REGEX.search(quest.getID())))
         return OrderedDict(sorted(quests.items()))
 
+    def isProgressionFinished(self):
+        quests = self.collectSortedQuests()
+        if quests:
+            lastQuest = quests.values()[-1]
+            return lastQuest.isCompleted()
+        return False
+
     def getFirstWinQuestForAwardsScreen(self):
         quests = self.eventsCache.getAllQuests(lambda quest: bool(FIRST_WIN_QUEST_REGEX.search(quest.getID())))
         return OrderedDict(sorted(quests.items()))

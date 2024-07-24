@@ -14,11 +14,11 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import 
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip_rotation import LootboxRotationTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.probability_button_tooltip import ProbabilityButtonTooltip
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import getUniqueRewardHandler
-from gui_lootboxes.gui.shared.event_dispatcher import showLootBoxOpenErrorWindow, showLootBoxesWelcomeScreen, showBonusProbabilitiesWindow, showRewardScreenWindow
+from gui_lootboxes.gui.shared.event_dispatcher import showLootBoxOpenErrorWindow, showBonusProbabilitiesWindow, showRewardScreenWindow
 from gui_lootboxes.gui.shared.events import LootBoxesEvent
 from gui_lootboxes.gui.shared.gui_helpers import getLootBoxViewModel, getLootBoxKeyViewModel
 from gui_lootboxes.gui.storage_context.context import LootBoxesContext, ViewEvents, ReturnPlaces
-from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED, LOOT_BOXES_INTRO_SHOWN, LOOT_BOXES_LAST_ADDED_ID, KEY_LOOTBOX_TRIGGER_HINT_SHOWN
+from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED, LOOT_BOXES_LAST_ADDED_ID, KEY_LOOTBOX_TRIGGER_HINT_SHOWN
 from frameworks.wulf import ViewSettings, ViewStatus, WindowFlags, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -34,7 +34,7 @@ from helpers import dependency
 from helpers.func_utils import waitEventAndCall
 from lootboxes_common import makeLootboxTokenID, makeLBKeyTokenID
 from shared_utils import findFirst
-from skeletons.gui.game_control import IGuiLootBoxesController
+from skeletons.gui.game_control import IGuiLootBoxesController, IGuiLootBoxesIntroController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -48,6 +48,7 @@ _logger = logging.getLogger(__name__)
 class LootBoxesStorageView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __guiLootBoxesCtr = dependency.descriptor(IGuiLootBoxesController)
+    __guiLootBoxesIntroCtr = dependency.descriptor(IGuiLootBoxesIntroController)
     __guiLoader = dependency.descriptor(IGuiLoader)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _COMMON_SOUND_SPACE = LOOT_BOXES_SOUND_SPACE
@@ -119,8 +120,7 @@ class LootBoxesStorageView(ViewImpl):
             if showTriggerHint:
                 model.setIsShowTriggerHint(self.__guiLootBoxesCtr.hasLootboxKey() and not self.__guiLootBoxesCtr.getSetting(KEY_LOOTBOX_TRIGGER_HINT_SHOWN))
                 self.__guiLootBoxesCtr.setSetting(KEY_LOOTBOX_TRIGGER_HINT_SHOWN, True)
-        if not self.__guiLootBoxesCtr.getSetting(LOOT_BOXES_INTRO_SHOWN):
-            showLootBoxesWelcomeScreen(self.getParentWindow())
+        self.__guiLootBoxesIntroCtr.tryShowIntro()
 
     def _onLoaded(self, *args, **kwargs):
         super(LootBoxesStorageView, self)._onLoaded(*args, **kwargs)
@@ -321,13 +321,11 @@ class LootBoxesStorageView(ViewImpl):
         return
 
     def __onKeysUpdate(self, *_):
-        if self.__context.getCurrentState() == States.STORAGE_VIEWING:
+        if self.__context.getCurrentState() in (States.OPENING, States.LOSE_OPENING, States.STORAGE_VIEWING):
             if self.viewStatus in (ViewStatus.DESTROYING, ViewStatus.DESTROYED):
                 return
             self.__fillLootBoxKeysModel()
-            self.__onBoxInfoUpdated()
-        else:
-            self.__waitStatesHandlers[States.STORAGE_VIEWING].append(self.__onKeysUpdate)
+            self.__waitStatesHandlers[States.STORAGE_VIEWING].append(self.__onBoxInfoUpdated)
 
     def __onBoxInfoUpdated(self):
         if self.__context.getCurrentState() == States.STORAGE_VIEWING:

@@ -385,7 +385,7 @@
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	2000	</weight>
       <maxHealth>	1000	</maxHealth>
-      <rotationSpeed>	100	</rotationSpeed>
+      <rotationSpeed>	200	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	30000	</maxHealth>
         <maxRegenHealth>	100	</maxRegenHealth>
@@ -513,21 +513,21 @@
       <chassis>
         <Chassis_F00_AMD_Panhard_178B_03>
           <axleCount>	2	</axleCount>
-          <axleSteeringLockAngles>	0 22	</axleSteeringLockAngles>
-          <axleSteeringAngles>	0 10	</axleSteeringAngles>
+          <axleSteeringLockAngles>	0 12	</axleSteeringLockAngles>
+          <axleSteeringAngles>	0 12	</axleSteeringAngles>
           <wheelRiseSpeed>	2	</wheelRiseSpeed>
           <grounds>
             <soft>
-              <rollingFriction>	0.2	</rollingFriction>
+              <rollingFriction>	0.1	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0	</rollingFriction>
+              <rollingFriction>	0.1	</rollingFriction>
             </firm>
           </grounds>
-          <isWheeledOnSpotRotation>	False	</isWheeledOnSpotRotation>
+          <isWheeledOnSpotRotation>	True	</isWheeledOnSpotRotation>
         </Chassis_F00_AMD_Panhard_178B_03>
       </chassis>
     </detailed>

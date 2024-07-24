@@ -52,7 +52,7 @@ class RacesBattleResultsFormatter(BattleResultsFormatter):
 
     def __makeDailyQuestsString(self, message):
         completedQuestIDs = message.data.get('completedQuestIDs', None)
-        if not completedQuestIDs:
+        if not completedQuestIDs or self.__racesProgression.isProgressionFinished():
             return u''
         else:
             result = u''

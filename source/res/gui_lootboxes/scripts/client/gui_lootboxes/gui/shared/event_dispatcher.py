@@ -10,9 +10,9 @@ from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
-def showLootBoxesWelcomeScreen(parent=None):
+def showLootBoxesWelcomeScreen(layoutID=None, closeCallback=None, parent=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.welcome_screen import LootBoxesWelcomeScreenWindow
-    window = LootBoxesWelcomeScreenWindow(parent=parent)
+    window = LootBoxesWelcomeScreenWindow(layoutID=layoutID, closeCallback=closeCallback, parent=parent)
     window.load()
 
 

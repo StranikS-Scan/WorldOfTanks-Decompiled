@@ -394,7 +394,7 @@
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	1000	</weight>
       <maxHealth>	1000	</maxHealth>
-      <rotationSpeed>	100	</rotationSpeed>
+      <rotationSpeed>	200	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	30000	</maxHealth>
         <maxRegenHealth>	100	</maxRegenHealth>
@@ -523,28 +523,28 @@
     <detailed>
       <engines>
         <Panhard_4E_02>
-          <smplEnginePower>	900	</smplEnginePower>
+          <smplEnginePower>	951.553	</smplEnginePower>
           <smplFwMaxSpeed>	120	</smplFwMaxSpeed>
         </Panhard_4E_02>
       </engines>
       <chassis>
         <Chassis_F00_AMD_Panhard_178B_02>
           <axleCount>	2	</axleCount>
-          <axleSteeringLockAngles>	0 24	</axleSteeringLockAngles>
-          <axleSteeringAngles>	0 14	</axleSteeringAngles>
+          <axleSteeringLockAngles>	0 8	</axleSteeringLockAngles>
+          <axleSteeringAngles>	0 8	</axleSteeringAngles>
           <wheelRiseSpeed>	2	</wheelRiseSpeed>
           <grounds>
             <soft>
-              <rollingFriction>	0.3	</rollingFriction>
+              <rollingFriction>	0.15	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.18	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
-          <isWheeledOnSpotRotation>	False	</isWheeledOnSpotRotation>
+          <isWheeledOnSpotRotation>	True	</isWheeledOnSpotRotation>
         </Chassis_F00_AMD_Panhard_178B_02>
       </chassis>
     </detailed>

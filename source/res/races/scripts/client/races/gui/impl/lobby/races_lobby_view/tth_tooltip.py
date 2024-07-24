@@ -42,7 +42,7 @@ class TthTooltip(ViewImpl):
         if self._property == Property.MAXSPEED.value:
             value = int(vehParams.speedLimits[0])
         elif self._property == Property.RELOADTIME.value:
-            value = int(vehParams.clipFireRate[0])
+            value = int(vehParams.reloadTimeSecs[0])
         elif self._property == Property.ACCELERATION.value:
             value = self.__calculateAccelerationFromZeroToHundred(vehParams)
         elif tth:

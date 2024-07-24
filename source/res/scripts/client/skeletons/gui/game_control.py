@@ -2524,6 +2524,12 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
         raise NotImplementedError
 
 
+class IGuiLootBoxesIntroController(IGameController):
+
+    def tryShowIntro(self):
+        raise NotImplementedError
+
+
 class ITelecomRentalsNotificationController(IGameController):
 
     def processSwitchNotifications(self):
@@ -3762,6 +3768,9 @@ class IRacesBattleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def getSelectedRacesVehicleDescr(self):
+        raise NotImplementedError
+
+    def getTokenProgressionID(self):
         raise NotImplementedError
 
     def openQueueView(self):

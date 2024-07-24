@@ -1281,7 +1281,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     PREV_ACHIEVEMENTS_NAME_LIST: []},
                 ArmoryYard.ARMORY_YARD_SETTINGS: {ArmoryYard.ARMORY_YARD_LAST_INTRO_VIEWED: None,
                                                   ArmoryYard.ARMORY_YARD_PREV_COMPLETED_QUESTS: {}},
-                GUI_LOOT_BOXES: {LOOT_BOXES_INTRO_SHOWN: False,
+                GUI_LOOT_BOXES: {LOOT_BOXES_INTRO_SHOWN: set(),
                                  LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
                                  LOOT_BOXES_VIEWED_COUNT: 0,
                                  LOOT_BOXES_KEY_VIEWED_COUNT: 0,
@@ -1535,7 +1535,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 73
+    version = 74
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2226,6 +2226,14 @@ class AccountSettings(object):
                         comp7UiSection = _unpack(keySettings[COMP7_UI_SECTION].asString)
                         comp7UiSection[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = 0
                         keySettings.write(COMP7_UI_SECTION, _pack(comp7UiSection))
+
+            if currVersion < 74:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if GUI_LOOT_BOXES in accSettings.keys():
+                        lootBoxesSettings = _unpack(accSettings[GUI_LOOT_BOXES].asString)
+                        lootBoxesSettings[LOOT_BOXES_INTRO_SHOWN] = set()
+                        accSettings.write(GUI_LOOT_BOXES, _pack(lootBoxesSettings))
 
             ads.writeInt('version', AccountSettings.version)
         return

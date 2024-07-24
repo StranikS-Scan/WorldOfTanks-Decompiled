@@ -344,6 +344,8 @@ class RacesBattleController(IRacesBattleController, SeasonProvider, Notifiable, 
         if event.alias == VIEW_ALIAS.LOBBY_HANGAR:
             if self.isEnabled and self.isBattleAvailable() and self.isRacesPrbActive:
                 self.openEventLobby()
+            else:
+                self.selectRandomBattle()
 
     @adisp_process
     def fightClick(self):

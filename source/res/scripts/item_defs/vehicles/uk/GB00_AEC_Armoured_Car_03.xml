@@ -375,7 +375,7 @@
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	3000	</weight>
       <maxHealth>	116	</maxHealth>
-      <rotationSpeed>	100	</rotationSpeed>
+      <rotationSpeed>	200	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	30000	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -503,19 +503,19 @@
         <Chassis_GB00_AEC_Armoured_Car_03>
           <isWheeledOnSpotRotation>	True	</isWheeledOnSpotRotation>
           <axleCount>	2	</axleCount>
-          <axleSteeringAngles>	0 4	</axleSteeringAngles>
+          <axleSteeringAngles>	0 8	</axleSteeringAngles>
           <grounds>
             <soft>
-              <rollingFriction>	0.15	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0	</rollingFriction>
+              <rollingFriction>	0.01	</rollingFriction>
             </firm>
           </grounds>
-          <axleSteeringLockAngles>	0 4	</axleSteeringLockAngles>
+          <axleSteeringLockAngles>	0 8	</axleSteeringLockAngles>
           <wheelRiseSpeed>	0	</wheelRiseSpeed>
         </Chassis_GB00_AEC_Armoured_Car_03>
       </chassis>

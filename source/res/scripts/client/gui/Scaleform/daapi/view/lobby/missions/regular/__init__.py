@@ -33,6 +33,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vehicles_overlay import EventBoardsVehiclesOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_battle_overlay import EventBoardsBattleOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_awards_overlay import EventBoardsAwardsOverlay
+    from gui.wot_anniversary.main_view import WotAnniversaryMainComponent
     return (ViewSettings(VIEW_ALIAS.LOBBY_MISSIONS, MissionsPage, 'missionsPage.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_MISSIONS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_MISSION_DETAILS, MissionDetailsContainerView, 'missionsDetails.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.LOBBY_MISSION_DETAILS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BROWSER_VIEW, EventBoardsDetailsBrowserView, 'eventBoardsDetails.swf', WindowLayer.TOP_SUB_VIEW, EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -49,6 +50,7 @@ def getViewSettings():
      ComponentSettings(QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS, LiveOpsWebEventsInjectView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS, BattlePassViewsHolderComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS, MapboxProgressionsComponent, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(QUESTS_ALIASES.WOT_ANNIVERSARY_VIEW_PY_ALIAS, WotAnniversaryMainComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS, BattleMattersMissionComponent, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, ScopeTemplates.VIEW_SCOPE),
      ComponentSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, ScopeTemplates.VIEW_SCOPE),

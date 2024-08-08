@@ -78,6 +78,7 @@ from gui.shared.system_factory import registerAwardControllerHandlers, collectAw
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
+from gui.wot_anniversary.utils import showWotAnniversaryAwardWindow
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
@@ -98,6 +99,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.sounds import ISoundsController
 from skeletons.gui.system_messages import ISystemMessages
+from skeletons.gui.wot_anniversary import IWotAnniversaryController
 if typing.TYPE_CHECKING:
     from typing import Tuple, Union, Dict, Literal
     from messenger.proto.bw.wrappers import _ServiceChannelData
@@ -2023,6 +2025,37 @@ class EmailConfirmationQuestHandler(ServiceChannelHandler):
         return
 
 
+class WotAnniversaryQuestsHandler(ServiceChannelHandler):
+    __wotAnniversaryCtrl = dependency.descriptor(IWotAnniversaryController)
+    __systemMessages = dependency.descriptor(ISystemMessages)
+
+    def __init__(self, awardCtrl):
+        super(WotAnniversaryQuestsHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__completedQuestIDs = set()
+
+    def fini(self):
+        self.__completedQuestIDs.clear()
+        super(WotAnniversaryQuestsHandler, self).fini()
+
+    def _showAward(self, _):
+        if not self.__completedQuestIDs:
+            return
+        loginQuests = self.__wotAnniversaryCtrl.getLoginQuests()
+        for questID in self.__completedQuestIDs:
+            if questID in loginQuests:
+                showWotAnniversaryAwardWindow(loginQuests[questID], useQueue=True)
+
+        self.__completedQuestIDs.clear()
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        if not super(WotAnniversaryQuestsHandler, self)._needToShowAward(ctx):
+            return False
+        rewardScreenRequiredQuests = self.__wotAnniversaryCtrl.getConfig().rewardScreenRequiredQuests
+        self.__completedQuestIDs = {questID for questID in message.data.get('completedQuestIDs', set()) if questID in rewardScreenRequiredQuests}
+        return bool(self.__completedQuestIDs)
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2067,4 +2100,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  WinbackQuestHandler,
  PrestigeAwardWindowHandler,
  EmailConfirmationQuestHandler,
- ClanSupplyPurchaseHandler))
+ ClanSupplyPurchaseHandler,
+ WotAnniversaryQuestsHandler))

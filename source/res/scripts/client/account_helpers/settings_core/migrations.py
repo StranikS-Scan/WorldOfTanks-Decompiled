@@ -1281,6 +1281,19 @@ def _migrateTo128(core, data, initialized):
     data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN] = False
 
 
+def _migrateTo129(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.settings_core.settings_constants import WotAnniversaryStorageKeys
+    wotAniversaryStorage = data[SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE]
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_INTRO_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_WELCOME_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED] = False
+    wotAniversaryStorage[WotAnniversaryStorageKeys.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1787,6 +1800,10 @@ _versions = ((1,
   False),
  (128,
   _migrateTo128,
+  False,
+  False),
+ (129,
+  _migrateTo129,
   False,
   False))
 

@@ -69,6 +69,13 @@
       <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB114_Vickers_MBT_Mk3_RW5_3Dst>
+          <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB114_Vickers_MBT_Mk3_RW5_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -91,9 +98,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.764727 0.43699 2.72664	</rayStart>
-        <rayEnd>	-0.764727 0.351724 2.6744	</rayEnd>
-        <rayUp>	0 0.52248 -0.852652	</rayUp>
+        <rayStart>	-0.741501 0.462179 2.685526	</rayStart>
+        <rayEnd>	-0.741501 0.376913 2.633286	</rayEnd>
+        <rayUp>	0 0.522417 -0.85269	</rayUp>
         <size>	0.26	</size>
       </slot>
       <slot>
@@ -1038,6 +1045,18 @@
         <clipAngle>	0.455843	</clipAngle>
         <anchorShift>	0.041293	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1080,6 +1099,13 @@
         <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB114_Vickers_MBT_Mk3_RW5_3Dst>
+            <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB114_Vickers_MBT_Mk3_RW5_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1966,6 +1992,15 @@
               <rayUp>	0.144099 0 0	</rayUp>
               <size>	0.44	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.073454 0.01 2.53	</rayStart>
+              <rayEnd>	0.073454 0.01 3.06	</rayEnd>
+              <rayUp>	0.11 0 0	</rayUp>
+              <compatibleModels>	GB114_Vickers_MBT_Mk3_RW5_3Dst	</compatibleModels>
+              <size>	0.53	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1977,6 +2012,13 @@
             <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB114_Vickers_MBT_Mk3_RW5_3Dst>
+                <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB114_Vickers_MBT_Mk3_RW5_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB114_Vickers_MBT_Mk3/collision/Gun_01.model	</collisionModelServer>
@@ -1993,6 +2035,13 @@
         <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB114_Vickers_MBT_Mk3_RW5_3Dst>
+            <undamaged>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB114_Vickers_MBT_Mk3/_skins/GB114_Vickers_MBT_Mk3_RW5_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB114_Vickers_MBT_Mk3_RW5_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB114_Vickers_MBT_Mk3/collision/Turret_01.model	</collisionModelServer>

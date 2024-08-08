@@ -36,6 +36,8 @@ class Events(CONST_CONTAINER):
     MARATHON_EXIT = 'ev_hangar_marathon_exit'
     BATTLE_MATTERS_ENTER = 'bm_enter'
     BATTLE_MATTERS_EXIT = 'bm_exit'
+    ANNIVERSARY_ENTER_EVENT = 'ev_bday_12_enter'
+    ANNIVERSARY_EXIT_EVENT = 'ev_bday_12_exit'
 
 
 def switchHangarFilteredFilter(on=True):
@@ -185,6 +187,20 @@ class WWISEBattleMattersFilter(WWISEHangarTasksFilter):
         return States.HANGAR_PLACE_TASKS_BATTLE_MATTERS
 
 
+class WWISEAnniversaryPageFilter(WWISEHangarTasksFilter):
+
+    def start(self):
+        super(WWISEAnniversaryPageFilter, self).start()
+        WWISE.WW_eventGlobal(Events.ANNIVERSARY_ENTER_EVENT)
+
+    def stop(self):
+        super(WWISEAnniversaryPageFilter, self).stop()
+        WWISE.WW_eventGlobal(Events.ANNIVERSARY_EXIT_EVENT)
+
+    def _getStartState(self):
+        return States.HANGAR_PLACE_TASKS_EVENTS
+
+
 def getEmptyFilter():
     return EmptySoundFilter()
 
@@ -204,7 +220,8 @@ _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilte
  SoundFilters.HANGAR_PLACE_TASKS_MISSIONS: _selectFilter(WWISEHangarTasksMissionsFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_EVENTS: _selectFilter(WWISEEventPageFilter()),
- SoundFilters.HANGAR_PLACE_TASKS_BATTLE_MATTERS: _selectFilter(WWISEBattleMattersFilter())}
+ SoundFilters.HANGAR_PLACE_TASKS_BATTLE_MATTERS: _selectFilter(WWISEBattleMattersFilter()),
+ SoundFilters.HANGAR_PLACE_TASKS_ANNIVERSARY: _selectFilter(WWISEAnniversaryPageFilter())}
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)

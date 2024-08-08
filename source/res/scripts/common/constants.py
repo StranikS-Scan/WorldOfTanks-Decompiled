@@ -2119,6 +2119,7 @@ class USER_SERVER_SETTINGS:
     SENIORITY_AWARDS = 113
     REFERRAL_PROGRAM = 114
     ADVANCED_ACHIEVEMENTS_STORAGE = 115
+    WOT_ANNIVERSARY = 117
     _ALL = (GAME,
      HIDE_MARKS_ON_GUN,
      EULA_VERSION,
@@ -2132,7 +2133,8 @@ class USER_SERVER_SETTINGS:
      UI_STORAGE_2,
      BATTLE_EVENTS,
      SENIORITY_AWARDS,
-     ADVANCED_ACHIEVEMENTS_STORAGE)
+     ADVANCED_ACHIEVEMENTS_STORAGE,
+     WOT_ANNIVERSARY)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -2253,7 +2255,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings',
  USER_SERVER_SETTINGS.REFERRAL_PROGRAM: 'referral program settings',
  USER_SERVER_SETTINGS.ADVANCED_ACHIEVEMENTS_STORAGE: 'advanced achievements storage',
- 116: 'Once only hints'}
+ 116: 'Once only hints',
+ USER_SERVER_SETTINGS.WOT_ANNIVERSARY: 'anniversary settings'}
 
 class WG_GAMES:
     TANKS = 'wot'

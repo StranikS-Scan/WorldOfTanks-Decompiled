@@ -1318,7 +1318,7 @@ class EquipmentsController(MethodsRules, IBattleController):
     def setEquipment(self, intCD, quantity, stage, timeRemaining, totalTime, index=0):
         _logger.debug('Equipment added: intCD=%d, quantity=%d, stage=%s, timeRemaining=%d, totalTime=%d', intCD, quantity, stage, timeRemaining, totalTime)
         index -= 1
-        slot = self._equipmentsIdxSlot.get(index, None)
+        slot = self._equipmentsIdxSlot.get(index, ())
         equipmentItem = slot[0] if slot and slot[1] == intCD else None
         slotIdx = len(self._equipmentsIdxSlot)
         if not intCD:
@@ -1356,7 +1356,7 @@ class EquipmentsController(MethodsRules, IBattleController):
             return
         else:
             index -= 1
-            slot = self._equipmentsIdxSlot.get(index, None)
+            slot = self._equipmentsIdxSlot.get(index, ())
             equipmentItem = slot if slot else None
             if oldIntCD in self._equipments:
                 del self._equipments[oldIntCD]

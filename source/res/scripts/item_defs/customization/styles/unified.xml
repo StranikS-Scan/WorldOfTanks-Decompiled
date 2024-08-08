@@ -22132,4 +22132,197 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	945	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_01	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	questsProgression c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	829	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	829 830	</id>
+        </camouflage>
+        <decal>
+          <id>	1078 1079 1080	</id>
+        </decal>
+        <projection_decal>
+          <id>	1088 1089 1090 1092	</id>
+        </projection_decal>
+      </alternateItems>
+    </style>
+    <style>
+      <id>	946	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_01	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	829	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	485	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	947	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_01	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	830	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	485	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	948	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_02.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_02	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	831	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	486	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	949	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_03.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_03	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	832	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	487	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	951	</id>
+      <texture>	gui/maps/vehicles/styles/14th_anniversary_04.png	</texture>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_04	</userString>
+      <description>	#vehicle_customization:special_style/14th_anniversary_01_desc	</description>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	834	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	488	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </unified.xml>

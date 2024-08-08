@@ -81,6 +81,7 @@ def getDefaultBonusPackersMap():
      Currency.GOLD: simpleBonusPacker,
      Currency.BPCOIN: simpleBonusPacker,
      Currency.EQUIP_COIN: simpleBonusPacker,
+     Currency.EVENT_COIN: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.BASIC: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker,
      'currencies': CurrenciesBonusUIPacker,

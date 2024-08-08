@@ -28,7 +28,7 @@ from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow, showComp7YearlyRewardsSelectionWindow
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow, showComp7YearlyRewardsSelectionWindow, showMissionsWotAnniversary
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -1498,6 +1498,20 @@ class _OpenPunishmentWindowHandler(ActionHandler):
         return
 
 
+class _OpenWotAnniversaryWindow(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.WOT_ANNIVERSARY_REMINDER
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showMissionsWotAnniversary()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1571,7 +1585,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenSeniorityAwardsVehicleSelection,
  _OpenSeniorityAwardsPersonalVehicleSelection,
  _OpenPunishmentWindowHandler,
- _OpenBondEquipmentSelection)
+ _OpenBondEquipmentSelection,
+ _OpenWotAnniversaryWindow)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

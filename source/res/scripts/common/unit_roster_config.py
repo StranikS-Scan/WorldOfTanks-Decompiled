@@ -34,7 +34,7 @@ class EpicSlot(BaseUnitRosterSlot):
 
 
 class Comp7Slot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (8, 8)
+    DEFAULT_LEVELS = (10, 10)
 
 
 class SquadRoster(BaseUnitRoster):

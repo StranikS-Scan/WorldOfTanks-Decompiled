@@ -208,8 +208,11 @@ class Source(object):
 
     def __stripServerQuestData(self, questClientData):
         questClientData.pop('serverOnly', None)
-        questClientData['bonus'] = StripVisitor().walkBonuses(questClientData['bonus'])
-        questClientData['bonusDelayed'] = StripVisitor().walkBonuses(questClientData['bonusDelayed'])
+        bonusSection = questClientData['bonus']
+        bonusConfig = bonusSection.get('config', {})
+        showProbabilitiesInfo = bonusConfig.get('showProbabilitiesInfo', False)
+        questClientData['bonus'] = StripVisitor(showProbabilitiesInfo).walkBonuses(bonusSection)
+        questClientData['bonusDelayed'] = StripVisitor(showProbabilitiesInfo).walkBonuses(questClientData['bonusDelayed'])
         return
 
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):

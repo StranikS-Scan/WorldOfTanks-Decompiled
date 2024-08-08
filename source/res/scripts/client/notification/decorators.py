@@ -1483,3 +1483,19 @@ class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
         config = self.__lobbyContext.getServerSettings().prestigeConfig
         if not config.isEnabled and self._model:
             self._updateButtonsState(lock=True)
+
+
+class WotAnniversaryReminderDecorator(MessageDecorator):
+    __TEMPLATE = 'WotAnniversaryReminderMessage'
+
+    def __init__(self, entityID):
+        super(WotAnniversaryReminderDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings())
+
+    def getType(self):
+        return NOTIFICATION_TYPE.WOT_ANNIVERSARY_REMINDER
+
+    def __makeEntity(self):
+        return g_settings.msgTemplates.format(self.__TEMPLATE)
+
+    def __makeSettings(self):
+        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)

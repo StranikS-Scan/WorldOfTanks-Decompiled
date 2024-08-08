@@ -1235,6 +1235,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_FAIRPLAYVIOLATION_TITLE_BAN = '#messenger:serviceChannelMessages/fairplayViolation/title/ban'
     SERVICECHANNELMESSAGES_FAIRPLAYVIOLATION_TEXT_BAN = '#messenger:serviceChannelMessages/fairplayViolation/text/ban'
     SERVICECHANNELMESSAGES_FAIRPLAYVIOLATION_BANDUEDATE = '#messenger:serviceChannelMessages/fairplayViolation/banDueDate'
+    SERVICECHANNELMESSAGES_WOTANNIVERSARY_TITLE = '#messenger:serviceChannelMessages/wotAnniversary/title'
+    SERVICECHANNELMESSAGES_WOTANNIVERSARY_TEXT = '#messenger:serviceChannelMessages/wotAnniversary/text'
+    SERVICECHANNELMESSAGES_WOTANNIVERSARY_BUTTON = '#messenger:serviceChannelMessages/wotAnniversary/button'
+    SERVICECHANNELMESSAGES_WOTANNIVERSARY_QUEST_TITLE = '#messenger:serviceChannelMessages/wotAnniversary/quest/title'
+    SERVICECHANNELMESSAGES_WOTANNIVERSARY_BATTLEQUEST_DESCRIPTION = '#messenger:serviceChannelMessages/wotAnniversary/battleQuest/description'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

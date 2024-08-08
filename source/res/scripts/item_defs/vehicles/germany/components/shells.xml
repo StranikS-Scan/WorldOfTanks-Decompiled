@@ -441,6 +441,63 @@
       </damage>
     </armorSpalls>
   </_40mm_39_M_Repeszgranat>
+  <_40mm_37M_Pzgr>
+    <id>	409	</id>
+    <userString>	#germany_vehicles:_40mm_37M_Pzgr	</userString>
+    <icon>	ap	</icon>
+    <price>	15	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	54	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_40mm_37M_Pzgr>
+  <_40mm_37M_Pzgr_T>
+    <id>	410	</id>
+    <userString>	#germany_vehicles:_40mm_37M_Pzgr_T	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing	</effects>
+    <damage>
+      <armor>	45	</armor>
+      <devices>	54	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_40mm_37M_Pzgr_T>
+  <_40mm_37M_Sprgr>
+    <id>	411	</id>
+    <userString>	#germany_vehicles:_40mm_37M_Sprgr	</userString>
+    <icon>	he_modern	</icon>
+    <price>	12	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	40	</caliber>
+    <explosionRadius>	0.35	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	54	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.35	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	30	</armor>
+        <devices>	25	</devices>
+      </damage>
+    </armorSpalls>
+  </_40mm_37M_Sprgr>
   <_45mm_Pzgr_39>
     <id>	199	</id>
     <userString>	#germany_vehicles:_45mm_Pzgr_39	</userString>

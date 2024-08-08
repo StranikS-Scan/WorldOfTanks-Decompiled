@@ -16,6 +16,7 @@ class QUESTS(object):
     MISSIONS_TAB_BATTLEMATTERS = '#quests:missions/tab/battleMatters'
     MISSIONS_TAB_WINBACK = '#quests:missions/tab/winback'
     MISSIONS_TAB_LIVE_OPS_WEB_EVENTS = '#quests:missions/tab/live_ops_web_events'
+    MISSIONS_TAB_WOT_ANNIVERSARY = '#quests:missions/tab/wot_anniversary'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -1065,6 +1066,8 @@ class QUESTS(object):
     MISSIONS_TAB_MAPBOX_BODY = '#quests:missions/tab/mapbox/body'
     MISSIONS_TAB_BATTLEMATTERS_HEADER = '#quests:missions/tab/battleMatters/header'
     MISSIONS_TAB_BATTLEMATTERS_BODY = '#quests:missions/tab/battleMatters/body'
+    MISSIONS_TAB_WOT_ANNIVERSARY_HEADER = '#quests:missions/tab/wot_anniversary/header'
+    MISSIONS_TAB_WOT_ANNIVERSARY_BODY = '#quests:missions/tab/wot_anniversary/body'
     MISSIONS_TAB_LABEL_CURRENTVEHICLE = '#quests:missions/tab/label/currentVehicle'
     MISSIONS_TAB_CURRENTVEHICLE_HEADER = '#quests:missions/tab/currentVehicle/header'
     MISSIONS_TAB_CURRENTVEHICLE_BODY = '#quests:missions/tab/currentVehicle/body'
@@ -1203,6 +1206,7 @@ class QUESTS(object):
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
     BONUSNAME_EVENTCOIN = '#quests:bonusName/eventCoin'
+    BONUSNAME_EVENTCOIN_PREVIEW = '#quests:bonusName/eventCoin/preview'
     BONUSNAME_BPCOIN = '#quests:bonusName/bpcoin'
     BONUSNAME_EQUIPCOIN = '#quests:bonusName/equipCoin'
     BONUSNAME_XP = '#quests:bonusName/xp'
@@ -1764,6 +1768,7 @@ class QUESTS(object):
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
      BONUSNAME_EVENTCOIN,
+     BONUSNAME_EVENTCOIN_PREVIEW,
      BONUSNAME_BPCOIN,
      BONUSNAME_EQUIPCOIN,
      BONUSNAME_XP,

@@ -35,4 +35,7 @@ class RES_COMMON(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'
+    MAPS_ICONS_WOT_ANNIVERSARY_INTROSCREEN_BG = '../maps/icons/wot_anniversary/introScreen/bg.png'
+    MAPS_ICONS_WOT_ANNIVERSARY_REWARDS_BG = '../maps/icons/wot_anniversary/rewards/bg.png'
+    MAPS_ICONS_WOT_ANNIVERSARY_WELCOMESCREEN_BG = '../maps/icons/wot_anniversary/welcomeScreen/bg.png'
     MAPS_UIKIT_DIALOG_TEMPLATES_SELECT_OPTION_BG = '../maps/uiKit/dialog_templates/select_option/bg.png'

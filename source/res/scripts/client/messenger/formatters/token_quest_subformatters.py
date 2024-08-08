@@ -5,6 +5,8 @@ import re
 from itertools import chain
 import typing
 from adisp import adisp_async, adisp_process
+from customization_quests_common import deserializeToken
+from gui.wot_anniversary.utils import isWotAnniversaryLoginQuest, isMascotRewardQuest
 from shared_utils import findFirst, first
 import constants
 import personal_missions
@@ -31,8 +33,8 @@ from helpers import dependency
 from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, SeniorityAwardsQuestAchievesFormatter
-from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, SeniorityAwardsQuestAchievesFormatter, WotAnniversaryQuestAchievesFormatter
+from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements, mergeRewards
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IWotPlusController, IComp7Controller
@@ -1149,3 +1151,63 @@ class SteamCompletionFormatter(AsyncTokenQuestsSubFormatter):
             return MessageData(formatted, settings)
         else:
             return
+
+
+class WotAnniversaryAwardsFormatter(AsyncTokenQuestsSubFormatter):
+    __TEMPLATE = 'WotAnniversaryQuestMessage'
+
+    def __init__(self):
+        super(WotAnniversaryAwardsFormatter, self).__init__()
+        self._achievesFormatter = WotAnniversaryQuestAchievesFormatter()
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedIDs = data.get('completedQuestIDs', set())
+            rewards = self.__processRewards(data, self.getQuestOfThisGroup(completedIDs))
+            settings = self._getGuiSettings(message, self.__TEMPLATE)
+            for reward in rewards:
+                formattedRewards = self._achievesFormatter.formatQuestAchieves(reward, asBattleFormatter=False, processCustomizations=True)
+                if formattedRewards:
+                    formattedMessage = g_settings.msgTemplates.format(self.__TEMPLATE, {'text': formattedRewards})
+                    messageDataList.append(MessageData(formattedMessage, settings))
+
+        if messageDataList:
+            callback(messageDataList)
+        else:
+            callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isWotAnniversaryLoginQuest(questID) or isMascotRewardQuest(questID)
+
+    def __processRewards(self, data, questIDs):
+        detailRewards = data.get('detailedRewards', {})
+        resultRewards = {}
+        results = []
+        for questID, rewards in detailRewards.items():
+            if questID in questIDs:
+                if 'vehicles' in rewards:
+                    results.append(rewards)
+                else:
+                    mergeRewards(resultRewards, rewards)
+
+        resultRewards = self.__excludeRewards(resultRewards)
+        results.append(resultRewards)
+        return results
+
+    def __excludeRewards(self, rewards):
+        tokens = rewards.get('tokens')
+        customizations = rewards.get('customizations')
+        if not tokens or not customizations:
+            return rewards
+        progressStyleIDs = [ deserializeToken(tID)[0] for tID in tokens.keys() if tID.startswith(constants.CUSTOMIZATION_PROGRESS_PREFIX) ]
+        if not progressStyleIDs:
+            return rewards
+        rewards['customizations'] = [ value for value in customizations if not (value.get('custType') == 'style' and value.get('id') in progressStyleIDs) ]
+        return rewards

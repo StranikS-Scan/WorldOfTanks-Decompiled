@@ -5777,6 +5777,60 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	14th_anniversary_01	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	485	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	191 191 191 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_01	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	486	</id>
+      <texture>	gui/maps/vehicles/repaints/vspishka.png	</texture>
+      <color>	114 94 125 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_02	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	487	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	48 74 89 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_03	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	488	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
+      <color>	191 191 191 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/14th_anniversary_04	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	theboys	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>

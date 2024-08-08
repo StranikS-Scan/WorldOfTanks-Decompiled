@@ -29,7 +29,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
- token_quest_subformatters.SteamCompletionFormatter()))
+ token_quest_subformatters.SteamCompletionFormatter(),
+ token_quest_subformatters.WotAnniversaryAwardsFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),

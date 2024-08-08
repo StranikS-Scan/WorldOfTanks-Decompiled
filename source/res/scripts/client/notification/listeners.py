@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_STARTED, LOOT_BOXES_WAS_FINISHED, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, BattleMatters, COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP, COMP7_YEARLY_REWARD_SEEN
-from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
+from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys, WotAnniversaryStorageKeys
 from chat_shared import SYS_MESSAGE_TYPE
 from collector_vehicle import CollectorVehicleConsts
 from constants import ARENA_BONUS_TYPE, AUTO_MAINTENANCE_RESULT, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAPS_TRAINING_ENABLED_KEY, PLAYER_SUBSCRIPTIONS_CONFIG, PremiumConfigs, SwitchState
@@ -53,6 +53,7 @@ from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncEvents, g_wgncProvider, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
+from gui.wot_anniversary.utils import isMascotQuestRewardAvailable, isAnniversaryNotificationShowed, setAnniversaryServerSetting
 from helpers import dependency, i18n, time_utils
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
@@ -62,7 +63,7 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator, Comp7BondEquipmentDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, EventLootBoxesDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, CollectionCustomMessageDecorator, Comp7BondEquipmentDecorator, WotAnniversaryReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IWinbackController, IComp7Controller
@@ -74,6 +75,7 @@ from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.wot_anniversary import IWotAnniversaryController
 from tutorial.control.game_vars import getVehicleByIntCD
 from uilogging.seniority_awards.constants import SeniorityAwardsLogSpaces
 from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger, CoinsNotificationLogger, RewardNotificationLogger
@@ -2343,6 +2345,137 @@ class Comp7OfferTokenListener(BaseReminderListener, Notifiable):
         AccountSettings.setNotifications(COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP, currentTimestamp)
 
 
+class WotAnniversaryReminderListener(BaseReminderListener, EventsHandler):
+    __wotAnniversaryCtrl = dependency.descriptor(IWotAnniversaryController)
+    __TYPE = NOTIFICATION_TYPE.WOT_ANNIVERSARY_REMINDER
+    __ENTITY_ID = 0
+
+    def __init__(self):
+        super(WotAnniversaryReminderListener, self).__init__(self.__TYPE, self.__ENTITY_ID)
+
+    def start(self, model):
+        result = super(WotAnniversaryReminderListener, self).start(model)
+        if result:
+            self._subscribe()
+            self.__tryNotify()
+        return result
+
+    def stop(self):
+        self._unsubscribe()
+        super(WotAnniversaryReminderListener, self).stop()
+
+    def _getEvents(self):
+        return ((self.__wotAnniversaryCtrl.onSettingsChanged, self.__tryNotify),)
+
+    def _getCallbacks(self):
+        return (('tokens', self.__onTokensUpdate),)
+
+    def _createDecorator(self, _):
+        return WotAnniversaryReminderDecorator(self._getNotificationId())
+
+    def __onTokensUpdate(self, _):
+        self.__tryNotify()
+
+    def __tryNotify(self):
+        if not self.__wotAnniversaryCtrl.isAvailableAndActivePhase():
+            self._removeNotification()
+            return
+        needToShow = False
+        rewardQuests = self.__wotAnniversaryCtrl.getMascotRewardQuests().values()
+        for quest in rewardQuests:
+            if quest.getID() == self.__wotAnniversaryCtrl.lastShownMascotReminderNotification:
+                continue
+            if isMascotQuestRewardAvailable(quest):
+                self.__wotAnniversaryCtrl.lastShownMascotReminderNotification = quest.getID()
+                needToShow = True
+
+        if needToShow:
+            self._notify(isStateChanged=True)
+
+
+class WotAnniversaryListener(_NotificationListener):
+    __wotAnniversaryCtrl = dependency.descriptor(IWotAnniversaryController)
+
+    def start(self, model):
+        result = super(WotAnniversaryListener, self).start(model)
+        if result:
+            self.__wotAnniversaryCtrl.onEventWillEndSoon += self.__notifyEventWillEndSoon
+            self.__wotAnniversaryCtrl.onEventActivePhaseEnded += self.__notifyActivePhaseFinished
+            self.__wotAnniversaryCtrl.onSettingsChanged += self.__onSettingsChanged
+            self.__updateLastEventState(onLoading=True)
+        return result
+
+    def stop(self):
+        self.__wotAnniversaryCtrl.onEventWillEndSoon -= self.__notifyEventWillEndSoon
+        self.__wotAnniversaryCtrl.onEventActivePhaseEnded -= self.__notifyActivePhaseFinished
+        self.__wotAnniversaryCtrl.onSettingsChanged -= self.__onSettingsChanged
+        super(WotAnniversaryListener, self).stop()
+
+    def __onSettingsChanged(self):
+        self.__updateLastEventState()
+
+    def __updateLastEventState(self, onLoading=False):
+        isEnabled = self.__wotAnniversaryCtrl.isEnabled()
+        isAvailable = self.__wotAnniversaryCtrl.isActive()
+        if isEnabled and self.__wotAnniversaryCtrl.isInActivePhase():
+            showedOnPause = isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED)
+            if isAvailable and onLoading and not isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED):
+                self.__pushStarted()
+            if not isAvailable and not showedOnPause:
+                self.__pushPause()
+            elif isAvailable and showedOnPause:
+                self.__pushEnabled()
+        if isAvailable and self.__wotAnniversaryCtrl.isInPostActivePhase():
+            if not isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED):
+                self.__pushActivePhaseFinished()
+            if self.__wotAnniversaryCtrl.isEventWillEndSoonDaysNow() and not isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED):
+                self.__pushEventWillEndSoon()
+        if not isEnabled and isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED) and not isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED):
+            self.__pushFinished()
+
+    def __notifyEventWillEndSoon(self):
+        self.__pushEventWillEndSoon()
+
+    def __notifyActivePhaseFinished(self):
+        if not isAnniversaryNotificationShowed(WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED):
+            self.__pushActivePhaseFinished()
+
+    def __pushStarted(self):
+        config = self.__wotAnniversaryCtrl.getConfig()
+        sday, smonth = self.__getParsedDate(config.startTime)
+        eday, emonth = self.__getParsedDate(config.activePhaseEndTime)
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_started.body(), startDay=sday, startMonth=smonth, endDay=eday, endMonth=emonth), type=SystemMessages.SM_TYPE.WotAnniversaryStartedMessage, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(R.strings.system_messages.wotAnniversary.switch_started.title())})
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED: True})
+
+    def __pushPause(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_pause.body()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED: True})
+
+    def __pushEnabled(self):
+        text = backport.text(R.strings.system_messages.wotAnniversary.switch_enabled.body())
+        SystemMessages.pushMessage(text=text, type=SystemMessages.SM_TYPE.Warning, priority=NotificationPriorityLevel.HIGH)
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED: False})
+
+    def __pushActivePhaseFinished(self):
+        config = self.__wotAnniversaryCtrl.getConfig()
+        day, month = self.__getParsedDate(config.eventCategoryEndTime)
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.switch_disable.body(), day=day, month=month), type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.HIGH)
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED: True})
+
+    def __pushEventWillEndSoon(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.body()), type=SystemMessages.SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.header())})
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED: True})
+
+    def __pushFinished(self):
+        SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.wotAnniversary.eventFinished.body()), type=SystemMessages.SM_TYPE.WarningHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.system_messages.wotAnniversary.eventWillEndSoon.header())})
+        setAnniversaryServerSetting({WotAnniversaryStorageKeys.WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED: True})
+
+    @staticmethod
+    def __getParsedDate(timeStamp):
+        timeStruct = time_utils.getTimeStructInLocal(timeStamp)
+        return (str(timeStruct.tm_mday), backport.text(R.strings.menu.dateTime.months.num(timeStruct.tm_mon)()))
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2370,7 +2503,9 @@ registerNotificationsListeners((ServiceChannelListener,
  PrestigeListener,
  SeniorityAwardsVehicleSelectionListener,
  NDQSwitcherListener,
- Comp7OfferTokenListener))
+ Comp7OfferTokenListener,
+ WotAnniversaryReminderListener,
+ WotAnniversaryListener))
 
 class NotificationsListeners(_NotificationListener):
 

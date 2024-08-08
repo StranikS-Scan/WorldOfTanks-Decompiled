@@ -26,7 +26,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
             _logger.warning('bonusList and bContentIdList mismatch! Bonus: %s', bonus)
         for bIndex, bModel in enumerate(bonusList):
             bModel.setIndex(bIndex)
-            tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
+            tooltipIndex = packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
             bonusModelsList.addViewModel(bModel)
 
         bonusModelsList.invalidate()
@@ -34,7 +34,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
     return
 
 
-def _packBonusTooltip(bonusModel, bonusIndex, bonusTooltipList, bonusContentIdList, tooltipData, tooltipIndex):
+def packBonusTooltip(bonusModel, bonusIndex, bonusTooltipList, bonusContentIdList, tooltipData, tooltipIndex):
     if tooltipData is None or not bonusTooltipList and not bonusContentIdList:
         return tooltipIndex
     else:

@@ -76,6 +76,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LIMITED_UI_PERMANENT_2 = 'LIMITED_UI_PERMANENT_2'
     REFERRAL_PROGRAM = 'REFERRAL_PROGRAM'
     ADVANCED_ACHIEVEMENTS_STORAGE = 'ADVANCED_ACHIEVEMENTS_STORAGE'
+    WOT_ANNIVERSARY_STORAGE = 'WOT_ANNIVERSARY_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
 
 
@@ -177,6 +178,7 @@ class ServerSettingsManager(object):
     BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SCORE_PANEL = settings_constants.ScorePanelStorageKeys
     SENIORITY_AWARDS = settings_constants.SeniorityAwardsStorageKeys
+    WOT_ANNIVERSARY = settings_constants.WotAnniversaryStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -802,7 +804,14 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.REFERRAL_PROGRAM: Section(masks={}, offsets={ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON: Offset(0, 4095)}),
-     SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: Section(masks={}, offsets={ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: Offset(0, 4294967295L)})}
+     SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: Section(masks={}, offsets={ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: Offset(0, 4294967295L)}),
+     SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: Section(masks={WOT_ANNIVERSARY.WOT_ANNIVERSARY_INTRO_SHOWED: 0,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_WELCOME_SHOWED: 1,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED: 2,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED: 3,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED: 4,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED: 5,
+                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED: 6}, offsets={})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1231,7 +1240,8 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: {},
          SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
          SETTINGS_SECTIONS.BATTLE_BORDER_MAP: {},
-         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {}}
+         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {},
+         SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1384,6 +1394,10 @@ class ServerSettingsManager(object):
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:
             settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
+        wotAnniversaryData = data.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, {})
+        clearWotAnniversary = clear.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, 0)
+        if wotAnniversaryData or clearWotAnniversary:
+            settings[SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, wotAnniversaryData) ^ clearWotAnniversary
         battleBorderMap = data.get(SETTINGS_SECTIONS.BATTLE_BORDER_MAP, {})
         clearBattleBorderMap = clear.get(SETTINGS_SECTIONS.BATTLE_BORDER_MAP, 0)
         if battleBorderMap or clearBattleBorderMap:

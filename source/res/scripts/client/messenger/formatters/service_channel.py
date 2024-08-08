@@ -77,6 +77,7 @@ from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
 from gui.shared.system_factory import collectModeNameKwargsByBonusType
+from gui.wot_anniversary.utils import isWotAnniversaryDailyQuest
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
 from items import ITEM_TYPES as I_T, ITEM_TYPE_NAMES, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
@@ -617,6 +618,34 @@ class Comp7BattleQuestsFormatter(object):
         return popUps
 
 
+class WotAnniversaryBattleQuestsFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'WotAnniversaryQuestMessage'
+    __DESCRIPTION = R.strings.messenger.serviceChannelMessages.wotAnniversary.battleQuest.description
+    _SEPARATOR = u'<br/>'
+
+    def format(self, message, *args):
+        if not message.data:
+            return None
+        else:
+            questIDs = self.__getAnniversaryQuests(message.data.get(u'completedQuestIDs', set()))
+            if not questIDs:
+                return None
+            rewards = getRewardsForQuests(message, questIDs)
+            eventCoin = rewards.get(Currency.EVENT_COIN, 0)
+            if not eventCoin:
+                return None
+            formatter = getBWFormatter(Currency.EVENT_COIN)
+            text = g_settings.htmlTemplates.format(u'battleQuestsEventCoin', {Currency.EVENT_COIN: formatter(eventCoin)})
+            description = text_styles.main(backport.text(self.__DESCRIPTION()))
+            result = self._SEPARATOR.join((description, text))
+            formattedMessage = g_settings.msgTemplates.format(self.__TEMPLATE, {u'text': result})
+            settings = self._getGuiSettings(message, self.__TEMPLATE)
+            return MessageData(formattedMessage, settings)
+
+    def __getAnniversaryQuests(self, questIDs):
+        return set((qId for qId in questIDs if isWotAnniversaryDailyQuest(qId)))
+
+
 class BattleResultsFormatter(WaitItemsSyncFormatter):
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
@@ -680,6 +709,10 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 for reward in comp7QuestsFormatter.format(message):
                     messages.append(MessageData(reward, settings))
 
+                anniversaryQuestsFormatter = WotAnniversaryBattleQuestsFormatter()
+                anniversaryMessage = anniversaryQuestsFormatter.format(message)
+                if anniversaryMessage:
+                    messages.append(anniversaryMessage)
                 messages.append(MessageData(formatted, settings))
                 text, data = self.__getFairplayData(message)
                 if text is not None and data is not None:
@@ -816,6 +849,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             battleResultKeys = self.__FLResultsKeys
         elif guiType == ARENA_GUI_TYPE.TOURNAMENT_COMP7:
             battleResultKeys = self.__COMP7SeasonResultsKeys
+            ctx[u'progressionPointsStr'] = u''
         else:
             battleResultKeys = self._battleResultKeys
         templateName = battleResultKeys[battleResKey]
@@ -5667,3 +5701,23 @@ class PrestigeFormatter(ServiceChannelFormatter):
                           u'grade': grade,
                           u'lvl': lvl}})
         return MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.type))
+
+
+class WotAnniversaryQuestAchievesFormatter(QuestAchievesFormatter):
+
+    @classmethod
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
+        eventCoinData = u''
+        eventCoin = data.get(Currency.EVENT_COIN, 0)
+        if eventCoin:
+            data.pop(Currency.EVENT_COIN, 0)
+            eventCoinData = cls.formatEventCoin(eventCoin)
+        result = super(WotAnniversaryQuestAchievesFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations, processTokens)
+        if eventCoinData:
+            result = cls._SEPARATOR.join((result, eventCoinData))
+        return result
+
+    @classmethod
+    def formatEventCoin(cls, eventCoin):
+        formatter = getBWFormatter(Currency.EVENT_COIN)
+        return g_settings.htmlTemplates.format(u'battleQuestsEventCoin', {Currency.EVENT_COIN: formatter(eventCoin)})

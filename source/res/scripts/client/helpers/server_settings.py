@@ -39,6 +39,7 @@ from soft_exception import SoftException
 from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
+from wot_anniversary_common import WOT_ANNIVERSARY_CONFIG_NAME
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Sequence, Set
     from dict2model.schemas import SchemaModelType
@@ -1415,6 +1416,33 @@ class _AdvancedAchievementsConfig(namedtuple('_AdvancedAchievementsConfig', ('en
         return cls()
 
 
+class WotAnniversaryConfig(namedtuple('WotAnniversaryConfig', ('isEnabled',
+ 'isActive',
+ 'startTime',
+ 'activePhaseEndTime',
+ 'eventCategoryEndTime',
+ 'anniversaryUrls',
+ 'rewardScreenRequiredQuests'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isActive=False, startTime=0, activePhaseEndTime=0, eventCategoryEndTime=0, anniversaryUrls={}, rewardScreenRequiredQuests=())
+        defaults.update(kwargs)
+        return super(WotAnniversaryConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1469,6 +1497,7 @@ class ServerSettings(object):
         self.__referralProgramConfig = ReferralProgramConfig()
         self.__liveOpsWebEventsConfig = LiveOpsWebEventsConfig()
         self.__advancedAchievementsConfig = _AdvancedAchievementsConfig()
+        self.__wotAnniversaryConfig = WotAnniversaryConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1635,6 +1664,10 @@ class ServerSettings(object):
             self.__liveOpsWebEventsConfig = makeTupleByDict(LiveOpsWebEventsConfig, self.__serverSettings[Configs.LIVE_OPS_EVENTS_CONFIG.value])
         else:
             self.__liveOpsWebEventsConfig = LiveOpsWebEventsConfig.defaults()
+        if WOT_ANNIVERSARY_CONFIG_NAME in self.__serverSettings:
+            self.__wotAnniversaryConfig = makeTupleByDict(WotAnniversaryConfig, self.__serverSettings[WOT_ANNIVERSARY_CONFIG_NAME])
+        else:
+            self.__wotAnniversaryConfig = WotAnniversaryConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1753,6 +1786,8 @@ class ServerSettings(object):
             self.__updateReferralProgramConfig(serverSettingsDiff)
         if Configs.LIVE_OPS_EVENTS_CONFIG.value in serverSettingsDiff:
             self.__updateLiveOpsWebEventsConfig(serverSettingsDiff)
+        if WOT_ANNIVERSARY_CONFIG_NAME in serverSettingsDiff:
+            self.__updateWotAnniversaryConfig(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -1947,6 +1982,10 @@ class ServerSettings(object):
     @property
     def advancedAchievementsConfig(self):
         return self.__advancedAchievementsConfig
+
+    @property
+    def wotAnniversaryConfig(self):
+        return self.__wotAnniversaryConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2457,6 +2496,9 @@ class ServerSettings(object):
 
     def __updateLiveOpsWebEventsConfig(self, serverSettingsDiff):
         self.__liveOpsWebEventsConfig = self.__liveOpsWebEventsConfig.replace(serverSettingsDiff[Configs.LIVE_OPS_EVENTS_CONFIG.value])
+
+    def __updateWotAnniversaryConfig(self, serverSettingsDiff):
+        self.__wotAnniversaryConfig = self.__wotAnniversaryConfig.replace(serverSettingsDiff[WOT_ANNIVERSARY_CONFIG_NAME])
 
     def __updateAdvancedAchievementsConfig(self, serverSettingsDiff):
         if Configs.ADVANCED_ACHIEVEMENTS_CONFIG.value in serverSettingsDiff:

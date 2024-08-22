@@ -84,7 +84,7 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
             elif canBuyGoldForVehicleThroughWeb(vehicle):
                 btnEnabled = True
             else:
-                btnEnabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+                btnEnabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, proxy=items.shop)
             options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': btnEnabled}))
         elif self.__isResearchEnabled(vehicle):
             isNextToUnlock, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)

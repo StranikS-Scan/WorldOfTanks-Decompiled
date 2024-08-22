@@ -1,0 +1,39 @@
+<CrewAccountComponent.def>
+  <Properties>
+    <skillsCrewBooksConversion>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <compDescr>
+              <Type>	UINT64	</Type>
+            </compDescr>
+            <count>
+              <Type>	UINT32	</Type>
+            </count>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </skillsCrewBooksConversion>
+    <skillsCrewBoostersReplacement>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <oldEqCD>
+              <Type>	UINT32	</Type>
+            </oldEqCD>
+            <newEqCD>
+              <Type>	UINT32	</Type>
+            </newEqCD>
+            <count>
+              <Type>	UINT32	</Type>
+            </count>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	BASE_AND_CLIENT	</Flags>
+    </skillsCrewBoostersReplacement>
+  </Properties>
+  <BaseMethods></BaseMethods>
+  <ClientMethods></ClientMethods>
+  <ofEntity>
+    <Account></Account>
+  </ofEntity>
+  <DefaultKeyName>	crewAccountComponent	</DefaultKeyName>
+</CrewAccountComponent.def>

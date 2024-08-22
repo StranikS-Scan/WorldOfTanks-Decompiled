@@ -12,11 +12,12 @@ from helpers import dependency
 from skeletons.gui.game_control import ILiveOpsWebEventsController
 from skeletons.gui.server_events import IEventsCache
 from web.web_client_api import webApiCollection
+from web.web_client_api.live_ops_web_events import LiveOpsWebEventsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.ui import CloseWindowWebApi, UtilWebApi
 
 def createWebHandlers():
-    return webApiCollection(CloseWindowWebApi, RequestWebApi, UtilWebApi)
+    return webApiCollection(CloseWindowWebApi, RequestWebApi, UtilWebApi, LiveOpsWebEventsWebApi)
 
 
 class LiveOpsWebEventsInjectView(InjectComponentAdaptor, LiveOpsWebEventsViewMeta):

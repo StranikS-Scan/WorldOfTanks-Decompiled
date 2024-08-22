@@ -847,7 +847,8 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def __getShotIndicatorState(self, shotIdx, targetPoint, shotPos, shotVel, shotGravity, player, target, shotDescr):
         shotResult = getSPGShotResult(targetPoint, shotIdx, shotPos, shotVel, shotGravity, player, target)
-        flyTime = getSPGShotFlyTime(targetPoint, shotVel, shotPos, shotDescr.maxDistance, shotDescr.speed)
+        vehAttrs = self.__sessionProvider.shared.feedback.getVehicleAttrs()
+        flyTime = getSPGShotFlyTime(targetPoint, shotVel, shotPos, shotDescr.maxDistance, shotDescr.speed, vehAttrs)
         return (shotResult, flyTime)
 
     def __needSPGIndicatorUpdate(self, shotDescr):

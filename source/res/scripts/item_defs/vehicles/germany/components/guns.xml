@@ -170,8 +170,6 @@
     <_105mm_KwK45_L52_ausf_B_FL>	502	</_105mm_KwK45_L52_ausf_B_FL>
     <_128mm_PaK44_L55_FL>	504	</_128mm_PaK44_L55_FL>
     <_105mm_KwK46_L68_N_FL>	505	</_105mm_KwK46_L68_N_FL>
-    <_88mm_Flakzwilling_FEP>	601	</_88mm_Flakzwilling_FEP>
-    <_50mm_MK_46_ROTARY_FEP>	602	</_50mm_MK_46_ROTARY_FEP>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -5393,7 +5391,7 @@
           <speed>	972	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	205 183	</piercingPower>
+          <piercingPower>	212 199	</piercingPower>
         </_90mm_AP_M77>
         <_90mm_HVAP_M304>
           <defaultPortion>	0.0	</defaultPortion>
@@ -7551,9 +7549,9 @@
       <maxRegenHealth>	110	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionRadius>	0.39	</shotDispersionRadius>
       <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
+        <turretRotation>	0.12	</turretRotation>
         <afterShot>	3.0	</afterShot>
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
@@ -7563,7 +7561,7 @@
           <speed>	1080	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	246 241	</piercingPower>
+          <piercingPower>	246 230	</piercingPower>
         </_128mm_PzGr39L50>
         <_128mm_PzGr40L50>
           <defaultPortion>	0.0	</defaultPortion>
@@ -11304,96 +11302,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </Gun_1_G00_Pillbox_Gun_7_5cm_SM24>
-    <_88mm_Flakzwilling_FEP>
-      <userString>	#germany_vehicles:_88mm_Flakzwilling_FEP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <effects>	shot_main	</effects>
-      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	5.0	</reloadTime>
-      <maxAmmo>	10000	</maxAmmo>
-      <aimingTime>	2.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.36	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.05	</turretRotation>
-        <afterShot>	0.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_88mm_FlakGr39_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	750	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	250 230	</piercingPower>
-        </_88mm_FlakGr39_FEP>
-        <_88mm_FlakGr40_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	1200	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	300 280	</piercingPower>
-        </_88mm_FlakGr40_FEP>
-      </shots>
-    </_88mm_Flakzwilling_FEP>
-    <_50mm_MK_46_ROTARY_FEP>
-      <userString>	#germany_vehicles:_50mm_MK_46_ROTARY_FEP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.2	</impulse>
-      <effects>	shot_medium	</effects>
-      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.00000 -25.00 1.00000 -25.00	</minPitch>
-        <maxPitch>	0.00000 4.00 1.00000 4.00	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-14 14	</turretYawLimits>
-      <rotationSpeed>	23.625	</rotationSpeed>
-      <reloadTime>	5.0	</reloadTime>
-      <maxAmmo>	10000	</maxAmmo>
-      <aimingTime>	2.7	</aimingTime>
-      <weight>	7680	</weight>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	125	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.108	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.35	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.2	</turretRotation>
-        <afterShot>	0.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_50mm_Pzgr39_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	800	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	230 220	</piercingPower>
-        </_50mm_Pzgr39_FEP>
-        <_50mm_Pzgr47_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	1000	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	300 280	</piercingPower>
-        </_50mm_Pzgr47_FEP>
-      </shots>
-    </_50mm_MK_46_ROTARY_FEP>
   </shared>
 </guns.xml>

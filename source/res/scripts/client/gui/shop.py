@@ -84,10 +84,9 @@ def canBuyGoldForVehicleThroughWeb(vehicle, itemsCache=None, tradeIn=None):
     if vehicle.isUnlocked:
         money = itemsCache.items.stats.money
         money = tradeIn.addTradeInPriceIfNeeded(vehicle, money)
-        exchangeRate = itemsCache.items.shop.exchangeRate
-        price = getGUIPrice(vehicle, money, exchangeRate)
+        price = getGUIPrice(vehicle, money, itemsCache.items.shop.defaults.exchangeRate)
         currency = price.getCurrency(byWeight=True)
-        mayObtainForMoney = vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
+        mayObtainForMoney = vehicle.mayObtainWithMoneyExchange(money, proxy=itemsCache.items.shop)
         isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
         if currency == Currency.GOLD:
             if not mayObtainForMoney:

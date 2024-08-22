@@ -24,6 +24,7 @@ class WindowImpl(Window):
         settings.content = kwargs.pop('content', None)
         settings.parent = kwargs.pop('parent', None)
         settings.name = kwargs.pop('name', '')
+        settings.ownerViewID = kwargs.pop('ownerViewID', None)
         super(WindowImpl, self).__init__(settings)
         return
 

@@ -21,7 +21,7 @@ from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTA
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -77,7 +77,7 @@ class TechTree(TechTreeMeta):
         self.__stopTopOfTheTreeSounds()
         nationIdx = nations.INDICES[nationName]
         SelectedNation.select(nationIdx)
-        if not self.__limitedUIController.isRuleCompleted(LuiRules.TECH_TREE_EVENTS):
+        if not self.__limitedUIController.isRuleCompleted(LUI_RULES.TechTreeEvent):
             g_techTreeDP.techTreeEventsListener.setNationViewed(nationIdx)
         self.__updateBlueprintBalance()
         self.__setVehicleCollectorState()

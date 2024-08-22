@@ -3,7 +3,7 @@
 from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG, WHEELED_VEHICLE_DEVICES, WHEELED_VEHICLE_GUI_ITEMS, TRACK_WITHIN_TRACK_DEVICES
+from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG, WHEELED_VEHICLE_DEVICES, TRACK_WITHIN_TRACK_DEVICES
 _COATED_OPTICS_TAG = 'coatedOptics'
 
 def hasTurretRotator(vDesc):
@@ -164,25 +164,3 @@ class VehicleDeviceStatesIterator(object):
 
     def clear(self):
         self._states.clear()
-
-
-class VehicleGUIItemStatesIterator(VehicleDeviceStatesIterator):
-
-    def __init__(self, states=None, vDesc=None):
-        super(VehicleGUIItemStatesIterator, self).__init__(states, vDesc, WHEELED_VEHICLE_GUI_ITEMS if isWheeledTech(vDesc) else VEHICLE_GUI_ITEMS)
-
-    def next(self):
-        itemName, deviceState = super(VehicleGUIItemStatesIterator, self).next()
-        deviceName = itemName
-        if itemName in VEHICLE_COMPLEX_ITEMS:
-            for name in VEHICLE_COMPLEX_ITEMS[itemName]:
-                state = self._states[name]
-                if state == 'destroyed':
-                    deviceState = state
-                    deviceName = name
-                    break
-                if state == 'critical':
-                    deviceState = state
-                    deviceName = name
-
-        return (itemName, deviceName, deviceState)

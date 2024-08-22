@@ -15,6 +15,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FIL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UNKNOWN_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, DEFAULT_UNLOCK_PROPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.lobby.exchange.exchange_rates_helper import calculateMaxPossibleFreeXp
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
@@ -231,8 +232,7 @@ class _TechTreeDataProvider(object):
         criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
         eliteVehicles = self.itemsCache.items.getVehicles(criteria)
         dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
-        exchangeRate = self.itemsCache.items.shop.freeXPConversion[0]
-        result = min(int(dirtyResult / exchangeRate) * exchangeRate, self.itemsCache.items.stats.gold * exchangeRate)
+        result = calculateMaxPossibleFreeXp(xpFromVehicles=dirtyResult, itemsCache=self.itemsCache)
         result += unlockStats.getVehTotalXP(nodeCD)
         return result
 

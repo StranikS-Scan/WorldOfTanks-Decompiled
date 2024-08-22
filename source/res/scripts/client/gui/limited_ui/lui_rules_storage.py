@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/limited_ui/lui_rules_storage.py
-import enum
 import logging
 from collections import namedtuple, defaultdict
+from enumerations import Enumeration, EnumItem
 import typing
 import BigWorld
 from account_helpers import AccountSettings
@@ -22,48 +22,42 @@ class LuiRuleTypes(CONST_CONTAINER):
     NOVICE = (COMMON, VERSIONED)
 
 
-class LuiRules(enum.Enum):
-    LOBBY_HEADER_COUNTERS_STORE = 'store'
-    LOBBY_HEADER_COUNTERS_PROFILE = 'profile'
-    PROFILE_HOF = 'profileHof'
-    PROFILE_TECHNIQUE_PAGE = 'profileTechniquePage'
-    SESSION_STATS = 'sessionStats'
-    BLUEPRINTS_BUTTON = 'blueprintsButton'
-    LOBBY_HEADER_COUNTERS_MISSIONS = 'missions'
-    MISSIONS_MARATHON_VIEW = 'MissionsMarathonView'
-    LOBBY_HEADER_COUNTERS_PM_OPERATIONS = 'PersonalMissionOperations'
-    REFERRAL_BTN_COUNTER = 'referralButtonCounter'
-    C11N_BTN_BUBBLE = 'CustomizationBtnBubble'
-    TECH_TREE_EVENTS = 'TechTreeEvent'
-    DOG_TAG_HINT = 'DogTagHangarHint'
-    MODE_SELECTOR_WIDGET_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
-    PR_HANGAR_HINT = 'PersonalReservesHangarHint'
-    MODERNIZE_SETUP_HINT = 'ModernizedSetupTabHint'
-    OFFER_BANNER_WINDOW = 'OfferBannerWindow'
-    COMP7_ENTRY_POINT = 'Comp7EntryPoint'
-    BP_ENTRY = 'BattlePassEntry'
-    PROGRESSIVE_ITEMS_REWARD = 'ProgressiveItemsReward'
-    DAILY_MISSIONS = 'DailyMissions'
-    CRAFT_MACHINE_ENTRY_POINT = 'CraftMachineEntryPoint'
-    MAPBOX_ENTRY_POINT = 'MapboxEntryPoint'
-    EPIC_BATTLES_ENTRY_POINT = 'EpicBattlesEntryPoint'
-    BATTLE_MISSIONS = 'BattleMissions'
-    HERO_TANK = 'HeroTank'
-    BM_FLAG = 'BattleMattersFlag'
-    PERSONAL_MISSIONS = 'PersonalMissions'
-    SYS_MSG_COLLECTION_START_BP = 'sysMsgCollectionStartBattlePass'
-    SYS_MSG_COLLECTIONS_UPDATED_ENTRY = 'sysMsgCollectionsUpdatedEntry'
-    LOBBY_HEADER_COUNTERS_STORAGE = 'storage'
-    PR_HANGAR_BUTTON = 'PersonalReservesHangarButton'
-    STRONGHOLD_ENTRY_POINT = 'StrongholdEntryPoint'
-    BR_ENTRY_POINT = 'BREntryPoint'
-    FUN_RANDOM_ENTRY_POINT = 'FunRandomEntryPoint'
-    FUN_RANDOM_NOTIFICATIONS = 'FunRandomNotifications'
-    WDR_NEWBIE_REWARD = 'WDRNewbieReward'
-    LIVE_OPS_WEB_EVENTS_ENTRY_POINT = 'LiveOpsWebEventsEntryPoint'
-    ADVANCED_ACHIEVEMENTS = 'AdvancedAchievements'
-
-
+LUI_RULES = Enumeration('Limited UI rules', ['store',
+ 'profile',
+ 'profileHof',
+ 'profileTechniquePage',
+ 'sessionStats',
+ 'blueprintsButton',
+ 'missions',
+ 'MissionsMarathonView',
+ 'PersonalMissionOperations',
+ 'referralButtonCounter',
+ 'CustomizationBtnBubble',
+ 'TechTreeEvent',
+ 'DogTagHangarHint',
+ 'ModeSelectorWidgetsBtnHint',
+ 'PersonalReservesHangarHint',
+ 'ModernizedSetupTabHint',
+ 'OfferBannerWindow',
+ 'Comp7EntryPoint',
+ 'BattlePassEntry',
+ 'ProgressiveItemsReward',
+ 'DailyMissions',
+ 'CraftMachineEntryPoint',
+ 'MapboxEntryPoint',
+ 'BattleMissions',
+ 'HeroTank',
+ 'BattleMattersFlag',
+ 'PersonalMissions',
+ 'sysMsgCollectionStartBattlePass',
+ 'sysMsgCollectionsUpdatedEntry',
+ 'storage',
+ 'PersonalReservesHangarButton',
+ 'StrongholdEntryPoint',
+ 'BREntryPoint',
+ 'WDRNewbieReward',
+ 'LiveOpsWebEventsEntryPoint',
+ 'AdvancedAchievements'])
 _POSTPONED_RULES_DELAY = 5.0
 _SERVER_SETTINGS_BLOCK_BITS = 32
 
@@ -129,7 +123,7 @@ class _LimitedUIRules(object):
     def completeRule(self, ruleID):
         rule = self.getRule(ruleID)
         if rule is None:
-            _logger.warning("Couldn't complete rule, ruleID was not found: %s", ruleID.value)
+            _logger.warning("Couldn't complete rule, ruleID was not found: %s", ruleID.name())
             return
         else:
             self.clearPostponedRulesCallback()
@@ -142,7 +136,7 @@ class _LimitedUIRules(object):
         for ruleID in ruleIDs:
             rule = self.getRule(ruleID)
             if rule is None:
-                _logger.warning("Couldn't complete rule, ruleID was not found: %s", ruleID.value)
+                _logger.warning("Couldn't complete rule, ruleID was not found: %s", ruleID.name())
                 continue
             self.__postponedCompletedRules[rule.ruleType].add(ruleID)
 
@@ -156,12 +150,12 @@ class _LimitedUIRules(object):
             serverRules = defaultdict(list)
             for ruleType, ruleIDs in self.__postponedCompletedRules.items():
                 if ruleType == LuiRuleTypes.VERSIONED:
-                    AccountSettings.completeVersionedRules([ ruleID.value for ruleID in ruleIDs ])
+                    AccountSettings.completeVersionedRules([ ruleID.name() for ruleID in ruleIDs ])
                     del self.__postponedCompletedRules[ruleType]
                 for ruleID in ruleIDs:
                     rule = self.getRule(ruleID)
                     if rule is None:
-                        _logger.warning("Couldn't complete postponed rule, ruleID was not found: %s", ruleID.value)
+                        _logger.warning("Couldn't complete postponed rule, ruleID was not found: %s", ruleID.name())
                         continue
                     storage, offset = self.__getServerRuleStorageInfo(rule)
                     serverRules[storage, ruleType].append(offset)
@@ -199,7 +193,7 @@ class _LimitedUIRules(object):
 
     @staticmethod
     def __isClientRuleCompleted(ruleID):
-        return AccountSettings.isVersionedRuleCompleted(ruleID.value)
+        return AccountSettings.isVersionedRuleCompleted(ruleID.name())
 
     def __isServerRuleCompleted(self, rule):
         storage, offset = self.__getServerRuleStorageInfo(rule)
@@ -208,7 +202,7 @@ class _LimitedUIRules(object):
     def __clearStoredVersionedRules(self):
         versionedRules = AccountSettings.getCompletedVersionedRules()
         if versionedRules:
-            AccountSettings.clearVersionedRules(set(versionedRules) - {ruleID.value for ruleID in self.getRulesIDsByTypes([LuiRuleTypes.VERSIONED])})
+            AccountSettings.clearVersionedRules(set(versionedRules) - {ruleID.name() for ruleID in self.getRulesIDsByTypes([LuiRuleTypes.VERSIONED])})
         self.__isInited = True
 
     @staticmethod
@@ -246,7 +240,7 @@ class RulesStorageMaker(object):
         for item in data.values():
             cls.__normalizeRuleItem(data, rulesIDs, item)
 
-        return {LuiRules(ruleID):_LimitedUIRule(**value) for ruleID, value in data.items()}
+        return {LUI_RULES.lookup(ruleID):_LimitedUIRule(**value) for ruleID, value in data.items() if LUI_RULES.lookup(ruleID) is not None}
 
     @classmethod
     def __makeRulesData(cls, ruleType, rules, idGen):

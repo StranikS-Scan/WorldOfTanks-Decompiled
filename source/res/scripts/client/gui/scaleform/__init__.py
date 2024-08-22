@@ -17,8 +17,6 @@ VEHICLE_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/tanks/'
 NATION_FILTER_ICONS_DIR_PATH = '../maps/icons/filters/nations/'
 BUTTON_FILTER_ICONS_DIR_PARH = '../maps/icons/library/'
 LEVEL_FILTER_ICONS_DIR_PARH = '../maps/icons/filters/levels/'
-NATIONS_ICON_FILENAME = '../maps/icons/nations/%s_%s.%s'
-NATION_ICON_PREFIX_131x31 = '131x31'
 DEFAULT_VIDEO_BUFFERING_TIME = 2.0
 
 def getVehicleTypeAssetPath(vehicleType, extension='.png'):
@@ -31,10 +29,6 @@ def getButtonsAssetPath(button, extension='.png'):
 
 def getNationsFilterAssetPath(nationName, extension='.png'):
     return ''.join((NATION_FILTER_ICONS_DIR_PATH, nationName, extension))
-
-
-def getNationsAssetPath(nation, namePrefix='', extension='png'):
-    return NATIONS_ICON_FILENAME % (NAMES[nation], namePrefix, extension)
 
 
 def getLevelsAssetPath(level_str, extension='.png'):

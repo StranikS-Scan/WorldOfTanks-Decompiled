@@ -203,6 +203,8 @@
     <_76mm_KT-IT>	257	</_76mm_KT-IT>
     <_107mm_LP_21>	259	</_107mm_LP_21>
     <_122-mm_D-25TB>	260	</_122-mm_D-25TB>
+    <_57mm_ZiS_4_44>	262	</_57mm_ZiS_4_44>
+    <_76mm_S_54A>	263	</_76mm_S_54A>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -221,7 +223,7 @@
     <_100mm_D-10T2S_FL>	501	</_100mm_D-10T2S_FL>
     <_122mm_M62-T2_7x7>	503	</_122mm_M62-T2_7x7>
     <_152mm_M_53_A_7x7>	504	</_152mm_M_53_A_7x7>
-    <_23mm_AZP23x4_FEP>	601	</_23mm_AZP23x4_FEP>
+    <_130mm_M_65_7x7>	505	</_130mm_M_65_7x7>
     <_37mm_automatic_SH-37_MapsTraining_Dummy_LT_1>	45	</_37mm_automatic_SH-37_MapsTraining_Dummy_LT_1>
     <_152mm_mortar_NM_mod1931_MapsTraining_Dummy_SPG_1>	48	</_152mm_mortar_NM_mod1931_MapsTraining_Dummy_SPG_1>
     <_76mm_S-54_MapsTraining_Player_MT_1>	51	</_76mm_S-54_MapsTraining_Player_MT_1>
@@ -1895,6 +1897,63 @@
         </_57mm_UO-271U>
       </shots>
     </_57mm_ZiS-2>
+    <_57mm_ZiS_4_44>
+      <userString>	#ussr_vehicles:_57mm_ZiS_4_44	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	50000	</price>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	43.75	</rotationSpeed>
+      <reloadTime>	2.85714285714286	</reloadTime>
+      <maxAmmo>	77	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	740	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_57mm_UBR-271K>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	990	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	146 130	</piercingPower>
+        </_57mm_UBR-271K>
+        <_57mm_UBR-271N>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1238	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	189 147	</piercingPower>
+        </_57mm_UBR-271N>
+        <_57mm_UO-271U>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	990	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	29 29	</piercingPower>
+        </_57mm_UO-271U>
+      </shots>
+    </_57mm_ZiS_4_44>
     <_76mm_L-11>
       <userString>	#ussr_vehicles:_76mm_L-11	</userString>
       <tags></tags>
@@ -2161,17 +2220,17 @@
       <shots>
         <_76mm_UBR-354A>
           <defaultPortion>	0.9	</defaultPortion>
-          <speed>	640	</speed>
+          <speed>	780	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	86 75	</piercingPower>
+          <piercingPower>	108 99	</piercingPower>
         </_76mm_UBR-354A>
         <_76mm_UBR-354MP>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	800	</speed>
+          <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	102 92	</piercingPower>
+          <piercingPower>	147 138	</piercingPower>
         </_76mm_UBR-354MP>
         <_76mm_UOF-354>
           <defaultPortion>	0.1	</defaultPortion>
@@ -2699,6 +2758,63 @@
         </_76mm_UOF-354M>
       </shots>
     </_76mm_S-54_S>
+    <_76mm_S_54A>
+      <userString>	#ussr_vehicles:_76mm_S_54A	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	40130	</price>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -26.0 1.0 -26.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	39.375	</rotationSpeed>
+      <reloadTime>	4.57142857142857	</reloadTime>
+      <maxAmmo>	52	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	1390	</weight>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.411428571428571	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_76mm_UBR-354MA>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	816	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	138 127	</piercingPower>
+        </_76mm_UBR-354MA>
+        <_76mm_UBR-354MP>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	172 156	</piercingPower>
+        </_76mm_UBR-354MP>
+        <_76mm_UOF-354M>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	816	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	39 39	</piercingPower>
+        </_76mm_UOF-354M>
+      </shots>
+    </_76mm_S_54A>
     <_76mm_KT-28>
       <userString>	#ussr_vehicles:_76mm_KT-28	</userString>
       <tags></tags>
@@ -6421,7 +6537,7 @@
           <speed>	895	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	201 181	</piercingPower>
+          <piercingPower>	216 196	</piercingPower>
         </_100mm_BR-412D>
         <_100mm_3UBK4>
           <defaultPortion>	0.0	</defaultPortion>
@@ -10475,6 +10591,64 @@
         </_130mm_53_VOF_482V>
       </shots>
     </_130mm_M_65>
+    <_130mm_M_65_7x7>
+      <userString>	#ussr_vehicles:_130mm_M_65_7x7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	330000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	4300	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_130mm_53_VBR_482>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	265 245	</piercingPower>
+        </_130mm_53_VBR_482>
+        <_130mm_3VBK>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	340 340	</piercingPower>
+        </_130mm_3VBK>
+        <_130mm_53_VOF_482V>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_130mm_53_VOF_482V>
+      </shots>
+    </_130mm_M_65_7x7>
     <_130mm_M_65K>
       <userString>	#ussr_vehicles:_130mm_M_65K	</userString>
       <tags></tags>
@@ -13051,50 +13225,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_107mm_ZiS-6_MapsTraining_Dummy_HT_2>
-    <_23mm_AZP23x4_FEP>
-      <userString>	#ussr_vehicles:_23mm_AZP23x4_FEP	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <effects>	shot_auto	</effects>
-      <reloadEffect>	reload_autoshoot_reloading_20_45	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	33.25	</rotationSpeed>
-      <reloadTime>	15	</reloadTime>
-      <maxAmmo>	50000	</maxAmmo>
-      <aimingTime>	2.1	</aimingTime>
-      <weight>	2800	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.35	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.1	</turretRotation>
-        <afterShot>	0.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_23mm_BZT_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	750	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	180 150	</piercingPower>
-        </_23mm_BZT_FEP>
-        <_23mm_BZK_FEP>
-          <defaultPortion>	0.5	</defaultPortion>
-          <speed>	1000	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	230 200	</piercingPower>
-        </_23mm_BZK_FEP>
-      </shots>
-    </_23mm_AZP23x4_FEP>
   </shared>
 </guns.xml>

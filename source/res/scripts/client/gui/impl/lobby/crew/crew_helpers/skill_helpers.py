@@ -1,114 +1,38 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_helpers/skill_helpers.py
+import copy
 from typing import Tuple
-from collections import OrderedDict
-from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.Vehicle import sortCrew
+from gui.shared.skill_parameters.skills_packers import g_skillPackers, packBase
 from items import tankmen
-from items.components.skills_constants import SKILLS_BY_ROLES, UNLEARNABLE_SKILLS
+from items.components import perks_constants
+from items.tankmen import COMMON_SKILLS, MAX_SKILLS_EFFICIENCY, MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, generateCompactDescr, getSkillsConfig
 from skill_formatters import SkillLvlFormatter
-from items.tankmen import MAX_SKILLS_EFFICIENCY_XP
-
-def isTmanSkillIrrelevant(tankman, skill):
-    return not any([ skill.name in SKILLS_BY_ROLES.get(role) for role in tankman.roles() ])
-
-
-def isTmanMaxed(tankman):
-    if tankman:
-        newSkillsCount, lastNewSkillLvl = getSkillsLevelsForXp(tankman)
-        return newSkillsCount == getAvailableSkillsNum(tankman) and lastNewSkillLvl.intSkillLvl == tankmen.MAX_SKILL_LEVEL
-    return False
-
-
-def getLastSkillSequenceNum(tankman):
-    tdescr = tankman.descriptor
-    return max(tdescr.lastSkillNumber - tdescr.freeSkillsNumber, 0)
-
-
-def getAvailableSkillsNum(tankman):
-    return len(tankman.availableSkills(True)) + getLastSkillSequenceNum(tankman) - tankman.newFreeSkillsCount
-
 
 def getSkillsLevelsForXp(tankman, possibleXp=0):
-    tmanDescr = tankman.descriptor
-    lastSkillNumber = getLastSkillSequenceNum(tankman)
-    availableSkillsNum = getAvailableSkillsNum(tankman)
-    wallet = tmanDescr.freeXP + possibleXp
-    if tmanDescr.roleLevel < tankmen.MAX_SKILL_LEVEL:
-        if not lastSkillNumber or possibleXp > 0:
-            wallet += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.roleLevel, 0)
-            wallet -= tankmen.TankmanDescr.getXpCostForSkillsLevels(tankmen.MAX_SKILL_LEVEL, 0)
-    wallet += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.lastSkillLevel if lastSkillNumber else 0, lastSkillNumber)
-    currCnt = tankmen.TankmanDescr.getSkillsCountFromXp(wallet)
-    currLvl = tankmen.TankmanDescr.getSkillLevelFromXp(currCnt, wallet)
-    if currCnt > availableSkillsNum or currCnt == availableSkillsNum and currLvl >= tankmen.MAX_SKILL_LEVEL:
-        currCnt = availableSkillsNum
-        currLvl = tankmen.MAX_SKILL_LEVEL
-    tmanResidualXp, tmanlvlCost = getXpResidualForNextSkillLevel(tankman, currCnt, currLvl, possibleXp)
-    currSkillLevel = SkillLvlFormatter(currLvl, tmanResidualXp, tmanlvlCost)
-    return (currCnt, currSkillLevel)
+    skillsCount, lastSkillLvl = tankman.descriptor.getTotalSkillsProgress(withFree=False, extraXP=possibleXp)
+    tmanResidualXp, tmanlvlCost = tankman.descriptor.getResidualXpForNextSkillLevel(skillsCount, lastSkillLvl, possibleXp)
+    currSkillLevel = SkillLvlFormatter(lastSkillLvl, tmanResidualXp, tmanlvlCost)
+    return (skillsCount, currSkillLevel)
 
 
-def getXpResidualForNextSkillLevel(tankman, currSkillsCount, currSkillLevel, possibleXp=0):
-    tmanDescr = tankman.descriptor
-    lastSkillNumber = getLastSkillSequenceNum(tankman)
-    availableSkillsNum = getAvailableSkillsNum(tankman)
-    if currSkillsCount <= availableSkillsNum:
-        totalXpCost = tmanDescr.freeXP + possibleXp
-        totalXpCost += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.roleLevel, 0)
-        totalXpCost -= tankmen.TankmanDescr.getXpCostForSkillsLevels(tankmen.MAX_SKILL_LEVEL, 0)
-        totalXpCost += tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.lastSkillLevel if lastSkillNumber else 0, lastSkillNumber)
-        levelUpXpCost = tankmen.TankmanDescr.levelUpXpCost(min(tankmen.MAX_SKILL_LEVEL - 1, currSkillLevel), currSkillsCount)
-        currXpCost = tankmen.TankmanDescr.getXpCostForSkillsLevels(currSkillLevel, currSkillsCount)
-        return (totalXpCost - currXpCost, levelUpXpCost)
-
-
-def getTmanNewSkillCount(tankman, useOnlyFull=False):
-    newSkillsCount = 0
-    lastSkillLevel = SkillLvlFormatter()
-    lastSkillNumber = getLastSkillSequenceNum(tankman)
-    if not tankman.isMaxRoleLevel:
-        return (0, SkillLvlFormatter(tankman.descriptor.lastSkillLevel))
-    if tankman.hasNewSkill(useCombinedRoles=True) or lastSkillNumber:
-        newSkillsCount, lastSkillLevel = getSkillsLevelsForXp(tankman)
-        newSkillsCount -= lastSkillNumber
-        if useOnlyFull and lastSkillLevel.intSkillLvl < tankmen.MAX_SKILL_LEVEL:
-            newSkillsCount = max(newSkillsCount - 1, 0)
-            lastSkillLevel = SkillLvlFormatter(tankmen.MAX_SKILL_LEVEL if newSkillsCount else tankman.descriptor.lastSkillLevel)
-        elif not useOnlyFull and lastSkillLevel.realSkillLvl >= tankmen.MAX_SKILL_LEVEL and newSkillsCount < len(tankman.availableSkills(True)) - tankman.newFreeSkillsCount:
-            newSkillsCount += 1
-            lastSkillLevel = SkillLvlFormatter(0)
-    return (newSkillsCount, lastSkillLevel)
-
-
-def getAllPossibleSkillsByRoles():
-    result = OrderedDict()
-    for skill in tankmen.COMMON_SKILLS_ORDERED:
-        result.setdefault('common', []).append(skill)
-
-    for role in TANKMEN_ROLES_ORDER_DICT['plain']:
-        roleSkills = tankmen.SKILLS_BY_ROLES_ORDERED.get(role, tuple())
-        for skill in roleSkills:
-            if skill in tankmen.COMMON_SKILLS:
-                continue
-            if skill in UNLEARNABLE_SKILLS:
-                continue
-            result.setdefault(role, []).append(skill)
-
-    return result
+def getTmanNewSkillCount(tankman, useOnlyFull=False, withFree=False):
+    newSkillsCount, lastSkillLevel = tankman.descriptor.getNewSkillsCount(fullOnly=useOnlyFull, withFree=withFree)
+    return (newSkillsCount, SkillLvlFormatter(lastSkillLevel))
 
 
 def quickEarnTmanSkills(tankman, possibleXp):
     currCnt, currLvl = getSkillsLevelsForXp(tankman)
-    currPossibleXp = possibleXp - (tankmen.MAX_SKILLS_EFFICIENCY_XP - tankman.skillsEfficiencyXP)
-    if currPossibleXp > 0:
+    currPossibleXp = possibleXp - tankman.descriptor.needEfficiencyXP
+    if currPossibleXp > 0 and not (tankman.descriptor.isMaxSkillXp() and tankman.isMaxSkillEfficiency):
         possSkillEff = tankmen.MAX_SKILLS_EFFICIENCY
         possCnt, possLvl = getSkillsLevelsForXp(tankman, currPossibleXp)
     else:
         possSkillEff = float(tankman.skillsEfficiencyXP + possibleXp) / tankmen.MAX_SKILLS_EFFICIENCY_XP
         possCnt, possLvl = CrewConstants.DONT_SHOW_LEVEL, SkillLvlFormatter()
-    if tankman.currentVehicleSkillsEfficiency < 0 or not possibleXp:
+    if tankman.currentVehicleSkillsEfficiency < 0 or not possibleXp or tankman.descriptor.isMaxSkillXp():
         possSkillEff = CrewConstants.DONT_SHOW_LEVEL
     return ((currCnt,
       possCnt,
@@ -130,5 +54,76 @@ def quickEarnCrewSkills(crew, selectedTankmanID, personalXP, commonXP):
     return (res, res2)
 
 
-def isCheckEffTankman(tankman):
-    return tankman and tankman.skillsEfficiencyXP == MAX_SKILLS_EFFICIENCY_XP
+def getTmanWithSkill(tankman, tankmanVehicle, skill, itemsFactory):
+    tmanDescr = tankman.descriptor
+    skills = tmanDescr.skills[:]
+    if not skills:
+        skills.append(skill.name)
+        lastSkillLevel = MAX_SKILL_LEVEL
+    else:
+        skills.insert(0, skill.name)
+        lastSkillLevel = tmanDescr.lastSkillLevel
+    rolesBonusSkills = {}
+    for role, bonusSkills in tankman.bonusSkills.iteritems():
+        rolesBonusSkills[role] = [ skill.name for skill in bonusSkills if skill ]
+
+    skilledTman = itemsFactory.createTankman(generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=tankmanVehicle, vehicleSlotIdx=tankman.vehicleSlotIdx, bonusSkillsLevels=[tmanDescr.bonusSkillsLevels])
+    return skilledTman
+
+
+def getMaxSkillsEffAndLikeOwnVehTman(tankman, tankmanVehicle, itemsFactory, removeSkillCopies=False):
+    tmanDescr = tankman.descriptor
+    vehicleTypeID = tmanDescr.vehicleTypeID
+    if tankmanVehicle:
+        _, vehicleTypeID = tankmanVehicle.descriptor.type.id
+    rolesBonusSkills = {}
+    for role, bonusSkills in tankman.bonusSkills.iteritems():
+        rolesBonusSkills[role] = [ skill.name for skill in bonusSkills if skill and not (removeSkillCopies and skill.name in tmanDescr.skills) ]
+
+    skilledTman = itemsFactory.createTankman(generateCompactDescr(tmanDescr.getPassport(), vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, tmanDescr.skills[:], tmanDescr.lastSkillLevel, skillsEfficiencyXP=MAX_SKILLS_EFFICIENCY_XP, rolesBonusSkills=rolesBonusSkills), vehicle=tankmanVehicle, vehicleSlotIdx=tankman.vehicleSlotIdx, bonusSkillsLevels=[tmanDescr.bonusSkillsLevels])
+    return skilledTman
+
+
+def getVehicleWithSkilledTman(skilledTman, tankman, tankmanVehicle, skillName=''):
+    newVehicle = copy.copy(tankmanVehicle)
+    if skillName in COMMON_SKILLS:
+        newVehicle.crew = newVehicle.getCrewWithSkill(skillName)
+    else:
+        crewItems = list()
+        skilledTmanDescr = tankman.descriptor
+        for slotIdx, tman in newVehicle.crew:
+            if tman and tman.descriptor.role == skilledTmanDescr.role:
+                crewItems.append((slotIdx, skilledTman))
+                continue
+            crewItems.append((slotIdx, tman))
+
+        newVehicle.crew = sortCrew(crewItems, tankmanVehicle.descriptor.type.crewRoles)
+    return newVehicle
+
+
+def getSkillParams(tankman, tankmanVehicle, skillBooster, skill, skillName, skillLevel, isFakeSkill, isIrrelevant=False):
+    skillPacker = g_skillPackers.get(skillName, packBase)
+    descrArgs = getSkillsConfig().getSkill(skillName).uiSettings.descrArgs
+    skillEfficiency = tankman.currentVehicleSkillsEfficiency if tankman else MAX_SKILLS_EFFICIENCY
+    isTmanTrainedVeh = not tankmanVehicle or tankman.descriptor.isOwnVehicleOrPremium(tankmanVehicle.descriptor.type)
+    if skill.name in perks_constants.SKIP_SE_PERKS or tankman and not skill.isEnable or isIrrelevant:
+        skillEfficiency = MAX_SKILLS_EFFICIENCY
+    return skillPacker(descrArgs, skillLevel, isSkillAlreadyEarned=True if isFakeSkill else skill.isLearned, lowEfficiency=skillEfficiency < MAX_SKILLS_EFFICIENCY, isTmanTrainedVeh=isTmanTrainedVeh, hasBooster=skillBooster is not None, customValues=dict(((name, lambda b=skillBooster, n=name: b if b and hasattr(b, n) else None) for name, _ in descrArgs)) if skillName in g_skillPackers else None)
+
+
+def getSkillDescription(tankman, skill, skillLevel, skillBooster, isCmpSkill, isFakeSkillLvl, isIrrelevant):
+    isMaxSkillEfficiency = tankman and tankman.isMaxSkillEfficiency
+    skillEfficiencyLvl = isMaxSkillEfficiency or not isFakeSkillLvl and skillLevel > 0
+    isLearned = skillEfficiencyLvl and not isFakeSkillLvl and skillLevel > 0 and skill.isLearned
+    inSkipSEPerks = skill.name in perks_constants.SKIP_SE_PERKS
+    validSkillBooster = skillBooster and not (tankman and not skill.isEnable) and not isIrrelevant
+    return skill.currentLvlDescription if isCmpSkill or validSkillBooster or isLearned or inSkipSEPerks else skill.maxLvlDescription
+
+
+def formatDescription(description, params):
+    for props in params:
+        color = params[props].get('color', '')
+        value = params[props].get('value', '')
+        description = description.replace('%(' + props + ')s', '{' + color + '_Start}' + value + '{' + color + '_End}')
+
+    return description

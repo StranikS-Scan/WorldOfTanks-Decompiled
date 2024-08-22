@@ -25,7 +25,7 @@
     <tags>	extinguisher premium_equipment	</tags>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
     <kpi>
@@ -45,8 +45,7 @@
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
-    <script>	Repairkit	  <repairAll>	false	</repairAll>
-      <bonusValue>	0	</bonusValue>
+    <script>	Repairkit	  <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.0	</stunResistanceDuration>
       <cooldownSeconds>	90	</cooldownSeconds>
@@ -64,11 +63,10 @@
     <price>	20000	</price>
     <improved>	true	</improved>
     <tags>	medkit premium_equipment	</tags>
-    <script>	Repairkit	  <repairAll>	true	</repairAll>
-      <bonusValue>	0.30	</bonusValue>
+    <script>	Repairkit	  <bonusValue>	0.30	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
       <stunResistanceDuration>	0.05	</stunResistanceDuration>
-      <cooldownSeconds>	90	</cooldownSeconds>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
     <kpi>
@@ -92,8 +90,7 @@
     <icon>	smallRepairkit	</icon>
     <price>	3000	</price>
     <tags>	repairkit	</tags>
-    <script>	Repairkit	  <repairAll>	false	</repairAll>
-      <bonusValue>	0	</bonusValue>
+    <script>	Repairkit	  <bonusValue>	0	</bonusValue>
       <cooldownSeconds>	90	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
@@ -116,9 +113,8 @@
         </vehicle>
       </exclude>
     </vehicleFilter>
-    <script>	Repairkit	  <repairAll>	true	</repairAll>
-      <bonusValue>	0.1	</bonusValue>
-      <cooldownSeconds>	90	</cooldownSeconds>
+    <script>	Repairkit	  <bonusValue>	0.1	</bonusValue>
+      <cooldownSeconds>	60	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
     </script>
     <kpi>
@@ -129,109 +125,6 @@
     </kpi>
     <tooltipSection>	equipment	</tooltipSection>
   </largeRepairkit>
-  <lendLeaseOil>
-    <id>	6	</id>
-    <userString>	#artefacts:lendLeaseOil/name	</userString>
-    <description>	#artefacts:lendLeaseOil/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:lendLeaseOil/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:lendLeaseOil/long_special	</longDescriptionSpecial>
-    <icon>	lendLeaseOil	</icon>
-    <price>	5000	</price>
-    <tags>	fuel	</tags>
-    <incompatibleTags>
-      <installed>	fuel	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <nations>	ussr	</nations>
-      </include>
-    </vehicleFilter>
-    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
-      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-    <tooltipSection>	equipment	</tooltipSection>
-  </lendLeaseOil>
-  <gasoline100>
-    <id>	7	</id>
-    <userString>	#artefacts:gasoline100/name	</userString>
-    <description>	#artefacts:gasoline100/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:gasoline100/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:gasoline100/long_special	</longDescriptionSpecial>
-    <icon>	gasoline100	</icon>
-    <price>	5000	</price>
-    <tags>	fuel	</tags>
-    <incompatibleTags>
-      <installed>	fuel	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <nations>	usa germany france uk czech sweden poland italy	</nations>
-        <componentFilters>
-          <engine>
-            <tags>	gasoline	</tags>
-          </engine>
-        </componentFilters>
-      </include>
-    </vehicleFilter>
-    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
-      <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	1.05	</value>
-      </mul>
-      <mul>
-        <name>	vehicleTurretRotationSpeed	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-    <tooltipSection>	equipment	</tooltipSection>
-  </gasoline100>
-  <gasoline105>
-    <id>	8	</id>
-    <userString>	#artefacts:gasoline105/name	</userString>
-    <description>	#artefacts:gasoline105/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:gasoline105/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:gasoline105/long_special	</longDescriptionSpecial>
-    <icon>	gasoline105	</icon>
-    <price>	20000	</price>
-    <improved>	true	</improved>
-    <tags>	fuel premium_equipment	</tags>
-    <incompatibleTags>
-      <installed>	fuel	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <nations>	usa germany france uk czech sweden poland italy	</nations>
-        <componentFilters>
-          <engine>
-            <tags>	gasoline	</tags>
-          </engine>
-        </componentFilters>
-      </include>
-    </vehicleFilter>
-    <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
-      <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	1.1	</value>
-      </mul>
-      <mul>
-        <name>	vehicleTurretRotationSpeed	</name>
-        <value>	1.1	</value>
-      </mul>
-    </kpi>
-    <tooltipSection>	equipment	</tooltipSection>
-  </gasoline105>
   <chocolate>
     <id>	9	</id>
     <userString>	#artefacts:chocolate/name	</userString>
@@ -315,10 +208,14 @@
     <longDescriptionSpecial>	#artefacts:removedRpmLimiter/long_special	</longDescriptionSpecial>
     <icon>	removedRpmLimiter	</icon>
     <price>	3000	</price>
-    <tags>	trigger	</tags>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale trigger	</tags>
     <vehicleFilter>
       <include>
         <nations>	ussr china	</nations>
+        <vehicle>
+          <tags>	removedRpmLimiter_user	</tags>
+        </vehicle>
       </include>
     </vehicleFilter>
     <script>	RemovedRpmLimiter	  <enginePowerFactor>	1.1	</enginePowerFactor>
@@ -408,34 +305,6 @@
     </kpi>
     <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_china>
-  <qualityOil>
-    <id>	16	</id>
-    <userString>	#artefacts:qualityOil/name	</userString>
-    <description>	#artefacts:qualityOil/descr	</description>
-    <shortDescriptionSpecial>	#artefacts:qualityOil/short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#artefacts:qualityOil/long_special	</longDescriptionSpecial>
-    <icon>	qualityOil	</icon>
-    <price>	5000	</price>
-    <tags>	fuel	</tags>
-    <incompatibleTags>
-      <installed>	fuel	</installed>
-    </incompatibleTags>
-    <vehicleFilter>
-      <include>
-        <nations>	china japan	</nations>
-      </include>
-    </vehicleFilter>
-    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
-      <turretRotationSpeedFactor>	1.0	</turretRotationSpeedFactor>
-    </script>
-    <kpi>
-      <mul>
-        <name>	vehicleEnginePower	</name>
-        <value>	1.05	</value>
-      </mul>
-    </kpi>
-    <tooltipSection>	equipment	</tooltipSection>
-  </qualityOil>
   <ration_uk>
     <id>	17	</id>
     <userString>	#artefacts:ration_uk/name	</userString>
@@ -586,4 +455,59 @@
     </kpi>
     <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_italy>
+  <qualityFuel>
+    <id>	65	</id>
+    <userString>	#artefacts:qualityFuel/name	</userString>
+    <description>	#artefacts:qualityFuel/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:qualityFuel/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:qualityFuel/long_special	</longDescriptionSpecial>
+    <icon>	qualityFuel	</icon>
+    <price>	5000	</price>
+    <tags>	fuel	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <script>	Fuel	  <enginePowerFactor>	1.05	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.05	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.05	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretRotationSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+  </qualityFuel>
+  <excellentFuel>
+    <id>	66	</id>
+    <userString>	#artefacts:excellentFuel/name	</userString>
+    <description>	#artefacts:excellentFuel/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:excellentFuel/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:excellentFuel/long_special	</longDescriptionSpecial>
+    <icon>	excellentFuel	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	fuel premium_equipment	</tags>
+    <incompatibleTags>
+      <installed>	fuel	</installed>
+    </incompatibleTags>
+    <script>	Fuel	  <enginePowerFactor>	1.1	</enginePowerFactor>
+      <turretRotationSpeedFactor>	1.1	</turretRotationSpeedFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.1	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretRotationSpeed	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+  </excellentFuel>
 </vehicle_equipments.xml>

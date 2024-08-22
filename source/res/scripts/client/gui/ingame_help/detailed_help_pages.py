@@ -445,5 +445,6 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  RocketAccelerationPagesBuilder,
  Comp7PagesBuilder,
  MapboxPagesBuilder,
+ AutoShootGunPagesBuilder,
  DualAccuracyPagesBuilder,
  DevMapsPagesBuilder))

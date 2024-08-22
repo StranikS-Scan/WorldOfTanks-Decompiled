@@ -92,6 +92,19 @@ class ModifyTerrainResistanceBase(Block):
         pass
 
 
+class ModifyTerrainResistanceSoftEqualMediumBase(Block):
+
+    def __init__(self, *args, **kwargs):
+        super(ModifyTerrainResistanceSoftEqualMediumBase, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._perk = self._makeDataInputSlot('perk', SLOT_TYPE.PERK)
+        self._mediumGroundFactor = self._makeDataInputSlot('mediumGroundFactor', SLOT_TYPE.FLOAT)
+        self._outSlot = self._makeEventOutputSlot('out')
+
+    def _execute(self):
+        pass
+
+
 class AddDeviceHitModifierBase(Block, Perk):
 
     def __init__(self, *args, **kwargs):

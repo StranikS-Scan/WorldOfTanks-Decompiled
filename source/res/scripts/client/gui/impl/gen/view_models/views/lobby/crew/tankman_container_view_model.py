@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_container_tab_model impor
 class TankmanContainerViewModel(BaseCrewViewModel):
     __slots__ = ('onTabChange',)
 
-    def __init__(self, properties=8, commands=5):
+    def __init__(self, properties=9, commands=5):
         super(TankmanContainerViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -54,6 +54,12 @@ class TankmanContainerViewModel(BaseCrewViewModel):
     def setBackButtonLabel(self, value):
         self._setResource(7, value)
 
+    def getIsContentVisible(self):
+        return self._getBool(8)
+
+    def setIsContentVisible(self, value):
+        self._setBool(8, value)
+
     def _initialize(self):
         super(TankmanContainerViewModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -62,4 +68,5 @@ class TankmanContainerViewModel(BaseCrewViewModel):
         self._addArrayProperty('tabs', Array())
         self._addStringProperty('nation', '')
         self._addResourceProperty('backButtonLabel', R.invalid())
+        self._addBoolProperty('isContentVisible', True)
         self.onTabChange = self._addCommand('onTabChange')

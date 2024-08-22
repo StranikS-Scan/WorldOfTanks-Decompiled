@@ -57,7 +57,7 @@ class JunkTankmenView(BaseTankmanListView):
     def _fillTankmanCard(self, cardsList, tankman):
         tm = TankmanModel()
         setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID))
-        setTmanSkillsModel(tm.getSkills(), tankman)
+        setTmanSkillsModel(tm.skills, tankman)
         tm.setNation(nations.NAMES[tankman.nationID])
         tm.setHasVoiceover(False)
         if tankman.isDismissed:

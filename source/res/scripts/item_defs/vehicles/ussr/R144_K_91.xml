@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	12.70	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -69,6 +72,13 @@
       <undamaged>	vehicles/russian/R144_K_91/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R144_K_91/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R144_K_91/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R144_K_91_3Dst_BPXV>
+          <undamaged>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Hull.model	</exploded>
+        </R144_K_91_3Dst_BPXV>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -642,6 +652,13 @@
         <clipAngle>	0.770706	</clipAngle>
         <anchorShift>	0.263942	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <compatibleModels>	R144_K_91_3Dst_BPXV	</compatibleModels>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -684,6 +701,13 @@
         <undamaged>	vehicles/russian/R144_K_91/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R144_K_91/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R144_K_91/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R144_K_91_3Dst_BPXV>
+            <undamaged>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Chassis.model	</exploded>
+          </R144_K_91_3Dst_BPXV>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -767,6 +791,51 @@
                   <row3>	-0.000004 0.739758 -3.151055	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R144_K_91_3Dst_BPXV	</modelsSet>
+                <boxCollider>
+                  <row0>	1.735000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.858000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.700000	</row2>
+                  <row3>	0.000000 0.841000 0.163000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.033000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.513000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.066000	</row2>
+                  <row3>	0.000000 0.964481 -0.692000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.263632 -0.143172	</row1>
+                  <row2>	0.000000 0.513741 0.945987	</row2>
+                  <row3>	0.000001 1.082839 2.233094	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 0.000004 -0.000003	</row0>
+                  <row1>	0.000000 0.276790 0.115704	</row1>
+                  <row2>	0.000001 -0.290312 0.694493	</row2>
+                  <row3>	0.000001 1.211887 3.065480	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 0.000003 0.000000	</row0>
+                  <row1>	0.000000 -0.175816 0.243081	</row1>
+                  <row2>	0.000000 -0.243081 -0.175816	</row2>
+                  <row3>	-0.000004 0.741000 -3.102000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.513000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.480000	</row2>
+                  <row3>	-1.913638 0.682391 -0.469000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.603000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.393000	</row2>
+                  <row3>	-1.345000 0.230000 -0.058798	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -836,6 +905,51 @@
                   <row1>	0.000000 -0.102556 0.281926	</row1>
                   <row2>	0.000000 -0.281926 -0.102556	</row2>
                   <row3>	0.000004 0.739758 -3.151055	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R144_K_91_3Dst_BPXV	</modelsSet>
+                <boxCollider>
+                  <row0>	1.735000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.858000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.700000	</row2>
+                  <row3>	0.000000 0.841000 0.163000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.033000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.513000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.066000	</row2>
+                  <row3>	0.000000 0.964481 -0.692000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.263632 -0.143172	</row1>
+                  <row2>	0.000000 0.513741 0.945987	</row2>
+                  <row3>	-0.000001 1.082839 2.233094	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 -0.000004 0.000003	</row0>
+                  <row1>	0.000000 0.276790 0.115704	</row1>
+                  <row2>	-0.000001 -0.290312 0.694493	</row2>
+                  <row3>	-0.000001 1.211887 3.065480	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.398610 0.000003 0.000000	</row0>
+                  <row1>	0.000000 -0.175816 0.243081	</row1>
+                  <row2>	0.000000 -0.243081 -0.175816	</row2>
+                  <row3>	-0.000004 0.741000 -3.102000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.513000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.480000	</row2>
+                  <row3>	1.914000 0.682391 -0.469000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.603000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.393000	</row2>
+                  <row3>	1.345000 0.230000 -0.058798	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -964,13 +1078,13 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <forwardElastK>	2.5	</forwardElastK>
+          <forwardElastK>	1.85	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <forwardElastK>	2	</forwardElastK>
+          <forwardElastK>	1.8	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
           <offset>	-0.0427509	</offset>
         </node>
@@ -991,13 +1105,13 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	2.5	</forwardElastK>
+          <forwardElastK>	1.85	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
-          <forwardElastK>	2	</forwardElastK>
+          <forwardElastK>	1.8	</forwardElastK>
           <backwardElastK>	0.7	</backwardElastK>
           <offset>	-0.0427509	</offset>
         </node>
@@ -1907,13 +2021,13 @@
             </armor_8>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-110 110	</turretYawLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.0666667 5 0.0888889 9 0.911013 9 0.933333 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.3	</reloadTime>
+          <reloadTime>	5.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -1925,6 +2039,13 @@
             <undamaged>	vehicles/russian/R144_K_91/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R144_K_91/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R144_K_91/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R144_K_91_3Dst_BPXV>
+                <undamaged>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Gun_01.model	</exploded>
+              </R144_K_91_3Dst_BPXV>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R144_K_91/collision/Gun_01.model	</collisionModelServer>
@@ -2004,6 +2125,15 @@
               <rayUp>	0.094 0 0	</rayUp>
               <size>	0.73	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <compatibleModels>	R144_K_91_3Dst_BPXV	</compatibleModels>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000001 -0.004983 1.43	</rayStart>
+              <rayEnd>	-0.000001 -0.004983 2.16	</rayEnd>
+              <rayUp>	0.094 0 0	</rayUp>
+              <size>	0.73	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2011,6 +2141,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	104.005 104.288	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2021,6 +2152,13 @@
         <undamaged>	vehicles/russian/R144_K_91/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R144_K_91/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R144_K_91/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R144_K_91_3Dst_BPXV>
+            <undamaged>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R144_K_91/_skins/R144_K_91_3Dst_BPXV/crash/lod0/Turret_01.model	</exploded>
+          </R144_K_91_3Dst_BPXV>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R144_K_91/collision/Turret_01.model	</collisionModelServer>
@@ -2566,6 +2704,13 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.872442	</clipAngle>
           <anchorShift>	0.23944	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <compatibleModels>	R144_K_91_3Dst_BPXV	</compatibleModels>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
         </slot>
       </customizationSlots>
       <customization>

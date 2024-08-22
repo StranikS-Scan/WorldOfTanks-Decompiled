@@ -26,11 +26,11 @@ class MarathonVehiclePreview(VehiclePreview):
                 viewPy.setInfoTooltip()
                 items = tuple((item for item in self._itemsPack if item.type not in ItemPackTypeGroup.CREW))
                 viewPy.setPackItems(items, self._price, self._oldPrice, self._title)
-        elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
+        elif alias == VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT:
             if self._itemsPack:
                 crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
-                viewPy.setVehicleCrews(vehicleItems, crewItems)
+                viewPy.updateInjectData(None, vehicleItems, crewItems)
         return
 
     def _processBackClick(self, ctx=None):

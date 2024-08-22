@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.meta.HangarHeaderMeta import HangarHeaderMeta
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.battle_pass.battle_pass_helpers import getSupportedArenaBonusTypeFor
 from gui.event_boards.listener import IEventBoardsListener
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -106,11 +106,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__liveOpsWebEventsController.onEventStateChanged += self.__updateRightWidget
         self.__battleMattersController.onStateChanged += self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish += self.__onBattleMattersStateChanged
-        self.__limitedUIController.startObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
-        self.__limitedUIController.startObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
-        self.__limitedUIController.startObserve(LuiRules.BM_FLAG, self.__updateBattleMattersEntryPoint)
-        self.__limitedUIController.startObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
-        self.__limitedUIController.startObserve(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT, self.__updateRightWidget)
+        self.__limitedUIController.startObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassWidgetVisibility)
+        self.__limitedUIController.startObserve(LUI_RULES.BattleMissions, self.__updateVOHeader)
+        self.__limitedUIController.startObserve(LUI_RULES.BattleMattersFlag, self.__updateBattleMattersEntryPoint)
+        self.__limitedUIController.startObserve(LUI_RULES.PersonalMissions, self.__updateVOHeader)
+        self.__limitedUIController.startObserve(LUI_RULES.LiveOpsWebEventsEntryPoint, self.__updateRightWidget)
         self.__updateBattleMattersEntryPoint()
         g_clientUpdateManager.addCallbacks({'inventory.1': self.update})
         if self._eventsController:
@@ -136,11 +136,11 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__liveOpsWebEventsController.onSettingsChanged -= self.__updateRightWidget
         self.__battleMattersController.onStateChanged -= self.__onBattleMattersStateChanged
         self.__battleMattersController.onFinish -= self.__onBattleMattersStateChanged
-        self.__limitedUIController.stopObserve(LuiRules.BP_ENTRY, self.__updateBattlePassWidgetVisibility)
-        self.__limitedUIController.stopObserve(LuiRules.BATTLE_MISSIONS, self.__updateVOHeader)
-        self.__limitedUIController.stopObserve(LuiRules.BM_FLAG, self.__updateBattleMattersEntryPoint)
-        self.__limitedUIController.stopObserve(LuiRules.PERSONAL_MISSIONS, self.__updateVOHeader)
-        self.__limitedUIController.stopObserve(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT, self.__updateRightWidget)
+        self.__limitedUIController.stopObserve(LUI_RULES.BattlePassEntry, self.__updateBattlePassWidgetVisibility)
+        self.__limitedUIController.stopObserve(LUI_RULES.BattleMissions, self.__updateVOHeader)
+        self.__limitedUIController.stopObserve(LUI_RULES.BattleMattersFlag, self.__updateBattleMattersEntryPoint)
+        self.__limitedUIController.stopObserve(LUI_RULES.PersonalMissions, self.__updateVOHeader)
+        self.__limitedUIController.stopObserve(LUI_RULES.LiveOpsWebEventsEntryPoint, self.__updateRightWidget)
         self._currentVehicle = None
         self.__screenWidth = None
         self.__activeWidgets = None
@@ -187,7 +187,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __getBPWidget(self):
         isBPAvailable = not self.__battlePassController.isDisabled()
         isValidBattleType = self.prbDispatcher and self.prbDispatcher.getEntity() and self.__battlePassController.isValidBattleType(self.prbDispatcher.getEntity())
-        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
+        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.BattlePassEntry)
         isVisible = isBPAvailable and isValidBattleType and isRuleCompleted
         return HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT if isVisible else ''
 
@@ -207,7 +207,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          constants.ARENA_BONUS_TYPE.UNKNOWN,
          constants.ARENA_BONUS_TYPE.MAPBOX,
          constants.ARENA_BONUS_TYPE.WINBACK)
-        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
+        isRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.BattlePassEntry)
         secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled() and isRuleCompleted
         self.as_setSecondaryEntryPointVisibleS(secondaryEntryPointAvailable)
         if secondaryEntryPointAvailable:
@@ -223,7 +223,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if isRandom:
             if self.__resourceWell.isActive() or self.__resourceWell.isPaused() or self.__resourceWell.isNotStarted():
                 alias = HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT
-            elif self.__liveOpsWebEventsController.canShowHangarEntryPoint() and self.__limitedUIController.isRuleCompleted(LuiRules.LIVE_OPS_WEB_EVENTS_ENTRY_POINT):
+            elif self.__liveOpsWebEventsController.canShowHangarEntryPoint() and self.__limitedUIController.isRuleCompleted(LUI_RULES.LiveOpsWebEventsEntryPoint):
                 alias = HANGAR_ALIASES.LIVE_OPS_WEB_EVENTS_ENTRY_POINT
         if self.__activeWidgets.update(ActiveWidgets.RIGHT, alias):
             self.as_addSecondaryEntryPointS(alias, True)
@@ -231,7 +231,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __updateBattleMattersEntryPoint(self, *_):
         isValidArena = self.__getCurentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.WINBACK)
         controller = self.__battleMattersController
-        isLuiRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BM_FLAG)
+        isLuiRuleCompleted = self.__limitedUIController.isRuleCompleted(LUI_RULES.BattleMattersFlag)
         isBattleMattersMShow = controller.isEnabled() and (not controller.isFinished() or controller.hasDelayedRewards()) and isValidArena and isLuiRuleCompleted
         alias = HANGAR_ALIASES.BATTLE_MATTERS_ENTRY_POINT if isBattleMattersMShow else ''
         if self.__activeWidgets.update(ActiveWidgets.LEFT, alias):

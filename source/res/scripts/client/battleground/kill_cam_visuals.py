@@ -95,7 +95,7 @@ class EffectsController(CallbackDelayer):
 
             if not isSpgShot and not isRicochet:
                 lastPoint = points[-1]
-                prevPoint = points[0]
+                prevPoint = points[-2]
                 gradientPoint = (prevPoint - lastPoint) * 0.1 + lastPoint
                 points.insert(-1, gradientPoint)
             ptsLen = len(points)

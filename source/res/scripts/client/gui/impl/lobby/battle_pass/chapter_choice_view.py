@@ -109,7 +109,7 @@ class ChapterChoiceView(ViewImpl):
             model.awardsWidget.setIsBpCoinEnabled(not self.__battlePass.isHoliday())
             model.awardsWidget.setHasExtra(self.__battlePass.hasExtra())
             model.awardsWidget.setIsBattlePassCompleted(self.__battlePass.isCompleted())
-            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(isSeasonWithSpecialTankmenScreen())
+            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(self.__isSpecialVoiceTankmenEnabled(self.__battlePass.getChapterIDs()))
             fillCollectionModel(model.awardsWidget.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
 
     def __updateChapters(self, chapters):
@@ -211,15 +211,22 @@ class ChapterChoiceView(ViewImpl):
         with self.viewModel.awardsWidget.transaction() as model:
             fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
 
+    def __isSpecialVoiceTankmenEnabled(self, activeChapters):
+        if not isSeasonWithSpecialTankmenScreen():
+            return False
+        specialVoiceChapters = self.__battlePass.getSpecialVoiceChapters()
+        return any((chapterID in activeChapters for chapterID in specialVoiceChapters))
+
     def __checkBPState(self, *_):
         if self.__battlePass.isPaused():
             showMissionsBattlePass()
             return
         with self.viewModel.transaction() as model:
             model.setIsSeasonWithAdditionalBackground(isSeasonWithAdditionalBackground())
-            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(isSeasonWithSpecialTankmenScreen())
-            if len(self.__battlePass.getChapterIDs()) != len(self.viewModel.getChapters()):
+            activeChapters = self.__battlePass.getChapterIDs()
+            if len(activeChapters) != len(self.viewModel.getChapters()):
                 self.__updateChapters(model.getChapters())
+            model.awardsWidget.setIsSpecialVoiceTankmenEnabled(self.__isSpecialVoiceTankmenEnabled(activeChapters))
 
     @staticmethod
     def __buyBattlePass(_):

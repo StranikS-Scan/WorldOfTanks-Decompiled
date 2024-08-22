@@ -6,7 +6,7 @@ import GUI
 import SCALEFORM
 import SoundGroups
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE, DIRECT_DETECTION_TYPE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
@@ -434,14 +434,12 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
 class SixthSenseIndicator(SixthSenseMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(SixthSenseIndicator, self).__init__()
         self.__callbackID = None
-        self.__detectionSoundEventName = None
-        self.__detectionSoundEvent = None
         self.__enabled = True
+        self.__sound = SixthSenseSound()
         return
 
     @property
@@ -460,9 +458,7 @@ class SixthSenseIndicator(SixthSenseMeta):
 
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
-        detectionAlertSetting = self.settingsCore.options.getSetting(SOUND.DETECTION_ALERT_SOUND)
-        self.__setDetectionSoundEvent(detectionAlertSetting.getEventName())
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
+        self.__sound.init()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -475,25 +471,17 @@ class SixthSenseIndicator(SixthSenseMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
-        self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.__sound.fini()
+        self.__sound = None
         super(SixthSenseIndicator, self)._dispose()
         return
 
     def __show(self):
         if not self.__enabled:
             return
-        else:
-            if self.__detectionSoundEvent is not None:
-                if self.__detectionSoundEvent.isPlaying:
-                    self.__detectionSoundEvent.restart()
-                else:
-                    if self.__detectionSoundEvent.name in SoundGroups.CUSTOM_MP3_EVENTS:
-                        SoundGroups.g_instance.prepareMP3(self.__detectionSoundEvent.name)
-                    self.__detectionSoundEvent.play()
-                self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
-            self.as_showS()
-            self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
-            return
+        self.__sound.play()
+        self.as_showS()
+        self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
 
     def __hide(self):
         self.__callbackID = None
@@ -511,23 +499,62 @@ class SixthSenseIndicator(SixthSenseMeta):
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
-            if value:
-                self.__cancelCallback()
-                self.__show()
+            if value.get('detectionType') != DIRECT_DETECTION_TYPE.SPECIAL_RECON:
+                if value.get('isObserved', False):
+                    self.__cancelCallback()
+                    self.__show()
+                else:
+                    self.__cancelCallback()
+                    self.__hide()
+
+
+class SixthSenseSound(object):
+    __settingsCore = dependency.descriptor(ISettingsCore)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        super(SixthSenseSound, self).__init__()
+        self.__eventName = None
+        self.__sound = None
+        return
+
+    def init(self):
+        self.__updateSoundEvent()
+        self.__settingsCore.onSettingsChanged += self.__onSettingsChanged
+
+    def fini(self):
+        self.__settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        if self.__sound.isPlaying:
+            self.__sound.stop()
+        self.__sound = None
+        return
+
+    def play(self):
+        if self.__sound is None:
+            return
+        else:
+            if self.__sound.isPlaying:
+                self.__sound.restart()
             else:
-                self.__cancelCallback()
-                self.__hide()
+                if self.__sound.name in SoundGroups.CUSTOM_MP3_EVENTS:
+                    SoundGroups.g_instance.prepareMP3(self.__sound.name)
+                self.__sound.play()
+            self.__sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
+            return
 
     def __onSettingsChanged(self, diff):
-        key = SOUND.DETECTION_ALERT_SOUND
-        if key in diff:
-            detectionAlertSetting = self.settingsCore.options.getSetting(key)
-            self.__setDetectionSoundEvent(detectionAlertSetting.getEventName())
+        if SOUND.DETECTION_ALERT_SOUND in diff:
+            self.__updateSoundEvent()
 
-    def __setDetectionSoundEvent(self, soundEventName):
-        if self.__detectionSoundEventName != soundEventName:
-            self.__detectionSoundEventName = soundEventName
-            self.__detectionSoundEvent = SoundGroups.g_instance.getSound2D(self.__detectionSoundEventName)
+    def __updateSoundEvent(self):
+        detectionAlertSetting = self.__settingsCore.options.getSetting(SOUND.DETECTION_ALERT_SOUND)
+        eventName = detectionAlertSetting.getEventName()
+        if self.__eventName != eventName:
+            self.__eventName = eventName
+            if self.__sound is not None and self.__sound.isPlaying:
+                self.__sound.stop()
+            self.__sound = SoundGroups.g_instance.getSound2D(self.__eventName)
+        return
 
 
 class SiegeModeIndicator(SiegeModeIndicatorMeta):

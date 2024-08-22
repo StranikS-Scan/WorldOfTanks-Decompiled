@@ -8,7 +8,7 @@ from gui.impl.lobby.account_dashboard.features.base import FeatureItem
 from gui.impl.lobby.dog_tags.animated_dog_tag_composer import AnimatedDogTagComposer
 from gui.impl.lobby.dog_tags.dog_tag_composer import DogTagComposerLobby
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showDogTags, showAnimatedDogTags
 from gui.shared.events import DogTagsEvent
@@ -34,7 +34,7 @@ class DogTagsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify += self.__updatePrem
         self._dtHelper.onDogTagDataChanged += self.__onDogTagDataChanged
         g_eventBus.addListener(DogTagsEvent.COUNTERS_UPDATED, self.__onCountersUpdated, EVENT_BUS_SCOPE.LOBBY)
-        self.__limitedUIController.startObserve(LuiRules.DOG_TAG_HINT, self.__onLuiRuleDogTagCompleted)
+        self.__limitedUIController.startObserve(LUI_RULES.DogTagHangarHint, self.__onLuiRuleDogTagCompleted)
         AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
         self._viewModel.dogTags.customizableDogTag.onClick += self.__onCustomizableDogTagClick
         self._viewModel.dogTags.animatedDogTag.onClick += self.__onAnimatedDogTagClick
@@ -46,7 +46,7 @@ class DogTagsFeature(FeatureItem):
         self.__gameSession.onPremiumNotify -= self.__updatePrem
         self._dtHelper.onDogTagDataChanged -= self.__onDogTagDataChanged
         g_eventBus.removeListener(DogTagsEvent.COUNTERS_UPDATED, self.__onCountersUpdated, EVENT_BUS_SCOPE.LOBBY)
-        self.__limitedUIController.stopObserve(LuiRules.DOG_TAG_HINT, self.__onLuiRuleDogTagCompleted)
+        self.__limitedUIController.stopObserve(LUI_RULES.DogTagHangarHint, self.__onLuiRuleDogTagCompleted)
         AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
         super(DogTagsFeature, self).finalize()
 

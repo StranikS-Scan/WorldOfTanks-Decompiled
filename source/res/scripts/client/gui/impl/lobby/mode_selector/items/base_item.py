@@ -12,7 +12,7 @@ from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import ModeSelectorNormalCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
 from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID, DEFAULT_MODE_SETTING
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
 from helpers import dependency, i18n, time_utils
@@ -128,7 +128,7 @@ class ModeSelectorItem(object):
         return GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)) is not None
 
     def _isNewLabelVisible(self):
-        isNewbie = not self.__limitedUIController.isRuleCompleted(LuiRules.MODE_SELECTOR_WIDGET_BTN_HINT)
+        isNewbie = not self.__limitedUIController.isRuleCompleted(LUI_RULES.ModeSelectorWidgetsBtnHint)
         return self._getIsNew() and not isNewbie
 
     def _isDisabled(self):

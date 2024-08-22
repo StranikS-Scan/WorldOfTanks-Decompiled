@@ -1,8 +1,7 @@
 <S16_Kranvagn_bob.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
   </crew>
@@ -30,6 +29,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	11.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>

@@ -93,7 +93,6 @@ class ITEM_TYPES(object):
     TANKMAN_ROLES_FEMALE_OBJECTIVECASE_UPPERCASE_GUNNER = '#item_types:tankman/roles/female/objectiveCase/upperCase/gunner'
     TANKMAN_ROLES_FEMALE_OBJECTIVECASE_UPPERCASE_LOADER = '#item_types:tankman/roles/female/objectiveCase/upperCase/loader'
     TANKMAN_SKILL_NOT_BE_USED = '#item_types:tankman/Skill_not_be_used'
-    TANKMAN_SKILLS_PERMANENT_DESCR = '#item_types:tankman/skills/permanent_descr'
     TANKMAN_SKILLS_TYPE_SKILL = '#item_types:tankman/skills/type/skill'
     TANKMAN_SKILLS_TYPE_SKILL_SHORT = '#item_types:tankman/skills/type/skill_short'
     TANKMAN_SKILLS_TYPE_PERK = '#item_types:tankman/skills/type/perk'
@@ -147,7 +146,6 @@ class ITEM_TYPES(object):
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
      SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
-     TANKMAN_SKILLS_PERMANENT_DESCR,
      TANKMAN_SKILLS_TYPE_SKILL,
      TANKMAN_SKILLS_TYPE_SKILL_SHORT,
      TANKMAN_SKILLS_TYPE_PERK,

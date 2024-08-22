@@ -65,12 +65,9 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
             return self._R_COMP7_EQUIPMENT_ICON
         return self._R_POI_EQUIPMENT_ICON if self.__isPoiEquipment(item) else super(Comp7ConsumablesPanel, self)._getEquipmentIconPath(item)
 
-    def _setKeyHandler(self, item, bwKey, idx):
+    def _setEquipmentKeyHandler(self, item, bwKey, idx):
         if bwKey not in self._keys:
-            if item.isEntityRequired():
-                handler = partial(self._handleEquipmentExpanded, self._cds[idx])
-            else:
-                handler = partial(self._handleEquipmentPressed, self._cds[idx])
+            handler = partial(self._handleEquipmentPressed, self._cds[idx])
             self._keys[bwKey] = handler
 
     def _onEquipmentAdded(self, intCD, item):
@@ -153,13 +150,14 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
             if vehicle is not None:
                 roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
                 roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
+                roleStartLevel = self.__comp7Controller.getEquipmentStartLevel(roleName)
                 if roleSkillEquipment is None:
                     if not avatar_getter.isObserver():
                         _logger.error('No equipment found for vehicle %s', vehicle.descriptor.name)
                     return
                 bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)
                 icon = backport.image(self._R_COMP7_EQUIPMENT_ICON.dyn(roleSkillEquipment.icon[0])())
-                tooltip = TOOLTIP_FORMAT.format(*getRoleEquipmentTooltipParts(roleSkillEquipment))
+                tooltip = TOOLTIP_FORMAT.format(*getRoleEquipmentTooltipParts(roleSkillEquipment, roleStartLevel))
                 self.as_addRoleSkillSlotS(self._ROLE_EQUIPMENT_IDX, bwKey, sfKey, 0, 0.0, 0.0, icon, tooltip, ANIMATION_TYPES.NONE)
         return
 
@@ -171,12 +169,18 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
     def __isPoiEquipment(item):
         return item is not None and POI_EQUIPMENT_TAG in item.getTags()
 
-    @staticmethod
-    def __buildRoleEquipmentTooltipText(item):
-        equipment = item.getDescriptor()
-        header, body = getRoleEquipmentTooltipParts(equipment)
-        tooltip = TOOLTIP_FORMAT.format(header, body)
-        return tooltip
+    def __buildRoleEquipmentTooltipText(self, item):
+        vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
+        if vehicle is None:
+            _logger.info('Cannot create roleEquipment tooltip, spawnInfoForVehicle not received yet')
+            return
+        else:
+            roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
+            startLevel = self.__comp7Controller.getEquipmentStartLevel(roleName)
+            equipment = item.getDescriptor()
+            header, body = getRoleEquipmentTooltipParts(equipment, startLevel)
+            tooltip = TOOLTIP_FORMAT.format(header, body)
+            return tooltip
 
     @staticmethod
     def __buildPoIEquipmentTooltipText(item):

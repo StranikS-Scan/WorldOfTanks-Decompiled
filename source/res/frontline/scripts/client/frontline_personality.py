@@ -10,6 +10,7 @@ from frontline.gui.battle_control.controllers.consumables import registerFLEquip
 from frontline.gui.battle_control.controllers.equipment_items import registerFLEquipmentsItems
 from frontline.gui.battle_control.controllers.repositories import registerFLBattleRepositories
 from frontline.gui.prb_control import registerFLPrebattles, extendIntroByType
+from frontline.gui.frontline_gui_constants import initFLLimitedUIIDs
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import registerQuestFlags
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
@@ -32,8 +33,8 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
 
     @property
     def _client_bannerEntryPointLUIRule(self):
-        from gui.limited_ui.lui_rules_storage import LuiRules
-        return LuiRules.EPIC_BATTLES_ENTRY_POINT
+        from gui.limited_ui.lui_rules_storage import LUI_RULES
+        return LUI_RULES.EpicBattlesEntryPoint
 
     @property
     def _client_providerBattleQueue(self):
@@ -57,6 +58,7 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
 
 
 def preInit():
+    initFLLimitedUIIDs()
     initHangarGuiConsts(gui_constants, __name__)
     battleMode = ClientFrontlineBattleMode(__name__)
     battleMode.registerClientHangarPresets()

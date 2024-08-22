@@ -36,6 +36,7 @@ from account_helpers.spa_flags import SPAFlags
 from account_helpers.telecom_rentals import TelecomRentals
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
+from account_helpers import CrewAccountController
 from account_shared import NotificationItem, readClientServerVersion
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE, EVENT_CLIENT_DATA, ARENA_GUI_TYPE
 from constants import PREBATTLE_INVITE_STATUS, PREBATTLE_TYPE, ARENA_GAMEPLAY_MASK_DEFAULT, ENABLE_FREE_PREMIUM_CREW
@@ -106,7 +107,7 @@ class _ClientCommandProxy(object):
 
     def perform(self, commandName, *args):
         if self.__commandGateway is None:
-            raise SoftException('Cliend command proxy is not ready')
+            raise SoftException('Client command proxy is not ready')
         callback = args[-1]
         commandArgs = args[:-1]
         for commandType, signatureCheck in self._COMMAND_SIGNATURES:
@@ -181,6 +182,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell = g_accountRepository.resourceWell
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
+        self.crewAccountController = g_accountRepository.crewAccountController
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -1163,7 +1165,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
                 for vehInvID, lockReason in diff.get('cache', {}).get('vehsLock', {}).iteritems():
                     if lockReason is None:
-                        lockReason = AccountCommands.LOCK_REASON.NONE
+                        lockReason = (AccountCommands.LOCK_REASON.NONE, 0)
                     events.onVehicleLockChanged(vehInvID, lockReason)
 
             return True
@@ -1400,6 +1402,7 @@ class _AccountRepository(object):
         self.gameRestrictions = GameRestrictions(self.syncData)
         self.platformBlueprintsConvertSaleLimits = {}
         self.freePremiumCrew = {}
+        self.crewAccountController = CrewAccountController.CrewAccountController(self.inventory)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
@@ -1418,6 +1421,7 @@ def delAccountRepository():
         g_accountRepository.customFilesCache.close()
         g_accountRepository.onTokenReceived.clear()
         g_accountRepository.prebattleInvitations.clear()
+        g_accountRepository.crewAccountController.clear()
         g_accountRepository = None
         return
 

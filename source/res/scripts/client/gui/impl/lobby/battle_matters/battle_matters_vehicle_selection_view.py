@@ -119,6 +119,8 @@ class BattleMattersVehicleSelectionView(ViewImpl):
 
     def _finalize(self):
         self.__filters = None
+        if self.__filterPopover and self.__filterPopover.viewStatus == ViewStatus.LOADED:
+            self.__filterPopover.destroyWindow()
         self.__filterPopover = None
         self.__vehicles = None
         super(BattleMattersVehicleSelectionView, self)._finalize()

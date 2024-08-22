@@ -26,7 +26,8 @@ from skeletons.gui.system_messages import ISystemMessages
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Optional, Tuple, List, Set, Union, Iterable
     from helpers.server_settings import _LimitedUIConfig
-    from gui.limited_ui.lui_rules_storage import _LimitedUIRules, _LimitedUIRule, LuiRules
+    from gui.limited_ui.lui_rules_storage import _LimitedUIRules, _LimitedUIRule
+    from enumerations import EnumItem
     from gui.limited_ui.lui_tokens_storage import LimitedUICondition, LimitedUITokenInfo
 _logger = logging.getLogger(__name__)
 
@@ -350,7 +351,7 @@ class LimitedUIController(ILimitedUIController):
         if isComplete:
             self.__completeRule(ruleID)
             if self.__rules.isCompleted(ruleID):
-                self.__updateTutorialHints(state=self.isEnabled, arguments=ruleID.value)
+                self.__updateTutorialHints(state=self.isEnabled, arguments=ruleID.name())
         return isComplete
 
     def __checkCondition(self, ruleID):

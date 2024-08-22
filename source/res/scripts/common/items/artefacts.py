@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
-import math
 import os
 from re import findall
 from enum import Enum, unique
@@ -13,7 +12,7 @@ from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK
 from debug_utils import LOG_DEBUG_DEV
 from extension_utils import importClass
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
-from items import _xml, vehicles
+from items import _xml, vehicles, tankmen
 from items.artefacts_helpers import VehicleFilter, _ArtefactFilter, readKpi
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
@@ -715,15 +714,13 @@ class Stimulator(Equipment):
 
 
 class Repairkit(Equipment):
-    __slots__ = ('repairAll', 'bonusValue')
+    __slots__ = ('bonusValue',)
 
     def __init__(self):
         super(Repairkit, self).__init__()
-        self.repairAll = False
         self.bonusValue = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
-        self.repairAll = section.readBool('repairAll', False)
         self.bonusValue = _xml.readFraction(xmlCtx, section, 'bonusValue')
 
 
@@ -1451,11 +1448,13 @@ class FactorSkillBattleBooster(SkillEquipment):
         self.efficiencyFactor = _xml.readPositiveFloat(xmlCtx, section, 'efficiencyFactor')
 
     def updateCrewSkill(self, a):
-        if a.baseAvgLevel < 100:
-            a.factor = max(1.0, a.factor)
-            a.baseAvgLevel = 100
+        efficiency = (a.factor - 0.57) / 0.43
+        if a.baseAvgLevel < 100 or a.skillEfficiency < 1.0:
+            efficiency = 1.0 + efficiency - float(a.baseAvgLevel) / 100
+            a.factor = 0.57 + 0.43 * efficiency
+            a.baseAvgLevel = efficiency * 100
         else:
-            a.factor = 0.57 + (a.factor - 0.57) * self.efficiencyFactor
+            a.factor = 0.57 + 0.43 * efficiency * self.efficiencyFactor
 
 
 class SixthSenseBattleBooster(SkillEquipment):
@@ -2356,23 +2355,26 @@ class Comp7FastRechargeEquipment(VisualScriptEquipment):
 
 
 class Comp7JuggernautEquipment(VisualScriptEquipment):
-    __slots__ = ('duration', 'enginePowerFactor', 'stunDurationFactor', 'repairBuff', 'gunReloadBoost')
+    __slots__ = ('duration', 'enginePowerFactor', 'dmgAbsorb', 'fwMaxSpeedBonus', 'bkMaxSpeedBonus', 'rammingDamageBonus', 'vehicleRotationSpeedFactor')
 
     @property
     def tooltipParams(self):
         params = super(Comp7JuggernautEquipment, self).tooltipParams
         params['enginePowerBuff'] = (self.enginePowerFactor - 1.0) * 100
-        params['stunDurationResist'] = self.stunDurationFactor * 100
+        params['dmgAbsorbBuff'] = tuple(map(lambda b: (1.0 - b) * 100, self.dmgAbsorb))
+        params['rammingDamageBuff'] = (self.rammingDamageBonus - 1.0) * 100
         return params
 
     def _readConfig(self, xmlCtx, section):
         super(Comp7JuggernautEquipment, self)._readConfig(xmlCtx, section)
         self.duration = tuple(map(float, section.readString('duration').split()))
         self.enginePowerFactor = section.readFloat('enginePowerFactor')
-        self.stunDurationFactor = section.readFloat('stunDurationFactor')
-        self.repairBuff = section.readFloat('repairBuff')
-        self.gunReloadBoost = section.readFloat('gunReloadBoost')
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.dmgAbsorb = tuple(map(float, section.readString('dmgAbsorb').split()))
+        self.fwMaxSpeedBonus = section.readFloat('fwMaxSpeedBonus')
+        self.bkMaxSpeedBonus = section.readFloat('bkMaxSpeedBonus')
+        self.rammingDamageBonus = section.readFloat('rammingDamageBonus')
+        self.vehicleRotationSpeedFactor = section.readFloat('vehicleRotationSpeedFactor')
         self._exportSlotsToVSE()
 
 
@@ -2438,16 +2440,23 @@ class Comp7RiskyAttackEquipment(VisualScriptEquipment):
 
 
 class Comp7ReconEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader):
-    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'delay')
+    __slots__ = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'delay', 'startupDelay')
 
     def __init__(self):
         super(Comp7ReconEquipment, self).__init__()
         self.initMarkerInformation()
 
+    @property
+    def tooltipParams(self):
+        params = super(Comp7ReconEquipment, self).tooltipParams
+        params['lampDelay'] = tankmen.getSkillsConfig().getSkill('commander_sixthSense').delay
+        return params
+
     def _readConfig(self, xmlCtx, section):
         super(Comp7ReconEquipment, self)._readConfig(xmlCtx, section)
         self.duration = tuple(map(float, section.readString('duration').split()))
         self.delay = section.readFloat('delay')
+        self.startupDelay = section.readFloat('startupDelay')
         self.readMarkerConfig(xmlCtx, section)
         self.cooldownSeconds = section.readFloat('cooldownSeconds')
         self._exportSlotsToVSE()

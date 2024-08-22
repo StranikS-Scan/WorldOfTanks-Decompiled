@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.25.1.1</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.25.1.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.26.0.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.26.0.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -123,8 +123,6 @@
       <Package type="hd">./res/packages/95_lost_city_ctf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/99_poland.pkg</Package>
       <Package type="hd">./res/packages/99_poland_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h20_wot_bday_2024.pkg</Package>
-      <Package type="hd">./res/packages/h20_wot_bday_2024_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
@@ -139,7 +137,6 @@
       <Package type="sandbox,sd,hd">./res/packages/battle_royale_progression.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/common_ext.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/comp7_light_progression.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_lootboxes.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_platform.pkg</Package>

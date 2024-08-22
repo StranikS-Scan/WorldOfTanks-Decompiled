@@ -237,14 +237,18 @@
       </cooldownSeconds>
       <duration>	12 15 20	  <exports>	vse tooltip	</exports>
       </duration>
+      <dmgAbsorb>	0.85 0.775 0.70	  <exports>	vse	</exports>
+      </dmgAbsorb>
       <enginePowerFactor>	1.35	  <exports>	vse	</exports>
       </enginePowerFactor>
-      <stunDurationFactor>	0.4	  <exports>	vse	</exports>
-      </stunDurationFactor>
-      <repairBuff>	30	  <exports>	vse tooltip	</exports>
-      </repairBuff>
-      <gunReloadBoost>	4.0	  <exports>	vse tooltip	</exports>
-      </gunReloadBoost>
+      <fwMaxSpeedBonus>	10	  <exports>	vse tooltip	</exports>
+      </fwMaxSpeedBonus>
+      <bkMaxSpeedBonus>	10	  <exports>	vse tooltip	</exports>
+      </bkMaxSpeedBonus>
+      <rammingDamageBonus>	1.30	  <exports>	vse tooltip	</exports>
+      </rammingDamageBonus>
+      <vehicleRotationSpeedFactor>	0.75	  <exports>	vse	</exports>
+      </vehicleRotationSpeedFactor>
     </script>
   </comp7_juggernaut>
   <comp7_sure_shot>
@@ -351,6 +355,8 @@
       </duration>
       <delay>	2	  <exports>	vse tooltip	</exports>
       </delay>
+      <startupDelay>	3	  <exports>	vse tooltip	</exports>
+      </startupDelay>
       <radius>	45 55 60	  <exports>	vse tooltip	</exports>
       </radius>
       <areaVisual>	content/Interface/TargetPoint/ReconFlight_02.visual	</areaVisual>

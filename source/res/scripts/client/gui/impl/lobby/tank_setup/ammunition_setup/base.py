@@ -19,13 +19,14 @@ from skeletons.gui.shared import IItemsCache
 class BaseAmmunitionSetupView(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    __slots__ = ('_ammunitionPanel', '_tankSetup', '_vehItem')
+    __slots__ = ('_ammunitionPanel', '_tankSetup', '_vehItem', '_optionalDevicesAssistant')
 
     def __init__(self, settings):
         super(BaseAmmunitionSetupView, self).__init__(settings)
         self._ammunitionPanel = None
         self._tankSetup = None
         self._vehItem = None
+        self._optionalDevicesAssistant = None
         return
 
     @property
@@ -57,17 +58,24 @@ class BaseAmmunitionSetupView(ViewImpl):
         self._tankSetup.onLoading(**kwargs)
         self._ammunitionPanel = self._createAmmunitionPanel()
         self._ammunitionPanel.onLoading(**kwargs)
+        self._optionalDevicesAssistant = self._createOptionalDevicesAssistantPanel()
+        if self._optionalDevicesAssistant:
+            self._optionalDevicesAssistant.onLoading(**kwargs)
 
     def _initialize(self, *args, **kwargs):
         super(BaseAmmunitionSetupView, self)._initialize()
         self._ammunitionPanel.initialize()
         self._tankSetup.initialize()
+        if self._optionalDevicesAssistant:
+            self._optionalDevicesAssistant.initialize()
         self._addListeners()
 
     def _finalize(self):
         self._removeListeners()
         self._ammunitionPanel.finalize()
         self._tankSetup.finalize()
+        if self._optionalDevicesAssistant:
+            self._optionalDevicesAssistant.finalize()
         self._vehItem = None
         super(BaseAmmunitionSetupView, self)._finalize()
         return
@@ -100,6 +108,9 @@ class BaseAmmunitionSetupView(ViewImpl):
 
     def _createAmmunitionPanel(self):
         raise NotImplementedError
+
+    def _createOptionalDevicesAssistantPanel(self):
+        pass
 
     def _addListeners(self):
         self._vehItem.onItemUpdated += self._onVehicleItemUpdated

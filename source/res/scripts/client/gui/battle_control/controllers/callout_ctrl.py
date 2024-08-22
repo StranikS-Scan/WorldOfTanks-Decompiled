@@ -108,7 +108,6 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 self.__radialKeyDown = None
                 if self.hasDelayedCallback(self.__delayOpenRadialMenu):
                     self.stopCallback(self.__delayOpenRadialMenu)
-                self.__setAimingEnabled(isEnabled=True)
             return
 
     def handleCalloutAndRadialMenuKeyPress(self, key, isDown):
@@ -128,7 +127,6 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             if self.__radialKeyDown is None and isDown:
                 self.__radialKeyDown = key
                 if not self.hasDelayedCallback(self.__delayOpenRadialMenu) and avatar_getter.isVehicleAlive() and not isPlayerObserver:
-                    self.__setAimingEnabled(isEnabled=False)
                     if self.__commandReceivedData is None and cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
                         self.__openRadialMenu()
                     else:
@@ -158,16 +156,6 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         g_messengerEvents.channels.onCommandReceived -= self.__onCommandReceived
         g_eventBus.removeListener(GameEvent.RESPOND_TO_CALLOUT, self.__handleCalloutButtonEvent, scope=EVENT_BUS_SCOPE.BATTLE)
         BattleReplay.g_replayCtrl.onCommandReceived -= self.__onCommandReceived
-
-    def __setAimingEnabled(self, isEnabled):
-        if not isEnabled:
-            self.__previousForcedGuiControlModeFlags = avatar_getter.getForcedGuiControlModeFlags()
-            avatar_getter.setForcedGuiControlMode(True, stopVehicle=False, enableAiming=False, cursorVisible=False)
-        elif self.__previousForcedGuiControlModeFlags is not None:
-            stopVehicle = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.MOVING_DISABLED > 0
-            enableAiming = self.__previousForcedGuiControlModeFlags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0
-            avatar_getter.setForcedGuiControlMode(False, stopVehicle, enableAiming, False)
-        return
 
     def __onCommandReceived(self, cmd):
         if not self.__isCalloutEnabled or not self.__isIBCEnabled or cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:

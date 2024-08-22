@@ -20,7 +20,7 @@ class CombinedCrewSkill(object):
 
     def _floatLevel(self):
         if self.boosterMultiplier is None:
-            return (self.tankmanLevel + self.levelIncrease) * self.skillsEfficiency
+            return self.tankmanLevel + self.levelIncrease
         else:
             return tankmen.MAX_SKILL_LEVEL + self.levelIncrease if self.tankmanLevel < tankmen.MAX_SKILL_LEVEL or self.skillsEfficiency < tankmen.MAX_SKILLS_EFFICIENCY else (tankmen.MAX_SKILL_LEVEL + self.levelIncrease) * self.boosterMultiplier
 

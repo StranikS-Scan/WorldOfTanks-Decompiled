@@ -2,22 +2,24 @@
 # Embedded file name: scripts/client/gui/impl/dialogs/dialogs.py
 import typing
 from BWUtil import AsyncReturn
-from wg_async import wg_async, wg_await
-from helpers import dependency
+from frameworks.wulf import WindowStatus
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.trophy_device_confirm_view import TrophyDeviceUpgradeConfirmView
 from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConversionView
+from gui.impl.lobby.crew.crew_helpers.tankman_helpers import isPremiumRetrainWarning
+from gui.impl.lobby.crew.dialogs.skills_training_confirm_dialog import SkillsTrainingConfirmDialog
+from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
 from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, ExchangeToUpgradeDevice
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.lobby.dialogs.quit_game_dialog import QuitGameDialogWindow
 from gui.impl.lobby.premacc.maps_blacklist_confirm_view import MapsBlacklistConfirmView
-from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
 from gui.impl.lobby.tank_setup.upgradable_device.UpgradeDeviceView import UpgradableDeviceUpgradeConfirmView
 from gui.impl.pub.dialog_window import DialogButtons, DialogWindow, SingleDialogResult
+from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
-from frameworks.wulf import WindowStatus
+from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
-    from typing import Any, Optional, Iterable, Union
+    from typing import Any, Optional, Iterable, Union, List
 
 @wg_async
 def show(dialog):
@@ -108,6 +110,19 @@ def showSingleDialogWithResultData(wrappedViewClass, layoutID, parent=None, *arg
 
 
 @wg_async
+@dependency.replace_none_kwargs(gui=IGuiLoader)
+def showCustomBlurSingleDialog(wrappedViewClass, layoutID, parent=None, gui=None, *args, **kwargs):
+    result = None
+    dialog = gui.windowsManager.getViewByLayoutID(layoutID)
+    if dialog is None:
+        dialog = FullScreenDialogWindowWrapper(wrappedViewClass(*args, **kwargs), parent, doBlur=False)
+    if dialog is not None:
+        result = yield wg_await(showSimpleWithResultData(dialog))
+    raise AsyncReturn(SingleDialogResult(busy=True, result=result))
+    return
+
+
+@wg_async
 def showExchangeToUpgradeDeviceDialog(device, parent=None):
     result = yield wg_await(showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToUpgradeItems(), parent=parent, wrappedViewClass=ExchangeToUpgradeDevice, device=device))
     raise AsyncReturn(result)
@@ -136,6 +151,10 @@ def showPerksDropDialog(tankmanId):
 @wg_async
 def showRetrainMassiveDialog(tankmenIds, vehicleCD):
     from gui.impl.lobby.crew.dialogs.retrain_massive_dialog import RetrainMassiveDialog
+    if isPremiumRetrainWarning(tankmenIds, vehicleCD):
+        result = yield wg_await(showRetrainPremiumVehicleDialog(vehicleCD, True))
+        if not result.result:
+            raise AsyncReturn(result)
     result = yield wg_await(showSingleDialog(layoutID=RetrainMassiveDialog.LAYOUT_ID, wrappedViewClass=RetrainMassiveDialog, tankmenIds=tankmenIds, vehicleCD=vehicleCD))
     raise AsyncReturn(result)
 
@@ -143,7 +162,18 @@ def showRetrainMassiveDialog(tankmenIds, vehicleCD):
 @wg_async
 def showRetrainSingleDialog(tankmanId, vehicleCD, targetRole=None, targetSlotIdx=None, isChangeRoleVisible=False, beforeActions=None, parentViewKey=None):
     from gui.impl.lobby.crew.dialogs.retrain_single_dialog import RetrainSingleDialog
+    if isPremiumRetrainWarning([tankmanId], vehicleCD):
+        result = yield wg_await(showRetrainPremiumVehicleDialog(vehicleCD))
+        if not result.result:
+            raise AsyncReturn(result)
     result = yield wg_await(showSingleDialog(layoutID=RetrainSingleDialog.LAYOUT_ID, wrappedViewClass=RetrainSingleDialog, tankmanId=tankmanId, vehicleCD=vehicleCD, targetRole=targetRole, targetSlotIdx=targetSlotIdx, isChangeRoleVisible=isChangeRoleVisible, beforeActions=beforeActions, parentViewKey=parentViewKey))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showRetrainPremiumVehicleDialog(vehicleCD, isMassive=False, parentViewKey=None):
+    from gui.impl.lobby.crew.dialogs.retrain_premium_vehicle_dialog import RetrainPremiumVehicleDialog
+    result = yield wg_await(showSingleDialog(layoutID=RetrainPremiumVehicleDialog.LAYOUT_ID, wrappedViewClass=RetrainPremiumVehicleDialog, vehicleCD=vehicleCD, isMassive=isMassive, parentViewKey=parentViewKey))
     raise AsyncReturn(result)
 
 
@@ -193,4 +223,10 @@ def showDismissTankmanDialog(tankmanId, parentViewKey=None):
 def showRestoreTankmanDialog(tankmanId, vehicleId, slotIdx, parentViewKey=None):
     from gui.impl.lobby.crew.dialogs.restore_tankman_dialog import RestoreTankmanDialog
     result = yield wg_await(showSingleDialog(layoutID=RestoreTankmanDialog.LAYOUT_ID, wrappedViewClass=RestoreTankmanDialog, tankmanId=tankmanId, vehicleId=vehicleId, slotIdx=slotIdx, parentViewKey=parentViewKey))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showSkillsTrainingConfirmDialog(tankman, skillsList, availableSkillsData):
+    result = yield wg_await(showSingleDialogWithResultData(layoutID=SkillsTrainingConfirmDialog.LAYOUT_ID, wrappedViewClass=SkillsTrainingConfirmDialog, tankman=tankman, skillsList=skillsList, availableSkillsData=availableSkillsData))
     raise AsyncReturn(result)

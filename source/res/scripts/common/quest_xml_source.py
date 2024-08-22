@@ -208,11 +208,8 @@ class Source(object):
 
     def __stripServerQuestData(self, questClientData):
         questClientData.pop('serverOnly', None)
-        bonusSection = questClientData['bonus']
-        bonusConfig = bonusSection.get('config', {})
-        showProbabilitiesInfo = bonusConfig.get('showProbabilitiesInfo', False)
-        questClientData['bonus'] = StripVisitor(showProbabilitiesInfo).walkBonuses(bonusSection)
-        questClientData['bonusDelayed'] = StripVisitor(showProbabilitiesInfo).walkBonuses(questClientData['bonusDelayed'])
+        questClientData['bonus'] = StripVisitor().walkBonuses(questClientData['bonus'])
+        questClientData['bonusDelayed'] = StripVisitor().walkBonuses(questClientData['bonusDelayed'])
         return
 
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
@@ -375,6 +372,7 @@ class Source(object):
          'isWinbackQuestsEnabled': self.__readCondition_bool,
          'isDailyQuestsEnabled': self.__readCondition_bool,
          'isSteamAllowed': self.__readCondition_bool,
+         'isFirstLogin': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'lastLogout': self.__readBattleResultsConditionList,
          'noviceType': self.__readBattleResultsConditionList,

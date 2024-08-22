@@ -859,7 +859,12 @@ class CommonTankAppearance(ScriptGameObject):
         return self.outfit.modelsSet if has3DStyle else 'default'
 
     def getTrackStates(self):
-        return [] if self.crashedTracksController is None else list(self.crashedTracksController.getLeftTrackStates() + self.crashedTracksController.getRightTrackStates())
+        if self.crashedTracksController is None:
+            return []
+        else:
+            leftTrackStates = self.crashedTracksController.getTrackStates(isLeft=True)
+            rightTrackStates = self.crashedTracksController.getTrackStates(isLeft=False)
+            return leftTrackStates + rightTrackStates
 
     def __shouldCreatePhysicalDestroyedTracks(self):
         quality = BigWorld.trackPhysicsQuality()
@@ -900,7 +905,7 @@ class CommonTankAppearance(ScriptGameObject):
                 track = self.tracks.getTrackGameObject(isLeft, idx)
                 track.createComponent(DebrisCrashedTrackComponent, isLeft, idx, self.typeDescriptor, self.gameObject, self.boundEffects, self.filter, self._vehicle.isPlayerVehicle, shouldCreateDebris, hitPoint, modelsSet)
                 if self.crashedTracksController is not None:
-                    self.crashedTracksController.addDebrisCrashedTrack(isLeft, idx, hitPoint)
+                    self.crashedTracksController.addCrashedTrack(isLeft, idx, hitPoint, isDebris=True)
 
             return
 
@@ -916,7 +921,7 @@ class CommonTankAppearance(ScriptGameObject):
                         track.removeComponent(debris)
                         foundCrashedTrackWithDebris = True
                         if self.crashedTracksController is not None:
-                            self.crashedTracksController.delDebrisCrashedTrack(isLeft, idx)
+                            self.crashedTracksController.delCrashedTrack(isLeft, idx)
 
         if not foundCrashedTrackWithDebris and self.crashedTracksController is not None:
             for idx in indices:

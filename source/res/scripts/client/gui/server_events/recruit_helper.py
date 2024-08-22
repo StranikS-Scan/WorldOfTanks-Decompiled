@@ -283,10 +283,19 @@ class _BaseRecruitInfo(object):
     def getFakeTankman(self):
         return Tankman.Tankman(self.__makeFakeDescriptor().makeCompactDescr())
 
+    def getFakeTankmanInVehicle(self, vehicle, role, dropIrrelevantSkills=False):
+        tmanDescr = self.__makeFakeDescriptor()
+        tmanDescr.role = role
+        vehicleRoles = vehicle.descriptor.type.crewRoles
+        vehicleSlotIdx = next((idx for idx, roles in enumerate(vehicleRoles) if roles[0] == role), -1)
+        if dropIrrelevantSkills:
+            tmanDescr.dropIrrelevantSkills()
+        return Tankman.Tankman(tmanDescr.makeCompactDescr(), vehicle=vehicle, vehicleSlotIdx=vehicleSlotIdx)
+
     def getNewSkillCount(self, onlyFull=False):
         if self._hasNewSkill:
             tankman = self.getFakeTankman()
-            count, lastSkillLevel = tankman.newSkillCount
+            count, lastSkillLevel = tankman.newSkillsCount
             if onlyFull and lastSkillLevel != MAX_SKILL_LEVEL:
                 count = max(count - 1, 0)
                 lastSkillLevel = MAX_SKILL_LEVEL

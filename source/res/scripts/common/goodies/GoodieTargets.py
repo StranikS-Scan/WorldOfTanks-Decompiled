@@ -64,12 +64,6 @@ class BuyGoldTankmen(HangarTarget):
         super(BuyGoldTankmen, self).__init__(targetID, limit)
 
 
-class FreeExperienceConversion(HangarTarget):
-
-    def __init__(self, targetID=None, limit=None):
-        super(FreeExperienceConversion, self).__init__(targetID, limit)
-
-
 class BuyVehicle(HangarTarget):
 
     def __init__(self, targetID, limit=None):

@@ -8,6 +8,7 @@ from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_card_model import PriceCardModel, CardState
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_list_model import PriceListModel
+from gui.impl.lobby.crew.utils import convertMoneyToTuple
 from gui.impl.pub import ViewImpl
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
@@ -18,10 +19,6 @@ if typing.TYPE_CHECKING:
     from skeletons.gui.shared.utils.requesters import IShopRequester
     from gui.shared.gui_items.Vehicle import Vehicle
 GOLD_OPERATION = 2
-
-def _convertMoneyToTuple(money):
-    return (money.credits, money.gold, money.crystal)
-
 
 class BasePriceList(ViewImpl):
     __slots__ = ('_selectedCardIndex', '_priceData', 'onPriceChange', '_retrainCost')
@@ -46,8 +43,8 @@ class BasePriceList(ViewImpl):
             if itemPrice.isActionPrice():
                 specialAlias = (None,
                  None,
-                 _convertMoneyToTuple(itemPrice.price),
-                 _convertMoneyToTuple(itemPrice.defPrice),
+                 convertMoneyToTuple(itemPrice.price),
+                 convertMoneyToTuple(itemPrice.defPrice),
                  True,
                  False,
                  None,

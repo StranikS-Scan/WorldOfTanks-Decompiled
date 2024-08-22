@@ -188,7 +188,6 @@
       <module>	client.cgf_components.shot_color_transmission_component	</module>
       <module>	client.cgf_components.bunkers	</module>
       <module>	client.cgf_components.auto_shoot_gun_components	</module>
-      <module>	client.cgf_components.gun_spin_animator_component	</module>
       <module>	client.cgf_components.gun_audition_component	</module>
       <module>	client.cgf_components.rtpc_component_manager	</module>
       <module>	common.cgf_components_common.shots_receiver	</module>
@@ -211,6 +210,7 @@
       <module>	cell.cgf_cell.bunkers	</module>
       <module>	editor.cgf_editor.entity_follower	</module>
       <module>	client.cgf_components.visual_effect_component_manager	</module>
+      <module>	client.cgf_components.sequence_components	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -272,13 +272,12 @@
       <path>	particles/Tank/rocket_accelerator/Ch54_BZ_72_1_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Cz35_T56_G_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch61_DZT_159_Rocket.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_23mm_AZP23x4_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_37mm_T250_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_40mm_Mle51_EBR_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_50mm_MK_46_ROTARY_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_57mm_C68x2_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_75mm_XM247_FEP.prefab	</path>
-      <path>	content/CGFPrefabs/Vehicle/guns/fep_qfg/_88mm_Flakzwilling_FEP.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_30_mm_protiletadlovy_dvojkanon_vz_53.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_37_mm_automaticky_dvojkanon.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_50_mm_protiletadlovy_dvojkanon_ZK_500S.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_57_mm_automaticky_dvojkanon_535S.prefab	</path>
+      <path>	content/CGFPrefabs/Vehicle/guns/czech/gun_57_mm_automaticky_dvojkanon_535T.prefab	</path>
     </prefabs>
   </cgf>
 </resources.xml>

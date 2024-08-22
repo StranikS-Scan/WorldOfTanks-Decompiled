@@ -10,8 +10,8 @@ from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.crew.tooltips.dismissed_toggle_tooltip import DismissedToggleTooltip
 from gui.impl.lobby.crew.utils import playRecruitVoiceover
 from gui.server_events import recruit_helper
-from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.gui_items.Tankman import NO_SLOT
+from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 _START_CARDS_LIMIT = 50

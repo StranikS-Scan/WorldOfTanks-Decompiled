@@ -28,6 +28,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         self.__equipmentRange = range(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1)
         self.__es = EventsSubscriber()
         self.__respawnTimestampSent = False
+        self.__isRespawnSkillAdded = False
         return
 
     def _populate(self):
@@ -35,7 +36,6 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__es.subscribeToEvent(vehStateCtrl.onVehicleStateUpdated, self.__onVehicleLootAction)
         self.__es.subscribeToEvent(BigWorld.player().onObserverVehicleChanged, self.__onObserverVehicleChanged)
-        self.__addRespawnSlot()
 
     def _dispose(self):
         self.__es.unsubscribeFromAllEvents()
@@ -93,7 +93,13 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
                 return
             self._addEquipmentSlot(slotIdx, intCD, item)
             self._mask |= 1 << slotIdx
+            if not self.__isRespawnSkillAdded:
+                self.__updateRespawnSkill()
             return
+
+    def _resetEquipments(self):
+        super(BattleRoyaleConsumablesPanel, self)._resetEquipments()
+        self.__removeRespawnSlot()
 
     def _isAvatarEquipment(self, item):
         return False
@@ -199,31 +205,25 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
             self.as_setGlowS(self._RESPAWN_EQUIPMENT_IDX, CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN)
         return
 
-    def _onVehicleStateUpdated(self, state, value):
-        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
-            self.__removeRespawnSlot()
-        super(BattleRoyaleConsumablesPanel, self)._onVehicleStateUpdated(state, value)
-
     def __updateRespawnSkill(self):
         arena = BigWorld.player().arena
         period = arena.period
         count = 0
         isAvailable = False
-        if period == ARENA_PERIOD.BATTLE:
+        if period in (ARENA_PERIOD.WAITING, ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE):
             vehicle = BigWorld.player().getVehicleAttached()
-            if vehicle and vehicle.isAlive():
+            if vehicle:
                 vehicleBRRespawnComponent = vehicle.dynamicComponents.get('vehicleBRRespawnComponent')
                 if vehicleBRRespawnComponent is not None:
                     count = vehicleBRRespawnComponent.lives
                     isAvailable = True
-            else:
-                self.__removeRespawnSlot()
-                return
         self.__addRespawnSlot(count, isAvailable)
+        self.__isRespawnSkillAdded = True
         return
 
     def __removeRespawnSlot(self):
         self.as_resetS([self._RESPAWN_EQUIPMENT_IDX])
+        self.__isRespawnSkillAdded = False
 
     def __addRespawnSlot(self, count=0, isAvailable=False):
         bwKey, sfKey = self._genKey(self._RESPAWN_EQUIPMENT_IDX)

@@ -8,7 +8,7 @@ import typing
 import BigWorld
 import personal_missions
 from battle_pass_common import BattlePassConsts
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, NEW_PERK_SYSTEM as NPS
 from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
@@ -25,7 +25,6 @@ from gui.dog_tag_composer import dogTagComposer
 from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardVO
 from gui.impl.gen import R
-from gui.impl.lobby.crew.crew_helpers.skill_helpers import getLastSkillSequenceNum
 from gui.prestige.prestige_helpers import mapGradeIDToUI, getCurrentGrade, getCurrentProgress, prestigePointsToXP, hasVehiclePrestige, MAX_GRADE_ID
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import QuestsBonusComposer
@@ -33,7 +32,6 @@ from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
 from gui.server_events.events_helpers import isC11nQuest, getDataByC11nQuest
 from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
-from gui.shared.gui_items.Tankman import getCrewSkinIconSmall
 from gui.shared.gui_items.Vehicle import getLevelIconPath
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -143,34 +141,41 @@ class VehicleProgressHelper(object):
         return (ready2BuyVehicles, ready2BuyModules)
 
     def getNewSkilledTankmen(self, tankmenXps):
-        skilledTankmans = []
+        skilledTankmen = []
         for _, tman in self.__vehicle.crew:
             if tman is not None and tman.hasSkillToLearn():
                 if not tman.isMaxRoleLevel:
                     continue
                 tmanBattleXp = tankmenXps.get(tman.invID, 0)
                 avgBattles2NewSkill = 0
-                showNewFreeSkill = False
-                showNewEarnedSkill = False
+                newSkillEarned = False
+                bonusSkillsAmount = 0
                 if tman.hasNewSkill(useCombinedRoles=True):
                     tmanDescr = tman.descriptor
-                    lastSkillNumber = getLastSkillSequenceNum(tman)
+                    lastSkillNumber = tmanDescr.lastSkillSeqNumber
                     wallet = tmanDescr.freeXP + tankmen.TankmanDescr.getXpCostForSkillsLevels(tmanDescr.lastSkillLevel if lastSkillNumber else 0, lastSkillNumber)
-                    skillsCountBefore = tmanDescr.getSkillsCountFromXp(wallet - tmanBattleXp)
-                    skillsCount = tmanDescr.getSkillsCountFromXp(wallet)
-                    if skillsCount > skillsCountBefore:
-                        showNewEarnedSkill = True
+                    skillsCountBefore = min(tmanDescr.getSkillsCountFromXp(wallet - tmanBattleXp), NPS.MAX_MAJOR_PERKS)
+                    skillsCount = min(tmanDescr.getSkillsCountFromXp(wallet), NPS.MAX_MAJOR_PERKS)
+                    newSkillEarned, bonusSkillsAmount = self.__getBonusSkillsAmount(tman, skillsCountBefore, skillsCount)
                 else:
                     tmanDossier = self.itemsCache.items.getTankmanDossier(tman.invID)
                     avgBattles2NewSkill = self.__getAvgBattles2NewSkill(tmanDossier.getAvgXP(), tman)
                     if 0 < avgBattles2NewSkill <= _MIN_BATTLES_TO_SHOW_PROGRESS:
-                        showNewEarnedSkill = True
-                if tman.newFreeSkillsCount > 0:
-                    showNewFreeSkill = True
-                if showNewFreeSkill or showNewEarnedSkill:
-                    skilledTankmans.append(self.__makeTankmanVO(tman, showNewFreeSkill, showNewEarnedSkill, avgBattles2NewSkill))
+                        newSkillEarned, bonusSkillsAmount = self.__getBonusSkillsAmount(tman, 1, 0)
+                if newSkillEarned:
+                    skilledTankmen.append(self.__makeTankmanVO(tman, newSkillEarned, bonusSkillsAmount, avgBattles2NewSkill))
 
-        return skilledTankmans
+        return skilledTankmen
+
+    @staticmethod
+    def __getBonusSkillsAmount(tmanToCheck, skillsCountBefore, skillsCountAfter):
+        newSkillsCount = skillsCountAfter - skillsCountBefore
+        if newSkillsCount > 0:
+            bonusSkillsAmount = 0
+            if (skillsCountBefore + tmanToCheck.freeSkillsCount) % 2 == 0:
+                bonusSkillsAmount = newSkillsCount * (len(tmanToCheck.combinedRoles) - 1)
+            return (True, bonusSkillsAmount)
+        return (False, 0)
 
     def __getAvgBattles2Unlock(self, unlockProps):
         return int(math.ceil((unlockProps.xpCost - self.__vehicleXp) / float(self.__avgVehicleXp))) if self.__avgVehicleXp > 0 else 0
@@ -188,24 +193,22 @@ class VehicleProgressHelper(object):
         vehicleName = text_styles.main(vehicle.userName)
         return _ms(BATTLE_RESULTS.COMMON_VEHICLE_DETAILS, vehicle=vehicleName, type=vehicleType)
 
-    def __makeTankmanVO(self, tman, showNewFreeSkill, showNewEarnedSkill, avgBattles2NewSkill):
+    def __makeTankmanVO(self, tman, newSkillEarned, bonusSkillsAmount, avgBattles2NewSkill):
         prediction = ''
         if 0 < avgBattles2NewSkill <= _MIN_BATTLES_TO_SHOW_PROGRESS:
             prediction = _ms(BATTLE_RESULTS.COMMON_NEWSKILLPREDICTION, battles=backport.getIntegralFormat(avgBattles2NewSkill))
         data = {'linkId': tman.invID}
-        if showNewEarnedSkill:
+        if newSkillEarned:
             data.update({'title': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWSKILL),
              'prediction': prediction,
-             'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE})
-        if showNewFreeSkill:
-            data.update({'freeSkillsTitle': _ms(BATTLE_RESULTS.COMMON_CREWMEMBER_NEWFREESKILL),
-             'freeSkillsLinkEvent': PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE})
+             'linkEvent': PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE,
+             'bonusSkillsAmount': bonusSkillsAmount})
         if tman.skinID != NO_CREW_SKIN_ID:
             skinItem = self.itemsCache.items.getCrewSkin(tman.skinID)
-            data['tankmenIcon'] = getCrewSkinIconSmall(skinItem.getIconID())
+            data['tankmenIcon'] = Tankman.getCrewSkinIconBig(skinItem.getIconID())
             fullTankmanName = localizedFullName(skinItem)
         else:
-            data['tankmenIcon'] = Tankman.getSmallIconPath(tman.nationID, tman.descriptor.iconID)
+            data['tankmenIcon'] = Tankman.getBarracksIconPath(tman.nationID, tman.descriptor.iconID)
             fullTankmanName = tman.fullUserName
         data['description'] = self.__makeTankmanDescription(tman.roleUserName, fullTankmanName)
         return data
@@ -259,8 +262,7 @@ class VehicleProgressBlock(base.StatsBlock):
         vo = super(VehicleProgressBlock, self).getVO()
         for item in vo:
             isNewEarnedSkill = item.get('linkEvent') == PROGRESS_ACTION.NEW_SKILL_UNLOCK_TYPE
-            isNewFreeSkill = item.get('freeSkillsLinkEvent') == PROGRESS_ACTION.NEW_FREE_SKILL_UNLOCK_TYPE
-            if not isNewEarnedSkill and not isNewFreeSkill:
+            if not isNewEarnedSkill:
                 continue
             tankman = self._itemsCache.items.getTankman(item['linkId'])
             item['linkBtnEnabled'] = tankman.canLearnSkills()

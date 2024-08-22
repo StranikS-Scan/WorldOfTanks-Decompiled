@@ -315,11 +315,12 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
-    COMP7_INTRO_SHOWN = 'isComp7IntroShown'
-    COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
+    COMP7_YEARLY_ANIMATION_SEEN = 'isComp7YearlyAnimationSeen'
     COMP7_SEASON_STATISTICS_SHOWN = 'isComp7SeasonStatisticsShown'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
     CREW_5075_WELCOME_SHOWN = 'crew5075WelcomeShown'
+    CREW_NPS_WELCOME_SHOWN = 'crewNpsWelcomeShown'
+    CREW_NPS_INTRO_SHOWN = 'crewNpsIntroShown'
     IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
     CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'
@@ -359,6 +360,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     AMMUNITION_FILTER_HINT = 'FilterHintZoneHint'
     MODERNIZED_SETUP_TAB_HINT = 'ModernizedSetupTabHint'
     OPT_DEV_DRAG_AND_DROP_HINT = 'OptDevDragAndDropHint'
+    WOTPLUS_OPT_DEV_HINT = 'WotPlusOptDevHint'
     HANGAR_MANUAL_HINT = 'HangarManualHint'
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
@@ -387,6 +389,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     FL_SCENARIO_HINT = 'FrontlineScenariosHint'
     FL_SCENARIO_HINT_SMALL = 'FrontlineScenariosHintSmallSizes'
     BATTLE_ROYALE_DYNAMIC_PLATOON_SUB_MODE_HINT = 'BattleRoyaleDynamicPlatoonSubModeHint'
+    CREW_BOOKS_POST_PROGRESSION_HINT = 'CrewBooksPostProgressionHint'
     ACHIEVEMENTS_HANGAR_HINT = 'AchievementsHangarHint'
     ACHIEVEMENTS_PROFILE_HINT = 'AchievementsProfileHint'
     ACHIEVEMENTS_PROFILE_HINT_SMALL = 'AchievementsProfileHintSmallSize'
@@ -512,12 +515,3 @@ class ReferralProgram(CONST_CONTAINER):
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
-
-class WotAnniversaryStorageKeys(CONST_CONTAINER):
-    WOT_ANNIVERSARY_INTRO_SHOWED = 'wotAnniversaryIntroShowed'
-    WOT_ANNIVERSARY_WELCOME_SHOWED = 'wotAnniversaryWelcomeShowed'
-    WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED = 'wotAnniversaryStartedShowed'
-    WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED = 'wotAnniversaryActivePhaseEndedShowed'
-    WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED = 'wotAnniversaryFinishedShowed'
-    WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED = 'wotAnniversaryEventWillEndSoonShowed'
-    WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED = 'wotAnniversaryOnPauseShowed'

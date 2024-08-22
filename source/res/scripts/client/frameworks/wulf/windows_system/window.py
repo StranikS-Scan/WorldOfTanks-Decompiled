@@ -11,6 +11,7 @@ from ..view.view import View
 from ..view.view_model import ViewModel
 from ..gui_constants import WindowStatus, WindowFlags, ViewStatus, ShowingStatus
 _logger = logging.getLogger(__name__)
+NO_WINDOW_OWNER = 0
 
 class WindowSettings(object):
     __slots__ = ('__proxy',)
@@ -91,6 +92,14 @@ class WindowSettings(object):
             raise SoftException('Content should be Window class or extends it')
         self.__proxy.parent = getProxy(parent)
         return
+
+    @property
+    def ownerViewID(self):
+        return self.__proxy.ownerViewID
+
+    @ownerViewID.setter
+    def ownerViewID(self, ownerViewID_):
+        self.__proxy.ownerViewID = ownerViewID_ or NO_WINDOW_OWNER
 
 
 class Window(PyObjectEntity):

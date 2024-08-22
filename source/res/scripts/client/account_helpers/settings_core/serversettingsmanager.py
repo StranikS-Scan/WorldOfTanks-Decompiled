@@ -76,7 +76,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     LIMITED_UI_PERMANENT_2 = 'LIMITED_UI_PERMANENT_2'
     REFERRAL_PROGRAM = 'REFERRAL_PROGRAM'
     ADVANCED_ACHIEVEMENTS_STORAGE = 'ADVANCED_ACHIEVEMENTS_STORAGE'
-    WOT_ANNIVERSARY_STORAGE = 'WOT_ANNIVERSARY_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
 
 
@@ -178,7 +177,6 @@ class ServerSettingsManager(object):
     BATTLE_PASS = settings_constants.BattlePassStorageKeys
     SCORE_PANEL = settings_constants.ScorePanelStorageKeys
     SENIORITY_AWARDS = settings_constants.SeniorityAwardsStorageKeys
-    WOT_ANNIVERSARY = settings_constants.WotAnniversaryStorageKeys
     SECTIONS = {SETTINGS_SECTIONS.GAME: Section(masks={GAME.ENABLE_OL_FILTER: 0,
                               GAME.ENABLE_SPAM_FILTER: 1,
                               GAME.INVITES_FROM_FRIENDS: 2,
@@ -475,6 +473,8 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
                                             GuiSettingsBehavior.EPIC_RANDOM_CHECKBOX_CLICKED: 3,
                                             GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: 4,
+                                            GuiSettingsBehavior.CREW_NPS_INTRO_SHOWN: 19,
+                                            GuiSettingsBehavior.CREW_NPS_WELCOME_SHOWN: 20,
                                             GuiSettingsBehavior.CREW_5075_WELCOME_SHOWN: 21,
                                             GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN: 22,
                                             GuiSettingsBehavior.PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN: 23,
@@ -483,8 +483,7 @@ class ServerSettingsManager(object):
                                             GuiSettingsBehavior.VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW: 26,
                                             GuiSettingsBehavior.BIRTHDAY_CALENDAR_INTRO_SHOWED: 27,
                                             GuiSettingsBehavior.RESOURCE_WELL_INTRO_SHOWN: 28,
-                                            GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN: 29,
-                                            GuiSettingsBehavior.COMP7_INTRO_SHOWN: 30,
+                                            GuiSettingsBehavior.COMP7_YEARLY_ANIMATION_SEEN: 29,
                                             GuiSettingsBehavior.IS_PRESTIGE_ONBOARDING_VIEWED: 31}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
@@ -552,11 +551,13 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
                                            OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
                                            OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
+                                           OnceOnlyHints.WOTPLUS_OPT_DEV_HINT: 27,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 29,
                                            OnceOnlyHints.SUMMARY_CUSTOMIZATION_BUTTON_HINT: 30,
                                            OnceOnlyHints.BATTLE_ROYALE_DYNAMIC_PLATOON_SUB_MODE_HINT: 31}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3: Section(masks={OnceOnlyHints.ACHIEVEMENTS_HANGAR_HINT: 0,
-                                           OnceOnlyHints.ACHIEVEMENTS_PROFILE_HINT_SMALL: 1}, offsets={}),
+                                           OnceOnlyHints.ACHIEVEMENTS_PROFILE_HINT_SMALL: 1,
+                                           OnceOnlyHints.CREW_BOOKS_POST_PROGRESSION_HINT: 2}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -804,14 +805,7 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.REFERRAL_PROGRAM: Section(masks={}, offsets={ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON: Offset(0, 4095)}),
-     SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: Section(masks={}, offsets={ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: Offset(0, 4294967295L)}),
-     SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: Section(masks={WOT_ANNIVERSARY.WOT_ANNIVERSARY_INTRO_SHOWED: 0,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_WELCOME_SHOWED: 1,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_FINISHED_NOTIFICATION_SHOWED: 2,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_ACTIVE_PHASE_ENDED_NOTIFICATION_SHOWED: 3,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_EVENT_WILL_END_SOON_NOTIFICATION_SHOWED: 4,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_ON_PAUSE_NOTIFICATION_SHOWED: 5,
-                                                 WOT_ANNIVERSARY.WOT_ANNIVERSARY_STARTED_NOTIFICATION_SHOWED: 6}, offsets={})}
+     SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: Section(masks={}, offsets={ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1240,8 +1234,7 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: {},
          SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
          SETTINGS_SECTIONS.BATTLE_BORDER_MAP: {},
-         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {},
-         SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE: {}}
+         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1394,10 +1387,6 @@ class ServerSettingsManager(object):
         clearBattleMatters = clear.get(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, 0)
         if battleMatters or clearBattleMatters:
             settings[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, battleMatters) ^ clearBattleMatters
-        wotAnniversaryData = data.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, {})
-        clearWotAnniversary = clear.get(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, 0)
-        if wotAnniversaryData or clearWotAnniversary:
-            settings[SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.WOT_ANNIVERSARY_STORAGE, wotAnniversaryData) ^ clearWotAnniversary
         battleBorderMap = data.get(SETTINGS_SECTIONS.BATTLE_BORDER_MAP, {})
         clearBattleBorderMap = clear.get(SETTINGS_SECTIONS.BATTLE_BORDER_MAP, 0)
         if battleBorderMap or clearBattleBorderMap:

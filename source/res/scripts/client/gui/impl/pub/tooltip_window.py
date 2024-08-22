@@ -19,7 +19,7 @@ class ToolTipWindow(WindowImpl):
             decorator = WindowView(layoutID=event.decoratorID)
         else:
             decorator = None
-        super(ToolTipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific())
+        super(ToolTipWindow, self).__init__(wndFlags=WindowFlags.TOOLTIP, decorator=decorator, content=content, parent=parent, areaID=R.areas.specific(), ownerViewID=event.targetViewID if event is not None else 0)
         return
 
 

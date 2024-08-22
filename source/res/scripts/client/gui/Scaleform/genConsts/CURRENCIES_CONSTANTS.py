@@ -14,6 +14,7 @@ class CURRENCIES_CONSTANTS(object):
     EQUIP_COIN = 'equipCoin'
     ERROR = 'error'
     WDR_COIN = 'wdrcoin'
+    BPBIT = 'bpbit'
     SINGAPORE_ALTERNATIVE_CURRENCIES_SET = [GOLD, CREDITS]
     GOLD_COLOR = 16761699
     GOLD_BIG_COLOR = 16768409

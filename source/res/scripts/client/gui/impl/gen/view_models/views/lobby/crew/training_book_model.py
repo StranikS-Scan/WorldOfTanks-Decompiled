@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class TrainingBookModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(TrainingBookModel, self).__init__(properties=properties, commands=commands)
 
     def getIntCD(self):
@@ -62,17 +62,41 @@ class TrainingBookModel(ViewModel):
     def setSelectedCount(self, value):
         self._setNumber(8, value)
 
-    def getIsEligibleForBuy(self):
-        return self._getBool(9)
+    def getPostProgressionClaimCount(self):
+        return self._getNumber(9)
 
-    def setIsEligibleForBuy(self, value):
-        self._setBool(9, value)
+    def setPostProgressionClaimCount(self, value):
+        self._setNumber(9, value)
 
     def getHasError(self):
         return self._getBool(10)
 
     def setHasError(self, value):
         self._setBool(10, value)
+
+    def getCanBuyBook(self):
+        return self._getBool(11)
+
+    def setCanBuyBook(self, value):
+        self._setBool(11, value)
+
+    def getIsDisabled(self):
+        return self._getBool(12)
+
+    def setIsDisabled(self, value):
+        self._setBool(12, value)
+
+    def getIsPostProgressionShown(self):
+        return self._getBool(13)
+
+    def setIsPostProgressionShown(self, value):
+        self._setBool(13, value)
+
+    def getCanAddMoreBooks(self):
+        return self._getBool(14)
+
+    def setCanAddMoreBooks(self, value):
+        self._setBool(14, value)
 
     def _initialize(self):
         super(TrainingBookModel, self)._initialize()
@@ -85,5 +109,9 @@ class TrainingBookModel(ViewModel):
         self._addNumberProperty('bookAddedXp', 0)
         self._addNumberProperty('availableCount', 0)
         self._addNumberProperty('selectedCount', 0)
-        self._addBoolProperty('isEligibleForBuy', False)
+        self._addNumberProperty('postProgressionClaimCount', 0)
         self._addBoolProperty('hasError', False)
+        self._addBoolProperty('canBuyBook', False)
+        self._addBoolProperty('isDisabled', False)
+        self._addBoolProperty('isPostProgressionShown', False)
+        self._addBoolProperty('canAddMoreBooks', False)

@@ -3,6 +3,7 @@
 import typing
 import logging
 from constants import PREMIUM_ENTITLEMENTS
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import ExtendedItemBonusUIPacker
@@ -16,7 +17,7 @@ from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_vehicle_
 from gui.impl.gen.view_models.views.lobby.battle_matters.battle_matters_main_view_model import BattleMattersMainViewModel
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.selectable_reward.bonus_packers import SelectableBonusPacker
-from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, BlueprintBonusUIPacker
+from gui.shared.missions.packers.bonus import DossierBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, BlueprintBonusUIPacker
 from gui.shared.gui_items.Vehicle import getIconResourceName
 from gui.shared.gui_items.Vehicle import getNationLessName
 from gui.shared.money import Currency
@@ -124,7 +125,8 @@ def getBattleMattersBonusPacker():
      BlueprintBonusTypes.BLUEPRINTS: BattleMattersBlueprintBonusUIPacker(),
      SELECTABLE_BONUS_NAME: BattleMattersTokenBonusUIPacker(),
      'entitlements': BattleMattersEntitlementsBonusUIPacker(),
-     'items': ExtendedItemBonusUIPacker()})
+     'items': ExtendedItemBonusUIPacker(),
+     'dossier': BattleMattersDossierBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -218,3 +220,11 @@ class BattleMattersEntitlementsBonusUIPacker(BaseBonusUIPacker):
             _logger.error('Not supported entitlement %s', bonus.getValue().id)
             result = super(BattleMattersEntitlementsBonusUIPacker, cls)._pack(bonus)
         return result
+
+
+class BattleMattersDossierBonusUIPacker(DossierBonusUIPacker):
+    _ITEMS_TO_SKIP = {(ACHIEVEMENT_BLOCK.STEAM, 'steamBriefingMedal')}
+
+    @classmethod
+    def _packAchievements(cls, bonus):
+        return [ cls._packSingleAchievement(achievement, bonus) for achievement in bonus.getAchievements() if achievement.getRecordName() not in cls._ITEMS_TO_SKIP ]

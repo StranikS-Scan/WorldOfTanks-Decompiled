@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	9.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2529,10 +2532,6 @@
       <tags></tags>
       <level>	8	</level>
       <price>	30000	</price>
-      <unlocks>
-        <turret>	Turret_2_R104_Object_430_II	  <cost>	23500	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	160	</armor_1>
         <armor_2>	130	</armor_2>
@@ -2582,15 +2581,15 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-90 90	</turretYawLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
+          <reloadTime>	7.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
@@ -2663,8 +2662,8 @@
         </_100mm_M-63>
         <_100mm_D54_obr_45U>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
-            <vehicle>	R144_K_91	  <cost>	252700	</cost>
-            </vehicle>
+            <turret>	Turret_2_R104_Object_430_II	  <cost>	23500	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2679,15 +2678,20 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-90 90	</turretYawLimits>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	7.1	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R104_Object_430_II/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R104_Object_430_II/crash/lod0/Gun_04.model	</destroyed>
@@ -3462,6 +3466,10 @@
       <tags></tags>
       <level>	9	</level>
       <price>	61000	</price>
+      <unlocks>
+        <vehicle>	R144_K_91	  <cost>	252700	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	180	</armor_1>
         <armor_2>	150	</armor_2>
@@ -3508,15 +3516,15 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-90 90	</turretYawLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	7.6	</reloadTime>
+          <reloadTime>	7.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
             <maxPitch>	0 4 1 4	</maxPitch>
@@ -3601,9 +3609,9 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-90 90	</turretYawLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	6.9	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
@@ -4395,16 +4403,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
-    <R113>	shared	  <unlocks>
-        <radio>	_10RT-26E	  <cost>	9200	</cost>
-        </radio>
-      </unlocks>
-    </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
   <physics>

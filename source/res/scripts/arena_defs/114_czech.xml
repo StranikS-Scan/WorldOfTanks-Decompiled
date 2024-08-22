@@ -2,13 +2,25 @@
   <name>	#arenas:114_czech/name	</name>
   <description>	#arenas:114_czech/description	</description>
   <geometry>	spaces/114_czech	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <boundingBox>
     <bottomLeft>	-400.000000 -500.000000	</bottomLeft>
     <upperRight>	600.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/114_czech/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/114_czech/mmap_crash01_bombing_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/114_czech/mmap_crash01_bombing_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
   <wwmusicSetup>
@@ -22,6 +34,16 @@
     <wwmusicResultDefeat>	music_pilsen_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <water>
@@ -95,51 +117,13 @@
           <position>	-19.398001 -8.463000	</position>
           <type>	1	</type>
         </point>
+        <point>
+          <position>	417.895081 34.919456	</position>
+          <type>	1	</type>
+        </point>
       </pointsOfInterestUDO>
       <controlPoint>	-140.511002 -6.513000	</controlPoint>
     </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
-  <mapActivities>
-    <scenario>
-      <startTime>	60.000000 0.000000	</startTime>
-      <possibility>	100.000000	</possibility>
-      <interval>	0.000000	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
-      <name>	check_explosion	</name>
-      <trajectories>
-        <warplane>
-          <preset>	chech_explosion	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-          <interval>	120.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	chech_explosion	</preset>
-          <position>	1.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	60.000000 0.000000	</startTime>
-          <interval>	150.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	chech_explosion	</preset>
-          <position>	1.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	90.000000 0.000000	</startTime>
-          <interval>	150.000000	</interval>
-        </warplane>
-        <warplane>
-          <preset>	chech_fire	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	5.000000 0.000000	</startTime>
-        </warplane>
-      </trajectories>
-    </scenario>
-  </mapActivities>
 </114_czech.xml>

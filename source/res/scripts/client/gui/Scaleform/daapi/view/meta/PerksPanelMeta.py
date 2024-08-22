@@ -12,3 +12,6 @@ class PerksPanelMeta(BaseDAAPIComponent):
 
     def as_clearPanelS(self):
         return self.flashObject.as_clearPanel() if self._isDAAPIInited() else None
+
+    def as_replayPauseS(self, isPaused):
+        return self.flashObject.as_replayPause(isPaused) if self._isDAAPIInited() else None

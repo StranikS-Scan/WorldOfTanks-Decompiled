@@ -8,7 +8,6 @@ from gui.impl.auxiliary.tankman_operations import packSkillReset
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_list_model import PriceListModel
-from gui.impl.lobby.crew.crew_helpers.skill_helpers import getAvailableSkillsNum
 from gui.impl.lobby.crew.dialogs.price_cards_content.base_price_list import BasePriceList
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.gui_item_economics import ItemPrice
@@ -17,6 +16,7 @@ from helpers import dependency
 from items.tankmen import TankmanDescr, MIN_XP_REUSE_FRACTION, MAX_XP_REUSE_FRACTION
 from skeletons.gui.lobby_context import ILobbyContext
 from constants import SwitchState
+from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getPerksResetGracePeriod
 if typing.TYPE_CHECKING:
     from gui.shared.utils.requesters import ShopRequester
     from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_card_model import PriceCardModel
@@ -75,8 +75,11 @@ class PerksResetPriceList(BasePriceList):
         recertificationFormState = self.__lobbyContext.getServerSettings().recertificationFormState()
         needRecertificationForm = recertificationFormState == SwitchState.ENABLED.value and self.__goodiesCache.getRecertificationForm(currency='gold')
         self._priceData = []
+        isFreeReset = getPerksResetGracePeriod() > 0 or not self._tankman.descriptor.firstSkillResetDisabled
+        if isFreeReset:
+            self._selectedCardIndex = next((idx for idx, cost in dropSkillsCost.items() if cost and cost['gold'] > 0), None)
         for key, cost in dropSkillsCost.iteritems():
-            if not needRecertificationForm and cost.get('recertificationForm'):
+            if not needRecertificationForm and cost.get('recertificationForm') > 0:
                 continue
             if cost['gold'] > 0:
                 self._goldOptionKey = key
@@ -85,8 +88,12 @@ class PerksResetPriceList(BasePriceList):
             recertificationForms = cost.get('recertificationForm')
             if recertificationForms:
                 priceArgs['recertificationForm'] = recertificationForms
+            if isFreeReset:
+                priceArgs['isFreeReset'] = True
             itemPrice = ItemPrice(price=DynamicMoney(credits=cost.get(Currency.CREDITS, 0), gold=cost.get(Currency.GOLD, 0), **priceArgs), defPrice=DynamicMoney(credits=defCost.get(Currency.CREDITS, 0), gold=defCost.get(Currency.GOLD, 0)))
             self._priceData.append((itemPrice, self.__getOperationData(cost), key))
+
+        return
 
     def _onTankmanChanged(self, data):
         tankmanId = self._tankman.invID
@@ -104,9 +111,9 @@ class PerksResetPriceList(BasePriceList):
         if xpReuseFraction < MAX_XP_REUSE_FRACTION:
             prevTmanXP = tmanDescr.totalXP()
             prevSkillsCount = tmanDescr.getFullSkillsCount()
-            maxAvailbleSkillsNum = getAvailableSkillsNum(self._tankman)
+            maxAvailbleSkillsNum = self._tankman.maxSkillsCount
+            tmanDescr.dropSkills(xpReuseFraction)
             if prevSkillsCount < maxAvailbleSkillsNum:
-                tmanDescr.dropSkills(xpReuseFraction)
                 return (xpReuseFraction, prevTmanXP - tmanDescr.totalXP(), prevSkillsCount - tmanDescr.getFullSkillsCount())
             return (xpReuseFraction, prevTmanXP - tmanDescr.totalXP(), 0)
         return (xpReuseFraction, 0, 0)

@@ -323,7 +323,7 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
         return (maxHitEffectCode, DamageFromShotDecoder.hasDamaged(maxHitEffectCode))
 
     def __getComponentInfo(self, projData):
-        origin = projData['origin']
+        origin = projData['trajectoryData'][0][0]
         points = projData['segments']
         longestDistSquared = lastHitPoint = None
         decodedPoints = self.decodeHitPoints(points)
@@ -372,12 +372,10 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
             self.appearance.addDamageSticker(sticker, componentName, value, start, end)
             return
 
-    def updateBrokenTracks(self, trackState):
+    def updateBrokenTracks(self, trackStates):
         if not self.__brokenTrackVisible:
-            self.__brokenTrackVisible = [None] * len(trackState)
-        for index, hitVector in enumerate(trackState):
-            if hitVector and self.__brokenTrackVisible[index] is None:
-                self.__brokenTrackVisible[index] = hitVector
-                self.appearance.addSimulatedCrashedTrack(index, self.simulationData_tracksInAir, trackState[index])
-
-        return
+            self.__brokenTrackVisible = [False] * len(trackStates)
+        for index, trackState in enumerate(trackStates):
+            if trackState['isBroken'] and not self.__brokenTrackVisible[index]:
+                self.__brokenTrackVisible[index] = True
+                self.appearance.addSimulatedCrashedTrack(index, self.simulationData_tracksInAir, trackState['hitPoint'])

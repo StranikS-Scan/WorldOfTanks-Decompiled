@@ -319,16 +319,12 @@ class _CurrentVehicle(_CachedVehicle):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)
         vehicle = vehicle if self.__isVehicleSuitable(vehicle) else None
         if vehicle is None:
-            vehiclesCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+            vehiclesCriteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
             invVehs = self.itemsCache.items.getVehicles(criteria=vehiclesCriteria)
-
-            def notEvent(x, y):
-                if x.isOnlyForEventBattles and not y.isOnlyForEventBattles:
-                    return 1
-                return -1 if not x.isOnlyForEventBattles and y.isOnlyForEventBattles else cmp(x, y)
-
+            if not invVehs:
+                invVehs = self.itemsCache.items.getVehicles(criteria=REQ_CRITERIA.VEHICLE.EVENT_BATTLE)
             if invVehs:
-                vehInvID = sorted(invVehs.itervalues(), cmp=notEvent)[0].invID
+                vehInvID = min(invVehs.itervalues()).invID
             else:
                 vehInvID = 0
         self._selectVehicle(vehInvID, callback, waitingOverlapsUI)

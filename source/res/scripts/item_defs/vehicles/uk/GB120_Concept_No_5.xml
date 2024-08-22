@@ -1,8 +1,7 @@
 <GB120_Concept_No_5.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
   </crew>
@@ -32,6 +31,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	12.7	</repairCost>
   <crewXpFactor>	1	</crewXpFactor>
@@ -72,6 +74,13 @@
       <undamaged>	vehicles/british/GB120_Concept_No_5/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB120_Concept_No_5/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB120_Concept_No_5/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB120_Concept_No_5_3Dst_BPXV>
+          <undamaged>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Hull.model	</exploded>
+        </GB120_Concept_No_5_3Dst_BPXV>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -94,10 +103,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.62146 0.474773 2.293328	</rayStart>
-        <rayEnd>	0.61913 0.299004 2.197936	</rayEnd>
-        <rayUp>	-0.001534 0.477006 -0.878899	</rayUp>
-        <size>	0.4	</size>
+        <rayStart>	0.676996 0.474959 2.29163	</rayStart>
+        <rayEnd>	0.674666 0.29919 2.196238	</rayEnd>
+        <rayUp>	-0.001534 0.47701 -0.878897	</rayUp>
+        <size>	0.3	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
       <slot>
@@ -325,6 +334,13 @@
         <clipAngle>	1.0595	</clipAngle>
         <anchorShift>	0.06	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <compatibleModels>	GB120_Concept_No_5_3Dst_BPXV	</compatibleModels>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -367,6 +383,13 @@
         <undamaged>	vehicles/british/GB120_Concept_No_5/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB120_Concept_No_5/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB120_Concept_No_5/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB120_Concept_No_5_3Dst_BPXV>
+            <undamaged>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Chassis.model	</exploded>
+          </GB120_Concept_No_5_3Dst_BPXV>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -811,7 +834,7 @@
               <slotId>	49000	</slotId>
               <rayStart>	0 0 3.36	</rayStart>
               <rayEnd>	0 0 3.86	</rayEnd>
-              <rayUp>	0.16 0 0	</rayUp>
+              <rayUp>	0.145 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
               <size>	0.5	</size>
               <isUVProportional>	false	</isUVProportional>
@@ -827,6 +850,13 @@
             <undamaged>	vehicles/british/GB120_Concept_No_5/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB120_Concept_No_5/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB120_Concept_No_5/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB120_Concept_No_5_3Dst_BPXV>
+                <undamaged>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Gun_01.model	</exploded>
+              </GB120_Concept_No_5_3Dst_BPXV>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB120_Concept_No_5/collision/Gun_01.model	</collisionModelServer>
@@ -843,6 +873,13 @@
         <undamaged>	vehicles/british/GB120_Concept_No_5/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB120_Concept_No_5/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB120_Concept_No_5/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB120_Concept_No_5_3Dst_BPXV>
+            <undamaged>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB120_Concept_No_5/_skins/GB120_Concept_No_5_3Dst_BPXV/crash/lod0/Turret_01.model	</exploded>
+          </GB120_Concept_No_5_3Dst_BPXV>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB120_Concept_No_5/collision/Turret_01.model	</collisionModelServer>
@@ -1300,6 +1337,13 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.598273	</clipAngle>
           <anchorShift>	1.0096	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <compatibleModels>	GB120_Concept_No_5_3Dst_BPXV	</compatibleModels>
+          <slotId>	38000	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
         </slot>
       </customizationSlots>
       <customization>

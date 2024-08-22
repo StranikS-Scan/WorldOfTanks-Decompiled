@@ -440,7 +440,7 @@ class Shell(FittingItem):
         return vehicle.shells.setupLayouts.isInOtherLayout(self)
 
     def _getAltPrice(self, buyPrice, proxy):
-        return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
+        return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs, useDiscounts=False) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 
     def _getFormatLongUserName(self, kind):
         if self.nationID == nations.INDICES['germany']:

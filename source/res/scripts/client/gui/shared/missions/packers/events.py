@@ -155,18 +155,20 @@ class Comp7WeeklyQuestPacker(_EventUIDataPacker):
         iconKey = ''
         currentProgress = 0
         totalProgress = 0
-        postBattleConditionModel = self.__getConditionsByPacker(PostBattleConditionPacker)
+        rootModel, postBattleConditionModel = self.__getConditionsByPacker(PostBattleConditionPacker)
         if postBattleConditionModel is not None:
             iconKey = postBattleConditionModel.getIconKey()
             currentProgress = postBattleConditionModel.getCurrent()
             totalProgress = postBattleConditionModel.getTotal()
             description = description or postBattleConditionModel.getDescrData()
-        conditionModel = self.__getConditionsByPacker(BonusConditionPacker)
+        rootModel.unbind()
+        rootModel, conditionModel = self.__getConditionsByPacker(BonusConditionPacker)
         if conditionModel is not None:
             iconKey = conditionModel.getIconKey()
             currentProgress = conditionModel.getCurrent()
             totalProgress = conditionModel.getTotal()
             description = description or conditionModel.getDescrData()
+        rootModel.unbind()
         if currentProgress == 0 and cardModel.getState() == CardState.COMPLETED:
             currentProgress = 1
         cardModel.setDescription(description)
@@ -178,7 +180,7 @@ class Comp7WeeklyQuestPacker(_EventUIDataPacker):
     def __getConditionsByPacker(self, packerClass):
         postBattleConditions = ConditionGroupModel()
         packerClass().pack(self._event, postBattleConditions)
-        return findFirstConditionModel(postBattleConditions)
+        return (postBattleConditions, findFirstConditionModel(postBattleConditions))
 
 
 class DailyQuestUIDataPacker(BattleQuestUIDataPacker):

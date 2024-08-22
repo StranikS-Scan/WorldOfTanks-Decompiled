@@ -135,11 +135,16 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
             self.__areaGO = None
         return
 
+    def _getEndTime(self):
+        return self._entity.launchTime + self._getViewStateDuration()
+
+    def _isEnded(self):
+        return self._getEndTime() < BigWorld.serverTime()
+
     def _updateViewState(self):
-        endTime = self._entity.launchTime + self._getViewStateDuration()
-        if endTime < BigWorld.serverTime():
+        if self._isEnded():
             return
-        state = {'endTime': endTime,
+        state = {'endTime': self._getEndTime(),
          'duration': self._getViewStateDuration()}
         self._guiSessionProvider.shared.feedback.invalidateBuffEffect(feedbackEventID=self._getFeedbackEventId(), vehicleID=self._entity.vehicleID, data=state)
 
@@ -153,6 +158,8 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
         return vInfo.team != BigWorld.player().team
 
     def _isVisible(self):
+        if self._isEnded():
+            return False
         vInfo = self._guiSessionProvider.getArenaDP().getVehicleInfo(self._entity.vehicleID)
         return vInfo.team == avatar_getter.getObserverTeam() or vInfo.isObserver()
 
@@ -204,6 +211,8 @@ class _Comp7RedLineApplicationPointEffect(_Comp7ApplicationPointEffect, EffectRu
 
     def onEnterWorld(self, prereqs):
         super(_Comp7RedLineApplicationPointEffect, self).onEnterWorld(prereqs)
+        if self._isEnded():
+            return
         self._playEffect(self._getAreaDuration())
 
     def _createMarker(self, duration):
@@ -214,11 +223,15 @@ class _Comp7RedLineApplicationPointEffect(_Comp7ApplicationPointEffect, EffectRu
         return
 
     def _playEffect(self, duration):
+        equipmentDelay = self._equipment.delay
+        timeSinceLaunch = BigWorld.serverTime() - self._entity.launchTime
+        if timeSinceLaunch > equipmentDelay:
+            return
         if self._equipment.areaShow == AreaShow.ALWAYS:
             duration += self._equipment.duration
         radius = self._getRadius()
         self.playEffect(AoeEffects.START, self._position, radius)
-        self._callbackDelayer.delayCallback(self._equipment.delay, self.playEffect, AoeEffects.ACTION, self._position, radius)
+        self._callbackDelayer.delayCallback(max(0.0, equipmentDelay - timeSinceLaunch), self.playEffect, AoeEffects.ACTION, self._position, radius)
 
 
 _EQUIPMENT_APPLICATION_POINTS = {'comp7_recon': _Comp7ReconApplicationPointEffect,

@@ -58,7 +58,7 @@ class _RegenerationKitBattleRoyaleItem(_EquipmentItem):
             return (False, _ActivationError('vehicleIsNotDamaged', {'name': self._descriptor.userString})) if not vehicle or vehicle.health >= vehicle.maxHealth else (True, None)
 
     def getActivationCode(self, entityName=None, avatar=None):
-        return 65536 + self._descriptor.id[1]
+        return self._descriptor.id[1]
 
     def getAnimationType(self):
         return ANIMATION_TYPES.MOVE_GREEN_BAR_DOWN | ANIMATION_TYPES.SHOW_COUNTER_ORANGE | ANIMATION_TYPES.DARK_COLOR_TRANSFORM if self._stage == EQUIPMENT_STAGES.ACTIVE else super(_RegenerationKitBattleRoyaleItem, self).getAnimationType()

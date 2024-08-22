@@ -20,12 +20,13 @@
           <bonusLimit>	1	</bonusLimit>
           <cumulativeSum>
             <description>
-              <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_6/condition	</key>
+              <en>	Destroy 12 enemy Hunters in Steel Hunter	</en>
+              <ru>	Ð£Ð½Ð¸ÑÑÐ¾Ð¶Ð¸ÑÑ 12 ÐµÐ´. ÑÐµÑÐ½Ð¸ÐºÐ¸ Ð¿ÑÐ¾ÑÐ¸Ð²Ð½Ð¸ÐºÐ° Ð² ÑÐµÐ¶Ð¸Ð¼Ðµ Â«Ð¡ÑÐ°Ð»ÑÐ½Ð¾Ð¹ Ð¾ÑÐ¾ÑÐ½Ð¸ÐºÂ»	</ru>
             </description>
             <sum>
               <kills></kills>
             </sum>
-            <greaterOrEqual>	100	</greaterOrEqual>
+            <greaterOrEqual>	12	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -44,7 +45,8 @@
       <hidden>	true	</hidden>
       <conditions>
         <description>
-          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_7/condition	</key>
+          <en>	Be the top player and destroy 4 enemy Hunters in a single battle	</en>
+          <ru>	ÐÐ¾Ð¹ÑÐ¸ Ð² ÑÐ¾Ð¿-1 Ð¸ ÑÐ½Ð¸ÑÑÐ¾Ð¶Ð¸ÑÑ 4 ÐµÐ´. ÑÐµÑÐ½Ð¸ÐºÐ¸ Ð¿ÑÐ¾ÑÐ¸Ð²Ð½Ð¸ÐºÐ° Ð² Ð¾Ð´Ð½Ð¾Ð¼ Ð±Ð¾Ñ	</ru>
         </description>
         <preBattle>
           <account>
@@ -68,7 +70,7 @@
               <lessOrEqual>	1	</lessOrEqual>
             </results>
             <vehicleKills>
-              <greaterOrEqual>	7	</greaterOrEqual>
+              <greaterOrEqual>	4	</greaterOrEqual>
             </vehicleKills>
           </and>
         </postBattle>
@@ -102,12 +104,13 @@
           <bonusLimit>	1	</bonusLimit>
           <cumulativeSum>
             <description>
-              <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_8/condition	</key>
+              <en>	Block 5,000 HP of damage	</en>
+              <ru>	ÐÐ°Ð±Ð»Ð¾ÐºÐ¸ÑÐ¾Ð²Ð°ÑÑ 5 000 ÐµÐ´. ÑÑÐ¾Ð½Ð°	</ru>
             </description>
             <sum>
               <damageBlockedByArmor></damageBlockedByArmor>
             </sum>
-            <greaterOrEqual>	100000	</greaterOrEqual>
+            <greaterOrEqual>	5000	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>

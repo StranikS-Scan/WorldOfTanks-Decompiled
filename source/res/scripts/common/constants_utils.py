@@ -725,3 +725,6 @@ class AbstractBattleMode(object):
         if self._client_hangarPresetsGetter:
             from gui.shared.system_factory import registerHangarPresetGetter
             registerHangarPresetGetter(self._QUEUE_TYPE, self._client_hangarPresetsGetter)
+
+    def registerNonReplayMode(self):
+        ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE.append(self._ARENA_BONUS_TYPE)

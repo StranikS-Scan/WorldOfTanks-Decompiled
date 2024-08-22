@@ -10,6 +10,7 @@
     <ArenaFairplayComponent></ArenaFairplayComponent>
     <ArenaFairplayKafkaLoggingComponent></ArenaFairplayKafkaLoggingComponent>
     <AccountFairplayComponent></AccountFairplayComponent>
+    <CrewAccountComponent></CrewAccountComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -29,10 +30,6 @@
     <RocketAccelerationController></RocketAccelerationController>
     <KillCamDataComponent></KillCamDataComponent>
     <AutoShootGunController></AutoShootGunController>
-    <SpinGunController></SpinGunController>
-    <TemperatureGunController></TemperatureGunController>
-    <MultiGunState></MultiGunState>
-    <SpinGunController></SpinGunController>
     <RocketAcceleration></RocketAcceleration>
     <VisualScriptEquipment></VisualScriptEquipment>
     <VisualScriptCache></VisualScriptCache>
@@ -41,6 +38,7 @@
     <VehicleCircle></VehicleCircle>
     <VehicleRadarDetection></VehicleRadarDetection>
     <VehicleBuff></VehicleBuff>
+    <IncomingDamageModifier></IncomingDamageModifier>
     <GunReloadBoost></GunReloadBoost>
     <NextClipsReloader></NextClipsReloader>
     <EnemyVehiclesController></EnemyVehiclesController>

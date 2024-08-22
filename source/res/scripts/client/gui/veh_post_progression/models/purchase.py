@@ -10,7 +10,7 @@ from skeletons.gui.game_control import IWalletController
 
 def _exchangeCredits(balance, creditsRate):
     if balance.isSet(_ExtCurrency.GOLD):
-        balance = balance.exchange(_ExtCurrency.GOLD, _ExtCurrency.CREDITS, creditsRate, default=0)
+        balance = balance.exchange(_ExtCurrency.GOLD, _ExtCurrency.CREDITS, creditsRate, default=0, useDiscounts=True)
     return balance
 
 

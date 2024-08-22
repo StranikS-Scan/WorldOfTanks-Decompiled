@@ -86,6 +86,7 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.DEATH_FREE_CAM: (control_modes.DeathFreeCamMode, 'freeVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.KILL_CAM: (kill_cam_modes.KillCamMode, 'killCamMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.LOOK_AT_KILLER: (kill_cam_modes.LookAtKillerMode, 'killCamMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.VEHICLES_SELECTION: (VehiclesSelectionControlMode, 'vehiclesSelection', _CTRL_TYPE.USUAL)}
 OVERWRITE_CTRLS_DESC_MAP = {}
 for royaleBonusCap in constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
@@ -455,8 +456,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         nextCtrlMode = avatar.getNextControlMode()
         if battleReplayInProgress or avatar.isObserver() or nextCtrlMode == _CTRL_MODE.POSTMORTEM:
             self.onControlModeChanged(_CTRL_MODE.POSTMORTEM, postmortemParams=params, bPostmortemDelay=True, newVehicleID=BigWorld.player().playerVehicleID)
-        elif nextCtrlMode == _CTRL_MODE.KILL_CAM:
-            self.onControlModeChanged(_CTRL_MODE.KILL_CAM, postmortemParams=params, bPostmortemDelay=True)
+        elif nextCtrlMode in _CTRL_MODE.KILL_CAM_MODES:
+            self.onControlModeChanged(nextCtrlMode, postmortemParams=params, bPostmortemDelay=True)
         else:
             _logger.error('Attempt to go to an unsupported CTRL Mode %s', nextCtrlMode)
         return
@@ -647,7 +648,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             if isObserverMode:
                 kwargs.update(vehicleID=self.__observerVehicle)
-            if eMode == _CTRL_MODE.KILL_CAM and hasattr(prevCtrl, 'camera'):
+            if eMode in _CTRL_MODE.KILL_CAM_MODES and hasattr(prevCtrl, 'camera'):
                 kwargs.update(previousCam=prevCtrl.camera)
             self.__curCtrl.enable(**kwargs)
             isReplayPlaying = replayCtrl.isPlaying
@@ -956,7 +957,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.__ctrlModeName = initialControlMode
 
     def __isModeSwitchInPrebattlePossible(self, eMode):
-        if eMode in (_CTRL_MODE.POSTMORTEM, _CTRL_MODE.KILL_CAM):
+        if eMode in (_CTRL_MODE.POSTMORTEM, _CTRL_MODE.KILL_CAM, _CTRL_MODE.LOOK_AT_KILLER):
             return True
         return True if self.__ctrlModeName == _CTRL_MODE.VEHICLES_SELECTION and eMode == _CTRL_MODE.ARCADE else False
 

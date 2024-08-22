@@ -21,6 +21,7 @@ class ICON_TEXT_FRAMES(object):
     CRYSTAL = 'crystal'
     EVENT_COIN = 'eventCoin'
     BPCOIN = 'bpcoin'
+    BPBIT = 'bpbit'
     EQUIP_COIN = 'equipCoin'
     EQUIP_COIN_BIG = 'equipCoinBig'
     TANK_DAILYXPFACTOR = 'tank_dailyXPFactor'

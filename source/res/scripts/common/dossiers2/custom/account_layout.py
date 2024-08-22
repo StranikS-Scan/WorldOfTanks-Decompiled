@@ -51,6 +51,7 @@ _comp7Season1BlockBuilder = StaticSizeBlockBuilder('comp7Season1', COMP7_BLOCK_L
 _comp7Season2BlockBuilder = StaticSizeBlockBuilder('comp7Season2', COMP7_BLOCK_LAYOUT, {}, [])
 _comp7Season3BlockBuilder = StaticSizeBlockBuilder('comp7Season3', COMP7_BLOCK_LAYOUT, {}, [])
 _comp7ArchiveGriffinBlockBuilder = StaticSizeBlockBuilder('comp7ArchiveGriffin', COMP7_BLOCK_LAYOUT, {}, [])
+_comp7ArchivePegasusBlockBuilder = StaticSizeBlockBuilder('comp7ArchivePegasus', COMP7_BLOCK_LAYOUT, {}, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_15x15_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -75,6 +76,7 @@ _maxComp7Season1BlockBuilder = StaticSizeBlockBuilder('maxComp7Season1', MAX_COM
 _maxComp7Season2BlockBuilder = StaticSizeBlockBuilder('maxComp7Season2', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 _maxComp7Season3BlockBuilder = StaticSizeBlockBuilder('maxComp7Season3', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 _maxComp7ArchiveGriffinBlockBuilder = StaticSizeBlockBuilder('maxComp7ArchiveGriffin', MAX_COMP7_BLOCK_LAYOUT, {}, [])
+_maxComp7ArchivePegasusBlockBuilder = StaticSizeBlockBuilder('maxComp7ArchivePegasus', MAX_COMP7_BLOCK_LAYOUT, {}, [])
 
 class VEHICLE_STATS:
     FRAGS = 'vehTypeFrags'
@@ -99,6 +101,7 @@ class VEHICLE_STATS:
     COMP7_CUT_SEASON_2 = 'comp7CutSeason2'
     COMP7_CUT_SEASON_3 = 'comp7CutSeason3'
     COMP7_CUT_ARCHIVE_GRIFFIN = 'comp7CutArchiveGriffin'
+    COMP7_CUT_ARCHIVE_PEGASUS = 'comp7CutArchivePegasus'
     PRESTIGE_SYSTEM = 'prestigeSystem'
     VEHICLE_ACHIEVEMENTS = 'vehicleAchievements'
     CUSTOMIZATION_ACHIEVEMENTS = 'customizationAchievements'
@@ -126,7 +129,8 @@ class VEHICLE_STATS:
      COMP7_CUT_ARCHIVE_GRIFFIN,
      PRESTIGE_SYSTEM,
      VEHICLE_ACHIEVEMENTS,
-     CUSTOMIZATION_ACHIEVEMENTS)
+     CUSTOMIZATION_ACHIEVEMENTS,
+     COMP7_CUT_ARCHIVE_PEGASUS)
 
 
 _vehTypeFragsBlockBuilder = DictBlockBuilder(VEHICLE_STATS.FRAGS, 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
@@ -151,6 +155,7 @@ _comp7CutSeason1BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_1
 _comp7CutSeason2BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_2, 'I', 'IIII', {})
 _comp7CutSeason3BlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_SEASON_3, 'I', 'IIII', {})
 _comp7CutArchiveGriffinBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_ARCHIVE_GRIFFIN, 'I', 'IIII', {})
+_comp7CutArchivePegasusBlockBuilder = DictBlockBuilder(VEHICLE_STATS.COMP7_CUT_ARCHIVE_PEGASUS, 'I', 'IIII', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -901,7 +906,17 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'Cosmic_LiveLongAndProsper',
  'Cosmic_KlingonValor',
  'BattlePassCommonPr_14',
- 'dDayFighter']
+ 'dDayFighter',
+ 'BattlePassCommonPr_15',
+ 'comp7_4_1',
+ 'comp7_4_2',
+ 'comp7_4_3',
+ 'comp7_4_yearly_iron',
+ 'comp7_4_yearly_bronze',
+ 'comp7_4_yearly_silver',
+ 'comp7_4_yearly_gold',
+ 'comp7_4_yearly_champion',
+ 'comp7_4_yearly_legend']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1131,7 +1146,17 @@ _singleAchievementsPopUps = ['titleSniper',
  'Cosmic_LiveLongAndProsper',
  'Cosmic_KlingonValor',
  'BattlePassCommonPr_14',
- 'dDayFighter']
+ 'dDayFighter',
+ 'BattlePassCommonPr_15',
+ 'comp7_4_1',
+ 'comp7_4_2',
+ 'comp7_4_3',
+ 'comp7_4_yearly_iron',
+ 'comp7_4_yearly_bronze',
+ 'comp7_4_yearly_silver',
+ 'comp7_4_yearly_gold',
+ 'comp7_4_yearly_champion',
+ 'comp7_4_yearly_legend']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1312,7 +1337,10 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _comp7CutArchiveGriffinBlockBuilder,
  _prestigeSystemBlockBuilder,
  _vehicleAchievementsBlockBuilder,
- _customizationAchievementsBlockBuilder)
+ _customizationAchievementsBlockBuilder,
+ _comp7ArchivePegasusBlockBuilder,
+ _maxComp7ArchivePegasusBlockBuilder,
+ _comp7CutArchivePegasusBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

@@ -4,7 +4,6 @@ from collections import namedtuple, Counter, defaultdict
 import logging
 import typing
 import Math
-import math
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -12,6 +11,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
 from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID
 from shared_utils import CONST_CONTAINER, isEmpty
+from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
@@ -286,11 +286,12 @@ def containsVehicleBound(purchaseItems):
     return any((count > item.boundInventoryCount(vehCD) for item, count in fromInventoryCounter.items()))
 
 
-def getPurchaseGoldForCredits(price):
-    _, exchangeRate, shortage = getPurchaseMoneyStateShortage(price)
+@dependency.replace_none_kwargs(exchangeProvider=IExchangeRatesWithDiscountsProvider)
+def getPurchaseGoldForCredits(price, exchangeProvider=None):
+    _, _, shortage = getPurchaseMoneyStateShortage(price)
     purchaseGold = 0
     if shortage:
-        purchaseGold = math.ceil(float(shortage.credits) / exchangeRate)
+        purchaseGold = exchangeProvider.goldToCredits.calculateGoldToExchange(shortage.credits)
     return purchaseGold
 
 
@@ -309,7 +310,7 @@ def getPurchaseMoneyState(price):
     else:
         money = money - price + shortage
         price = shortage
-        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+        money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0, useDiscounts=True)
         shortage = money.getShortage(price)
         if not shortage:
             moneyState = MoneyForPurchase.ENOUGH_WITH_EXCHANGE

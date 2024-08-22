@@ -47,6 +47,7 @@ DISCARD_POST_PROGRESSION_PAIRS = 'discardPostProgressionPairs'
 PURCHASE_POST_PROGRESSION_PAIR = 'purchasePostProgressionPair'
 PURCHASE_POST_PROGRESSION_STEPS = 'purchasePostProgressionSteps'
 SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY = 'switchPrebattleAmmoPanelAvailability'
+ADD_SKILLS_TANKMAN = 'addSkillsTankman'
 _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  SELL_MULTIPLE: actions.SellMultipleItems,
  UNLOCK_ITEM: actions.UnlockItemAction,
@@ -88,7 +89,8 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  PURCHASE_POST_PROGRESSION_PAIR: actions.PurchasePostProgressionPair,
  PURCHASE_POST_PROGRESSION_STEPS: actions.PurchasePostProgressionSteps,
  SET_EQUIPMENT_SLOT_TYPE: actions.SetEquipmentSlotType,
- SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY: actions.SwitchPrebattleAmmoPanelAvailabilityAction}
+ SWITCH_PREBATTLE_AMMO_PANEL_AVAILABILITY: actions.SwitchPrebattleAmmoPanelAvailabilityAction,
+ ADD_SKILLS_TANKMAN: actions.TmanAddSkillsAction}
 
 @adisp_process
 def doAction(actionType, *args, **kwargs):

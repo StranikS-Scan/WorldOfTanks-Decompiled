@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 import copy
 import logging
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from functools import partial
 from operator import itemgetter
 import BigWorld
@@ -12,13 +12,15 @@ from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHA
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from comp7_common import COMP7_WEEKLY_REWARD_TOKEN_REGEXP
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, MODERNIZED_DEVICES_TOKEN_PREFIX, STYLE_3D_PROGRESS_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter as dogTagComponentConfig
 from dog_tags_common.config.common import ComponentPurpose, ComponentViewType
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from epic_constants import EPIC_OFFER_TOKEN_PREFIX, EPIC_SELECT_BONUS_NAME
+from exchange.personal_discounts_constants import EXCHANGE_RATE_GOLD_NAME, EXCHANGE_RATE_FREE_XP_NAME
+from exchange.personal_discounts_parser import convertTokensToExchangeDiscounts
 from external_strings_utils import strtobool
 from frameworks.wulf import WindowLayer
 from gui import makeHtmlString
@@ -56,6 +58,7 @@ from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
+from helpers.time_utils import ONE_DAY
 from items import tankmen, vehicles
 from items.components import c11n_components as cc
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -118,6 +121,19 @@ def _isAchievement(block):
 
 def _isBadge(block):
     return block == BADGES_BLOCK
+
+
+def expirationToTimestamp(expires, currentTime=None):
+    expiryTime = 0
+    if currentTime is None:
+        currentTime = time_utils.getServerUTCTime()
+    if 'after' in expires:
+        expiryTime = int(currentTime) + int(expires['after']) * 3600
+    elif 'at' in expires:
+        expiryTime = int(expires['at'])
+    elif 'endOfGameDay' in expires:
+        expiryTime = int(currentTime) + ONE_DAY - time_utils.getServerTimeCurrentDay()
+    return expiryTime
 
 
 class SimpleBonus(object):
@@ -951,6 +967,91 @@ class SelectableBonus(TokensBonus):
         return (self.getType(),)
 
 
+class PersonalExchangeRateTokensBonus(TokensBonus):
+    _itemsCache = dependency.descriptor(IItemsCache)
+    __TEMPLATE = 'personalExchangeRate'
+
+    def __init__(self, value, isCompensation=False, ctx=None):
+        super(TokensBonus, self).__init__('battleToken', value, isCompensation, ctx)
+
+    def getUserName(self):
+        pass
+
+    def getCount(self):
+        return len(self.__getValidParsedDiscounts())
+
+    @property
+    def resourceName(self):
+        pass
+
+    def isShowInGUI(self):
+        return True
+
+    def format(self):
+        if self._defaultRate is None or self._discountInfoStr is None:
+            _logger.error('Rate is None or discount str is not defined for personal exchange discounts')
+            return []
+        else:
+            discountInfo = backport.text(self._discountInfoStr, amount=len(self.__getValidParsedDiscounts()))
+            return makeHtmlString('html_templates:lobby/quests/bonuses', self.__TEMPLATE, {'discount': discountInfo})
+
+    def getTokens(self):
+        return {self.resourceName: self._TOKEN_RECORD(self.resourceName, None, self.getCount(), 1)}
+
+    @property
+    def _defaultRate(self):
+        return None
+
+    @property
+    def _discountInfoStr(self):
+        return None
+
+    def __getValidParsedDiscounts(self):
+        allDiscounts = []
+        for tokenName, tokenData in self._value.items():
+            tokenEndTime = expirationToTimestamp(tokenData.get('expires'))
+            discount = convertTokensToExchangeDiscounts({tokenName: (tokenEndTime, tokenData.get('count', 0))}, self._defaultRate, time_utils.getServerUTCTime())
+            allDiscounts.append(discount)
+
+        return allDiscounts
+
+
+class PersonalExchangeRateGoldTokensBonus(PersonalExchangeRateTokensBonus):
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.bonuses.goldPersonalRate())
+
+    @property
+    def resourceName(self):
+        return EXCHANGE_RATE_GOLD_NAME
+
+    @property
+    def _discountInfoStr(self):
+        return R.strings.quests.bonuses.goldPersonalRate()
+
+    @property
+    def _defaultRate(self):
+        return self._itemsCache.items.shop.defaults.exchangeRate
+
+
+class PersonalXpExchangeRateTokenBonus(PersonalExchangeRateTokensBonus):
+
+    def getUserName(self):
+        return backport.text(R.strings.quests.bonuses.freeXpPersonalRate())
+
+    @property
+    def resourceName(self):
+        return EXCHANGE_RATE_FREE_XP_NAME
+
+    @property
+    def _discountInfoStr(self):
+        return R.strings.quests.bonuses.freeXpPersonalRate()
+
+    @property
+    def _defaultRate(self):
+        return self._itemsCache.items.shop.defaults.freeXPConversion
+
+
 class EntitlementBonus(SimpleBonus):
     _ENTITLEMENT_RECORD = namedtuple('_ENTITLEMENT_RECORD', ['id', 'amount'])
     _FORMATTED_AMOUNT = ('ranked_202203_access',)
@@ -1066,6 +1167,7 @@ def createBonusFromTokens(result, prefix, bonusId, value):
 
 
 def tokensFactory(name, value, isCompensation=False, ctx=None):
+    accumulatedRewards = defaultdict(dict)
     result = []
     for tID, tValue in value.iteritems():
         if tID.startswith(LOOTBOX_TOKEN_PREFIX):
@@ -1098,7 +1200,21 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         if COMP7_WEEKLY_REWARD_TOKEN_REGEXP.match(tID):
             result.append(Comp7TokenWeeklyRewardBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(EXCHANGE_RATE_GOLD_NAME):
+            accumulatedRewards[EXCHANGE_RATE_GOLD_NAME][tID] = tValue
+        if tID.startswith(EXCHANGE_RATE_FREE_XP_NAME):
+            accumulatedRewards[EXCHANGE_RATE_FREE_XP_NAME][tID] = tValue
+        if tID.startswith(MODERNIZED_DEVICES_TOKEN_PREFIX):
+            result.append(ModernizedDeviceRewardBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(STYLE_3D_PROGRESS_PREFIX):
+            result.append(Style3DProgressRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
+
+    for tId, data in accumulatedRewards.items():
+        if tId.startswith(EXCHANGE_RATE_GOLD_NAME):
+            result.append(PersonalExchangeRateGoldTokensBonus(data, isCompensation=False, ctx=None))
+        if tId.startswith(EXCHANGE_RATE_FREE_XP_NAME):
+            result.append(PersonalXpExchangeRateTokenBonus(data, isCompensation=False, ctx=None))
 
     return result
 
@@ -1167,7 +1283,6 @@ class CompletionTokensBonus(TokensBonus):
 
 
 class C11nProgressTokenBonus(TokensBonus):
-    __c11n = dependency.descriptor(ICustomizationService)
     BONUS_NAME = 'styleProgress'
 
     def __init__(self, value, isCompensation=False, ctx=None):
@@ -1190,11 +1305,6 @@ class C11nProgressTokenBonus(TokensBonus):
 
     def getProgressLevel(self):
         return self.__progressData.level
-
-    def getC11nItem(self):
-        itemTypeID = GUI_ITEM_TYPE.STYLE
-        c11nItem = self.__c11n.getItemByID(itemTypeID, self.getStyleID())
-        return c11nItem
 
 
 class ItemsBonus(SimpleBonus):
@@ -2154,6 +2264,12 @@ class WotPlusAdditionalBonuses(WoTPlusBonus):
         return makeTooltip(backport.text(awardItem.header()), backport.text(awardItem.body(), applications=serverSettings.getAdditionalWoTPlusXPCount()))
 
 
+class WotPlusOptionalDevicesAssistant(WoTPlusBonus):
+
+    def __init__(self):
+        super(WotPlusOptionalDevicesAssistant, self).__init__(WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT)
+
+
 def randomBlueprintBonusFactory(name, value, isCompensation=False, ctx=None):
     blueprintBonuses = []
     for params, fragmentCount in value.iteritems():
@@ -2657,6 +2773,50 @@ class EpicAbilityPtsBonus(IntegralBonus):
     pass
 
 
+class ModernizedDeviceRewardBonus(TokensBonus):
+    BONUS_NAME = 'modernizedDevice'
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(ModernizedDeviceRewardBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = self.BONUS_NAME
+
+    def isShowInGUI(self):
+        return True
+
+    def getTierLevel(self):
+        tID = self._value.keys()[0]
+        tier = tID.split('_')[2]
+        tierLevel = tier[1]
+        return int(tierLevel)
+
+    def getTooltip(self):
+        data = getSimpleTooltipData(self._name)
+        header = i18n.makeString(data[0])
+        body = i18n.makeString(data[1]).format(level=self.getTierLevel())
+        return makeTooltip(header or None, body or None) if header or body else ''
+
+
+class Style3DProgressRewardBonus(TokensBonus):
+    BONUS_NAME = 'style3DProgression'
+
+    def __init__(self, name, value, isCompensation=False, ctx=None):
+        super(Style3DProgressRewardBonus, self).__init__(name, value, isCompensation, ctx)
+        self._name = self.BONUS_NAME
+
+    def isShowInGUI(self):
+        return True
+
+    def getStyleID(self):
+        tID = self._value.keys()[0]
+        styleID = tID.split(':')[1]
+        return int(styleID)
+
+    def getLevel(self):
+        tID = self._value.keys()[0]
+        level = tID.split(':')[2]
+        return int(level)
+
+
 class ItemsBonusFactory(object):
     CREW_BOOKS_BONUS_CLASS = CrewBooksBonus
     ITEMS_BONUS_CLASS = ItemsBonus
@@ -2767,7 +2927,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  WoTPlusBonusType.ATTENDANCE_REWARD: AttendanceReward,
  WoTPlusBonusType.BATTLE_BONUSES: WotPlusBattleBonuses,
  WoTPlusBonusType.BADGES: WotPlusBadges,
- WoTPlusBonusType.ADDITIONAL_BONUSES: WotPlusAdditionalBonuses}
+ WoTPlusBonusType.ADDITIONAL_BONUSES: WotPlusAdditionalBonuses,
+ WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT: WotPlusOptionalDevicesAssistant}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))

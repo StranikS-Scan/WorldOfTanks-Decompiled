@@ -60,7 +60,7 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
         hasFullSkills = self._tankman.descriptor.getFullSkillsCount() > 0
         setTankmanModel(vm.tankman, self._tankman, tmanNativeVeh)
         vm.setIsRecoveryPossible(self._tankman.isRestorable())
-        setTmanSkillsModel(vm.tankman.getSkills(), self._tankman)
+        setTmanSkillsModel(vm.tankman.skills, self._tankman, fillBonusSkills=False)
         skills = self._tankman.skills
         if skills:
             lastSkill = skills[-1]

@@ -5,6 +5,7 @@ from BaseAccountExtensionComponent import BaseAccountExtensionComponent
 from PlayerEvents import g_playerEvents as events
 from debug_utils import LOG_DEBUG_DEV
 from frontline_common import frontline_account_commands
+from constants import QUEUE_TYPE
 
 def skipResponse(resultID, errorCode):
     LOG_DEBUG_DEV('skipResponse', resultID, errorCode)
@@ -22,11 +23,11 @@ class FLAccountComponent(BaseAccountExtensionComponent):
 
     def enqueueEpic(self, vehInvID):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, frontline_account_commands.CMD_ENQUEUE_EPIC, vehInvID, 0, 0)
+            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.EPIC, vehInvID])
 
     def dequeueEpic(self):
         if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, frontline_account_commands.CMD_DEQUEUE_EPIC, 0, 0, 0)
+            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.EPIC)
 
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:

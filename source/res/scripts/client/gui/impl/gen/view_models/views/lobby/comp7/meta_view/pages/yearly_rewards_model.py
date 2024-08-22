@@ -23,10 +23,9 @@ class BannerState(Enum):
 
 
 class YearlyRewardsModel(ViewModel):
-    __slots__ = ('onGoToStylePreview', 'onGoToVehiclePreview', 'onGoToRewardsSelection')
-    DEFAULT_CARD_INDEX = -1
+    __slots__ = ('onGoToStylePreview', 'onGoToVehiclePreview', 'onGoToRewardsSelection', 'onIntroViewed')
 
-    def __init__(self, properties=9, commands=3):
+    def __init__(self, properties=9, commands=4):
         super(YearlyRewardsModel, self).__init__(properties=properties, commands=commands)
 
     def getCards(self):
@@ -63,17 +62,17 @@ class YearlyRewardsModel(ViewModel):
     def setHasDataError(self, value):
         self._setBool(4, value)
 
-    def getHasInitialCardsAnimation(self):
+    def getWithIntro(self):
         return self._getBool(5)
 
-    def setHasInitialCardsAnimation(self, value):
+    def setWithIntro(self, value):
         self._setBool(5, value)
 
-    def getInitialCardIndex(self):
-        return self._getNumber(6)
+    def getStyle3dAvailable(self):
+        return self._getBool(6)
 
-    def setInitialCardIndex(self, value):
-        self._setNumber(6, value)
+    def setStyle3dAvailable(self, value):
+        self._setBool(6, value)
 
     def getRanks(self):
         return self._getArray(7)
@@ -98,10 +97,11 @@ class YearlyRewardsModel(ViewModel):
         self._addNumberProperty('currentRank')
         self._addBoolProperty('isQualificationActive', False)
         self._addBoolProperty('hasDataError', False)
-        self._addBoolProperty('hasInitialCardsAnimation', False)
-        self._addNumberProperty('initialCardIndex', -1)
+        self._addBoolProperty('withIntro', True)
+        self._addBoolProperty('style3dAvailable', False)
         self._addArrayProperty('ranks', Array())
         self._addNumberProperty('topPercentage', 0)
         self.onGoToStylePreview = self._addCommand('onGoToStylePreview')
         self.onGoToVehiclePreview = self._addCommand('onGoToVehiclePreview')
         self.onGoToRewardsSelection = self._addCommand('onGoToRewardsSelection')
+        self.onIntroViewed = self._addCommand('onIntroViewed')

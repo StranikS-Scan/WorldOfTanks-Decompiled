@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	11.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -1460,11 +1463,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L7	</name>
-              <radius>	0.255277	</radius>
+              <radius>	0.275	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.267424	</radius>
+              <radius>	0.285	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1697,11 +1700,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R7	</name>
-              <radius>	0.253506	</radius>
+              <radius>	0.275	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.267454	</radius>
+              <radius>	0.285	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1709,7 +1712,7 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R7	</name>
-              <startAngle>	-3.06147	</startAngle>
+              <startAngle>	-1.85	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>

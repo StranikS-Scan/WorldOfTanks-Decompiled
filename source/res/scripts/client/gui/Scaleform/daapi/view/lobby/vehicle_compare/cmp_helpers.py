@@ -1,14 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
-import operator
 from frameworks.wulf import WindowLayer
 from helpers import dependency
 from items import tankmen
+from items.tankmen import SKILLS_BY_ROLES, ROLES_BY_SKILLS
 from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME
 from items.components.c11n_components import SeasonType
@@ -16,6 +15,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from constants import NEW_PERK_SYSTEM as NPS
 MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,
@@ -27,47 +27,14 @@ OPTIONAL_DEVICE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE]
 EQUIPMENT_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT]
 BATTLE_BOOSTER_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER]
 
-def createTankman(nationID, vehicleTypeID, role, roleLevel, skills, vehicle, vehicleSlotIDx):
-    descr = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, roleLevel, skills)
-    newTankmen = Tankman(descr, vehicle=vehicle, vehicleSlotIdx=vehicleSlotIDx)
+def createTankman(nationID, vehicleTypeID, role, roleLevel, skills, vehicle, vehicleSlotIDx, rolesBonusSkills=None, bonusSkillNamesMaxLvl=None):
+    bonusSkillsLevels = [[tankmen.MAX_SKILL_LEVEL] * NPS.MAX_BONUS_SKILLS_PER_ROLE, bonusSkillNamesMaxLvl or []]
+    descr = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, roleLevel, skills, rolesBonusSkills=rolesBonusSkills)
+    newTankmen = Tankman(descr, vehicle=vehicle, vehicleSlotIdx=vehicleSlotIDx, bonusSkillsLevels=bonusSkillsLevels)
     if BROTHERHOOD_SKILL_NAME in skills:
         newTankmen.setBrotherhoodActivity(True)
         newTankmen.rebuildSkills()
     return newTankmen
-
-
-def sortSkills(skillsSet):
-    return sorted(skillsSet, key=PARAMS_AFFECTED_TANKMEN_SKILLS.index)
-
-
-def _getAvailableSkillsByRoles(availableSkills):
-    outcome = {}
-    for role, skills in tankmen.SKILLS_BY_ROLES.iteritems():
-        intersection = skills.intersection(set(availableSkills))
-        if intersection:
-            outcome[role] = intersection
-
-    return outcome
-
-
-_PARAMS_AFFECTED_SKILLS_BY_ROLES = _getAvailableSkillsByRoles(PARAMS_AFFECTED_TANKMEN_SKILLS)
-
-def getVehicleCrewSkills(vehicle):
-    descCrewRoles = vehicle.descriptor.type.crewRoles
-    mainRoles = map(operator.itemgetter(0), descCrewRoles)
-    outcome = [ [role, _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]] for role in mainRoles ]
-    leftRoles = set(tankmen.ROLES.difference(set(mainRoles)))
-    if leftRoles:
-        for idx, rolesRange in reversed(list(enumerate(descCrewRoles))):
-            for role in rolesRange:
-                if role in leftRoles:
-                    leftRoles.remove(role)
-                    outcome[idx][1] |= _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]
-                    if not leftRoles:
-                        return outcome
-
-    else:
-        return outcome
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -155,3 +122,23 @@ def getVehicleTopModules(vehicle):
     topModules = checker.process()
     checker.clear()
     return sorted(topModules, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
+
+
+def isSkillMajor(skillName, role):
+    skills = SKILLS_BY_ROLES.get(role, set())
+    return skillName in skills
+
+
+def splitSkills(selectedSkills):
+    skillsByIdx = {}
+    bonusSkillsByIdx = {}
+    bonusSkillNamesMaxLvl = []
+    for idx, (mainRole, skills) in selectedSkills.items():
+        for skillName in skills:
+            if isSkillMajor(skillName, mainRole):
+                skillsByIdx.setdefault(idx, []).append(skillName)
+            role = list(ROLES_BY_SKILLS.get(skillName))[0]
+            bonusSkillsByIdx.setdefault(idx, {}).setdefault(role, []).append(skillName)
+            bonusSkillNamesMaxLvl.append(skillName)
+
+    return (skillsByIdx, bonusSkillsByIdx, bonusSkillNamesMaxLvl)

@@ -81,7 +81,6 @@ def getDefaultBonusPackersMap():
      Currency.GOLD: simpleBonusPacker,
      Currency.BPCOIN: simpleBonusPacker,
      Currency.EQUIP_COIN: simpleBonusPacker,
-     Currency.EVENT_COIN: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.BASIC: simpleBonusPacker,
      constants.PREMIUM_ENTITLEMENTS.PLUS: simpleBonusPacker,
      'currencies': CurrenciesBonusUIPacker,
@@ -93,7 +92,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.BATTLE_BONUSES: wotPlusBonusPacker,
      constants.WoTPlusBonusType.BADGES: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.ADDITIONAL_BONUSES: wotPlusBonusPacker}
+     constants.WoTPlusBonusType.ADDITIONAL_BONUSES: wotPlusBonusPacker,
+     constants.WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT: wotPlusBonusPacker}
 
 
 def getLocalizedBonusName(name):
@@ -637,14 +637,14 @@ class DossierBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packAchievements(cls, bonus):
-        result = []
-        for achievement in bonus.getAchievements():
-            dossierIconName = achievement.getName()
-            dossierValue = achievement.getValue()
-            dossierLabel = achievement.getUserName()
-            result.append(cls._packSingleBonus(bonus, dossierIconName, DOSSIER_ACHIEVEMENT_POSTFIX, dossierValue, dossierLabel))
+        return [ cls._packSingleAchievement(achievement, bonus) for achievement in bonus.getAchievements() ]
 
-        return result
+    @classmethod
+    def _packSingleAchievement(cls, achievement, bonus):
+        dossierIconName = achievement.getName()
+        dossierValue = achievement.getValue()
+        dossierLabel = achievement.getUserName()
+        return cls._packSingleBonus(bonus, dossierIconName, DOSSIER_ACHIEVEMENT_POSTFIX, dossierValue, dossierLabel)
 
     @classmethod
     def _packBadges(cls, bonus):

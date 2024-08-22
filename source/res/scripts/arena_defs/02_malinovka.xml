@@ -2,13 +2,20 @@
   <name>	#arenas:02_malinovka/name	</name>
   <description>	#arenas:02_malinovka/description	</description>
   <geometry>	spaces/02_malinovka	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
     <bottomLeft>	-500.0 -500.0	</bottomLeft>
     <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <minimap>	spaces/02_malinovka/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/02_malinovka/mmap_crash01_plane_mill_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -27,6 +34,12 @@
     <loadBanks>
       <bank>
         <name>	env_Forest.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
       </bank>
     </loadBanks>
   </soundRemapping>

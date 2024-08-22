@@ -2,15 +2,20 @@
   <xmlns:xsi>	http://www.w3.org/2001/XMLSchema-instance	</xmlns:xsi>
   <xsi:noNamespaceSchemaLocation>	../../development/xml_schema/items/perks.xsd	</xsi:noNamespaceSchemaLocation>
   <perk>
+    <id>	102	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	crewLevelIncrease	</argId>
+        <value>	0.05	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	104	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	enemyModulesCrewDamageProbability	</argId>
-        <value>	0.0	</value>
-      </arg>
-      <arg>
-        <argId>	damageMonitoringDelay	</argId>
-        <value>	-0.04	</value>
+        <argId>	vehicleGunAimSpeed	</argId>
+        <value>	-0.00125	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -18,12 +23,12 @@
     <id>	101	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	circularVisionRadius	</argId>
+        <argId>	increaseCircularVisionRadius	</argId>
         <value>	0.0002	</value>
       </arg>
       <arg>
-        <argId>	circularVisionRadiusWhileSurveyingDeviceDamaged	</argId>
-        <value>	0.002	</value>
+        <argId>	penaltyToDamagedSurveyingDevice	</argId>
+        <value>	-0.002	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -32,7 +37,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	stunResistanceEffectFactor	</argId>
-        <value>	0.0	</value>
+        <value>	0.001	</value>
       </arg>
       <arg>
         <argId>	artNotificationDelayFactor	</argId>
@@ -45,7 +50,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	equipmentPreparationTime	</argId>
-        <value>	-0.0015	</value>
+        <value>	-0.001	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -74,6 +79,10 @@
         <argId>	vehicleEnemySpottingTime	</argId>
         <value>	0.02	</value>
       </arg>
+      <arg>
+        <argId>	damageMonitoringDelay	</argId>
+        <value>	-0.04	</value>
+      </arg>
     </defaultBlockSettings>
   </perk>
   <perk>
@@ -81,7 +90,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	aimingDispersion	</argId>
-        <value>	-0.00025	</value>
+        <value>	-0.00035	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -89,12 +98,12 @@
     <id>	205	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	rngMod	</argId>
-        <value>	0.0	</value>
+        <argId>	vehicleGunAimSpeed	</argId>
+        <value>	-0.00025	</value>
       </arg>
       <arg>
-        <argId>	damagedGunPrecisionPenaltyReduction	</argId>
-        <value>	0.002	</value>
+        <argId>	turretRotationSpeed	</argId>
+        <value>	0.00025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -102,8 +111,12 @@
     <id>	206	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	vehicleGunAimSpeed	</argId>
-        <value>	-0.00025	</value>
+        <argId>	rngMod	</argId>
+        <value>	0.0005	</value>
+      </arg>
+      <arg>
+        <argId>	aimingDispersion	</argId>
+        <value>	-0.00015	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -130,11 +143,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	mediumGroundFactor	</argId>
-        <value>	-0.00025	</value>
-      </arg>
-      <arg>
-        <argId>	softGroundFactor	</argId>
-        <value>	-0.001	</value>
+        <value>	-0.0005	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -142,12 +151,12 @@
     <id>	304	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	fuelTanksDevicesHitChanceProbability	</argId>
-        <value>	0.0	</value>
+        <argId>	antifragmentationLining	</argId>
+        <value>	0.0010	</value>
       </arg>
       <arg>
-        <argId>	engineFireStartingChance	</argId>
-        <value>	-0.0025	</value>
+        <argId>	vehicleFallingDamageResistance	</argId>
+        <value>	0.0030	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -156,15 +165,15 @@
     <defaultBlockSettings>
       <arg>
         <argId>	damageEnemiesByRamming	</argId>
-        <value>	0.0015	</value>
+        <value>	0.002	</value>
       </arg>
       <arg>
         <argId>	vehicleRamDamageResistance	</argId>
-        <value>	0.0015	</value>
+        <value>	0.0025	</value>
       </arg>
       <arg>
         <argId>	trackRamDamageResist	</argId>
-        <value>	0.0	</value>
+        <value>	-0.005	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -180,8 +189,8 @@
         <value>	0.01	</value>
       </arg>
       <arg>
-        <argId>	enginePower	</argId>
-        <value>	0.0005	</value>
+        <argId>	engineReduceFineFactor	</argId>
+        <value>	-0.002	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -204,7 +213,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	gunReloadSpeed	</argId>
-        <value>	-0.0009	</value>
+        <value>	-0.0005	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -213,7 +222,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	vehicleAmmoBayStrength	</argId>
-        <value>	0.00125	</value>
+        <value>	0.0025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -230,12 +239,8 @@
     <id>	404	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	shotDemaskFactor	</argId>
+        <argId>	shellVelocity	</argId>
         <value>	0.001	</value>
-      </arg>
-      <arg>
-        <argId>	foliageMaskingFactor	</argId>
-        <value>	0.0002	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -275,11 +280,7 @@
     <defaultBlockSettings>
       <arg>
         <argId>	crewLevelIncrease	</argId>
-        <value>	0.0	</value>
-      </arg>
-      <arg>
-        <argId>	teamRadioBonusFactor	</argId>
-        <value>	0.001	</value>
+        <value>	0.025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>
@@ -293,15 +294,20 @@
     </defaultBlockSettings>
   </perk>
   <perk>
+    <id>	504	</id>
+    <defaultBlockSettings>
+      <arg>
+        <argId>	commanderLampDelay	</argId>
+        <value>	0.0075	</value>
+      </arg>
+    </defaultBlockSettings>
+  </perk>
+  <perk>
     <id>	505	</id>
     <defaultBlockSettings>
       <arg>
-        <argId>	radioDistance	</argId>
-        <value>	0.002	</value>
-      </arg>
-      <arg>
         <argId>	crewLevelIncrease	</argId>
-        <value>	0.0	</value>
+        <value>	0.025	</value>
       </arg>
     </defaultBlockSettings>
   </perk>

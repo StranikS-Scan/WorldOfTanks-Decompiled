@@ -28,3 +28,9 @@ class WotPlusState(Enum):
     INACTIVE = 0
     ACTIVE = 1
     CANCELLED = 2
+
+
+class OptionalDevicesUsageConst(object):
+    REMOVE = 'remove'
+    UPDATE = 'update'
+    COPY = 'copy'

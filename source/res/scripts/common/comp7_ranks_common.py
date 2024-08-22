@@ -7,11 +7,12 @@ from soft_exception import SoftException
 EXTRA_RANK_TAG = 'extra'
 COMP7_UNDEFINED_RANK_ID = 0
 COMP7_UNDEFINED_DIVISION_ID = 0
+COMP7_UNDEFINED_DIVISION_SERIAL_IDX = 0
 
 class Comp7Division(object):
-    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints')
+    __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints', 'serialIdx')
 
-    def __init__(self, dvsnDict):
+    def __init__(self, serialIdx, dvsnDict):
         pointsRange = dvsnDict['range']
         self.range = pointsRange if type(pointsRange) is Interval else Interval(*pointsRange)
         self.rank = dvsnDict['rank']
@@ -21,6 +22,7 @@ class Comp7Division(object):
         self.activityPointsPerBattle = dvsnDict['rankInactivity']['activityPointsPerBattle'] if 'rankInactivity' in dvsnDict else 0
         self.hasRankInactivity = dvsnDict.get('hasRankInactivity', False)
         self.seasonPoints = dvsnDict.get('seasonPoints', 0)
+        self.serialIdx = serialIdx
 
     def __cmp__(self, other):
         if not isinstance(other, Comp7Division):
@@ -51,8 +53,8 @@ class Comp7RanksConfig(object):
     @cached_property
     def divisions(self):
         divs = []
-        for dvsnDict in self._config.get('divisions', ()):
-            division = Comp7Division(dvsnDict)
+        for serialIdx, dvsnDict in enumerate(self._config.get('divisions', ())):
+            division = Comp7Division(serialIdx, dvsnDict)
             divs.append(division)
 
         return tuple(divs)

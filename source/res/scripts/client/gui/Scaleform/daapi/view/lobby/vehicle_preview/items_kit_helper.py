@@ -270,13 +270,9 @@ def getItemIcon(rawItem, item):
 
 
 def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
+    title = ''
     if item is not None:
-        title = item.userName
-        if forBox and item.itemTypeName != '':
-            tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
-            if tooltipKey:
-                title = _ms(tooltipKey, group=item.userType, value=item.userName)
-                title = title.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
+        title = getTooltipText(item) if forBox else item.userName
     elif rawItem.type in (ItemPackType.CUSTOM_SLOT, ItemPackType.CUSTOM_SEVERAL_SLOTS):
         title = _ms(key=TOOLTIPS.AWARDITEM_SLOTS_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
@@ -316,14 +312,18 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = backport.text(R.strings.tooltips.awardItem.randomBooklet.header())
     elif rawItem.type == ItemPackType.CUSTOM_FREE_XP:
         title = backport.text(R.strings.tooltips.awardItem.customFreeXP.header(), value=backport.getIntegralFormat(rawItem.count))
-    else:
+    if not title:
         title = rawItem.title or ''
     return title
 
 
 def getItemDescription(rawItem, item):
+    description = ''
     if item is not None:
-        description = item.fullDescription
+        if hasattr(item, 'fullDescription'):
+            description = item.fullDescription
+        if not description:
+            description = getTooltipText(item)
     elif rawItem.type in (ItemPackType.CUSTOM_SLOT, ItemPackType.CUSTOM_SEVERAL_SLOTS):
         description = _ms(TOOLTIPS.AWARDITEM_SLOTS_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_GOLD:
@@ -362,9 +362,19 @@ def getItemDescription(rawItem, item):
         description = backport.text(R.strings.tooltips.awardItem.randomBooklet.body())
     elif rawItem.type == ItemPackType.CUSTOM_FREE_XP:
         description = backport.text(R.strings.tooltips.awardItem.freeXP.body())
-    else:
-        description = rawItem.description or ''
+    if not description:
+        description = rawItem.description or rawItem.title or ''
     return description
+
+
+def getTooltipText(item):
+    text = ''
+    if item and item.itemTypeName != '':
+        tooltipKey = TOOLTIPS.getItemBoxTooltip(item.itemTypeName)
+        if tooltipKey:
+            text = _ms(tooltipKey, group=item.userType, value=item.userName)
+            text = text.replace(_DOUBLE_OPEN_QUOTES, _OPEN_QUOTES).replace(_DOUBLE_CLOSE_QUOTES, _CLOSE_QUOTES)
+    return text
 
 
 def getItemTooltipType(rawItem, item):
@@ -459,7 +469,8 @@ def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
          'overlayType': overlay,
          'type': rawItem.type,
          'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE and rawItem.count > 1 else '',
-         'description': getItemTitle(rawItem, fittingItem, forBox=True),
+         'description': getItemDescription(rawItem, fittingItem),
+         'title': getItemTitle(rawItem, fittingItem, forBox=True),
          'groupID': rawItem.groupID,
          'rawCount': rawItem.count})
 
@@ -789,7 +800,7 @@ def addBuiltInEquipment(packItems, itemsCache, vehicleCD):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
-    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0)
+    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0, useDiscounts=True)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)

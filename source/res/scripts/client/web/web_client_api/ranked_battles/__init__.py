@@ -15,6 +15,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from web.web_client_api import w2capi, w2c, W2CSchema, webApiCollection, Field
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
@@ -129,7 +130,8 @@ DEFAULT_WEB_HANDLERS = {RequestWebApi,
  RankedBattlesWebApi,
  QuestsWebApi,
  ShopWebApi,
- UtilWebApi}
+ UtilWebApi,
+ PersonalExchangeRatesDiscountsWebApi}
 
 def createRankedOverlayHandlers():
     handlers = DEFAULT_WEB_HANDLERS.copy()

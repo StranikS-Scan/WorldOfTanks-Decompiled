@@ -52,7 +52,7 @@ class AmmunitionPanelInject(AmmunitionPanelInjectMeta, IGlobalListener):
         self.stopGlobalListening()
         self.getInjectView().onVehicleChanged -= self.__onVehicleChanged
 
-    def __onPanelSectionResized(self, sectionType, offsetX, offsetY, width, height):
+    def __onPanelSectionResized(self, sectionType, offsetX, offsetY, width, height, **kwargs):
         self.as_setHelpLayoutS({'sectionType': sectionType,
          'offsetX': offsetX,
          'offsetY': offsetY,

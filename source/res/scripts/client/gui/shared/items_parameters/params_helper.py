@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
 import copy
-import typing
 from itertools import chain
+import typing
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
+from gui.shared.items_parameters.bonus_helper import CREW_MASTERY_BONUSES, isSituationalBonus
+from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
@@ -78,7 +80,8 @@ EXTRA_POWER_PARAMS = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
  KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND,
  KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND,
  KPI.Name.ENEMY_MODULES_CREW_CRIT_CHANCE,
- KPI.Name.VEHICLE_DAMAGE_ENEMIES_BY_RAMMING)
+ KPI.Name.VEHICLE_DAMAGE_ENEMIES_BY_RAMMING,
+ KPI.Name.SHELL_VELOCITY)
 EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
  KPI.Name.CREW_REPEATED_STUN_DURATION,
  KPI.Name.CREW_STUN_DURATION,
@@ -89,9 +92,7 @@ EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
  KPI.Name.VEHICLE_CHASSIS_STRENGTH,
  KPI.Name.VEHICLE_FIRE_CHANCE,
  KPI.Name.VEHICLE_RAM_DAMAGE_RESISTANCE,
- KPI.Name.VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE,
  KPI.Name.VEHICLE_REPAIR_SPEED,
- KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT,
  KPI.Name.STUN_RESISTANCE_EFFECT_FACTOR,
  KPI.Name.VEHICLE_FUEL_TANK_LESION_CHANCE,
  KPI.Name.VEHICLE_RAM_CHASSIS_DAMAGE_RESISTANCE,
@@ -99,19 +100,22 @@ EXTRA_ARMOR_PARAMS = (KPI.Name.CREW_HIT_CHANCE,
  KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY,
  KPI.Name.FIRE_EXTINGUISHING_RATE,
  KPI.Name.COMMANDER_HIT_CHANCE,
- KPI.Name.WOUNDED_CREW_EFFICIENCY)
+ KPI.Name.WOUNDED_CREW_EFFICIENCY,
+ KPI.Name.VEHICLE_HE_SHELL_DAMAGE_RESISTANCE,
+ KPI.Name.VEHICLE_FALLING_DAMAGE_RESISTANCE,
+ KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_ENGINE,
+ KPI.Name.VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK)
 EXTRA_MOBILITY_PARAMS = (KPI.Name.VEHICLE_SPEED_GAIN,
- KPI.Name.VEHICLE_WEAK_SOIL_RESISTANCE,
- KPI.Name.VEHICLE_AVERAGE_SOIL_RESISTANCE,
+ KPI.Name.MEDIUM_GROUND_FACTOR,
+ KPI.Name.SOFT_GROUND_FACTOR,
  KPI.Name.WHEELS_ROTATION_SPEED)
-EXTRA_CAMOUFLAGE_PARAMS = (KPI.Name.VEHICLE_OWN_SPOTTING_TIME, KPI.Name.FOLIAGE_MASKING_FACTOR)
+EXTRA_CAMOUFLAGE_PARAMS = (KPI.Name.VEHICLE_OWN_SPOTTING_TIME, KPI.Name.FOLIAGE_MASKING_FACTOR, KPI.Name.COMMANDER_LAMP_DELAY)
 EXTRA_VISIBILITY_PARAMS = (KPI.Name.VEHICLE_ENEMY_SPOTTING_TIME,
  KPI.Name.DEMASK_FOLIAGE_FACTOR,
  KPI.Name.DEMASK_MOVING_FACTOR,
- KPI.Name.CIRCULAR_VISION_RADIUS_WHILE_SURVEYING_DEVICE_DAMAGED,
+ KPI.Name.PENALTY_TO_DAMAGED_SURVEYING_DEVICE,
  KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
- KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
- KPI.Name.VEHICLE_ALLY_RADIO_DISTANCE)
+ KPI.Name.DAMAGED_MODULES_DETECTION_TIME)
 EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeArmor': EXTRA_ARMOR_PARAMS,
  'relativeMobility': EXTRA_MOBILITY_PARAMS,
@@ -230,18 +234,64 @@ def itemOnVehicleComparator(vehicle, item):
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
-def skillOnSimilarCrewComparator(vehicle, skillName=None):
+def skillOnSimilarCrewComparator(vehicle, skillNames=None, highlightedSkills=None):
     vehicleWithIdealCrew = copy.copy(vehicle)
     vehicleWithIdealCrew.crew = vehicle.getSimilarCrew()
-    vehicleParamsObject = params.VehicleParams(vehicleWithIdealCrew)
+    situationalBonuses = []
+    highlightedSkills = highlightedSkills or []
+    skillNames = skillNames or []
+    for skillName in skillNames:
+        if skillName in CREW_MASTERY_BONUSES:
+            situationalBonuses.append(skillName)
+
+    if highlightedSkills:
+        for highlightedSkill in highlightedSkills:
+            if isSituationalBonus(highlightedSkill):
+                vehicleWithIdealCrew.crew = vehicleWithIdealCrew.getCrewWithoutSkill(highlightedSkill)
+
+    vehicleParamsObject = params.VehicleParams(vehicleWithIdealCrew, situationalBonuses)
     vehicleParams = vehicleParamsObject.getParamsDict()
     bonuses = vehicleParamsObject.getBonuses(vehicleWithIdealCrew)
     penalties = vehicleParamsObject.getPenalties(vehicleWithIdealCrew)
     compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicleWithIdealCrew)
     newVehicle = copy.copy(vehicle)
-    newVehicle.crew = newVehicle.getCrewWithSkill(skillName)
-    newVehicleParams = params.VehicleParams(newVehicle).getParamsDict()
-    return VehiclesComparator(newVehicleParams, vehicleParams, suitableArtefacts=compatibleArtefacts, bonuses=bonuses, penalties=penalties)
+    newVehicle.crew = newVehicle.getCrewWithSkill(skillNames)
+    updateCrewBonus(newVehicle)
+    newVehicleParams = params.VehicleParams(newVehicle, situationalBonuses).getParamsDict()
+    situationalParams, situationalKPI = getSituationalParams(skillNames)
+    return VehiclesComparator(newVehicleParams, vehicleParams, suitableArtefacts=compatibleArtefacts, bonuses=bonuses, penalties=penalties, paramsThatCountAsSituational=situationalParams, situationalKPI=situationalKPI, highlightedBonuses=highlightedSkills)
+
+
+def updateCrewBonus(vehicle):
+    crewDescriptors = []
+    for _, tman in vehicle.crew:
+        crewDescriptors.append(tman.descriptor.makeCompactDescr() if tman else None)
+
+    vehicle.calcCrewBonuses(crewDescriptors, vehicle.itemsCache.items, fromBattle=True)
+    for _, tankman in vehicle.crew:
+        if tankman is not None:
+            tankman.updateBonusesFromVehicle(vehicle)
+
+    return
+
+
+def getSituationalParams(skillNames):
+    from items import tankmen
+    situationalParams = []
+    situationalKPI = []
+    for skillName in skillNames:
+        if skillName in CREW_MASTERY_BONUSES:
+            situationalParams.append('situationalCrewLevelIncrease')
+        skill = tankmen.getSkillsConfig().getSkill(skillName)
+        for param in skill.params.values():
+            if param.situational:
+                situationalParams.append(param.name)
+
+        for kpi in skill.kpi:
+            if kpi.situational:
+                situationalKPI.append(kpi.name)
+
+    return (situationalParams, situationalKPI)
 
 
 def artifactComparator(vehicle, item, slotIdx, compareWithEmptySlot=False):
@@ -289,8 +339,41 @@ def vehiclesComparator(comparableVehicle, vehicle):
     return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle))
 
 
-def previewVehiclesComparator(comparableVehicle, vehicle):
-    return None if vehicle is None else VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicle), bonuses=params.VehicleParams(comparableVehicle).getBonuses(comparableVehicle, False))
+def previewVehiclesComparator(comparableVehicle, vehicle, withSituational=False):
+    if vehicle is None:
+        return
+    else:
+        skillNames = getSkillsDiff(comparableVehicle, vehicle) if withSituational else []
+        situationalBonuses = []
+        for skillName in skillNames:
+            if skillName in CREW_MASTERY_BONUSES:
+                situationalBonuses.append(skillName)
+
+        situationalParams, situationalKPI = getSituationalParams(skillNames)
+        updateCrewBonus(comparableVehicle)
+        return VehiclesComparator(params.VehicleParams(comparableVehicle, situationalBonuses).getParamsDict(), params.VehicleParams(vehicle, situationalBonuses).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicle), bonuses=params.VehicleParams(comparableVehicle, situationalBonuses).getBonuses(comparableVehicle, False), paramsThatCountAsSituational=situationalParams, situationalKPI=situationalKPI)
+
+
+def previewNoSkillsVehiclesComparator(comparableVehicle, vehicle):
+    if vehicle is None:
+        return
+    else:
+        vehicleCopy = copy.copy(vehicle)
+        vehicleCopy.crew = vehicle.getCrewWithoutSkills()
+        comparableVehicleCopy = copy.copy(comparableVehicle)
+        comparableVehicleCopy.crew = comparableVehicle.getCrewWithoutSkills()
+        return VehiclesComparator(params.VehicleParams(comparableVehicleCopy).getParamsDict(), params.VehicleParams(vehicleCopy).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicleCopy), bonuses=params.VehicleParams(comparableVehicleCopy).getBonuses(comparableVehicleCopy, False))
+
+
+def getSkillsDiff(comparableVehicle, vehicle):
+    skillsDiff = []
+    for _, comparableTman in comparableVehicle.crew:
+        if comparableTman:
+            for skill in comparableTman.skillsMap:
+                if not any((skill in tman.skillsMap for _, tman in vehicle.crew if tman)):
+                    skillsDiff.append(skill)
+
+    return skillsDiff
 
 
 def _getIdealCrewVehicle(vehicle):
@@ -374,6 +457,10 @@ def hasPositiveEffect(groupName, comparator):
     return __hasEffect(groupName, comparator, PARAM_STATE.BETTER)
 
 
+def hasSituationalEffect(groupName, comparator):
+    return __hasEffect(groupName, comparator, PARAM_STATE.SITUATIONAL)
+
+
 def getCommonParam(state, name, parentID='', highlight=HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE):
     return {'state': state,
      'paramID': name,
@@ -419,6 +506,7 @@ class VehParamsBaseGenerator(object):
                             result.append(formattedParam)
                             hasParams = True
 
+                    diffParams.update({'vehIntCD': vehIntCD})
                     result.extend(self._getExtraParams(comparator, groupName, diffParams))
                 if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
                     separator = self._makeSeparator(groupName)
@@ -447,13 +535,32 @@ class VehParamsBaseGenerator(object):
     def _isExtraParamEnabled(self):
         return False
 
+    def _isHiddenBooster(self, vehicle, extraParamName, paramValue, installedBoosters):
+        if extraParamName in HIDDEN_PARAM_DEFAULTS and paramValue == HIDDEN_PARAM_DEFAULTS[extraParamName]:
+            return True
+        conditionalBonus = CONDITIONAL_BONUSES.get(extraParamName)
+        if conditionalBonus:
+            boosterName = next(((key[0] if key else None) for key in conditionalBonus.keys()))
+            for item in installedBoosters:
+                if vehicle and item and item.name == boosterName:
+                    return not item.isAffectsOnVehicle(vehicle)
+
+        return False
+
     def _getExtraParams(self, comparator, groupName, diffParams):
+        from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
         result = []
         if self._isExtraParamEnabled():
             hasExtraParams = False
+            vehicle = g_tankSetupVehicle.item
+            if vehicle is None:
+                return
+            installedBoosters = []
+            if vehicle and vehicle.compactDescr == diffParams.get('vehIntCD'):
+                installedBoosters = vehicle.battleBoosters.installed
             for extraParamName in EXTRA_PARAMS_GROUP[groupName]:
                 param = comparator.getExtendedData(extraParamName)
-                if extraParamName in HIDDEN_PARAM_DEFAULTS and param.value == HIDDEN_PARAM_DEFAULTS[extraParamName]:
+                if self._isHiddenBooster(vehicle, extraParamName, param.value, installedBoosters):
                     continue
                 highlight = diffParams.get(extraParamName, HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE)
                 formattedParam, nSlashCount = self._makeExtraParamVO(param, groupName, highlight)

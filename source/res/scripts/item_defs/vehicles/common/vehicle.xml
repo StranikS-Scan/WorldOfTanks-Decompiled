@@ -115,6 +115,8 @@
     <rancorousBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</rancorousBattleBooster>
     <pedantBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</pedantBattleBooster>
     <lastEffortBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</lastEffortBattleBooster>
+    <practicalityBattleBooster>	NoneExtra : BattleBoosterForPerk	</practicalityBattleBooster>
+    <enemyShotPredictorBattleBooster>	NoneExtra: BattleBoosterForPerk	</enemyShotPredictorBattleBooster>
     <shoot>	ShowShooting : Shoot	</shoot>
     <noAmmo>	NoneExtra : NoAmmo	</noAmmo>
     <gunReload>	NoneExtra : GunReload	</gunReload>
@@ -132,9 +134,6 @@
     <largeMedkit>	NoneExtra : Repairkit	</largeMedkit>
     <smallRepairkit>	NoneExtra : Repairkit	</smallRepairkit>
     <largeRepairkit>	NoneExtra : Repairkit	</largeRepairkit>
-    <lendLeaseOil>	NoneExtra : Fuel	</lendLeaseOil>
-    <gasoline100>	NoneExtra : Fuel	</gasoline100>
-    <gasoline105>	NoneExtra : Fuel	</gasoline105>
     <chocolate>	NoneExtra : Stimulator	</chocolate>
     <cocacola>	NoneExtra : Stimulator	</cocacola>
     <ration>	NoneExtra : Stimulator	</ration>
@@ -147,7 +146,8 @@
     <ration_poland>	NoneExtra : Stimulator	</ration_poland>
     <ration_italy>	NoneExtra : Stimulator	</ration_italy>
     <removedRpmLimiter>	NoneExtra : RemovedRpmLimiter	</removedRpmLimiter>
-    <qualityOil>	NoneExtra : Fuel	</qualityOil>
+    <qualityFuel>	NoneExtra : Fuel	</qualityFuel>
+    <excellentFuel>	NoneExtra : Fuel	</excellentFuel>
     <overturn>	NoneExtra : Overturn	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
       <gameplayFactors>
         <reloadTime>	2.0	</reloadTime>
@@ -311,7 +311,6 @@
       <beamLength>	10.0	</beamLength>
       <bindNode>	HP_gunFire	</bindNode>
     </laserSight>
-    <multiShoot>	ShowShootingMultiGun : MultiShoot	</multiShoot>
     <comp7_aoe_heal>	NoneExtra : VisualScriptEquipmentExtra	</comp7_aoe_heal>
     <comp7_ally_support>	NoneExtra : VisualScriptEquipmentExtra	</comp7_ally_support>
     <comp7_juggernaut>	NoneExtra : VisualScriptEquipmentExtra	</comp7_juggernaut>

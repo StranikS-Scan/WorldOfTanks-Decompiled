@@ -37,7 +37,7 @@ class GameSeason(object):
         return self.__cycleStartDate <= now < self.__cycleEndDate
 
     def hasTentativeDates(self):
-        return bool(self.__data.get('tentative_dates'))
+        return bool(self.__data.get('tentativeDates'))
 
     def isLastCycle(self, cycleID):
         return self.getLastCycleInfo().ordinalNumber == self.getCycleInfo(cycleID).ordinalNumber

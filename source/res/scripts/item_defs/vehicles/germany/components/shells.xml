@@ -19,8 +19,7 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_7.92mm_AP>
     <id>	96	</id>
@@ -2081,7 +2080,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	280	</armor>
       <devices>	122	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -2098,7 +2097,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	280	</armor>
       <devices>	122	</devices>
     </damage>
     <normalizationAngle>	2	</normalizationAngle>
@@ -2116,7 +2115,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	380	</armor>
       <devices>	122	</devices>
     </damage>
     <armorSpalls>
@@ -5775,122 +5774,4 @@
     <notInShop>	True	</notInShop>
     <ricochetAngle>	70	</ricochetAngle>
   </_210mm_Gr.18Be_StoryMode>
-  <_88mm_FlakGr39_FEP>
-    <id>	601	</id>
-    <userString>	#germany_vehicles:_88mm_FlakGr39_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	220	</armor>
-      <devices>	110	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_88mm_FlakGr39_FEP>
-  <_88mm_FlakGr40_FEP>
-    <id>	602	</id>
-    <userString>	#germany_vehicles:_88mm_FlakGr40_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	55.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	88	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	110	</armor>
-      <devices>	55	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_88mm_FlakGr40_FEP>
-  <_50mm_Pzgr39_FEP>
-    <id>	603	</id>
-    <userString>	#germany_vehicles:_50mm_Pzgr39_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	50	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	20	</armor>
-      <devices>	10	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_50mm_Pzgr39_FEP>
-  <_50mm_Pzgr47_FEP>
-    <id>	604	</id>
-    <userString>	#germany_vehicles:_50mm_Pzgr47_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	5.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	50	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	10	</armor>
-      <devices>	5	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_50mm_Pzgr47_FEP>
 </shells.xml>

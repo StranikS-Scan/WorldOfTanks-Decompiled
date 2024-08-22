@@ -4,7 +4,7 @@ import logging
 import constants
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.base_flags import IQuestsFlag
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.flag_helpers import getActiveQuestLabel, headerQuestFormatterVo, wrapQuestGroup, LabelState
 from gui.Scaleform.daapi.view.lobby.missions.regular.missions_page import setHideDoneFilter
@@ -42,7 +42,7 @@ class BattleQuestsFlag(BaseQuestFlag):
 
     @classmethod
     def formatQuests(cls, vehicle, params):
-        if vehicle is None or not cls._limitedUIController.isRuleCompleted(LuiRules.BATTLE_MISSIONS):
+        if vehicle is None or not cls._limitedUIController.isRuleCompleted(LUI_RULES.BattleMissions):
             return
         else:
             quests = cls._getQuests(vehicle)

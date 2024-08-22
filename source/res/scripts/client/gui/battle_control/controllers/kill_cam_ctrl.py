@@ -38,6 +38,7 @@ class KillCameraController(IBattleController):
         self.onKillCamInterrupted = Event.Event(self.__eManager)
         self.onKillCamModeEffectsPlaced = Event.Event(self.__eManager)
         self.onSimulationSceneActive = Event.Event(self.__eManager)
+        self.onRespawnRequested = Event.Event(self.__eManager)
         return
 
     def getControllerID(self):
@@ -62,6 +63,9 @@ class KillCameraController(IBattleController):
 
     def killCamInterrupted(self):
         self.onKillCamInterrupted()
+
+    def respawnRequested(self):
+        self.onRespawnRequested()
 
     def simulationSceneActive(self, active=True):
         self.onSimulationSceneActive(active)
@@ -106,7 +110,7 @@ class KillCameraController(IBattleController):
     def __buildGunMarkerData(self, projectile, phaseDuration, simulatedKillerGunInfo, hasSpottedData, hasAttackerVehicle, unspottedOrigin):
         phaseDuration *= 1000
         useProjectileOrigin = hasAttackerVehicle and hasSpottedData
-        markerData = GunMarkerData(projectile=projectile, phaseDuration=phaseDuration, simulatedKillerGunInfo=simulatedKillerGunInfo if hasSpottedData else None, projectileOrigin=projectile['origin'] if useProjectileOrigin else unspottedOrigin)
+        markerData = GunMarkerData(projectile=projectile, phaseDuration=phaseDuration, simulatedKillerGunInfo=simulatedKillerGunInfo if hasSpottedData else None, projectileOrigin=projectile['trajectoryData'][0][0] if useProjectileOrigin else unspottedOrigin)
         return (KillCamInfoMarkerType.GUN, markerData)
 
     def __buildDistanceMarkerData(self, projectile, phaseDuration, hasSpottedData):

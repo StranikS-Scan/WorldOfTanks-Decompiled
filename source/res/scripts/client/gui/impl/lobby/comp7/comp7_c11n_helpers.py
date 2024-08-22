@@ -51,10 +51,10 @@ def getStylePreviewVehicle(style, defaultVehicle=None, itemsCache=None, comp7Con
                     return vehicleCD
 
         styleCriteria = REQ_CRITERIA.CUSTOM(style.mayInstall)
-        inventorySuitableVehicles = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | styleCriteria)
-        vehicle = first(sorted(inventorySuitableVehicles.values(), key=lambda v: v.level, reverse=True))
-        if vehicle is not None:
-            return vehicle.intCD
+        invVehicles = itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | styleCriteria).values()
+        vehicles = sorted([ v for v in invVehicles if 'battle_royale' not in v.tags ], key=lambda v: v.level, reverse=True)
+        if vehicles:
+            return first(vehicles).intCD
         if defaultVehicle is not None:
             return defaultVehicle
         allSuitableVehicles = itemsCache.items.getVehicles(styleCriteria)

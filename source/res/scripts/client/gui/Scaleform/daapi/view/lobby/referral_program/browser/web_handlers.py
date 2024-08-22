@@ -3,6 +3,7 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_dispatcher import showReferralProgramWindow
 from web.web_client_api import webApiCollection
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.referral_program import ReferralProgramWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.rewards import RewardsWebApi
@@ -24,4 +25,4 @@ class _OpenTabWebApi(OpenTabWebApi):
 
 
 def createReferralWebHandlers():
-    return webApiCollection(SoundWebApi, RequestWebApi, ReferralProgramWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi)
+    return webApiCollection(SoundWebApi, RequestWebApi, ReferralProgramWebApi, ContextMenuWebApi, OpenWindowWebApi, UtilWebApi, RewardsWebApi, SocialWebApi, ShopWebApi, CloseWindowWebApi, _OpenTabWebApi, PersonalExchangeRatesDiscountsWebApi)

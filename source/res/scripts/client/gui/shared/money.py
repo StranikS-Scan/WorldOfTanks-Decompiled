@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/money.py
 from collections import namedtuple
+from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
+from helpers import dependency
 from typing import TYPE_CHECKING
 from shared_utils import CONST_CONTAINER
 from soft_exception import SoftException
@@ -76,6 +78,7 @@ class Money(object):
     ALL = Currency.ALL
     UNDEFINED = None
     WEIGHT = Currency.BY_WEIGHT
+    exchange_rates_with_discount_provider = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
 
     def __init__(self, credits=None, gold=None, crystal=None, eventCoin=None, bpcoin=None, equipCoin=None, *args, **kwargs):
         super(Money, self).__init__()
@@ -301,12 +304,16 @@ class Money(object):
     def copy(self):
         return self._copy(**self._values)
 
-    def exchange(self, currency, toCurrency, rate, default=None):
+    def exchange(self, currency, toCurrency, rate, default=None, useDiscounts=False):
         if currency == toCurrency:
             raise SoftException('Currencies are same: {}'.format(toCurrency))
         if currency not in self._values:
             raise SoftException('Current is not found: {}'.format(currency))
-        value = self.get(toCurrency, 0) + self.get(currency) * rate
+        value = None
+        if useDiscounts:
+            value = self.get(toCurrency, 0) + self.exchange_rates_with_discount_provider.exchange(currency, toCurrency, self.get(currency))
+        if value is None:
+            value = self.get(toCurrency, 0) + rate * self.get(currency)
         copy = self._values.copy()
         self._setValue(copy, currency, default)
         self._setValue(copy, toCurrency, value)

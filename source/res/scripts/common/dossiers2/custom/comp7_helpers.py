@@ -76,8 +76,7 @@ def addSeasonRecord(updateCtx, seasonKey, fields, values):
     addRecords(updateCtx, seasonKey, fields, values)
 
 
-def archiveSeasonsGriffin(seasonsNumber, ctx, seasonsPacking, seasonsNewPacking):
-    archiveName = 'comp7ArchiveGriffin'
+def archiveSeasons(archiveName, seasonsNumber, ctx, seasonsPacking, seasonsNewPacking):
     seasonsValues = getSeasonsRecords(SEASON_KEY, seasonsNumber, ctx, seasonsPacking)
     sumSeasonsValues = getSumSeasonsValues(seasonsValues)
     valuesToArchive = prepareArchiveSeasonsRecords(sumSeasonsValues, seasonsNewPacking)
@@ -85,8 +84,7 @@ def archiveSeasonsGriffin(seasonsNumber, ctx, seasonsPacking, seasonsNewPacking)
     clearSeasonsRecords(seasonsNumber, SEASON_KEY, ctx, seasonsPacking)
 
 
-def archiveMaxSeasonsGriffin(seasonsNumber, ctx, maxSeasonsPacking):
-    archiveName = 'maxComp7ArchiveGriffin'
+def archiveMaxSeasons(archiveName, seasonsNumber, ctx, maxSeasonsPacking):
     maxSeasonsValues = getSeasonsRecords(MAX_SEASON_KEY, seasonsNumber, ctx, maxSeasonsPacking)
     maxValues = getMaxSeasonsValues(maxSeasonsValues)
     valuesToArchive = prepareArchiveSeasonsRecords(maxValues, maxSeasonsPacking)
@@ -94,8 +92,7 @@ def archiveMaxSeasonsGriffin(seasonsNumber, ctx, maxSeasonsPacking):
     clearSeasonsRecords(seasonsNumber, MAX_SEASON_KEY, ctx, maxSeasonsPacking)
 
 
-def archiveCutSeasonsGriffin(seasonsNumber, ctx):
-    archiveName = 'comp7CutArchiveGriffin'
+def archiveCutSeasons(archiveName, seasonsNumber, ctx):
     cutSeasonsValues = getCutSeasonsRecords(CUT_SEASON_KEY, seasonsNumber, ctx)
     valuesToArchive = prepareArchiveCutSeasonsRecords(cutSeasonsValues)
     updateDictRecords(ctx, archiveName, 'I', 'IIII', valuesToArchive)

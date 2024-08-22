@@ -17,7 +17,7 @@ class Comp7AmmunitionPanelView(HangarAmmunitionPanelView):
             tooltipId = event.getArgument('tooltipId')
             tooltipData = None
             if tooltipId == TOOLTIPS_CONSTANTS.COMP7_ROLE_SKILL_LOBBY_TOOLTIP:
-                tooltipData = createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(event.getArgument('roleSkill'),))
+                tooltipData = createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(event.getArgument('roleSkill'), self.__getCurrentVehicleRoleSkillLevel()))
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
@@ -38,12 +38,17 @@ class Comp7AmmunitionPanelView(HangarAmmunitionPanelView):
         return
 
     def __getCurrentVehicleRoleSkill(self):
+        roleName = self.__getCurrentVehicleRole()
+        return None if roleName is None else self.__comp7Controller.getRoleEquipment(roleName)
+
+    def __getCurrentVehicleRole(self):
         if not g_currentVehicle.isPresent():
-            return
+            return None
         else:
             vehicle = g_currentVehicle.item
             restriction = self.__comp7Controller.isSuitableVehicle(vehicle)
-            if restriction is not None:
-                return
-            roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-            return self.__comp7Controller.getRoleEquipment(roleName)
+            return None if restriction is not None else ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
+
+    def __getCurrentVehicleRoleSkillLevel(self):
+        roleName = self.__getCurrentVehicleRole()
+        return None if roleName is None else self.__comp7Controller.getEquipmentStartLevel(roleName)

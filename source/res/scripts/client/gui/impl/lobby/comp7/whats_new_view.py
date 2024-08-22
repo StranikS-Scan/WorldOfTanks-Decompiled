@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/whats_new_view.py
 import typing
+from shared_utils import first
 import SoundGroups
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import GUI_START_BEHAVIOR
-from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from comp7_common import rentVehiclesQuestIDBySeasonNumber
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
@@ -15,15 +15,14 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 from gui.impl.gen.view_models.views.lobby.comp7.whats_new_view_model import WhatsNewViewModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.comp7 import comp7_model_helpers
+from gui.impl.lobby.comp7.comp7_gui_helpers import updateComp7LastSeason
 from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.event_dispatcher import showBrowserOverlayView
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
-from shared_utils import first
+from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
@@ -56,6 +55,8 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             elif tooltipId == TOOLTIPS_CONSTANTS.SHOP_VEHICLE:
                 vehicleCD = int(event.getArgument('vehicleCD'))
                 tooltipData = createTooltipData(isSpecial=True, specialAlias=tooltipId, specialArgs=(vehicleCD,))
+            else:
+                tooltipData = None
             if tooltipData:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 if window is None:
@@ -84,7 +85,7 @@ class WhatsNewView(ViewImpl, IGlobalListener):
         self.__playSound()
 
     def _onLoaded(self):
-        self.__setComp7WhatsNewShown()
+        updateComp7LastSeason()
 
     def __addListeners(self):
         self.viewModel.onClose += self.__onClose
@@ -125,7 +126,14 @@ class WhatsNewView(ViewImpl, IGlobalListener):
     def __updateData(self):
         with self.viewModel.transaction() as vm:
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
+            self.__setReconFlightDelay(vm)
             self.__setVehicles(vm)
+
+    def __setReconFlightDelay(self, viewModel):
+        cache = vehicles.g_cache
+        equipmentID = cache.equipmentIDs().get('comp7_recon')
+        reconFlightDelay = cache.equipments().get(equipmentID).startupDelay
+        viewModel.setReconFlightDelay(reconFlightDelay)
 
     def __setVehicles(self, viewModel):
         rentVehicles = self.__getRentVehicles()
@@ -138,12 +146,6 @@ class WhatsNewView(ViewImpl, IGlobalListener):
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
-
-    def __setComp7WhatsNewShown(self):
-        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
-        stateFlags = self.__settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
-        stateFlags[GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN] = True
-        self.__settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, stateFlags)
 
     def __getRentVehicles(self):
         rentVehicles = []

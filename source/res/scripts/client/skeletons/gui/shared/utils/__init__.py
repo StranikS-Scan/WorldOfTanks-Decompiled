@@ -8,7 +8,9 @@ if TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from gui.shared.gui_items.badge import Badge
     from gui.shared.gui_items.dossier import AccountDossier
+    from gui.shared.utils.tankmen_stats_cache import TankmenStatsCache
 
 class IItemsRequester(requesters.IRequester):
 
@@ -92,6 +94,10 @@ class IItemsRequester(requesters.IRequester):
     def achievements20(self):
         raise NotImplementedError
 
+    @property
+    def tankmenStatsCache(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -131,6 +137,9 @@ class IItemsRequester(requesters.IRequester):
     def getInventoryTankmen(self, criteria=None):
         raise NotImplementedError
 
+    def getInventoryTankmenRO(self):
+        raise NotImplementedError
+
     def getDismissedTankmen(self, criteria=None):
         raise NotImplementedError
 
@@ -138,6 +147,9 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     def tankmenInBarracksCount(self):
+        raise NotImplementedError
+
+    def hasAnyTmanInBarracks(self):
         raise NotImplementedError
 
     def freeTankmenBerthsCount(self):

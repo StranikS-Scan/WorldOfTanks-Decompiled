@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/buy_and_exchange.py
 import logging
 import typing
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.exchange_dialog_state import ExchangeDialogState
-from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult
-from gui.impl.lobby.tank_setup.dialogs.bottom_content.bottom_contents import ExchangePriceBottomContent
+from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContentResult, ExchangeContent, ExchangeMoneyInfo
 from gui.shared.utils import decorators
 from gui.impl.gen.view_models.views.lobby.common.dialog_with_exchange import DialogWithExchange
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogView
@@ -43,6 +43,10 @@ class BuyAndExchange(FullScreenDialogView, typing.Generic[TViewModel]):
         elif self.viewModel.getExchangeState() != ExchangeDialogState.DEFAULT:
             self.viewModel.setExchangeState(ExchangeDialogState.DEFAULT)
         return
+
+    def createToolTipContent(self, event, contentID):
+        exchangeDiscountTooltips = (R.views.lobby.personal_exchange_rates.tooltips.ExchangeLimitTooltip(), R.views.lobby.personal_exchange_rates.tooltips.ExchangeRateTooltip())
+        return self._exchangeContent.createToolTipContent(event, contentID) if contentID in exchangeDiscountTooltips else super(BuyAndExchange, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(BuyAndExchange, self)._onLoading(*args, **kwargs)
@@ -120,7 +124,7 @@ class BuyAndExchange(FullScreenDialogView, typing.Generic[TViewModel]):
         pass
 
     def _createExchangeContent(self):
-        return ExchangePriceBottomContent(fromCurrency=Currency.GOLD, toCurrency=Currency.CREDITS, viewModel=self.viewModel.exchangePanel, needItem=self._needItemsForExchange())
+        return ExchangeContent(fromItem=ExchangeMoneyInfo(currencyType=Currency.GOLD), toItem=ExchangeMoneyInfo(Currency.CREDITS), viewModel=self.viewModel.exchangePanel, needItem=self._needItemsForExchange())
 
     def _needItemsForExchange(self):
         return self._stats.money.getShortage(self.__price).get(Currency.CREDITS, default=0)

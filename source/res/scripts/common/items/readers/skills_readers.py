@@ -95,12 +95,7 @@ def _readBrotherhoodSkill(xmlCtx, section, subsectionName):
 
 def _readCommanderTutorSkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.CommanderTutorSkill(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'xpBonusFactorPerLevel'))
-
-
-def _readCommanderUniversalistSkill(xmlCtx, section, subsectionName):
-    skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.CommanderUniversalistSkill(skill, _xml.readFraction(xmlCtx, section, 'efficiency'), _xml.readFloat(xmlCtx, section, 'chanceToHitPerLevel'))
+    return skills_components.CommanderTutorSkill(skill, _xml.readNonNegativeFloat(xmlCtx, section, 'xpBonusFactorPerLevel'), _xml.readFraction(xmlCtx, section, 'efficiency'))
 
 
 def _readCommanderSkillWithDelaySkill(xmlCtx, section, subsectionName):
@@ -129,13 +124,12 @@ def _readCommanderEnemyShotPredictorSkill(xmlCtx, section, subsectionName):
 
 
 _g_skillConfigReaders = {'repair': _readRole,
- 'fireFighting': _readRole,
  'camouflage': _readRole,
  'brotherhood': _readBrotherhoodSkill,
  'commander_tutor': _readCommanderTutorSkill,
- 'commander_universalist': _readCommanderUniversalistSkill,
- 'commander_expert': _readCommonSkill,
+ 'commander_coordination': _readCommonSkill,
  'commander_sixthSense': _readCommanderSkillWithDelaySkill,
+ 'commander_emergency': _readCrewMasterySkill,
  'commander_enemyShotPredictor': _readCommanderEnemyShotPredictorSkill,
  'commander_eagleEye': _readCommonSkill,
  'commander_practical': _readCommonSkill,
@@ -145,23 +139,26 @@ _g_skillConfigReaders = {'repair': _readRole,
  'driver_badRoadsKing': _readCommonSkill,
  'driver_rammingMaster': _readCommonSkill,
  'driver_motorExpert': _readCommonSkill,
+ 'driver_reliablePlacement': _readCommonSkill,
  'gunner_smoothTurret': _readCommonSkill,
  'gunner_sniper': _readCommonSkill,
  'gunner_rancorous': _readCommonSkill,
- 'gunner_gunsmith': _readCommonSkill,
+ 'gunner_armorer': _readCommonSkill,
  'gunner_focus': _readCommonSkill,
  'gunner_quickAiming': _readCommonSkill,
  'loader_pedant': _readCommonSkill,
  'loader_desperado': _readCommonSkill,
  'loader_intuition': _readCommonSkill,
- 'loader_ambushMaster': _readCommonSkill,
+ 'loader_perfectCharge': _readCommonSkill,
  'loader_ammunitionImprove': _readCommonSkill,
  'loader_melee': _readCommonSkill,
  'radioman_finder': _readCommonSkill,
- 'radioman_inventor': _readCrewMasterySkill,
+ 'radioman_expert': _readCrewMasterySkill,
  'radioman_lastEffort': _readRadiomanLastEffortSkill,
- 'radioman_retransmitter': _readCrewMasterySkill,
- 'radioman_interference': _readCommonSkill}
+ 'radioman_sideBySide': _readCrewMasterySkill,
+ 'fireFighting': _readCommonSkill,
+ 'radioman_interference': _readCommonSkill,
+ 'radioman_signalInterception': _readCommonSkill}
 
 def readSkillsConfig(xmlPath):
     xmlCtx = (None, xmlPath)
@@ -181,3 +178,24 @@ def readSkillsConfig(xmlPath):
 
     ResMgr.purge(xmlPath, True)
     return config
+
+
+def readAutoFillConfig(xmlPath):
+    cfg = {}
+    xmlCtx = (None, xmlPath)
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    autofillSection = _xml.getSubsection(xmlCtx, section, 'autofill')
+    for roleName, roleSection in autofillSection.items():
+        if roleName not in skills_constants.ROLES:
+            _xml.raiseWrongXml(xmlCtx, roleName, 'wrong role name')
+        skillsList = []
+        for skillName in roleSection.keys():
+            if skillName not in skills_constants.ACTIVE_SKILLS:
+                _xml.raiseWrongXml(xmlCtx, skillName, 'wrong skill name')
+            skillsList.append(skillName)
+
+        cfg[roleName] = tuple(skillsList)
+
+    return cfg

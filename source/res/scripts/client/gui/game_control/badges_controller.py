@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/badges_controller.py
+import typing
 import Event
 import constants
 from adisp import adisp_process
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.gui_items.processors.common import BadgesSelector
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.scheduled_notifications import Notifiable, AcyclicNotifier
 from helpers import dependency
 from skeletons.gui.game_control import IBadgesController
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.context import GLOBAL_FLAG
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.shared.gui_items.badge import Badge
 
 class BadgesController(IBadgesController, Notifiable):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -42,11 +45,11 @@ class BadgesController(IBadgesController, Notifiable):
         self.__clear()
 
     def onLobbyStarted(self, ctx):
-        self.__initCurrentBadges()
-        self.__badgesProcessing()
+        badges = self.itemsCache.items.getBadges()
+        self.__initCurrentBadges(badges)
+        self.__badgesProcessing(badges)
         g_clientUpdateManager.addCallbacks({'badges': self.__updateBadges,
          'stats.dossier': self.__updateBadges})
-        self.itemsCache.onSyncCompleted += self.__onSyncCompleted
 
     def select(self, badges):
         self.__selectOnClient(badges)
@@ -60,7 +63,6 @@ class BadgesController(IBadgesController, Notifiable):
     def __clear(self):
         self.stopNotification()
         g_clientUpdateManager.removeObjectCallbacks(self)
-        self.itemsCache.onSyncCompleted -= self.__onSyncCompleted
         self.__currentSelectedPrefix = None
         self.__currentSelectedSuffix = None
         self.__pendingBadges = None
@@ -70,19 +72,16 @@ class BadgesController(IBadgesController, Notifiable):
         if self.__pendingBadges is not None:
             return
         else:
-            self.__initCurrentBadges()
-            self.__badgesProcessing()
+            badges = self.itemsCache.items.getBadges()
+            self.__initCurrentBadges(badges)
+            self.__badgesProcessing(badges)
             self.onUpdated()
             return
 
-    def __onSyncCompleted(self, updateReason, _):
-        if updateReason in (CACHE_SYNC_REASON.DOSSIER_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
-            self.__updateBadges()
-
-    def __initCurrentBadges(self):
+    def __initCurrentBadges(self, badges):
         self.__currentSelectedPrefix = None
         self.__currentSelectedSuffix = None
-        for badge in self.itemsCache.items.getBadges().itervalues():
+        for badge in badges.itervalues():
             if badge.isSelected:
                 if badge.isPrefixLayout() and badge.isAchieved:
                     self.__currentSelectedPrefix = badge
@@ -124,14 +123,14 @@ class BadgesController(IBadgesController, Notifiable):
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         else:
-            self.__initCurrentBadges()
+            self.__initCurrentBadges(self.itemsCache.items.getBadges())
         self.__pendingBadges = None
         self.onUpdated()
         return
 
-    def __badgesProcessing(self):
+    def __badgesProcessing(self, badges):
         currentSelectedPrefix = self.__currentSelectedPrefix
-        for badge in self.itemsCache.items.getBadges().itervalues():
+        for badge in badges.itervalues():
             if self.__tutorStorage is not None and badge.isNew() and badge.isAchieved:
                 if badge.isPrefixLayout():
                     self.__tutorStorage.setValue(GLOBAL_FLAG.HAVE_NEW_BADGE, True)

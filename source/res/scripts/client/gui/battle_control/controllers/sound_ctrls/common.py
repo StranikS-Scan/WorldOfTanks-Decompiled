@@ -170,7 +170,7 @@ class ShotsResultSoundController(IShotsResultSoundController):
     ENEMY_AND_CHASSIS_DAMAGED_BY_PROJECTILE = 'enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player'
     ENEMY_DAMAGED_BY_PROJECTILE = 'enemy_hp_damaged_by_projectile_by_player'
     ENEMY_DAMAGED_BY_NOT_PIERCING = None
-    ENEMY_DAMAGED_BY_DIRECT_EXPLOSION = 'enemy_hp_damaged_by_explosion_at_direct_hit_by_player'
+    ENEMY_DAMAGED_BY_DIRECT_EXPLOSION = None
     ENEMY_DAMAGED_BY_NEAR_EXPLOSION = 'enemy_hp_damaged_by_near_explosion_by_player'
     ENEMY_NOT_DAMAGED_ATTEMPT_AND_GUN_DAMAGED = 'enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player'
     ENEMY_NOT_DAMAGED_ATTEMPT_AND_CHASSIS_DAMAGED = 'enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player'

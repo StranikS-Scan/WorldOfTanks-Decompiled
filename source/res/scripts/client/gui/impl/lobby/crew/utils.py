@@ -16,6 +16,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.info_tip_model import Info
 from gui.impl.gen.view_models.views.lobby.crew.popovers.filter_popover_view_model import VehicleSortColumn
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
 from gui.impl.lobby.crew.filter import GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, VEHICLE_TAGS
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import strcmp, i18n, dependency
@@ -31,8 +32,6 @@ DocumentRecord = namedtuple('DocumentRecord', ['id', 'group', 'value'])
 
 class TRAINING_TIPS(CONST_CONTAINER):
     CHOOSE_ANY_CREW_MEMBER = 'chooseAnyCrewMember'
-    MAXED_CREW_MEMBERS = 'maxedCrewMembers'
-    ENOUGH_EXPERIENCE = 'enoughExperience'
     NOT_TRAINED_THIS_VEHICLE = 'notTrainedThisVehicle'
     NOT_FULL_CREW = 'notFullCrew'
     NOT_FULL_AND_NOT_TRAINED_CREW = 'notFullAndNotTrainedCrew'
@@ -41,9 +40,13 @@ class TRAINING_TIPS(CONST_CONTAINER):
     LOW_PE_NOT_TRAINED_CREW = 'LowPENotTrainedCrew'
     LOW_PE_NOT_TRAINED_NOT_FULL = 'LowPENotTrainedNotFullCrew'
     LOW_PE_TIPS_PERSONAL = 'LowPEtipsPersonal'
+    WILL_FULL_TRAINED_PERSONAL = 'WillFullTrainedPersonal'
+    WILL_FULL_TRAINED_FEW_MEMBERS = 'WillFullTrainedFewMembers'
+    WILL_FULL_TRAINED_CREW = 'WillFullTrainedCrew'
+    FULL_TRAINED_PERSONAL = 'FullTrainedPersonal'
+    FULL_TRAINED_FEW_MEMBERS = 'FullTrainedFewMembers'
+    ALL_FULL_TRAINED = 'AllFullTrained'
     tips = {CHOOSE_ANY_CREW_MEMBER: 1,
-     MAXED_CREW_MEMBERS: 2,
-     ENOUGH_EXPERIENCE: 3,
      NOT_TRAINED_THIS_VEHICLE: 11,
      NOT_FULL_CREW: 12,
      NOT_FULL_AND_NOT_TRAINED_CREW: 13,
@@ -51,7 +54,13 @@ class TRAINING_TIPS(CONST_CONTAINER):
      LOW_PE_NOT_FULL_CREW: 15,
      LOW_PE_NOT_TRAINED_CREW: 16,
      LOW_PE_NOT_TRAINED_NOT_FULL: 17,
-     LOW_PE_TIPS_PERSONAL: 18}
+     LOW_PE_TIPS_PERSONAL: 18,
+     WILL_FULL_TRAINED_PERSONAL: 19,
+     WILL_FULL_TRAINED_FEW_MEMBERS: 20,
+     WILL_FULL_TRAINED_CREW: 21,
+     FULL_TRAINED_PERSONAL: 22,
+     FULL_TRAINED_FEW_MEMBERS: 23,
+     ALL_FULL_TRAINED: 24}
 
 
 def setTextFormatter(tipID, forPlaceHolders):
@@ -190,7 +199,7 @@ def discountPercent(value, defaultValue):
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def packJunkmanCompensationData(books, rewardsArray, tooltipData, itemsCache=None):
+def packCompensationData(books, rewardsArray, tooltipData, itemsCache=None):
     bookTypeOrder = [CREW_BOOK_RARITY.CREW_EPIC, CREW_BOOK_RARITY.CREW_RARE, CREW_BOOK_RARITY.CREW_COMMON]
     booksDataByType = defaultdict(lambda : {'amount': 0,
      'books': []})
@@ -202,6 +211,7 @@ def packJunkmanCompensationData(books, rewardsArray, tooltipData, itemsCache=Non
         typeData['amount'] += value
         typeData['books'].append((book, value))
 
+    booksAmount = 0
     for key in bookTypeOrder:
         if key not in booksDataByType:
             continue
@@ -216,5 +226,37 @@ def packJunkmanCompensationData(books, rewardsArray, tooltipData, itemsCache=Non
         reward.setTooltipId(key)
         reward.setTooltipContentId(str(R.views.lobby.crew.tooltips.ConversionTooltip()))
         rewardsArray.addViewModel(reward)
+        booksAmount += 1
 
-    return
+    return booksAmount
+
+
+BOOSTER_ICON_MAPPING = {'enemyShotPredictorBattleBooster': 'commander_enemyShotPredictor',
+ 'practicalityBattleBooster': 'commander_practical',
+ 'lastEffortBattleBooster': 'radioman_lastEffort',
+ 'sixthSenseBattleBooster': 'commander_sixthSense'}
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packBoostersCompensationData(boosters, rewardsArray, tooltipData, itemsCache=None):
+    for boosterReplacement in boosters:
+        newEqCD = boosterReplacement['newEqCD']
+        count = boosterReplacement['count']
+        tooltipId = str(newEqCD)
+        tooltipData[tooltipId] = {'oldDirectiveID': boosterReplacement['oldEqCD'],
+         'newDirectiveID': newEqCD,
+         'amount': count}
+        booster = itemsCache.items.getItemByCD(newEqCD)
+        reward = RewardItemModel()
+        reward.setItem(BOOSTER_ICON_MAPPING.get(booster.name))
+        reward.setValue(str(count))
+        reward.setName('items')
+        reward.setType('items')
+        reward.setLabel(booster.userName)
+        reward.setTooltipId(tooltipId)
+        reward.setOverlayType(STORE_CONSTANTS.BATTLE_BOOSTER)
+        reward.setTooltipContentId(str(R.views.lobby.crew.tooltips.DirectiveConversionTooltip()))
+        rewardsArray.addViewModel(reward)
+
+
+def convertMoneyToTuple(money):
+    return (money.credits, money.gold, money.crystal)

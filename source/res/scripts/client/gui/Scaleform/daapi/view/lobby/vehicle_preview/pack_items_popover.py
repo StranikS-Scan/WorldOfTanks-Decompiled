@@ -10,7 +10,7 @@ from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
-from web.web_client_api.common import ItemPackEntry
+from web.web_client_api.common import ItemPackEntry, ItemPackType
 _R_SHOP_PACK = R.strings.tooltips.vehiclePreview.shopPack
 
 class PackItemsPopover(PackItemsPopoverMeta):
@@ -24,11 +24,11 @@ class PackItemsPopover(PackItemsPopoverMeta):
         self.__rawItems = []
         for item in self.__data.get('items'):
             item = flashObject2Dict(item)
-            self.__rawItems.append(ItemPackEntry(type=item.get('type'), id=int(item.get('id')), count=item.get('rawCount') or 0, groupID=item.get('groupID'), title=item.get('title'), description=item.get('description')))
+            self.__rawItems.append(ItemPackEntry(type=item.get('type'), id=int(item.get('id')) if item.get('type') != ItemPackType.TOKEN else item.get('id'), count=item.get('rawCount') or 0, groupID=item.get('groupID'), title=item.get('title'), description=item.get('description')))
 
     def showTooltip(self, intCD, itemType):
         toolTipMgr = self.appLoader.getApp().getToolTipMgr()
-        itemId = int(intCD)
+        itemId = int(intCD) if itemType != ItemPackType.TOKEN else intCD
         rawItem = [ item for item in self.__rawItems if item.id == itemId and item.type == itemType ][0]
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
         showItemTooltip(toolTipMgr, rawItem, item)
@@ -45,6 +45,7 @@ class PackItemsPopover(PackItemsPopoverMeta):
              'value': backport.text(_R_SHOP_PACK.count()).format(count=count) if count > 1 else None,
              'icon': item.get('icon'),
              'overlayType': item.get('overlayType'),
+             'title': item.get('title'),
              'description': item.get('description'),
              'hasCompensation': item.get('hasCompensation', False)})
 

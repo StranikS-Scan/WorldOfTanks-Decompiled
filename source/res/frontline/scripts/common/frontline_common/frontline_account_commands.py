@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/common/frontline_common/frontline_account_commands.py
-CMD_ENQUEUE_EPIC = 900
-CMD_DEQUEUE_EPIC = 901
+CMD_FL_SET_FPR = 900
+CMD_FL_GET_FPR = 901
 CMD_CREATE_PREBATTLE_EPIC_TRAINING = 902
 CMD_FORCE_EPIC_DEV_START = 903
 CMD_CREATE_PREBATTLE_EPIC = 904

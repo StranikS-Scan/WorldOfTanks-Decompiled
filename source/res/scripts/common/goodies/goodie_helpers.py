@@ -6,7 +6,7 @@ from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, FreeExperienceConversion, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill
+from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill
 from goodie_multiple_resources import FreeXpCrewXpMultiResourceList, FreeXpMainXpMultiResourceList
 from Goodies import GoodieException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -32,7 +32,6 @@ _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_BUY_SLOT: BuySlot,
  GOODIE_TARGET_TYPE.ON_POST_BATTLE: PostBattle,
  GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN: BuyGoldTankmen,
- GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION: FreeExperienceConversion,
  GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: BuyVehicle,
  GOODIE_TARGET_TYPE.ON_EPIC_META: EpicMeta,
  GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE: DemountOptionalDevice,
@@ -59,7 +58,6 @@ GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  BuySlot: 'slot',
  PostBattle: 'post_battle',
  BuyGoldTankmen: 'gold_tankmen',
- FreeExperienceConversion: 'free_xp_conversion',
  BuyVehicle: 'vehicle',
  EpicMeta: 'epic_meta',
  DemountOptionalDevice: 'demount_optional_device',
@@ -78,7 +76,6 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'slot': GOODIE_TARGET_TYPE.ON_BUY_SLOT,
  'post_battle': GOODIE_TARGET_TYPE.ON_POST_BATTLE,
  'gold_tankmen': GOODIE_TARGET_TYPE.ON_BUY_GOLD_TANKMEN,
- 'free_xp_conversion': GOODIE_TARGET_TYPE.ON_FREE_XP_CONVERSION,
  'vehicle': GOODIE_TARGET_TYPE.ON_BUY_VEHICLE,
  'epic_meta': GOODIE_TARGET_TYPE.ON_EPIC_META,
  'demount_optional_device': GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE,

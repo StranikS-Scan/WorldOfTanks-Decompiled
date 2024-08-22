@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from Vehicle import Vehicle
 _UPDATE_FUN_PREFIX = '_updatePerk'
 _DATA_KEY_PERK_ID = 'perkID'
+_INTERVAL_FOR_SAME_NOTIFICATION = 6
 
 class PerksController(ViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -49,7 +50,9 @@ class PerksController(ViewComponentsController):
         changes, currentRibbonsState = self._getCurrentState(ribbons, self._prevRibbonsState)
         for perkID, perkData in sorted(changes.iteritems(), key=lambda item: item[1]['endTime']):
             if perkData['endTime'] > BigWorld.serverTime():
-                self.onPerkChanged({_DATA_KEY_PERK_ID: perkID})
+                prevPerkEndTime = self._prevRibbonsState.get(perkID, {}).get('endTime', 0)
+                if perkData['endTime'] - prevPerkEndTime > _INTERVAL_FOR_SAME_NOTIFICATION:
+                    self.onPerkChanged({_DATA_KEY_PERK_ID: perkID})
 
         self._prevRibbonsState = deepcopy(currentRibbonsState)
 

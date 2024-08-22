@@ -384,6 +384,10 @@ def __readBonus_int(bonus, name, section, eventType, checkLimit):
     bonus[name] = __readIntWithTokenExpansion(section)
 
 
+def __readBonus_signed_int(bonus, name, section, eventType, checkLimit):
+    bonus[name] = section.asInt
+
+
 def __readBonus_factor(bonus, name, section, eventType, checkLimit):
     bindingToken = section.readString('token2float', '')
     rate = section.readFloat('rate', 1.0)
@@ -1064,6 +1068,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'researchAllVehicles': __readBonus_bool,
  'equipGold': __readBonus_bool,
  'ultimateLoginPriority': __readBonus_bool,
+ 'provideXPpp': __readBonus_signed_int,
  'addTankmanSkills': __readBonus_bool,
  'buySpecial': __readBonus_string_set,
  'premiumAmmo': __readBonus_int,

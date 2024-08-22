@@ -21,7 +21,7 @@ class BoosterType(Enum):
 class CrewPerksTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(CrewPerksTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -48,11 +48,11 @@ class CrewPerksTooltipModel(ViewModel):
     def setLevel(self, value):
         self._setReal(3, value)
 
-    def getIsCommonExtraAvailable(self):
-        return self._getBool(4)
+    def getRealLevel(self):
+        return self._getReal(4)
 
-    def setIsCommonExtraAvailable(self, value):
-        self._setBool(4, value)
+    def setRealLevel(self, value):
+        self._setReal(4, value)
 
     def getIsAdvancedTooltipEnable(self):
         return self._getBool(5)
@@ -60,51 +60,63 @@ class CrewPerksTooltipModel(ViewModel):
     def setIsAdvancedTooltipEnable(self, value):
         self._setBool(5, value)
 
-    def getIsZeroPerk(self):
+    def getIsGroupSkill(self):
         return self._getBool(6)
 
-    def setIsZeroPerk(self, value):
+    def setIsGroupSkill(self, value):
         self._setBool(6, value)
 
-    def getIsIrrelevant(self):
+    def getIsAnyMemberWithLowEfficiency(self):
         return self._getBool(7)
 
-    def setIsIrrelevant(self, value):
+    def setIsAnyMemberWithLowEfficiency(self, value):
         self._setBool(7, value)
 
+    def getIsAnyMemberUntrained(self):
+        return self._getBool(8)
+
+    def setIsAnyMemberUntrained(self, value):
+        self._setBool(8, value)
+
+    def getIsZeroPerk(self):
+        return self._getBool(9)
+
+    def setIsZeroPerk(self, value):
+        self._setBool(9, value)
+
+    def getIsIrrelevant(self):
+        return self._getBool(10)
+
+    def setIsIrrelevant(self, value):
+        self._setBool(10, value)
+
     def getDescription(self):
-        return self._getString(8)
+        return self._getString(11)
 
     def setDescription(self, value):
-        self._setString(8, value)
-
-    def getDescriptionKwargs(self):
-        return self._getString(9)
-
-    def setDescriptionKwargs(self, value):
-        self._setString(9, value)
+        self._setString(11, value)
 
     def getBoosters(self):
-        return self._getArray(10)
+        return self._getArray(12)
 
     def setBoosters(self, value):
-        self._setArray(10, value)
+        self._setArray(12, value)
 
     @staticmethod
     def getBoostersType():
         return CrewPerksTooltipBoosterModel
 
     def getEfficiency(self):
-        return self._getReal(11)
+        return self._getReal(13)
 
     def setEfficiency(self, value):
-        self._setReal(11, value)
+        self._setReal(13, value)
 
     def getBoosterType(self):
-        return BoosterType(self._getString(12))
+        return BoosterType(self._getString(14))
 
     def setBoosterType(self, value):
-        self._setString(12, value.value)
+        self._setString(14, value.value)
 
     def _initialize(self):
         super(CrewPerksTooltipModel, self)._initialize()
@@ -112,12 +124,14 @@ class CrewPerksTooltipModel(ViewModel):
         self._addStringProperty('icon', '')
         self._addStringProperty('skillType', '')
         self._addRealProperty('level', 0.0)
-        self._addBoolProperty('isCommonExtraAvailable', False)
+        self._addRealProperty('realLevel', 0.0)
         self._addBoolProperty('isAdvancedTooltipEnable', False)
+        self._addBoolProperty('isGroupSkill', False)
+        self._addBoolProperty('isAnyMemberWithLowEfficiency', False)
+        self._addBoolProperty('isAnyMemberUntrained', False)
         self._addBoolProperty('isZeroPerk', False)
         self._addBoolProperty('isIrrelevant', False)
         self._addStringProperty('description', '')
-        self._addStringProperty('descriptionKwargs', '')
         self._addArrayProperty('boosters', Array())
         self._addRealProperty('efficiency', 0.0)
         self._addStringProperty('boosterType', BoosterType.NONE.value)

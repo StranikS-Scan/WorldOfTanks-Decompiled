@@ -61,7 +61,11 @@
         <value>	2.5	</value>
       </mul>
       <mul>
-        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.3	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
         <value>	0.3	</value>
       </mul>
       <mul>
@@ -473,4 +477,45 @@
     <tooltipSection>	equipment	</tooltipSection>
     <archetype>	improvedSights	</archetype>
   </deluxeImprovedSights>
+  <deluxeAdditionalInvisibilityDevice>
+    <id>	121	</id>
+    <userString>	#artefacts:deluxeAdditionalInvisibilityDevice/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeAdditionalInvisibilityDevice/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeAdditionalInvisibilityDevice/long_special	</longDescriptionSpecial>
+    <icon>	additionalInvisibilityDevice	</icon>
+    <price>	6000	  <crystal></crystal>
+    </price>
+    <tags>	additInvisibilityDevice deluxe	</tags>
+    <notInShop>	true	</notInShop>
+    <incompatibleTags>
+      <installed>	additInvisibilityDevice	</installed>
+    </incompatibleTags>
+    <script>	LowNoiseTracks	  <weight>	100	</weight>
+      <overridableFactors>
+        <invisibilityBonus>	0.06	</invisibilityBonus>
+      </overridableFactors>
+    </script>
+    <kpi>
+      <aggregateMul>
+        <name>	vehicleCamouflageGroup	</name>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.1	</value>
+          <vehicleTypes>	lightTank mediumTank	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.08	</value>
+          <vehicleTypes>	AT-SPG	</vehicleTypes>
+        </mul>
+        <mul>
+          <name>	vehicleCamouflage	</name>
+          <value>	1.06	</value>
+          <vehicleTypes>	heavyTank SPG	</vehicleTypes>
+        </mul>
+      </aggregateMul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+    <archetype>	additionalInvisibilityDevice	</archetype>
+  </deluxeAdditionalInvisibilityDevice>
 </deluxe_devices.xml>

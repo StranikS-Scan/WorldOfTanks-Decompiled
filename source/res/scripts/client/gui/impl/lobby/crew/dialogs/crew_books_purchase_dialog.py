@@ -133,7 +133,7 @@ class CrewBooksPurchaseDialog(BaseCrewDialogTemplateView):
         purchaseMoneyState = getPurchaseMoneyState(self.purchasePrice.price)
         if purchaseMoneyState is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
             purchaseGold = getPurchaseGoldForCredits(self.purchasePrice.price)
-            event_dispatcher.showExchangeCurrencyWindowModal(currencyValue=purchaseGold)
+            event_dispatcher.showExchangeCurrencyWindowModal(gold=purchaseGold, backgroundImage=R.images.gui.maps.icons.crewBooks.screen_bg())
             return False
         self._executeBuy()
         return True

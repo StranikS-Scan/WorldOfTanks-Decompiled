@@ -42,6 +42,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.points_of_interest import poi_notification_panel
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject
     from gui.Scaleform.daapi.view.battle.comp7.filter_popover import Comp7TankCarouselFilterPopover
+    from gui.Scaleform.daapi.view.battle.comp7 import indicators
     return (ViewSettings(VIEW_ALIAS.COMP7_BATTLE_PAGE, Comp7BattlePage, 'comp7BattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.Comp7BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.Comp7StatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
@@ -66,7 +67,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, Comp7PrebattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL, battle_carousel.PrebattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, Comp7TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE))
+     GroupedViewSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, Comp7TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_RECON_FLIGHT, indicators.ReconFlightIndicator, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

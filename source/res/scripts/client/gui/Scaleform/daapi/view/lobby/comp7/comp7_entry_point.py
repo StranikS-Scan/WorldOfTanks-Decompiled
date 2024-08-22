@@ -32,8 +32,8 @@ class Comp7EntryPoint(ResizableEntryPointMeta):
 
 
 class Comp7EntryPointView(ViewImpl, Notifiable):
-    __START_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 6
-    __END_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 6
+    __START_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
+    __END_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, flags=ViewFlags.VIEW):

@@ -22144,6 +22144,204 @@
       </exclude>
     </vehicleFilter>
     <style>
+      <id>	953	</id>
+      <texture>	gui/maps/vehicles/styles/mid_autumn_festival_2024.png	</texture>
+      <userString>	#vehicle_customization:special_style/mid_autumn_festival_2024	</userString>
+      <description>	#vehicle_customization:special_style/mid_autumn_festival_2024_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/mid_autumn_festival_2024_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	835	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	484	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	973	</id>
+      <texture>	gui/maps/vehicles/styles/bp_15_1.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp_15_1	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp_15_1_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	821	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	974	</id>
+      <texture>	gui/maps/vehicles/styles/bp_15_2.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp_15_2	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp_15_2_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	822	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	975	</id>
+      <texture>	gui/maps/vehicles/styles/bp_15_3.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp_15_3	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp_15_3_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	845	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	846	</id>
+              <appliedTo>	4352	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	498	</id>
+              <appliedTo>	112	</appliedTo>
+            </item>
+            <item>
+              <id>	499	</id>
+              <appliedTo>	30464	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	976	</id>
+      <texture>	gui/maps/vehicles/styles/bp_15_4.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp_15_4	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp_15_4_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	847	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	848	</id>
+              <appliedTo>	256	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	849	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	500	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
       <id>	945	</id>
       <texture>	gui/maps/vehicles/styles/14th_anniversary_01.png	</texture>
       <userString>	#vehicle_customization:special_style/14th_anniversary_01	</userString>
@@ -22324,6 +22522,328 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1200g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	965	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <description>	#vehicle_customization:special_style/onslaught_season_2023-2024_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/manticore_desc/long	</longDescriptionSpecial>
+      <tags>	questsProgression c11n2D	</tags>
+      <alternateItems>
+        <camouflage>
+          <id>	838 839 840 841 842 843	</id>
+        </camouflage>
+        <decal>
+          <id>	1111 1112 1113 1114 1115 1116 1117 1201 1202 1203 1204 1205 1206 1207 1208 1209 1210 1211 1212 1213 1214 1215	</id>
+        </decal>
+      </alternateItems>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	838	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	966	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	838	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	491	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1101	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	967	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	839	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	492	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1102	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	968	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	840	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	493	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1103	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	969	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	841	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	494	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1104	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	970	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	842	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	495	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1105	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	971	</id>
+      <texture>	gui/maps/vehicles/styles/manticore.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_progression	</userString>
+      <tags>	hiddenInUI c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	843	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	496	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1106	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <style>
+      <id>	972	</id>
+      <texture>	gui/maps/vehicles/styles/manticore_yearly.png	</texture>
+      <userString>	#vehicle_customization:special_style/manticore_yearly	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/manticore_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	844	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	497	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	1048	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	1044	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+          <insignias>
+            <item>
+              <id>	71	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
     </style>
   </itemGroup>
   <itemGroup>
@@ -32697,6 +33217,45 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G134_PzKpfw_VII	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	941	</id>
+      <texture>	gui/maps/vehicles/styles/G134_PzKpfw_VII_3Dst_BPXV.png	</texture>
+      <modelsSet>	G134_PzKpfw_VII_3Dst_BPXV	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G134_PzKpfw_VII_3Dst_BPXV	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G134_PzKpfw_VII_3Dst_BPXV_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18001	</slotId>
+              <id>	110	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
@@ -37017,6 +37576,49 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	92	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB120_Concept_No_5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	938	</id>
+      <texture>	gui/maps/vehicles/styles/GB120_Concept_No_5_3Dst_BPXV.png	</texture>
+      <modelsSet>	GB120_Concept_No_5_3Dst_BPXV	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB120_Concept_No_5_3Dst_BPXV	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB120_Concept_No_5_3Dst_BPXV_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	108	</id>
+            </item>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	109	</id>
             </item>
           </attachments>
         </outfit>
@@ -43254,6 +43856,111 @@
             <item>
               <slotId>	18000	</slotId>
               <id>	82	</id>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R194_ST_62_var_2	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	939	</id>
+      <texture>	gui/maps/vehicles/styles/R194_ST_62_var_2_ClansEv_3Dst.png	</texture>
+      <modelsSet>	R194_ST_62_var_2_ClansEv_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R194_ST_62_var_2_ClansEv_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R194_ST_62_var_2_ClansEv_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	824	</id>
+              <appliedTo>	272	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	825	</id>
+              <appliedTo>	4096	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	1043	</id>
+              <appliedTo>	1024	</appliedTo>
+            </item>
+            <item>
+              <id>	960	</id>
+              <appliedTo>	256	</appliedTo>
+            </item>
+          </decals>
+          <insignias>
+            <item>
+              <id>	67	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R144_K_91	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	937	</id>
+      <texture>	gui/maps/vehicles/styles/R144_K_91_3Dst_BPXV.png	</texture>
+      <modelsSet>	R144_K_91_3Dst_BPXV	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R144_K_91_3Dst_BPXV	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R144_K_91_3Dst_BPXV_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	111	</id>
+            </item>
+            <item>
+              <slotId>	38000	</slotId>
+              <id>	112	</id>
             </item>
           </attachments>
         </outfit>

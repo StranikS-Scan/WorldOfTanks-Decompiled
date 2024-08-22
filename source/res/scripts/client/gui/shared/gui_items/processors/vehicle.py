@@ -433,7 +433,8 @@ class VehicleSeller(ItemProcessor):
     def __splitInventory(self):
         result = {}
         for vehicle in self.nationGroupVehs:
-            vehInv = self.itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], (GUI_ITEM_TYPE.SHELL,) + GUI_ITEM_TYPE.VEHICLE_MODULES) | REQ_CRITERIA.INVENTORY).values()
+            itemTypeIds = (GUI_ITEM_TYPE.SHELL,) + GUI_ITEM_TYPE.VEHICLE_MODULES
+            vehInv = self.itemsCache.items.getItems(itemTypeID=itemTypeIds, criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], itemTypeIds) | REQ_CRITERIA.INVENTORY, nationID=vehicle.nationID).values()
             result[vehicle.invID] = set((m.intCD for m in vehInv)) & self.inventory
 
         full = reduce(lambda acc, inv: acc | inv, result.itervalues())

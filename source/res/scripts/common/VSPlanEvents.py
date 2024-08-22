@@ -15,6 +15,7 @@ class PcVSPlanSimpleEvent(object):
     VEHICLE_FIRE_STOPPED = 'OnVehicleFireStopped'
     VEHICLE_EQUIPMENT_SWAP = 'OnVehicleEquipmentSwap'
     VEHICLE_BLOCK_DAMAGE = 'OnVehicleBlockDamage'
+    VEHICLE_DAMAGE_BY_ENEMY = 'OnVehicleDamageByEnemy'
     VEHICLE_CHANGE_HEALTH = 'OnVehicleChangeHealth'
     VEHICLE_DEVICE_WAS_CRIT = 'OnVehicleDeviceWasCrit'
     VEHICLE_TANKMAN_WAS_CRIT = 'OnVehicleTankmanWasCrit'

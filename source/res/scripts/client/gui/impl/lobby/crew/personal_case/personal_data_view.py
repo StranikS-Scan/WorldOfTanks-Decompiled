@@ -67,6 +67,9 @@ class PersonalDataView(IPersonalTab, BasePersonalCaseView):
         self.__dataProviders.reinit(self.tankman)
         self.__dataProviders.update()
 
+    def onStopAnimations(self):
+        pass
+
     @createBackportTooltipDecorator()
     def createToolTip(self, event):
         return super(PersonalDataView, self).createToolTip(event)

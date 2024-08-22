@@ -120,3 +120,5 @@ class STORAGE(object):
     OFFERS_EXPIRATION = '#storage:offers/expiration'
     OFFERS_NOITEMS_TITLE = '#storage:offers/noItems/title'
     OPTDEVICE_HOVER_EFFECT = '#storage:optDevice/hover/effect'
+    EQUIPMENT_COOLDOWN = '#storage:equipment/cooldown'
+    EQUIPMENT_EXTENDEDDESCRIPTION = '#storage:equipment/extendedDescription'

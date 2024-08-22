@@ -1,8 +1,7 @@
 <F87_Batignolles-Chatillon_12t.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
   </crew>
@@ -32,6 +31,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	9.0	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -3018,7 +3020,7 @@
             <minPitch>	0 -13 0.319444 -13 0.333333 -11 0.666667 -11 0.680556 -13 1 -13	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <reloadTime>	24	</reloadTime>
+          <reloadTime>	21	</reloadTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
@@ -3026,11 +3028,11 @@
           </clip>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F87_Batignolles-Chatillon_12t/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F87_Batignolles-Chatillon_12t/crash/lod0/Gun_02.model	</destroyed>
@@ -3482,7 +3484,7 @@
             <minPitch>	0 -13 0.319444 -13 0.333333 -11 0.666667 -11 0.680556 -13 1 -13	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
-          <reloadTime>	20	</reloadTime>
+          <reloadTime>	17	</reloadTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
@@ -3490,11 +3492,11 @@
           </clip>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F87_Batignolles-Chatillon_12t/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F87_Batignolles-Chatillon_12t/crash/lod0/Gun_03.model	</destroyed>
@@ -4163,11 +4165,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4175,7 +4172,7 @@
     <detailed>
       <engines>
         <Mathis_210>
-          <smplEnginePower>	320	</smplEnginePower>
+          <smplEnginePower>	350	</smplEnginePower>
           <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </Mathis_210>
         <Mathis_300>

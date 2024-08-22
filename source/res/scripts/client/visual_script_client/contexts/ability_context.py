@@ -50,6 +50,10 @@ class AbilityContextClient(VehicleContextClient):
     def cooldown(self):
         pass
 
+    @vse_event_out(display_name='OnStartupCooldown', description='Calls when ability delayed before it can be activated', aspects=[ASPECT.CLIENT])
+    def startupCooldown(self):
+        pass
+
     @vse_event_out(display_name='OnExhausted', description='Calls when ability becomes exhausted', aspects=[ASPECT.CLIENT])
     def exhausted(self):
         pass

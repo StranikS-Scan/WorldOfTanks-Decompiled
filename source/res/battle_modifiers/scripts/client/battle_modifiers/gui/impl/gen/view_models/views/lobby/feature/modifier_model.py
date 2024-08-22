@@ -29,6 +29,7 @@ class ModType(Enum):
     NORMALIZATION_ANGLE = 'normalizationAngle'
     RICOCHET_ANGLE = 'ricochetAngle'
     ENGINE_POWER = 'enginePower'
+    ENGINE_FIRE_FACTOR = 'engineFireFactor'
     FW_MAX_SPEED = 'fwMaxSpeed'
     BK_MAX_SPEED = 'bkMaxSpeed'
     ROTATION_SPEED_ON_STILL = 'rotationSpeedOnStill'
@@ -48,10 +49,12 @@ class ModType(Enum):
     ENV_MODULE_DAMAGE_CHANCE = 'envModuleDamageChance'
     REPAIR_SPEED = 'repairSpeed'
     VISION_MIN_RADIUS = 'visionMinRadius'
+    VISION_MAX_RADIUS = 'visionMaxRadius'
     VISION_TIME = 'visionTime'
     EQUIPMENT_COOLDOWN = 'equipmentCooldown'
     INVISIBILITY_FACTOR_AT_SHOT = 'invisibilityFactorAtShot'
     VEHICLE_AOI_RADIUS = 'vehicleAoIRadius'
+    DEVICE_DAMAGE_FIRST = 'deviceDamageFirst'
 
 
 class ModPhysType(Enum):

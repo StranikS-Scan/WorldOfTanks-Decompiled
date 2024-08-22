@@ -41,7 +41,8 @@ class SeasonProvider(ISeasonProvider):
         return season_common.isWithinSeasonTime(settings.asDict(), seasonID, self.__getNow())
 
     def hasAnySeason(self):
-        return bool(self.__getSeasonSettings().seasons)
+        settings = self.__getSeasonSettings()
+        return bool(settings.seasons) if settings is not None else None
 
     def hasAvailablePrimeTimeServers(self, now=None):
         return self._hasPrimeStatusServer((PrimeTimeStatus.AVAILABLE,), now)
@@ -91,20 +92,22 @@ class SeasonProvider(ISeasonProvider):
 
     def getCurrentSeason(self, now=None):
         now = now or self.__getNow()
-        for seasonID, seasonData in self.__getSeasonSettings().seasons.iteritems():
-            if seasonData['startSeason'] <= now < seasonData['endSeason']:
-                currCycleInfo = (None,
-                 None,
-                 seasonID,
-                 None)
-                for cycleID, cycleTimes in seasonData['cycles'].iteritems():
-                    if cycleTimes['start'] <= now < cycleTimes['end']:
-                        currCycleInfo = (cycleTimes['start'],
-                         cycleTimes['end'],
-                         seasonID,
-                         cycleID)
+        seasonSettings = self.__getSeasonSettings()
+        if seasonSettings is not None:
+            for seasonID, seasonData in seasonSettings.seasons.iteritems():
+                if seasonData['startSeason'] <= now < seasonData['endSeason']:
+                    currCycleInfo = (None,
+                     None,
+                     seasonID,
+                     None)
+                    for cycleID, cycleTimes in seasonData['cycles'].iteritems():
+                        if cycleTimes['start'] <= now < cycleTimes['end']:
+                            currCycleInfo = (cycleTimes['start'],
+                             cycleTimes['end'],
+                             seasonID,
+                             cycleID)
 
-                return self._createSeason(currCycleInfo, seasonData)
+                    return self._createSeason(currCycleInfo, seasonData)
 
         return
 
@@ -132,16 +135,17 @@ class SeasonProvider(ISeasonProvider):
         now = now or self.__getNow()
         settings = self.__getSeasonSettings()
         seasonsComing = []
-        for seasonID, season in settings.seasons.iteritems():
-            startSeason = season['startSeason']
-            if now < startSeason:
-                seasonsComing.append((seasonID, startSeason))
+        if settings is not None:
+            for seasonID, season in settings.seasons.iteritems():
+                startSeason = season['startSeason']
+                if now < startSeason:
+                    seasonsComing.append((seasonID, startSeason))
 
         if seasonsComing:
             seasonID, _ = min(seasonsComing, key=itemgetter(1))
             return self.getSeason(seasonID)
         else:
-            return None
+            return
 
     def getPeriodInfo(self, now=None, peripheryID=None):
         now = now or self.__getNow()
@@ -282,10 +286,11 @@ class SeasonProvider(ISeasonProvider):
         now = now or self.__getNow()
         settings = self.__getSeasonSettings()
         seasonsPassed = []
-        for seasonID, season in settings.seasons.iteritems():
-            endSeason = season['endSeason']
-            if now >= endSeason:
-                seasonsPassed.append((seasonID, endSeason))
+        if settings is not None:
+            for seasonID, season in settings.seasons.iteritems():
+                endSeason = season['endSeason']
+                if now >= endSeason:
+                    seasonsPassed.append((seasonID, endSeason))
 
         return seasonsPassed
 

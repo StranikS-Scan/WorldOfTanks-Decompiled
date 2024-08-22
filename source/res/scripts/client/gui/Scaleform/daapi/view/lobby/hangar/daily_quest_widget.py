@@ -5,7 +5,7 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from BonusCaps import BonusCapsConst
 from constants import DAILY_QUESTS_CONFIG
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.events_helpers import isDailyQuestsEnable
 from gui.impl.lobby.missions.daily_quests_widget_view import DailyQuestsWidgetView
@@ -57,7 +57,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return self.__hangarGuiCtrl.checkCurrentBonusCaps(ARENA_BONUS_TYPE_CAPS.DAILY_QUESTS)
 
     def isLimitedUiRuleCompleted(self):
-        return self.limitedUIController.isRuleCompleted(LuiRules.DAILY_MISSIONS)
+        return self.limitedUIController.isRuleCompleted(LUI_RULES.DailyMissions)
 
     def __isQueueSelected(self, queueType):
         return self.prbDispatcher.getFunctionalState().isQueueSelected(queueType) if self.prbDispatcher is not None else False
@@ -134,7 +134,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
         self.promoController.onTeaserShown += self.__onTeaserShown
         self.promoController.onTeaserClosed += self.__onTeaserClosed
-        self.limitedUIController.startObserve(LuiRules.DAILY_MISSIONS, self.__updateQuestsVisibility)
+        self.limitedUIController.startObserve(LUI_RULES.DailyMissions, self.__updateQuestsVisibility)
         self.addListener(events.DailyQuestWidgetEvent.UPDATE_QUESTS_VISIBILITY, self.__updateQuestsVisibility, EVENT_BUS_SCOPE.LOBBY)
 
     def __removeListeners(self):
@@ -143,7 +143,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.eventsCache.onSyncCompleted -= self.__onSyncCompleted
         self.promoController.onTeaserShown -= self.__onTeaserShown
         self.promoController.onTeaserClosed -= self.__onTeaserClosed
-        self.limitedUIController.stopObserve(LuiRules.DAILY_MISSIONS, self.__updateQuestsVisibility)
+        self.limitedUIController.stopObserve(LUI_RULES.DailyMissions, self.__updateQuestsVisibility)
         self.removeListener(events.DailyQuestWidgetEvent.UPDATE_QUESTS_VISIBILITY, self.__updateQuestsVisibility, EVENT_BUS_SCOPE.LOBBY)
         if self._injectView is not None:
             self._injectView.viewModel.onDisappear -= self.__hide

@@ -9,6 +9,7 @@ from PlayerEvents import g_playerEvents
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.managers.loaders import g_viewOverrider
+from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.INVITES import INVITES
 from gui.clans.formatters import ClanAppActionHtmlTextFormatter, ClanMultiNotificationsHtmlTextFormatter, ClanSingleNotificationHtmlTextFormatter
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
@@ -36,6 +37,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IEventLootBoxesController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IComp7Controller
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -1485,17 +1487,37 @@ class PrestigeLvlUpDecorator(LockButtonMessageDecorator):
             self._updateButtonsState(lock=True)
 
 
-class WotAnniversaryReminderDecorator(MessageDecorator):
-    __TEMPLATE = 'WotAnniversaryReminderMessage'
+class ExchangeRateDiscountDecorator(MessageDecorator):
 
-    def __init__(self, entityID):
-        super(WotAnniversaryReminderDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings())
+    def __init__(self, entityID, notificationType, savedData, model, template, priority, useCounterOnce=False, isNotify=True):
+        self.__notificationType = notificationType
+        self.__useCounterOnce = useCounterOnce
+        entity = g_settings.msgTemplates.format(template, data={'linkageData': savedData})
+        settings = NotificationGuiSettings(isNotify=isNotify, priorityLevel=priority, groupID=self.getGroup())
+        super(ExchangeRateDiscountDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
 
     def getType(self):
-        return NOTIFICATION_TYPE.WOT_ANNIVERSARY_REMINDER
+        return self.__notificationType
 
-    def __makeEntity(self):
-        return g_settings.msgTemplates.format(self.__TEMPLATE)
+    def getGroup(self):
+        return NotificationGroup.OFFER
 
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)
+    def getSavedData(self):
+        return self._entity.get('linkageData')
+
+    def isShouldCountOnlyOnce(self):
+        return self.__useCounterOnce
+
+    @staticmethod
+    def isPinned():
+        return True
+
+
+class PostProgressionDecorator(LockButtonMessageDecorator):
+    __appLoader = dependency.descriptor(IAppLoader)
+
+    def _make(self, formatted=None, settings=None):
+        super(PostProgressionDecorator, self)._make(formatted, settings)
+        lobbyHangarWindow = self.__appLoader.getApp().containerManager.getView(WindowLayer.SUB_VIEW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BATTLE_QUEUE})
+        self._updateButtonsState(lobbyHangarWindow is not None)
+        return

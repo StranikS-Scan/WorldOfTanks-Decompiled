@@ -23,12 +23,13 @@ from gui.platform.products_fetcher.user_subscriptions.controller import Subscrip
 from gui.platform.products_fetcher.user_subscriptions.user_subscription import UserSubscription, SUBSCRIPTION_CANCEL_STATUSES, SubscriptionRequestPlatform
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.bonuses import GoldBank, IdleCrewXP, ExcludedMap, FreeEquipmentDemounting, WoTPlusExclusiveVehicle, AttendanceReward, SimpleBonus, WotPlusBattleBonuses, WotPlusBadges, WotPlusAdditionalBonuses
+from gui.server_events.bonuses import GoldBank, IdleCrewXP, ExcludedMap, FreeEquipmentDemounting, WoTPlusExclusiveVehicle, AttendanceReward, SimpleBonus, WotPlusBattleBonuses, WotPlusBadges, WotPlusAdditionalBonuses, WotPlusOptionalDevicesAssistant
 from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from CurrentVehicle import g_currentVehicle
 from helpers import dependency
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from skeletons.gui.game_control import IWotPlusController, ISteamCompletionController
+from skeletons.gui.game_control import IWotPlusController, ISteamCompletionController, IOptionalDevicesAssistantController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import IUserSubscriptionsFetchController
 from skeletons.gui.shared import IItemsCache
@@ -42,7 +43,7 @@ if typing.TYPE_CHECKING:
     from gui.platform.products_fetcher.user_subscriptions.controller import UserSubscriptionsFetchController
     from gui.platform.products_fetcher.user_subscriptions.fetch_result import UserSubscriptionFetchResult
 _logger = logging.getLogger(__name__)
-_SECONDS_IN_DAY = 86400
+_SECONDS_IN_DAY = 60 * 60 * 24
 
 class NotificationTypeTemplate(Enum):
     PASSIVE_XP = ('PassiveXpEnabledMessage', 'PassiveXpDisabledMessage')
@@ -53,6 +54,7 @@ class NotificationTypeTemplate(Enum):
     BATTLE_BONUSES = ('BattleBonusesEnabledMessage', 'BattleBonusesDisabledMessage')
     BADGE = ('BadgeEnabledMessage', 'BadgeDisabledMessage')
     ADDITIONAL_XP = ('AdditionalXpEnabledMessage', 'AdditionalXpDisabledMessage')
+    OPTIONAL_DEVICES_ASSISTANT = ('OptionalDevicesAssistantEnabledMessage', 'OptionalDevicesAssistantDisabledMessage')
 
     @property
     def getEnable(self):
@@ -183,22 +185,24 @@ class WotPlusController(IWotPlusController):
     def getEnabledBonuses(self):
         serverSettings = self._lobbyContext.getServerSettings()
         enabledBonuses = []
-        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
-            enabledBonuses.append(WoTPlusExclusiveVehicle())
+        if serverSettings.isOptionalDevicesAssistantEnabled():
+            enabledBonuses.append(WotPlusOptionalDevicesAssistant())
         if serverSettings.isRenewableSubGoldReserveEnabled():
             enabledBonuses.append(GoldBank())
         if serverSettings.isRenewableSubPassiveCrewXPEnabled():
             enabledBonuses.append(IdleCrewXP())
-        if serverSettings.isWotPlusExcludedMapEnabled():
-            enabledBonuses.append(ExcludedMap())
-        if serverSettings.isFreeEquipmentDemountingEnabled():
-            enabledBonuses.append(FreeEquipmentDemounting())
         if serverSettings.isDailyAttendancesEnabled():
             enabledBonuses.append(AttendanceReward())
         if serverSettings.isWotPlusBattleBonusesEnabled():
             enabledBonuses.append(WotPlusBattleBonuses())
         if serverSettings.isAdditionalWoTPlusEnabled():
             enabledBonuses.append(WotPlusAdditionalBonuses())
+        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
+            enabledBonuses.append(WoTPlusExclusiveVehicle())
+        if serverSettings.isWotPlusExcludedMapEnabled():
+            enabledBonuses.append(ExcludedMap())
+        if serverSettings.isFreeEquipmentDemountingEnabled():
+            enabledBonuses.append(FreeEquipmentDemounting())
         if serverSettings.isBadgesEnabled():
             enabledBonuses.append(WotPlusBadges())
         return enabledBonuses
@@ -266,6 +270,7 @@ class WotPlusController(IWotPlusController):
         isBattleBonusesEnabled = serverSettings.isWotPlusBattleBonusesEnabled()
         isBadgesEnabled = serverSettings.isBadgesEnabled()
         isAdditionalXPEnabled = serverSettings.isAdditionalWoTPlusEnabled()
+        isOptionalDevicesAssistantEnabled = serverSettings.isOptionalDevicesAssistantEnabled()
         with settings.wotPlusSettings() as dt:
             dt.setWotPlusEnabledState(isWotPlusEnabled)
             hasSubscription = self.isEnabled()
@@ -286,6 +291,7 @@ class WotPlusController(IWotPlusController):
                     self._notifyClient(dt.isBattleBonusesEnabled, isBattleBonusesEnabled, NotificationTypeTemplate.BATTLE_BONUSES)
                     self._notifyClient(dt.isBadgesEnabled, isBadgesEnabled, NotificationTypeTemplate.BADGE)
                     self._notifyClient(dt.isAdditionalXPEnabled, isAdditionalXPEnabled, NotificationTypeTemplate.ADDITIONAL_XP)
+                    self._notifyClient(dt.isOptionalDevicesAssistantEnabled, isOptionalDevicesAssistantEnabled, NotificationTypeTemplate.OPTIONAL_DEVICES_ASSISTANT)
             dt.setIsFirstTime(not hasSubscription)
             dt.setGoldReserveEnabledState(isGoldReserveEnabled)
             dt.setPassiveXpState(isPassiveXpEnabled)
@@ -295,6 +301,7 @@ class WotPlusController(IWotPlusController):
             dt.setBattleBonusesState(isBattleBonusesEnabled)
             dt.setBadgesEnabled(isBadgesEnabled)
             dt.setAdditionalXPEnabled(isAdditionalXPEnabled)
+            dt.setOptionalDevicesAssistantEnabled(isOptionalDevicesAssistantEnabled)
 
     def _notifyClient(self, lastSeenStatus, currentStatus, notifications):
         if lastSeenStatus != currentStatus:
@@ -340,3 +347,16 @@ class WotPlusController(IWotPlusController):
     def _onCmdResponseReceived(self, resultID, requestID, errorStr, errorMsg=None):
         if not AccountCommands.isCodeValid(requestID):
             _logger.error('Received invalid response: resultId: %s, requestId: %s, error: %s, message: %s', resultID, requestID, errorStr, errorMsg)
+
+
+class WotPlusHintChecker(object):
+
+    def check(self, aliasId):
+        lobbyContext = dependency.instance(ILobbyContext)
+        if not lobbyContext.getServerSettings().isOptionalDevicesAssistantEnabled():
+            return False
+        wotPlusCtrl = dependency.instance(IWotPlusController)
+        optDevicesAssistantCtrl = dependency.instance(IOptionalDevicesAssistantController)
+        selectedVehicle = g_currentVehicle.item
+        _, __, resultItems = optDevicesAssistantCtrl.getPopularOptDevicesList(selectedVehicle)
+        return wotPlusCtrl.isEnabled() and bool(resultItems)

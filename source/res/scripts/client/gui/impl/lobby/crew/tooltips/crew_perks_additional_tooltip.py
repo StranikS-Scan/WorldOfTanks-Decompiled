@@ -4,23 +4,29 @@ import typing
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
+from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import BoosterType
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Tankman import getTankmanSkill, SKILL_EFFICIENCY_UNTRAINED
+from gui.shared.gui_items.Tankman import getTankmanSkill, isSkillLearnt, SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
 from gui.shared.tooltips.advanced import SKILL_MOVIES
 from helpers import dependency
+from items.components import perks_constants
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Tankman import TankmanSkill
+    from gui.shared.gui_items.Tankman import Tankman, TankmanSkill
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewPerksAdditionalTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_skill', '_tankman')
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillBooster')
 
     def __init__(self, skillName=None, tankmanId=None):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksAdditionalTooltip())
         settings.model = CrewPerksAdditionalTooltipModel()
+        self._skillName = skillName
         self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
-        self._skill = getTankmanSkill(skillName, tankman=self._tankman)
+        self._tankmanVehicle = self._getVehicle()
+        self._skill = getTankmanSkill(self._skillName, tankman=self._tankman)
+        self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
         super(CrewPerksAdditionalTooltip, self).__init__(settings)
         return
 
@@ -42,7 +48,32 @@ class CrewPerksAdditionalTooltip(ViewImpl):
             movieName = SKILL_MOVIES.get(self._skill.name, None)
             if movieName:
                 vm.setAnimationName(movieName)
-            isDisabled = self._tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED if self._tankman else False
+            isDisabled = self._tankman and self._tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED and self._getBoosterType() == BoosterType.NONE
             vm.setIsDisabled(isDisabled)
-            vm.setIsIrrelevant(self._tankman and not self._skill.isEnable)
+            vm.setIsIrrelevant(self._isIrrelevant())
         return
+
+    def _getVehicle(self):
+        if self._tankman is None:
+            return
+        else:
+            return self._itemsCache.items.getVehicle(self._tankman.vehicleInvID) if self._tankman.isInTank else None
+
+    def _getBoosterType(self):
+        if self._skillBooster and not self._isIrrelevant():
+            if isSkillLearnt(self._skillName, self._tankmanVehicle) or self._skillName in perks_constants.SKIP_SE_PERKS:
+                return BoosterType.EXTRA
+            return BoosterType.ORDINARY
+        return BoosterType.NONE
+
+    def _isIrrelevant(self):
+        if not self._tankman:
+            return False
+        role = self._tankman.role
+        for bonusRole, bonusSkills in self._tankman.bonusSkills.iteritems():
+            for bonusSkill in bonusSkills:
+                if bonusSkill and self._skill.name == bonusSkill.name:
+                    role = bonusRole
+                    break
+
+        return not self._skill.isEnable or not self._skill.isRelevantForRole(role)

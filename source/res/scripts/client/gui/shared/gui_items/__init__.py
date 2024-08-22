@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/__init__.py
 import logging
+from typing import TYPE_CHECKING
 from gui.impl import backport
 from gui.impl.backport import getNiceNumberFormat
 from gui.impl.gen import R
@@ -10,7 +11,8 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES,
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
-from collections import namedtuple
+if TYPE_CHECKING:
+    from typing import Set, FrozenSet, Union
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
@@ -252,9 +254,7 @@ def getItemIconName(itemName):
 
 
 def checkForTags(vTags, tags):
-    if not hasattr(tags, '__iter__'):
-        tags = (tags,)
-    return bool(vTags & frozenset(tags))
+    return tags in vTags if isinstance(tags, str) else not vTags.isdisjoint(tags)
 
 
 @dependency.replace_none_kwargs(itemsFactory=IGuiItemsFactory)
@@ -310,7 +310,6 @@ class KPI(object):
         VEHICLE_AMMO_BAY_ENGINE_FUEL_STRENGTH = 'vehicleAmmoBayEngineFuelStrength'
         VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
         VEHICLE_CHASSIS_FALL_DAMAGE = 'vehicleChassisFallDamage'
-        VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
         VEHICLE_RAM_DAMAGE_RESISTANCE = 'vehicleRamDamageResistance'
         VEHICLE_DAMAGE_ENEMIES_BY_RAMMING = 'damageEnemiesByRamming'
         VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
@@ -320,7 +319,6 @@ class KPI(object):
         VEHICLE_INVISIBILITY_AFTER_SHOT = 'vehicleInvisibilityAfterShot'
         VEHICLE_RELOAD_TIME_AFTER_SHELL_CHANGE = 'vehicleReloadTimeAfterShellChange'
         VEHICLE_STRENGTH = 'vehicleStrength'
-        VEHICLE_PENALTY_FOR_DAMAGED_ENGINE_AND_COMBAT = 'vehPenaltyForDamageEngineAndCombat'
         VEHICLE_ALL_GROUND_ROTATION_SPEED = 'vehicleAllGroundRotationSpeed'
         VEHICLE_SPEED_GAIN = 'vehicleSpeedGain'
         VEHICLE_TURRET_OR_CUTTING_ROTATION_SPEED = 'vehicleTurretOrCuttingRotationSpeed'
@@ -329,11 +327,11 @@ class KPI(object):
         EQUIPMENT_PREPARATION_TIME = 'equipmentPreparationTime'
         DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND = 'damageAndPiercingDistributionLowerBound'
         DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND = 'damageAndPiercingDistributionUpperBound'
-        CIRCULAR_VISION_RADIUS_WHILE_SURVEYING_DEVICE_DAMAGED = 'circularVisionRadiusWhileSurveyingDeviceDamaged'
+        PENALTY_TO_DAMAGED_SURVEYING_DEVICE = 'penaltyToDamagedSurveyingDevice'
         STUN_RESISTANCE_EFFECT_FACTOR = 'stunResistanceEffectFactor'
         ART_NOTIFICATION_DELAY_FACTOR = 'artNotificationDelayFactor'
-        VEHICLE_WEAK_SOIL_RESISTANCE = 'vehicleWeakSoilResistance'
-        VEHICLE_AVERAGE_SOIL_RESISTANCE = 'vehicleAverageSoilResistance'
+        MEDIUM_GROUND_FACTOR = 'mediumGroundFactor'
+        SOFT_GROUND_FACTOR = 'softGroundFactor'
         WHEELS_ROTATION_SPEED = 'wheelsRotationSpeed'
         VEHICLE_FUEL_TANK_LESION_CHANCE = 'vehicleFuelTankLesionChance'
         FOLIAGE_MASKING_FACTOR = 'foliageMaskingFactor'
@@ -345,7 +343,12 @@ class KPI(object):
         FIRE_EXTINGUISHING_RATE = 'fireExtinguishingRate'
         COMMANDER_HIT_CHANCE = 'commanderHitChance'
         WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
-        VEHICLE_ALLY_RADIO_DISTANCE = 'vehicleAllyRadioDistance'
+        VEHICLE_HE_SHELL_DAMAGE_RESISTANCE = 'vehicleHEShellDamageResistance'
+        VEHICLE_FALLING_DAMAGE_RESISTANCE = 'vehicleFallingDamageResistance'
+        VEHICLE_PENALTY_FOR_DAMAGED_ENGINE = 'vehPenaltyForDamagedEngine'
+        VEHICLE_PENALTY_FOR_DAMAGED_AMMORACK = 'vehPenaltyForDamagedAmmorack'
+        COMMANDER_LAMP_DELAY = 'commanderLampDelay'
+        SHELL_VELOCITY = 'shellVelocity'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         CREW_LEVEL = 'crewLevel'
@@ -367,6 +370,7 @@ class KPI(object):
         CREW_SKILL_PEDANT = 'crewSkillPedant'
         CREW_SKILL_SMOOTH_TURRET = 'crewSkillSmoothTurret'
         CREW_SKILL_PRACTICAL = 'crewSkillPractical'
+        CREW_SKILL_STUN_RESISTANCE = 'crewSkillStunResistance'
         DEMASK_FOLIAGE_FACTOR = 'demaskFoliageFactor'
         DEMASK_MOVING_FACTOR = 'demaskMovingFactor'
         GAME_XP = 'gameXp'

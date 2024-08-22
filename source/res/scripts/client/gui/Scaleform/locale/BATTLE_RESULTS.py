@@ -65,7 +65,6 @@ class BATTLE_RESULTS(object):
     COMMON_FITTING_PURCHASE = '#battle_results:common/fitting/purchase'
     COMMON_RESEARCHPREDICTION = '#battle_results:common/researchPrediction'
     COMMON_NEWSKILLPREDICTION = '#battle_results:common/newSkillPrediction'
-    COMMON_CREWMEMBER_NEWFREESKILL = '#battle_results:common/crewMember/newFreeSkill'
     COMMON_CREWMEMBER_NEWSKILL = '#battle_results:common/crewMember/newSkill'
     COMMON_CREWMEMBER_DESCRIPTION = '#battle_results:common/crewMember/description'
     COMMON_NOPROGRESS = '#battle_results:common/noProgress'

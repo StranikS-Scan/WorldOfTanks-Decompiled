@@ -113,7 +113,17 @@ def getRadioDistance(vehicleDescr, factors):
 
 
 def getCircularVisionRadius(vehicleDescr, factors):
-    return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
+    penalty = max(factors['circularVisionRadius'], 0.0)
+    circularVisionRadiusMul = (1 - (1 - penalty) * factors['penaltyToDamagedSurveyingDevice']) * factors['increaseCircularVisionRadius'] if penalty < vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] else factors['increaseCircularVisionRadius'] * max(factors['circularVisionRadius'], 0.0)
+    return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * circularVisionRadiusMul
+
+
+def getVehicleShotSpeedByFactors(factors, speed, gravity=1.0):
+    projectileSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
+    newProjectileSpeedFactor = projectileSpeedFactor * factors.get('gunShotsSpeed', 1.0)
+    speed = speed / projectileSpeedFactor * newProjectileSpeedFactor
+    gravity = gravity / projectileSpeedFactor ** 2 * newProjectileSpeedFactor ** 2
+    return (speed, gravity)
 
 
 def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):
@@ -251,16 +261,16 @@ if IS_CLIENT:
         return (moving, still)
 
 
-    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors):
+    def updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease=0):
         extras = {}
         extraAspects = {VEHICLE_TTC_ASPECTS.WHEN_STILL: ('invisibility',)}
         for aspect in extraAspects.iterkeys():
             currFactors = copy.deepcopy(factors)
-            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
+            updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect, additionalCrewLevelIncrease)
             for coefficient in extraAspects[aspect]:
                 extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
-        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT)
+        updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, VEHICLE_TTC_ASPECTS.DEFAULT, additionalCrewLevelIncrease)
         for coefficientName, coefficientValue in extras.iteritems():
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
             factors[coefficientName] = coefficientValue
@@ -288,7 +298,7 @@ if IS_CLIENT:
         return sum(filter(None, [ getattr(eq, 'crewLevelIncrease', None) for eq in eqs ]))
 
 
-    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
+    def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect, additionalCrewLevelIncrease=0):
         from VehicleDescrCrew import VehicleDescrCrew
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
@@ -296,6 +306,7 @@ if IS_CLIENT:
                 eq.updateVehicleAttrFactorsForAspect(vehicleDescr, factors, aspect)
 
         vehicleDescr.applyOptDevFactorsForAspect(factors, aspect)
+        factors['crewLevelIncrease'] += additionalCrewLevelIncrease
         vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs)
         for eq in eqs:
             if eq is not None and 'crewSkillBattleBooster' in eq.tags:

@@ -1,7 +1,7 @@
 <01_karelia.xml>
   <name>	#arenas:01_karelia/name	</name>
   <description>	#arenas:01_karelia/description	</description>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <geometry>	spaces/01_karelia	</geometry>
   <boundingBox>
     <bottomLeft>	-500.0 -500.0	</bottomLeft>
@@ -9,6 +9,18 @@
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/01_karelia/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/01_karelia/mmap_01_bunker_destruction_destroyed.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/01_karelia/mmap_01_bunker_destruction_zone.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	15	</maxPlayersInTeam>
   <wwmusicSetup>
@@ -27,6 +39,12 @@
       <bank>
         <name>	env_Mountain.bnk	</name>
       </bank>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
     </loadBanks>
   </soundRemapping>
   <umbraEnabled>	1	</umbraEnabled>
@@ -40,7 +58,7 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	397.532227 402.584412	</position1>
+          <position1>	397.524078 402.612030	</position1>
         </team1>
         <team2>
           <position1>	-401.340332 -399.975006	</position1>
@@ -50,27 +68,27 @@
     <domination>
       <teamSpawnPoints>
         <team1>
-          <position>	316.212 266.048	</position>
+          <position>	316.212006 266.048004	</position>
         </team1>
         <team2>
-          <position>	-283.829 -372.661	</position>
+          <position>	-283.829010 -372.661011	</position>
         </team2>
       </teamSpawnPoints>
-      <controlPoint>	-284.113739 227.256271	</controlPoint>
+      <controlPoint>	-284.113770 227.256287	</controlPoint>
     </domination>
     <assault>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <teamSpawnPoints>
         <team1></team1>
         <team2>
-          <position>	45.721 -424.924	</position>
-          <position>	287.086 -271.999	</position>
-          <position>	448.251 -37.818	</position>
+          <position>	45.721001 -424.924011	</position>
+          <position>	287.085999 -271.998993	</position>
+          <position>	448.251007 -37.818001	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-278.805054 213.265259	</position1>
+          <position1>	-278.753235 213.265732	</position1>
         </team1>
         <team2></team2>
       </teamBasePositions>
@@ -78,7 +96,7 @@
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	397.532227 402.584412	</position1>
+          <position1>	397.524078 402.612030	</position1>
         </team1>
         <team2>
           <position1>	-401.340332 -399.975006	</position1>

@@ -158,6 +158,7 @@ IS_BATTLE_PASS_EXTRA_STARTED = 'isBattlePassExtraStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 IS_CUSTOMIZATION_INTRO_VIEWED = 'isCustomizationIntroViewed'
+NPS_STORAGE = 'nps_storage'
 CUSTOMIZATION_STYLE_ITEMS_VISITED = 'CustomizationStyleItemsVisited'
 OPT_DEVICE_TAB_VISITED = 'optDeviceTabVisited'
 ANONYMIZER = GAME.ANONYMIZER
@@ -237,11 +238,13 @@ MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
+SHOWN_OPTIONAL_DEVICES_ASSISTANT_HINT = 'shownOptionalDevicesAssistantHint'
 MINIMAP_SIZE = 'minimapSize'
 COMP7_LIGHT_INTRO_SHOWN = 'comp7LightIntroShown'
 COMP7_UI_SECTION = 'comp7'
 COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT = 'comp7WeeklyQuestsPageTokensCount'
 COMP7_SHOP_SEEN_PRODUCTS = 'comp7ShopSeenProducts'
+COMP7_LAST_SEASON = 'comp7LastSeason'
 FUN_RANDOM_NOTIFICATIONS = 'funRandomNotifications'
 FUN_RANDOM_NOTIFICATIONS_FROZEN = 'funRandomNotificationsFrozen'
 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS = 'funRandomNotificationsProgressions'
@@ -292,6 +295,8 @@ IS_NEEDED_SHOW_HINT_ACHIEVEMENT_CATALOG = 'isNeededShowHintAchievementCatalog'
 UNSEEN_ADVANCED_ACHIEVEMENTS = 'unseenAdvancedAchievements'
 SEEN_TROPHIES_ADVANCED_ACHIEVEMENTS = 'seenTrophiesAdvancedAchievements'
 MAIN_ADVANCED_ACHIEVEMENTS_PAGE_VISITED = 'mainAdvancedAchievementsPageVisited'
+EXCHANGE_GOLD_RATE_DISCOUNT_ANIMATION_SHOWED = 'ExchangeGoldRateDiscountAnimationShowed'
+EXCHANGE_XP_RATE_DISCOUNT_ANIMATION_SHOWED = 'ExchangeXpRateDiscountAnimationShowed'
 VIEWED_MODULES_SECTION = 'mua'
 LIMITED_UI_VERSIONED_RULES = 'luiVersioned'
 
@@ -748,9 +753,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     GuiSettingsBehavior.IS_PRESTIGE_ONBOARDING_VIEWED: False,
                                     GuiSettingsBehavior.PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN: False,
                                     'birthdayCalendarIntroShowed': False,
-                                    GuiSettingsBehavior.COMP7_INTRO_SHOWN: False,
-                                    GuiSettingsBehavior.COMP7_WHATS_NEW_SHOWN: False,
-                                    GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: False},
+                                    GuiSettingsBehavior.COMP7_YEARLY_ANIMATION_SEEN: False,
+                                    GuiSettingsBehavior.CLAN_SUPPLY_INTRO_SHOWN: False,
+                                    GuiSettingsBehavior.CREW_NPS_WELCOME_SHOWN: False,
+                                    GuiSettingsBehavior.CREW_NPS_INTRO_SHOWN: False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
@@ -977,7 +983,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isBattleBonusesEnabled': False,
                            'isOnboardingShown': False,
                            'isBadgesEnabled': False,
-                           'isAdditionalXPEnabled': False},
+                           'isAdditionalXPEnabled': False,
+                           'isOptionalDevicesAssistantEnabled': False},
                 TELECOM_RENTALS: {'isTelecomRentalsEnabled': True,
                                   'isTelecomRentalsBlocked': True},
                 PERSONAL_RESERVES: {'isFirstTimeNotificationShown': False,
@@ -1081,6 +1088,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 APPLIED_COLOR_SETTINGS: {},
                 LAST_SELECTED_PM_BRANCH: 0,
                 CRYSTALS_INFO_SHOWN: False,
+                NPS_STORAGE: {},
                 TRAJECTORY_VIEW_HINT_SECTION: {HINTS_LEFT: 3,
                                                LAST_DISPLAY_DAY: 0,
                                                NUM_BATTLES: 0},
@@ -1158,6 +1166,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
                 CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
                 SHOWN_WOT_PLUS_INTRO: False,
+                SHOWN_OPTIONAL_DEVICES_ASSISTANT_HINT: False,
                 OPT_DEVICE_TAB_VISITED: {},
                 BattleMatters.BATTLE_MATTERS_SETTINGS: {BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS: 0,
                                                         BattleMatters.QUEST_IDX_FOR_LAST_UPDATED_PROGRESS: 0,
@@ -1335,7 +1344,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
                         OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
  KEY_UI_FLAGS: {COMP7_UI_SECTION: {COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT: 0,
-                                   COMP7_SHOP_SEEN_PRODUCTS: []},
+                                   COMP7_SHOP_SEEN_PRODUCTS: set(),
+                                   COMP7_LAST_SEASON: None},
                 COLLECTIONS_SECTION: {COLLECTION_SHOWN_NEW_REWARDS: {},
                                       COLLECTION_SHOWN_NEW_ITEMS: {},
                                       COLLECTION_SHOWN_NEW_ITEMS_COUNT: {},
@@ -1367,7 +1377,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'uiSpamVisited_PersonalReservesHangarHint': False,
                 'uiSpamVisited_ModernizedSetupTabHint': False,
                 'uiSpamVisited_OfferBannerWindow': False,
-                'uiSpamVisited_StrongholdView': False},
+                'uiSpamVisited_StrongholdView': False,
+                EXCHANGE_GOLD_RATE_DISCOUNT_ANIMATION_SHOWED: set(),
+                EXCHANGE_XP_RATE_DISCOUNT_ANIMATION_SHOWED: set()},
  KEY_BATTLE_HINTS: {},
  KEY_NEWBIE_HINTS: {}}
 

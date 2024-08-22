@@ -21,7 +21,6 @@ if TYPE_CHECKING:
     from Vehicular import GeneralWheelsAnimatorConfig
     from items import vehicles
     from items.components.shared_components import CustomizationSlotDescription
-    from items.components.component_constants import MultiGunState
 
 class VEHICLE_ITEM_STATUS(object):
     UNDEFINED = 0
@@ -258,7 +257,7 @@ class Radio(InstallableItem):
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -281,7 +280,6 @@ class Turret(InstallableItem):
         self.turretDetachmentEffects = None
         self.customizableVehicleAreas = None
         self.prefabs = None
-        self.multiGunState = component_constants.DEFAULT_TURRET_MULTI_GUN_STATE
         return
 
     @property
@@ -292,7 +290,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', 'dualAccuracy', 'isDamageMutable', 'forcedReloadTime', 'autoShoot', 'spin', 'temperature', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', 'dualAccuracy', 'isDamageMutable', 'forcedReloadTime', 'autoShoot', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -317,7 +315,6 @@ class Gun(InstallableItem):
         self.dualGun = component_constants.DEFAULT_GUN_DUALGUN
         self.dualAccuracy = component_constants.DEFAULT_GUN_DUAL_ACCURACY
         self.autoShoot = component_constants.DEFAULT_GUN_AUTOSHOOT
-        self.spin = component_constants.DEFAULT_SPIN_GUN
         self.drivenJoints = None
         self.effects = None
         self.reloadEffect = None
@@ -327,7 +324,6 @@ class Gun(InstallableItem):
         self.customizableVehicleAreas = None
         self.edgeByVisualModel = True
         self.prefabs = None
-        self.temperature = None
         self.shootImpulses = component_constants.EMPTY_TUPLE
         self.isDamageMutable = False
         return

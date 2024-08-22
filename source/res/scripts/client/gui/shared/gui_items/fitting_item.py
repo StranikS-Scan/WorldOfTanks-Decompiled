@@ -40,7 +40,7 @@ SLOT_HIGHLIGHT_TO_ITEM_HIGHLIGHT_TYPES = {SLOT_HIGHLIGHT_TYPES.EQUIPMENT_TROPHY:
  SLOT_HIGHLIGHT_TYPES.EQUIPMENT_MODERNIZED: ItemHighlightTypes.MODERNIZED}
 
 def canBuyWithGoldExchange(price, money, exchangeRate):
-    money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+    money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0, useDiscounts=True)
     return FittingItem._isEnoughMoney(price, money)[0]
 
 
@@ -454,17 +454,17 @@ class FittingItem(GUIItem):
         if canBuy:
             return canBuy
         if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
-            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0, useDiscounts=True)
             price = self.getBuyPrice().price
             canBuy, reason = self._isEnoughMoney(price, money)
             return canBuy
         return False
 
-    def mayObtainWithMoneyExchange(self, money, exchangeRate):
+    def mayObtainWithMoneyExchange(self, money, proxy):
         canRent, _ = self.mayRent(money)
         if canRent:
             return True
-        return True if self.isRestoreAvailable() and self.mayRestoreWithExchange(money, exchangeRate) else self.mayPurchaseWithExchange(money, exchangeRate)
+        return True if self.isRestoreAvailable() and self.mayRestoreWithExchange(money, proxy.defaults.exchangeRate) else self.mayPurchaseWithExchange(money, proxy.exchangeRate)
 
     def mayPurchase(self, money):
         buyPrice = self.getBuyPrice(preferred=True).price

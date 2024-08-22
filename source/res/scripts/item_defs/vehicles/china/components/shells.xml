@@ -19,6 +19,7 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_37mm_AP_M74>
     <id>	43	</id>
@@ -1056,7 +1057,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainArmorPiercing	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	280	</armor>
       <devices>	122	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -1073,7 +1074,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	240	</armor>
+      <armor>	280	</armor>
       <devices>	122	</devices>
     </damage>
     <ricochetAngle>	85	</ricochetAngle>
@@ -1091,14 +1092,14 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	320	</armor>
+      <armor>	370	</armor>
       <devices>	122	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	1.46	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	160	</armor>
+        <armor>	185	</armor>
         <devices>	60	</devices>
       </damage>
     </armorSpalls>

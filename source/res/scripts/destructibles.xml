@@ -15753,6 +15753,17 @@
       <lifetimeEffect>	hd_bld_AF_001_VHouse_Ruins_01_01	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Environment/hd_env_EU_010_Car/normal/lod0/hd_env_EU_010_Car_02.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	inf_envAM_010_Cars_03	</effect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2_03_hit_01_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	hd_bld_AF_001_VHouse_Ruins_01_01	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Environment/hd_env_EU_010_Car/normal/lod0/hd_env_EU_010_Car_03.model	</filename>
       <health>	10	</health>
       <decayEffect>	none	</decayEffect>
@@ -18353,6 +18364,17 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1.000000	</effectScale>
       <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/MilitaryEnvironment/hd_mle_SU_015_Plane_P40/normal/lod0/hd_mle_SU_015_Plane_P40_01.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_mle_SU_015_Plane_P40_01	</effect>
+      <hitEffect>	hd_mle_SU_015_Plane_P40_01_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1.000000	</effectScale>
+      <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
   </fragiles>

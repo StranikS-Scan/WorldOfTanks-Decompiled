@@ -392,7 +392,7 @@
     <price>	20000	</price>
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor	</tags>
-    <script>	FactorSkillBattleBooster	  <skillName>	fireFighting	</skillName>
+    <script>	SkillEquipment	  <skillName>	fireFighting	</skillName>
       <efficiencyFactor>	1.5	</efficiencyFactor>
       <perkLevelMultiplier>	1.5	</perkLevelMultiplier>
     </script>
@@ -456,10 +456,10 @@
           <name>	crewSkillRancorous	</name>
           <value>	1	</value>
         </boostSkill>
-        <add>
+        <mul>
           <name>	crewSkillRancorousDuration	</name>
           <value>	2	</value>
-        </add>
+        </mul>
       </oneOf>
     </kpi>
     <tooltipSection>	skills	</tooltipSection>
@@ -475,7 +475,7 @@
     <type>	battleBoosters	</type>
     <tags>	notForSale crewSkillBattleBooster armor	</tags>
     <script>	SkillEquipment	  <skillName>	loader_pedant	</skillName>
-      <perkLevelMultiplier>	4.0	</perkLevelMultiplier>
+      <perkLevelMultiplier>	3.0	</perkLevelMultiplier>
     </script>
     <kpi>
       <oneOf>
@@ -485,7 +485,7 @@
         </boostSkill>
         <mul>
           <name>	vehicleAmmoBayStrength	</name>
-          <value>	4.0	</value>
+          <value>	3.0	</value>
         </mul>
       </oneOf>
     </kpi>
@@ -500,7 +500,8 @@
     <icon>	radioman_lastEffort	</icon>
     <price>	10000	</price>
     <type>	battleBoosters	</type>
-    <tags>	notForSale crewSkillBattleBooster reconnaissance	</tags>
+    <tags>	notForSale crewSkillBattleBooster notBuyWhenAutoEquip hideIfNotInShop reconnaissance	</tags>
+    <notInShop>	true	</notInShop>
     <script>	LastEffortBattleBooster	  <skillName>	radioman_lastEffort	</skillName>
       <durationPerLevel>	0.03	</durationPerLevel>
       <chanceToHitPerLevel>	0.0	</chanceToHitPerLevel>
@@ -659,4 +660,58 @@
       </mul>
     </kpi>
   </additInvisibilityDeviceBattleBooster>
+  <practicalityBattleBooster>
+    <id>	205	</id>
+    <userString>	#artefacts:practicalityBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:practicalityBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:practicalityBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	commander_practical	</icon>
+    <price>	20000	</price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale crewSkillBattleBooster	</tags>
+    <script>	SkillEquipment	  <skillName>	commander_practical	</skillName>
+      <perkLevelMultiplier>	2.0	</perkLevelMultiplier>
+    </script>
+    <kpi>
+      <oneOf>
+        <boostSkill>
+          <name>	crewSkillPractical	</name>
+          <value>	1	</value>
+        </boostSkill>
+        <mul>
+          <name>	crewSkillPractical	</name>
+          <value>	2.0	</value>
+        </mul>
+      </oneOf>
+    </kpi>
+    <tooltipSection>	skills	</tooltipSection>
+  </practicalityBattleBooster>
+  <enemyShotPredictorBattleBooster>
+    <id>	206	</id>
+    <userString>	#artefacts:enemyShotPredictorBattleBooster/name	</userString>
+    <description>	#artefacts:crewBattleBooster/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:enemyShotPredictorBattleBooster/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:enemyShotPredictorBattleBooster/long_special	</longDescriptionSpecial>
+    <icon>	commander_enemyShotPredictor	</icon>
+    <price>	10000	</price>
+    <type>	battleBoosters	</type>
+    <tags>	notForSale crewSkillBattleBooster	</tags>
+    <script>	SkillEquipment	  <skillName>	commander_enemyShotPredictor	</skillName>
+      <perkLevelMultiplier>	1.5	</perkLevelMultiplier>
+    </script>
+    <kpi>
+      <oneOf>
+        <boostSkill>
+          <name>	crewSkillStunResistance	</name>
+          <value>	1	</value>
+        </boostSkill>
+        <mul>
+          <name>	crewSkillStunResistance	</name>
+          <value>	1.5	</value>
+        </mul>
+      </oneOf>
+    </kpi>
+    <tooltipSection>	skills	</tooltipSection>
+  </enemyShotPredictorBattleBooster>
 </battle_boosters.xml>

@@ -1,11 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/vehicle_view_states.py
-from helpers import dependency
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.system_factory import registerVehicleViewState, collectVehicleViewStates
 from shared_utils import findFirst
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.game_control import IWotPlusController
 
 class IVehicleViewState(object):
     __slots__ = ()
@@ -202,16 +199,10 @@ class PremiumIGRViewState(SelectedViewState):
 registerVehicleViewState(PremiumIGRViewState)
 
 class WoTPlusVehicleViewState(SelectedViewState):
-    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
     def isSuitableVehicle(cls, vehicle):
         return vehicle.isWotPlus()
-
-    def isMaintenanceEnabled(self):
-        isWotPlusMaintenanceEnabled = self._wotPlusCtrl.isEnabled() and self.lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled()
-        return super(WoTPlusVehicleViewState, self).isMaintenanceEnabled() and isWotPlusMaintenanceEnabled
 
 
 registerVehicleViewState(WoTPlusVehicleViewState)

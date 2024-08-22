@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/__init__.py
 from frameworks.wulf import WindowLayer
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_skills_inject import VehicleCompareConfiguratorSkillsInject
 from gui.Scaleform.framework import GroupedViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
@@ -26,6 +27,7 @@ def getViewSettings():
      GroupedViewSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CMP_ADD_VEHICLE_POPOVER, VehicleCompareAddVehiclePopover, 'vehicleCompareAddVehiclePopover.swf', WindowLayer.WINDOW, 'VehicleCompareAddVehiclePopover', VEHICLE_COMPARE_CONSTANTS.VEHICLE_CMP_ADD_VEHICLE_POPOVER, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
      GroupedViewSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER, VehicleCompareCartPopover, 'vehicleCompareCartPopover.swf', WindowLayer.WINDOW, 'vehicleCompareCartPopover', VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER, ScopeTemplates.WINDOW_VIEWED_MULTISCOPE),
      ComponentSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_PARAMS, VehicleCompareParameters, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CONFIGURATOR_SKILLS_WIDGET, VehicleCompareConfiguratorSkillsInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CONFIGURATOR_EQUIPMENT_WIDGET, VehicleCompareConfiguratorAmmoInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CONFIGURATOR_MODIFICATIONS_WIDGET, VehicleCompareConfiguratorProgressionInject, ScopeTemplates.DEFAULT_SCOPE))
 

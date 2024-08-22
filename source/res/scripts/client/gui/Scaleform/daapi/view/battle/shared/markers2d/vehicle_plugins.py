@@ -589,7 +589,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self._hideVehicleMarker(vehicleID)
 
     def __isVehicleFocusAllowed(self, focusedMarker):
-        return True if avatar_getter.getInputHandler().ctrlModeName == CTRL_MODE_NAME.DEATH_FREE_CAM else avatar_getter.isVehicleAlive() or not focusedMarker.getIsPlayerTeam() and not focusedMarker.getIsActionMarkerActive()
+        return True if avatar_getter.getInputHandler().ctrlModeName == CTRL_MODE_NAME.DEATH_FREE_CAM else avatar_getter.isVehicleAlive() or focusedMarker.getIsPlayerTeam() or not focusedMarker.getIsActionMarkerActive()
 
     def __onVehicleInFocus(self, vehicleID, entityInFocusData):
         if entityInFocusData.entityTypeInFocus != ENTITY_IN_FOCUS_TYPE.VEHICLE:

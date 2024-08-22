@@ -35,6 +35,10 @@ class BonusTypes(enum.IntEnum):
     DOGTAG_ENGRAVING = 16
     DOGTAG_BACKGROUND = 17
     OFFER = 18
+    STYLE_3D_PROGRESS = 19
+    CREW = 20
+    TOKEN = 21
+    EQUIP_COIN = 22
 
 
 def getBonusType(bonus):
@@ -169,6 +173,41 @@ class _OfferBonusHelper(_BaseBonusHelper):
         return BonusTypes.OFFER
 
 
+class _Style3DProgressBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.STYLE_3D_PROGRESS
+
+
+class _TankmenBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.CREW
+
+
+class _TokensBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.TOKEN
+
+
+class _EquipCoinBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.EQUIP_COIN
+
+
+class _TokenBonusHelper(_BaseBonusHelper):
+
+    @staticmethod
+    def getBonusType(bonus):
+        return BonusTypes.TOKEN
+
+
 _BONUS_HELPERS_MAP = {'items': _ItemsBonusHelper,
  'customizations': _CustomizationsBonusHelper,
  'goodies': _GoodiesBonusHelper,
@@ -180,7 +219,12 @@ _BONUS_HELPERS_MAP = {'items': _ItemsBonusHelper,
  Currency.CREDITS: _CreditsBonusHelper,
  Currency.CRYSTAL: _CrystalBonusHelper,
  C11nProgressTokenBonus.BONUS_NAME: _StyleProgressBonusHelper,
- SELECTABLE_BONUS_NAME: _OfferBonusHelper}
+ SELECTABLE_BONUS_NAME: _OfferBonusHelper,
+ 'style3DProgression': _Style3DProgressBonusHelper,
+ 'tankmen': _TankmenBonusHelper,
+ 'tokens': _TokensBonusHelper,
+ 'equipCoin': _EquipCoinBonusHelper,
+ 'battleToken': _TokenBonusHelper}
 
 def _splitDossierBonus(dossier):
     dossierValue = dossier.getValue()

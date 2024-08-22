@@ -3,12 +3,15 @@
 from adisp import adisp_process
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.meta.ConfirmExchangeDialogMeta import ConfirmExchangeDialogMeta
+from gui.impl.lobby.exchange.exchange_rates_helper import handleUserValuesInput, showAllPersonalDiscountsWindow, handleAndRoundStepperInput
+from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 
 class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
 
     def __init__(self, meta, handler):
         super(ConfirmExchangeDialog, self).__init__()
         self.handler = handler
+        self.__selectedGold, self.__selectedResource = (0, 0)
         self.__exchangeMutex = False
         self.__setMeta(meta)
 
@@ -22,6 +25,20 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
         self.__prepareAndSendData()
         return
 
+    def onSelectedAmountChanged(self, goldValue, needItemsValue):
+        if goldValue != self.__selectedGold:
+            needItemsValue = 0
+        else:
+            goldValue = 0
+        self.__selectedGold, self.__selectedResource = handleAndRoundStepperInput({'gold': goldValue,
+         'currency': needItemsValue}, exchangeRate=self.meta.getExchangeProvider(), validateGold=True)
+        isLimitExceeded = self.meta.discountsAmountAppliedForExchange(self.__selectedGold)
+        self.as_setExchangeValuesS(self.__selectedGold, self.__selectedResource, isLimitExceeded)
+        g_eventBus.handleEvent(events.ExchangeRatesDiscountsEvent(events.ExchangeRatesDiscountsEvent.ON_SELECTED_AMOUNT_CHANGED, {'amount': self.__selectedGold}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def openDiscountInfoPage(self):
+        showAllPersonalDiscountsWindow(exchangeRateType=self.meta.getExchangeType(), selectedValue={'currency': self.__selectedResource})
+
     def onWindowClose(self):
         self._callHandler(False)
         self.destroy()
@@ -32,7 +49,7 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
             return
         else:
             self.__exchangeMutex = True
-            exchangedValue = goldValue * self.meta.getExchangeRate()
+            exchangedValue = self.meta.getResourceAmountToExchangeForGold(goldValue)
             result = yield self.meta.submit(goldValue, exchangedValue)
             if result is not None:
                 SystemMessages.pushMessagesFromResult(result)
@@ -73,3 +90,7 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
 
     def __prepareAndSendData(self, *args):
         self.as_updateS(self.meta.makeVO())
+        self.__selectedResource = self.meta.getResourceToExchange()
+        self.__selectedGold, self.__selectedResource = handleUserValuesInput(selectedGold=0, selectedCurrency=self.__selectedResource, exchangeProvider=self.meta.getExchangeProvider())
+        isLimitExceeded = self.meta.discountsAmountAppliedForExchange(self.__selectedGold)
+        self.as_setExchangeValuesS(self.__selectedGold, self.__selectedResource, isLimitExceeded)

@@ -31,12 +31,59 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	-356.987061 -329.783722	</position1>
+          <position1>	-356.987091 -329.783752	</position1>
         </team1>
         <team2>
-          <position1>	300.916107 362.276428	</position1>
+          <position1>	300.916138 362.276459	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/44_north_america/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	93.141022 238.990402	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-257.509827 324.074585	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-311.891113 472.911743	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-300.384857 46.348057	</position>
+          <type>	2	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-459.658600 17.753941	</position>
+        </team1>
+        <team2>
+          <position>	158.583740 391.457977	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-146.855698 157.200546	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </44_north_america.xml>

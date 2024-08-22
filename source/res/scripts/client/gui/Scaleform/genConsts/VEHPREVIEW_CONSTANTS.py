@@ -17,7 +17,7 @@ class VEHPREVIEW_CONSTANTS(object):
     ELITE_FACT_SHEET_LINKAGE = 'VehPreviewEliteFactSheetUI'
     BROWSE_LINKAGE = 'VPBrowseUI'
     MODULES_LINKAGE = 'VPModulesUI'
-    CREW_LINKAGE = 'VPCrewTabUI'
+    CREW_TAB_INJECT = 'VPCrewTabInjectUI'
     CREW_INFO_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewCrewInfoVO'
     FACT_SHEET_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewFactSheetVO'
     ELITE_FACT_SHEET_DATA_CLASS_NAME = 'net.wg.gui.lobby.vehiclePreview.data.VehPreviewEliteFactSheetVO'

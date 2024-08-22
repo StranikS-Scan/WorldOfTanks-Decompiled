@@ -3,7 +3,7 @@
 import logging
 import math
 import random
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 from copy import deepcopy
 from itertools import izip
 from operator import itemgetter
@@ -40,7 +40,7 @@ from helpers import i18n, time_utils, dependency
 from items import customizations, filterIntCDsByItemType, getTypeInfoByName, getTypeOfCompactDescr, tankmen, vehicles
 from items.components.c11n_constants import CUSTOM_STYLE_POOL_ID, HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, CustomizationType, ItemTags, SeasonType
 from items.customizations import createNationalEmblemComponents
-from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILLS_EFFICIENCY
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL
 from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
@@ -54,6 +54,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
+from constants import NEW_PERK_SYSTEM as NPS
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
     from items.components.c11n_components import StyleItem
@@ -512,6 +513,13 @@ class Vehicle(FittingItem):
 
         return NO_TANKMAN
 
+    def getTankmanBySlotIdx(self, slotIdx):
+        for idx, (vehSlotIdx, tman) in enumerate(self.crew):
+            if vehSlotIdx == slotIdx:
+                return (idx, tman)
+
+        return (None, None)
+
     def _calcSellPrice(self, proxy):
         return self.__calcSellPrice(proxy, self.sellPrices.itemPrice.price)
 
@@ -881,6 +889,14 @@ class Vehicle(FittingItem):
         self._crew = value
 
     @property
+    def isCrewFullyTrained(self):
+        for _, tankman in self.crew:
+            if tankman and tankman.descriptor.needXpForVeteran:
+                return False
+
+        return True
+
+    @property
     def lastCrew(self):
         return self._lastCrew
 
@@ -1000,7 +1016,7 @@ class Vehicle(FittingItem):
 
     @property
     def isAmmoFull(self):
-        return sum((s.count for s in self.shells.installed.getItems())) >= self.ammoMinSize or self.isOnlyForBattleRoyaleBattles
+        return sum((itemData[1] or 0 for itemData in self.shells.installed.getStorage if itemData)) >= self.ammoMinSize or self.isOnlyForBattleRoyaleBattles
 
     @property
     def isAmmoNotFullInSetups(self):
@@ -1363,7 +1379,7 @@ class Vehicle(FittingItem):
 
     @property
     def isCrewFull(self):
-        crew = [ tman for _, tman in self.crew ]
+        crew = {tman for _, tman in self.crew}
         return None not in crew and len(crew)
 
     @property
@@ -1610,7 +1626,7 @@ class Vehicle(FittingItem):
         if mayRestore:
             return mayRestore
         if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
-            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0, useDiscounts=False)
             mayRestore, reason = self._isEnoughMoney(self.restorePrice, money)
             return mayRestore
         return False
@@ -1666,21 +1682,34 @@ class Vehicle(FittingItem):
     def __getCrewSkills(self):
         skillLevels = {}
         skills = {}
+        rolesBonusSkills = {}
+        bonusSkillsLevels = {}
         usedTankmans = []
-        for idx, role in enumerate(self.descriptor.type.crewRoles):
+        for _, roles in enumerate(self.descriptor.type.crewRoles):
             for tankmanIdx, vehTankman in self.crew:
-                if vehTankman and tankmanIdx not in usedTankmans and role == vehTankman.combinedRoles:
-                    tankmanSkills = [ s.name for s in vehTankman.skills ]
-                    skills[idx] = tankmanSkills
-                    tankmanSkillLevels = [ s.level for s in vehTankman.skills ]
-                    skillLevels[idx] = tankmanSkillLevels[-1] if tankmanSkillLevels else 0
+                if vehTankman and tankmanIdx not in usedTankmans and roles == vehTankman.combinedRoles:
+                    skillLevels[tankmanIdx] = 0
+                    skills[tankmanIdx] = []
+                    for skill in vehTankman.skills:
+                        skills[tankmanIdx].append(skill.name)
+                        skillLevels[tankmanIdx] = skill.level
+
+                    for forRole, bonusSkils in vehTankman.bonusSkills.iteritems():
+                        for bonusSkil in bonusSkils:
+                            if bonusSkil:
+                                rolesBonusSkills.setdefault(tankmanIdx, {}).setdefault(forRole, []).append(bonusSkil.name)
+
+                    bonusSkillsLevels[tankmanIdx] = vehTankman.bonusSkillsLevels
                     usedTankmans.append(tankmanIdx)
                     break
 
-        return (skills, skillLevels)
+        return (skills,
+         skillLevels,
+         rolesBonusSkills,
+         bonusSkillsLevels)
 
     def getSimilarCrew(self):
-        skills, skillLevels = self.__getCrewSkills()
+        skills, skillLevels, rolesBonusSkills, bonusSkillsLevels = self.__getCrewSkills()
         levelsByIndexes = {}
         skillsEfficiencyByIndexes = {}
         nativeVehsByIdxs = {}
@@ -1693,67 +1722,111 @@ class Vehicle(FittingItem):
             skillsEfficiencyByIndexes[tankmanIdx] = None
             nativeVehsByIdxs[tankmanIdx] = None
 
-        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes, skillsEfficiencyByIdxs=skillsEfficiencyByIndexes, nativeVehsByIdxs=nativeVehsByIdxs)
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes, skillsEfficiencyByIdxs=skillsEfficiencyByIndexes, nativeVehsByIdxs=nativeVehsByIdxs, rolesBonusSkills=rolesBonusSkills, bonusSkillsLevels=bonusSkillsLevels)
 
     def getPerfectCrew(self):
-        skills, skillLevels = self.__getCrewSkills()
-        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True)
+        skills, skillLevels, bonusSkills, bonusSkillsLevels = self.__getCrewSkills()
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, rolesBonusSkills=bonusSkills, bonusSkillsLevels=bonusSkillsLevels)
 
-    def getCrewWithSkill(self, skillName):
-        if skillName is None:
+    def getCrewWithSkill(self, skillNames):
+
+        def _cannotAddSkill(tman, skillName):
+            skillAlreadyLearned = tman.skillAlreadyLearned(skillName)
+            cannotLearnSkill = skillName not in tman.getPossibleSkills()
+            return skillAlreadyLearned and tman.skillsMap[skillName].isSkillActive or cannotLearnSkill
+
+        if skillNames is None:
             return self.crew
         else:
+            if not isinstance(skillNames, (list, set, tuple)):
+                skillNames = [skillNames]
+            skillNames = filter(None, skillNames)
             crewItems = list()
-            crewRoles = self.descriptor.type.crewRoles
             for slotIdx, tman in self.crew:
                 if tman is None:
                     crewItems.append((slotIdx, tman))
                     continue
-                skillAlreadyLearned = tman.skillAlreadyLearned(skillName)
-                skillIsInProgress = tman.skillIsInProgress(skillName)
-                cannotLearnSkill = skillName not in tman.getPossibleSkills()
-                if cannotLearnSkill or skillAlreadyLearned:
-                    crewItems.append((slotIdx, tman))
-                    continue
                 tmanDescr = tman.descriptor
                 skills = tmanDescr.skills[:]
-                if skillIsInProgress:
-                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
-                elif not skills:
-                    skills.append(skillName)
-                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
-                else:
-                    skills.insert(0, skillName)
-                    lastSkillLevel = tmanDescr.lastSkillLevel
-                skilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
-                crewItems.append((slotIdx, skilledTman))
+                rolesBonusSkills = {}
+                for role, bonusSkills in tman.bonusSkills.iteritems():
+                    rolesBonusSkills[role] = [ skill.name for skill in bonusSkills if skill ]
 
+                lastSkillLevel = tmanDescr.lastSkillLevel if skills else MAX_SKILL_LEVEL
+                skillsAdded = False
+                skillNamesMaxLvl = []
+                for skillName in skillNames:
+                    if _cannotAddSkill(tman, skillName):
+                        continue
+                    roleType = tankmen.getSkillRoleType(skillName)
+                    if roleType == tman.role or roleType == tankmen.COMMON_SKILL_ROLE_TYPE:
+                        if skillName not in skills:
+                            skills.insert(0, skillName)
+                        elif skillName in skills[-1:]:
+                            lastSkillLevel = MAX_SKILL_LEVEL
+                    else:
+                        rolesBonusSkills.setdefault(roleType, []).append(skillName)
+                        skillNamesMaxLvl.append(skillName)
+                    skillsAdded = True
+
+                if not skillsAdded:
+                    newTman = tman
+                else:
+                    bonusSkillsLevels = [tmanDescr.bonusSkillsLevels, skillNamesMaxLvl]
+                    newTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=bonusSkillsLevels)
+                crewItems.append((slotIdx, newTman))
+
+            crewRoles = self.descriptor.type.crewRoles
             return sortCrew(crewItems, crewRoles)
 
     def getCrewWithoutSkill(self, skillName):
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         for slotIdx, tman in self.crew:
-            if tman and skillName in tman.skillsMap:
-                tmanDescr = tman.descriptor
-                skills = tmanDescr.skills[:]
-                if tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
-                    lastSkillLevel = tankmen.MAX_SKILL_LEVEL
-                else:
-                    lastSkillLevel = tmanDescr.lastSkillLevel
+            if not tman or skillName not in tman.skillsMap:
+                crewItems.append((slotIdx, tman))
+                continue
+            tmanDescr = tman.descriptor
+            skills = tmanDescr.skills[:]
+            if tmanDescr.skillLevel(skillName) < tankmen.MAX_SKILL_LEVEL:
+                lastSkillLevel = tankmen.MAX_SKILL_LEVEL
+            else:
+                lastSkillLevel = tmanDescr.lastSkillLevel
+            rolesBonusSkills = defaultdict(list)
+            bonusSkillsLevels = []
+            for role, bonusSkills in tman.bonusSkills.iteritems():
+                for bonusSkill in bonusSkills:
+                    if bonusSkill and skillName != bonusSkill.name:
+                        bonusSkillsLevels.append(bonusSkill.level)
+                        rolesBonusSkills[role].append(bonusSkill.name)
+
+            if skillName in skills:
                 skills.remove(skillName)
-                unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
-                crewItems.append((slotIdx, unskilledTman))
-            crewItems.append((slotIdx, tman))
+            unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
+            crewItems.append((slotIdx, unskilledTman))
 
         return sortCrew(crewItems, crewRoles)
 
-    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None, skillsEfficiencyByIdxs=None):
+    def getCrewWithoutSkills(self):
+        crewItems = list()
+        crewRoles = self.descriptor.type.crewRoles
+        for slotIdx, tman in self.crew:
+            tmanDescr = tman.descriptor
+            skills = []
+            lastSkillLevel = 0
+            unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx)
+            crewItems.append((slotIdx, unskilledTman))
+
+        return sortCrew(crewItems, crewRoles)
+
+    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None, skillsEfficiencyByIdxs=None, rolesBonusSkills=None, bonusSkillsLevels=None):
         skillsByIdxs = skillsByIdxs or {}
         skillLevelsByIdxs = skillLevelsByIdxs or {}
         levelByIdxs = levelByIdxs or {}
         nativeVehsByIdxs = nativeVehsByIdxs or {}
         skillsEfficiencyByIdxs = skillsEfficiencyByIdxs or {}
+        rolesBonusSkills = rolesBonusSkills or {}
+        bonusSkillsLevels = bonusSkillsLevels or {}
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         brotherhoodActive = skillsByIdxs and any((BROTHERHOOD_SKILL_NAME in skills for skills in skillsByIdxs.values()))
@@ -1766,7 +1839,7 @@ class Vehicle(FittingItem):
                     nationID, vehicleTypeID = nativeVehicle.descriptor.type.id
                 else:
                     nationID, vehicleTypeID = self.descriptor.type.id
-                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL), skillsEfficiencyXP=skillsEfficiencyByIdxs.get(idx, MAX_SKILLS_EFFICIENCY_XP)), vehicle=self, vehicleSlotIdx=idx)
+                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL), skillsEfficiencyXP=skillsEfficiencyByIdxs.get(idx, MAX_SKILLS_EFFICIENCY_XP), rolesBonusSkills=rolesBonusSkills.get(idx, {})), vehicle=self, vehicleSlotIdx=idx, bonusSkillsLevels=[bonusSkillsLevels.get(idx, [tankmen.MAX_SKILL_LEVEL] * NPS.MAX_BONUS_SKILLS_PER_ROLE)])
                 if brotherhoodActive and activateBrotherhood:
                     tankman.setBrotherhoodActivity(True)
                     tankman.rebuildSkills()
@@ -2192,4 +2265,4 @@ def getBattlesLeft(vehicle):
 
 
 def getLowEfficiencyTankmenIds(vehicle):
-    return [ tankman.invID for _, tankman in vehicle.crew if tankman is not None and tankman.currentVehicleSkillsEfficiency < MAX_SKILLS_EFFICIENCY ]
+    return [ tankman.invID for _, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]

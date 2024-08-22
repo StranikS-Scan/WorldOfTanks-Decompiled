@@ -109,7 +109,7 @@ class _Effect(object):
             return False
         if checkTeam and vehicle.publicInfo['team'] != avatar_getter.getPlayerTeam():
             vInfo = cls.__sessionProvider.getArenaDP().getVehicleInfo(avatar_getter.getPlayerVehicleID())
-            return vInfo.isObserver()
+            return vInfo.isObserver() and value.get('isSourceVehicle', False)
         return value.get('isSourceVehicle', False)
 
     def _load(self):

@@ -49,6 +49,7 @@ class ValidationResult(object):
         NOT_THE_SAME_CLASS = 2
         NOT_THE_SAME_NATION = 3
         NO_VEHICLE_ASSOCIATED = 4
+        NO_NEED_XP = 5
 
     def __init__(self):
         self.isValid = True
@@ -79,6 +80,10 @@ class CrewValidator(object):
         if tmanDescr.vehicleTypeID is None:
             result.isValid = False
             result.appendError(ValidationResult.ERRORS.NO_VEHICLE_ASSOCIATED)
+        if not tmanDescr.needXpForVeteran:
+            result.isValid = False
+            result.appendError(ValidationResult.ERRORS.NO_NEED_XP)
+        if not result.isValid:
             return result
         else:
             associatedVehType = vehicles.g_cache.vehicle(tmanDescr.nationID, tmanDescr.vehicleTypeID)

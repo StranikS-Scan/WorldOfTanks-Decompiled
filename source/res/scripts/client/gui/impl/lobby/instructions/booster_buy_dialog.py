@@ -51,8 +51,9 @@ class BoosterBuyWindowView(DialogBuySellItemBaseView):
         model.setSpecialType(self._item.getOverlayType())
         model.setIsRearm(vehicle.isAutoBattleBoosterEquip() if vehicle is not None else False)
         if vehicle is not None and not self._item.isAffectsOnVehicle(vehicle):
-            model.setUpperDescription(R.strings.tooltips.battleBooster.buy.useless.upper_description())
-            model.setLowerDescription(R.strings.tooltips.battleBooster.buy.useless.lower_description())
+            model.setUpperDescription(R.strings.tooltips.battleBooster.useless.header())
+            root = R.strings.tooltips.crewSkillBattleBooster if self._item.isCrewBooster() else R.strings.tooltips.battleBooster
+            model.setLowerDescription(root.useless.body())
         super(BoosterBuyWindowView, self)._setBaseParams(model)
         return
 

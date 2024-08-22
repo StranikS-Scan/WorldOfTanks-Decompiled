@@ -7,6 +7,7 @@ class WarningDescription(Enum):
     SIMILARDEVICEALREADYINSTALLED = 'similar_device_already_installed'
     TOOHEAVY = 'too_heavy'
     USELESSBATTLEBOOSTER = 'useless_battle_booster'
+    USELESSCREWSKILLBATTLEBOOSTER = 'useless_crew_skill_battle_booster'
 
 
 class WarningTooltipViewModel(ViewModel):

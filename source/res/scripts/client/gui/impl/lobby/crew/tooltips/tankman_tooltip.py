@@ -99,8 +99,8 @@ class TankmanTooltip(ViewImpl):
             finalEffVal += commanderBonus
             self.__addModifier(vm.getCommanderFeatures(), commanderBonus, R.images.gui.maps.icons.tankmen.skills.medium.commander_bonus(), backport.text(R.strings.tooltips.tankman.commanderBonus.title()), backport.text(R.strings.tooltips.tankman.commanderBonus.description()))
         if vehicle.optDevices.layoutCapacity:
-            criteria = REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.OPTIONALDEVICE]) | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET
-            optDevices = self.itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria).values()
+            criteria = REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.OPTIONALDEVICE]) | ~REQ_CRITERIA.SECRET
+            optDevices = self.itemsCache.items.getItems(GUI_ITEM_TYPE.OPTIONALDEVICE, criteria, nationID=vehicle.nationID).values()
             archetypes = {}
             for optDevice in optDevices:
                 if optDevice.descriptor.factorsContainCrewLevelIncrease():
@@ -124,7 +124,7 @@ class TankmanTooltip(ViewImpl):
 
         if vehicle.consumables.layoutCapacity:
             criteria = REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT]) | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET
-            equipments = self.itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, criteria).values()
+            equipments = self.itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, criteria, nationID=vehicle.nationID).values()
             for equipment in equipments:
                 equipmentBonus = 0
                 if equipment.isStimulator:
@@ -135,7 +135,7 @@ class TankmanTooltip(ViewImpl):
 
         if vehicle.battleBoosters.layoutCapacity:
             criteria = REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.BATTLE_BOOSTER]) | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET
-            boosters = self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_BOOSTER, criteria).values()
+            boosters = self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_BOOSTER, criteria, nationID=vehicle.nationID).values()
             for booster in boosters:
                 battleBoosterBonus = 0
                 if booster.isAffectOnCrewLevel():

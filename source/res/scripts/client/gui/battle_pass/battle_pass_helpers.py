@@ -12,7 +12,6 @@ from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDA
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
-from gui.battle_pass.sounds import AwardVideoSoundControl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
@@ -174,22 +173,6 @@ def getSupportedCurrentArenaBonusType(queueType=None):
         if queueType is None:
             queueType = dispatcher.getEntity().getQueueType()
     return getSupportedArenaBonusTypeFor(queueType, isInUnit)
-
-
-def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
-    if not videoSource:
-        _logger.error('videoSource is not specified!')
-        if callable(onVideoClosed):
-            onVideoClosed()
-        return
-    if not videoSource.exists():
-        _logger.error('videoSource is invalid!')
-        if callable(onVideoClosed):
-            onVideoClosed()
-        return
-    from gui.impl.lobby.video.video_view import VideoViewWindow
-    window = VideoViewWindow(videoSource(), onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=AwardVideoSoundControl(videoSource()))
-    window.load()
 
 
 def getTankmanFirstNationGroup(tankmanGroupName):

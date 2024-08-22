@@ -64,7 +64,7 @@ def getPremiumCostActionPrc(discounts, packet, proxy):
 
 
 def calcVehicleRestorePrice(defaultPrice, proxy):
-    exchangeRate = proxy.exchangeRate
+    exchangeRate = proxy.defaults.exchangeRate
     sellPriceFactor = proxy.sellPriceModif
     restorePriceModif = proxy.vehiclesRestoreConfig.restorePriceModif
     return Money.makeFromMoneyTuple(getVehicleRestorePrice(defaultPrice, exchangeRate, sellPriceFactor, restorePriceModif))

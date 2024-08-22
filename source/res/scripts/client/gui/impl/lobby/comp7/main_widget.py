@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/main_widget.py
-from comp7_light_progression.gui.shared.event_dispatcher import showProgressionView
 from frameworks.wulf import ViewFlags, ViewSettings
-from comp7_light_progression.skeletons.game_controller import IComp7LightProgressionOnTokensController
-from gui.impl.lobby.comp7.tooltips.widget_tooltip_view import WidgetTooltipView
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import MainWidgetModel, BattleStatus
+from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import MainWidgetModel
+from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
+from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
+from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
+from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.pub import ViewImpl
+from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 
@@ -30,7 +33,6 @@ class Comp7MainWidgetComponent(InjectComponentAdaptor):
 
 
 class Comp7MainWidget(ViewImpl):
-    comp7LightProgression = dependency.descriptor(IComp7LightProgressionOnTokensController)
     __slots__ = ()
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
@@ -45,36 +47,78 @@ class Comp7MainWidget(ViewImpl):
         return super(Comp7MainWidget, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        return WidgetTooltipView() if contentID == R.views.lobby.comp7.tooltips.WidgetTooltipView() else super(Comp7MainWidget, self).createToolTipContent(event, contentID)
-
-    def updateModel(self):
-        isInProgress = self.comp7LightProgression.isEnabled and not self.comp7LightProgression.isFinished
-        currentStage = 0
-        if isInProgress:
-            currentStage = self.comp7LightProgression.getCurrentStageData().get('currentStage')
-        with self.viewModel.transaction() as model:
-            model.setCurrentProgression(currentStage)
-            model.setBattleStatus(BattleStatus.INPROGRESS if isInProgress else BattleStatus.COMPLETED)
+        if contentID == R.views.lobby.comp7.tooltips.MainWidgetTooltip():
+            return MainWidgetTooltip()
+        return RankInactivityTooltip() if contentID == R.views.lobby.comp7.tooltips.RankInactivityTooltip() else super(Comp7MainWidget, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
-        super(Comp7MainWidget, self)._onLoading(args, kwargs)
-        self.updateModel()
+        super(Comp7MainWidget, self)._onLoading(*args, **kwargs)
+        self.__updateData()
         self.__addListeners()
-
-    def __addListeners(self):
-        self.viewModel.onOpenProgression += self.__onOpenProgression
-        self.comp7LightProgression.onProgressPointsUpdated += self.updateModel
-        self.comp7LightProgression.onSettingsChanged += self.updateModel
-
-    def __removeListeners(self):
-        self.viewModel.onOpenProgression -= self.__onOpenProgression
-        self.comp7LightProgression.onProgressPointsUpdated -= self.updateModel
-        self.comp7LightProgression.onSettingsChanged -= self.updateModel
 
     def _finalize(self):
         self.__removeListeners()
         super(Comp7MainWidget, self)._finalize()
 
+    def __updateRating(self, *_, **__):
+        rating = self.__comp7Controller.rating
+        activitiPoints = self.__comp7Controller.activityPoints
+        viewData = self.__comp7Controller.getViewData(HANGAR_ALIASES.COMP7_WIDGET)
+        prevRating = viewData.get('prevRating', rating)
+        prevActivityPoints = self.viewModel.getRankInactivityCount()
+        if rating != prevRating or activitiPoints != prevActivityPoints:
+            self.__updateData()
+
+    def __updateData(self, *_, **__):
+        if self.__comp7Controller.isFrozen() or not self.__comp7Controller.isEnabled():
+            return
+        with self.viewModel.transaction() as vm:
+            vm.setIsEnabled(not self.__comp7Controller.isOffline)
+            vm.setSeasonName(getSeasonNameEnum())
+            self.__updateQualificationData(vm)
+            self.__updateProgressionData(vm)
+
+    def __updateQualificationData(self, model):
+        comp7_qualification_helpers.setQualificationInfo(model.qualificationModel)
+
+    def __updateProgressionData(self, model):
+        if not self.__comp7Controller.isAvailable():
+            return
+        division = comp7_shared.getPlayerDivision()
+        rating = self.__comp7Controller.rating
+        viewData = self.__comp7Controller.getViewData(HANGAR_ALIASES.COMP7_WIDGET)
+        prevRating = viewData.get('prevRating', rating)
+        viewData['prevRating'] = rating
+        model.setRank(comp7_shared.getRankEnumValue(division))
+        model.setCurrentScore(rating)
+        model.setPrevScore(prevRating)
+        comp7_model_helpers.setDivisionInfo(model=model.divisionInfo, division=division)
+        comp7_model_helpers.setElitePercentage(model)
+        if self.__comp7Controller.hasActiveSeason():
+            comp7_model_helpers.setRanksInactivityInfo(model)
+
+    def __addListeners(self):
+        self.__comp7Controller.onStatusUpdated += self.__updateData
+        self.__comp7Controller.onRankUpdated += self.__updateRating
+        self.__comp7Controller.onComp7ConfigChanged += self.__updateData
+        self.__comp7Controller.onComp7RanksConfigChanged += self.__updateData
+        self.__comp7Controller.onOfflineStatusUpdated += self.__updateData
+        self.__comp7Controller.onQualificationBattlesUpdated += self.__updateData
+        self.__comp7Controller.onQualificationStateUpdated += self.__updateData
+        self.__comp7Controller.onEntitlementsUpdated += self.__updateData
+        self.viewModel.onOpenMeta += self.__onOpenMetaClick
+
+    def __removeListeners(self):
+        self.__comp7Controller.onStatusUpdated -= self.__updateData
+        self.__comp7Controller.onRankUpdated -= self.__updateRating
+        self.__comp7Controller.onComp7ConfigChanged -= self.__updateData
+        self.__comp7Controller.onComp7RanksConfigChanged -= self.__updateData
+        self.__comp7Controller.onOfflineStatusUpdated -= self.__updateData
+        self.__comp7Controller.onQualificationBattlesUpdated -= self.__updateData
+        self.__comp7Controller.onQualificationStateUpdated -= self.__updateData
+        self.__comp7Controller.onEntitlementsUpdated -= self.__updateData
+        self.viewModel.onOpenMeta -= self.__onOpenMetaClick
+
     @staticmethod
-    def __onOpenProgression():
-        showProgressionView()
+    def __onOpenMetaClick():
+        event_dispatcher.showComp7MetaRootView()

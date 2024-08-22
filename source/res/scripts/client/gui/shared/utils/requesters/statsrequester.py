@@ -18,7 +18,7 @@ from nation_change.nation_change_helpers import NationalGroupDataAccumulator
 if typing.TYPE_CHECKING:
     from typing import List, Tuple
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
-_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan', 'premMask'))
+_ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan', 'premMask', 'dailyXPFactor'))
 
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
@@ -59,6 +59,10 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def equipCoin(self):
         return max(self.actualEquipCoin, 0)
+
+    @property
+    def postProgressionXP(self):
+        return self.getCacheValue('XPpp', 0)
 
     @property
     def money(self):

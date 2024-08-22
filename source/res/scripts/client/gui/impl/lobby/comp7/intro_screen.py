@@ -2,21 +2,22 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/intro_screen.py
 import logging
 import typing
-from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COMP7_LIGHT_INTRO_SHOWN
-from frameworks.wulf import ViewSettings, ViewFlags
+from frameworks.wulf import ViewSettings, ViewFlags, WindowFlags
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.intro_screen_model import IntroScreenModel
 from gui.impl.lobby.comp7 import comp7_model_helpers
+from gui.impl.lobby.comp7.comp7_gui_helpers import updateComp7LastSeason
 from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
+from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 _logger = logging.getLogger(__name__)
 
 class IntroScreen(ViewImpl, IGlobalListener):
@@ -58,19 +59,21 @@ class IntroScreen(ViewImpl, IGlobalListener):
         self.__updateData()
 
     def _onLoaded(self):
-        self.__setComp7IntroShown()
+        updateComp7LastSeason()
 
     def __addListeners(self):
         self.viewModel.onClose += self.__onClose
         self.viewModel.scheduleInfo.season.pollServerTime += self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated += self.__onStatusUpdated
         self.startGlobalListening()
+        g_eventBus.addListener(events.LobbyHeaderMenuEvent.MENU_CLICK, self.__onHeaderMenuClick, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __removeListeners(self):
         self.viewModel.onClose -= self.__onClose
         self.viewModel.scheduleInfo.season.pollServerTime -= self.__onPollServerTime
         self.__comp7Controller.onStatusUpdated -= self.__onStatusUpdated
         self.stopGlobalListening()
+        g_eventBus.removeListener(events.LobbyHeaderMenuEvent.MENU_CLICK, self.__onHeaderMenuClick, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onStatusUpdated(self, status):
         if comp7_model_helpers.isModeForcedDisabled(status):
@@ -83,12 +86,19 @@ class IntroScreen(ViewImpl, IGlobalListener):
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
             vm.setQualificationBattlesCount(self.__comp7Controller.qualificationBattlesNumber)
 
-    def __setComp7IntroShown(self):
-        AccountSettings.setSettings(COMP7_LIGHT_INTRO_SHOWN, True)
-
     def __onClose(self):
         event_dispatcher.showHangar()
         self.destroyWindow()
 
     def __onPollServerTime(self):
         self.__updateData()
+
+    def __onHeaderMenuClick(self, *_):
+        self.destroyWindow()
+
+
+class IntroScreenWindow(LobbyNotificationWindow):
+    __slots__ = ()
+
+    def __init__(self, parent=None):
+        super(IntroScreenWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=IntroScreen(R.views.lobby.comp7.IntroScreen()), parent=parent)

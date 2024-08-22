@@ -1,13 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import logging
+import copy
 from string import lower
+import time
 import BigWorld
 from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
+from exchange.personal_discounts_helper import getDiscountsRequiredForExchange
 from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
+from gui.game_control.exchange_rates_with_discounts import getCurrentTime
+from gui.impl.lobby.exchange.exchange_rates_helper import createSystemExchangeNotification
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.notifications import NotificationPriorityLevel
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
@@ -23,8 +29,9 @@ from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, m
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
-from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController, IExchangeRatesWithDiscountsProvider
 from wg_async import wg_async, wg_await, await_callback
+from shared_utils import first
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -79,57 +86,66 @@ class PremiumAccountBuyer(Processor):
 
 
 class GoldToCreditsExchanger(Processor):
+    __exchangeRatesProvider = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
 
     def __init__(self, gold, withConfirm=True):
-        self.gold = gold
-        self.credits = int(gold) * self.itemsCache.items.shop.exchangeRate
+        rate = self.__exchangeRatesProvider.goldToCredits
+        self.gold, self.baseRate = gold, rate.unlimitedDiscountRate
+        allDiscounts = copy.deepcopy(rate.allPersonalLimitedDiscounts)
+        curTime = getCurrentTime()
+        self.discounts = getDiscountsRequiredForExchange(allDiscounts, self.gold, curTime) if allDiscounts else {}
+        self.credits = rate.calculateExchange(self.gold)
         super(GoldToCreditsExchanger, self).__init__()
         if withConfirm:
             self.addPlugin(plugins.HtmlMessageConfirmator('exchangeGoldConfirmation', 'html_templates:lobby/dialogs', 'confirmExchange', {'primaryCurrencyAmount': backport.getGoldFormat(self.gold),
              'resultCurrencyAmount': backport.getIntegralFormat(self.credits)}))
-        self.addPlugin(plugins.MoneyValidator(Money(gold=self.gold)))
+        self.addPlugins([plugins.MoneyValidator(Money(gold=self.gold)), plugins.ExchangeValidator(self.gold), plugins.ExchangeValidator(self.credits)])
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='exchange/{}'.format(errStr), defaultSysMsgKey='exchange/server_error', gold=self.gold)
+        return makeI18nError(sysMsgKey='exchange/{}'.format(errStr), defaultSysMsgKey='exchange/server_error', gold=int(self.gold))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='exchange/success', gold=backport.getGoldFormat(self.gold), credits=formatPrice(Money(credits=self.credits)), type=SM_TYPE.FinancialTransactionWithGold)
+        rate = self.__exchangeRatesProvider.goldToCredits
+        isUnlimDiscount = True if rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal else False
+        return createSystemExchangeNotification(discounts=self.discounts, goldAmount=self.gold, defaultRate=rate.defaultRate, baseRate=self.baseRate, isPersonalUnlimRate=isUnlimDiscount, exchangeType=rate.getExchangeRateName)
 
     def _request(self, callback):
         _logger.debug('Make server request to exchange gold to credits')
-        BigWorld.player().stats.exchange(self.gold, lambda code: self._response(code, callback))
+        BigWorld.player().stats.exchange(self.gold, self.credits, lambda code: self._response(code, callback))
 
 
 class FreeXPExchanger(Processor):
+    __exchangeRatesProvider = dependency.descriptor(IExchangeRatesWithDiscountsProvider)
 
-    def __init__(self, xp, vehiclesCD, freeConversion=False):
-        rate = self.itemsCache.items.shop.freeXPConversion
-        self.xp = xp
-        self.__freeConversion = bool(freeConversion)
-        self.gold = round(rate[1] * xp / rate[0]) if not freeConversion else 0
-        self.vehiclesCD = vehiclesCD
-        super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(), plugins.MoneyValidator(Money(gold=self.gold)), plugins.EliteVehiclesValidator(self.vehiclesCD)))
+    def __init__(self, xp, vehiclesCD):
+        rate = self.__exchangeRatesProvider.freeXpTranslation
+        self.xp, self.baseRate, self.vehiclesCD = xp, rate.unlimitedDiscountRate, vehiclesCD
+        self.gold = rate.calculateGoldToExchange(self.xp)
+        allDiscounts = copy.deepcopy(rate.allPersonalLimitedDiscounts)
+        curTime = getCurrentTime()
+        self.discounts = getDiscountsRequiredForExchange(allDiscounts, self.gold, curTime) if allDiscounts else {}
+        super(FreeXPExchanger, self).__init__(plugins=(self.__makeConfirmator(),
+         plugins.MoneyValidator(Money(gold=self.gold)),
+         plugins.ExchangeValidator(self.gold),
+         plugins.ExchangeValidator(self.xp),
+         plugins.EliteVehiclesValidator(self.vehiclesCD)))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='exchangeXP/{}'.format(errStr), defaultSysMsgKey='exchangeXP/server_error', xp=backport.getIntegralFormat(self.xp))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='exchangeXP/success', gold=backport.getGoldFormat(self.gold), xp=backport.getIntegralFormat(self.xp), type=SM_TYPE.FinancialTransactionWithGold)
+        rate = self.__exchangeRatesProvider.freeXpTranslation
+        isUnlimDiscount = True if rate.unlimitedDiscountInfo is not None and rate.unlimitedDiscountInfo.isPersonal else False
+        return createSystemExchangeNotification(discounts=self.discounts, goldAmount=self.gold, defaultRate=rate.defaultRate, baseRate=self.baseRate, isPersonalUnlimRate=isUnlimDiscount, exchangeType=rate.getExchangeRateName)
 
     def _request(self, callback):
         _logger.debug('Make server request to exchange xp for credits')
-        BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, lambda code: self._response(code, callback), int(self.__freeConversion))
+        BigWorld.player().stats.convertToFreeXP(self.vehiclesCD, self.xp, self.gold, lambda code: self._response(code, callback))
 
     def __makeConfirmator(self):
-        xpLimit = self.itemsCache.items.shop.freeXPConversionLimit
         extra = {'resultCurrencyAmount': backport.getIntegralFormat(self.xp),
          'primaryCurrencyAmount': backport.getGoldFormat(self.gold)}
-        if self.__freeConversion:
-            sourceKey = 'XP_EXCHANGE_FOR_FREE'
-            extra['freeXPLimit'] = backport.getIntegralFormat(xpLimit)
-        else:
-            sourceKey = 'XP_EXCHANGE_FOR_GOLD'
-        return plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', extra, sourceKey=sourceKey)
+        return plugins.HtmlMessageConfirmator('exchangeXPConfirmation', 'html_templates:lobby/dialogs', 'confirmExchangeXP', extra, sourceKey='XP_EXCHANGE_FOR_GOLD')
 
 
 class BattleResultsGetter(Processor):
@@ -441,6 +457,45 @@ class UseCrewBookProcessor(GroupedRequestProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='crewBooks/{}'.format(errStr), auxData=self._makeErrorData(errStr), defaultSysMsgKey='crewBooks/failed')
+
+
+class ClaimRewardForPostProgression(Processor):
+
+    def __init__(self, xppToConvert):
+        super(ClaimRewardForPostProgression, self).__init__()
+        self.addPlugins([plugins.ExperiencePostProgressionValidator(xppToConvert)])
+
+    def _request(self, callback):
+        _logger.debug('Make server request to claim reward for post progression.')
+        BigWorld.player().inventory.claimRewardForPostProgression(0, lambda code, ctx: self._response(code, callback, ctx=ctx))
+
+    def _successHandler(self, code, ctx=None):
+        crewBookID = ctx.get('crewBookID')
+        itemsCache = dependency.instance(IItemsCache)
+        crewBook = first(itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.ID(crewBookID)).values())
+        formatedDate = str(time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(time.time())))
+        text = backport.text(R.strings.system_messages.post_progression.success(), book_name=crewBook.getName().strip(), amount=str(int(ctx.get('count'))), at=formatedDate)
+        return makeI18nSuccess(sysMsgKey=text, type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, auxData={'header': backport.text(R.strings.system_messages.post_progression.success.title())})
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey=backport.text(R.strings.system_messages.post_progression.server_error()), type=SM_TYPE.Error)
+
+
+class FillingAllUntrainedPerksProcessor(Processor):
+
+    def __init__(self, fillInBarracks):
+        super(FillingAllUntrainedPerksProcessor, self).__init__()
+        self._fillInBarracks = fillInBarracks
+
+    def _request(self, callback):
+        _logger.debug('Make server request to fill untrained perks for all crew members.')
+        BigWorld.player().inventory.fillAllTankmenSkills(self._fillInBarracks, lambda resID, code, errStr: self._response(code, callback, errStr))
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nError(sysMsgKey=backport.text(R.strings.system_messages.filling_untrained_perks.success()), type=SM_TYPE.Information)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey=backport.text(R.strings.system_messages.filling_untrained_perks.server_error()), type=SM_TYPE.Error)
 
 
 class VehicleChangeNation(Processor):

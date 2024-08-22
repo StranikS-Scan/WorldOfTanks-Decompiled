@@ -56,7 +56,7 @@ class AmmunitionSetupView(AmmunitionSetupViewMeta):
         g_eventBus.handleEvent(AmmunitionSetupViewEvent(AmmunitionSetupViewEvent.CLOSE_VIEW), EVENT_BUS_SCOPE.LOBBY)
 
     def __onAmmunitionSetupViewResized(self, event):
-        self.as_gfSizeUpdatedS(event.ctx.get('offsetX'), event.ctx.get('width'))
+        self.as_gfSizeUpdatedS(event.ctx.get('offsetX'), event.ctx.get('width'), event.ctx.get('bottomMargin'))
 
     def __onUpdateTTC(self, event):
         vehicleItem = event.ctx.get('vehicleItem')

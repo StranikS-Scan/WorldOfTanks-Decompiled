@@ -9,6 +9,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 class WelcomeScreen(CONST_CONTAINER):
     CREW_22_WELCOME = 'crew22Welcome'
     CREW_5075_WELCOME = 'crew5075Welcome'
+    CREW_NPS_WELCOME = 'crewNpsWelcome'
 
 
 class AccountSettingsHelper(object):

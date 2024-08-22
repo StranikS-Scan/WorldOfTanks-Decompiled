@@ -18,11 +18,9 @@ from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
-from skeletons.gui.game_control import IWotPlusController, IHangarGuiController
+from skeletons.gui.game_control import IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
 from telecom_rentals_common import ROSTER_EXPIRATION_TOKEN_NAME, PARTNERSHIP_TOKEN_NAME
-if typing.TYPE_CHECKING:
-    from typing import Set, Dict
 
 class _FRONT_SUPPLY_ITEMS(object):
     RENT_TANK = 0
@@ -38,7 +36,6 @@ class _SUPPLY_ITEMS(object):
 
 class HangarCarouselDataProvider(CarouselDataProvider):
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
 
     def __init__(self, carouselFilter, itemsCache):
@@ -78,25 +75,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         newHiddenDynamicFilters = self.getHiddenDynamicFilters()
         self.filter.reset(keys=newHiddenDynamicFilters, save=prevHiddenDynamicFilters != newHiddenDynamicFilters)
 
-    def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
-        rentalVehicles = self._telecomRentalsVehicles
-        changeInRentals = set(vehiclesCDs or ()).issubset(rentalVehicles)
-        filterCriteria = filterCriteria or REQ_CRITERIA.EMPTY
-        if vehiclesCDs:
-            filterCriteria |= REQ_CRITERIA.IN_CD_LIST(vehiclesCDs)
-        criteria = self._baseCriteria | filterCriteria | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | REQ_CRITERIA.VEHICLE.TELECOM_RENT
-        newRentalsVehicles = self._itemsCache.items.getVehicles(criteria).viewkeys()
-        isVehicleRemoved = not set(vehiclesCDs or ()).issubset(newRentalsVehicles)
-        isVehicleAdded = not set(vehiclesCDs or ()).issubset(rentalVehicles)
-        if changeInRentals or isVehicleRemoved or isVehicleAdded:
-            telecomPendingVehCD = self._telecomRentals.getRentsPending()
-            telecomPendingVehCD = telecomPendingVehCD.intersection(newRentalsVehicles)
-            if isVehicleAdded and telecomPendingVehCD:
-                self._telecomRentals.resetRentsPending(telecomPendingVehCD)
-            self.buildList()
-            return
-        super(HangarCarouselDataProvider, self).updateVehicles(vehiclesCDs, filterCriteria, forceUpdate)
-
     def updateSupplies(self):
         self._supplyItems = []
         self._buildSupplyItems()
@@ -108,14 +86,12 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         return vehicle.getCustomState() != Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
     def _populate(self):
-        self._wotPlusCtrl.onDataChanged += self._onWotPlusDataChanged
         self._telecomRentals = BigWorld.player().telecomRentals
         self._telecomRentals.onPendingRentChanged += self._onTelecomPendingRentChanged
         g_clientUpdateManager.addCallback('tokens', self._onTelecomRentalsChanged)
         super(HangarCarouselDataProvider, self)._populate()
 
     def _dispose(self):
-        self._wotPlusCtrl.onDataChanged -= self._onWotPlusDataChanged
         self._telecomRentals.onPendingRentChanged -= self._onTelecomPendingRentChanged
         g_clientUpdateManager.removeObjectCallbacks(self, True)
         super(HangarCarouselDataProvider, self)._dispose()
@@ -163,10 +139,6 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         if vehCD is not None:
             self.buildList()
         return
-
-    def _onWotPlusDataChanged(self, diff):
-        if 'exclusiveVehicle' in diff:
-            self.buildList()
 
     def _buildTelecomRentalVehicleItems(self):
         self._telecomRentalsVehicles = []

@@ -5749,33 +5749,6 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Bovington	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	paints 20g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <paint>
-      <id>	482	</id>
-      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
-      <color>	50 62 66 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:special_style/bovington	</userString>
-      <tags>	hiddenInUI	</tags>
-    </paint>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-  </itemGroup>
-  <itemGroup>
     <name>	14th_anniversary_01	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -5821,6 +5794,186 @@
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:special_style/14th_anniversary_04	</userString>
       <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Bovington	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	482	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
+      <color>	50 62 66 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/bovington	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Mid-Autumn Festival 2024	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	484	</id>
+      <texture>	gui/maps/vehicles/repaints/uk_color_07.png	</texture>
+      <color>	43 50 56 255	</color>
+      <gloss>	0.634	</gloss>
+      <metallic>	0.506	</metallic>
+      <userString>	#vehicle_customization:special_style/mid_autumn_festival_2024	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass S15	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	498	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_02.png	</texture>
+      <color>	45 48 40 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/bp_15_3	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	499	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_color_03.png	</texture>
+      <color>	51 51 51 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/bp_15_3	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	500	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_02.png	</texture>
+      <color>	26 30 27 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:special_style/bp_15_4	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	Manticore	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	491	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	40 40 40 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_1	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	492	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_12.png	</texture>
+      <color>	45 53 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_2	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	493	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	74 77 84 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_3	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	494	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_27.png	</texture>
+      <color>	37 39 51 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_4	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	495	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_color_02.png	</texture>
+      <color>	166 166 164 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_5	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	496	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	19 19 25 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024_6	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	497	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	19 19 25 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/manticore_yearly	</userString>
+      <tags>	styleOnly hiddenInUI	</tags>
     </paint>
     <usages>
       <item>

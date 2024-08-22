@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class FreeXpBookModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(FreeXpBookModel, self).__init__(properties=properties, commands=commands)
 
     def getPlayerXp(self):
@@ -38,17 +38,23 @@ class FreeXpBookModel(ViewModel):
     def setExchangeRate(self, value):
         self._setNumber(4, value)
 
-    def getIsEligibleToApplyFreeXp(self):
+    def getHasError(self):
         return self._getBool(5)
 
-    def setIsEligibleToApplyFreeXp(self, value):
+    def setHasError(self, value):
         self._setBool(5, value)
 
-    def getHasError(self):
+    def getIsErrorTooltipVisible(self):
         return self._getBool(6)
 
-    def setHasError(self, value):
+    def setIsErrorTooltipVisible(self, value):
         self._setBool(6, value)
+
+    def getCanApplyFreeXp(self):
+        return self._getBool(7)
+
+    def setCanApplyFreeXp(self, value):
+        self._setBool(7, value)
 
     def _initialize(self):
         super(FreeXpBookModel, self)._initialize()
@@ -57,5 +63,6 @@ class FreeXpBookModel(ViewModel):
         self._addNumberProperty('currentXpValue', 0)
         self._addNumberProperty('currentMaxValue', 0)
         self._addNumberProperty('exchangeRate', 1)
-        self._addBoolProperty('isEligibleToApplyFreeXp', False)
         self._addBoolProperty('hasError', False)
+        self._addBoolProperty('isErrorTooltipVisible', False)
+        self._addBoolProperty('canApplyFreeXp', False)

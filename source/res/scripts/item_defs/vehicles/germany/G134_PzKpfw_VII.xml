@@ -33,6 +33,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	10.50	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -76,6 +79,11 @@
           <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</exploded>
         </G134_PzKpfw_VII_3Dst>
+        <G134_PzKpfw_VII_3Dst_BPXV>
+          <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Hull.model	</exploded>
+        </G134_PzKpfw_VII_3Dst_BPXV>
       </sets>
     </models>
     <swinging>
@@ -833,6 +841,12 @@
         <rotation>	0 0 0	</rotation>
         <attachNode>	V	</attachNode>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -881,6 +895,11 @@
             <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</exploded>
           </G134_PzKpfw_VII_3Dst>
+          <G134_PzKpfw_VII_3Dst_BPXV>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Chassis.model	</exploded>
+          </G134_PzKpfw_VII_3Dst_BPXV>
         </sets>
       </models>
       <traces>
@@ -964,6 +983,18 @@
                   <row2>	0.000000 -0.419597 0.687233	</row2>
                   <row3>	0.000000 1.563143 3.173495	</row3>
                 </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.795408 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.911089	</row2>
+                  <row3>	-2.106683 0.899082 -0.204031	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.920554 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 -0.002110 -0.299993	</row1>
+                  <row2>	0.000000 0.732236 -0.005150	</row2>
+                  <row3>	-1.488082 0.889847 -3.793365	</row3>
+                </boxCollider>
               </hullCollider>
             </physicalParams>
           </trackDebris>
@@ -1034,6 +1065,18 @@
                   <row1>	0.000000 0.396995 0.242389	</row1>
                   <row2>	0.000000 -0.419597 0.687233	</row2>
                   <row3>	0.000000 1.563143 3.173495	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.795408 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.911090	</row2>
+                  <row3>	2.107000 0.899082 -0.204031	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.920554 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.001571 -0.299996	</row1>
+                  <row2>	0.000000 0.732244 -0.003834	</row2>
+                  <row3>	1.488000 0.889847 -3.793370	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1368,7 +1411,6 @@
             <length>	0.145146	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.39565	</xStart>
@@ -1570,7 +1612,6 @@
             <length>	0.145131	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.39568	</xStart>
@@ -1840,6 +1881,11 @@
                 <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</exploded>
               </G134_PzKpfw_VII_3Dst>
+              <G134_PzKpfw_VII_3Dst_BPXV>
+                <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Gun_01.model	</exploded>
+              </G134_PzKpfw_VII_3Dst_BPXV>
             </sets>
           </models>
           <hitTester>
@@ -1885,6 +1931,15 @@
               <rayUp>	0.095 0 0	</rayUp>
               <size>	0.5	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <compatibleModels>	G134_PzKpfw_VII_3Dst_BPXV	</compatibleModels>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000045 -0.026492 5.90426	</rayStart>
+              <rayEnd>	-0.000045 -0.026492 6.40426	</rayEnd>
+              <rayUp>	0.095 0 0	</rayUp>
+              <size>	0.5	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1910,6 +1965,11 @@
             <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</exploded>
           </G134_PzKpfw_VII_3Dst>
+          <G134_PzKpfw_VII_3Dst_BPXV>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst_BPXV/crash/lod0/Turret_01.model	</exploded>
+          </G134_PzKpfw_VII_3Dst_BPXV>
         </sets>
       </models>
       <hitTester>

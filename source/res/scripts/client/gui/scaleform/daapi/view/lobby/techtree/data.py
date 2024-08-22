@@ -13,7 +13,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps, Unlock
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
 from gui.shared.economics import getGUIPrice
@@ -54,7 +54,7 @@ class _ItemsData(object):
         self._items = itemsCache.items
         self._stats = itemsCache.items.stats
         self._wereInBattle = self._getNodesWereInBattle()
-        self._hideTechTreeEvent = not self.limitedUIController.isRuleCompleted(LuiRules.TECH_TREE_EVENTS)
+        self._hideTechTreeEvent = not self.limitedUIController.isRuleCompleted(LUI_RULES.TechTreeEvent)
         return
 
     def __del__(self):
@@ -240,10 +240,9 @@ class _ItemsData(object):
     def _checkRestoreState(self, state, item):
         state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.RESTORE_AVAILABLE)
         money = self._stats.money
-        exchangeRate = self._items.shop.exchangeRate
         mayRent, _ = item.mayRent(money)
         if item.isRestoreAvailable():
-            if item.mayRestoreWithExchange(money, exchangeRate) or not mayRent:
+            if item.mayRestoreWithExchange(money, self._items.shop.defaults.exchangeRate) or not mayRent:
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.RESTORE_AVAILABLE)
         return state
 
@@ -347,7 +346,7 @@ class _ItemsData(object):
         money = self._stats.money
         if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             money = self.tradeIn.addTradeInPriceIfNeeded(item, money)
-        return item.mayObtainWithMoneyExchange(money, self._items.shop.exchangeRate)
+        return item.mayObtainWithMoneyExchange(money, proxy=self._items.shop)
 
     def _canSell(self, nodeCD):
         raise NotImplementedError
@@ -368,7 +367,7 @@ class _ItemsData(object):
         for node in nodes_:
             state = node.getState()
             nodeID = node.getNodeCD()
-            node.setGuiPrice(getGUIPrice(self.getItem(nodeID), self._stats.money, self._items.shop.exchangeRate))
+            node.setGuiPrice(getGUIPrice(self.getItem(nodeID), self._stats.money, self._items.shop.defaults.exchangeRate))
             if canBuyGoldForItemThroughWeb(nodeID) or self._mayObtainForMoney(nodeID):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
             else:
@@ -679,7 +678,7 @@ class ResearchItemsData(_ItemsData):
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
         else:
             renderer = 'item'
-        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
+        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.defaults.exchangeRate)
         displayInfo = {'path': path,
          'renderer': renderer,
          'level': level}
@@ -939,7 +938,7 @@ class NationTreeData(_ItemsData):
         state = self._checkRentableState(state, guiItem)
         state = self._checkTradeInState(state, guiItem)
         state = self._checkTechTreeEvents(state, guiItem, unlockProps)
-        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
+        price = getGUIPrice(guiItem, self._stats.money, self._items.shop.defaults.exchangeRate)
         return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
 
     @staticmethod

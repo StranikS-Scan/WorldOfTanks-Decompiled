@@ -1014,7 +1014,11 @@
     </modifiers>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.85	</value>
       </mul>
       <mul>
@@ -1074,7 +1078,11 @@
         <value>	2	</value>
       </add>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	1.15	</value>
       </mul>
       <mul>
@@ -1386,7 +1394,11 @@
     </modifiers>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.85	</value>
       </mul>
       <mul>
@@ -1442,7 +1454,11 @@
         <value>	0.96	</value>
       </mul>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	1.15	</value>
       </mul>
       <mul>
@@ -1598,7 +1614,11 @@
     </modifiers>
     <kpi>
       <mul>
-        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
         <value>	0.5	</value>
       </mul>
       <mul>
@@ -1654,7 +1674,11 @@
         <value>	1.04	</value>
       </mul>
       <mul>
-        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
         <value>	1.5	</value>
       </mul>
       <mul>
@@ -2990,7 +3014,11 @@
     </modifiers>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.85	</value>
       </mul>
       <mul>
@@ -3034,7 +3062,11 @@
         <value>	3	</value>
       </add>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	1.15	</value>
       </mul>
       <mul>

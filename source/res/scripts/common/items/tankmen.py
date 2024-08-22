@@ -1,42 +1,44 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/tankmen.py
+import math
 import random
 import struct
+from collections import defaultdict
 from functools import partial
-from itertools import izip
-from typing import TYPE_CHECKING, List, Dict, Any, Tuple, Optional, Set
+from itertools import chain, izip
+from typing import Any, Dict, List, Optional, Sequence, Set, TYPE_CHECKING, Tuple
 import nations
-from constants import ITEM_DEFS_PATH, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
+from constants import ITEM_DEFS_PATH, NEW_PERK_SYSTEM as NPS, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV, LOG_ERROR, LOG_WARNING
 from helpers_common import bisectLE
-from items import vehicles, ITEM_TYPES, parseIntCompactDescr
-from items.components import skills_components, crew_skins_constants, crew_books_constants
-from items.components import skills_constants
-from items.components import tankmen_components
+from items import ITEM_TYPES, parseIntCompactDescr, tankmen_cfg, vehicles
+from items.components import crew_books_constants, crew_skins_constants, skills_components, skills_constants, tankmen_components
 from items.components.crew_books_components import CrewBooksCache
 from items.components.crew_skins_components import CrewSkinsCache
-from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
-from items.readers import skills_readers
-from items.readers import tankmen_readers
+from items.passports import PassportCache, acceptOn, distinctFrom, maxAttempts, passport_generator
+from items.readers import skills_readers, tankmen_readers
 from items.readers.crewBooks_readers import readCrewBooksCacheFromXML
 from items.readers.crewSkins_readers import readCrewSkinsCacheFromXML
 from items.tankman_flags import TankmanFlags
 from soft_exception import SoftException
-from vehicles import VEHICLE_CLASS_TAGS, EXTENDED_VEHICLE_TYPE_ID_FLAG
+from vehicles import EXTENDED_VEHICLE_TYPE_ID_FLAG, VEHICLE_CLASS_TAGS
 if TYPE_CHECKING:
-    from items.vehicles import VehicleType
+    from items.vehicles import VehicleDescriptor, VehicleType
+    from items.artefacts import SkillEquipment
 SKILL_NAMES = skills_constants.SKILL_NAMES
 SKILL_INDICES = skills_constants.SKILL_INDICES
 ROLES = skills_constants.ROLES
 COMMON_SKILL_ROLE_TYPE = skills_constants.COMMON_SKILL_ROLE_TYPE
 COMMON_SKILLS = skills_constants.COMMON_SKILLS
 COMMON_SKILLS_ORDERED = skills_constants.COMMON_SKILLS_ORDERED
-SEPARATE_SKILLS = skills_constants.SEPARATE_SKILLS
 ROLES_AND_COMMON_SKILLS = skills_constants.ROLES_AND_COMMON_SKILLS
 LEARNABLE_ACTIVE_SKILLS = skills_constants.LEARNABLE_ACTIVE_SKILLS
 UNLEARNABLE_SKILLS = skills_constants.UNLEARNABLE_SKILLS
+ROLES_BY_SKILLS = skills_constants.ROLES_BY_SKILLS
 SKILLS_BY_ROLES = skills_constants.SKILLS_BY_ROLES
 SKILLS_BY_ROLES_ORDERED = skills_constants.SKILLS_BY_ROLES_ORDERED
+ACTIVE_NOT_GROUP_SKILLS = skills_constants.ACTIVE_NOT_GROUP_SKILLS
+SkillUtilization = skills_constants.SkillUtilization
 MAX_FREE_SKILLS_SIZE = 16
 NO_SKILL = -1
 MAX_SKILL_LEVEL = 100
@@ -74,13 +76,6 @@ def getSkillsConfig():
     if _g_skillsConfig is None:
         _g_skillsConfig = skills_readers.readSkillsConfig(ITEM_DEFS_PATH + 'tankmen/tankmen.xml')
     return _g_skillsConfig
-
-
-def getLoreConfig():
-    global _g_loreConfig
-    if _g_loreConfig is None:
-        _g_loreConfig = tankmen_readers.readLoreConfig(ITEM_DEFS_PATH + 'tankmen/lore.xml')
-    return _g_loreConfig
 
 
 def getSkillsMask(skills):
@@ -174,7 +169,29 @@ def generateSkills(role, skillsMask):
     return [ skill for skill in tankmanSkills if skill not in UNLEARNABLE_SKILLS ]
 
 
-def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask, isPreview=False, freeXP=0):
+def presetSkillsFromCfg(roles):
+    cfg = tankmen_cfg.getAutoFillConfig()
+    majorSkills = []
+    rolesBonusSkills = {}
+    mainRole = roles[0]
+    for skill in cfg[mainRole]:
+        majorSkills.append(skill)
+
+    bonusRoles = roles[1:]
+    for bonusRole in bonusRoles:
+        bonusDecrCnt = NPS.MAX_BONUS_SKILLS_PER_ROLE
+        for skill in cfg[bonusRole]:
+            if skill in skills_constants.COMMON_SKILLS_ORDERED:
+                continue
+            if bonusDecrCnt == 0:
+                break
+            bonusDecrCnt -= 1
+            rolesBonusSkills.setdefault(bonusRole, []).append(skill)
+
+    return (majorSkills, rolesBonusSkills)
+
+
+def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skillsMask, isPreview=False, freeXP=0, presetSkillsRoless=False):
     tankmenList = []
     prevPassports = PassportCache()
     for i in xrange(len(roles)):
@@ -182,14 +199,18 @@ def generateTankmen(nationID, vehicleTypeID, roles, isPremium, roleLevel, skills
         pg = passport_generator(nationID, isPremium, partial(crewMemberPreviewProducer, vehicleTypeID=vehicleTypeID, role=role[0]) if isPreview else passportProducer, maxAttempts(10), distinctFrom(prevPassports), acceptOn('roles', role[0]))
         passport = next(pg)
         prevPassports.append(passport)
-        skills = generateSkills(role, skillsMask)
-        tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills, initialXP=freeXP)
+        rolesBonusSkills = {}
+        if presetSkillsRoless:
+            skills, rolesBonusSkills = presetSkillsFromCfg(roles[i])
+        else:
+            skills = generateSkills(role, skillsMask)
+        tmanCompDescr = generateCompactDescr(passport, vehicleTypeID, role[0], roleLevel, skills, initialXP=freeXP, rolesBonusSkills=rolesBonusSkills)
         tankmenList.append(tmanCompDescr)
 
     return tankmenList if len(tankmenList) == len(roles) else []
 
 
-def generateCompactDescr(passport, vehicleTypeID, role, roleLevel=MAX_SKILL_LEVEL, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=(), initialXP=0, skillsEfficiencyXP=MAX_SKILLS_EFFICIENCY_XP):
+def generateCompactDescr(passport, vehicleTypeID, role, roleLevel=MAX_SKILL_LEVEL, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, dossierCompactDescr='', freeSkills=(), initialXP=0, skillsEfficiencyXP=MAX_SKILLS_EFFICIENCY_XP, rolesBonusSkills=None):
     pack = struct.pack
     nationID, isPremium, isFemale, firstNameID, lastNameID, iconID = passport
     header = ITEM_TYPES.tankman + (nationID << 4)
@@ -197,6 +218,7 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel=MAX_SKILL_LEVE
     tf = TankmanFlags()
     tf.extendedVehicleTypeID = vehicleTypeID > 255
     tf.hasFreeSkills = len(freeSkills) > 0
+    tf.hasBonusSkills = bool(rolesBonusSkills)
     tf.isFemale = isFemale
     tf.isPremium = isPremium
     cd += tf.pack()
@@ -213,6 +235,15 @@ def generateCompactDescr(passport, vehicleTypeID, role, roleLevel=MAX_SKILL_LEVE
     cd += chr(lastSkillLevel if numSkills else 0)
     if tf.hasFreeSkills:
         cd += pack('B', len(freeSkills))
+    if tf.hasBonusSkills:
+        bonusSkills = []
+        for roleSkills in rolesBonusSkills.itervalues():
+            for skill in roleSkills:
+                if skill:
+                    bonusSkills.append(SKILL_INDICES[skill])
+
+        numBonusSkills = len(bonusSkills)
+        cd += pack((str(1 + numBonusSkills) + 'B'), numBonusSkills, *bonusSkills)
     freeXP = 0
     cd += pack('>3HI', firstNameID, lastNameID, iconID, freeXP)
     cd += dossierCompactDescr
@@ -260,8 +291,15 @@ def stripNonBattle(compactDescr):
     numSkills = ord(compactDescr[l])
     l += 2 + numSkills
     l += 1 if tf.hasFreeSkills else 0
-    l += 6
+    if tf.hasBonusSkills:
+        length = struct.unpack('B', compactDescr[l])
+        l += length + 1
+    l += 10
     return compactDescr[:l]
+
+
+def sortTankmanRoles(roles, rolesOrder):
+    return roles[:1] + tuple(sorted(roles[1:], key=lambda role: rolesOrder[role]))
 
 
 def parseNationSpecAndRole(compactDescr):
@@ -312,28 +350,88 @@ class OperationsRestrictions(object):
 class TankmanDescr(object):
 
     def __init__(self, compactDescr, battleOnly=False):
+        self.__rolesBonusSkills = defaultdict(list)
+        self.__bonusSkillLevels = []
+        self._totalMajorSkills = None
         self.__initFromCompactDescr(compactDescr, battleOnly)
+        return
+
+    @property
+    def kpi(self):
+        kpi = []
+        skillsConfig = getSkillsConfig()
+        skills = self.skills + sum(self.__rolesBonusSkills.values(), [])
+        for skill_name in skills:
+            kpi += skillsConfig.getSkill(skill_name).kpi
+
+        return kpi
+
+    def getRoleBonusSkills(self, activeRoles):
+        for role in activeRoles:
+            if role in self.__rolesBonusSkills:
+                skills = self.__rolesBonusSkills[role]
+                additional = NPS.MAX_BONUS_SKILLS_PER_ROLE - len(skills)
+                for skill in skills + ['any'] * additional:
+                    yield (role, skill)
+
+            for skill in ['any'] * NPS.MAX_BONUS_SKILLS_PER_ROLE:
+                yield (role, skill)
 
     @property
     def skills(self):
         return list(self._skills)
 
     @property
-    def kpi(self):
-        kpi = []
-        skillsConfig = getSkillsConfig()
-        for skill_name in self.skills:
-            kpi += skillsConfig.getSkill(skill_name).kpi
-
-        return kpi
-
-    @property
     def freeSkills(self):
         return list(self._skills[:self.freeSkillsNumber])
 
     @property
+    def selectedFreeSkills(self):
+        return [ skill for skill in self.freeSkills if skill != 'any' ]
+
+    @property
+    def bonusSkillsLevels(self):
+        return list(self.__bonusSkillLevels)
+
+    @bonusSkillsLevels.setter
+    def bonusSkillsLevels(self, bonusSkillLevels):
+        self.__bonusSkillLevels = bonusSkillLevels
+
+    def getPossibleBonusSkills(self, bonusRoles):
+        return list(chain(*[ self.getBonusSkillsForRole(role) for role in bonusRoles ]))
+
+    @property
+    def bonusSkills(self):
+        return self.__rolesBonusSkills
+
+    def getBonusSkillsForRole(self, roleName):
+        return list(self.__rolesBonusSkills[roleName])
+
+    def getSkillsMask(self):
+        return getSkillsMask(self._skills + sum(self.__rolesBonusSkills.itervalues(), []))
+
+    @property
     def earnedSkills(self):
         return list(self._skills[self.freeSkillsNumber:])
+
+    @property
+    def selectedSkills(self):
+        return [ skill for skill in self._skills if skill != 'any' ]
+
+    @property
+    def selectedSkillsCount(self):
+        return len(self.selectedSkills)
+
+    def selectedBonusSkillsCount(self, role):
+        return len(self.__rolesBonusSkills.get(role, []))
+
+    @property
+    def selectedFreeSkillsCount(self):
+        return self.freeSkillsNumber - self.newFreeSkillsCount
+
+    @property
+    def newFreeSkillsCount(self):
+        return self.freeSkills.count('any')
 
     @property
     def lastSkillLevel(self):
@@ -344,14 +442,48 @@ class TankmanDescr(object):
         return len(self._skills)
 
     @property
-    def earnedSkillsNumber(self):
+    def lastSkillSeqNumber(self):
+        return max(self.lastSkillNumber - self.freeSkillsNumber, 0)
+
+    @property
+    def earnedSkillsCount(self):
         return len(self._skills) - self.freeSkillsNumber
 
     @property
-    def skillLevels(self):
+    def totalMajorSkills(self):
+        if self._totalMajorSkills is None:
+            totalMajorSkills = self.getFullSkillsCount(withFree=True)
+            self._totalMajorSkills = min(NPS.MAX_MAJOR_PERKS, totalMajorSkills + 1)
+        return self._totalMajorSkills
+
+    @property
+    def totalBonusSkills(self):
+        return -(-self.totalMajorSkills // 2)
+
+    def skillLevels(self, activeRoles):
+        if not activeRoles:
+            return
+        majorRole = activeRoles[0]
         for skillName in self._skills:
+            if skillName == 'any' or majorRole not in ROLES_BY_SKILLS[skillName]:
+                continue
             level = MAX_SKILL_LEVEL if skillName != self._skills[-1] else self.__lastSkillLevel
             yield (skillName, level)
+
+        if len(activeRoles) <= 1:
+            return
+        activeRoles = activeRoles[1:]
+        for roleName, skills in self.__rolesBonusSkills.items():
+            if roleName not in activeRoles:
+                continue
+            for idx, skillName in enumerate(skills):
+                level = self.__bonusSkillLevels[idx] if len(self.__bonusSkillLevels) > idx else self.__bonusSkillLevels[-1]
+                yield (skillName, level)
+
+    def hasSkills(self):
+        hasSkills = self.selectedSkillsCount > 0
+        hasSkills |= any((skills for skills in self.__rolesBonusSkills.itervalues()))
+        return hasSkills
 
     @property
     def nativeRoles(self):
@@ -395,6 +527,18 @@ class TankmanDescr(object):
         factor *= 1.0 + commanderTutorXpBonusFactor
         return factor
 
+    @property
+    def freeXP(self):
+        return self.__freeXP
+
+    @freeXP.setter
+    def freeXP(self, xp):
+        self._totalMajorSkills = None
+        if xp != self.__freeXP:
+            residualXP = xp - (self.__freeXP + self.needXpForVeteran)
+            self.__freeXP = xp - residualXP if residualXP > 0 else xp
+        return
+
     @staticmethod
     def levelUpXpCost(fromSkillLevel, skillSeqNum):
         costs = _g_levelXpCosts
@@ -424,21 +568,87 @@ class TankmanDescr(object):
             if residualXp > 0:
                 return bisectLE(_g_levelXpCosts, residualXp)
 
-    def getTotalSkillProgress(self, withFree=False):
-        xp = self.totalXP()
-        fullSkillsNumber = bisectLE(_g_skillXpCosts, xp)
-        lastSkillXP = xp - _g_skillXpCosts[fullSkillsNumber]
-        lastSkillLevel = bisectLE(_g_levelXpCosts, lastSkillXP >> fullSkillsNumber + 1)
-        if withFree:
-            fullSkillsNumber += self.freeSkillsNumber
-        return fullSkillsNumber * MAX_SKILL_LEVEL + lastSkillLevel
+    @property
+    def canUseFreeXp(self):
+        return not self.hasMaxEfficiency or not self.isMaxSkillXp()
 
-    def getFullSkillsCount(self, withFree=True):
-        xp = self.totalXP()
+    @property
+    def hasMaxEfficiency(self):
+        return self.skillsEfficiencyXP == MAX_SKILLS_EFFICIENCY_XP
+
+    @property
+    def needEfficiencyXP(self):
+        return MAX_SKILLS_EFFICIENCY_XP - self.skillsEfficiencyXP
+
+    @property
+    def needXpForVeteran(self):
+        totalXP = self.totalXP()
+        needSkillsXP = _g_skillXpCosts[self.maxSkillsCount] - totalXP
+        needXP = self.needEfficiencyXP + needSkillsXP
+        return needXP
+
+    def isMaxSkillXp(self, extraXP=0):
+        totalXP = self.totalXP() + extraXP
+        return _g_skillXpCosts[self.maxSkillsCount] - totalXP <= 0
+
+    def isMaxedXp(self, extraXP=0):
+        totalXP = self.totalXP() - self.needEfficiencyXP + extraXP
+        return _g_skillXpCosts[self.maxSkillsCount] - totalXP <= 0
+
+    @property
+    def maxSkillsCount(self):
+        return NPS.MAX_MAJOR_PERKS - self.freeSkillsNumber
+
+    def getResidualXpForNextSkillLevel(self, currSkillsCount, currSkillLevel, extraXP=0):
+        residualXP = levelUpXpCost = 0
+        if self.isMaxSkillXp(extraXP=extraXP):
+            return (residualXP, levelUpXpCost)
+        lastSkillNumber = self.lastSkillSeqNumber
+        totalXpCost = self.freeXP + extraXP
+        totalXpCost += self.getXpCostForSkillsLevels(self.lastSkillLevel if lastSkillNumber else 0, lastSkillNumber)
+        levelUpXpCost = self.levelUpXpCost(min(MAX_SKILL_LEVEL - 1, currSkillLevel), currSkillsCount)
+        currXpCost = self.getXpCostForSkillsLevels(currSkillLevel, currSkillsCount)
+        residualXP, levelUpXpCost = totalXpCost - currXpCost, levelUpXpCost
+        return (residualXP, levelUpXpCost)
+
+    def getTotalSkillsProgress(self, withFree=True, extraXP=0):
+        extraXP = int(extraXP)
+        if self.isMaxSkillXp(extraXP=extraXP):
+            skillsCount, lastSkillLevel = self.maxSkillsCount, MAX_SKILL_LEVEL
+        else:
+            xp = self.totalXP() + extraXP
+            fullSkillsCount = self.getFullSkillsCount(withFree=False, xp=xp)
+            lastSkillXP = xp - _g_skillXpCosts[fullSkillsCount]
+            lastSkillLevel = bisectLE(_g_levelXpCosts, lastSkillXP >> fullSkillsCount + 1)
+            skillsCount = fullSkillsCount + 1
+        if withFree:
+            skillsCount += self.freeSkillsNumber
+        return (skillsCount, lastSkillLevel)
+
+    def getTotalSkillsProgressPercent(self, withFree=False, extraXP=0):
+        skillsCount, lastSkillLevel = self.getTotalSkillsProgress(withFree, extraXP)
+        return (skillsCount - 1) * MAX_SKILL_LEVEL + lastSkillLevel
+
+    def getFullSkillsCount(self, withFree=True, xp=None):
+        if xp is None:
+            xp = self.totalXP()
         skillsNum = bisectLE(_g_skillXpCosts, xp)
         if withFree:
             skillsNum += self.freeSkillsNumber
         return skillsNum
+
+    def getNewSkillsCount(self, fullOnly=False, withFree=True):
+        skillsCount, lastSkillLevel = self.getTotalSkillsProgress(withFree=True)
+        newSkillsCount = skillsCount - self.earnedSkillsCount - self.selectedFreeSkillsCount
+        if not withFree:
+            newSkillsCount -= self.newFreeSkillsCount
+        if not self.isMaxSkillXp() and fullOnly and lastSkillLevel != MAX_SKILL_LEVEL:
+            newSkillsCount -= 1
+            lastSkillLevel = MAX_SKILL_LEVEL
+        return (newSkillsCount, lastSkillLevel)
+
+    def getNewBonusSkillsCount(self, role):
+        return self.totalBonusSkills - self.selectedBonusSkillsCount(role)
 
     def skillLevel(self, skillName):
         if skillName not in self.skills:
@@ -447,9 +657,9 @@ class TankmanDescr(object):
             return MAX_SKILL_LEVEL if skillName != self._skills[-1] else self.__lastSkillLevel
 
     def totalXP(self):
-        numFullSkills = max(self.earnedSkillsNumber - 1, 0)
-        lastEarnedSkillLevel = self.__lastSkillLevel if self.earnedSkillsNumber > 0 else 0
-        lastEarnedSkillXP = _g_levelXpCosts[lastEarnedSkillLevel] << self.earnedSkillsNumber
+        numFullSkills = max(self.earnedSkillsCount - 1, 0)
+        lastEarnedSkillLevel = self.__lastSkillLevel if self.earnedSkillsCount > 0 else 0
+        lastEarnedSkillXP = _g_levelXpCosts[lastEarnedSkillLevel] << self.earnedSkillsCount
         return _g_skillXpCosts[numFullSkills] + lastEarnedSkillXP + self.freeXP
 
     def addXP(self, xp, truncateXP=True):
@@ -460,7 +670,7 @@ class TankmanDescr(object):
             tmpXP -= xpToAdd
         if tmpXP <= 0:
             return
-        self.freeXP = self.freeXP + tmpXP
+        self.freeXP += tmpXP
         if truncateXP:
             self.truncateXP()
         self.__levelUpLastSkill()
@@ -473,20 +683,99 @@ class TankmanDescr(object):
     def roleLevel(self):
         return MAX_SKILL_LEVEL
 
-    def addSkill(self, skillName):
-        if skillName in self.skills:
-            raise SoftException('Skill already leaned (%s)' % skillName)
+    @property
+    def roleID(self):
+        return SKILL_INDICES[self.role]
+
+    def validateSkill(self, skillName, utilizationType, battleOnly=False):
         if skillName not in skills_constants.ACTIVE_SKILLS:
             raise SoftException('Unknown skill (%s)' % skillName)
         if skillName in skills_constants.UNLEARNABLE_SKILLS:
             raise SoftException('Skill (%s) cannot be learned' % skillName)
         if self.role != 'commander' and skillName in skills_constants.COMMANDER_SKILLS:
             raise SoftException('Cannot learn commander skill (%s) for another role (%s)' % (skillName, self.role))
-        if self._skills and self.__lastSkillLevel != MAX_SKILL_LEVEL:
-            raise SoftException('Last skill not fully leaned (%d)' % self.__lastSkillLevel)
-        self._skills.append(skillName)
-        self.__lastSkillLevel = 0
-        self.__levelUpLastSkill()
+        if utilizationType == SkillUtilization.FREE_SKILL:
+            if skillName not in COMMON_SKILLS and skillName not in SKILLS_BY_ROLES[self.role]:
+                raise SoftException('Cannot learn free skill (%s) for this tankman' % skillName)
+            if 'any' not in self.freeSkills:
+                raise SoftException('no free skill slots available')
+            if battleOnly:
+                return
+            if skillName in self.freeSkills:
+                raise SoftException('free skill (%s) is already learned' % skillName)
+        elif utilizationType == SkillUtilization.MAJOR_SKILL:
+            if len(self.skills) >= NPS.MAX_MAJOR_PERKS:
+                raise SoftException('Maximum available perks (%s)' % skillName, NPS.MAX_MAJOR_PERKS)
+            if battleOnly:
+                return
+            if self._skills and self.__lastSkillLevel != MAX_SKILL_LEVEL:
+                raise SoftException('Last skill not fully leaned (%d)' % self.__lastSkillLevel)
+            if skillName in self.skills:
+                raise SoftException('Skill already leaned (%s)' % skillName)
+        else:
+            role = next((role for role in ROLES_BY_SKILLS[skillName]), None)
+            if role is None:
+                raise SoftException("Skill doesn't have a role".format(skillName))
+            if skillName in COMMON_SKILLS:
+                raise SoftException('Can\'t learn "{}" as bonus skill'.format(skillName))
+            numBonusSkills = self.selectedBonusSkillsCount(role)
+            if numBonusSkills == NPS.MAX_BONUS_SKILLS_PER_ROLE:
+                raise SoftException('Can\'t learn "{}" skill with index = {}'.format(skillName, numBonusSkills))
+            if battleOnly:
+                return
+            if skillName in self.__rolesBonusSkills[role]:
+                raise SoftException('Bonus skill "{}" is already learned'.format(skillName))
+            skillProgress = self.getTotalSkillsProgressPercent(withFree=True) / MAX_SKILL_LEVEL + (1 if not self.lastSkillLevel or self.lastSkillLevel == MAX_SKILL_LEVEL else 0)
+            if numBonusSkills > math.ceil(skillProgress / 2.0):
+                raise SoftException('Tried to learn skill "{}" by index {}, while can have only {}'.format(skillName, numBonusSkills, skillProgress))
+        return
+
+    def validateSkillUtilization(self, skillName, utilizationType, battleOnly=False):
+        try:
+            self.validateSkill(skillName, utilizationType, battleOnly)
+        except SoftException:
+            return False
+
+        return True
+
+    def validateSkillEquipment(self, vehDescr, idxInCrew, equipment):
+        if 'crewSkillBattleBooster' not in equipment.tags:
+            return False
+        skillName = equipment.skillName
+        crewRoles = vehDescr.type.crewRoles
+        if skillName not in ROLES_BY_SKILLS:
+            return False
+        rolesBySkill = ROLES_BY_SKILLS[skillName]
+        roles = crewRoles[idxInCrew]
+        hasSkill = any((name == skillName for name, _ in self.skillLevels(roles)))
+        iterRoles = (role for role in roles)
+        majorRole = next(iterRoles)
+        if majorRole in rolesBySkill and (hasSkill or self.validateSkillUtilization(skillName, SkillUtilization.FREE_SKILL, battleOnly=True) or self.validateSkillUtilization(skillName, SkillUtilization.MAJOR_SKILL, battleOnly=True)):
+            return True
+        for bonusRole in iterRoles:
+            if bonusRole not in rolesBySkill:
+                continue
+            if hasSkill or self.validateSkillUtilization(skillName, SkillUtilization.BONUS_SKILL, True):
+                return True
+
+        return False
+
+    def isFreeSkillCompletionRequiped(self, curUtilization):
+        return self.freeSkills.count('any') and curUtilization != SkillUtilization.BONUS_SKILL
+
+    def addSkill(self, skillName, utilizationType=SkillUtilization.MAJOR_SKILL, useFree=True):
+        if useFree and self.isFreeSkillCompletionRequiped(utilizationType) and self.validateSkillUtilization(skillName, SkillUtilization.FREE_SKILL):
+            if skillName in self.earnedSkills:
+                self.dropSkill(skillName, xpReuseFraction=1.0)
+            self.replaceFreeSkill('any', skillName)
+        else:
+            self.validateSkill(skillName, utilizationType)
+            if utilizationType == SkillUtilization.MAJOR_SKILL:
+                self._skills.append(skillName)
+                self.__lastSkillLevel = 0
+                self.__levelUpLastSkill()
+            elif utilizationType == SkillUtilization.BONUS_SKILL:
+                self.__rolesBonusSkills[next((role for role in ROLES_BY_SKILLS[skillName]))].append(skillName)
 
     def truncateXP(self):
         self.freeXP = min(_MAX_FREE_XP, self.freeXP)
@@ -497,21 +786,20 @@ class TankmanDescr(object):
         return True if self.lastSkillNumber == 1 + self.freeSkillsNumber and self.__lastSkillLevel == 0 else False
 
     def dropSkills(self, xpReuseFraction=MIN_XP_REUSE_FRACTION, throwIfNoChange=True, truncateXP=True):
+        if self.__rolesBonusSkills:
+            self.__rolesBonusSkills.clear()
+            throwIfNoChange = False
         if len(self._skills) == 0:
             if throwIfNoChange:
                 raise SoftException('attempt to reset empty skills')
             return
         prevTotalXP = self.totalXP()
-        numSkills = self.earnedSkillsNumber
-        if numSkills < 1:
-            if throwIfNoChange:
-                raise SoftException('attempt to reset free skills')
-            return
-        del self._skills[self.freeSkillsNumber:]
-        if self.freeSkillsNumber:
-            self.__lastSkillLevel = MAX_SKILL_LEVEL
-        else:
-            self.__lastSkillLevel = 0
+        if self.earnedSkillsCount:
+            del self._skills[self.freeSkillsNumber:]
+        for skillName in self._skills:
+            self.replaceFreeSkill(skillName, 'any')
+
+        self.__lastSkillLevel = MAX_SKILL_LEVEL if self.freeSkillsNumber else 0
         if xpReuseFraction > MIN_XP_REUSE_FRACTION:
             tmpXP = int(xpReuseFraction * (prevTotalXP - self.totalXP()))
             self.freeXP = self.freeXP + tmpXP
@@ -523,26 +811,16 @@ class TankmanDescr(object):
     def dropSkill(self, skillName, xpReuseFraction=MIN_XP_REUSE_FRACTION, truncateXP=True):
         idx = self._skills.index(skillName)
         prevTotalXP = self.totalXP()
-        numSkills = self.earnedSkillsNumber
+        numSkills = self.earnedSkillsCount
         if numSkills == 1:
             self.__lastSkillLevel = MAX_SKILL_LEVEL if self.freeSkillsNumber else 0
         elif idx + 1 == numSkills:
             self.__lastSkillLevel = MAX_SKILL_LEVEL
         del self._skills[idx]
+        curTotalXP = self.totalXP()
         if xpReuseFraction > MIN_XP_REUSE_FRACTION:
-            self.addXP(int(xpReuseFraction * (prevTotalXP - self.totalXP())), truncateXP=truncateXP)
+            self.addXP(int(xpReuseFraction * (prevTotalXP - curTotalXP)), truncateXP=truncateXP)
         self._updateRank()
-
-    def validateLearningFreeSkill(self, skillName):
-        if 'any' not in self.freeSkills:
-            return (False, 'no free skill slots available', False)
-        if skillName in self.freeSkills:
-            return (False, 'free skill (%s) is already learned' % skillName, False)
-        if skillName not in skills_constants.ACTIVE_SKILLS:
-            return (False, 'Unknown skill (%s)' % skillName, False)
-        if skillName in skills_constants.UNLEARNABLE_SKILLS:
-            return (False, 'Skill (%s) cannot be learned' % skillName, False)
-        return (False, 'Cannot learn free skill (%s) for this tankman' % skillName, False) if skillName not in COMMON_SKILLS and skillName not in SKILLS_BY_ROLES[self.role] else (True, '', skillName in self.earnedSkills)
 
     def replaceFreeSkill(self, oldSkillName, newSkillName):
         idx = self._skills.index(oldSkillName)
@@ -553,6 +831,23 @@ class TankmanDescr(object):
     @property
     def skillsEfficiency(self):
         return float(self.skillsEfficiencyXP) / MAX_SKILLS_EFFICIENCY_XP
+
+    @property
+    def irrelevantSkills(self):
+        for skill in self.selectedSkills:
+            role = list(ROLES_BY_SKILLS[skill])[0]
+            if skill not in COMMON_SKILLS and role != self.role:
+                yield skill
+
+    def dropIrrelevantSkills(self):
+        hasDrops = False
+        for skill in self.irrelevantSkills:
+            hasDrops = True
+            if skill in self.freeSkills:
+                self.replaceFreeSkill(skill, 'any')
+            self.dropSkill(skill, MAX_XP_REUSE_FRACTION)
+
+        return hasDrops
 
     def respecialize(self, newVehicleTypeID, newSkillsEfficiency):
         newVehTags = vehicles.g_list.getList(self.nationID)[newVehicleTypeID].tags
@@ -641,6 +936,8 @@ class TankmanDescr(object):
         flags = TankmanFlags()
         flags.extendedVehicleTypeID = self.vehicleTypeID > 255
         flags.hasFreeSkills = self.freeSkillsNumber > 0
+        flags.hasBonusSkills = len(self.__rolesBonusSkills) > 0
+        flags.firstSkillResetDisabled = self.firstSkillResetDisabled
         flags.isFemale = self.isFemale
         flags.isPremium = self.isPremium
         cd += flags.pack()
@@ -654,14 +951,17 @@ class TankmanDescr(object):
         cd += chr(self.__lastSkillLevel if numSkills else 0)
         if flags.hasFreeSkills:
             cd += chr(self.freeSkillsNumber)
-        cd += pack('>3HI', self.firstNameID, self.lastNameID, self.iconID, self.freeXP)
+        if flags.hasBonusSkills:
+            bonusSkills = []
+            for roleSkills in self.__rolesBonusSkills.itervalues():
+                for skillName in roleSkills:
+                    bonusSkills.append(SKILL_INDICES[skillName])
+
+            numBonusSkills = len(bonusSkills)
+            cd += pack((str(1 + numBonusSkills) + 'B'), numBonusSkills, *bonusSkills)
+        cd += pack('>3HI', self.firstNameID, self.lastNameID, self.iconID, self.__freeXP)
         cd += self.dossierCompactDescr
         return cd
-
-    def isRestorable(self):
-        res = self.freeSkillsNumber > 0 or self.getFullSkillsCount() >= 2
-        res &= not ('lockCrew' in self.__vehicleTags and 'unrecoverable' in self.__vehicleTags)
-        return res
 
     def __initFromCompactDescr(self, compactDescr, battleOnly):
         cd = compactDescr
@@ -675,6 +975,7 @@ class TankmanDescr(object):
             flags = TankmanFlags.fromCD(cd)
             self.isPremium = flags.isPremium
             self.isFemale = flags.isFemale
+            self.firstSkillResetDisabled = flags.firstSkillResetDisabled
             cd = cd[flags.len:]
             if flags.extendedVehicleTypeID:
                 self.vehicleTypeID = unpack('>H', cd[:2])
@@ -693,12 +994,7 @@ class TankmanDescr(object):
             if numSkills == 0:
                 self.__lastSkillLevel = 0
             else:
-                for skillID in unpack(str(numSkills) + 'B', cd[:numSkills]):
-                    skillName = SKILL_NAMES[skillID]
-                    if skillName not in skills_constants.ACTIVE_FREE_SKILLS:
-                        raise SoftException('Incorrect skill name', skillName)
-                    self._skills.append(skillName)
-
+                self._skills = self.__readSkills(cd, numSkills)
                 self.__lastSkillLevel = ord(cd[numSkills])
                 if self.__lastSkillLevel > MAX_SKILL_LEVEL:
                     raise SoftException('Incorrect last skill level', self.__lastSkillLevel)
@@ -709,14 +1005,25 @@ class TankmanDescr(object):
                 cd = cd[1:]
             if self.freeSkillsNumber == len(self._skills) and self.freeSkillsNumber > 0:
                 self.__lastSkillLevel = MAX_SKILL_LEVEL
-            nationConfig = getNationConfig(nationID)
-            self.firstNameID, self.lastNameID, self.iconID, self.freeXP = unpack('>3HI', cd[:10].ljust(10, '\x00'))
+            if flags.hasBonusSkills:
+                numSkills = unpack('B', cd[0])
+                cd = cd[1:]
+                bonusSkills = self.__readSkills(cd, numSkills)
+                for skillName in bonusSkills:
+                    roles = list(ROLES_BY_SKILLS[skillName])
+                    roleName = roles[0]
+                    self.__rolesBonusSkills[roleName].append(skillName)
+
+                cd = cd[numSkills:]
+            self.firstNameID, self.lastNameID, self.iconID, self.__freeXP = unpack('>3HI', cd[:10].ljust(10, '\x00'))
             cd = cd[10:]
             self.__gid = None
+            self.__initBonusSkillLevels()
             if battleOnly:
-                del self.freeXP
+                del self.__freeXP
                 return
             self.dossierCompactDescr = cd
+            nationConfig = getNationConfig(nationID)
             if not nationConfig.hasFirstName(self.firstNameID):
                 raise SoftException('Incorrect firstNameID', self.firstNameID)
             if not nationConfig.hasLastName(self.lastNameID):
@@ -731,11 +1038,27 @@ class TankmanDescr(object):
         return
 
     def _updateRank(self):
-        lastSkillLevel = self.lastSkillLevel if self.earnedSkillsNumber > 0 else 0
-        absLvl = max(0, self.earnedSkillsNumber - 1) * MAX_SKILL_LEVEL + lastSkillLevel
+        lastSkillLevel = self.lastSkillLevel if self.earnedSkillsCount > 0 else 0
+        absLvl = max(0, self.earnedSkillsCount - 1) * MAX_SKILL_LEVEL + lastSkillLevel
         self._rankIdx = 1 + absLvl / SKILL_LEVELS_PER_RANK
         rr = getNationConfig(self.nationID).getRoleRanks(self.role)
         self.rankID = rr[min(self._rankIdx, len(rr) - 1)]
+
+    def isRestorable(self):
+        res = self.freeSkillsNumber > 0 or self.getFullSkillsCount() >= 2
+        res &= not ('lockCrew' in self.__vehicleTags and 'unrecoverable' in self.__vehicleTags)
+        return res
+
+    def __readSkills(self, cd, numSkills):
+        unpack = struct.unpack
+        skillsList = []
+        for skillID in unpack(str(numSkills) + 'B', cd[:numSkills]):
+            skillName = SKILL_NAMES[skillID]
+            if skillName not in skills_constants.ACTIVE_FREE_SKILLS:
+                raise SoftException('Incorrect skill name', skillName)
+            skillsList.append(skillName)
+
+        return skillsList
 
     def __paramsOnVehicle(self, vehicleType):
         isPremium = 'premium' in vehicleType.tags or 'premiumIGR' in vehicleType.tags
@@ -743,7 +1066,7 @@ class TankmanDescr(object):
         return (isPremium, isSameClass)
 
     def __levelUpLastSkill(self):
-        numSkills = self.earnedSkillsNumber
+        numSkills = self.earnedSkillsCount
         if numSkills <= 0:
             return
         canLevelUp, newLevel, xpCost = self.__findAffordableLevel(self.__lastSkillLevel, numSkills)
@@ -751,6 +1074,15 @@ class TankmanDescr(object):
             self.freeXP -= xpCost
             self.__lastSkillLevel = newLevel
             self._updateRank()
+        self.__initBonusSkillLevels()
+
+    def __initBonusSkillLevels(self):
+        totalSkillsProgress = self.getTotalSkillsProgressPercent(withFree=True)
+        self.__bonusSkillLevels = []
+        for _ in xrange(NPS.MAX_BONUS_SKILLS_PER_ROLE):
+            level = math.ceil(min(totalSkillsProgress, MAX_SKILL_LEVEL * 2) / 2.0)
+            self.__bonusSkillLevels.append(level)
+            totalSkillsProgress = max(0, totalSkillsProgress - MAX_SKILL_LEVEL * 2)
 
     def __findAffordableLevel(self, currentLevel, skillNum):
         canLevelUp = False
@@ -783,10 +1115,8 @@ def makeTmanDescrByTmanData(tmanData):
     lastSkillLevel = tmanData.get('lastSkillLevel', MAX_SKILL_LEVEL)
     skills = tmanData.get('skills', [])
     freeSkills = tmanData.get('freeSkills', [])
-    if skills is None:
-        skills = []
-    if freeSkills is None:
-        freeSkills = []
+    skills = skills if skills is not None else []
+    freeSkills = freeSkills if freeSkills is not None else []
     __validateSkills(skills)
     __validateSkills(freeSkills)
     if not set(skills).isdisjoint(set(freeSkills)):
@@ -973,7 +1303,6 @@ def __validateSkills(skills):
 
 
 _g_skillsConfig = None
-_g_loreConfig = None
 _g_crewSkinsConfig = None
 _g_nationsConfig = [ None for x in xrange(len(nations.NAMES)) ]
 _g_tankmenGroupNames = None
@@ -1001,7 +1330,10 @@ def _makeSkillXpCosts():
 _g_skillXpCosts = _makeSkillXpCosts()
 _g_totalFirstSkillXpCost = _g_skillXpCosts[1]
 
-def getRecruitInfoFromToken(tokenName):
+def getRecruitInfoFromToken(tokenName, **kwargs):
+    skillIndices = kwargs.get('skillIndices', SKILL_INDICES)
+    activeSkills = kwargs.get('activeSkills', skills_constants.ACTIVE_SKILLS)
+    activeFreeSkills = kwargs.get('activeSkills', skills_constants.ACTIVE_FREE_SKILLS)
     parts = tokenName.split(':')
     if len(parts) != RECRUIT_TMAN_TOKEN_TOTAL_PARTS:
         return None
@@ -1053,7 +1385,7 @@ def getRecruitInfoFromToken(tokenName):
                 if len(skills) != len(earnedSkillsSet):
                     raise SoftException('earned skills are duplicated')
                 for skill in skills:
-                    if skill not in skills_constants.ACTIVE_SKILLS:
+                    if skill not in activeSkills:
                         raise SoftException('earned skill "{}" is not active'.format(skill))
                     result['skills'].append(skill)
 
@@ -1072,7 +1404,7 @@ def getRecruitInfoFromToken(tokenName):
                 if len(chosenFreeSkills) != len(freeSkillsSet):
                     raise SoftException('free skills are duplicated')
                 for skill in freeSkills:
-                    if skill not in skills_constants.ACTIVE_FREE_SKILLS:
+                    if skill != 'any' and skill not in activeFreeSkills:
                         raise SoftException('free skill "{}" is not active'.format(skill))
                     result['freeSkills'].append(skill)
 
@@ -1094,7 +1426,7 @@ def getRecruitInfoFromToken(tokenName):
                 for role in roles:
                     if role not in skills_constants.ROLES:
                         raise SoftException('unknown role name "{}"'.format(role))
-                    result['roles'].append(SKILL_INDICES[role])
+                    result['roles'].append(skillIndices[role])
 
         except (ValueError, SoftException) as e:
             LOG_DEBUG_DEV('getRecruitInfoFromToken({}) error: {}'.format(tokenName, e))
@@ -1240,6 +1572,10 @@ def isItemWithCompactDescrExist(compactDescr):
     return None
 
 
+def iterAffectedRolesByEquipment(vehDescr, idxInCrew, equipment):
+    return any((role in ROLES_BY_SKILLS.get(equipment.skillName, []) for role in vehDescr.type.crewRoles[idxInCrew]))
+
+
 class Cache(object):
     __slots__ = ('__crewSkins', '__crewBooks')
 
@@ -1278,8 +1614,17 @@ def getSkillRoleType(skillName):
         return None
 
 
-def compareMastery(tankmanDescr1, tankmanDescr2):
-    if tankmanDescr1.skillsEfficiencyXP < MAX_SKILLS_EFFICIENCY_XP or tankmanDescr2.skillsEfficiencyXP < MAX_SKILLS_EFFICIENCY_XP:
-        return cmp(tankmanDescr1.skillsEfficiencyXP, tankmanDescr2.skillsEfficiencyXP)
-    else:
-        return cmp(tankmanDescr1.totalXP(), tankmanDescr2.totalXP())
+def getLessMasteredIDX(tankmenDescrs):
+    forSortMastered = []
+    isCrewEmpty = True
+    for slotIdx, tankmanDescr in enumerate(tankmenDescrs):
+        if tankmanDescr:
+            forSortMastered.append((tankmanDescr.skillsEfficiencyXP - MAX_SKILLS_EFFICIENCY_XP,
+             -abs(tankmanDescr.needXpForVeteran),
+             tankmanDescr.totalXP(),
+             slotIdx))
+            isCrewEmpty = False
+        forSortMastered.append((float('inf'), slotIdx))
+
+    forSortMastered = sorted(forSortMastered, key=lambda item: [ idx for idx in item ])
+    return (isCrewEmpty, forSortMastered[0][-1])

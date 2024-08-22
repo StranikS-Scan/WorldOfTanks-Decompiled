@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	7.30	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2863,10 +2866,6 @@
       <tags></tags>
       <level>	6	</level>
       <price>	12840	</price>
-      <unlocks>
-        <turret>	Turret_2_A44	  <cost>	8800	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	75	</armor_1>
         <armor_2>	60	</armor_2>
@@ -2895,89 +2894,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	190	</maxAmmo>
+        <_57mm_ZiS_4_44>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
-            <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
-            </gun>
-            <gun>	_76mm_S-54	  <cost>	4300	</cost>
+            <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
             </gun>
           </unlocks>
-          <armor>
-            <armor_2>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003329 0.088179 1.13172	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.003307 0.226599 0.034966	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003329 0.088179 1.13172	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.006659 0.089775 1.02483	</rayStart>
-              <rayEnd>	-0.006659 0.089775 1.52783	</rayEnd>
-              <rayUp>	0.065 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.006660 0.089775 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	1.1 1.1 0.000000 0.1	</tiling>
-            <density>	126.699 126.554	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	240	</maxAmmo>
           <armor>
             <armor_2>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -3051,90 +2972,11 @@
             <density>	127.133 130.029	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	190	</maxAmmo>
-          <unlocks>
-            <gun>	_107mm_ZiS-6	  <cost>	14400	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_2>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.00215 0.085108 1.78655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.003297 0.226537 0.034943	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.00215 0.085108 1.78655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.0043 0.08662 1.19	</rayStart>
-              <rayEnd>	0.0043 0.08662 1.628	</rayEnd>
-              <rayUp>	0.065 0 0	</rayUp>
-              <size>	0.438	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.004299 0.086618 0.000000	</shotOffset>
-          <camouflage>
-            <density>	128.568 130.332	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_S-54>
+        </_57mm_ZiS_4_44>
         <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
-            <vehicle>	R60_Object416	  <cost>	104600	</cost>
-            </vehicle>
+            <turret>	Turret_2_A44	  <cost>	8800	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_2>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3144,17 +2986,17 @@
             <gun>	40	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_04.model	</undamaged>
@@ -3765,6 +3607,10 @@
       <tags></tags>
       <level>	7	</level>
       <price>	17300	</price>
+      <unlocks>
+        <vehicle>	R60_Object416	  <cost>	104600	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	90	</armor_1>
         <armor_2>	75	</armor_2>
@@ -3781,7 +3627,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5170	</weight>
       <maxHealth>	300	</maxHealth>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
@@ -3794,82 +3640,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_F-34>	shared	  <maxAmmo>	190	</maxAmmo>
-          <armor>
-            <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.003806 0.098043 1.29531	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.003278 0.226337 0.034856	</anchorPosition>
-              <anchorDirection>	-0.000001 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.003806 0.098043 1.29531	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.007612 0.089775 0.989775	</rayStart>
-              <rayEnd>	-0.007612 0.089775 1.547775	</rayEnd>
-              <rayUp>	0.067 0 0	</rayUp>
-              <size>	0.558	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.007613 0.089775 0.000000	</shotOffset>
-          <camouflage>
-            <density>	126.699 126.554	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_F-34>
-        <_57mm_ZiS-4>	shared	  <maxAmmo>	240	</maxAmmo>
+        <_57mm_ZiS_4_44>	shared	  <maxAmmo>	240	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3882,7 +3653,7 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
+          <reloadTime>	2.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3943,82 +3714,7 @@
             <density>	127.133 130.029	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	190	</maxAmmo>
-          <armor>
-            <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/russian/R59_A44/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/russian/R59_A44/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R59_A44/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R59_A44/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.001673 0.095799 1.78655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.003276 0.226269 0.034835	</anchorPosition>
-              <anchorDirection>	-0.000001 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.001673 0.095799 1.78655	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.003346 0.08662 1.15	</rayStart>
-              <rayEnd>	0.003346 0.08662 1.604	</rayEnd>
-              <rayUp>	0.065 0 0	</rayUp>
-              <size>	0.454	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.003346 0.086618 0.000000	</shotOffset>
-          <camouflage>
-            <density>	128.568 130.332	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_S-54>
+        </_57mm_ZiS_4_44>
         <_107mm_ZiS-6>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4028,17 +3724,17 @@
             <gun>	40	</gun>
           </armor>
           <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R59_A44/normal/lod0/Gun_08.model	</undamaged>
@@ -4645,33 +4341,28 @@
     </Turret_2_A44>
   </turrets0>
   <engines>
-    <V-2-34>	shared	  <unlocks>
+    <V_2_34_43>	shared	  <unlocks>
         <engine>	V-5	  <cost>	5500	</cost>
         </engine>
       </unlocks>
-    </V-2-34>
+    </V_2_34_43>
     <V-5>	shared	</V-5>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2-34>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        <V_2_34_43>
+          <smplEnginePower>	580	</smplEnginePower>
           <smplFwMaxSpeed>	59	</smplFwMaxSpeed>
-        </V-2-34>
+        </V_2_34_43>
         <V-5>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+          <smplEnginePower>	640	</smplEnginePower>
           <smplFwMaxSpeed>	59	</smplFwMaxSpeed>
         </V-5>
       </engines>

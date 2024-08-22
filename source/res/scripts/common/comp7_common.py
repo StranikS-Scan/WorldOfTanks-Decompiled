@@ -4,7 +4,7 @@ import enum
 import re
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
 __COMP7_QUEST_PREFIX = 'comp7'
-__COMP7_MASKOT_ID = '3'
+__COMP7_MASKOT_ID = '4'
 SEASONS_IN_YEAR = 3
 __COMP7_QUALIFICATION_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}:qualification'
 __COMP7_QUALIFICATION_QUEST_ID_TEMPLATE = 'comp7_{maskot}_{season}_ranks_65'
@@ -13,6 +13,7 @@ __COMP7_TOKEN_PREFIX_TEMPLATE = 'comp7_{maskot}_{season}'
 __COMP7_WEEKLY_REWARD_TOKEN_TEMPLATE = 'comp7_{maskot}_{season}_weekly_rewards_token'
 __COMP7_SEASON_POINT_ASSET_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
 __COMP7_YEARLY_REWARD_TEMPLATE = 'comp7_{maskot}_yearly_reward'
+__COMP7_SEASON_NAME_TEMPLATE = 'comp7_{maskot}_{season}'
 __COMP7_SEASON_POINTS_ENTITLEMENT_TEMPLATE = 'comp7_season_points:{maskot}:{season}'
 __COMP7_RATING_ENTITLEMENT_PREFIX = 'comp7_rating_points'
 __COMP7_RATING_ENTITLEMENT_TEMPLATE = __COMP7_RATING_ENTITLEMENT_PREFIX + ':{maskot}:{season}'
@@ -74,6 +75,10 @@ def maxRankEntNameBySeasonNumber(seasonNumber):
     return __COMP7_MAX_RANK_ENTITLEMENT_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
 
 
+def seasonNameBySeasonNumber(seasonNumber):
+    return __COMP7_SEASON_NAME_TEMPLATE.format(maskot=__COMP7_MASKOT_ID, season=seasonNumber)
+
+
 SEASON_POINTS_ENTITLEMENTS = [ seasonPointsCodeBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]
 SEASON_POINTS_ASSETS = [ seasonPointsAssetBySeasonNumber(n + 1) for n in range(SEASONS_IN_YEAR) ]
 
@@ -81,7 +86,7 @@ def parseRatingEnt(entCode):
     if not entCode.startswith(__COMP7_RATING_ENTITLEMENT_PREFIX):
         return (None, None)
     else:
-        _, mascotID, index = entCode.split(':', 3)
+        _, mascotID, index = entCode.split(':', 2)
         return (int(mascotID), int(index))
 
 

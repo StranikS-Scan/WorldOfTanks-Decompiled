@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/strongholds/web_handlers.py
 from web.web_client_api import webApiCollection
 from web.web_client_api.clans import ClansWebApi
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.reactive_comm import ReactiveCommunicationWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
@@ -57,4 +58,4 @@ def _createCloseWindowWebApi(onBrowserClose=None):
 
 
 def createStrongholdsWebHandlers(onBrowserOpen=None, onBrowserClose=None):
-    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, ReactiveCommunicationWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, VehiclesWebApi, ArenasWebApi, UtilWebApi, UILoggingWebApi)
+    return webApiCollection(_createCloseWindowWebApi(onBrowserClose=onBrowserClose), _createOpenWindowWebApi(onBrowserOpen=onBrowserOpen, onBrowserClose=onBrowserClose), ClansWebApi, ContextMenuWebApi, NotificationWebApi, OpenTabWebApi, ReactiveCommunicationWebApi, RequestWebApi, StrongholdsWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, VehiclesWebApi, ArenasWebApi, UtilWebApi, UILoggingWebApi, PersonalExchangeRatesDiscountsWebApi)

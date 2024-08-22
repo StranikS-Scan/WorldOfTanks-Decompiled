@@ -20,11 +20,15 @@ from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters.params_helper import hasSituationalEffect
 from gui.shared.tooltips.contexts import HangarParamContext
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.shared import IItemsCache
+_HIGHLIGHT_TYPE_STATE_MAP = {PARAM_STATE.BETTER: HighlightType.INCREASE,
+ PARAM_STATE.WORSE: HighlightType.DECREASE,
+ PARAM_STATE.SITUATIONAL: HighlightType.SITUATIONAL}
 
 class VehicleParamsView(ViewImpl):
     __slots__ = ('__vehIntCD', '__expandedGroups', '__params', '__extraParams', '__groups', '__context', '__comparator', '__stockParams')
@@ -187,6 +191,7 @@ class VehicleParamsView(ViewImpl):
          'IsEnabled': self._getGroupEnabled(groupName),
          'Value': formatParameterValue(param.name, param.value, param.state, allowSmartRound=False, isColorize=False, nDigits=self._getRoundNDigits()),
          'HighlightType': self._getGroupHighlight(groupName),
+         'IsSituational': hasSituationalEffect(param.name, self.comparator),
          'TooltipID': self._getTooltipID(),
          'BuffIconType': getGroupIcon(param, self.comparator),
          'IsOpen': self.__getIsOpened(groupName=groupName),
@@ -235,10 +240,25 @@ class VehicleParamsView(ViewImpl):
         param = self.comparator.getExtendedData(paramName)
         if skipMissing and (not param.value or paramName in HIDDEN_PARAM_DEFAULTS and param.value == HIDDEN_PARAM_DEFAULTS[paramName]):
             return
-        highlight = diffParams.get(paramName, HighlightType.NONE)
+        if param.mustHighlight:
+            highlight = HighlightType.INCREASE if not param.isSituational else HighlightType.SITUATIONAL
+        else:
+            highlight = self.__getHighlightType(paramName, diffParams, param.state)
         paramModel = self._createParam(param, groupName, highlight)
         if paramModel:
             paramsContainer.append(paramModel)
+
+    def __getHighlightType(self, paramName, diffParams, paramState):
+        if diffParams:
+            return diffParams.get(paramName, HighlightType.NONE)
+        elif paramState is None:
+            return HighlightType.NONE
+        else:
+            if isinstance(paramState[0], (tuple, list)):
+                stateType, _ = paramState[0]
+            else:
+                stateType = paramState[0]
+            return _HIGHLIGHT_TYPE_STATE_MAP.get(stateType, HighlightType.NONE)
 
     def __getIsOpened(self, groupName):
         return self.expandedGroups is None or self.expandedGroups.get(groupName, False)
@@ -309,23 +329,70 @@ class VehiclePreviewParamsView(VehicleParamsView):
         return g_currentPreviewVehicle.item
 
 
+class VehicleCompareParamsView(VehicleParamsView):
+    __slots__ = ('_baseVehicle', '_changedVehicle')
+
+    def __init__(self, baseVehicle, changedVehicle, *args, **kwargs):
+        self._baseVehicle = baseVehicle
+        self._changedVehicle = changedVehicle
+        super(VehicleCompareParamsView, self).__init__(*args, **kwargs)
+
+    def _getComparator(self):
+        return params_helper.previewVehiclesComparator(self._getChangedVehicle(), self._getVehicle(), withSituational=True)
+
+    def _getVehicle(self):
+        return self._baseVehicle
+
+    def _finalize(self):
+        self._baseVehicle = None
+        self._changedVehicle = None
+        super(VehicleCompareParamsView, self)._finalize()
+        return
+
+    def _onIgrTypeChanged(self):
+        pass
+
+    def _onCurrentVehicleChanged(self):
+        pass
+
+    def _onCacheResync(self, *_):
+        pass
+
+    def _getTooltipID(self):
+        return TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+
+    def _getAdvancedParamTooltip(self, _):
+        return TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+
+    def _getChangedVehicle(self):
+        return self._changedVehicle
+
+    def _isExtraParamEnabled(self):
+        return True
+
+    def _isAdditionalValueEnabled(self):
+        return True
+
+
 class VehicleSkillPreviewParamsView(VehicleParamsView):
 
     def __init__(self, *args, **kwargs):
         super(VehicleSkillPreviewParamsView, self).__init__(*args, **kwargs)
         self.__skillName = kwargs.get('skillName', '')
+        self.__highlightedSkills = kwargs.get('highlightedSkills', '')
 
     def update(self):
         if not self._getVehicle():
             return
         super(VehicleSkillPreviewParamsView, self).update()
 
-    def updateForSkill(self, skillName):
+    def updateForSkill(self, skillName, highlightedSkills=None):
         self.__skillName = skillName
+        self.__highlightedSkills = highlightedSkills
         self.update()
 
     def _getComparator(self):
-        return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillName)
+        return params_helper.skillOnSimilarCrewComparator(self._getVehicle(), self.__skillName, self.__highlightedSkills)
 
     def _isExtraParamEnabled(self):
         return True

@@ -107,12 +107,20 @@ def kpiFromCrewSkills(vehicle):
         if tankman is None:
             continue
         for skill in tankman.skills:
-            level = crewMemberRealSkillLevel(vehicle, skill.name)
-            if level != tankmen.NO_SKILL:
-                skills[skill.name] = level
+            if skill.isSkillActive:
+                level = crewMemberRealSkillLevel(vehicle, skill.name)
+                if level != tankmen.NO_SKILL:
+                    skills[skill.name] = level
+
+        for bonusSkills in tankman.bonusSkills.itervalues():
+            for bonusSkill in bonusSkills:
+                if bonusSkill and bonusSkill.name != 'any' and bonusSkill.level != tankmen.NO_SKILL and bonusSkill.isSkillActive:
+                    level = crewMemberRealSkillLevel(vehicle, bonusSkill.name)
+                    if level != tankmen.NO_SKILL:
+                        skills[bonusSkill.name] = crewMemberRealSkillLevel(vehicle, bonusSkill.name)
 
     for eq in vehicle.battleBoosters.installed.getItems():
-        if 'crewSkillBattleBooster' in eq.descriptor.tags:
+        if eq.isCrewBooster() and eq.isAffectsOnVehicle(vehicle):
             if eq.descriptor.skillName not in skills:
                 skills[eq.descriptor.skillName] = tankmen.MAX_SKILL_LEVEL
 
@@ -137,16 +145,41 @@ def getRocketAccelerationKpiFactors(vehDescr):
     return rocketKPI
 
 
-def getVehicleFactors(vehicle):
+def getVehicleFactors(vehicle, situationalBonuses=None):
     factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
     eqs = [ eq.descriptor for eq in vehicle.consumables.installed.getItems() ]
     for booster in vehicle.battleBoosters.installed.getItems():
-        eqs.append(booster.descriptor)
+        if booster.isAffectsOnVehicle(vehicle):
+            eqs.append(booster.descriptor)
 
     crewCompactDescrs = extractCrewDescrs(vehicle)
-    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors)
+    additionalCrewLevelIncrease = calculateAdditionalCrewLevelIncrease(vehicle, situationalBonuses)
+    utils.updateAttrFactorsWithSplit(vehicleDescr, crewCompactDescrs, eqs, factors, additionalCrewLevelIncrease)
     return factors
+
+
+def calculateAdditionalCrewLevelIncrease(vehicle, situationalBonuses):
+    situationalBonuses = situationalBonuses or []
+    if not situationalBonuses:
+        return 0.0
+    else:
+        resultCrewLevelIncrease = 0.0
+        for _, tankman in vehicle.crew:
+            if tankman is None:
+                continue
+            for skill in tankman.skills:
+                if skill.isSkillActive and skill.name in situationalBonuses:
+                    skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(skill.name), 'crewLevelIncrease', 0.0)
+                    resultCrewLevelIncrease += skillLevelIncrease / tankmen.MAX_SKILL_LEVEL * skill.level
+
+            for bonusSkills in tankman.bonusSkills.itervalues():
+                for bonusSkill in bonusSkills:
+                    if bonusSkill and bonusSkill.isSkillActive:
+                        skillLevelIncrease = getattr(tankmen.getSkillsConfig().getSkill(bonusSkill.name), 'crewLevelIncrease', 0.0)
+                        resultCrewLevelIncrease += skillLevelIncrease / tankmen.MAX_SKILL_LEVEL * bonusSkill.level
+
+        return resultCrewLevelIncrease
 
 
 def extractCrewDescrs(vehicle, replaceNone=True):

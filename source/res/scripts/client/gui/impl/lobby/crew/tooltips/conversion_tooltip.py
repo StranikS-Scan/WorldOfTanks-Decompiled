@@ -11,13 +11,14 @@ from skeletons.gui.shared import IItemsCache
 
 class ConversionTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__books', '__isReceived')
+    __slots__ = ('__books', '__title', '__description')
 
-    def __init__(self, books, isReceived=True):
+    def __init__(self, books, **kwargs):
         settings = ViewSettings(R.views.lobby.crew.tooltips.ConversionTooltip())
         settings.model = ConversionTooltipModel()
         self.__books = books
-        self.__isReceived = isReceived
+        self.__title = kwargs.get('title')
+        self.__description = kwargs.get('description')
         super(ConversionTooltip, self).__init__(settings)
 
     @property
@@ -27,7 +28,8 @@ class ConversionTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(ConversionTooltip, self)._onLoading()
         with self.viewModel.transaction() as vm:
-            vm.setIsReceived(self.__isReceived)
+            vm.setTitle(self.__title)
+            vm.setDescription(self.__description)
             booksList = vm.getBooksList()
             booksList.clear()
             for book, value in self.__books:

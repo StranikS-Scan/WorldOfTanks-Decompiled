@@ -170,8 +170,6 @@
     <Maybach_HL_234_TRM_P30_FL>	502	</Maybach_HL_234_TRM_P30_FL>
     <Porsche_Deutz_Typ180_2_FL>	504	</Porsche_Deutz_Typ180_2_FL>
     <Maybach_HL_230_TRM_P45_FL>	505	</Maybach_HL_230_TRM_P45_FL>
-    <MB507_FEP>	601	</MB507_FEP>
-    <Maybach_HL_234P60_E100_FEP>	602	</Maybach_HL_234P60_E100_FEP>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -2886,14 +2884,14 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	650	</power>
+      <power>	750	</power>
       <weight>	1349	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
     </Continental_AVI_1790_8>
     <MB_837_K>
       <userString>	#germany_vehicles:MB_837_K	</userString>
@@ -2947,41 +2945,6 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </M_17T_nestejaahdytteinen_bensiinimoottori>
-    <MB507_FEP>
-      <userString>	#germany_vehicles:MB507_FEP	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1750	</power>
-      <weight>	750	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	250	</rpm_min>
-      <rpm_max>	2800	</rpm_max>
-    </MB507_FEP>
-    <Maybach_HL_234P60_E100_FEP>
-      <userString>	#germany_vehicles:Maybach_HL_234P60_E100_FEP	</userString>
-      <shortUserString>	#germany_vehicles:Maybach_HL_234P60_E100_FEP_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
-      <power>	1200	</power>
-      <weight>	750	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	404	</rpm_min>
-      <rpm_max>	2305	</rpm_max>
-    </Maybach_HL_234P60_E100_FEP>
     <Maybach_HL_210P30_Ausf_A_IGR>
       <userString>	#igr_vehicles:Maybach_HL_210P30_Ausf_A_IGR	</userString>
       <tags>	gasoline	</tags>

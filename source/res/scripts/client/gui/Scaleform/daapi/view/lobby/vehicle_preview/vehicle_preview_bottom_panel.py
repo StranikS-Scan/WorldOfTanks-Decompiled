@@ -499,8 +499,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         money = self._tradeIn.addTradeInPriceIfNeeded(vehicle, money)
         buyButtonTooltip = ''
         actionTooltip = getActionPriceData(vehicle)
-        exchangeRate = self._itemsCache.items.shop.exchangeRate
-        priceType, price = getPriceTypeAndValue(vehicle, money, exchangeRate)
+        priceType, price = getPriceTypeAndValue(vehicle, money, self._itemsCache.items.shop.defaults.exchangeRate)
         itemPrice = chooseItemPriceVO(priceType, price)
         currency = price.getCurrency(byWeight=True)
         walletAvailable = self.__walletAvailableForCurrency(currency)
@@ -513,7 +512,8 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
             isAction = minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']
         elif not vehicle.isRestoreAvailable():
             isAction = vehicle.buyPrices.getSum().isActionPrice()
-        mayObtain = self.__isHeroTank or walletAvailable and vehicle.mayObtainWithMoneyExchange(money, exchangeRate)
+        mayObtainWithExchange = vehicle.mayObtainWithMoneyExchange(money, proxy=self._itemsCache.items.shop)
+        mayObtain = self.__isHeroTank or walletAvailable and mayObtainWithExchange
         isBuyingAvailable = not vehicle.isHidden or vehicle.isRentable or vehicle.isRestorePossible()
         isMoneyEnough = True
         restoreInfo = vehicle.restoreInfo

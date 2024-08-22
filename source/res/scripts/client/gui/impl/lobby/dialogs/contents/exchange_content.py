@@ -2,13 +2,21 @@
 # Embedded file name: scripts/client/gui/impl/lobby/dialogs/contents/exchange_content.py
 import logging
 from enum import Enum
-import Event
 from adisp import adisp_process, adisp_async
+from exchange.personal_discounts_helper import getDiscountsRequiredForExchange
 from gui import SystemMessages
-from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.game_control.exchange_rates_with_discounts import getCurrentTime
 from gui.impl.auxiliary.exchanger import Exchanger
+from gui.impl.gen import R
 from gui.impl.gen.view_models.common.exchange_panel_model import ExchangePanelModel
-from gui.impl.common.base_sub_model_view import BaseSubModelView
+from gui.impl.gen.view_models.common.price_item_model import PriceItemModel
+from gui.impl.gen.view_models.views.lobby.exchange.currency_model import CurrencyType
+from gui.impl.lobby.exchange.currency_tab_view import getCurrencyValueFromType
+from gui.impl.lobby.exchange.discount_info_tooltip import DiscountInfoTooltip, LimitedDiscountInfoTooltip
+from gui.impl.lobby.exchange.discount_info_view import ExchangeDiscountView
+from gui.impl.lobby.exchange.exchange_rates_helper import getRateNameFromCurrencies, handleUserValuesInput, showAllPersonalDiscountsWindow, handleAndRoundStepperInput
+from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController
@@ -21,11 +29,10 @@ class ExchangeContentResult(Enum):
     INVALID_VALUE = 2
 
 
-class ExchangeContent(BaseSubModelView):
-    __slots__ = ('__fromItem', '__toItem', '__needItem', '__exchanger')
+class ExchangeContent(ExchangeDiscountView):
 
     def __init__(self, fromItem, toItem, viewModel=None, needItem=0):
-        super(ExchangeContent, self).__init__(viewModel or ExchangePanelModel())
+        super(ExchangeContent, self).__init__(getRateNameFromCurrencies((fromItem.getType(), toItem.getType())), viewModel or ExchangePanelModel())
         self.__fromItem = fromItem
         self.__toItem = toItem
         self.__needItem = needItem
@@ -37,15 +44,7 @@ class ExchangeContent(BaseSubModelView):
         if self.__needItem > 0:
             fromItemCount, toItemCount = self.__exchanger.calculateFromItemCount(self.__needItem)
         self.__fillItemsModel(fromItemCount, toItemCount)
-        self.__fillRateModel()
-
-    def initialize(self, *args, **kwargs):
-        super(ExchangeContent, self).initialize(*args, **kwargs)
-        self.__exchanger.init()
-
-    def finalize(self):
-        self.__exchanger.fini()
-        super(ExchangeContent, self).finalize()
+        self._updateDiscountInfo()
 
     def update(self, needItem=0):
         super(ExchangeContent, self).update()
@@ -59,19 +58,49 @@ class ExchangeContent(BaseSubModelView):
     @adisp_process
     def exchange(self, callback=None):
         if not self.__validateCount():
-            if callback is not None:
-                callback(ExchangeContentResult.INVALID_VALUE)
+            callback(ExchangeContentResult.INVALID_VALUE)
         else:
             fromItemCount = self._viewModel.fromItem.getValue()
             result = yield self.__exchanger.tryExchange(fromItemCount, withConfirm=False)
             if result and result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-            if callback is not None:
-                callback(ExchangeContentResult.SERVER_ERROR if result is None else ExchangeContentResult.IS_OK)
-        return
+            callback(ExchangeContentResult.SERVER_ERROR if not result.success else ExchangeContentResult.IS_OK)
 
-    def getViewModel(self):
-        return self._viewModel
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.personal_exchange_rates.tooltips.ExchangeLimitTooltip():
+            selectedExchangeAmount = self._viewModel.fromItem.getValue()
+            return LimitedDiscountInfoTooltip(self._exchangeRate.getExchangeRateName, selectedExchangeAmount)
+        return DiscountInfoTooltip(self._exchangeRate.getExchangeRateName) if contentID == R.views.lobby.personal_exchange_rates.tooltips.ExchangeRateTooltip() else super(ExchangeContent, self).createToolTipContent(event, contentID)
+
+    def _addListeners(self):
+        self._viewModel.exchangeRate.onOpenAllDiscountsWindow += self.__onOpenAllDiscountsWindow
+        self._viewModel.exchangeRate.onSelectedValueUpdated += self.__onSelectedAmountChanged
+        super(ExchangeContent, self)._addListeners()
+
+    def _removeListeners(self):
+        self._viewModel.exchangeRate.onOpenAllDiscountsWindow -= self.__onOpenAllDiscountsWindow
+        self._viewModel.exchangeRate.onSelectedValueUpdated -= self.__onSelectedAmountChanged
+        super(ExchangeContent, self)._removeListeners()
+
+    @replaceNoneKwargsModel
+    def _updateDiscountInfo(self, model=None):
+        allGold = getCurrencyValueFromType(CurrencyType.GOLD)
+        maxGold, maxResource = handleUserValuesInput(selectedGold=allGold, selectedCurrency=0, exchangeProvider=self._exchangeRate)
+        model.exchangeRate.setMaxResourceAmountForExchange(maxResource)
+        model.exchangeRate.setMaxGoldAmountForExchange(maxGold)
+        self.__fillRateModel(model)
+        self.__onSelectedAmountChanged({'gold': self._viewModel.fromItem.getValue()})
+        super(ExchangeContent, self)._updateDiscountInfo(model=model.exchangeRate.discount)
+
+    def __onOpenAllDiscountsWindow(self):
+        showAllPersonalDiscountsWindow(exchangeRateType=self._exchangeRate.getExchangeRateName, selectedValue={'currency': self._viewModel.toItem.getValue()})
+
+    def __onSelectedAmountChanged(self, event):
+        selectedGold, selectedCurrency = handleAndRoundStepperInput(event, exchangeRate=self._exchangeRate, validateGold=True)
+        self.__fillItemsModel(selectedGold, selectedCurrency)
+
+    def __updateTooltipInformation(self):
+        g_eventBus.handleEvent(events.ExchangeRatesDiscountsEvent(events.ExchangeRatesDiscountsEvent.ON_SELECTED_AMOUNT_CHANGED, {'amount': self._viewModel.fromItem.getValue()}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __validateCount(self):
         fromItemCount = self._viewModel.fromItem.getValue()
@@ -88,66 +117,27 @@ class ExchangeContent(BaseSubModelView):
         with self._viewModel.transaction() as ts:
             self.__fromItem.updateItemModel(ts.fromItem, fromItemCount)
             self.__toItem.updateItemModel(ts.toItem, toItemCount)
+            ts.exchangeRate.setAmountOfPersonalDiscounts(len(getDiscountsRequiredForExchange(self._exchangeRate.allPersonalLimitedDiscounts, fromItemCount, getCurrentTime())))
+        self.__updateTooltipInformation()
 
-    def __fillRateModel(self):
-        with self._viewModel.transaction() as ts:
-            ts.exchangeRate.setCurrent(self.__exchanger.getCurrentRate())
-            ts.exchangeRate.setDefault(self.__exchanger.getDefaultRate())
-            ts.exchangeRate.setDiscount(self.__exchanger.getDiscount())
-
-
-class ExchangeItemInfo(object):
-
-    def __init__(self, itemType=''):
-        self._type = itemType
-        self.onUpdated = Event.Event()
-
-    def init(self):
-        pass
-
-    def fini(self):
-        self.onUpdated.clear()
-
-    def getType(self):
-        return self._type
-
-    def isEnough(self, count):
-        return False
-
-    def getMaxCount(self):
-        pass
-
-    def isAvailable(self):
-        return False
-
-    def getItemModel(self, count):
-        return None
-
-    def _onUpdate(self, *args, **kwargs):
-        self.onUpdated()
+    def __fillRateModel(self, model):
+        model.exchangeRate.setDefault(self.__exchanger.getDefaultRate())
 
 
-class ExchangeMoneyInfo(ExchangeItemInfo):
+class ExchangeMoneyInfo(object):
     __itemsCache = dependency.descriptor(IItemsCache)
     __walletController = dependency.descriptor(IWalletController)
 
     def __init__(self, currencyType=''):
         if currencyType not in Currency.ALL:
             _logger.error('%s is not Currency!', currencyType)
-        super(ExchangeMoneyInfo, self).__init__(itemType=currencyType)
-
-    def init(self):
-        super(ExchangeMoneyInfo, self).init()
-        g_clientUpdateManager.addMoneyCallback(self._onUpdate)
-        self.__walletController.onWalletStatusChanged += self._onUpdate
-
-    def fini(self):
-        self.__walletController.onWalletStatusChanged -= self._onUpdate
-        g_clientUpdateManager.removeObjectCallbacks(self)
-        super(ExchangeMoneyInfo, self).fini()
+        self._type = currencyType
 
     def isEnough(self, count):
         return count <= self.__itemsCache.items.stats.money.get(self._type, 0)
+
+    def getType(self):
+        return self._type
 
     def isAvailable(self):
         return self.__walletController.isAvailable

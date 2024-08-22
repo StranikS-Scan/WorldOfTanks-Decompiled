@@ -22,6 +22,8 @@ from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
 from gui.impl.lobby.tank_setup.tank_setup_sounds import playEnterTankSetupView, playExitTankSetupView
 from gui.impl.lobby.tank_setup.tooltips.setup_tab_tooltip_view import SetupTabTooltipView
 from gui.impl.lobby.tank_setup.tooltips.warning_tooltip_view import WarningTooltipView
+from gui.impl.lobby.tanksetup.tooltips.not_enough_data_for_popular_loadouts_tooltip import NotEnoughDataForPopularLoadoutsTooltip
+from gui.impl.lobby.tanksetup.tooltips.popular_loadouts_tooltip import popularLoadoutsTooltip
 from gui.prb_control import prbDispatcherProperty
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.close_confiramtor_helper import CloseConfirmatorsHelper
@@ -76,6 +78,12 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
         elif contentID == R.views.lobby.tanksetup.tooltips.SetupTabTooltipView():
             name = event.getArgument('name', '')
             return SetupTabTooltipView(name)
+        elif contentID == R.views.lobby.tanksetup.tooltips.PopularLoadoutsTooltip():
+            return popularLoadoutsTooltip()
+        if contentID == R.views.lobby.tanksetup.tooltips.NotEnoughDataForPopularLoadoutsTooltip():
+            sourceVehicleCD = int(event.getArgument('sourceVehicleCompDescr', 0))
+            if sourceVehicleCD:
+                return NotEnoughDataForPopularLoadoutsTooltip(sourceVehicleCD)
         if contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             if tooltipId == TankSetupConstants.EQUIP_COIN_INFO_TOOLTIP:
@@ -305,6 +313,8 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._vehItem.getItem().settings = g_currentVehicle.item.settings
                 self._vehItem.getItem().optDevices.dynSlotType = g_currentVehicle.item.optDevices.dynSlotType
                 self._tankSetup.update(fullUpdate=True)
+            if self._optionalDevicesAssistant:
+                self._optionalDevicesAssistant.updateVehicle(self._vehItem.getItem())
             self._updateAmmunitionPanel()
             return
 

@@ -563,11 +563,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         else:
             return
 
-    def setCollisionsOnlyAtPos(self, enable, cameraCollisionScaleMult = 4.0):
-        if self._ArcadeCamera__aimingSystem:
-            self._ArcadeCamera__aimingSystem.cursorShouldCheckCollisions(not enable)
-        self._ArcadeCamera__cam.setCollisionCheckOnlyAtPos(enable, cameraCollisionScaleMult)
-
     def __adjustMinDistForShotPointCalc(self):
         if self._ArcadeCamera__aimingSystem:
             vehPos = Matrix(self._ArcadeCamera__aimingSystem.vehicleMProv).translation

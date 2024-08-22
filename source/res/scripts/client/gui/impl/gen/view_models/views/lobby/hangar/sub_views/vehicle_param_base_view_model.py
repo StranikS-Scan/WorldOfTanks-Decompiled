@@ -7,6 +7,7 @@ class HighlightType(Enum):
     NONE = 'none'
     INCREASE = 'increase'
     DECREASE = 'decrease'
+    SITUATIONAL = 'situational'
 
 
 class VehicleParamBaseViewModel(ViewModel):

@@ -6,6 +6,7 @@ import math_utils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import CollisionStrategy
 from Vehicle import Vehicle as VehicleEntity
+from items.utils import getVehicleShotSpeedByFactors
 _SPG_SHOT_RESULT_TOLERANCE = 0.25
 
 class SPGShotResultEnum(IntEnum):
@@ -39,13 +40,15 @@ def getSPGShotResult(targetPosition, shotIdx, shotPos, shotVel, shotGravity, pla
         return shotResult
 
 
-def getSPGShotFlyTime(targetPosition, shotVelVector, shotPos, maxDistance, shotVel):
+def getSPGShotFlyTime(targetPosition, shotVelVector, shotPos, maxDistance, shotVel, vehAttrs):
     distAxis = targetPosition - shotPos
     distAxis.y = 0
     distAxis.normalise()
     shotVelDA = shotVelVector.dot(distAxis)
     if math_utils.almostZero(shotVelDA):
+        shotVel, _ = getVehicleShotSpeedByFactors(vehAttrs, shotVel)
         if shotVel != 0:
             return maxDistance / shotVel
         return -1.0
+    shotVelDA, _ = getVehicleShotSpeedByFactors(vehAttrs, shotVelDA)
     return (targetPosition.dot(distAxis) - shotPos.dot(distAxis)) / shotVelDA

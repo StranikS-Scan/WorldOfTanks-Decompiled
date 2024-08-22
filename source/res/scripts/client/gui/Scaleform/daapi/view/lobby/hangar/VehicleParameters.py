@@ -75,7 +75,7 @@ class VehicleParameters(VehicleParametersMeta):
 class VehiclePreviewParameters(VehicleParameters):
 
     def _createDataProvider(self):
-        return VehPreviewParamsDataProvider()
+        return VehNoSkillsPreviewParamsDataProvider()
 
     def _populate(self):
         super(VehiclePreviewParameters, self)._populate()
@@ -292,6 +292,15 @@ class VehPreviewParamsDataProvider(_VehParamsDataProvider):
 
     def _getComparator(self):
         return params_helper.previewVehiclesComparator(self._cache.item, self._cache.defaultItem)
+
+
+class VehNoSkillsPreviewParamsDataProvider(_VehParamsDataProvider):
+
+    def __init__(self, tooltipType=None):
+        super(VehNoSkillsPreviewParamsDataProvider, self).__init__(_PreviewVehParamsGenerator(tooltipType))
+
+    def _getComparator(self):
+        return params_helper.previewNoSkillsVehiclesComparator(self._cache.item, self._cache.defaultItem)
 
 
 class VehPostProgressionDataProvider(_VehParamsDataProvider):

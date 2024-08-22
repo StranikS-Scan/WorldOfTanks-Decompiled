@@ -1,6 +1,20 @@
 <once-only-hints.xml>
   <gui>	gui/tutorial-lobby-gui.xml	</gui>
   <hints>
+    <hint>	WotPlusOptDevHint	  <item-id>	HangarOptionalDeviceSlots	</item-id>
+      <text>	_(#tutorial:wotPlus/newFeature)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
+      <condition>
+        <class-condition>	WotPlusHintChecker	  <path>	gui.game_control.wot_plus_controller	</path>
+          <arguments>	WotPlusOptDevHint	</arguments>
+        </class-condition>
+      </condition>
+    </hint>
     <hint>	CustomizationSlotsHint	  <item-id>	CustomizationSlots	</item-id>
       <text>	_(#tutorial:customization/slots)	</text>
       <arrow>
@@ -318,61 +332,6 @@
         </condition-and>
       </condition>
     </hint>
-    <hint>	AnimatedDogTagHangarHint	  <item-id>	AccountButton	</item-id>
-      <text>	#dogtags:tutorial/hangar/animatedDogTag	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_DogTagsEnabled	</global-active>
-        <global-active>	_HaveNewAnimatedDogTag	</global-active>
-      </condition>
-    </hint>
-    <hint>	PersonalReservesHangarHint	  <item-id>	ReservesButton	</item-id>
-      <text>	_(#personal_reserves:hangarEntry/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
-    <hint>	PersonalReservesActivationHint	  <item-id>	PersonalReservesGroup	</item-id>
-      <text>	_(#personal_reserves:activation/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
     <hint>	HangarManualHint	  <item-id>	LobbyMenuBnt	</item-id>
       <text>	_(#manual:manual_update/hint)	</text>
       <arrow>
@@ -415,19 +374,6 @@
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	DogTagHangarHint	</arguments>
         </class-condition>
-      </condition>
-    </hint>
-    <hint>	AnimatedDogTagProfileHint	  <item-id>	AnimatedDogTagsEntryPoint	</item-id>
-      <text>	#dogtags:tutorial/playerProfile/animatedDogTag	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_HaveNewAnimatedDogTag	</global-active>
-        <global-active>	_DogTagsEnabled	</global-active>
       </condition>
     </hint>
     <hint>	BattleSessionUpButtonTournamentHint	  <item-id>	BattleSessionUpButtonTournament	</item-id>
@@ -905,72 +851,14 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
-    <hint>	AchievementsHangarHint	  <item-id>	MenuProfile	</item-id>
-      <text>	_(#achievements_page:hint/hangar)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <hide-immediately>	True	</hide-immediately>
-      <condition>
-        <condition-and>
-          <global-active>	_VisitedAchievementsFromNotification	</global-active>
-          <condition-hint-showed>
-            <hint-id>	AchievementsProfileHint	</hint-id>
-            <value>	False	</value>
-          </condition-hint-showed>
-        </condition-and>
-      </condition>
-    </hint>
-    <hint>	AchievementsProfileHint	  <item-id>	ProfileAchievementsTab	</item-id>
-      <text>	_(#achievements_page:hint/profile)	</text>
+    <hint>	CrewBooksPostProgressionHint	  <item-id>	CrewBooksPostProgressionBtn	</item-id>
+      <text>	_(#crew_books:buttons/postProgression/hint)	</text>
       <arrow>
         <direction>	R	</direction>
         <loop>	True	</loop>
       </arrow>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <condition-and>
-          <global-active>	_VisitedAchievementsFromNotification	</global-active>
-          <class-condition>	AdvancedAchievementHintChecker	  <path>	gui.impl.lobby.achievements.profile_utils	</path>
-            <arguments>	AchievementsProfileHintSmallSize	</arguments>
-          </class-condition>
-          <condition-hint-showed>
-            <hint-id>	AchievementsHangarHint	</hint-id>
-            <value>	True	</value>
-          </condition-hint-showed>
-        </condition-and>
-      </condition>
-    </hint>
-    <hint>	AchievementsProfileHintSmallSize	  <item-id>	ProfileAchievementsTabSmall	</item-id>
-      <text>	_(#achievements_page:hint/profile)	</text>
-      <arrow>
-        <direction>	R	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <condition-and>
-          <global-active>	_VisitedAchievementsFromNotification	</global-active>
-          <class-condition>	AdvancedAchievementHintChecker	  <path>	gui.impl.lobby.achievements.profile_utils	</path>
-            <arguments>	AchievementsProfileHint	</arguments>
-          </class-condition>
-          <condition-hint-showed>
-            <hint-id>	AchievementsHangarHint	</hint-id>
-            <value>	True	</value>
-          </condition-hint-showed>
-        </condition-and>
-      </condition>
     </hint>
   </hints>
 </once-only-hints.xml>

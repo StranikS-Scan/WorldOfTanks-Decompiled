@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/header_helpers/personal_mission_flags.py
 import nations
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.base_flags import IQuestsFlag
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.flag_helpers import headerQuestFormatterVo, wrapQuestGroup, LabelState
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
@@ -168,7 +168,7 @@ class PersonalMissionsFlag(IQuestsFlag):
         if vehicle is None:
             return
         else:
-            isPersonalMissionsEnabled = cls.__lobbyContext.getServerSettings().isPersonalMissionsEnabled() and cls.__limitedUIController.isRuleCompleted(LuiRules.PERSONAL_MISSIONS)
+            isPersonalMissionsEnabled = cls.__lobbyContext.getServerSettings().isPersonalMissionsEnabled() and cls.__limitedUIController.isRuleCompleted(LUI_RULES.PersonalMissions)
             if not isPersonalMissionsEnabled:
                 return []
             result = []

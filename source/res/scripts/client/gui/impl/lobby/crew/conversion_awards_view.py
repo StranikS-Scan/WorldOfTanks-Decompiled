@@ -7,7 +7,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.awards_view_model import AwardsViewModel
 from gui.impl.lobby.crew.base_crew_view import BaseCrewSubView
 from gui.impl.lobby.crew.tooltips.conversion_tooltip import ConversionTooltip
-from gui.impl.lobby.crew.utils import packJunkmanCompensationData
+from gui.impl.lobby.crew.utils import packCompensationData
 from gui.impl.pub import WindowImpl
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -27,7 +27,7 @@ class ConversionAwardsView(BaseCrewSubView):
         if contentID == R.views.lobby.crew.tooltips.ConversionTooltip():
             tooltipId = event.getArgument('tooltipId')
             books = self.__tooltipData[tooltipId] if tooltipId in self.__tooltipData else []
-            return ConversionTooltip(books, True)
+            return ConversionTooltip(books, title=R.strings.tooltips.conversion.received.header(), description=R.strings.tooltips.conversion.received.body())
         return super(ConversionAwardsView, self).createToolTipContent(event, contentID)
 
     @property
@@ -43,7 +43,7 @@ class ConversionAwardsView(BaseCrewSubView):
             tx.setUnderTitle(locales.underTitle())
             tx.setBottomNote(locales.buttonNote())
             tx.setButtonTitle(locales.button.submit())
-            packJunkmanCompensationData(self.__conversionResult, tx.mainRewards, self.__tooltipData)
+            packCompensationData(self.__conversionResult, tx.mainRewards, self.__tooltipData)
 
     def _onLoaded(self, *args, **kwargs):
         super(ConversionAwardsView, self)._onLoaded(*args, **kwargs)

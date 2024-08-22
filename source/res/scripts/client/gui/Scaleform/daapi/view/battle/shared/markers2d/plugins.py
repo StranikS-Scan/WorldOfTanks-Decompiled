@@ -183,6 +183,8 @@ class ControlModePlugin(MarkerPlugin):
         self._parentObj.setIsPivotAtCameraForMarkers(isPivotAtCamera)
 
     def __onKillCamModeStateChanged(self, state, _):
+        if state is DeathCamEvent.State.NONE:
+            return
         self._parentObj.setVisible(state in (DeathCamEvent.State.INACTIVE, DeathCamEvent.State.FINISHED))
 
 

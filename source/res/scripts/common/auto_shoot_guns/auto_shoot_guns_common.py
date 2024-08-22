@@ -45,15 +45,6 @@ class AutoShootPredictionState(object):
      COOLDOWN: 'cooldown'}
 
 
-class SpinGunState(object):
-    NOT_STARTED = 0
-    SPIN_UP = 1
-    SPIN_FULL = 2
-    SPIN_DOWN = 3
-    ACTIVE_STATES = (SPIN_FULL, SPIN_UP, SPIN_DOWN)
-    DYNAMIC_STATES = (SPIN_UP, SPIN_DOWN)
-
-
 def autoShootDynamicAttrFactors():
     factors = {'rate/multiplier': 1.0,
      'isDelayShooting': False,

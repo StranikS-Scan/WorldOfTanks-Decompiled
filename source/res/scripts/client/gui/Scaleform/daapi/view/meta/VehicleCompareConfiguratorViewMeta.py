@@ -19,9 +19,6 @@ class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
     def toggleTopModules(self, value):
         self._printOverrideError('toggleTopModules')
 
-    def skillSelect(self, skillType, slotIndex, selected):
-        self._printOverrideError('skillSelect')
-
     def as_setDevicesDataS(self, data):
         return self.flashObject.as_setDevicesData(data) if self._isDAAPIInited() else None
 
@@ -36,9 +33,6 @@ class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
 
     def as_disableCamoS(self):
         return self.flashObject.as_disableCamo() if self._isDAAPIInited() else None
-
-    def as_setSkillsS(self, skills):
-        return self.flashObject.as_setSkills(skills) if self._isDAAPIInited() else None
 
     def as_setTopModulesSelectedS(self, value):
         return self.flashObject.as_setTopModulesSelected(value) if self._isDAAPIInited() else None

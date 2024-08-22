@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/badges_loader.py
+from typing import TYPE_CHECKING
 import resource_helper
-from constants import CURRENT_REALM
 from constants import ITEM_DEFS_PATH
-from gui.shared.gui_items.badge import BadgeLayouts
+from gui.shared.gui_items.badge import BadgeLayouts, BadgeTypes
+from realm import CURRENT_REALM
 from soft_exception import SoftException
+if TYPE_CHECKING:
+    from typing import Optional, Dict
 _BADGES_XML_PATH = ITEM_DEFS_PATH + 'badges.xml'
 
 def _readBadges():
@@ -25,6 +28,8 @@ def _readBadges():
             value['weight'] = -1.0
         if 'type' not in value:
             value['type'] = 0
+        if value['type'] == BadgeTypes.COLLAPSIBLE and 'group' not in value:
+            raise SoftException('Invalid badge. No group for the COLLAPSIBLE badge', value)
         if 'layout' not in value:
             value['layout'] = BadgeLayouts.PREFIX
         else:

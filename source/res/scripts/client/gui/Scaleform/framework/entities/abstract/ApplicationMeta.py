@@ -88,8 +88,8 @@ class ApplicationMeta(BaseDAAPIComponent):
     def as_updateStageS(self, w, h, scale):
         return self.flashObject.as_updateStage(w, h, scale) if self._isDAAPIInited() else None
 
-    def as_blurBackgroundViewsS(self, ownLayer, blurAnimRepeatCount):
-        return self.flashObject.as_blurBackgroundViews(ownLayer, blurAnimRepeatCount) if self._isDAAPIInited() else None
+    def as_blurBackgroundViewsS(self, ownLayer, blurAnimRepeatCount, blurRadius):
+        return self.flashObject.as_blurBackgroundViews(ownLayer, blurAnimRepeatCount, blurRadius) if self._isDAAPIInited() else None
 
     def as_unblurBackgroundViewsS(self):
         return self.flashObject.as_unblurBackgroundViews() if self._isDAAPIInited() else None

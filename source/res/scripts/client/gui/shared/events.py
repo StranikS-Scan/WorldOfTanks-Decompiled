@@ -206,7 +206,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_CONFIRM_ORDER_DIALOG = 'showConfirmOrderDialog'
     SHOW_EXCHANGE_DIALOG = 'showExchangeDialog'
     SHOW_EXCHANGE_DIALOG_MODAL = 'showExchangeDialogModal'
-    SHOW_DETAILED_EXCHANGE_XP_DIALOG = 'showDetailedExchangeXPDialog'
     SHOW_CHECK_BOX_DIALOG = 'showCheckBoxDialog'
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
@@ -868,3 +867,8 @@ class HangarEvent(SharedEvent):
 
 class GameSessionEvent(SharedEvent):
     UPDATE_KICK_NOTIFICATION = 'gameSession/updateKickNotification'
+
+
+class ExchangeRatesDiscountsEvent(HasCtxEvent):
+    ON_SELECTED_AMOUNT_CHANGED = 'onSelectedAmountChanged'
+    ON_PERSONAL_DISCOUNT_VIEWED = 'onPersonalDiscountViewed'

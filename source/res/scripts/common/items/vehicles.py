@@ -24,7 +24,7 @@ from items._xml import cachedFloat
 from items.attributes_helpers import onCollectAttributes, STATIC_ATTR_PREFIX, readModifiers
 from items.artefacts_helpers import readKpi
 from items.components import component_constants, shell_components, chassis_components, skills_constants
-from items.components import shared_components, gun_components
+from items.components import shared_components
 from items.components.c11n_constants import ApplyArea, CamouflageTilingType, CamouflageTilingTypeNameToType, ProjectionDecalMatchingTags
 from items.components.post_progression_components import PostProgressionCache, getActiveModifications
 from items.components.shell_components import HighExplosiveImpactParams
@@ -233,19 +233,22 @@ def vehicleAttributeFactors():
     factors = {'engine/power': 1.0,
      'turret/rotationSpeed': 1.0,
      'circularVisionRadius': 1.0,
+     'increaseCircularVisionRadius': 1.0,
+     'penaltyToDamagedSurveyingDevice': 1.0,
      'invisibility': [0.0, 1.0],
      'radio/distance': 1.0,
      'gun/rotationSpeed': 1.0,
      'chassis/shotDispersionFactors/movement': 1.0,
      'chassis/shotDispersionFactors/rotation': 1.0,
      'gun/shotDispersionFactors/turretRotation': 1.0,
+     'gun/shots/speed': 1.0,
      'gun/reloadTime': 1.0,
      'gun/aimingTime': 1.0,
      'gun/piercing': 1.0,
      'gun/clipTimeBetweenShots': 1.0,
      'gun/canShoot': True,
      'engine/fireStartingChance': 1.0,
-     'healthBurnPerSecLossFraction': 1.0,
+     'healthBurnPerSecLossFraction': 0.57,
      'repairSpeed': 1.0,
      'additiveShotDispersionFactor': 1.0,
      'brokenTrack': 0,
@@ -423,10 +426,7 @@ class VehicleDescriptor(object):
     hasSpeedometer = property(lambda self: self.type.hasSpeedometer)
     isDualgunVehicle = property(lambda self: 'dualGun' in self.gun.tags)
     hasDualAccuracy = property(lambda self: 'dualAccuracy' in self.gun.tags)
-    isMultiGunVehicle = property(lambda self: 'multiGun' in self.turret.tags)
     isAutoShootGunVehicle = property(lambda self: 'autoShoot' in self.gun.tags)
-    isSpinGunVehicle = property(lambda self: self.isAutoShootGunVehicle and 'spin' in self.gun.tags)
-    isTemperatureGun = property(lambda self: self.isAutoShootGunVehicle and 'temperature' in self.gun.tags)
     hasTurboshaftEngine = property(lambda self: self.type.hasTurboshaftEngine)
     hasHydraulicChassis = property(lambda self: self.type.hasHydraulicChassis)
     hasCharge = property(lambda self: self.type.hasCharge)
@@ -1448,9 +1448,7 @@ class VehicleDescriptor(object):
 
     @property
     def shootExtraName(self):
-        if self.isDualgunVehicle:
-            return 'dualShoot'
-        return 'multiShoot' if self.isMultiGunVehicle else 'shoot'
+        return 'dualShoot' if self.isDualgunVehicle else 'shoot'
 
     def __updateAttributes(self, onAnyApp=False):
         self.miscAttrs = None
@@ -2741,6 +2739,7 @@ class VehicleList(object):
     def __init__(self):
         self.__ids = {}
         self.__categories = {}
+        self.__typeCompDescrToLevel = typeCompDescrToLevel = {}
         typeCompDescrsByLevel = {level:[] for level in range(1, 11)}
         list = []
         for nation in nations.NAMES:
@@ -2761,6 +2760,7 @@ class VehicleList(object):
             self.__ids.update(dict(((d.name, (nationID, d.id)) for d in descrs.itervalues())))
             for descr in descrs.itervalues():
                 typeCompDescrsByLevel[descr.level].append(descr.compactDescr)
+                typeCompDescrToLevel[descr.compactDescr] = descr.level
 
             ResMgr.purge(xmlPath, True)
 
@@ -2785,6 +2785,9 @@ class VehicleList(object):
 
     def getTypeCompDescrsByLevel(self, level):
         return self.__typeCompDescrsByLevel[level]
+
+    def getLevelByTypeCompDescr(self, compDescr):
+        return self.__typeCompDescrToLevel[compDescr]
 
     def isVehicleExisting(self, name):
         return name in self.__ids
@@ -4207,12 +4210,6 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.customizableVehicleAreas = _readCustomizableAreas(xmlCtx, section, 'customization')
     if section.has_key('multiGun'):
         item.multiGun = _readMultiGun(xmlCtx, section, 'multiGun')
-    if section.has_key('multiGunState'):
-        item.multiGunState = _readMultiGunState(xmlCtx, section['multiGunState'], item.multiGun)
-        item.tags = item.tags.union(('multiGun',))
-    else:
-        item.multiGunState = component_constants.DEFAULT_TURRET_MULTI_GUN_STATE
-        item.tags = item.tags.difference(('multiGun',))
     item.materials = _readArmor(xmlCtx, section, 'armor')
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.healthParams = shared_components.DeviceHealth(_xml.readInt(xmlCtx, section, 'maxHealth', 1))
@@ -4346,25 +4343,6 @@ def _readMultiGun(xmlCtx, section, subsection):
     return multiGun
 
 
-def _readMultiGunState(xmlCtx, section, multiGun):
-    sequence = map(int, _xml.readStringOrEmpty(xmlCtx, section, 'sequence').split())
-    patterns = {}
-    if IS_CLIENT or IS_UE_EDITOR:
-        if multiGun is None:
-            _xml.raiseWrongXml(xmlCtx, 'multiGunState', 'multiGunState specified without multiGun')
-        patternIndex = 1
-        patterns[-patternIndex] = range(0, len(multiGun))
-        if section.has_key('patterns'):
-            for _, pattern in section['patterns'].items():
-                patternIndex += 1
-                gunIndexes = map(int, _xml.readStringOrEmpty(xmlCtx, pattern, 'gunIndexes').split())
-                patSequence = map(int, _xml.readStringOrEmpty(xmlCtx, pattern, 'sequence').split())
-                patSequence = [ (gunIndex,) for gunIndex in patSequence ]
-                patterns[-patternIndex] = component_constants.MultiGunPattern(gunIndexes=gunIndexes, sequence=patSequence)
-
-    return component_constants.MultiGunState(patterns=patterns, sequence=sequence)
-
-
 def makeMultiExtraNameTemplate(name):
     return name.replace('_', '{}', 1) if '_' in name else name + '{}'
 
@@ -4488,14 +4466,6 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.autoShoot = component_constants.DEFAULT_GUN_AUTOSHOOT
     else:
         item.autoShoot = _readGunClipAutoShoot(xmlCtx, section)
-    if not section.has_key('spin'):
-        item.spin = component_constants.DEFAULT_SPIN_GUN
-    else:
-        item.spin = _readSpinGun(xmlCtx, section)
-    if not section.has_key('temperatureMechanics'):
-        item.temperature = None
-    else:
-        item.temperature = _readTemperatureMechanics(xmlCtx, section, 'temperatureMechanics')
     if item.burst[0] > item.clip[0] > 1:
         _xml.raiseWrongXml(xmlCtx, 'burst', 'burst/count is larger than clip/count')
     if item.autoreload != component_constants.DEFAULT_GUN_AUTORELOAD and item.clip[0] <= 1:
@@ -4524,14 +4494,6 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         tags = tags.difference(('autoShoot',))
     else:
         tags = tags.union(('autoShoot',))
-    if item.spin == component_constants.DEFAULT_SPIN_GUN:
-        tags -= {'spin'}
-    else:
-        tags |= {'spin'}
-    if item.temperature is None:
-        tags -= {'temperature'}
-    else:
-        tags |= {'temperature'}
     if dualGun is None:
         tags = tags.difference(('dualGun',))
     else:
@@ -4655,16 +4617,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
     else:
         hasOverride = True
         autoShoot = _readGunClipAutoShoot(xmlCtx, section)
-    if not section.has_key('spin'):
-        spin = sharedItem.spin
-    else:
-        hasOverride = True
-        spin = _readSpinGun(xmlCtx, section)
-    if not section.has_key('temperatureMechanics'):
-        temperatureMechanics = sharedItem.temperature
-    else:
-        hasOverride = True
-        temperatureMechanics = _readTemperatureMechanics(xmlCtx, section, 'temperatureMechanics')
     if not section.has_key('burst'):
         burst = sharedItem.burst
     else:
@@ -4851,22 +4803,6 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
                 tags = tags.difference(('autoShoot',))
             else:
                 tags = tags.union(('autoShoot',))
-            item.tags = tags
-        if spin is not sharedItem.spin:
-            item.spin = spin
-            tags = item.tags
-            if spin == component_constants.DEFAULT_SPIN_GUN:
-                tags -= {'spin'}
-            else:
-                tags |= {'spin'}
-            item.tags = tags
-        if temperatureMechanics is not sharedItem.temperature:
-            item.temperature = temperatureMechanics
-            tags = item.tags
-            if temperatureMechanics is None:
-                tags -= {'temperature'}
-            else:
-                tags |= {'temperature'}
             item.tags = tags
         if dualGun is not None:
             item.dualGun = dualGun
@@ -5065,44 +5001,6 @@ def _readGunClipAutoShoot(xmlCtx, section):
     return component_constants.AutoShoot(shotDispersionPerSec=shotDispersionPerSec, maxShotDispersion=maxShotDispersion, groupSize=groupSize)
 
 
-def _readSpinGun(xmlCtx, section):
-    spinUpTimeout = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/spinUpTimeout', 0.0)
-    spinDownTimeout = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/spinDownTimeout', 0.0)
-    startFactor = _xml.readNonNegativeFloat(xmlCtx, section, 'spin/startFactor', 0.0)
-    isSpinUpShootingEnable = _xml.readBool(xmlCtx, section, 'spin/isSpinUpShootingEnable', True)
-    return component_constants.SpinGun(spinUpTimeout=spinUpTimeout, spinDownTimeout=spinDownTimeout, isSpinUpShootingEnable=isSpinUpShootingEnable, startFactor=startFactor)
-
-
-def _readTemperatureMechanics(xmlCtx, section, paramName):
-    subXmlCtx, section = _xml.getSubSectionWithContext(xmlCtx, section, paramName, throwIfMissing=False)
-    if section is None:
-        return
-    else:
-        heatingPerShot = _xml.readPositiveInt(subXmlCtx, section, 'heatingPerShot')
-        heatingPerSec = _xml.readPositiveInt(subXmlCtx, section, 'heatingPerSec')
-        coolingDelay = _xml.readNonNegativeFloat(subXmlCtx, section, 'coolingDelay')
-        coolingPerSec = _xml.readPositiveInt(subXmlCtx, section, 'coolingPerSec')
-        coolingOverheatPerSec = _xml.readPositiveInt(subXmlCtx, section, 'coolingOverheatPerSec')
-        thermalStateHysteresis = _xml.readPositiveInt(subXmlCtx, section, 'thermalStateHysteresis')
-        temperatureSegmentSize = _xml.readNonNegativeFloat(subXmlCtx, section, 'temperatureSegmentSize')
-        states = []
-        for tag, subsection in section['thermalStates'].items():
-            if tag == 'state':
-                maxTemperature = _xml.readNonNegativeInt(subXmlCtx, subsection, 'maxTemperature')
-                isOverheated = _xml.readBool(subXmlCtx, subsection, 'isOverheated', False)
-                modifiers = readModifiers(subXmlCtx, _xml.getSubsection(subXmlCtx, subsection, 'modifiers'))
-                state = gun_components.TemperatureGunParams.TemperatureGunState(temperature=maxTemperature, isOverheated=isOverheated, modifiers=modifiers)
-                states.append(state)
-
-        if not states:
-            _xml.raiseWrongXml(subXmlCtx, '', 'no temperature states in thermalStates, the presence of {} does not matter'.format(paramName))
-        states.sort(key=lambda state: state.temperature)
-        temperatureRanges = [ state.temperature for state in states ]
-        if len(temperatureRanges) != len(set(temperatureRanges)):
-            _xml.raiseWrongXml(subXmlCtx, '', 'states with the same temperature range')
-        return gun_components.TemperatureGunParams(states=states, heatingPerShot=heatingPerShot, heatingPerSec=heatingPerSec, coolingDelay=coolingDelay, coolingPerSec=coolingPerSec, coolingOverheatPerSec=coolingOverheatPerSec, thermalStateHysteresis=thermalStateHysteresis, temperatureSegmentSize=temperatureSegmentSize)
-
-
 def _readGunClipAutoreload(xmlCtx, section):
     reloadTime = _xml.readTupleOfPositiveFloats(xmlCtx, section, 'autoreload/reloadTime')
     if not len(reloadTime):
@@ -5199,7 +5097,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.armorSpalls = armorSpalls
             shellType.maxDamage = max(max(shellFragments.armorDamage), max(shellFragments.deviceDamage), max(armorSpalls.armorDamage), max(armorSpalls.deviceDamage), max(blastWave.armorDamage), max(blastWave.deviceDamage))
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
-        if shellType.explosionRadius <= 0.0:
+        if not isModernHighExplosive and shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
         explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'shellFragmentsDamageAbsorptionFactor')
         for f in explosionSettings:
@@ -6931,6 +6829,7 @@ def _readImpactParams(xmlCtx, section, paramName):
         params.armorDamage = (0.0, 0.0)
         params.deviceDamage = (0.0, 0.0)
         params.isActive = False
+        params.hasSplash = False
         return params
     else:
         params.radius = _xml.readNonNegativeFloat(subXmlCtx, subsection, 'impactRadius', 0.0)
@@ -6942,7 +6841,8 @@ def _readImpactParams(xmlCtx, section, paramName):
         if subsection.has_key('damageAbsorption'):
             label = _xml.readNonEmptyString(subXmlCtx, subsection, 'damageAbsorption')
             params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
-        params.isActive = params.radius and (any(params.armorDamage) or any(params.deviceDamage))
+        params.isActive = any(params.armorDamage) or any(params.deviceDamage)
+        params.hasSplash = params.radius and params.isActive
         return params
 
 

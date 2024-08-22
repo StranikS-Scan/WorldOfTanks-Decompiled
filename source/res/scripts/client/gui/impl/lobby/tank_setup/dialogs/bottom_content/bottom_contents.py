@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/dialogs/bottom_content/bottom_contents.py
-from gui.impl.lobby.dialogs.contents.exchange_content import ExchangeContent, ExchangeMoneyInfo
 from gui.impl.common.base_sub_model_view import BaseSubModelView
 from gui.impl.lobby.tank_setup.configurations.base import BaseDealPanel
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
@@ -25,25 +24,6 @@ class AmmunitionBuyBottomContent(BaseSubModelView):
     def update(self):
         super(AmmunitionBuyBottomContent, self).update()
         BaseDealPanel.updateDealPanelPrice(self.__vehicle, self.__items, self._viewModel)
-
-
-class ExchangePriceBottomContent(ExchangeContent):
-
-    def __init__(self, fromCurrency, toCurrency, viewModel, needItem=0):
-        self.__fromCurrency = ExchangeMoneyInfo(currencyType=fromCurrency)
-        self.__toCurrency = ExchangeMoneyInfo(currencyType=toCurrency)
-        self.__needItem = needItem
-        super(ExchangePriceBottomContent, self).__init__(fromItem=self.__fromCurrency, toItem=self.__toCurrency, viewModel=viewModel, needItem=needItem)
-
-    def initialize(self, *args, **kwargs):
-        super(ExchangePriceBottomContent, self).initialize(*args, **kwargs)
-        self.__fromCurrency.init()
-        self.__toCurrency.init()
-
-    def finalize(self):
-        self.__fromCurrency.fini()
-        self.__toCurrency.fini()
-        super(ExchangePriceBottomContent, self).finalize()
 
 
 class PriceBottomContent(BaseSubModelView):

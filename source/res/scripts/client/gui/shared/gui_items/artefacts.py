@@ -95,7 +95,7 @@ class Equipment(VehicleArtefact):
     __slots__ = ()
 
     def _getAltPrice(self, buyPrice, proxy):
-        return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Equipment, self)._getAltPrice(buyPrice, proxy)
+        return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs, useDiscounts=False) if Currency.GOLD in buyPrice else super(Equipment, self)._getAltPrice(buyPrice, proxy)
 
     @property
     def icon(self):
@@ -243,8 +243,12 @@ class BattleBooster(Equipment):
         return TAG_OPT_DEVICE_HIDE_IF_NOT_IN_SHOP in self.tags if self.isHidden else False
 
     def isAffectsOnVehicle(self, vehicle, setupIdx=None):
+
+        def getValidator(tankman):
+            return tankman.descriptor.validateSkillEquipment if tankman is not None else tankmen.iterAffectedRolesByEquipment
+
         if self.isCrewBooster():
-            return True
+            return any((getValidator(tankman)(vehicle.descriptor, idxInCrew, self.descriptor) for idxInCrew, tankman in vehicle.crew))
         else:
             if setupIdx is not None:
                 for device in vehicle.optDevices.setupLayouts.setups[setupIdx]:
@@ -633,7 +637,7 @@ class OptionalDevice(RemovableDevice):
         money = proxy.stats.money
         if not money.isSet(Currency.GOLD):
             return False
-        money = money.exchange(Currency.GOLD, Currency.CREDITS, proxy.shop.exchangeRate, default=0)
+        money = money.exchange(Currency.GOLD, Currency.CREDITS, proxy.shop.exchangeRate, default=0, useDiscounts=True)
         canBuy, _ = self._isEnoughMoney(self.getUpgradePrice(proxy).price, money)
         return canBuy
 

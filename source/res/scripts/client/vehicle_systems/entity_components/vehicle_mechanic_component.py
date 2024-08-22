@@ -16,16 +16,6 @@ def ifPlayerVehicle(method):
     return wrapper
 
 
-def ifAppearanceReady(method):
-
-    @wraps(method)
-    def wrapper(mechanicComponent, *args, **kwargs):
-        if mechanicComponent.isAppearanceReady():
-            method(mechanicComponent, *args, **kwargs)
-
-    return wrapper
-
-
 def getPlayerVehicleMechanic(mechanicName):
     vehicle = BigWorld.player().getVehicleAttached()
     return vehicle.dynamicComponents.get(mechanicName, None) if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isAlive() else None
@@ -37,9 +27,6 @@ class VehicleMechanicComponent(BigWorld.DynamicScriptComponent):
         super(VehicleMechanicComponent, self).__init__()
         self.__componentDestroyed = False
         self.__appearanceInited = False
-
-    def isAppearanceReady(self):
-        return self.__appearanceInited and self.__isAppearanceReady()
 
     def isComponentDestroyed(self):
         return self.__componentDestroyed

@@ -80,6 +80,9 @@ class AvatarPostmortemComponent(object):
         if currentControlMode not in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES:
             if isReplay or self.deadOnReconnection:
                 return CTRL_MODE_NAME.POSTMORTEM
+            if self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.LOOK_AT_KILLER):
+                return CTRL_MODE_NAME.LOOK_AT_KILLER
+        if self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM) and (currentControlMode is CTRL_MODE_NAME.LOOK_AT_KILLER or currentControlMode not in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES):
             return CTRL_MODE_NAME.KILL_CAM
         if currentControlMode in (CTRL_MODE_NAME.KILL_CAM, CTRL_MODE_NAME.DEATH_FREE_CAM):
             return CTRL_MODE_NAME.POSTMORTEM

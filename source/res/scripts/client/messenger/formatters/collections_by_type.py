@@ -30,104 +30,9 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.WotAnniversaryAwardsFormatter()))
+ token_quest_subformatters.SkipNotificationFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
-SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
- _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
- _SM_TYPE.battleResults.index(): _sc.BattleResultsFormatter(),
- _SM_TYPE.invoiceReceived.index(): _sc.InvoiceReceivedFormatter(),
- _SM_TYPE.adminTextMessage.index(): _sc.AdminMessageFormatter(),
- _SM_TYPE.accountTypeChanged.index(): _sc.AccountTypeChangedFormatter(),
- _SM_TYPE.giftReceived.index(): _sc.GiftReceivedFormatter(),
- _SM_TYPE.autoMaintenance.index(): _sc.AutoMaintenanceFormatter(),
- _SM_TYPE.premiumBought.index(): _sc.PremiumBoughtFormatter(),
- _SM_TYPE.premiumExtended.index(): _sc.PremiumExtendedFormatter(),
- _SM_TYPE.premiumExpired.index(): _sc.PremiumExpiredFormatter(),
- _SM_TYPE.premiumChanged.index(): _sc.PremiumChangedFormatter(),
- _SM_TYPE.prbArenaFinish.index(): _sc.PrebattleArenaFinishFormatter(),
- _SM_TYPE.prbKick.index(): _sc.PrebattleKickFormatter(),
- _SM_TYPE.prbDestruction.index(): _sc.PrebattleDestructionFormatter(),
- _SM_TYPE.vehicleCamouflageTimedOut.index(): _sc.VehCamouflageTimedOutFormatter(),
- _SM_TYPE.vehiclePlayerEmblemTimedOut.index(): _sc.VehEmblemTimedOutFormatter(),
- _SM_TYPE.vehiclePlayerInscriptionTimedOut.index(): _sc.VehInscriptionTimedOutFormatter(),
- _SM_TYPE.vehTypeLockExpired.index(): _sc.VehicleTypeLockExpired(),
- _SM_TYPE.serverDowntimeCompensation.index(): _sc.ServerDowntimeCompensation(),
- _SM_TYPE.achievementReceived.index(): _sc.AchievementFormatter(),
- _SM_TYPE.converter.index(): _sc.ConverterFormatter(),
- _SM_TYPE.tokenQuests.index(): _sc.TokenQuestsFormatter(),
- _SM_TYPE.notificationsCenter.index(): _sc.NCMessageFormatter(),
- _SM_TYPE.clanEvent.index(): _sc.ClanMessageFormatter(),
- _SM_TYPE.fortEvent.index(): _sc.StrongholdMessageFormatter(),
- _SM_TYPE.vehicleRented.index(): _sc.VehicleRentedFormatter(),
- _SM_TYPE.rentalsExpired.index(): _sc.RentalsExpiredFormatter(),
- _SM_TYPE.potapovQuestBonus.index(): _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS),
- _SM_TYPE.goodieRemoved.index(): _sc.GoodyRemovedFormatter(),
- _SM_TYPE.goodiesExpired.index(): _sc.GoodiesExpiredFormatter(),
- _SM_TYPE.goodieDisabled.index(): _sc.GoodyDisabledFormatter(),
- _SM_TYPE.goodieEnabled.index(): _sc.GoodieEnabledFormatter(),
- _SM_TYPE.telecomOrderCreated.index(): _sc.TelecomReceivedInvoiceFormatter(),
- _SM_TYPE.telecomOrderUpdated.index(): _sc.TelecomStatusFormatter(),
- _SM_TYPE.telecomOrderDeleted.index(): _sc.TelecomRemovedInvoiceFormatter(),
- _SM_TYPE.prbVehicleKick.index(): _sc.PrbVehicleKickFormatter(),
- _SM_TYPE.prbVehicleKickFilter.index(): _sc.PrbVehicleKickFilterFormatter(),
- _SM_TYPE.vehicleGroupLocked.index(): _sc.RotationGroupLockFormatter(),
- _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
- _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
- _SM_TYPE.royaleQuests.index(): _sc.BRQuestsFormatter(),
- _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(subFormatters=_HANGAR_QUESTS_SUB_FORMATTERS),
- _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter(),
- _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
- _SM_TYPE.customizationChanged.index(): _sc.CustomizationChangedFormatter(),
- _SM_TYPE.lootBoxesAutoOpenReward.index(): _sc.LootBoxAutoOpenFormatter(),
- _SM_TYPE.progressiveReward.index(): _sc.ProgressiveRewardFormatter(),
- _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
- _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
- _SM_TYPE.enhancementRemoved.index(): _sc.EnhancementRemovedFormatter(),
- _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
- _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
- _SM_TYPE.battlePassBought.index(): _sc.BattlePassBoughtFormatter(),
- _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
- _SM_TYPE.battlePassStyleRecieved.index(): _sc.BattlePassStyleReceivedFormatter(),
- _SM_TYPE.battlePassSeasonEnd.index(): _sc.BattlePassSeasonEndFormatter(),
- _SM_TYPE.battlePassUseNonChapterPoints.index(): _sc.BattlePassFreePointsUsedFormatter(),
- _SM_TYPE.collectibleVehiclesUnlocked.index(): _sc.CollectibleVehiclesUnlockedFormatter(),
- _SM_TYPE.customizationProgress.index(): _sc.CustomizationProgressFormatter(),
- _SM_TYPE.dogTagsUnlockComponent.index(): _sc.DogTagComponentUnlockFormatter(),
- _SM_TYPE.dogTagsGradingChange.index(): _sc.DogTagComponentGradingFormatter(),
- _SM_TYPE.enhancementsWipedOnVehicles.index(): _sc.EnhancementsWipedOnVehiclesFormatter(),
- _SM_TYPE.prbWrongEnqueueDataKick.index(): _sc.PrbEventEnqueueDataFormatter(),
- _SM_TYPE.dedicationReward.index(): _sc.DedicationRewardFormatter(),
- _SM_TYPE.customizationProgressionChanged.index(): _sc.CustomizationProgressionChangedFormatter(),
- _SM_TYPE.wotPlusUnlocked.index(): _wotPlusFormatters.WotPlusUnlockedAwardFormatter(),
- _SM_TYPE.wotPlusRenewed.index(): _wotPlusFormatters.WotPlusRenewedFormatter(),
- _SM_TYPE.wotPlusExpired.index(): _wotPlusFormatters.WotPlusExpiredFormatter(),
- _SM_TYPE.bonusExcludedMap.index(): _sc.SimpleFormatter('BonusExcludedMapAvailable'),
- _SM_TYPE.wotPlusExcludedVehicleEnabled.index(): _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=True),
- _SM_TYPE.wotPlusExcludedVehicleExpired.index(): _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False),
- _SM_TYPE.goldReserveIsFull.index(): _sc.SimpleFormatter('GoldReserveFullMessage'),
- _SM_TYPE.passiveXPNoTank.index(): _sc.SimpleFormatter('PassiveXPNoTankMessage'),
- _SM_TYPE.passiveXPIncompatibleCrewNewDay.index(): _sc.SimpleFormatter('PassiveXPIncompatibleCrewNewDayMessage'),
- _SM_TYPE.passiveXPIncompatibleCrew.index(): _wotPlusFormatters.PassiveXpIncompatibleCrewFormatter(),
- _SM_TYPE.passiveXPActivated.index(): _wotPlusFormatters.PassiveXpActivatedFormatter(),
- _SM_TYPE.passiveXPDeactivated.index(): _wotPlusFormatters.PassiveXpDeactivatedFormatter(),
- _SM_TYPE.passiveXPSwitched.index(): _wotPlusFormatters.PassiveXpSwitchedFormatter(),
- _SM_TYPE.giftSystemMessage.index(): GiftSystemMessagesProxy(),
- _SM_TYPE.telecomMergeResults.index(): _sc.TelecomMergeResultsFormatter(),
- _SM_TYPE.epicSeasonEnd.index(): _sc.EpicSeasonEndFormatter(),
- _SM_TYPE.epicLevelUp.index(): _sc.EpicLevelUpFormatter(),
- _SM_TYPE.recertificationResetUsed.index(): _sc.RecertificationResetUsedFormatter(),
- _SM_TYPE.recertificationReset.index(): _sc.RecertificationResetFormatter(),
- _SM_TYPE.recertificationAvailability.index(): _sc.RecertificationAvailabilityFormatter(),
- _SM_TYPE.recertificationFinancial.index(): _sc.RecertificationFinancialFormatter(),
- _SM_TYPE.resourceWellOperation.index(): _sc.ResourceWellOperationFormatter(),
- _SM_TYPE.resourceWellReward.index(): _sc.ResourceWellRewardFormatter(),
- _SM_TYPE.resourceWellNoVehicles.index(): _sc.ResourceWellNoVehiclesFormatter(),
- _SM_TYPE.customization2dProgressionChanged.index(): _sc.Customization2DProgressionChangedFormatter(),
- _SM_TYPE.fairplay.index(): _sc.FairplayFormatter(),
- _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
- _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
- _SM_TYPE.prestigeLevelChanged.index(): _sc.PrestigeFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -198,6 +103,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.customizationProgressionChanged.index(), _sc.CustomizationProgressionChangedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPActivated.index(), _wotPlusFormatters.PassiveXpActivatedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPDeactivated.index(), _wotPlusFormatters.PassiveXpDeactivatedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.replacedConsumables.index(), _sc.ConsumableReplacedItemsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.passiveXPSwitched.index(), _wotPlusFormatters.PassiveXpSwitchedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.wotPlusUnlocked.index(), _wotPlusFormatters.WotPlusUnlockedAwardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.wotPlusRenewed.index(), _wotPlusFormatters.WotPlusRenewedFormatter())
@@ -250,3 +156,8 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_SWITCH, _wotPlusFormatters.WotPlusSwitchFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.ACHIEVEMENTS20_EARNING_SM_TYPE, _sc.AchievementsEarningSMFormatter())
     registerMessengerServerFormatter(_SM_TYPE.prbVehicleKickFromSquad.index(), _sc.PrbVehicleMaxTypeKickFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.skillsCrewBoostersConversion.index(), _sc.SkillsCrewBoostersConversionFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.passiveXPDeactivateDueToPostProgression.index(), _wotPlusFormatters.PassiveXPDeactivateDueToPostProgressionFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.crewBooksConversion.index(), _sc.CrewBooksConversionFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.postProgressionUnlocked.index(), _sc.PostProgressionUnlockedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.postProgressionCompleted.index(), _sc.PostProgressionCompletedFormatter())

@@ -96,7 +96,7 @@ class PostProgressionContextMenuHandler(SimpleVehicleCMHandler):
         elif vehicle.canTradeIn:
             label = MENU.CONTEXTMENU_BUYORTRADEIN
         itemsRequester = self.__itemsCache.items
-        btnEnabled = vehicle.mayObtainWithMoneyExchange(itemsRequester.stats.money, itemsRequester.shop.exchangeRate)
+        btnEnabled = vehicle.mayObtainWithMoneyExchange(itemsRequester.stats.money, proxy=itemsRequester.shop)
         if vehicle.isCollectible and not self.__isCollectibleVehicleEnabled(vehicle):
             btnEnabled = False
         elif canBuyGoldForVehicleThroughWeb(vehicle):

@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	13.00	</repairCost>
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
@@ -88,6 +91,13 @@
       <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <R194_ST_62_var_2_ClansEv_3Dst>
+          <undamaged>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Hull.model	</exploded>
+        </R194_ST_62_var_2_ClansEv_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -653,6 +663,19 @@
         <clipAngle>	0.490215	</clipAngle>
         <anchorShift>	0.03	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15048	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	R194_ST_62_var_2_ClansEv_3Dst	</compatibleModels>
+        <position>	-0.00029637 1.33849 2.11245	</position>
+        <rotation>	0.371385 -0.001716 3.14158	</rotation>
+        <scale>	0.721884 0.204976 0.721885	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.077785	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -694,6 +717,13 @@
         <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <R194_ST_62_var_2_ClansEv_3Dst>
+            <undamaged>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Chassis.model	</exploded>
+          </R194_ST_62_var_2_ClansEv_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -783,6 +813,45 @@
                   <row3>	-1.885495 1.027613 -0.008530	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R194_ST_62_var_2_ClansEv_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.150252 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.205000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.881000	</row2>
+                  <row3>	0.000000 0.914000 0.219000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.799000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.451458 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.965500	</row2>
+                  <row3>	0.000000 1.258000 -0.295000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.520930 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.169897 0.247255	</row1>
+                  <row2>	0.000000 -0.517638 0.355686	</row2>
+                  <row3>	0.000000 0.968349 2.741887	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.520930 0.000004 0.000002	</row0>
+                  <row1>	0.000000 0.228217 -0.470110	</row1>
+                  <row2>	-0.000001 0.565004 0.274284	</row2>
+                  <row3>	0.000000 1.009000 -2.884000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.456000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.251860	</row2>
+                  <row3>	-1.885495 0.802000 -0.008530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.588000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.781677 -0.617250	</row1>
+                  <row2>	0.000000 0.708192 0.896845	</row2>
+                  <row3>	0.000000 0.744187 3.447778	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -858,6 +927,45 @@
                   <row1>	0.000000 0.300000 0.000000	</row1>
                   <row2>	0.000000 0.000000 5.251860	</row2>
                   <row3>	1.885495 1.027613 -0.008530	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R194_ST_62_var_2_ClansEv_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.150250 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.205000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.881000	</row2>
+                  <row3>	0.000000 0.914000 0.219000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.799000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.451458 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.965500	</row2>
+                  <row3>	0.000000 1.258000 -0.295000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.520930 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.169897 0.247255	</row1>
+                  <row2>	0.000000 -0.517638 0.355686	</row2>
+                  <row3>	0.000000 0.968349 2.741887	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.520930 0.000004 0.000002	</row0>
+                  <row1>	0.000000 0.228217 -0.470110	</row1>
+                  <row2>	-0.000001 0.565004 0.274284	</row2>
+                  <row3>	0.000000 1.009000 -2.884000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.456000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.251860	</row2>
+                  <row3>	1.885000 0.802000 -0.008530	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.588000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.781677 -0.617250	</row1>
+                  <row2>	0.000000 0.708192 0.896845	</row2>
+                  <row3>	0.000000 0.744187 3.447780	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1702,11 +1810,58 @@
             <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <R194_ST_62_var_2_ClansEv_3Dst>
+                <undamaged>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </R194_ST_62_var_2_ClansEv_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R194_ST_62_var_2/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R194_ST_62_var_2/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <drivenJoints>
+            <sets>
+              <R194_ST_62_var_2_ClansEv_3Dst>
+                <master>
+                  <node>	Gun	</node>
+                  <table>
+                    <row>	-20	</row>
+                    <row>	0	</row>
+                    <row>	6	</row>
+                  </table>
+                  <slaves>
+                    <slave>
+                      <node>	Joint_01	</node>
+                      <table>
+                        <row>	-15.242	</row>
+                        <row>	0	</row>
+                        <row>	-0.974	</row>
+                      </table>
+                    </slave>
+                    <slave>
+                      <node>	Joint_02	</node>
+                      <table>
+                        <row>	-46.046	</row>
+                        <row>	0	</row>
+                        <row>	13.701	</row>
+                      </table>
+                    </slave>
+                    <slave>
+                      <node>	Joint_03	</node>
+                      <table>
+                        <row>	-18.772	</row>
+                        <row>	0	</row>
+                        <row>	6.426	</row>
+                      </table>
+                    </slave>
+                  </slaves>
+                </master>
+              </R194_ST_62_var_2_ClansEv_3Dst>
+            </sets>
+          </drivenJoints>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1759,6 +1914,13 @@
         <undamaged>	vehicles/russian/R194_ST_62_var_2/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R194_ST_62_var_2/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <R194_ST_62_var_2_ClansEv_3Dst>
+            <undamaged>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R194_ST_62_var_2/_skins/R194_ST_62_var_2_ClansEv_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </R194_ST_62_var_2_ClansEv_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R194_ST_62_var_2/collision/Turret_01.model	</collisionModelServer>
@@ -1783,9 +1945,9 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.10548 0.411271 0.762135	</rayStart>
-          <rayEnd>	-0.973059 0.274795 0.70017	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
+          <rayStart>	-1.085648 0.424445 0.775503	</rayStart>
+          <rayEnd>	-0.953227 0.287969 0.713538	</rayEnd>
+          <rayUp>	0.618054 0.731003 -0.289212	</rayUp>
           <size>	0.25	</size>
         </slot>
         <slot>
@@ -2277,6 +2439,45 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.570239	</clipAngle>
           <anchorShift>	-0.050242	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R194_ST_62_var_2_ClansEv_3Dst	</compatibleModels>
+          <position>	-0.896831 2.10603 -0.032728	</position>
+          <rotation>	0.505331 -1.20149 3.04821	</rotation>
+          <scale>	0.393178 0.372137 0.393177	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.570239	</clipAngle>
+          <anchorShift>	0.006945	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R194_ST_62_var_2_ClansEv_3Dst	</compatibleModels>
+          <position>	0.896857 2.10601 -0.0327275	</position>
+          <rotation>	0.505347 1.20148 -3.04822	</rotation>
+          <scale>	0.393177 0.372136 0.393177	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.570239	</clipAngle>
+          <anchorShift>	0.006945	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	R194_ST_62_var_2_ClansEv_3Dst	</compatibleModels>
+          <position>	-0.000177671 2.12455 0.476789	</position>
+          <rotation>	0.207705 -0.001715 3.14158	</rotation>
+          <scale>	0.457876 0.233387 0.457876	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.40513	</clipAngle>
+          <anchorShift>	-0.009305	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

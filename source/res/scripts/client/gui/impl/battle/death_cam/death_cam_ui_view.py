@@ -5,8 +5,7 @@ from AvatarInputHandler.DynamicCameras.kill_cam_camera import CallbackPauseManag
 from constants import IMPACT_TYPES
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_control.controllers.kill_cam_ctrl import KillCamInfoMarkerType, ImpactMarkerData
-from gui.impl.gen.view_models.views.battle.death_cam.death_cam_ui_view_model import DeathCamUiViewModel
-from gui.impl.gen.view_models.views.battle.death_cam.marker_view_model import ImpactMode
+from gui.impl.gen.view_models.views.battle.death_cam.death_cam_hud_view_model import DeathCamHudViewModel, ImpactMode
 from gui.shared.events import DeathCamEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -47,20 +46,22 @@ class DeathCamUIView(SubModelPresenter):
     def updatePauseText(self, seconds=None):
         if seconds is not None:
             self.__timerSeconds = seconds
-        self.viewModel.setRemainingTime(self.__timerSeconds)
+        self.viewModel.hud.setRemainingTime(self.__timerSeconds)
         return
 
     def initialize(self):
         super(DeathCamUIView, self).initialize()
-        if self.__guiSessionProvider.shared.killCamCtrl:
-            self.__guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChanged
-            self.__guiSessionProvider.shared.killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
+        killCamCtrl = self.__guiSessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
 
     def finalize(self):
         self.__callbackDelayer.clearCallbacks()
-        if self.__guiSessionProvider.shared.killCamCtrl:
-            self.__guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChanged
-            self.__guiSessionProvider.shared.killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
+        killCamCtrl = self.__guiSessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
 
     def __onKillCamStateChanged(self, killCamState, totalSceneDuration):
         if killCamState is DeathCamEvent.State.PAUSE:
@@ -72,7 +73,7 @@ class DeathCamUIView(SubModelPresenter):
             self.__barsVisibility(True)
             self.updatePauseText()
         elif killCamState is DeathCamEvent.State.ENDING:
-            self.viewModel.setIsFinalPhase(False)
+            self.viewModel.hud.setIsFinalPhase(False)
             self.__barsVisibility(False)
         elif killCamState is DeathCamEvent.State.ACTIVE:
             sceneDuration = totalSceneDuration
@@ -97,8 +98,8 @@ class DeathCamUIView(SubModelPresenter):
         self.__callbackDelayer.delayCallback(self._DISPLAY_DELAY, self.__triggerFinalPhase)
 
     def __triggerFinalPhase(self):
-        self.viewModel.setIsFinalPhase(True)
+        self.viewModel.hud.setIsFinalPhase(True)
 
     def __barsVisibility(self, show=True):
         self.__isSceneRunning = show
-        self.viewModel.setBarsVisible(self.__isSceneRunning)
+        self.viewModel.hud.setBarsVisible(self.__isSceneRunning)

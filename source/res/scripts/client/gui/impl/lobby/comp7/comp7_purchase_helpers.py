@@ -67,12 +67,12 @@ class _BaseProductPacker(object):
             self.__setProductPrice(price, priceModel)
 
     def __setRestorePrice(self, item, priceModel):
-        price = getGUIPrice(item, self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate)
+        price = getGUIPrice(item, self._itemsCache.items.stats.money, self._itemsCache.items.shop.defaults.exchangeRate)
         currency = price.getCurrency()
         money = self._itemsCache.items.stats.money
         priceModel.setName(currency)
         priceModel.setValue(price.get(currency, 0))
-        priceModel.setIsEnough(item.mayRestoreWithExchange(money, self._itemsCache.items.shop.exchangeRate))
+        priceModel.setIsEnough(item.mayRestoreWithExchange(money, self._itemsCache.items.shop.defaults.exchangeRate))
 
     def __setProductPrice(self, price, priceModel):
         currency = price.get('currency')

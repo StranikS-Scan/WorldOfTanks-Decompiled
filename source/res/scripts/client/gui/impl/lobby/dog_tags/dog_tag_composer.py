@@ -13,7 +13,7 @@ from gui.dog_tag_composer import DogTagComposerClient
 from gui.impl.gen.view_models.views.lobby.account_dashboard.dog_tag_model import DogTagModel
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_component import DtComponent
 from gui.impl.gen.view_models.views.lobby.dog_tags.dt_grid_section import DtGridSection
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from helpers import dependency
 from helpers import getLanguageCode
 from helpers.dependency import replace_none_kwargs
@@ -103,7 +103,7 @@ class DogTagComposerLobby(DogTagComposerClient):
         model.setBackground(bgImage)
         count = 0
         isEmptyCounter = False
-        if self._limitedUIController.isRuleCompleted(LuiRules.DOG_TAG_HINT):
+        if self._limitedUIController.isRuleCompleted(LUI_RULES.DogTagHangarHint):
             customizableDogTagsVisited = userSettings.getDogTagsSettings().customizableDogTagsVisited
             count = len(self._dtHelper.getUnseenComps())
             isEmptyCounter = count == 0 and not customizableDogTagsVisited

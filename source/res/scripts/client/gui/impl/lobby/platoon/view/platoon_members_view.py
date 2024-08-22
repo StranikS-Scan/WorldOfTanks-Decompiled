@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/platoon/view/platoon_members_view.py
 import logging
 import BigWorld
+import typing
 from enum import Enum
 from helpers.CallbackDelayer import CallbackDelayer
 import VOIP
@@ -30,6 +31,7 @@ from gui.impl.gen.view_models.views.lobby.platoon.slot_label_element_model impor
 from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel, ErrorType
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
+from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from gui.impl.lobby.platoon.platoon_helpers import formatSearchEstimatedTime, BonusState, getPlatoonBonusState
@@ -53,10 +55,14 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from shared_utils import findFirst
 from skeletons.gui.game_control import IPlatoonController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from helpers.server_settings import Comp7RanksConfig
+    from comp7_ranks_common import Comp7Division
 _logger = logging.getLogger(__name__)
 _strButtons = R.strings.platoon.buttons
 
@@ -367,6 +373,9 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
         with self.viewModel.transaction() as model:
             model.setCanMinimize(True)
             model.setRawTitle(self._getTitle())
+            header, body = self._getWindowInfoTooltipHeaderAndBody()
+            model.setWindowTooltipHeader(header)
+            model.setWindowTooltipBody(body)
             layoutStyle = self.__getLayoutStyle()
             fileName = '{battleType}_{layout}_list'.format(battleType=self._prebattleType.value, layout=layoutStyle.value)
             self._setHeaderBg(fileName, model)
@@ -737,8 +746,26 @@ class Comp7MembersView(SquadMembersView):
     def _setModeSlotSpecificData(self, slotData, slotModel):
         playerData = slotData.get('player', {})
         queueInfo = playerData.get('extraData', {}).get('comp7EnqueueData', {})
+        rank = queueInfo.get('rank', 0)
+        rating = queueInfo.get('rating', 0)
         isOnline = bool(queueInfo.get('isOnline', 0))
-        slotModel.setErrorType(ErrorType.NONE if isOnline else ErrorType.MODEOFFLINE)
+        division = self.__getDivision(rank, rating)
+        if division is None:
+            _logger.error("Failed to get player's division. dbID: %d; rank: %d; rating: %d", playerData.get('dbID'), rank, rating)
+            return
+        else:
+            slotModel.rankData.setRank(comp7_shared.getRankEnumValue(division))
+            slotModel.rankData.setDivision(comp7_shared.getDivisionEnumValue(division))
+            slotModel.rankData.setScore(rating)
+            slotModel.setErrorType(ErrorType.NONE if isOnline else ErrorType.MODEOFFLINE)
+            return
+
+    def _getWindowInfoTooltipHeaderAndBody(self):
+        squadRatingSettings = self._comp7Controller.getModeSettings().squadRatingRestriction
+        rating = squadRatingSettings.get(2)
+        tooltipHeader = backport.text(R.strings.platoon.members.header.tooltip.comp7.header())
+        tooltipBody = backport.text(R.strings.platoon.members.header.tooltip.comp7.body(), rating=rating)
+        return (tooltipHeader, tooltipBody)
 
     def _initWindowModeSpecificData(self, model):
         options = self._comp7Controller.getModeSettings().squadSizes
@@ -811,6 +838,12 @@ class Comp7MembersView(SquadMembersView):
 
     def __getDropDownItemTooltipText(self):
         return backport.text(R.strings.platoon.members.header.tooltip.comp7.dropdown.item())
+
+    @classmethod
+    def __getDivision(cls, rank, rating):
+        ranksConfig = cls._lobbyContext.getServerSettings().comp7RanksConfig
+        division = findFirst(lambda d: rating in d.range, ranksConfig.divisionsByRank.get(rank, ()))
+        return division
 
     @staticmethod
     def __playerTimeJoin(slot):

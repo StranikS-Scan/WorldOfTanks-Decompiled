@@ -31,7 +31,8 @@ _GAMEPLAY_ENTITIES_TO_HIDE = ['Vehicle',
  'AreaOfEffect',
  'AttackArtilleryFort',
  'AttackBomber',
- 'PersonalDeathZone']
+ 'PersonalDeathZone',
+ 'ApplicationPoint']
 PostEffectSettings = namedtuple('PostEffectSettings', 'contrast, saturation, vignette')
 _logger = logging.getLogger(__name__)
 
@@ -208,10 +209,8 @@ class SimulatedScene(object):
     def saveKillSnapshot(self):
         self.__movementTracker.saveSnapshot(isKill=True)
 
-    def setPendingShotID(self, shotID, stopTracking=False):
+    def setPendingShotID(self, shotID):
         self.__movementTracker.setPendingShotID(shotID)
-        if stopTracking:
-            self.__movementTracker.stop()
 
     def getMovementData(self, shotID):
         return self.__movementTracker.getData(shotID)

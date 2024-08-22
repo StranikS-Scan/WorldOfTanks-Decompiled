@@ -1,10 +1,8 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <ap_npd>	ARMOR_PIERCING_NPD.png 0 0	</ap_npd>
     <ap_cr_npd>	ARMOR_PIERCING_CR_NPD.png 0 0	</ap_cr_npd>
@@ -21,6 +19,7 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_37mm_Prurazny_vz_18>
     <id>	4	</id>
@@ -226,6 +225,226 @@
       </damage>
     </armorSpalls>
   </_37mm_Narazovy_vz_47>
+  <_30_JPNh_PLDvK_53>
+    <id>	80	</id>
+    <userString>	#czech_vehicles:_30_JPNh_PLDvK_53	</userString>
+    <icon>	ap	</icon>
+    <price>	5	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	30	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	4	</armor>
+      <devices>	2	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_30_JPNh_PLDvK_53>
+  <_30_JPNhWJ_PLDvK_53>
+    <id>	81	</id>
+    <userString>	#czech_vehicles:_30_JPNhWJ_PLDvK_53	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	5	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	30	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	3	</armor>
+      <devices>	1	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_30_JPNhWJ_PLDvK_53>
+  <_30_JF_PLDvK_53>
+    <id>	112	</id>
+    <userString>	#czech_vehicles:_30_JF_PLDvK_53	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	5	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	30	</caliber>
+    <explosionRadius>	0.0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	8	</armor>
+        <devices>	4	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_30_JF_PLDvK_53>
+  <_37_JPNh_AMDvK>
+    <id>	76	</id>
+    <userString>	#czech_vehicles:_37_JPNh_AMDvK	</userString>
+    <icon>	ap	</icon>
+    <price>	8	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	6	</armor>
+      <devices>	3	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_37_JPNh_AMDvK>
+  <_37_JPNhWJ_AMDvK>
+    <id>	77	</id>
+    <userString>	#czech_vehicles:_37_JPNhWJ_AMDvK	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	9	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	37	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	4	</armor>
+      <devices>	2	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_37_JPNhWJ_AMDvK>
+  <_37_JF_AMDvK>
+    <id>	111	</id>
+    <userString>	#czech_vehicles:_37_JF_AMDvK	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	7	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	37	</caliber>
+    <explosionRadius>	0.0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	smallHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	smallHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	smallHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	6	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	12	</armor>
+        <devices>	6	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_37_JF_AMDvK>
   <_47mm_Prurazny>
     <id>	11	</id>
     <userString>	#czech_vehicles:_47mm_Prurazny	</userString>
@@ -340,6 +559,560 @@
       </damage>
     </armorSpalls>
   </_47mm_Narazovy_vz_36>
+  <_50_JPNh_PLDvK_500S>
+    <id>	91	</id>
+    <userString>	#czech_vehicles:_50_JPNh_PLDvK_500S	</userString>
+    <icon>	ap	</icon>
+    <price>	12	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JPNh_PLDvK_500S>
+  <_50_JPNhWJ_PLDvK_500S>
+    <id>	92	</id>
+    <userString>	#czech_vehicles:_50_JPNhWJ_PLDvK_500S	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	13	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	6	</armor>
+      <devices>	3	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JPNhWJ_PLDvK_500S>
+  <_50_JF_PLDvK_500S>
+    <id>	110	</id>
+    <userString>	#czech_vehicles:_50_JF_PLDvK_500S	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	15	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	50	</caliber>
+    <explosionRadius>	0.0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	16	</armor>
+      <devices>	8	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	16	</armor>
+        <devices>	8	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JF_PLDvK_500S>
+  <_50_JPNh_PLDvK_500>
+    <id>	96	</id>
+    <userString>	#czech_vehicles:_50_JPNh_PLDvK_500	</userString>
+    <icon>	ap	</icon>
+    <price>	13	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	8	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JPNh_PLDvK_500>
+  <_50_JPNhWJ_PLDvK_500>
+    <id>	97	</id>
+    <userString>	#czech_vehicles:_50_JPNhWJ_PLDvK_500	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	14	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	6	</armor>
+      <devices>	3	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JPNhWJ_PLDvK_500>
+  <_50_JF_PLDvK_500>
+    <id>	98	</id>
+    <userString>	#czech_vehicles:_50_JF_PLDvK_500	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	16	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	50	</caliber>
+    <explosionRadius>	0.0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	16	</armor>
+      <devices>	8	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	16	</armor>
+        <devices>	8	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_50_JF_PLDvK_500>
+  <_57_JPNh_AMDvK_535T>
+    <id>	85	</id>
+    <userString>	#czech_vehicles:_57_JPNh_AMDvK_535T	</userString>
+    <icon>	ap	</icon>
+    <price>	32	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	6	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JPNh_AMDvK_535T>
+  <_57_JPNhWJ_AMDvK_535T>
+    <id>	86	</id>
+    <userString>	#czech_vehicles:_57_JPNhWJ_AMDvK_535T	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	36	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	9	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JPNhWJ_AMDvK_535T>
+  <_57_JF_AMDvK_535T>
+    <id>	87	</id>
+    <userString>	#czech_vehicles:_57_JF_AMDvK_535T	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	40	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	24	</armor>
+      <devices>	12	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	24	</armor>
+        <devices>	12	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JF_AMDvK_535T>
+  <_57_JPNh_AMDvK_535S>
+    <id>	93	</id>
+    <userString>	#czech_vehicles:_57_JPNh_AMDvK_535S	</userString>
+    <icon>	ap	</icon>
+    <price>	20	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumArmorPiercing1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumArmorPiercing6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	12	</armor>
+      <devices>	6	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JPNh_AMDvK_535S>
+  <_57_JPNhWJ_AMDvK_535S>
+    <id>	94	</id>
+    <userString>	#czech_vehicles:_57_JPNhWJ_AMDvK_535S	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	22	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumAPCR1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumAPCR6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	9	</armor>
+      <devices>	4	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JPNhWJ_AMDvK_535S>
+  <_57_JF_AMDvK_535S>
+    <id>	95	</id>
+    <userString>	#czech_vehicles:_57_JF_AMDvK_535S	</userString>
+    <icon>	he_zero_splash	</icon>
+    <price>	24	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	57	</caliber>
+    <explosionRadius>	0	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive1	</effects>
+    <dynamicEffects>
+      <effect>
+        <name>	mediumHighExplosive1	</name>
+        <maxShotsCount>	3	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive3	</name>
+        <minShotsCount>	3	</minShotsCount>
+        <maxShotsCount>	6	</maxShotsCount>
+      </effect>
+      <effect>
+        <name>	mediumHighExplosive6	</name>
+        <minShotsCount>	6	</minShotsCount>
+      </effect>
+    </dynamicEffects>
+    <damage>
+      <armor>	24	</armor>
+      <devices>	12	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	24	</armor>
+        <devices>	12	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceDamagePossibility>
+      <protectFromDirectHits>	tankmen	</protectFromDirectHits>
+    </deviceDamagePossibility>
+  </_57_JF_AMDvK_535S>
+  <_6_6_cm_Prurazny_vz_44>
+    <id>	103	</id>
+    <userString>	#czech_vehicles:_6_6_cm_Prurazny_vz_44	</userString>
+    <icon>	ap	</icon>
+    <price>	73	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	66	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_6_6_cm_Prurazny_vz_44>
+  <_6_6_cm_Prurazny_vz_44_s_wolf_jadrem>
+    <id>	104	</id>
+    <userString>	#czech_vehicles:_6_6_cm_Prurazny_vz_44_s_wolf_jadrem	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	66	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	80	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_6_6_cm_Prurazny_vz_44_s_wolf_jadrem>
+  <_6_6_cm_Narazovy_vz_44>
+    <id>	105	</id>
+    <userString>	#czech_vehicles:_6_6_cm_Narazovy_vz_44	</userString>
+    <icon>	he_modern	</icon>
+    <price>	56	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	66	</caliber>
+    <explosionRadius>	0.86	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.86	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	60	</armor>
+        <devices>	40	</devices>
+      </damage>
+    </armorSpalls>
+  </_6_6_cm_Narazovy_vz_44>
+  <_75mm_Prurazny_vz_48>
+    <id>	100	</id>
+    <userString>	#czech_vehicles:_75mm_Prurazny_vz_48	</userString>
+    <icon>	ap	</icon>
+    <price>	110	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Prurazny_vz_48>
+  <_75mm_Prurazny_vz_48_s_wolf_jadrem>
+    <id>	101	</id>
+    <userString>	#czech_vehicles:_75mm_Prurazny_vz_48_s_wolf_jadrem	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Prurazny_vz_48_s_wolf_jadrem>
+  <_75mm_Narazovy_vz_48>
+    <id>	102	</id>
+    <userString>	#czech_vehicles:_75mm_Narazovy_vz_48	</userString>
+    <icon>	he_modern	</icon>
+    <price>	89	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	75	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_Narazovy_vz_48>
   <_130mm_Prurazny_59-56G>
     <id>	73	</id>
     <userString>	#czech_vehicles:_130mm_Prurazny_59-56G	</userString>
@@ -1285,80 +2058,6 @@
       </damage>
     </armorSpalls>
   </_130mm_Narazovy_vz_55>
-  <_57mm_BR-281_FEP>
-    <id>	601	</id>
-    <userString>	#czech_vehicles:_57mm_BR-281_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	70	</armor>
-      <devices>	35	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_57mm_BR-281_FEP>
-  <_57mm_BR-281U_FEP>
-    <id>	602	</id>
-    <userString>	#czech_vehicles:_57mm_BR-281U_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	17.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	57	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	35	</armor>
-      <devices>	17	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_57mm_BR-281U_FEP>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

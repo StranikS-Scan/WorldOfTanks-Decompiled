@@ -111,7 +111,7 @@ if IS_DEVELOPMENT:
         def onListenerRemoved(self, go, listener):
             hierarchy = CGF.HierarchyManager(go.spaceID)
             root = hierarchy.getTopMostParent(go)
-            self.__texts.pop(root, None)
+            self.__texts.pop(go, None)
             callback = self.__listeners.pop(go, None)
             provider = root.findComponentByType(RocketAccelerationController)
             if provider is not None:

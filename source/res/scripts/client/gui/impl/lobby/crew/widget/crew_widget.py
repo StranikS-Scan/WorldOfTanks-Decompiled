@@ -2,11 +2,10 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/widget/crew_widget.py
 from collections import OrderedDict
 from itertools import chain
-from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
-from helpers.dependency import descriptor
 from typing import TYPE_CHECKING, NamedTuple
 import Event
 from account_helpers import AccountSettings
+from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG, JUNK_TANKMAN_NOVELTY
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui import SystemMessages
@@ -26,22 +25,25 @@ from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_model import C
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_slot_model import CrewWidgetSlotModel
 from gui.impl.gen.view_models.views.lobby.crew.common.toggle_button_model import ToggleState
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
+from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBonusEnum
 from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
-from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel
+from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel, setTmanMajorSkillsModel, setTmanBonusSkillsModel
 from gui.impl.lobby.crew.crew_helpers.skill_formatters import SkillLvlFormatter
-from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount, isCheckEffTankman
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
+from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableTooltip
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED
+from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED, getTankmanSkill, Tankman
 from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyTankmenIds, NO_VEHICLE_ID
 from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils import decorators
 from helpers import dependency, int2roman
-from items.tankmen import compareMastery, MAX_SKILL_LEVEL
+from helpers.dependency import descriptor
+from items.tankmen import MAX_SKILL_LEVEL, getLessMasteredIDX, sortTankmanRoles
 from renewable_subscription_common.passive_xp import isTagsSetOk
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IWotPlusController
@@ -53,7 +55,6 @@ from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_model import CrewWidgetTankmanModel
     from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
-    from gui.shared.gui_items.Tankman import Tankman
     from typing import Union
 BuildedMessage = NamedTuple('BuildedMessage', [('text', str),
  ('iconFrom', DynAccessor),
@@ -161,7 +162,12 @@ class CrewWidget(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             self.__uiLogger.onBeforeTooltipOpened(tooltipId)
             if tooltipId == TooltipConstants.SKILL:
-                args = [event.getArgument('skillName'), int(event.getArgument('tankmanID'))]
+                args = [event.getArgument('skillName'),
+                 int(event.getArgument('tankmanID')),
+                 None,
+                 True,
+                 None,
+                 event.getArgument('isBonus')]
                 self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
             if tooltipId == TooltipConstants.TANKMAN:
@@ -195,7 +201,7 @@ class CrewWidget(ViewImpl):
                 tankman = self.itemsCache.items.getTankman(tankmanID)
                 role = tankman.role
                 for idx, roles in enumerate(tankman.vehicleNativeDescr.type.crewRoles):
-                    if role in roles:
+                    if roles and role == roles[0]:
                         slotIdx = idx
                         break
 
@@ -208,6 +214,9 @@ class CrewWidget(ViewImpl):
              None,
              None]
             return createBackportTooltipContent(specialAlias=TOOLTIPS_CONSTANTS.VEHICLE_CREW_MEMBER_IN_HANGAR, specialArgs=args)
+        elif contentID == R.views.lobby.crew.tooltips.EmptySkillTooltip():
+            tman = self.itemsCache.items.getTankman(int(event.getArgument('tankmanID')))
+            return EmptySkillTooltip(tman, int(event.getArgument('skillIndex')))
         else:
             return super(CrewWidget, self).createToolTipContent(event, contentID)
 
@@ -313,7 +322,7 @@ class CrewWidget(ViewImpl):
         vmSlotsList = vm.getSlots()
         vmSlotsList.clear()
         vmSlot = CrewWidgetSlotModel()
-        self.__fillTankmanModel(vmSlot.tankman, self.__currentTankman)
+        self._fillTankmanModel(vmSlot.tankman, self.__currentTankman)
         vmSlotsList.addViewModel(vmSlot)
         self.updateVmSlotsData(vmSlotsList)
         vmSlotsList.invalidate()
@@ -413,16 +422,9 @@ class CrewWidget(ViewImpl):
         return
 
     def __findTmanData(self):
-        lessMastered = 0
-        tankmenDescrs = OrderedDict(sorted(self.__currentVehicle.crew, key=lambda item: item[0]))
-        isCrewEmpty = True
-        for slotIdx, tman in tankmenDescrs.items():
-            if tman is not None:
-                isCrewEmpty = False
-                if slotIdx > 0 and (tankmenDescrs[lessMastered] is None or compareMastery(tankmenDescrs[lessMastered].descriptor, tman.descriptor) > 0):
-                    lessMastered = slotIdx
-
-        return (isCrewEmpty, lessMastered)
+        crew = OrderedDict(sorted(self.__currentVehicle.crew, key=lambda item: item[0]))
+        tankmenDescrs = [ (tman.descriptor if tman else None) for tman in crew.itervalues() ]
+        return getLessMasteredIDX(tankmenDescrs)
 
     def __fillVehicleInfo(self, vm):
         vm.setVehicleName(self.__currentVehicle.shortUserName)
@@ -438,17 +440,18 @@ class CrewWidget(ViewImpl):
             vmSlot = CrewWidgetSlotModel()
             vmSlot.setSlotIdx(slotIdx)
             vmSlotRoles = vmSlot.getRoles()
-            for crewRole in vehicle.descriptor.type.crewRoles[slotIdx]:
+            sortedRoles = sortTankmanRoles(vehicle.descriptor.type.crewRoles[slotIdx], Tankman.TANKMEN_ROLES_ORDER)
+            for crewRole in sortedRoles:
                 vmSlotRoles.addString(crewRole)
 
-            self.__fillTankmanModel(vmSlot.tankman, tman, vehicle.crewIndices.get(tmanInvID) == lessMastered and vehicle.isXPToTman)
+            self._fillTankmanModel(vmSlot.tankman, tman, vehicle.crewIndices.get(tmanInvID) == lessMastered and vehicle.isXPToTman)
             vmSlotsList.addViewModel(vmSlot)
 
         self.updateVmSlotsData(vmSlotsList)
         vmSlotsList.invalidate()
         return
 
-    def __fillTankmanModel(self, vmTankman, tman, isLessMastered=False):
+    def _fillTankmanModel(self, vmTankman, tman, isLessMastered=False):
         if tman is not None:
             tmanSkillsEfficiency = tman.currentVehicleSkillsEfficiency
             vmTankman.setTankmanID(tman.invID)
@@ -459,12 +462,13 @@ class CrewWidget(ViewImpl):
             vmTankman.setHasWarning(tmanSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED)
             vmTankman.setIsLessMastered(isLessMastered)
             vmTankman.setSkillsEfficiency(tmanSkillsEfficiency)
-            setTmanSkillsModel(vmTankman.getSkills(), tman)
+            setTmanSkillsModel(vmTankman.skills, tman, fillBonusSkills=tman.isInTank)
             newSkillsCount, lastSkillLevel = getTmanNewSkillCount(tman)
             if tman.earnedSkillsCount + newSkillsCount <= 0:
                 lastSkillLevel = SkillLvlFormatter()
             vmTankman.setLastSkillLevel(self._getLastSkillLevelFormat(lastSkillLevel))
             vmTankman.setLastSkillLevelFull(lastSkillLevel.realSkillLvl)
+            vmTankman.setHasPostProgression(tman.descriptor.isMaxSkillXp())
             vmTankmanRolesList = vmTankman.getRoles()
             for role in tman.roles():
                 vmTankmanRolesList.addString(role)
@@ -481,7 +485,7 @@ class CrewWidget(ViewImpl):
         wotPlusState = ToggleState.HIDDEN
         vehicle = self.__currentVehicle
         if vehicle and self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled():
-            wotPlusState = ToggleState.DISABLED if not self.wotPlusCtrl.isEnabled() or not isTagsSetOk(vehicle.tags) else (ToggleState.ON if self.wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID) else ToggleState.OFF)
+            wotPlusState = ToggleState.DISABLED if not self.wotPlusCtrl.isEnabled() or not isTagsSetOk(vehicle.tags) or vehicle.isCrewFullyTrained else (ToggleState.ON if self.wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID) else ToggleState.OFF)
         vmWotPlusButton.setState(wotPlusState)
 
     def __onDogMoreInfoClick(self):
@@ -554,13 +558,16 @@ class CrewWidget(ViewImpl):
         return message
 
     def __getIdleCrewState(self):
+        vehicle = self.__currentVehicle
         if not self.lobbyContext.getServerSettings().isRenewableSubPassiveCrewXPEnabled():
             return IdleCrewBonusEnum.INVISIBLE
         if not self.wotPlusCtrl.isEnabled():
             return IdleCrewBonusEnum.DISABLED
-        if not isTagsSetOk(self.__currentVehicle.tags):
+        if not isTagsSetOk(vehicle.tags):
             return IdleCrewBonusEnum.INCOMPATIBLEWITHCURRENTVEHICLE
-        if self.wotPlusCtrl.hasVehicleCrewIdleXP(self.__currentVehicle.invID):
+        if vehicle.isCrewFullyTrained:
+            return IdleCrewBonusEnum.POSTPROGRESSIONREACHED
+        if self.wotPlusCtrl.hasVehicleCrewIdleXP(vehicle.invID):
             return IdleCrewBonusEnum.ACTIVEONCURRENTVEHICLE
         return IdleCrewBonusEnum.ACTIVEONANOTHERVEHICLE if self.wotPlusCtrl.getVehicleIDWithIdleXP() else IdleCrewBonusEnum.ENABLED
 
@@ -576,7 +583,7 @@ class CrewWidget(ViewImpl):
             viewedCache = crewBooksViewedCache()
             newCrewBooksAmount = viewedCache.newCrewBooksAmount
             if newCrewBooksAmount:
-                vmCrewBooks.setNewAmount(str(newCrewBooksAmount))
+                vmCrewBooks.setNewAmount(str(int(newCrewBooksAmount)))
             elif JunkTankmanHelper().isShowNovelty(showPlace=JUNK_TANKMAN_NOVELTY.WIDGET):
                 vmCrewBooks.setNewAmount(backport.text(R.strings.crew.common.exclamationMark()))
             else:
@@ -598,7 +605,7 @@ class QuickTrainingCrewWidget(CrewWidget):
         self._cachePossibleSkillsEfficiency = None
         return
 
-    def updateInteractiveTankmen(self, isFreeXpSelected=False):
+    def updateInteractiveTankmen(self):
         qtView = self.gui.windowsManager.getViewByLayoutID(self.currentViewID)
         with self.viewModel.transaction() as vm:
             vmSlots = vm.getSlots()
@@ -606,8 +613,9 @@ class QuickTrainingCrewWidget(CrewWidget):
                 if vmSlot.tankman is None:
                     continue
                 tman = self.itemsCache.items.getTankman(vmSlot.tankman.getTankmanID())
-                isInteractive = qtView.canTmanBeSelected(tman) and not isFreeXpSelected or isFreeXpSelected and isCheckEffTankman(tman)
-                vmSlot.tankman.setIsInteractive(isInteractive)
+                if tman is None:
+                    continue
+                vmSlot.tankman.setIsInteractive(qtView.canTmanBeSelected(tman))
 
             vmSlots.invalidate()
         return
@@ -663,6 +671,12 @@ class QuickTrainingCrewWidget(CrewWidget):
             slotIDX = vmSlot.getSlotIdx()
             if vmSlot.tankman is None or possibleSkillsLevels and len(possibleSkillsLevels) <= slotIDX:
                 continue
+            tman = self.itemsCache.items.getTankman(vmSlot.tankman.getTankmanID())
+            setTmanSkillsModel(vmSlot.tankman.possibleSkills, tman, fillBonusSkills=tman.isInTank if tman else False, possibleSkillsLevels=None if possibleSkillsLevels is None else possibleSkillsLevels[vmSlot.getSlotIdx()])
+            if self._cachePossibleSkillsEfficiency is not None:
+                possSkillsEff = self._cachePossibleSkillsEfficiency[vmSlot.getSlotIdx()]
+                if possSkillsEff != CrewConstants.DONT_SHOW_LEVEL:
+                    vmSlot.tankman.possibleSkills.setSkillsEfficiency(possSkillsEff)
             if possibleSkillsLevels is None:
                 vmSlot.tankman.setPossibleSkillsAmount(0)
                 vmSlot.tankman.setLastPossibleSkillLevel(-1)
@@ -676,4 +690,37 @@ class QuickTrainingCrewWidget(CrewWidget):
             vmSlot.tankman.setLastSkillLevelFull(currSkillsLvl.realSkillLvl)
             vmSlot.tankman.setHasPossibleProgress(possibleSkillsCount > 0 or progressLvl.isSkillLvl)
 
+        return
+
+
+class SkillsTrainingCrewWidget(CrewWidget):
+
+    def updateSelectedSkills(self, tankman, selectedSkills, role):
+        with self.viewModel.transaction() as vm:
+            for slotVM in vm.getSlots():
+                if slotVM.tankman.getTankmanID() == tankman.invID:
+                    possibleSkills = slotVM.tankman.possibleSkills
+                    if role == tankman.role:
+                        listVM = possibleSkills.getMajorSkills()
+                        listVM.clear()
+                        setTmanMajorSkillsModel(listVM, tankman)
+                        for skillName in selectedSkills:
+                            for skillVM in listVM:
+                                if skillVM.getName() == CrewConstants.NEW_SKILL:
+                                    skill = getTankmanSkill(skillName, tankman=tankman)
+                                    skillVM.setName(skillName)
+                                    skillVM.setIcon(skill.extensionLessIconName)
+                                    break
+
+                    else:
+                        listVM = possibleSkills.getBonusSkills()
+                        listVM.clear()
+                        setTmanBonusSkillsModel(listVM, tankman, selectedRole=role, selectedSkills=selectedSkills)
+                    listVM.invalidate()
+                    break
+
+    def _fillTankmanModel(self, vmTankman, tman, isLessMastered=False):
+        super(SkillsTrainingCrewWidget, self)._fillTankmanModel(vmTankman, tman, isLessMastered)
+        if tman is not None:
+            setTmanSkillsModel(vmTankman.possibleSkills, tman, fillBonusSkills=tman.isInTank)
         return

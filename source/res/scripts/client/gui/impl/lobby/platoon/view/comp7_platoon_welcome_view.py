@@ -16,6 +16,7 @@ class Comp7WelcomeView(WelcomeView):
     _squadType = Type.COMP7
 
     def _initButtons(self):
+        super(Comp7WelcomeView, self)._initButtons()
         with self.viewModel.transaction() as model:
             model.createPlatoonForTwo.setText(backport.text(strButtons.createPlatoon.comp7.forTwo.text()))
             model.createPlatoonForTwo.setCaption(backport.text(strButtons.createPlatoon.caption()))

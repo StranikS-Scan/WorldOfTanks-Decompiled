@@ -1,8 +1,7 @@
 <F04_B1.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	gunner
-			loader	</commander>
+    <commander></commander>
     <gunner></gunner>
     <driver>	loader	</driver>
     <radioman></radioman>
@@ -31,6 +30,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.05	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	2.736	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>

@@ -601,7 +601,7 @@ class StatusSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
 
     def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
-            self.__isObservedByEnemy = value
+            self.__isObservedByEnemy = value.get('isObserved', False)
             self.__updateStatus()
             if self.__isObservedByEnemy:
                 self.stopCallback(self.__onObservationDone)

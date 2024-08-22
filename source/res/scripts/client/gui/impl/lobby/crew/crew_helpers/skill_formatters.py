@@ -23,6 +23,9 @@ class SkillLvlFormatter(object):
     def __str__(self):
         return 'SkillLvlFormatter(skillLvl={}, residual={}, lvlCost={})'.format(self.__skillLvl, self.__residual, self.__lvlCost)
 
+    def __repr__(self):
+        return '<{}>'.format(self.__str__())
+
     def __add__(self, other):
         if self.isSkillLvl:
             if isinstance(other, SkillLvlFormatter):

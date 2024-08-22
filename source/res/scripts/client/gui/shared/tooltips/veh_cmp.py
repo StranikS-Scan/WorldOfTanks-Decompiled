@@ -2,11 +2,8 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/veh_cmp.py
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
-from gui.impl.lobby.crew.tooltips.veh_cmp_skills_tooltip import VehCmpSkillsTooltip
 from gui.shared.formatters import text_styles
-from gui.shared.tooltips import TOOLTIP_TYPE, formatters, ToolTipBaseData
+from gui.shared.tooltips import TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -51,12 +48,3 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
         else:
             title = title.defCamoInfo
         return formatters.packTextBlockData(text=text_styles.standard(backport.text(title())), padding=formatters.packPadding(top=-6, left=-2, bottom=-6))
-
-
-class VehCmpSkillsTooltipBuilder(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(VehCmpSkillsTooltipBuilder, self).__init__(context, TOOLTIPS_CONSTANTS.VEH_CMP_SKILLS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(VehCmpSkillsTooltip(), None, False)

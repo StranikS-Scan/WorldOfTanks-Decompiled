@@ -9,6 +9,7 @@ from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
 from adisp import adisp_async, adisp_process
 from constants import IS_EDITOR
+from exchange.personal_discounts_constants import MAX_DISCOUNT_VALUE
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.dialogs import CheckBoxDialogMeta, DIALOG_BUTTON_ID, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, I18nConfirmDialogMeta, I18nInfoDialogMeta, IconDialogMeta, IconPriceDialogMeta, PMConfirmationDialogMeta
@@ -377,7 +378,7 @@ class TankmanDropSkillValidator(SyncValidator):
         self.__tankman = tankman
 
     def _validate(self):
-        return makeSuccess() if self.__tankman is not None and self.__tankman.skills else makeError('server_error')
+        return makeSuccess() if self.__tankman is not None and (self.__tankman.skills or self.__tankman.bonusSkills) else makeError('server_error')
 
 
 class GroupOperationsValidator(SyncValidator):
@@ -778,34 +779,38 @@ class BoosterActivateValidator(SyncValidator):
 
 class TankmanAddSkillValidator(SyncValidator):
 
-    def __init__(self, tankmanDscr, skillName):
+    def __init__(self, tankmanDscr, utilizationType, skillName):
         super(TankmanAddSkillValidator, self).__init__()
-        self.tankmanDscr = tankmanDscr
+        self.tmanDscr = tankmanDscr
+        self.utilizationType = utilizationType
         self.skillName = skillName
 
     def _validate(self):
-        if self.skillName in self.tankmanDscr.skills:
+        try:
+            if self.tmanDscr.isFreeSkillCompletionRequiped(self.utilizationType) and self.tmanDscr.validateSkillUtilization(self.skillName, skills_constants.SkillUtilization.FREE_SKILL):
+                return makeSuccess()
+            self.tmanDscr.validateSkill(self.skillName, self.utilizationType)
+        except SoftException as e:
+            logging.debug(e.message)
             return makeError()
-        if self.skillName not in skills_constants.ACTIVE_SKILLS:
-            return makeError()
-        from items.tankmen import MAX_SKILL_LEVEL
-        if self.tankmanDscr.roleLevel != MAX_SKILL_LEVEL:
-            return makeError()
-        if self.skillName in skills_constants.UNLEARNABLE_SKILLS:
-            return makeError()
-        return makeError() if self.tankmanDscr.skills and self.tankmanDscr.lastSkillLevel != MAX_SKILL_LEVEL else makeSuccess()
+
+        return makeSuccess()
 
 
-class TankmanLearnFreeSkillValidator(SyncValidator):
+class TankmanAddSkillsValidator(TankmanAddSkillValidator):
 
-    def __init__(self, tankmanDscr, skillName):
-        super(TankmanLearnFreeSkillValidator, self).__init__()
-        self.tankmanDscr = tankmanDscr
-        self.skillName = skillName
+    def __init__(self, tmanDscr, utilizationType, skillNames):
+        super(TankmanAddSkillsValidator, self).__init__(tmanDscr, utilizationType, '')
+        self.skillNames = skillNames
 
     def _validate(self):
-        success, _, _ = self.tankmanDscr.validateLearningFreeSkill(self.skillName)
-        return makeError() if not success else makeSuccess()
+        for skillName in self.skillNames:
+            self.skillName = skillName
+            res = super(TankmanAddSkillsValidator, self)._validate()
+            if not res.success:
+                return res
+
+        return makeSuccess()
 
 
 class IsLongDisconnectedFromCenter(SyncValidator):
@@ -1209,3 +1214,28 @@ class AsyncDialogConfirmator(AsyncConfirmator):
             callback(makeSuccess())
             return
         callback(makeError())
+
+
+class ExchangeValidator(SyncValidator):
+
+    def __init__(self, exchangeAmount):
+        self.__exchangeAmount = exchangeAmount
+        super(ExchangeValidator, self).__init__()
+
+    def _validate(self):
+        if MAX_DISCOUNT_VALUE < self.__exchangeAmount:
+            _logger.error('The error when exchanging the %d value is too large', self.__exchangeAmount)
+            return makeError('server_error')
+        return super(ExchangeValidator, self)._validate()
+
+
+class ExperiencePostProgressionValidator(SyncValidator):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, xppToConvert):
+        super(ExperiencePostProgressionValidator, self).__init__()
+        self.__xppToConvert = xppToConvert
+
+    def _validate(self):
+        count = self.__itemsCache.items.stats.postProgressionXP // self.__xppToConvert
+        return makeError('lack_of_experience_to_acquire_books') if not count else makeSuccess()

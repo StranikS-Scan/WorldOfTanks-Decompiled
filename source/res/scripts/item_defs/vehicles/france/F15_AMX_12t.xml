@@ -1,8 +1,7 @@
 <F15_AMX_12t.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
   </crew>
@@ -31,6 +30,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.282	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2657,7 +2659,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_SA49_L48>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_75mm_SA49_L48>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 0.200227 -12 0.263889 -4 0.736111 -4 0.799773 -12 1 -12	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -2684,7 +2686,7 @@
             <armor_16>	30	</armor_16>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	16	</reloadTime>
           <clip>
             <count>	4	</count>
@@ -2695,7 +2697,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F15_AMX_12t/normal/lod0/Gun_03.model	</undamaged>
@@ -3256,7 +3258,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_SA49_L48>
-        <_75mm_SA50>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_75mm_SA50>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -12 0.200227 -12 0.263889 -4 0.736111 -4 0.799773 -12 1 -12	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -3978,18 +3980,13 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_528	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_528>	shared	</SCR_528>
   </radios>
   <physics>
     <detailed>
       <engines>
         <AMX_B_271>
-          <smplEnginePower>	250	</smplEnginePower>
+          <smplEnginePower>	290	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </AMX_B_271>
         <AMX_B_272>

@@ -3,7 +3,7 @@
 import typing
 from shared_utils import findFirst
 from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import Division
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
+from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import Rank
 from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonState
 from gui.impl.gen.view_models.views.lobby.comp7.year_model import YearState
 from gui.periodic_battles.models import PeriodType
@@ -89,6 +89,8 @@ def getCurrentSeasonState(comp7Controller=None):
      PeriodType.NOT_AVAILABLE_END,
      PeriodType.STANDALONE_NOT_AVAILABLE_END):
         return SeasonState.END
+    if periodInfo.periodType == PeriodType.UNDEFINED:
+        return SeasonState.DISABLED
     if periodInfo.periodType == PeriodType.BETWEEN_SEASONS:
         return SeasonState.END
     if periodInfo.cycleBorderLeft.delta(currentTime) < time_utils.ONE_DAY * _SEASON_START_DURATION_DAYS:

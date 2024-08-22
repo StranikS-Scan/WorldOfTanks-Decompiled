@@ -3,7 +3,7 @@
 import logging
 import typing
 from shared_utils import findFirst
-from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer, WindowStatus
+from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -225,13 +225,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
             tabs.invalidate()
 
     def __onClose(self):
-        if self.__shouldNotBeClosed():
-            logging.warning('Could not close the meta view, a loading view is exist')
-            return
         showHangar()
-
-    def __shouldNotBeClosed(self):
-        return self.__guiLoader.windowsManager.findWindows(lambda window: window.windowStatus == WindowStatus.LOADING)
 
     def __onViewStatusChanged(self, viewID, status):
         view = self.__guiLoader.windowsManager.getView(viewID)

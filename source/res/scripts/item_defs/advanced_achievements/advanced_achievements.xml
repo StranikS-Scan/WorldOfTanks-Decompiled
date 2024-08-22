@@ -154,6 +154,7 @@
         <UI>
           <stringKey>	czech	</stringKey>
           <background>	czech	</background>
+          <order>	303 309 437 380 390	</order>
         </UI>
         <stages>
           <stage>
@@ -162,7 +163,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	303 309 380 390	</requiredAchievementIDs>
+          <requiredAchievementIDs>	303 309 437 380 390	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -7829,6 +7830,113 @@
         <openByUnlock></openByUnlock>
         <conditions>
           <vehicle>	ussr:R77_KV2	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	433	</id>
+        <UI>
+          <stringKey>	Cz34_Vz_71_Tesak	</stringKey>
+          <background>	czech	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	czech:Cz34_Vz_71_Tesak	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	434	</id>
+        <UI>
+          <stringKey>	Cz24_Vz_64_Blesk	</stringKey>
+          <background>	czech	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	czech:Cz24_Vz_64_Blesk	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	435	</id>
+        <UI>
+          <stringKey>	Cz28_LPT_67_Selma	</stringKey>
+          <background>	czech	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	czech:Cz28_LPT_67_Selma	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	436	</id>
+        <UI>
+          <stringKey>	Cz23_Skoda_T_17	</stringKey>
+          <background>	czech	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	czech:Cz23_Skoda_T_17	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	437	</id>
+        <UI>
+          <stringKey>	branch_czech_Cz34_Vz_71_Tesak	</stringKey>
+          <vehicle>	czech:Cz34_Vz_71_Tesak	</vehicle>
+          <background>	czech_branch	</background>
+          <iconPosition>	bottom	</iconPosition>
+          <order>	304 436 434 435 433	</order>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	50	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <requiredAchievementIDs>	304 436 435 434 433	</requiredAchievementIDs>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	438	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	GB114_Vickers_MBT_Mk3	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	uk:GB114_Vickers_MBT_Mk3	</vehicle>
         </conditions>
       </achievement>
     </vehicleAchievements>

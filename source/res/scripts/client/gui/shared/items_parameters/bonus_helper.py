@@ -28,9 +28,11 @@ def isSituationalBonus(bonusName, bonusType='', paramName=''):
     return paramName in _PARTIALLY_SITUATIONAL_BONUSES[bonusName] if bonusName in _PARTIALLY_SITUATIONAL_BONUSES else bonusName in _SITUATIONAL_BONUSES
 
 
-_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'radioman_inventor', 'radioman_retransmitter')
-CREW_MASTERY_BONUSES = ('radioman_inventor', 'radioman_retransmitter')
-_PARTIALLY_SITUATIONAL_BONUSES = {'lastEffortBattleBooster': KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY}
+_SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'radioman_expert', 'radioman_sideBySide', 'commander_emergency')
+CREW_MASTERY_BONUSES = ('radioman_expert', 'radioman_sideBySide', 'commander_emergency')
+_PARTIALLY_SITUATIONAL_BONUSES = {'lastEffortBattleBooster': KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY,
+ 'enemyShotPredictorBattleBooster': KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
+ 'rancorousBattleBooster': KPI.Name.DAMAGED_MODULES_DETECTION_TIME}
 
 def _removeCamouflageModifier(vehicle, bonusID):
     if bonusID == EXTRAS_CAMOUFLAGE:
@@ -169,20 +171,23 @@ class BonusExtractor(object):
 
     def extractBonus(self, bonusGroup, bonusID):
         paramName = self.__paramName
-        if isSituationalBonus(bonusID, bonusGroup, paramName):
+        situationalBonuses = []
+        isSituational = isSituationalBonus(bonusID, bonusGroup, paramName)
+        if isSituational:
             paramName += 'Situational'
-        valueWithBonus = self.__extractParamValue(paramName)
+            situationalBonuses.append(bonusID)
+        valueWithBonus = self.__extractParamValue(paramName, situationalBonuses)
         self.__vehicle = _VEHICLE_MODIFIERS[bonusGroup](self.__vehicle, bonusID)
         if bonusGroup == BonusTypes.EXTRA and bonusID == EXTRAS_CAMOUFLAGE:
             self.__removeCamouflage = True
-        valueWithoutBonus = self.__extractParamValue(paramName)
+        valueWithoutBonus = self.__extractParamValue(paramName, situationalBonuses)
         return getParamExtendedData(self.__paramName, valueWithBonus, valueWithoutBonus)
 
     def _getCopyVehicle(self, vehicle):
         return self.itemsCache.items.getVehicleCopy(vehicle)
 
-    def __extractParamValue(self, paramName):
-        return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage), paramName)
+    def __extractParamValue(self, paramName, situationalBonuses=None):
+        return getattr(_CustomizedVehicleParams(self.__vehicle, self.__removeCamouflage, situationalBonuses), paramName)
 
     @staticmethod
     def __reorderDevices(devices):
@@ -209,9 +214,9 @@ class PostProgressionBonusExtractor(BonusExtractor):
 
 class _CustomizedVehicleParams(VehicleParams):
 
-    def __init__(self, vehicle, removeCamouflage):
+    def __init__(self, vehicle, removeCamouflage, situationalBonuses=None):
         self.__removeCamouflage = removeCamouflage
-        super(_CustomizedVehicleParams, self).__init__(vehicle)
+        super(_CustomizedVehicleParams, self).__init__(vehicle, situationalBonuses)
 
     def _getVehicleDescriptor(self, vehicle):
         return vehicle.descriptor if self.__removeCamouflage else super(_CustomizedVehicleParams, self)._getVehicleDescriptor(vehicle)

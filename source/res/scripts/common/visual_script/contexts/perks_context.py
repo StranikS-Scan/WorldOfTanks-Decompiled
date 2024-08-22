@@ -30,6 +30,7 @@ class PerkContext(VScriptContext):
     OnVehicleFireStopped = vse_forward_event('OnVehicleFireStopped', (), display_name='OnVehicleFireStopped', description='On vehicle fire stopped')
     OnVehicleEquipmentSwap = vse_forward_event('OnVehicleEquipmentSwap', (), display_name='OnVehicleEquipmentSwap', description='On vehicle equipment swap')
     OnVehicleBlockDamage = vse_forward_event('OnVehicleBlockDamage', (), display_name='OnVehicleBlockDamage', description='On vehicle block damage')
+    OnVehicleDamageByEnemy = vse_forward_event('OnVehicleDamageByEnemy', (), display_name='OnVehicleDamageByEnemy', description='On vehicle damage by enemy')
     OnVehicleChangeHealth = vse_forward_event('OnVehicleChangeHealth', (), display_name='OnVehicleChangeHealth', description='On vehicle change health')
     OnVehicleDeviceWasCrit = vse_forward_event('OnVehicleDeviceWasCrit', (), display_name='OnVehicleDeviceWasCrit', description='On vehicle device was crit')
     OnVehicleTankmanWasCrit = vse_forward_event('OnVehicleTankmanWasCrit', (), display_name='OnVehicleTankmanWasCrit', description='On vehicle tankman was crit')

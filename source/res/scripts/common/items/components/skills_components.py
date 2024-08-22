@@ -144,16 +144,8 @@ class CommanderTutorSkill(ExtendedSkill):
     def xpBonusFactorPerLevel(self):
         return self._setOfParameters[0]
 
-
-class CommanderUniversalistSkill(ExtendedSkill):
-    __slots__ = ()
-
     @property
     def efficiency(self):
-        return self._setOfParameters[0]
-
-    @property
-    def chanceToHitPerLevel(self):
         return self._setOfParameters[1]
 
 
@@ -237,7 +229,7 @@ class SkillsConfig(legacy_stuff.LegacyStuff):
     __slots__ = skills_constants.ROLES | skills_constants.ACTIVE_SKILLS | {'vsePerkToSkill'}
 
     def __init__(self):
-        self.vsePerkToSkill = {StubPerkIDs.COMMANDER_UNIVERSALIST: 'commander_universalist',
+        self.vsePerkToSkill = {StubPerkIDs.COMMANDER_TUTOR: 'commander_tutor',
          StubPerkIDs.RADIOMAN_LAST_EFFORT: 'radioman_lastEffort'}
 
     @staticmethod

@@ -633,6 +633,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_BRAVGDAMAGE_BODY = '#profile:profile/params/tooltip/brAvgDamage/body'
     PROFILE_DROPDOWN_LABELS_COMP7 = '#profile:profile/dropdown/labels/comp7'
     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN = '#profile:profile/dropdown/labels/comp7_archive_Griffin'
+    PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_PEGASUS = '#profile:profile/dropdown/labels/comp7_archive_Pegasus'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1 = '#profile:profile/dropdown/labels/comp7_season_1'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2 = '#profile:profile/dropdown/labels/comp7_season_2'
     PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3 = '#profile:profile/dropdown/labels/comp7_season_3'
@@ -687,6 +688,7 @@ class PROFILE(object):
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_HEADER = '#profile:profile/params/tooltip/maxHealthRepair/header'
     PROFILE_PARAMS_TOOLTIP_MAXHEALTHREPAIR_BODY = '#profile:profile/params/tooltip/maxHealthRepair/body'
     SEASONS_DROPDOWN_LABEL = '#profile:seasons/dropdown_label'
+    SEASONS_COMP7_DROPDOWN_LABEL = '#profile:seasons/comp7_dropdown_label'
     SECTION_ADVANCEDACHIEVEMENTS_TITLE = '#profile:section/advancedAchievements/title'
     PROFILE_DROPDOWN_LABELS_ENUM = (PROFILE_DROPDOWN_LABELS_ALL,
      PROFILE_DROPDOWN_LABELS_RANDOM,
@@ -706,6 +708,7 @@ class PROFILE(object):
      PROFILE_DROPDOWN_LABELS_BATTLEROYALESQUAD,
      PROFILE_DROPDOWN_LABELS_COMP7,
      PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_GRIFFIN,
+     PROFILE_DROPDOWN_LABELS_COMP7_ARCHIVE_PEGASUS,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_1,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_2,
      PROFILE_DROPDOWN_LABELS_COMP7_SEASON_3)

@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.impl.lobby.offers.offer_banner_window import OfferBannerWindow
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.app_loader import GuiGlobalSpaceID, IAppLoader
@@ -60,10 +60,10 @@ class OffersBannerController(IOffersBannerController):
         return
 
     def __subscribeLui(self):
-        self.__limitedUIController.startObserve(LuiRules.OFFER_BANNER_WINDOW, self._loadBanners)
+        self.__limitedUIController.startObserve(LUI_RULES.OfferBannerWindow, self._loadBanners)
 
     def __unsubscribeLui(self):
-        self.__limitedUIController.stopObserve(LuiRules.OFFER_BANNER_WINDOW, self._loadBanners)
+        self.__limitedUIController.stopObserve(LUI_RULES.OfferBannerWindow, self._loadBanners)
 
     def showBanners(self, *args, **kwargs):
         self._loadBanners()
@@ -74,7 +74,7 @@ class OffersBannerController(IOffersBannerController):
 
     @adisp_process
     def _loadBanners(self, *args, **kwargs):
-        canShow = self.__limitedUIController.isRuleCompleted(LuiRules.OFFER_BANNER_WINDOW)
+        canShow = self.__limitedUIController.isRuleCompleted(LUI_RULES.OfferBannerWindow)
         if not canShow:
             for offer in self.__iNotSeenOffers():
                 _logger.debug('OfferBannerWindow for offerID=%s was hidden by limitedUIController ', offer.id)

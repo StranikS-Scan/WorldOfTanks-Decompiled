@@ -2,25 +2,24 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import logging
 import BigWorld
-from gui import makeHtmlString, GUI_NATIONS_ORDER_INDEX
+from gui import SystemMessages
+from gui import makeHtmlString
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.event_dispatcher import showConversionAwardsView
 from gui.shared.formatters import formatPrice, formatPriceValue
 from gui.shared.gui_items import Tankman
-from gui.shared.gui_items.Tankman import NO_SLOT, getTankmanSkill
+from gui.shared.gui_items.Tankman import NO_SLOT, getTankmanSkill, BaseBookConvertingFormatter
 from gui.shared.gui_items.processors import Processor, ItemProcessor, GroupedRequestProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins
 from gui.shared.money import Money, Currency
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from items import tankmen, makeIntCompactDescrByID
 from items.tankmen import SKILL_INDICES, getSkillsConfig
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
-from gui import SystemMessages
-from gui.shared.notifications import NotificationPriorityLevel
-from gui.shared.event_dispatcher import showConversionAwardsView
-import time
 _logger = logging.getLogger(__name__)
 
 def _getSysMsgType(price):
@@ -240,6 +239,20 @@ class TankmanReturn(Processor):
         BigWorld.player().inventory.returnCrew(self.__vehicle.invID, lambda code: self._response(code, callback))
 
 
+class ResetAllTankmenSkills(Processor):
+    __PREFIX = 'reset_all_tankmen_skills'
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__PREFIX), type=SM_TYPE.Information)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/{}'.format(self.__PREFIX, errStr), defaultSysMsgKey='{}/server_error'.format(self.__PREFIX))
+
+    def _request(self, callback):
+        _logger.debug('Make server request to reset all tankmen skills')
+        BigWorld.player().inventory.resetAllTankmenSkills(callback=lambda code: self._response(code, callback))
+
+
 class TankmanRetraining(GroupedRequestProcessor):
 
     def __init__(self, tankmanInvID, vehicleIntCD, tmanCostTypeIdx, isRoleChange, groupID=0, groupSize=1):
@@ -286,38 +299,44 @@ class TankmanFreeToOwnXpConvertor(GroupedRequestProcessor):
         return makeSuccess(backport.text(R.strings.system_messages.free_xp_to_tman_skill.success(), money=sum((item.itemCount for item in iter(ctx) if item.itemID == 'freeXP'))))
 
 
+class TankmanAddSkills(ItemProcessor):
+
+    def __init__(self, tmanInvID, utilizationType, skillNames):
+        self.skillNames = skillNames
+        self.utilizationType = utilizationType
+        tankman = self.itemsCache.items.getTankman(tmanInvID)
+        super(TankmanAddSkills, self).__init__(tankman, (plugins.TankmanAddSkillsValidator(tankman.descriptor, utilizationType, skillNames),))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='{}/{}'.format(self.__getSysMsgKey(), errStr), defaultSysMsgKey='{}/server_error'.format(self.__getSysMsgKey()))
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__getSysMsgKey()), type=SM_TYPE.Information, skill=', '.join((getTankmanSkill(skillName, self.item).userName for skillName in self.skillNames)))
+
+    def _request(self, callback):
+        BigWorld.player().inventory.addTankmanSkills(self.item.invID, self.utilizationType, self.skillNames, lambda code: self._response(code, callback))
+
+    def __getSysMsgKey(self):
+        return 'add_tankman_skill' if len(self.skillNames) == 1 else 'add_tankman_skills'
+
+
 class TankmanAddSkill(ItemProcessor):
 
-    def __init__(self, tankman, skillName):
-        super(TankmanAddSkill, self).__init__(tankman, (plugins.TankmanAddSkillValidator(tankman.descriptor, skillName),))
-        self.skill = getTankmanSkill(skillName, tankman)
+    def __init__(self, tmanInvID, skillName, utilizationType):
+        self.utilizationType = utilizationType
+        self.skillName = skillName
+        tankman = self.itemsCache.items.getTankman(tmanInvID)
+        super(TankmanAddSkill, self).__init__(tankman, (plugins.TankmanAddSkillValidator(tankman.descriptor, utilizationType, skillName),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='add_tankman_skill/{}'.format(errStr), defaultSysMsgKey='add_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='add_tankman_skill/success', skill=self.skill.userName, type=SM_TYPE.Information)
-
-    def _request(self, callback):
-        _logger.debug('Make server request to add tankman skill: %s, %s', self.item, self.skill.name)
-        BigWorld.player().inventory.addTankmanSkill(self.item.invID, self.skill.name, lambda code: self._response(code, callback))
-
-
-class TankmanLearnFreeSkill(ItemProcessor):
-
-    def __init__(self, tankman, skillName):
-        super(TankmanLearnFreeSkill, self).__init__(tankman, (plugins.TankmanLearnFreeSkillValidator(tankman.descriptor, skillName),))
-        self.skillName = skillName
-
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='learn_tankman_free_skill/{}'.format(errStr), defaultSysMsgKey='learn_tankman_free_skill/server_error')
-
-    def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='learn_tankman_free_skill/success', type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='add_tankman_skill/success', skill=getTankmanSkill(self.skillName, self.item).userName, type=SM_TYPE.Information)
 
     def _request(self, callback):
         _logger.debug('Make server request to add tankman skill: %s, %s', self.item, self.skillName)
-        BigWorld.player().inventory.learnTankmanFreeSkill(self.item.invID, self.skillName, lambda code: self._response(code, callback))
+        BigWorld.player().inventory.addTankmanSkill(self.item.invID, self.utilizationType, self.skillName, lambda code: self._response(code, callback))
 
 
 class TankmanChangeRole(GroupedRequestProcessor):
@@ -422,7 +441,7 @@ class TankmanRestore(GroupedRequestProcessor):
         return makeI18nSuccess(sysMsgKey='restore_tankman/success', type=SM_TYPE.Information, auxData=self._makeSuccessData())
 
 
-class TankmenJunkConverter(Processor):
+class TankmenJunkConverter(Processor, BaseBookConvertingFormatter):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError(sysMsgKey='conversion/error', defaultSysMsgKey='restore_tankman/server_error')
@@ -430,21 +449,11 @@ class TankmenJunkConverter(Processor):
     def _successHandler(self, code, ctx=None):
         if not ctx:
             return makeI18nSuccess(sysMsgKey='conversion/success', type=SM_TYPE.Information)
-        else:
-            showConversionAwardsView(conversionResults=ctx)
-            formatedDate = str(time.strftime('%d.%m.%Y %H:%M:%S', time.localtime(time.time())))
-            message = backport.text(R.strings.system_messages.conversion.header(), at=formatedDate)
-            crewBooks = []
-            for intCD, count in ctx.iteritems():
-                crewBook = self.itemsCache.items.getItemByCD(intCD)
-                if crewBook is None:
-                    continue
-                crewBooks.append(dict(name=crewBook.getName().strip(), count=count, nation=GUI_NATIONS_ORDER_INDEX[crewBook.getNation()], type=crewBook.getBookTypeOrder()))
-
-            crewBooks.sort(key=lambda item: (item['nation'], -item['type']))
-            message += ',\n'.join(('{} ({})'.format(crewBook['name'], crewBook['count']) for crewBook in crewBooks)) + '.'
-            SystemMessages.pushMessage(text=message, type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.LOW, messageData={'header': backport.text(R.strings.system_messages.conversion.title())})
-            return
+        showConversionAwardsView(conversionResults=ctx)
+        self.setCrewBooks(ctx, self.itemsCache)
+        self.sortCrewBooks(key=lambda item: (item['nation'], -item['type']))
+        text = self.getTextMessage(header=R.strings.system_messages.conversion.header())
+        SystemMessages.pushMessage(text=text, type=SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.LOW, messageData={'header': backport.text(R.strings.system_messages.conversion.title())})
 
     def _request(self, callback):
         _logger.debug('Make server request to convert junk tankmen ')

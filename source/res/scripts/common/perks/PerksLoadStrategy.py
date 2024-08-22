@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/perks/PerksLoadStrategy.py
 from perks.vse_plan import VsePlan, PlanStatus
-from wg_async import wg_async, wg_await, distributeLoopOverTicks
+from wg_async import wg_async, wg_await, distributeLoopOverTicks2
 
 class LoadType:
     DEFAULT = 0
@@ -95,7 +95,7 @@ class DefaultLoadStrategy(BaseLoadStrategy):
             for idx, item in enumerate(self._plans):
                 yield item.load(tempCreator[idx], isAutoStart)
 
-        yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=_MAX_LOAD_PLANS, logID='loadPlans'))
+        yield wg_await(distributeLoopOverTicks2(asyncLoop(), logID='loadPlans'))
 
     @wg_async
     def _startAsync(self):
@@ -104,7 +104,7 @@ class DefaultLoadStrategy(BaseLoadStrategy):
             for plan in self._plans:
                 yield plan.start()
 
-        yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='start'))
+        yield wg_await(distributeLoopOverTicks2(asyncLoop(), logID='start'))
 
     def _onStatusChanged(self):
         if self._state == LoadState.PRE_START:

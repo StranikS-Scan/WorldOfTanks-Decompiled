@@ -35,6 +35,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic, ReplayEventID
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 from helpers.styles_perf_toolset import g_reportGenerator
@@ -205,6 +206,7 @@ class BattleReplay(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     appLoader = dependency.descriptor(IAppLoader)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         userPrefs = Settings.g_instance.userPrefs
@@ -284,6 +286,7 @@ class BattleReplay(object):
     def subscribe(self):
         g_playerEvents.onBattleResultsReceived += self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer += self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
         g_playerEvents.onAvatarObserverVehicleChanged += self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged += self.__onSettingsChanging
@@ -291,6 +294,7 @@ class BattleReplay(object):
     def unsubscribe(self):
         g_playerEvents.onBattleResultsReceived -= self.__onBattleResultsReceived
         g_playerEvents.onAccountBecomePlayer -= self.__onAccountBecomePlayer
+        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
         g_playerEvents.onAvatarObserverVehicleChanged -= self.__onAvatarObserverVehicleChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanging
@@ -1189,6 +1193,10 @@ class BattleReplay(object):
             else:
                 self.__playerDatabaseID = player.databaseID
             return
+
+    def __onAvatarBecomePlayer(self):
+        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE:
+            self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):
         if not self.isPlaying:

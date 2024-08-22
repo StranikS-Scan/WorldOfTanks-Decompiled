@@ -86,7 +86,7 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
             self._setResult(DialogButtons.CANCEL)
         tm = vm.tankman
         setTankmanModel(tm, self._tankman, tmanNativeVeh=self._itemsCache.items.getItemByCD(self._tankman.vehicleNativeDescr.type.compactDescr))
-        setTmanSkillsModel(tm.getSkills(), self._tankman)
+        setTmanSkillsModel(tm.skills, self._tankman, fillBonusSkills=False)
         tm.setTimeToDismiss(time)
 
     def _setResult(self, result):
@@ -101,7 +101,7 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
             state = getPurchaseMoneyState(price)
             if state is MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
                 purchaseGold = getPurchaseGoldForCredits(price)
-                event_dispatcher.showExchangeCurrencyWindowModal(currencyValue=purchaseGold)
+                event_dispatcher.showExchangeCurrencyWindowModal(gold=purchaseGold, backgroundImage=R.images.gui.maps.icons.windows.background())
                 return False
         self.__restoreTankman()
         return True

@@ -305,6 +305,20 @@
       <min>	0.0	</min>
     </restrictions>
   </enginePower>
+  <engineFireFactor>
+    <scope>	cell client hangar	</scope>
+    <dataType>	float	</dataType>
+    <domain>	engine	</domain>
+    <client>
+      <domain>	battleParams	</domain>
+      <physicalType>	probability	</physicalType>
+      <useTypes>	val mul add	</useTypes>
+    </client>
+    <restrictions>
+      <min>	0.0	</min>
+      <max>	1.0	</max>
+    </restrictions>
+  </engineFireFactor>
   <fwMaxSpeed>
     <scope>	cell client hangar	</scope>
     <dataType>	float	</dataType>
@@ -369,7 +383,7 @@
     </restrictions>
   </armorDamageLast>
   <deviceDamageFirst>
-    <scope>	base cell client	</scope>
+    <scope>	base cell client hangar	</scope>
     <dataType>	float	</dataType>
     <domain>	shell	</domain>
     <restrictions>
@@ -852,4 +866,16 @@
     <dataType>	string	</dataType>
     <domain>	gun	</domain>
   </gunMainPrefab>
+  <visionMaxRadius>
+    <scope>	cell client hangar	</scope>
+    <dataType>	float	</dataType>
+    <client>
+      <domain>	visibility	</domain>
+      <physicalType>	meters	</physicalType>
+      <useTypes>	val mul add	</useTypes>
+    </client>
+    <restrictions>
+      <min>	0.0	</min>
+    </restrictions>
+  </visionMaxRadius>
 </battle_params.xml>

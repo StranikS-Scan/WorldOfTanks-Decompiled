@@ -385,6 +385,17 @@ class _MarathonRewardScreen(W2CSchema):
     marathon_prefix = Field(required=True, type=basestring)
 
 
+class _BPBitStylePreviewSchema(W2CSchema):
+    vehicle_cd = Field(required=False, type=int)
+    style_id = Field(required=True, type=int)
+    back_btn_descr = Field(required=False, type=basestring)
+    back_url = Field(required=False, type=basestring)
+    level = Field(required=False, type=int)
+    price = Field(required=False, type=dict)
+    buy_params = Field(required=False, type=dict)
+    alternate_item = Field(required=False, type=list)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -520,6 +531,16 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_MarathonRewardScreen, 'marathon_reward_screen')
     def openMarathonRewardScreen(self, cmd):
         showMarathonRewardScreen(cmd.marathon_prefix)
+
+    @w2c(_BPBitStylePreviewSchema, 'bpbit_style_preview')
+    def openBPBitStylePreview(self, cmd):
+        if not self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id).is3D:
+            previewMethod = event_dispatcher.showShowcaseStyleBuyingPreview
+            obtainingMethod = ObtainingMethods.BUY.value
+        else:
+            previewMethod = None
+            obtainingMethod = None
+        return self._openVehicleStylePreview(cmd, previewMethod, obtainingMethod=obtainingMethod)
 
     def _openVehicleStylePreview(self, cmd, showStyleFunc=None, **additionalStyleFuncKwargs):
         if cmd.vehicle_cd:

@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -1118,7 +1117,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1642,6 +1640,17 @@
     <tags>	mediumTank role_MT_universal HD patton mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 earn_crystals special	</tags>
     <level>	10	</level>
   </A120_M48A5_7x7>
+  <A174_T57_58_Rush_Ep1>
+    <id>	256	</id>
+    <userString>	#usa_vehicles:A174_T57_58_Rush_Ep1	</userString>
+    <description>	#usa_vehicles:A174_T57_58_Rush_Ep1_descr	</description>
+    <shortUserString>	#usa_vehicles:A174_T57_58_Rush_Ep1_short	</shortUserString>
+    <price>	22500	  <gold></gold>
+    </price>
+    <tags>	heavyTank special role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit restoreWithStyle	</tags>
+    <level>	10	</level>
+    <notInShop>	True	</notInShop>
+  </A174_T57_58_Rush_Ep1>
   <A1041_M18_Hellcat_NewOnBoarding>
     <id>	400	</id>
     <userString>	#usa_vehicles:M18_Hellcat	</userString>
@@ -1714,24 +1723,4 @@
     <level>	6	</level>
     <notInShop>	True	</notInShop>
   </A1006_M4A3E8_Sherman_StoryModeHard>
-  <A143_M_V_Y_FEP23>
-    <id>	47	</id>
-    <userString>	#usa_vehicles:A143_M_V_Y_FEP	</userString>
-    <description>	#usa_vehicles:A143_M_V_Y_FEP_descr	</description>
-    <shortUserString>	#usa_vehicles:A143_M_V_Y_FEP_short	</shortUserString>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD fun_random mode_hidden autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
-    <level>	10	</level>
-  </A143_M_V_Y_FEP23>
-  <A116_XM551_FEP23>
-    <id>	48	</id>
-    <userString>	#usa_vehicles:A116_XM551_FEP	</userString>
-    <shortUserString>	#usa_vehicles:A116_XM551_FEP_short	</shortUserString>
-    <description>	#usa_vehicles:A116_XM551_FEP_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD fun_random mode_hidden autocannon secret earn_crystals cannot_be_sold builtinRepairkit_user lockCrew lockCrewSkills hideCrew lockOptionalDevices lockShells lockEquipment lockDevices hideStorage lockOutfit	</tags>
-    <level>	10	</level>
-  </A116_XM551_FEP23>
 </list.xml>

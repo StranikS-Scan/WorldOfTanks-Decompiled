@@ -5062,20 +5062,6 @@
         </effects>
       </variant1>
     </dc_impact_dot>
-    <dc_impact>
-      <variant1>
-        <stages>
-          <base>	10000.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/dc_impact.eff	</file>
-            <force>	1	</force>
-          </pixie>
-        </effects>
-      </variant1>
-    </dc_impact>
     <inf_envSU_83_05_Scaffold2>
       <variant1>
         <stages>
@@ -35501,6 +35487,52 @@
         </effects>
       </variant1>
     </hd_mle_asjp_004_mitsubishia6mzero_01>
+    <hd_mle_SU_015_Plane_P40_01_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_mle_SU_015_Plane_P40_01_hit.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	inf_fuel_mleAF_003_WestlandLysander	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_SU_015_Plane_P40_01_hit>
+    <hd_mle_SU_015_Plane_P40_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_mle_SU_015_Plane_P40_01.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	41.000000	</metal_1>
+              <metal_2>	75.000000	</metal_2>
+              <glass>	27.000000	</glass>
+              <debrisAmount>	65.000000	</debrisAmount>
+              <weight>	8105.000000	</weight>
+              <cloth>	14.000000	</cloth>
+              <wood_1>	17.000000	</wood_1>
+              <wood_2>	12.000000	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_SU_015_Plane_P40_01>
     <hd_env_as_039_oysterfarm_1_2>
       <variant1>
         <stages>

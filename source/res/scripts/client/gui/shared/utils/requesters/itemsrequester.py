@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/ItemsRequester.py
+import logging
 import operator
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict, namedtuple
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 import BigWorld
 import constants
 import dossiers2
@@ -15,12 +16,14 @@ from adisp import adisp_async, adisp_process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_NOTE
+from dossiers2.ui.achievements import BADGES_BLOCK
 from goodies.goodie_constants import GOODIE_STATE
 from gui.game_loading.resources.consts import Milestones
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType, checkForTags
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters import vehicle_items_getter
+from gui.shared.utils.tankmen_stats_cache import TankmenStatsCache
 from helpers import dependency, isPlayerAvatar
 from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehicles
 from items.components.c11n_constants import CustomizationDisplayType, SeasonType
@@ -31,11 +34,14 @@ from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if TYPE_CHECKING:
+    from typing import Optional, Dict
     import skeletons.gui.shared.utils.requesters as requesters
+    from gui.shared.gui_items.badge import Badge
     from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+_logger = logging.getLogger(__name__)
 DO_LOG_BROKEN_SYNC = False
 
 def getDiffID(itemdID):
@@ -321,6 +327,8 @@ class REQ_CRITERIA(object):
         VEHICLE_NATIVE_LEVELS = staticmethod(lambda levels: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeDescr.level in levels)))
         NATION = staticmethod(lambda nationNames: RequestCriteria(PredicateCondition(lambda item: nations.NAMES[item.nationID] in nationNames)))
         IS_LOCK_CREW = staticmethod(lambda isLockCrew=False: RequestCriteria(PredicateCondition(lambda item: item.isLockedByVehicle() in isLockCrew)))
+        IS_POST_PROGRESSION_AVAILABLE = RequestCriteria(PredicateCondition(lambda item: item.descriptor.isMaxSkillXp()))
+        IS_LOW_EFFICIENCY = RequestCriteria(PredicateCondition(lambda item: not item.isMaxSkillEfficiency))
         DISMISSED = RequestCriteria(PredicateCondition(lambda item: item.isDismissed))
         ACTIVE = ~DISMISSED
 
@@ -332,6 +340,7 @@ class REQ_CRITERIA(object):
     class CREW_ITEM(object):
         IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.inAccount()))
         BOOK_RARITIES = staticmethod(lambda rarityTypes: RequestCriteria(PredicateCondition(lambda item: item.getBookType() in rarityTypes)))
+        ID = staticmethod(lambda bookId: RequestCriteria(PredicateCondition(lambda item: item.getID() == bookId)))
         NATIONS = staticmethod(lambda nationIDs=nations.INDICES.keys(): RequestCriteria(PredicateCondition(lambda item: item.nationID in nationIDs or item.getNationID() == nations.NONE_INDEX)))
 
     class BOOSTER(object):
@@ -372,7 +381,8 @@ class REQ_CRITERIA(object):
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe))
         TROPHY = RequestCriteria(PredicateCondition(lambda item: item.isTrophy))
         MODERNIZED = RequestCriteria(PredicateCondition(lambda item: item.isModernized))
-        HAS_ANY_FROM_CATEGORIES = staticmethod(lambda *categories: RequestCriteria(PredicateCondition(lambda item: not item.descriptor.categories.isdisjoint(categories))))
+        HAS_ANY_FROM_CATEGORIES = staticmethod(lambda categories: RequestCriteria(PredicateCondition(lambda item: not item.descriptor.categories.isdisjoint(categories))))
+        HAS_ANY_FROM_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not item.descriptor.tags.isdisjoint(tags))))
 
     class BADGE(object):
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
@@ -452,6 +462,9 @@ class ItemsRequester(IItemsRequester):
          self.__vehicleRotation,
          self.__recycleBin}
         self.__vehCustomStateCache = defaultdict(dict)
+        self.__tankmenStatsCache = TankmenStatsCache()
+        self._invTmenRO = None
+        return
 
     @property
     def inventory(self):
@@ -536,6 +549,10 @@ class ItemsRequester(IItemsRequester):
     @property
     def achievements20(self):
         return self.__achievements20
+
+    @property
+    def tankmenStatsCache(self):
+        return self.__tankmenStatsCache
 
     @adisp_async
     @adisp_process
@@ -665,6 +682,9 @@ class ItemsRequester(IItemsRequester):
         self.__anonymizer.clear()
         self.__giftSystem.clear()
         self.__gameRestrictions.clear()
+        self.__tankmenStatsCache.setNeedUpdate()
+        self._invTmenRO = None
+        return
 
     def onDisconnected(self):
         self.__tokens.onDisconnected()
@@ -701,6 +721,7 @@ class ItemsRequester(IItemsRequester):
 
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':
+                self.__tankmenStatsCache.setNeedUpdate()
                 for itemID in data.keys():
                     vehData = self.__inventory.getVehicleData(getDiffID(itemID))
                     if vehData is not None:
@@ -727,6 +748,7 @@ class ItemsRequester(IItemsRequester):
                             invalidate[GUI_ITEM_TYPE.TANKMAN].update(self.__getTankmenIDsForVehicle(vehData))
 
             if itemTypeID == GUI_ITEM_TYPE.TANKMAN:
+                self.__tankmenStatsCache.setNeedUpdate()
                 for data in itemsDiff.itervalues():
                     invalidate[itemTypeID].update(data.keys())
                     for itemID in data.keys():
@@ -819,6 +841,8 @@ class ItemsRequester(IItemsRequester):
         if invalidIDs:
             invalidate[GUI_ITEM_TYPE.VEH_POST_PROGRESSION].update(invalidIDs)
             invalidate[GUI_ITEM_TYPE.VEHICLE].update(invalidIDs)
+        if GUI_ITEM_TYPE.TANKMAN in invalidate:
+            self._invTmenRO = None
         for itemTypeID, uniqueIDs in invalidate.iteritems():
             self._invalidateItems(itemTypeID, uniqueIDs)
 
@@ -933,6 +957,12 @@ class ItemsRequester(IItemsRequester):
 
         return result
 
+    def getInventoryTankmenRO(self):
+        if self._invTmenRO is None:
+            self._invTmenRO = self.getInventoryTankmen()
+            LOG_DEBUG('Created new read-only all-inventory-tankmen dict')
+        return self._invTmenRO
+
     def getDismissedTankmen(self, criteria=REQ_CRITERIA.TANKMAN.DISMISSED):
         result = ItemsCollection()
         duration = self.__shop.tankmenRestoreConfig.billableDuration
@@ -960,8 +990,12 @@ class ItemsRequester(IItemsRequester):
             return result
 
     def tankmenInBarracksCount(self):
-        tmen = self.getInventoryTankmen()
+        tmen = self.getInventoryTankmenRO()
         return sum((1 for tmn in tmen.itervalues() if not tmn.isInTank))
+
+    def hasAnyTmanInBarracks(self):
+        tmen = self.getInventoryTankmenRO()
+        return any((not tman.isInTank for tman in tmen.itervalues()))
 
     def freeTankmenBerthsCount(self):
         return self.stats.tankmenBerthsCount - self.tankmenInBarracksCount()
@@ -974,8 +1008,9 @@ class ItemsRequester(IItemsRequester):
 
     def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
         result = ItemsCollection()
+        receivedBadges = self.getAccountDossier().getDossierDescr()[BADGES_BLOCK]
         for badgeID, badgeData in self.__badges.available.iteritems():
-            item = self.itemsFactory.createBadge(badgeData, proxy=self)
+            item = self.itemsFactory.createBadge(badgeData, proxy=self, receivedBadges=receivedBadges)
             if criteria(item):
                 result[badgeID] = item
 
@@ -1171,9 +1206,13 @@ class ItemsRequester(IItemsRequester):
         return
 
     def __makeVehicle(self, typeCompDescr, vehInvData=None):
-        vehInvData = vehInvData or self.__inventory.getItemData(typeCompDescr)
-        vehExtData = self.__inventory.getVehExtData(typeCompDescr)
-        return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData)
+        container = self.__itemsCache[GUI_ITEM_TYPE.VEHICLE]
+        if typeCompDescr in container:
+            return container[typeCompDescr]
+        else:
+            vehInvData = vehInvData or self.__inventory.getItemData(typeCompDescr)
+            vehExtData = self.__inventory.getVehExtData(typeCompDescr)
+            return self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, strCompactDescr=vehInvData.compDescr, inventoryID=vehInvData.invID, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData) if vehInvData is not None else self.__makeItem(GUI_ITEM_TYPE.VEHICLE, typeCompDescr, typeCompDescr=typeCompDescr, proxy=self, extData=vehExtData)
 
     def __makeTankman(self, tmanInvID, tmanInvData=None):
         tmanInvData = tmanInvData or self.__inventory.getTankmanData(tmanInvID)

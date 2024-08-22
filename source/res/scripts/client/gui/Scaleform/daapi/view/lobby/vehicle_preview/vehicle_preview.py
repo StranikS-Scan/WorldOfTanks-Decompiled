@@ -17,7 +17,7 @@ from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableVi
 from gui.Scaleform.daapi.view.lobby.store.browser.sound_constants import SHOP_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.hero_tank_preview_constants import getHeroTankPreviewParams
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab import getUniqueMembers
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.info.crew_tab_view import DOG
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import OFFER_CHANGED_EVENT, addBuiltInEquipment, getActiveOffer
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE, VEHICLE_PREVIEW_SOUND_SPACE, COMMON_VEHICLE_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
@@ -82,9 +82,9 @@ _TABS_DATA = ({'id': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_BROWSE_NAME,
   'linkage': VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_MODULES_NAME,
-  'linkage': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.CREW_LINKAGE,
+  'linkage': VEHPREVIEW_CONSTANTS.MODULES_LINKAGE}, {'id': VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT,
   'label': VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME,
-  'linkage': VEHPREVIEW_CONSTANTS.CREW_LINKAGE})
+  'linkage': VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT})
 _SHOW_BACK_BTN = True
 _SHOW_CLOSE_BTN = True
 
@@ -336,26 +336,31 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 viewPy.setBundlePreviewMetricsLogger(self.__uiMetricsLogger)
             elif self.__offers:
                 viewPy.setOffers(self.__offers, self._title, self.__description)
-        elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
-            viewPy.setCrewText(self.__ctx.get('crewText'))
+        elif alias == VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT:
+            crewText = self.__ctx.get('crewText')
+            previewVehicleIntCD = g_currentPreviewVehicle.item.intCD
             if self._itemsPack:
-                crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 vehicleItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.VEHICLE))
+                crewItems = tuple((item for item in self._itemsPack if item.type in ItemPackTypeGroup.CREW))
                 if crewItems and not vehicleItems:
                     groupID = crewItems[0].groupID
-                    vehicleItems = (ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=groupID),)
-                viewPy.setVehicleCrews(vehicleItems, crewItems)
+                    vehicleItems = (ItemPackEntry(id=previewVehicleIntCD, groupID=groupID),)
             elif self.__offers:
                 offer = getActiveOffer(self.__offers)
-                viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=offer.crew.groupID),), (offer.crew,))
+                vehicleItems = (ItemPackEntry(id=previewVehicleIntCD, groupID=offer.crew.groupID),)
+                crewItems = (offer.crew,)
             elif self.__isHeroTank:
                 crewData = self.__heroTanksControl.getCurrentTankCrew()
                 if crewData and crewData.get('tankmen'):
-                    viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), (ItemPackEntry(type=ItemPackType.CREW_CUSTOM, groupID=1, extra=crewData),))
+                    vehicleItems = (ItemPackEntry(id=previewVehicleIntCD, groupID=1),)
+                    crewItems = (ItemPackEntry(type=ItemPackType.CREW_CUSTOM, groupID=1, extra=crewData),)
                 else:
-                    viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
+                    vehicleItems = (ItemPackEntry(id=previewVehicleIntCD, groupID=1),)
+                    crewItems = ()
             else:
-                viewPy.setVehicleCrews((ItemPackEntry(id=g_currentPreviewVehicle.item.intCD, groupID=1),), ())
+                vehicleItems = (ItemPackEntry(id=previewVehicleIntCD, groupID=1),)
+                crewItems = ()
+            viewPy.updateInjectData(crewText, vehicleItems, crewItems)
         elif alias == VEHPREVIEW_CONSTANTS.BROWSE_LINKAGE:
             viewPy.setHeroTank(self.__isHeroTank)
             if self.__offers:
@@ -446,8 +451,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
         if self.__haveCustomCrew or self.__offers:
             tab_ids = [ tab['id'] for tab in _TABS_DATA ]
-            if VEHPREVIEW_CONSTANTS.CREW_LINKAGE in tab_ids:
-                selectedTabInd = tab_ids.index(VEHPREVIEW_CONSTANTS.CREW_LINKAGE)
+            if VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT in tab_ids:
+                selectedTabInd = tab_ids.index(VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT)
         for idx, tab in enumerate(_TABS_DATA):
             tab['selected'] = selectedTabInd == idx
 
@@ -460,10 +465,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__fullUpdate()
 
     def __updateCrewTabLabel(self):
-        crewCount = len(g_currentPreviewVehicle.item.crew)
-        crewCount += len(getUniqueMembers(g_currentPreviewVehicle.item))
         for tab in _TABS_DATA:
-            if tab['linkage'] == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
+            if tab['linkage'] == VEHPREVIEW_CONSTANTS.CREW_TAB_INJECT:
+                vehicle = g_currentPreviewVehicle.item
+                crewCount = len(vehicle.crew) + (1 if DOG in vehicle.tags else 0)
                 tab['label'] = _ms(VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME, crewCount=crewCount)
 
     def __onCompareBasketChanged(self, changedData):

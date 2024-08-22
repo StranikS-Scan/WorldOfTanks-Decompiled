@@ -4,11 +4,11 @@ from collections import namedtuple
 from functools import partial
 import BigWorld
 import math
-from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, RespawnState
+from constants import VEHICLE_SETTING, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, RespawnState, IS_DEVELOPMENT
 from items import vehicles, ITEM_TYPES
 from wotdecorators import noexcept
 Cooldowns = namedtuple('Cooldows', ['id', 'leftTime', 'baseTime'])
-_DO_LOG = False
+_DO_LOG = IS_DEVELOPMENT
 
 def noneAccepted(func):
     func.__isNoneAccepted = True
@@ -262,13 +262,13 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onBattleEvents {}'.format(battleEvents))
         avatar.onBattleEvents(battleEvents)
 
-    def onObservedByEnemy(self):
+    def onObservedByEnemy(self, detectionType):
         avatar = self._avatar()
         if not avatar:
             return
         if _DO_LOG:
-            self._doLog('onObservedByEnemy')
-        avatar.onObservedByEnemy(self.entity.id)
+            self._doLog('onObservedByEnemy {}'.format(detectionType))
+        avatar.onObservedByEnemy(self.entity.id, detectionType)
 
     def onSectorShooting(self, sectorID):
         avatar = self._avatar()

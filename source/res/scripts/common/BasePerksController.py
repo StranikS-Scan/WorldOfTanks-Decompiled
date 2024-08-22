@@ -29,6 +29,7 @@ class BasePerksController(object):
     _multiplicativeAttributeFactors = {'gun/aimingTime',
      'repairSpeed',
      'gun/shotDispersionFactors/turretRotation',
+     'gun/shots/speed',
      'chassis/shotDispersionFactors/movement',
      'chassis/shotDispersionFactors/rotation',
      'crewChanceToHitFactor',
@@ -40,6 +41,8 @@ class BasePerksController(object):
      'xRayFactor',
      'foliageInvisibilityFactor',
      'circularVisionRadius',
+     'increaseCircularVisionRadius',
+     'penaltyToDamagedSurveyingDevice',
      'gun/reloadTime',
      'gun/rotationSpeed',
      'invisibilityFactorAtShot',
@@ -61,9 +64,11 @@ class BasePerksController(object):
      'fuelTankHealthFactor',
      'turretRotatorHealthFactor',
      'radioHealthFactor',
+     'engineReduceFineDynFactor',
      'explosiveDamageResistanceFactor',
      'trackRammingDamageFactor',
-     'turretRotatorCritPenaltyReduce'}
+     'turretRotatorCritPenaltyReduce',
+     'antifragmentationLiningFactor'}
     _additiveDynamicFactors = {'criticalHitChanceBoost',
      'damageDistributionLowerBound',
      'piercingDistributionLowerBound',
@@ -76,7 +81,8 @@ class BasePerksController(object):
      'fallDamageReductionPercent',
      'damageChanceToInnerModules',
      'decreaseOwnSpottingTime',
-     'rancorousTimeDelay'}
+     'rancorousTimeDelay',
+     'sixthSenseDelayDecrease'}
     _scopeContextMap = {}
 
     def __init__(self, owner, scopedPerks):
@@ -274,7 +280,7 @@ class BasePerksController(object):
                     continue
                 skillData0 = perkData0.args.skillData
                 skillData1 = perkData1.args.skillData
-                if len(skillData0) != len(skillData1):
+                if len(skillData0) != len(skillData1) or skillData0.get('booster') != skillData1.get('booster') or skillData0.get('crew') != skillData1.get('crew'):
                     changedPerks.add(perkID0)
                     break
 

@@ -26,6 +26,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.web import IWebController
 from web.web_client_api import w2capi, webApiCollection, w2c, W2CSchema
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.sound import SoundWebApi
@@ -295,7 +296,7 @@ class CalendarController(GameWindowController, ICalendarController):
 
     @adisp_process
     def __openBrowser(self, browserID, url, browserSize, invokedFrom):
-        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi, OpenWindowWebApi)
+        browserHandlers = webApiCollection(NotificationWebApi, RequestWebApi, ShopWebApi, SoundWebApi, UtilWebApi, _CloseWindowWebApi, _OpenTabWebApi, OpenWindowWebApi, PersonalExchangeRatesDiscountsWebApi)
 
         def showBrowserWindow():
             ctx = {'size': browserSize,

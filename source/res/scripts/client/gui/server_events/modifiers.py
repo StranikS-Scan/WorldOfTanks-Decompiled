@@ -291,7 +291,7 @@ class _SellPriceMul(_PriceOpAbstract):
         if item.buyPrices.itemPrice.price.isSet(Currency.GOLD):
             if isForGold:
                 return (int(item.buyPrices.itemPrice.price.gold * float(value)), _DT.GOLD)
-            creditsPrice = item.buyPrices.itemPrice.price.gold * self.itemsCache.items.shop.exchangeRate
+            creditsPrice = item.buyPrices.itemPrice.price.gold * self.itemsCache.items.shop.defaults.exchangeRate
             return (int(creditsPrice * float(value)), _DT.CREDITS)
         return (int(item.buyPrices.itemPrice.price.getSignValue(Currency.CREDITS) * float(value)), _DT.CREDITS)
 

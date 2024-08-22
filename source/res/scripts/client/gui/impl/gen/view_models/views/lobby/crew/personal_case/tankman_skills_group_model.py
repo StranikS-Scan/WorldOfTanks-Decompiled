@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skill_model
 class TankmanSkillsGroupModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(TankmanSkillsGroupModel, self).__init__(properties=properties, commands=commands)
 
     def getRole(self):
@@ -16,11 +16,29 @@ class TankmanSkillsGroupModel(ViewModel):
     def setRole(self, value):
         self._setString(0, value)
 
+    def getDirectiveId(self):
+        return self._getNumber(1)
+
+    def setDirectiveId(self, value):
+        self._setNumber(1, value)
+
+    def getDirectiveName(self):
+        return self._getString(2)
+
+    def setDirectiveName(self, value):
+        self._setString(2, value)
+
+    def getSelectedSkillsCount(self):
+        return self._getNumber(3)
+
+    def setSelectedSkillsCount(self, value):
+        self._setNumber(3, value)
+
     def getSkills(self):
-        return self._getArray(1)
+        return self._getArray(4)
 
     def setSkills(self, value):
-        self._setArray(1, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getSkillsType():
@@ -29,4 +47,7 @@ class TankmanSkillsGroupModel(ViewModel):
     def _initialize(self):
         super(TankmanSkillsGroupModel, self)._initialize()
         self._addStringProperty('role', '')
+        self._addNumberProperty('directiveId', 0)
+        self._addStringProperty('directiveName', '')
+        self._addNumberProperty('selectedSkillsCount', 0)
         self._addArrayProperty('skills', Array())

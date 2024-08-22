@@ -9,10 +9,6 @@ Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostResidueTime',
  'boostFraction'])
 AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec', 'maxShotDispersion', 'groupSize'])
-SpinGun = collections.namedtuple('SpinGun', ['spinUpTimeout',
- 'spinDownTimeout',
- 'isSpinUpShootingEnable',
- 'startFactor'])
 DualGun = reflectedNamedTuple('DualGun', ['chargeTime',
  'shootImpulse',
  'reloadLockTime',
@@ -23,8 +19,6 @@ DualGun = reflectedNamedTuple('DualGun', ['chargeTime',
  'preChargeIndication',
  'chargeCancelTime'])
 DualAccuracy = collections.namedtuple('DualAccuracy', ['afterShotDispersionAngle', 'coolingDelay'])
-MultiGunState = collections.namedtuple('MultiGunState', ['patterns', 'sequence'])
-MultiGunPattern = collections.namedtuple('MultiGunPattern', ['gunIndexes', 'sequence'])
 UNDEFINED_ITEM_TYPE_ID = 0
 ZERO_FLOAT = 0.0
 ZERO_INT = 0
@@ -57,8 +51,6 @@ DEFAULT_GUN_CLIP = (1, 0.0)
 DEFAULT_GUN_DUALGUN = DualGun(chargeTime=4.0, shootImpulse=100.0, reloadLockTime=10.0, reloadTimes=(10, 8), rateTime=5, chargeThreshold=0.5, afterShotDelay=0.5, preChargeIndication=0.25, chargeCancelTime=0.18)
 DEFAULT_GUN_DUAL_ACCURACY = DualAccuracy(afterShotDispersionAngle=1.0, coolingDelay=5.0)
 DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0, groupSize=1)
-DEFAULT_SPIN_GUN = SpinGun(startFactor=0.0, spinUpTimeout=0.0, spinDownTimeout=0.0, isSpinUpShootingEnable=True)
-DEFAULT_TURRET_MULTI_GUN_STATE = MultiGunState(patterns={}, sequence=(0,))
 DEFAULT_FAKE_TURRETS = {'lobby': (),
  'battle': ()}
 DEFAULT_HULL_VARIANT_MATCH = (None, None)
@@ -84,6 +76,7 @@ ALLOWED_SLOTS_ANCHORS = ('paint', 'camouflage', 'effect', 'style')
 TANKMEN_GROUPS = ('normalGroups', 'premiumGroups')
 MAIN_TRACK_PAIR_IDX = 0
 DEFAULT_TRACK_HIT_VECTOR = Vector3(0.0, 10.0, 0.0)
+TrackState = collections.namedtuple('TrackState', ['isBroken', 'hitPoint', 'isDebris'])
 DynamicShotEffect = collections.namedtuple('DynamicShotEffect', ['effectsIndex', 'minShotsCount', 'maxShotsCount'])
 DYNAMIC_SHOT_MAX_COUNT = 10000
 ShootImpulse = collections.namedtuple('ShootImpulse', ['magnitude', 'applicationPoint', 'isStillSafe'])

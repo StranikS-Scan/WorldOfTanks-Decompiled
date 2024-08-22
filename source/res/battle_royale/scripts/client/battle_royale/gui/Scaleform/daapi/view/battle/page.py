@@ -330,20 +330,22 @@ class BattleRoyalePage(BattleRoyalePageMeta, ISpawnListener):
     def __onCameraChanged(self, ctrlMode, _=None):
         if self.__isFullStatsShown:
             return
-        teamPanelAliases = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.VIDEO)
-        if ctrlMode in teamPanelAliases:
-            args = {'hidden': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL},
-             'visible': {BATTLE_VIEW_ALIASES.PLAYERS_PANEL}}
         else:
-            args = {'hidden': {BATTLE_VIEW_ALIASES.PLAYERS_PANEL},
-             'visible': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL}}
-        hideInVideoModeAliases = {BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL,
-         BATTLE_VIEW_ALIASES.BR_RESPAWN_MESSAGE_PANEL,
-         BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES,
-         BATTLE_VIEW_ALIASES.RADAR_BUTTON}
-        args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO else 'visible'].update(hideInVideoModeAliases)
-        args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO or not self.isPostmortemTipsVisible else 'visible'].add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
-        self._setComponentsVisibility(**args)
+            teamPanelAliases = (CTRL_MODE_NAME.POSTMORTEM, CTRL_MODE_NAME.VIDEO)
+            if ctrlMode in teamPanelAliases:
+                args = {'hidden': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL},
+                 'visible': {BATTLE_VIEW_ALIASES.PLAYERS_PANEL}}
+            else:
+                args = {'hidden': {BATTLE_VIEW_ALIASES.PLAYERS_PANEL},
+                 'visible': {BATTLE_VIEW_ALIASES.BATTLE_TEAM_PANEL}}
+            hideInVideoModeAliases = {BATTLE_VIEW_ALIASES.BATTLE_LEVEL_PANEL, BATTLE_VIEW_ALIASES.BR_RESPAWN_MESSAGE_PANEL, BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES}
+            args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO else 'visible'].update(hideInVideoModeAliases)
+            args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO or BigWorld.player().isObserver() and BigWorld.player().getObservedVehicleID() is None else 'visible'].add(BATTLE_VIEW_ALIASES.RADAR_BUTTON)
+            args['hidden' if ctrlMode == CTRL_MODE_NAME.VIDEO or not self.isPostmortemTipsVisible else 'visible'].add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+            if BigWorld.player().isObserver():
+                args['hidden' if BigWorld.player().getObservedVehicleID() is None else 'visible'].update({BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL})
+            self._setComponentsVisibility(**args)
+            return
 
     def __onConfWindowTriggered(self, isOpened):
         if isOpened:

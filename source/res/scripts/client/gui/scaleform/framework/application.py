@@ -428,8 +428,8 @@ class AppEntry(FlashComponentWrapper, ApplicationMeta):
     def printObjectsReport(self, gc=True, flags=16655, movieName=''):
         return self.movie.printObjectsReport(gc, flags, movieName)
 
-    def blurBackgroundViews(self, ownLayer, blurAnimRepeatCount):
-        self.as_blurBackgroundViewsS(ownLayer, blurAnimRepeatCount)
+    def blurBackgroundViews(self, ownLayer, blurAnimRepeatCount, blurRadius):
+        self.as_blurBackgroundViewsS(ownLayer, blurAnimRepeatCount, blurRadius)
 
     def unblurBackgroundViews(self):
         self.as_unblurBackgroundViewsS()

@@ -47,10 +47,10 @@ class BarracksViewModel(ViewModel):
     def setIsBerthsOnSale(self, value):
         self._setBool(4, value)
 
-    def getIsConversionBannerVisible(self):
+    def getIsBannerVisible(self):
         return self._getBool(5)
 
-    def setIsConversionBannerVisible(self, value):
+    def setIsBannerVisible(self, value):
         self._setBool(5, value)
 
     def getHasFilters(self):
@@ -66,7 +66,7 @@ class BarracksViewModel(ViewModel):
         self._addNumberProperty('itemsOffset', 0)
         self._addArrayProperty('tankmanList', Array())
         self._addBoolProperty('isBerthsOnSale', False)
-        self._addBoolProperty('isConversionBannerVisible', False)
+        self._addBoolProperty('isBannerVisible', False)
         self._addBoolProperty('hasFilters', False)
         self.onResetFilters = self._addCommand('onResetFilters')
         self.onBuyBerth = self._addCommand('onBuyBerth')

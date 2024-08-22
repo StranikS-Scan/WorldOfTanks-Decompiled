@@ -19,7 +19,8 @@ class VehicleRespawnComponent(DynamicScriptComponent):
 
     def onDestroy(self):
         super(VehicleRespawnComponent, self).onDestroy()
-        self.entity.onAppearanceReady -= self._onVehicleAppeared
+        if hasattr(self.entity, 'onAppearanceReady'):
+            self.entity.onAppearanceReady -= self._onVehicleAppeared
 
     def chooseSpawnGroup(self, groupName):
         self.cell.chooseSpawnGroup(groupName)
@@ -39,7 +40,7 @@ class VehicleRespawnComponent(DynamicScriptComponent):
             return
         else:
             vehInfo = avatar.arena.vehicles[self.entity.id]
-            isVehicleAlive = vehInfo['isAlive'] and not self.entity.isDestroyed and self.entity.isStarted and self.entity.isAlive()
+            isVehicleAlive = vehInfo['isAlive'] and not self.entity.isDestroyed and hasattr(self.entity, 'isStarted') and self.entity.isStarted and self.entity.isAlive()
             isVehicleReady = avatar.playerVehicleID != self.entity.id or avatar.vehicle and avatar.vehicle.id == avatar.playerVehicleID
             if not isVehicleAlive or not isVehicleReady:
                 nextTick(makeCallbackWeak(self.waitForRespawnReadiness))()

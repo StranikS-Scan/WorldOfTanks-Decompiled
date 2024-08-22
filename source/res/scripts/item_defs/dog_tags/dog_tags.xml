@@ -679,7 +679,7 @@
     <purpose>	DEDICATION	</purpose>
     <isExternalUnlockOnly>	true	</isExternalUnlockOnly>
     <progressKey>	stats_api.comp7PrestigePoints	</progressKey>
-    <grades>	0 17500 25000 37000 52000 69000 88000 108000 130000 155000	</grades>
+    <grades>	0 30000 40000 60000 80000 105000 130000 160000 200000 250000	</grades>
     <isDefault>	false	</isDefault>
     <battleTypes>	43	</battleTypes>
     <glossaryName>	COMP7_SEASON1_PRESTIGE_POINTS	</glossaryName>
@@ -814,11 +814,13 @@
     <viewType>	engraving	</viewType>
     <purpose>	DEDICATION	</purpose>
     <isExternalUnlockOnly>	true	</isExternalUnlockOnly>
-    <progressKey>	stats_api.comp7AnnualWins	</progressKey>
+    <progressKey>	stats_api.comp7DeprecatedProgress	</progressKey>
     <grades>	0 180 210 240 270 330 390 450 525 600	</grades>
     <isDefault>	false	</isDefault>
+    <isSecret>	true	</isSecret>
     <battleTypes>	43	</battleTypes>
     <glossaryName>	COMP7_ANNUAL_WINS	</glossaryName>
+    <isDeprecated>	true	</isDeprecated>
   </component>
   <component>
     <componentId>	617	</componentId>
@@ -922,6 +924,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_IRON	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	630	</componentId>
@@ -929,6 +932,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_BRONZE	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	631	</componentId>
@@ -936,6 +940,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_SILVER	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	632	</componentId>
@@ -943,6 +948,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_GOLD	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	633	</componentId>
@@ -950,6 +956,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_CHAMPION	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	634	</componentId>
@@ -957,6 +964,7 @@
     <viewType>	background	</viewType>
     <purpose>	BASE	</purpose>
     <glossaryName>	COMP7_3_3_LEGEND	</glossaryName>
+    <isSecret>	true	</isSecret>
   </component>
   <component>
     <componentId>	635	</componentId>
@@ -1025,6 +1033,60 @@
     <animation>	vehicle_sparks_3	</animation>
     <isShowInPrebattle>	true	</isShowInPrebattle>
     <glossaryName>	VEHICLE_COUNT_MAX_ENGRAVING	</glossaryName>
+  </component>
+  <component>
+    <componentId>	641	</componentId>
+    <resourceRoot>	#dogtags:component/engraving/dedication/641	</resourceRoot>
+    <viewType>	engraving	</viewType>
+    <purpose>	DEDICATION	</purpose>
+    <isExternalUnlockOnly>	true	</isExternalUnlockOnly>
+    <progressKey>	stats_api.comp7AnnualWins	</progressKey>
+    <grades>	0 30 60 100 160 220 300 380 480 600	</grades>
+    <isDefault>	false	</isDefault>
+    <battleTypes>	43	</battleTypes>
+    <glossaryName>	COMP7_4_ANNUAL_WINS	</glossaryName>
+  </component>
+  <component>
+    <componentId>	642	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/642	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_IRON	</glossaryName>
+  </component>
+  <component>
+    <componentId>	643	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/643	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_BRONZE	</glossaryName>
+  </component>
+  <component>
+    <componentId>	644	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/644	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_SILVER	</glossaryName>
+  </component>
+  <component>
+    <componentId>	645	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/645	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_GOLD	</glossaryName>
+  </component>
+  <component>
+    <componentId>	646	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/646	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_CHAMPION	</glossaryName>
+  </component>
+  <component>
+    <componentId>	647	</componentId>
+    <resourceRoot>	#dogtags:component/background/base/647	</resourceRoot>
+    <viewType>	background	</viewType>
+    <purpose>	BASE	</purpose>
+    <glossaryName>	COMP7_4_1_LEGEND	</glossaryName>
   </component>
   <startingComponents>
     <components>	66 300	</components>

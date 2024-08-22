@@ -14,6 +14,13 @@ def getTitle(name=None):
     return title
 
 
+def getTitleFromTokenData(tokenData):
+    name = tokenData.getFullUserNameByNation().strip()
+    if tokenData.getSmallIcon() in (recruit_helper._TANKWOMAN_ICON, recruit_helper._TANKMAN_ICON):
+        name = None
+    return getTitle(name)
+
+
 def getIconName(iconID):
     return iconID.split('.')[0]
 

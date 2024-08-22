@@ -17,7 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control import prbDispatcherProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import events
@@ -142,7 +142,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._referralCtrl.onReferralStateChanged += self.__onReferralStateChanged
         self._referralCtrl.onReferralProgramUpdated += self.__onReferralProgramUpdated
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
-        self._limitedUIController.startObserve(LuiRules.SESSION_STATS, self.__onLuiRuleSessionStatsCompleted)
+        self._limitedUIController.startObserve(LUI_RULES.sessionStats, self.__onLuiRuleSessionStatsCompleted)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
         bubbleCount = self._referralCtrl.getBubbleCount()
@@ -168,7 +168,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self._referralCtrl.onReferralProgramUpdated -= self.__onReferralProgramUpdated
         self._referralCtrl.onReferralStateChanged -= self.__onReferralStateChanged
-        self._limitedUIController.stopObserve(LuiRules.SESSION_STATS, self.__onLuiRuleSessionStatsCompleted)
+        self._limitedUIController.stopObserve(LUI_RULES.sessionStats, self.__onLuiRuleSessionStatsCompleted)
         self.stopGlobalListening()
         super(MessengerBar, self)._dispose()
 
@@ -232,7 +232,7 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
             btnIsVisible &= battlesCount >= self._NEW_PLAYER_BATTLES
         self.as_setSessionStatsButtonVisibleS(btnIsVisible)
         self.as_setSessionStatsButtonEnableS(isSessionStatsEnabled and isInSupportedMode, tooltip)
-        self.__updateSessionStatsHint(btnIsVisible and self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and self._limitedUIController.isRuleCompleted(LuiRules.SESSION_STATS))
+        self.__updateSessionStatsHint(btnIsVisible and self.__sessionStatsBtnOnlyOnceHintShow and isSessionStatsEnabled and isInSupportedMode and self._limitedUIController.isRuleCompleted(LUI_RULES.sessionStats))
         return
 
     def __onLuiRuleSessionStatsCompleted(self, *_):

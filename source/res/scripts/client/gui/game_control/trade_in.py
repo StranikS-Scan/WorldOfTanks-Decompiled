@@ -350,7 +350,7 @@ class TradeInController(ITradeInController):
         return self.__cache.get('possibleVehiclesToBuy', set())
 
     def getVehiclesToSell(self, respectSelectedVehicleToBuy):
-        return self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self._vehicleToBuyInfo.possibleVehiclesToTradeInCDs) | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP) if respectSelectedVehicleToBuy and self._vehicleToBuyInfo.isSelected() else self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP)
+        return self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self._vehicleToBuyInfo.possibleVehiclesToTradeInCDs) | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP) if respectSelectedVehicleToBuy and self._vehicleToBuyInfo.isSelected() else self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.CAN_TRADE_OFF | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP)
 
     def getVehiclesToBuy(self, respectSelectedVehicleToSell):
         return self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_IN | REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self._vehicleToSellInfo.possibleVehiclesToTradeInCDs) | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP) if respectSelectedVehicleToSell and self._vehicleToSellInfo.isSelected() else self.itemsCache.items.getVehicles(REQ_CRITERIA.VEHICLE.CAN_TRADE_IN | REQ_CRITERIA.VEHICLE.ACTIVE_IN_NATION_GROUP | REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(self.getPossibleVehiclesToBuy()))

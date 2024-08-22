@@ -19,8 +19,7 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_12.7mm_AP_M2>
     <id>	0	</id>
@@ -577,6 +576,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_76mm_AP_M79>
+  <_76mm_AP_M79E20>
+    <id>	231	</id>
+    <userString>	#usa_vehicles:_76mm_AP_M79E20	</userString>
+    <icon>	ap	</icon>
+    <price>	96	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_76mm_AP_M79E20>
   <_76mm_AP_M79_149>
     <id>	121	</id>
     <userString>	#usa_vehicles:_76mm_AP_M79_149	</userString>
@@ -627,6 +642,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_76mm_HVAP_M93>
+  <_76mm_HVAP_M93E20>
+    <id>	232	</id>
+    <userString>	#usa_vehicles:_76mm_HVAP_M93E20	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	160	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_76mm_HVAP_M93E20>
   <_76mm_HVAP_T4>
     <id>	122	</id>
     <userString>	#usa_vehicles:_76mm_HVAP_T4	</userString>
@@ -692,6 +724,30 @@
       </damage>
     </armorSpalls>
   </_76mm_HE_M42A1>
+  <_76mm_HE_M42A1E20>
+    <id>	233	</id>
+    <userString>	#usa_vehicles:_76mm_HE_M42A1E20	</userString>
+    <icon>	he_modern	</icon>
+    <price>	68	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	120	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
+  </_76mm_HE_M42A1E20>
   <_76mm_AP_M339>
     <id>	63	</id>
     <userString>	#usa_vehicles:_76mm_AP_M339	</userString>
@@ -1083,6 +1139,22 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_90mm_AP_M77>
+  <_90mm_AP_M77E2M2>
+    <id>	228	</id>
+    <userString>	#usa_vehicles:_90mm_AP_M77E2M2	</userString>
+    <icon>	ap	</icon>
+    <price>	255	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_AP_M77E2M2>
   <_90mm_AP_T33>
     <id>	123	</id>
     <userString>	#usa_vehicles:_90mm_AP_T33	</userString>
@@ -1182,6 +1254,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_90mm_HVAP_M304>
+  <_90mm_HVAP_M304E2M2>
+    <id>	229	</id>
+    <userString>	#usa_vehicles:_90mm_HVAP_M304E2M2	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_HVAP_M304E2M2>
   <_90mm_HE_M71>
     <id>	25	</id>
     <userString>	#usa_vehicles:_90mm_HE_M71	</userString>
@@ -1206,6 +1295,30 @@
       </damage>
     </armorSpalls>
   </_90mm_HE_M71>
+  <_90mm_HE_M71E2M2>
+    <id>	230	</id>
+    <userString>	#usa_vehicles:_90mm_HE_M71E2M2	</userString>
+    <icon>	he_modern	</icon>
+    <price>	255	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	90	</caliber>
+    <explosionRadius>	1.46	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	380	</armor>
+      <devices>	122	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.46	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	160	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_90mm_HE_M71E2M2>
   <_90mm_AP_M318>
     <id>	78	</id>
     <userString>	#usa_vehicles:_90mm_AP_M318	</userString>
@@ -3782,152 +3895,4 @@
     <ricochetAngle>	70	</ricochetAngle>
     <notInShop>	True	</notInShop>
   </_76mm_AP_M79_StoryModeHard>
-  <_75mm_HVAP_M45A3_FEP>
-    <id>	601	</id>
-    <userString>	#usa_vehicles:_75mm_HVAP_M45A3_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	30	</armor>
-      <devices>	15	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_75mm_HVAP_M45A3_FEP>
-  <_75mm_HEAT_T0305_FEP>
-    <id>	602	</id>
-    <userString>	#usa_vehicles:_75mm_HEAT_T0305_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	7.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	75	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mediumAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	mediumAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	mediumAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	15	</armor>
-      <devices>	7	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_75mm_HEAT_T0305_FEP>
-  <_37mm_M1305_AP_FEP>
-    <id>	603	</id>
-    <userString>	#usa_vehicles:_37mm_M1305_AP_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	4	</armor>
-      <devices>	2	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_37mm_M1305_AP_FEP>
-  <_37mm_M1305_HEAT_FEP>
-    <id>	604	</id>
-    <userString>	#usa_vehicles:_37mm_M1305_HEAT_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	1.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	37	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	2	</armor>
-      <devices>	1	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_37mm_M1305_HEAT_FEP>
 </shells.xml>

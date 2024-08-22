@@ -186,7 +186,7 @@ class NationChangeScreen(ViewImpl):
         if isDogInCrew:
             tankmanVM = NationChangeTankmanModel()
             dogTooltip = R.strings.tooltips.hangar.crew.rudy.dog.dyn(guiVh.nationName)
-            tankmanVM.setImage(self.__icons.tankmen.icons.small.ussr_dog_1())
+            tankmanVM.setImage(self.__icons.tankmen.icons.barracks.ussr_dog_1())
             tankmanVM.setIsSimpleTooltip(True)
             tankmanVM.setSimpleTooltipHeader(backport.text(dogTooltip.header()))
             tankmanVM.setSimpleTooltipBody(backport.text(dogTooltip.body()))

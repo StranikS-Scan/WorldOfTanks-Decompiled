@@ -17,7 +17,6 @@ from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQues
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
 from gui.shared.events import PersonalMissionsEvent
-from gui.wot_anniversary.utils import isWotAnniversaryQuest
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
@@ -25,7 +24,6 @@ from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.wot_anniversary import IWotAnniversaryController
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
@@ -204,14 +202,6 @@ def showMissionsLiveOpsWebEvents():
     _showMissions(tab=QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS)
 
 
-@dependency.replace_none_kwargs(wotAnniversaryController=IWotAnniversaryController)
-def showMissionsWotAnniversary(wotAnniversaryController=None):
-    if wotAnniversaryController.isAvailableAndActivePhase():
-        showMissions(tab=QUESTS_ALIASES.WOT_ANNIVERSARY_VIEW_PY_ALIAS)
-    else:
-        showMissions()
-
-
 def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True, subTab=None):
     _showMissions(**{'tab': tab,
      'subTab': subTab,
@@ -282,8 +272,6 @@ def showMission(eventID, eventType=None):
                 return showMissionsMarathon(marathonPrefix=prefix)
             if events_helpers.isBattleMattersQuestID(eventID):
                 showBattleMatters()
-            elif isWotAnniversaryQuest(eventID):
-                return showMissionsWotAnniversary()
         if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
             showPersonalMission(eventID)
         elif quest is not None and quest.showMissionAction() is not None:

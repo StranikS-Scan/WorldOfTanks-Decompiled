@@ -22,6 +22,18 @@ _PRODUCT_TYPE_TO_MODEL = {ProductTypes.VEHICLE: VehicleProductModel,
  ProductTypes.STYLE3D: Style3dProductModel,
  ProductTypes.REWARD: RewardProductModel}
 _PRODUCT_TYPE_ORDER = [ProductTypes.VEHICLE, ProductTypes.STYLE3D, ProductTypes.REWARD]
+_COMP7_PREV_SEASON_PRODUCTS = [51313,
+ 23884,
+ 52049,
+ 24140,
+ 47121,
+ 30969,
+ 62753,
+ 76876,
+ 223820,
+ 60977,
+ 28665,
+ 30201]
 if typing.TYPE_CHECKING:
     from gui.game_control.comp7_shop_controller import ShopPageProductInfo
 
@@ -68,12 +80,12 @@ def getVehicleCDAndStyle(cd, c11nService=None):
 
 def getSeenProducts():
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    return settings.get(COMP7_SHOP_SEEN_PRODUCTS, [])
+    return settings.get(COMP7_SHOP_SEEN_PRODUCTS, set())
 
 
 def addSeenProduct(product):
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    settings.setdefault(COMP7_SHOP_SEEN_PRODUCTS, []).append(product)
+    settings.setdefault(COMP7_SHOP_SEEN_PRODUCTS, set()).add(product)
     AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
 
 
@@ -81,7 +93,7 @@ def hasUnseenProduct(products):
     seenProducts = getSeenProducts()
     for product in products.itervalues():
         cd, _ = _getProductTypeData(product)
-        if cd not in seenProducts:
+        if cd not in seenProducts and cd not in _COMP7_PREV_SEASON_PRODUCTS:
             return True
 
     return False
@@ -108,7 +120,7 @@ def _setGenericData(model, productCD, productType, product, itemsCache=None):
     isEnoughMoney = playerMoney >= productPrice
     purchaseAllowed = product.purchasable and product.limitsPurchaseAllowed
     model.setId(productCD)
-    model.setIsNew(productCD not in getSeenProducts())
+    model.setIsNew(productCD not in getSeenProducts() and productCD not in _COMP7_PREV_SEASON_PRODUCTS)
     model.setType(productType)
     model.setRank(product.rank)
     model.setLimitedQuantity(product.limitedQuantity)
@@ -177,4 +189,4 @@ def _setRewardSpecificData(model, productCD, itemsCache=None):
     model.reward.setItem(packedBonus.getItem())
     model.reward.setLabel(packedBonus.getLabel())
     model.reward.setValue(packedBonus.getValue())
-    model.setTooltipId(TOOLTIPS_CONSTANTS.AWARD_MODULE)
+    model.setTooltipId(TOOLTIPS_CONSTANTS.SHOP_MODULE)

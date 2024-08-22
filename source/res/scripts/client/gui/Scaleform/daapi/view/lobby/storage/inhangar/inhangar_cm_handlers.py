@@ -199,7 +199,7 @@ class VehiclesRentedCMHandler(ContextMenu):
     def __canBuy(self):
         items = self.__itemsCache.items
         vehicle = self.__itemsCache.items.getItemByCD(self._id)
-        return vehicle is not None and vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+        return vehicle is not None and vehicle.mayObtainWithMoneyExchange(items.stats.money, proxy=items.shop)
 
     def __canRemove(self):
         vehicle = self.__itemsCache.items.getItemByCD(self._id)

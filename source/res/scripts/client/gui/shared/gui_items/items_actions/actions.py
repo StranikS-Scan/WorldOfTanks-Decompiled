@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/items_actions/actions.py
 import logging
+import typing
 from collections import namedtuple
 from functools import partial
 from itertools import chain
-import typing
 from typing import Callable
 import wg_async as future_async
 from PlayerEvents import g_playerEvents
@@ -42,8 +42,7 @@ from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors import makeSuccess
 from gui.shared.gui_items.processors.common import ConvertBlueprintFragmentProcessor, BuyBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
-from gui.shared.gui_items.processors.common import UseCrewBookProcessor
-from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter
+from gui.shared.gui_items.processors.common import UseCrewBookProcessor, FillingAllUntrainedPerksProcessor
 from gui.shared.gui_items.processors.goodies import BoosterBuyer, BoosterActivator
 from gui.shared.gui_items.processors.messages.items_processor_messages import ItemDeconstructionProcessorMessage, MultItemsDeconstructionProcessorMessage
 from gui.shared.gui_items.processors.module import BuyAndInstallItemProcessor, OptDeviceInstaller, ModuleDeconstruct, EquippedModernizedDeviceDestroyProcessor
@@ -51,6 +50,7 @@ from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
+from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills
 from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
@@ -63,10 +63,10 @@ from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IWotPlusController
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -176,7 +176,7 @@ class BuyAction(CachedItemAction):
     def _mayObtainWithMoneyExchange(self, item):
         items = self._itemsCache.items
         money = items.stats.money
-        return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
+        return item.mayObtainWithMoneyExchange(money, proxy=items.shop)
 
 
 class SellItemAction(CachedItemAction):
@@ -274,7 +274,7 @@ class VehicleBuyAction(BuyAction):
             if item.isInInventory and not item.isRented:
                 showInventoryMsg('already_exists', item, msgType=SystemMessages.SM_TYPE.Warning)
             else:
-                price = getGUIPrice(item, self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate)
+                price = getGUIPrice(item, self._itemsCache.items.stats.money, self._itemsCache.items.shop.defaults.exchangeRate)
                 if price is None:
                     showShopMsg('not_found', item)
                     return
@@ -302,7 +302,7 @@ class VehicleBuyAction(BuyAction):
     def _mayObtainWithMoneyExchange(self, item):
         items = self._itemsCache.items
         money = self.tradeIn.addTradeInPriceIfNeeded(item, items.stats.money)
-        return item.mayObtainWithMoneyExchange(money, items.shop.exchangeRate)
+        return item.mayObtainWithMoneyExchange(money, proxy=items.shop)
 
 
 class _UnlockItem(CachedItemAction):
@@ -906,6 +906,46 @@ class ConvertBlueprintFragmentAction(IGUIItemAction):
         result = yield ConvertBlueprintFragmentProcessor(self.__vehicleCD, self.__fragmentCount, self.__fragmentPosition, self.__usedNationalFragments).request()
         if not result or not result.success:
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.BLUEPRINTS_CONVERSION_ERROR, type=result.sysMsgType)
+
+
+class TmanAddSkillsAction(CachedItemAction):
+
+    def __init__(self, tmanInvID, utilizationType, skillNames):
+        super(TmanAddSkillsAction, self).__init__()
+        self.__skillNames = skillNames
+        self.__utilizationType = utilizationType
+        self.__tmanInvID = tmanInvID
+
+    @decorators.adisp_process('studying')
+    def doAction(self):
+        result = yield TankmanAddSkills(self.__tmanInvID, self.__utilizationType, self.__skillNames).request()
+        if not result:
+            return
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
+
+
+class FillAllTankmenSkillsAction(IGUIItemAction):
+
+    def __init__(self, fillInBarracks):
+        super(FillAllTankmenSkillsAction, self).__init__()
+        self._fillInBarracks = fillInBarracks
+
+    @decorators.adisp_process('fillingAllTankmenSkills')
+    def doAction(self):
+        result = yield FillingAllUntrainedPerksProcessor(self._fillInBarracks).request()
+        if not result:
+            return
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
+
+
+class ResetAllTankmenSkillsAction(IGUIItemAction):
+
+    @decorators.adisp_process('resettingAllTankmenSkills')
+    def doAction(self):
+        result = yield ResetAllTankmenSkills().request()
+        if not result:
+            return
+        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
 
 
 class UseCrewBookAction(GroupedItemAction):

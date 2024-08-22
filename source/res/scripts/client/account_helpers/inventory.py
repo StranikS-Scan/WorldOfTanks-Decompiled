@@ -3,6 +3,7 @@
 import collections
 import logging
 import typing
+import Event
 from array import array
 from functools import partial
 from itertools import chain
@@ -41,6 +42,7 @@ class Inventory(object):
         self.__ignore = True
         self.__commandsProxy = clientCommandsProxy
         self.abilities = AbilitiesHelper()
+        self.onStartSynchronize = Event.Event()
         return
 
     def onAccountBecomePlayer(self):
@@ -56,6 +58,7 @@ class Inventory(object):
         self.abilities.setAccount(account)
 
     def synchronize(self, isFullSync, diff):
+        self.onStartSynchronize(isFullSync, diff)
         if isFullSync:
             self.__cache.clear()
         invDiff = diff.get('inventory', None)
@@ -122,10 +125,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_DISMISS_TMAN, tmanInvID, 0, 0, proxy)
             return
 
@@ -135,9 +135,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_TMAN_EQUIP_CREW_SKIN, tmanInvID, skinID, 0, proxy)
             return
 
@@ -147,9 +145,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_TMAN_UNEQUIP_CREW_SKIN, tmanInvID, 0, 0, proxy)
             return
 
@@ -169,6 +165,18 @@ class Inventory(object):
              groupID,
              groupSize]
             self.__account._doCmdIntArr(AccountCommands.CMD_LEARN_CREW_BOOK, arr, proxy)
+            return
+
+    def claimRewardForPostProgression(self, count, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            proxy = None
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr='', ext=None: callback(resultID, ext)
+            self.__account._doCmdInt(AccountCommands.CLAIM_REWARD_FOR_POST_PROGRESSION, count, proxy)
             return
 
     def convertJunkTankmen(self, callback, errorStr='', ext=None):
@@ -221,10 +229,7 @@ class Inventory(object):
             return
         else:
             arr = [vehInvID] + [ int(s) for s in shells ]
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_SHELLS, arr, proxy)
             return
 
@@ -235,10 +240,7 @@ class Inventory(object):
             return
         else:
             arr = [vehInvID] + [ int(e) for e in eqs ]
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_EQS, arr, proxy)
             return
 
@@ -257,9 +259,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_SWITCH_LAYOUT, vehInvID, groupID, layoutIdx, proxy)
             return
 
@@ -269,9 +269,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_TOGGLE_SWITCH_LAYOUT, vehInvID, groupID, proxy)
             return
 
@@ -281,9 +279,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_VPP_DISCARD_PAIRS, [vehIntCD] + stepIDs, proxy)
             return
 
@@ -293,9 +289,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_VPP_SELECT_PAIR, vehIntCD, stepID, pairType, proxy)
             return
 
@@ -346,10 +340,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER, [])
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_RETURN_CREW, vehInvID, 0, 0, proxy)
             return
 
@@ -359,25 +350,31 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_REPAIR, vehInvID, 0, 0, proxy)
             return
 
-    def addTankmanSkill(self, tmanInvID, skillName, callback):
+    def addTankmanSkills(self, tmanInvID, utilizationType, skillNames, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            skillIdx = tankmen.SKILL_INDICES[skillName]
+            arr = [tmanInvID, utilizationType]
+            arr.extend((tankmen.SKILL_INDICES[skillName] for skillName in skillNames))
+            proxy = self.getCallbackProxy(callback)
+            self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_ADD_MULTIPLE_SKILLS, arr, proxy)
+            return
+
+    def addTankmanSkill(self, tmanInvID, utilizationType, skillName, callback):
+        if self.__ignore:
             if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_ADD_SKILL, tmanInvID, skillIdx, 0, proxy)
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            skillID = tankmen.SKILL_INDICES[skillName]
+            proxy = self.getCallbackProxy(callback)
+            self.__account._doCmdInt3(AccountCommands.CMD_TMAN_ADD_SKILL, tmanInvID, utilizationType, skillID, proxy)
             return
 
     def earnAllSkillsForVehicleCrew(self, vehInvID, callback=None):
@@ -386,25 +383,8 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt2(AccountCommands.CMD_EARN_ALL_SKILLS, vehInvID, 0, proxy)
-            return
-
-    def learnTankmanFreeSkill(self, tmanInvID, skillName, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            skillIdx = tankmen.SKILL_INDICES[skillName]
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt2(AccountCommands.CMD_LEARN_TMAN_FREE_SKILL, tmanInvID, skillIdx, proxy)
             return
 
     def dropTankmanSkills(self, tmanInvID, dropSkillsCostIdx, useRecertificationForm, callback):
@@ -461,10 +441,7 @@ class Inventory(object):
             return
         else:
             isOn = 1 if isOn else 0
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt4(AccountCommands.CMD_VEH_SETTINGS, vehInvID, setting, isOn, source, proxy)
             return
 
@@ -474,10 +451,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_TMAN_XP, tmanInvID, xp, 0, proxy)
             return
 
@@ -487,10 +461,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             skinList = []
             for k, v in skinsDict.items():
                 skinList.extend([k, v])
@@ -536,10 +507,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt2(AccountCommands.CMD_OBTAIN_ALL, 0, 0, proxy)
             return
 
@@ -563,10 +531,7 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdStr(AccountCommands.CMD_OBTAIN_VEHICLE, name, proxy)
             return
 
@@ -578,6 +543,16 @@ class Inventory(object):
             callback = lambda reqID, resID, errStr: _logger.debug('addExpiringGoodie result: %s, %s, %s', reqID, resID, errStr)
         self.__account._doCmdInt3(AccountCommands.CMD_ADD_EXPIRING_GOODIE, goodieID, amount, expirePeriod, callback)
         return
+
+    def resetAllTankmenSkills(self, callback=None):
+        proxy = self.getCallbackProxy(callback)
+        self.__account._doCmdInt(AccountCommands.CMD_RESET_ALL_TMEN_SKILLS, 0, proxy)
+
+    def giveAllTankmenMaxXp(self, callback=None):
+        self.__account._doCmdInt(AccountCommands.CMD_GIVE_ALL_TMEN_MAX_XP, 0, callback)
+
+    def fillAllTankmenSkills(self, fillInBarracks=False, callback=None):
+        self.__account._doCmdInt(AccountCommands.CMD_FILL_ALL_TMEN_SKILLS, int(fillInBarracks), callback)
 
     def equipOptDevsSequence(self, vehInvID, devices, callback):
         if self.__ignore:
@@ -596,6 +571,12 @@ class Inventory(object):
         else:
             self.__account.shop.waitForSync(partial(self.__destroyModernizedOptDev, vehInvID, deviceCompDescr, callback))
             return
+
+    def getCallbackProxy(self, callback):
+        proxy = None
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+        return proxy
 
     def __destroyModernizedOptDev(self, vehInvID, deviceCompDescr, callback, resultID, shopRev):
         if resultID < 0:
@@ -637,10 +618,7 @@ class Inventory(object):
                 callback(resultID)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt4(AccountCommands.CMD_SELL_ITEM, shopRev, itemTypeIdx, itemInvID, count, proxy)
             return
 
@@ -702,10 +680,7 @@ class Inventory(object):
                 callback(resultID)
             return
         else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdInt4(AccountCommands.CMD_TMAN_DROP_SKILLS, shopRev, tmanInvID, dropSkillsCostIdx, useRecertificationForm, proxy)
             return
 
@@ -766,10 +741,7 @@ class Inventory(object):
             arr.append(lastNameID if lastNameID is not None else -1)
             arr.append(iGroupID)
             arr.append(iconID if iconID is not None else -1)
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
+            proxy = self.getCallbackProxy(callback)
             self.__account._doCmdIntArr(AccountCommands.CMD_TMAN_PASSPORT, arr, proxy)
             return
 
@@ -874,8 +846,6 @@ class Inventory(object):
                 callback(resultID)
             return
         else:
-            proxy = None
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_SET_CUSTOM_ROLE_SLOT, shopRev, vehInvID, slotID, proxy)
             return

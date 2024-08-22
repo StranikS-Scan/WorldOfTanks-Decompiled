@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/web/web_client_api/battle_royale/__init__.py
 from collections import namedtuple
 from web.web_client_api import webApiCollection
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
 from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi
@@ -17,7 +18,7 @@ from web.web_client_api.frontline import FrontLineWebApi
 BattleRoyaleSeasonAchievements = namedtuple('BattleRoyaleSeasonAchievements', ('season_id', 'episode_id', 'battle_count', 'kill_count', 'top1'))
 
 def createBattleRoyaleWebHanlders():
-    return webApiCollection(FrontLineWebApi, BattleRoyaleWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, QuestsWebApi)
+    return webApiCollection(FrontLineWebApi, BattleRoyaleWebApi, VehiclesWebApi, RequestWebApi, ShopWebApi, OpenWindowWebApi, CloseWindowWebApi, OpenTabWebApi, NotificationWebApi, ContextMenuWebApi, UtilWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, QuestsWebApi, PersonalExchangeRatesDiscountsWebApi)
 
 
 @w2capi(name='battle_royale', key='action')

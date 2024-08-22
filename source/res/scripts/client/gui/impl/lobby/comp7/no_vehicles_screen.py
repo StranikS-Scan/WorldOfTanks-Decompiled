@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import 
 from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import ErrorReason
 from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyWindow
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
@@ -97,7 +97,7 @@ class NoVehiclesScreen(ViewImpl, IGlobalListener):
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
 
 
-class NoVehiclesScreenWindow(LobbyWindow):
+class NoVehiclesScreenWindow(LobbyNotificationWindow):
 
     def __init__(self, parent=None):
         super(NoVehiclesScreenWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=NoVehiclesScreen(layoutID=R.views.lobby.comp7.NoVehiclesScreen()), parent=parent, layer=WindowLayer.TOP_SUB_VIEW)

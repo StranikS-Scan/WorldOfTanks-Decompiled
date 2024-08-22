@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/veh_comparison_basket.py
 from collections import namedtuple
+from copy import deepcopy
 from itertools import imap
 import BigWorld
 from helpers.local_cache import FileLocalCache
@@ -25,34 +26,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 if TYPE_CHECKING:
     import typing
-    from typing import Optional, List
-PARAMS_AFFECTED_TANKMEN_SKILLS = ('brotherhood',
- 'repair',
- 'camouflage',
- 'commander_eagleEye',
- 'commander_universalist',
- 'commander_tutor',
- 'commander_expert',
- 'commander_enemyShotPredictor',
- 'gunner_smoothTurret',
- 'gunner_sniper',
- 'gunner_rancorous',
- 'gunner_gunsmith',
- 'driver_virtuoso',
- 'driver_smoothDriving',
- 'driver_badRoadsKing',
- 'driver_tidyPerson',
- 'driver_rammingMaster',
- 'loader_desperado',
- 'loader_pedant',
- 'loader_intuition',
- 'radioman_finder',
- 'radioman_retransmitter',
- 'radioman_lastEffort',
- 'radioman_inventor',
- 'fireFighting')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
-_NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs',
  'addedCDs',
@@ -80,6 +54,22 @@ def getInstalledModulesCDs(vehicle):
     return outcome
 
 
+def getStockCrewSkills(vehicle):
+    return {idx:(role[0], []) for idx, role in enumerate(vehicle.descriptor.type.crewRoles)}
+
+
+def getCrewSkills(vehicle):
+    currentSkills = {}
+    for idx, tankman in vehicle.crew:
+        if tankman is not None:
+            skillList = [ skill.name for skill in tankman.skills if skill.isRelevantForRole(tankman.role) ]
+            skillList += [ skill.name for skill in sum(tankman.bonusSkills.values(), []) if skill ]
+            currentSkills[idx] = (tankman.role, skillList)
+        currentSkills[idx] = (vehicle.descriptor.type.crewRoles[idx][0], [])
+
+    return currentSkills
+
+
 def _isVehHasCamouflage(vehicle):
     return bool(vehicle.getBonusCamo())
 
@@ -94,16 +84,6 @@ def _removeVehicleCamouflages(vehicle):
 
 def _getVehicleEquipment(vehicle):
     return vehicle.consumables.installed.getIntCDs(default=None)
-
-
-def _getCrewSkills(vehicle):
-    availableSkills = set(PARAMS_AFFECTED_TANKMEN_SKILLS)
-    currentSkills = set()
-    for _, tankman in vehicle.crew:
-        if tankman is not None:
-            currentSkills = currentSkills.union(set([ skill.name for skill in tankman.skills ]))
-
-    return currentSkills.intersection(availableSkills)
 
 
 def _makeStrCD(vehicle):
@@ -151,7 +131,7 @@ class CONFIGURATION_TYPES(object):
 
 
 class _VehCmpCache(FileLocalCache):
-    VERSION = 4
+    VERSION = 5
 
     def __init__(self, databaseID, vehiclesIterator):
         super(_VehCmpCache, self).__init__('veh_cmp_cache', ('basket_state', databaseID), async=True)
@@ -200,6 +180,7 @@ class _VehCompareData(object):
         self.__rentalIsOver = rentalIsOver
         self.__crewLvl = CrewTypes.SKILL_100
         self.__inventoryCrewLvl = CrewTypes.SKILL_100
+        self.__stockCrewSkills = getStockCrewSkills(self.itemsCache.items.getItemByCD(vehicleIntCD))
         self.__crewSkills = self.getStockCrewSkills()
         self.__inventoryCrewSkills = self.getStockCrewSkills()
         self.__intCD = vehicleIntCD
@@ -284,7 +265,7 @@ class _VehCompareData(object):
         return _DEF_SHELL_INDEX
 
     def getInventoryCrewData(self):
-        return (self.__inventoryCrewLvl, self.__inventoryCrewSkills.copy())
+        return (self.__inventoryCrewLvl, deepcopy(self.__inventoryCrewSkills))
 
     def getInventoryCrewLvl(self):
         return self.__inventoryCrewLvl
@@ -305,7 +286,7 @@ class _VehCompareData(object):
         return CrewTypes.SKILL_100
 
     def getStockCrewSkills(self):
-        return _NO_CREW_SKILLS.copy()
+        return deepcopy(self.__stockCrewSkills)
 
     def getStockEquipment(self):
         equipmentIDs = self.getNoEquipmentLayout()
@@ -341,7 +322,7 @@ class _VehCompareData(object):
         return self.__stockVehStrCD
 
     def getCrewData(self):
-        return (self.__crewLvl, self.__crewSkills.copy())
+        return (self.__crewLvl, self.__crewSkills)
 
     def getEquipment(self):
         equipmentIDs = self.__equipment[:]
@@ -499,7 +480,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             isChanged = True
             vehCompareData.setEquipment(newEqs)
         if crewLvl != CrewTypes.SKILL_100 and crewLvl != CrewTypes.CURRENT:
-            crewSkills = _NO_CREW_SKILLS.copy()
+            crewSkills = getStockCrewSkills(vehicle)
         if vehCompareData.getCrewData() != (crewLvl, crewSkills):
             vehCompareData.setCrewData(crewLvl, crewSkills)
             isChanged = True
@@ -650,9 +631,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             if defCrewData is not None:
                 vehCmpData.setCrewData(*defCrewData)
             elif vehicle.isInInventory:
-                vehCmpData.setCrewData(CrewTypes.CURRENT, _getCrewSkills(vehicle))
+                vehCmpData.setCrewData(CrewTypes.CURRENT, getCrewSkills(vehicle))
             else:
-                vehCmpData.setCrewData(CrewTypes.SKILL_100, _NO_CREW_SKILLS.copy())
+                vehCmpData.setCrewData(CrewTypes.SKILL_100, getStockCrewSkills(vehicle))
             if defEquipment is not None:
                 vehCmpData.setEquipment(defEquipment)
             elif vehicle.isInInventory:
@@ -809,9 +790,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     @classmethod
     def __updateInventoryCrewData(cls, vehCompareData, vehicle):
         if vehicle.isInInventory:
-            vehCompareData.setInventoryCrewData(CrewTypes.CURRENT, _getCrewSkills(vehicle))
+            vehCompareData.setInventoryCrewData(CrewTypes.CURRENT, getCrewSkills(vehicle))
         else:
-            vehCompareData.setInventoryCrewData(CrewTypes.SKILL_100, _NO_CREW_SKILLS.copy())
+            vehCompareData.setInventoryCrewData(CrewTypes.SKILL_100, getStockCrewSkills(vehicle))
 
     @classmethod
     def __updatePostProgression(cls, vehCmpData, vehicle, dynSlotType=None, progressState=None):

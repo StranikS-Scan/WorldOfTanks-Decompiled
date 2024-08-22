@@ -32,22 +32,24 @@ class RenewableSubWebApiMixin(object):
 
     def getEnabledBonuses(self, serverSettings):
         enabledBonuses = []
+        if serverSettings.isOptionalDevicesAssistantEnabled():
+            enabledBonuses.append(WoTPlusBonusType.OPTIONAL_DEVICES_ASSISTANT)
         if serverSettings.isRenewableSubGoldReserveEnabled():
             enabledBonuses.append(WoTPlusBonusType.GOLD_BANK)
         if serverSettings.isRenewableSubPassiveCrewXPEnabled():
             enabledBonuses.append(WoTPlusBonusType.IDLE_CREW_XP)
-        if serverSettings.isWotPlusExcludedMapEnabled():
-            enabledBonuses.append(WoTPlusBonusType.EXCLUDED_MAP)
-        if serverSettings.isFreeEquipmentDemountingEnabled():
-            enabledBonuses.append(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
-        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
-            enabledBonuses.append(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
         if serverSettings.isDailyAttendancesEnabled():
             enabledBonuses.append(WoTPlusBonusType.ATTENDANCE_REWARD)
         if serverSettings.isWotPlusBattleBonusesEnabled():
             enabledBonuses.append(WoTPlusBonusType.BATTLE_BONUSES)
         if serverSettings.isAdditionalWoTPlusEnabled():
             enabledBonuses.append(WoTPlusBonusType.ADDITIONAL_BONUSES)
+        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
+            enabledBonuses.append(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
+        if serverSettings.isWotPlusExcludedMapEnabled():
+            enabledBonuses.append(WoTPlusBonusType.EXCLUDED_MAP)
+        if serverSettings.isFreeEquipmentDemountingEnabled():
+            enabledBonuses.append(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
         if serverSettings.isBadgesEnabled():
             enabledBonuses.append(WoTPlusBonusType.BADGES)
         return enabledBonuses

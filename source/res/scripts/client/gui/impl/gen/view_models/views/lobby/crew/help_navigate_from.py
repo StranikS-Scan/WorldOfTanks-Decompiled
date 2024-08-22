@@ -7,7 +7,6 @@ class HelpNavigateFrom(ViewModel):
     QUICKTRAINING = 'QuickTraining'
     PERSONALFILE = 'PersonalFile'
     PERSONALDATA = 'PersonalData'
-    SERVICERECORD = 'ServiceRecord'
 
     def __init__(self, properties=0, commands=0):
         super(HelpNavigateFrom, self).__init__(properties=properties, commands=commands)

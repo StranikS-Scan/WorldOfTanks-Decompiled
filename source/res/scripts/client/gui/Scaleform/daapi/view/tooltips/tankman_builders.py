@@ -9,6 +9,7 @@ from gui.impl.lobby.crew.tooltips.commander_bonus_additional_tooltip import Comm
 from gui.impl.lobby.crew.tooltips.commander_bonus_tooltip import CommanderBonusTooltip
 from gui.impl.lobby.crew.tooltips.crew_perks_additional_tooltip import CrewPerksAdditionalTooltip
 from gui.impl.lobby.crew.tooltips.crew_perks_tooltip import CrewPerksTooltip
+from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.lobby.crew.tooltips.skill_untrained_additional_tooltip import SkillUntrainedAdditionalTooltip
 from gui.impl.lobby.crew.tooltips.skill_untrained_tooltip import SkillUntrainedTooltip
 from gui.impl.lobby.crew.tooltips.skills_efficiency_tooltip import SkillsEfficiencyTooltip
@@ -17,9 +18,10 @@ from gui.shared.tooltips import advanced
 from gui.shared.tooltips import contexts, ToolTipBaseData
 from gui.shared.tooltips import tankman
 from gui.shared.tooltips.advanced import TANKMAN_MOVIES
-from gui.shared.tooltips.builders import DataBuilder, AdvancedTooltipWindowBuilder
+from gui.shared.tooltips.builders import DataBuilder, AdvancedTooltipWindowBuilder, TooltipWindowBuilder
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.shared import IItemsCache
 __all__ = ('getTooltipBuilders',)
 
 def _advancedPerkCondition(skillName, *_):
@@ -61,9 +63,9 @@ class CrewPerkTooltipData(ToolTipBaseData):
     def __init__(self, context):
         super(CrewPerkTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.CREW_PERK_GF)
 
-    def getDisplayableData(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, skillCustomisation=None, *args, **kwargs):
+    def getDisplayableData(self, skillName, tankmanId, skillLevel=None, showAdditionalInfo=True, skillCustomisation=None, isBonus=None, *args, **kwargs):
         parent = kwargs.pop('parent', None)
-        return DecoratedTooltipWindow(CrewPerksTooltip(skillName, tankmanId, skillLevel, isCommonExtraAvailable, showAdditionalInfo, skillCustomisation=skillCustomisation), parent, False)
+        return DecoratedTooltipWindow(CrewPerksTooltip(skillName, tankmanId, skillLevel, showAdditionalInfo, skillCustomisation=skillCustomisation, isBonus=isBonus), parent, False)
 
     def buildToolTip(self, *args, **kwargs):
         return {'type': self.getType(),
@@ -156,12 +158,28 @@ class SkillsEfficiencyTooltipAdditional(ToolTipBaseData):
         return DecoratedTooltipWindow(AdvancedTooltipView('skillEfficiency', backport.text(R.strings.tooltips.skillsEfficiency.header()), backport.text(R.strings.tooltips.skillsEfficiency.altDescription())), parent, useDecorator=False)
 
 
+class EmptySkillTooltipData(ToolTipBaseData):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, context):
+        super(EmptySkillTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.EMPTY_SKILL_GF)
+
+    def getDisplayableData(self, tankmanId, *args, **kwargs):
+        tman = self.itemsCache.items.getTankman(tankmanId)
+        allSkillCount, _ = tman.descriptor.getTotalSkillsProgress(withFree=True)
+        lasSkillIdx = max(allSkillCount - 1, 0)
+        parent = kwargs.pop('parent', None)
+        return DecoratedTooltipWindow(EmptySkillTooltip(tman, lasSkillIdx), parent, useDecorator=False)
+
+
 def getTooltipBuilders():
     return (NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      BattleRoyaleTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      SpecialTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.SPECIAL_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.CREW_PERK_GF, None, CrewPerkTooltipData(contexts.ToolTipContext(None)), CrewPerkTooltipDataAdditional(contexts.ToolTipContext(None)), condition=_advancedPerkCondition),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.CREW_PERK_ALT_GF, None, CrewPerkTooltipDataAdditional(contexts.ToolTipContext(None))),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.CREW_SKILL_UNTRAINED, None, SkillUntrainedTooltipData(contexts.ToolTipContext(None)), SkillUntrainedTooltipDataAdditional(contexts.ToolTipContext(None))),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.COMMANDER_BONUS, None, CommanderBonusTooltipData(contexts.ToolTipContext(None)), CommanderBonusTooltipDataAdditional(contexts.ToolTipContext(None))),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.TANKMAN, None, TankmanTooltipData(contexts.TankmanHangarContext()), TankmanTooltipAdditional(contexts.TankmanHangarContext())),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.SKILLS_EFFICIENCY, None, SkillsEfficiencyTooltipData(contexts.ToolTipContext(None)), SkillsEfficiencyTooltipAdditional(contexts.ToolTipContext(None))))
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.SKILLS_EFFICIENCY, None, SkillsEfficiencyTooltipData(contexts.ToolTipContext(None)), SkillsEfficiencyTooltipAdditional(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EMPTY_SKILL_GF, None, EmptySkillTooltipData(contexts.ToolTipContext(None))))

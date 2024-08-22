@@ -64,7 +64,8 @@ class TournamentsWidget(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(TournamentsWidget, self)._onLoading(*args, **kwargs)
-        if isTournamentEnabled():
+        comp7Settings = self.__comp7Controller.getModeSettings()
+        if isTournamentEnabled() and comp7Settings.tournaments.get('isBannerEnabled', False):
             self.__updateState()
 
     def __onOpenTournaments(self):
@@ -74,7 +75,7 @@ class TournamentsWidget(ViewImpl):
             _logger.warning('Trying to open tournaments when isTournamentEnabled = False')
 
     def __updateState(self):
-        if self.__comp7Controller.getTournamentBannerAvailability():
+        with self.viewModel.transaction() as tx:
             widgetData = self.__comp7Controller.getTournamentBannerData()
             if not widgetData:
                 logging.warning('No widget data to show')
@@ -83,6 +84,5 @@ class TournamentsWidget(ViewImpl):
             if not tournamentState:
                 logging.warning('Incorrect widget state=%s', widgetData['state'])
                 return
-            with self.viewModel.transaction() as tx:
-                tx.setIsEnabled(True)
-                tx.setState(tournamentState)
+            tx.setIsEnabled(True)
+            tx.setState(tournamentState)

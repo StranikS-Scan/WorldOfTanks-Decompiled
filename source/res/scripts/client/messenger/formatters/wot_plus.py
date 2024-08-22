@@ -105,6 +105,17 @@ class PassiveXpIncompatibleCrewFormatter(GeneralFormatter):
         return {'vehicleName': vehName}
 
 
+class PassiveXPDeactivateDueToPostProgressionFormatter(GeneralFormatter):
+
+    def __init__(self):
+        super(PassiveXPDeactivateDueToPostProgressionFormatter, self).__init__('PassiveXPDeactivateDueToPostProgression')
+
+    def getValues(self, message, *args):
+        vehTypeCD = message.data.get('vehTypeCD')
+        vehName = getUserName(getVehicleType(vehTypeCD))
+        return {'vehicleName': vehName}
+
+
 class WotPlusSwitchFormatter(ServiceChannelFormatter):
 
     def format(self, template, *args):

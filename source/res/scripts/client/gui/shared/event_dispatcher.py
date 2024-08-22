@@ -2,13 +2,12 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 from operator import attrgetter
-import Steam
-import adisp
 import typing
 from BWUtil import AsyncReturn
-from shared_utils import first
-from advanced_achievements_client.constants import TROPHIES_ACHIEVEMENT_ID
+import Steam
+import adisp
 from CurrentVehicle import HeroTankPreviewAppearance
+from advanced_achievements_client.constants import TROPHIES_ACHIEVEMENT_ID
 from constants import GameSeasonType, RentType
 from debug_utils import LOG_WARNING
 from frameworks.wulf import ViewFlags, Window, WindowFlags, WindowLayer, WindowStatus
@@ -63,6 +62,7 @@ from helpers import dependency
 from helpers.aop import pointcutable
 from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
+from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IBoostersController, IComp7Controller
 from skeletons.gui.goodies import IGoodiesCache
@@ -148,6 +148,25 @@ def showFrontlineWelcomeWindow():
     WelcomeViewWindow().load()
 
 
+def showSkillSelectWindow():
+    from gui.impl.lobby.vehicle_compare.skill_select_view import SkillSelectWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    view = uiLoader.windowsManager.getViewByLayoutID(R.views.lobby.vehicle_compare.SkillSelectView())
+    if view is not None:
+        return
+    else:
+        SkillSelectWindow().load()
+        return
+
+
+@wg_async
+def showFillAllPerksDialog():
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.crew.dialogs.fill_all_perks_dialog import FillAllPerksDialog
+    result = yield wg_await(dialogs.showCustomBlurSingleDialog(layoutID=FillAllPerksDialog.LAYOUT_ID, wrappedViewClass=FillAllPerksDialog))
+    raise AsyncReturn(result)
+
+
 def showFrontlineInfoWindow(autoscrollSection=''):
     from frontline.gui.impl.lobby.views.sub_views.info_view import InfoViewWindow
     InfoViewWindow(autoscrollSection=autoscrollSection).load()
@@ -210,7 +229,7 @@ def _doPurchaseOffer(vehicleCD, rentType, nums, price, seasonType, buyParams, re
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def mayObtainWithMoneyExchange(itemPrice, itemsCache=None):
-    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0)
+    return itemPrice <= itemsCache.items.stats.money.exchange(Currency.GOLD, Currency.CREDITS, itemsCache.items.shop.exchangeRate, default=0, useDiscounts=True)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -300,9 +319,14 @@ def showMapsBlacklistView():
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=R.views.lobby.excluded_maps.ExcludedMapsView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showCrew5075Welcome():
+def showCrewNpsWelcome():
     from gui.impl.lobby.crew.crew_intro_view import CrewIntroWindow
     CrewIntroWindow().load()
+
+
+def showNpsIntroView(**kwargs):
+    from gui.impl.lobby.crew.nps_intro_view import NpsIntroWindow
+    NpsIntroWindow(**kwargs).load()
 
 
 def showDailyExpPageView(exitEvent=None):
@@ -731,6 +755,17 @@ def showCrewAboutView(navigateFrom=None):
     HelpViewWindow(navigateFrom=navigateFrom).load()
 
 
+def showCrewPostProgressionView():
+    from gui.impl.lobby.crew.crew_post_progression_view import CrewPostProgressionWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.crew.CrewPostProgressionView()
+    crewPostProgressionView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
+    if crewPostProgressionView is None:
+        window = CrewPostProgressionWindow()
+        window.load()
+    return
+
+
 def showPersonalCase(tankmanInvID, tabId=R.views.lobby.crew.personal_case.PersonalFileView(), previousViewID=None):
     from gui.impl.lobby.crew.tankman_container_view import TankmanContainerView
     uiLoader = dependency.instance(IGuiLoader)
@@ -755,6 +790,15 @@ def showChangeCrewMember(slotIdx, vehicleInvID, parentLayoutID=None):
     else:
         changeCrewMemberView.selectSlot(slotIdx)
         changeCrewMemberView.bringToFront()
+    return
+
+
+def showSkillsTraining(tankmanInvID, role, callback):
+    from gui.impl.lobby.crew.container_vews.skills_training.skills_training_view import SkillsTrainingWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    if uiLoader.windowsManager.getViewByLayoutID(R.views.lobby.crew.SkillsTrainingView()) is None:
+        window = SkillsTrainingWindow(tankmanID=tankmanInvID, role=role, callback=callback)
+        window.load()
     return
 
 
@@ -870,17 +914,36 @@ def openPaymentLink():
 
 @pointcutable
 def showExchangeCurrencyWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXCHANGE_WINDOW)), EVENT_BUS_SCOPE.LOBBY)
+    showExchangeGoldWindow()
 
 
 @pointcutable
 def showExchangeCurrencyWindowModal(**ctx):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXCHANGE_WINDOW_MODAL), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+    showExchangeGoldWindow(ctx=ctx, layer=WindowLayer.TOP_WINDOW, doBlur=False)
 
 
 @pointcutable
 def showExchangeXPWindow(needXP=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.EXCHANGE_XP_WINDOW), ctx={'needXP': needXP}), EVENT_BUS_SCOPE.LOBBY)
+    ctx = None if needXP is None else {'currencyValue': needXP}
+    showExchangeFreeXPWindow(ctx)
+    return
+
+
+@wg_async
+def showExchangeXPDialogWindow(needXP=None, parent=None):
+    from gui.impl.lobby.exchange.exchange_free_xp_window import ExchangeXPWindowDialog
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+    from gui.impl.dialogs import dialogs
+    from gui.impl.pub.dialog_window import DialogButtons
+    ctx = None if needXP is None else {'currency': needXP}
+    layoutID = R.views.lobby.personal_exchange_rates.ExperienceExchangeView()
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
+        wrapper = FullScreenDialogWindowWrapper(ExchangeXPWindowDialog(layoutID=layoutID, ctx=ctx), parent=parent, layer=WindowLayer.FULLSCREEN_WINDOW, doBlur=True)
+        result = yield wg_await(dialogs.show(wrapper))
+        status = True if result.result in DialogButtons.ACCEPT_BUTTONS else False
+        raise AsyncReturn(tuple([status] + list(result.data)))
+    return
 
 
 def showBubbleTooltip(msg):
@@ -1786,6 +1849,14 @@ def showPostProgressionResearchDialog(vehicle, stepIDs, parent=None):
 
 
 @wg_async
+def showResetAllPerksDialog():
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.crew.dialogs.reset_all_perks_confirm_dialog import ResetAllPerksConfirmDialog
+    result = yield wg_await(dialogs.showCustomBlurSingleDialog(layoutID=ResetAllPerksConfirmDialog.LAYOUT_ID, wrappedViewClass=ResetAllPerksConfirmDialog))
+    raise AsyncReturn(result)
+
+
+@wg_async
 def showTokenRecruitDialog(ctx, parentViewKey=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import TokenRecruitDialog
@@ -1798,6 +1869,14 @@ def showTankwomanRecruitAwardDialog(ctx, parentViewKey=None):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import QuestRecruitDialog
     result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=QuestRecruitDialog.LAYOUT_ID, wrappedViewClass=QuestRecruitDialog))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showRecruitConfirmIrrelevantConversionDialog(ctx):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.crew.dialogs.recruit_window.confirm_irrelevant_perk_reset_dialog import ConfirmIrrelevantPerkResetDialog
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, layoutID=ConfirmIrrelevantPerkResetDialog.LAYOUT_ID, wrappedViewClass=ConfirmIrrelevantPerkResetDialog))
     raise AsyncReturn(result)
 
 
@@ -2027,16 +2106,17 @@ def showComp7MetaRootView(tabId=None, *args, **kwargs):
     return
 
 
-def showComp7NoVehiclesScreen():
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showComp7NoVehiclesScreen(notificationMgr=None):
     from gui.impl.lobby.comp7.no_vehicles_screen import NoVehiclesScreenWindow
     if not NoVehiclesScreenWindow.getInstances():
-        NoVehiclesScreenWindow(parent=getParentWindow()).load()
+        notificationMgr.append(WindowNotificationCommand(NoVehiclesScreenWindow()))
 
 
-def showComp7IntroScreen():
-    from gui.impl.lobby.comp7.intro_screen import IntroScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.comp7.IntroScreen(), IntroScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showComp7IntroScreen(notificationMgr=None):
+    from gui.impl.lobby.comp7.intro_screen import IntroScreenWindow
+    notificationMgr.append(WindowNotificationCommand(IntroScreenWindow()))
 
 
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
@@ -2102,10 +2182,10 @@ def showComp7SeasonStatisticsScreen(seasonNumber=None, force=False, notification
         notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showComp7PurchaseDialog(productCode):
+def showComp7PurchaseDialog(productCode, parent=None):
     from gui.impl.lobby.comp7.dialogs.purchase_dialog import PurchaseDialogWindow
     if not PurchaseDialogWindow.getInstances():
-        PurchaseDialogWindow(productCode).load()
+        PurchaseDialogWindow(productCode, parent).load()
 
 
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
@@ -2254,4 +2334,32 @@ def showAdvancedAchievementsRewardView(bonusTuples, *args, **kwargs):
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
         window = RewardViewWindow(bonusTuples=bonusTuples, *args, **kwargs)
         window.load()
+    return
+
+
+@wg_async
+def showExchangeGoldWindow(ctx=None, layer=WindowLayer.FULLSCREEN_WINDOW, doBlur=True):
+    from gui.impl.lobby.exchange.exchange_gold_window import ExchangeGoldView
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+    from gui.impl.dialogs import dialogs
+    layoutID = R.views.lobby.personal_exchange_rates.GoldExchangeView()
+    guiLoader = dependency.instance(IGuiLoader)
+    ctx = ctx or {}
+    ctx.setdefault('blur', doBlur)
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
+        yield dialogs.showSimple(FullScreenDialogWindowWrapper(ExchangeGoldView(layoutID=layoutID, ctx=ctx), doBlur=False, layer=layer))
+    return
+
+
+@wg_async
+def showExchangeFreeXPWindow(ctx=None, doBlur=True):
+    from gui.impl.lobby.exchange.exchange_free_xp_window import ExchangeFreeXPView
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+    from gui.impl.dialogs import dialogs
+    layoutID = R.views.lobby.personal_exchange_rates.ExperienceExchangeView()
+    guiLoader = dependency.instance(IGuiLoader)
+    ctx = ctx or {}
+    ctx.setdefault('blur', doBlur)
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
+        yield dialogs.showSimple(FullScreenDialogWindowWrapper(ExchangeFreeXPView(layoutID=layoutID, ctx=ctx), doBlur=False, layer=WindowLayer.FULLSCREEN_WINDOW))
     return

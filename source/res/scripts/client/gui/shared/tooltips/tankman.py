@@ -21,6 +21,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
+def getSkillIcon(skillName, tankmanSkill):
+    return backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill_with_frame()) if skillName == 'new_skill' else tankmanSkill(skillName=skillName).bigIconPath
+
+
 class TankmanSkillListField(ToolTipDataField):
 
     def _getValue(self):
@@ -41,7 +45,7 @@ class TankmanSkillListField(ToolTipDataField):
         return skillsList
 
     def _addNewSkills(self, tankman, skillsList):
-        newSkillsCount, newSkillLevel = tankman.newSkillCount
+        newSkillsCount, newSkillLevel = tankman.newSkillsCount
         if newSkillsCount > 0:
             if newSkillsCount > 2:
                 newSkills = [str(newSkillsCount - 1) + 'x100']
@@ -107,12 +111,12 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         if freeSkills:
             tankmanSkill = item.getTankmanSkill()
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_FREESKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(tankmanSkill(skillName=skillName).bigIconPath) for skillName in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, tankmanSkill)) for skillName in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         skills = item.getEarnedSkills(multiplyNew=True)
         if skills:
             tankmanSkill = item.getTankmanSkill()
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(tankmanSkill(skillName=skillName).bigIconPath) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, tankmanSkill)) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         expiryTime = item.getExpiryTime()
         if expiryTime:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=20 if skills else (17 if hasDescr else 16), bottom=2)))
@@ -142,7 +146,7 @@ class SpecialTankmanTooltipData(BlocksTooltipData):
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_FREESKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
             blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillBigIconPath(skill)) for skill in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         skillNum = self.__getNewSkillCount(tankmanData.freeXP)
-        icon = backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill())
+        icon = backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill_with_frame())
         if skillNum:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17, bottom=10)))
             blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(icon) for _ in range(skillNum) ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
@@ -226,14 +230,6 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
         if len(skills) > maxPopUpBlocks:
             diff = str(len(skills) - maxPopUpBlocks)
             commonStatsBlock.append(formatters.packAlignedTextBlockData(text=text_styles.middleTitle(makeString(TOOLTIPS.HANGAR_CREW_MORESKILLS, skill_cnt=diff)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-
-    @classmethod
-    def _getNewSkillsBlock(cls, isFree):
-        if isFree:
-            titleR = R.strings.tooltips.hangar.crew.new_free_skill_available.header()
-        else:
-            titleR = R.strings.tooltips.hangar.crew.new_skill_available.header()
-        return formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': backport.text(titleR)}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': backport.text(R.strings.tooltips.hangar.crew.new_skill_available.text())}))
 
     def _getFullUserName(self, item):
         nationName = nations.NAMES[item.nationID]

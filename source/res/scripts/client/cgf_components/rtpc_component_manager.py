@@ -5,7 +5,7 @@ from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemove
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from Sound import RTPCComponent
-from Vehicular import KineticEnergyGetter, RemainingAmmoClipPercentGetter, OverheatValueGetter
+from Vehicular import KineticEnergyGetter, RemainingAmmoClipPercentGetter
 from constants import IS_CLIENT
 if IS_CLIENT:
     from Vehicle import Vehicle
@@ -20,8 +20,7 @@ class RTPCSourceType(object):
     KINETIC_ENERGY = 1
     INTERVAL_BETWEEN_SHOTS = 2
     REMAINIG_AMMO_CLIP_PERCENT = 3
-    OVERHEAT_VALUE = 4
-    COUNT = 5
+    COUNT = 4
 
 
 @autoregister(presentInAllWorlds=True)
@@ -64,14 +63,3 @@ class RTPCComponentManager(CGF.ComponentManager):
             clipPercent = ammo.getClipPercentLeft() * 100 if ammo is not None else 0.0
             rtpcComponent.setRTPCsBySourceType(RTPCSourceType.REMAINIG_AMMO_CLIP_PERCENT, clipPercent)
         return
-
-    @onProcessQuery(CGF.GameObject, RTPCComponent, OverheatValueGetter)
-    def onOverheatValueRTPCAdded(self, gameObject, rtpcComponent, _):
-        vehicle = self.getVehicleComponentForRTPC(gameObject)
-        if vehicle is None:
-            return
-        else:
-            temperatureGunController = vehicle.dynamicComponents.get('temperatureGunController')
-            if temperatureGunController is not None:
-                rtpcComponent.setRTPCsBySourceType(RTPCSourceType.OVERHEAT_VALUE, vehicle.temperatureGunController.temperatureProgress)
-            return

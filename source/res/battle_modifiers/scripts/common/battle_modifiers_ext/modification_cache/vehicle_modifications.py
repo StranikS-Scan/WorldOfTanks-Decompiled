@@ -162,6 +162,7 @@ class VehicleModifier(object):
             shell.piercingPowerRandomization = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION, shell.piercingPowerRandomization)
             shell.piercingPowerRandomizationType = modifiers(BattleParams.PIERCING_POWER_RANDOMIZATION_TYPE, shell.piercingPowerRandomizationType)
             shell.armorDamage = (modifiers(BattleParams.ARMOR_DAMAGE_FIRST, shell.armorDamage[0]), modifiers(BattleParams.ARMOR_DAMAGE_LAST, shell.armorDamage[1]))
+            shell.isDamageMutable = shell.armorDamage[0] != shell.armorDamage[1]
             shell.deviceDamage = (modifiers(BattleParams.DEVICE_DAMAGE_FIRST, shell.deviceDamage[0]), modifiers(BattleParams.DEVICE_DAMAGE_LAST, shell.deviceDamage[1]))
             effectsIndex = shell.effectsIndex
             modifiers.modificationCtx['shotsCount'] = 1 if shell.dynamicEffectsIndexes else 0
@@ -196,6 +197,7 @@ class VehicleModifier(object):
             armorSpalls.damageAbsorptionType = modifiers(BattleParams.ARMOR_SPALLS_DAMAGE_ABSORPTION, armorSpalls.damageAbsorptionType)
             armorSpalls.armorDamage = (modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE_FIRST, armorSpalls.armorDamage[0]), modifiers(BattleParams.ARMOR_SPALLS_ARMOR_DAMAGE_LAST, armorSpalls.armorDamage[1]))
             armorSpalls.deviceDamage = (modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE_FIRST, armorSpalls.deviceDamage[0]), modifiers(BattleParams.ARMOR_SPALLS_DEVICE_DAMAGE_LAST, armorSpalls.deviceDamage[1]))
+            armorSpalls.hasSplash = armorSpalls.radius and (any(armorSpalls.armorDamage) or any(armorSpalls.deviceDamage))
             if BattleParams.ARMOR_SPALLS_CONE_ANGLE in modifiers:
                 initAngle = acos(armorSpalls.coneAngleCos)
                 armorSpalls.coneAngleCos = cos(modifiers(BattleParams.ARMOR_SPALLS_CONE_ANGLE, initAngle))
@@ -216,6 +218,7 @@ class VehicleModifier(object):
         if DEBUG_MODIFIERS:
             LOG_DEBUG("[BattleModifiers][Debug] Modify engine '{}'".format(engine.name))
         engine = copy.copy(engine)
+        engine.fireStartingChance = modifiers(BattleParams.ENGINE_FIRE_FACTOR, engine.fireStartingChance)
         if IS_CLIENT:
             engine.sounds = modifiers(BattleParams.ENGINE_SOUNDS, engine.sounds)
         return engine

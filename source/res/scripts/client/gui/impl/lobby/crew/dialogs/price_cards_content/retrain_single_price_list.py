@@ -51,6 +51,10 @@ class RetrainSinglePriceList(BasePriceList):
         operationData = super(RetrainSinglePriceList, self).selectedOperationData
         return (None, None, None, None) if operationData is None else operationData
 
+    @property
+    def isAllRetrainOperationFree(self):
+        return isAllRetrainOperationFree(self._tankman.descriptor, self._retrainCost)
+
     def updateTargetRole(self, role):
         if self._targetRole == role:
             return
@@ -87,7 +91,7 @@ class RetrainSinglePriceList(BasePriceList):
         for idx, cost in enumerate(self._retrainCost):
             defCost = defaultTankmanCost[idx]
             credits, gold = getFinalRetrainCost(TankmanDescr(self._tankman.strCD), cost)
-            if isAllRetrainOperationFree(self._tankman.descriptor, self._retrainCost) and not credits:
+            if self.isAllRetrainOperationFree and not credits:
                 credits = defCost.get(Currency.CREDITS, 0)
             itemPrice = ItemPrice(price=Money(credits=credits, gold=gold), defPrice=Money(credits=defCost.get(Currency.CREDITS, 0), gold=defCost.get(Currency.GOLD, 0)))
             self._priceData.append((itemPrice, self._getOperationData(cost), idx))

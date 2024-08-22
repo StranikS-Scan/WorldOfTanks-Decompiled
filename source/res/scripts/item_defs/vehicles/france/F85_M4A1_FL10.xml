@@ -1,10 +1,10 @@
 <F85_M4A1_FL10.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	loader	</commander>
+    <commander></commander>
     <gunner>	loader	</gunner>
     <driver></driver>
-    <radioman>	loader	</radioman>
+    <radioman></radioman>
   </crew>
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
@@ -31,6 +31,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	3.556	</repairCost>
   <premiumVehicleXPFactor>	0.3	</premiumVehicleXPFactor>

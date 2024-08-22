@@ -19,8 +19,7 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_12.7mm_AP_B32>
     <id>	117	</id>
@@ -5246,78 +5245,4 @@
     <ricochetAngle>	70	</ricochetAngle>
     <notInShop>	True	</notInShop>
   </_107mm_UBR-420_MapsTraining_Dummy_HT_2>
-  <_23mm_BZT_FEP>
-    <id>	601	</id>
-    <userString>	#ussr_vehicles:_23mm_BZT_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	23	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	8	</armor>
-      <devices>	4	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_23mm_BZT_FEP>
-  <_23mm_BZK_FEP>
-    <id>	602	</id>
-    <userString>	#ussr_vehicles:_23mm_BZK_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	2.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	23	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	4	</armor>
-      <devices>	2	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_23mm_BZK_FEP>
 </shells.xml>

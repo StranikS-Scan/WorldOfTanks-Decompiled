@@ -78,8 +78,8 @@ class GuiItemFactory(IGuiItemsFactory):
     def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         return Vehicle(strCompactDescr, inventoryID, typeCompDescr, proxy, extData, invData)
 
-    def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1):
-        return Tankman(strCompactDescr, inventoryID, vehicle, dismissedAt, proxy, vehicleSlotIdx)
+    def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1, bonusSkillsLevels=None):
+        return Tankman(strCompactDescr, inventoryID, vehicle, dismissedAt, proxy, vehicleSlotIdx, bonusSkillsLevels)
 
     def createTankmanDossier(self, tmanDescr, tankmanDossierDescr, extDossier, playerDBID=None, currentVehicleItem=None):
         return TankmanDossier(tmanDescr, tankmanDossierDescr, extDossier, playerDBID, currentVehicleItem)
@@ -90,15 +90,15 @@ class GuiItemFactory(IGuiItemsFactory):
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None):
         return VehicleDossier(dossier, vehTypeCompDescr, playerDBID)
 
-    def createBadge(self, descriptor, proxy=None, extraData=None):
+    def createBadge(self, descriptor, proxy=None, extraData=None, receivedBadges=None):
         badgeData = descriptor.copy()
         if badges.CUSTOM_LOGIC_KEY in badgeData:
             className = badgeData.pop(badges.CUSTOM_LOGIC_KEY)
             cls = getattr(badges, className, None)
             if cls:
-                return cls(badgeData, proxy=proxy, extraData=extraData)
+                return cls(badgeData, proxy=proxy, receivedBadges=receivedBadges, extraData=extraData)
             _logger.error('Wrong name of custom badge class %r', className)
-        return badges.Badge(badgeData, proxy=proxy)
+        return badges.Badge(badgeData, proxy=proxy, receivedBadges=receivedBadges)
 
     def createLootBox(self, lootBoxID, lootBoxConfig, count):
         return LootBox(lootBoxID, lootBoxConfig, count)

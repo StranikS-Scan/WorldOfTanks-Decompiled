@@ -164,11 +164,8 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
         if itemId == FITTING_TYPES.VEHICLE_CHASSIS and item.isTrackWithinTrack():
             movieKey = CHASSIS_TRACK_WITHIN_TRACK
             descrKey = CHASSIS_TRACK_WITHIN_TRACK
-        if isEquipment:
-            if itemId in ('lendLeaseOil', 'qualityOil'):
-                descrKey = 'enhancedOil'
-            elif item.isStimulator:
-                descrKey = 'ration'
+        elif isEquipment and item.isStimulator:
+            descrKey = 'ration'
         if movieKey not in MODULE_MOVIES:
             movieModule = None
         else:
@@ -231,47 +228,49 @@ SKILL_MOVIES = {'repair': 'skillRepairs',
  'naturalCover': 'skillConcealment',
  'fireFighting': 'skillFirefighting',
  'brotherhood': 'skillBrothersInArms',
- 'commander_tutor': 'skillMentor',
+ 'commander_tutor': 'skillCommanderTutor',
  'commander_eagleEye': 'skillEagleEye',
  'commander_universalist': 'skillJackOfAllTrades',
- 'commander_expert': 'skillExpert',
+ 'commander_coordination': 'skillCommanderCoordination',
  'commander_sixthSense': 'skillSixthSense',
- 'commander_enemyShotPredictor': 'skillArtLamp',
- 'commander_practical': 'skillPracticality',
+ 'commander_enemyShotPredictor': 'skillCommanderEnemyShotPredictor',
+ 'commander_practical': 'skillCommanderPractical',
+ 'commander_emergency': 'skillCommanderEmergency',
  'gunner_rancorous': 'skillDesignatedTarget',
- 'gunner_gunsmith': 'skillArmorer',
+ 'gunner_armorer': 'skillGunnerArmorer',
  'gunner_sniper': 'skillSniper',
  'gunner_smoothTurret': 'skillSnapShot',
- 'gunner_focus': 'skillConcentration',
- 'gunner_quickAiming': 'skillQuickAiming',
- 'driver_rammingMaster': 'skillControlledImpact',
+ 'gunner_focus': 'skillGunnerFocus',
+ 'gunner_quickAiming': 'skillGunnerQuickAiming',
+ 'driver_rammingMaster': 'skillDriverRammingMaster',
  'driver_badRoadsKing': 'skillOffRoadDriving',
  'driver_tidyPerson': 'skillPreventativeMaintenance',
  'driver_virtuoso': 'skillClutchBraking',
  'driver_smoothDriving': 'skillSmoothRide',
- 'driver_motorExpert': 'skillMotorConnoisseur',
+ 'driver_motorExpert': 'skillDriverMotorExpert',
+ 'driver_reliablePlacement': 'skillDriverReliablePlacement',
  'radioman_finder': 'skillSituationalAwareness',
  'radioman_lastEffort': 'skillCallForVengeance',
- 'radioman_inventor': 'skillSignalBoosting',
- 'radioman_retransmitter': 'skillRelaying',
- 'radioman_interference': 'skillInterference',
+ 'radioman_expert': 'skillRadiomanExpert',
+ 'radioman_sideBySide': 'skillRadiomanSideBySide',
+ 'radioman_interference': 'skillRadiomanInterference',
+ 'radioman_signalInterception': 'skillRadiomanSignalInterception',
  'loader_desperado': 'skillAdrenalineRush',
  'loader_pedant': 'skillSafeStowage',
  'loader_intuition': 'skillIntuition',
  'loader_ambushMaster': 'skillAmbushMaster',
- 'loader_ammunitionImprove': 'skillShellImprovement',
- 'loader_melee': 'skillCloseCombat'}
+ 'loader_ammunitionImprove': 'skillLoaderAmmunitionImprove',
+ 'loader_melee': 'skillLoaderMelee',
+ 'loader_perfectCharge': 'skillLoaderPerfectCharge'}
 MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'smallRepairkit': 'consumablesRepairKitSmall',
  'largeMedkit': 'consumablesFirstAidBig',
  'smallMedkit': 'consumablesFirstAidSmall',
  'autoExtinguishers': 'consumablesExtinguisherBig',
  'handExtinguishers': 'consumablesExtinguisherSmall',
- 'lendLeaseOil': 'consumablesOilLendLease',
- 'qualityOil': 'consumablesOilQuality',
+ 'qualityFuel': 'consumablesQualityFuel',
+ 'excellentFuel': 'consumablesExcellentFuel',
  'removedRpmLimiter': 'consumablesSpeedGovernorRemoved',
- 'gasoline105': 'consumablesGasoline105',
- 'gasoline100': 'consumablesGasoline100',
  'aimingStabilizer': 'equipmentVerticalStabilizer',
  'enhancedAimDrives': 'equipmentGunLayingDrive',
  'coatedOptics': 'equipmentCoatedOptics',

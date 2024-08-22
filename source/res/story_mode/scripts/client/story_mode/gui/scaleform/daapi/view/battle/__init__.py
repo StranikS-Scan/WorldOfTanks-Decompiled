@@ -53,7 +53,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.vehicles import DualGunComponent
     from gui.Scaleform.daapi.view.battle.shared.indicators import SixthSenseIndicator
     from gui.Scaleform.daapi.view.battle.shared.damage_info_panel import DamageInfoPanel
-    from gui.Scaleform.daapi.view.battle.shared.spectator_view import SpectatorView
     from gui.Scaleform.daapi.view.battle.classic.map_info_tip import MapInfoTip
     from gui.Scaleform.daapi.view.battle.shared.battle_timers import BattleTimer
     from gui.Scaleform.daapi.view.battle.shared.damage_panel import DamagePanel
@@ -69,7 +68,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.pve_base.progress_counter.progress_counter import PveProgressCounter
     from gui.Scaleform.daapi.view.battle.shared.messages import PlayerMessages
     from gui.impl.battle.battle_page.ammunition_panel.prebattle_ammunition_panel_inject import PrebattleAmmunitionPanelInject
-    from gui.Scaleform.daapi.view.battle.shared.death_cam_ui import DeathCamUI
     from gui.Scaleform.daapi.view.battle.pve_base.stats_exchange import PveStatisticsDataController
     from gui.Scaleform.daapi.view.battle.shared.postmortem_info_panel import PostmortemInfoPanel
     from gui.Scaleform.daapi.view.battle.shared.postmortem_panel import PostmortemPanel
@@ -105,7 +103,6 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.SPECTATOR_VIEW, SpectatorView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_INFO_PANEL, DamageInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE, SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, DualGunComponent, ScopeTemplates.DEFAULT_SCOPE),
@@ -116,7 +113,6 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, VehicleMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, VehicleErrorMessages, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.DEATH_CAM_HUD, DeathCamUI, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER, messenger_view.BattleMessengerView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_INFO_PAGE, PostmortemInfoPanel, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalStoryModeViewSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, PostmortemPanel, StoryModePostmortemPanel, ScopeTemplates.DEFAULT_SCOPE))

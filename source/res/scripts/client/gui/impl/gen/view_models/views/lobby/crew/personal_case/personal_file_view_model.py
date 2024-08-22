@@ -1,127 +1,77 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/personal_case/personal_file_view_model.py
-from enum import Enum
-from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skill_model import TankmanSkillModel
-from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_group_model import TankmanSkillsGroupModel
-
-class SkillsState(Enum):
-    LEARNAVAILABLE = 'available'
-    REDUCED = 'reduced'
-    TRAINING = 'training'
-    DISABLED = 'disabled'
-    LOCKED = 'locked'
-    ZEROSKILLS = 'zeroSkills'
-    ALLSKILLS = 'allSkills'
-
+from gui.impl.gen.view_models.views.lobby.crew.common.tankman_info_model import TankmanInfoModel
+from gui.impl.gen.view_models.views.lobby.crew.personal_case.post_progression_widget_model import PostProgressionWidgetModel
+from gui.impl.gen.view_models.views.lobby.crew.personal_case.skills_matrix_model import SkillsMatrixModel
 
 class PersonalFileViewModel(ViewModel):
-    __slots__ = ('onIncrease', 'onReset', 'onHoverSkill', 'onLeaveSkill', 'onClickSkill')
+    __slots__ = ()
 
-    def __init__(self, properties=12, commands=5):
+    def __init__(self, properties=8, commands=0):
         super(PersonalFileViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getSkillsState(self):
-        return SkillsState(self._getString(0))
-
-    def setSkillsState(self, value):
-        self._setString(0, value.value)
-
-    def getSelectAvailableSkillsCount(self):
-        return self._getNumber(1)
-
-    def setSelectAvailableSkillsCount(self, value):
-        self._setNumber(1, value)
-
-    def getIsFemale(self):
-        return self._getBool(2)
-
-    def setIsFemale(self, value):
-        self._setBool(2, value)
-
-    def getIsTankmanWithDescription(self):
-        return self._getBool(3)
-
-    def setIsTankmanWithDescription(self, value):
-        self._setBool(3, value)
-
-    def getIsResetDisable(self):
-        return self._getBool(4)
-
-    def setIsResetDisable(self, value):
-        self._setBool(4, value)
-
-    def getHasIncreaseDiscount(self):
-        return self._getBool(5)
-
-    def setHasIncreaseDiscount(self, value):
-        self._setBool(5, value)
-
-    def getHasDropSkillDiscount(self):
-        return self._getBool(6)
-
-    def setHasDropSkillDiscount(self, value):
-        self._setBool(6, value)
-
-    def getIsTankmanInVehicle(self):
-        return self._getBool(7)
-
-    def setIsTankmanInVehicle(self, value):
-        self._setBool(7, value)
-
-    def getRelevantGroupedSkills(self):
-        return self._getArray(8)
-
-    def setRelevantGroupedSkills(self, value):
-        self._setArray(8, value)
+    @property
+    def tankmanInfo(self):
+        return self._getViewModel(0)
 
     @staticmethod
-    def getRelevantGroupedSkillsType():
-        return TankmanSkillsGroupModel
+    def getTankmanInfoType():
+        return TankmanInfoModel
 
-    def getIrrelevantGroupedSkills(self):
-        return self._getArray(9)
-
-    def setIrrelevantGroupedSkills(self, value):
-        self._setArray(9, value)
+    @property
+    def skills(self):
+        return self._getViewModel(1)
 
     @staticmethod
-    def getIrrelevantGroupedSkillsType():
-        return TankmanSkillsGroupModel
+    def getSkillsType():
+        return SkillsMatrixModel
 
-    def getCommonSkills(self):
-        return self._getArray(10)
-
-    def setCommonSkills(self, value):
-        self._setArray(10, value)
+    @property
+    def postProgression(self):
+        return self._getViewModel(2)
 
     @staticmethod
-    def getCommonSkillsType():
-        return TankmanSkillModel
+    def getPostProgressionType():
+        return PostProgressionWidgetModel
+
+    def getTankmanId(self):
+        return self._getNumber(3)
+
+    def setTankmanId(self, value):
+        self._setNumber(3, value)
 
     def getSkillsEfficiency(self):
-        return self._getReal(11)
+        return self._getReal(4)
 
     def setSkillsEfficiency(self, value):
-        self._setReal(11, value)
+        self._setReal(4, value)
+
+    def getIsTankmanInVehicle(self):
+        return self._getBool(5)
+
+    def setIsTankmanInVehicle(self, value):
+        self._setBool(5, value)
+
+    def getHasPostProgression(self):
+        return self._getBool(6)
+
+    def setHasPostProgression(self, value):
+        self._setBool(6, value)
+
+    def getIsPostProgressionAnimated(self):
+        return self._getBool(7)
+
+    def setIsPostProgressionAnimated(self, value):
+        self._setBool(7, value)
 
     def _initialize(self):
         super(PersonalFileViewModel, self)._initialize()
-        self._addStringProperty('skillsState')
-        self._addNumberProperty('selectAvailableSkillsCount', 0)
-        self._addBoolProperty('isFemale', False)
-        self._addBoolProperty('isTankmanWithDescription', False)
-        self._addBoolProperty('isResetDisable', False)
-        self._addBoolProperty('hasIncreaseDiscount', False)
-        self._addBoolProperty('hasDropSkillDiscount', False)
-        self._addBoolProperty('isTankmanInVehicle', False)
-        self._addArrayProperty('relevantGroupedSkills', Array())
-        self._addArrayProperty('irrelevantGroupedSkills', Array())
-        self._addArrayProperty('commonSkills', Array())
+        self._addViewModelProperty('tankmanInfo', TankmanInfoModel())
+        self._addViewModelProperty('skills', SkillsMatrixModel())
+        self._addViewModelProperty('postProgression', PostProgressionWidgetModel())
+        self._addNumberProperty('tankmanId', 0)
         self._addRealProperty('skillsEfficiency', 0.0)
-        self.onIncrease = self._addCommand('onIncrease')
-        self.onReset = self._addCommand('onReset')
-        self.onHoverSkill = self._addCommand('onHoverSkill')
-        self.onLeaveSkill = self._addCommand('onLeaveSkill')
-        self.onClickSkill = self._addCommand('onClickSkill')
+        self._addBoolProperty('isTankmanInVehicle', False)
+        self._addBoolProperty('hasPostProgression', False)
+        self._addBoolProperty('isPostProgressionAnimated', False)

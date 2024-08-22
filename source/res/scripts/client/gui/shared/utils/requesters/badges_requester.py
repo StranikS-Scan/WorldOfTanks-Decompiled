@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/badges_requester.py
+import typing
 import BigWorld
 from adisp import adisp_async
 from gui.doc_loaders.badges_loader import getAvailableBadges

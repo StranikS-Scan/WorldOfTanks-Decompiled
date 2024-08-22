@@ -129,7 +129,8 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'increaseHealth': MENU.TANK_PARAMS_VAL,
  'artNotificationDelayFactor': MENU.TANK_PARAMS_S,
  'vehicleOwnSpottingTime': MENU.TANK_PARAMS_S,
- 'damagedModulesDetectionTime': MENU.TANK_PARAMS_S}
+ 'damagedModulesDetectionTime': MENU.TANK_PARAMS_S,
+ 'commanderLampDelay': MENU.TANK_PARAMS_S}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'reloadCooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
@@ -472,7 +473,8 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'maxDamage': _niceFormat,
  'artNotificationDelayFactor': _niceFormat,
  'vehicleOwnSpottingTime': _niceFormat,
- 'damagedModulesDetectionTime': _niceFormat}
+ 'damagedModulesDetectionTime': _niceFormat,
+ 'commanderLampDelay': _niceFormat}
 
 def _deltaWrapper(fn):
 
@@ -514,7 +516,8 @@ SMART_ROUND_PARAMS = {'damage',
  CONTINUOUS_DAMAGE_PER_SECOND}
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
- PARAM_STATE.BETTER: 2}
+ PARAM_STATE.BETTER: 2,
+ PARAM_STATE.SITUATIONAL: 1}
 
 def colorize(paramStr, state, colorScheme):
     if isinstance(state, (tuple, list)):

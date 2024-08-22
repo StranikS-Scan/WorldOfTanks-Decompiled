@@ -1,21 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/comp7/squad/entity.py
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
-from gui.prb_control.items.unit_items import DynamicRosterSettings
-from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
-from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.ctx import Comp7PrbAction
 from gui.prb_control.entities.base.squad.ctx import SquadSettingsCtx
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
+from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
+from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
 from gui.prb_control.entities.comp7.scheduler import Comp7Scheduler
+from gui.prb_control.entities.comp7.squad.action_handler import Comp7SquadActionsHandler
+from gui.prb_control.entities.comp7.squad.actions_validator import Comp7SquadActionsValidator
+from gui.prb_control.items.unit_items import DynamicRosterSettings
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.prb_control.entities.comp7.squad.actions_validator import Comp7SquadActionsValidator
-from gui.prb_control.entities.comp7.squad.action_handler import Comp7SquadActionsHandler
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
-from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from skeletons.gui.shared import IItemsCache
 
 class Comp7SquadEntryPoint(SquadEntryPoint):

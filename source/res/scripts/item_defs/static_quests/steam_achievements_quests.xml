@@ -2,43 +2,6 @@
   <quests>
     <tokenQuest>
       <enabled>	true	</enabled>
-      <id>	WGSSA-52694_q01	</id>
-      <serverOnly>	true	</serverOnly>
-      <conditions>
-        <preBattle>
-          <account>
-            <and>
-              <isSteamAllowed>	true	</isSteamAllowed>
-              <or>
-                <token>
-                  <id>	steam_add_briefing_medal	</id>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                  <consume>	10	  <force></force>
-                  </consume>
-                </token>
-                <token>
-                  <id>	battle_matters_complete	</id>
-                  <greaterOrEqual>	1	</greaterOrEqual>
-                  <consume>	10	</consume>
-                </token>
-              </or>
-            </and>
-          </account>
-        </preBattle>
-        <common>
-          <bonusLimit>	1	</bonusLimit>
-        </common>
-      </conditions>
-      <bonus>
-        <dossier>
-          <name>	steamAchievements:steamBriefingMedal	</name>
-          <value>	1	</value>
-          <type>	set	</type>
-        </dossier>
-      </bonus>
-    </tokenQuest>
-    <tokenQuest>
-      <enabled>	true	</enabled>
       <id>	WGSSA-52694_q02	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
@@ -86,45 +49,6 @@
       <bonus>
         <dossier>
           <name>	steamAchievements:steamDoOperationMedal	</name>
-          <value>	1	</value>
-          <type>	set	</type>
-        </dossier>
-        <dossier>
-          <name>	steamAchievements:steamDoPotapovQuestMedal	</name>
-          <value>	1	</value>
-          <type>	set	</type>
-        </dossier>
-        <dossier>
-          <name>	steamAchievements:steamDoAllBranchPotapovQuestMedal	</name>
-          <value>	1	</value>
-          <type>	set	</type>
-        </dossier>
-      </bonus>
-    </tokenQuest>
-    <tokenQuest>
-      <enabled>	true	</enabled>
-      <id>	WGSSA-52694_q03	</id>
-      <serverOnly>	true	</serverOnly>
-      <conditions>
-        <preBattle>
-          <account>
-            <and>
-              <isSteamAllowed>	true	</isSteamAllowed>
-              <token>
-                <id>	steam_add_bootcamp_medal	</id>
-                <greaterOrEqual>	1	</greaterOrEqual>
-                <consume>	10	</consume>
-              </token>
-            </and>
-          </account>
-        </preBattle>
-        <common>
-          <bonusLimit>	1	</bonusLimit>
-        </common>
-      </conditions>
-      <bonus>
-        <dossier>
-          <name>	steamAchievements:steamBootcampMedal	</name>
           <value>	1	</value>
           <type>	set	</type>
         </dossier>

@@ -11,7 +11,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.pub import WindowImpl
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared.event_dispatcher import showAdvancedAchievementsRewardView
 from helpers import dependency
 from functools import partial
@@ -271,7 +271,7 @@ class CommandBuilder(object):
         if IS_DEVELOPMENT:
             root.append(self._createDebugMessageCommand(receiver, '--- Achievements earned ---'))
             root.append(self._createAchievementDataDebugCommand(receiver, achievementsData))
-        if self.__limitedUICtrl.isRuleCompleted(LuiRules.ADVANCED_ACHIEVEMENTS):
+        if self.__limitedUICtrl.isRuleCompleted(LUI_RULES.AdvancedAchievements):
             root.append(self._createEarningAnimationCommand(receiver, achievementsData))
         root.append(self._createTimeStampUpdateCommand(receiver, achievementsData))
         root.append(self._createNotificationCommand(receiver, achievementsData))

@@ -70,6 +70,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.comp7_shop_controller import Comp7ShopController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusController
+    from gui.game_control.optional_devices_assistant_controller import OptionalDevicesAssistantController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
@@ -89,8 +90,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.live_ops_web_events_controller import LiveOpsWebEventsController
     from gui.game_control.achievements_controller import AchievementsController
     from gui.game_control.achievements_earning_controller import Achievements20EarningController
-    from skeletons.gui.wot_anniversary import IWotAnniversaryController
-    from gui.game_control.wot_anniversary_controller import WotAnniversaryController
+    from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -160,6 +160,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IDemoAccCompletionController, _DemoAccCompletionController())
     _config(_interface.IVehiclePostProgressionController, VehiclePostProgressionController())
     _config(_interface.IWotPlusController, WotPlusController())
+    _config(_interface.IOptionalDevicesAssistantController, OptionalDevicesAssistantController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
@@ -171,10 +172,10 @@ def getGameControllersConfig(manager):
     _config(_interface.IDailyQuestIntroPresenter, DailyQuestsIntroPresenter())
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
-    _config(IWotAnniversaryController, WotAnniversaryController())
     _config(_interface.IHangarGuiController, HangarGuiController())
     _config(_interface.IGraphicsOptimizationController, GraphicsOptimizationController())
     _config(_interface.ILiveOpsWebEventsController, LiveOpsWebEventsController())
     _config(_interface.IAchievementsController, AchievementsController())
     _config(_interface.IAchievements20EarningController, Achievements20EarningController())
+    _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
     collectGameControllers(_config)

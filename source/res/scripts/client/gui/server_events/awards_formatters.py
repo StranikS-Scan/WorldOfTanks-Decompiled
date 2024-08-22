@@ -5,6 +5,7 @@ from collections import namedtuple
 from math import ceil
 from typing import TYPE_CHECKING
 from constants import LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX
+from exchange.personal_discounts_constants import EXCHANGE_RATE_FREE_XP_NAME, EXCHANGE_RATE_GOLD_NAME
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -66,7 +67,6 @@ BATTLE_BONUS_X5_TOKEN = 'battle_bonus_x5'
 CREW_BONUS_X3_TOKEN = 'crew_bonus_x3'
 GOLD_MISSION = 'goldmission'
 BR_PROGRESSION_TOKEN = 'img:battle_royale:progression'
-COMP7_LIGHT_PROGRESSION_TOKEN = 'img:comp7_light:progression'
 AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
                       Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
                       Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CRYSTAL,
@@ -754,8 +754,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         complexToken = parseComplexToken(tokenID)
         if tokenID.startswith(BR_PROGRESSION_TOKEN):
             return self._formatBRComplexToken(complexToken, token, bonus)
-        elif tokenID.startswith(COMP7_LIGHT_PROGRESSION_TOKEN):
-            return self._formatComp7LightComplexToken(complexToken, token, bonus)
         else:
             if complexToken.isDisplayable:
                 formatted = self._formatComplexToken(complexToken, token, bonus)
@@ -767,15 +765,13 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 formatted = self._formatBonusToken(CREW_BONUS_X3_TOKEN, token, bonus)
             elif tokenID.startswith(RESOURCE_TOKEN_PREFIX):
                 formatted = self._formatResource(token, bonus)
+            elif tokenID.startswith(EXCHANGE_RATE_FREE_XP_NAME) or tokenID.startswith(EXCHANGE_RATE_GOLD_NAME):
+                formatted = self._formatExchangeRateToken(token, bonus)
             return formatted
 
     def _formatBRComplexToken(self, complexToken, token, bonus):
         formatted = self._formatComplexToken(complexToken, token, bonus)
         return formatted._replace(tooltip=self.__getBRProgressionTooltip())
-
-    def _formatComp7LightComplexToken(self, complexToken, token, bonus):
-        formatted = self._formatComplexToken(complexToken, token, bonus)
-        return formatted._replace(tooltip=self.__getComp7LightProgressionTooltip())
 
     def _formatBonusLabel(self, count):
         return formatCountLabel(count)
@@ -828,6 +824,19 @@ class TokenBonusFormatter(SimpleBonusFormatter):
 
             return PreformattedBonus(label=self._formatBonusLabel(token.count), userName=self._getLootboxUserName(lootBox), labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=self._getLootboxUserName(lootBox), body=''), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
+    def _formatExchangeRateToken(self, token, bonus):
+        if token.count <= 0:
+            return None
+        else:
+            images = {}
+            resource = R.strings.tooltips.quests.bonuses.token.exchangeRate.dyn(bonus.resourceName)
+            header = backport.text(resource.header())
+            tooltip = makeTooltip(header)
+            for size in AWARDS_SIZES.ALL():
+                images[size] = RES_ICONS.getExchangeRateBonusIcon(size, bonus.resourceName)
+
+            return PreformattedBonus(bonusName=bonus.getUserName, images=images, label=self._formatBonusLabel(bonus.getCount()), userName=header, labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus))
+
     def _getLootboxUserName(self, lootBox):
         return lootBox.getUserName()
 
@@ -849,11 +858,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     @staticmethod
     def __getBRProgressionTooltip():
         tokenBase = R.strings.battle_royale_progression.quests.bonuses.progressionToken
-        return makeTooltip(backport.text(tokenBase.header()), backport.text(tokenBase.body()))
-
-    @staticmethod
-    def __getComp7LightProgressionTooltip():
-        tokenBase = R.strings.comp7_light_progression.quests.bonuses.progressionToken
         return makeTooltip(backport.text(tokenBase.header()), backport.text(tokenBase.body()))
 
 

@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/comp7/comp7_prb_helpers.py
+import logging
 import adisp
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COMP7_LIGHT_INTRO_SHOWN, GUI_START_BEHAVIOR
+from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import sf_lobby
+from gui.impl.lobby.comp7.comp7_gui_helpers import isComp7OnboardingShouldBeShown, isComp7WhatsNewShouldBeShown
 from gui.prb_control.entities.base.ctx import Comp7PrbAction, PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
+_logger = logging.getLogger(__name__)
 
 @adisp.adisp_process
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
@@ -69,9 +72,9 @@ class Comp7ViewPresenter(object):
             self.__showView()
 
     def __showView(self):
-        if self.__isComp7OnboardingShouldBeShown():
+        if isComp7OnboardingShouldBeShown():
             self.__showOnboarding()
-        elif self.__isComp7WhatsNewShouldBeShown():
+        elif isComp7WhatsNewShouldBeShown():
             self.__showWhatsNew()
 
     @classmethod
@@ -81,12 +84,6 @@ class Comp7ViewPresenter(object):
             view = container.getView()
             if hasattr(view, 'alias'):
                 return view.alias == VIEW_ALIAS.LOBBY_HANGAR
-        return False
-
-    def __isComp7OnboardingShouldBeShown(self):
-        return not AccountSettings.getSettings(COMP7_LIGHT_INTRO_SHOWN)
-
-    def __isComp7WhatsNewShouldBeShown(self):
         return False
 
     @classmethod

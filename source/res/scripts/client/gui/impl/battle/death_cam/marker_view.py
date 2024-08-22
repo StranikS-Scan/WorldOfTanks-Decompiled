@@ -9,7 +9,7 @@ from constants import IMPACT_TYPES
 import Math
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_control.controllers.kill_cam_ctrl import KillCamInfoMarkerType, ImpactMarkerData, GunMarkerData, DistanceMarkerData
-from gui.impl.gen.view_models.views.battle.death_cam.marker_view_model import MarkerViewModel, ShellType, Phase, DeathReason, ImpactMode, CaliberRule
+from gui.impl.gen.view_models.views.battle.death_cam.death_cam_hud_view_model import DeathCamHudViewModel, ShellType, Phase, DeathReason, ImpactMode, CaliberRule
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.events import DeathCamEvent
 from helpers import dependency
@@ -68,14 +68,16 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         super(DeathCamMarkerView, self).finalize()
 
     def __addListeners(self):
-        if self.__guiSessionProvider.shared.killCamCtrl:
-            self.__guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChanged
-            self.__guiSessionProvider.shared.killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
+        killCamCtrl = self.__guiSessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
 
     def __removeListeners(self):
-        if self.__guiSessionProvider.shared.killCamCtrl:
-            self.__guiSessionProvider.shared.killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChanged
-            self.__guiSessionProvider.shared.killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
+        killCamCtrl = self.__guiSessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChanged
+            killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
 
     def __onKillCamStateChanged(self, killCamState, _):
         if killCamState is DeathCamEvent.State.PREPARING:
@@ -129,7 +131,7 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         self.__markerMatrix, markerOffsetMatrix = self.__getCaliberMarkerPositions(gunMarkerData)
         if self.viewModel is not None:
             gunMatrixProvider = BigWorld.LerpPositionMatrixProvider(self.__markerMatrix, markerOffsetMatrix, self.__gunPosConfig)
-            self.__positionController.add(self.viewModel.base.proxy, gunMatrixProvider)
+            self.__positionController.add(self.viewModel.marker.proxy, gunMatrixProvider)
             self.__showMarker()
         return
 
@@ -155,7 +157,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         self.viewModel.setShellType(shellType)
         self.viewModel.setShellIcon(projectileData['shellIcon'])
         self.viewModel.setShellCaliber(projectileData['shellCaliber'])
-        self.viewModel.setShellDamageBasic(projectileData['averageDamageOfShell'])
+        averageDamageOfShell = projectileData['averageDamageOfShell']
+        self.viewModel.setShellDamageBasic(averageDamageOfShell)
         velocity = projectileData['velocity']
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         self.viewModel.setShellVelocityBasic(int(round(velocity.length / projSpeedFactor)))
@@ -184,6 +187,8 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
     def __updateImpactMarkerParameters(self, projectileData, relativeArmor, shellKind, causeOfDeath):
         impactType = self.__IMPACT_MODES[projectileData['impactType']]
         effectiveDamage = projectileData['effectiveShellDamage']
+        averageDamageOfShell = projectileData['averageDamageOfShell']
+        self.viewModel.setShellDamageBasic(averageDamageOfShell)
         self.viewModel.setShellDamageEffective(effectiveDamage)
         self.viewModel.setArmorNominal(projectileData['nominalArmor'])
         self.viewModel.setArmorRelative(relativeArmor)
@@ -197,7 +202,7 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
         if projectileData['is3CaliberRuleActive']:
             ricochetAngle = maxPenetrationAngle = 90
         else:
-            ricochetAngle = math.degrees(math.acos(projectileData['ricochetAngleCos']))
+            ricochetAngle = round(math.degrees(math.acos(projectileData['ricochetAngleCos'])))
             maxPenetrationAngle = min(projectileData['maxPenetrationAngle'], ricochetAngle)
         self.viewModel.setAngleFailure(maxPenetrationAngle)
         self.viewModel.setAngleRicochet(ricochetAngle)
@@ -215,7 +220,7 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
             randomization -= distanceLossHE
             self.viewModel.setShellDamageRandomizationFactor(randomization)
         elif impactType == ImpactMode.MODERNHE:
-            self.viewModel.setShellDamageBasic(projectileData['averageDamageOfShell'] / 2)
+            self.viewModel.setShellDamageBasic(averageDamageOfShell / 2)
             self.viewModel.setShellDamageRandomizationFactor(randomization)
         self.viewModel.setDeathReason(self.__DEATH_REASONS.get(causeOfDeath, DeathReason.HP))
 
@@ -234,7 +239,7 @@ class DeathCamMarkerView(SubModelPresenter, IGlobalListener):
 
     def __updateMarkerPosition(self):
         if self.viewModel is not None:
-            self.__positionController.add(self.viewModel.base.proxy, self.__markerMatrix)
+            self.__positionController.add(self.viewModel.marker.proxy, self.__markerMatrix)
             self.__showMarker()
         return
 

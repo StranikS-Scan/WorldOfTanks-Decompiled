@@ -1,10 +1,8 @@
 <shells.xml>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
-    <aap>	AUTOCANNON_ARMOR_PIERCING.png 0 0	</aap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
-    <aap_cr>	AUTOCANNON_ARMOR_PIERCING_CR.png 0 0	</aap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <ap_npd>	ARMOR_PIERCING_NPD.png 0 0	</ap_npd>
     <ap_cr_npd>	ARMOR_PIERCING_CR_NPD.png 0 0	</ap_cr_npd>
@@ -15,10 +13,9 @@
     <he_modern_premium>	HIGH_EXPLOSIVE_MODERN_PREMIUM.png 0 0	</he_modern_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
-    <ahe_spg>	AUTOCANNON_HIGH_EXPLOSIVE_SPG.png 0 0	</ahe_spg>
-    <ahc_spg>	AUTOCANNON_HOLLOW_CHARGE_SPG.png 0 0	</ahc_spg>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
   </icons>
   <_13.2mm_Balle_P.>
     <id>	15	</id>
@@ -2988,116 +2985,4 @@
     </damage>
     <notInShop>	True	</notInShop>
   </_155_OE_mle_1956_MapsTraining_Dummy_SPG_2>
-  <_150mm_NW_Rocket_1_FEP>
-    <id>	601	</id>
-    <userString>	#france_vehicles:_150mm_NW_Rocket_1_FEP	</userString>
-    <icon>	ahe_spg	</icon>
-    <price>	0	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	150	</caliber>
-    <explosionRadius>	15	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	fepQfgRocket	</effects>
-    <damage>
-      <armor>	500	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <deviceDamagePossibility>
-      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
-      <protectFromDirectHits>	internal tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_150mm_NW_Rocket_1_FEP>
-  <_150mm_NW_Rocket_2_FEP>
-    <id>	602	</id>
-    <userString>	#france_vehicles:_150mm_NW_Rocket_2_FEP	</userString>
-    <icon>	ahc_spg	</icon>
-    <price>	0	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	150	</caliber>
-    <explosionRadius>	4	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	fepQfgRocket	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	100	</devices>
-    </damage>
-    <deviceDamagePossibility>
-      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
-      <protectFromDirectHits>	internal tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_150mm_NW_Rocket_2_FEP>
-  <_40mm_OFL_40_D_233_EBR_FEP>
-    <id>	603	</id>
-    <userString>	#france_vehicles:_40mm_OFL_40_D_233_EBR_FEP	</userString>
-    <icon>	aap	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	40	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallArmorPiercing1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallArmorPiercing1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallArmorPiercing6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	10	</armor>
-      <devices>	5	</devices>
-    </damage>
-    <normalizationAngle>	5	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_40mm_OFL_40_D_233_EBR_FEP>
-  <_40mm_OCC_40_D_255_EBR_FEP>
-    <id>	604	</id>
-    <userString>	#france_vehicles:_40mm_OCC_40_D_255_EBR_FEP	</userString>
-    <icon>	aap_cr	</icon>
-    <price>	0	</price>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <mechanics>	NON_PIERCING_DAMAGE	</mechanics>
-    <nonPiercingDamage>
-      <damage>
-        <armor>	2.0	</armor>
-      </damage>
-    </nonPiercingDamage>
-    <caliber>	40	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	smallAPCR1	</effects>
-    <dynamicEffects>
-      <effect>
-        <name>	smallAPCR1	</name>
-        <maxShotsCount>	3	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR3	</name>
-        <minShotsCount>	3	</minShotsCount>
-        <maxShotsCount>	6	</maxShotsCount>
-      </effect>
-      <effect>
-        <name>	smallAPCR6	</name>
-        <minShotsCount>	6	</minShotsCount>
-      </effect>
-    </dynamicEffects>
-    <damage>
-      <armor>	5	</armor>
-      <devices>	2	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	90	</ricochetAngle>
-    <deviceDamagePossibility>
-      <protectFromDirectHits>	internal external tankmen	</protectFromDirectHits>
-    </deviceDamagePossibility>
-  </_40mm_OCC_40_D_255_EBR_FEP>
 </shells.xml>

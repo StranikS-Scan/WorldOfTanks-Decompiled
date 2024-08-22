@@ -220,8 +220,8 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
             tankmanID, _ = self._findWidgetSlotNextIdx(NO_TANKMAN, slotIDX)
         if tankmanID == NO_TANKMAN and self.crew:
             tankmanID = next((item[1].invID for item in self.crew if item and item[1]), NO_TANKMAN)
-        self.destroyWindow()
         showPersonalCase(tankmanID, previousViewID=self._currentViewID)
+        self.destroyWindow()
 
     def _onHangar(self):
         self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.TO_GARAGE)
@@ -249,6 +249,6 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
     def onPrbEntitySwitched(self):
         self.destroyWindow()
 
-    def _onVehicleLockChanged(self, vehInvID, lockReason):
+    def _onVehicleLockChanged(self, _, lockReason):
         if lockReason[0] in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT):
             self._destroySubViews()

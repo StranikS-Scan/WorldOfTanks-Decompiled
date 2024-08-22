@@ -11,7 +11,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -122,7 +122,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.update()
 
     def __applyCustomizationNewCounter(self, vehicle):
-        if vehicle.isCustomizationEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.C11N_BTN_BUBBLE):
+        if vehicle.isCustomizationEnabled() and self.__limitedUIController.isRuleCompleted(LUI_RULES.CustomizationBtnBubble):
             availableItemTypes = getItemTypesAvailableForVehicle()
             itemsFilter = lambda item: self.__filterAvailableCustomizations(item, vehicle)
             counter = vehicle.getC11nItemsNoveltyCounter(self.__itemsCache.items, itemTypes=availableItemTypes, itemFilter=itemsFilter)

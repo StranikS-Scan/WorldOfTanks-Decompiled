@@ -210,7 +210,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
         vehicleWasInBattle = False
         accDossier = self.itemsCache.items.getAccountDossier(None)
-        if vehicle is None or vehicle.isOnlyForFunRandomBattles:
+        if vehicle is None:
             return options
         else:
             isEventVehicle = vehicle.isOnlyForEventBattles
@@ -245,7 +245,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                         canSell = False
                     if not vehicle.isPremiumIGR and not vehicle.isWotPlus:
                         items = self.itemsCache.items
-                        enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+                        enabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, proxy=items.shop)
                         label = MENU.CONTEXTMENU_RESTORE if vehicle.isRestoreAvailable() else MENU.CONTEXTMENU_BUY
                         options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': enabled}))
                     if vehicle.isTelecomRent:

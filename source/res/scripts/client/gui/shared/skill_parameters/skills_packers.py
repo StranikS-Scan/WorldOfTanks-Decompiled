@@ -15,7 +15,7 @@ def packBase(descrArgs, skillLevel, *args, **kwargs):
     lowEfficiency = kwargs.get('lowEfficiency', False)
     isTmanTrainedVeh = kwargs.get('isTmanTrainedVeh', False)
     customValues = kwargs.get('customValues')
-    isSkillAlreadyEarned = kwargs.get('isSkillAlreadyEarned')
+    isSkillAlreadyEarned = kwargs.get('isSkillAlreadyEarned') or kwargs.get('isSkillAlreadyEarned')
     hasBooster = kwargs.get('hasBooster')
     for paramName, paramDescArgs in descrArgs:
         if customValues and paramName in customValues:
@@ -34,7 +34,7 @@ def packBase(descrArgs, skillLevel, *args, **kwargs):
      'kpiArgs': kpiArgs}
 
 
-def _packCommanderExpert(descrArgs, skillLevel, *args, **kwargs):
+def _packGunnerRancorous(descrArgs, skillLevel, *args, **kwargs):
     damageMonitoringDelayBase = 4.5
     damageMonitoringDelayMinimum = 0.5
 
@@ -64,17 +64,6 @@ def _packEnemyShotPredictor(descrArgs, skillLevel, *args, **kwargs):
     return packBase(descrArgs, skillLevel, *args, **kwargs)
 
 
-def _packGunnerGunsmith(descrArgs, skillLevel, *args, **kwargs):
-    base = 0.25
-
-    def _customValue(skillDescrArg, isKpi, skillEfficiency=kwargs.get('skillEfficiency', 1.0)):
-        return skillDescrArg.value * MAX_SKILL_LEVEL if isKpi else base - abs(skillDescrArg.value * skillLevel)
-
-    kwargs.update({'customValues': {'damageAndPiercingDistributionLowerBound': _customValue,
-                      'damageAndPiercingDistributionUpperBound': _customValue}})
-    return packBase(descrArgs, skillLevel, *args, **kwargs)
-
-
 def _parkSixthSense(descrArgs, skillLevel, *args, **kwargs):
 
     def _customValue(skillDescrArg, isKpi, customValues=kwargs.get('customValues', {})):
@@ -91,7 +80,21 @@ def _parkSixthSense(descrArgs, skillLevel, *args, **kwargs):
     return packBase(descrArgs, skillLevel, *args, **kwargs)
 
 
-g_skillPackers = {SKILLS.COMMANDER_EXPERT: _packCommanderExpert,
+def _packBadRoadsKing(descrArgs, skillLevel, *args, **kwargs):
+    maxSoftGroundFactor = 1
+
+    def _customValue(skillDescrArg, isKpi):
+        if isKpi:
+            skillSoftGroundFactor = skillDescrArg.value * MAX_SKILL_LEVEL
+            return min(maxSoftGroundFactor, skillSoftGroundFactor)
+        skillSoftGroundFactor = skillDescrArg.value * skillLevel
+        return min(maxSoftGroundFactor, skillSoftGroundFactor)
+
+    kwargs.update({'customValues': {'softGroundFactor': _customValue}})
+    return packBase(descrArgs, skillLevel, *args, **kwargs)
+
+
+g_skillPackers = {SKILLS.GUNNER_RANCOROUS: _packGunnerRancorous,
  SKILLS.COMMANDER_ENEMY_SHOT_PREDICTOR: _packEnemyShotPredictor,
- SKILLS.GUNNER_GUNSMITH: _packGunnerGunsmith,
- SKILLS.COMMANDER_SIXTH_SENSE: _parkSixthSense}
+ SKILLS.COMMANDER_SIXTH_SENSE: _parkSixthSense,
+ SKILLS.DRIVER_BAD_ROADS_KING: _packBadRoadsKing}

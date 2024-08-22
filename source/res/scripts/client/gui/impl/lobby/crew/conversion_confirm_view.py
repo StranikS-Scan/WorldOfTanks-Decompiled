@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.crew.conversion_confirm_view_model imp
 from gui.impl.lobby.crew.base_crew_view import BaseCrewSubView
 from gui.impl.lobby.crew.filter.data_providers import JunkTankmenDataProvider
 from gui.impl.lobby.crew.tooltips.conversion_tooltip import ConversionTooltip
-from gui.impl.lobby.crew.utils import packJunkmanCompensationData
+from gui.impl.lobby.crew.utils import packCompensationData
 from gui.impl.pub import WindowImpl
 from gui.shared.event_dispatcher import showJunkTankmen
 from gui.shared.gui_items.items_actions import factory
@@ -29,7 +29,7 @@ class ConversionConfirmView(BaseCrewSubView):
         if contentID == R.views.lobby.crew.tooltips.ConversionTooltip():
             tooltipId = event.getArgument('tooltipId')
             books = self.__tooltipData[tooltipId] if tooltipId in self.__tooltipData else []
-            return ConversionTooltip(books, False)
+            return ConversionTooltip(books, title=R.strings.tooltips.conversion.notReceived.header(), description=R.strings.tooltips.conversion.notReceived.body())
         return super(ConversionConfirmView, self).createToolTipContent(event, contentID)
 
     @property
@@ -73,7 +73,7 @@ class ConversionConfirmView(BaseCrewSubView):
             self.__tooltipData = {}
             rewards = tx.getRewards()
             rewards.clear()
-            packJunkmanCompensationData(books, rewards, self.__tooltipData)
+            packCompensationData(books, rewards, self.__tooltipData)
             tx.setTankmanAmount(len(items))
 
 

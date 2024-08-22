@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.comp7.schedule_info_model import Sched
 class WhatsNewViewModel(ViewModel):
     __slots__ = ('onClose', 'onVideoOpen')
 
-    def __init__(self, properties=2, commands=2):
+    def __init__(self, properties=3, commands=2):
         super(WhatsNewViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -29,9 +29,16 @@ class WhatsNewViewModel(ViewModel):
     def getVehiclesType():
         return VehicleModel
 
+    def getReconFlightDelay(self):
+        return self._getReal(2)
+
+    def setReconFlightDelay(self, value):
+        self._setReal(2, value)
+
     def _initialize(self):
         super(WhatsNewViewModel, self)._initialize()
         self._addViewModelProperty('scheduleInfo', ScheduleInfoModel())
         self._addArrayProperty('vehicles', Array())
+        self._addRealProperty('reconFlightDelay', 0.0)
         self.onClose = self._addCommand('onClose')
         self.onVideoOpen = self._addCommand('onVideoOpen')

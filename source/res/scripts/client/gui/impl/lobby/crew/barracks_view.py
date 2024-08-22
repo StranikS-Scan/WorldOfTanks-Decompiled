@@ -2,13 +2,11 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/barracks_view.py
 import nations
 from PlayerEvents import g_playerEvents
-from constants import JUNK_TANKMAN_NOVELTY
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.game_control import restore_contoller
 from gui.impl import backport
-from gui.impl.auxiliary.junk_tankman_helper import JunkTankmanHelper
 from gui.impl.backport import createContextMenuData, BackportContextMenuWindow
 from gui.impl.dialogs import dialogs
 from gui.impl.gen import R
@@ -18,13 +16,13 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.crew.base_tankman_list_view import BaseTankmanListView
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanModel, setTmanSkillsModel, setRecruitTankmanModel
-from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getBethsSlotsCount
+from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getBethsSlotsCount, getPerksResetGracePeriod
 from gui.impl.lobby.crew.filter import getTankmanKindSettings, getNationSettings, getTankmanRoleSettings, getVehicleTypeSettings, getVehicleTierSettings, getVehicleGradeSettings, SEARCH_MAX_LENGTH
 from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, TankmenDataProvider, RecruitsDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
+from gui.impl.lobby.crew.widget.crew_banner_widget import CrewBannerWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.tooltips.bunks_confirm_discount_tooltip import BunksConfirmDiscountTooltip
-from gui.impl.lobby.crew.widget.conversion_banner_widget import ConversionBannerWidget
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
 from gui.shared.event_dispatcher import showPersonalCase, showHangar
@@ -55,7 +53,7 @@ class BarracksView(BaseTankmanListView):
         self.__hasFilters = location == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
         self.__filterState = FilterState({FilterState.GROUPS.TANKMANKIND.value: TankmanKind.RECRUIT.value if self.__hasFilters else TankmanKind.TANKMAN.value})
         self.__filterPanelWidget = self.__initFilterPanelWidget()
-        self.__conversionBannerWidget = ConversionBannerWidget()
+        self.__bannerWidget = CrewBannerWidget()
         self.__dataProviders = CompoundDataProvider(tankmen=TankmenDataProvider(self.__filterState), recruits=RecruitsDataProvider(self.__filterState))
         self.__uiLogger = CrewViewLogger(self, CrewViewKeys.BARRACKS)
         super(BarracksView, self).__init__(settings)
@@ -84,28 +82,24 @@ class BarracksView(BaseTankmanListView):
                     return window
         return None
 
-    def __setIsConversionBannerVisible(self, visibleFlag=-1, transaction=None):
-        canShow = JunkTankmanHelper().canShowConversionBanner if visibleFlag == -1 else visibleFlag > 0
-        self.__conversionBannerWidget.setWidgetStates()
-        if canShow:
-            JunkTankmanHelper().setAsShowed(JUNK_TANKMAN_NOVELTY.HEADER)
-        if transaction:
-            transaction.setIsConversionBannerVisible(canShow)
-        else:
-            with self.viewModel.transaction() as tx:
-                tx.setIsConversionBannerVisible(canShow)
+    def __updateWidget(self, tx):
+        timeLeft = getPerksResetGracePeriod()
+        isVisible = timeLeft > 0
+        tx.setIsBannerVisible(isVisible)
+        if isVisible:
+            self.__bannerWidget.fillModel()
 
     def _onLoading(self, *args, **kwargs):
         super(BarracksView, self)._onLoading(*args, **kwargs)
         self.__uiLogger.initialize()
         self.setChildView(FilterPanelWidget.LAYOUT_ID(), self.__filterPanelWidget)
-        self.setChildView(ConversionBannerWidget.LAYOUT_ID(), self.__conversionBannerWidget)
+        self.setChildView(CrewBannerWidget.LAYOUT_ID(), self.__bannerWidget)
         with self.viewModel.transaction() as tx:
             berths = self.itemsCache.items.stats.tankmenBerthsCount
             berthPrice, _ = self.itemsCache.items.shop.getTankmanBerthPrice(berths)
             defaultBerthPrice, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
             tx.setIsBerthsOnSale(berthPrice != defaultBerthPrice)
-            self.__setIsConversionBannerVisible(transaction=tx)
+            self.__updateWidget(tx)
         self.__dataProviders.subscribe()
         self.__dataProviders.update()
 
@@ -121,6 +115,7 @@ class BarracksView(BaseTankmanListView):
         self.__filterState = None
         self.__dataProviders = None
         self.__filterPanelWidget = None
+        self.__bannerWidget = None
         return
 
     def _onVehicleLockChanged(self, _, __):
@@ -141,8 +136,7 @@ class BarracksView(BaseTankmanListView):
          (self.__dataProviders.onDataChanged, self.__fillCardList),
          (self.itemsCache.onSyncCompleted, self.__onBerthsPricesChanged),
          (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged),
-         (self.eventsCache.onProgressUpdated, self.__onNewRecruits),
-         (JunkTankmanHelper().setIsConversionBannerVisible, self.__setIsConversionBannerVisible))
+         (self.eventsCache.onProgressUpdated, self.__onNewRecruits))
 
     @property
     def _tankmenProvider(self):
@@ -169,7 +163,7 @@ class BarracksView(BaseTankmanListView):
     def _fillTankmanCard(self, cardsList, tankman):
         tm = TankmanModel()
         setTankmanModel(tm, tankman, tmanNativeVeh=self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr), tmanVeh=self.itemsCache.items.getVehicle(tankman.vehicleInvID))
-        setTmanSkillsModel(tm.getSkills(), tankman)
+        setTmanSkillsModel(tm.skills, tankman, fillBonusSkills=False)
         tm.setNation(nations.NAMES[tankman.nationID])
         tm.setHasVoiceover(False)
         if tankman.isDismissed:
@@ -181,7 +175,7 @@ class BarracksView(BaseTankmanListView):
         tm = TankmanModel()
         if len(recruitInfo.getNations()) == 1:
             tm.setNation(recruitInfo.getNations()[0])
-        setRecruitTankmanModel(tm, recruitInfo)
+        setRecruitTankmanModel(tm, recruitInfo, useOnlyFullSkills=False)
         cardsList.addViewModel(tm)
 
     def __onInventoryUpdate(self, invDiff):
@@ -255,7 +249,7 @@ class BarracksView(BaseTankmanListView):
 
     def __fillCardList(self):
         with self.viewModel.transaction() as tx:
-            self.__setIsConversionBannerVisible(transaction=tx)
+            self.__updateWidget(tx)
             tx.setHasFilters(self.__filterPanelWidget.hasAppliedFilters())
             self.__filterPanelWidget.updateAmountInfo(self.__dataProviders.itemsCount, self.__dataProviders.initialItemsCount)
             tx.setItemsAmount(self.__dataProviders.itemsCount)

@@ -25,8 +25,6 @@ from gui.server_events import conditions, formatters, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isDailyQuest, getDataByC11nQuest
 from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
-from gui.wot_anniversary.utils import getQuestNumber
-from gui.wot_anniversary.wot_anniversary_constants import WOT_ANNIVERSARY_ALL_MASCOT_BATTLE_QUESTS_PREFIX, WOT_ANNIVERSARY_PREFIX
 from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from nations import ALLIANCE_TO_NATIONS
@@ -498,55 +496,11 @@ class _BattleMattersQuestInfo(QuestPostBattleInfo):
         return progresses
 
 
-class WotAnniversaryQuestInfo(QuestPostBattleInfo):
-
-    def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
-        result = super(WotAnniversaryQuestInfo, self).getInfo(svrEvents, pCur, pPrev, noProgressInfo)
-        result['linkTooltip'] = backport.text(R.strings.wot_anniversary.battleResults.linkBtn.tooltip())
-        return result
-
-    def _getBonuses(self, svrEvents, pCur=None, bonuses=None):
-        return [] if self.event.getID().startswith(WOT_ANNIVERSARY_ALL_MASCOT_BATTLE_QUESTS_PREFIX) else super(WotAnniversaryQuestInfo, self)._getBonuses(svrEvents, pCur, bonuses)
-
-    def _getBonusCount(self, pCur=None):
-        questID = self.event.getID()
-        if questID.startswith(WOT_ANNIVERSARY_ALL_MASCOT_BATTLE_QUESTS_PREFIX):
-            questNumber = getQuestNumber(questID)
-            if questNumber > 1 and not self.event.isCompleted(progress=pCur):
-                return questNumber - 1
-        return self.NO_BONUS_COUNT
-
-    def _getProgresses(self, pCur, pPrev):
-        index = 0
-        progresses = []
-        for cond in self.event.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
-                for _, (curProg, totalProg, diff, _) in cond.getProgressPerGroup(pCur, pPrev).iteritems():
-                    if not isinstance(cond, conditions.CumulativeSum):
-                        label = cond.getUserString()
-                    else:
-                        label = cond.getCustomDescription()
-                    if not diff or not label:
-                        continue
-                    index += 1
-                    progresses.append({'progrTooltip': None,
-                     'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
-                     'maxProgrVal': totalProg,
-                     'currentProgrVal': curProg,
-                     'description': '%d. %s' % (index, label),
-                     'progressDiff': '+ %s' % backport.getIntegralFormat(diff),
-                     'progressDiffTooltip': TOOLTIPS.QUESTS_PROGRESS_EARNEDINBATTLE})
-
-        return progresses
-
-
 def _getEventInfoData(event):
     if str(event.getID()).startswith(BATTLE_MATTERS_QUEST_ID):
         return _BattleMattersQuestInfo(event)
     if str(event.getID()).startswith(BATTLE_PASS_RANDOM_QUEST_ID_PREFIX):
         return _BattlePassRandomQuestPostBattleInfo(event)
-    if str(event.getID()).startswith(WOT_ANNIVERSARY_PREFIX):
-        return WotAnniversaryQuestInfo(event)
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return PersonalMissionPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:

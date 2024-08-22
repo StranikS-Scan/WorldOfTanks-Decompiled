@@ -5,7 +5,7 @@ from fun_random.gui.game_control import registerFunRandomAwardControllers
 from fun_random.gui.prb_control import registerFunRandomOthersPrbParams
 from fun_random.gui.Scaleform import registerFunRandomScaleform
 from fun_random.gui.server_events import registerFunRandomQuests
-from fun_random.gui.fun_gui_constants import PREBATTLE_ACTION_NAME
+from fun_random.gui.fun_gui_constants import initFunRandomLimitedUIIds, PREBATTLE_ACTION_NAME
 from fun_random.gui import fun_gui_constants
 from fun_random_common import injectConsts, injectSquadConsts
 from fun_random_common.fun_battle_mode import FunRandomBattleMode
@@ -73,8 +73,8 @@ class ClientFunRandomBattleMode(FunRandomBattleMode):
 
     @property
     def _client_bannerEntryPointLUIRule(self):
-        from gui.limited_ui.lui_rules_storage import LuiRules
-        return LuiRules.FUN_RANDOM_ENTRY_POINT
+        from gui.limited_ui.lui_rules_storage import LUI_RULES
+        return LUI_RULES.FunRandomEntryPoint
 
     @property
     def _client_prbSquadEntityClass(self):
@@ -140,11 +140,6 @@ class ClientFunRandomBattleMode(FunRandomBattleMode):
         return [FunRandomLootboxAutoOpenFormatter()]
 
     @property
-    def _client_ammunitionPanelViews(self):
-        from fun_random.gui.impl.lobby.tank_setup.qfg_ammunition_panel import FunRandomQuickFireGunsAmmunitionPanelView
-        return (FunRandomQuickFireGunsAmmunitionPanelView,)
-
-    @property
     def _client_vehicleViewStates(self):
         from fun_random.gui.vehicle_view_states import FunRandomVehicleViewState
         return (FunRandomVehicleViewState,)
@@ -165,6 +160,7 @@ def preInit():
     injectSquadConsts(__name__)
     initGuiTypes(fun_gui_constants, __name__)
     initRequestType(fun_gui_constants, __name__)
+    initFunRandomLimitedUIIds()
     battleMode = ClientFunRandomBattleMode(__name__)
     battleMode.registerCommon()
     battleMode.registerClient()
@@ -184,7 +180,6 @@ def preInit():
     battleMode.registerMessengerClientFormatters(fun_gui_constants)
     battleMode.registerClientTokenQuestsSubFormatters()
     battleMode.registerClientLootBoxAutoOpenSubFormatters()
-    battleMode.registerAmmunitionPanelViews()
     battleMode.registerVehicleViewStates()
     registerFunRandomOthersPrbParams()
     registerFunRandomAwardControllers()

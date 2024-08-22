@@ -371,6 +371,7 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_REGULAR,
      TOURNAMENT_EVENT,
      TOURNAMENT_COMP7)
+    REPLAY_DISABLE_RANGE = []
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -915,6 +916,7 @@ BASE_PREM_FACTOR = 1.0
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
 DOG_TAGS_CONFIG = 'dog_tags_config'
 RENEWABLE_SUBSCRIPTION_CONFIG = 'renewable_subscription_config'
+OPTIONAL_DEVICES_USAGE_CONFIG = 'optional_devices_usage_config'
 PLAYER_SUBSCRIPTIONS_CONFIG = 'player_subscriptions_config'
 IS_LOOT_BOXES_ENABLED = 'isLootBoxesEnabled'
 SENIORITY_AWARDS_CONFIG = 'seniority_awards_config'
@@ -1149,6 +1151,7 @@ class EQUIPMENT_STAGES:
     ACTIVE = 5
     COOLDOWN = 6
     SHARED_COOLDOWN = 7
+    STARTUP_COOLDOWN = 8
     WAIT_FOR_CHOICE = 9
     EXHAUSTED = 255
     ALL = (NOT_RUNNING,
@@ -1159,6 +1162,7 @@ class EQUIPMENT_STAGES:
      ACTIVE,
      COOLDOWN,
      SHARED_COOLDOWN,
+     STARTUP_COOLDOWN,
      EXHAUSTED)
 
     @classmethod
@@ -1170,6 +1174,7 @@ class EQUIPMENT_STAGES:
          cls.PREPARING: 'preparing',
          cls.ACTIVE: 'active',
          cls.COOLDOWN: 'cooldown',
+         cls.STARTUP_COOLDOWN: 'startupCooldown',
          cls.EXHAUSTED: 'exhausted'}.get(value)
 
 
@@ -1503,11 +1508,14 @@ END_OF_GAME_DAY = {'endOfGameDay': True}
 LOOTBOX_TOKEN_PREFIX = 'lootBox:'
 TWITCH_TOKEN_PREFIX = 'token:twitch'
 CUSTOMIZATION_PROGRESS_PREFIX = 'cust_progress_'
+STYLE_3D_PROGRESS_PREFIX = 'style_3D_progress'
+MODERNIZED_DEVICES_TOKEN_PREFIX = 'modernized_devices_'
 EMAIL_CONFIRMATION_QUEST_ID = 'email_confirmation'
 EMAIL_CONFIRMATION_TOKEN_NAME = 'acc_completion:email_confirm'
 DEMO_ACCOUNT_ATTR = 'isDemoAccount'
 HAS_PM1_COMPLETED_TOKEN = 'has_completed_pm1'
 HAS_PM2_COMPLETED_TOKEN = 'has_completed_pm2'
+HAS_PM_BRANCH_COMPLETED_TOKEN = 'has_completed_pm_branch'
 LINKED_SET_UNFINISHED_TOKEN = 'linkedset_unfinished'
 FREE_PREMIUM_CREW_LOG_EXT_PREFIX = 'free_premium_crew:level:'
 
@@ -1892,6 +1900,10 @@ class REQUEST_COOLDOWN:
     CMD_EQUIP_TMAN = 0.5
     CMD_TMAN_RESTORE = 1.0
     CMD_REMOVE_ONBOARDING = 10
+    CMD_EXCHANGE = 1.0
+    CMD_FREE_XP_CONV = 1.0
+    RESET_ALL_TANKMEN_SKILLS = 60.0
+    FILL_ALL_TANKMEN_SKILLS = 60.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2119,7 +2131,6 @@ class USER_SERVER_SETTINGS:
     SENIORITY_AWARDS = 113
     REFERRAL_PROGRAM = 114
     ADVANCED_ACHIEVEMENTS_STORAGE = 115
-    WOT_ANNIVERSARY = 117
     _ALL = (GAME,
      HIDE_MARKS_ON_GUN,
      EULA_VERSION,
@@ -2133,8 +2144,7 @@ class USER_SERVER_SETTINGS:
      UI_STORAGE_2,
      BATTLE_EVENTS,
      SENIORITY_AWARDS,
-     ADVANCED_ACHIEVEMENTS_STORAGE,
-     WOT_ANNIVERSARY)
+     ADVANCED_ACHIEVEMENTS_STORAGE)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -2255,8 +2265,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings',
  USER_SERVER_SETTINGS.REFERRAL_PROGRAM: 'referral program settings',
  USER_SERVER_SETTINGS.ADVANCED_ACHIEVEMENTS_STORAGE: 'advanced achievements storage',
- 116: 'Once only hints',
- USER_SERVER_SETTINGS.WOT_ANNIVERSARY: 'anniversary settings'}
+ 116: 'Once only hints'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -2654,8 +2663,9 @@ class VISIBILITY:
     MIN_RADIUS = 50.0
 
 
-VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing'])
-VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing'}
+VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing', 'gun/shots/speed'])
+VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing',
+ 'gun/shots/speed': 'gunShotsSpeed'}
 
 class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
@@ -2809,6 +2819,7 @@ class TARGET_LOST_FLAGS:
 
 GIFT_TANKMAN_TOKEN_NAME = 'WOTD-95479_gift_tankman'
 JUNK_CREW_CONVERSION_TOKEN = 'junk_crew_conversion_token'
+GRACE_PERIOD_RESET_PERK = 'grace_period_reset_perk'
 ENABLE_FREE_PREMIUM_CREW = False
 GAMEPLAY_NAMES_WITH_DISABLED_QUESTS = ('bootcamp',)
 
@@ -3304,8 +3315,13 @@ class AbilitySystemScopeNames(object):
     CREW = 'crew'
 
 
-PerkData = namedtuple('PerkData', 'level, args')
-CrewContextArgs = namedtuple('CrewContextArgs', 'skillData')
+class PerkData(namedtuple('PerkData', ['level', 'args'])):
+    pass
+
+
+class CrewContextArgs(namedtuple('CrewContextArgs', ['skillData'])):
+    pass
+
 
 class SkillProcessorArgs(object):
     __slots__ = ('level', 'levelIncrease', 'skillsEfficiency', 'isActive', 'isFire', 'skillConfig', 'hasActiveTankmanForBooster', 'tankmenSkillConfig')
@@ -3328,11 +3344,12 @@ class SkillProcessorArgs(object):
 
 
 class GroupSkillProcessorArgs(object):
-    __slots__ = ('factor', 'baseAvgLevel')
+    __slots__ = ('factor', 'baseAvgLevel', 'skillEfficiency')
 
-    def __init__(self, factor, baseAvgLevel):
+    def __init__(self, factor, baseAvgLevel, skillEfficiency=1.0):
         self.factor = factor
         self.baseAvgLevel = baseAvgLevel
+        self.skillEfficiency = skillEfficiency
 
 
 class ReloadRestriction(object):
@@ -3573,6 +3590,7 @@ class WoTPlusBonusType(object):
     BATTLE_BONUSES = 'battle_bonuses'
     BADGES = 'badges'
     ADDITIONAL_BONUSES = 'additional_bonuses'
+    OPTIONAL_DEVICES_ASSISTANT = 'optional_devices_assistant'
 
 
 class WoTPlusDailyAttendance(object):
@@ -3694,3 +3712,16 @@ class SCENARIO_RESULT:
 
 
 PLATOON_RESTRICTED_VEHICLE_TAGS = ('role_LT_wheeled', 'scout', 'mediumTank', 'heavyTank', 'AT-SPG', 'SPG')
+
+class NEW_PERK_SYSTEM:
+    MAX_MAJOR_PERKS = 6
+    MAX_BONUS_SKILLS_PER_ROLE = 3
+    BONUS_SKILL_ENABLING_FREQUENCY = float(MAX_MAJOR_PERKS) / MAX_BONUS_SKILLS_PER_ROLE
+
+
+class DIRECT_DETECTION_TYPE:
+    RAYTRACE = 0
+    RECON = 1
+    FORCED = 2
+    STEALTH_RADAR = 3
+    SPECIAL_RECON = 4

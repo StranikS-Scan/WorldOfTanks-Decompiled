@@ -8,9 +8,11 @@ from shared_utils import CONST_CONTAINER
 from helpers import dependency
 from items.components.perks_constants import PerkState
 from skeletons.gui.battle_session import IBattleSessionProvider
+from ReplayEvents import g_replayEvents
 
 class PerksSounds(CONST_CONTAINER):
     PERK = 'detachment_perk'
+    PERK_STOP = 'detachment_perk_stop'
 
 
 class PerksPanel(PerksPanelMeta):
@@ -39,9 +41,22 @@ class PerksPanel(PerksPanelMeta):
             if state == PerkState.ACTIVE:
                 if perkID not in prevPerks or prevPerks[perkID]['state'] != PerkState.ACTIVE:
                     WWISE.WW_eventGlobal(PerksSounds.PERK)
+            if perkID in prevPerks and prevPerks[perkID]['state'] == PerkState.ACTIVE:
+                WWISE.WW_eventGlobal(PerksSounds.PERK_STOP)
 
     def clearHUD(self):
         self.as_clearPanelS()
+
+    def _populate(self):
+        super(PerksPanel, self)._populate()
+        g_replayEvents.onPause += self._onReplayPaused
+
+    def _dispose(self):
+        g_replayEvents.onPause -= self._onReplayPaused
+        super(PerksPanel, self)._dispose()
+
+    def _onReplayPaused(self, isPaused):
+        self.as_replayPauseS(isPaused)
 
     def _getLifeTime(self, perkData):
         lifeTimeServer = perkData['lifeTime']

@@ -42,6 +42,8 @@
     <MTU_870_P>	40	</MTU_870_P>
     <ID36S_6V_CA_LE>	41	</ID36S_6V_CA_LE>
     <SPA_Tipo_343>	42	</SPA_Tipo_343>
+    <AVDS_1790_2D>	43	</AVDS_1790_2D>
+    <AVDS_1790M>	44	</AVDS_1790M>
     <MTU_MB_837_Ba_500A_7x7>	501	</MTU_MB_837_Ba_500A_7x7>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
@@ -629,6 +631,40 @@
       <rpm_min>	349	</rpm_min>
       <rpm_max>	2152	</rpm_max>
     </AVDS_1790>
+    <AVDS_1790_2D>
+      <userString>	#italy_vehicles:AVDS_1790_2D	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85200	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	2132	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	304	</rpm_min>
+      <rpm_max>	2288	</rpm_max>
+    </AVDS_1790_2D>
+    <AVDS_1790M>
+      <userString>	#italy_vehicles:AVDS_1790M	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	85200	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	2050	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </AVDS_1790M>
     <MB_838>
       <userString>	#italy_vehicles:MB_838	</userString>
       <tags>	diesel	</tags>

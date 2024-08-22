@@ -34,6 +34,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.promo import IPromoLogger
 from skeletons.gui.web import IWebController
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.promo import PromoWebApi
 from web.web_client_api.battle_pass import BattlePassWebApi
@@ -375,7 +376,7 @@ def _showBrowserView(url, returnClb, soundSpaceID=None, guiLoader=None):
     if guiLoader.windowsManager.findViews(_predicate):
         _logger.debug('BrowserView with url %s is already opened', url)
         return
-    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
+    webHandlers = webApiCollection(PromoWebApi, VehiclesWebApi, RequestWebApi, RankedBattlesWebApi, BattlePassWebApi, ui_web_api.OpenWindowWebApi, ui_web_api.CloseWindowWebApi, ui_web_api.OpenTabWebApi, ui_web_api.NotificationWebApi, ui_web_api.ContextMenuWebApi, ui_web_api.UtilWebApi, sound_web_api.SoundWebApi, sound_web_api.HangarSoundWebApi, ShopWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, PersonalExchangeRatesDiscountsWebApi)
 
     def _returnCallback(*args, **kwargs):
         if kwargs.pop('forceClosed', False):

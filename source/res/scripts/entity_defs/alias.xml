@@ -791,6 +791,9 @@
       <gunPiercing>
         <Type>	FLOAT	</Type>
       </gunPiercing>
+      <gunShotsSpeed>
+        <Type>	FLOAT	</Type>
+      </gunShotsSpeed>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <IS_OBSERVED_BY_ENEMY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1225,6 +1228,12 @@
         <Type>	ARRAY	  <of>	UINT8	</of>
         </Type>
       </vehDisabledSetupSwitches>
+      <prestigeLevel>
+        <Type>	INT32	</Type>
+      </prestigeLevel>
+      <prestigeGradeMarkID>
+        <Type>	INT32	</Type>
+      </prestigeGradeMarkID>
     </Properties>
   </RESPAWN_INFO_VEHICLE>
   <BUFF_EFFECT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1697,9 +1706,12 @@
       <shotID>
         <Type>	SHOT_ID	</Type>
       </shotID>
-      <origin>
-        <Type>	VECTOR3	</Type>
-      </origin>
+      <trajectoryData>
+        <Type>	ARRAY	  <of>	ARRAY	  <of>	VECTOR3	</of>
+            <size>	2	</size>
+          </of>
+        </Type>
+      </trajectoryData>
       <gravity>
         <Type>	FLOAT	</Type>
       </gravity>
@@ -1733,9 +1745,6 @@
       <ricochetCount>
         <Type>	UINT16	</Type>
       </ricochetCount>
-      <ricochetPoint>
-        <Type>	VECTOR3	</Type>
-      </ricochetPoint>
       <ricochetAngleCos>
         <Type>	FLOAT	</Type>
       </ricochetAngleCos>
@@ -1785,6 +1794,12 @@
       <distanceLossHE>
         <Type>	FLOAT	</Type>
       </distanceLossHE>
+      <averageDamageOfShell>
+        <Type>	FLOAT	</Type>
+      </averageDamageOfShell>
+      <hasDistanceFalloff>
+        <Type>	BOOL	</Type>
+      </hasDistanceFalloff>
     </Properties>
   </KILL_CAM_PROJECTILE_UNSPOTTED>
   <KILL_CAM_PROJECTILE_SPOTTED>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1822,6 +1837,18 @@
       </statusCode>
     </Properties>
   </KILL_CAM_DATA>
+  <TRACK_STATE>	FIXED_DICT	  <Properties>
+      <isBroken>
+        <Type>	BOOL	</Type>
+      </isBroken>
+      <hitPoint>
+        <Type>	VECTOR3	</Type>
+      </hitPoint>
+      <isDebris>
+        <Type>	BOOL	</Type>
+      </isDebris>
+    </Properties>
+  </TRACK_STATE>
   <VEHICLE_HIT_DIRECTION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <hitDirYaw>
@@ -2166,19 +2193,6 @@
       </maxShotDispersion>
     </Properties>
   </AUTO_SHOOT_GUN_STATE_STATUS>
-  <SPIN_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <state>
-        <Type>	UINT8	</Type>
-      </state>
-      <stateActivationTime>
-        <Type>	FLOAT32	</Type>
-      </stateActivationTime>
-      <spinFactor>
-        <Type>	FLOAT32	</Type>
-      </spinFactor>
-    </Properties>
-  </SPIN_GUN_STATE_STATUS>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>

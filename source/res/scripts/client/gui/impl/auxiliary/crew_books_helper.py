@@ -80,6 +80,12 @@ class _CrewBooksViewedCache(object):
 
         return False
 
+    def xppToConvert(self):
+        return self._lobbyContext.getServerSettings().xppToConvert()
+
+    def rewardBookId(self):
+        return self._lobbyContext.getServerSettings().rewardBookId()
+
     @property
     def newCrewBooksAmount(self):
         result = 0

@@ -7,19 +7,19 @@ from typing import Optional
 import nations
 from Event import Event
 from constants import MAX_VEHICLE_LEVEL
-from gui import GUI_NATIONS_ORDER_INDICES, GUI_NATIONS_ORDER_INDEX
+from gui import GUI_NATIONS_ORDER_INDEX, GUI_NATIONS_ORDER_INDICES
 from gui.impl.gen.view_models.views.lobby.crew.common.filter_toggle_group_model import ToggleGroupType
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanLocation
 from gui.impl.lobby.crew.crew_helpers.sort_helpers import SortHeap
-from gui.impl.lobby.crew.filter import VEHICLE_LOCATION_IN_HANGAR, GRADE_PREMIUM, GRADE_ELITE, GRADE_PRIMARY
+from gui.impl.lobby.crew.filter import GRADE_ELITE, GRADE_PREMIUM, GRADE_PRIMARY, VEHICLE_LOCATION_IN_HANGAR
 from gui.impl.lobby.crew.utils import getDocGroupValues, getRentCriteria
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman, getFullUserName
-from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES, VEHICLE_TAGS, checkForTags
+from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_TYPES_ORDER_INDICES, checkForTags
 from gui.shared.utils.requesters import REQ_CRITERIA, RequestCriteria
 from helpers import dependency
-from items import tankmen, crew_junk_convert_helper
+from items import crew_junk_convert_helper, tankmen
 from skeletons.gui.shared import IItemsCache
 
 class _TankmenSortCriteriaMixin(object):
@@ -29,12 +29,68 @@ class _TankmenSortCriteriaMixin(object):
         def key(item):
             tdescr = item.descriptor
             return (GUI_NATIONS_ORDER_INDICES[item.nationID],
-             -tdescr.getTotalSkillProgress(withFree=True),
+             -tdescr.getTotalSkillsProgressPercent(withFree=True),
              Tankman.TANKMEN_ROLES_ORDER[tdescr.role],
              getFullUserName(item.nationID, tdescr.firstNameID, tdescr.lastNameID))
 
         criteria = REQ_CRITERIA.CUSTOM(key)
         return criteria
+
+
+class _BonusSkillsMixin(object):
+
+    def __init__(self, bonusRoles=None, *args, **kwargs):
+        self.__bonusRoles = bonusRoles or []
+        super(_BonusSkillsMixin, self).__init__(*args, **kwargs)
+
+    def _getWrapper(self):
+        raise NotImplementedError
+
+    def items(self):
+        wrapper = self._getWrapper()
+        return [ wrapper(item, self.__bonusRoles) for item in super(_BonusSkillsMixin, self).items() ]
+
+    def reinit(self, tankman=None, role=None, bonusRoles=None):
+        self.__bonusRoles = bonusRoles or []
+        super(_BonusSkillsMixin, self).reinit()
+
+
+class _ItemCallProxy(object):
+
+    def __init__(self, item):
+        self._item = item
+
+    def __getattr__(self, name):
+        attr = getattr(self._item, name)
+        return self._proxy(attr) if callable(attr) else attr
+
+    def _proxy(self, method):
+
+        def wrapper(*args, **kwargs):
+            return method(*args, **kwargs)
+
+        return wrapper
+
+
+class _TankmanBonusSkillsWrapper(_ItemCallProxy):
+
+    def __init__(self, tankman, bonusRoles=None):
+        super(_TankmanBonusSkillsWrapper, self).__init__(tankman)
+        self.__bonusSkills = tankman.buildBonusSkills(self._item, bonusRoles=bonusRoles)
+
+    @property
+    def bonusSkills(self):
+        return self.__bonusSkills
+
+
+class _RecruitBonusSkillsWrapper(_ItemCallProxy):
+
+    def __init__(self, recruit, bonusRoles=None):
+        super(_RecruitBonusSkillsWrapper, self).__init__(recruit)
+        self.__wrappedTankman = _TankmanBonusSkillsWrapper(self._item.getFakeTankman(), bonusRoles=bonusRoles)
+
+    def getFakeTankman(self):
+        return self.__wrappedTankman
 
 
 class FilterableItemsDataProvider(object):
@@ -263,7 +319,7 @@ class JunkTankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProv
         super(JunkTankmenDataProvider, self).__init__({})
 
     def _itemsGetter(self, criteria, initial=False):
-        items = self.itemsCache.items.getInventoryTankmen().values()
+        items = self.itemsCache.items.getInventoryTankmenRO().values()
         return filter(criteria, items)
 
     def _getFiltersList(self):
@@ -284,14 +340,6 @@ class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider
         self.__inventoryTankmen = None
         self.__dismissedTankmen = None
         return
-
-    def dissmissed(self):
-        items = self._getDismissedTankmen()
-        return self.__applyFilters(items)
-
-    def regular(self):
-        items = self._getInventoryTankmen()
-        return self.__applyFilters(items)
 
     def tankmenInBarracksCount(self):
         return sum((1 for tankman in self._getInventoryTankmen() if not tankman.isInTank))
@@ -384,7 +432,7 @@ class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider
 
     def _getInventoryTankmen(self):
         if self.__inventoryTankmen is None:
-            self.__inventoryTankmen = self.itemsCache.items.getInventoryTankmen().values()
+            self.__inventoryTankmen = self.itemsCache.items.getInventoryTankmenRO().values()
         return self.__inventoryTankmen
 
     def _getDismissedTankmen(self):
@@ -451,18 +499,14 @@ class RecruitsDataProvider(FilterableItemsDataProvider):
         return filter(criteria, items)
 
 
-class TankmenChangeDataProvider(TankmenDataProvider):
+class TankmenChangeDataProvider(_BonusSkillsMixin, TankmenDataProvider):
     __slots__ = ('__tankman', '__vehicle', '__rolesOrder', '__role')
 
-    def __init__(self, state, tankman=None, vehicle=None, role=None):
+    def __init__(self, state, tankman=None, vehicle=None, role=None, bonusRoles=None):
         self.__tankman = tankman
         self.__vehicle = vehicle
         self.role = role
-        super(TankmenChangeDataProvider, self).__init__(state)
-
-    def items(self):
-        items = super(TankmenChangeDataProvider, self).items()
-        return [self.__tankman] + items if items and self.__tankman else items
+        super(TankmenChangeDataProvider, self).__init__(state=state, bonusRoles=bonusRoles)
 
     @property
     def role(self):
@@ -481,10 +525,13 @@ class TankmenChangeDataProvider(TankmenDataProvider):
     def vehicle(self):
         return self.__vehicle
 
-    def reinit(self, tankman=None, role=None):
+    def reinit(self, tankman=None, role=None, bonusRoles=None):
         self.__tankman = tankman
         self.role = role
-        super(TankmenChangeDataProvider, self).reinit()
+        super(TankmenChangeDataProvider, self).reinit(bonusRoles=bonusRoles)
+
+    def _getWrapper(self):
+        return _TankmanBonusSkillsWrapper
 
     def _getFiltersList(self):
         return [self._getFilterByTankmanRoleCriteria(),
@@ -517,7 +564,7 @@ class TankmenChangeDataProvider(TankmenDataProvider):
     def _getSortKeyCriteria(self):
         criteria = REQ_CRITERIA.CUSTOM(lambda item: self.__rolesOrder[item.role])
         criteria |= REQ_CRITERIA.CUSTOM(lambda item: -int(item.vehicleNativeDescr.type.compactDescr == self.__vehicle.intCD))
-        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.getTotalSkillProgress(withFree=True))
+        criteria |= REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.getTotalSkillsProgressPercent(withFree=True))
         criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.fullUserName)
         return criteria
 
@@ -548,14 +595,14 @@ class TankmenChangeDataProvider(TankmenDataProvider):
         self.__rolesOrder = OrderedDict([ (role, idx) for idx, role in enumerate(roles) ])
 
 
-class RecruitsChangeDataProvider(RecruitsDataProvider):
+class RecruitsChangeDataProvider(_BonusSkillsMixin, RecruitsDataProvider):
     __slots__ = ('__tankman', '__vehicle', '__role')
 
-    def __init__(self, state, tankman=None, vehicle=None, role=None):
+    def __init__(self, state, tankman=None, vehicle=None, role=None, bonusRoles=None):
         self.__tankman = tankman
         self.__vehicle = vehicle
         self.__role = role
-        super(RecruitsChangeDataProvider, self).__init__(state)
+        super(RecruitsChangeDataProvider, self).__init__(state=state, bonusRoles=bonusRoles)
 
     @property
     def tankman(self):
@@ -569,10 +616,13 @@ class RecruitsChangeDataProvider(RecruitsDataProvider):
     def role(self):
         return self.__role
 
-    def reinit(self, tankman=None, role=None):
+    def reinit(self, tankman=None, role=None, bonusRoles=None):
         self.__tankman = tankman
         self.__role = role
-        super(RecruitsChangeDataProvider, self).reinit()
+        super(RecruitsChangeDataProvider, self).reinit(bonusRoles=bonusRoles)
+
+    def _getWrapper(self):
+        return _RecruitBonusSkillsWrapper
 
     def _getInitialFilterCriteria(self):
         criteria = super(RecruitsChangeDataProvider, self)._getInitialFilterCriteria()

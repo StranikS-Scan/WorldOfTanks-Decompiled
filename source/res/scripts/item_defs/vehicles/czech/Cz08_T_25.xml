@@ -31,6 +31,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.232	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -4385,7 +4388,11 @@
         </engine>
       </unlocks>
     </Skoda_V12_19_8_liter_450>
-    <Skoda_V12_19_8_liter_500>	shared	</Skoda_V12_19_8_liter_500>
+    <Skoda_V12_19_8_liter_500>	shared	  <unlocks>
+        <vehicle>	Cz23_Skoda_T_17	  <cost>	50750	</cost>
+        </vehicle>
+      </unlocks>
+    </Skoda_V12_19_8_liter_500>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>

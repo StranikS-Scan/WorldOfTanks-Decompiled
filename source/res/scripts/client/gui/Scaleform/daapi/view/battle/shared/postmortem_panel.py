@@ -201,7 +201,7 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):
-    __slots__ = ('__playerInfo', '_isPlayerVehicle', '_maxHealth', '__healthPercent', '_isInPostmortem', '_deathAlreadySet', '__isColorBlind')
+    __slots__ = ('__playerInfo', '_isPlayerVehicle', '_maxHealth', '__healthPercent', '_isInPostmortem', '_deathAlreadySet', '__isColorBlind', '__wasPostmortemInfoHidden')
 
     def __init__(self):
         super(PostmortemPanel, self).__init__()
@@ -216,6 +216,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         arena = avatar_getter.getArena()
         self.__arenaInfo = arena.arenaInfo if arena is not None else None
         self.__isPostmortemEnabled = avatar_getter.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM)
+        self.__wasPostmortemInfoHidden = False
         return
 
     def changeCtrlMode(self, ctrlMode):
@@ -466,7 +467,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         dogTagModel = layoutComposer.getModel(self._buildDogTag(dogTagInfo['dogTag']))
         _logger.info('PostmortemPanel.__onKillerDogTagSet: dogTagInfo %s, dogTagModel %s', str(dogTagInfo), str(dogTagModel))
         killCamCtrl = self.sessionProvider.shared.killCamCtrl
-        fadeOut = killCamCtrl and (killCamCtrl.killCtrlState is None or not self.__isSimpleDeathCam())
+        fadeOut = not killCamCtrl or killCamCtrl.killCtrlState is None or not self.__isSimpleDeathCam()
+        self.__wasPostmortemInfoHidden = fadeOut
         self.as_showKillerDogTagS(dogTagModel, fadeOut)
         return
 
@@ -488,7 +490,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         elif killCamState is DeathCamEvent.State.ACTIVE:
             self.as_movePostmortemPanelUpS()
         elif killCamState is DeathCamEvent.State.ENDING:
-            self.as_fadePostmortemPanelOutS()
+            if not self.__wasPostmortemInfoHidden:
+                self.as_fadePostmortemPanelOutS()
         elif killCamState is DeathCamEvent.State.FINISHED:
             self.as_setInDeathCamS(False)
             respawnCtrl = self.sessionProvider.dynamic.respawn
@@ -499,6 +502,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onMarkerDisplayChanged(self, markerState, ctx):
         if markerState == KillCamInfoMarkerType.DISTANCE:
+            self.__wasPostmortemInfoHidden = True
             self.as_fadePostmortemPanelOutS()
 
     def __isSimpleDeathCam(self):

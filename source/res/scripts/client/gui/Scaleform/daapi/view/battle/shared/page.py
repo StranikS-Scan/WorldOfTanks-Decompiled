@@ -356,8 +356,11 @@ class SharedPage(BattlePageMeta):
         if event.alias in (VIEW_ALIAS.INGAME_HELP, VIEW_ALIAS.INGAME_DETAILS_HELP):
             self._handleHelpEvent(event)
 
+    def __isOptionalComponentVisible(self, alias):
+        return self.getComponent(alias) is not None and self.as_isComponentVisibleS(alias)
+
     def __handleBattleLoading(self, event):
-        if self.as_isComponentVisibleS(_ALIASES.DEATH_CAM_HUD):
+        if self.__isOptionalComponentVisible(_ALIASES.DEATH_CAM_HUD):
             return
         if event.ctx['isShown']:
             self._onBattleLoadingStart()
@@ -491,7 +494,8 @@ class SharedPage(BattlePageMeta):
         self._setComponentsVisibility(hidden=self._deathCamToggling)
 
     def _onKillCamSimulationFinish(self):
-        self._setComponentsVisibility(visible=self._deathCamToggling or None, hidden={_ALIASES.DEATH_CAM_HUD})
+        if self.getComponent(_ALIASES.DEATH_CAM_HUD) is not None:
+            self._setComponentsVisibility(visible=self._deathCamToggling or None, hidden={_ALIASES.DEATH_CAM_HUD})
         self._deathCamToggling.clear()
         return
 

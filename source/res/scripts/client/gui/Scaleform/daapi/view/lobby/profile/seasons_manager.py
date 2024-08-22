@@ -173,6 +173,10 @@ class _Comp7SeasonsManager(_BaseSeasonManager):
     def getStats(self, dossierStats):
         return dossierStats.getComp7Stats(archive=getArchiveName(self._seasonKey)) if isComp7Archive(self._seasonKey) else dossierStats.getComp7Stats(season=getSeasonName(self._seasonKey))
 
+    def addSeasonsDropdown(self, targetVO):
+        super(_Comp7SeasonsManager, self).addSeasonsDropdown(targetVO)
+        targetVO['dropdownSeasonLabel'] = backport.text(R.strings.profile.seasons.comp7_dropdown_label())
+
     def _makeSeasonsDropDown(self):
         itemsList = BattleTypesDropDownItems()
         for archive in COMP7_ARCHIVE_NAMES:

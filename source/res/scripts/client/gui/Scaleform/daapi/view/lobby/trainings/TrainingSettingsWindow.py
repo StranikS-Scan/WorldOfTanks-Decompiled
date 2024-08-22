@@ -6,6 +6,7 @@ from constants import PREBATTLE_TYPE, Configs
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
+from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prbEntityProperty
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from gui.shared import events, EVENT_BUS_SCOPE
@@ -29,7 +30,7 @@ def isComp7Arena(arena, settings, comp7Controller=None):
 def getComp7Data(lobbyContext=None):
     return {'size': lobbyContext.getServerSettings().comp7Config.numPlayers,
      'canChangeArenaTime': False,
-     'alertText': backport.text(R.strings.menu.training.alertText.onlyTierX())}
+     'additionalInfo': PREBATTLE_ALIASES.TRAINING_ADDITIONAL_INFO_COMP7}
 
 
 _ARENA_TYPE_FILTERS = {'comp7': isComp7Arena}

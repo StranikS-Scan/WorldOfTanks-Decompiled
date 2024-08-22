@@ -5,6 +5,14 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.consumable_slot_m
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.impl import backport
+from gui.impl.gen import R
+OPEN_TAG = '{whiteSpanish_open}'
+CLOSE_TAG = '{whiteSpanish_close}'
+
+def formatValueToColorTag(value):
+    return OPEN_TAG + str(value) + CLOSE_TAG
+
 
 class ConsumableDeviceProvider(VehicleBaseArrayProvider):
     __slots__ = ()
@@ -16,13 +24,21 @@ class ConsumableDeviceProvider(VehicleBaseArrayProvider):
         model = super(ConsumableDeviceProvider, self).createSlot(item, ctx)
         model.setImageName(item.descriptor.iconName)
         model.setItemName(item.name)
-        model.setDescription(item.shortDescription)
+        self.__fillDescription(model, item)
         model.setIsBuiltIn(item.isBuiltIn)
         isEnough = item.mayPurchaseWithExchange(self._itemsCache.items.stats.money, self._itemsCache.items.shop.exchangeRate)
         model.setIsBuyMoreDisabled(not isEnough)
         self._fillHighlights(model, item)
         self._fillBuyPrice(model, item)
         return model
+
+    def __fillDescription(self, model, item):
+        descr = item.shortDescription
+        cooldown = item.descriptor.cooldownSeconds
+        if cooldown > 0:
+            cooldownStr = backport.text(R.strings.tank_setup.equipment.cooldown(), cooldown=formatValueToColorTag(cooldown))
+            descr = backport.text(R.strings.tank_setup.equipment.extendedDescription(), descr=descr, extendedDescr=cooldownStr)
+        model.setDescription(descr)
 
     def updateSlot(self, model, item, ctx):
         super(ConsumableDeviceProvider, self).updateSlot(model, item, ctx)

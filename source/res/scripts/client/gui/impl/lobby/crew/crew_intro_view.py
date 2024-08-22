@@ -9,8 +9,8 @@ from gui.impl.gen.view_models.views.lobby.crew.crew_intro_view_model import Crew
 from gui.impl.gui_decorators import args2params
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.account_settings_helper import AccountSettingsHelper, WelcomeScreen
-from uilogging.crew5075.logging_constants import Crew5075ViewKeys
-from uilogging.crew5075.loggers import Crew5075ViewLogger
+from uilogging.crew_nps.logging_constants import CrewNpsViewKeys
+from uilogging.crew_nps.loggers import CrewNpsWelcomeViewLogger
 
 class CrewIntroView(BaseCrewSubView):
     __slots__ = ('__screenName', '__uiLogger')
@@ -19,7 +19,7 @@ class CrewIntroView(BaseCrewSubView):
         settings = ViewSettings(R.views.lobby.crew.CrewIntroView())
         settings.model = CrewIntroViewModel()
         self.__screenName = screenName
-        self.__uiLogger = Crew5075ViewLogger(self, Crew5075ViewKeys.WELCOME)
+        self.__uiLogger = CrewNpsWelcomeViewLogger(self, CrewNpsViewKeys.WELCOME)
         super(CrewIntroView, self).__init__(settings)
 
     @property
@@ -53,11 +53,11 @@ class CrewIntroView(BaseCrewSubView):
     def __close(self, reason):
         self.__uiLogger.logButtonClick(reason)
         self.destroyWindow()
-        AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_5075_WELCOME_SHOWN)
+        AccountSettingsHelper.welcomeScreenShown(GuiSettingsBehavior.CREW_NPS_WELCOME_SHOWN)
 
 
 class CrewIntroWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, screenName=WelcomeScreen.CREW_5075_WELCOME):
+    def __init__(self, screenName=WelcomeScreen.CREW_NPS_WELCOME):
         super(CrewIntroWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=CrewIntroView(screenName), layer=WindowLayer.TOP_WINDOW)

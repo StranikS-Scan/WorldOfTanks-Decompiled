@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	6.232	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2560,7 +2563,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	3750	</weight>
+      <weight>	3730	</weight>
       <maxHealth>	124	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
@@ -2579,7 +2582,7 @@
           <unlocks>
             <gun>	_57mm_ZiS-4	  <cost>	2200	</cost>
             </gun>
-            <gun>	_76mm_S-54	  <cost>	4300	</cost>
+            <gun>	_76mm_S_54A	  <cost>	4300	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2593,14 +2596,14 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -2785,7 +2788,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_76mm_S_54A>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_A43	  <cost>	4450	</cost>
             </turret>
@@ -2801,14 +2804,14 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -2890,7 +2893,7 @@
             <density>	132.97 120.693	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_76mm_S-54>
+        </_76mm_S_54A>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R57_A43/normal/lod0/Turret_01.model	</undamaged>
@@ -3409,7 +3412,7 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3601,7 +3604,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-4>
-        <_76mm_S-54>	shared	  <maxAmmo>	120	</maxAmmo>
+        <_76mm_S_54A>	shared	  <maxAmmo>	120	</maxAmmo>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3613,7 +3616,7 @@
             </armor_5>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3702,7 +3705,7 @@
             <density>	132.97 120.693	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_76mm_S-54>
+        </_76mm_S_54A>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R57_A43/normal/lod0/Turret_02.model	</undamaged>
@@ -4208,33 +4211,28 @@
     </Turret_2_A43>
   </turrets0>
   <engines>
-    <V-2-34>	shared	  <unlocks>
+    <V_2_34_43>	shared	  <unlocks>
         <engine>	V-5	  <cost>	5500	</cost>
         </engine>
       </unlocks>
-    </V-2-34>
+    </V_2_34_43>
     <V-5>	shared	</V-5>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
     <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <V-2-34>
-          <smplEnginePower>	528.6406	</smplEnginePower>
+        <V_2_34_43>
+          <smplEnginePower>	580	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
-        </V-2-34>
+        </V_2_34_43>
         <V-5>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+          <smplEnginePower>	640	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </V-5>
       </engines>

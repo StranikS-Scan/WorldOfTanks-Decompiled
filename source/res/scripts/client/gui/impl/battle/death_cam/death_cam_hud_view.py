@@ -24,8 +24,8 @@ class DeathCamHudView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(DeathCamHudView, self)._onLoading(*args, **kwargs)
-        self.__subviews.append(DeathCamUIView(self.viewModel.deathCamHUD, self))
-        self.__subviews.append(DeathCamMarkerView(self.viewModel.marker, self))
+        self.__subviews.append(DeathCamUIView(self.viewModel, self))
+        self.__subviews.append(DeathCamMarkerView(self.viewModel, self))
         for subview in self.__subviews:
             subview.initialize()
 

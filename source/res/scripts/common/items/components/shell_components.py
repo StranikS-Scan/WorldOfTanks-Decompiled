@@ -46,7 +46,7 @@ class HollowChargeType(ShellType):
 
 
 class HighExplosiveImpactParams(object):
-    __slots__ = ('radius', 'armorDamage', 'deviceDamage', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive')
+    __slots__ = ('radius', 'armorDamage', 'deviceDamage', 'coneAngleCos', 'piercingSpalls', 'damageAbsorptionType', 'isActive', 'hasSplash')
 
     def __init__(self):
         self.radius = component_constants.ZERO_FLOAT
@@ -55,6 +55,7 @@ class HighExplosiveImpactParams(object):
         self.coneAngleCos = None
         self.piercingSpalls = None
         self.damageAbsorptionType = None
+        self.hasSplash = True
         self.isActive = True
         return
 

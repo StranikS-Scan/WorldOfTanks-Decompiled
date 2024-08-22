@@ -343,15 +343,6 @@
       <cutOffYDistance>	5.	</cutOffYDistance>
     </ally>
   </battleRoyaleHealpoint>
-  <deathCamHEImpact>
-    <ally>
-      <visual>	content/Interface/CheckPoint/dc_HE_impactCircle.model	</visual>
-      <color>	0xffffffff	</color>
-      <enableAccurateCollision>	True	</enableAccurateCollision>
-      <maxUpdateInterval>	0.04	</maxUpdateInterval>
-      <overTerrainHeight>	0.2	</overTerrainHeight>
-    </ally>
-  </deathCamHEImpact>
   <lootTypes>
     <item>	&gt;	  <name>	lootBase	</name>
       <id>	1	</id>
@@ -719,13 +710,6 @@
     </effect>
   </berserkerTurretEffect>
   <berserkerTransformPath>	particles/Environment/Battle_Royal/Berserk/transform.xml	</berserkerTransformPath>
-  <killingShotFullImpactZone>
-    <effects>
-      <model>
-        <name>	content/Interface/CheckPoint/dc_HE_impactSphere_full.model	</name>
-      </model>
-    </effects>
-  </killingShotFullImpactZone>
   <mapsTrainingBotsLazer>
     <effect>
       <path>	particles/eff_sequence/maps_training_laser_e_staticBright_1.seq	</path>

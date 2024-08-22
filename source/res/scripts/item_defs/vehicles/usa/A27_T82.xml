@@ -1,5 +1,41 @@
 <A27_T82.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
+  <speedLimits>
+    <forward>	64	</forward>
+    <backward>	12	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.16	</moving>
+    <still>	0.32	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <firePenalty>	0.48	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.03	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.06	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	5.2	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <density>	0.84 0.84	</density>
@@ -3770,40 +3806,6 @@
       </camouflage>
     </Turret_2_A27_T82>
   </turrets0>
-  <crew>
-    <commander>	gunner
-			radioman	</commander>
-    <driver></driver>
-    <gunner></gunner>
-    <loader></loader>
-  </crew>
-  <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
-  <speedLimits>
-    <forward>	64	</forward>
-    <backward>	12	</backward>
-  </speedLimits>
-  <invisibility>
-    <moving>	0.16	</moving>
-    <still>	0.32	</still>
-    <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.48	</firePenalty>
-  </invisibility>
-  <optDevsOverrides>
-    <camouflageNet>
-      <invisibilityBonus>	0.05 0.075	</invisibilityBonus>
-    </camouflageNet>
-    <additionalInvisibilityDevice>
-      <invisibilityBonus>	0.03 0.04	</invisibilityBonus>
-    </additionalInvisibilityDevice>
-    <trophyBasicAdditionalInvisibilityDevice>
-      <invisibilityBonus>	0.03	</invisibilityBonus>
-    </trophyBasicAdditionalInvisibilityDevice>
-    <trophyUpgradedAdditionalInvisibilityDevice>
-      <invisibilityBonus>	0.05	</invisibilityBonus>
-    </trophyUpgradedAdditionalInvisibilityDevice>
-  </optDevsOverrides>
-  <repairCost>	5.2	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
   <engines>
     <Continental_W-670>	shared	  <unlocks>
         <engine>	Twin_Cadillac_series_44T4	  <cost>	820	</cost>

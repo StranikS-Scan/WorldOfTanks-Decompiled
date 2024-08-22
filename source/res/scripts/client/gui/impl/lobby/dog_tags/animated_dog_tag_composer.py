@@ -9,7 +9,7 @@ from dog_tags_common.config.common import ComponentViewType, ComponentPurpose
 from gui.impl.gen.view_models.views.lobby.dog_tags.animated_dog_tag_component import AnimatedDogTagComponent
 from gui.impl.lobby.achievements.profile_utils import fillAdvancedAchievementModel
 from gui.impl.lobby.dog_tags.dog_tag_composer import DogTagComposerLobby
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.server_events import settings as userSettings
 if typing.TYPE_CHECKING:
     from typing import Iterable
@@ -37,7 +37,7 @@ class AnimatedDogTagComposer(DogTagComposerLobby):
         model.setEngraving(self.getComponentImage(engraving.compId, localized=True))
         counter = 0
         isEmptyCounter = False
-        if self._limitedUIController.isRuleCompleted(LuiRules.DOG_TAG_HINT):
+        if self._limitedUIController.isRuleCompleted(LUI_RULES.DogTagHangarHint):
             counter = len(self._dtHelper.getUnseenCoupledComps()) / 2
             animatedDogTagsVisited = userSettings.getDogTagsSettings().animatedDogTagsVisited
             isEmptyCounter = counter == 0 and not animatedDogTagsVisited

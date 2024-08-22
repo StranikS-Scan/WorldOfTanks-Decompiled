@@ -26,7 +26,7 @@ class FreeSkillConfirmationDialog(BaseCrewDialogTemplateView):
         self.__skill = skill
 
     def _onLoading(self, *args, **kwargs):
-        if self.__skill.isAlreadyEarned:
+        if self.__skill.isLearnedAsMajor:
             titleRes = R.strings.dialogs.freeSkillsLearning.title.relearning
         else:
             titleRes = R.strings.dialogs.freeSkillsLearning.title.learning

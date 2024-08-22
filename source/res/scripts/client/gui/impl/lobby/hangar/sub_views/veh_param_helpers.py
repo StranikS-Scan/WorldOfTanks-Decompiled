@@ -9,6 +9,9 @@ from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, KPI_FORMATTE
 from gui.shared.items_parameters.params_helper import hasPositiveEffect, hasNegativeEffect, hasGroupPenalties
 _EQUAL_TO_ZERO_LITERAL = '~0'
 _NUMBER_DIGITS = 2
+_STATE_COLOR_MAP = {PARAM_STATE.BETTER: '%(green_open)s{}%(green_close)s',
+ PARAM_STATE.WORSE: '%(red_open)s{}%(red_close)s',
+ PARAM_STATE.SITUATIONAL: '%(yellow_open)s{}%(yellow_close)s'}
 
 def getGroupIcon(parameter, comparator):
     states = {0: BuffIconType.NONE,
@@ -57,11 +60,8 @@ def colorize(paramStr, state):
         stateType, _ = state
     else:
         stateType = state
-    if stateType == PARAM_STATE.NOT_APPLICABLE:
-        return paramStr
-    if stateType == PARAM_STATE.WORSE:
-        return '%(red_open)s{}%(red_close)s'.format(paramStr)
-    return '%(green_open)s{}%(green_close)s'.format(paramStr) if stateType == PARAM_STATE.BETTER else paramStr
+    color = _STATE_COLOR_MAP.get(stateType, '')
+    return color.format(paramStr) if color else paramStr
 
 
 def _cutDigits(value, nDigits=_NUMBER_DIGITS):
@@ -79,7 +79,7 @@ def formatParameterValue(parameterName, paramValue, parameterState=None, formatS
     preprocessor = settings.get('preprocessor')
     if KPI.Name.hasValue(parameterName):
         formatter = KPI_FORMATTERS.get(parameterName, kpiFormatValue)
-        values, separator = formatter(parameterName, paramValue), None
+        values, separator = formatter(parameterName, round(paramValue, 3)), None
     elif preprocessor:
         values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:

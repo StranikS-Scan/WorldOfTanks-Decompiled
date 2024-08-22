@@ -40,6 +40,7 @@ class SPECIAL_VOICE_TAG(object):
     BP_H2 = ('tankmen_bp1002_1', 'tankmen_bp1002_3')
     BP_13 = ('tankmen_bp13_1', 'tankmen_bp13_2', 'tankmen_bp13_3', 'tankmen_bp13_4', 'tankmen_bp13_5', 'tankmen_bp13_6', 'tankmen_bp13_7', 'tankmen_bp13_8', 'tankmen_bp13_9')
     CYGAN = 'cygan_SpecialVoice'
+    MARTY_VOLE = 'martyVole_SpecialVoice'
     CTM_24 = ('kirk_SpecialVoice', 'spock_SpecialVoice', 'uhura_SpecialVoice')
     ERIKA = 'erikaSpecialVoice'
     MIKA = 'mikaSpecialVoice'
@@ -66,7 +67,8 @@ class SPECIAL_VOICE_TAG(object):
      CELEBRITY_2024,
      CYGAN,
      ERIKA,
-     MIKA) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M
+     MIKA,
+     MARTY_VOLE) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M
 
 
 class SPECIAL_CREW_TAG(object):

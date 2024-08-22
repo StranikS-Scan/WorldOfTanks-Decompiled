@@ -11,7 +11,6 @@ from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.gui_items.processors.tankman import TankmanUnload
 from gui.shared.utils import decorators
 from helpers import dependency
-from items.tankmen import MAX_SKILLS_EFFICIENCY
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewMetricsLoggerWithParent
 from uilogging.crew.logging_constants import CrewViewKeys, CrewTankmanContextMenuKeys, LAYOUT_ID_TO_ITEM
@@ -50,8 +49,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.QUICK_TRAINING)
 
     def retrain(self):
-        tankman = self.itemsCache.items.getTankman(self._tankmanID)
-        dialogs.showRetrainSingleDialog(self._tankmanID, self._vehicle.intCD, targetSlotIdx=tankman.vehicleSlotIdx, parentViewKey=self._parentViewKey)
+        dialogs.showRetrainSingleDialog(self._tankmanID, self._vehicle.intCD, parentViewKey=self._parentViewKey)
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.RETRAIN)
 
     def changeCrewMember(self):
@@ -80,7 +78,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         if self._vehicle:
             for _, tman in self._vehicle.crew:
                 if tman and tman.invID == self._tankmanID:
-                    isRetrainAvailable = tman.currentVehicleSkillsEfficiency < MAX_SKILLS_EFFICIENCY
+                    isRetrainAvailable = not tman.isMaxCurrentVehicleSkillsEfficiency
                     break
 
         isNotInQuickTraining = self._previousViewID != R.views.lobby.crew.QuickTrainingView()

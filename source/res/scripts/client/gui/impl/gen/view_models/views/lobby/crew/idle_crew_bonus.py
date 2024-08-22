@@ -9,6 +9,7 @@ class IdleCrewBonusEnum(Enum):
     ACTIVEONCURRENTVEHICLE = 'ActiveOnCurrentVehicle'
     INCOMPATIBLEWITHCURRENTVEHICLE = 'IncompatibleWithCurrentVehicle'
     ACTIVEONANOTHERVEHICLE = 'ActiveOnAnotherVehicle'
+    POSTPROGRESSIONREACHED = 'PostProgressionReached'
     INVISIBLE = 'Invisible'
 
 

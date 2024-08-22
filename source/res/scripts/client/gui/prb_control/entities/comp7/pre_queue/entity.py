@@ -1,26 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/comp7/pre_queue/entity.py
-import typing
 import BigWorld
+import typing
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
+from gui.periodic_battles.models import PrimeTimeStatus
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
+from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueEntity, PreQueueEntryPoint, PreQueueSubscriber
 from gui.prb_control.entities.comp7.comp7_prb_helpers import Comp7ViewPresenter
-from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
-from gui.prb_control.entities.comp7.scheduler import Comp7Scheduler
 from gui.prb_control.entities.comp7.pre_queue.actions_validator import Comp7ActionsValidator
 from gui.prb_control.entities.comp7.pre_queue.ctx import Comp7QueueCtx
 from gui.prb_control.entities.comp7.pre_queue.permissions import Comp7Permissions
+from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
+from gui.prb_control.entities.comp7.scheduler import Comp7Scheduler
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
-from gui.prb_control.entities.base import vehicleAmmoCheck
-from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
-from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.prb_control.storages.comp7_storage import Comp7Storage

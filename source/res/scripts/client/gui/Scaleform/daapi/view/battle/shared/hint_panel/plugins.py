@@ -719,7 +719,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             vehicleType = vTypeDesc.type.id
             self.__vehicleId = makeIntCompactDescrByID('vehicle', vehicleType[0], vehicleType[1])
             self.__haveReqLevel = vTypeDesc.level >= _HINT_MIN_VEHICLE_LEVEL
-            if self._hasVehicleHelpHint(vTypeDesc):
+            if self.__hasVehicleHelpHint(vTypeDesc):
                 self.__updateHintCounterOnStart(self.__vehicleId, vehicle, self.__helpHintSettings)
             if self.__canDisplayVehicleHelpHint(vTypeDesc) or self._canDisplayCustomHelpHint():
                 self.__displayHint(CommandMapping.CMD_SHOW_HELP)
@@ -763,11 +763,11 @@ class PreBattleHintPlugin(HintPanelPlugin):
         self.__hintInQueue = None
         return
 
-    def _hasVehicleHelpHint(self, vTypeDesc):
+    def __hasVehicleHelpHint(self, vTypeDesc):
         return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy or vTypeDesc.isAutoShootGunVehicle
 
     def __canDisplayVehicleHelpHint(self, vTypeDesc):
-        return self.__isInDisplayPeriod and self._hasVehicleHelpHint(vTypeDesc) and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
+        return self.__isInDisplayPeriod and self.__hasVehicleHelpHint(vTypeDesc) and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
 
     def __canDisplayBattleCommunicationHint(self):
         battleCommunications = dependency.instance(IBattleCommunicationsSettings)
@@ -820,7 +820,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
             if viewCtx.get('hasUniqueVehicleHelpScreen', False):
                 vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
                 vTypeDesc = vehicle.typeDescriptor
-                if self._hasVehicleHelpHint(vTypeDesc):
+                if self.__hasVehicleHelpHint(vTypeDesc):
                     hintStats = self.__helpHintSettings[self.__vehicleId]
                     self.__helpHintSettings[self.__vehicleId] = self._updateCounterOnUsed(hintStats)
         return

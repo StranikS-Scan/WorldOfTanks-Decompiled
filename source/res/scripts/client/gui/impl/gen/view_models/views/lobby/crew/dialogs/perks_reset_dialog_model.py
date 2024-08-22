@@ -1,29 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/dialogs/perks_reset_dialog_model.py
-from gui.impl.gen.view_models.views.dialogs.dialog_template_view_model import DialogTemplateViewModel
-from gui.impl.gen.view_models.views.lobby.crew.dialogs.dialog_tankman_model import DialogTankmanModel
+from gui.impl.gen.view_models.views.lobby.crew.dialogs.tankman_skills_change_base_dialog_model import TankmanSkillsChangeBaseDialogModel
 
-class PerksResetDialogModel(DialogTemplateViewModel):
+class PerksResetDialogModel(TankmanSkillsChangeBaseDialogModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=2):
+    def __init__(self, properties=11, commands=2):
         super(PerksResetDialogModel, self).__init__(properties=properties, commands=commands)
-
-    @property
-    def tankmanBefore(self):
-        return self._getViewModel(6)
-
-    @staticmethod
-    def getTankmanBeforeType():
-        return DialogTankmanModel
-
-    @property
-    def tankmanAfter(self):
-        return self._getViewModel(7)
-
-    @staticmethod
-    def getTankmanAfterType():
-        return DialogTankmanModel
 
     def getTitle(self):
         return self._getString(8)
@@ -31,8 +14,20 @@ class PerksResetDialogModel(DialogTemplateViewModel):
     def setTitle(self, value):
         self._setString(8, value)
 
+    def getResetGracePeriodLeft(self):
+        return self._getNumber(9)
+
+    def setResetGracePeriodLeft(self, value):
+        self._setNumber(9, value)
+
+    def getHasFreeFirstReset(self):
+        return self._getBool(10)
+
+    def setHasFreeFirstReset(self, value):
+        self._setBool(10, value)
+
     def _initialize(self):
         super(PerksResetDialogModel, self)._initialize()
-        self._addViewModelProperty('tankmanBefore', DialogTankmanModel())
-        self._addViewModelProperty('tankmanAfter', DialogTankmanModel())
         self._addStringProperty('title', '')
+        self._addNumberProperty('resetGracePeriodLeft', 0)
+        self._addBoolProperty('hasFreeFirstReset', False)

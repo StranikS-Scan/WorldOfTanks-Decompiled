@@ -36,7 +36,7 @@ from AimSound import AimSound
 from AvatarInputHandler import cameras, keys_handlers
 from AvatarInputHandler.RespawnDeathMode import RespawnDeathMode
 from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode, PostMortemControlMode, DeathFreeCamMode
-from AvatarInputHandler.kill_cam_modes import KillCamMode
+from AvatarInputHandler.kill_cam_modes import KillCamMode, LookAtKillerMode
 from AutoShootGunController import getPlayerVehicleAutoShootGunController
 from BattleReplay import CallbackDataNames
 from ChatManager import chatManager
@@ -44,7 +44,6 @@ from ClientChat import ClientChat
 from Flock import DebugLine
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents
-from TemperatureGunController import getPlayerVehicleTemperatureGunController
 from TriggersManager import TRIGGER_TYPE
 from account_helpers import BattleResultsCache, ClientInvitations
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
@@ -773,9 +772,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.base.setDevelopmentFeature(0, 'killEnemyTeam', 0, '')
                         return True
                     if key == Keys.KEY_J:
-                        self.base.setDevelopmentFeature(0, 'temperatureGunController/reset_temperature_gun', 0, '')
-                        return True
-                    if key == Keys.KEY_M:
                         self.base.setDevelopmentFeature(0, 'stun', 0, '')
                         return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
@@ -938,6 +934,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if not isinstance(self.inputHandler.ctrl, (VideoCameraControlMode,
                      ArcadeControlMode,
                      KillCamMode,
+                     LookAtKillerMode,
                      PostMortemControlMode,
                      DeathFreeCamMode,
                      RespawnDeathMode)):
@@ -1733,10 +1730,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if self.isObserver() or observedVehID == self.playerVehicleID:
             self.guiSessionProvider.shared.feedback.handleBattleEvents(events, self.__getBattleEventsAdditionalData())
 
-    def onObservedByEnemy(self, vehicleID):
+    def onObservedByEnemy(self, vehicleID, detectionType):
         if not self.__updateVehicleStatus(vehicleID):
             return
-        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, True)
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, {'isObserved': True,
+         'detectionType': detectionType})
         TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.SIXTH_SENSE)
 
     def battleEventsSummary(self, summary):
@@ -2022,14 +2020,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return
             self.cell.vehicle_shoot()
             shotArgs = None
-            simplifiedPrediction = False
             vehicle = BigWorld.entity(self.playerVehicleID)
             if vehicle is not None and vehicle.isStarted:
                 if vehicle.activeGunIndex is not None:
                     shotArgs = (vehicle.activeGunIndex, False)
-                elif vehicle.typeDescriptor is not None:
-                    simplifiedPrediction = vehicle.typeDescriptor.isMultiGunVehicle
-            self.__startWaitingForShot(error != CANT_SHOOT_ERROR.EMPTY_CLIP, simplifiedPrediction, shotArgs)
+            self.__startWaitingForShot(error != CANT_SHOOT_ERROR.EMPTY_CLIP, shotArgs=shotArgs)
             TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_DISCRETE_SHOOT, aimingInfo=self.__aimingInfo)
             self.dropStopUntilFireMode()
             return
@@ -2098,11 +2093,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         elif self.isGunLocked or self.__isOwnBarrelUnderWater():
             if not isRepeat:
                 self.showVehicleError(self.__cantShootCriticals['gun_locked'])
-            return (False, error)
-        temperatureGunController = getPlayerVehicleTemperatureGunController()
-        if temperatureGunController is not None and temperatureGunController.isOverheated:
-            if not isRepeat:
-                self.showVehicleError(self.__cantShootCriticals['gun_overheated'])
             return (False, error)
         else:
             return (True, error)
@@ -2450,8 +2440,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
      'crew_destroyed': 'cantShootCrewInactive',
      'no_ammo': 'cantShootNoAmmo',
      'gun_reload': 'cantShootGunReloading',
-     'gun_locked': 'cantShootGunLocked',
-     'gun_overheated': 'cantShootGunOverheated'}
+     'gun_locked': 'cantShootGunLocked'}
 
     def __createFakeCameraMatrix(self):
         BigWorld.camera(BigWorld.FreeCamera())

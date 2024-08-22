@@ -30,6 +30,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	4.376	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2626,105 +2629,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_SA32L>	shared	  <maxAmmo>	70	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -13 1 -13	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_75mm_Long_44L	  <cost>	2700	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	14	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F62_ELC_AMX/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F62_ELC_AMX/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F62_ELC_AMX/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F62_ELC_AMX/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F62_ELC_AMX/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000283 -0.029918 0.966719	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.114875 0.091827	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.00028 -0.014327 0.586156	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.077423 1.12309 0.313277	</position>
-              <rotation>	0.417269 -0.000882 3.13741	</rotation>
-              <scale>	1.79056 1 1.79058	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.072559	</clipAngle>
-              <anchorShift>	0.377518	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.006573 1.16187 0.446061	</position>
-              <rotation>	0.59463 -0.001782 3.13697	</rotation>
-              <scale>	1.6152 0.675151 1.61522	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.072559	</clipAngle>
-              <anchorShift>	0.37752	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.00004 -0.028653 1.00664	</rayStart>
-              <rayEnd>	0.00004 -0.028653 1.16664	</rayEnd>
-              <rayUp>	0.055 0 0	</rayUp>
-              <size>	0.16	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
-            <density>	197.589 204.434	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_SA32L>
         <_75mm_Long_44L>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
@@ -2743,9 +2647,9 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>

@@ -19,7 +19,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen, updateBuyAnimationFlag
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen, updateBuyAnimationFlag, getSingleVehicleForCustomization
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
@@ -46,6 +46,8 @@ from tutorial.control.game_vars import getVehicleByIntCD
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.battle_pass.character_widget_view_model import CharacterWidgetViewModel
+    from gui.impl.gen.view_models.views.lobby.battle_pass.style_info_model import StyleInfoModel
+    from gui.shared.gui_items.customization.c11n_items import Style
 _logger = logging.getLogger(__name__)
 _bpRes = R.strings.battle_pass
 _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
@@ -253,7 +255,7 @@ class BattlePassProgressionsView(ViewImpl):
             packBonusModelAndTooltipData(realPaidAwards, levelModel.paidRewardItems, self.__tooltipItems)
             model.levels.addViewModel(levelModel)
 
-    def __setStyleWidget(self, model):
+    def __setProgressiveStyleWidget(self, model):
         style = getStyleForChapter(self.__chapterID)
         if style is not None:
             vehicleCD = getVehicleCDForStyle(style, itemsCache=self.__itemsCache)
@@ -275,6 +277,17 @@ class BattlePassProgressionsView(ViewImpl):
                 self.__setCharacterModel(model.paid, character)
         return
 
+    def __setStyleWidget(self, model, style):
+        model.setStyleName(style.userName)
+        model.setStyleId(style.id)
+        vehicleCD = getSingleVehicleForCustomization(style)
+        if vehicleCD is not None:
+            vehicle = getVehicleByIntCD(vehicleCD)
+            if vehicle is not None:
+                fillVehicleInfo(model.vehicleInfo, vehicle)
+                model.setIsVehicleInHangar(vehicle.isInInventory)
+        return
+
     def __setCharacterModel(self, model, character):
         iconName, characterName, skills, groupName = getDataByTankman(character)
         skillsArray = Array()
@@ -293,14 +306,13 @@ class BattlePassProgressionsView(ViewImpl):
             _logger.error('Cannot find rewards for widget in progression for chapter=%s', self.__chapterID)
             return
         elif getRewardSourceByType(FinalReward.PROGRESSIVE_STYLE, self.__chapterID) == BattlePassConsts.REWARD_FREE:
-            self.__setStyleWidget(model)
+            self.__setProgressiveStyleWidget(model)
             return
         else:
             maxLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)
             style = getStyleForChapter(self.__chapterID)
             if style is not None:
-                model.widgetFinalRewards.styleInfo.setStyleName(style.userName)
-                model.widgetFinalRewards.styleInfo.setStyleId(style.id)
+                self.__setStyleWidget(model.widgetFinalRewards.styleInfo, style)
             vehicleSource = getRewardSourceByType(FinalReward.VEHICLE, self.__chapterID)
             if vehicleSource is not None:
                 vehicle, _ = getVehicleInfoForChapter(self.__chapterID, awardSource=vehicleSource)

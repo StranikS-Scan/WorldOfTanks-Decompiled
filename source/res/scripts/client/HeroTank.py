@@ -9,7 +9,7 @@ from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
@@ -65,13 +65,13 @@ class HeroTank(ClientSelectableCameraVehicle):
         self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
         self._heroTankCtrl.onInteractive += self._updateInteractive
-        self.__limitedUIController.startObserve(LuiRules.HERO_TANK, self.__updateHeroTankVisibility)
+        self.__limitedUIController.startObserve(LUI_RULES.HeroTank, self.__updateHeroTankVisibility)
 
     def onLeaveWorld(self):
         self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         self._heroTankCtrl.onInteractive -= self._updateInteractive
-        self.__limitedUIController.stopObserve(LuiRules.HERO_TANK, self.__updateHeroTankVisibility)
+        self.__limitedUIController.stopObserve(LUI_RULES.HeroTank, self.__updateHeroTankVisibility)
         super(HeroTank, self).onLeaveWorld()
 
     def onMouseClick(self):
@@ -101,7 +101,7 @@ class HeroTank(ClientSelectableCameraVehicle):
         if g_currentPreviewVehicle.item is not None:
             if g_currentPreviewVehicle.item.intCD == self.__heroTankCD:
                 return
-        allowShowHeroTank = self.__limitedUIController.isRuleCompleted(LuiRules.HERO_TANK)
+        allowShowHeroTank = self.__limitedUIController.isRuleCompleted(LUI_RULES.HeroTank)
         heroTankCD = self._heroTankCtrl.getRandomTankCD()
         if self._heroTankCtrl.isEnabled() and allowShowHeroTank and heroTankCD:
             if self.__heroTankCD != heroTankCD:

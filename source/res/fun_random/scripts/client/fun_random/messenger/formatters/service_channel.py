@@ -8,7 +8,7 @@ from fun_random.gui.feature.util.fun_wrappers import hasActiveProgression, hasSp
 from fun_random.notification.decorators import FunRandomNewSubModesMessageDecorator
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from messenger import g_settings
@@ -25,8 +25,8 @@ _WARNING_HEADER_TEMPLATE = 'WarningHeaderSysMessage'
 class FunRandomNotificationsFormatter(ServiceChannelFormatter, FunAssetPacksMixin, FunProgressionWatcher, FunSubModesWatcher):
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __DECORATOR = {FunNotificationType.NEW_SUB_MODES: FunRandomNewSubModesMessageDecorator}
-    __LIMITED_UI = {FunNotificationType.NEW_SUB_MODES: LuiRules.FUN_RANDOM_NOTIFICATIONS,
-     FunNotificationType.NEW_PROGRESSION: LuiRules.FUN_RANDOM_NOTIFICATIONS}
+    __LIMITED_UI = {FunNotificationType.NEW_SUB_MODES: LUI_RULES.FunRandomNotifications,
+     FunNotificationType.NEW_PROGRESSION: LUI_RULES.FunRandomNotifications}
     __PRIORITY = {FunNotificationType.NEW_SUB_MODES: NotificationPriorityLevel.HIGH,
      FunNotificationType.SWITCH_OFF_SUB_MODES: NotificationPriorityLevel.HIGH,
      FunNotificationType.SWITCH_ON_SUB_MODES: NotificationPriorityLevel.HIGH}

@@ -7,7 +7,10 @@ from avatar_components.avatar_postmortem_component import SimulatedVehicleType
 from constants import KILL_CAM_STATUS_CODE, BATTLE_LOG_SHELL_TYPES
 from gun_rotation_shared import decodeGunAngles
 from items.vehicles import getItemByCompactDescr
+from AvatarInputHandler.kill_cam_mode_helpers.kill_cam_helpers import calculateSPGTrajectory
 _logger = logging.getLogger(__name__)
+_UNSPOTTED_PIVOT_DISTANCE_FACTOR = 12
+_UNSPOTTED_MARKER_DISTANCE_FACTOR = 4
 
 class KillCamDataComponent(BigWorld.DynamicScriptComponent):
 
@@ -16,11 +19,21 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
         self.processedData = None
         return
 
+    @property
+    def __killerIsSpotted(self):
+        return self.processedData['attacker'] and self.processedData['attacker']['spotted']
+
+    @property
+    def __isRicochet(self):
+        return self.processedData['projectile']['ricochetCount'] > 0
+
     def set_capturedKillCamData(self, _=None):
         self.__updateSimulationData()
 
     def getSimulationData(self):
         self.__updateLateAttackerData()
+        if self.processedData is not None and self.processedData.get('trajectoryData', None) is None:
+            self.processedData['trajectoryData'], self.processedData['unspottedOrigin'] = self.__setupTrajectory()
         return self.processedData
 
     def __updateSimulationData(self):
@@ -141,6 +154,40 @@ class KillCamDataComponent(BigWorld.DynamicScriptComponent):
         return {'shellType': BATTLE_LOG_SHELL_TYPES.getShellType(shellDescr),
          'shellKind': shellDescr.kind,
          'shellIcon': shellDescr.iconName,
-         'shellCaliber': shellDescr.caliber,
-         'averageDamageOfShell': shellDescr.armorDamage[0],
-         'hasDistanceFalloff': shellDescr.isDamageMutable}
+         'shellCaliber': shellDescr.caliber}
+
+    def __setupTrajectory(self):
+        projectileData = self.processedData['projectile']
+        projectileTrajectoryData = projectileData['trajectoryData']
+        origin = Math.Vector3(projectileTrajectoryData[0][0])
+        impactPoint = Math.Vector3(projectileData['impactPoint'])
+        gravity = Math.Vector3(0.0, -projectileData['gravity'], 0.0)
+        velocity = Math.Vector3(projectileData['velocity'])
+        unspottedOrigin = None
+        if not self.__killerIsSpotted:
+            directionVector = origin - impactPoint
+            directionVector *= 1 / directionVector.length
+            unspottedOrigin = impactPoint + directionVector * _UNSPOTTED_MARKER_DISTANCE_FACTOR
+            origin = impactPoint + directionVector * _UNSPOTTED_PIVOT_DISTANCE_FACTOR
+        elif self.processedData['attacker']['vehicleType'] == 'SPG':
+            trajectoryPoints = calculateSPGTrajectory(origin, impactPoint, velocity, gravity)
+            if self.__killerIsSpotted:
+                return (trajectoryPoints, unspottedOrigin)
+            trajectoryEndVector = Math.Vector3(trajectoryPoints[-1] - trajectoryPoints[-2])
+            halfLength = trajectoryEndVector.length / 2.0
+            trajectoryEndVector.normalise()
+            trajectoryPoints = [trajectoryPoints[-2] + trajectoryEndVector * halfLength, trajectoryPoints[-1]]
+            unspottedOrigin = trajectoryPoints[-2]
+            return (trajectoryPoints, unspottedOrigin)
+        if self.__isRicochet:
+            trajectoryPoints = []
+            for index in range(len(projectileTrajectoryData) - 1):
+                nPointOrigin, nPointVelocity = projectileTrajectoryData[index]
+                n1PointOrigin, _ = projectileTrajectoryData[index + 1]
+                trajectoryPoints += calculateSPGTrajectory(nPointOrigin, n1PointOrigin, nPointVelocity, gravity)
+
+            trajectoryPoints += calculateSPGTrajectory(projectileTrajectoryData[-1][0], impactPoint, projectileTrajectoryData[-1][1], gravity)
+            return (trajectoryPoints, unspottedOrigin)
+        else:
+            trajectoryPoints = calculateSPGTrajectory(origin, impactPoint, velocity, gravity)
+            return (trajectoryPoints, unspottedOrigin)

@@ -294,8 +294,12 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
     def respawnVehicle(vID, compactDescr=None, outfitCompactDescr=None):
         _logger.debug('respawnVehicle(%d)', vID)
         vehicle = BigWorld.entities.get(vID)
+        avatar = BigWorld.player()
+        if vID == avatar.playerVehicleID:
+            ctrl = avatar.guiSessionProvider.shared.killCamCtrl
+            if ctrl:
+                ctrl.respawnRequested()
         if vehicle is not None:
-            avatar = BigWorld.player()
             vehInfo = avatar.arena.vehicles[vID]
             avatarVehicle = avatar.vehicle
             isVehicleAlive = vehInfo['isAlive'] and vehicle.isAlive()

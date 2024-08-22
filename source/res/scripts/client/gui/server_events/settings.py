@@ -61,8 +61,8 @@ class _DogTagsRootSettings(utils.SettingRootRecord):
 
 class _WotPlusSettings(utils.SettingRootRecord):
 
-    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, **_):
-        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown)
+    def __init__(self, isFirstTime=True, isWotPlusEnabled=False, isGoldReserveEnabled=False, isPassiveXpEnabled=False, isFreeDemountingEnabled=False, isExcludedMapEnabled=False, isDailyAttendancesEnabled=False, amountOfDailyAttendance=0, isBattleBonusesEnabled=False, isBadgesEnabled=False, isAdditionalXPEnabled=False, isOnboardingShown=False, isOptionalDevicesAssistantEnabled=False, **_):
+        super(_WotPlusSettings, self).__init__(isFirstTime=isFirstTime, isWotPlusEnabled=isWotPlusEnabled, isGoldReserveEnabled=isGoldReserveEnabled, isPassiveXpEnabled=isPassiveXpEnabled, isFreeDemountingEnabled=isFreeDemountingEnabled, isExcludedMapEnabled=isExcludedMapEnabled, isDailyAttendancesEnabled=isDailyAttendancesEnabled, amountOfDailyAttendance=amountOfDailyAttendance, isBattleBonusesEnabled=isBattleBonusesEnabled, isBadgesEnabled=isBadgesEnabled, isAdditionalXPEnabled=isAdditionalXPEnabled, isOnboardingShown=isOnboardingShown, isOptionalDevicesAssistantEnabled=isOptionalDevicesAssistantEnabled)
 
     def setIsFirstTime(self, isFirstTime):
         self.update(isFirstTime=isFirstTime)
@@ -102,6 +102,9 @@ class _WotPlusSettings(utils.SettingRootRecord):
 
     def setOnboardingShown(self, onboardingShown=True):
         self.update(isOnboardingShown=onboardingShown)
+
+    def setOptionalDevicesAssistantEnabled(self, isEnabled):
+        self.update(isOptionalDevicesAssistantEnabled=isEnabled)
 
     @classmethod
     def _getSettingName(cls):

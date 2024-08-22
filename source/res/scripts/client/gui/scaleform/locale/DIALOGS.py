@@ -219,6 +219,7 @@ class DIALOGS(object):
     RECRUITWINDOW_MENUEMPTYROW = '#dialogs:recruitWindow/menuEmptyRow'
     RECRUITWINDOW_SUBMIT = '#dialogs:recruitWindow/submit'
     RECRUITWINDOW_CANCEL = '#dialogs:recruitWindow/cancel'
+    RECRUITCONVERSIONCONFIRM_WARNING = '#dialogs:recruitConversionConfirm/warning'
     BUYSLOTNOTENOUGH_CREDITS_TITLE = '#dialogs:buySlotNotEnough/credits/title'
     BUYSLOTNOTENOUGH_CREDITS_MESSAGE = '#dialogs:buySlotNotEnough/credits/message'
     BUYSLOTNOTENOUGH_CREDITS_SUBMIT = '#dialogs:buySlotNotEnough/credits/submit'
@@ -966,6 +967,7 @@ class DIALOGS(object):
     PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
     PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
     COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
+    COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
     COMP7_DESERTER_SUBMIT = '#dialogs:comp7/deserter/submit'
     COMP7_DESERTER_CANCEL = '#dialogs:comp7/deserter/cancel'
@@ -996,6 +998,10 @@ class DIALOGS(object):
     PERKSRESET_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:perksReset/priceCard/credits/description'
     PERKSRESET_PRICECARD_GOLD_DESCRIPTION = '#dialogs:perksReset/priceCard/gold/description'
     PERKSRESET_LOSTSKILL_TOOLTIP_DESCRIPTION = '#dialogs:perksReset/lostSkill/tooltip/description'
+    PERKSRESET_GRACELABEL = '#dialogs:perksReset/graceLabel'
+    PERKSRESET_FREEFIRSTRESETLABEL = '#dialogs:perksReset/freeFirstResetLabel'
+    PERKSRESET_DISCOUNTTOOLTIP_HEADER = '#dialogs:perksReset/discountTooltip/header'
+    PERKSRESET_DISCOUNTTOOLTIP_BODY = '#dialogs:perksReset/discountTooltip/body'
     RETRAIN_TITLE_SINGLE_SIMPLE = '#dialogs:retrain/title/single/simple'
     RETRAIN_TITLE_SINGLE_COMPLEX = '#dialogs:retrain/title/single/complex'
     RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
@@ -1013,6 +1019,10 @@ class DIALOGS(object):
     RETRAIN_PRICE = '#dialogs:retrain/price'
     RETRAIN_SUBMIT = '#dialogs:retrain/submit'
     RETRAIN_CANCEL = '#dialogs:retrain/cancel'
+    RETRAIN_PREMIUM_DESCRIPTION = '#dialogs:retrain/premium/description'
+    RETRAIN_DISCOUNTLABEL = '#dialogs:retrain/discountLabel'
+    RETRAIN_DISCOUNTTOOLTIP_HEADER = '#dialogs:retrain/discountTooltip/header'
+    RETRAIN_DISCOUNTTOOLTIP_BODY = '#dialogs:retrain/discountTooltip/body'
     RECRUIT_TITLE = '#dialogs:recruit/title'
     RECRUIT_WARNING_PREMIUMVEHICLE = '#dialogs:recruit/warning/premiumVehicle'
     RECRUIT_PRICECARD_FREE_TITLE = '#dialogs:recruit/priceCard/free/title'
@@ -1057,6 +1067,19 @@ class DIALOGS(object):
     WGSHEVENTUNFREEZEVEHICLE_MESSAGEPART_FOURTH = '#dialogs:wgshEventUnfreezeVehicle/messagePart/fourth'
     WGSHEVENTUNFREEZEVEHICLE_SUBMIT = '#dialogs:wgshEventUnfreezeVehicle/submit'
     WGSHEVENTUNFREEZEVEHICLE_CANCEL = '#dialogs:wgshEventUnfreezeVehicle/cancel'
+    SKILLSTRAININGCONFIRM_MESSAGE = '#dialogs:skillsTrainingConfirm/message'
+    SKILLSTRAININGCONFIRM_SUBMIT = '#dialogs:skillsTrainingConfirm/submit'
+    SKILLSTRAININGCONFIRM_CANCEL = '#dialogs:skillsTrainingConfirm/cancel'
+    RESETALLPERKS_TITLE = '#dialogs:resetAllPerks/title'
+    RESETALLPERKS_WARNING = '#dialogs:resetAllPerks/warning'
+    RESETALLPERKS_SUBMIT = '#dialogs:resetAllPerks/submit'
+    RESETALLPERKS_CANCEL = '#dialogs:resetAllPerks/cancel'
+    FILLALLPERKS_TITLE = '#dialogs:fillAllPerks/title'
+    FILLALLPERKS_SUBTITLE = '#dialogs:fillAllPerks/subTitle'
+    FILLALLPERKS_CHECKBOX = '#dialogs:fillAllPerks/checkbox'
+    FILLALLPERKS_BUTTON_FILL = '#dialogs:fillAllPerks/button/fill'
+    FILLALLPERKS_BUTTON_CANCEL = '#dialogs:fillAllPerks/button/cancel'
+    FILLALLPERKS_DESCRIPTION = '#dialogs:fillAllPerks/description'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -1265,6 +1288,7 @@ class DIALOGS(object):
      RECRUITWINDOW_MENUEMPTYROW,
      RECRUITWINDOW_SUBMIT,
      RECRUITWINDOW_CANCEL,
+     RECRUITCONVERSIONCONFIRM_WARNING,
      BUYSLOTNOTENOUGH_CREDITS_TITLE,
      BUYSLOTNOTENOUGH_CREDITS_MESSAGE,
      BUYSLOTNOTENOUGH_CREDITS_SUBMIT,
@@ -2012,6 +2036,7 @@ class DIALOGS(object):
      PERKLEARNCONFIRM_DESC,
      PERKLEARNCONFIRM_LEARN,
      COMP7_DESERTER_TITLE,
+     COMP7_DESERTER_MSGTITLE,
      COMP7_DESERTER_MESSAGE,
      COMP7_DESERTER_SUBMIT,
      COMP7_DESERTER_CANCEL,
@@ -2042,6 +2067,10 @@ class DIALOGS(object):
      PERKSRESET_PRICECARD_CREDITS_DESCRIPTION,
      PERKSRESET_PRICECARD_GOLD_DESCRIPTION,
      PERKSRESET_LOSTSKILL_TOOLTIP_DESCRIPTION,
+     PERKSRESET_GRACELABEL,
+     PERKSRESET_FREEFIRSTRESETLABEL,
+     PERKSRESET_DISCOUNTTOOLTIP_HEADER,
+     PERKSRESET_DISCOUNTTOOLTIP_BODY,
      RETRAIN_TITLE_SINGLE_SIMPLE,
      RETRAIN_TITLE_SINGLE_COMPLEX,
      RETRAIN_WARNING_PREMIUMVEHICLE,
@@ -2059,6 +2088,10 @@ class DIALOGS(object):
      RETRAIN_PRICE,
      RETRAIN_SUBMIT,
      RETRAIN_CANCEL,
+     RETRAIN_PREMIUM_DESCRIPTION,
+     RETRAIN_DISCOUNTLABEL,
+     RETRAIN_DISCOUNTTOOLTIP_HEADER,
+     RETRAIN_DISCOUNTTOOLTIP_BODY,
      RECRUIT_TITLE,
      RECRUIT_WARNING_PREMIUMVEHICLE,
      RECRUIT_PRICECARD_FREE_TITLE,
@@ -2102,7 +2135,20 @@ class DIALOGS(object):
      WGSHEVENTUNFREEZEVEHICLE_MESSAGEPART_THIRD,
      WGSHEVENTUNFREEZEVEHICLE_MESSAGEPART_FOURTH,
      WGSHEVENTUNFREEZEVEHICLE_SUBMIT,
-     WGSHEVENTUNFREEZEVEHICLE_CANCEL)
+     WGSHEVENTUNFREEZEVEHICLE_CANCEL,
+     SKILLSTRAININGCONFIRM_MESSAGE,
+     SKILLSTRAININGCONFIRM_SUBMIT,
+     SKILLSTRAININGCONFIRM_CANCEL,
+     RESETALLPERKS_TITLE,
+     RESETALLPERKS_WARNING,
+     RESETALLPERKS_SUBMIT,
+     RESETALLPERKS_CANCEL,
+     FILLALLPERKS_TITLE,
+     FILLALLPERKS_SUBTITLE,
+     FILLALLPERKS_CHECKBOX,
+     FILLALLPERKS_BUTTON_FILL,
+     FILLALLPERKS_BUTTON_CANCEL,
+     FILLALLPERKS_DESCRIPTION)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

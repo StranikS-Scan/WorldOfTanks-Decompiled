@@ -263,7 +263,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'isPostProgressionUnlocked': self.__vehicle.postProgressionAvailability(unlockOnly=True).result}
 
     def __prepareInventoryModules(self):
-        moduleList = self.__itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE(self.__nationGroupVehicles) | REQ_CRITERIA.INVENTORY).values()
+        nationID = self.__nationGroupVehicles[0].nationID if len(self.__nationGroupVehicles) == 1 else None
+        moduleList = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.VEHICLE_MODULES, criteria=REQ_CRITERIA.VEHICLE.SUITABLE(self.__nationGroupVehicles) | REQ_CRITERIA.INVENTORY, nationID=nationID).values()
         inInventoryModules = []
         for module in moduleList:
             data = _ModulesData(module)
@@ -307,11 +308,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return onVehicleBattleBoosters
 
     def __prepareVehicleCustomizations(self, vehicle):
-        installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)).values()
+        installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.STYLE, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle), nationID=vehicle.nationID).values()
         if not installedCustomizations:
             criteria = REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle)
             criteria |= ~REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.NATIONAL_EMBLEM])
-            installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria).itervalues()
+            installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria, nationID=vehicle.nationID).itervalues()
             installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
         customizationOnVehicle = []
         for customization in installedCustomizations:
@@ -324,7 +325,8 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         return customizationOnVehicle
 
     def __prepareInventoryShells(self):
-        shellList = self.__itemsCache.items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE(self.__nationGroupVehicles, [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY).values()
+        nationID = self.__nationGroupVehicles[0].nationID if len(self.__nationGroupVehicles) == 1 else None
+        shellList = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.SHELL, criteria=REQ_CRITERIA.VEHICLE.SUITABLE(self.__nationGroupVehicles, [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY, nationID=nationID).values()
         inInventoryShells = []
         for shell in shellList:
             data = _ShellData(shell, True, shell.intCD in self.__otherVehicleShells)

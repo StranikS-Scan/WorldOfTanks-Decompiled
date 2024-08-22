@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hof/web_handlers.py
 from web.web_client_api import webApiCollection, w2capi
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.shop import ShopWebApi
 from web.web_client_api.ui.browser import CloseBrowserViewWebApiMixin
 from web.web_client_api.vehicles import VehiclesWebApi
@@ -14,4 +15,4 @@ def createHofWebHandlers():
     class _CloseWindowWebApi(CloseBrowserViewWebApiMixin):
         pass
 
-    return webApiCollection(_CloseWindowWebApi, OpenWindowWebApi, OpenTabWebApi, RequestWebApi, SoundWebApi, ContextMenuWebApi, ShopWebApi, VehiclesWebApi)
+    return webApiCollection(_CloseWindowWebApi, OpenWindowWebApi, OpenTabWebApi, RequestWebApi, SoundWebApi, ContextMenuWebApi, ShopWebApi, VehiclesWebApi, PersonalExchangeRatesDiscountsWebApi)

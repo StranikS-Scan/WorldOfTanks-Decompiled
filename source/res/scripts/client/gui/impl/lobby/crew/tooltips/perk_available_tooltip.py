@@ -24,13 +24,13 @@ class PerkAvailableTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(PerkAvailableTooltip, self)._onLoading()
         tankman = self._itemsCache.items.getTankman(self.__tankmanID)
-        newSkillsCount, lastNewSkillLvl = tankman.newSkillCount
+        newSkillsCount, lastNewSkillLvl = tankman.newSkillsCount
         availableSkills = len(tankman.availableSkills(useCombinedRoles=True))
         with self.viewModel.transaction() as vm:
             if availableSkills < newSkillsCount:
                 newSkillsCount = availableSkills
                 lastNewSkillLvl = 0
                 vm.setIsAllSlotsTrained(True)
-            vm.setPerkCount(newSkillsCount)
+            vm.setPerkCount(newSkillsCount - tankman.newFreeSkillsCount)
             vm.setLastPerkLevel(lastNewSkillLvl)
             vm.setZeroPerkCount(tankman.newFreeSkillsCount)

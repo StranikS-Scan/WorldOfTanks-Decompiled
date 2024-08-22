@@ -16,7 +16,7 @@ class BuffIconType(IntEnum):
 class VehicleParamGroupViewModel(VehicleParamBaseViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(VehicleParamGroupViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -33,33 +33,39 @@ class VehicleParamGroupViewModel(VehicleParamBaseViewModel):
     def setIsOpen(self, value):
         self._setBool(6, value)
 
+    def getIsSituational(self):
+        return self._getBool(7)
+
+    def setIsSituational(self, value):
+        self._setBool(7, value)
+
     def getBuffIconType(self):
-        return BuffIconType(self._getNumber(7))
+        return BuffIconType(self._getNumber(8))
 
     def setBuffIconType(self, value):
-        self._setNumber(7, value.value)
+        self._setNumber(8, value.value)
 
     def getAdditionalValue(self):
-        return self._getString(8)
+        return self._getString(9)
 
     def setAdditionalValue(self, value):
-        self._setString(8, value)
+        self._setString(9, value)
 
     def getParams(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setParams(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getParamsType():
         return VehicleParamViewModel
 
     def getExtraParams(self):
-        return self._getArray(10)
+        return self._getArray(11)
 
     def setExtraParams(self, value):
-        self._setArray(10, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getExtraParamsType():
@@ -69,6 +75,7 @@ class VehicleParamGroupViewModel(VehicleParamBaseViewModel):
         super(VehicleParamGroupViewModel, self)._initialize()
         self._addViewModelProperty('indicator', VehicleParamIndicatorViewModel())
         self._addBoolProperty('isOpen', False)
+        self._addBoolProperty('isSituational', False)
         self._addNumberProperty('buffIconType')
         self._addStringProperty('additionalValue', '')
         self._addArrayProperty('params', Array())

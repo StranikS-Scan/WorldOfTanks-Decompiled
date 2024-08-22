@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getClanTag
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.meta.BattleQueueMeta import BattleQueueMeta
 from gui.Scaleform.daapi.view.meta.BattleStrongholdsQueueMeta import BattleStrongholdsQueueMeta
+from gui.impl.lobby.comp7 import comp7_shared, comp7_i18n_helpers, comp7_model_helpers
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
@@ -196,11 +197,19 @@ class _Comp7QueueProvider(RandomQueueProvider):
         ranks = info.get('ranks', {})
         qualPlayers = info.get('qualPlayers', 0)
         allPlayersCount = info.get('players', sum(ranks.values()) + qualPlayers)
-        self._proxy.as_setDPS([{'type': backport.text(R.strings.menu.prebattle.playersLabel()),
-          'icon': backport.image(R.images.gui.maps.icons.comp7.icons.playersTotalIcon()),
-          'count': allPlayersCount,
-          'highlight': False}])
+        self._createCommonPlayerString(allPlayersCount)
+        if ranks:
+            ranksData = []
+            isInQualification = comp7_shared.isQualification()
+            playerRankIdx = comp7_shared.getPlayerDivision().rank if not isInQualification else None
+            for rankIdx, playersCount in ranks.items():
+                rankName = comp7_i18n_helpers.RANK_MAP[rankIdx]
+                ranksData.append(self.__getRankData(rankName, playersCount, rankIdx == playerRankIdx))
+
+            ranksData.append(self.__getRankData('qualification', qualPlayers, isInQualification))
+            self._proxy.as_setDPS(ranksData)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and allPlayersCount > 1)
+        return
 
     def getLayoutStr(self):
         pass
@@ -219,6 +228,15 @@ class _Comp7QueueProvider(RandomQueueProvider):
 
     def additionalInfo(self):
         pass
+
+    def __getRankData(self, rankName, playersCount, isHighlight):
+        seasonName = comp7_model_helpers.getSeasonNameEnum().value
+        rankImg = R.images.gui.maps.icons.comp7.ranks.dyn(seasonName).c_40.dyn(rankName)
+        rankStr = R.strings.comp7.rank.dyn(rankName)
+        return {'type': backport.text(rankStr()),
+         'icon': backport.image(rankImg()),
+         'count': playersCount,
+         'highlight': isHighlight}
 
 
 class _WinbackQueueProvider(RandomQueueProvider):

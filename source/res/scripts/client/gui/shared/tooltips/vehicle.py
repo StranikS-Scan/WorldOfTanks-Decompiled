@@ -36,6 +36,7 @@ from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEEL
 from gui.impl.lobby.crew.tooltips.vehicle_params_tooltip_view import BaseVehicleParamsTooltipView, BaseVehicleAdvancedParamsTooltipView, VehicleAdvancedParamsTooltipView, VehicleAvgParamsTooltipView
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
+from items.components.skills_constants import ORDERED_ROLES
 from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import ITradeInController, IWotPlusController
@@ -101,7 +102,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         valueWidth = 77
         textGap = -2
-        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=34, right=0), blockWidth=20)]
+        headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=14, right=0), blockWidth=20)]
         headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
@@ -295,12 +296,14 @@ class DefaultCrewMemberTooltipData(BlocksTooltipData):
         if tankmanID == NO_TANKMAN:
             roles = list(self.context.getVehicle().descriptor.type.crewRoles[slotIdx])
         else:
-            roles = list(self.__itemsCache.items.getTankman(tankmanID).vehicleNativeDescr.type.crewRoles[slotIdx])
+            tman = self.__itemsCache.items.getTankman(tankmanID)
+            roles = list(tman.roles() if tman.isInTank else tman.vehicleNativeDescr.type.crewRoles[slotIdx])
         mainRole = roles[0]
         bodyStr = '{}/{}'.format(TOOLTIPS.VEHICLEPREVIEW_CREW, mainRole)
         crewParams = {k:text_styles.neutral(v) for k, v in _CREW_TOOLTIP_PARAMS[mainRole].iteritems()}
         blocks.append(formatters.packTitleDescBlock(text_styles.highTitle(ITEM_TYPES.tankman_roles(mainRole)), text_styles.main(_ms(bodyStr, **crewParams))))
         roles.remove(mainRole)
+        roles.sort(key=ORDERED_ROLES.index)
         if roles:
             rolesStr = ', '.join([ text_styles.stats(_ms(ITEM_TYPES.tankman_roles(r))) for r in roles ])
             blocks.append(formatters.packTextBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPREVIEW_CREW_ADDITIONALROLES, roles=rolesStr))))

@@ -63,7 +63,12 @@
         <specValue>	2.5	</specValue>
       </mul>
       <mul>
-        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
         <value>	0.5	</value>
         <specValue>	0.35	</specValue>
       </mul>
@@ -140,7 +145,12 @@
         <specValue>	2.5	</specValue>
       </mul>
       <mul>
-        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <name>	vehPenaltyForDamagedEngine	</name>
+        <value>	0.5	</value>
+        <specValue>	0.35	</specValue>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamagedAmmorack	</name>
         <value>	0.5	</value>
         <specValue>	0.35	</specValue>
       </mul>
@@ -199,7 +209,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -268,7 +283,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -337,7 +357,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -406,7 +431,12 @@
     </script>
     <kpi>
       <mul>
-        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <name>	vehicleHEShellDamageResistance	</name>
+        <value>	0.5	</value>
+        <specValue>	0.4	</specValue>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
         <value>	0.5	</value>
         <specValue>	0.4	</specValue>
       </mul>
@@ -1669,7 +1699,7 @@
     <longDescriptionSpecial>	#artefacts:improvedRadioCommunication/long_special	</longDescriptionSpecial>
     <icon>	improvedRadioCommunication	</icon>
     <price>	600000	</price>
-    <tags></tags>
+    <tags>	radioCommunication	</tags>
     <categories>	stealth	</categories>
     <vehicleFilter>
       <include>
@@ -2026,7 +2056,7 @@
     <longDescriptionSpecial>	#artefacts:commandersView/long_special	</longDescriptionSpecial>
     <icon>	commandersView	</icon>
     <price>	600000	</price>
-    <tags></tags>
+    <tags>	commandersView	</tags>
     <categories>	stealth	</categories>
     <vehicleFilter>
       <include>

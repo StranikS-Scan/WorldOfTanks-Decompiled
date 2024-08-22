@@ -40,11 +40,12 @@ class KillCamSoundPlayer(CallbackPauseManager, IViewComponentsCtrlListener):
     def __init__(self):
         CallbackPauseManager.__init__(self)
         self.__transitionDuration = 0.0
-        if self.sessionProvider.shared.killCamCtrl:
-            self.sessionProvider.shared.killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChange
-            self.sessionProvider.shared.killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
-            self.sessionProvider.shared.killCamCtrl.onKillCamInterrupted += self.__onKillCamInterrupted
-            self.sessionProvider.shared.killCamCtrl.onKillCamModeEffectsPlaced += self.__onKillCamModeEffectsPlaced
+        killCamCtrl = self.sessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged += self.__onKillCamStateChange
+            killCamCtrl.onMarkerDisplayChanged += self.__onMarkerDisplayChanged
+            killCamCtrl.onKillCamInterrupted += self.__onKillCamInterrupted
+            killCamCtrl.onKillCamModeEffectsPlaced += self.__onKillCamModeEffectsPlaced
 
     @property
     def __isSimplifiedDC(self):
@@ -55,11 +56,12 @@ class KillCamSoundPlayer(CallbackPauseManager, IViewComponentsCtrlListener):
         super(KillCamSoundPlayer, self).detachedFromCtrl(ctrlID)
         CallbackPauseManager.destroy(self)
         self.__muteGameAudio(False)
-        if self.sessionProvider.shared.killCamCtrl:
-            self.sessionProvider.shared.killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChange
-            self.sessionProvider.shared.killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
-            self.sessionProvider.shared.killCamCtrl.onKillCamInterrupted -= self.__onKillCamInterrupted
-            self.sessionProvider.shared.killCamCtrl.onKillCamModeEffectsPlaced -= self.__onKillCamModeEffectsPlaced
+        killCamCtrl = self.sessionProvider.shared.killCamCtrl
+        if killCamCtrl:
+            killCamCtrl.onKillCamModeStateChanged -= self.__onKillCamStateChange
+            killCamCtrl.onMarkerDisplayChanged -= self.__onMarkerDisplayChanged
+            killCamCtrl.onKillCamInterrupted -= self.__onKillCamInterrupted
+            killCamCtrl.onKillCamModeEffectsPlaced -= self.__onKillCamModeEffectsPlaced
 
     def __onKillCamInterrupted(self):
         self.__playSoundNotification(_DeathCamSound.DC_UI_EXIT)

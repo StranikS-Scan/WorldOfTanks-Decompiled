@@ -4972,25 +4972,4 @@
       </shotSound>
     </effects>
   </shot_env_artillery>
-  <fep_qfg_shot_rocket>
-    <timeline>
-      <lighting2>	0.075	</lighting2>
-      <end>	0.3	</end>
-      <endpixie>	0.1	</endpixie>
-      <soundplaystop>	8	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/Tank/fep_qfg/guns/fep_qfg_shot_rocket.eff	</file>
-        <force>	1	</force>
-      </pixie>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_mlrs_main_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_mlrs_main_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-  </fep_qfg_shot_rocket>
 </gun_effects.xml>

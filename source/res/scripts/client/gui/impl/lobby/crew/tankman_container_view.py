@@ -5,7 +5,7 @@ from collections import OrderedDict
 import Event
 from account_helpers.AccountSettings import CREW_SKINS_VIEWED
 from account_helpers import AccountSettings
-from base_crew_view import BaseCrewView
+from base_crew_view import BaseCrewView, IS_FROM_ESCAPE_PARAM
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
@@ -14,8 +14,8 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_container_view_model impo
 from gui.impl.lobby.crew.personal_case import IPersonalTab
 from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
 from gui.impl.lobby.crew.personal_case.personal_data_view import PersonalDataView
-from gui.impl.lobby.crew.personal_case.personal_file_view import PersonalFileView
-from gui.impl.lobby.crew.personal_case.service_record_view import ServiceRecordView
+from gui.impl.lobby.crew.container_vews.personal_file.personal_file_view import PersonalFileView
+from gui.impl.lobby.crew.container_vews.service_record.service_record_view import ServiceRecordView
 from gui.impl.lobby.crew.widget.crew_widget import NO_TANKMAN
 from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsView
 from gui.shared.event_dispatcher import showChangeCrewMember
@@ -41,7 +41,7 @@ class TabsId(object):
 TABS = OrderedDict([(TabsId.PERSONAL_FILE, PersonalFileView), (TabsId.PERSONAL_DATA, PersonalDataView), (TabsId.SERVICE_RECORD, ServiceRecordView)])
 
 class TankmanContainerView(BaseCrewView):
-    __slots__ = ('_tankmanInvID', 'vehicleID', '_activeTab', '_createdTabs', 'paramsView', 'onTabChanged')
+    __slots__ = ('_tankmanInvID', 'vehicleID', '_activeTab', '_createdTabs', '_isAnimationEnabled', 'paramsView', 'onTabChanged', '_isContentHidden')
     itemsCache = dependency.descriptor(IItemsCache)
     gui = dependency.descriptor(IGuiLoader)
 
@@ -55,8 +55,10 @@ class TankmanContainerView(BaseCrewView):
         self.vehicleID = self.itemsCache.items.getTankman(tankmanInvID).vehicleInvID
         self.onTabChanged = Event.Event()
         self._createdTabs = []
+        self._isAnimationEnabled = False
         self.paramsView = None
         self._uiLogger = CrewMetricsLoggerWithParent()
+        self._isContentVisible = True
         return
 
     def updateTankmanId(self, tankmanInvID):
@@ -66,7 +68,8 @@ class TankmanContainerView(BaseCrewView):
         self.__changeTab(tabID)
 
     def updateTTCWithSkillName(self, skillName):
-        self.paramsView.updateForSkill(skillName)
+        self.paramsView.updateForSkill([skillName] if skillName is not None else [])
+        return
 
     @property
     def viewModel(self):
@@ -81,6 +84,13 @@ class TankmanContainerView(BaseCrewView):
         if isinstance(tab, BasePersonalCaseView):
             tab.uiLogger.onBringToFront(otherWindow)
 
+    def toggleContentVisibility(self, isVisible):
+        self._isContentVisible = isVisible
+        self.viewModel.setIsContentVisible(isVisible)
+
+    def setAnimationInProgress(self, isEnabled):
+        self._isAnimationEnabled = isEnabled
+
     def _onEmptySlotAutoSelect(self, _):
         self.destroyWindow()
 
@@ -93,7 +103,6 @@ class TankmanContainerView(BaseCrewView):
         super(TankmanContainerView, self)._onLoading(*args, **kwargs)
         self.__createTab(self._activeTab, LAYOUT_ID_TO_ITEM.get(self._previousViewID))
         self._uiLogger.setParentViewKey(LAYOUT_ID_TO_ITEM.get(self._activeTab))
-        self.onTabChanged(self._activeTab)
 
     def _fillViewModel(self, vm):
         super(TankmanContainerView, self)._fillViewModel(vm)
@@ -131,6 +140,11 @@ class TankmanContainerView(BaseCrewView):
         return
 
     def _onClose(self, params=None):
+        if not self._isContentVisible:
+            return
+        if self._isAnimationEnabled and isinstance(params, dict) and params.get(IS_FROM_ESCAPE_PARAM, False):
+            self.__stopAnimations()
+            return
         self._logClose(params)
         self._destroySubViews()
 
@@ -138,6 +152,10 @@ class TankmanContainerView(BaseCrewView):
         self._destroySubViews()
         if logClick:
             self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.TO_BARRACKS)
+
+    def _onFocus(self, focused):
+        tab = self.getChildView(self._activeTab)
+        tab._onFocus(focused)
 
     def _onTabChange(self, args):
         self.__changeTab(int(args.get('tabId', TabsId.DEFAULT)))
@@ -177,8 +195,11 @@ class TankmanContainerView(BaseCrewView):
 
     def __selectTankman(self, tankmanInvID):
         self._tankmanInvID = tankmanInvID
-        self.vehicleID = self.itemsCache.items.getTankman(tankmanInvID).vehicleInvID
-        self.__updateTab(tankmanInvID)
+        vehicle = self.itemsCache.items.getTankman(tankmanInvID)
+        if not vehicle:
+            return
+        self.vehicleID = vehicle.vehicleInvID
+        self.__updateTabs(tankmanInvID)
         self._crewWidget.updateTankmanId(tankmanInvID)
 
     def __changeTab(self, tabID):
@@ -186,18 +207,25 @@ class TankmanContainerView(BaseCrewView):
             return
         self._uiLogger.setParentViewKey(LAYOUT_ID_TO_ITEM.get(tabID))
         self._uiLogger.logClick(TABS_LOGGING_KEYS.get(tabID, CrewViewKeys.HANGAR), CrewViewKeys.PERSONAL_FILE)
+        self._isAnimationEnabled = False
         self.__createTab(tabID, LAYOUT_ID_TO_ITEM.get(self._activeTab))
         with self.viewModel.transaction() as vm:
             vm.setCurrentTabId(tabID)
         self.onTabChanged(tabID, prevTabKey=LAYOUT_ID_TO_ITEM.get(self._activeTab))
         self._activeTab = tabID
         self._crewWidget.setCurrentViewID(tabID)
-        self.__updateTab(self._tankmanInvID)
 
-    def __updateTab(self, tankmanInvID):
+    def __updateTabs(self, tankmanInvID):
+        for tabId in TabsId.ALL:
+            tab = self.getChildView(tabId)
+            if isinstance(tab, IPersonalTab):
+                tab.onChangeTankman(tankmanInvID)
+
+    def __stopAnimations(self):
+        self._isAnimationEnabled = False
         tab = self.getChildView(self._activeTab)
         if isinstance(tab, IPersonalTab):
-            tab.onChangeTankman(tankmanInvID)
+            tab.onStopAnimations()
 
     def __createTab(self, tabId, parentViewKey=None):
         if tabId in self._createdTabs:

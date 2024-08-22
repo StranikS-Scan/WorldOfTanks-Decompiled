@@ -135,9 +135,6 @@ class ShowShootingMultiGun(ShowShooting):
         if currentGuns == self._SHOT_ALL_GUNS:
             data['_gunIndex'] = range(0, len(gunDescr.effects))
             data['_gunSequence'] = [data['_gunIndex']] * burstCount
-        elif currentGuns < 0:
-            data['_gunIndex'] = turretDescr.multiGunState.patterns[currentGuns].gunIndexes
-            data['_gunSequence'] = turretDescr.multiGunState.patterns[currentGuns].sequence
         else:
             data['_gunIndex'] = [currentGuns]
             data['_gunSequence'] = [data['_gunIndex']] * burstCount

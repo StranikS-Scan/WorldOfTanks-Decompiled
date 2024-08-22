@@ -32,6 +32,9 @@
     <trophyUpgradedAdditionalInvisibilityDevice>
       <invisibilityBonus>	0.09	</invisibilityBonus>
     </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.1	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
   <repairCost>	9.00	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -2680,10 +2683,6 @@
       <tags></tags>
       <level>	7	</level>
       <price>	21000	</price>
-      <unlocks>
-        <turret>	Turret_2_Object416	  <cost>	15500	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	110	</armor_1>
         <armor_2>	75	</armor_2>
@@ -2713,7 +2712,7 @@
         <_100mm_D10T>	shared	  <maxAmmo>	35	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <unlocks>
             <gun>	_100mm_M-63	  <cost>	54000	</cost>
@@ -2730,14 +2729,14 @@
             </armor_4>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.7	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	6.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <turretYawLimits>	-75 75	</turretYawLimits>
           <models>
@@ -2831,11 +2830,11 @@
         <_100mm_M-63>	shared	  <maxAmmo>	35	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	R104_Object_430_II	  <cost>	150500	</cost>
-            </vehicle>
+            <turret>	Turret_2_Object416	  <cost>	15500	</cost>
+            </turret>
           </unlocks>
           <armor>
             <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3504,6 +3503,10 @@
       <tags></tags>
       <level>	8	</level>
       <price>	35000	</price>
+      <unlocks>
+        <vehicle>	R104_Object_430_II	  <cost>	150500	</cost>
+        </vehicle>
+      </unlocks>
       <armor>
         <armor_1>	110	</armor_1>
         <armor_2>	75	</armor_2>
@@ -3535,7 +3538,7 @@
         <_100mm_D10T>	shared	  <maxAmmo>	35	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3550,14 +3553,14 @@
             </armor_5>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	6.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <turretYawLimits>	-75 75	</turretYawLimits>
           <models>
@@ -3651,7 +3654,7 @@
         <_100mm_M-63>	shared	  <maxAmmo>	35	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 3 1 3	</maxPitch>
+            <maxPitch>	0 4 1 4	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4376,16 +4379,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700	</cost>
-        </radio>
-      </unlocks>
-    </_9RM>
-    <R113>	shared	  <unlocks>
-        <radio>	_10RT-26E	  <cost>	9200	</cost>
-        </radio>
-      </unlocks>
-    </R113>
     <_10RT-26E>	shared	</_10RT-26E>
   </radios>
   <physics>

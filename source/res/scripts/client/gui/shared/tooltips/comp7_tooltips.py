@@ -30,14 +30,15 @@ class RoleSkillBattleTooltipData(BlocksTooltipData):
             _logger.error('Missing Role Skill for role = %s', roleName)
             return []
         else:
-            items = [self.__packTooltipBlock(roleName, equipment)]
+            startLevel = self.context.getStartLevel(roleName)
+            items = [self.__packTooltipBlock(roleName, equipment, startLevel)]
             return items
 
     @staticmethod
-    def __packTooltipBlock(roleName, equipment):
+    def __packTooltipBlock(roleName, equipment, startLevel):
         blocks = []
         blocks.append(formatters.packTitleDescBlock(title=text_styles.main(getRoleText(roleName)), desc=text_styles.middleTitle(equipment.userString)))
-        active, passive = getRoleSkillDescription(equipment)
+        active, passive = getRoleSkillDescription(equipment, startLevel)
         if active:
             blocks.append(formatters.packTextBlockData(text=text_styles.standard(stripColorTagDescrTags(active)), padding=formatters.packPadding(bottom=15)))
         if passive:
@@ -55,13 +56,13 @@ class RoleSkillLobbyTooltipData(BlocksTooltipData):
         self._setWidth(width=400)
         return
 
-    def _packBlocks(self, equipmentName):
+    def _packBlocks(self, equipmentName, startLevel):
         equipment = self.context.buildItem(equipmentName)
         if equipment is None:
             _logger.error('Missing Role Skill = %s', equipmentName)
             return []
         else:
-            items = filter(None, [self.__packHeaderBlock(equipment), self.__packDescriptionBlock(equipment), self.__packInfoBlock()])
+            items = filter(None, [self.__packHeaderBlock(equipment), self.__packDescriptionBlock(equipment, startLevel), self.__packInfoBlock()])
             return items
 
     @classmethod
@@ -70,9 +71,9 @@ class RoleSkillLobbyTooltipData(BlocksTooltipData):
         return formatters.packBuildUpBlockData(blocks=blocks)
 
     @classmethod
-    def __packDescriptionBlock(cls, equipment):
+    def __packDescriptionBlock(cls, equipment, startLevel):
         blocks = []
-        active, passive = getRoleSkillDescription(equipment)
+        active, passive = getRoleSkillDescription(equipment, startLevel)
         if passive:
             blocks.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.roleSkill.description.passive())), desc=text_styles.main(cls.__formatEquipmentParams(passive))))
         if active:
@@ -110,7 +111,7 @@ def getCooldown(equipment):
     return backport.text(cooldown, cooldownSeconds=equipment.cooldownSeconds)
 
 
-def getRoleSkillDescription(equipment):
+def getRoleSkillDescription(equipment, startLevel):
     params = {}
     for k, v in equipment.tooltipParams.iteritems():
         if isinstance(v, tuple):
@@ -120,6 +121,8 @@ def getRoleSkillDescription(equipment):
 
         params[k] = v
 
+    if startLevel is not None:
+        params['startLevel'] = startLevel
     description = R.strings.artefacts.dyn(equipment.name).dyn('descr')
     active = description.dyn('active')
     active = backport.text(active(), **params) if active.exists() else ''
@@ -220,8 +223,8 @@ class Comp7SelectableRewardTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
-def getRoleEquipmentTooltipParts(equipment):
-    active, passive = getRoleSkillDescription(equipment)
+def getRoleEquipmentTooltipParts(equipment, startLevel):
+    active, passive = getRoleSkillDescription(equipment, startLevel)
     cooldown = getCooldown(equipment)
     body = '\n\n'.join(filter(None, (passive, active, cooldown)))
     return (equipment.userString, stripColorTagDescrTags(body))

@@ -4,6 +4,7 @@ from functools import partial
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.event_dispatcher import showStorage
 from web.web_client_api import webApiCollection, w2capi
+from web.web_client_api.exchange import PersonalExchangeRatesDiscountsWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.request.access_token import AccessTokenWebApiMixin
 from web.web_client_api.request.spa_id import SpaIdWebApiMixin
@@ -33,7 +34,8 @@ _DEFAULT_MARATHON_WEB_API_COLLECTION = (SoundWebApi,
  UtilWebApi,
  ShopWebApi,
  RewardsWebApi,
- SocialWebApi)
+ SocialWebApi,
+ PersonalExchangeRatesDiscountsWebApi)
 
 @w2capi('request', 'request_id')
 class _RequestWebApi(AccessTokenWebApiMixin, WgniTokenWebApiMixin, SpaIdWebApiMixin):

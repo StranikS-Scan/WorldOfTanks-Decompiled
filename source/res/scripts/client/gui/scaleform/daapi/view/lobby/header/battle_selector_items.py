@@ -33,7 +33,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, IWinbackController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -245,7 +245,6 @@ class _DisabledSelectorItem(_SelectorItem):
 
 
 class _RandomQueueItem(_SelectorItem):
-    _winbackController = dependency.descriptor(IWinbackController)
 
     def isRandomBattle(self):
         return True
@@ -259,32 +258,9 @@ class _RandomQueueItem(_SelectorItem):
             self._isDisabled = True
             self._isSelected = False
 
-    def isVisible(self):
-        return not self._winbackController.isModeAvailable()
-
     def _update(self, state):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.RANDOMS)
-        self._isVisible = self.isVisible()
-
-
-class _WinbackQueueItem(_RandomQueueItem):
-
-    def isDemoButtonDisabled(self):
-        return True
-
-    def isInSquad(self, state):
-        return False
-
-    def isVisible(self):
-        return self._winbackController.isModeAvailable()
-
-    def isShowNewIndicator(self):
-        return False
-
-    def _update(self, state):
-        self._isDisabled = state.hasLockedState
-        self._isSelected = state.isQueueSelected(QUEUE_TYPE.WINBACK) and not self._isLocked
         self._isVisible = self.isVisible()
 
 
@@ -392,7 +368,6 @@ class _EventBattlesItem(_SelectorItem):
 
 
 class _BattleSelectorItems(object):
-    _winbackController = dependency.descriptor(IWinbackController)
 
     def __init__(self, items, extraItems=None):
         super(_BattleSelectorItems, self).__init__()
@@ -471,7 +446,7 @@ class _BattleSelectorItems(object):
         return self.__items
 
     def _getDefaultPAN(self):
-        return PREBATTLE_ACTION_NAME.WINBACK if self._winbackController.isModeAvailable() else _DEFAULT_PAN
+        return _DEFAULT_PAN
 
     def isSelected(self, action):
         if action in self.__items:
@@ -1022,16 +997,11 @@ def _addEpicTrainingBattleType(items, lobbyContext=None):
     return
 
 
-def _addWinbackBattleType(items):
-    items.append(_WinbackQueueItem(backport.text(_R_BATTLE_TYPES.winback()), PREBATTLE_ACTION_NAME.WINBACK, 13, SELECTOR_BATTLE_TYPES.WINBACK))
-
-
 def _addEventBattlesType(items):
     items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,
- PREBATTLE_ACTION_NAME.WINBACK: _addWinbackBattleType,
  PREBATTLE_ACTION_NAME.RANKED: _addRankedBattleType,
  PREBATTLE_ACTION_NAME.E_SPORT: _addCommandBattleType,
  PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: _addStrongholdsBattleType,

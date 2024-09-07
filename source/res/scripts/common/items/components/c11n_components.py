@@ -482,12 +482,13 @@ class StyleItem(BaseCustomizationItem):
 class InsigniaItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.INSIGNIA
-    __slots__ = ('atlas', 'alphabet', 'canBeMirrored')
+    __slots__ = ('atlas', 'alphabet', 'canBeMirrored', 'emissionSettings')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.atlas = ''
         self.alphabet = ''
         self.canBeMirrored = False
+        self.emissionSettings = {'emissionAnimationSpeed': DEFAULT_EMISSION_ANIMATION_SPEED, 'deferredEmissionBrightness': DEFAULT_DEFERRED_EMISSION, 'forwardEmissionBrightness': DEFAULT_FORWARD_EMISSION, 'emissionMap': '', 'emissionPatternMap': ''}
         super(InsigniaItem, self).__init__(parentGroup)
 
 class ItemGroup(object):
@@ -540,7 +541,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.DECAL: DecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.STYLE: StyleItem, CustomizationType.FONT: Font, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PAINT: PaintItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.PAINT: PaintItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.FONT: Font, CustomizationType.DECAL: DecalItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -772,7 +773,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.STYLE: self.styles, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.MODIFICATION: self.modifications, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences}
+        self.itemTypes = {CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.DECAL: self.decals, CustomizationType.PAINT: self.paints, CustomizationType.PROJECTION_DECAL: self.projection_decals}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):

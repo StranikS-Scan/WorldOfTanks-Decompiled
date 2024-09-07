@@ -231,11 +231,6 @@ class ExtendedVehicleInfoTooltipData(VehicleInfoTooltipData):
             awardCrewAndHangarBlock = VehicleAdditionalItems(vehicle, self.context.getParamsConfiguration(vehicle), self._LEFT_PADDING, self._RIGHT_PADDING, showVehicleSlot, params.get('tmanRoleLevel', CrewTypes.SKILL_100) if showCrew else VehicleAdditionalItems.NO_CREW, params.get('allModulesAvailable', False)).construct()
             if awardCrewAndHangarBlock:
                 blocks.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
-        showDiscount = params.get('showDiscount', False)
-        if showDiscount:
-            discountTooltip = R.strings.winback.vehicleDiscountRewardTooltip
-            description = text_styles.main(backport.text(discountTooltip.description(), research=text_styles.stats(backport.text(discountTooltip.description.research())), purchase=text_styles.stats(backport.text(discountTooltip.description.purchase()))))
-            blocks.append(formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.winback.tooltip.info()), desc=description, imgPadding=formatters.packPadding(left=20, top=4, right=10)))
         return blocks
 
 

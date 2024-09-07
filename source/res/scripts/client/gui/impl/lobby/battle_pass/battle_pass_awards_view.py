@@ -17,7 +17,7 @@ from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
- BattlePassRewardReason.GIFT_CHAPTER: RewardReason.BUY_BATTLE_PASS,
+ BattlePassRewardReason.GIFT_CHAPTER: RewardReason.GIFT_CHAPTER,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS: RewardReason.BUY_BATTLE_PASS_LEVELS,
  BattlePassRewardReason.STYLE_UPGRADE: RewardReason.STYLE_UPGRADE,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE: RewardReason.BUY_MULTIPLE_BATTLE_PASS,

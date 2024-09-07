@@ -8,7 +8,7 @@ from gui.impl.gen import R
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.utils import decorators
 from shared_utils import first
-from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import ArmoryYardMainViewModel, AnimationStatus, ArmoryYardLevelModel, RewardStatus
+from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import ArmoryYardMainViewModel, AnimationStatus, ArmoryYardLevelModel, RewardStatus, BuyButtonState
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import EscSource
 from armory_yard.gui.shared.bonus_packers import getArmoryYardBuyViewPacker, packVehicleModel
 from armory_yard.gui.shared.bonuses_sorter import bonusesSortKeyFunc
@@ -24,7 +24,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBon
 from helpers import dependency
 from skeletons.gui.game_control import IArmoryYardController
 from skeletons.account_helpers.settings_core import ISettingsCore
-from armory_yard.gui.window_events import showArmoryYardVideoRewardWindow, showArmoryYardInfoPage, showArmoryYardBuyWindow, showArmoryYardVehiclePreview, showArmoryYardBundlesWindow
+from armory_yard.gui.window_events import showArmoryYardVideoRewardWindow, showArmoryYardInfoPage, showArmoryYardBuyWindow, showArmoryYardVehiclePreview, showArmoryYardBundlesWindow, showArmoryYardShopWindow, showArmoryYardPostProgressionBuyWindow
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 
@@ -74,11 +74,12 @@ class _ProgressionTabPresenter(object):
         self.__eventsSubscriber = SuspendableEventSubscriber()
         self.__parent = None
         self.__state = _InternalState()
+        self.__unload = False
         return
 
     def init(self, parent):
         self.__parent = parent
-        self.__eventsSubscriber.subscribeToEvents((self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__stageManager.onStartStage, self.__onStartStage), (self.__stageManager.onFinishStage, self.__onFinishStage), (self.__viewModel.onCollectReward, self.__onCollectReward), (self.__viewModel.onPlayAnimation, self.__onPlayAnimation), (self.__armoryYardCtrl.onProgressUpdated, self.__onProgressUpdate), (self.__armoryYardCtrl.onCollectFinalReward, self._checkAndShowFinalRewardWindow), (self.__viewModel.onAboutEvent, self.__onAboutEvent), (self.__viewModel.onClose, self.__closeView), (self.__viewModel.onSkipAnimation, self.__onSkipAnimation), (self.__viewModel.onMoveSpace, self.__onMoveSpace), (self.__viewModel.onBuyTokens, self.__onBuyTokens), (self.__viewModel.onStartMoving, self.__onStartMoving), (self.__viewModel.onShowVehiclePreview, self.__onShowVehiclePreview), (self.__armoryYardCtrl.onStatusChange, self.__updateState))
+        self.__eventsSubscriber.subscribeToEvents((self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__armoryYardCtrl.onAYCoinsUpdate, self.__onAYCoinsUpdate), (self.__stageManager.onStartStage, self.__onStartStage), (self.__stageManager.onFinishStage, self.__onFinishStage), (self.__viewModel.onCollectReward, self.__onCollectReward), (self.__viewModel.onPlayAnimation, self.__onPlayAnimation), (self.__armoryYardCtrl.onProgressUpdated, self.__onProgressUpdate), (self.__armoryYardCtrl.onCollectFinalReward, self._checkAndShowFinalRewardWindow), (self.__viewModel.onAboutEvent, self.__onAboutEvent), (self.__viewModel.onClose, self.__closeView), (self.__viewModel.onSkipAnimation, self.__onSkipAnimation), (self.__viewModel.onMoveSpace, self.__onMoveSpace), (self.__viewModel.onBuyTokens, self.__onBuyTokens), (self.__viewModel.onStartMoving, self.__onStartMoving), (self.__viewModel.onShowVehiclePreview, self.__onShowVehiclePreview), (self.__armoryYardCtrl.onStatusChange, self.__updateState), (self.__viewModel.onShopOpen, self.__onShopOpen))
         self.__eventsSubscriber.pause()
         self.__armoryYardCtrl.cameraManager.init()
 
@@ -92,6 +93,7 @@ class _ProgressionTabPresenter(object):
         return
 
     def onLoad(self):
+        self.__unload = False
         self.__eventsSubscriber.resume()
         with self.__viewModel.transaction() as model:
             self.__updateSteps(model)
@@ -103,6 +105,7 @@ class _ProgressionTabPresenter(object):
             model.setAnimationStatus(AnimationStatus.DISABLED)
             model.setReplay(True)
             model.setState(self.__armoryYardCtrl.getState())
+            self.__checkBuyButton(model)
         if self.__state.isAnimation:
             self.__stageManager.resume()
         else:
@@ -119,9 +122,21 @@ class _ProgressionTabPresenter(object):
 
     def onUnload(self):
         self.__eventsSubscriber.pause()
+        self.__unload = True
         if self.__state.isAnimation:
             self.__onSkipAnimation()
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': False}), EVENT_BUS_SCOPE.GLOBAL)
+
+    def __checkBuyButton(self, model):
+        if self.__armoryYardCtrl.payedTokensLeft() == 0:
+            model.setBuyButtonState(BuyButtonState.HIDDEN)
+            return
+        if self.__armoryYardCtrl.isPostProgressionActive():
+            model.setBuyButtonState(BuyButtonState.COINS)
+        elif not self.__armoryYardCtrl.isClaimedFinalReward():
+            model.setBuyButtonState(BuyButtonState.TOKENS)
+        else:
+            model.setBuyButtonState(BuyButtonState.HIDDEN)
 
     def __onMoveSpace(self, args=None):
         if args is None:
@@ -133,12 +148,21 @@ class _ProgressionTabPresenter(object):
             return
 
     def __onBuyTokens(self):
+        if self.__armoryYardCtrl.payedTokensLeft() == 0:
+            return
         if self.__armoryYardCtrl.isCompleted():
+            if self.__armoryYardCtrl.isPostProgressionActive():
+                showArmoryYardPostProgressionBuyWindow(parent=self.__parent)
             return
         if self.__armoryYardCtrl.isStarterPackAvailable():
             showArmoryYardBundlesWindow(parent=self.__parent)
         else:
             showArmoryYardBuyWindow(parent=self.__parent)
+
+    def __onShopOpen(self):
+        if not self.__armoryYardCtrl.isCompleted():
+            return
+        showArmoryYardShopWindow()
 
     def __setEmptyRewardsButton(self):
         with self.__viewModel.transaction() as model:
@@ -196,9 +220,16 @@ class _ProgressionTabPresenter(object):
         with self.__viewModel.transaction() as model:
             self.__updateSteps(model)
             self.__updateProgressionTimes(model)
+            self.__checkBuyButton(model)
+
+    def __onAYCoinsUpdate(self):
+        with self.__viewModel.transaction() as model:
+            self.__checkBuyButton(model)
 
     def __onProgressUpdate(self):
-        self.__viewModel.setCurrentLevel(self.__armoryYardCtrl.getCurrentProgress())
+        with self.__viewModel.transaction() as model:
+            model.setCurrentLevel(self.__armoryYardCtrl.getCurrentProgress())
+            self.__checkBuyButton(model)
         if not self.__state.isAnimation:
             self.__updateView(progressUpdated=True)
 
@@ -332,6 +363,8 @@ class _ProgressionTabPresenter(object):
 
     def _checkAndShowFinalRewardWindow(self):
         if self.__lastPlayedStageID != self.__armoryYardCtrl.getTotalSteps() or self.__armoryYardCtrl.isClaimedFinalReward() or not self.__armoryYardCtrl.isFinalQuestCompleted:
+            return
+        if self.__unload:
             return
         self._showVideoRewardWindow()
         BigWorld.player().AccountArmoryYardComponent.claimFinalReward()

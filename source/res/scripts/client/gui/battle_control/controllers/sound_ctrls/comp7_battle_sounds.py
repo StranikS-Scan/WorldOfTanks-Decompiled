@@ -72,16 +72,26 @@ class _EquipmentStateSoundPlayer(VehicleStateSoundPlayer):
      'comp7_aggressive_detection': 'comp_7_ability_buff_end',
      'comp7_march': 'comp_7_ability_buff_end'}
     __EQUIPMENT_PREPARING_START = {'comp7_redline': 'comp_7_ability_arty_aim',
-     'poi_artillery_aoe': 'comp_7_ability_arty_aim'}
+     'poi_artillery_aoe': 'comp_7_ability_arty_aim',
+     'poi_smoke': 'comp_7_ability_arty_aim',
+     'poi_minefield': 'comp_7_ability_arty_aim'}
     __EQUIPMENT_PREPARING_CANCEL = {'comp7_redline': 'comp_7_ability_arty_cancel',
-     'poi_artillery_aoe': 'comp_7_ability_arty_cancel'}
+     'poi_artillery_aoe': 'comp_7_ability_arty_cancel',
+     'poi_smoke': 'comp_7_ability_arty_cancel',
+     'poi_minefield': 'comp_7_ability_arty_cancel'}
     __PRE_DEACTIVATION_SOUNDS = {'comp7_aoe_inspire': _PreDeactivationParams('comp_7_ability_insp_stop', 3.0)}
     __POI_EQUIPMENT_ACTIVATED = {'poi_radar': 'comp_7_ability_poi_radar',
      'poi_radar_ally': 'comp_7_ability_poi_radar_ally',
      'poi_radar_enemy': 'comp_7_ability_poi_radar_enemy',
      'poi_artillery_aoe': 'comp_7_ability_arty_apply',
      'poi_artillery_aoe_ally': 'comp_7_ability_arty_ally',
-     'poi_artillery_aoe_enemy': 'comp_7_ability_arty_enemy'}
+     'poi_artillery_aoe_enemy': 'comp_7_ability_arty_enemy',
+     'poi_smoke': 'comp_7_ability_arty_apply',
+     'poi_smoke_ally': 'comp_7_ability_arty_ally',
+     'poi_smoke_enemy': 'comp_7_ability_arty_enemy',
+     'poi_minefield': 'comp_7_ability_arty_apply',
+     'poi_minefield_ally': 'comp_7_ability_arty_ally',
+     'poi_minefield_enemy': 'comp_7_ability_arty_enemy'}
 
     def __init__(self):
         super(_EquipmentStateSoundPlayer, self).__init__()
@@ -236,7 +246,7 @@ _ArtilleryAreaParams = namedtuple('_ArtilleryAreaParams', ('position', 'radius',
 
 class _ArtillerySoundPlayer(SoundPlayer):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __COMP7_ARTILLERY_NAMES = ('comp7_redline', 'poi_artillery_aoe')
+    __COMP7_ARTILLERY_NAMES = ('comp7_redline', 'poi_artillery_aoe', 'poi_smoke', 'poi_minefield')
     __ARTILLERY_START = 'comp_7_ability_arty_enter'
     __ARTILLERY_STOP = 'comp_7_ability_arty_exit'
     __ARTILLERY_DAMAGE_PC = 'imp_artillery_expl_huge_NPC_PC'

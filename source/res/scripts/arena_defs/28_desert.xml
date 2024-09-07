@@ -83,6 +83,8 @@
       </teamBasePositions>
     </maps_training>
     <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <visualScript>
         <server>
           <plan>	PointsOfInterest/pointsOfInterest	</plan>
@@ -103,35 +105,37 @@
       <minimap>	spaces/28_desert/mmap_comp7.dds	</minimap>
       <teamSpawnPoints>
         <team1>
-          <position>	300.214996 -210.442001	</position>
+          <position>	404.521606 213.309036	</position>
         </team1>
         <team2>
-          <position>	-348.260986 45.106998	</position>
+          <position>	-413.864929 124.521797	</position>
         </team2>
       </teamSpawnPoints>
       <pointsOfInterestUDO>
         <point>
-          <position>	-145.156998 -397.769989	</position>
-          <type>	1	</type>
+          <position>	-4.275839 100.850296	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	36.030998 73.267998	</position>
-          <type>	1	</type>
+          <position>	208.646896 484.979584	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-118.657806 75.435295	</position>
-          <type>	2	</type>
+          <position>	159.682037 -67.877113	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-46.923557 -114.073349	</position>
-          <type>	1	</type>
-        </point>
-        <point>
-          <position>	176.493774 -9.077857	</position>
-          <type>	2	</type>
+          <position>	-94.584969 -431.050873	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	-77.758339 -258.860901	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	249.900940 -208.700195	</position1>
+          <position2>	116.863976 310.117004	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
 </28_desert.xml>

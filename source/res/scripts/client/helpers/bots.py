@@ -20,8 +20,6 @@ def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
         lastName = i18n.convert(nationConfig.getLastName(lastNameID))
         if IS_DEVELOPMENT:
             name = _DEV_PREFIX_FORMAT_CREW.format(nationID, firstNameID, lastNameID) + name
-        elif arenaBonusType == ARENA_BONUS_TYPE.WINBACK:
-            name = _removeSpecialSymbols(_NAME_FORMAT_CREW_WINBACK.format(firstName, lastName))
         else:
             name = _NAME_FORMAT_CREW.format(firstName, lastName)
     elif namingType == BotNamingType.VEHICLE_MODEL:

@@ -56,6 +56,7 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     HYDRO_AUTO_SIEGE_CHASSIS = 'hydroAutoSiegeChassis'
     HYDRO_WHEELED_CHASSIS = 'hydroWheeledChassis'
     TRACK_WITHIN_TRACK_CHASSIS = 'trackWithinTrackChassis'
+    MULTI_TRACK_CHASSIS = 'multiTackChassis'
 
 
 _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
@@ -69,7 +70,8 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
  _ModuleExtraStatuses.HYDRO_CHASSIS: (_STR_EXTRA_PATH.hydraulicChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
  _ModuleExtraStatuses.HYDRO_AUTO_SIEGE_CHASSIS: (_STR_EXTRA_PATH.hydraulicAutoSiegeChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
  _ModuleExtraStatuses.HYDRO_WHEELED_CHASSIS: (_STR_EXTRA_PATH.hydraulicWheeledChassisLabel, _IMG_EXTRA_PATH.hydraulicWheeledChassisIcon),
- _ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS: (_STR_EXTRA_PATH.trackWithinTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack)}
+ _ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS: (_STR_EXTRA_PATH.trackWithinTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack),
+ _ModuleExtraStatuses.MULTI_TRACK_CHASSIS: (_STR_EXTRA_PATH.multiTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack)}
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -710,6 +712,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 result.append(_ModuleExtraStatuses.HYDRO_CHASSIS)
         elif module.isTrackWithinTrack():
             result.append(_ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS)
+        elif module.isMultiTrack():
+            result.append(_ModuleExtraStatuses.MULTI_TRACK_CHASSIS)
         return result
 
 

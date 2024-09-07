@@ -154,7 +154,9 @@ class CustomAction(_Action):
     def invoke(self, notID, actor=None):
         actor, value = self.__getActor()
         if actor is not None:
-            return CustomActionsKeeper.invoke(actor, **self.kwargs)
+            kwargs = self.kwargs
+            kwargs['notID'] = notID
+            return CustomActionsKeeper.invoke(actor, **kwargs)
         else:
             LOG_ERROR("Can't find actor for ", str(value))
             return

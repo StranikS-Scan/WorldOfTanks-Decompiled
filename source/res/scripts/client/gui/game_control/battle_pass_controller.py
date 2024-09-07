@@ -30,6 +30,7 @@ _logger = logging.getLogger(__name__)
 TopPoints = namedtuple('TopPoints', ['label', 'winPoint', 'losePoint'])
 BattleRoyaleTopPoints = namedtuple('BattleRoyaleTopPoints', ['label', 'points'])
 PointsDifference = namedtuple('PointsDifference', ['bonus', 'top', 'textID'])
+NOT_DEFINED_CHAPTER_ID = 0
 
 class BattlePassController(IBattlePassController, EventsHandler):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -133,7 +134,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
         return self.__getConfig().seasonFinish <= time_utils.getServerUTCTime()
 
     def isValidBattleType(self, prbEntity):
-        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.WINBACK)
+        return prbEntity.getQueueType() in (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX)
 
     def isGameModeEnabled(self, arenaBonusType):
         return self.__getConfig().isGameModeEnabled(arenaBonusType)
@@ -551,7 +552,7 @@ class BattlePassController(IBattlePassController, EventsHandler):
             rewardsToChoose.sort(key=lambda x: (int(x.split(':')[-1]), x.split(':')[-2]))
         else:
             rewardsToChoose = []
-        self.getRewardLogic().startManualFlow(rewardsToChoose, 0)
+        self.getRewardLogic().startManualFlow(rewardsToChoose, NOT_DEFINED_CHAPTER_ID)
         return
 
     def getChapterStyleProgress(self, chapter):

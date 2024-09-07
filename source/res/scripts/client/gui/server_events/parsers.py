@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/parsers.py
+import typing
 import weakref
-from typing import Union
 from gui.server_events import formatters, conditions
 from gui.server_events.conditions import _Cumulativable, CumulativeResult, _ConditionsGroup
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Optional, Tuple, Union
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class ConditionsParser(object):
     LOGICAL_OPS = {'and': conditions.AndGroup,
@@ -112,7 +115,11 @@ class AccountRequirements(ConditionsParser):
             return conditions.AccountDossierValue(uniqueName, data)
         if name == 'vehiclesUnlocked':
             return conditions.VehiclesUnlocked(uniqueName, data)
-        return conditions.VehiclesOwned(uniqueName, data) if name == 'vehiclesOwned' else None
+        if name == 'vehiclesOwned':
+            return conditions.VehiclesOwned(uniqueName, data)
+        if name == 'activeProgression':
+            return conditions.VersusAIProgression(uniqueName, data)
+        return conditions.QuestCondition(uniqueName, data) if name == 'quest' else None
 
     def isAvailable(self):
         conds = self.getConditions()
@@ -171,7 +178,7 @@ class VehicleRequirements(ConditionsParser):
         if self._suitableVehicles is None:
             invVehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
             isAvailable = self.isAvailable
-            self._suitableVehicles = [ vehicleItem for vehicleItem in invVehs.itervalues() if isAvailable(vehicleItem) ]
+            self._suitableVehicles = tuple([ vehicleItem.intCD for vehicleItem in invVehs.itervalues() if isAvailable(vehicleItem) ])
         return self._suitableVehicles
 
     def _handleCondition(self, name, data, uniqueName, group):

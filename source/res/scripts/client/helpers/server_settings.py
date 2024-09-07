@@ -1199,21 +1199,13 @@ class Comp7RewardsConfig(settingsBlock('Comp7RewardsConfig', ('main', 'extra')))
 
 
 class WinbackConfig(namedtuple('WinbackConfig', ('isEnabled',
- 'isModeEnabled',
- 'isWhatsNewEnabled',
- 'isProgressionEnabled',
- 'tokenQuestPrefix',
- 'offerTokenPrefix',
- 'winbackAccessToken',
- 'winbackBattlesCountToken',
- 'winbackShowPromoToken',
- 'winbackPromoURL',
- 'lastQuestEnabler',
- 'winbackStartingQuest'))):
+ 'versusAIIsDefaultModeToken',
+ 'defaultProgression',
+ 'progressions'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isModeEnabled=False, isWhatsNewEnabled=False, isProgressionEnabled=False, tokenQuestPrefix='', offerTokenPrefix='', winbackAccessToken='', winbackBattlesCountToken='', winbackShowPromoToken='', winbackPromoURL='', lastQuestEnabler='', winbackStartingQuest='')
+        defaults = dict(isEnabled=False, versusAIIsDefaultModeToken='', defaultProgression='', progressions={})
         defaults.update(kwargs)
         return super(WinbackConfig, cls).__new__(cls, **defaults)
 
@@ -1309,11 +1301,13 @@ class ArmoryYardConfig(namedtuple('ArmoryYardConfig', ('isEnabled',
  'infoPageLink',
  'activeHoursCountdown',
  'announcementCountdown',
- 'starterPacks'))):
+ 'starterPacks',
+ 'postProgression',
+ 'shop'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0, starterPacks={})
+        defaults = dict(isEnabled=False, isPaused=False, seasons={}, animations={}, cycleTimes={}, tokenBase='', receivedRewardTokenPostfix='', stageTokenPostfix='', currencyTokenPostfix='', tokenCost={}, rewards={}, introVideoLink='', infoPageLink='', activeHoursCountdown=0, announcementCountdown=0, starterPacks={}, postProgression={}, shop={})
         defaults.update(kwargs)
         return super(ArmoryYardConfig, cls).__new__(cls, **defaults)
 
@@ -1471,26 +1465,28 @@ class EarlyAccessConfig(namedtuple('EarlyAccessConfig', ('isEnabled',
         return self.seasons.get(seasonID, {}).get('tokenCost', {})
 
 
-class RacesConfig(namedtuple('RacesConfig', ('isEnabled',
- 'isBattleEnabled',
- 'peripheryIDs',
- 'primeTimes',
- 'seasons',
- 'cycleTimes',
- 'rewardSettings',
- 'racesVehicles',
- 'scoreSystem'))):
+class RandomBattlesConfig(namedtuple('RandomBattlesConfig', ('isEnabled', 'levels'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isBattleEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, rewardSettings={}, racesVehicles={}, scoreSystem={})
+        defaults = dict(isEnabled=False, levels=tuple())
         defaults.update(kwargs)
-        return super(RacesConfig, cls).__new__(cls, **defaults)
+        return super(RandomBattlesConfig, cls).__new__(cls, **defaults)
+
+    def getLevels(self):
+        return self.levels
+
+    def asDict(self):
+        return self._asdict()
 
     def replace(self, data):
         allowedFields = self._fields
         dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
         return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
 
 
 class ServerSettings(object):
@@ -1548,7 +1544,8 @@ class ServerSettings(object):
         self.__versusAISettings = VersusAIConfig()
         self.__debutBoxesConfig = DebutBoxesConfig()
         self.__earlyAccessConfig = EarlyAccessConfig()
-        self.__racesConfig = RacesConfig()
+        self.__armoryYardSettings = ArmoryYardConfig.defaults()
+        self.__randomBattlesConfig = RandomBattlesConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1718,8 +1715,8 @@ class ServerSettings(object):
             self.__debutBoxesConfig = DebutBoxesConfig.defaults()
         if Configs.EARLY_ACCESS_CONFIG.value in self.__serverSettings:
             self.__earlyAccessConfig = makeTupleByDict(EarlyAccessConfig, self.__serverSettings[Configs.EARLY_ACCESS_CONFIG.value])
-        if Configs.RACES_CONFIG.value in self.__serverSettings:
-            self.__racesConfig = makeTupleByDict(RacesConfig, self.__serverSettings[Configs.RACES_CONFIG.value])
+        if Configs.RANDOM_BATTLES_CONFIG.value in self.__serverSettings:
+            self.__randomBattlesConfig = makeTupleByDict(RandomBattlesConfig, self.__serverSettings[Configs.RANDOM_BATTLES_CONFIG.value])
         self.__schemaManager.set(self.__serverSettings)
         self.onServerSettingsChange(serverSettings)
 
@@ -1846,8 +1843,8 @@ class ServerSettings(object):
         lbKeyConfig = Configs.LOOTBOX_KEYS_CONFIG.value
         if lbKeyConfig in serverSettingsDiff:
             self.__serverSettings[lbKeyConfig] = serverSettingsDiff[lbKeyConfig]
-        if Configs.RACES_CONFIG.value in serverSettingsDiff:
-            self.__racesConfig = self.__racesConfig.replace(serverSettingsDiff[Configs.RACES_CONFIG.value])
+        if Configs.RANDOM_BATTLES_CONFIG.value in serverSettingsDiff:
+            self.__updateRandomBattlesConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2049,8 +2046,8 @@ class ServerSettings(object):
         return self.__earlyAccessConfig
 
     @property
-    def racesConfig(self):
-        return self.__racesConfig
+    def randomBattlesConfig(self):
+        return self.__randomBattlesConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -2062,6 +2059,9 @@ class ServerSettings(object):
 
     def isPMBattleProgressEnabled(self):
         return self.__getGlobalSetting('isPMBattleProgressEnabled', True)
+
+    def isStaticWeatherSwitchEnabled(self):
+        return self.__getGlobalSetting('isStaticWeatherSwitchEnabled', True)
 
     def getDisabledPMOperations(self):
         return self.__getGlobalSetting('disabledPMOperations', dict())
@@ -2294,6 +2294,9 @@ class ServerSettings(object):
 
     def getMaxScoutInSquadsLevels(self):
         return self.__getGlobalSetting('maxScoutInSquadsLevels', [])
+
+    def getPossibleSquadsVehicleLevels(self):
+        return self.__getGlobalSetting('possibleSquadsVehicleLevels', [])
 
     def getRandomMapsForDemonstrator(self):
         return self.__getGlobalSetting('randomMapsForDemonstrator', {})
@@ -2572,6 +2575,9 @@ class ServerSettings(object):
 
     def __updateEarlyAccessConfig(self, diff):
         self.__earlyAccessConfig = self.__earlyAccessConfig.replace(diff[Configs.EARLY_ACCESS_CONFIG.value])
+
+    def __updateRandomBattlesConfig(self, diff):
+        self.__randomBattlesConfig = self.__randomBattlesConfig.replace(diff[Configs.RANDOM_BATTLES_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

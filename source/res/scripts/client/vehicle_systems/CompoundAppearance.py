@@ -16,6 +16,7 @@ from debug_utils import LOG_ERROR
 from aih_constants import ShakeReason
 from shared_utils import findFirst
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
+from vehicle_systems.components.CrashedTracks import VEHICLE_MOVEMENT_STATES
 from vehicle_systems.components.terrain_circle_component import TerrainCircleComponent
 from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
@@ -104,6 +105,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__engineStarted = False
         self.__turbochargerSoundPlaying = False
         self.partsGameObjects = PartsGameObjects()
+        self.__prevMovementState = VEHICLE_MOVEMENT_STATES.NORMAL
         return
 
     def setVehicle(self, vehicle):
@@ -179,6 +181,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         else:
             self.__engineStarted = False
             self.__activated = False
+            self.__prevMovementState = VEHICLE_MOVEMENT_STATES.NORMAL
             self.highlighter.deactivate()
             super(CompoundAppearance, self).deactivate()
             if self.__inSpeedTreeCollision:
@@ -442,33 +445,56 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
     def addCrashedTrack(self, isLeft, pairIndex=0, index=None):
         if not self._vehicle.isAlive():
             return
-        self._addCrashedTrack(isLeft, pairIndex, self.isLeftSideFlying if isLeft else self.isRightSideFlying, self._vehicle.getExtraHitPoint(index))
-        self.onChassisDestroySound(isLeft, True, trackPairIdx=pairIndex)
+        else:
+            self._addCrashedTrack(isLeft, pairIndex, self.isLeftSideFlying if isLeft else self.isRightSideFlying, self._vehicle.getExtraHitPoint(index))
+            self.onChassisDestroySound(isLeft, True, trackPairIdx=pairIndex)
+            if self.crashedTracksController is not None:
+                self.__prevMovementState = self.crashedTracksController.getTankMovementState()
+            return
 
     def delCrashedTrack(self, isLeft, pairIndex=0):
         self._delCrashedTrack(isLeft, pairIndex)
         self.onChassisDestroySound(isLeft, False, trackPairIdx=pairIndex)
+        if self.crashedTracksController is not None:
+            self.__prevMovementState = self.crashedTracksController.getTankMovementState()
+        return
 
     def onChassisDestroySound(self, isLeft, destroy, wheelsIdx=-1, trackPairIdx=MAIN_TRACK_PAIR_IDX):
-        if self._vehicle is None:
+        vehicle = self.getVehicle()
+        if vehicle is None:
             return
         else:
-            if not self._vehicle.isEnteringWorld and self.engineAudition:
+            if not vehicle.isEnteringWorld and self.engineAudition:
                 if wheelsIdx == -1:
-                    if isLeft:
-                        position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_LEFT_MID)).translation
-                    else:
-                        position = Math.Matrix(self.compoundModel.node(TankNodeNames.TRACK_RIGHT_MID)).translation
+                    trackNodeName = TankNodeNames.TRACK_LEFT_MID if isLeft else TankNodeNames.TRACK_RIGHT_MID
+                    position = Math.Matrix(self.compoundModel.node(trackNodeName)).translation
                     materialType = 0
                 else:
                     position = self.wheelsAnimator.getWheelWorldTransform(wheelsIdx).translation
                     materialType = 0 if self.wheelsAnimator.isWheelDeflatable(wheelsIdx) else 1
-                vehicle = self.getVehicle()
                 if not destroy and vehicle.isPlayerVehicle and any((device.groupName == 'extraHealthReserve' for device in vehicle.getOptionalDevices() if device is not None)):
                     SoundGroups.g_instance.playSound2D('cons_springs')
-                if trackPairIdx == MAIN_TRACK_PAIR_IDX:
-                    self.engineAudition.onChassisDestroy(position, destroy, materialType)
+                if self.__isUseMultiTrackSound(vehicle):
+                    self.__onMultiTrackChassisSound(vehicle, destroy, position)
+                    return
+                if vehicle.isTrackWithinTrack and trackPairIdx != MAIN_TRACK_PAIR_IDX:
+                    return
+                self.engineAudition.onChassisDestroy(position, destroy, materialType)
             return
+
+    def __isUseMultiTrackSound(self, vehicle):
+        if not vehicle.isMultiTrack or self.crashedTracksController is None:
+            return False
+        else:
+            currentMovementState = self.crashedTracksController.getTankMovementState()
+            useMultiTrackSound = currentMovementState == self.__prevMovementState or currentMovementState != VEHICLE_MOVEMENT_STATES.STOP and self.__prevMovementState != VEHICLE_MOVEMENT_STATES.STOP
+            return useMultiTrackSound
+
+    def __onMultiTrackChassisSound(self, vehicle, destroy, position):
+        if destroy:
+            SoundGroups.g_instance.playSoundPos('breakdown_treads_outer', position)
+        elif vehicle.isPlayerVehicle:
+            SoundGroups.g_instance.playSound2D('repair_treads_outer')
 
     def turretDamaged(self):
         player = BigWorld.player()

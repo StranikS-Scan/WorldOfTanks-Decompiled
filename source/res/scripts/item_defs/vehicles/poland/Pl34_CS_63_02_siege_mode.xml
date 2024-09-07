@@ -63,14 +63,14 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
-      <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Hull.model	</undamaged>
-      <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Hull.model	</destroyed>
-      <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Hull.model	</exploded>
+      <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</exploded>
       <sets>
         <Pl21_CS_63_3Dst_BV>
-          <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Hull.model	</exploded>
+          <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</exploded>
         </Pl21_CS_63_3Dst_BV>
       </sets>
     </models>
@@ -85,13 +85,13 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.00048 0.537738 0.447164	</turret>
+      <turret>	-0.000500 0.517777 0.447200	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/poland/Pl21_CS_63/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/poland/Pl34_CS_63_02/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
-    <hangarShadowTexture>	vehicles/poland/Pl21_CS_63/CS_63_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/poland/Pl34_CS_63_02/CS_63_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
       <slot>
         <slotType>	clan	</slotType>
@@ -1169,14 +1169,14 @@
       <maxRegenHealth>	190	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
-        <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Chassis.model	</exploded>
+        <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</exploded>
         <sets>
           <Pl21_CS_63_3Dst_BV>
-            <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Chassis.model	</exploded>
+            <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</exploded>
           </Pl21_CS_63_3Dst_BV>
         </sets>
       </models>
@@ -1483,8 +1483,8 @@
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.981122 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/poland/Pl21_CS_63/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/poland/Pl34_CS_63_02/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
       <topRightCarryingPoint>	1.29043 1.84372	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
@@ -1598,10 +1598,10 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/poland/Pl21_CS_63/track/segment.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/poland/Pl21_CS_63/track/segment.model	</segmentModelRight>
-          <left>	vehicles/poland/Pl21_CS_63/track/left.track	</left>
-          <right>	vehicles/poland/Pl21_CS_63/track/right.track	</right>
+          <segmentModelLeft>	vehicles/poland/Pl34_CS_63_02/track/segment.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/poland/Pl34_CS_63_02/track/segment.model	</segmentModelRight>
+          <left>	vehicles/poland/Pl34_CS_63_02/track/left.track	</left>
+          <right>	vehicles/poland/Pl34_CS_63_02/track/right.track	</right>
           <segmentLength>	0.142	</segmentLength>
           <segmentOffset>	0.283648	</segmentOffset>
           <atlas>
@@ -1632,7 +1632,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/poland/Pl21_CS_63/track/segment.model	</model>
+            <model>	vehicles/poland/Pl34_CS_63_02/track/segment.model	</model>
             <length>	0.143275	</length>
           </mainSegment>
           <collisionHull>
@@ -1830,7 +1830,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/poland/Pl21_CS_63/track/segment.model	</model>
+            <model>	vehicles/poland/Pl34_CS_63_02/track/segment.model	</model>
             <length>	0.144107	</length>
           </mainSegment>
           <collisionHull>
@@ -2110,17 +2110,17 @@
             </armor_14>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	3.5	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.416667 8 0.430556 3 0.569444 3 0.583333 8 1 8	</maxPitch>
           </pitchLimits>
-          <reloadTime>	27	</reloadTime>
+          <reloadTime>	25	</reloadTime>
           <clip>
             <count>	4	</count>
-            <rate>	15	</rate>
+            <rate>	12	</rate>
           </clip>
           <burst>
             <count>	2	</count>
@@ -2132,20 +2132,20 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</exploded>
             <sets>
               <Pl21_CS_63_3Dst_BV>
-                <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Gun_01.model	</exploded>
+                <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</exploded>
               </Pl21_CS_63_3Dst_BV>
             </sets>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl21_CS_63/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl34_CS_63_02/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_large	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
@@ -2184,8 +2184,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0.044 -0.002 3.31625	</rayStart>
-              <rayEnd>	0.044 -0.002 4.01625	</rayEnd>
+              <rayStart>	0.044 -0.002 0	</rayStart>
+              <rayEnd>	0.044 -0.002 0.7	</rayEnd>
               <rayUp>	0.099 0 0	</rayUp>
               <size>	0.7	</size>
             </slot>
@@ -2205,24 +2205,24 @@
         </_105mm_armata_wz_64_02>
       </guns>
       <models>
-        <undamaged>	vehicles/poland/Pl21_CS_63/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/poland/Pl21_CS_63/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/poland/Pl21_CS_63/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</exploded>
         <sets>
           <Pl21_CS_63_3Dst_BV>
-            <undamaged>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl21_CS_63/_skins/Pl21_CS_63_3Dst_BV/crash/lod0/Turret_01.model	</exploded>
+            <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</exploded>
           </Pl21_CS_63_3Dst_BV>
         </sets>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/poland/Pl21_CS_63/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/poland/Pl21_CS_63/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/poland/Pl34_CS_63_02/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.047869 0.259552 1.19185	</gunPosition>
+      <gunPosition>	-0.047869 0.259552 1.191849	</gunPosition>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.039 0 1.051 0 0.616 0.141 0.708 0.5 0.586 0.5 0.458 0.5 0.164 0.348 0.273	</physicsShape>
+      <physicsShape>	1.039 0.032 1.051 0 0.651 0.169 0.708 0.5 0.586 0.5 0.458 0.5 0.164 0.348 0.273	</physicsShape>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2862,9 +2862,14 @@
     <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
-    <default>	15516	</default>
+    <default>	31111	</default>
     <lodDist>	MEDIUM	</lodDist>
-    <alpha>	0.8	</alpha>
+    <alpha>	0.92	</alpha>
   </emblems>
+  <prefabAttachments>
+    <newAttachment0>
+      <attachmentId>	31027	</attachmentId>
+    </newAttachment0>
+  </prefabAttachments>
   <customDefaultCamouflage>	true	</customDefaultCamouflage>
 </Pl34_CS_63_02_siege_mode.xml>

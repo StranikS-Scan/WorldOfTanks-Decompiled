@@ -1,0 +1,251 @@
+<style_31190_comp7_inscriptions.xml>
+  <quests>
+    <battleQuest>
+      <id>	last_man_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/last_man_31190/condition	</key>
+              </description>
+            </win>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	winAloneAgainstVehicleCount	</key>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_7	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	sudden_strike_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	10	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <isFirstBlood>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/sudden_strike_31190/condition	</key>
+            </description>
+          </isFirstBlood>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_8	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	blitzkrieg_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win>
+              <description>
+                <key>	#vehicle_customization:customization/tooltip/quests/blitzkrieg_31190/condition	</key>
+              </description>
+            </win>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	duration	</key>
+              <lessOrEqual>	150	</lessOrEqual>
+            </results>
+            <results>
+              <hideInGui></hideInGui>
+              <key>	finishReason	</key>
+              <equal>	1	</equal>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_9	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	prestige_7v7_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	50	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <results>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/prestige_7v7_31190/condition	</key>
+            </description>
+            <key>	comp7PrestigePoints	</key>
+            <max>	1	</max>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_10	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	workhorse_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <common>
+          <cumulativeSum>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/workhorse_31190/condition	</key>
+            </description>
+            <sum>
+              <spotted></spotted>
+              <kills></kills>
+            </sum>
+            <greaterOrEqual>	500	</greaterOrEqual>
+          </cumulativeSum>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_11	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	rampage_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <bonusTypes>	43	</bonusTypes>
+          </battle>
+        </preBattle>
+        <postBattle>
+          <vehicleKills>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/rampage_31190/condition	</key>
+            </description>
+            <greaterOrEqual>	5	</greaterOrEqual>
+          </vehicleKills>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_12	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+    <battleQuest>
+      <id>	double_threat_31190	</id>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <showPostBattleStat>	true	</showPostBattleStat>
+      <conditions>
+        <preBattle>
+          <battle>
+            <and>
+              <unit>
+                <isSquad>	true	</isSquad>
+                <unitSize>	2	</unitSize>
+              </unit>
+              <bonusTypes>	43	</bonusTypes>
+            </and>
+          </battle>
+        </preBattle>
+        <common>
+          <battles>
+            <count>	25	</count>
+          </battles>
+        </common>
+        <postBattle>
+          <win>
+            <description>
+              <key>	#vehicle_customization:customization/tooltip/quests/double_threat_31190/condition	</key>
+            </description>
+          </win>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31190_14	</id>
+          <expires>	01.12.2050 05:10	</expires>
+          <count>	1	</count>
+          <limit>	1	</limit>
+        </token>
+      </bonus>
+    </battleQuest>
+  </quests>
+</style_31190_comp7_inscriptions.xml>

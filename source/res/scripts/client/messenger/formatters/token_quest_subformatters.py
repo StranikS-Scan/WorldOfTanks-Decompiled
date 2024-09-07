@@ -30,11 +30,11 @@ from helpers import dependency
 from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IWotPlusController
+from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -944,77 +944,6 @@ class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
     def __getRankName(self, rankIndex):
         rankKey = self.__RANK_NAME_KEYS[rankIndex - 1]
         return backport.text(R.strings.comp7.rank.dyn(rankKey)())
-
-
-class WinbackRewardFormatterBase(ServiceChannelFormatter, TokenQuestsSubFormatter):
-    __MESSAGE_TEMPLATE = 'Winback{}Award'
-    __TOKEN_TYPE = 'SelectableToken'
-    __AWARD_TYPE = 'Quest'
-    __SIMPLE = 'Simple'
-    _winbackController = dependency.descriptor(IWinbackController)
-
-    def __init__(self):
-        super(WinbackRewardFormatterBase, self).__init__()
-        self._achievesFormatter = WinbackQuestAchievesFormatter()
-
-    def _format(self, message, *args):
-        messageDataList = []
-        data = message.data or {}
-        completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
-        for qID in completedQuestIDs:
-            messageData = self.__buildMessage(qID, message)
-            if messageData is not None:
-                messageDataList.append(messageData)
-
-        return messageDataList if messageDataList else [MessageData(None, None)]
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return cls._winbackController.isWinbackQuest(questID)
-
-    def __buildMessage(self, questID, message):
-        data = message.data or {}
-        rewards = data.get('detailedRewards', {}).get(questID, {})
-        isWithButton = bool(self._achievesFormatter.getSelectableRewards(rewards))
-        fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False)
-        if fmt is not None:
-            templateParams = {'achieves': fmt or ''}
-            questType = self.__AWARD_TYPE
-            if self._winbackController.getQuestIdx(questID) < 0:
-                questType = self.__SIMPLE
-            elif isWithButton:
-                questType = self.__TOKEN_TYPE
-            template = self.__MESSAGE_TEMPLATE.format(questType)
-            settings = self._getGuiSettings(message, template)
-            formatted = g_settings.msgTemplates.format(template, templateParams)
-            return MessageData(formatted, settings)
-        else:
-            return
-
-
-class WinbackRewardFormatter(AsyncTokenQuestsSubFormatter, WinbackRewardFormatterBase):
-
-    def __init__(self):
-        AsyncTokenQuestsSubFormatter.__init__(self)
-        WinbackRewardFormatterBase.__init__(self)
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced:
-            messageDataList = self._format(message)
-        if messageDataList:
-            callback(messageDataList)
-        callback([MessageData(None, None)])
-        return
-
-
-class WinbackClientRewardFormatter(WinbackRewardFormatterBase):
-
-    def format(self, message, *args):
-        return self._format(message, *args)
 
 
 class CrewPerksFormatter(AsyncTokenQuestsSubFormatter):

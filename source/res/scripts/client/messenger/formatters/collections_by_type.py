@@ -19,7 +19,6 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
@@ -232,8 +231,6 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_ENDED, _sc.MapboxEndedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_EVENT_STARTED, _sc.MapboxStartedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD, _sc.BattleMattersTokenAward())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WINBACK_SELECTABLE_REWARD, _sc.WinbackSelectableAward())
-    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WINBACK_BATTLERESULTS_REWARD, token_quest_subformatters.WinbackClientRewardFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.MAPBOX_SURVEY_AVAILABLE, _sc.MapboxSurveyAvailableFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_BATTLE_AWARD, token_quest_subformatters.BattleMattersClientAwardsFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.WOTPLUS_FEATURE_DISABLED, _sc.SimpleFormatter('WotPlusDisabled'))

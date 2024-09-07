@@ -54,6 +54,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.Vehicle import getNationLessName, getUserName, NO_VEHICLE_ID
 from gui.shared.gui_items.processors.goodies import BoosterActivator
+from gui.shared.gui_items.vehicle_helpers import isSecretExtendedNonInventoryVehicle
 from gui.shared.lock_overlays import lockNotificationManager
 from gui.shared.money import Currency, MONEY_UNDEFINED, Money
 from gui.shared.utils import isPopupsWindowsOpenDisabled
@@ -66,7 +67,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController, IBoostersController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController, IBoostersController, IBattlePassController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -190,6 +191,8 @@ def showHangarVehicleConfigurator():
 
 
 def showVehicleInfo(vehTypeCompDescr):
+    if isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
+        return
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEHICLE_INFO_WINDOW, getViewName(VIEW_ALIAS.VEHICLE_INFO_WINDOW, int(vehTypeCompDescr))), ctx={'vehicleCompactDescr': int(vehTypeCompDescr)}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -553,6 +556,8 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias, previewBackCb=previewBackCb)
     else:
         vehicle = dependency.instance(IItemsCache).items.getItemByCD(vehTypeCompDescr)
+        if isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
+            return
         if not (itemsPack or offers or vehParams) and vehicle.canTradeIn:
             viewAlias = VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW
         elif offers and offers[0].eventType == 'telecom_rentals':
@@ -963,9 +968,17 @@ def showSeniorityRewardAwardWindow(completedQuests, data, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True, packageRewards=None):
+@dependency.replace_none_kwargs(battlePassController=IBattlePassController)
+def showBattlePassAwardsWindow(bonuses, data, useQueue=False, needNotifyClosing=True, packageRewards=None, battlePassController=None):
     from gui.impl.lobby.battle_pass.battle_pass_awards_view import BattlePassAwardWindow
-    findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, packageRewards, needNotifyClosing)
+    from gui.game_control.battle_pass_controller import NOT_DEFINED_CHAPTER_ID
+    chapterID = data.get('chapter', None)
+    if not battlePassController.isChapterExists(chapterID) and chapterID != NOT_DEFINED_CHAPTER_ID:
+        _logger.debug("BattlePassAwardWindow can't be loaded, chapter (chapterID=%d) doesn't exist", chapterID)
+        return
+    else:
+        findAndLoadWindow(useQueue, BattlePassAwardWindow, bonuses, data, packageRewards, needNotifyClosing)
+        return
 
 
 def showBattlePassHowToEarnPointsView(parent=None, chapterID=0):
@@ -1575,6 +1588,8 @@ def showOnboardingView(styleCD=None, isFirstRun=False, parent=None, guiLoader=No
 
 @wg_async
 def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None):
+    if isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
+        return
     from gui.impl.lobby.veh_post_progression.post_progression_intro import getPostProgressionIntroWindowProc
     intoProc = getPostProgressionIntroWindowProc()
     yield intoProc.show()
@@ -1584,6 +1599,8 @@ def showVehPostProgressionView(vehTypeCompDescr, exitEvent=None):
 
 
 def showVehPostProgressionCmpView(vehTypeCompDescr, exitEvent=None):
+    if isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
+        return
     loadEvent = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.VEH_POST_PROGRESSION_CMP), ctx={'intCD': vehTypeCompDescr,
      'exit': exitEvent})
     g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -2163,18 +2180,6 @@ def showCollectionsIntro():
         from gui.impl.lobby.collection.intro_view import IntroWindow
         window = IntroWindow(parent=getParentWindow())
         window.load()
-
-
-def showWinbackIntroView(parent=None):
-    from gui.impl.lobby.winback.winback_daily_quests_intro_view import WinbackDailyQuestsIntroWindow
-    window = WinbackDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
-    window.load()
-    return
-
-
-def showWinbackSelectRewardView(selectableBonusTokens=None):
-    from gui.impl.lobby.winback.winback_selectable_reward_view import WinbackSelectableRewardWindow
-    WinbackSelectableRewardWindow(selectableBonusTokens).load()
 
 
 def showAchievementEditView(*args, **kwargs):

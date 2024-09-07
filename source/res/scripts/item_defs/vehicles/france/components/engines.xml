@@ -100,8 +100,6 @@
     <Astazou_XVI>	116	</Astazou_XVI>
     <SOFAM_8Gxb_C>	118	</SOFAM_8Gxb_C>
     <Maybach_HL_295_CL_850>	31002	</Maybach_HL_295_CL_850>
-    <Panhard_4E_02>	40000	</Panhard_4E_02>
-    <Panhard_4E_03>	40001	</Panhard_4E_03>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
@@ -114,6 +112,7 @@
     <Somua_S-40Bis_IGR>	60004	</Somua_S-40Bis_IGR>
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
+    <Moteur_moderne_3M_27_F128>	31004	</Moteur_moderne_3M_27_F128>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
@@ -1557,6 +1556,23 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
     </Moteur_moderne_3M_27_1_01>
+    <Moteur_moderne_3M_27_F128>
+      <userString>	#france_vehicles:Moteur_moderne_3M_27_F128	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	24600	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	530	</power>
+      <weight>	700	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2801	</rpm_max>
+    </Moteur_moderne_3M_27_F128>
     <Maybach_HL_295_003_Somua>
       <userString>	#france_vehicles:Maybach_HL_295_003_Somua	</userString>
       <tags>	gasoline	</tags>
@@ -1786,40 +1802,6 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Panhard_4E>
-    <Panhard_4E_03>
-      <userString>	#france_vehicles:Panhard_4E	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	ev_race_eng_radial_pc	</wwsoundPC>
-      <wwsoundNPC>	ev_race_eng_radial_npc	</wwsoundNPC>
-      <power>	855	</power>
-      <weight>	500	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	200	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
-    </Panhard_4E_03>
-    <Panhard_4E_02>
-      <userString>	#france_vehicles:Panhard_4E	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	ev_race_eng_radial_pc	</wwsoundPC>
-      <wwsoundNPC>	ev_race_eng_radial_npc	</wwsoundNPC>
-      <power>	900	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	200	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
-    </Panhard_4E_02>
     <General_Motors_6046_Series_71>
       <userString>	#france_vehicles:General_Motors_6046_Series_71	</userString>
       <tags>	diesel	</tags>

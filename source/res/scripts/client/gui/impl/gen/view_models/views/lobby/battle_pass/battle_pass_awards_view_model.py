@@ -12,6 +12,7 @@ class RewardReason(Enum):
     BUY_MULTIPLE_BATTLE_PASS = 'buyMultipleBattlePassReason'
     STYLE_UPGRADE = 'styleUpgradeReason'
     DEFAULT = 'defaultReason'
+    GIFT_CHAPTER = 'giftChapterReason'
 
 
 class ChapterType(Enum):

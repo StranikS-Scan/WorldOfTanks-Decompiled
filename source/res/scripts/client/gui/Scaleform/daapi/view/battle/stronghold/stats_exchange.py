@@ -56,7 +56,7 @@ class StrongholdStatisticDataController(ClassicStatisticsDataController):
         else:
             enemyTeamName = battleCtx.getTeamName(enemy=True)
         arenaInfoData = {'mapName': battleCtx.getArenaTypeName(),
-         'winText': battleCtx.getArenaWinString(),
+         'winText': self._getArenaWinText(),
          'winTextShort': self._getArenaWinTextShort(),
          'battleTypeLocaleStr': battleCtx.getArenaDescriptionString(isInBattle=False),
          'battleTypeIconPathBig': battleCtx.getBattleTypeIconPathBig(),

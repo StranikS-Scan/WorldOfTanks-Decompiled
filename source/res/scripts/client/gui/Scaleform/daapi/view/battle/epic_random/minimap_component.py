@@ -16,5 +16,6 @@ class EpicRandomTeamsOrControlsPointsPlugin(TeamsOrControlsPointsPlugin):
 
     def _addPointEntry(self, symbol, position, number):
         entryID = super(EpicRandomTeamsOrControlsPointsPlugin, self)._addPointEntry(symbol, position, number)
-        self._invoke(entryID, 'setScale', _SCALE_FAC)
+        if entryID is not None:
+            self._invoke(entryID, 'setScale', _SCALE_FAC)
         return entryID

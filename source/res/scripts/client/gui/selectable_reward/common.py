@@ -8,21 +8,20 @@ from gui.impl.backport import TooltipData
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, Features
 from gui.server_events.bonuses import SelectableBonus
 from gui.shared.gui_items.processors import makeError
-from gui.shared.gui_items.processors.offers import ReceiveMultipleOfferGiftsProcessor, ReceiveOfferGiftProcessor, BattleMattersOfferProcessor, WinbackMultipleOfferProcessor
+from gui.shared.gui_items.processors.offers import ReceiveMultipleOfferGiftsProcessor, ReceiveOfferGiftProcessor, BattleMattersOfferProcessor
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, List, Optional, Tuple
-    from account_helpers.offers.events_data import OfferEventData, OfferGift
+    from typing import Callable, Dict, List, Tuple
+    from account_helpers.offers.events_data import OfferEventData
     from gui.SystemMessages import ResultMsg
 _logger = logging.getLogger(__name__)
 
 class SelectableRewardManager(object):
-    __itemsCache = dependency.descriptor(IItemsCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
     __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     _FEATURE = None
     _SINGLE_GIFT_PROCESSOR = ReceiveOfferGiftProcessor
@@ -105,7 +104,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def getSelectableBonuses(cls, condition=None):
-        return [ SelectableBonus({tokenID: cls._packTokenData(token)}) for tokenID, token in cls.__itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID) and (not callable(condition) or condition(tokenID)) ]
+        return [ cls._createSelectableBonus(tokenID, token) for tokenID, token in cls._itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID) and (not callable(condition) or condition(tokenID)) ]
 
     @classmethod
     def getRemainedChoices(cls, bonus):
@@ -127,6 +126,10 @@ class SelectableRewardManager(object):
         return None
 
     @classmethod
+    def _createSelectableBonus(cls, tokenID, token):
+        return SelectableBonus({tokenID: cls._packTokenData(token)})
+
+    @classmethod
     def _getBonusOffer(cls, bonus):
         return cls.__offersDataProvider.getOfferByToken(cls._getBonusOfferToken(bonus))
 
@@ -144,7 +147,7 @@ class SelectableRewardManager(object):
 
     @classmethod
     def __getFeatureTokens(cls):
-        return {tokenID:token for tokenID, token in cls.__itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID)}
+        return {tokenID:token for tokenID, token in cls._itemsCache.items.tokens.getTokens().iteritems() if cls.isFeatureReward(tokenID)}
 
 
 class BattlePassSelectableRewardManager(SelectableRewardManager):
@@ -185,36 +188,6 @@ class BattleMattersSelectableRewardManager(SelectableRewardManager):
     @classmethod
     def getTabTooltipData(cls, selectableBonus):
         return None
-
-    @classmethod
-    def getBonusOffer(cls, bonus):
-        return cls._getBonusOffer(bonus)
-
-
-class WinbackSelectableRewardManager(SelectableRewardManager):
-    _MULTIPLE_GIFT_PROCESSOR = WinbackMultipleOfferProcessor
-    _winbackController = dependency.descriptor(IWinbackController)
-
-    @classmethod
-    def isFeatureReward(cls, tokenID):
-        return cls._winbackController.isWinbackOfferToken(tokenID)
-
-    @classmethod
-    def getRawBonusOptions(cls, bonus):
-        if not isinstance(bonus, SelectableBonus):
-            return {}
-        offer = cls._getBonusOffer(bonus)
-        return {gift.id:{'option': gift.rawBonuses,
-         'count': gift.giftCount,
-         'limit': gift.limit()} for gift in offer.getAllGifts()}
-
-    @classmethod
-    def getFirstOfferGift(cls, bonus):
-        if not isinstance(bonus, SelectableBonus):
-            return None
-        else:
-            offer = cls._getBonusOffer(bonus)
-            return offer.getFirstGift() if offer is not None else None
 
     @classmethod
     def getBonusOffer(cls, bonus):

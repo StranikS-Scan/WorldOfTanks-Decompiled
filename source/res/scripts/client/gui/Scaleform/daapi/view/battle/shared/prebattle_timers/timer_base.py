@@ -27,7 +27,6 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
         self.__timeLeft = None
         self.__callbackID = None
         self.__arenaPeriod = None
-        self._stateToMessage = self._getStateToMessage()
         super(PreBattleTimerBase, self).__init__()
         return
 
@@ -58,19 +57,16 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
             self.__setTimeShiftCallback()
 
     def hideCountdown(self, state, speed):
-        self.as_setMessageS(backport.text(self._stateToMessage[state]))
+        self.as_setMessageS(backport.text(_STATE_TO_MESSAGE[state]))
         self._clearTimeShiftCallback()
         self.as_hideAllS(speed != 0)
 
     def _getMessage(self):
         if self._state == COUNTDOWN_STATE.WAIT:
-            msg = backport.text(self._stateToMessage[self._state])
+            msg = backport.text(_STATE_TO_MESSAGE[self._state])
         else:
             msg = i18n.makeString(self._battleTypeStr)
         return msg
-
-    def _getStateToMessage(self):
-        return _STATE_TO_MESSAGE
 
     def _isDisplayWinCondition(self):
         return True
@@ -85,12 +81,9 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
         super(PreBattleTimerBase, self)._dispose()
 
     def __setTimeShiftCallback(self):
-        self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self._updateTimer)
+        self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)
 
-    def getTimeLeft(self):
-        return self.__timeLeft
-
-    def _updateTimer(self):
+    def __updateTimer(self):
         self.__callbackID = None
         if self.__timeLeft > 0:
             timeLeftWithShift = self.__timeLeft - 1

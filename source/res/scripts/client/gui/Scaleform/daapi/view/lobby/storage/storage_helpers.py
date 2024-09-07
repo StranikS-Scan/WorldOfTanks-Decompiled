@@ -277,14 +277,14 @@ def _getActionBtnTooltipForOptDevice(item):
     return makeTooltip(header, body)
 
 
+def getItemNationID(item):
+    compatibleNations = []
+    if item.itemTypeName == STORE_CONSTANTS.EQUIPMENT:
+        item.descriptor.compatibleNations()
+    return compatibleNations[0] if len(compatibleNations) == 1 else item.nationID
+
+
 def getItemVo(item):
-
-    def getItemNationID(item):
-        compatibleNations = []
-        if item.itemTypeName == STORE_CONSTANTS.EQUIPMENT:
-            item.descriptor.compatibleNations()
-        return compatibleNations[0] if len(compatibleNations) == 1 else item.nationID
-
     priceVO = getItemPricesVO(item.getSellPrice())[0]
     itemNationID = getItemNationID(item)
     nationFlagIcon = RES_SHOP.getNationFlagIcon(nations.NAMES[itemNationID]) if itemNationID != nations.NONE_INDEX else ''
@@ -397,17 +397,23 @@ class OptDeviceBonusesDescriptionBuilder(object):
         itemR = R.strings.artefacts.dyn(item.descriptor.groupName)
         effectR = itemR.dyn('effect') if itemR else None
         effectsList = [ backport.text(effect()) for effect in effectR.values() ] if effectR else []
-        return text_styles.concatStylesToSingleLine(icons.lightning(), backport.text(R.strings.storage.optDevice.hover.effect()), effectsList[0]).format(**self.KPI_HTML_TEMPLATE.source) if effectsList else ''
+        return self._effectStringFormat(effectsList[0]) if effectsList else ''
 
     def __createKpiString(self, kpi):
-        value = self.__kpiFormat(kpi, kpi.value)
-        specValue = self.__kpiFormat(kpi, kpi.specValue) if kpi.specValue else None
+        value = self._kpiFormat(kpi, kpi.value)
+        specValue = self._kpiFormat(kpi, kpi.specValue) if kpi.specValue else None
         generalValue = ' / '.join((value, specValue)) if specValue is not None else value
         bonus = kpi.getDescriptionR()
         description = ' '.join((generalValue, backport.text(bonus) if bonus else ''))
+        return self._kpiStringFormat(description)
+
+    def _effectStringFormat(self, effect):
+        return text_styles.concatStylesToSingleLine(icons.lightning(), backport.text(R.strings.storage.optDevice.hover.effect()), effect).format(**self.KPI_HTML_TEMPLATE.source)
+
+    def _kpiStringFormat(self, description):
         return description.format(**self.KPI_HTML_TEMPLATE.source)
 
-    def __kpiFormat(self, kpi, value):
+    def _kpiFormat(self, kpi, value):
         return self.KPI_VALUE_TEMPLATE.format(getKpiValueString(kpi, value))
 
 

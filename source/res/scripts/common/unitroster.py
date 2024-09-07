@@ -3,7 +3,7 @@
 import struct
 import nations
 from items import vehicles
-from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES
+from constants import VEHICLE_CLASSES, VEHICLE_CLASS_INDICES, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 _BAD_CLASS_INDEX = 16
 
 class BaseUnitRoster:
@@ -218,7 +218,7 @@ def _vehType__repr__(self):
 
 class BaseUnitRosterSlot(object):
     __EXACT_TYPE_PREFIX = '\x00'
-    DEFAULT_LEVELS = (1, 10)
+    DEFAULT_LEVELS = (MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL)
     DEFAULT_NATIONS = []
     DEFAULT_VEHICLE_CLASSES = []
     NATION_MASK_POWER = 16

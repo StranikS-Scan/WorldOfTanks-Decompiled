@@ -7,6 +7,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from gui.impl.gen import R
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.tutorial import ITutorialLoader
 from skeletons.gui.game_control import IEarlyAccessController
 from soft_exception import SoftException
@@ -41,10 +42,16 @@ class BaseActionsValidator(IActionsValidator):
 
 
 class CurrentVehicleActionsValidator(BaseActionsValidator):
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def _validate(self):
         if g_currentPreviewVehicle.isPresent():
             return ValidationResult(False, PREBATTLE_RESTRICTION.PREVIEW_VEHICLE_IS_PRESENT)
+        randomBattlesLevels = self.__lobbyContext.getServerSettings().randomBattlesConfig.getLevels()
+        if g_currentVehicle.isPresent():
+            currentLevel = g_currentVehicle.getLevel()
+            if currentLevel not in randomBattlesLevels:
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED_FOR_11_LVL)
         if not g_currentVehicle.isReadyToFight():
             if not g_currentVehicle.isPresent():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_PRESENT)
@@ -76,7 +83,7 @@ class EarlyAccessActionsValidator(BaseActionsValidator):
 
     def _validate(self):
         if self.__earlyAccessCtrl.isEnabled():
-            if self.__earlyAccessCtrl.hangarFeatureState.isLayoutIdActive(R.views.lobby.early_access.EarlyAccessMainView()):
+            if self.__earlyAccessCtrl.hangarFeatureState.isLayoutIdActive(R.views.lobby.early_access.EarlyAccessQuestsView()):
                 return ValidationResult(False, PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE)
         return super(EarlyAccessActionsValidator, self)._validate()
 

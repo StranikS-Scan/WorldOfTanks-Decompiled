@@ -7,11 +7,11 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_universal	</postProgressionTree>
+  <postProgressionTree>	role_XI_MBT_B	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
-    <backward>	15	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.063	</moving>
@@ -37,7 +37,7 @@
   <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	2.0	</priceFactor>
+    <priceFactor>	2.2	</priceFactor>
     <density>	1.01847 1.01847	</density>
   </camouflage>
   <hull>
@@ -65,10 +65,10 @@
     </armor>
     <primaryArmor>	armor_1 armor_16 armor_4	</primaryArmor>
     <weight>	27000	</weight>
-    <maxHealth>	1760	</maxHealth>
+    <maxHealth>	2000	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -1054,8 +1054,8 @@
     <Chassis_A150_MBT_B>
       <userString>	#usa_vehicles:Chassis_A150_MBT_B	</userString>
       <tags></tags>
-      <level>	10	</level>
-      <price>	82500	</price>
+      <level>	11	</level>
+      <price>	112500	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -1065,14 +1065,14 @@
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
       <brakeForce>	56000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	190	</maxRegenHealth>
+      <maxHealth>	350	</maxHealth>
+      <maxRegenHealth>	260	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/american/A150_MBT_B/normal/lod0/Chassis.model	</undamaged>
@@ -1885,19 +1885,19 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.85892439	</repairTime>
     </Chassis_A150_MBT_B>
   </chassis>
   <turrets0>
     <Turret_1_A150_MBT_B>
       <userString>	#usa_vehicles:Turret_1_A150_MBT_B	</userString>
       <tags></tags>
-      <level>	10	</level>
+      <level>	11	</level>
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	350	</armor_1>
-        <armor_2>	230	</armor_2>
+        <armor_1>	240	</armor_1>
+        <armor_2>	200	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	45	</armor_4>
         <armor_5>	45	</armor_5>
@@ -1924,21 +1924,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	17000	</weight>
-      <maxHealth>	440	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <maxHealth>	600	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	170	</maxHealth>
-        <maxRegenHealth>	85	</maxRegenHealth>
+        <maxHealth>	200	</maxHealth>
+        <maxRegenHealth>	100	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	420	</circularVisionRadius>
+      <circularVisionRadius>	410	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	60	</maxRegenHealth>
+        <maxHealth>	160	</maxHealth>
+        <maxRegenHealth>	80	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_RHD>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_120mm_RHD_MBT>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1948,32 +1948,36 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	180	</armor_7>
+            <armor_7>	150	</armor_7>
             <armor_8>	0	</armor_8>
             <armor_9>	40	</armor_9>
             <armor_10>	80	</armor_10>
             <armor_11>	50	</armor_11>
-            <armor_12>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_12>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_12>
-            <armor_13>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_13>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_13>
             <gun>	50	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	32	</reloadTime>
+          <clip>
+            <count>	5	</count>
+            <rate>	30	</rate>
+          </clip>
+          <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.30856 10 0.432222 2.5 0.557778 2.5 0.69144 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1998,7 +2002,7 @@
                 <slave>
                   <node>	Joint_01	</node>
                   <table>
-                    <row>	0	</row>
+                    <row>	-20	</row>
                     <row>	0	</row>
                     <row>	10	</row>
                   </table>
@@ -2006,7 +2010,6 @@
               </slaves>
             </master>
           </drivenJoints>
-          <effects>	shot_large_mb	</effects>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2054,11 +2057,13 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <effects>	shot_large_APFSDS_mb	</effects>
+          <reloadEffect>	reload115_152	</reloadEffect>
           <camouflage>
             <density>	104.744 107.736	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_120mm_RHD>
+        </_120mm_RHD_MBT>
       </guns>
       <models>
         <undamaged>	vehicles/american/A150_MBT_B/normal/lod0/Turret_01.model	</undamaged>
@@ -2455,22 +2460,22 @@
     </Turret_1_A150_MBT_B>
   </turrets0>
   <engines>
-    <Continental_AVCR>	shared	</Continental_AVCR>
+    <Continental_AVCR_MBT>	shared	</Continental_AVCR_MBT>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN_VRC-3>	shared	</AN_VRC-3>
+    <AN_VRC-3_MBT>	shared	</AN_VRC-3_MBT>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
-        <Continental_AVCR>
-          <smplEnginePower>	1000	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Continental_AVCR>
+        <Continental_AVCR_MBT>
+          <smplEnginePower>	1100	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+        </Continental_AVCR_MBT>
       </engines>
       <chassis>
         <Chassis_A150_MBT_B>

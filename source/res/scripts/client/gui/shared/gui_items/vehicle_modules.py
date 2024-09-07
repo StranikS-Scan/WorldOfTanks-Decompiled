@@ -16,7 +16,8 @@ import nations
 from items import vehicles as veh_core
 _MODULE_TYPES_ORDER = ('vehicleGun', 'vehicleTurret', 'vehicleEngine', 'vehicleChassis', 'vehicleRadio', 'vehicleFuelTank')
 _MODULE_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(_MODULE_TYPES_ORDER)))
-_SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
+_SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING_FSDS,
+ SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_CR,
  SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
@@ -89,6 +90,12 @@ class VehicleChassis(VehicleModule):
     def isTrackWithinTrack(self):
         return g_paramsCache.isTrackWithinTrack(self.intCD)
 
+    def isMultiTrack(self):
+        return g_paramsCache.isMultiTrack(self.intCD)
+
+    def chassisType(self):
+        return g_paramsCache.chassisType(self.intCD)
+
     @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_WHEELEDCHASSIS if self.isWheeledChassis() else RES_ICONS.MAPS_ICONS_MODULES_CHASSIS
@@ -103,8 +110,10 @@ class VehicleChassis(VehicleModule):
             if self.isWheeledChassis():
                 return backport.image(R.images.gui.maps.icons.modules.hydraulicWheeledChassisIcon())
             return backport.image(R.images.gui.maps.icons.modules.hydraulicChassisIcon())
+        elif self.isTrackWithinTrack():
+            return backport.image(R.images.gui.maps.icons.modules.trackWithinTrack())
         else:
-            return backport.image(R.images.gui.maps.icons.modules.trackWithinTrack()) if self.isTrackWithinTrack() else None
+            return backport.image(R.images.gui.maps.icons.modules.trackWithinTrack()) if self.isMultiTrack() else None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_WHEELED_CHASSIS if self.isWheeledChassis() else super(VehicleChassis, self).getGUIEmblemID()

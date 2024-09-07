@@ -2,11 +2,11 @@
 # Embedded file name: scripts/common/items/readers/chassis_readers.py
 import math
 import ResMgr
+import Math
 from items import _xml
 from items.components import chassis_components
 from items.components import component_constants
 from items.components.chassis_components import SplineTrackPairDesc
-from items.components.shared_components import LodSettings
 from items.readers import shared_readers
 from debug_utils import LOG_ERROR
 from constants import IS_EDITOR, IS_CLIENT, IS_UE_EDITOR
@@ -19,17 +19,17 @@ def readWheelsAndGroups(xmlCtx, section):
     wheelId = 0
     defSyncAngle = section.readFloat('wheels/leadingWheelSyncAngle', 60)
     for sname, subsection in _xml.getChildren(xmlCtx, section, 'wheels'):
+        radiusKey = 'radius' if subsection.has_key('radius') else 'geometry/radius'
         if sname == 'group':
             ctx = (xmlCtx, 'wheels/group')
-            group = chassis_components.WheelGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), radius=_xml.readPositiveFloat(ctx, subsection, 'radius'))
+            group = chassis_components.WheelGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), template=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), count=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), radius=_xml.readPositiveFloat(ctx, subsection, radiusKey), trackPairIndex=subsection.readInt('trackPairIdx', 0))
             wheelGroups.append(group)
         if sname == 'wheel':
             from items.vehicles import _readHitTester, _readArmor
             ctx = (xmlCtx, 'wheels/wheel[{}]'.format(wheelId))
-            radiusKey = 'radius' if subsection.has_key('radius') else 'geometry/radius'
             index = _xml.readIntOrNone(ctx, subsection, 'index')
             actualIndex = wheelId if index is None else index
-            w = chassis_components.Wheel(index=index, isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, radiusKey), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTesterManager=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=actualIndex), position=subsection.readVector3('wheelPos', (0, 0, 0)))
+            w = chassis_components.Wheel(index=index, isLeft=_xml.readBool(ctx, subsection, 'isLeft'), radius=_xml.readPositiveFloat(ctx, subsection, radiusKey), nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeading=subsection.readBool('isLeading', False), leadingSyncAngle=subsection.readFloat('syncAngle', defSyncAngle), hitTesterManager=_readHitTester(ctx, subsection, 'hitTester', optional=True), materials=_readArmor(ctx, subsection, 'armor', optional=True, index=actualIndex), position=subsection.readVector3('wheelPos', (0, 0, 0)), trackPairIndex=subsection.readInt('trackPairIdx', 0))
             if IS_EDITOR:
                 w.editorData.defSyncAngle = defSyncAngle
             wheels.append(w)
@@ -49,6 +49,13 @@ def readWheelsAndGroups(xmlCtx, section):
     return (tuple(wheelGroups), tuple(wheels))
 
 
+def _createNameListByTemplate(startIndex, template, count):
+    if template is None:
+        return []
+    else:
+        return [ '%s%d' % (template, i) for i in range(startIndex, startIndex + count) ]
+
+
 def readGroundNodesAndGroups(xmlCtx, section, cache):
     if section['groundNodes'] is None:
         return (component_constants.EMPTY_TUPLE,
@@ -61,11 +68,19 @@ def readGroundNodesAndGroups(xmlCtx, section, cache):
         for sname, subsection in _xml.getChildren(xmlCtx, section, 'groundNodes'):
             if sname == 'group':
                 ctx = (xmlCtx, 'groundNodes/group')
-                group = chassis_components.GroundNodeGroup(isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), nodesTemplate=intern(_xml.readNonEmptyString(ctx, subsection, 'template')), affectedWheelsTemplate=_xml.readStringOrNone(ctx, subsection, 'affectedWheelsTemplate'), nodesCount=_xml.readInt(ctx, subsection, 'count', 1), startIndex=subsection.readInt('startIndex', 0), collisionSamplesCount=subsection.readInt('collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False))
-                groundGroups.append(group)
+                startIndex = subsection.readInt('startIndex', 0)
+                count = _xml.readInt(ctx, subsection, 'count', 1)
+                namesTemplate = intern(_xml.readNonEmptyString(ctx, subsection, 'template'))
+                affectedWheelsTemplate = _xml.readStringOrNone(ctx, subsection, 'affectedWheelsTemplate')
+                groundNodeNames = _createNameListByTemplate(startIndex, namesTemplate, count)
+                affectedWheels = _createNameListByTemplate(startIndex, affectedWheelsTemplate, count)
+                for i, name in enumerate(groundNodeNames):
+                    groundNode = chassis_components.GroundNode(nodeName=name, affectedWheelName=affectedWheels[i] if i < len(affectedWheels) else '', isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), collisionSamplesCount=subsection.readInt('collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False), trackPairIdx=subsection.readInt('trackPairIdx', 0))
+                    groundNodes.append(groundNode)
+
             if sname == 'node':
                 ctx = (xmlCtx, 'groundNodes/node')
-                groundNode = chassis_components.GroundNode(nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), affectedWheelName=_xml.readStringOrEmpty(ctx, subsection, 'affectedWheelName'), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), collisionSamplesCount=_xml.readInt(ctx, subsection, 'collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False))
+                groundNode = chassis_components.GroundNode(nodeName=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), affectedWheelName=_xml.readStringOrEmpty(ctx, subsection, 'affectedWheelName'), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), minOffset=_xml.readFloat(ctx, subsection, 'minOffset'), maxOffset=_xml.readFloat(ctx, subsection, 'maxOffset'), collisionSamplesCount=subsection.readInt('collisionSamplesCount', 1), hasLiftMode=_xml.readBool(ctx, subsection, 'hasLiftMode', False), trackPairIdx=subsection.readInt('trackPairIdx', 0))
                 groundNodes.append(groundNode)
 
         activePostmortem = _xml.readBool(xmlCtx, section, 'groundNodes/activePostmortem', False)
@@ -81,54 +96,94 @@ def readGroundNodesAndGroups(xmlCtx, section, cache):
 
 
 def readTrackNodes(xmlCtx, section):
-    if section['trackNodes'] is None:
+    if not section.has_key('trackNodes'):
         return component_constants.EMPTY_TUPLE
-    else:
-        defElasticity = _xml.readFloat(xmlCtx, section, 'trackNodes/elasticity', 1500.0)
-        defDamping = _xml.readFloat(xmlCtx, section, 'trackNodes/damping', 1.0)
-        defForwardElastK = _xml.readFloat(xmlCtx, section, 'trackNodes/forwardElastK', 1.0)
-        defBackwardElastK = _xml.readFloat(xmlCtx, section, 'trackNodes/backwardElastK', 1.0)
-        defOffset = _xml.readFloat(xmlCtx, section, 'trackNodes/offset', 0.0)
-        trackNodes = []
-        xmlCtx = (xmlCtx, 'trackNodes')
-        for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
-            if sname == 'node':
-                ctx = (xmlCtx, 'trackNodes/node')
-                name = _xml.readStringOrNone(ctx, subsection, 'leftSibling')
-                if name is not None:
-                    leftNodeName = intern(name)
-                else:
-                    leftNodeName = None
-                name = _xml.readStringOrNone(ctx, subsection, 'rightSibling')
-                if name is not None:
-                    rightNodeName = intern(name)
-                else:
-                    rightNodeName = None
-                trackNode = chassis_components.TrackNode(name=intern(_xml.readNonEmptyString(ctx, subsection, 'name')), isLeft=_xml.readBool(ctx, subsection, 'isLeft'), initialOffset=_xml.readFloat(ctx, subsection, 'offset', defOffset), leftNodeName=leftNodeName, rightNodeName=rightNodeName, damping=_xml.readFloat(ctx, subsection, 'damping', defDamping), elasticity=_xml.readFloat(ctx, subsection, 'elasticity', defElasticity), forwardElasticityCoeff=_xml.readFloat(ctx, subsection, 'forwardElastK', defForwardElastK), backwardElasticityCoeff=_xml.readFloat(ctx, subsection, 'backwardElastK', defBackwardElastK))
-                trackNodes.append(trackNode)
+    trackNodes = []
+    xmlCtx = (xmlCtx, 'trackNodes')
+    for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
+        if sname == 'trackPair':
+            ctx = (xmlCtx, 'trackNodes/trackPair')
+            nodes = readTrackPairTrackNodes(ctx, subsection)
+            trackNodes.extend(nodes)
 
-        return tuple(trackNodes)
+    if not trackNodes:
+        trackNodes.extend(readTrackPairTrackNodes((xmlCtx, 'trackNodes'), section['trackNodes']))
+    return tuple(trackNodes)
+
+
+def readTrackPairTrackNodes(xmlCtx, section):
+    trackNodes = []
+    defElasticity = _xml.readFloat(xmlCtx, section, 'elasticity', 1500.0)
+    defDamping = _xml.readFloat(xmlCtx, section, 'damping', 2.0)
+    defForwardElastK = _xml.readFloat(xmlCtx, section, 'forwardElastK', 1.0)
+    defBackwardElastK = _xml.readFloat(xmlCtx, section, 'backwardElastK', 1.0)
+    defOffset = _xml.readFloat(xmlCtx, section, 'offset', 0.0)
+    for sname, subsection in section.items():
+        if sname == 'node':
+            name = _xml.readStringOrNone(xmlCtx, subsection, 'leftSibling')
+            if name is not None:
+                leftNodeName = intern(name)
+            else:
+                leftNodeName = None
+            name = _xml.readStringOrNone(xmlCtx, subsection, 'rightSibling')
+            if name is not None:
+                rightNodeName = intern(name)
+            else:
+                rightNodeName = None
+            trackNode = chassis_components.TrackNode(name=intern(_xml.readNonEmptyString(xmlCtx, subsection, 'name')), isLeft=_xml.readBool(xmlCtx, subsection, 'isLeft'), initialOffset=_xml.readFloat(xmlCtx, subsection, 'offset', defOffset), leftNodeName=leftNodeName, rightNodeName=rightNodeName, trackPairIndex=subsection.readInt('trackPairIdx', 0), damping=_xml.readFloat(xmlCtx, subsection, 'damping', defDamping), elasticity=_xml.readFloat(xmlCtx, subsection, 'elasticity', defElasticity), forwardElasticityCoeff=_xml.readFloat(xmlCtx, subsection, 'forwardElastK', defForwardElastK), backwardElasticityCoeff=_xml.readFloat(xmlCtx, subsection, 'backwardElastK', defBackwardElastK))
+            trackNodes.append(trackNode)
+
+    return trackNodes
 
 
 def readTrackSplineParams(xmlCtx, section):
-    trackSplineParams = None
-    if IS_EDITOR:
-        if not section.has_key('trackThickness'):
-            return
-    if section['trackNodes'] is not None:
-        ctx = (xmlCtx, 'trackNodes')
-        trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(ctx, section, 'trackThickness'), maxAmplitude=_xml.readFloat(ctx, section, 'trackNodes/maxAmplitude'), maxOffset=_xml.readFloat(ctx, section, 'trackNodes/maxOffset'), gravity=_xml.readFloat(ctx, section, 'trackNodes/gravity'))
+    if not section.has_key('trackNodes'):
+        return None
+    else:
+        trackPairs = {}
+        for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
+            if sname == 'trackPair':
+                ctx = (xmlCtx, 'trackNodes/trackPair')
+                pairParams = readSplineTrackPairParams(ctx, subsection)
+                trackPairs[pairParams.trackPairIdx] = pairParams
+
+        if not trackPairs:
+            trackPairs[component_constants.MAIN_TRACK_PAIR_IDX] = readSplineTrackPairParams((xmlCtx, 'trackNodes'), section['trackNodes'])
+        return trackPairs
+
+
+def readSplineTrackPairParams(xmlCtx, section):
+    if section is not None:
+        trackSplineParams = chassis_components.TrackSplineParams(trackPairIdx=section.readInt('trackPairIdx', 0), thickness=section.readFloat('trackThickness', -0.0339), maxAmplitude=section.readFloat('maxAmplitude', 0.01), maxOffset=section.readFloat('maxOffset', 0.01), gravity=section.readFloat('gravity', -9.8))
         if IS_EDITOR:
-            trackSplineParams.editorData._enable = _xml.readBool(ctx, section, 'trackNodes/enable', True)
-            trackSplineParams.editorData.elasticity = _xml.readFloat(ctx, section, 'trackNodes/elasticity', 1500.0)
-            trackSplineParams.editorData.linkBones = _xml.readBool(ctx, section, 'trackNodes/linkBones', False)
-    elif section['splineDesc'] is not None or section['physicalTracks'] is not None:
-        trackSplineParams = chassis_components.TrackSplineParams(thickness=_xml.readFloat(xmlCtx, section, 'trackThickness'), maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
+            trackSplineParams.editorData._enable = section.readBool('enable', True)
+            trackSplineParams.editorData.linkBones = section.readBool('linkBones', False)
+            trackSplineParams.editorData.elasticity = section.readFloat('elasticity', 1500.0)
+    else:
+        trackSplineParams = chassis_components.TrackSplineParams(trackPairIdx=0, thickness=component_constants.ZERO_FLOAT, maxAmplitude=component_constants.ZERO_FLOAT, maxOffset=component_constants.ZERO_FLOAT, gravity=component_constants.ZERO_FLOAT)
+        if IS_EDITOR:
+            trackSplineParams.editorData._enable = True
+            trackSplineParams.editorData.linkBones = False
+            trackSplineParams.editorData.elasticity = 1500.0
     return trackSplineParams
 
 
 def readTraces(xmlCtx, section, centerOffset, cache):
-    return chassis_components.Traces(lodDist=shared_readers.readLodDist(xmlCtx, section, 'traces/lodDist', cache), bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, section, 'traces/textureSet')), centerOffset=centerOffset, size=_xml.readPositiveVector2(xmlCtx, section, 'traces/size'), activePostmortem=_xml.readBool(xmlCtx, section, 'traces/activePostmortem', False))
+    tracesSection = section['traces']
+    if tracesSection is None:
+        return
+    else:
+        tracesParams = {}
+        for sectName, subsection in tracesSection.items():
+            if sectName != 'tracesParams':
+                continue
+            idx = _xml.readInt(xmlCtx, subsection, 'trackPairIdx')
+            tracesParams[idx] = chassis_components.Traces(bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, subsection, 'bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, subsection, 'textureSet')), centerOffset=centerOffset, centerOffsetFactor=subsection.readVector2('centerOffsetFactor', Math.Vector2(1, 1)), offset=subsection.readVector2('offset', Math.Vector2(0, 0)), size=_xml.readPositiveVector2(xmlCtx, subsection, 'size'), trackPairIdx=idx)
+
+        if len(tracesParams) == 0:
+            tracesParams[component_constants.MAIN_TRACK_PAIR_IDX] = chassis_components.Traces(bufferPrefs=intern(_xml.readNonEmptyString(xmlCtx, tracesSection, 'bufferPrefs')), textureSet=intern(_xml.readNonEmptyString(xmlCtx, tracesSection, 'textureSet')), centerOffset=centerOffset, centerOffsetFactor=tracesSection.readVector2('centerOffsetFactor', Math.Vector2(1, 1)), offset=tracesSection.readVector2('offset', Math.Vector2(0, 0)), size=_xml.readPositiveVector2(xmlCtx, tracesSection, 'size'), trackPairIdx=component_constants.MAIN_TRACK_PAIR_IDX)
+        tracesConfig = chassis_components.TracesConfig(tracesParams=tracesParams, lodDist=shared_readers.readLodDist(xmlCtx, tracesSection, 'lodDist', cache), activePostmortem=_xml.readBool(xmlCtx, tracesSection, 'activePostmortem', False))
+        return tracesConfig
 
 
 def readTrackBasicParams(xmlCtx, section, cache):

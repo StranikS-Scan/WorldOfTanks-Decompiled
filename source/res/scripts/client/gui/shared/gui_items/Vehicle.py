@@ -146,6 +146,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     PREMIUM_IGR = 'premiumIGR'
     CANNOT_BE_SOLD = 'cannot_be_sold'
     SECRET = 'secret'
+    SECRET_EXTENDED = 'secretExtended'
     SPECIAL = 'special'
     OBSERVER = 'observer'
     DISABLED_IN_ROAMING = 'disabledInRoaming'
@@ -208,6 +209,7 @@ class Vehicle(FittingItem):
         UNAVAILABLE = 'unavailable'
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
+        TEMP_UNAVAILABLE = 'tempUnavailable'
         WILL_BE_UNLOCKED_IN_BATTLE = 'willBeUnlockedInBattle'
         CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, WILL_BE_UNLOCKED_IN_BATTLE)
         UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
@@ -229,7 +231,8 @@ class Vehicle(FittingItem):
      VEHICLE_STATE.ROTATION_GROUP_UNLOCKED,
      VEHICLE_STATE.ROTATION_GROUP_LOCKED,
      VEHICLE_STATE.WILL_BE_UNLOCKED_IN_BATTLE,
-     VEHICLE_STATE.SUBSCRIPTION_SUSPENDED)
+     VEHICLE_STATE.SUBSCRIPTION_SUSPENDED,
+     VEHICLE_STATE.TEMP_UNAVAILABLE)
     TRADE_OFF_NOT_READY_STATES = (VEHICLE_STATE.DAMAGED,
      VEHICLE_STATE.EXPLODED,
      VEHICLE_STATE.DESTROYED,
@@ -1051,6 +1054,14 @@ class Vehicle(FittingItem):
         return self._descriptor.isTrackWithinTrack
 
     @property
+    def isMultiTrack(self):
+        return self._descriptor.isMultiTrack
+
+    @property
+    def chassisType(self):
+        return self._descriptor.chassisType
+
+    @property
     def miscAttrs(self):
         return self._descriptor.miscAttrs
 
@@ -1127,6 +1138,8 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.SERVER_RESTRICTION
         elif self.isRotationGroupLocked:
             ms = Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED
+        elif self.level not in self.lobbyContext.getServerSettings().randomBattlesConfig.getLevels():
+            ms = Vehicle.VEHICLE_STATE.TEMP_UNAVAILABLE
         ms = self.checkUndamagedState(ms, isCurrentPlayer)
         ms = self.__getRentableState(ms, isCurrentPlayer)
         if ms in Vehicle.CAN_SELL_STATES and self.__customState in Vehicle.VEHICLE_STATE.UNSUITABLE:
@@ -1187,7 +1200,8 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
          Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED,
-         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED):
+         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
+         Vehicle.VEHICLE_STATE.TEMP_UNAVAILABLE):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -1210,6 +1224,10 @@ class Vehicle(FittingItem):
     @property
     def isSecret(self):
         return VEHICLE_TAGS.SECRET in self.tags
+
+    @property
+    def isSecretExtended(self):
+        return VEHICLE_TAGS.SECRET_EXTENDED in self.tags
 
     @property
     def isSpecial(self):
@@ -2161,6 +2179,7 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
+ Vehicle.VEHICLE_STATE.TEMP_UNAVAILABLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
  Vehicle.VEHICLE_STATE.AMMO_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_AMMONOTFULL,
  Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,

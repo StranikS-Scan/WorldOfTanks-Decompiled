@@ -60,7 +60,7 @@
       <teamBasePositions>
         <team1>
           <position1>	-63.945648 -262.439301	</position1>
-          <position2>	195.944229 101.281593	</position2>
+          <position2>	195.954361 101.283958	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
@@ -111,30 +111,32 @@
       </teamBasePositions>
     </maps_training>
     <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-63.550190 330.836884	</position>
+          <position>	395.013214 -350.867920	</position>
         </team1>
         <team2>
-          <position>	5.351830 -342.105225	</position>
+          <position>	-349.713348 -45.510376	</position>
         </team2>
       </teamSpawnPoints>
       <pointsOfInterestUDO>
         <point>
-          <position>	-368.796112 -40.520699	</position>
-          <type>	1	</type>
+          <position>	74.665291 -370.243011	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	360.496185 33.977219	</position>
-          <type>	1	</type>
+          <position>	400.851135 348.091125	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	192.687241 143.472198	</position>
-          <type>	2	</type>
+          <position>	-47.127899 366.439453	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	209.421127 -92.144554	</position>
-          <type>	2	</type>
+          <position>	-253.252441 -376.364136	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
       <visualScript>
@@ -154,7 +156,13 @@
           </flyDirection>
         </flyDirections>
       </recon>
-      <controlPoint>	-22.860573 16.666328	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	-63.945648 -262.439301	</position1>
+          <position2>	195.954361 101.283958	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
 </08_ruinberg.xml>

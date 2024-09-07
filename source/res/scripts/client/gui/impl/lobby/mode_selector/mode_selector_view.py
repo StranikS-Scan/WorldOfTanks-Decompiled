@@ -28,7 +28,6 @@ from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelecto
 from gui.impl.lobby.mode_selector.popovers.random_battle_popover import RandomBattlePopover
 from gui.impl.lobby.mode_selector.sound_constants import MODE_SELECTOR_SOUND_SPACE
 from gui.impl.lobby.mode_selector.tooltips.simply_format_tooltip import SimplyFormatTooltipView
-from gui.impl.lobby.winback.popovers.winback_leave_mode_popover_view import WinbackLeaveModePopoverView
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -38,7 +37,7 @@ from gui.shared.system_factory import registerModeSelectorTooltips, collectModeS
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBootcampController, IWinbackController, IComp7Controller, IRankedBattlesController
+from skeletons.gui.game_control import IBootcampController, IComp7Controller, IRankedBattlesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
@@ -84,7 +83,6 @@ class ModeSelectorView(ViewImpl):
     __bootcamp = dependency.descriptor(IBootcampController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gui = dependency.descriptor(IGuiLoader)
-    __winbackController = dependency.descriptor(IWinbackController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __rankedBattleController = dependency.descriptor(IRankedBattlesController)
     layoutID = R.views.lobby.mode_selector.ModeSelectorView()
@@ -159,11 +157,7 @@ class ModeSelectorView(ViewImpl):
             return tooltipClass() if tooltipClass else None
 
     def createPopOverContent(self, event):
-        if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover():
-            if self.__winbackController.getWinbackBattlesCountLeft() > 0:
-                return WinbackLeaveModePopoverView()
-            return RandomBattlePopover()
-        return super(ModeSelectorView, self).createPopOverContent(event)
+        return RandomBattlePopover() if event.contentID == R.views.lobby.mode_selector.popovers.RandomBattlePopover() else super(ModeSelectorView, self).createPopOverContent(event)
 
     def refresh(self):
         self.__dataProvider.forceRefresh()

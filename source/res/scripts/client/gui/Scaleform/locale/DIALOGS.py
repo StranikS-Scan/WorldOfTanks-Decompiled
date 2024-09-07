@@ -20,6 +20,14 @@ class DIALOGS(object):
     INTERVIEWQUIT_MESSAGE = '#dialogs:interviewQuit/message'
     INTERVIEWQUIT_SUBMIT = '#dialogs:interviewQuit/submit'
     INTERVIEWQUIT_CANCEL = '#dialogs:interviewQuit/cancel'
+    SURVEYQUIT_TITLE = '#dialogs:surveyQuit/title'
+    SURVEYQUIT_MESSAGE = '#dialogs:surveyQuit/message'
+    SURVEYQUIT_SUBMIT = '#dialogs:surveyQuit/submit'
+    SURVEYQUIT_CANCEL = '#dialogs:surveyQuit/cancel'
+    APPLICATIONQUIT_TITLE = '#dialogs:applicationQuit/title'
+    APPLICATIONQUIT_MESSAGE = '#dialogs:applicationQuit/message'
+    APPLICATIONQUIT_SUBMIT = '#dialogs:applicationQuit/submit'
+    APPLICATIONQUIT_CANCEL = '#dialogs:applicationQuit/cancel'
     LEGALINFOWINDOW_TITLE = '#dialogs:legalInfoWindow/title'
     COMMON_SUBMIT = '#dialogs:common/submit'
     COMMON_CANCEL = '#dialogs:common/cancel'
@@ -1020,10 +1028,6 @@ class DIALOGS(object):
     PERKLEARNCONFIRM_TITLE = '#dialogs:perkLearnConfirm/title'
     PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
     PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
-    RACES_DESERTER_TITLE = '#dialogs:races/deserter/title'
-    RACES_DESERTER_SUBMIT = '#dialogs:races/deserter/submit'
-    RACES_DESERTER_CANCEL = '#dialogs:races/deserter/cancel'
-    RACES_DESERTER_DESCRIPTIONALIVE = '#dialogs:races/deserter/descriptionAlive'
     COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
     COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
     COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
@@ -1116,6 +1120,14 @@ class DIALOGS(object):
      INTERVIEWQUIT_MESSAGE,
      INTERVIEWQUIT_SUBMIT,
      INTERVIEWQUIT_CANCEL,
+     SURVEYQUIT_TITLE,
+     SURVEYQUIT_MESSAGE,
+     SURVEYQUIT_SUBMIT,
+     SURVEYQUIT_CANCEL,
+     APPLICATIONQUIT_TITLE,
+     APPLICATIONQUIT_MESSAGE,
+     APPLICATIONQUIT_SUBMIT,
+     APPLICATIONQUIT_CANCEL,
      LEGALINFOWINDOW_TITLE,
      COMMON_SUBMIT,
      COMMON_CANCEL,
@@ -2116,10 +2128,6 @@ class DIALOGS(object):
      PERKLEARNCONFIRM_TITLE,
      PERKLEARNCONFIRM_DESC,
      PERKLEARNCONFIRM_LEARN,
-     RACES_DESERTER_TITLE,
-     RACES_DESERTER_SUBMIT,
-     RACES_DESERTER_CANCEL,
-     RACES_DESERTER_DESCRIPTIONALIVE,
      COMP7_DESERTER_TITLE,
      COMP7_DESERTER_MSGTITLE,
      COMP7_DESERTER_MESSAGE,

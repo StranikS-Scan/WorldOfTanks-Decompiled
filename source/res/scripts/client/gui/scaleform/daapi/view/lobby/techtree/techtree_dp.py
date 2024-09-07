@@ -201,12 +201,12 @@ class _TechTreeDataProvider(object):
     def _getNationsMenuItem(self, nation):
         nationID = nations.INDICES[nation]
         hasDiscount = nationID in self.techTreeEventsListener.getNations(unviewed=True)
-        hasEarlyAccess = self.earlyAccessController.isQuestActive() and nationID == self.earlyAccessController.getNationID() and not AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN)
-        isTooltipSpecial = hasDiscount or nationID in self.techTreeEventsListener.getNations()
-        return {'tooltip': TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT if isTooltipSpecial else nation,
+        hasEarlyAccess = self.earlyAccessController.isQuestActive() and nationID == self.earlyAccessController.getNationID()
+        isTooltipSpecial = hasDiscount or hasEarlyAccess or nationID in self.techTreeEventsListener.getNations()
+        return {'tooltip': TOOLTIPS_CONSTANTS.TECHTREE_NATION_EVENT if isTooltipSpecial else nation,
          'isTooltipSpecial': isTooltipSpecial,
          'hasDiscount': hasDiscount,
-         'hasEarlyAccess': hasEarlyAccess,
+         'hasEarlyAccess': hasEarlyAccess and not AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN),
          'label': nation}
 
     def getAvailableNationsIndices(self):

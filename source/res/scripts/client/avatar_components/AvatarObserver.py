@@ -100,7 +100,7 @@ class AvatarObserver(CallbackDelayer):
                 self.__previousObservedVehicleID = self.__observedVehicleID
                 if hasattr(self.vehicle.filter, 'enableStabilisedMatrix'):
                     self.vehicle.filter.enableStabilisedMatrix(True)
-                if not self.guiSessionProvider.shared.vehicleState.isInPostmortem:
+                if not self.vehicle.isDestroyed and typeofveh == 'observed':
                     BigWorld.target.exclude = self.vehicle
                     for v in BigWorld.player().vehicles:
                         if v.appearance is not None:

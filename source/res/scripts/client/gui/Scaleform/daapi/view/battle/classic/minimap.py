@@ -150,127 +150,147 @@ class GlobalSettingsPlugin(common.SimplePlugin):
             return
 
 class TeamsOrControlsPointsPlugin(common.EntriesPlugin):
-    __slots__ = ('__personalTeam', '__entries', '__markerIDs', '__hasActiveCommit')
+    __slots__ = ('_personalTeam', '_entriesStorage', '_markerIDs', '_hasActiveCommit')
     def __init__(self, parentObj):
         super(TeamsOrControlsPointsPlugin, self).__init__(parentObj)
-        self._TeamsOrControlsPointsPlugin__personalTeam = 0
-        self._TeamsOrControlsPointsPlugin__entries = []
-        self._TeamsOrControlsPointsPlugin__markerIDs = {}
-        self._TeamsOrControlsPointsPlugin__hasActiveCommit = False
+        self._personalTeam = 0
+        self._entriesStorage = []
+        self._markerIDs = {}
+        self._hasActiveCommit = False
 
     def start(self):
         super(TeamsOrControlsPointsPlugin, self).start()
-        g_playerEvents.onTeamChanged = g_playerEvents.onTeamChanged + self._TeamsOrControlsPointsPlugin__onTeamChanged
+        g_playerEvents.onTeamChanged = g_playerEvents.onTeamChanged + self._onTeamChanged
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onActionAddedToMarkerReceived = ctrl.onActionAddedToMarkerReceived + self._TeamsOrControlsPointsPlugin__onActionAddedToMarkerReceived
-            ctrl.onReplyFeedbackReceived = ctrl.onReplyFeedbackReceived + self._TeamsOrControlsPointsPlugin__onReplyFeedbackReceived
-            ctrl.onRemoveCommandReceived = ctrl.onRemoveCommandReceived + self._TeamsOrControlsPointsPlugin__onRemoveCommandReceived
+            ctrl.onActionAddedToMarkerReceived = ctrl.onActionAddedToMarkerReceived + self._onActionAddedToMarkerReceived
+            ctrl.onReplyFeedbackReceived = ctrl.onReplyFeedbackReceived + self._onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived = ctrl.onRemoveCommandReceived + self._onRemoveCommandReceived
         self.restart()
 
     def stop(self):
-        g_playerEvents.onTeamChanged = g_playerEvents.onTeamChanged - self._TeamsOrControlsPointsPlugin__onTeamChanged
+        g_playerEvents.onTeamChanged = g_playerEvents.onTeamChanged - self._onTeamChanged
         super(TeamsOrControlsPointsPlugin, self).stop()
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
-            ctrl.onActionAddedToMarkerReceived = ctrl.onActionAddedToMarkerReceived - self._TeamsOrControlsPointsPlugin__onActionAddedToMarkerReceived
-            ctrl.onReplyFeedbackReceived = ctrl.onReplyFeedbackReceived - self._TeamsOrControlsPointsPlugin__onReplyFeedbackReceived
-            ctrl.onRemoveCommandReceived = ctrl.onRemoveCommandReceived - self._TeamsOrControlsPointsPlugin__onRemoveCommandReceived
+            ctrl.onActionAddedToMarkerReceived = ctrl.onActionAddedToMarkerReceived - self._onActionAddedToMarkerReceived
+            ctrl.onReplyFeedbackReceived = ctrl.onReplyFeedbackReceived - self._onReplyFeedbackReceived
+            ctrl.onRemoveCommandReceived = ctrl.onRemoveCommandReceived - self._onRemoveCommandReceived
 
     def restart(self):
-        for x in self._TeamsOrControlsPointsPlugin__entries:
+        for x in self._entriesStorage:
             self._delEntry(x)
-        self._TeamsOrControlsPointsPlugin__entries = []
-        self._TeamsOrControlsPointsPlugin__personalTeam = self._arenaDP.getNumberOfTeam()
-        self._TeamsOrControlsPointsPlugin__addTeamSpawnPoints()
-        self._TeamsOrControlsPointsPlugin__addTeamBasePositions()
-        self._TeamsOrControlsPointsPlugin__addControlPoints()
+        self._entriesStorage = []
+        self._personalTeam = self._arenaDP.getNumberOfTeam()
+        self._addTeamSpawnPoints()
+        self._addTeamBasePositions()
+        self._addControlPoints()
 
-    def __onActionAddedToMarkerReceived(self, senderID, commandID, markerType, objectID):
-        if _ACTIONS.battleChatCommandFromActionID(commandID).name not in BASE_CMD_NAMES or objectID not in self._TeamsOrControlsPointsPlugin__markerIDs:
+    @property
+    def allySpawnSymbol(self):
+        return _S_NAME.ALLY_TEAM_SPAWN
+
+    @property
+    def enemySpawnSymbol(self):
+        return _S_NAME.ENEMY_TEAM_SPAWN
+
+    @property
+    def allyBaseSymbol(self):
+        return _S_NAME.ALLY_TEAM_BASE
+
+    @property
+    def enemyBaseSymbol(self):
+        return _S_NAME.ENEMY_TEAM_BASE
+
+    @property
+    def controlPointSymbol(self):
+        return _S_NAME.CONTROL_POINT
+
+    def _onActionAddedToMarkerReceived(self, senderID, commandID, markerType, objectID):
+        if _ACTIONS.battleChatCommandFromActionID(commandID).name not in BASE_CMD_NAMES or objectID not in self._markerIDs:
             return
         else:
-            model = self._TeamsOrControlsPointsPlugin__markerIDs[objectID]
+            model = self._markerIDs[objectID]
             if model is not None:
                 if _ACTIONS.battleChatCommandFromActionID(commandID).name in [BATTLE_CHAT_COMMAND_NAMES.ATTACKING_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFENDING_BASE]:
-                    self._TeamsOrControlsPointsPlugin__onReplyFeedbackReceived(objectID, senderID, MarkerType.BASE_MARKER_TYPE, 0, 1)
+                    self._onReplyFeedbackReceived(objectID, senderID, MarkerType.BASE_MARKER_TYPE, 0, 1)
                 else:
                     self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_ATTACK)
             return
 
-    def __onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
+    def _onReplyFeedbackReceived(self, ucmdID, replierID, markerType, oldReplyCount, newReplyCount):
         if markerType != MarkerType.BASE_MARKER_TYPE:
             return
         else:
             newReply = newReplyCount > oldReplyCount
             playerHasReply = replierID == avatar_getter.getPlayerVehicleID()
-            if ucmdID in self._TeamsOrControlsPointsPlugin__markerIDs and newReply:
+            if ucmdID in self._markerIDs and newReply:
                 if playerHasReply:
-                    self._invoke(self._TeamsOrControlsPointsPlugin__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_REPLY)
-                    self._TeamsOrControlsPointsPlugin__hasActiveCommit = True
-                elif not self._TeamsOrControlsPointsPlugin__hasActiveCommit:
-                    self._invoke(self._TeamsOrControlsPointsPlugin__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
-            if ucmdID in self._TeamsOrControlsPointsPlugin__markerIDs and ((newReplyCount < oldReplyCount and playerHasReply) or (newReplyCount <= 0)):
-                self._invoke(self._TeamsOrControlsPointsPlugin__markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+                    self._invoke(self._markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_REPLY)
+                    self._hasActiveCommit = True
+                elif not self._hasActiveCommit:
+                    self._invoke(self._markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
+            if ucmdID in self._markerIDs and ((newReplyCount < oldReplyCount and playerHasReply) or (newReplyCount <= 0)):
+                self._invoke(self._markerIDs[ucmdID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_IDLE)
                 if playerHasReply:
-                    self._TeamsOrControlsPointsPlugin__hasActiveCommit = False
+                    self._hasActiveCommit = False
             return
 
-    def __onRemoveCommandReceived(self, removeID, markerType):
-        if not self._TeamsOrControlsPointsPlugin__markerIDs or markerType != MarkerType.BASE_MARKER_TYPE:
+    def _onRemoveCommandReceived(self, removeID, markerType):
+        if not self._markerIDs or markerType != MarkerType.BASE_MARKER_TYPE:
             return
-        elif removeID in self._TeamsOrControlsPointsPlugin__markerIDs:
-            self._invoke(self._TeamsOrControlsPointsPlugin__markerIDs[removeID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
+        elif removeID in self._markerIDs:
+            self._invoke(self._markerIDs[removeID].getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
             return
         else:
             _logger.error(str(removeID) + ' not found in markerIDs')
             return
 
-    def __onTeamChanged(self, teamID):
+    def _onTeamChanged(self, teamID):
         self.restart()
 
-    def __addBaseEntry(self, symbol, position, uid):
+    def _addBaseEntry(self, symbol, position, uid):
         matrix = Math.Matrix()
         matrix.setTranslate(position)
         model = self._addEntryEx(uid, symbol, _C_NAME.TEAM_POINTS, active = True, matrix = matrix)
         if model is not None:
-            self._TeamsOrControlsPointsPlugin__markerIDs[uid] = model
+            self._markerIDs[uid] = model
             _, number = getBaseTeamAndIDFromUniqueID(uid)
             self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
             self._invoke(model.getID(), BATTLE_MINIMAP_CONSTS.SET_STATE, BATTLE_MINIMAP_CONSTS.STATE_DEFAULT)
 
-    def __addPointEntry(self, symbol, position, number):
+    def _addPointEntry(self, symbol, position, number):
         matrix = Math.Matrix()
         matrix.setTranslate(position)
         entryID = self._addEntry(symbol, _C_NAME.TEAM_POINTS, active = True, matrix = matrix)
         if entryID:
             self._invoke(entryID, BATTLE_MINIMAP_CONSTS.SET_POINT_NUMBER, number)
-            self._TeamsOrControlsPointsPlugin__entries.append(entryID)
+            self._entriesStorage.append(entryID)
 
-    def __addTeamSpawnPoints(self):
-        points = self._arenaVisitor.getTeamSpawnPointsIterator(self._TeamsOrControlsPointsPlugin__personalTeam)
+    def _addTeamSpawnPoints(self):
+        points = self._arenaVisitor.getTeamSpawnPointsIterator(self._personalTeam)
         for team, position, number in points:
-            if team == self._TeamsOrControlsPointsPlugin__personalTeam:
-                symbol = _S_NAME.ALLY_TEAM_SPAWN
+            if team == self._personalTeam:
+                symbol = self.allySpawnSymbol
             else:
-                symbol = _S_NAME.ENEMY_TEAM_SPAWN
-            self._TeamsOrControlsPointsPlugin__addPointEntry(symbol, position, number)
+                symbol = self.enemySpawnSymbol
+            self._addPointEntry(symbol, position, number)
 
-    def __addTeamBasePositions(self):
+    def _addTeamBasePositions(self):
         positions = self._arenaVisitor.type.getTeamBasePositionsIterator()
         for team, position, number in positions:
-            if team == self._TeamsOrControlsPointsPlugin__personalTeam:
-                symbol = _S_NAME.ALLY_TEAM_BASE
+            if team == self._personalTeam:
+                symbol = self.allyBaseSymbol
             else:
-                symbol = _S_NAME.ENEMY_TEAM_BASE
+                symbol = self.enemyBaseSymbol
             uid = getUniqueTeamOrControlPointID(team, number)
-            self._TeamsOrControlsPointsPlugin__addBaseEntry(symbol, position, uid)
+            self._addBaseEntry(symbol, position, uid)
 
-    def __addControlPoints(self):
+    def _addControlPoints(self):
         points = self._arenaVisitor.type.getControlPointsIterator()
         for position, number in points:
             uid = getUniqueTeamOrControlPointID(0, number)
-            self._TeamsOrControlsPointsPlugin__addBaseEntry(_S_NAME.CONTROL_POINT, position, uid)
+            self._addBaseEntry(self.controlPointSymbol, position, uid)
 
 class ClassicMinimapPingPlugin(plugins.MinimapPingPlugin):
     def _getClickPosition(self, x, y):

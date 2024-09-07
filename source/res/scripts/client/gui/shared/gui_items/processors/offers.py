@@ -61,7 +61,7 @@ class ReceiveMultipleOfferGiftsProcessor(Processor):
     ERROR_CODE_MULTI_ERROR = 'MULTI_ERROR'
 
     def __init__(self, chosenGifts):
-        self.__chosenGifts = chosenGifts
+        self._chosenGifts = chosenGifts
         super(ReceiveMultipleOfferGiftsProcessor, self).__init__()
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -81,9 +81,9 @@ class ReceiveMultipleOfferGiftsProcessor(Processor):
         return super(ReceiveMultipleOfferGiftsProcessor, self)._successHandler(code, ctx)
 
     def _request(self, callback):
-        _logger.debug('Make server request to receive offers gifts. Choices: %s', self.__chosenGifts)
+        _logger.debug('Make server request to receive offers gifts. Choices: %s', self._chosenGifts)
         Waiting.show('loadContent')
-        choices = json.dumps(self.__chosenGifts)
+        choices = json.dumps(self._chosenGifts)
         BigWorld.player().receiveMultipleOfferGifts(choices, lambda requestID, resultID, errStr, ext=None: self._response(resultID, callback, ctx=ext, errStr=errStr))
         return
 
@@ -94,19 +94,4 @@ class BattleMattersOfferProcessor(ReceiveOfferGiftProcessor):
     def _successHandler(self, code, ctx=None):
         Waiting.hide('loadContent')
         self.__systemMessages.proto.serviceChannel.pushClientMessage(ctx, SCH_CLIENT_MSG_TYPE.BATTLE_MATTERS_TOKEN_AWARD)
-        return makeSuccess(auxData=ctx)
-
-
-class WinbackMultipleOfferProcessor(ReceiveMultipleOfferGiftsProcessor):
-    __systemMessages = dependency.descriptor(ISystemMessages)
-
-    def _successHandler(self, code, ctx=None):
-        Waiting.hide('loadContent')
-        successData = ctx.get(RES_SUCCESS)
-        if successData:
-            self.__systemMessages.proto.serviceChannel.pushClientMessage(successData, SCH_CLIENT_MSG_TYPE.WINBACK_SELECTABLE_REWARD)
-        failureData = ctx.get(RES_FAILURE)
-        if failureData:
-            msg = self._errorHandler(code, self.ERROR_CODE_MULTI_ERROR, ctx=failureData)
-            SystemMessages.pushMessage(msg.userMsg, msg.sysMsgType)
         return makeSuccess(auxData=ctx)

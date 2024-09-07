@@ -8,7 +8,9 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from points_of_interest_shared import PoiType
 _POI_TYPE_TO_STR = {PoiType.ARTILLERY: MINIMAPENTRIES_CONSTANTS.POI_TYPE_ARTY,
- PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON}
+ PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON,
+ PoiType.SMOKE: MINIMAPENTRIES_CONSTANTS.POI_TYPE_SMOKE,
+ PoiType.MINEFIELD: MINIMAPENTRIES_CONSTANTS.POI_TYPE_MINEFIELD}
 
 class MinimapLobby(MinimapPresentationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)

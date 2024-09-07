@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/lobby/feature/armory_yard_main_view.py
 import logging
-from armory_yard.gui.window_events import showArmoryYardBuyWindow, showArmoryYardBundlesWindow
+from armory_yard.gui.window_events import showArmoryYardBuyWindow, showArmoryYardBundlesWindow, showArmoryYardPostProgressionBuyWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.events import ArmoryYardEvent
 from helpers import dependency
@@ -9,9 +9,10 @@ from shared_utils import first
 from gui.impl.gen import R
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.event_dispatcher import showHangar
+from armory_yard.gui.window_events import showArmoryYardShopWindow, showArmoryYardShopBuyWindow
 from gui.impl.pub import ViewImpl
 from frameworks.wulf import ViewFlags, ViewSettings
-from skeletons.gui.game_control import IArmoryYardController, IAwardController
+from skeletons.gui.game_control import IArmoryYardController, IArmoryYardShopController, IAwardController
 from skeletons.gui.impl import IGuiLoader
 from armory_yard.managers.stage_manager import StageManager
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_main_view_model import ArmoryYardMainViewModel, TabId
@@ -29,6 +30,7 @@ _logger = logging.getLogger(__name__)
 
 class ArmoryYardMainView(ViewImpl, IGlobalListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+    __armoryShopCtrl = dependency.descriptor(IArmoryYardShopController)
     __gui = dependency.descriptor(IGuiLoader)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -42,6 +44,7 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
         self.__onLoadedCallback = onLoadedCallback
         self.__destroyCallback = None
         super(ArmoryYardMainView, self).__init__(settings)
+        self.__isClose = False
         self.__stageManager = StageManager()
         self.__tabId = None
         self.__initedTabId = tabId if tabId is not None else TabId.PROGRESS
@@ -74,6 +77,9 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
         super(ArmoryYardMainView, self)._finalize()
         if self.__destroyCallback is not None:
             self.__destroyCallback()
+        if not self.__isClose and not self.__armoryYardCtrl.isVehiclePreview:
+            self.__armoryYardCtrl.disableVideoStreaming()
+            showHangar()
         return
 
     def _onLoading(self, *args, **kwargs):
@@ -84,15 +90,25 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
     def _onLoaded(self, *args, **kwargs):
         super(ArmoryYardMainView, self)._onLoaded(*args, **kwargs)
         self.__setTab()
+        self.__shopUpdate()
         if self.__onLoadedCallback is not None:
             self.__onLoadedCallback()
         return
 
     def _getEvents(self):
-        return super(ArmoryYardMainView, self)._getEvents() + ((self.viewModel.onTabChange, self.__onTabChange), (self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated), (self.__armoryYardCtrl.onTabIdChanged, self.__onTabChange))
+        return super(ArmoryYardMainView, self)._getEvents() + ((self.viewModel.onTabChange, self.__onTabChange),
+         (self.__armoryYardCtrl.serverSettings.onUpdated, self.__onServerSettingsUpdated),
+         (self.__armoryYardCtrl.onTabIdChanged, self.__onTabChange),
+         (self.__armoryShopCtrl.onSettingsUpdate, self.__shopUpdate),
+         (self.__armoryYardCtrl.onStatusChange, self.__checkStatus))
+
+    def __checkStatus(self):
+        if not self.__armoryYardCtrl.isActive():
+            self.__closeView()
+            return
 
     def _getListeners(self):
-        return ((ArmoryYardEvent.DESTROY_ARMORY_YARD_MAIN_VIEW, self.__destroyWindowEvent), (ArmoryYardEvent.SHOW_ARMORY_YARD_BUY_VIEW, self.__showArmoryYardBuyView))
+        return ((ArmoryYardEvent.DESTROY_ARMORY_YARD_MAIN_VIEW, self.__destroyWindowEvent), (ArmoryYardEvent.SHOW_ARMORY_YARD_BUY_VIEW, self.__showArmoryYardBuyView), (ArmoryYardEvent.SHOW_ARMORY_YARD_SHOP_BUY_VIEW, self.__showArmoryYardShopBuyView))
 
     def _getCurrentPresenter(self):
         return self.__tabs[self.__tabId or self.__initedTabId]
@@ -128,6 +144,10 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
         if self.__tabId != tabID:
             if self.__tabId is not None:
                 self.__tabs[self.__tabId].onUnload()
+            if tabID == TabId.SHOP:
+                self.__tabId = None
+                showArmoryYardShopWindow(self.getWindow())
+                return
             self.__tabId = tabID
             self.__tabs[self.__tabId].onLoad()
             if self.viewModel:
@@ -150,6 +170,9 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING if not isVisible else HeaderMenuVisibilityState.ALL}), EVENT_BUS_SCOPE.LOBBY)
 
     def __closeView(self, *args):
+        if self.__isClose:
+            return
+        self.__isClose = True
         self.__armoryYardCtrl.disableVideoStreaming()
         self.destroy()
         showHangar()
@@ -162,10 +185,21 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
     def __onTabChange(self, *args):
         self.__setTab(TabId(first(args).get('tabId')))
 
+    def __shopUpdate(self):
+        if self.viewModel:
+            with self.getViewModel().transaction() as model:
+                model.setShopButtonVisible(self.__armoryShopCtrl.isEnabled)
+
     def __showArmoryYardBuyView(self, event):
         if self.__tabId == TabId.PROGRESS and not self.__armoryYardCtrl.isCompleted():
             if self.__armoryYardCtrl.isStarterPackAvailable():
                 showArmoryYardBundlesWindow(parent=self.getParentWindow(), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
+            elif self.__armoryYardCtrl.isPostProgressionActive():
+                showArmoryYardPostProgressionBuyWindow(parent=self.getParentWindow(), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
             else:
                 showArmoryYardBuyWindow(parent=self.getParentWindow(), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
+        return
+
+    def __showArmoryYardShopBuyView(self, event):
+        showArmoryYardShopBuyWindow(productId=event.ctx.get('productID'), onLoadedCallback=event.ctx.get('onLoadedCallback', None))
         return

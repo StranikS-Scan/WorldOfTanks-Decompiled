@@ -33,6 +33,16 @@ def showArmoryYardRewardWindow(bonuses, state, stage=0, closeCallback=None, show
         notificationMgr.append(WindowNotificationCommand(window))
 
 
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showArmoryYardShopRewardWindow(description, iconPath, count=1, itemType='', closeCallback=None, showImmediately=True, notificationMgr=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_shop_rewards_view import ArmoryYardShopRewardsWindow
+    window = ArmoryYardShopRewardsWindow(description, iconPath, count, itemType, closeCallback)
+    if showImmediately:
+        window.load()
+    else:
+        notificationMgr.append(WindowNotificationCommand(window))
+
+
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
 def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
     from armory_yard.gui.impl.lobby.feature.armory_yard_buy_view import ArmoryYardBuyWindow
@@ -42,11 +52,29 @@ def showArmoryYardBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, o
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
+def showArmoryYardPostProgressionBuyWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_post_progression_buy_view import ArmoryYardPostProgressionBuyWindow
+    if armoryYard.isActive():
+        window = ArmoryYardPostProgressionBuyWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
+        window.load()
+
+
+@dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
 def showArmoryYardBundlesWindow(armoryYard=None, parent=None, isBlurEnabled=False, onLoadedCallback=None):
     from armory_yard.gui.impl.lobby.feature.armory_yard_bundles_view import ArmoryYardBundlesWindow
     if armoryYard.isActive():
         window = ArmoryYardBundlesWindow(parent=parent, isBlurEnabled=isBlurEnabled, onLoadedCallback=onLoadedCallback)
         window.load()
+
+
+def showArmoryYardShopWindow(parent=None, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_shop_view import ArmoryYardShopWindow
+    ArmoryYardShopWindow(parent=parent, onLoadedCallback=onLoadedCallback).load()
+
+
+def showArmoryYardShopBuyWindow(productId, onClosedCallback=None, onLoadedCallback=None):
+    from armory_yard.gui.impl.lobby.feature.armory_yard_shop_buy_view import ArmoryYardShopBuyWindow
+    ArmoryYardShopBuyWindow(productId, onClosedCallback=onClosedCallback, onLoadedCallback=onLoadedCallback).load()
 
 
 @dependency.replace_none_kwargs(armoryYard=IArmoryYardController)
@@ -85,7 +113,7 @@ def showBuyGoldForArmoryYard(goldPrice):
     showBuyGoldWebOverlay(params)
 
 
-def showArmoryYardVehiclePreview(vehTypeCompDescr, showHeroTankText=False, backToHangar=False, isHeroTank=False, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, backBtnLabel=None):
+def showArmoryYardVehiclePreview(vehTypeCompDescr, showHeroTankText=False, backToHangar=False, isHeroTank=False, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previewBackCb=None, backBtnLabel=None, isHeroInteractive=False, isNeedHeroTankHidden=False):
     previewAppearance = None
     if backToHangar:
         previewAppearance = HeroTankPreviewAppearance()
@@ -102,7 +130,9 @@ def showArmoryYardVehiclePreview(vehTypeCompDescr, showHeroTankText=False, backT
      'backBtnLabel': backBtnLabel,
      'previewAlias': previewAlias,
      'showHeroTankText': showHeroTankText,
-     'isHeroTank': isHeroTank}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'isHeroTank': isHeroTank,
+     'isHeroInteractive': isHeroInteractive,
+     'isNeedHeroTankHidden': isNeedHeroTankHidden}), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 
 

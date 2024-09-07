@@ -361,7 +361,6 @@ def packMissionFormationElement(formationName, width=32, height=32, vSpace=-11):
 
 
 def getUniqueBonusTypes(bonusTypes):
-    from gui.winback.winback_helpers import getQuestsFormatterBonusType
     uniqueTypes = set()
     for bonusType in bonusTypes:
         if bonusType in ARENA_BONUS_TYPE.TOURNAMENT_RANGE:
@@ -374,8 +373,6 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.EVENT_BATTLES
         if bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_RANGE:
             bonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
-        if bonusType == ARENA_BONUS_TYPE.WINBACK:
-            bonusType = getQuestsFormatterBonusType()
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

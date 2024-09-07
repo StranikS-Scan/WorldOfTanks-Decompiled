@@ -28,8 +28,8 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __comp7Controller = dependency.descriptor(IComp7Controller)
     _ROLE_EQUIPMENT_IDX = 6
-    _POI_EQUIPMENT_IDX = {PoiType.ARTILLERY: 7,
-     PoiType.RECON: 8}
+    _POI_EQUIPMENT_IDX = {PoiType.MINEFIELD: 7,
+     PoiType.SMOKE: 8}
     _R_COMP7_EQUIPMENT_ICON = R.images.gui.maps.icons.roleSkills.c_43x43
     _R_POI_EQUIPMENT_ICON = R.images.gui.maps.icons.pointsOfInterest.equipments.c_43x43
 

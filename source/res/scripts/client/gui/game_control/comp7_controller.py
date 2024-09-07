@@ -14,6 +14,7 @@ from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT
 from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
+from gui.comp7.comp7_helpers import updateComp7Settings
 from gui.comp7.entitlements_cache import EntitlementsCache
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
 from gui.prb_control import prb_getters
@@ -78,6 +79,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.onQualificationStateUpdated = Event.Event(em)
         self.onSeasonPointsUpdated = Event.Event(em)
         self.onComp7RewardsConfigChanged = Event.Event(em)
+        self.onComp7BattleFinished = Event.Event(em)
         return
 
     @property
@@ -205,6 +207,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         return
 
     def onLobbyInited(self, event):
+        if self.isAvailable():
+            updateComp7Settings()
         self.startNotification()
         self.startGlobalListening()
 

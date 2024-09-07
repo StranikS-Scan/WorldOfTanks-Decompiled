@@ -746,4 +746,50 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J40_Type_71	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31143	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/J40_Type_71_3dst_Magnus.png	</texture>
+      <userString>	#vehicle_customization:J40_Type_71_3dst_Magnus/name	</userString>
+      <description>	#vehicle_customization:J40_Type_71_3dst_Magnus/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:J40_Type_71_3dst_Magnus/longDescription	</longDescriptionSpecial>
+      <modelsSet>	J40_Type_71_3dst_Magnus	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31021	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </japan.xml>

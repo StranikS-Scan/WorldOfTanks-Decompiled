@@ -908,6 +908,7 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteString(section, 'atlas', item, 'atlas', '')
             changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
             changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
+            changed |= rewriteEmissionSettings(section, item.emissionSettings)
         changed |= self.writeBaseGroup(item, section)
         return changed
 

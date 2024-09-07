@@ -39,5 +39,8 @@ class EarlyAccessHangarFeatureState(object):
                     cgfCameraManager.switchToTank(instantly=False)
                 self.__isInVehicleState = False
 
+    def isInVehicleState(self):
+        return self.__isInVehicleState
+
     def isLayoutIdActive(self, layoutID):
         return layoutID in self.__activeLayoutIDs

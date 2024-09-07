@@ -14,8 +14,8 @@ from helpers import dependency, server_settings
 from PlayerEvents import g_playerEvents
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from versus_ai.skeletons.versus_ai_controller import IVersusAIController
-from versus_ai.gui.versus_ai_gui_constants import NOOB_MIN_BATTLES_COUNT, NOOB_VEHICLE_LEVELS
+from skeletons.gui.game_control import IVersusAIController, IWinbackController
+from versus_ai.gui.versus_ai_gui_constants import NOOB_MIN_BATTLES_COUNT, NOOB_VEHICLE_LEVELS, FUNCTIONAL_FLAG
 if typing.TYPE_CHECKING:
     from helpers.server_settings import VersusAIConfig
 
@@ -59,18 +59,35 @@ class VersusAIController(IVersusAIController, IGlobalListener):
     def isEnabled(self):
         return self.getConfig().isEnabled
 
+    def isVersusAIPrbActive(self):
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.VERSUS_AI)
+
     def getConfig(self):
         return self.__lobbyContext.getServerSettings().versusAIConfig
 
-    def shouldBeDefaultMode(self):
-        battlesCount = self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-        return self.isEnabled() and battlesCount < NOOB_MIN_BATTLES_COUNT and not AccountSettings.getSettings(HAS_LEFT_VERSUS_AI) and self.__hasLowLevelsInConfig()
+    @staticmethod
+    def __shouldBeDefaultModeIfWinbacker():
+        winbackController = dependency.getInstanceIfHas(IWinbackController)
+        return winbackController.versusAIModeShouldBeDefault() if winbackController else False
 
-    def __shouldSwitchModeForNoob(self):
-        if AccountSettings.getSettings(HAS_LEFT_VERSUS_AI) or not self.__hasLowLevelsInConfig() or not self.isEnabled():
+    def shouldBeDefaultMode(self):
+        if self.__shouldBeDefaultModeIfWinbacker():
+            return True
+        if not self.__isSwitchModeEnable():
+            return False
+        battlesCount = self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+        return battlesCount < NOOB_MIN_BATTLES_COUNT
+
+    def __shouldSwitchModeToRandomForNoob(self):
+        if not self.__isSwitchModeEnable():
+            return False
+        if self.__shouldBeDefaultModeIfWinbacker():
             return False
         battlesCount = self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         return battlesCount >= NOOB_MIN_BATTLES_COUNT
+
+    def __isSwitchModeEnable(self):
+        return self.isEnabled() and not AccountSettings.getSettings(HAS_LEFT_VERSUS_AI) and self.__hasLowLevelsInConfig()
 
     def __hasLowLevelsInConfig(self):
         configLevels = self.getConfig().levels
@@ -85,7 +102,7 @@ class VersusAIController(IVersusAIController, IGlobalListener):
             return
 
     def __switchModeForNoob(self):
-        if self.__shouldSwitchModeForNoob():
+        if self.__isVersusAIMode() and self.__shouldSwitchModeToRandomForNoob():
             self.__selectRandomBattle()
 
     @adisp.adisp_process
@@ -107,5 +124,5 @@ class VersusAIController(IVersusAIController, IGlobalListener):
 
     def __updateMode(self):
         if self.__isVersusAIMode():
-            if not self.isEnabled() or self.__shouldSwitchModeForNoob():
+            if not self.isEnabled() or self.__shouldSwitchModeToRandomForNoob():
                 self.__selectRandomBattle()

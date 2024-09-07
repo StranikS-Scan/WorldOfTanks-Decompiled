@@ -27,7 +27,6 @@ if typing.TYPE_CHECKING:
     from gui.impl.lobby.early_access.hangar_feature_state import EarlyAccessHangarFeatureState
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
-    from gui.impl.lobby.winback.winback_helpers import WinbackQuestTypes
     from gui.limited_ui.lui_rules_storage import LuiRules
     from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
@@ -2997,6 +2996,7 @@ class IComp7Controller(IGameController, ISeasonProvider):
     onQualificationStateUpdated = None
     onSeasonPointsUpdated = None
     onComp7RewardsConfigChanged = None
+    onComp7BattleFinished = None
 
     @property
     def rating(self):
@@ -3138,6 +3138,11 @@ class IArmoryYardController(IGameController):
     onTabIdChanged = None
     onCollectFinalReward = None
     onBundlesDisabled = None
+    onAYCoinsUpdate = None
+
+    @property
+    def isArmoryVisiting(self):
+        raise NotImplementedError
 
     @property
     def serverSettings(self):
@@ -3201,7 +3206,7 @@ class IArmoryYardController(IGameController):
     def isActive(self):
         raise NotImplementedError
 
-    def goToArmoryYard(self, tabId, loadBuyView=False):
+    def goToArmoryYard(self, tabId, ctx=None):
         raise NotImplementedError
 
     def goToArmoryYardQuests(self):
@@ -3223,6 +3228,9 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def isSceneLoaded(self):
+        raise NotImplementedError
+
+    def isPostProgressionActive(self):
         raise NotImplementedError
 
     def getAvailableQuestsCount(self):
@@ -3259,6 +3267,43 @@ class IArmoryYardController(IGameController):
         raise NotImplementedError
 
     def checkAnnouncement(self):
+        raise NotImplementedError
+
+    def payedTokensLeft(self):
+        raise NotImplementedError
+
+    def isPostProgressionEnabled(self):
+        raise NotImplementedError
+
+
+class IArmoryYardShopController(IGameController):
+    onProductsUpdate = None
+    onAYCoinsUpdate = None
+    onSettingsUpdate = None
+    onPurchaseComplete = None
+    onPurchaseError = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def ayCoins(self):
+        raise NotImplementedError
+
+    @property
+    def conversionPrices(self):
+        raise NotImplementedError
+
+    @property
+    def products(self):
+        raise NotImplementedError
+
+    @property
+    def isSeasonCompleted(self):
+        raise NotImplementedError
+
+    def isBundle(self, productId):
         raise NotImplementedError
 
 
@@ -3337,9 +3382,18 @@ class ICollectionsSystemController(IGameController):
 class IWinbackController(IGameController):
     onConfigUpdated = None
     onStateUpdated = None
+    onTokensUpdated = None
 
     @property
     def winbackConfig(self):
+        raise NotImplementedError
+
+    @property
+    def activeProgressionConfig(self):
+        raise NotImplementedError
+
+    @property
+    def winbackProgression(self):
         raise NotImplementedError
 
     @property
@@ -3350,25 +3404,27 @@ class IWinbackController(IGameController):
     def winbackPromoURL(self):
         raise NotImplementedError
 
+    @property
+    def winbackInfoPageURL(self):
+        raise NotImplementedError
+
+    @property
+    def progressionName(self):
+        raise NotImplementedError
+
     def isEnabled(self):
         raise NotImplementedError
 
-    def isModeAvailable(self):
+    def isWidgetEnabled(self):
         raise NotImplementedError
 
-    def isProgressionAvailable(self):
+    def isProgressionEnabled(self):
+        raise NotImplementedError
+
+    def isVersusAIPrbActive(self):
         raise NotImplementedError
 
     def isWinbackQuest(self, quest):
-        raise NotImplementedError
-
-    def parseOfferToken(self, token):
-        raise NotImplementedError
-
-    def getQuestIdx(self, quest):
-        raise NotImplementedError
-
-    def getQuestType(self, questID):
         raise NotImplementedError
 
     def isFinished(self):
@@ -3377,13 +3433,19 @@ class IWinbackController(IGameController):
     def isWinbackOfferToken(self, offerToken):
         raise NotImplementedError
 
-    def hasWinbackOfferToken(self):
+    def hasWinbackOfferGiftToken(self):
         raise NotImplementedError
 
-    def getWinbackBattlesCountLeft(self):
+    def winbackOfferGiftTokenCount(self):
         raise NotImplementedError
 
     def isPromoEnabled(self):
+        raise NotImplementedError
+
+    def versusAIModeShouldBeDefault(self):
+        raise NotImplementedError
+
+    def getHeaderFlagState(self):
         raise NotImplementedError
 
 
@@ -3687,7 +3749,16 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
     def iterCycleProgressionQuests(self, cycleID):
         raise NotImplementedError
 
+    def iterAllCycles(self, now=None):
+        raise NotImplementedError
+
+    def isPostprogressionBlockedByQuestFinisher(self):
+        raise NotImplementedError
+
     def isQuestActive(self):
+        raise NotImplementedError
+
+    def getPostProgressionVehiclesForQuest(self, questID):
         raise NotImplementedError
 
     def getPostProgressionVehicles(self):
@@ -3723,71 +3794,23 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
     def isPostProgressionQueueSelected(self):
         raise NotImplementedError
 
-
-class IRacesBattleController(IGameController, ISeasonProvider):
-    onRacesConfigChanged = None
-    onPrimeTimeStatusUpdated = None
-    onStatusTick = None
-
-    def isRacesMode(self):
+    def isFilterDisabledInQueue(self):
         raise NotImplementedError
 
-    @property
+    def getVehicleTypeAndLevelsByVehicleCD(self, vehCD):
+        raise NotImplementedError
+
+
+class IVersusAIController(IGameController):
+
     def isEnabled(self):
         raise NotImplementedError
 
-    @property
-    def isRacesPrbActive(self):
+    def isVersusAIPrbActive(self):
         raise NotImplementedError
 
-    def isBattleAvailable(self):
+    def getConfig(self):
         raise NotImplementedError
 
-    def isInQueue(self):
+    def shouldBeDefaultMode(self):
         raise NotImplementedError
-
-    def selectRandomBattle(self):
-        raise NotImplementedError
-
-    def selectRaces(self):
-        raise NotImplementedError
-
-    def onPrbEnter(self):
-        raise NotImplementedError
-
-    def onPrbLeave(self):
-        raise NotImplementedError
-
-    def openEventLobby(self):
-        raise NotImplementedError
-
-    def getRacesVehiclesInfo(self):
-        raise NotImplementedError
-
-    def getRacesVehicles(self):
-        raise NotImplementedError
-
-    def getSelectedRacesVehicleDescr(self):
-        raise NotImplementedError
-
-    def getTokenProgressionID(self):
-        raise NotImplementedError
-
-    def openQueueView(self):
-        raise NotImplementedError
-
-    def getRacesAccountSettings(self, name):
-        raise NotImplementedError
-
-    def setRacesAccountSettings(self, name, value):
-        raise NotImplementedError
-
-    def closeRewardScreen(self):
-        raise NotImplementedError
-
-    def closePostBattleScreen(self):
-        raise NotImplementedError
-
-
-class IRacesVisibilityLayerController(IGameController):
-    pass

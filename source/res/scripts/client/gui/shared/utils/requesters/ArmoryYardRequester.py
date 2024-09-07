@@ -16,6 +16,16 @@ class ArmoryYardRequester(AbstractSyncDataRequester, IArmoryYardRequester):
         from armory_yard_constants import PROGRESSION_LEVEL_PDATA_KEY
         return self._data.get(PROGRESSION_LEVEL_PDATA_KEY, 0)
 
+    @property
+    def shopLastSeasonCompleted(self):
+        from armory_yard_constants import SHOP_PDATA_KEY, SHOP_LAST_SEASON_COMPLETED
+        return self._data.get(SHOP_PDATA_KEY, {}).get(SHOP_LAST_SEASON_COMPLETED, False)
+
+    @property
+    def shopProductLimits(self):
+        from armory_yard_constants import SHOP_PDATA_KEY, SHOP_PRODUCT_LIMITS
+        return self._data.get(SHOP_PDATA_KEY, {}).get(SHOP_PRODUCT_LIMITS, {})
+
     @adisp_async
     def _requestCache(self, callback):
         BigWorld.player().armoryYard.getCache(lambda resID, value: self._response(resID, value, callback))

@@ -10,8 +10,8 @@ from gui.Scaleform.daapi.view.lobby.header.battle_selector_item import SelectorI
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import SpecialSquadItem
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import dependency
+from skeletons.gui.game_control import IVersusAIController
 from versus_ai.gui.versus_ai_gui_constants import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES
-from versus_ai.skeletons.versus_ai_controller import IVersusAIController
 
 def addVersusAIBattleType(items):
     items.append(_VersusAIItem(backport.text(R.strings.menu.headerButtons.battle.types.versusAI()), PREBATTLE_ACTION_NAME.VERSUS_AI, 3, SELECTOR_BATTLE_TYPES.VERSUS_AI))

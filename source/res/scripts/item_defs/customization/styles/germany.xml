@@ -2284,4 +2284,52 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G134_PzKpfw_VII	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31189	</id>
+      <modelsSet>	G134_PzKpfw_VII_3dst_Kinetic	</modelsSet>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <attachments>
+            <item>
+              <id>	31025	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <overrideDefaultAttachments>	0	</overrideDefaultAttachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/G134_PzKpfw_VII_3dst_Kinetic.png	</texture>
+      <userString>	#vehicle_customization:special_style/G134_PzKpfw_VII_3dst_Kinetic	</userString>
+      <description>	#vehicle_customization:special_style/G134_PzKpfw_VII_3dst_Kinetic_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G134_PzKpfw_VII_3dst_Kinetic_desc/long	</longDescriptionSpecial>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
 </germany.xml>

@@ -376,20 +376,24 @@ class _Comp7DynObjects(DynObjectsBase):
         self.__cachedPrefabs = set()
         self.__spawnPointConfig = None
         self.__pointsOfInterestConfig = None
+        self.__minesEffects = None
         return
 
     def init(self, dataSection):
         if self._initialized:
             return
-        for prefabKey in self.__ALL_KEYS:
-            self.__prefabPaths[prefabKey] = self.__readPrefab(dataSection, prefabKey)
+        else:
+            for prefabKey in self.__ALL_KEYS:
+                self.__prefabPaths[prefabKey] = self.__readPrefab(dataSection, prefabKey)
 
-        self.__spawnPointConfig = _SpawnPointsConfig.createFromXML(dataSection['spawnPointsConfig'])
-        self.__pointsOfInterestConfig = _PointsOfInterestConfig.createFromXML(dataSection['pointOfInterest'])
-        self.__cachedPrefabs.update(set(self.__prefabPaths.values()))
-        self.__cachedPrefabs.update(set(self.__pointsOfInterestConfig.getPrefabs()))
-        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
-        super(_Comp7DynObjects, self).init(dataSection)
+            self.__spawnPointConfig = _SpawnPointsConfig.createFromXML(dataSection['spawnPointsConfig'])
+            self.__pointsOfInterestConfig = _PointsOfInterestConfig.createFromXML(dataSection['pointOfInterest'])
+            self.__cachedPrefabs.update(set(self.__prefabPaths.values()))
+            self.__cachedPrefabs.update(set(self.__pointsOfInterestConfig.getPrefabs()))
+            CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
+            self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_EpicMinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), placeMinesEffect='minesDecalEffect', blowUpEffectName='minesBlowUpEffect', activationEffect=None)
+            super(_Comp7DynObjects, self).init(dataSection)
+            return
 
     def clear(self):
         if self.__cachedPrefabs:
@@ -397,6 +401,7 @@ class _Comp7DynObjects(DynObjectsBase):
             self.__cachedPrefabs.clear()
         self.__spawnPointConfig = None
         self.__pointsOfInterestConfig = None
+        self.__minesEffects = None
         self._initialized = False
         return
 
@@ -412,6 +417,9 @@ class _Comp7DynObjects(DynObjectsBase):
 
     def getPointOfInterestConfig(self):
         return self.__pointsOfInterestConfig
+
+    def getMinesEffect(self):
+        return self.__minesEffects
 
     @staticmethod
     def __readPrefab(dataSection, key):

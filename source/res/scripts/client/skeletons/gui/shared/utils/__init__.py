@@ -96,6 +96,10 @@ class IItemsRequester(requesters.IRequester):
     def refProgram(self):
         raise NotImplementedError
 
+    @property
+    def armoryYard(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

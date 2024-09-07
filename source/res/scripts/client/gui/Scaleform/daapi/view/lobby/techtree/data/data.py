@@ -168,8 +168,6 @@ class _ItemsData(object):
             state = node.getState()
             if blueprints[nodeCD]:
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.BLUEPRINT)
-            else:
-                state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.BLUEPRINT)
             result.append((nodeCD, state))
 
         return result

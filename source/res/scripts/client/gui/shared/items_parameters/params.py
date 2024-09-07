@@ -112,7 +112,9 @@ _SHELL_KINDS = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR,
+ SHELL_TYPES.ARMOR_PIERCING_FSDS,
  SHELL_TYPES.FLAME)
+_POWER_PIERCING_SHELLS = (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_CR, SHELL_TYPES.ARMOR_PIERCING_FSDS)
 _AUTOCANNON_SHOT_DISTANCE = 400
 
 def _processExtraBonuses(vehicle):
@@ -286,6 +288,8 @@ class ChassisParams(WeightedParam):
                 repairTimes.append(track.healthParams.repairTime)
 
             repairTimes.reverse()
+            if chassis.isMultiTrack and repairTimes:
+                repairTimes = [min(repairTimes), max(repairTimes)]
         else:
             repairTimes.append(chassis.repairTime)
         return [ repairTime / 0.57 for repairTime in repairTimes ]
@@ -453,17 +457,17 @@ class VehicleParams(_ParameterBase):
 
     @property
     def damage(self):
-        avgDamage = self._itemDescr.shot.shell.damage[0]
         damageRandomization = self._itemDescr.shot.shell.damageRandomization
         lowerRandomizationFactor = self.damageAndPiercingDistributionLowerBound / 100.0
         upperRandomizationFactor = self.damageAndPiercingDistributionUpperBound / 100.0
         lowerBoundRandomization = damageRandomization - lowerRandomizationFactor
         upperBoundRandomization = damageRandomization + upperRandomizationFactor
-        return (int(floor(avgDamage - avgDamage * lowerBoundRandomization)), int(ceil(avgDamage + avgDamage * upperBoundRandomization)))
+        minDamage, maxDamage = self._itemDescr.shot.shell.dmgLimits
+        return (int(floor(minDamage - minDamage * lowerBoundRandomization)), int(ceil(maxDamage + maxDamage * upperBoundRandomization)))
 
     @property
     def avgDamage(self):
-        return int(round(sum(self.damage) / 2.0))
+        return self._itemDescr.shot.shell.distanceDmg.avgDamage if self._itemDescr.shot.shell.distanceDmg is not None else int(round(sum(self.damage) / 2.0))
 
     @property
     def chargeTime(self):
@@ -836,6 +840,8 @@ class VehicleParams(_ParameterBase):
                 repairTime.append(self.__calcRealChassisRepairTime(track.healthParams.repairTime))
 
             repairTime.reverse()
+            if chassis.isMultiTrack and repairTime:
+                repairTime = [min(repairTime), max(repairTime)]
         elif chassis.repairTime is not None:
             repairTime.append(self.__calcRealChassisRepairTime(chassis.repairTime))
         return repairTime
@@ -1365,7 +1371,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def avgDamage(self):
-        return self._itemDescr.damage[0]
+        return self._itemDescr.avgDamage
 
     @property
     def avgPiercingPower(self):
@@ -1377,7 +1383,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def piercingPowerTable(self):
-        if self._itemDescr.kind in (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_CR):
+        if self._itemDescr.kind in _POWER_PIERCING_SHELLS:
             if self._vehicleDescr is None:
                 return NO_DATA
             result = []

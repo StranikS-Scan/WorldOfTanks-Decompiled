@@ -8,7 +8,7 @@ from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
 import SoundGroups
 import Event
-__all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage', 'SOUND_EVENT')
+__all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage', 'SOUND_EVENT', 'GLOBAL_FLAG')
 
 class StartReqs(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -130,13 +130,15 @@ class GLOBAL_FLAG(object):
     RESEARCH_VEH_POST_PROGRESSION_PURCHASABLE = '_ResearchVehPostProgressionPurchasable'
     PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
     IS_NEED_TO_SHOW_SPECIALIZATION_SLOT = 'isNeedToShowSpecializationSlot'
+    IS_CHANGE_AI_MODE = 'isChangeAIMode'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
      BADGE_PAGE_HAS_NEW_SUFFIX_BADGE,
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
-     PERSONAL_RESERVES_AVAILABLE)
+     PERSONAL_RESERVES_AVAILABLE,
+     IS_CHANGE_AI_MODE)
 
 
 class GlobalStorage(object):

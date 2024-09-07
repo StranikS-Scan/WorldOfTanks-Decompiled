@@ -909,7 +909,3 @@ _DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),
                'switchHysteresis': (1, 2, 3),
                'lowRpm': (0.2, 0.2, 0.2),
                'highRpm': (0.9, 0.9, 0.9)}}
-
-def setTrackBitToBitMask(bitMask, trackPairIdx, isLeft):
-    idx = trackPairIdx * 2 + (not isLeft)
-    return bitMask | 1 << idx

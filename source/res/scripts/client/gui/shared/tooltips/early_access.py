@@ -56,3 +56,12 @@ class EarlyAccessCurrencyTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(EarlyAccessCurrencyTooltipView(), useDecorator=False)
+
+
+class EarlyAccessEntryPointTooltipWindowData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(EarlyAccessEntryPointTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.EARLY_ACCESS_ENTRY_POINT)
+
+    def getDisplayableData(self, vehicleCD, *args, **kwargs):
+        return DecoratedTooltipWindow(EarlyAccessEntryPointTooltipView(vehicleCD), useDecorator=False)

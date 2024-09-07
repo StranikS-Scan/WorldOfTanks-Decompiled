@@ -142,10 +142,9 @@ def calcShellParams(descriptors):
         piercingPower = d.piercingPower[0]
         shell = d.shell
         ppRand = shell.piercingPowerRandomization
-        damageRand = shell.damageRandomization
         curPiercingPower = (int(piercingPower - piercingPower * ppRand), int(ceil(piercingPower + piercingPower * ppRand)))
-        damage = shell.damage[0]
-        curDamage = (int(damage - damage * damageRand), int(ceil(damage + damage * damageRand)))
+        minDmg, maxDmg = shell.randomizationDmgLimits
+        curDamage = (int(minDmg), int(ceil(maxDmg)))
         result[PIERCING_POWER_PROP_NAME] = (min(result[PIERCING_POWER_PROP_NAME][0], curPiercingPower[0]), max(result[PIERCING_POWER_PROP_NAME][1], curPiercingPower[1]))
         result[DAMAGE_PROP_NAME] = (min(result[DAMAGE_PROP_NAME][0], curDamage[0]), max(result[DAMAGE_PROP_NAME][1], curDamage[1]))
 

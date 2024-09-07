@@ -41,8 +41,10 @@ def getLevelsAssetPath(level_str, extension='.png'):
     return ''.join([LEVEL_FILTER_ICONS_DIR_PARH, level_str, extension])
 
 
-def getNecessaryArenaFrameName(arenaSubType, hasBase=None):
-    return '{0}{1}'.format('assault', '1' if hasBase else '2') if arenaSubType.startswith('assault') else arenaSubType
+def getNecessaryArenaFrameName(arenaSubType, hasBase=None, hasControlPoint=None):
+    if arenaSubType.startswith('assault'):
+        return '{0}{1}'.format('assault', '1' if hasBase else '2')
+    return '{0}{1}'.format('comp7_', '1' if hasBase else '2') if arenaSubType.startswith('comp7') and not hasControlPoint else arenaSubType
 
 
 def getPathForFlash(path, base=SCALEFORM_SWF_PATH_V3):

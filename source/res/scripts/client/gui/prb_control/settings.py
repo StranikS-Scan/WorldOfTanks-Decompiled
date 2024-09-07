@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/settings.py
 from UnitBase import UNIT_ERROR, UNIT_BROWSER_ERROR, LEADER_SLOT
-from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE, QUEUE_TYPE
+from constants import PREBATTLE_TYPE, PREBATTLE_INVITE_STATE, QUEUE_TYPE, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from prebattle_shared import SETTING_DEFAULTS, PrebattleSettings
 from shared_utils import CONST_CONTAINER, BitmaskHelper
-VEHICLE_MIN_LEVEL = 1
-VEHICLE_MAX_LEVEL = 10
+VEHICLE_MIN_LEVEL = MIN_VEHICLE_LEVEL
+VEHICLE_MAX_LEVEL = MAX_VEHICLE_LEVEL
 VEHICLE_DEF_LEVEL_RANGE = (VEHICLE_MIN_LEVEL, VEHICLE_MAX_LEVEL)
 VEHICLE_LEVELS = range(VEHICLE_MIN_LEVEL, VEHICLE_MAX_LEVEL + 1)
 TEAM_MAX_LIMIT = 150
@@ -188,7 +188,6 @@ class PREBATTLE_ACTION_NAME(object):
     EVENT_BATTLE = 'event'
     MAPBOX = 'mapbox'
     COMP7 = 'comp7'
-    WINBACK = 'winback'
 
 
 class PREBATTLE_INIT_STEP(object):
@@ -208,7 +207,6 @@ class SELECTOR_BATTLE_TYPES(object):
     MAPS_TRAINING = 'mapsTraining'
     EVENT = 'event'
     COMP7 = 'comp7'
-    WINBACK = 'winback'
 
 
 class REQUEST_TYPE(object):
@@ -329,6 +327,7 @@ class PREBATTLE_RESTRICTION(object):
     VEHICLE_TELECOM_RENTALS_IS_OVER = 'vehicle/telecomRentalsIsOver'
     VEHICLE_IN_PREMIUM_IGR_ONLY = 'vehicle/inPremiumIgrOnly'
     VEHICLE_NOT_SUPPORTED = 'vehicle/not_supported'
+    VEHICLE_NOT_SUPPORTED_FOR_11_LVL = 'vehicle/not_supported_for_11_lvl'
     VEHICLE_EPIC_ONLY = 'vehicle/epic_only'
     VEHICLE_ROTATION_GROUP_LOCKED = 'vehicle/rotationGroupLocked'
     UNSUITABLE_VEHICLE_FOR_BATTLE_ROYALE = 'vehicle/notForBattleRoyaleMode'

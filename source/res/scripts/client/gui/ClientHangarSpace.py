@@ -54,7 +54,7 @@ def _getHangarType(isPremium):
 
 
 def getHangarFullVisibilityMask(spacePath):
-    spaceName = getSpaceNameFromPath(spacePath)
+    spaceName = _getSpaceNameFromPath(spacePath)
     spaceVisibilityFlags = SpaceVisibilityFlagsFactory.create(spaceName)
     availableFullVisibilityIDs = FULL_VISIBILITY_TAG_IDS.intersection(spaceVisibilityFlags.typeIDToIndex.iterkeys())
     return spaceVisibilityFlags.getMaskForGameplayIDs(availableFullVisibilityIDs)
@@ -128,7 +128,7 @@ def _loadVisualScript(cfg, section):
         cfg['vse_plans'] = readVisualScriptPlans(vseSection)
 
 
-def getSpaceNameFromPath(path):
+def _getSpaceNameFromPath(path):
     return path if 'spaces' not in path else path.split('/')[-1]
 
 

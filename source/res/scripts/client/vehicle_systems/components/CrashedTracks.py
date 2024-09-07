@@ -11,7 +11,7 @@ from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority, makeCallbackWeak
-from constants import IS_EDITOR
+from constants import IS_EDITOR, VEHICLE_MOVEMENT_STATES
 
 class CrashedTrackController(Component):
     baseTracksComponent = AutoProperty()
@@ -22,10 +22,7 @@ class CrashedTrackController(Component):
         self.__modelsSet = modelsSet
         self.__baseTrackFashion = trackFashion
         self.baseTracksComponent = None
-        if self.__vehicleDesc.chassis.tracks is not None:
-            pairsCount = len(self.__vehicleDesc.chassis.tracks.trackPairs)
-        else:
-            pairsCount = 1
+        pairsCount = self.getTrackPairsCount()
         self.__crashedTracks = {'left': [False] * pairsCount,
          'right': [False] * pairsCount}
         self.__model = None
@@ -36,6 +33,9 @@ class CrashedTrackController(Component):
         self.__debrisCrashedTracks = {'left': [False] * pairsCount,
          'right': [False] * pairsCount}
         return
+
+    def getTrackPairsCount(self):
+        return 1 if self.__vehicleDesc.chassis.tracks is None else len(self.__vehicleDesc.chassis.tracks.trackPairs)
 
     def isLeftTrackBroken(self):
         for isTrackCrashed in self.__crashedTracks['left']:
@@ -50,6 +50,32 @@ class CrashedTrackController(Component):
                 return True
 
         return False
+
+    def isTrackSideBroken(self, side):
+        needToStop = len(self.__crashedTracks)
+        tracksCount = 0
+        for tracks in (self.__crashedTracks, self.__debrisCrashedTracks):
+            tracksCount += tracks[side].count(True)
+
+        return tracksCount >= needToStop
+
+    def isAnyTrackOnSideBroken(self, side):
+        for tracks in (self.__crashedTracks, self.__debrisCrashedTracks):
+            if any(tracks[side]):
+                return True
+
+        return False
+
+    def isMultiTrackSlowed(self):
+        return self.isAnyTrackOnSideBroken('left') or self.isAnyTrackOnSideBroken('right')
+
+    def isMultiTrackCantMove(self):
+        return self.isTrackSideBroken('left') or self.isTrackSideBroken('right')
+
+    def getTankMovementState(self):
+        if self.isMultiTrackCantMove():
+            return VEHICLE_MOVEMENT_STATES.STOP
+        return VEHICLE_MOVEMENT_STATES.SLOW if self.isMultiTrackSlowed() else VEHICLE_MOVEMENT_STATES.NORMAL
 
     def setVehicle(self, entity):
         self.__entity = weakref.proxy(entity)
@@ -153,10 +179,7 @@ class CrashedTrackController(Component):
         if self.__entity is None:
             return
         else:
-            if self.__vehicleDesc.chassis.tracks is not None:
-                pairsCount = len(self.__vehicleDesc.chassis.tracks.trackPairs)
-            else:
-                pairsCount = 1
+            pairsCount = self.getTrackPairsCount()
             self.__crashedTracks = {'left': [False] * pairsCount,
              'right': [False] * pairsCount}
             self.__debrisCrashedTracks = {'left': [False] * pairsCount,

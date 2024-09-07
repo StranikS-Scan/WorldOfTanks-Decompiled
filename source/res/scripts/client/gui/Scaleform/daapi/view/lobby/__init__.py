@@ -60,7 +60,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.PromoPremiumIgrWindow import PromoPremiumIgrWindow
     from gui.Scaleform.daapi.view.lobby.ServerStats import ServerStats
     from gui.Scaleform.daapi.view.lobby.shared.web_view import WebView
-    from gui.Scaleform.daapi.view.lobby.SkillDropForFreeWindow import SkillDropForFreeWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleBuyWindow
     from gui.Scaleform.daapi.view.lobby.vehicle_obtain_windows import VehicleRestoreWindow
     from gui.Scaleform.daapi.view.lobby.VehicleInfoWindow import VehicleInfoWindow
@@ -140,7 +139,6 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_INFO_WINDOW, BoosterInfoWindow, 'boosterInfo.swf', WindowLayer.WINDOW, VIEW_ALIAS.BOOSTER_INFO_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.GOODIE_INFO_WINDOW, GoodieInfoWindow, 'goodieInfo.swf', WindowLayer.WINDOW, VIEW_ALIAS.GOODIE_INFO_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, PromoPremiumIgrWindow, 'promoPremiumIgrWindow.swf', WindowLayer.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     GroupedViewSettings(VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, SkillDropForFreeWindow, 'skillDropForFreeWindow.swf', WindowLayer.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_BUY_WINDOW, BootcampComponentOverride(VehicleBuyWindow, BCVehicleBuyWindow), BootcampComponentOverride('vehicleBuyWindow.swf', 'BCVehicleBuyWindow.swf'), WindowLayer.TOP_WINDOW, 'vehicleBuyWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, VehicleRestoreWindow, 'vehicleBuyWindow.swf', WindowLayer.TOP_WINDOW, 'vehicleRestoreWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.VEHICLE_INFO_WINDOW, VehicleInfoWindow, 'vehicleInfo.swf', WindowLayer.WINDOW, 'vehicleInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isCentered=False),
@@ -209,7 +207,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOSTER_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.GOODIE_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.PROMO_PREMIUM_IGR_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.TANKMAN_SKILLS_DROP_FOR_FREE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_BUY_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),

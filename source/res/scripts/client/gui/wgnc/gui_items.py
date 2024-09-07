@@ -3,9 +3,13 @@
 from collections import namedtuple
 from functools import partial
 from debug_utils import LOG_WARNING, LOG_DEBUG
+from gui.Scaleform.framework import ScopeTemplates
+from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
+from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.poll.poll_view_model import PollViewType
 from gui.promo.promo_logger import PromoLogSourceType
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import WGNCShowItemEvent
+from gui.shared.events import WGNCShowItemEvent, LoadGuiImplViewEvent
 from gui.shared.utils.decorators import ReprInjector
 from gui.wgnc.client import ClosePollWindowFromPopUp, ClientLogic
 from gui.wgnc.errors import ValidationError
@@ -162,10 +166,19 @@ class PollItem(WindowItem):
 
     def show(self, notID):
         LOG_DEBUG('PollItem.show', notID, self._name)
-        g_eventBus.handleEvent(WGNCShowItemEvent(notID, self._name, WGNCShowItemEvent.SHOW_POLL_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        try:
+            target = PollViewType(self._name)
+        except ValueError:
+            LOG_WARNING("View target is invalid, view can't be loaded, target={}".format(self._name))
+            return
+
+        from gui.impl.lobby.poll.poll_view import PollView
+        layoutID = R.views.lobby.poll.PollView()
+        g_eventBus.handleEvent(LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=layoutID, viewClass=PollView, scope=ScopeTemplates.VIEW_SCOPE), ctx={'notID': notID,
+         'target': target}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def close(self, notID):
-        LOG_DEBUG('PollItem.close', notID, self._name)
+        LOG_DEBUG('POllItem.close', notID, self._name)
         g_eventBus.handleEvent(WGNCShowItemEvent(notID, self._name, WGNCShowItemEvent.CLOSE_POLL_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def validate(self, actionsHolder):

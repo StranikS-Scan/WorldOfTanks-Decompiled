@@ -6,7 +6,7 @@ from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
-BattleReplay, SoundGroups, MusicControllerWWISE, helpers, avatar_getter = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers', 'gui.battle_control.avatar_getter')
+BattleReplay, SoundGroups, MusicControllerWWISE, helpers = dependencyImporter('BattleReplay', 'SoundGroups', 'MusicControllerWWISE', 'helpers')
 
 class SoundMeta(Meta):
 
@@ -279,23 +279,3 @@ class SetGlobalSoundSwitch(Block, SoundMeta):
     def _setValue(self):
         SoundGroups.g_instance.setState(self._switchName.getValue(), self._switchValue.getValue())
         self._out.call()
-
-
-class PlaySoundNotification(Block, SoundMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(PlaySoundNotification, self).__init__(*args, **kwargs)
-        self._in = self._makeEventInputSlot('in', self._execute)
-        self._out = self._makeEventOutputSlot('out')
-        self._eventName = self._makeDataInputSlot('eventName', SLOT_TYPE.STR)
-
-    def _execute(self):
-        soundNotifications = avatar_getter.getSoundNotifications()
-        if soundNotifications is not None:
-            soundNotifications.play(self._eventName.getValue())
-        self._out.call()
-        return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]

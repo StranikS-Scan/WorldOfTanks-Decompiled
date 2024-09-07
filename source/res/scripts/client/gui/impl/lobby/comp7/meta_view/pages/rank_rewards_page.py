@@ -37,6 +37,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_SEASON_NUMBERS
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getComp7ProductsUrl
+from gui.shared.event_dispatcher import showShop
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
@@ -125,6 +127,7 @@ class RankRewardsPage(PageSubModelPresenter):
 
     def _getEvents(self):
         return ((self.viewModel.onPreviewOpen, self.__onPreviewOpen),
+         (self.viewModel.onComp7ShopOpen, self.__onComp7ShopOpen),
          (self.__eventsCache.onSyncCompleted, self.__onEventsSyncCompleted),
          (self.__comp7Controller.onComp7RanksConfigChanged, self.__onRanksConfigChanged),
          (self.__comp7Controller.onRankUpdated, self.__onRankUpdated),
@@ -258,3 +261,6 @@ class RankRewardsPage(PageSubModelPresenter):
             _logger.error('Division number could not be parsed - %s', q.getID())
 
         return result
+
+    def __onComp7ShopOpen(self):
+        showShop(getComp7ProductsUrl())

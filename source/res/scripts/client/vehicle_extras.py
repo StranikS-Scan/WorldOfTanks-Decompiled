@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_extras.py
+import typing
 from functools import partial
 from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
@@ -18,6 +19,8 @@ from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
 from constants import IS_EDITOR, CollisionFlags
 import Projectiles
 from vehicle_extras_battle_royale import AfterburningBattleRoyale
+if typing.TYPE_CHECKING:
+    from ResMgr import DataSection
 
 def reload():
     modNames = (reload.__module__,)
@@ -256,6 +259,7 @@ def wheelHealths(name, index, containerName, dataSection, vehType):
 
 class TrackHealth(DamageMarker):
     __slots__ = ('__isLeft', '_trackPairIndex')
+    _RESOURCE = R.strings.ingame_gui.devices.track
 
     def _readConfig(self, dataSection, containerName):
         self.__isLeft = dataSection.readBool('isLeft')
@@ -264,10 +268,12 @@ class TrackHealth(DamageMarker):
         functionalCanMoveState = 'functionalCanMove'
         self.sounds[functionalCanMoveState] = dataSection.readString('sounds/' + functionalCanMoveState)
 
-    def _getDeviceUserString(self, dataSection, _):
-        resource = R.strings.ingame_gui.devices.track
-        typeTxt = backport.text(resource.left() if self.__isLeft else resource.right())
-        return backport.text(resource(), type=typeTxt)
+    def _getDeviceUserString(self, dataSection, _, additionalTypeTxt=None):
+        typeTxt = backport.text(self._RESOURCE.left() if self.__isLeft else self._RESOURCE.right())
+        finalTxt = [typeTxt]
+        if additionalTypeTxt is not None:
+            finalTxt.extend(additionalTypeTxt)
+        return backport.text(self._RESOURCE(), type=u' '.join(finalTxt))
 
     def _start(self, data, args):
         data['entity'].appearance.addCrashedTrack(self.__isLeft, self._trackPairIndex, self.index)
@@ -278,10 +284,41 @@ class TrackHealth(DamageMarker):
 
 class TrackWithinTrackHealth(TrackHealth):
 
-    def _getDeviceUserString(self, dataSection, _):
-        resource = R.strings.ingame_gui.devices.track
-        typeTxt = backport.text(resource.main() if self._trackPairIndex == MAIN_TRACK_PAIR_IDX else resource.outer())
-        return backport.text(resource(), type=typeTxt)
+    def _getDeviceUserString(self, dataSection, containerName, additionalTypeTxt=None):
+        typeTxt = backport.text(self._RESOURCE.reserve() if self._trackPairIndex == MAIN_TRACK_PAIR_IDX else self._RESOURCE.main())
+        if additionalTypeTxt is None:
+            additionalTypeTxt = []
+        additionalTypeTxt.append(typeTxt)
+        return super(TrackWithinTrackHealth, self)._getDeviceUserString(dataSection, containerName, additionalTypeTxt)
+
+
+class MultiTrackHealth(TrackHealth):
+
+    def _getTrackNamesMap(self):
+        raise NotImplementedError
+
+    def _getDeviceUserString(self, dataSection, containerName, additionalTypeTxt=None):
+        trackNames = self._getTrackNamesMap()
+        deviceString = trackNames[self._trackPairIndex]
+        typeTxt = backport.text(self._RESOURCE.dyn(deviceString)())
+        if additionalTypeTxt is None:
+            additionalTypeTxt = []
+        additionalTypeTxt.append(typeTxt)
+        return super(MultiTrackHealth, self)._getDeviceUserString(dataSection, containerName, additionalTypeTxt)
+
+
+class MultiTrackSequentHealth(MultiTrackHealth):
+
+    def _getTrackNamesMap(self):
+        return {0: 'back',
+         1: 'front'}
+
+
+class MultiTrackParallelHealth(MultiTrackHealth):
+
+    def _getTrackNamesMap(self):
+        return {0: 'inner',
+         1: 'outer'}
 
 
 class TankmanHealth(DamageMarker):

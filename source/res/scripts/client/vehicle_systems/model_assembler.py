@@ -210,22 +210,25 @@ def createSuspension(appearance, vehicleDescriptor, lodStateLink):
             siegeSwitchOffTime = vehicleDescriptor.type.siegeModeParams['switchOffTime']
         if vehicleDescriptor.isWheeledVehicle:
             siegeSwitchOnTime = siegeSwitchOffTime = __getWheelsRiseTime(vehicleDescriptor)
-        suspension = appearance.createComponent(Vehicular.Suspension, compoundModel, tessellationCollisionSensor, wheelsDataProvider, TankPartIndexes.CHASSIS, siegeSwitchOnTime, siegeSwitchOffTime, groundNodesConfig.activePostmortem, vehicleDescriptor.isWheeledVehicle)
+        trackSplineParams = vehicleDescriptor.chassis.trackSplineParams
+        trackPairsCount = len(trackSplineParams) if trackSplineParams is not None else 1
+        suspension = appearance.createComponent(Vehicular.Suspension, compoundModel, tessellationCollisionSensor, wheelsDataProvider, TankPartIndexes.CHASSIS, siegeSwitchOnTime, siegeSwitchOffTime, groundNodesConfig.activePostmortem, vehicleDescriptor.isWheeledVehicle, trackPairsCount)
         for groundGroup in groundNodeGroups:
             nodes = _createNameListByTemplate(groundGroup.startIndex, groundGroup.nodesTemplate, groundGroup.nodesCount)
             wheels = ['']
             if groundGroup.affectedWheelsTemplate is not None:
                 wheels = _createNameListByTemplate(groundGroup.startIndex, groundGroup.affectedWheelsTemplate, groundGroup.nodesCount)
-            suspension.addGroundNodesGroup(nodes, groundGroup.isLeft, groundGroup.minOffset, groundGroup.maxOffset, wheels, groundGroup.collisionSamplesCount, groundGroup.hasLiftMode)
+            suspension.addGroundNodesGroup(nodes, groundGroup.isLeft, groundGroup.minOffset, groundGroup.maxOffset, wheels, groundGroup.collisionSamplesCount, groundGroup.hasLiftMode, groundGroup.trackPairIdx)
 
         for groundNode in groundNodes:
-            suspension.addGroundNode(groundNode.nodeName, groundNode.isLeft, groundNode.minOffset, groundNode.maxOffset, groundNode.affectedWheelName, groundNode.collisionSamplesCount, groundNode.hasLiftMode)
+            suspension.addGroundNode(groundNode.nodeName, groundNode.isLeft, groundNode.minOffset, groundNode.maxOffset, groundNode.affectedWheelName, groundNode.collisionSamplesCount, groundNode.hasLiftMode, groundNode.trackPairIdx)
 
-        if vehicleDescriptor.chassis.trackSplineParams is not None:
-            trackSplineParams = vehicleDescriptor.chassis.trackSplineParams
-            suspension.setParameters(trackSplineParams.thickness)
+        if trackSplineParams is not None:
+            for _, trackPairParams in trackSplineParams.items():
+                suspension.setParameters(trackPairParams.trackPairIdx, trackPairParams.thickness)
+
         else:
-            suspension.setParameters(0.0)
+            suspension.setParameters(0, 0.0)
         suspension.setLodLink(lodStateLink)
         lodSettings = groundNodesConfig.lodSettings
         if lodSettings is None:
@@ -235,7 +238,7 @@ def createSuspension(appearance, vehicleDescriptor, lodStateLink):
         collisionObstaclesCollector.setActivePostmortem(groundNodesConfig.activePostmortem)
         tessellationCollisionSensor.setActivePostmortem(groundNodesConfig.activePostmortem)
         return suspension
-    except BigWorld.AssetException:
+    except RuntimeError:
         _logger.error('Failed to create Suspension', exc_info=True)
         if suspension is not None:
             appearance.removeComponent(suspension)
@@ -296,10 +299,10 @@ def createTankWheelsAnimator(appearance, typeDescriptor, splineTracks, lodStateL
         wheelsAnimator = appearance.createComponent(Vehicular.TankWheelsAnimator, compoundModel)
         for group in wheelsConfig.groups:
             nodes = _createNameListByTemplate(group.startIndex, group.template, group.count)
-            wheelsAnimator.addWheelGroup(group.isLeft, group.radius, nodes)
+            wheelsAnimator.addWheelGroup(group.isLeft, group.radius, nodes, group.trackPairIndex)
 
         for wheel in wheelsConfig.wheels:
-            wheelsAnimator.addWheel(wheel.isLeft, wheel.radius, wheel.nodeName, wheel.isLeading, wheel.leadingSyncAngle)
+            wheelsAnimator.addWheel(wheel.isLeft, wheel.radius, wheel.nodeName, wheel.isLeading, wheel.leadingSyncAngle, wheel.trackPairIndex)
 
         if splineTracks is not None and splineTracks.left and splineTracks.right:
             wheelsAnimator.setSplineTrackMovementData(splineTracks.left[0], splineTracks.right[0])
@@ -308,7 +311,7 @@ def createTankWheelsAnimator(appearance, typeDescriptor, splineTracks, lodStateL
         if f is not None:
             wheelsAnimator.setMovementInfo(f.movementInfo)
         return wheelsAnimator
-    except BigWorld.AssetException:
+    except RuntimeError:
         _logger.error('Failed to create TankWheelsAnimator', exc_info=True)
         if wheelsAnimator is not None:
             appearance.removeComponent(wheelsAnimator)
@@ -324,15 +327,18 @@ def createTrackNodesAnimator(appearance, typeDescriptor, lodStateLink=None):
         wheelsDataProvider = appearance.wheelsAnimator
         trackNodesConfig = typeDescriptor.chassis.trackNodes
         trackSplineParams = typeDescriptor.chassis.trackSplineParams
+        trackPairsCount = len(trackSplineParams) if trackSplineParams is not None else 1
         if not trackNodesConfig:
             return
-        trackNodesAnimator = appearance.createComponent(Vehicular.TrackNodesAnimator, compoundModel, TankNodeNames.HULL_SWINGING)
+        trackNodesAnimator = appearance.createComponent(Vehicular.TrackNodesAnimator, compoundModel, TankNodeNames.HULL_SWINGING, trackPairsCount)
         if trackSplineParams is not None:
-            trackNodesAnimator.setParameters(trackSplineParams.thickness, trackSplineParams.gravity, trackSplineParams.maxAmplitude, trackSplineParams.maxOffset)
+            for _, trackPairParams in trackSplineParams.items():
+                trackNodesAnimator.setParameters(trackPairParams.trackPairIdx, trackPairParams.thickness, trackPairParams.gravity, trackPairParams.maxAmplitude, trackPairParams.maxOffset)
+
         for trackNode in trackNodesConfig.nodes:
             leftSibling = '' if trackNode.leftNodeName is None else trackNode.leftNodeName
             rightSibling = '' if trackNode.rightNodeName is None else trackNode.rightNodeName
-            trackNodesAnimator.addTrackNode(trackNode.name, trackNode.isLeft, trackNode.initialOffset, leftSibling, rightSibling, (trackNode.damping,
+            trackNodesAnimator.addTrackNode(trackNode.name, trackNode.isLeft, trackNode.initialOffset, leftSibling, rightSibling, trackNode.trackPairIndex, (trackNode.damping,
              trackNode.elasticity,
              trackNode.forwardElasticityCoeff,
              trackNode.backwardElasticityCoeff))
@@ -341,7 +347,7 @@ def createTrackNodesAnimator(appearance, typeDescriptor, lodStateLink=None):
         trackNodesAnimator.setLodLink(lodStateLink)
         trackNodesAnimator.setLodSettings(shared_components.LodSettings(typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))
         return trackNodesAnimator
-    except BigWorld.AssetException:
+    except RuntimeError:
         _logger.error('Failed to create TrackNodesAnimator', exc_info=True)
         if trackNodesAnimator is not None:
             appearance.removeComponent(trackNodesAnimator)
@@ -355,23 +361,27 @@ def assembleVehicleTraces(appearance, f, lodStateLink=None):
     chassisConfig = appearance.typeDescriptor.chassis
     tracesConfig = chassisConfig.traces
     textures = {}
-    for matKindName, texId in DecalMap.g_instance.getTextureSet(tracesConfig.textureSet).iteritems():
-        if matKindName != 'bump':
+    for _, tracesParams in tracesConfig.tracesParams.iteritems():
+        for matKindName, texId in DecalMap.g_instance.getTextureSet(tracesParams.textureSet).iteritems():
+            if matKindName == 'bump':
+                continue
             for matKind in material_kinds.EFFECT_MATERIAL_IDS_BY_NAMES[matKindName]:
                 textures[matKind] = texId
 
     vehicleTraces.setTrackTextures(textures)
     vehicleTraces.setCompound(appearance.compoundModel)
-    if chassisConfig.generalWheelsAnimatorConfig is None:
-        wrOffset = Math.Vector2(tracesConfig.centerOffset, 0)
-        wlOffset = Math.Vector2(-tracesConfig.centerOffset, 0)
-        length = appearance.typeDescriptor.chassis.topRightCarryingPoint[1] * 2
-        vehicleTraces.addTrackTrace('', wrOffset, tracesConfig.size, length, tracesConfig.bufferPrefs, False)
-        vehicleTraces.addTrackTrace('', wlOffset, tracesConfig.size, length, tracesConfig.bufferPrefs, False)
-    else:
+    for _, tracesParams in tracesConfig.tracesParams.iteritems():
+        if chassisConfig.generalWheelsAnimatorConfig is None:
+            centerOffset = Math.Vector2(tracesParams.centerOffset * tracesParams.centerOffsetFactor.x, 0)
+            wrOffset = tracesParams.offset - centerOffset
+            wlOffset = tracesParams.offset + centerOffset
+            length = appearance.typeDescriptor.chassis.topRightCarryingPoint[1] * 2
+            vehicleTraces.addTrackTrace('', wrOffset, tracesParams.centerOffsetFactor, tracesParams.size, length, tracesParams.bufferPrefs, False)
+            vehicleTraces.addTrackTrace('', wlOffset, tracesParams.centerOffsetFactor, tracesParams.size, length, tracesParams.bufferPrefs, False)
         traceConfigs = appearance.wheelsAnimator.getTraceConfigs()
         for trace in traceConfigs:
-            vehicleTraces.addTrackTrace('', trace[0], tracesConfig.size, trace[1], tracesConfig.bufferPrefs, False)
+            offset = tracesParams.offset + Math.Vector2(trace[0].x * tracesParams.centerOffsetFactor.x, trace[0].y * tracesParams.centerOffsetFactor.y)
+            vehicleTraces.addTrackTrace('', offset, tracesParams.centerOffsetFactor, tracesParams.size, trace[1], tracesParams.bufferPrefs, False)
 
     isLeftFlying = DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isLeftSideFlying')
     isRightFlying = DataLinks.createBoolLink(appearance.flyingInfoProvider, 'isRightSideFlying')

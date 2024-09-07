@@ -24,7 +24,7 @@ class Comp7PrebattleTimer(Comp7PrebattleTimerMeta):
         self.__isPrebattleInputStateLocked = False
 
     def updateBattleCtx(self, battleCtx):
-        self.__winConditionStr = battleCtx.getArenaWinString()
+        self.__winConditionStr = self.__getWinString(battleCtx)
         super(Comp7PrebattleTimer, self).updateBattleCtx(battleCtx)
 
     def setCountdown(self, state, timeLeft):
@@ -100,3 +100,10 @@ class Comp7PrebattleTimer(Comp7PrebattleTimerMeta):
             self.as_setWinConditionTextS(backport.text(self.__RES_ROOT.wait.additionalInfo()))
         else:
             self.as_setWinConditionTextS('')
+
+    @staticmethod
+    def __getWinString(battleCtx):
+        arenaDescription = battleCtx.getArenaDP().getPersonalDescription()
+        hasControlPoint = arenaDescription.isControlPointExists()
+        hasBase = arenaDescription.isBaseExists()
+        return backport.text(R.strings.arenas.type.comp7.description()) if hasControlPoint else backport.text(R.strings.arenas.type.dyn('comp7_{}'.format(1 if hasBase else 2)).dyn('timer_message')())

@@ -4,8 +4,8 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class DamageInfoPanelMeta(BaseDAAPIComponent):
 
-    def as_showS(self, itemList, showFire):
-        return self.flashObject.as_show(itemList, showFire) if self._isDAAPIInited() else None
+    def as_showS(self, itemList, showFire, hasMultitrack):
+        return self.flashObject.as_show(itemList, showFire, hasMultitrack) if self._isDAAPIInited() else None
 
     def as_hideS(self):
         return self.flashObject.as_hide() if self._isDAAPIInited() else None
@@ -37,14 +37,26 @@ class DamageInfoPanelMeta(BaseDAAPIComponent):
     def as_updateLeftTrackS(self, stateId, isHit):
         return self.flashObject.as_updateLeftTrack(stateId, isHit) if self._isDAAPIInited() else None
 
+    def as_updateSecondLeftTrackS(self, stateId, isHit):
+        return self.flashObject.as_updateSecondLeftTrack(stateId, isHit) if self._isDAAPIInited() else None
+
     def as_hideLeftTrackS(self):
         return self.flashObject.as_hideLeftTrack() if self._isDAAPIInited() else None
+
+    def as_hideSecondLeftTrackS(self):
+        return self.flashObject.as_hideSecondLeftTrack() if self._isDAAPIInited() else None
 
     def as_updateRightTrackS(self, stateId, isHit):
         return self.flashObject.as_updateRightTrack(stateId, isHit) if self._isDAAPIInited() else None
 
+    def as_updateSecondRightTrackS(self, stateId, isHit):
+        return self.flashObject.as_updateSecondRightTrack(stateId, isHit) if self._isDAAPIInited() else None
+
     def as_hideRightTrackS(self):
         return self.flashObject.as_hideRightTrack() if self._isDAAPIInited() else None
+
+    def as_hideSecondRightTrackS(self):
+        return self.flashObject.as_hideSecondRightTrack() if self._isDAAPIInited() else None
 
     def as_updateGunS(self, stateId, isHit):
         return self.flashObject.as_updateGun(stateId, isHit) if self._isDAAPIInited() else None

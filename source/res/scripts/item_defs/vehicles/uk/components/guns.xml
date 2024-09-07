@@ -103,7 +103,6 @@
     <_120mm_Gun_L11PA>	111	</_120mm_Gun_L11PA>
     <_105mm_Gun_L7_HEAT_7x7>	31001	</_105mm_Gun_L7_HEAT_7x7>
     <_105mm_AT_Gun_L7_Alligator>	31004	</_105mm_AT_Gun_L7_Alligator>
-    <_2pdr_Gun_Mk_XB_02_R>	40000	</_2pdr_Gun_Mk_XB_02_R>
     <_120mm_Gun_L1A1_FL>	501	</_120mm_Gun_L1A1_FL>
     <_150mm_QF_5_9inch>	112	</_150mm_QF_5_9inch>
     <_75mm_AT_Gun_M3_L37_usa>	113	</_75mm_AT_Gun_M3_L37_usa>
@@ -133,7 +132,6 @@
     <_105mm_Gun_L7_HEAT_SH>	10004	</_105mm_Gun_L7_HEAT_SH>
     <_5_5inch_AT_Gun_SH>	10005	</_5_5inch_AT_Gun_SH>
     <OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>	8	</OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>
-    <Gun_1_GB00_AEC_Armoured_Car_03_id64009>	64009	</Gun_1_GB00_AEC_Armoured_Car_03_id64009>
   </ids>
   <shared>
     <_12.7mm_MG_HB_M2>
@@ -633,50 +631,6 @@
         </_2pdr_HE_Mk.2B>
       </shots>
     </_2pdr_Gun_Mk_XB>
-    <_2pdr_Gun_Mk_XB_02_R>
-      <userString>	#gb_vehicles:_2pdr_Gun_Mk_XB	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.26	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.14	</amplitude>
-        <recoilEffect>	medium	</recoilEffect>
-      </recoil>
-      <effects>	shot_races_pushing	</effects>
-      <reloadEffect>	reload_Gravizapa	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
-        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	43.75	</rotationSpeed>
-      <reloadTime>	1.2	</reloadTime>
-      <maxAmmo>	100	</maxAmmo>
-      <aimingTime>	1.14285714285714	</aimingTime>
-      <weight>	350	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	35	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_2pdr_AP_Mk.XB_02_R>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	350	</speed>
-          <gravity>	0.0	</gravity>
-          <maxDistance>	1000	</maxDistance>
-          <piercingPower>	1 1	</piercingPower>
-        </_2pdr_AP_Mk.XB_02_R>
-      </shots>
-    </_2pdr_Gun_Mk_XB_02_R>
     <QF_2pdr_Littlejohn>
       <userString>	#gb_vehicles:QF_2pdr_Littlejohn	</userString>
       <tags></tags>
@@ -3722,7 +3676,7 @@
           <speed>	1020	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	42 42	</piercingPower>
+          <piercingPower>	84 84	</piercingPower>
         </_20pdr_HE_Mk3>
       </shots>
     </_20pdr_Gun_Type_A>
@@ -3779,7 +3733,7 @@
           <speed>	1020	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	42 42	</piercingPower>
+          <piercingPower>	84 84	</piercingPower>
         </_20pdr_HE_Mk3>
       </shots>
     </_20pdr_Gun_Type_B>
@@ -7586,55 +7540,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </OQF_17pdr_Gun_Mk_VII_MapsTraining_Dummy_MT_2>
-    <Gun_1_GB00_AEC_Armoured_Car_03_id64009>
-      <userString>	Gun_1_GB00_AEC_Armoured_Car_03_id64009	</userString>
-      <description>	TODO: gun Gun_1_GB00_AEC_Armoured_Car_03_id64009 description	</description>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	2750	</price>
-      <models>
-        <undamaged>	vehicles/british/GB00_AEC_Armoured_Car_03/normal/lod0/Gun_01.model	</undamaged>
-        <destroyed>	vehicles/british/GB00_AEC_Armoured_Car_03/crash/lod0/Gun_01.model	</destroyed>
-        <exploded>	vehicles/british/GB00_AEC_Armoured_Car_03/crash/lod0/Gun_01.model	</exploded>
-      </models>
-      <impulse>	0.12	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.14	</amplitude>
-        <backoffTime>	0.1	</backoffTime>
-        <returnTime>	0.1	</returnTime>
-      </recoil>
-      <effects>	shot_small	</effects>
-      <groundWave></groundWave>
-      <pitchLimits>
-        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	50.0	</rotationSpeed>
-      <reloadTime>	1.4	</reloadTime>
-      <maxAmmo>	600	</maxAmmo>
-      <aimingTime>	1.5	</aimingTime>
-      <weight>	71	</weight>
-      <maxHealth>	30	</maxHealth>
-      <maxRegenHealth>	14	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <invisibilityFactorAtShot>	0.33	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.47	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <Development_Shell>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	390	</maxDistance>
-          <piercingPower>	32 13	</piercingPower>
-        </Development_Shell>
-      </shots>
-    </Gun_1_GB00_AEC_Armoured_Car_03_id64009>
   </shared>
 </guns.xml>

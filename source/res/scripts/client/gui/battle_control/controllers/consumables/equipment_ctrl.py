@@ -665,6 +665,10 @@ class _ArcadeMineFieldEpicBattleItem(_OrderItem):
         return AracdeMinefieldControleMode
 
 
+class _PoiMineFieldItem(_OrderItem):
+    pass
+
+
 class _ReconItem(_OrderItem):
 
     def getMarker(self):
@@ -691,6 +695,10 @@ class _ArcadeSmokeItem(_SmokeItem):
 
     def _getErrorMsg(self):
         return InCooldownError(self._descriptor.userString) if self._quantity else None
+
+
+class _PoiSmokeItem(_SmokeItem):
+    pass
 
 
 class _StealthRadarItem(_OrderItem):
@@ -1112,6 +1120,10 @@ def _comp7ItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag
 def _poiItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
     if descriptor.name.startswith('poi_artillery_aoe'):
         itemClass = _PoiArtilleryItem
+    elif descriptor.name.startswith('poi_smoke'):
+        itemClass = _PoiSmokeItem
+    elif descriptor.name.startswith('poi_minefield'):
+        itemClass = _PoiMineFieldItem
     else:
         itemClass = _PoiEquipmentItemVS
     return itemClass(descriptor, quantity, stage, timeRemaining, totalTime, tag)
@@ -1511,6 +1523,13 @@ class _ReplaySmokeItem(_ReplayOrderItem):
         pass
 
 
+class _ReplayMineFieldItem(_ReplayOrderItem):
+
+    def getAimingControlMode(self):
+        from AvatarInputHandler.MapCaseMode import ArcadeMapCaseControlMode
+        return ArcadeMapCaseControlMode
+
+
 class _ReplayAfterburningItem(_ReplayItem):
     __slots__ = ('__totalDeployingTime', '__totalConsumingTime', '__totalRechargingTime', '__totalCooldownTime', '_prevTimeRemaining', '__fullyChargedSoundCbId', '__almostChargedSoundCbId', '__almostChargedSound', '__playingSoundObj', '_animationType', '_totalTime')
     _FULL_CHARGE_DELAY_SOUND_TIME = 5.0
@@ -1734,6 +1753,10 @@ def _replayComp7ItemFactory(descriptor, quantity, stage, timeRemaining, totalTim
 def _replayPoiItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
     if descriptor.name.startswith('poi_artillery_aoe'):
         itemClass = _ReplayPoiArtilleryItem
+    elif descriptor.name.startswith('poi_smoke'):
+        itemClass = _ReplaySmokeItem
+    elif descriptor.name.startswith('poi_minefield'):
+        itemClass = _ReplayMineFieldItem
     else:
         itemClass = _ReplayPoiEquipmentItemVS
     return itemClass(descriptor, quantity, stage, timeRemaining, totalTime, tag)

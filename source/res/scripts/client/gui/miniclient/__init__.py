@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/__init__.py
 import ResMgr
-from constants import CONTENT_TYPE, IS_SANDBOX
+from constants import CONTENT_TYPE, IS_SANDBOX, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.Scaleform.locale.MINICLIENT import MINICLIENT
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
@@ -22,8 +22,8 @@ def _get_config(is_miniclient, is_tutorial, is_sandbox):
 
     def vehicle_filter(vehicle_item):
         extraCondition = not vehicle_item.isOnlyForEventBattles
-        min_vehicle_level = 1
-        max_vehicle_level = 10
+        min_vehicle_level = MIN_VEHICLE_LEVEL
+        max_vehicle_level = MAX_VEHICLE_LEVEL
         if is_miniclient:
             bootcampController = dependency.instance(IBootcampController)
             if bootcampController.isInBootcampAccount():

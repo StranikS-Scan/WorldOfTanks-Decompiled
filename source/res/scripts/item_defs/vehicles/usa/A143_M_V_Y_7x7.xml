@@ -853,7 +853,7 @@
   <chassis>
     <Chassis_A143_M_V_Y_7x7>
       <userString>	#usa_vehicles:Chassis_A143_M_V_Y	</userString>
-      <tags></tags>
+      <tags>	trackWithinTrack	</tags>
       <level>	10	</level>
       <price>	82500	</price>
       <notInShop>	true	</notInShop>
@@ -892,7 +892,6 @@
           <speedToStartLimitedRepair>	5	</speedToStartLimitedRepair>
           <speedToStopLimitedRepair>	3	</speedToStopLimitedRepair>
         </repairSpeedLimiter>
-        <breakMode>	SLOW	</breakMode>
         <repairTime>	6.85714293	</repairTime>
       </trackPairParams>
       <models>

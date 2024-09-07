@@ -1,9 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/armory_yard_rewards_view_model.py
+from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_rewards_vehicle_model import ArmoryYardRewardsVehicleModel
+
+class State(Enum):
+    STAGE = 'stage'
+    STYLE = 'style'
+    SHOP = 'shop'
+
 
 class ArmoryYardRewardsViewModel(ViewModel):
     __slots__ = ('onClose', 'onShowVehicle')
@@ -14,10 +21,10 @@ class ArmoryYardRewardsViewModel(ViewModel):
         super(ArmoryYardRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
-        return self._getString(0)
+        return State(self._getString(0))
 
     def setState(self, value):
-        self._setString(0, value)
+        self._setString(0, value.value)
 
     def getStages(self):
         return self._getNumber(1)
@@ -63,7 +70,7 @@ class ArmoryYardRewardsViewModel(ViewModel):
 
     def _initialize(self):
         super(ArmoryYardRewardsViewModel, self)._initialize()
-        self._addStringProperty('state', '')
+        self._addStringProperty('state')
         self._addNumberProperty('stages', 0)
         self._addBoolProperty('hasAllRewards', False)
         self._addArrayProperty('vehicles', Array())

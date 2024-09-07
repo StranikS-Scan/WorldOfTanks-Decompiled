@@ -30,8 +30,12 @@ class RosterSlot10(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (1, 10)
 
 
+class RosterSlot11(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (1, 11)
+
+
 class EpicSlot(BaseUnitRosterSlot):
-    DEFAULT_LEVELS = (8, 8)
+    DEFAULT_LEVELS = (9, 9)
 
 
 class Comp7Slot(BaseUnitRosterSlot):
@@ -41,16 +45,16 @@ class Comp7Slot(BaseUnitRosterSlot):
 class SquadRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class SpecRoster(BaseUnitRoster):
     MAX_SLOTS = 15
     MAX_EMPTY_SLOTS = 14
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     MAX_UNIT_POINTS_SUM = 150
     LIMITS_TYPE = BaseUnitRosterLimits
 
@@ -58,8 +62,8 @@ class SpecRoster(BaseUnitRoster):
 class EventRoster(BaseUnitRoster):
     MAX_SLOTS = 5
     MAX_EMPTY_SLOTS = 4
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
@@ -76,24 +80,24 @@ class EpicRoster(BaseUnitRoster):
 class BattleRoyaleRoster(BaseUnitRoster):
     MAX_SLOTS = 2
     MAX_EMPTY_SLOTS = 1
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class MapBoxRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
 class FunRandomRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
 
 
@@ -109,6 +113,6 @@ class Comp7Roster(BaseUnitRoster):
 class VersusAIRoster(BaseUnitRoster):
     MAX_SLOTS = 3
     MAX_EMPTY_SLOTS = 2
-    SLOT_TYPE = RosterSlot10
-    DEFAULT_SLOT_PACK = RosterSlot10().pack()
+    SLOT_TYPE = RosterSlot11
+    DEFAULT_SLOT_PACK = RosterSlot11().pack()
     LIMITS_TYPE = BaseUnitRosterLimits

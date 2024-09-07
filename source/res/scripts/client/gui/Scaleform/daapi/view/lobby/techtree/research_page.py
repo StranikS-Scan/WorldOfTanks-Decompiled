@@ -384,6 +384,7 @@ class Research(ResearchMeta):
         bpfProps = rootNode.getBpfProps()
         isNext2Unlock = NODE_STATE.isNext2Unlock(nodeState)
         isPremium = NODE_STATE.isCollectibleActionVehicle(nodeState) or NODE_STATE.isPremium(nodeState)
+        isEarlyAccess = NODE_STATE.isEarlyAccess(nodeState) > 0
         comparisonState, comparisonTooltip = resolveStateTooltip(self._cmpBasket, root, enabledTooltip='', fullTooltip=TOOLTIPS.RESEARCHPAGE_VEHICLE_BUTTON_COMPARE_DISABLED)
         tankTier = int2roman(root.level)
         tankHasNationGroup = (root.isInInventory or root.isRented) and root.hasNationGroup
@@ -411,6 +412,7 @@ class Research(ResearchMeta):
                            'previewBtnEnabled': root.isPreviewAllowed(),
                            'previewBtnLabel': backport.text(R.strings.menu.research.labels.button.vehiclePreview()),
                            'isPremium': isPremium,
+                           'isEarlyAccess': isEarlyAccess,
                            'vehicleId': self._data.getRootCD(),
                            'vehicleState': nodeState,
                            'isInInventory': NODE_STATE.inInventory(nodeState),

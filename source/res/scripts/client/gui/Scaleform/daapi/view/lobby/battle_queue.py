@@ -40,22 +40,15 @@ from gui.shared.view_helpers import ClanEmblemsHelper
 from gui.sounds.ambients import BattleQueueEnv
 from helpers import dependency, i18n, time_utils, int2roman
 from helpers.i18n import makeString
-from skeletons.gui.game_control import IWinbackController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
  ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
  ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
-_LONG_WAITING_LEVELS = (9, 10)
+_LONG_WAITING_LEVELS = (9, 10, 11)
+_LONG_WAITING_FOR_LEVEL = (11,)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
-
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def needShowLongWaitingWarning(lobbyContext=None):
-    vehicle = g_currentVehicle.item
-    return lobbyContext is not None and vehicle is not None and vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS
-
 
 class QueueProvider(object):
 
@@ -92,9 +85,6 @@ class QueueProvider(object):
 
     def processQueueInfo(self, qInfo):
         pass
-
-    def needAdditionalInfo(self):
-        return False
 
     def additionalInfo(self):
         pass
@@ -138,11 +128,6 @@ class QueueProvider(object):
 
 class RandomQueueProvider(QueueProvider):
 
-    def __init__(self, proxy, qType=constants.QUEUE_TYPE.UNKNOWN):
-        super(RandomQueueProvider, self).__init__(proxy, qType)
-        self._needAdditionalInfo = None
-        return
-
     def processQueueInfo(self, qInfo):
         info = dict(qInfo)
         if 'classes' in info:
@@ -163,13 +148,16 @@ class RandomQueueProvider(QueueProvider):
             self._proxy.as_setDPS(vClassesData)
         self._proxy.as_showStartS(self._isStartButtonDisplayed(vClasses))
 
-    def needAdditionalInfo(self):
-        if self._needAdditionalInfo is None:
-            self._needAdditionalInfo = needShowLongWaitingWarning()
-        return self._needAdditionalInfo
-
     def additionalInfo(self):
-        return text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
+        vehicle = g_currentVehicle.item
+        resultStr = ''
+        if not vehicle:
+            return resultStr
+        if vehicle.type == VEHICLE_CLASS_NAME.SPG and vehicle.level in _LONG_WAITING_LEVELS:
+            resultStr = text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIMEWARNING))
+        elif vehicle.level in _LONG_WAITING_FOR_LEVEL:
+            resultStr = text_styles.main(makeString(MENU.PREBATTLE_WAITINGTIME11LEVELWARNING))
+        return resultStr
 
     @staticmethod
     def _isStartButtonDisplayed(vClasses):
@@ -253,9 +241,6 @@ class _Comp7QueueProvider(RandomQueueProvider):
     def getTankName(self, vehicle):
         pass
 
-    def needAdditionalInfo(self):
-        return False
-
     def additionalInfo(self):
         pass
 
@@ -268,22 +253,6 @@ class _Comp7QueueProvider(RandomQueueProvider):
          'highlight': isHighlight}
 
 
-class _WinbackQueueProvider(RandomQueueProvider):
-    __winbackController = dependency.descriptor(IWinbackController)
-
-    def getLayoutStr(self):
-        pass
-
-    def getTitle(self, guiType):
-        return backport.text(R.strings.winback.winbackBattleQueue.title())
-
-    def getAdditionalParams(self):
-        subTitleMainText = backport.text(R.strings.winback.winbackBattleQueue.subTitle.text())
-        subTitleBattlesLeft = backport.text(R.strings.winback.winbackBattleQueue.subTitle.battleRemaining(), battlesCount=text_styles.tutorial(str(self.__winbackController.getWinbackBattlesCountLeft())))
-        return {'subTitle': ' '.join((subTitleMainText, text_styles.stats(subTitleBattlesLeft))),
-         'footerText': backport.text(R.strings.winback.winbackBattleQueue.footer.text())}
-
-
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANDOMS, RandomQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.EVENT_BATTLES, _EventQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANKED, _RankedQueueProvider)
@@ -291,7 +260,6 @@ registerBattleQueueProvider(constants.QUEUE_TYPE.EPIC, _EpicQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.BATTLE_ROYALE, _BattleRoyaleQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.MAPBOX, _MapboxQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.COMP7, _Comp7QueueProvider)
-registerBattleQueueProvider(constants.QUEUE_TYPE.WINBACK, _WinbackQueueProvider)
 
 def _providerFactory(proxy, qType):
     provider = collectBattleQueueProvider(qType) or QueueProvider
@@ -363,10 +331,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
                 iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
             else:
                 iconlabel = 'neutral'
-            if self.__provider.needAdditionalInfo():
-                additional = self.__provider.additionalInfo()
-            else:
-                additional = ''
+            additional = self.__provider.additionalInfo()
             vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = self.__provider.getTankName(vehicle)
@@ -408,8 +373,6 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
         textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
         timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
-        if self.__provider is not None and self.__provider.needAdditionalInfo():
-            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
         self.as_setTimerS(textLabel, timeLabel)
         self.__createTime += 1
         return

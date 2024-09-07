@@ -180,6 +180,9 @@ def getRandomTooltipData(result):
     elif state == PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE:
         header = None
         body = backport.text(R.strings.tooltips.hangar.startBtn.preview.body())
+    elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED_FOR_11_LVL:
+        header = backport.text(R.strings.tooltips.hangar.startBtn.notSupportFor11lvl.header())
+        body = backport.text(R.strings.tooltips.hangar.startBtn.notSupportFor11lvl.body())
     else:
         return ''
     return makeTooltip(header, body)
@@ -250,6 +253,9 @@ def getComp7FightBtnTooltipData(result):
     elif state == PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE:
         header = None
         body = backport.text(R.strings.tooltips.hangar.startBtn.preview.body())
+    elif state == PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED_FOR_11_LVL:
+        header = backport.text(R.strings.tooltips.hangar.startBtn.notSupportFor11lvl.header())
+        body = backport.text(R.strings.tooltips.hangar.startBtn.notSupportFor11lvl.body())
     else:
         return ''
     return makeTooltip(header, body)

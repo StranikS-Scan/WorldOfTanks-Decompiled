@@ -15,7 +15,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.app_loader import IAppLoader
 _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
-_IGNORED_SKILL_NAMES = ()
+_IGNORED_SKILL_NAMES = ('commander_sixthSense',)
 
 class CommanderComponent(InjectComponentAdaptor):
 
@@ -59,8 +59,8 @@ class CommanderView(ViewImpl):
                  None,
                  None,
                  False)
-                self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
-                return TOOLTIPS_CONSTANTS.CREW_PERK_GF
+                self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY)
+                return TOOLTIPS_CONSTANTS.BATTLE_ROYALE_CREW_PERK_GF
         return super(CommanderView, self).createToolTip(event)
 
     def _initialize(self):

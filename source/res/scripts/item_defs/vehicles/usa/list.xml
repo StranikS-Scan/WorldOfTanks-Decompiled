@@ -760,8 +760,8 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD secret testTank improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
-    <level>	10	</level>
+    <tags>	heavyTank role_HT_support HD testTank improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret secretExtended lockOutfit	</tags>
+    <level>	11	</level>
   </A150_MBT_B>
   <A149_AMBT>
     <id>	133	</id>
@@ -1605,6 +1605,19 @@
     <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret special cannot_be_sold comp7 earn_crystals	</tags>
     <level>	10	</level>
   </A143_M_V_Y_7x7>
+  <A165_XM57>
+    <id>	174	</id>
+    <userString>	#usa_vehicles:A165_XM57	</userString>
+    <description>	#usa_vehicles:A165_XM57_descr	</description>
+    <shortUserString>	#usa_vehicles:A165_XM57_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A165_XM57_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A165_XM57_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD siegeMode autoSiege heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </A165_XM57>
   <A157_M_VII_Y>
     <id>	140	</id>
     <userString>	#usa_vehicles:A157_M_VII_Y	</userString>
@@ -1618,4 +1631,43 @@
     <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A157_M_VII_Y>
+  <A125_AEP_1_T>
+    <id>	141	</id>
+    <userString>	#usa_vehicles:A125_AEP_1_T	</userString>
+    <description>	#usa_vehicles:A125_AEP_1_descr	</description>
+    <shortUserString>	#usa_vehicles:A125_AEP_1_T_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A125_AEP_1_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A125_AEP_1_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user testTank secret	</tags>
+    <level>	9	</level>
+  </A125_AEP_1_T>
+  <A162_ATAC_II>
+    <id>	173	</id>
+    <userString>	#usa_vehicles:A162_ATAC_II	</userString>
+    <description>	#usa_vehicles:A162_ATAC_II_descr	</description>
+    <shortUserString>	#usa_vehicles:A162_ATAC_II_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A162_ATAC_II_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A162_ATAC_II_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <level>	9	</level>
+    <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals secret testTank	</tags>
+  </A162_ATAC_II>
+  <A67_T57_58_T>
+    <id>	31006	</id>
+    <userString>	#usa_vehicles:A67_T57_58_T	</userString>
+    <description>	#usa_vehicles:A67_T57_58_T_descr	</description>
+    <shortUserString>	#usa_vehicles:A67_T57_58_T_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A67_T57_58_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A67_T57_58_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special lockOutfit secret testTank cannot_be_sold	</tags>
+    <level>	11	</level>
+  </A67_T57_58_T>
 </list.xml>

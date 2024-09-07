@@ -25,9 +25,9 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
     def __init__(self, ctx=None):
         super(ArmoryYardVehiclePreview, self).__init__(ctx)
         self._showHeroTankText = ctx.get('showHeroTankText', False)
-        self._heroInteractive = False
+        self._heroInteractive = ctx.get('isHeroInteractive', False)
         currentHeroTankCD = self.__heroTanksControl.getCurrentTankCD()
-        self.__needHeroTankHidden = not ctx.get('isHeroTank', False) and self._vehicleCD == currentHeroTankCD
+        self.__needHeroTankHidden = ctx.get('isNeedHeroTankHidden', False) or not ctx.get('isHeroTank', False) and self._vehicleCD == currentHeroTankCD
         self.__backToHeroTank = ctx.get('isHeroTank', False)
 
     def onPrbEntitySwitching(self):
@@ -46,6 +46,7 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
             self.__heroTanksControl.setHidden(True)
         self.__updateVisibilityHangarHeaderMenu()
         self.startGlobalListening()
+        self.__armoryYardCtrl.onUpdated += self.__checkExit
 
     def _dispose(self):
         if self.__needHeroTankHidden:
@@ -55,10 +56,20 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
         super(ArmoryYardVehiclePreview, self)._dispose()
         if self.__armoryYardCtrl.isVehiclePreview:
             self.__armoryYardCtrl.unloadScene()
+        self.__armoryYardCtrl.onUpdated -= self.__checkExit
+
+    def __checkExit(self):
+        if not self.__armoryYardCtrl.isActive():
+            self.__armoryYardCtrl.unloadScene(isReload=False)
+            self.closeView()
+            showHangar()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
-        if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_PY_ALIAS and self._showHeroTankText:
-            viewPy.setPanelTextData(backport.text(R.strings.armory_yard.prevView.title()), backport.text(R.strings.armory_yard.prevView.button()), text_styles.highTitleRegular(backport.text(R.strings.armory_yard.prevView.body())))
+        if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_PY_ALIAS:
+            if self._showHeroTankText:
+                viewPy.setPanelTextData(backport.text(R.strings.armory_yard.prevView.title()), backport.text(R.strings.armory_yard.prevView.button()), text_styles.highTitleRegular(backport.text(R.strings.armory_yard.prevView.body())))
+            else:
+                viewPy.setPanelTextData(uniqueVehicleTitle='')
         elif alias == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
             stepsRewards = self.__armoryYardCtrl.getStepsRewards()
             stepCount = self.__armoryYardCtrl.getTotalSteps()

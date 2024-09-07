@@ -32,6 +32,9 @@ class IArenaGuiDescription(object):
     def isBaseExists(self):
         raise NotImplementedError
 
+    def isControlPointExists(self):
+        raise NotImplementedError
+
     def getTypeName(self, isInBattle=True):
         raise NotImplementedError
 
@@ -105,6 +108,9 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
     def isBaseExists(self):
         return functions.isBaseExists(self._visitor.type.getID(), self._team)
 
+    def isControlPointExists(self):
+        return functions.isControlPointExists(self._visitor.type.getID())
+
     def getTypeName(self, isInBattle=True):
         name = self._visitor.type.getName()
         if isInBattle:
@@ -168,7 +174,7 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
         return i18n.makeString('#arenas:type/{}/name'.format(functions.getArenaSubTypeName(self._visitor.type.getID())))
 
     def getFrameLabel(self):
-        return getNecessaryArenaFrameName(functions.getArenaSubTypeName(self._visitor.type.getID()), self.isBaseExists())
+        return getNecessaryArenaFrameName(functions.getArenaSubTypeName(self._visitor.type.getID()), self.isBaseExists(), self.isControlPointExists())
 
     def getLegacyFrameLabel(self):
         return self.getFrameLabel()
@@ -212,6 +218,9 @@ class ArenaWithL10nDescription(IArenaGuiDescription):
 
     def isBaseExists(self):
         return self._decorated.isBaseExists()
+
+    def isControlPointExists(self):
+        return self._decorated.isControlPointExists()
 
     def getBattleTypeIconPath(self, sizeFolder='c_136x136'):
         return self._decorated.getBattleTypeIconPath(sizeFolder=sizeFolder)
@@ -300,7 +309,7 @@ class MapboxArenaDescription(ArenaWithLabelDescription):
         return not replayCtrl.isPlaying
 
 
-class Comp7BattlesDescription(ArenaWithLabelDescription):
+class Comp7BattlesDescription(ArenaWithBasesDescription):
 
     def isInvitationEnabled(self):
         replayCtrl = BattleReplay.g_replayCtrl

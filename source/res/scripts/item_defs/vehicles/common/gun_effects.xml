@@ -3224,6 +3224,236 @@
       </groundWave>
     </relatedEffects>
   </shot_large_aspg>
+  <shot_large_APFSDS>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/shot_large_apfsds.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_large_APFSDS>
+  <shot_large_APFSDS_mb>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/shot_large_APFSDS_mb.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_large_APFSDS_mb>
   <shot_dualgun1_large_mb_L>
     <timeline>
       <lighting2>	0.09	</lighting2>
@@ -4824,6 +5054,236 @@
       </groundWave>
     </relatedEffects>
   </shot_huge_aspg>
+  <shot_huge_APFSDS>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/shot_huge_apfsds.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_huge_APFSDS>
+  <shot_huge_APFSDS_mb>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/shot_huge_APFSDS_mb.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_huge_APFSDS_mb>
   <shot_huge2>
     <timeline>
       <lighting2>	0.1	</lighting2>
@@ -5414,119 +5874,4 @@
       </groundWave>
     </relatedEffects>
   </shot_Gravizapa>
-  <shot_races_pushing>
-    <timeline>
-      <lighting2>	0.085	</lighting2>
-      <end>	0.4	</end>
-      <endpixie>	1	</endpixie>
-      <soundplaystop>	4	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/102_race_24_shot.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-      <light>
-        <startKey>	start	</startKey>
-        <endKey>	lighting2	</endKey>
-        <innerRadius>	100	</innerRadius>
-        <outerRadius>	600	</outerRadius>
-        <castShadows>	false	</castShadows>
-        <position>	HP_gunFire	</position>
-        <animation>
-          <time>	0.0	</time>
-          <color>	255 150 0	</color>
-          <multiplier>	10	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.25	</time>
-          <color>	255 200 100	</color>
-          <multiplier>	15	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.75	</time>
-          <color>	170 65 25	</color>
-          <multiplier>	10	</multiplier>
-        </animation>
-        <animation>
-          <time>	1.0	</time>
-          <color>	0 0 0 0	</color>
-          <multiplier>	5	</multiplier>
-        </animation>
-      </light>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-    <relatedEffects>
-      <groundWave>
-        <timeline>
-          <shooting>	1	</shooting>
-        </timeline>
-        <effects>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/cosm_groundwave_main_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_main_snow.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	water	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_medium_water.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_main_oil.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-        </effects>
-      </groundWave>
-    </relatedEffects>
-  </shot_races_pushing>
 </gun_effects.xml>

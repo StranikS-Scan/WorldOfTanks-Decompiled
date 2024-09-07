@@ -6,6 +6,7 @@ import CommandMapping
 from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, ROLE_TYPE, ACTION_TYPE_TO_LABEL, ROLE_TYPE_TO_LABEL
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.hint_panel_plugin import HelpHintContext
+from gui.comp7.comp7_helpers import getComp7DetailedHelpPages
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -25,6 +26,7 @@ class HelpPagePriority(object):
     DEFAULT = 0
     MAPS = 1
     TRACK_WITHIN_TRACK = 2
+    MULTI_TRACK = 2
     ROCKET_ACCELERATION = 3
     TURBOSHAFT_ENGINE = 4
     DUAL_ACCURACY = 5
@@ -408,7 +410,7 @@ class Comp7PagesBuilder(DetailedHelpPagesBuilder):
     def buildPages(cls, ctx):
         pages = []
         comp7Header = backport.text(R.strings.comp7.detailsHelp.mainTitle())
-        for pageName in ('seasonModifiers', 'poi', 'roleSkills', 'rules'):
+        for pageName in getComp7DetailedHelpPages():
             addPage(datailedList=pages, headerTitle=comp7Header, title=backport.text(R.strings.comp7.detailsHelp.dyn(pageName).title()), descr=text_styles.mainBig(backport.text(R.strings.comp7.detailsHelp.dyn(pageName)())), vKeys=[], buttons=[], image=backport.image(R.images.comp7.gui.maps.icons.comp7.battleHelp.dyn(pageName)()))
 
         return pages
@@ -463,6 +465,26 @@ class DevMapsPagesBuilder(DetailedHelpPagesBuilder):
         ctx['isDevMaps'] = arenaVisitor.extra.isMapsInDevelopmentEnabled()
 
 
+class MultiTrackPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isMultiTrack',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.MULTI_TRACK
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.multiTrack.headerTitle()), backport.text(R.strings.ingame_help.detailsHelp.multiTrack.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.multiTrack.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.multiTrack.multitrack_tank()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isMultiTrack'] = isMultiTrack = vehicle is not None and vehicle.typeDescriptor.isMultiTrack
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isMultiTrack
+        return
+
+
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -477,4 +499,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  DualAccuracyPagesBuilder,
  DevMapsPagesBuilder,
  FlameTankPagesBuilder,
- AssaultTankPagesBuilder))
+ AssaultTankPagesBuilder,
+ MultiTrackPagesBuilder))

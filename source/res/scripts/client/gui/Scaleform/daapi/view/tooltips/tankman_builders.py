@@ -7,7 +7,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.crew.tooltips.advanced_tooltip_view import AdvancedTooltipView
 from gui.impl.lobby.crew.tooltips.commander_bonus_additional_tooltip import CommanderBonusAdditionalTooltip
 from gui.impl.lobby.crew.tooltips.commander_bonus_tooltip import CommanderBonusTooltip
-from gui.impl.lobby.crew.tooltips.crew_perks_additional_tooltip import CrewPerksAdditionalTooltip
+from gui.impl.lobby.crew.tooltips.crew_perks_additional_tooltip import CrewPerksAdditionalTooltip, BattleRoyaleCrewPerksAdditionalTooltip
 from gui.impl.lobby.crew.tooltips.crew_perks_tooltip import CrewPerksTooltip
 from gui.impl.lobby.crew.tooltips.tankman_tooltip import TankmanTooltip
 from gui.shared.tooltips import advanced
@@ -68,6 +68,12 @@ class CrewPerkTooltipDataAdditional(CrewPerkTooltipData):
         return DecoratedTooltipWindow(CrewPerksAdditionalTooltip(skillName, tankmanId), parent, False)
 
 
+class BattleRoyaleCrewPerkTooltipDataAdditional(CrewPerkTooltipData):
+
+    def getDisplayableData(self, skillName, tankmanId, skillLevel=None, isCommonExtraAvailable=False, showAdditionalInfo=True, parent=None, *args, **kwargs):
+        return DecoratedTooltipWindow(BattleRoyaleCrewPerksAdditionalTooltip(skillName, tankmanId), parent, False)
+
+
 class CommanderBonusTooltipData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -107,5 +113,6 @@ def getTooltipBuilders():
     return (NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      BattleRoyaleTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.CREW_PERK_GF, None, CrewPerkTooltipData(contexts.ToolTipContext(None)), CrewPerkTooltipDataAdditional(contexts.ToolTipContext(None)), condition=_advancedPerkCondition),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_CREW_PERK_GF, None, CrewPerkTooltipData(contexts.ToolTipContext(None)), BattleRoyaleCrewPerkTooltipDataAdditional(contexts.ToolTipContext(None)), condition=_advancedPerkCondition),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.COMMANDER_BONUS, None, CommanderBonusTooltipData(contexts.ToolTipContext(None)), CommanderBonusTooltipDataAdditional(contexts.ToolTipContext(None))),
      AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.TANKMAN, None, TankmanTooltipData(contexts.TankmanHangarContext()), TankmanTooltipAdditional(contexts.TankmanHangarContext())))

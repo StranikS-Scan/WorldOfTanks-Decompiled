@@ -223,11 +223,12 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
     def hide(self, allowAction=True):
         if self.app is not None:
             self.app.unregisterGuiKeyHandler(self)
-        if self.__isVisible is False:
+        if not self.__isVisible:
             return
         else:
             self.as_hideS(allowAction)
             self.stopCallback(self.__checkForValidLocationMarkerLoop)
+            self.stopCallback(self.__checkForTemporaryRespondUpdateLoop)
             return
 
     def _populate(self):
@@ -413,13 +414,11 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__reshow(removedID, markerType, markerType != MarkerType.LOCATION_MARKER_TYPE)
 
     def __reshow(self, removedID, markerType, reshowPreviousState):
-        if self.__isVisible is False:
+        if not self.__isVisible or self.__crosshairData is None:
             return
         else:
-            if self.__crosshairData is not None:
-                if self.__crosshairData.targetID == removedID and markerType == self.__crosshairData.targetMarkerType:
-                    self.hide(allowAction=False)
-                    self.show(reshowPreviousState)
+            if self.__crosshairData.targetID == removedID and markerType == self.__crosshairData.targetMarkerType:
+                self.show(reshowPreviousState)
             return
 
     def __onVehicleMarkerRemoved(self, vehicleID):
@@ -437,26 +436,24 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self.__reshow(addedID, markerType, True)
 
     def __checkForValidLocationMarkerLoop(self):
-        if self.__crosshairData is None or self.__isVisible is False:
+        if self.__crosshairData is None or not self.__isVisible:
             return
         else:
             chatCommands = self.sessionProvider.shared.chatCommands
             _, targetMarkerType, targetMarkerSubtype, _, _ = chatCommands.getAimedAtTargetData()
             if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(targetMarkerType, targetMarkerSubtype) and targetMarkerType != self.__crosshairData.targetMarkerType:
-                self.hide(allowAction=False)
                 self.show(reshowPreviousState=False)
             hasDelayedCallback = self.hasDelayedCallback(self.__checkForValidLocationMarkerLoop)
             return self._REFRESH_TIME_IN_SECONDS if not hasDelayedCallback else None
 
     def __checkForTemporaryRespondUpdateLoop(self):
-        if self.__crosshairData is None or self.__isVisible is False:
+        if self.__crosshairData is None or not self.__isVisible:
             return
         else:
             chatCommands = self.sessionProvider.shared.chatCommands
             _, targetMarkerType, targetMarkerSubtype, replyState, _ = chatCommands.getAimedAtTargetData()
             if RadialMenu.__isCanRespondToAlly(targetMarkerType, targetMarkerSubtype, replyState):
                 return self._REFRESH_TIME_IN_SECONDS
-            self.hide(allowAction=False)
             self.show(reshowPreviousState=False)
             return -1
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/shell.py
+from itertools import izip
 from debug_utils import LOG_ERROR
 from constants import SHELL_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -238,66 +239,91 @@ class _AdvancedCommonStatsBlockConstructior(_BaseCommonStatsBlockConstructor):
 
 class CommonStatsBlockConstructor(_BaseCommonStatsBlockConstructor):
 
-    def __init__(self, shell, configuration, valueWidth, params):
-        super(CommonStatsBlockConstructor, self).__init__(shell, configuration, valueWidth, params=params)
+    @property
+    def colorScheme(self):
+        return params_formatters.COLORLESS_SCHEME if self.configuration.colorless else params_formatters.BASE_SCHEME
 
-    def construct(self):
-        block = []
-        if self.configuration.params:
-            top = 8
-            bottom = 8
-            topPadding = formatters.packPadding(top=top)
-            bottomPadding = formatters.packPadding(bottom=bottom)
-            shell = self.shell
-            comparator = params_helper.shellComparator(shell, self.configuration.vehicle)
-            piercingPowerTable = self._params.pop('piercingPowerTable')
-            isDistanceDependent = piercingPowerTable is not None
-            colorScheme = params_formatters.COLORLESS_SCHEME if self.configuration.colorless else params_formatters.BASE_SCHEME
-            tableData = []
-            if isinstance(piercingPowerTable, list):
-                for distance, value in self.__iteratePiercingPowerTable(piercingPowerTable, comparator, colorScheme):
-                    tableData.append((value, distance))
-
-            formattedParameters = params_formatters.getFormattedParamsList(shell.descriptor, self._params)
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=bottomPadding))
-            for paramName, paramValue in formattedParameters:
-                if paramName == ModuleTooltipBlockConstructor.CALIBER:
-                    continue
-                if comparator is not None:
-                    paramValue = params_formatters.colorizedFormatParameter(comparator.getExtendedData(paramName), colorScheme)
-                if paramValue is not None:
-                    paramUnits = _ms(params_formatters.measureUnitsForParameter(paramName))
-                    isPiercingPower = paramName == 'avgPiercingPower'
-                    if isPiercingPower:
-                        if piercingPowerTable != NO_DATA:
-                            paramUnits += _ASTERISK
-                        if tableData and isDistanceDependent:
-                            paramValue = '%s-%s' % (tableData[0][0], tableData[-1][0])
-                    block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, paramUnits))
-
-            if piercingPowerTable != NO_DATA:
-                if isDistanceDependent and tableData:
-                    title = _ms(MENU.MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE, minDist=tableData[0][1], maxDist=tableData[-1][1])
-                elif self.shell.type == SHELL_TYPES.FLAME:
-                    title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTEFLAME)
-                else:
-                    title = _ms(MENU.MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE)
-                block.append(formatters.packTitleDescBlock(title=text_styles.standard(title), padding=topPadding))
-        return block
-
-    @staticmethod
-    def __iteratePiercingPowerTable(table, comparator, colorScheme):
+    def __iterPiercingPowerTable(self, table, comparator):
         if comparator is not None:
             extendedTable = comparator.getExtendedData('piercingPowerTable')
-            for (distance, value), (_, valueState) in zip(extendedTable.value, extendedTable.state):
-                fmtValue = params_formatters.formatParameter('piercingPower', value, valueState, colorScheme)
-                yield (distance, fmtValue)
+            for (distance, value), (_, valueState) in izip(extendedTable.value, extendedTable.state):
+                yield (distance, params_formatters.formatParameter('piercingPower', value, valueState, self.colorScheme))
 
         else:
             for distance, value in table:
                 yield (distance, params_formatters.formatParameter('piercingPower', value))
 
         return
+
+    def _getDamagePackInfo(self):
+        distanceDmg = self.shell.descriptor.distanceDmg
+        if distanceDmg is None:
+            return
+        else:
+            distance = distanceDmg.distance
+            return backport.text(R.strings.menu.moduleInfo.params.distanceDamage(), minDmg=backport.getNiceNumberFormat(distance.min), maxDmg=backport.getNiceNumberFormat(distance.max))
+
+    def _getAvgPiercingPowerPackInfo(self, pTable, tableData):
+        asteriksTitle = None
+        value = None
+        if pTable != NO_DATA:
+            asteriksTitle = self._getAvgPiercingPowerTitle(pTable, tableData)
+        if tableData and pTable is not None:
+            value = '%s-%s' % (tableData[0][0], tableData[-1][0])
+        return (value, asteriksTitle)
+
+    def _getAvgPiercingPowerTitle(self, pTable, tableData):
+        if pTable is not None and tableData:
+            return backport.text(R.strings.menu.moduleInfo.params.piercingDistance.footnote(), minDist=tableData[0][1], maxDist=tableData[-1][1])
+        else:
+            return backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnoteFlame()) if self.shell.type == SHELL_TYPES.FLAME else backport.text(R.strings.menu.moduleInfo.params.noPiercingDistance.footnote())
+
+    def _getFormattedParameter(self, value, comparator):
+        return params_formatters.colorizedFormatParameter(comparator.getExtendedData(value), self.colorScheme)
+
+    def _getTableData(self, piercingPowerTable, comparator):
+        if not isinstance(piercingPowerTable, list):
+            return []
+        return [ (value, distance) for distance, value in self.__iterPiercingPowerTable(piercingPowerTable, comparator) ]
+
+    def construct(self):
+        if not self.configuration.params:
+            return []
+        else:
+            comparator = params_helper.shellComparator(self.shell, self.configuration.vehicle)
+            piercingPowerTable = self._params.pop('piercingPowerTable')
+            tableData = self._getTableData(piercingPowerTable, comparator)
+            block = [formatters.packTitleDescBlock(title=text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8))]
+            asteriks = _ASTERISK
+            asteriksTitles = []
+            for paramName, paramValue in params_formatters.getFormattedParamsList(self.shell.descriptor, self._params):
+                if paramName == ModuleTooltipBlockConstructor.CALIBER:
+                    continue
+                if comparator is not None:
+                    paramValue = self._getFormattedParameter(paramName, comparator)
+                if paramValue is None:
+                    continue
+                paramUnits = _ms(params_formatters.measureUnitsForParameter(paramName))
+                asteriksTitle = None
+                if paramName == 'avgPiercingPower':
+                    value, asteriksTitle = self._getAvgPiercingPowerPackInfo(piercingPowerTable, tableData)
+                    paramValue = value or paramValue
+                if paramName == 'damage':
+                    asteriksTitle = self._getDamagePackInfo()
+                if asteriksTitle is not None:
+                    asteriksTitles.append(asteriksTitle)
+                    paramUnits += asteriks
+                    asteriks += _ASTERISK
+                block.append(self._packParameterBlock(backport.text(R.strings.menu.moduleInfo.params.dyn(paramName)()), paramValue, paramUnits))
+
+            asteriks = ''
+            padding = formatters.packPadding(top=16)
+            for title in asteriksTitles:
+                block.append(formatters.packTitleDescBlock(title=text_styles.standard(asteriks + title), padding=padding))
+                asteriks += _ASTERISK
+                padding = None
+
+            return block
 
 
 class StatusBlockConstructor(ShellTooltipBlockConstructor):

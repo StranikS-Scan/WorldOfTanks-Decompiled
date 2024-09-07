@@ -14,6 +14,7 @@ from gui.impl.gen.view_models.views.lobby.early_access.early_access_state_enum i
 from gui.impl.pub import ViewImpl
 from skeletons.gui.game_control import IEarlyAccessController
 from helpers import dependency, time_utils, int2roman
+from nations import AVAILABLE_NAMES
 
 class TooltipBuilder(object):
     _RES_ROOT = R.strings.early_access
@@ -84,8 +85,10 @@ class QuestsTooltipBuilder(TooltipBuilder):
                 return self._formNoteText(self.__cycle.startDate)
 
     def __formRequiredVehiclesText(self):
-        _, minLvl, maxLvl = self._earlyAccessCtrl.getRequiredVehicleTypeAndLevelsForQuest(None)
-        return backport.text(self._RES_ROOT.questsView.chapter.postprogression.disabled.doFuture.samelvl.body(), lvl=int2roman(minLvl)) if minLvl == maxLvl else backport.text(self._RES_ROOT.questsView.chapter.postprogression.disabled.doFuture.body(), minLvl=int2roman(minLvl), maxLvl=int2roman(maxLvl))
+        vehType, minLvl, maxLvl = self._earlyAccessCtrl.getRequiredVehicleTypeAndLevelsForQuest(None)
+        nation = AVAILABLE_NAMES[self._earlyAccessCtrl.getNationID()]
+        vehicleInfoText = backport.text(self._RES_ROOT.vehicleInfo.body(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase()), minLvl=int2roman(minLvl), maxLvl=int2roman(maxLvl))
+        return backport.text(self._RES_ROOT.questsView.chapter.postprogression.disabled.doFuture.body(), text=backport.text(self._RES_ROOT.vehicleInfo.postprogression.vehicleType.dyn(vehType.replace('-', '_'))(), vehicleInfo=vehicleInfoText))
 
     def __getCycleState(self):
         nowTime = time_utils.getServerUTCTime()

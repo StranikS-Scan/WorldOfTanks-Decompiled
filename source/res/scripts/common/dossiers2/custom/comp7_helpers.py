@@ -16,12 +16,32 @@ def getSeasonsRecords(seasonKey, seasonsNumber, ctx, packing):
     return seasonsRecords
 
 
+def getSeasonsRecordsWithGriffin(seasonKey, seasonsNumber, ctx, packing, archiveName):
+    seasonsRecords = []
+    for seasonNumber in range(seasonsNumber):
+        key = '{}{}'.format(seasonKey, seasonNumber + 1)
+        seasonsRecords.append(getStaticSizeBlockRecordValues(ctx, key, packing))
+
+    seasonsRecords.append(getStaticSizeBlockRecordValues(ctx, archiveName, packing))
+    return seasonsRecords
+
+
 def getCutSeasonsRecords(seasonKey, seasonsNumber, ctx):
     cutRecords = []
     for seasonNumber in range(seasonsNumber):
         key = '{}{}'.format(seasonKey, seasonNumber + 1)
         cutRecords.append(getDictBlockRecordValues(ctx, key, 'I', 'IIII'))
 
+    return cutRecords
+
+
+def getCutSeasonsRecordsWithGriffin(seasonKey, seasonsNumber, ctx, archiveName):
+    cutRecords = []
+    for seasonNumber in range(seasonsNumber):
+        key = '{}{}'.format(seasonKey, seasonNumber + 1)
+        cutRecords.append(getDictBlockRecordValues(ctx, key, 'I', 'IIII'))
+
+    cutRecords.append(getDictBlockRecordValues(ctx, archiveName, 'I', 'IIII'))
     return cutRecords
 
 
@@ -97,6 +117,32 @@ def archiveMaxSeasonsGriffin(seasonsNumber, ctx, maxSeasonsPacking):
 def archiveCutSeasonsGriffin(seasonsNumber, ctx):
     archiveName = 'comp7CutArchiveGriffin'
     cutSeasonsValues = getCutSeasonsRecords(CUT_SEASON_KEY, seasonsNumber, ctx)
+    valuesToArchive = prepareArchiveCutSeasonsRecords(cutSeasonsValues)
+    updateDictRecords(ctx, archiveName, 'I', 'IIII', valuesToArchive)
+    clearCutSeasonsRecords(seasonsNumber, ctx)
+
+
+def archiveSeasonsWolf(seasonsNumber, ctx, seasonsPacking):
+    archiveName = 'comp7ArchiveGriffin'
+    seasonsValues = getSeasonsRecordsWithGriffin(SEASON_KEY, seasonsNumber, ctx, seasonsPacking, archiveName)
+    sumSeasonsValues = getSumSeasonsValues(seasonsValues)
+    valuesToArchive = prepareArchiveSeasonsRecords(sumSeasonsValues, seasonsPacking)
+    updateStaticSizeBlockRecords(ctx, archiveName, valuesToArchive)
+    clearSeasonsRecords(seasonsNumber, SEASON_KEY, ctx, seasonsPacking)
+
+
+def archiveMaxSeasonsWolf(seasonsNumber, ctx, maxSeasonsPacking):
+    archiveName = 'maxComp7ArchiveGriffin'
+    maxSeasonsValues = getSeasonsRecordsWithGriffin(MAX_SEASON_KEY, seasonsNumber, ctx, maxSeasonsPacking, archiveName)
+    maxValues = getMaxSeasonsValues(maxSeasonsValues)
+    valuesToArchive = prepareArchiveSeasonsRecords(maxValues, maxSeasonsPacking)
+    updateStaticSizeBlockRecords(ctx, archiveName, valuesToArchive)
+    clearSeasonsRecords(seasonsNumber, MAX_SEASON_KEY, ctx, maxSeasonsPacking)
+
+
+def archiveCutSeasonsWolf(seasonsNumber, ctx):
+    archiveName = 'comp7CutArchiveGriffin'
+    cutSeasonsValues = getCutSeasonsRecordsWithGriffin(CUT_SEASON_KEY, seasonsNumber, ctx, archiveName)
     valuesToArchive = prepareArchiveCutSeasonsRecords(cutSeasonsValues)
     updateDictRecords(ctx, archiveName, 'I', 'IIII', valuesToArchive)
     clearCutSeasonsRecords(seasonsNumber, ctx)

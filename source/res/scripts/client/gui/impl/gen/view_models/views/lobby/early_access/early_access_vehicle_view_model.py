@@ -5,10 +5,10 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.early_access.early_access_vehicle_model import EarlyAccessVehicleModel
 
 class EarlyAccessVehicleViewModel(ViewModel):
-    __slots__ = ('onSelectVehicle', 'onCompare', 'onShowVehiclePreview', 'onShowInHangar', 'onBuyVehicle', 'onAboutEvent', 'onBackToHangar', 'onBackToPrevScreen', 'onBuyTokens', 'onGoToQuests', 'onMoveSpace', 'onStartMoving')
+    __slots__ = ('onSelectVehicle', 'onCompare', 'onShowVehiclePreview', 'onShowInHangar', 'onBuyVehicle', 'onAboutEvent', 'onBackToHangar', 'onBackToPrevScreen', 'onBuyTokens', 'onGoToQuests', 'onMoveSpace', 'onStartMoving', 'onAnimationFinished')
     ARG_VEHICLE_CD = 'vehicleCD'
 
-    def __init__(self, properties=9, commands=12):
+    def __init__(self, properties=9, commands=13):
         super(EarlyAccessVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentDate(self):
@@ -92,3 +92,4 @@ class EarlyAccessVehicleViewModel(ViewModel):
         self.onGoToQuests = self._addCommand('onGoToQuests')
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onStartMoving = self._addCommand('onStartMoving')
+        self.onAnimationFinished = self._addCommand('onAnimationFinished')

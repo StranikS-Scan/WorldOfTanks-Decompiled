@@ -3,6 +3,7 @@
 import locale
 import logging
 import time
+import typing
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
 from CurrentVehicle import g_currentVehicle
@@ -26,18 +27,20 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IFunRandomController, IDebutBoxesController, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import Quest
 _EventsBlockData = namedtuple('EventsBlockData', 'filteredCount totalCount blockData')
 _MAIN_QUEST_AWARDS_COUNT = 6
 _BIG_TOKENS_TRESHOLD = 2
@@ -77,10 +80,13 @@ def getGroupPackerByContextID(contextID, proxy):
             groups = proxy.getGroups()
             group = groups.get(contextID)
             if group:
+                groupID = group.getID()
                 if group.isMarathon():
                     return _MissionsGroupQuestsBlockInfo(group)
                 if group.isPremium():
                     return _PremiumGroupedQuestsBlockInfo()
+                if isVersusAIQuest(groupID):
+                    return _VersusAIGroupedQuestsBlockInfo(group)
                 return _GroupedEventsBlockInfo(group)
         return
 
@@ -278,7 +284,10 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
         return [_MotiveQuestsBlockInfo(), _UngroupedQuestsBlockInfo()]
 
     def _createGroupedEventsBlock(self, group):
-        return _MapsTrainingGroupedQuestsBlockInfo(group) if events_helpers.isMapsTraining(group.getID()) else _GroupedQuestsBlockInfo(group)
+        groupID = group.getID()
+        if events_helpers.isMapsTraining(groupID):
+            return _MapsTrainingGroupedQuestsBlockInfo(group)
+        return _VersusAIGroupedQuestsBlockInfo(group) if isVersusAIQuest(groupID) else _GroupedQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isRegularQuest())
@@ -473,14 +482,15 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
         self._completedQuestsCount = 0
 
     def _findEvents(self, srvEvents):
-        if self._group.getID() == BATTLE_ROYALE_GROUPS_ID:
+        groupId = self.getEventsBlockID()
+        if groupId == BATTLE_ROYALE_GROUPS_ID:
             currentSeason = self.__battleRoyaleController.getCurrentSeason()
             isSeasonActive = currentSeason is not None and self.__battleRoyaleController.getCurrentCycleInfo()[1]
             if self.__battleRoyaleController.isEnabled() and isSeasonActive:
                 result = self.__battleRoyaleController.getQuests().values()
             else:
                 result = []
-        elif self._group.getID() == MAPS_TRAINING_GROUPS_ID:
+        elif groupId == MAPS_TRAINING_GROUPS_ID:
             result = [ event for event in self._group.getGroupContent(srvEvents) if event.shouldBeShown() ]
         else:
             result = self._group.getGroupContent(srvEvents)
@@ -824,3 +834,29 @@ class _MapsTrainingGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         descriptionBlockInfo = super(_MapsTrainingGroupedQuestsBlockInfo, self)._getDescrBlock()
         descriptionBlockInfo['period'] = ''
         return descriptionBlockInfo
+
+
+class _VersusAIGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
+
+    def _findEvents(self, srvEvents):
+        result = self._getQuests(srvEvents)
+        self._completedQuestsCount = 0
+        for quest in result:
+            if quest.isCompleted():
+                self._completedQuestsCount += 1
+
+        self._totalQuestsCount = len(result)
+        return result
+
+    def _getDescrBlock(self):
+        descriptionBlockInfo = super(_VersusAIGroupedQuestsBlockInfo, self)._getDescrBlock()
+        descriptionBlockInfo['period'] = ''
+        descriptionBlockInfo.pop('descr', None)
+        return descriptionBlockInfo
+
+    def _getQuests(self, srvEvents):
+        winbackController = dependency.getInstanceIfHas(IWinbackController)
+        if winbackController is None or not winbackController.isProgressionEnabled():
+            return []
+        else:
+            return [ quest for quest in self._group.getGroupContent(srvEvents) if quest.isCompleted() or quest.accountReqs.isAvailable() ]

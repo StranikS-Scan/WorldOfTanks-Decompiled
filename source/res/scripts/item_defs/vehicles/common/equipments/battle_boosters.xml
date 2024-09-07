@@ -423,7 +423,7 @@
     <notInShop>	true	</notInShop>
     <script>	SixthSenseBattleBooster	  <skillName>	commander_sixthSense	</skillName>
       <turnOnDelay>	2.0	</turnOnDelay>
-      <turnOffDelay>	2.0	</turnOffDelay>
+      <turnOffDelay>	0.0	</turnOffDelay>
     </script>
     <kpi>
       <oneOf>
@@ -598,7 +598,7 @@
         <deviceFilter>
           <tags>
             <required>	improvedSights	</required>
-            <incompatible>	deluxe trophyUpgraded	</incompatible>
+            <incompatible>	trophyUpgraded	</incompatible>
           </tags>
         </deviceFilter>
         <attribute>	multShotDispersionFactor	</attribute>

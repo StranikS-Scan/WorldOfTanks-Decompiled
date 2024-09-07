@@ -12,8 +12,7 @@ from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
 from gui.impl.gen.view_models.views.lobby.comp7.maps_model import MapsModel
-from gui.impl.gen.view_models.views.lobby.comp7.page_model import PageModel
-from gui.impl.gen.view_models.views.lobby.comp7.pages_model import Types
+from gui.impl.gen.view_models.views.lobby.comp7.page_model import PageModel, Types
 from gui.impl.gen.view_models.views.lobby.comp7.whats_new_view_model import WhatsNewViewModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.comp7 import comp7_model_helpers

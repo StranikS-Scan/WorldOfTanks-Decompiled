@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -381,6 +382,9 @@
           <name>	music_interactive_part_13.pck	</name>
         </bank>
         <bank>
+          <name>	music_interactive_part_14.pck	</name>
+        </bank>
+        <bank>
           <name>	wheel_vehicle_GUI.pck	</name>
         </bank>
         <bank>
@@ -530,7 +534,13 @@
           <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
         </bank>
         <bank>
-          <name>	bp14_red_fury_vo.bnk	</name>
+          <name>	style_3D_G134_PzKpfw_VII_3dst_Kinetic.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R148_Object_430_U_3dst_Bastion.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_J40_Type_71_3dst_Magnus.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -667,6 +677,15 @@
         </bank>
         <bank>
           <name>	style_3D_A143_M_V_Y_3DSt.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_G134_PzKpfw_VII_3dst_Kinetic.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_R148_Object_430_U_3dst_Bastion.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_J40_Type_71_3dst_Magnus.bnk	</name>
         </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>

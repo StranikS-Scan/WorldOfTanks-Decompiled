@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/requirements.py
 import types
+import typing
 import nations
 from constants import EVENT_TYPE, IGR_TYPE, IS_CHINA
 from gui import makeHtmlString
@@ -14,10 +15,13 @@ from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from helpers import int2roman, dependency
 from helpers.i18n import makeString as ms
+from helpers.dependency import replace_none_kwargs
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Tuple
 
 def packTokens(tokens):
     return {'tokens': tokens,
@@ -41,9 +45,10 @@ def prepareAccountConditionsGroup(conditions, event):
     return group
 
 
-def _isVehicleConditionAvailable(condition, suitableVehicles):
-    for vehicle in suitableVehicles:
-        if condition.isAvailable(vehicle):
+@replace_none_kwargs(itemsCache=IItemsCache)
+def _isVehicleConditionAvailable(condition, suitableVehicleIntCDs, itemsCache=None):
+    for vehicleIntCD in suitableVehicleIntCDs:
+        if condition.isAvailable(itemsCache.items.getVehicle(vehicleIntCD)):
             return True
 
     return False

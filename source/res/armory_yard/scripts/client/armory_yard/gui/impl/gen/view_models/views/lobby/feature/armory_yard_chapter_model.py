@@ -1,12 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/impl/gen/view_models/views/lobby/feature/armory_yard_chapter_model.py
-from enum import Enum
+from enum import Enum, IntEnum
 from frameworks.wulf import ViewModel
 
 class ChapterState(Enum):
     DISABLED = 'disabled'
     ACTIVE = 'active'
     COMPLETED = 'completed'
+
+
+class ChapterTokenState(IntEnum):
+    HIDDEN = 0
+    TOKENS = 1
+    COINS = 2
+    LOCK = 3
 
 
 class ArmoryYardChapterModel(ViewModel):
@@ -45,11 +52,11 @@ class ArmoryYardChapterModel(ViewModel):
     def setTotalQuests(self, value):
         self._setNumber(4, value)
 
-    def getShowTokens(self):
-        return self._getBool(5)
+    def getTokenState(self):
+        return ChapterTokenState(self._getNumber(5))
 
-    def setShowTokens(self, value):
-        self._setBool(5, value)
+    def setTokenState(self, value):
+        self._setNumber(5, value.value)
 
     def getReceivedTokens(self):
         return self._getNumber(6)
@@ -70,6 +77,6 @@ class ArmoryYardChapterModel(ViewModel):
         self._addNumberProperty('completedQuestsNew', 0)
         self._addNumberProperty('completedQuestsAll', 0)
         self._addNumberProperty('totalQuests', 0)
-        self._addBoolProperty('showTokens', False)
+        self._addNumberProperty('tokenState')
         self._addNumberProperty('receivedTokens', 0)
         self._addNumberProperty('totalTokens', 0)

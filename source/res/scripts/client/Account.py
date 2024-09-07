@@ -814,15 +814,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPS_TRAINING, 0, 0, 0)
 
-    def enqueueWinback(self, vehInvID):
-        if events.isPlayerEntityChanging:
-            return
-        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.WINBACK, vehInvID])
-
-    def dequeueWinback(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.WINBACK)
-
     def requestMapsTrainingInitialConfiguration(self, accountID, callback):
         if not events.isPlayerEntityChanging:
             proxy = lambda requestID, resultID, errorStr, ext=[]: callback(resultID, errorStr, ext)

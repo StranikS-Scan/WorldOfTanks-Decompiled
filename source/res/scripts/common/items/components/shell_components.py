@@ -116,7 +116,10 @@ class Stun(object):
 
 def createShellType(typeName):
     shellType = None
-    if typeName in (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_HE, SHELL_TYPES.ARMOR_PIERCING_CR):
+    if typeName in (SHELL_TYPES.ARMOR_PIERCING,
+     SHELL_TYPES.ARMOR_PIERCING_HE,
+     SHELL_TYPES.ARMOR_PIERCING_FSDS,
+     SHELL_TYPES.ARMOR_PIERCING_CR):
         shellType = ArmorPiercingType(typeName)
     elif typeName == SHELL_TYPES.HOLLOW_CHARGE:
         shellType = HollowChargeType(typeName)

@@ -93,6 +93,8 @@
       </teamBasePositions>
     </maps_training>
     <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <visualScript>
         <server>
           <plan>	PointsOfInterest/pointsOfInterest	</plan>
@@ -112,31 +114,37 @@
       </recon>
       <teamSpawnPoints>
         <team1>
-          <position>	-110.655762 378.447968	</position>
+          <position>	57.301773 -355.984924	</position>
         </team1>
         <team2>
-          <position>	-118.174072 -379.324585	</position>
+          <position>	23.933186 353.983063	</position>
         </team2>
       </teamSpawnPoints>
       <pointsOfInterestUDO>
         <point>
-          <position>	-89.803528 -7.729283	</position>
-          <type>	1	</type>
+          <position>	-290.402496 1.052623	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	145.127228 -0.038859	</position>
-          <type>	1	</type>
+          <position>	17.222425 -260.928070	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	40.159782 215.957062	</position>
-          <type>	2	</type>
+          <position>	-87.619827 -14.893785	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	36.817371 -229.928391	</position>
-          <type>	2	</type>
+          <position>	226.949097 104.817192	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	269.724182 6.693123	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	-265.002136 -289.331116	</position1>
+          <position2>	224.681900 -204.980438	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
   <roadMap></roadMap>

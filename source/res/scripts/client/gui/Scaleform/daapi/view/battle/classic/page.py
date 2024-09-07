@@ -215,16 +215,16 @@ class ClassicPage(SharedPage):
             self._fsToggling.add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
         return
 
+    @staticmethod
+    def invalidateSiegeVehicle(vehicleType):
+        return (vehicleType.hasSiegeMode or vehicleType.isTrackWithinTrack or vehicleType.isMultiTrack) and not vehicleType.isWheeledVehicle and not vehicleType.isDualgunVehicle
+
     def _changeCtrlMode(self, ctrlMode):
-
-        def invalidateSiegeVehicle(vehicleType):
-            return (vehicleType.hasSiegeMode or vehicleType.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleType.isDualgunVehicle
-
         components = {BATTLE_VIEW_ALIASES.DAMAGE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_DAMAGE_LOG_PANEL, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL}
         if ctrlMode != CTRL_MODE_NAME.POSTMORTEM:
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
-            if vehicle and invalidateSiegeVehicle(vehicle.typeDescriptor):
+            if vehicle and self.invalidateSiegeVehicle(vehicle.typeDescriptor):
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
             if vehicle and vehicle.typeDescriptor.hasRocketAcceleration:
                 components.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)

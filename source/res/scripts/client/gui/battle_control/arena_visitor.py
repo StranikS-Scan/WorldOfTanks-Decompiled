@@ -69,7 +69,6 @@ class _ClientArenaSkeleton(object):
     extraData = {}
     viewPoints = []
     isFogOfWarEnabled = False
-    arenaInfo = None
 
 
 class _ArenaTypeSkeleton(object):
@@ -307,9 +306,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isMapbox(self):
         return self._guiType == _GUI_TYPE.MAPBOX
 
-    def isWinback(self):
-        return self._guiType == _GUI_TYPE.WINBACK
-
     def isVersusAI(self):
         return self._guiType == _GUI_TYPE.VERSUS_AI
 
@@ -475,6 +471,7 @@ class _ArenaModifiersVisitor(IArenaVisitor):
         self._modifiers = modifiers = BattleModifiers() if modifiers is None else modifiers
         self._shellData = {SHELL_TYPES.ARMOR_PIERCING: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(5.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
          SHELL_TYPES.ARMOR_PIERCING_CR: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(2.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(70.0)))),
+         SHELL_TYPES.ARMOR_PIERCING_FSDS: (modifiers(BattleParams.NORMALIZATION_ANGLE, math.radians(2.0)), math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(80.0)))),
          SHELL_TYPES.ARMOR_PIERCING_HE: (modifiers(BattleParams.NORMALIZATION_ANGLE, 0.0), 0.0),
          SHELL_TYPES.HOLLOW_CHARGE: (0.0, math.cos(modifiers(BattleParams.RICOCHET_ANGLE, math.radians(85.0)))),
          SHELL_TYPES.HIGH_EXPLOSIVE: (0.0, 0.0)}
@@ -711,7 +708,3 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     @catch_attribute_exception(default=_ClientArenaSkeleton.componentSystem)
     def getComponentSystem(self):
         return self._arena.componentSystem
-
-    @catch_attribute_exception(default=_ClientArenaSkeleton.arenaInfo)
-    def getArenaInfo(self):
-        return self._arena.arenaInfo

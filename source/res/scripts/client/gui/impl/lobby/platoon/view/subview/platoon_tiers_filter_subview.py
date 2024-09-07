@@ -14,6 +14,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.pub.view_impl import ViewImpl, PopOverViewImpl
 from frameworks.wulf import ViewSettings
 from skeletons.account_helpers.settings_core import ISettingsCore
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 _logger = logging.getLogger(__name__)
 
 class TiersFilterSubview(ViewImpl):
@@ -21,8 +22,8 @@ class TiersFilterSubview(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
-    MIN_LEVEL = 1
-    MAX_LEVEL = 10
+    MIN_LEVEL = MIN_VEHICLE_LEVEL
+    MAX_LEVEL = MAX_VEHICLE_LEVEL
 
     def __init__(self):
         settings = ViewSettings(layoutID=R.views.lobby.platoon.subViews.SettingsContent(), model=SettingsModel())

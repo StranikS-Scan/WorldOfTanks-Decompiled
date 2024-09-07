@@ -68,6 +68,9 @@ class _CachedVehicle(object):
     def isCollectible(self):
         return self.isPresent() and self.item.isCollectible
 
+    def getLevel(self):
+        return self.item.level
+
     def refreshModel(self, outfit=None):
         raise NotImplementedError
 

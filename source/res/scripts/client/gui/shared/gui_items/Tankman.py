@@ -41,6 +41,7 @@ class CrewTypes(object):
 
 
 BROTHERHOOD_SKILL_NAME = 'brotherhood'
+REPAIR_SKILL_NAME = 'repair'
 NO_TANKMAN = -1
 NO_SLOT = -1
 MAX_ROLE_LEVEL = 100

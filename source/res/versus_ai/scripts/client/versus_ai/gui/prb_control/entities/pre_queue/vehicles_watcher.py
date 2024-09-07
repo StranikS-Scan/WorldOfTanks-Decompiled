@@ -5,9 +5,9 @@ from constants import Configs
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import LimitedLevelVehiclesWatcher
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, server_settings
+from skeletons.gui.game_control import IVersusAIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from versus_ai.skeletons.versus_ai_controller import IVersusAIController
 
 class VersusAIVehiclesWatcher(LimitedLevelVehiclesWatcher):
     __versusAICtrl = dependency.descriptor(IVersusAIController)

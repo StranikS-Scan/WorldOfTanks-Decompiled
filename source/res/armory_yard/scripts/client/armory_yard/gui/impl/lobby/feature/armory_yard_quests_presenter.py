@@ -3,7 +3,7 @@
 import logging
 from operator import attrgetter
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
-from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_chapter_model import ArmoryYardChapterModel, ChapterState
+from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_chapter_model import ArmoryYardChapterModel, ChapterState, ChapterTokenState
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_quest_model import ArmoryYardQuestModel
 from Event import SuspendableEventSubscriber
 from armory_yard.gui.window_events import showArmoryYardInfoPage
@@ -84,7 +84,7 @@ class _QuestsTabPresenter(object):
         questsArray.clear()
         isPrevChapterFinished = True
         nowTime = time_utils.getServerUTCTime()
-        isFinished = ctrl.isCompleted()
+        isPostProgression = ctrl.isPostProgressionActive()
         for cycle in sorted(currentSeason.getAllCycles().values(), key=attrgetter('ID')):
             chapter = ArmoryYardChapterModel()
             chapter.setId(cycle.ID)
@@ -99,9 +99,13 @@ class _QuestsTabPresenter(object):
             isPrevChapterFinished = ctrl.isChapterFinished(cycle.ID)
             totalChapterTokens = ctrl.totalTokensInChapter(cycle.ID)
             receivedTokens = totalChapterTokens if isPrevChapterFinished else ctrl.receivedTokensInChapter(cycle.ID)
-            chapter.setShowTokens(not isFinished)
+            if state == ChapterState.ACTIVE and not isPrevChapterFinished:
+                tokenState = ChapterTokenState.COINS if isPostProgression else ChapterTokenState.TOKENS
+            else:
+                tokenState = ChapterTokenState.LOCK if state == ChapterState.DISABLED else ChapterTokenState.HIDDEN
             chapter.setReceivedTokens(receivedTokens)
             chapter.setTotalTokens(totalChapterTokens)
+            chapter.setTokenState(tokenState)
             chaptersArray.addViewModel(chapter)
 
         chaptersArray.invalidate()

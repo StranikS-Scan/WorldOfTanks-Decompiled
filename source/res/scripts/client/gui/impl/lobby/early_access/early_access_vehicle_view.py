@@ -35,7 +35,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent, View, Window
 
 class EarlyAccessVehicleView(ViewImpl):
-    __slots__ = ('__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze')
+    __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze')
     __itemsCache = dependency.descriptor(IItemsCache)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
@@ -50,6 +50,8 @@ class EarlyAccessVehicleView(ViewImpl):
         self.__isFromTechTree = isFromTechTree
         self.__currentVehicleCD = selectedVehicleCD
         self.__isAnimationFreeze = False
+        self.__isAnimationPlaying = False
+        self.__hasDelayedBalanceUpdates = False
 
     @property
     def viewModel(self):
@@ -109,12 +111,14 @@ class EarlyAccessVehicleView(ViewImpl):
          (self.viewModel.onBuyTokens, self.__onShowBuyView),
          (self.viewModel.onGoToQuests, self.__onShowQuestsView),
          (self.viewModel.onStartMoving, self.__onStartMoving),
-         (self.viewModel.onMoveSpace, self.__onMoveSpace))
+         (self.viewModel.onMoveSpace, self.__onMoveSpace),
+         (self.viewModel.onAnimationFinished, self.__onAnimationFinished))
 
     def __updateModel(self, shouldUpdateSelectedVehicle=True, showCarouselSliderAnimation=False):
         startDate, endDate = self.__earlyAccessController.getSeasonInterval()
         currentTime = time_utils.getServerUTCTime()
         _, endProgressionDate = self.__earlyAccessController.getProgressionTimes()
+        self.__isAnimationPlaying = showCarouselSliderAnimation
         with self.viewModel.transaction() as model:
             model.setStartDate(startDate)
             model.setEndDate(endDate)
@@ -144,7 +148,7 @@ class EarlyAccessVehicleView(ViewImpl):
                 self.__setAnimationParams(vModel.animationParams, prevVehiclesStates[idx], state, model.getTokensBalance(), price)
             vModel.setState(state)
             vModel.setPrice(price)
-            vModel.setIsPostProgression(veh.compactDescr in self.__earlyAccessController.getPostProgressionVehicles())
+            vModel.setIsPostProgression(not self.__earlyAccessController.isPostprogressionBlockedByQuestFinisher() and veh.compactDescr in self.__earlyAccessController.getPostProgressionVehicles())
             if state in (State.LOCKED, State.INPROGRESS):
                 vModel.setUnlockPriceAfterEA(unlockProps.xpCost)
             elif state == State.PURCHASABLE:
@@ -188,12 +192,13 @@ class EarlyAccessVehicleView(ViewImpl):
 
     def __onShowBuyView(self):
         self.__isAnimationFreeze = True
+        self.__isAnimationPlaying = False
         showBuyTokensWindow(parent=self.getWindow(), backCallback=self.__buyViewBackCallback)
 
     def __onShowQuestsView(self):
-        self.__earlyAccessController.hangarFeatureState.enter(R.views.lobby.early_access.EarlyAccessMainView())
+        self.__earlyAccessController.hangarFeatureState.enter(R.views.lobby.early_access.EarlyAccessQuestsView())
         self.destroy()
-        showEarlyAccessQuestsView()
+        showEarlyAccessQuestsView(isFromTechTree=self.__isFromTechTree)
 
     def __onBuyVehicle(self, event):
         vehicleCD = int(event.get(EarlyAccessVehicleViewModel.ARG_VEHICLE_CD, 0))
@@ -230,7 +235,9 @@ class EarlyAccessVehicleView(ViewImpl):
         self.__updateModel()
 
     def __onBalanceUpdated(self):
-        if not self.__isAnimationFreeze:
+        if self.__isAnimationPlaying:
+            self.__hasDelayedBalanceUpdates = True
+        if not self.__isAnimationFreeze and not self.__isAnimationPlaying:
             self.__updateModel(shouldUpdateSelectedVehicle=False, showCarouselSliderAnimation=True)
 
     def __onInventoryUpdate(self, _, invDiff):
@@ -240,6 +247,12 @@ class EarlyAccessVehicleView(ViewImpl):
                 purchasableVehicles = set((veh.getVehicleCD() for veh in self.viewModel.getVehicles() if veh.getState() == State.PURCHASABLE))
                 if changedEAVehicles & purchasableVehicles:
                     self.__updateModel(shouldUpdateSelectedVehicle=False)
+
+    def __onAnimationFinished(self):
+        self.__isAnimationPlaying = False
+        if self.__hasDelayedBalanceUpdates:
+            self.__updateModel(shouldUpdateSelectedVehicle=False, showCarouselSliderAnimation=True)
+            self.__hasDelayedBalanceUpdates = False
 
     def __onStartMoving(self):
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)

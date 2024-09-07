@@ -383,7 +383,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -422,6 +422,47 @@
     <tooltipSection>	equipment	</tooltipSection>
     <archetype>	improvedRotationMechanism	</archetype>
   </deluxeImprovedRotationMechanism>
+  <deluxeImprovedSights>
+    <id>	120	</id>
+    <userString>	#artefacts:deluxeImprovedSights/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:deluxeImprovedSights/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:deluxeImprovedSights/long_special	</longDescriptionSpecial>
+    <icon>	improvedSights	</icon>
+    <notInShop>	true	</notInShop>
+    <groupName>	improvedSights	</groupName>
+    <price>	5000	  <crystal></crystal>
+    </price>
+    <removable>	false	</removable>
+    <tags>	improvedSights deluxe firepower	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	StaticOptionalDevice	  <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.91	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.91	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+    <archetype>	improvedSights	</archetype>
+  </deluxeImprovedSights>
   <trophyBasicAimDrives>
     <id>	50	</id>
     <userString>	#artefacts:trophyBasicAimDrives/name	</userString>
@@ -812,7 +853,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -889,7 +930,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -961,7 +1002,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1021,7 +1062,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1075,7 +1116,7 @@
         <vehicle>
           <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1119,7 +1160,7 @@
         <vehicle>
           <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -1568,7 +1609,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2017,7 +2058,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -2131,7 +2172,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2222,7 +2263,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2476,7 +2517,7 @@
         <vehicle>
           <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -2669,7 +2710,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -2881,7 +2922,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3130,7 +3171,7 @@
         <vehicle>
           <tags>	lightTank mediumTank	</tags>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3236,7 +3277,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3420,7 +3461,7 @@
       <include>
         <vehicle>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -3481,7 +3522,7 @@
         <vehicle>
           <tags>	lightTank mediumTank	</tags>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3569,7 +3610,7 @@
         <vehicle>
           <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
           <minLevel>	8	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
     </vehicleFilter>
@@ -3760,7 +3801,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -3853,7 +3894,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -3946,7 +3987,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
         </vehicle>
       </include>
       <exclude>
@@ -4034,7 +4075,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
           <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
         </vehicle>
       </include>
@@ -4129,7 +4170,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
           <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
         </vehicle>
       </include>
@@ -4224,7 +4265,7 @@
       <include>
         <vehicle>
           <minLevel>	5	</minLevel>
-          <maxLevel>	10	</maxLevel>
+          <maxLevel>	11	</maxLevel>
           <tags>	extraHealthReserve_class1_user extraHealthReserve_class2_user extraHealthReserve_class3_user	</tags>
         </vehicle>
       </include>

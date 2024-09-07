@@ -45,7 +45,7 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	200	</armor_1>
+      <armor_1>	220	</armor_1>
       <armor_2>	140	</armor_2>
       <armor_3>	60	</armor_3>
       <armor_4>	50	</armor_4>
@@ -1813,7 +1813,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.48	</shotDispersionRadius>
-          <reloadTime>	9.7	</reloadTime>
+          <reloadTime>	13.3	</reloadTime>
           <aimingTime>	3.4	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -1821,16 +1821,6 @@
             <afterShot>	6.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shootImpulse>
-            <magnitude>	40	</magnitude>
-            <applicationPoint>	shootPoint	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <shootImpulse>
-            <magnitude>	120	</magnitude>
-            <applicationPoint>	vehicleCOM	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1946,8 +1936,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	2	</switchOnTime>
-    <switchOffTime>	2	</switchOffTime>
+    <switchOnTime>	3	</switchOnTime>
+    <switchOffTime>	3	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <soundStateChange>
       <on>	turbine_polish_start_PC	</on>

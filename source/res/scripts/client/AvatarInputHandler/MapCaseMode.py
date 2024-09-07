@@ -391,6 +391,91 @@ class _DirectionalAreaStrikeSelector(_AreaStrikeSelector):
             _AreaStrikeSelector.processHover(self, self.area.position)
 
 
+class _ArenaBoundsDirectionalAreaStrikeSelector(_AreaStrikeSelector):
+
+    def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
+        super(_ArenaBoundsDirectionalAreaStrikeSelector, self).__init__(position, equipment, direction)
+        self.selectingPosition = True
+        self.__arena = BigWorld.player().arena
+        self.__wasInsideArenaBounds = True
+        self.__outFromBoundsAimArea = None
+        self.__insetRadius = 0
+        size = self._getAreaSize()
+        visualPath = equipment.areaVisual
+        color = None
+        aimLimits = getattr(equipment, 'arenaAimLimits', None)
+        if aimLimits:
+            self.__insetRadius = aimLimits.insetRadius
+            color = aimLimits.areaColor
+            if aimLimits.areaSwitch:
+                visualPath = aimLimits.areaSwitch
+        self.__outFromBoundsAimArea = CombatSelectedArea()
+        self.__outFromBoundsAimArea.setup(position, direction, size, visualPath, color, marker=None)
+        self.__outFromBoundsAimArea.setGUIVisible(False)
+        self.__updatePositionsAndVisibility(position)
+        return
+
+    def destroy(self):
+        super(_ArenaBoundsDirectionalAreaStrikeSelector, self).destroy()
+        if self.__outFromBoundsAimArea:
+            self.__outFromBoundsAimArea.destroy()
+            self.__outFromBoundsAimArea = None
+        return
+
+    def setGUIVisible(self, isVisible):
+        if self.__wasInsideArenaBounds:
+            super(_ArenaBoundsDirectionalAreaStrikeSelector, self).setGUIVisible(isVisible)
+        if self.__outFromBoundsAimArea:
+            self.__outFromBoundsAimArea.setGUIVisible(isVisible and not self.__wasInsideArenaBounds)
+
+    def processHover(self, position, force=False):
+        if self.selectingPosition:
+            super(_ArenaBoundsDirectionalAreaStrikeSelector, self).processHover(position, force)
+            self.__updatePositionsAndVisibility(position)
+        else:
+            self.direction = position - self.area.position
+            if self.direction.lengthSquared <= 0.001:
+                self.direction = Vector3(0, 0, 1)
+            super(_ArenaBoundsDirectionalAreaStrikeSelector, self).processHover(self.area.position, force)
+
+    def processSelection(self, position, reset=False):
+        if reset:
+            if self.selectingPosition:
+                return True
+            self.selectingPosition = True
+            self.direction = _DEFAULT_STRIKE_DIRECTION
+            super(_ArenaBoundsDirectionalAreaStrikeSelector, self).processHover(position)
+            self.area.setSelectingDirection(False)
+            return False
+        elif not self.selectingPosition:
+            return super(_ArenaBoundsDirectionalAreaStrikeSelector, self).processSelection(position)
+        elif not self.__wasInsideArenaBounds:
+            return False
+        else:
+            self.area.relocate(position, self.direction)
+            replayCtrl = BattleReplay.g_replayCtrl
+            if replayCtrl.isRecording:
+                if position is not None:
+                    replayCtrl.setConsumablesPosition(self.area.position, self.direction)
+            self.selectingPosition = False
+            self.area.setSelectingDirection(True)
+            return False
+
+    def __updatePositionsAndVisibility(self, position):
+        checkPosition = position
+        radius = self.__insetRadius
+        if radius > 0:
+            checkPosition = Math.Vector3(position.x + (radius if position.x > 0 else -radius), position.y, position.z + (radius if position.z > 0 else -radius))
+        isInside = self.__arena.isPointInsideArenaBB(checkPosition)
+        if isInside != self.__wasInsideArenaBounds:
+            self.__wasInsideArenaBounds = isInside
+            if self.__outFromBoundsAimArea:
+                self.area.setGUIVisible(self.__wasInsideArenaBounds)
+                self.__outFromBoundsAimArea.setGUIVisible(not self.__wasInsideArenaBounds)
+        if self.__outFromBoundsAimArea and not self.__wasInsideArenaBounds:
+            self.__outFromBoundsAimArea.relocate(position, self.direction)
+
+
 class _BomberStrikeSelector(_DirectionalAreaStrikeSelector, _VehiclesSelector):
 
     def __init__(self, position, equipment):
@@ -548,6 +633,51 @@ class _ArenaBoundArtilleryStrikeSelector(_ArenaBoundsAreaStrikeSelector, _Vehicl
                 yield v
 
 
+class _Comp7MineFieldStrikeSelector(_ArenaBoundsDirectionalAreaStrikeSelector, _VehiclesSelector, _FLMinesSensor):
+
+    def __init__(self, position, equipment):
+        _ArenaBoundsDirectionalAreaStrikeSelector.__init__(self, position, equipment)
+        _VehiclesSelector.__init__(self, self.__intersectedVehicles)
+        _FLMinesSensor.__init__(self, self.__minesIntersected)
+        self.__checkIntersectMines()
+
+    def destroy(self):
+        _ArenaBoundsDirectionalAreaStrikeSelector.destroy(self)
+        _VehiclesSelector.destroy(self)
+        _FLMinesSensor.destroy(self)
+
+    def processSelection(self, position, reset=False):
+        if not reset and self.isIntersectMine():
+            SoundGroups.g_instance.playSound2D(EPIC_SOUND.EB_ABILITY_MINEFIELD_BLOCK)
+            ctrl = self._sessionProvider.shared.messages
+            if ctrl is not None:
+                ctrl.showVehicleError('minefieldIsIntersected')
+            return False
+        else:
+            return _ArenaBoundsDirectionalAreaStrikeSelector.processSelection(self, position, reset)
+
+    def tick(self):
+        super(_Comp7MineFieldStrikeSelector, self).tick()
+        self.highlightVehicles()
+        self.__checkIntersectMines()
+
+    def __intersectedVehicles(self, vehicles):
+        for v in vehicles:
+            if self.area.pointInside(v.position):
+                yield v
+
+    def __minesIntersected(self, mines):
+        for m in mines:
+            if self.area.pointInside(m.position):
+                yield m
+
+    def __checkIntersectMines(self):
+        if self.isIntersectMine():
+            self.area.setColor(int(4294901760L))
+        else:
+            self.area.setColor(int(4278255360L))
+
+
 class _Comp7ArenaBoundArtilleryStrikeSelector(_ArenaBoundArtilleryStrikeSelector):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -612,7 +742,9 @@ _STRIKE_SELECTORS = {artefacts.RageArtillery: _ArtilleryStrikeSelector,
  artefacts.AttackArtilleryFortEquipment: _ArenaBoundArtilleryStrikeSelector,
  artefacts.Comp7ReconEquipment: _Comp7ArenaBoundPlaneStrikeSelector,
  artefacts.Comp7RedlineEquipment: _Comp7ArenaBoundArtilleryStrikeSelector,
- artefacts.PoiArtilleryEquipment: _ArenaBoundArtilleryStrikeSelector}
+ artefacts.PoiArtilleryEquipment: _ArenaBoundArtilleryStrikeSelector,
+ artefacts.PoiSmokeEquipment: _ArenaBoundArtilleryStrikeSelector,
+ artefacts.PoiMineFieldEquipment: _ArcadeFLMinesSelector}
 
 class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)

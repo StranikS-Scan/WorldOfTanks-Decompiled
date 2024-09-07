@@ -21,10 +21,8 @@ class ShotsReceiver(BigWorld.DynamicScriptComponent, Receiver):
         self.onShot = Event()
 
     def receiveShot(self, position, normal, shotID, effectIndex, matKind):
-        gameObject = self.entity.gameObject
-        if gameObject:
-            if gameObject.isValid():
-                self.onShot(position, normal, shotID, effectIndex, matKind, self.entity.gameObject.id)
+        if self.entity.gameObject.isValid():
+            self.onShot(position, normal, shotID, effectIndex, matKind, self.entity.gameObject.id)
 
 
 @autoregister(presentInAllWorlds=True)

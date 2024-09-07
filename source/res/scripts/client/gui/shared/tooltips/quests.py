@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/quests.py
+import typing
 import constants
 from battle_pass_common import BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
 from CurrentVehicle import g_currentVehicle
@@ -32,6 +33,9 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController, IComp7Controller
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
+if typing.TYPE_CHECKING:
+    from typing import Dict
+    from gui.server_events.event_items import Quest
 _MAX_AWARDS_PER_TOOLTIP = 5
 _MAX_QUESTS_PER_TOOLTIP = 4
 _MAX_BONUSES_PER_QUEST = 2

@@ -71,7 +71,7 @@ class TankCarousel(TankCarouselMeta):
 
     def getCustomParams(self):
         popupFilters = super(TankCarousel, self).getCustomParams()
-        if self.__earlyAccessCtrl.isEnabled() and self.__earlyAccessCtrl.isPostProgressionQueueSelected():
+        if self.__earlyAccessCtrl.isEnabled() and self.__earlyAccessCtrl.isPostProgressionQueueSelected() and not self.__earlyAccessCtrl.isFilterDisabledInQueue():
             popupFilters.update({'early_access': True})
         return popupFilters
 

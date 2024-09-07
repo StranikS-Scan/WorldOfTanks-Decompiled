@@ -704,7 +704,9 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def __showWindow(self, ePlatoonLayout, dropdownOffset=None):
         view = self.__getView(ePlatoonLayout)
-        if self.__isViewProperPrbType(view):
+        if self.prbEntity.getEntityType() == PREBATTLE_TYPE.STRONGHOLD:
+            return
+        elif self.__isViewProperPrbType(view):
             if view.getParentWindow().isHidden():
                 view.getParentWindow().show()
             return

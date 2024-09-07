@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class ArmoryYardCurrencyTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(ArmoryYardCurrencyTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getReceivedTokens(self):
@@ -38,6 +38,12 @@ class ArmoryYardCurrencyTooltipViewModel(ViewModel):
     def setEndTimestamp(self, value):
         self._setNumber(4, value)
 
+    def getIsPostProgression(self):
+        return self._getBool(5)
+
+    def setIsPostProgression(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(ArmoryYardCurrencyTooltipViewModel, self)._initialize()
         self._addNumberProperty('receivedTokens', 0)
@@ -45,3 +51,4 @@ class ArmoryYardCurrencyTooltipViewModel(ViewModel):
         self._addNumberProperty('questsForToken', 0)
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)
+        self._addBoolProperty('isPostProgression', False)

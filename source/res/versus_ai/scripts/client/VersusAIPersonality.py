@@ -22,6 +22,8 @@ class ClientVersusAIBattleMode(AbstractBattleMode):
     _CLIENT_BATTLE_PAGE = VIEW_ALIAS.CLASSIC_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = PREBATTLE_ACTION_NAME.VERSUS_AI
     _CLIENT_PRB_ACTION_NAME_SQUAD = PREBATTLE_ACTION_NAME.VERSUS_AI_SQUAD
+    _SM_TYPE_BATTLE_RESULT = 'versusAIBattleResults'
+    _SM_TYPES = [_SM_TYPE_BATTLE_RESULT]
 
     @property
     def _ROSTER_CLASS(self):
@@ -40,7 +42,7 @@ class ClientVersusAIBattleMode(AbstractBattleMode):
 
     @property
     def _client_gameControllers(self):
-        from versus_ai.skeletons.versus_ai_controller import IVersusAIController
+        from skeletons.gui.game_control import IVersusAIController
         from versus_ai.gui.game_control.versus_ai_controller import VersusAIController
         return ((IVersusAIController, VersusAIController, False),)
 
@@ -105,6 +107,12 @@ class ClientVersusAIBattleMode(AbstractBattleMode):
         from versus_ai.helpers.versus_ai_tips import VersusAiTipsCriteria
         return VersusAiTipsCriteria
 
+    @property
+    def _client_messengerServerFormatters(self):
+        from versus_ai.messenger.formatters.service_channel import VersusAIBattleResultsFormatter
+        from chat_shared import SYS_MESSAGE_TYPE
+        return {SYS_MESSAGE_TYPE.versusAIBattleResults.index(): VersusAIBattleResultsFormatter()}
+
 
 def preInit():
     initGuiTypes(versus_ai_gui_constants, __name__)
@@ -120,6 +128,9 @@ def preInit():
     battleMode.registerBattleTipCriteria()
     registerVersusAIScaleform()
     registerVersusAIStorage()
+    battleMode.registerSystemMessagesTypes()
+    battleMode.registerBattleResultSysMsgType()
+    battleMode.registerMessengerServerFormatters()
 
 
 def init():

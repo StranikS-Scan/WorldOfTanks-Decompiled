@@ -79,6 +79,11 @@
           <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Hull.model	</exploded>
         </G134_PzKpfw_VII_3Dst>
+        <G134_PzKpfw_VII_3dst_Kinetic>
+          <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Hull.model	</exploded>
+        </G134_PzKpfw_VII_3dst_Kinetic>
       </sets>
     </models>
     <swinging>
@@ -103,9 +108,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.714966 0.506611 2.68611	</rayStart>
-        <rayEnd>	-0.714966 0.342522 2.57176	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
+        <rayStart>	-0.818849 0.506611 2.68611	</rayStart>
+        <rayEnd>	-0.818849 0.342522 2.57176	</rayEnd>
+        <rayUp>	-0 0.571743 -0.820433	</rayUp>
         <size>	0.32	</size>
       </slot>
       <slot>
@@ -830,11 +835,53 @@
         <anchorShift>	-0.203838	</anchorShift>
       </slot>
       <slot>
-        <slotType>	sequence	</slotType>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15063	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3dst_Kinetic	</compatibleModels>
+        <position>	-0.100795 1.631601 2.794693	</position>
+        <rotation>	0.572662 -0.000173 3.141583	</rotation>
+        <scale>	0.7 1 0.7	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.426267	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15064	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3dst_Kinetic	</compatibleModels>
+        <position>	-1.055026 1.777952 0.617913	</position>
+        <rotation>	1.534668 -1.570783 3.141591	</rotation>
+        <scale>	0.45 0.15 0.45	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.087912	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15065	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3dst_Kinetic	</compatibleModels>
+        <position>	1.055026 1.777952 0.617913	</position>
+        <rotation>	1.534668 1.570777 3.14159	</rotation>
+        <scale>	0.45 0.15 0.45	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.087912	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15066	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G134_PzKpfw_VII_3dst_Kinetic	</compatibleModels>
+        <position>	-0.000003 1.61237 -3.6213	</position>
+        <rotation>	1.570796 0 0	</rotation>
+        <scale>	0.5 0.4 0.5	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
-        <attachNode>	V	</attachNode>
       </slot>
     </customizationSlots>
     <customization>
@@ -883,6 +930,11 @@
             <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Chassis.model	</exploded>
           </G134_PzKpfw_VII_3Dst>
+          <G134_PzKpfw_VII_3dst_Kinetic>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Chassis.model	</exploded>
+          </G134_PzKpfw_VII_3dst_Kinetic>
         </sets>
       </models>
       <traces>
@@ -967,6 +1019,63 @@
                   <row3>	0.000000 1.563143 3.173495	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G134_PzKpfw_VII_3dst_Kinetic	</modelsSet>
+                <boxCollider>
+                  <row0>	2.070730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.653770 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.911090	</row2>
+                  <row3>	0.000000 1.296430 -0.204031	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.465142 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.727540	</row2>
+                  <row3>	0.000000 1.369370 -0.851422	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.390128 -0.253293	</row1>
+                  <row2>	0.000000 0.398749 0.614163	</row2>
+                  <row3>	0.000000 1.275820 -3.407520	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.457056 -0.086354	</row1>
+                  <row2>	0.000000 0.333107 1.763070	</row2>
+                  <row3>	0.000000 1.547320 2.134030	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.396995 0.242389	</row1>
+                  <row2>	0.000000 -0.419597 0.687233	</row2>
+                  <row3>	0.000000 1.563140 3.173500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.246187 -0.124486 -0.117877	</row0>
+                  <row1>	0.265814 0.277160 0.262455	</row1>
+                  <row2>	-0.000006 -0.553640 0.584666	</row2>
+                  <row3>	-2.109139 1.482134 3.173500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.222791 -0.200908 0.000000	</row0>
+                  <row1>	0.311503 0.345432 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.805203	</row2>
+                  <row3>	-2.048321 1.589037 2.546777	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.252129 -0.239297 -0.040843	</row0>
+                  <row1>	0.259565 0.321531 -0.281503	</row1>
+                  <row2>	0.370372 0.277788 0.658795	</row2>
+                  <row3>	-2.109140 1.482130 1.780162	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.266588 -0.137590 0.000000	</row0>
+                  <row1>	0.321042 0.622038 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.000000	</row2>
+                  <row3>	-2.096912 1.305990 -0.973190	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1036,6 +1145,63 @@
                   <row1>	0.000000 0.396995 0.242389	</row1>
                   <row2>	0.000000 -0.419597 0.687233	</row2>
                   <row3>	0.000000 1.563143 3.173495	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G134_PzKpfw_VII_3dst_Kinetic	</modelsSet>
+                <boxCollider>
+                  <row0>	2.070730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.653770 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.911090	</row2>
+                  <row3>	0.000000 1.296430 -0.204031	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.465142 0.000000	</row1>
+                  <row2>	0.000000 0.000000 4.727540	</row2>
+                  <row3>	0.000000 1.369370 -0.851422	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.390128 -0.253293	</row1>
+                  <row2>	0.000000 0.398749 0.614163	</row2>
+                  <row3>	0.000000 1.275820 -3.407520	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.457056 -0.086354	</row1>
+                  <row2>	0.000000 0.333107 1.763070	</row2>
+                  <row3>	0.000000 1.547320 2.134030	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.038960 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.396995 0.242389	</row1>
+                  <row2>	0.000000 -0.419597 0.687233	</row2>
+                  <row3>	0.000000 1.563140 3.173500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.246195 0.124474 0.117873	</row0>
+                  <row1>	-0.265796 0.277165 0.262468	</row1>
+                  <row2>	0.000000 -0.553653 0.584654	</row2>
+                  <row3>	2.109000 1.482130 3.173500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.222803 0.200895 0.000000	</row0>
+                  <row1>	-0.311482 0.345451 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.805203	</row2>
+                  <row3>	2.048000 1.589040 2.546780	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.250025 0.239280 -0.052279	</row0>
+                  <row1>	-0.343224 0.321561 -0.169694	</row1>
+                  <row2>	-0.109478 0.277777 0.747802	</row2>
+                  <row3>	2.109000 1.462840 1.780160	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.266585 0.137595 0.000000	</row0>
+                  <row1>	-0.321054 0.622032 0.000000	</row1>
+                  <row2>	0.000000 0.000000 5.000000	</row2>
+                  <row3>	2.097000 1.305990 -0.973190	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1842,6 +2008,11 @@
                 <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</destroyed>
                 <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Gun_02.model	</exploded>
               </G134_PzKpfw_VII_3Dst>
+              <G134_PzKpfw_VII_3dst_Kinetic>
+                <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Gun_01.model	</exploded>
+              </G134_PzKpfw_VII_3dst_Kinetic>
             </sets>
           </models>
           <hitTester>
@@ -1850,6 +2021,24 @@
           </hitTester>
           <effects>	shot_largeext	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-16	</row>
+                <row>	5	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	static	</node>
+                  <table>
+                    <row>	0	</row>
+                    <row>	0	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1887,6 +2076,18 @@
               <rayUp>	0.095 0 0	</rayUp>
               <size>	0.5	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0 0.509832 0.769495	</rayStart>
+              <rayEnd>	0 0.134703 0.630648	</rayEnd>
+              <rayUp>	0 -0.347118 0.937822	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	G134_PzKpfw_VII_3dst_Kinetic	</compatibleModels>
+              <planeProjection>	true	</planeProjection>
+              <size>	0.3	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1912,6 +2113,11 @@
             <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3Dst/crash/lod0/Turret_01.model	</exploded>
           </G134_PzKpfw_VII_3Dst>
+          <G134_PzKpfw_VII_3dst_Kinetic>
+            <undamaged>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G134_PzKpfw_VII/_skins/G134_PzKpfw_VII_3dst_Kinetic/crash/lod0/Turret_01.model	</exploded>
+          </G134_PzKpfw_VII_3dst_Kinetic>
         </sets>
       </models>
       <hitTester>

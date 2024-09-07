@@ -801,6 +801,7 @@ class BattleReplay(object):
              'playerID': self.__playerDatabaseID,
              'playerVehicle': vehicleName,
              'mapName': arenaName,
+             'arenaUniqueID': arena.arenaUniqueID,
              'mapDisplayName': arena.arenaType.name,
              'gameplayID': ArenaType.getGameplayName(gameplayID) or gameplayID,
              'vehicles': vehicles,

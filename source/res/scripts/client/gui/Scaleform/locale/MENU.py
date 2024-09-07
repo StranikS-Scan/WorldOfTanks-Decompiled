@@ -264,6 +264,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = '#menu:tankCarousel/vehicleStates/wot_plus_exclusive_vehicle_disabled'
     TANKCAROUSEL_STATSSTATUS_UNAVAILABLE = '#menu:tankCarousel/statsStatus/unavailable'
     TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT = '#menu:tankCarousel/vehicleStates/unsuitableToUnit'
+    TANKCAROUSEL_VEHICLESTATES_TEMPUNAVAILABLE = '#menu:tankCarousel/vehicleStates/tempUnavailable'
     TANKCAROUSEL_VEHICLESTATES_DISABLED = '#menu:tankCarousel/vehicleStates/disabled'
     TANKCAROUSEL_WOTPLUSSELECTIONAVAILABLE = '#menu:tankCarousel/wotPlusSelectionAvailable'
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
@@ -339,6 +340,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_FALLOUT_ONLY = '#menu:currentVehicleStatus/fallout_only'
     CURRENTVEHICLESTATUS_DEALISOVER = '#menu:currentVehicleStatus/dealIsOver'
     CURRENTVEHICLESTATUS_UNSUITABLETOUNIT = '#menu:currentVehicleStatus/unsuitableToUnit'
+    CURRENTVEHICLESTATUS_TEMPUNAVAILABLE = '#menu:currentVehicleStatus/tempUnavailable'
     CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
     CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
@@ -388,6 +390,7 @@ class MENU(object):
     PREBATTLE_TITLE = '#menu:prebattle/title'
     PREBATTLE_DESCRIPTION = '#menu:prebattle/description'
     PREBATTLE_WAITINGTIMEWARNING = '#menu:prebattle/waitingTimeWarning'
+    PREBATTLE_WAITINGTIME11LEVELWARNING = '#menu:prebattle/waitingTime11LevelWarning'
     PREBATTLE_COMPANIESTITLE_JUNIOR = '#menu:prebattle/CompaniesTitle/JUNIOR'
     PREBATTLE_COMPANIESTITLE_MIDDLE = '#menu:prebattle/CompaniesTitle/MIDDLE'
     PREBATTLE_COMPANIESTITLE_CHAMPION = '#menu:prebattle/CompaniesTitle/CHAMPION'
@@ -433,6 +436,7 @@ class MENU(object):
     LEVELS_8 = '#menu:levels/8'
     LEVELS_9 = '#menu:levels/9'
     LEVELS_10 = '#menu:levels/10'
+    LEVELS_11 = '#menu:levels/11'
     LEVELS_ROMAN_1 = '#menu:levels/roman/1'
     LEVELS_ROMAN_2 = '#menu:levels/roman/2'
     LEVELS_ROMAN_3 = '#menu:levels/roman/3'
@@ -443,6 +447,7 @@ class MENU(object):
     LEVELS_ROMAN_8 = '#menu:levels/roman/8'
     LEVELS_ROMAN_9 = '#menu:levels/roman/9'
     LEVELS_ROMAN_10 = '#menu:levels/roman/10'
+    LEVELS_ROMAN_11 = '#menu:levels/roman/11'
     LEVELS_ALL = '#menu:levels/all'
     NATION_TREE_TITLE_USSR = '#menu:nation_tree/title/ussr'
     NATION_TREE_TITLE_GERMANY = '#menu:nation_tree/title/germany'
@@ -858,6 +863,7 @@ class MENU(object):
     HEADER_LEVEL_8 = '#menu:header/level/8'
     HEADER_LEVEL_9 = '#menu:header/level/9'
     HEADER_LEVEL_10 = '#menu:header/level/10'
+    HEADER_LEVEL_11 = '#menu:header/level/11'
     HEADER_VEHICLETYPE_LIGHTTANK = '#menu:header/vehicleType/lightTank'
     HEADER_VEHICLETYPE_MEDIUMTANK = '#menu:header/vehicleType/mediumTank'
     HEADER_VEHICLETYPE_HEAVYTANK = '#menu:header/vehicleType/heavyTank'
@@ -1090,6 +1096,7 @@ class MENU(object):
     MODULEINFO_DUALGUNLABEL = '#menu:moduleInfo/dualGunLabel'
     MODULEINFO_DUALACCURACYGUNLABEL = '#menu:moduleInfo/dualAccuracyGunLabel'
     MODULEINFO_TRACKWITHINTRACKCHASSISLABEL = '#menu:moduleInfo/trackWithinTrackChassisLabel'
+    MODULEINFO_MULTITRACKCHASSISLABEL = '#menu:moduleInfo/multiTrackChassisLabel'
     MODULEINFO_HYDRAULICCHASSISLABEL = '#menu:moduleInfo/hydraulicChassisLabel'
     MODULEINFO_HYDRAULICAUTOSIEGECHASSISLABEL = '#menu:moduleInfo/hydraulicAutoSiegeChassisLabel'
     MODULEINFO_HYDRAULICWHEELEDCHASSISLABEL = '#menu:moduleInfo/hydraulicWheeledChassisLabel'
@@ -1158,6 +1165,7 @@ class MENU(object):
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTEFLAME = '#menu:moduleInfo/params/noPiercingDistance/footnoteFlame'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
+    MODULEINFO_PARAMS_DISTANCEDAMAGE = '#menu:moduleInfo/params/distanceDamage'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE_MAXDISTANCE = '#menu:moduleInfo/params/noPiercingDistance/footnote/maxDistance'
     MODULEINFO_PARAMS_STUNMAXDURATION = '#menu:moduleInfo/params/stunMaxDuration'
     MODULEINFO_PARAMS_STUNMAXDURATIONLIST = '#menu:moduleInfo/params/stunMaxDurationList'
@@ -1346,6 +1354,7 @@ class MENU(object):
     INVENTORY_MENU_SHELL_KINDS_NAME = '#menu:inventory/menu/shell/kinds/name'
     INVENTORY_MENU_SHELL_KINDS_ARMOR_PIERCING_NAME = '#menu:inventory/menu/shell/kinds/ARMOR_PIERCING/name'
     INVENTORY_MENU_SHELL_KINDS_ARMOR_PIERCING_CR_NAME = '#menu:inventory/menu/shell/kinds/ARMOR_PIERCING_CR/name'
+    INVENTORY_MENU_SHELL_KINDS_ARMOR_PIERCING_FSDS_NAME = '#menu:inventory/menu/shell/kinds/ARMOR_PIERCING_FSDS/name'
     INVENTORY_MENU_SHELL_KINDS_ARMOR_PIERCING_HE_NAME = '#menu:inventory/menu/shell/kinds/ARMOR_PIERCING_HE/name'
     INVENTORY_MENU_SHELL_KINDS_HOLLOW_CHARGE_NAME = '#menu:inventory/menu/shell/kinds/HOLLOW_CHARGE/name'
     INVENTORY_MENU_SHELL_KINDS_HIGH_EXPLOSIVE_NAME = '#menu:inventory/menu/shell/kinds/HIGH_EXPLOSIVE/name'
@@ -1407,6 +1416,7 @@ class MENU(object):
     SHOP_MENU_SHELL_KINDS_NAME = '#menu:shop/menu/shell/kinds/name'
     SHOP_MENU_SHELL_KINDS_ARMOR_PIERCING_NAME = '#menu:shop/menu/shell/kinds/ARMOR_PIERCING/name'
     SHOP_MENU_SHELL_KINDS_ARMOR_PIERCING_CR_NAME = '#menu:shop/menu/shell/kinds/ARMOR_PIERCING_CR/name'
+    SHOP_MENU_SHELL_KINDS_ARMOR_PIERCING_FSDS_NAME = '#menu:shop/menu/shell/kinds/ARMOR_PIERCING_FSDS/name'
     SHOP_MENU_SHELL_KINDS_ARMOR_PIERCING_HE_NAME = '#menu:shop/menu/shell/kinds/ARMOR_PIERCING_HE/name'
     SHOP_MENU_SHELL_KINDS_HOLLOW_CHARGE_NAME = '#menu:shop/menu/shell/kinds/HOLLOW_CHARGE/name'
     SHOP_MENU_SHELL_KINDS_HIGH_EXPLOSIVE_NAME = '#menu:shop/menu/shell/kinds/HIGH_EXPLOSIVE/name'
@@ -1672,13 +1682,6 @@ class MENU(object):
     STEAM_OTHERMETHODS = '#menu:steam/otherMethods'
     STEAM_SUBMIT = '#menu:steam/submit'
     STEAM_CANCEL = '#menu:steam/cancel'
-    SKILLDROPFORFREEWINDOW_ACTIONTIME_TITLE = '#menu:skillDropForFreeWindow/actionTime/title'
-    SKILLDROPFORFREEWINDOW_ACTIONTIME_DESCRIPTION = '#menu:skillDropForFreeWindow/actionTime/description'
-    SKILLDROPFORFREEWINDOW_DAYS = '#menu:skillDropForFreeWindow/days'
-    SKILLDROPFORFREEWINDOW_HOURS = '#menu:skillDropForFreeWindow/hours'
-    SKILLDROPFORFREEWINDOW_MINUTES = '#menu:skillDropForFreeWindow/minutes'
-    SKILLDROPFORFREEWINDOW_SECONDS = '#menu:skillDropForFreeWindow/seconds'
-    SKILLDROPFORFREEWINDOW_TIMER_TOOLTIP = '#menu:skillDropForFreeWindow/timer/tooltip'
     CENTERISAVAILABLE = '#menu:centerIsAvailable'
     CENTERISUNAVAILABLE = '#menu:centerIsUnAvailable'
     ACCOUNT_PROFILE_EMPTYBATTLELIST = '#menu:account/profile/emptyBattleList'
@@ -2171,6 +2174,7 @@ class MENU(object):
     CRYSTALS_INFO_TAB_SPENDTAB = '#menu:crystals/info/tab/spendTab'
     CRYSTALS_INFO_TAB_EARN_LEVEL_TITLE = '#menu:crystals/info/tab/earn/level/title'
     CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTION = '#menu:crystals/info/tab/earn/level/description'
+    CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTIONCONTENT_LEVEL11 = '#menu:crystals/info/tab/earn/level/descriptionContent/level11'
     CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTIONCONTENT_LEVEL10 = '#menu:crystals/info/tab/earn/level/descriptionContent/level10'
     CRYSTALS_INFO_TAB_EARN_LEVEL_DESCRIPTIONCONTENT_LEVEL9 = '#menu:crystals/info/tab/earn/level/descriptionContent/level9'
     CRYSTALS_INFO_TAB_EARN_LEVEL_MOD_0 = '#menu:crystals/info/tab/earn/level/mod/0'
@@ -2444,6 +2448,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_SUBSCRIPTION_SUSPENDED,
      TANKCAROUSEL_VEHICLESTATES_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
      TANKCAROUSEL_VEHICLESTATES_UNSUITABLETOUNIT,
+     TANKCAROUSEL_VEHICLESTATES_TEMPUNAVAILABLE,
      TANKCAROUSEL_VEHICLESTATES_DISABLED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
@@ -2533,6 +2538,7 @@ class MENU(object):
      LEVELS_8,
      LEVELS_9,
      LEVELS_10,
+     LEVELS_11,
      LEVELS_ROMAN_1,
      LEVELS_ROMAN_2,
      LEVELS_ROMAN_3,
@@ -2543,6 +2549,7 @@ class MENU(object):
      LEVELS_ROMAN_8,
      LEVELS_ROMAN_9,
      LEVELS_ROMAN_10,
+     LEVELS_ROMAN_11,
      LEVELS_ALL)
     LEVELS_ROMAN_ENUM = (LEVELS_ROMAN_1,
      LEVELS_ROMAN_2,
@@ -2553,7 +2560,8 @@ class MENU(object):
      LEVELS_ROMAN_7,
      LEVELS_ROMAN_8,
      LEVELS_ROMAN_9,
-     LEVELS_ROMAN_10)
+     LEVELS_ROMAN_10,
+     LEVELS_ROMAN_11)
     MODULEINFO_COMPATIBLE_ENUM = (MODULEINFO_COMPATIBLE_TURRETS,
      MODULEINFO_COMPATIBLE_SHELLS,
      MODULEINFO_COMPATIBLE_AMMUNITION,
@@ -2575,7 +2583,8 @@ class MENU(object):
      HEADER_LEVEL_7,
      HEADER_LEVEL_8,
      HEADER_LEVEL_9,
-     HEADER_LEVEL_10)
+     HEADER_LEVEL_10,
+     HEADER_LEVEL_11)
     HEADER_VEHICLETYPE_ENUM = (HEADER_VEHICLETYPE_LIGHTTANK,
      HEADER_VEHICLETYPE_MEDIUMTANK,
      HEADER_VEHICLETYPE_HEAVYTANK,

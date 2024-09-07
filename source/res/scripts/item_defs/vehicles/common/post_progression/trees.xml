@@ -2821,4 +2821,502 @@
       </step>
     </steps>
   </role_SPG_assault>
+  <role_XI_279>
+    <id>	71	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_1	</value>
+        </action>
+        <unlocks>	3 711	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	711	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_2	</value>
+        </action>
+        <unlocks>	5 712	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	712	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_3	</value>
+        </action>
+        <unlocks>	6 713	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	713	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_279_base_4	</value>
+        </action>
+        <unlocks>	8 714	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	714	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_279_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_279_base_5	</value>
+        </action>
+        <unlocks>	715	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	715	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_279_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_XI_279>
+  <role_XI_BZT_70>
+    <id>	72	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_1	</value>
+        </action>
+        <unlocks>	3 721	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	721	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_2	</value>
+        </action>
+        <unlocks>	5 722	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	722	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_3	</value>
+        </action>
+        <unlocks>	6 723	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	723	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_BZT_70_base_4	</value>
+        </action>
+        <unlocks>	8 724	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	724	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_BZT_70_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_BZT_70_base_5	</value>
+        </action>
+        <unlocks>	725	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	725	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_BZT_70_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_XI_BZT_70>
+  <role_XI_MBT_B>
+    <id>	73	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <unlocks>	2	</unlocks>
+        <level>	1	</level>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_1	</value>
+        </action>
+        <unlocks>	3 731	</unlocks>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	731	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_1	</value>
+        </action>
+        <level>	2	</level>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <unlocks>	4	</unlocks>
+        <level>	3	</level>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_2	</value>
+        </action>
+        <unlocks>	5 732	</unlocks>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	732	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_2	</value>
+        </action>
+        <level>	4	</level>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_base_3	</value>
+        </action>
+        <unlocks>	6 733	</unlocks>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	733	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_pair_3	</value>
+        </action>
+        <level>	5	</level>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <unlocks>	7	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	8	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	6	</level>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_MBT_B_base_4	</value>
+        </action>
+        <unlocks>	8 734	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	734	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_MBT_B_pair_4	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	9	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	7	</level>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	unlockBaseModificationCost	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	role_XI_MBT_B_base_5	</value>
+        </action>
+        <unlocks>	735	</unlocks>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+      <step>
+        <id>	735	</id>
+        <price>	unlockPairModificationCost	</price>
+        <action>
+          <type>	pair_modification	</type>
+          <value>	role_XI_MBT_B_pair_5	</value>
+        </action>
+        <vehicleFilter>
+          <include>
+            <vehicle>
+              <minLevel>	10	</minLevel>
+            </vehicle>
+          </include>
+        </vehicleFilter>
+        <level>	8	</level>
+      </step>
+    </steps>
+  </role_XI_MBT_B>
 </trees.xml>

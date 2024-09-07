@@ -337,7 +337,9 @@ class BasicCriteriesGroup(CriteriesGroup):
 
     @classmethod
     def _earlyAccessCriteria(cls, vehicle):
-        return vehicle.intCD in cls._earlyAccessController.getAffectedVehicles()
+        allVehicles = set(cls._earlyAccessController.getAffectedVehicles().keys())
+        allVehicles |= cls._earlyAccessController.getPostProgressionVehicles()
+        return vehicle.intCD in allVehicles
 
 
 class RoleCriteriesGroup(BasicCriteriesGroup):

@@ -4,7 +4,6 @@ import logging
 from adisp import adisp_async, adisp_process
 from gui import SystemMessages
 from gui.battle_pass.battle_pass_constants import ChapterState
-from gui.shared.event_dispatcher import showExchangeXPWindow
 from gui.shared.gui_items.processors.battle_pass import BuyBattlePass, BuyBattlePassLevels
 from gui.shared.money import Currency
 from gui.shared.utils import decorators
@@ -30,8 +29,6 @@ class BattlePassBuyer(object):
         result = False
         if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
             showBuyGoldForBattlePass(amount)
-        elif currency == Currency.FREE_XP and cls.__itemsCache.items.stats.actualFreeXP < amount:
-            showExchangeXPWindow(amount)
         else:
             result = yield cls.__buyBattlePass(seasonID, chapterID, priceID)
         if onBuyCallback:

@@ -38,7 +38,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.server_events.bonuses import SimpleBonus
 if typing.TYPE_CHECKING:
-    from typing import Dict, List, Union
+    from typing import Dict, Callable, List, Optional, Tuple, Union
     from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EventPostBattleInfo
     import potapov_quests
 
@@ -484,7 +484,7 @@ class Quest(ServerEventAbstract):
         return self.accountReqs.isAvailable() and (self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles())
 
     def _checkVehicleConditions(self, vehicle):
-        return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
+        return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle.intCD in self.vehicleReqs.getSuitableVehicles()
 
 
 class TokenQuest(Quest):

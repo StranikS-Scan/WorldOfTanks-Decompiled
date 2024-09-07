@@ -1,0 +1,16 @@
+<extension.xml>
+  <FeatureName>	winback	</FeatureName>
+  <Components>
+    <StaticComponents>
+      <AccountWinbackComponent></AccountWinbackComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	WinbackPersonality	</Personality>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities></ServerOnlyEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

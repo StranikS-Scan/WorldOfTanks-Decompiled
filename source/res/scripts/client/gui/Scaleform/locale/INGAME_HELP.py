@@ -160,3 +160,6 @@ class INGAME_HELP(object):
     RADIALMENU_POSITIVE = '#ingame_help:radialMenu/positive'
     DETAILSHELP_TRACKWITHINTRACK_TITLE = '#ingame_help:detailsHelp/trackWithinTrack/title'
     DETAILSHELP_TRACKWITHINTRACK_DESCRIPTION = '#ingame_help:detailsHelp/trackWithinTrack/description'
+    DETAILSHELP_MULTITRACK_HEADERTITLE = '#ingame_help:detailsHelp/multiTrack/headerTitle'
+    DETAILSHELP_MULTITRACK_TITLE = '#ingame_help:detailsHelp/multiTrack/title'
+    DETAILSHELP_MULTITRACK_DESCRIPTION = '#ingame_help:detailsHelp/multiTrack/description'

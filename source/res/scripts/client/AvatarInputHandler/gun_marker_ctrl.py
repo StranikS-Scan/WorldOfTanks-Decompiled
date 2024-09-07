@@ -165,6 +165,7 @@ class _CrosshairShotResults(object):
     shellExtraData = namedtuple('shellExtraData', ('hasNormalization', 'mayRicochet', 'checkCaliberForRicochet', 'jetLossPPByDist'))
     _SHELL_EXTRA_DATA = {constants.SHELL_TYPES.ARMOR_PIERCING: shellExtraData(True, True, True, 0.0),
      constants.SHELL_TYPES.ARMOR_PIERCING_CR: shellExtraData(True, True, True, 0.0),
+     constants.SHELL_TYPES.ARMOR_PIERCING_FSDS: shellExtraData(True, True, True, 0.0),
      constants.SHELL_TYPES.ARMOR_PIERCING_HE: shellExtraData(True, False, False, 0.0),
      constants.SHELL_TYPES.HOLLOW_CHARGE: shellExtraData(False, True, False, 0.5),
      constants.SHELL_TYPES.HIGH_EXPLOSIVE: shellExtraData(False, False, False, 0.0),

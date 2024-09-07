@@ -23,7 +23,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
     from gui.Scaleform.daapi.view.battle.comp7 import minimap
     from gui.Scaleform.daapi.view.battle.comp7 import damage_panel
-    from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
+    from gui.Scaleform.daapi.view.battle.comp7 import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import quest_progress_top_view
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import perks_panel
@@ -53,7 +53,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.Comp7DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, sn_panel.Comp7StatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.Comp7BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.Comp7ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),

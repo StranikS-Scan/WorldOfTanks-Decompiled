@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/comp7/status_notifications/sn_items.py
+from gui.Scaleform.daapi.view.battle.comp7.status_notifications.comp7_helpers import getSmokeDataByPredicate
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import sn_items
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES as _TIMER_TYPES
+from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.impl import backport
 from gui.impl.gen import R
@@ -11,6 +13,62 @@ class _Comp7LocalizationProvider(sn_items.LocalizationProvider):
     @property
     def _stringResource(self):
         return R.strings.comp7.battlePage.statusNotificationTimers
+
+
+class _Comp7SmokeMixin(object):
+
+    @staticmethod
+    def _isSmokeFitsByTeam(teamID):
+        raise NotImplementedError
+
+    @staticmethod
+    def _postEffectCondition(isPostEffect):
+        raise NotImplementedError
+
+
+class Comp7SmokeSN(_Comp7LocalizationProvider, _Comp7SmokeMixin, sn_items.SmokeSN):
+
+    def _getSmokeData(self, smokesInfo):
+        return getSmokeDataByPredicate(smokesInfo, self._isSmokeFitsByTeam, self._postEffectCondition)
+
+    @staticmethod
+    def _isSmokeFitsByTeam(teamID):
+        return teamID == avatar_getter.getPlayerTeam()
+
+    @staticmethod
+    def _postEffectCondition(isPostEffect):
+        return not isPostEffect
+
+
+class Comp7EnemySmokeSN(_Comp7LocalizationProvider, _Comp7SmokeMixin, sn_items.EnemySmokeSN):
+
+    def _getSmokeData(self, smokesInfo):
+        return getSmokeDataByPredicate(smokesInfo, self._isSmokeFitsByTeam, self._postEffectCondition)
+
+    @staticmethod
+    def _isSmokeFitsByTeam(teamID):
+        return teamID != avatar_getter.getPlayerTeam()
+
+    @staticmethod
+    def _postEffectCondition(isPostEffect):
+        return not isPostEffect
+
+
+class Comp7EnemySmokePostEffectSN(_Comp7LocalizationProvider, _Comp7SmokeMixin, sn_items.EnemySmokeSN):
+
+    def _getSmokeData(self, smokesInfo):
+        return getSmokeDataByPredicate(smokesInfo, self._isSmokeFitsByTeam, self._postEffectCondition)
+
+    def _getTitle(self, value):
+        return backport.text(self._stringResource.smoke.enemyPostEffect())
+
+    @staticmethod
+    def _isSmokeFitsByTeam(teamID):
+        return teamID != avatar_getter.getPlayerTeam()
+
+    @staticmethod
+    def _postEffectCondition(isPostEffect):
+        return isPostEffect
 
 
 class Comp7HealingSN(_Comp7LocalizationProvider, sn_items.HealingSN):

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/shared/gui_items/items_actions/actions.py
 from adisp import adisp_process, adisp_async
-from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_reward_state import ArmoryYardRewardState
+from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_rewards_view_model import State
 from armory_yard.gui.window_events import showArmoryYardRewardWindow
 from gui.shared.gui_items.items_actions.actions import AsyncGUIItemAction
 from armory_yard.gui.shared.gui_items.processors.armory_yard import CollectRewardsProcessor, BuyStepTokens
@@ -20,7 +20,7 @@ class CollectRewardsAction(AsyncGUIItemAction):
     def _action(self, callback):
         result = yield CollectRewardsProcessor().request()
         if result.success and result.auxData is not None:
-            showArmoryYardRewardWindow(bonuses=result.auxData, state=ArmoryYardRewardState.STAGE, stage=self.__stageCount, closeCallback=self.__closeCallback)
+            showArmoryYardRewardWindow(bonuses=result.auxData, state=State.STAGE, stage=self.__stageCount, closeCallback=self.__closeCallback)
         callback(result)
         return
 

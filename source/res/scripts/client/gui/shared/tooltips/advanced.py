@@ -21,6 +21,7 @@ from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
+MULTI_TRACK_CHASSIS = 'vehicleMultiTrackChassis'
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -159,6 +160,9 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
                 descrKey = 'enhancedOil'
             elif item.isStimulator:
                 descrKey = 'ration'
+        if itemId == FITTING_TYPES.VEHICLE_CHASSIS and item.isMultiTrack():
+            movieKey = MULTI_TRACK_CHASSIS
+            descrKey = MULTI_TRACK_CHASSIS
         if movieKey not in MODULE_MOVIES:
             movieModule = None
         else:
@@ -269,6 +273,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'vehicleChassis': 'moduleSuspension',
  'vehicleWheeledChassis': 'moduleWheel',
  'vehicleTrackWithinTrackChassis': 'moduleTrackWithinTrack',
+ 'vehicleMultiTrackChassis': 'moduleTrackWithinTrack',
  'vehicleTurret': 'moduleTurret',
  'cocacola': 'consumablesCola',
  'chocolate': 'consumablesChocolate',
@@ -311,5 +316,6 @@ SHELL_MOVIES = {(SHELL_TYPES.ARMOR_PIERCING, False): 'bulletAP',
  (SHELL_TYPES.HOLLOW_CHARGE, False): 'bulletHEAT',
  (SHELL_TYPES.HIGH_EXPLOSIVE, False): 'bulletHE',
  (SHELL_TYPES.ARMOR_PIERCING_CR, False): 'bulletAPCR',
+ (SHELL_TYPES.ARMOR_PIERCING_FSDS, False): 'bulletAPFSDS',
  (SHELL_TYPES.HIGH_EXPLOSIVE, True): 'bulletHEModern',
  (SHELL_TYPES.FLAME, False): 'bulletFlame'}

@@ -114,10 +114,9 @@
     <_105mm_mle_FV1>	31002	</_105mm_mle_FV1>
     <_120mm_D_1203_CL>	31003	</_120mm_D_1203_CL>
     <_100mm_SA_47_25t>	31005	</_100mm_SA_47_25t>
-    <_75mm_SA49_EBR_03>	40001	</_75mm_SA49_EBR_03>
+    <_105mm_D_1507>	31006	</_105mm_D_1507>
     <Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>	24	</Canon_de_155mm_de_33_calibres_MapsTraining_Dummy_SPG_2>
     <_90mm_canon_DCA_30_CA_bootcamp>	1002	</_90mm_canon_DCA_30_CA_bootcamp>
-    <Gun_1_F00_AMD_Panhard_178B_02_id60010>	60010	</Gun_1_F00_AMD_Panhard_178B_02_id60010>
   </ids>
   <shared>
     <_13.2mm_Hotchkiss_mle._1930>
@@ -1220,51 +1219,6 @@
         </_75mm_OE_mle_1939>
       </shots>
     </_75mm_SA49_EBR>
-    <_75mm_SA49_EBR_03>
-      <userString>	#france_vehicles:_75mm_SA49_EBR	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.001	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.1	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_races_pushing	</effects>
-      <reloadEffect>	reload_Gravizapa	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
-        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	240.0	</rotationSpeed>
-      <reloadTime>	4	</reloadTime>
-      <maxAmmo>	999	</maxAmmo>
-      <aimingTime>	2	</aimingTime>
-      <weight>	1000	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <damagedHealth>	2	</damagedHealth>
-      <repairCost>	0	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.16	</turretRotation>
-        <afterShot>	4.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_75mm_OE_mle_1939_03_R>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	350	</speed>
-          <gravity>	0.0	</gravity>
-          <maxDistance>	1000	</maxDistance>
-          <piercingPower>	1 1	</piercingPower>
-        </_75mm_OE_mle_1939_03_R>
-      </shots>
-    </_75mm_SA49_EBR_03>
     <_75mm_SA49>
       <userString>	#france_vehicles:_75mm_SA49	</userString>
       <tags></tags>
@@ -4757,6 +4711,64 @@
       </shots>
       <groundWave></groundWave>
     </Canon_de_105_DEFA_4767_mod>
+    <_105mm_D_1507>
+      <userString>	#france_vehicles:_105mm_D_1507	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	185000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.26	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.45	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	dualgun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2470	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.32	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_OFL_105_G1_Oie>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 250	</piercingPower>
+        </_105mm_OFL_105_G1_Oie>
+        <_105mm_OCC_105_F1_Oie>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 310	</piercingPower>
+        </_105mm_OCC_105_F1_Oie>
+        <_105mm_OE_105_Mle_60_Oie>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_OE_105_Mle_60_Oie>
+      </shots>
+    </_105mm_D_1507>
     <_120mm_SA_46>
       <userString>	#france_vehicles:_120mm_SA_46	</userString>
       <tags></tags>
@@ -6687,55 +6699,5 @@
       </shots>
       <notInShop>	True	</notInShop>
     </_90mm_canon_DCA_30_CA_bootcamp>
-    <Gun_1_F00_AMD_Panhard_178B_02_id60010>
-      <userString>	Gun_1_F00_AMD_Panhard_178B_02_id60010	</userString>
-      <description>	TODO: gun Gun_1_F00_AMD_Panhard_178B_02_id60010 description	</description>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	2750	</price>
-      <models>
-        <undamaged>	vehicles/french/F00_AMD_Panhard_178B_02/normal/lod0/Gun_01.model	</undamaged>
-        <destroyed>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Gun_01.model	</destroyed>
-        <exploded>	vehicles/french/F00_AMD_Panhard_178B_02/crash/lod0/Gun_01.model	</exploded>
-      </models>
-      <impulse>	0.12	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.14	</amplitude>
-        <backoffTime>	0.1	</backoffTime>
-        <returnTime>	0.1	</returnTime>
-      </recoil>
-      <effects>	shot_races_pushing	</effects>
-      <groundWave></groundWave>
-      <pitchLimits>
-        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
-        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	50.0	</rotationSpeed>
-      <reloadTime>	1.4	</reloadTime>
-      <maxAmmo>	600	</maxAmmo>
-      <aimingTime>	1.5	</aimingTime>
-      <weight>	71	</weight>
-      <maxHealth>	30	</maxHealth>
-      <maxRegenHealth>	14	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <invisibilityFactorAtShot>	0.33	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.47	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <Development_Shell>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	900	</speed>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	390	</maxDistance>
-          <piercingPower>	32 13	</piercingPower>
-        </Development_Shell>
-      </shots>
-    </Gun_1_F00_AMD_Panhard_178B_02_id60010>
   </shared>
 </guns.xml>

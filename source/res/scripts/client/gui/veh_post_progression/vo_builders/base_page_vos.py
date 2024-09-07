@@ -13,8 +13,9 @@ def getBaseButtonsVO(vehicle):
     return {'shopIconPath': backport.image(R.images.gui.maps.shop.vehicles.c_360x270.dyn(iconName)()),
      'compareBtnVisible': True,
      'goToVehicleViewBtnVisible': True,
-     'isPremium': vehicle.isPremium or vehicle.buyPrices.itemPrice.isActionPrice(),
-     'vehicleId': vehicle.intCD}
+     'isPremium': vehicle.isPremium,
+     'vehicleId': vehicle.intCD,
+     'isEarlyAccess': vehicle.isEarlyAccess}
 
 
 def getBaseDataVO(vehicle):

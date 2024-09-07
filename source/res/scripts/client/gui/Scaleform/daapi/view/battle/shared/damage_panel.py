@@ -193,7 +193,6 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self.__isAutoRotationShown = False
         self.__initialized = False
         self.__isWheeledTech = False
-        self.__isTrackWithinVehicle = False
         self.__stunSourcesData = {}
         self.__debuffDuration = 0
         self.__isRepairPointActive = False
@@ -363,8 +362,6 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
         self.__stunSourcesData = {}
         if self.__isWheeledTech:
             self.__isWheeledTech = False
-        if self.__isTrackWithinVehicle:
-            self.__isTrackWithinVehicle = False
         self.hideStatusImmediate()
 
     def _updateStun(self, stunInfo):
@@ -495,14 +492,14 @@ class DamagePanel(DamagePanelMeta, IPrebattleSetupsListener, IArenaVehiclesContr
             else:
                 self.__isAutoRotationOff = False
         self.__isWheeledTech = vehicle.isWheeledTech
-        self.__isTrackWithinVehicle = vehicle.isTrackWithinTrack
         self.__updateMaxHealth()
         prebattleCtrl = self.sessionProvider.shared.prebattleSetups
         prebattleVehicle = prebattleCtrl.getPrebattleSetupsVehicle() if prebattleCtrl is not None else None
         health = self.__maxHealth if prebattleVehicle is not None else vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isWheeledTech, not self.__isAutoRotationOff, self.__isTrackWithinVehicle)
+        indicatorType = vehicle_getter.getVehicleIndicatorType(vehicle.typeDescriptor)
+        self.as_setupS(healthStr, healthProgress, indicatorType, vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), not self.__isAutoRotationOff)
         if self.__isWheeledTech:
             self.as_setupWheeledS(vTypeDesc.chassis.generalWheelsAnimatorConfig.getNonTrackWheelsCount())
         self._updatePlayerInfo(vehicle.id)

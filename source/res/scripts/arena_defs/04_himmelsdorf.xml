@@ -66,14 +66,8 @@
       </teamBasePositions>
     </assault2>
     <comp7>
-      <teamSpawnPoints>
-        <team1>
-          <position>	75.536003 326.539001	</position>
-        </team1>
-        <team2>
-          <position>	11.108000 -227.046005	</position>
-        </team2>
-      </teamSpawnPoints>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <visualScript>
         <server>
           <plan>	PointsOfInterest/pointsOfInterest	</plan>
@@ -91,26 +85,39 @@
           </flyDirection>
         </flyDirections>
       </recon>
-      <minimap>	spaces/04_himmelsdorf/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
-          <position>	40.230999 40.389999	</position>
-          <type>	2	</type>
+          <position>	-125.518349 -162.723236	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-248.788406 84.539139	</position>
-          <type>	1	</type>
+          <position>	259.999817 48.799259	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	177.077240 29.240419	</position>
-          <type>	1	</type>
+          <position>	180.071869 -6.324630	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	258.119659 50.491982	</position>
-          <type>	2	</type>
+          <position>	-144.070892 136.689621	</position>
+          <type>	4	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	-144.937195 73.648186	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	-214.139175 18.497681	</position1>
+          <position2>	103.040794 335.699524	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-123.776001 356.640015	</position>
+        </team1>
+        <team2>
+          <position>	374.260986 -241.209000	</position>
+        </team2>
+      </teamSpawnPoints>
     </comp7>
   </gameplayTypes>
   <roadMap></roadMap>

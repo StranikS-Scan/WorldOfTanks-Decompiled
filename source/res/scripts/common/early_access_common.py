@@ -18,3 +18,7 @@ def makeEarlyAccessToken(seasonID):
 
 def getGroupName(groupName):
     return '_'.join((EARLY_ACCESS_PREFIX, '{}'.format(groupName))) if groupName == EARLY_ACCESS_POSTPR_KEY else '_'.join((EARLY_ACCESS_PREFIX, 'cycle_{}'.format(groupName)))
+
+
+def getQuestFinisherName(seasonID):
+    return '_'.join((EARLY_ACCESS_PREFIX, 'quests_finisher_season_{}'.format(seasonID)))

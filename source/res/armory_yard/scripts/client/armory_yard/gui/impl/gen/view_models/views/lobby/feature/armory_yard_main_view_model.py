@@ -30,6 +30,7 @@ class RewardStatus(IntEnum):
 class TabId(IntEnum):
     PROGRESS = 0
     QUESTS = 1
+    SHOP = 2
 
 
 class EscSource(IntEnum):
@@ -40,14 +41,21 @@ class EscSource(IntEnum):
 class SimpleTooltipStates(IntEnum):
     TAB = 0
     CHAPTER = 1
+    SHOPINFO = 2
+
+
+class BuyButtonState(IntEnum):
+    HIDDEN = 0
+    TOKENS = 1
+    COINS = 2
 
 
 class ArmoryYardMainViewModel(ViewModel):
-    __slots__ = ('onMoveSpace', 'onStartMoving', 'onTabChange', 'onClose', 'onPlayAnimation', 'onSkipAnimation', 'onAboutEvent', 'onCollectReward', 'onBuyTokens', 'onShowVehiclePreview')
+    __slots__ = ('onMoveSpace', 'onStartMoving', 'onTabChange', 'onClose', 'onPlayAnimation', 'onSkipAnimation', 'onAboutEvent', 'onCollectReward', 'onBuyTokens', 'onShowVehiclePreview', 'onShopOpen')
     TOOLTIP_ID_ARG = 'tooltipId'
     FINAL_REWARD_TOOLTIP_TYPE = 'finalReward'
 
-    def __init__(self, properties=15, commands=10):
+    def __init__(self, properties=17, commands=11):
         super(ArmoryYardMainViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -154,6 +162,18 @@ class ArmoryYardMainViewModel(ViewModel):
     def setReplay(self, value):
         self._setBool(14, value)
 
+    def getShopButtonVisible(self):
+        return self._getBool(15)
+
+    def setShopButtonVisible(self, value):
+        self._setBool(15, value)
+
+    def getBuyButtonState(self):
+        return BuyButtonState(self._getNumber(16))
+
+    def setBuyButtonState(self, value):
+        self._setNumber(16, value.value)
+
     def _initialize(self):
         super(ArmoryYardMainViewModel, self)._initialize()
         self._addViewModelProperty('finalReward', ArmoryYardRewardsVehicleModel())
@@ -171,6 +191,8 @@ class ArmoryYardMainViewModel(ViewModel):
         self._addNumberProperty('toTimestamp', 0)
         self._addNumberProperty('animationStatus')
         self._addBoolProperty('replay', False)
+        self._addBoolProperty('shopButtonVisible', False)
+        self._addNumberProperty('buyButtonState')
         self.onMoveSpace = self._addCommand('onMoveSpace')
         self.onStartMoving = self._addCommand('onStartMoving')
         self.onTabChange = self._addCommand('onTabChange')
@@ -181,3 +203,4 @@ class ArmoryYardMainViewModel(ViewModel):
         self.onCollectReward = self._addCommand('onCollectReward')
         self.onBuyTokens = self._addCommand('onBuyTokens')
         self.onShowVehiclePreview = self._addCommand('onShowVehiclePreview')
+        self.onShopOpen = self._addCommand('onShopOpen')

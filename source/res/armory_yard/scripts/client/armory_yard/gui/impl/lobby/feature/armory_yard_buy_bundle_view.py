@@ -105,16 +105,24 @@ class ArmoryYardBuyBundleView(ViewImpl):
                 self.__isBuying = True
                 if not Waiting.isOpened('buyBundleArmoryYard'):
                     Waiting.show('buyBundleArmoryYard', isAlwaysOnTop=True, isSingle=True)
-                self.__stepAfterBuy = self.__armoryYardCtrl.getCurrencyTokenCount() + product['tokens']
+                bundleTokens = product['tokens']
+                self.__stepAfterBuy = self.__armoryYardCtrl.getCurrencyTokenCount() + bundleTokens
                 maxTokensCount = self.__armoryYardCtrl.getTotalSteps()
+                postProgressionCoins = 0
                 if self.__stepAfterBuy > maxTokensCount:
+                    if self.__armoryYardCtrl.isPostProgressionEnabled():
+                        postProgressionCoins = self.__stepAfterBuy - maxTokensCount
                     self.__stepAfterBuy = maxTokensCount
                 result = yield self.__webCtrl.sendRequest(ctx=ShopBuyStorefrontProductCtx(storefront=self.__armoryYardCtrl.getStarterPackSettings()['storefrontName'], productCode=product['productCode'], amount=1, prices=[{'code': currency,
                   'amount': price.get(currency),
                   'item_type': 'currency'}]))
                 if result.isSuccess():
                     self.__armoryYardCtrl.refreshBundle()
-                    self.__armoryYardCtrl.onPayed(product['tokens'])
+                    if postProgressionCoins > 0:
+                        self.__armoryYardCtrl.onPayed(False, bundleTokens - postProgressionCoins)
+                        self.__armoryYardCtrl.onPayed(True, postProgressionCoins)
+                    else:
+                        self.__armoryYardCtrl.onPayed(False, bundleTokens)
                     if not self.__isTokenDelivered():
                         self.__timeoutCallback = BigWorld.callback(10, self.__timeout)
                     else:

@@ -6,10 +6,10 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_base_model
 from gui.impl.gen.view_models.views.lobby.comp7.qualification_model import QualificationModel
 
 class RankRewardsModel(ProgressionBaseModel):
-    __slots__ = ('onPreviewOpen',)
+    __slots__ = ('onPreviewOpen', 'onComp7ShopOpen')
     DEFAULT_ITEM_INDEX = -1
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=5, commands=2):
         super(RankRewardsModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -42,3 +42,4 @@ class RankRewardsModel(ProgressionBaseModel):
         self._addArrayProperty('items', Array())
         self._addNumberProperty('initialItemIndex', -1)
         self.onPreviewOpen = self._addCommand('onPreviewOpen')
+        self.onComp7ShopOpen = self._addCommand('onComp7ShopOpen')

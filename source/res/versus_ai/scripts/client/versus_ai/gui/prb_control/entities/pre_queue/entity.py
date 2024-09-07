@@ -13,10 +13,10 @@ from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PRE_QUEUE_JOIN_ERRORS
 from gui.prb_control.storages import prequeue_storage_getter
 from helpers import dependency
+from skeletons.gui.game_control import IVersusAIController
 from versus_ai.gui.prb_control.entities.pre_queue.vehicles_watcher import VersusAIVehiclesWatcher
 from versus_ai.gui.prb_control.entities.squad.entity import VersusAISquadEntryPoint
 from versus_ai.gui.prb_control.entities.pre_queue.actions_validator import VersusAIActionsValidator
-from versus_ai.skeletons.versus_ai_controller import IVersusAIController
 _logger = logging.getLogger(__name__)
 
 class VersusAIEntryPoint(PreQueueEntryPoint):

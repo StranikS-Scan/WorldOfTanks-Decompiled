@@ -105,16 +105,14 @@
       </teamBasePositions>
     </assault2>
     <comp7>
-      <boundingBox>
-        <bottomLeft>	-500.000000 -350.000000	</bottomLeft>
-        <upperRight>	350.000000 500.000000	</upperRight>
-      </boundingBox>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	207.838120 449.178711	</position>
+          <position>	-441.503052 390.041046	</position>
         </team1>
         <team2>
-          <position>	-456.245636 -205.969406	</position>
+          <position>	278.445984 -288.104248	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -122,7 +120,6 @@
           <plan>	PointsOfInterest/pointsOfInterest	</plan>
         </server>
       </visualScript>
-      <minimap>	spaces/01_karelia/mmap_comp7.dds	</minimap>
       <recon>
         <flyDirections>
           <flyDirection>
@@ -137,23 +134,29 @@
       </recon>
       <pointsOfInterestUDO>
         <point>
-          <position>	-425.880646 415.621613	</position>
-          <type>	1	</type>
+          <position>	-449.842804 -115.792336	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	123.902733 -161.640076	</position>
-          <type>	1	</type>
+          <position>	182.277985 424.512177	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-110.680473 -76.689072	</position>
-          <type>	2	</type>
+          <position>	313.829987 170.230774	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	87.581993 101.738266	</position>
-          <type>	2	</type>
+          <position>	-181.905228 -312.888245	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	-241.935806 245.584152	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	44.324654 445.058258	</position1>
+          <position2>	-374.883331 157.304443	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
   <mapActivities>

@@ -15,7 +15,6 @@ from PlayerEvents import g_playerEvents
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount
     from skeletons.gui.shared import IItemsCache
-    from gui.shared.gui_items.Vehicle import getNationLessName
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -450,38 +449,3 @@ class HangarGetVehicleInsigniaRank(Block, VehicleMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.HANGAR]
-
-
-class GetVehicleName(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetVehicleName, self).__init__(*args, **kwargs)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._res = self._makeDataOutputSlot('name', SLOT_TYPE.STR, self._exec)
-
-    def _exec(self):
-        vehicle = self._vehicle.getValue()
-        if vehicle:
-            self._res.setValue(vehicle.typeDescriptor.name)
-
-
-class NationLessName(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(NationLessName, self).__init__(*args, **kwargs)
-        self._vehicleName = self._makeDataInputSlot('vehicleName', SLOT_TYPE.STR)
-        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.STR, self._exec)
-
-    def _exec(self):
-        self._res.setValue(getNationLessName(self._vehicleName.getValue()))
-
-
-class GetHullPosition(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetHullPosition, self).__init__(*args, **kwargs)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._res = self._makeDataOutputSlot('res', SLOT_TYPE.VECTOR3, self._exec)
-
-    def _exec(self):
-        self._res.setValue(self._vehicle.getValue().typeDescriptor.chassis.hullPosition)

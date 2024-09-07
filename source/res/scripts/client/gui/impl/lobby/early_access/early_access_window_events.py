@@ -69,9 +69,9 @@ def showEarlyAccessVehicleView(isFromTechTree=False, selectedVehicleCD=None):
 
 
 @checkIntroSeen(isNextVehicleView=False)
-def showEarlyAccessQuestsView():
+def showEarlyAccessQuestsView(isFromTechTree=False):
     from gui.impl.lobby.early_access.early_access_quests_view import EarlyAccessQuestsView
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.early_access.EarlyAccessMainView(), EarlyAccessQuestsView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.early_access.EarlyAccessQuestsView(), EarlyAccessQuestsView, ScopeTemplates.LOBBY_SUB_SCOPE), isFromTechTree=isFromTechTree), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showIntroView(isNextVehicleView=True):

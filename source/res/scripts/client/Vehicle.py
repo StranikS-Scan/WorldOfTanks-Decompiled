@@ -136,6 +136,14 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         return False if self.typeDescriptor is None else self.typeDescriptor.isTrackWithinTrack
 
     @property
+    def isMultiTrack(self):
+        return self.typeDescriptor.isMultiTrack
+
+    @property
+    def chassisType(self):
+        return self.typeDescriptor.chassisType
+
+    @property
     def wheelsScrollSmoothed(self):
         if self.__wheelsScrollFilter is not None:
             return [ scrollFilter.output(BigWorld.time()) for scrollFilter in self.__wheelsScrollFilter ]
@@ -250,6 +258,8 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         if 'battle_royale' in self.typeDescriptor.type.tags:
             from InBattleUpgrades import onBattleRoyalePrerequisites
             forceReloading = onBattleRoyalePrerequisites(self, oldTypeDescriptor, forceReloading)
+            if isDelayedRespawn:
+                self.respawnCompactDescr = None
         strCD = self.typeDescriptor.makeCompactDescr()
         newInfo = VehicleAppearanceCacheInfo(self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr)
         ctrl = self.guiSessionProvider.dynamic.appearanceCache

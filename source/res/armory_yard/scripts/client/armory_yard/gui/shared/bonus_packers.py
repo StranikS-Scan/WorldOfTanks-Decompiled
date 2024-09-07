@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/shared/bonus_packers.py
 import logging
+import typing
+from armory_yard.gui.shared.bonuses_sorter import bonusesSortKeyFunc
 from constants import PREMIUM_ENTITLEMENTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
@@ -9,10 +11,16 @@ from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_reward
 from armory_yard_constants import isArmoryYardBattleToken, FEATURE_NAME_BASE
 from gui.impl.backport import createTooltipData, TooltipData
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+from gui.server_events.bonuses import getNonQuestBonuses, splitBonuses, mergeBonuses, VehiclesBonus, TokensBonus
 from gui.shared.gui_items.Vehicle import getNationLessName
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BaseBonusUIPacker, BonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, TokenBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BaseBonusUIPacker, BonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, TokenBonusUIPacker, SimpleBonusUIPacker, VehiclesBonusUIPacker, getDefaultBonusPacker
 from items.vehicles import getVehicleClassFromVehicleType
 from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
+if typing.TYPE_CHECKING:
+    BonusModelType = typing.TypeVar('BonusModelType', bound=BonusModel)
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from frameworks.wulf import Array
+    from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 _logger = logging.getLogger(__name__)
 _ARMORY_YARD_REST_ICON_NAME = 'default'
 
@@ -137,10 +145,10 @@ def packVehicleModel(vehicleModel, vehicle):
     vehicleModel.setIsElite(vehicle.isElite)
 
 
-def packRestModel(rewardsList, rewardListModel, tooltipData, index):
+def packRestModel(rewardsList, rewardListModel, tooltipData, index, restRewardsTextId=None):
     model = BonusModel()
     model.setName(_ARMORY_YARD_REST_ICON_NAME)
-    model.setValue(backport.text(R.strings.armory_yard.buyView.reward.rest(), count=len(rewardsList)))
+    model.setValue(backport.text(restRewardsTextId or R.strings.armory_yard.buyView.reward.rest(), count=len(rewardsList)))
     model.setTooltipContentId(str(R.views.armory_yard.lobby.feature.tooltips.RestRewardTooltipView()))
     tooltipID = str(len(tooltipData))
     tooltipData[tooltipID] = TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[rewardsList])
@@ -148,3 +156,14 @@ def packRestModel(rewardsList, rewardListModel, tooltipData, index):
     model.setIndex(index)
     rewardListModel.addViewModel(model)
     return
+
+
+def packBonuses(rewards, packer=None):
+    bonuses = []
+    for rewardType, rewardValue in rewards.items():
+        bonuses.extend(getNonQuestBonuses(rewardType, rewardValue))
+
+    bonuses = splitBonuses(mergeBonuses(bonuses))
+    bonuses.sort(key=bonusesSortKeyFunc)
+    packer = packer or getDefaultBonusPacker()
+    return [ packedBonus for bonus in bonuses for packedBonus in packer.pack(bonus) ]

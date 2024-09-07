@@ -68,6 +68,60 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamBasePositions>
+        <team1>
+          <position1>	-109.527763 396.998962	</position1>
+          <position2>	44.257236 72.060005	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	322.122437 270.394592	</position>
+        </team1>
+        <team2>
+          <position>	-374.460999 -273.794739	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-208.508102 14.765611	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-431.100128 243.471359	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	373.554718 -113.832115	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	59.428783 -186.011902	</position>
+          <type>	4	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

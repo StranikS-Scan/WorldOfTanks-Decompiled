@@ -19,7 +19,7 @@ from gui.Scaleform.genConsts.ROCKET_ACCELERATOR_INDICATOR import ROCKET_ACCELERA
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.genConsts.SIXTHSENSEINDICATOR_CONSTS import SIXTHSENSEINDICATOR_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
-from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, VEHICLE_DEVICE_IN_COMPLEX_ITEM, DEVICE_STATE_DESTROYED
+from gui.battle_control.battle_constants import DEVICE_STATES_RANGE, DEVICE_STATE_NORMAL, DEVICE_STATE_CRITICAL, DEVICE_STATE_DESTROYED, getVehicleDeviceInComplexItemName
 from gui.battle_control.battle_constants import HIT_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import PREDICTION_INDICATOR_MAX_ON_SCREEN
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CROSSHAIR_VIEW_ID
@@ -574,6 +574,14 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
 
 
+def _isTrackSideDestroyed(side, devices):
+    for device, state in list(devices.items()):
+        if device.startswith(side) and state != DEVICE_STATE_DESTROYED:
+            return False
+
+    return True
+
+
 class SiegeModeIndicator(SiegeModeIndicatorMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -588,7 +596,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._startTime = BigWorld.serverTime()
         self._switchTimeTable = {}
         self._siegeComponent = None
-        self._deviceStateConverter = lambda s, dn: s
+        self._deviceStateConverter = None
         return
 
     def _populate(self):
@@ -646,8 +654,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         LOG_DEBUG('Updating siege mode: devices')
         device = max(self._devices.items(), key=self.__getDeviceStateLevel)
         deviceName, deviceState = device
-        if deviceName in VEHICLE_DEVICE_IN_COMPLEX_ITEM:
-            deviceName = VEHICLE_DEVICE_IN_COMPLEX_ITEM[deviceName]
+        deviceName = getVehicleDeviceInComplexItemName(deviceName)
+        deviceState = self._devices.get(deviceName, deviceState)
         self.as_updateDeviceStateS(deviceName, deviceState)
 
     def __onVehicleControlling(self, vehicle):
@@ -657,7 +665,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__resetDevices()
         self.__updateDevicesView()
         hasSiegeMode = vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode)
-        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack):
+        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack or vTypeDesc.isMultiTrack):
             uiType = self.__getUIType(vTypeDesc)
             self.as_setSiegeModeTypeS(uiType)
             self._devices = self.__createDevicesMap(vTypeDesc)
@@ -733,8 +741,10 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
 
     def __updateDevicesState(self, deviceName, _, realState):
         if deviceName in self._devices:
-            self._devices[deviceName] = self._deviceStateConverter(deviceName, realState)
+            if self._deviceStateConverter is not None:
+                self._deviceStateConverter(deviceName, realState, self._devices)
             self.__updateDevicesView()
+        return
 
     def __updateDestroyed(self, _):
         self.__isEnabled = False
@@ -765,28 +775,40 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             converter = cls.__turboshaftDeviceStateConverter
         elif vTypeDesc.isTrackWithinTrack:
             converter = cls.__trackWithinTrackDeviceStateConverter
+        elif vTypeDesc.isMultiTrack:
+            converter = cls.__multiTrackDeviceStateConverter
         if converter is None:
             raise SoftException("Can't get device state converter for siege mode")
         return converter
 
     @staticmethod
-    def __hydraulicDeviceStateConverter(deviceName, state):
+    def __hydraulicDeviceStateConverter(deviceName, state, devices):
         if state == DEVICE_STATE_CRITICAL and deviceName in ('leftTrack0', 'rightTrack0'):
             state = DEVICE_STATE_NORMAL
-        return state
+        devices[deviceName] = state
 
     @staticmethod
-    def __trackWithinTrackDeviceStateConverter(deviceName, state):
+    def __trackWithinTrackDeviceStateConverter(deviceName, state, devices):
         allTracks = ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1')
         if state == DEVICE_STATE_DESTROYED and deviceName in ('leftTrack1', 'rightTrack1'):
             state = DEVICE_STATE_CRITICAL
         elif state == DEVICE_STATE_CRITICAL and deviceName in allTracks:
             state = DEVICE_STATE_NORMAL
-        return state
+        devices[deviceName] = state
 
     @staticmethod
-    def __turboshaftDeviceStateConverter(deviceName, state):
-        return DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName == 'engine' else state
+    def __multiTrackDeviceStateConverter(deviceName, state, devices):
+        devices[deviceName] = state
+        devices['chassis'] = DEVICE_STATE_NORMAL
+        hasMovementPenalty = any((state == DEVICE_STATE_DESTROYED for device, state in list(devices.items())))
+        if hasMovementPenalty:
+            isCantMove = _isTrackSideDestroyed('leftTrack', devices) or _isTrackSideDestroyed('rightTrack', devices)
+            devices['chassis'] = DEVICE_STATE_DESTROYED if isCantMove else DEVICE_STATE_CRITICAL
+
+    @staticmethod
+    def __turboshaftDeviceStateConverter(deviceName, state, devices):
+        state = DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName == 'engine' else state
+        devices[deviceName] = state
 
     @staticmethod
     def __getUIType(vTypeDesc):
@@ -795,7 +817,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             uiType = SIEGE_MODE_CONSTS.HYDRAULIC_CHASSIS_TYPE
         elif vTypeDesc.hasTurboshaftEngine:
             uiType = SIEGE_MODE_CONSTS.TURBOSHAFT_ENGINE_TYPE
-        elif vTypeDesc.isTrackWithinTrack:
+        elif vTypeDesc.isTrackWithinTrack or vTypeDesc.isMultiTrack:
             uiType = SIEGE_MODE_CONSTS.TRACK_WITHIN_TRACK_TYPE
         if uiType is None:
             raise SoftException("Can't get UI siege mode type")
@@ -809,6 +831,13 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             deviceNames = ('engine',)
         elif vTypeDesc.isTrackWithinTrack:
             deviceNames = ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1')
+        elif vTypeDesc.isMultiTrack:
+            deviceNames = []
+            for trackIdx in range(vTypeDesc.trackPairsCount):
+                deviceNames.append('leftTrack{}'.format(trackIdx))
+                deviceNames.append('rightTrack{}'.format(trackIdx))
+
+            deviceNames.append('chassis')
         else:
             raise SoftException("Can't create updatable devices")
         return {name:DEVICE_STATE_NORMAL for name in deviceNames}

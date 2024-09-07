@@ -3,6 +3,7 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.early_access.early_access_window_events import updateVisibilityHangarHeaderMenu, showEarlyAccessVehicleView
@@ -18,10 +19,17 @@ class EarlyAccessVehiclePreview(VehiclePreview):
     def __init__(self, ctx=None):
         super(EarlyAccessVehiclePreview, self).__init__(ctx)
         self.__isFromVehicleView = ctx.get('isFromVehicleView', False)
+        self.__vehicleCD = ctx.get('itemCD', None)
         self._needToResetAppearance = True
+        return
 
     def setBottomPanel(self):
         self.as_setBottomPanelS(self.__BOTTOM_PANEL_FLASH_PATH)
+
+    def _onRegisterFlashComponent(self, viewPy, alias):
+        super(EarlyAccessVehiclePreview, self)._onRegisterFlashComponent(viewPy, alias)
+        if alias == VEHPREVIEW_CONSTANTS.BOTTOM_PANEL_EARLY_ACCESS_PY_ALIAS:
+            viewPy.setIsBlockedVehicle(self.__vehicleCD in self.__earlyAccessController.getBlockedVehicles())
 
     def _populate(self):
         super(EarlyAccessVehiclePreview, self)._populate()

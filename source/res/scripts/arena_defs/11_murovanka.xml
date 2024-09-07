@@ -64,19 +64,21 @@
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-315.961304 4.944634	</position1>
-          <position2>	112.371071 -220.978729	</position2>
+          <position1>	-315.956482 4.945620	</position1>
+          <position2>	112.371002 -220.979004	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
     <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-33.235714 449.249512	</position>
+          <position>	-103.428413 -420.277771	</position>
         </team1>
         <team2>
-          <position>	-33.570129 -432.394257	</position>
+          <position>	-31.051983 323.763977	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -98,23 +100,29 @@
       </recon>
       <pointsOfInterestUDO>
         <point>
-          <position>	-395.243744 5.413159	</position>
-          <type>	1	</type>
+          <position>	-460.981476 28.330618	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	167.788849 24.177389	</position>
-          <type>	1	</type>
+          <position>	169.826309 24.274853	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-95.192665 -195.343323	</position>
-          <type>	2	</type>
+          <position>	-352.651550 238.014969	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-76.324905 219.491440	</position>
-          <type>	2	</type>
+          <position>	-71.794495 -47.583633	</position>
+          <type>	4	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	-282.224457 5.246193	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	-315.956482 4.945620	</position1>
+          <position2>	112.371002 -220.979004	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
   <mapActivities></mapActivities>

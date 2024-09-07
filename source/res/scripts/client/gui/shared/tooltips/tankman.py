@@ -123,7 +123,8 @@ class BattleRoyaleTankmanSkillListField(TankmanSkillListField):
             skillsList.append({'id': str(idx),
              'label': skill.userName,
              'level': skill.level,
-             'enabled': skill.isEnable})
+             'enabled': skill.isEnable,
+             'typeName': skill.typeName})
 
         return skillsList
 
@@ -295,6 +296,7 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
             if innerBlock:
                 items.append(formatters.packBuildUpBlockData(innerBlock, padding=formatters.packPadding(left=0, right=50, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
             commonStatsBlock = []
+            self._createCommanderFeatureSkillsBlock(commonStatsBlock)
             self._createFreeSkillsBlock(commonStatsBlock)
             self._createEarnedSkillsBlock(commonStatsBlock)
             if commonStatsBlock:
@@ -329,6 +331,15 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
 
     def _createFreeSkillsBlock(self, commonStatsBlock):
         pass
+
+    def _createCommanderFeatureSkillsBlock(self, commonStatsBlock):
+        commanderFeatures = self._getCommanderFeatureList()
+        if not commanderFeatures:
+            return
+        commonStatsBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_COMMANDERFEATURE)})))
+        maxPopUpBlocks = 2
+        for skill in commanderFeatures[:maxPopUpBlocks]:
+            commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
 
     def _createEarnedSkillsBlock(self, commonStatsBlock):
         skills = self._getSkillList()
@@ -365,7 +376,18 @@ class BattleRoyaleTankmanTooltipDataBlock(BlocksTooltipData):
     def _getSkillList(self):
         skillListField = BattleRoyaleTankmanSkillListField(self, 'skills')
         _, value = skillListField.buildData()
-        return value if value is not None else []
+        if value is None:
+            return []
+        else:
+            return [ skill for skill in value if skill['typeName'] != 'commanderSpecial' ]
+
+    def _getCommanderFeatureList(self):
+        skillListField = BattleRoyaleTankmanSkillListField(self, 'skills')
+        _, value = skillListField.buildData()
+        if value is None:
+            return []
+        else:
+            return [ skill for skill in value if skill['typeName'] == 'commanderSpecial' ]
 
     @staticmethod
     def _createVehicleBlock(innerBlock, vehicle):

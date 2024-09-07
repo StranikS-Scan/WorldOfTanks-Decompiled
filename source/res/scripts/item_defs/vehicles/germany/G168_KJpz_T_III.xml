@@ -1,17 +1,16 @@
 <G168_KJpz_T_III.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
-    <backward>	18	</backward>
+    <forward>	55	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.154	</moving>
@@ -50,17 +49,17 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	30	</armor_1>
-      <armor_2>	30	</armor_2>
+      <armor_1>	54	</armor_1>
+      <armor_2>	90	</armor_2>
       <armor_3>	30	</armor_3>
       <armor_4>	30	</armor_4>
-      <armor_5>	20	</armor_5>
+      <armor_5>	50	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	30	</armor_7>
+      <armor_7>	40	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	30	</armor_9>
-      <armor_10>	30	</armor_10>
-      <armor_11>	30	</armor_11>
+      <armor_9>	50	</armor_9>
+      <armor_10>	50	</armor_10>
+      <armor_11>	50	</armor_11>
       <armor_12>	30	</armor_12>
       <armor_13>	30	</armor_13>
       <armor_14>	30	</armor_14>
@@ -91,10 +90,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.951613 0.72605 1.35166	</rayStart>
-        <rayEnd>	-0.951634 0.329955 1.295963	</rayEnd>
+        <rayStart>	-1.116659 0.661267 1.812416	</rayStart>
+        <rayEnd>	-1.116638 0.265172 1.756719	</rayEnd>
         <rayUp>	-0 0.139245 -0.990258	</rayUp>
-        <size>	0.32	</size>
+        <size>	0.3	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -447,7 +446,7 @@
     <Chassis_G168_KJpz_T_III>
       <userString>	#germany_vehicles:Chassis_G168_KJpz_T_III	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <weight>	18000	</weight>
@@ -456,8 +455,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -867,7 +866,7 @@
       <physicalTracks>
         <left>
           <segmentsCount>	152	</segmentsCount>
-          <segmentsOuterThickness>	0.092523	</segmentsOuterThickness>
+          <segmentsOuterThickness>	0.07052	</segmentsOuterThickness>
           <segmentsInnerThickness>	-0.010505	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.431	</segmentsPlaneOffset>
           <mainSegment>
@@ -1116,7 +1115,7 @@
         </left>
         <right>
           <segmentsCount>	152	</segmentsCount>
-          <segmentsOuterThickness>	0.092552	</segmentsOuterThickness>
+          <segmentsOuterThickness>	0.07052	</segmentsOuterThickness>
           <segmentsInnerThickness>	-0.010533	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.427	</segmentsPlaneOffset>
           <mainSegment>
@@ -1371,7 +1370,7 @@
     <Turret_1_G168_KJpz_T_III>
       <userString>	#germany_vehicles:Turret_1_G168_KJpz_T_III	</userString>
       <tags></tags>
-      <level>	9	</level>
+      <level>	8	</level>
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -1383,7 +1382,7 @@
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
+      <circularVisionRadius>	380	</circularVisionRadius>
       <armor>
         <armor_1>	40	</armor_1>
         <armor_2>	40	</armor_2>
@@ -1408,21 +1407,28 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Versuchskanone_L65>	shared	  <maxAmmo>	44	</maxAmmo>
-          <reloadTime>	10.7	</reloadTime>
+        <_120mm_Versuchskanone_L65>	shared	  <maxAmmo>	60	</maxAmmo>
+          <reloadTime>	9.6	</reloadTime>
+          <clip>
+            <count>	3	</count>
+            <rate>	20	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	9.6 10.5 11.6	</reloadTime>
+          </autoreload>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <afterShot>	7	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.6	</aimingTime>
-          <shotDispersionRadius>	0.28	</shotDispersionRadius>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
+            <maxPitch>	0.00000 8.00 0.05556 8.00 0.08333 10.00 0.91667 10.00 0.94444 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
-          <turretYawLimits>	-30 30	</turretYawLimits>
+          <turretYawLimits>	-180 180	</turretYawLimits>
           <armor>
             <armor_1>	40	</armor_1>
             <armor_2>	40	</armor_2>
@@ -1446,8 +1452,9 @@
             </armor_15>
             <armor_16>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_16>
-            <armor_17>	40	</armor_17>
-            <gun>	20	</gun>
+            <armor_17>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <gun>	35	</gun>
           </armor>
           <customizationSlots>
             <slot>
@@ -1638,17 +1645,17 @@
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34000	</slotId>
-          <rayStart>	-1.449507 0.419367 -0.123901	</rayStart>
-          <rayEnd>	-1.249614 0.419367 -0.117358	</rayEnd>
+          <rayStart>	-1.511553 0.419368 -0.123901	</rayStart>
+          <rayEnd>	-1.31166 0.419368 -0.117358	</rayEnd>
           <rayUp>	0 1 -0	</rayUp>
           <size>	0.62	</size>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34001	</slotId>
-          <rayStart>	1.449947 0.419367 -0.117357	</rayStart>
-          <rayEnd>	1.250054 0.419367 -0.123901	</rayEnd>
-          <rayUp>	-0 1 0	</rayUp>
+          <rayStart>	1.511557 0.419368 -0.123901	</rayStart>
+          <rayEnd>	1.311664 0.419368 -0.117357	</rayEnd>
+          <rayUp>	-0 1 -0	</rayUp>
           <size>	0.62	</size>
         </slot>
         <slot>
@@ -1794,9 +1801,8 @@
           <slotId>	35012	</slotId>
           <tags>	formfactor_square	</tags>
           <position>	0.000018 1.96076 -2.36816	</position>
-          <rotation>	1.56904 -0.0055461 -0.0055461	</rotation>
+          <rotation>	1.56904 -0.005546 -0.005546	</rotation>
           <scale>	0.623948 0.182959 0.623947	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
@@ -1806,9 +1812,8 @@
           <slotId>	35013	</slotId>
           <tags>	formfactor_rect1x4	</tags>
           <position>	0.000018 1.96076 -2.36816	</position>
-          <rotation>	1.56907 -0.00542704 -0.00542704	</rotation>
+          <rotation>	1.56907 -0.005427 -0.005427	</rotation>
           <scale>	1.88524 1 1.88523	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
@@ -1818,9 +1823,8 @@
           <slotId>	35014	</slotId>
           <tags>	formfactor_rect1x2	</tags>
           <position>	0.000018 1.96076 -2.36816	</position>
-          <rotation>	1.56914 -0.00554618 -0.00554618	</rotation>
+          <rotation>	1.56914 -0.005546 -0.005546	</rotation>
           <scale>	1.25072 0.366745 1.25071	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
@@ -1830,9 +1834,8 @@
           <slotId>	35015	</slotId>
           <tags>	formfactor_rect1x3	</tags>
           <position>	0.000018 1.96076 -2.36816	</position>
-          <rotation>	1.56907 -0.0054279 -0.0054279	</rotation>
+          <rotation>	1.56907 -0.005428 -0.005428	</rotation>
           <scale>	1.88524 1 1.88524	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
@@ -1842,9 +1845,8 @@
           <slotId>	35016	</slotId>
           <tags>	formfactor_rect1x6	</tags>
           <position>	0.000018 1.96076 -2.36816	</position>
-          <rotation>	1.56907 -0.00542704 -0.00542704	</rotation>
+          <rotation>	1.56907 -0.005427 -0.005427	</rotation>
           <scale>	1.88524 1 1.88523	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.896092	</clipAngle>
           <anchorShift>	0.04	</anchorShift>
@@ -1878,8 +1880,8 @@
     <detailed>
       <engines>
         <MTU803>
-          <smplEnginePower>	850	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplEnginePower>	1800	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </MTU803>
       </engines>
       <chassis>

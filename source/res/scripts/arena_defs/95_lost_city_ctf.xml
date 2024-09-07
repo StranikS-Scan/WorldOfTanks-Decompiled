@@ -94,12 +94,14 @@
       </teamBasePositions>
     </assault2>
     <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	48.544998 317.769012	</position>
+          <position>	-305.232666 136.427078	</position>
         </team1>
         <team2>
-          <position>	51.368000 -315.613007	</position>
+          <position>	326.719727 -118.230736	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -122,27 +124,29 @@
       <minimap>	spaces/95_lost_city_ctf/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
-          <position>	382.687012 232.240997	</position>
-          <type>	2	</type>
+          <position>	-153.331696 462.357513	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	372.800995 -232.384003	</position>
-          <type>	2	</type>
+          <position>	139.604568 -395.324036	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-440.919006 -1.021000	</position>
-          <type>	1	</type>
+          <position>	-133.693787 -457.891388	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-116.900002 0.279000	</position>
-          <type>	1	</type>
-        </point>
-        <point>
-          <position>	190.310669 -1.276736	</position>
-          <type>	1	</type>
+          <position>	244.322815 388.357208	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	0.000000 0.000000	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	53.463375 292.176880	</position1>
+          <position2>	-0.000046 0.000000	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
   </gameplayTypes>
 </95_lost_city_ctf.xml>

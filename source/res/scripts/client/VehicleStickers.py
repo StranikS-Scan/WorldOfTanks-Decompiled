@@ -37,6 +37,7 @@ def isUseDebugStickers():
 DEBUG_STICKER_TEXTURE = 'gui/maps/vehicles/decals/player_stickers/cool/sticker_15.dds'
 _TextureParams = namedtuple('TextureParams', ('textureName', 'bumpTextureName', 'mirror'))
 _CounterParams = namedtuple('CounterParams', ('atlas', 'alphabet', 'mirror'))
+_InsigniaParams = namedtuple('InsigniaParams', ('textureName', 'emissionTextureName', 'emissionPatternName', 'emissionAnimationSpeed', 'emissionHDRBrightness', 'emissionLDRBrightness'))
 _StickerSlotPair = namedtuple('_StickerSlotPair', ('componentSlot', 'stickerParams'))
 _PersonalNumberTexParams = namedtuple('PersonalNumberTexParams', ('textureName', 'textureMap', 'text', 'fontMask', 'digitsCount'))
 _INSIGNIA_LETTER = '*'
@@ -477,7 +478,7 @@ class InsigniaStickerPack(StickerPack):
         slotIdx = len(params)
         if componentIdx in Insignia.Indexes.ALL:
             if IS_EDITOR:
-                defaultParams = _TextureParams('', '', False)
+                defaultParams = _InsigniaParams('', '', '', 0, 0, 0)
                 item = items.vehicles.g_cache.customization20().insignias.get(componentSlot.edResourceId)
                 stickerParam = defaultParams if item is None else self._convertToInsignia(item)
             else:
@@ -503,12 +504,26 @@ class InsigniaStickerPack(StickerPack):
         params.append(_StickerSlotPair(componentSlot, stickerParam))
         return
 
+    def _attachAsGunSticker(self, componentIdx, stickerModel, isDamaged):
+        params = self._data[componentIdx]
+        for idx, param in enumerate(params):
+            slot, sticker = param
+            if not sticker or slot.hideIfDamaged and isDamaged:
+                continue
+            texName, emissionMap, emissionPatternMap, animationSpeed, hdrBrightness, ldrBrightness = sticker
+            if texName == '':
+                continue
+            sizes = self._getStickerSize(slot)
+            stickerAttributes = self._getStickerAttributes(slot, sticker)
+            handle = stickerModel.addGunSticker(texName, emissionMap, emissionPatternMap, slot.rayStart, sizes, slot.rayUp, animationSpeed, hdrBrightness, ldrBrightness, stickerAttributes)
+            self._handles[componentIdx][idx] = handle
+
     def attach(self, componentIdx, stickerModel, isDamaged):
         if not self._isValidComponentIdx(componentIdx):
             return
         if componentIdx in Insignia.Indexes.ALL:
             if self._useOldInsignia or self._useCustomInsignia:
-                super(InsigniaStickerPack, self).attach(componentIdx, stickerModel, isDamaged)
+                self._attachAsGunSticker(componentIdx, stickerModel, isDamaged)
             return
         params = self._data[componentIdx]
         for idx, param in enumerate(params):
@@ -543,7 +558,7 @@ class InsigniaStickerPack(StickerPack):
         return False if self._insigniaRank == self._NO_INSIGNIA_RANK else super(InsigniaStickerPack, self)._isValidComponentIdx(componentIdx)
 
     def _getDefaultParams(self):
-        defaultParams = _TextureParams('', '', False)
+        defaultParams = _InsigniaParams('', '', '', 0, 0, 0)
         defaultInsignia = items.vehicles.g_cache.customization20().defaultInsignias.get(self._customizationNationID)
         if defaultInsignia is None:
             return defaultParams
@@ -559,11 +574,18 @@ class InsigniaStickerPack(StickerPack):
             stickerAttributes |= StickerAttributes.IS_PLANE_PROJECTION
         return stickerAttributes | super(InsigniaStickerPack, self)._getStickerAttributes(slot, sticker)
 
-    def _convertToInsignia(self, item):
-        constantPart, delimeterPart, changeablePart = item.texture.rpartition('_')
+    def _changeRankInTextureName(self, textureName):
+        if textureName == '':
+            return ''
+        constantPart, delimeterPart, changeablePart = textureName.rpartition('_')
         _, dotPart, extenstionPart = changeablePart.partition('.')
-        textureName = constantPart + delimeterPart + str(self._insigniaRank) + dotPart + extenstionPart
-        return _TextureParams(textureName, '', item.canBeMirrored)
+        return constantPart + delimeterPart + str(self._insigniaRank) + dotPart + extenstionPart
+
+    def _convertToInsignia(self, item):
+        textureName = self._changeRankInTextureName(item.texture)
+        emissionTextureName = self._changeRankInTextureName(item.emissionSettings['emissionMap'])
+        emissionPatternName = self._changeRankInTextureName(item.emissionSettings['emissionPatternMap'])
+        return _InsigniaParams(textureName, emissionTextureName, emissionPatternName, item.emissionSettings['emissionAnimationSpeed'], item.emissionSettings['deferredEmissionBrightness'], item.emissionSettings['forwardEmissionBrightness'])
 
     def _convertToCounter(self, item):
         return _CounterParams(item.atlas, item.alphabet, item.canBeMirrored)

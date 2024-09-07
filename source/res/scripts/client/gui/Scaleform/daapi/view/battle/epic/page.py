@@ -182,7 +182,7 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
-                if not (vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack):
+                if not self.invalidateSiegeVehicle(vehicle.typeDescriptor):
                     if BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in visibleUI:
                         visibleUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
                         hiddenUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)

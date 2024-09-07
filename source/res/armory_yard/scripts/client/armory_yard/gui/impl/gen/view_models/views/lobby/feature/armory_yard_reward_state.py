@@ -6,6 +6,7 @@ class ArmoryYardRewardState(ViewModel):
     __slots__ = ()
     STAGE = 'stage'
     STYLE = 'style'
+    SHOP = 'shop'
 
     def __init__(self, properties=0, commands=0):
         super(ArmoryYardRewardState, self).__init__(properties=properties, commands=commands)

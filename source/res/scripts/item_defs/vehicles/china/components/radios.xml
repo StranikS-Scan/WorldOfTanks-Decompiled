@@ -26,6 +26,7 @@
     <A-220B_T>	254	</A-220B_T>
     <A_220A>	255	</A_220A>
     <_9RM_CZ>	23	</_9RM_CZ>
+    <A-220B-2>	27	</A-220B-2>
     <Marconi_G2A>	28	</Marconi_G2A>
     <A-220B_1_MK>	257	</A-220B_1_MK>
     <A-220B_FL>	501	</A-220B_FL>
@@ -44,6 +45,8 @@
     <_9RM_shop_P>	31005	</_9RM_shop_P>
     <A-220_1_P>	31006	</A-220_1_P>
     <A-220B_1_P>	31007	</A-220B_1_P>
+    <A-220B-2_70>	31009	</A-220B-2_70>
+    <A-220B_1_T>	31010	</A-220B_1_T>
   </ids>
   <shared>
     <_9RM>
@@ -115,6 +118,30 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B>
+    <A-220B-2>
+      <userString>	#china_vehicles:A-220B-2	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B-2>
+    <A-220B-2_70>
+      <userString>	#china_vehicles:A-220B-2_70	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	84000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B-2_70>
     <A-220B_FL>
       <userString>	#china_vehicles:A-220B	</userString>
       <tags></tags>
@@ -162,6 +189,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B_1_P_T>
+    <A-220B_1_T>
+      <userString>	#china_vehicles:A-220B_1_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_T>
     <A-220B_1_MK>
       <userString>	#china_vehicles:A-220B_1_MK	</userString>
       <tags></tags>

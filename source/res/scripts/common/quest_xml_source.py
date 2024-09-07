@@ -8,7 +8,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC, timeDataToUTC, checkLogExtInfoLen
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -371,7 +371,7 @@ class Source(object):
          'bonusLimit': self.__readCondition_int,
          'isTutorialCompleted': self.__readCondition_bool,
          'isBattleMattersEnabled': self.__readCondition_bool,
-         'isWinbackQuestsEnabled': self.__readCondition_bool,
+         'activeProgression': self.__readCondition_string,
          'isSteamAllowed': self.__readCondition_bool,
          'totalBattles': self.__readBattleResultsConditionList,
          'lastLogout': self.__readBattleResultsConditionList,
@@ -828,7 +828,7 @@ class Source(object):
     def __readVehicleFilter_levels(self, _, section, node):
         res = set()
         for level in section.asString.split():
-            if 1 <= int(level) <= 10:
+            if MIN_VEHICLE_LEVEL <= int(level) <= MAX_VEHICLE_LEVEL:
                 res.add(int(level))
             raise SoftException('Unsupported vehicle level %s' % level)
 

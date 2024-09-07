@@ -4,7 +4,6 @@ from constants import PREBATTLE_TYPE as _P_TYPE
 from constants import QUEUE_TYPE as _Q_TYPE
 from constants import PREBATTLE_TYPE_NAMES as _P_NAMES
 from constants import QUEUE_TYPE_NAMES as _Q_NAMES
-from gui.prb_control.storages.winback_storage import WinbackStorage
 from gui.shared.system_factory import registerPrbStorage, collectPrbStorage, collectAllStorages
 from gui.prb_control.settings import CTRL_ENTITY_TYPE as _C_TYPE
 from gui.prb_control.settings import CTRL_ENTITY_TYPE_NAMES as _C_NAMES
@@ -49,7 +48,6 @@ registerPrbStorage(_makeLegacyName(_P_TYPE.EPIC_TRAINING), TrainingStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.MAPBOX), MapboxStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.MAPS_TRAINING), MapsTrainingStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.COMP7), Comp7Storage())
-registerPrbStorage(makeQueueName(_Q_TYPE.WINBACK), WinbackStorage())
 
 class storage_getter(object):
 

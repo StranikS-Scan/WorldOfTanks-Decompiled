@@ -6,15 +6,11 @@ import types
 import typing
 import weakref
 from abc import ABCMeta, abstractmethod
-from collections import OrderedDict
 from copy import deepcopy
 from functools import partial
 from itertools import chain, ifilter
 import ArenaType
 import BigWorld
-from blueprints.BlueprintTypes import BlueprintTypes
-from blueprints.FragmentTypes import getFragmentType
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 import gui.awards.event_dispatcher as award_events
 from gui.shared.account_settings_helper import AccountSettingsHelper
 import personal_missions
@@ -45,11 +41,10 @@ from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken, defaultEventMethod, multipleBattlePassPurchasedEventMethod
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
-from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, BlueprintBonusTypes
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessRewardsView
-from gui.impl.lobby.winback.winback_reward_view import WinbackRewardWindow
 from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, parseComp7TokensQuestID
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
@@ -59,9 +54,9 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from gui.server_events import awards, events_dispatcher as quests_events, recruit_helper
-from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts, GoodiesBonus, VehiclesBonus
+from gui.server_events.bonuses import getServiceBonuses, getMergedBonusesFromDicts
 from gui.server_events.events_dispatcher import showCurrencyReserveAwardWindow, showLootboxesAward, showMissionsBattlePass, showSubscriptionAwardWindow
-from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest, getIdxFromQuestID
+from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDailyQuest
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
@@ -84,7 +79,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -1342,7 +1337,6 @@ class BattlePassStyleRecievedHandler(ServiceChannelHandler):
 
 class BattlePassBuyEmptyHandler(ServiceChannelHandler):
     __battlePass = dependency.descriptor(IBattlePassController)
-    __MULTIPLE_CHAPTER = 0
 
     def __init__(self, awardCtrl):
         super(BattlePassBuyEmptyHandler, self).__init__(SYS_MESSAGE_TYPE.battlePassBought.index(), awardCtrl)
@@ -1368,14 +1362,16 @@ class BattlePassBuyEmptyHandler(ServiceChannelHandler):
         _, message = ctx
         packageRewards = message.data.get('packageReward')
         chapterID = message.data.get('chapter')
+        reason = message.data.get('reason')
         if chapterID is None:
             _logger.error('chapter can not be None!')
             return
         else:
-            if chapterID:
-                reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS
-            else:
-                reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE
+            if reason is None:
+                if chapterID:
+                    reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS
+                else:
+                    reason = BattlePassRewardReason.PURCHASE_BATTLE_PASS_MULTIPLE
             prevLevel, _ = self.__battlePass.getChapterLevelInterval(chapterID)
             callback = partial(self.__onAwardShown, chapterID)
             data = {'prevLevel': prevLevel,
@@ -1613,6 +1609,7 @@ class ResourceWellRewardHandler(ServiceChannelHandler):
 
 
 class Comp7RewardHandler(MultiTypeServiceChannelHandler):
+    __comp7Ctrl = dependency.descriptor(IComp7Controller)
 
     def __init__(self, awardCtrl):
         super(Comp7RewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index()), awardCtrl)
@@ -1626,6 +1623,9 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         data = message.data
+        bonusType = data.get('bonusType', 0)
+        if bonusType == ARENA_BONUS_TYPE.COMP7:
+            self.__comp7Ctrl.onComp7BattleFinished()
         self.__completedQuestIDs.update((qID for qID in data.get('completedQuestIDs', set()) if isComp7VisibleQuest(qID)))
         if not self.__completedQuestIDs:
             return
@@ -1696,139 +1696,6 @@ class Comp7RewardHandler(MultiTypeServiceChannelHandler):
     @staticmethod
     def __getTokensQuestSortKey(quest):
         return parseComp7TokensQuestID(quest.getID())
-
-
-class WinbackQuestHandler(MultiTypeServiceChannelHandler):
-    __notificationMgr = dependency.descriptor(INotificationWindowController)
-    __winbackController = dependency.descriptor(IWinbackController)
-    __goodiesCache = dependency.descriptor(IGoodiesCache)
-    __systemMessages = dependency.descriptor(ISystemMessages)
-    _MAX_COUNT_BONUSES = 4
-
-    def __init__(self, awardCtrl):
-        super(WinbackQuestHandler, self).__init__((SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.battleResults.index()), awardCtrl)
-        self.__quests = {}
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        self._filterDaily()
-        if not self.__quests:
-            return
-        quests = self.__quests
-        isOnlyDaily = len(quests) == 1 and isDailyQuest(first(quests))
-        splittedBonuses = self._splitBonuses()
-        splittedBonusesLength = len(splittedBonuses)
-        if message.type == SYS_MESSAGE_TYPE.battleResults.index():
-            self.__systemMessages.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.WINBACK_BATTLERESULTS_REWARD)
-        for bonusesIndex, bonuses in enumerate(splittedBonuses):
-            fromIdx, toIdx = bonusesIndex * self._MAX_COUNT_BONUSES, (bonusesIndex + 1) * self._MAX_COUNT_BONUSES
-            window = WinbackRewardWindow(ctx={'quests': quests.keys()[fromIdx:toIdx],
-             'bonuses': bonuses,
-             'isOnlyDaily': isOnlyDaily,
-             'isLastWindow': bonusesIndex == splittedBonusesLength - 1})
-            self.__notificationMgr.append(WindowNotificationCommand(window))
-
-    def _filterDaily(self):
-        allQuests = self.eventsCache.getAllQuests()
-        unneccessaryQIDs = [ qID for qID in self.__quests if isDailyQuest(qID) and not self.isShowCongrats(allQuests.get(qID)) ]
-        for qID in unneccessaryQIDs:
-            self.__quests.pop(qID)
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        return False if not super(WinbackQuestHandler, self)._needToShowAward(ctx) else bool(self.__checkWinbackQuests(message.data))
-
-    def _splitBonuses(self):
-        splittedBonuses = []
-        quests = self.__quests
-        questIDs = quests.keys()
-        allBonusesList = []
-        dailyBonuses = {}
-        for questID in questIDs:
-            if isDailyQuest(questID):
-                dailyBonuses = quests[questID]
-            allBonusesList.extend(self._getMainBonusesList(quests[questID]))
-
-        bonusIndex = 0
-        currentBlock = {}
-        countTilMax = self._MAX_COUNT_BONUSES
-        while bonusIndex < len(allBonusesList):
-            if countTilMax == 0:
-                splittedBonuses.append(currentBlock)
-                currentBlock = {}
-                countTilMax = self._MAX_COUNT_BONUSES
-            currentBlock = getMergedBonusesFromDicts([currentBlock] + allBonusesList[bonusIndex:bonusIndex + countTilMax])
-            bonusIndex += countTilMax
-            countTilMax = self._MAX_COUNT_BONUSES - self._calculateMainBonuses(currentBlock)
-
-        if currentBlock:
-            splittedBonuses.append(currentBlock)
-        if dailyBonuses:
-            if splittedBonuses:
-                splittedBonuses[-1] = getMergedBonusesFromDicts([splittedBonuses[-1], dailyBonuses])
-            else:
-                splittedBonuses.append(dailyBonuses)
-        return splittedBonuses
-
-    def _getMainBonusesList(self, bonuses):
-        result = []
-        for bonusName, bonusData in bonuses.items():
-            if bonusName == 'premium_plus':
-                result.append({'premium_plus': bonuses.get('premium_plus')})
-            if bonusName == 'tokens':
-                result += [ {'tokens': {tokenName: bonusData.get(tokenName)}} for tokenName in bonusData.keys() if self.__winbackController.isWinbackOfferToken(tokenName) ]
-            if bonusName == VehiclesBonus.VEHICLES_BONUS:
-                result += [ {VehiclesBonus.VEHICLES_BONUS: {vehicleCD: vehicleData}} for vehicleBlock in bonusData for vehicleCD, vehicleData in vehicleBlock.iteritems() if vehicleData.get('compensatedNumber', 0) <= 0 ]
-            if bonusName == BlueprintBonusTypes.BLUEPRINTS:
-                result += self._getDiscounts(bonuses)
-            if bonusName == 'slots':
-                result.append({bonusName: bonusData})
-
-        return result
-
-    def _getDiscounts(self, bonuses):
-        result = []
-        vehicleToResultIndex = {}
-        blueprints = bonuses.get(BlueprintBonusTypes.BLUEPRINTS, {})
-        for blueprintId in blueprints.keys():
-            result.append({BlueprintBonusTypes.BLUEPRINTS: {blueprintId: blueprints.get(blueprintId)}})
-            if getFragmentType(blueprintId) == BlueprintTypes.VEHICLE:
-                vehicleToResultIndex[blueprintId] = len(result) - 1
-
-        goodies = bonuses.get(GoodiesBonus.GOODIES, {})
-        addedVehicles = vehicleToResultIndex.keys()
-        for goodyId in goodies.keys():
-            goody = self.__goodiesCache.getGoodieByID(goodyId)
-            if goody.variety == GOODIE_VARIETY.DISCOUNT and goody.target and goody.target.targetType == GOODIE_TARGET_TYPE.ON_BUY_VEHICLE:
-                targetValue = goody.target.targetValue
-                if targetValue in addedVehicles:
-                    result[vehicleToResultIndex[targetValue]][GoodiesBonus.GOODIES] = {goodyId: goodies.get(goodyId)}
-
-        return result
-
-    def _calculateMainBonuses(self, bonuses):
-        result = 0
-        for bonusName, bonusData in bonuses.items():
-            if bonusName == 'premium_plus':
-                result += 1
-            if bonusName == 'tokens':
-                offerTokens = [ token for token in bonusData.keys() if self.__winbackController.isWinbackOfferToken(token) ]
-                result += len(offerTokens)
-            if bonusName == VehiclesBonus.VEHICLES_BONUS:
-                for vehicleBlock in bonusData:
-                    result += len(vehicleBlock)
-
-            if bonusName == BlueprintBonusTypes.BLUEPRINTS:
-                result += len(bonusData)
-
-        return result
-
-    def __checkWinbackQuests(self, data):
-        completedQuestIDs = data.get('completedQuestIDs', ())
-        qIDs = [ qID for qID in completedQuestIDs if isDailyQuest(qID) or self.__winbackController.isWinbackQuest(qID) ]
-        if qIDs:
-            self.__quests = OrderedDict(sorted([ (qID, data.get('detailedRewards', {}).get(qID)) for qID in qIDs ], key=lambda item: getIdxFromQuestID(item[0])))
-        return qIDs
 
 
 class CollectionsRewardHandler(ServiceChannelHandler):
@@ -1958,7 +1825,6 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  BattleMattersQuestsHandler,
  ResourceWellRewardHandler,
  Comp7RewardHandler,
- WinbackQuestHandler,
  CollectionsRewardHandler,
  PremiumSubsEntitlementReceivedHandler,
  Comp7CouponHandler,

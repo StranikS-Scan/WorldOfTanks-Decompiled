@@ -10,7 +10,7 @@
   <postProgressionTree>	role_ATSPG_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	36	</forward>
+    <forward>	30	</forward>
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
@@ -45,7 +45,7 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	200	</armor_1>
+      <armor_1>	220	</armor_1>
       <armor_2>	140	</armor_2>
       <armor_3>	60	</armor_3>
       <armor_4>	50	</armor_4>
@@ -1812,7 +1812,7 @@
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	9.7	</reloadTime>
+          <reloadTime>	13.3	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -1820,16 +1820,6 @@
             <afterShot>	8.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shootImpulse>
-            <magnitude>	40	</magnitude>
-            <applicationPoint>	shootPoint	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
-          <shootImpulse>
-            <magnitude>	120	</magnitude>
-            <applicationPoint>	vehicleCOM	</applicationPoint>
-            <isStillSafe>	True	</isStillSafe>
-          </shootImpulse>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1920,7 +1910,7 @@
     <detailed>
       <engines>
         <GTD_2T6x2_T>
-          <smplEnginePower>	860	</smplEnginePower>
+          <smplEnginePower>	750	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </GTD_2T6x2_T>
       </engines>
@@ -1943,8 +1933,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	2	</switchOnTime>
-    <switchOffTime>	2	</switchOffTime>
+    <switchOnTime>	3	</switchOnTime>
+    <switchOffTime>	3	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <soundStateChange>
       <on>	turbine_polish_start_PC	</on>

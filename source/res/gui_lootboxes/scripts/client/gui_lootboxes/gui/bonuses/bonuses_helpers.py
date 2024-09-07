@@ -56,9 +56,10 @@ def preformatStyle(rewards):
 
 def preformatKey(rewards, dataUsedKeys, dataFaildKey):
     for token in rewards.get('tokens', {}).iterkeys():
-        _, keyID = token.split(':')
-        if token.startswith(LOOTBOX_KEY_PREFIX) and (int(keyID) in dataUsedKeys.keys() or int(keyID) in dataFaildKey.keys()):
-            rewards['tokens'][token]['count'] += 1
+        if token.startswith(LOOTBOX_KEY_PREFIX):
+            _, keyID = token.split(':')
+            if int(keyID) in dataUsedKeys.keys() or int(keyID) in dataFaildKey.keys():
+                rewards['tokens'][token]['count'] += 1
 
 
 def prepareOpenResult(result):

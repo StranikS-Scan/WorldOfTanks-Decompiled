@@ -12,7 +12,7 @@ from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHA
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID, COMP7_TOKEN_COUPON_REWARD_NAME, COMP7_TOKEN_COUPON_REWARD_ID
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, VERSUS_AI_PROGRESSION_TOKEN_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -39,7 +39,7 @@ from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
 from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
-from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
+from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN, TokenBonusFormatter
 from gui.server_events.events_helpers import parseC11nProgressToken
 from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
@@ -574,6 +574,29 @@ class TokensBonus(SimpleBonus):
         return sum((v.get('count', 0) for v in self._value.values()))
 
 
+class VersusAIProgressionsTokenBonus(TokensBonus):
+    __TEMPLATE_NAME = 'versusAIProgressionsToken'
+    _formatter = TokenBonusFormatter()
+
+    def _format(self, styleSubset):
+        formatedValue = self.formatValue()
+        progressionName = self.getProgressionName()
+        preformattedBonus = self._formatter.format(self)[0]
+        text = makeHtmlString('html_templates:lobby/quests/{}'.format(styleSubset), self.__TEMPLATE_NAME, {'count': formatedValue,
+         'valueName': preformattedBonus.userName,
+         'progressionName': progressionName})
+        return text if text != self.__TEMPLATE_NAME else formatedValue
+
+    def getProgressionName(self):
+        return next(self._value.iterkeys()).split(':')[1]
+
+    def formatValue(self):
+        return str(self.getCount())
+
+    def isShowInGUI(self):
+        return True
+
+
 class ResourceBonus(TokensBonus):
 
     def __init__(self, name, value, prefix, isCompensation=False, ctx=None):
@@ -1040,8 +1063,8 @@ class X3CrewTokensBonus(TokensBonus):
 
 class SelectableBonus(TokensBonus):
 
-    def __init__(self, value, isCompensation=False, ctx=None):
-        super(SelectableBonus, self).__init__(SELECTABLE_BONUS_NAME, value, isCompensation, ctx)
+    def __init__(self, value, isCompensation=False, ctx=None, name=SELECTABLE_BONUS_NAME):
+        super(SelectableBonus, self).__init__(name, value, isCompensation, ctx)
 
     def isShowInGUI(self):
         return True
@@ -1303,6 +1326,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(Comp7TokenCouponBonus({tID: tValue}, isCompensation, ctx))
         if tID.startswith(COLLECTION_ITEM_TOKEN_PREFIX_NAME):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(VERSUS_AI_PROGRESSION_TOKEN_PREFIX):
+            result.append(VersusAIProgressionsTokenBonus(name, {tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -3086,6 +3111,27 @@ def _getItemTooltip(name):
     return makeTooltip(header or None, body or None) if header or body else ''
 
 
+def mergeBonuses(bonuses):
+    merged = copy.deepcopy(bonuses)
+    if len(merged) > 1:
+        i = 0
+        while i < len(merged) - 1:
+            j = i + 1
+            while j < len(merged):
+                mergFunc = getMergeBonusFunction(merged[i], merged[j])
+                if mergFunc and merged[i].getName() == merged[j].getName():
+                    merged[i], needPop = mergFunc(merged[i], merged[j])
+                    if needPop:
+                        merged.pop(j)
+                    else:
+                        j += 1
+                j += 1
+
+            i += 1
+
+    return merged
+
+
 def getMergeBonusFunction(lhv, rhv):
 
     def hasOneBaseClass(l, r, cls):
@@ -3106,27 +3152,6 @@ def getMergeBonusFunction(lhv, rhv):
         return None
     else:
         return mergeSimpleBonuses if ofSameClassWithBase(lhv, lhv, SimpleBonus) else None
-
-
-def mergeBonuses(bonuses, getMergeFunc=getMergeBonusFunction):
-    merged = copy.deepcopy(bonuses)
-    if len(merged) > 1:
-        i = 0
-        while i < len(merged) - 1:
-            j = i + 1
-            while j < len(merged):
-                mergFunc = getMergeFunc(merged[i], merged[j])
-                if mergFunc and merged[i].getName() == merged[j].getName():
-                    merged[i], needPop = mergFunc(merged[i], merged[j])
-                    if needPop:
-                        merged.pop(j)
-                    else:
-                        j += 1
-                j += 1
-
-            i += 1
-
-    return merged
 
 
 def mergeItemsBonuses(lhv, rhv):

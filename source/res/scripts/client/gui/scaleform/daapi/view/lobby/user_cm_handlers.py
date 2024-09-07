@@ -21,6 +21,7 @@ from gui.shared import event_dispatcher as shared_events, events, g_eventBus, ut
 from gui.clans.clan_cache import ClanInfo
 from gui.shared.denunciator import LobbyDenunciator, LobbyChatDenunciator, DENUNCIATIONS, DENUNCIATIONS_MAP
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.gui_items.vehicle_helpers import isSecretExtendedNonInventoryVehicle
 from gui.shared.utils.functions import showSentInviteMessage
 from gui.wgcg.clan.contexts import CreateInviteCtx
 from helpers import i18n, dependency
@@ -32,7 +33,7 @@ from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IWinbackController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -80,7 +81,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
-    __winbackController = dependency.descriptor(IWinbackController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -290,7 +290,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 isEnabled = self.__epicCtrl.isCurrentCycleActive() if self.__epicCtrl.isEpicPrbActive() else True
                 state = self.prbDispatcher.getFunctionalState()
                 isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
-                isEnabled = isEnabled and (isRandomSquadAction or not self.__winbackController.isModeAvailable())
+                isEnabled = isEnabled and isRandomSquadAction
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
             if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
@@ -458,6 +458,7 @@ class AppealCMHandler(BaseUserCMHandler):
     def __init__(self, cmProxy, ctx=None):
         super(AppealCMHandler, self).__init__(cmProxy, ctx)
         self._denunciator = LobbyDenunciator()
+        self._ctx = ctx
 
     def fini(self):
         self._denunciator = None
@@ -465,16 +466,16 @@ class AppealCMHandler(BaseUserCMHandler):
         return
 
     def appealIncorrectBehavior(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self._arenaUniqueID)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self._arenaUniqueID, self._ctx)
 
     def appealNotFairPlay(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self._arenaUniqueID)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self._arenaUniqueID, self._ctx)
 
     def appealForbiddenNick(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FORBIDDEN_NICK, self._arenaUniqueID)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.FORBIDDEN_NICK, self._arenaUniqueID, self._ctx)
 
     def appealBot(self):
-        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.BOT, self._arenaUniqueID)
+        self._denunciator.makeAppeal(self.databaseID, self.userName, DENUNCIATIONS.BOT, self._arenaUniqueID, self._ctx)
 
     def showVehicleInfo(self):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
@@ -482,6 +483,8 @@ class AppealCMHandler(BaseUserCMHandler):
 
     def showVehiclePreview(self):
         vehicleCD = getValidVehicleCDForNationChange(self._vehicleCD)
+        if isSecretExtendedNonInventoryVehicle(vehicleCD):
+            return
         shared_events.showVehiclePreview(vehicleCD)
         shared_events.hideBattleResults()
 

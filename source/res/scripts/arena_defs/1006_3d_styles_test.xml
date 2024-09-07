@@ -1,0 +1,36 @@
+<1006_3d_styles_test.xml>
+  <name>	#arenas:1006_3d_styles_test/name	</name>
+  <description>	#arenas:1006_3d_styles_test/description	</description>
+  <geometry>	spaces/1006_3d_styles_test	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/1006_3d_styles_test/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading></wwmusicLoading>
+    <wwmusicIntensive></wwmusicIntensive>
+    <wwmusicRelaxed></wwmusicRelaxed>
+    <wwmusicStop></wwmusicStop>
+    <wwmusicEndbattleStop></wwmusicEndbattleStop>
+    <wwmusicResultWin></wwmusicResultWin>
+    <wwmusicResultDrawn></wwmusicResultDrawn>
+    <wwmusicResultDefeat></wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</1006_3d_styles_test.xml>

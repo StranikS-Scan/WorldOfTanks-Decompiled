@@ -10,10 +10,10 @@ class Winback(object):
     def __init__(self, commandsProxy):
         self.__commandsProxy = commandsProxy
 
-    def turnOffBattles(self, reason, callback):
+    def drawWinbackSelectorHintToken(self, callback):
         if callback is not None:
             proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr)
         else:
             proxy = None
-        self.__commandsProxy.perform(AccountCommands.CMD_TURNOFF_WINBACK_BATTLES, reason, proxy)
+        self.__commandsProxy.perform(AccountCommands.CMD_DRAW_WINBACK_SELECTOR_HINT_TOKEN, 0, proxy)
         return

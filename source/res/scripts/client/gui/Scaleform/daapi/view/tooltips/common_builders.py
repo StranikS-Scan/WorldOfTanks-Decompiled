@@ -48,8 +48,8 @@ def getTooltipBuilders():
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_IN_PROGRESS, None, common.BattlePassInProgressTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_COMPLETED, None, common.BattlePassCompletedTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BATTLE_PASS_NO_CHAPTER, None, common.BattlePassNoChapterTooltipWindowData(contexts.ToolTipContext(None))),
-     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_DISCOUNT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeDiscountInfoTooltip(contexts.QuestContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_DISCOUNT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationDiscountTooltip(contexts.TechTreeContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_EVENT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeEventInfoTooltip(contexts.QuestContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_NATION_EVENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, common.TechTreeNationEventTooltip(contexts.TechTreeContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.DOG_TAGS_INFO, TOOLTIPS_CONSTANTS.DOG_TAGS_INFO_UI, DogTagInfoTooltip(contexts.DogTagInfoContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEH_POST_PROGRESSION_ENTRY_POINT, None, common.VehPostProgressionEntryPointTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_REWARDS, None, common.AdditionalRewardsTooltipContentWindowData(contexts.ToolTipContext(None))))

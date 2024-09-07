@@ -341,6 +341,9 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
     def _createExchangeCollector(self):
         raise NotImplementedError
 
+    def _getArenaWinText(self):
+        return self._battleCtx.getArenaWinString()
+
     def _getArenaWinTextShort(self):
         return self._battleCtx.getArenaWinString()
 
@@ -367,7 +370,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         battleCtx = self._battleCtx
         questProgress = self.sessionProvider.shared.questProgress
         arenaInfoData = {'mapName': battleCtx.getArenaTypeName(),
-         'winText': battleCtx.getArenaWinString(),
+         'winText': self._getArenaWinText(),
          'winTextShort': self._getArenaWinTextShort(),
          'battleTypeLocaleStr': battleCtx.getArenaDescriptionString(isInBattle=False),
          'battleTypeIconPathBig': battleCtx.getBattleTypeIconPathBig(),

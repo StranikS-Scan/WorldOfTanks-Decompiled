@@ -13,9 +13,7 @@ class WGNC_ALIASES(object):
     NOT_MODAL_BASIC_WINDOW = 'wgnc/notModalBasicWindow'
     POLL_WINDOW = 'wgnc/pollWindow'
     SWF_DIALOG = 'WGNCDialog.swf'
-    SWF_POLL_WINDOW = 'WGNCPollWindow.swf'
     UI_DIALOG = 'WGNCDialog'
-    UI_POLL_WINDOW = 'WGNCPollWindowUI'
 
 
 def getContextMenuHandlers():
@@ -24,8 +22,7 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.wgnc.WGNCDialog import WGNCDialog
-    from gui.Scaleform.daapi.view.lobby.wgnc.WGNCPollWindow import WGNCPollWindow
-    return (ViewSettings(WGNC_ALIASES.MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.TOP_WINDOW, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE, isModal=True), GroupedViewSettings(WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.WINDOW, WGNC_ALIASES.UI_DIALOG, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE), GroupedViewSettings(WGNC_ALIASES.POLL_WINDOW, WGNCPollWindow, WGNC_ALIASES.SWF_POLL_WINDOW, WindowLayer.WINDOW, WGNC_ALIASES.UI_POLL_WINDOW, events.WGNCShowItemEvent.SHOW_POLL_WINDOW, ScopeTemplates.DEFAULT_SCOPE))
+    return (ViewSettings(WGNC_ALIASES.MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.TOP_WINDOW, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE, isModal=True), GroupedViewSettings(WGNC_ALIASES.NOT_MODAL_BASIC_WINDOW, WGNCDialog, WGNC_ALIASES.SWF_DIALOG, WindowLayer.WINDOW, WGNC_ALIASES.UI_DIALOG, events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -35,7 +32,7 @@ def getBusinessHandlers():
 class _WGNCPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, self.__showBasicWindow), (events.WGNCShowItemEvent.SHOW_POLL_WINDOW, self.__showPollWindow))
+        listeners = ((events.WGNCShowItemEvent.SHOW_BASIC_WINDOW, self.__showBasicWindow),)
         super(_WGNCPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def __showBasicWindow(self, event):

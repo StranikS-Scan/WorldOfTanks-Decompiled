@@ -749,16 +749,23 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def canShoot(self, isRepeat=False):
         if self.__currShellCD is None:
             result, error = False, CANT_SHOOT_ERROR.WAITING
-        elif self.__ammo[self.__currShellCD][0] == 0:
-            result, error = False, CANT_SHOOT_ERROR.NO_AMMO
-        elif self.isGunReloading():
-            if not isRepeat and self.__gunSettings.hasAutoReload():
-                self.__shotFail()
-            result, error = False, CANT_SHOOT_ERROR.RELOADING
-        elif self.__ammo[self.__currShellCD][1] == 0 and self.__gunSettings.isCassetteClip():
-            result, error = True, CANT_SHOOT_ERROR.EMPTY_CLIP
         else:
-            result, error = True, CANT_SHOOT_ERROR.UNDEFINED
+            isCassette = self.__gunSettings.isCassetteClip()
+            totalAmmo = self.__ammo[self.__currShellCD][0]
+            totalCellAmmo = self.__ammo[self.__currShellCD][1]
+            burstSize = self.__gunSettings.burst.size
+            if totalAmmo == 0:
+                result, error = False, CANT_SHOOT_ERROR.NO_AMMO
+            elif totalCellAmmo == 0 and isCassette and totalAmmo < burstSize:
+                result, error = False, CANT_SHOOT_ERROR.NO_AMMO
+            elif self.isGunReloading():
+                if not isRepeat and self.__gunSettings.hasAutoReload():
+                    self.__shotFail()
+                result, error = False, CANT_SHOOT_ERROR.RELOADING
+            elif totalCellAmmo == 0 and isCassette:
+                result, error = True, CANT_SHOOT_ERROR.EMPTY_CLIP
+            else:
+                result, error = True, CANT_SHOOT_ERROR.UNDEFINED
         return (result, error)
 
     def clearAmmo(self):

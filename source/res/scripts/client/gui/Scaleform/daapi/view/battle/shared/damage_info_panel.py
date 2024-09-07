@@ -19,6 +19,8 @@ _DEVICE_NAME_TO_ID = {'gunHealth': DAMAGE_INFO_PANEL_CONSTS.GUN,
  'ammoBayHealth': DAMAGE_INFO_PANEL_CONSTS.AMMO_BAY,
  'leftTrack0Health': DAMAGE_INFO_PANEL_CONSTS.LEFT_TRACK,
  'rightTrack0Health': DAMAGE_INFO_PANEL_CONSTS.RIGHT_TRACK,
+ 'leftTrack1Health': DAMAGE_INFO_PANEL_CONSTS.SECOND_LEFT_TRACK,
+ 'rightTrack1Health': DAMAGE_INFO_PANEL_CONSTS.SECOND_RIGHT_TRACK,
  'commanderHealth': DAMAGE_INFO_PANEL_CONSTS.COMMANDER,
  'gunner1Health': DAMAGE_INFO_PANEL_CONSTS.FIRST_GUNNER,
  'gunner2Health': DAMAGE_INFO_PANEL_CONSTS.SECOND_GUNNER,
@@ -43,7 +45,9 @@ _DEVICE_HIDE_METHODS = {DAMAGE_INFO_PANEL_CONSTS.GUN: 'as_hideGunS',
  DAMAGE_INFO_PANEL_CONSTS.RADIO: 'as_hideRadioS',
  DAMAGE_INFO_PANEL_CONSTS.AMMO_BAY: 'as_hideAmmoBayS',
  DAMAGE_INFO_PANEL_CONSTS.LEFT_TRACK: 'as_hideLeftTrackS',
+ DAMAGE_INFO_PANEL_CONSTS.SECOND_LEFT_TRACK: 'as_hideSecondLeftTrackS',
  DAMAGE_INFO_PANEL_CONSTS.RIGHT_TRACK: 'as_hideRightTrackS',
+ DAMAGE_INFO_PANEL_CONSTS.SECOND_RIGHT_TRACK: 'as_hideSecondRightTrackS',
  DAMAGE_INFO_PANEL_CONSTS.WHEEL: 'as_hideWheelS',
  DAMAGE_INFO_PANEL_CONSTS.COMMANDER: 'as_hideCommanderS',
  DAMAGE_INFO_PANEL_CONSTS.FIRST_GUNNER: 'as_hideFirstGunnerS',
@@ -61,7 +65,9 @@ _DEVICE_UPDATE_METHODS = {DAMAGE_INFO_PANEL_CONSTS.GUN: 'as_updateGunS',
  DAMAGE_INFO_PANEL_CONSTS.RADIO: 'as_updateRadioS',
  DAMAGE_INFO_PANEL_CONSTS.AMMO_BAY: 'as_updateAmmoBayS',
  DAMAGE_INFO_PANEL_CONSTS.LEFT_TRACK: 'as_updateLeftTrackS',
+ DAMAGE_INFO_PANEL_CONSTS.SECOND_LEFT_TRACK: 'as_updateSecondLeftTrackS',
  DAMAGE_INFO_PANEL_CONSTS.RIGHT_TRACK: 'as_updateRightTrackS',
+ DAMAGE_INFO_PANEL_CONSTS.SECOND_RIGHT_TRACK: 'as_updateSecondRightTrackS',
  DAMAGE_INFO_PANEL_CONSTS.WHEEL: 'as_updateWheelS',
  DAMAGE_INFO_PANEL_CONSTS.COMMANDER: 'as_updateCommanderS',
  DAMAGE_INFO_PANEL_CONSTS.FIRST_GUNNER: 'as_updateFirstGunnerS',
@@ -93,33 +99,15 @@ def _defaultIterator(fetcher):
     return
 
 
-def _yohIterator(fetcher):
-    damagedDevices = dict(fetcher.getDamagedDevices())
-    for mainTrack, protectingTrack in (('leftTrack0Health', 'leftTrack1Health'), ('rightTrack0Health', 'rightTrack1Health')):
-        isMainDestroyed = damagedDevices.get(mainTrack) == 'destroyed'
-        isProtectingDestroyed = damagedDevices.get(protectingTrack) == 'destroyed'
-        damagedDevices.pop(protectingTrack, None)
-        if isMainDestroyed or isProtectingDestroyed:
-            damagedDevices[mainTrack] = 'destroyed' if isMainDestroyed else 'damaged'
-        damagedDevices.pop(mainTrack, None)
-
-    for deviceName, state in damagedDevices.iteritems():
-        value = _deviceDataConverter(deviceName, state)
-        if value is not None:
-            yield value
-
-    return
-
-
-def _getDevicesIterator(fetcher, isYoh):
-    iterator = _yohIterator if isYoh else _defaultIterator
+def _getDevicesIterator(fetcher):
+    iterator = _defaultIterator
     for value in iterator(fetcher):
         yield value
 
 
-def _getDevicesSnapshot(fetcher, isYoh):
+def _getDevicesSnapshot(fetcher):
     snap = set()
-    for deviceID, stateID in _getDevicesIterator(fetcher, isYoh):
+    for deviceID, stateID in _getDevicesIterator(fetcher):
         snap.add((deviceID, stateID))
 
     return snap
@@ -134,7 +122,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         self.__vehicleID = 0
         self.__devicesSnap = set()
         self.__isInFire = False
-        self.__isTrackWithinTrack = False
+        self.__hasMultiTrack = False
 
     def _populate(self):
         super(DamageInfoPanel, self)._populate()
@@ -165,13 +153,15 @@ class DamageInfoPanel(DamageInfoPanelMeta):
                 handler.onCameraChanged -= self.__onCameraChanged
         self.__devicesSnap.clear()
         self.__isInFire = False
+        self.__hasMultiTrack = False
         super(DamageInfoPanel, self)._dispose()
         return
 
     def __show(self, vehicleID, fetcher):
         vehicleType = self.sessionProvider.arenaVisitor.vehicles.getVehicleInfo(vehicleID).get('vehicleType')
         if vehicleType is not None:
-            self.__isTrackWithinTrack = vehicleType.isTrackWithinTrack
+            if vehicleType.isTrackWithinTrack or vehicleType.isMultiTrack:
+                self.__hasMultiTrack = True
         if not self.__isShown:
             self.__setDevicesStates(fetcher)
         else:
@@ -187,12 +177,11 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         self.__vehicleID = 0
         self.__devicesSnap.clear()
         self.__isShown = False
-        self.__isTrackWithinTrack = False
 
     def __setDevicesStates(self, fetcher):
         self.__isShown = True
         items = []
-        for deviceID, stateID in _getDevicesIterator(fetcher, self.__isTrackWithinTrack):
+        for deviceID, stateID in _getDevicesIterator(fetcher):
             items.append((deviceID, stateID))
             self.__devicesSnap.add((deviceID, stateID))
 
@@ -202,10 +191,10 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         else:
             fireID = DAMAGE_INFO_PANEL_CONSTS.HIDE_FIRE
         LOG_DEBUG('Shows states of devices', items, self.__isInFire)
-        self.as_showS(items, fireID)
+        self.as_showS(items, fireID, self.__hasMultiTrack)
 
     def __updateDevicesStates(self, vehicleID, fetcher):
-        newDevicesSnap = _getDevicesSnapshot(fetcher, self.__isTrackWithinTrack)
+        newDevicesSnap = _getDevicesSnapshot(fetcher)
         toHide = self.__devicesSnap.difference(newDevicesSnap)
         toUpdate = dict(newDevicesSnap.difference(self.__devicesSnap))
         for deviceID, _ in toHide:

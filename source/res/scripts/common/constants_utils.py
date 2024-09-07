@@ -206,13 +206,6 @@ def initSquadCommonTypes(extConstants, personality):
     addClientUnitCmd(extConstants.CLIENT_UNIT_CMD, personality)
 
 
-def deselectLobbyHeaderButtons(alias, personality):
-    from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
-    LobbyHeader.DESELECT_TAB_ALIASES.add(alias)
-    msg = 'alias:{alias} was added to DESELECT_TAB_ALIASES. Personality: {p}'.format(alias=alias, p=personality)
-    LOG_DEBUG(msg)
-
-
 class AbstractBattleMode(object):
     _PREBATTLE_TYPE = None
     _QUEUE_TYPE = None
@@ -361,6 +354,10 @@ class AbstractBattleMode(object):
 
     @property
     def _client_notificationActionHandlers(self):
+        return []
+
+    @property
+    def _client_notificationListeners(self):
         return []
 
     @property
@@ -572,6 +569,10 @@ class AbstractBattleMode(object):
     def registerClientNotificationHandlers(self):
         from gui.shared.system_factory import registerNotificationsActionsHandlers
         registerNotificationsActionsHandlers(self._client_notificationActionHandlers)
+
+    def registerClientNotificationListeners(self):
+        from gui.shared.system_factory import registerNotificationsListeners
+        registerNotificationsListeners(self._client_notificationListeners)
 
     def registerMessengerClientFormatters(self, extGuiConstants):
         extGuiConstants.SCH_CLIENT_MSG_TYPE.inject(self._personality)

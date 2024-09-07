@@ -10,4 +10,5 @@ def getTooltipBuilders():
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_VEHICLE_LOCKED, None, early_access.EarlyAccessVehicleLockedTooltipData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_PAUSED, None, early_access.EarlyAccessPausedTooltipData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_CAROUSEL_VEHICLE_POST_PROGRESSION, None, early_access.EarlyAccessCarouselVehiclePostProgressionTooltipData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_CURRENCY, None, early_access.EarlyAccessCurrencyTooltipData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_CURRENCY, None, early_access.EarlyAccessCurrencyTooltipData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.EARLY_ACCESS_ENTRY_POINT, None, early_access.EarlyAccessEntryPointTooltipWindowData(contexts.ToolTipContext(None))))

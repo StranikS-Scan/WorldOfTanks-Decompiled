@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/early_access/tooltips/early_access_entry_point_tooltip_view.py
 from early_access_common import EARLY_ACCESS_POSTPR_KEY
+from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 from frameworks.wulf import ViewSettings
@@ -9,6 +10,7 @@ from skeletons.gui.game_control import IEarlyAccessController
 from gui.impl.gen.view_models.views.lobby.early_access.tooltips.early_access_entry_point_tooltip_view_model import EarlyAccessEntryPointTooltipViewModel
 from gui.impl.gen.view_models.views.lobby.early_access.tooltips.early_access_tooltip_chapter_model import EarlyAccessTooltipChapterModel, TooltipChapterState
 from gui.impl.gen.view_models.views.lobby.early_access.early_access_state_enum import State
+from nations import AVAILABLE_NAMES
 
 class EarlyAccessEntryPointTooltipView(ViewImpl):
     __slots__ = ('__isHavePostprVehicle', '__isPostprActive', '__showOnlyPostProgression')
@@ -67,15 +69,18 @@ class EarlyAccessEntryPointTooltipView(ViewImpl):
     def __updateChapter(self, chaptersArray, cycleID, isPrevChapterFinished, prevRemainQuests=0):
         ctrl = self.__earlyAccessController
         chapterModel = EarlyAccessTooltipChapterModel()
-        completedQuests = sum((quest.isCompleted() for quest in ctrl.iterCycleProgressionQuests(cycleID)))
-        totalQuests = sum((1 for _ in ctrl.iterCycleProgressionQuests(cycleID)))
+        completedQuests = sum(((quest.isCompleted() if quest is not None else False) for quest in ctrl.iterCycleProgressionQuests(cycleID)))
+        totalQuests = sum(((1 if quest else 0) for quest in ctrl.iterCycleProgressionQuests(cycleID)))
         remainQuests = totalQuests - completedQuests
         isChapterFinished = bool(completedQuests == totalQuests)
         state = TooltipChapterState.ACTIVE
         if cycleID == EARLY_ACCESS_POSTPR_KEY:
-            _, minLvl, maxLvl = ctrl.getRequiredVehicleTypeAndLevelsForQuest(None)
+            vehicleType, minLvl, maxLvl = ctrl.getRequiredVehicleTypeAndLevelsForQuest(None)
+            nation = AVAILABLE_NAMES[self.__earlyAccessController.getNationID()]
             chapterModel.setMinVehicleLvl(minLvl)
             chapterModel.setMaxVehicleLvl(maxLvl)
+            chapterModel.setVehicleType(vehicleType)
+            chapterModel.setNation(backport.text(R.strings.nations.dyn(nation).genetiveCase()))
             if isChapterFinished:
                 state = TooltipChapterState.COMPLETED
             elif self.__isHavePostprVehicle and not isChapterFinished:

@@ -317,9 +317,11 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     DISPLAY_PLATOON_MEMBER_CLICKED = 'isDisplayPlatoonMembersClicked'
     VEH_POST_PROGRESSION_UNLOCK_MSG_NEED_SHOW = 'vehPostProgressionUnlockMsgNeedShow'
     BIRTHDAY_CALENDAR_INTRO_SHOWED = 'birthdayCalendarIntroShowed'
+    WINBACK_INTRO_SHOWED = 'isWinbackIntroShown'
     RESOURCE_WELL_INTRO_SHOWN = 'resourceWellIntroShown'
     COMP7_INTRO_SHOWN = 'isComp7IntroShown'
     COMP7_WHATS_NEW_SHOWN = 'isComp7WhatsNewShown'
+    COMP7_VERSION_FLAG = 'comp7VersionFlag'
     CREW_22_WELCOME_SHOWN = 'crew22WelcomeShown'
 
 
@@ -388,6 +390,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     SUMMARY_CUSTOMIZATION_BUTTON_HINT = 'SummaryCustomizationButtonHint'
     REFERRAL_RECRUIT_ENTRY_POINT_HINT = 'ReferralRecruitEntryPointHint'
     REFERRAL_ENTRY_POINT_HINT = 'ReferralEntryPointHint'
+    BATTLE_SELECTOR_BAR_AI_HINT = 'BattleSelectorBarAIHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

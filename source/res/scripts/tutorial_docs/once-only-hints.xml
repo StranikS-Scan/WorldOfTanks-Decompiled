@@ -962,5 +962,18 @@
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	BattleSelectorBarAIHint	  <item-id>	BattleSelectorBar	</item-id>
+      <text>	_(#winback.winback:hint/text)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	isChangeAIMode	</global-active>
+      </condition>
+    </hint>
   </hints>
 </once-only-hints.xml>

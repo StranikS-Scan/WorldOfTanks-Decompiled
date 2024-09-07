@@ -570,7 +570,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
     @classmethod
     def isSuitable(cls):
         guiType = cls.sessionProvider.arenaVisitor.getArenaGuiType()
-        return guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
+        return not cls.sessionProvider.isReplayPlaying and guiType != ARENA_GUI_TYPE.RANKED and guiType != ARENA_GUI_TYPE.BATTLE_ROYALE and guiType != ARENA_GUI_TYPE.MAPS_TRAINING
 
     def start(self):
         prbSettings = dict(AccountSettings.getSettings(PRE_BATTLE_HINT_SECTION))
@@ -648,7 +648,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return False
 
     def __checkHintConditions(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or self.__checkFlameThrowerConditions(typeDescriptor)
+        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or typeDescriptor.isMultiTrack or self.__checkFlameThrowerConditions(typeDescriptor)
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():

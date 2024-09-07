@@ -6,7 +6,7 @@ from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
 from comp7_common import COMP7_CURRENT_SEASON
-COMP7_MASCOT_ID = 3
+COMP7_MASCOT_ID = 4
 COMP7_RATING_ENTITLEMENT_TMPL = 'comp7_rating_points'
 COMP7_RATING_ENTITLEMENT = 'comp7_rating_points:{}:{}'.format(COMP7_MASCOT_ID, COMP7_CURRENT_SEASON)
 COMP7_ELITE_ENTITLEMENT = 'comp7_elite_rank:{}:{}'.format(COMP7_MASCOT_ID, COMP7_CURRENT_SEASON)
@@ -104,7 +104,7 @@ def parseRatingEnt(entCode):
     if not checkIfRatingEnt(entCode):
         return (None, None)
     else:
-        _, mascotID, index = entCode.split(':', 3)
+        _, mascotID, index = entCode.split(':', 4)
         return (int(mascotID), int(index))
 
 

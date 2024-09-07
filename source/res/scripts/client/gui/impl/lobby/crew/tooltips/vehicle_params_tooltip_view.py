@@ -16,6 +16,7 @@ from gui.impl import backport
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters import formatters as param_formatter
 from helpers import i18n
+from items.vehicle_items import CHASSIS_ITEM_TYPE
 from post_progression_common import ACTION_TYPES
 from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, isRomanNumberForbidden
 from items import perks, vehicles, tankmen, parseIntCompactDescr
@@ -262,6 +263,9 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
                 desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
             elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.hasDualAccuracy:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
+            elif self._paramName == CHASSIS_REPAIR_TIME and vehicle and vehicle.isMultiTrack:
+                trackType = CHASSIS_ITEM_TYPE.TRACK_TYPE_MAP[vehicle.chassisType]
+                desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeMultiTrack.dyn(trackType)())
             else:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
         if isRelativeParameter(self._paramName) and self._context.isApproximately:

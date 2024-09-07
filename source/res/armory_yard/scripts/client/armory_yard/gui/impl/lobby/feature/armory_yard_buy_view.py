@@ -97,7 +97,7 @@ class ArmoryYardBuyView(ViewImpl):
             action = factory.getAction(BUY_STEP_TOKENS, stepCount)
             result = yield factory.asyncDoAction(action)
             if result:
-                self.__armoryYardCtrl.onPayed(stepCount, price)
+                self.__armoryYardCtrl.onPayed(False, stepCount, price)
                 self.destroyWindow()
             else:
                 self.__armoryYardCtrl.onPayedError()
@@ -114,7 +114,7 @@ class ArmoryYardBuyView(ViewImpl):
     def onShowVehiclePreview(self):
         vehicle = self.__armoryYardCtrl.getFinalRewardVehicle()
         self.__armoryYardCtrl.isVehiclePreview = True
-        showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=partial(self.__armoryYardCtrl.goToArmoryYard, loadBuyView=True), backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))
+        showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadBuyView': True}), backBtnLabel=backport.text(R.strings.armory_yard.buyView.backButton.mainView()))
         self.__armoryYardCtrl.cameraManager.goToHangar()
 
     def _onLoaded(self, *args, **kwargs):

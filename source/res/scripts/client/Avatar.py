@@ -66,7 +66,7 @@ from constants import DEFAULT_VECTOR_3
 from constants import DROWN_WARNING_LEVEL
 from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_TYPE
 from constants import TARGET_LOST_FLAGS
-from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS, VEHICLE_SIEGE_STATE
+from constants import VEHICLE_MISC_STATUS, VEHICLE_HIT_FLAGS, VEHICLE_SIEGE_STATE, VEHICLE_MOVEMENT_STATES
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING, LOG_NOTE
 from DualAccuracy import getPlayerVehicleDualAccuracy
 from gui import GUI_CTRL_MODE_FLAG, IngameSoundNotifications, SystemMessages
@@ -268,6 +268,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__vehiclesWaitedInfo = {}
         self.__isVehicleMoving = False
         self.__deadOnLoading = False
+        self.isStaticWeatherSwitchEnabled = False
         self.arena = None
         return
 
@@ -296,6 +297,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         uniprof.enterToRegion('avatar.arena.loading')
         BigWorld.enableLoadingTimer(True)
         self.arena = ClientArena.ClientArena(self.arenaUniqueID, self.arenaTypeID, self.arenaBonusType, self.arenaGuiType, self.arenaExtraData, self.spaceID)
+        self.isStaticWeatherSwitchEnabled = self.lobbyContext.getServerSettings().isStaticWeatherSwitchEnabled()
         AreaDestructibles.g_destructiblesManager.startSpace(self.spaceID)
         if self.arena.arenaType is None:
             import game
@@ -1897,8 +1899,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             cantMove = False
             vehicle = BigWorld.entity(self.playerVehicleID)
             if self.inputHandler.ctrl.isSelfVehicle():
-                for deviceName, stateName in self.__deviceStates.iteritems():
-                    msgName = self.__cantMoveCriticals.get(deviceName + '_' + stateName)
+                for deviceName in self.__deviceStates:
+                    msgName = self.getCantMoveMessage(deviceName, self.__deviceStates)
                     if msgName is not None:
                         cantMove = True
                         if isKeyDown:
@@ -2561,10 +2563,23 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.inputHandler.detachCursor(value, enableAiming)
 
     __cantMoveCriticals = {'engine_destroyed': 'cantMoveEngineDamaged',
-     'leftTrack0_destroyed': 'cantMoveChassisDamaged',
-     'rightTrack0_destroyed': 'cantMoveChassisDamaged',
      'vehicle_destroyed': 'cantMoveVehicleDestroyed',
-     'crew_destroyed': 'cantMoveCrewInactive'}
+     'crew_destroyed': 'cantMoveCrewInactive',
+     'leftTrack0_destroyed': 'cantMoveChassisDamaged',
+     'rightTrack0_destroyed': 'cantMoveChassisDamaged'}
+
+    def getCantMoveMessage(self, deviceName, deviceStates):
+        if self.vehicleTypeDescriptor.isMultiTrack and _isDeviceTrack(deviceName):
+            if self.__getVehicleMovementState() == VEHICLE_MOVEMENT_STATES.STOP:
+                return 'cantMoveChassisDamaged'
+            return None
+        else:
+            return self.__cantMoveCriticals.get('_'.join((deviceName, deviceStates[deviceName])))
+
+    def __getVehicleMovementState(self):
+        isRightSideDestroyed = self.__isTrackSideDestroyed('rightTrack', self.__deviceStates)
+        isLeftSideDestroyed = self.__isTrackSideDestroyed('leftTrack', self.__deviceStates)
+        return VEHICLE_MOVEMENT_STATES.STOP if isRightSideDestroyed or isLeftSideDestroyed else VEHICLE_MOVEMENT_STATES.NORMAL
 
     def __setIsOnArena(self, onArena):
         if self.__isOnArena == onArena:
@@ -2583,28 +2598,43 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def showVehicleError(self, msgName, args=None):
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
 
+    def __isTrackSideDestroyed(self, trackSide, damagedDevices):
+        needToStop = self.vehicleTypeDescriptor.trackPairsCount
+        brokenTracks = 0
+        for device, state in list(damagedDevices.items()):
+            if device.startswith(trackSide) and state == 'destroyed':
+                brokenTracks += 1
+
+        return brokenTracks == needToStop
+
     def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, ignoreMessages=False):
         deviceName = None
         deviceState = None
         soundType = None
         soundNotificationCheckFn = None
         if extra is not None:
+            prevState = self.__getVehicleMovementState()
             if damageCode in self.__damageInfoCriticals:
                 deviceName = extra.name[:-len('Health')]
                 if damageCode == 'DEVICE_REPAIRED_TO_CRITICAL':
                     deviceState = 'repaired'
-                    soundType = self.__getSoundTypeForTracks(deviceName, extra)
+                    soundType = self.__getSoundTypeForTrackRepaired(deviceName, extra)
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_DEVICE_CRITICAL, deviceName=deviceName, isRepaired=True, isCriticalNow=True)
                 else:
                     deviceState = 'critical'
                     soundType = 'critical'
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_DEVICE_CRITICAL, deviceName=deviceName, isRepaired=False, isCriticalNow=True)
                 self.__deviceStates[deviceName] = 'critical'
+                if deviceState == 'repaired':
+                    if self.vehicleTypeDescriptor.isMultiTrack and _isDeviceTrack(deviceName):
+                        soundType = self.__getSoundTypeForMultiTrackRepaired(prevState, extra)
             elif damageCode in self.__damageInfoDestructions:
                 deviceName = extra.name[:-len('Health')]
                 deviceState = 'destroyed'
                 soundType = 'destroyed'
                 self.__deviceStates[deviceName] = 'destroyed'
+                if self.vehicleTypeDescriptor.isMultiTrack and _isDeviceTrack(deviceName) and prevState == self.__getVehicleMovementState():
+                    soundType = None
                 if damageCode.find('TANKMAN_HIT') != -1 and not ignoreMessages:
                     self.playSoundIfNotMuted('crew_member_contusion')
                 if damageCode.find('TANKMAN_HIT') != -1:
@@ -2612,17 +2642,17 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 else:
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_DEVICE_CRITICAL, deviceName=deviceName, isRepaired=False, isCriticalNow=False)
                 if self.__cruiseControlMode is not _CRUISE_CONTROL_MODE.NONE:
-                    msgName = self.__cantMoveCriticals.get(deviceName + '_' + deviceState)
+                    msgName = self.getCantMoveMessage(deviceName, self.__deviceStates)
                     if msgName is not None:
                         self.showVehicleError(msgName)
             elif damageCode in self.__damageInfoHealings:
                 deviceName = extra.name[:-len('Health')]
                 deviceState = 'normal'
                 if deviceName in ('leftTrack0', 'rightTrack0'):
-                    soundType = self.__getSoundTypeForTracks(deviceName, extra)
-                else:
-                    soundType = 'fixed'
+                    soundType = self.__getSoundTypeForTrackRepaired(deviceName, extra)
                 self.__deviceStates.pop(deviceName, None)
+                if self.vehicleTypeDescriptor.isMultiTrack and _isDeviceTrack(deviceName):
+                    soundType = self.__getSoundTypeForMultiTrackRepaired(prevState, extra)
                 if damageCode == 'TANKMAN_RESTORED':
                     TriggersManager.g_manager.fireTrigger(TRIGGER_TYPE.PLAYER_TANKMAN_SHOOTED, tankmanName=deviceName, isHealed=True)
                 elif damageCode == 'DEVICE_REPAIRED':
@@ -2648,7 +2678,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 self.playSoundIfNotMuted(sound, soundNotificationCheckFn)
         return
 
-    def __getSoundTypeForTracks(self, deviceName, extra):
+    def __getSoundTypeForTrackRepaired(self, deviceName, extra):
         if 'functionalCanMove' in extra.sounds:
             tracksToCheck = ['leftTrack0', 'rightTrack0']
             if deviceName in tracksToCheck:
@@ -2661,6 +2691,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
             if canMove and deviceName in self.__deviceStates and self.__deviceStates[deviceName] == 'destroyed':
                 return 'functionalCanMove'
+
+    def __getSoundTypeForMultiTrackRepaired(self, prevState, extra):
+        return 'functionalCanMove' if 'functionalCanMove' in extra.sounds and prevState != self.__getVehicleMovementState() else None
 
     __damageInfoCriticals = ('DEVICE_CRITICAL',
      'DEVICE_REPAIRED_TO_CRITICAL',
@@ -3154,6 +3187,10 @@ class FilterLagEmulator(object):
 
 
 Avatar = PlayerAvatar
+
+def _isDeviceTrack(deviceName):
+    return deviceName.startswith(('leftTrack', 'rightTrack'))
+
 
 def getVehicleShootingPositions(vehicle):
     vd = vehicle.typeDescriptor

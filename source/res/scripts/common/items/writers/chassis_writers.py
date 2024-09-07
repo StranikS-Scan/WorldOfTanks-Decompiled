@@ -13,10 +13,11 @@ def writeWheelsAndGroups(wheelsConfig, section, materialData, chassisName):
     for sname, subsection in _xml.getChildren(None, section, 'wheels'):
         if sname == 'group':
             group = wheelsConfig.groups[groupId]
+            radiusKey = 'radius' if subsection.has_key('radius') else 'geometry/radius'
             _xml.rewriteString(subsection, 'template', group.template)
             _xml.rewriteInt(subsection, 'count', group.count)
             _xml.rewriteInt(subsection, 'startIndex', group.startIndex)
-            _xml.rewriteFloat(subsection, 'radius', group.radius)
+            _xml.rewriteFloat(subsection, radiusKey, group.radius)
             groupId += 1
         if sname == 'wheel':
             from items.vehicles import _writeHitTester, _writeArmor
@@ -40,12 +41,26 @@ def writeWheelsAndGroups(wheelsConfig, section, materialData, chassisName):
     return
 
 
-def writeTraces(traces, section, cache):
-    shared_writers.writeLodDist(traces.lodDist, section, 'traces/lodDist', cache)
-    _xml.rewriteString(section, 'traces/bufferPrefs', traces.bufferPrefs)
-    _xml.rewriteString(section, 'traces/textureSet', traces.textureSet)
-    _xml.rewriteVector2(section, 'traces/size', traces.size)
-    _xml.rewriteBool(section, 'traces/activePostmortem', traces.activePostmortem, defaultValue=False)
+def writeTraces(tracesConfig, section, cache):
+    tracesSection = section['traces']
+    if tracesSection is None:
+        tracesSection = section.createSection('traces')
+    else:
+        for childSectionName, _ in tracesSection.items():
+            tracesSection.deleteSection(childSectionName)
+
+    shared_writers.writeLodDist(tracesConfig.lodDist, tracesSection, 'lodDist', cache)
+    _xml.rewriteBool(tracesSection, 'activePostmortem', tracesConfig.activePostmortem)
+    for _, tracesParams in tracesConfig.tracesParams.iteritems():
+        tracesParamsSection = tracesSection.createSection('tracesParams')
+        _xml.rewriteInt(tracesParamsSection, 'trackPairIdx', tracesParams.trackPairIdx)
+        _xml.rewriteString(tracesParamsSection, 'bufferPrefs', tracesParams.bufferPrefs)
+        _xml.rewriteString(tracesParamsSection, 'textureSet', tracesParams.textureSet)
+        _xml.rewriteVector2(tracesParamsSection, 'size', tracesParams.size)
+        _xml.rewriteVector2(tracesParamsSection, 'offset', tracesParams.offset)
+        _xml.rewriteVector2(tracesParamsSection, 'centerOffsetFactor', tracesParams.centerOffsetFactor)
+
+    return
 
 
 def writeTrackBasicParams(trackBasicParams, section, cache):
@@ -110,79 +125,79 @@ def __writeDebris(tracksDebris, section):
         return
 
 
-def writeTrackSplineParams(trackSplineParams, section):
+def writeTrackNodesAndSplineParams(nodes, trackSplineParams, section):
     if trackSplineParams is None:
         return
-    else:
-        if not section.has_key('trackNodes'):
-            section.createSection('trackNodes')
-        _xml.rewriteFloat(section, 'trackThickness', trackSplineParams.thickness)
-        _xml.rewriteBool(section, 'trackNodes/enable', trackSplineParams.editorData._enable)
-        _xml.rewriteBool(section, 'trackNodes/linkBones', trackSplineParams.editorData.linkBones)
-        _xml.rewriteFloat(section, 'trackNodes/maxAmplitude', trackSplineParams.maxAmplitude)
-        _xml.rewriteFloat(section, 'trackNodes/maxOffset', trackSplineParams.maxOffset)
-        _xml.rewriteFloat(section, 'trackNodes/gravity', trackSplineParams.gravity)
-        _xml.rewriteFloat(section, 'trackNodes/elasticity', trackSplineParams.editorData.elasticity)
-        _xml.rewriteFloat(section, 'trackNodes/damping', trackSplineParams.editorData.damping)
-        return
-
-
-def writeTrackNodes(nodes, section):
-    defForwardElastK = section.readFloat('trackNodes/forwardElastK', 1.0)
-    defBackwardElastK = section.readFloat('trackNodes/backwardElastK', 1.0)
-    defOffset = section.readFloat('trackNodes/offset', 0.0)
-
-    def writeTrackNode(curNode, curSection):
-        _xml.rewriteBool(curSection, 'isLeft', curNode.isLeft)
-        _xml.rewriteString(curSection, 'name', curNode.name)
-        _xml.rewriteFloat(curSection, 'forwardElastK', curNode.forwardElasticityCoeff, defForwardElastK)
-        _xml.rewriteFloat(curSection, 'backwardElastK', curNode.backwardElasticityCoeff, defBackwardElastK)
-        _xml.rewriteFloat(curSection, 'offset', curNode.initialOffset, defOffset)
-        if curNode.leftNodeName:
-            _xml.rewriteString(curSection, 'leftSibling', curNode.leftNodeName)
-        if curNode.rightNodeName:
-            _xml.rewriteString(curSection, 'rightSibling', curNode.rightNodeName)
-
-    if len(nodes) == 0:
+    elif len(nodes) == 0:
         if section.has_key('trackNodes'):
             section.deleteSection('trackNodes')
         return
     else:
-        sectionParent = section['trackNodes'] if section.has_key('trackNodes') else section.createSection('trackNodes')
-        sectionToSave = None
-        for node in nodes:
-            for childSectionName, childSection in sectionParent.items():
-                if childSectionName == 'node' and node.name == childSection.readString('name'):
-                    sectionToSave = childSection
-                    break
-            else:
-                sectionToSave = sectionParent.createSection('node')
+        if section.has_key('trackThickness'):
+            section.deleteSection('trackThickness')
+        trackNodesSection = section['trackNodes'] if section.has_key('trackNodes') else section.createSection('trackNodes')
+        for childSectionName, _ in trackNodesSection.items():
+            trackNodesSection.deleteSection(childSectionName)
 
-            writeTrackNode(node, sectionToSave)
+        def writeSplineParams(params, curSection):
+            _xml.rewriteFloat(curSection, 'trackPairIdx', params.trackPairIdx)
+            _xml.rewriteFloat(curSection, 'trackThickness', params.thickness)
+            _xml.rewriteFloat(curSection, 'maxAmplitude', params.maxAmplitude)
+            _xml.rewriteFloat(curSection, 'maxOffset', params.maxOffset)
+            _xml.rewriteFloat(curSection, 'gravity', params.gravity)
+            _xml.rewriteFloat(curSection, 'damping', params.editorData.damping)
+            _xml.rewriteBool(curSection, 'enable', params.editorData._enable)
+            _xml.rewriteBool(curSection, 'linkBones', params.editorData.linkBones)
+            _xml.rewriteFloat(curSection, 'elasticity', params.editorData.elasticity)
+
+        def writeTrackNode(curNode, curSection):
+            _xml.rewriteBool(curSection, 'isLeft', curNode.isLeft)
+            _xml.rewriteString(curSection, 'name', curNode.name)
+            _xml.rewriteFloat(curSection, 'forwardElastK', curNode.forwardElasticityCoeff, 1.0)
+            _xml.rewriteFloat(curSection, 'backwardElastK', curNode.backwardElasticityCoeff, 1.0)
+            _xml.rewriteFloat(curSection, 'offset', curNode.initialOffset, 0.0)
+            _xml.rewriteFloat(curSection, 'trackPairIdx', curNode.trackPairIndex)
+            if curNode.leftNodeName:
+                _xml.rewriteString(curSection, 'leftSibling', curNode.leftNodeName)
+            if curNode.rightNodeName:
+                _xml.rewriteString(curSection, 'rightSibling', curNode.rightNodeName)
+
+        for _, params in trackSplineParams.iteritems():
+            pairSection = trackNodesSection.createSection('trackPair')
+            writeSplineParams(params, pairSection)
+            for node in nodes:
+                if node.trackPairIndex != params.trackPairIdx:
+                    continue
+                for childSectionName, childSection in pairSection.items():
+                    if childSectionName == 'node' and node.name == childSection.readString('name'):
+                        sectionToSave = childSection
+                        break
+                else:
+                    sectionToSave = pairSection.createSection('node')
+
+                writeTrackNode(node, sectionToSave)
 
         return
 
 
-def writeGroundNodes(groups, section):
-
-    def writeGroundNode(curGroup, curSection):
-        _xml.rewriteString(curSection, 'template', curGroup.nodesTemplate)
-        _xml.rewriteInt(curSection, 'startIndex', curGroup.startIndex)
-        _xml.rewriteInt(curSection, 'count', curGroup.nodesCount)
-        _xml.rewriteBool(curSection, 'isLeft', curGroup.isLeft)
-        _xml.rewriteFloat(curSection, 'minOffset', curGroup.minOffset)
-        _xml.rewriteFloat(curSection, 'maxOffset', curGroup.maxOffset)
-        _xml.rewriteString(curSection, 'affectedWheelsTemplate', curGroup.affectedWheelsTemplate)
-
-    if len(groups) == 0:
+def writeGroundNodes(nodes, section):
+    if len(nodes) == 0:
         return
     sectionParent = section['groundNodes'] if section.has_key('groundNodes') else section.createSection('groundNodes')
-    for childSectionName, childSection in sectionParent.items():
-        if childSectionName == 'group':
-            sectionParent.deleteSection(childSection)
+    for _, childSection in sectionParent.items():
+        sectionParent.deleteSection(childSection)
 
-    for node in groups:
-        sectionToSave = sectionParent.createSection('group')
+    def writeGroundNode(curNode, curSection):
+        _xml.rewriteString(curSection, 'name', curNode.nodeName)
+        _xml.rewriteString(curSection, 'affectedWheelName', curNode.affectedWheelName, '')
+        _xml.rewriteInt(curSection, 'collisionSamplesCount', curNode.collisionSamplesCount)
+        _xml.rewriteBool(curSection, 'isLeft', curNode.isLeft)
+        _xml.rewriteFloat(curSection, 'minOffset', curNode.minOffset)
+        _xml.rewriteFloat(curSection, 'maxOffset', curNode.maxOffset)
+        _xml.rewriteInt(curSection, 'trackPairIdx', curNode.trackPairIdx)
+
+    for node in nodes:
+        sectionToSave = sectionParent.createSection('node')
         writeGroundNode(node, sectionToSave)
 
 

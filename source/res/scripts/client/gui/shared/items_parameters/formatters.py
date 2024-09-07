@@ -640,7 +640,7 @@ def getAllParametersTitles():
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_TOP, groupName)
         data['titleText'] = formatVehicleParamName(groupName)
         data['isEnabled'] = True
-        data['tooltip'] = TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+        data['tooltip'] = TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
         result.append(data)
         for paramName in PARAMS_GROUPS[groupName]:
             data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ADVANCED, paramName, groupName)

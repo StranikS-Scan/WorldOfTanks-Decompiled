@@ -8,19 +8,19 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from items import getTypeOfCompactDescr
-from skeletons.gui.game_control import IQuestsController, IBattleRoyaleController
+from skeletons.gui.game_control import IQuestsController, IBattleRoyaleController, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest, isFunRandomQuest
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isBattleRoyale, isDailyEpic, isDailyQuest, isFunRandomQuest, isVersusAIQuest
 from gui.ranked_battles.ranked_helpers import isRankedQuestID
 if typing.TYPE_CHECKING:
     from Vehicle import Vehicle
-    from gui.server_events.event_items import Quest
+    from gui.server_events.event_items import Quest, ServerEventAbstract
 _MAX_LVL_FOR_TUTORIAL = 3
 
 def _isAvailableForMode(q):
-    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not isFunRandomQuest(q.getID())
+    return not isDailyEpic(q.getGroupID()) and not isDailyQuest(q.getID()) and not isPremium(q.getID()) and not isRankedQuestID(q.getID()) and not isBattleRoyale(q.getGroupID()) and not isFunRandomQuest(q.getID()) and not isVersusAIQuest(q.getGroupID())
 
 
 class _QuestCache(object):
@@ -92,11 +92,10 @@ class _QuestCache(object):
     def __update(self, vehicle=None):
         quests = self.__eventsCache.getQuests(self.__filterFunc)
         for quest in quests.itervalues():
-            suitableVehicles = quest.getSuitableVehicles()
-            if vehicle and vehicle not in suitableVehicles:
+            suitableVehicleIntCDs = quest.getSuitableVehicles()
+            if vehicle and vehicle.intCD not in suitableVehicleIntCDs:
                 continue
-            for veh in suitableVehicles:
-                vehIntCD = veh.intCD
+            for vehIntCD in suitableVehicleIntCDs:
                 if vehIntCD not in self.__cache:
                     self.__cache[vehIntCD] = {quest}
                 self.__cache[vehIntCD].add(quest)
@@ -179,6 +178,9 @@ class QuestsController(IQuestsController):
         if self.__battleRoyaleController.isBattleRoyaleMode():
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return list(self.__battleRoyaleController.getQuests().values())
+        winbackController = dependency.getInstanceIfHas(IWinbackController)
+        if winbackController and winbackController.isEnabled() and winbackController.isProgressionEnabled() and winbackController.isVersusAIPrbActive():
+            return list(winbackController.winbackProgression.questContainer.getAvailableQuests().values())
         if notCompleted:
             quests = [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and q.shouldBeShown() and not q.isCompleted() ]
             return quests

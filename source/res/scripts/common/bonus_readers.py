@@ -2,7 +2,6 @@
 # Embedded file name: scripts/common/bonus_readers.py
 import time
 from typing import Union, TYPE_CHECKING
-import blueprints
 import dossiers2
 from dynamic_currencies import g_dynamicCurrenciesData
 import items
@@ -18,7 +17,7 @@ from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN
+from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
 if TYPE_CHECKING:
@@ -829,7 +828,7 @@ def __readBonus_vehicleChoice(bonus, _name, section, eventType, checkLimit):
     extra = {}
     if section.has_key('levels'):
         for level in section['levels'].asString.split():
-            if 1 <= int(level) <= 10:
+            if MIN_VEHICLE_LEVEL <= int(level) <= MAX_VEHICLE_LEVEL:
                 extra.setdefault('levels', set()).add(int(level))
 
     if section.has_key('crewLvl'):

@@ -13,7 +13,6 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.SHOP_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.DefaultContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.AwardContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EXTENDED_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.ExtendedAwardContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.WINBACK_DISCOUNT_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.WinbackDiscountContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SENIORITY_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.SeniorityAwardContext())),
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.TRADE_IN, TOOLTIPS_CONSTANTS.COMPLEX_UI, vehicle.VehicleTradeInTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, vehicle.VehicleTradeInPriceTooltipData(contexts.HangarContext())),

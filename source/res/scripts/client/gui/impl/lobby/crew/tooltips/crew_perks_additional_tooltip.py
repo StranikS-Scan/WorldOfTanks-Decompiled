@@ -41,14 +41,29 @@ class CrewPerksAdditionalTooltip(ViewImpl):
     def _getEvents(self):
         return ((self.viewModel.onError, self.onError),)
 
+    def _setBasicInfo(self, vm):
+        vm.setIcon(self._skill.bigIconPath)
+        vm.setSkillType(self._skill.typeName)
+        vm.setTitle(self._skill.userName)
+
+    def _setAdditionalInfo(self, vm):
+        vm.setDescription(self._skill.altDescription)
+        vm.setInfo(self._skill.altInfo)
+
+    def _setMovie(self, vm):
+        movieName = SKILL_MOVIES.get(self._skill.name, None)
+        if movieName:
+            vm.setAnimationName(movieName)
+        return
+
     def _fillModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setIcon(self._skill.bigIconPath)
-            vm.setSkillType(self._skill.typeName)
-            vm.setTitle(self._skill.userName)
-            vm.setDescription(self._skill.altDescription)
-            vm.setInfo(self._skill.altInfo)
-            movieName = SKILL_MOVIES.get(self._skill.name, None)
-            if movieName:
-                vm.setAnimationName(movieName)
-        return
+            self._setBasicInfo(vm)
+            self._setAdditionalInfo(vm)
+            self._setMovie(vm)
+
+
+class BattleRoyaleCrewPerksAdditionalTooltip(CrewPerksAdditionalTooltip):
+
+    def _setAdditionalInfo(self, vm):
+        vm.setDescription(self._skill.description)

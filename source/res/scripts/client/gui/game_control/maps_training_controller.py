@@ -110,6 +110,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
     def _showVehicle(self):
         if g_currentPreviewVehicle.isHeroTank:
             g_currentPreviewVehicle.selectHeroTank(False)
+        g_currentPreviewVehicle.resetAppearance()
         g_currentPreviewVehicle.selectVehicle(self.__vehCompDescr)
 
     def _hideVehicle(self):

@@ -1233,27 +1233,6 @@ class CollectionsLockButtonDecorator(MessageDecorator):
         return
 
 
-class WinbackSelectableRewardReminderDecorator(MessageDecorator):
-
-    def __init__(self, entityID):
-        super(WinbackSelectableRewardReminderDecorator, self).__init__(entityID, self.__makeEntity(), self.__makeSettings())
-
-    def isShouldCountOnlyOnce(self):
-        return True
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getType(self):
-        return NOTIFICATION_TYPE.WINBACK_SELECTABLE_REWARD_AVAILABLE
-
-    def __makeEntity(self):
-        return g_settings.msgTemplates.format('WinbackSelectableRewardReminder')
-
-    def __makeSettings(self):
-        return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.LOW)
-
-
 class WotPlusIntroViewMessageDecorator(MessageDecorator):
     ENTITY_ID = 0
 

@@ -18,12 +18,14 @@ from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.event_dispatcher import showBattlePassDailyQuestsIntroWindow
 from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
 from nations import INDICES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 if typing.TYPE_CHECKING:
     from typing import Dict, List
     from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
@@ -110,8 +112,7 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
          QUEUE_TYPE.MAPBOX: ARENA_BONUS_TYPE.MAPBOX,
          QUEUE_TYPE.EPIC: ARENA_BONUS_TYPE.EPIC_BATTLE,
-         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7,
-         QUEUE_TYPE.WINBACK: ARENA_BONUS_TYPE.WINBACK}
+         QUEUE_TYPE.COMP7: ARENA_BONUS_TYPE.COMP7}
         arenaBonusType = arenaBonusTypeByQueueType.get(queueType, ARENA_BONUS_TYPE.UNKNOWN)
     return arenaBonusType
 
@@ -150,8 +151,11 @@ def showBPGamefaceVideo(chapter, level, battlePass=None, onVideoClosed=None):
     if chapter not in chapterIDs or level is None:
         _logger.error('Both chapter and level must be specified and correct!')
     else:
+        Waiting.show('loadBattlePassAwardVideo')
+        g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.SHOW_BATTLE_PASS_AWARDS_VIDEO), scope=EVENT_BUS_SCOPE.LOBBY)
         window = StyleVideoViewWindow(chapter, level, onVideoClosed=onVideoClosed)
         window.load()
+        Waiting.hide('loadBattlePassAwardVideo')
     return
 
 

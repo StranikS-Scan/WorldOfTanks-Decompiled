@@ -684,6 +684,26 @@
       <priceGroup>	MT projection_decals 100g	</priceGroup>
       <mirror>	true	</mirror>
     </projection_decal>
+    <projection_decal>
+      <id>	31182	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Dom_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Dom_Decal_2024_MT/name	</userString>
+      <scaleFactorId>	1	</scaleFactorId>
+      <tags>	direction_right_to_left styleOnly hiddenInUI disableVerticalMirror formfactor_rect1x2	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31183	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Ashberry_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Ashberry_Decal_2024_MT/name	</userString>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    </projection_decal>
     <name>	Cool	</name>
   </itemGroup>
   <itemGroup>
@@ -9270,15 +9290,6 @@
       <tags>	formfactor_square direction_right_to_left	</tags>
     </projection_decal>
     <projection_decal>
-      <id>	31162	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP14ADD_Decal_04_2024_MT.dds	</texture>
-      <scaleFactorId>	2	</scaleFactorId>
-      <mirror>	true	</mirror>
-      <userString>	#vehicle_customization:BP14ADD_Decal_04_2024_MT/name	</userString>
-      <description>	#vehicle_customization:BP14ADD_Decal_04_2024_MT/description	</description>
-      <tags>	formfactor_square direction_right_to_left	</tags>
-    </projection_decal>
-    <projection_decal>
       <id>	31163	</id>
       <texture>	gui/maps/vehicles/decals/projection_decals/special/BP14ADD_Decal_05_2024_MT.dds	</texture>
       <scaleFactorId>	2	</scaleFactorId>
@@ -9336,6 +9347,179 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	RushFireBear_Decal_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI formfactor_square styleOnly disableVerticalMirror	</tags>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31171	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_01_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_01_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_01_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31172	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_02_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_02_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_02_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31173	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_03_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_03_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_03_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31174	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_04_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_04_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_04_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31175	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_05_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_05_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_05_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31176	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/RushFireBear_06_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:RushFireBear_06_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:RushFireBear_06_Decal_2024_MT/description	</description>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Steel_Union	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31184	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Steel_Union_Decal.dds	</texture>
+      <scaleFactorId>	2	</scaleFactorId>
+      <tags>	formfactor_rect1x2 direction_right_to_left hiddenInUI styleOnly	</tags>
+      <userString>	#vehicle_customization:Steel_Union_Decal_01/name	</userString>
+      <description>	#vehicle_customization:Steel_Union_Decal_01/description	</description>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Storks_2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31186	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/Storks_2024_decal_01.dds	</texture>
+      <userString>	#vehicle_customization:Storks_2024_decal_01/name	</userString>
+      <description>	#vehicle_customization:Storks_2024_decal_01/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	BP15_Decal_2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31187	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/BP15_Decal_01_2024.dds	</texture>
+      <userString>	#vehicle_customization:BP15_Decal_01_2024/name	</userString>
+      <description>	#vehicle_customization:BP15_Decal_01_2024/description	</description>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+      <scaleFactorId>	2	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31188	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/BP15_Decal_02_2024.dds	</texture>
+      <userString>	#vehicle_customization:BP15_Decal_02_2024/name	</userString>
+      <description>	#vehicle_customization:BP15_Decal_02_2024/description	</description>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31189	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/BP15_Decal_03_2024.dds	</texture>
+      <userString>	#vehicle_customization:BP15_Decal_03_2024/name	</userString>
+      <description>	#vehicle_customization:BP15_Decal_03_2024/description	</description>
+      <tags>	direction_right_to_left formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31190	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/BP15_Decal_04_2024.dds	</texture>
+      <userString>	#vehicle_customization:BP15_Decal_04_2024/name	</userString>
+      <description>	#vehicle_customization:BP15_Decal_04_2024/description	</description>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31177	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Paragons_01_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Paragons_01_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Paragons_01_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31178	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Paragons_02_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Paragons_02_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Paragons_02_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31179	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Paragons_03_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Paragons_03_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Paragons_03_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31180	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Paragons_04_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Paragons_04_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Paragons_04_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31181	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Paragons_05_Decal_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Paragons_05_Decal_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Paragons_05_Decal_2024_MT/description	</description>
+    </projection_decal>
+    <name>	Paragons_Decal_2024_MT	</name>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <tags>	formfactor_square hiddenInUI styleOnly disableVerticalMirror	</tags>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>

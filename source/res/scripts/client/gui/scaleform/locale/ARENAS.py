@@ -53,6 +53,12 @@ class ARENAS(object):
     TYPE_COMP7_NAME = '#arenas:type/comp7/name'
     TYPE_COMP7_DESCRIPTION = '#arenas:type/comp7/description'
     TYPE_COMP7_SHORT_DESCRIPTION = '#arenas:type/comp7/short_description'
+    TYPE_COMP7_1_DESCRIPTION = '#arenas:type/comp7_1/description'
+    TYPE_COMP7_1_SHORT_DESCRIPTION = '#arenas:type/comp7_1/short_description'
+    TYPE_COMP7_2_DESCRIPTION = '#arenas:type/comp7_2/description'
+    TYPE_COMP7_2_SHORT_DESCRIPTION = '#arenas:type/comp7_2/short_description'
+    TYPE_COMP7_1_TIMER_MESSAGE = '#arenas:type/comp7_1/timer_message'
+    TYPE_COMP7_2_TIMER_MESSAGE = '#arenas:type/comp7_2/timer_message'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -145,8 +151,6 @@ class ARENAS(object):
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
-    C_102_RACE_2024_NAME = '#arenas:102_race_2024/name'
-    C_102_RACE_2024_DESCRIPTION = '#arenas:102_race_2024/description'
     C_105_GERMANY_NAME = '#arenas:105_germany/name'
     C_105_GERMANY_DESCRIPTION = '#arenas:105_germany/description'
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
@@ -172,6 +176,8 @@ class ARENAS(object):
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
     C_500_STALINGRAD_NAME = '#arenas:500_stalingrad/name'
     C_500_STALINGRAD_DESCRIPTION = '#arenas:500_stalingrad/description'
+    C_502_KAMCHATKA_NAME = '#arenas:502_kamchatka/name'
+    C_502_KAMCHATKA_DESCRIPTION = '#arenas:502_kamchatka/description'
     TYPE_MAPS_TRAINING_NAME = '#arenas:type/maps_training/name'
     TYPE_MAPS_TRAINING_DESCRIPTION = '#arenas:type/maps_training/description'
     C_1003_CGF_TEST_NAME = '#arenas:1003_cgf_test/name'
@@ -234,6 +240,12 @@ class ARENAS(object):
      TYPE_COMP7_NAME,
      TYPE_COMP7_DESCRIPTION,
      TYPE_COMP7_SHORT_DESCRIPTION,
+     TYPE_COMP7_1_DESCRIPTION,
+     TYPE_COMP7_1_SHORT_DESCRIPTION,
+     TYPE_COMP7_2_DESCRIPTION,
+     TYPE_COMP7_2_SHORT_DESCRIPTION,
+     TYPE_COMP7_1_TIMER_MESSAGE,
+     TYPE_COMP7_2_TIMER_MESSAGE,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,
@@ -326,8 +338,6 @@ class ARENAS(object):
      C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
      C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
-     C_102_RACE_2024_NAME,
-     C_102_RACE_2024_DESCRIPTION,
      C_105_GERMANY_NAME,
      C_105_GERMANY_DESCRIPTION,
      C_60_ASIA_MIAO_NAME,
@@ -353,6 +363,8 @@ class ARENAS(object):
      C_210_BF_EPIC_DESERT_DESCRIPTION,
      C_500_STALINGRAD_NAME,
      C_500_STALINGRAD_DESCRIPTION,
+     C_502_KAMCHATKA_NAME,
+     C_502_KAMCHATKA_DESCRIPTION,
      TYPE_MAPS_TRAINING_NAME,
      TYPE_MAPS_TRAINING_DESCRIPTION,
      C_1003_CGF_TEST_NAME,

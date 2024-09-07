@@ -77,6 +77,7 @@
       <AT-SPG2></AT-SPG2>
       <HT_Ch47_BZ_176></HT_Ch47_BZ_176>
       <secret></secret>
+      <secretExtended></secretExtended>
       <special></special>
       <private></private>
       <disabledInRoaming></disabledInRoaming>
@@ -165,7 +166,11 @@
   <vehicleChassis>
     <userString>	#item_types:chassis/name	</userString>
     <description>	#item_types:chassis/desc	</description>
-    <tags></tags>
+    <tags>
+      <multiTrackParallel></multiTrackParallel>
+      <multiTrackSequent></multiTrackSequent>
+      <trackWithinTrack></trackWithinTrack>
+    </tags>
   </vehicleChassis>
   <vehicleTurret>
     <userString>	#item_types:turret/name	</userString>

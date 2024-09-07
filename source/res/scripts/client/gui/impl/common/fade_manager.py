@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/fade_manager.py
 import logging
+from functools import wraps
 import typing
 import BigWorld
+from adisp import isAsync
 from frameworks.wulf import Window, View, WindowSettings, ViewSettings, WindowFlags, WindowStatus
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.fading_cover_view_model import FadingCoverViewModel
@@ -10,7 +12,7 @@ from gui.impl.gen_utils import DynAccessor
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
-from wg_async import wg_async, await_callback, AsyncSemaphore, BrokenPromiseError
+from wg_async import wg_async, wg_await, await_callback, AsyncSemaphore, BrokenPromiseError
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Union
 _logger = logging.getLogger(__name__)
@@ -203,3 +205,36 @@ class FadeManager(object):
             framesLeft -= 1
             if framesLeft > 0:
                 BigWorld.callback(0.0, lambda : self._bringToFront(framesLeft))
+
+
+class useFade(object):
+
+    def __init__(self, layer, coverFactory, *args, **kwargs):
+        super(useFade, self).__init__()
+        self._layer = layer
+        self._coverFactory = coverFactory
+        self._args = args
+        self._kwargs = kwargs
+
+    def __call__(self, func):
+
+        @wraps(func)
+        @wg_async
+        def wrapper(*args, **kwargs):
+            with FadeManager(self._layer, self._createCover) as fadeManager:
+                yield wg_await(fadeManager.show())
+                result = func(*args, **kwargs)
+                if isAsync(func):
+                    yield await_callback(result)(*args, **kwargs)
+                yield wg_await(fadeManager.hide())
+
+        return wrapper
+
+    def _createCover(self):
+        return self._coverFactory(*self._args, **self._kwargs)
+
+
+class useDefaultFade(useFade):
+
+    def __init__(self, layer, background=None, fadeInDuration=FADE_IN_DURATION, fadeOutDuration=FADE_OUT_DURATION):
+        super(useDefaultFade, self).__init__(layer, DefaultFadingCover, background=background, fadeInDuration=fadeInDuration, fadeOutDuration=fadeOutDuration)

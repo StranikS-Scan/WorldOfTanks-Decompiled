@@ -77,6 +77,13 @@
       <undamaged>	vehicles/japan/J40_Type_71/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/japan/J40_Type_71/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/japan/J40_Type_71/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <J40_Type_71_3dst_Magnus>
+          <undamaged>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Hull.model	</exploded>
+        </J40_Type_71_3dst_Magnus>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -718,6 +725,42 @@
         <clipAngle>	0.79594	</clipAngle>
         <anchorShift>	0.04	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15057	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J40_Type_71_3dst_Magnus	</compatibleModels>
+        <position>	-0.000234 1.124855 3.155012	</position>
+        <rotation>	0.595863 0.000505 3.14018	</rotation>
+        <scale>	0.449999 0.299999 0.45	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15058	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J40_Type_71_3dst_Magnus	</compatibleModels>
+        <position>	-1.331629 1.101642 3.50191	</position>
+        <rotation>	1.122955 -0.001135 3.138893	</rotation>
+        <scale>	0.479999 0.299998 0.48	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15059	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	J40_Type_71_3dst_Magnus	</compatibleModels>
+        <position>	1.331629 1.101642 3.50191	</position>
+        <rotation>	1.122955 0.001135 3.138893	</rotation>
+        <scale>	0.479999 0.299998 0.48	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -759,6 +802,13 @@
         <undamaged>	vehicles/japan/J40_Type_71/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/japan/J40_Type_71/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/japan/J40_Type_71/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <J40_Type_71_3dst_Magnus>
+            <undamaged>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Chassis.model	</exploded>
+          </J40_Type_71_3dst_Magnus>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -839,6 +889,39 @@
                   <row3>	0.000023 1.146200 3.345179	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	J40_Type_71_3dst_Magnus	</modelsSet>
+                <boxCollider>
+                  <row0>	1.945790 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.286030 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.470450	</row2>
+                  <row3>	0.000022 1.055650 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.578170 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.470450	</row2>
+                  <row3>	0.000022 1.558760 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.595586 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.192050	</row2>
+                  <row3>	-1.832795 1.486089 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.185310 -0.321252	</row1>
+                  <row2>	0.000000 1.162710 0.670697	</row2>
+                  <row3>	0.000022 1.332170 -4.817980	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000001 -0.000002	</row0>
+                  <row1>	0.000000 -0.221093 -0.202775	</row1>
+                  <row2>	0.000000 0.361392 -0.394038	</row2>
+                  <row3>	0.000023 1.146200 3.345180	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -893,6 +976,39 @@
                   <row1>	0.000000 0.595586 0.000000	</row1>
                   <row2>	0.000000 0.000000 8.192050	</row2>
                   <row3>	1.833000 1.057010 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.185310 -0.321252	</row1>
+                  <row2>	0.000000 1.162710 0.670697	</row2>
+                  <row3>	0.000022 1.332170 -4.817980	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000001 -0.000002	</row0>
+                  <row1>	0.000000 -0.221093 -0.202775	</row1>
+                  <row2>	0.000000 0.361392 -0.394038	</row2>
+                  <row3>	0.000023 1.146200 3.345180	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	J40_Type_71_3dst_Magnus	</modelsSet>
+                <boxCollider>
+                  <row0>	1.945790 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.286030 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.470450	</row2>
+                  <row3>	0.000022 1.055650 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.405920 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.578170 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.470450	</row2>
+                  <row3>	0.000022 1.558760 -0.798023	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.595586 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.192050	</row2>
+                  <row3>	1.833000 1.486000 -0.798023	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.405920 0.000000 0.000000	</row0>
@@ -1164,6 +1280,11 @@
             <model>	vehicles/japan/J40_Type_71/track/segment_01.model	</model>
             <length>	0.159498	</length>
           </mainSegment>
+          <modelSets>
+            <J40_Type_71_3dst_Magnus>
+              <mainSegmentModel>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/track/segment_01.model	</mainSegmentModel>
+            </J40_Type_71_3dst_Magnus>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1387,6 +1508,11 @@
             <model>	vehicles/japan/J40_Type_71/track/segment_01.model	</model>
             <length>	0.159493	</length>
           </mainSegment>
+          <modelSets>
+            <J40_Type_71_3dst_Magnus>
+              <mainSegmentModel>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/track/segment_01.model	</mainSegmentModel>
+            </J40_Type_71_3dst_Magnus>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1751,6 +1877,13 @@
             <undamaged>	vehicles/japan/J40_Type_71/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/japan/J40_Type_71/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/japan/J40_Type_71/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <J40_Type_71_3dst_Magnus>
+                <undamaged>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Gun_01.model	</exploded>
+              </J40_Type_71_3dst_Magnus>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/japan/J40_Type_71/collision/Gun_01.model	</collisionModelServer>
@@ -1767,6 +1900,13 @@
         <undamaged>	vehicles/japan/J40_Type_71/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/japan/J40_Type_71/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/japan/J40_Type_71/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <J40_Type_71_3dst_Magnus>
+            <undamaged>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/japan/J40_Type_71/_skins/J40_Type_71_3dst_Magnus/crash/lod0/Turret_01.model	</exploded>
+          </J40_Type_71_3dst_Magnus>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/japan/J40_Type_71/collision/Turret_01.model	</collisionModelServer>
@@ -2297,6 +2437,26 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.814385	</clipAngle>
           <anchorShift>	0.740805	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35042	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J40_Type_71_3dst_Magnus	</compatibleModels>
+          <position>	-1.179594 2.412954 -1.236518	</position>
+          <rotation>	0.971276 -1.570796 -3.114826	</rotation>
+          <scale>	0.45 0.4 0.45	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	J40_Type_71_3dst_Magnus	</compatibleModels>
+          <position>	1.203927 2.377339 -1.236308	</position>
+          <rotation>	2.178813 -1.410402 0.158898	</rotation>
+          <scale>	0.45 0.4 0.45	</scale>
+          <showOn>	256	</showOn>
         </slot>
       </customizationSlots>
       <customization>

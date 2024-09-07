@@ -51,16 +51,19 @@ class ModuleInfoWindow(ModuleInfoMeta):
             dataProvider = ModuleBlockTooltipData(context=contexts.ModuleInfoContext())
         data = dataProvider.buildToolTip(*tooltipArgs)
         if itemTypeID == GUI_ITEM_TYPE.SHELL:
-            if module.type == SHELL_TYPES.FLAME:
-                titleArr = [module.userType, backport.text(R.strings.item_types.shell.kinds.FLAME()), module.userName]
-            else:
-                titleArr = [module.userType, module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
+            titleArr = self._getShellTitleArgs(module)
         else:
             titleArr = [module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
         data['windowTitle'] = ' '.join(titleArr)
         data['overlayType'] = module.getOverlayType()
         data['highlightType'] = module.getBigHighlightType()
         self._updateModuleInfo(data)
+
+    def _getShellTitleArgs(self, module):
+        if module.type == SHELL_TYPES.FLAME:
+            shellInfo = backport.text(R.strings.item_types.shell.kinds.FLAME())
+            return [module.userType, shellInfo, module.userName]
+        return [module.userType, module.longUserNameAbbr, _ms(MENU.MODULEINFO_TITLE)] if module.type == SHELL_TYPES.ARMOR_PIERCING_FSDS else [module.userType, module.longUserName, _ms(MENU.MODULEINFO_TITLE)]
 
     def _updateModuleInfo(self, data):
         self.as_setModuleInfoS(data)

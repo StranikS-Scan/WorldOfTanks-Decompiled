@@ -7,7 +7,7 @@ from battle_royale_progression.gui.impl.lobby.views.quests_packer import getEven
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.server_events.events_helpers import EventInfoModel
+from gui.server_events.events_helpers import EventInfoModel, questsSortFunc
 from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController, IBRProgressionOnTokensController
@@ -115,7 +115,7 @@ class ProgressionView(SubModelPresenter):
         questsList = battleQuestsModel.getTasksBattle()
         questsList.clear()
         bonusIndexTotal = len(self.__tooltipData)
-        for _, quest in data['battleQuests'].items():
+        for quest in sorted(data['battleQuests'].values(), key=questsSortFunc):
             packer = getEventUIDataPacker(quest)
             questModels = packer.pack()
             bonusTooltipList = packer.getTooltipData()

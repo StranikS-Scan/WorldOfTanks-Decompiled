@@ -50,6 +50,7 @@ from gui.shared.formatters.icons import serverBlockerIcon
 from gui.shared.formatters.servers import formatPingStatus
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr, getTillTimeByResource
+from gui.shared.utils.functions import capitalizeText
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
@@ -64,7 +65,7 @@ from messenger.storage import storage_getter
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IIGRController, IServerStatsController, IBattleRoyaleRentVehiclesController
+from skeletons.gui.game_control import IIGRController, IServerStatsController, IBattleRoyaleRentVehiclesController, IEarlyAccessController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -1471,6 +1472,8 @@ class BattlePassCompletedTooltipContentWindowData(_BattlePassMixedContentTooltip
 
 class TechTreeEventTooltipBase(BlocksTooltipData):
     _eventsListener = dependency.descriptor(ITechTreeEventsListener)
+    _earlyAccessController = dependency.descriptor(IEarlyAccessController)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(TechTreeEventTooltipBase, self).__init__(context, None)
@@ -1480,16 +1483,31 @@ class TechTreeEventTooltipBase(BlocksTooltipData):
     def _actionNameBlock(self, title, description, icon):
         return formatters.packImageTextBlockData(title=text_styles.neutral(title), desc=text_styles.standard(description), img=icon, imgPadding=formatters.packPadding(top=-1), padding=formatters.packPadding(bottom=10))
 
-    def _actionExpireBlock(self, actionID):
-        timeLeftStr = getTillTimeByResource(self._eventsListener.getTimeTillEnd(actionID), R.strings.tooltips.techTreePage.event.timeLeft)
-        return formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.tooltips.techTreePage.event.time(), time=text_styles.main(timeLeftStr))), padding=formatters.packPadding(top=10, left=23))
+    def _eventExpireBlock(self, actionID, timeTillEnd=None):
+        timeLeftStr = getTillTimeByResource(self._eventsListener.getTimeTillEnd(actionID) if timeTillEnd is None else timeTillEnd, R.strings.tooltips.techTreePage.event.timeLeft)
+        expireRes = R.strings.tooltips.techTreePage.event.time if actionID else R.strings.tooltips.techTreePage.eventGeneral.time
+        return formatters.packTextBlockData(text=text_styles.standard(backport.text(expireRes(), time=text_styles.main(timeLeftStr))), padding=formatters.packPadding(top=10, left=23))
+
+    def _packEarlyAccessBlock(self, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE):
+        blocks = list()
+        nationStr = nations.NAMES[self._earlyAccessController.getNationID()]
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(backport.text(R.strings.early_access.featureName.text())), img=backport.image(R.images.gui.maps.icons.early_access.nation_tree.ea_tooltip_icon())))
+        _, finishSeasonTime = self._earlyAccessController.getSeasonInterval()
+        leftTime = time_utils.getTimeDeltaFromNow(finishSeasonTime)
+        icon = icons.makeImageTag(getNationsFilterAssetPath(nationStr), 26, 16, -4)
+        description = text_styles.concatStylesWithSpace(capitalizeText(backport.text(R.strings.menu.inventory.menu.vehicle.name())), backport.text(R.strings.nations.dyn(nationStr).genetiveCase()))
+        blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icon, '   ', text_styles.main(description)), padding=formatters.packPadding(left=43)))
+        blocks.append(self._eventExpireBlock(None, leftTime))
+        return formatters.packBuildUpBlockData(blocks, linkage=linkage)
 
 
-class TechTreeDiscountInfoTooltip(TechTreeEventTooltipBase):
+class TechTreeEventInfoTooltip(TechTreeEventTooltipBase):
 
     def _packBlocks(self, *args, **kwargs):
-        items = super(TechTreeDiscountInfoTooltip, self)._packBlocks(*args, **kwargs)
+        items = super(TechTreeEventInfoTooltip, self)._packBlocks(*args, **kwargs)
         items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_TECHTREE_HEADER), desc=text_styles.main(TOOLTIPS.HEADER_BUTTONS_TECHTREE_BODY)))
+        if self._earlyAccessController.isEnabled():
+            items.append(self._packEarlyAccessBlock(linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         if not self._eventsListener.actions:
             return items
         actionGoups = defaultdict(list)
@@ -1516,22 +1534,24 @@ class TechTreeDiscountInfoTooltip(TechTreeEventTooltipBase):
                     nationName = text_styles.main(backport.text(R.strings.nations.dyn(nation)()))
                     blocks.append(formatters.packTextBlockData(text_styles.concatStylesToSingleLine(icon, separator, nationName), padding=formatters.packPadding(left=43)))
 
-        blocks.append(self._actionExpireBlock(actionIDs[0]))
+        blocks.append(self._eventExpireBlock(actionIDs[0]))
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
 
-class TechTreeNationDiscountTooltip(TechTreeEventTooltipBase):
+class TechTreeNationEventTooltip(TechTreeEventTooltipBase):
 
     def _packBlocks(self, nation):
-        items = super(TechTreeNationDiscountTooltip, self)._packBlocks()
+        items = super(TechTreeNationEventTooltip, self)._packBlocks()
         items.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.techTreePage.nations.dyn(nation)()))))
         nationID = nations.INDICES[nation]
         closestAction = self._eventsListener.getActiveAction(nationID=nationID)
+        if self._earlyAccessController.isEnabled() and nationID == self._earlyAccessController.getNationID():
+            items.append(self._packEarlyAccessBlock())
         if nationID not in self._eventsListener.getNations():
             return items
         blocks = list()
         blocks.append(self._actionNameBlock(backport.text(R.strings.tooltips.techTreePage.event.name(), eventName=self._eventsListener.getUserName(closestAction)), backport.text(R.strings.tooltips.techTreePage.event.description(), nation=backport.text(R.strings.nations.dyn(nation).genetiveCase())), backport.image(R.images.gui.maps.icons.library.discount())))
-        blocks.append(self._actionExpireBlock(closestAction))
+        blocks.append(self._eventExpireBlock(closestAction))
         items.append(formatters.packBuildUpBlockData(blocks))
         return items
 

@@ -3,6 +3,7 @@
 from constants import SECTOR_STATE
 from enumerations import Enumeration, AttributeEnumItem
 from gui.impl.gen import R
+from items.vehicle_items import CHASSIS_ITEM_TYPE
 from shared_utils import CONST_CONTAINER
 
 class BATTLE_CTRL_ID(object):
@@ -119,18 +120,16 @@ TRACK_WITHIN_TRACK_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'left
 VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'surveyingDevice', 'radio', 'fuelTank')
 WHEELED_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'wheel', 'surveyingDevice', 'radio', 'fuelTank')
 ALL_VEHICLE_GUI_ITEMS = ('engine', 'ammoBay', 'gun', 'turretRotator', 'chassis', 'wheel', 'surveyingDevice', 'radio', 'fuelTank')
-VEHICLE_DEVICE_IN_COMPLEX_ITEM = {'leftTrack0': 'chassis',
- 'leftTrack1': 'chassis',
- 'rightTrack0': 'chassis',
- 'rightTrack1': 'chassis',
- 'wheel0': 'wheel',
- 'wheel1': 'wheel',
- 'wheel2': 'wheel',
- 'wheel3': 'wheel',
- 'wheel4': 'wheel',
- 'wheel5': 'wheel',
- 'wheel6': 'wheel',
- 'wheel7': 'wheel'}
+
+def getVehicleDeviceInComplexItemName(deviceName):
+    result = deviceName
+    if 'wheel' in deviceName:
+        result = 'wheel'
+    elif 'Track' in deviceName:
+        result = 'chassis'
+    return result
+
+
 VEHICLE_COMPLEX_ITEMS = {'chassis': ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1'),
  'wheel': ('wheel0', 'wheel1', 'wheel2', 'wheel3', 'wheel4', 'wheel5', 'wheel6', 'wheel7')}
 DEVICE_STATE_NORMAL = 'normal'
@@ -144,12 +143,23 @@ class TIMER_VIEW_STATE(object):
     WARNING = 'warning'
 
 
-class VEHICLE_INDICATOR_TYPE(object):
+class VEHICLE_INDICATOR_TYPE(CONST_CONTAINER):
     DEFAULT = 'Tank'
     SPG = 'SPG'
     AT_SPG = 'AT-SPG'
+    DEFAULT_YOH = 'TankYoh'
+    DEFAULT_MULTITRACK_SEQUENT = 'TankMultitrackSequent'
+    DEFAULT_MULTITRACK_PARALLEL = 'TankMultitrackParallel'
+    SPG_MULTITRACK_SEQUENT = 'SPGMultitrackSequent'
+    SPG_MULTITRACK_PARALLEL = 'SPGMultitrackParallel'
+    AT_SPG_MULTITRACK_SEQUENT = 'AT-SPGMultitrackSequent'
+    AT_SPG_MULTITRACK_PARALLEL = 'AT-SPGMultitrackParallel'
+    WHEEL = 'Wheel'
 
 
+VEHICLE_CHASSIS_INDICATOR_POSTFIX = {CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK: 'Yoh',
+ CHASSIS_ITEM_TYPE.MULTITRACK_SEQUENT: 'MultitrackSequent',
+ CHASSIS_ITEM_TYPE.MULTITRACK_PARALLEL: 'MultitrackParallel'}
 EXTRA_SUFFIX = 'Health'
 EXTRA_PREFIX_LENGTH = len(EXTRA_SUFFIX)
 

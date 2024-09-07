@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/shared/bonuses_sorter.py
+import typing
 from enum import IntEnum
 import constants
 from gui.goodies.goodie_items import BOOSTERS_ORDERS
@@ -8,6 +9,8 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from items.components.supply_slot_categories import SlotCategories
 from shared_utils import first
+if typing.TYPE_CHECKING:
+    from gui.shared.missions.packers.bonus import ItemsBonus, GoodiesBonus, SimpleBonus
 
 class BonusesSortWeights(IntEnum):
     DEMOUNT_KIT = 0

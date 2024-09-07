@@ -10,7 +10,7 @@
   <postProgressionTree>	role_ATSPG_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	34	</forward>
+    <forward>	30	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -798,10 +798,10 @@
       <terrainResistance>	1.1 1.4 2.3	</terrainResistance>
       <brakeForce>	39500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	21	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1688,7 +1688,7 @@
             <maxPitch>	0.00000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10.8	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.5	</afterShot>
@@ -1797,21 +1797,21 @@
     <detailed>
       <engines>
         <GTD_2T5x2_T>
-          <smplEnginePower>	940	</smplEnginePower>
-          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
+          <smplEnginePower>	680	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </GTD_2T5x2_T>
       </engines>
       <chassis>
         <Chassis_Pl30_SDP_Wz58T_2_T>
           <grounds>
             <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
+              <rollingFriction>	0.14515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0927	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.04855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>
@@ -1819,6 +1819,18 @@
       </chassis>
     </detailed>
   </physics>
+  <siege_mode>
+    <switchOnTime>	3	</switchOnTime>
+    <switchOffTime>	3	</switchOffTime>
+    <engineDamageCoeff>	1	</engineDamageCoeff>
+    <soundStateChange>
+      <on>	turbine_polish_start_PC	</on>
+      <off>	turbine_polish_stop_PC	</off>
+      <npcOn>	turbine_polish_start_NPC	</npcOn>
+      <npcOff>	turbine_polish_stop_NPC	</npcOff>
+      <isEngine>	true	</isEngine>
+    </soundStateChange>
+  </siege_mode>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

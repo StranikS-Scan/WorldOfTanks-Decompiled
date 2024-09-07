@@ -142,4 +142,4 @@ def playRecruitVoiceover(voiceoverParams):
 
 
 def discountPercent(value, defaultValue):
-    return int(100 * (1 - float(value) / defaultValue))
+    return int(100 * round(1 - float(value) / defaultValue, 2))

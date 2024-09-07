@@ -303,8 +303,9 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             if vehicle.appearance:
                 vehicle.appearance.removeComponentByType(GenericComponents.ControlModeStatus)
                 vehicle.appearance.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
-            player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
-            player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
+            if player.inWorld:
+                player.entityGameObject.removeComponentByType(GenericComponents.ControlModeStatus)
+                player.entityGameObject.createComponent(GenericComponents.ControlModeStatus, _CTRL_MODES.index(self.__ctrlModeName))
             return
 
     def prerequisites(self):

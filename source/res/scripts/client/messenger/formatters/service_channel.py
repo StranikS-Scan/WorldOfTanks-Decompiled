@@ -2622,7 +2622,7 @@ class ConverterFormatter(ServiceChannelFormatter):
             blueprintsText = self.__getBlueprintsMessageText(blueprints)
             if blueprintsText is not None:
                 messagesListData.append(MessageData(blueprintsText, self._getGuiSettings(message, self.__CONVERTER_BLUEPRINTS_TEMPLATE)))
-        return
+        return messagesListData
 
     def __getBlueprintsMessageText(self, blueprints):
         universal = 0

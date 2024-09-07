@@ -609,6 +609,11 @@ class TankmanDescr(object):
         levelUpXpCost = self.levelUpXpCost(min(MAX_SKILL_LEVEL - 1, currSkillLevel), currSkillsCount)
         currXpCost = self.getXpCostForSkillsLevels(currSkillLevel, currSkillsCount)
         residualXP, levelUpXpCost = totalXpCost - currXpCost, levelUpXpCost
+        if residualXP >= levelUpXpCost:
+            residualXP -= levelUpXpCost
+            if currSkillLevel == MAX_SKILL_LEVEL - 1:
+                return (residualXP, 0)
+            return (residualXP, self.levelUpXpCost(currSkillLevel + 1, currSkillsCount))
         return (residualXP, levelUpXpCost)
 
     def getTotalSkillsProgress(self, withFree=True, extraXP=0):

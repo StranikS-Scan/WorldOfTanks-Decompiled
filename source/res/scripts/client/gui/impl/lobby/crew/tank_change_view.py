@@ -172,8 +172,11 @@ class TankChangeView(BaseCrewView):
         vehicle = self.itemsCache.items.getItemByCD(vehicleID)
         if not vehicle:
             return
-        dialogs.showRetrainSingleDialog(self.tankman.invID, vehicleID, isChangeRoleVisible=True, parentViewKey=CrewViewKeys.TANK_CHANGE)
-        SoundGroups.g_instance.playSound2D(SOUNDS.CREW_TANK_CLICK)
+        else:
+            slot = next((slot for slot, tman in vehicle.crew if tman and self.tankman.invID == tman.invID), None)
+            dialogs.showRetrainSingleDialog(self.tankman.invID, vehicleID, targetSlotIdx=slot, isChangeRoleVisible=True, parentViewKey=CrewViewKeys.TANK_CHANGE)
+            SoundGroups.g_instance.playSound2D(SOUNDS.CREW_TANK_CLICK)
+            return
 
     def _onVehicleUpdated(self, _):
         lastVehicleCD = self.vehicle.compactDescr if self.vehicle else None

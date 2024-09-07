@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/functions.py
-import typing
 from collections import defaultdict
 from operator import itemgetter
+import typing
+import BigWorld
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
 from items import utils, tankmen
@@ -188,20 +189,27 @@ def extractCrewDescrs(vehicle, replaceNone=True):
     otherVehicleSlots = []
     vehicleDescr = vehicle.descriptor
     for idx, tankman in sorted(vehicle.crew, key=itemgetter(0)):
+        tankmanCompDescr = None
         if tankman is not None:
             if hasattr(tankman, 'strCD'):
-                tankmanDescr = tankman.strCD
+                tankmanCompDescr = tankman.strCD
                 if tankman.efficiencyRoleLevel < tankman.roleLevel:
                     otherVehicleSlots.append(idx)
             else:
-                tankmanDescr = tankman
-        elif not replaceNone:
-            tankmanDescr = None
-            emptySlots.append(idx)
-        else:
-            role = vehicleDescr.type.crewRoles[idx][0]
-            tankmanDescr = createFakeTankmanDescr(role, vehicleDescr.type)
-        crewCompactDescrs.append(tankmanDescr)
+                tankmanCompDescr = tankman
+            if tankmanCompDescr is not None:
+                _, _, roleID = tankmen.parseNationSpecAndRole(tankmanCompDescr)
+                if tankmen.SKILL_NAMES[roleID] != vehicleDescr.type.crewRoles[idx][0]:
+                    from gui.shared.gui_items.items_actions import factory
+                    factory.doAction(factory.UNLOAD_TANKMAN, vehicle.invID, idx, int(BigWorld.serverTime()), 1)
+                    tankmanCompDescr = None
+        if tankmanCompDescr is None:
+            if not replaceNone:
+                emptySlots.append(idx)
+            else:
+                role = vehicleDescr.type.crewRoles[idx][0]
+                tankmanCompDescr = createFakeTankmanDescr(role, vehicleDescr.type)
+        crewCompactDescrs.append(tankmanCompDescr)
 
     return crewCompactDescrs if replaceNone else (crewCompactDescrs, emptySlots, otherVehicleSlots)
 

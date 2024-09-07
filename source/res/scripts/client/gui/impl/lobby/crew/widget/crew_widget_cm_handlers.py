@@ -49,7 +49,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.QUICK_TRAINING)
 
     def retrain(self):
-        dialogs.showRetrainSingleDialog(self._tankmanID, self._vehicle.intCD, parentViewKey=self._parentViewKey)
+        dialogs.showRetrainSingleDialog(self._tankmanID, self._vehicle.intCD, targetSlotIdx=self._slotIdx, parentViewKey=self._parentViewKey)
         self._uiLogger.logClick(CrewTankmanContextMenuKeys.RETRAIN)
 
     def changeCrewMember(self):

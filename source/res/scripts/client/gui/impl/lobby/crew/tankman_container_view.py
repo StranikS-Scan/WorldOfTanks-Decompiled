@@ -207,7 +207,7 @@ class TankmanContainerView(BaseCrewView):
             return
         self._uiLogger.setParentViewKey(LAYOUT_ID_TO_ITEM.get(tabID))
         self._uiLogger.logClick(TABS_LOGGING_KEYS.get(tabID, CrewViewKeys.HANGAR), CrewViewKeys.PERSONAL_FILE)
-        self._isAnimationEnabled = False
+        self.__stopAnimations()
         self.__createTab(tabID, LAYOUT_ID_TO_ITEM.get(self._activeTab))
         with self.viewModel.transaction() as vm:
             vm.setCurrentTabId(tabID)

@@ -65,6 +65,9 @@ class ServiceRecordView(ContainerBase, IPersonalTab, BasePersonalCaseView):
                  event.getArgument('isRare')))
         return super(ServiceRecordView, self).createToolTipContent(event, contentID)
 
+    def onStopAnimations(self):
+        pass
+
     def _fillViewModel(self, vm):
         vm.setIsTankmanInVehicle(self.context.tankman.vehicleDescr is not None)
         vm.setRankName(self.context.tankman.rankUserName)

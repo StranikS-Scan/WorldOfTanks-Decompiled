@@ -2264,5 +2264,5 @@ def getBattlesLeft(vehicle):
     return i18n.makeString('#menu:infinitySymbol') if vehicle.isInfiniteRotationGroup else str(vehicle.rotationBattlesLeft)
 
 
-def getLowEfficiencyTankmenIds(vehicle):
-    return [ tankman.invID for _, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]
+def getLowEfficiencyCrew(vehicle):
+    return [ (slotID, tankman.invID) for slotID, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]

@@ -16,6 +16,7 @@ from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
 from gui.comp7.entitlements_cache import EntitlementsCache, CacheStatus
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
 from gui.impl.lobby.comp7.comp7_gui_helpers import isSeasonStasticsShouldBeShown
+from gui.impl.lobby.comp7.comp7_lobby_sounds import LobbySounds, playSound
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.items import ValidationResult
@@ -221,6 +222,11 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__banExpiryTime = None
         self.stopGlobalListening()
         return
+
+    def onPrbEntitySwitching(self):
+        if not self.isComp7PrbActive():
+            return
+        self.__leaveMode()
 
     def onPrbEntitySwitched(self):
         if not self.isComp7PrbActive():
@@ -599,6 +605,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         if not isSeasonStasticsShouldBeShown():
             return
         event_dispatcher.showComp7SeasonStatisticsScreen()
+
+    def __leaveMode(self):
+        playSound(LobbySounds.LEAVE_MODE.value)
 
 
 class _LeaderboardDataProvider(object):

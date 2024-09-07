@@ -37,7 +37,7 @@ from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableToo
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED, getTankmanSkill, Tankman
-from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyTankmenIds, NO_VEHICLE_ID
+from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyCrew, NO_VEHICLE_ID
 from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils import decorators
@@ -236,7 +236,7 @@ class CrewWidget(ViewImpl):
             return window
 
     def createPopOverContent(self, event):
-        args = {'tankmenIds': getLowEfficiencyTankmenIds(self.__currentVehicle),
+        args = {'crewIds': getLowEfficiencyCrew(self.__currentVehicle),
          'vehicleCD': self.__currentVehicle.intCD}
         return BackportPopOverContent(createPopOverData(VIEW_ALIAS.CREW_OPERATIONS_POPOVER, args))
 

@@ -61,7 +61,10 @@ class PreviewTankman(Tankman):
     def backportSkillList(self):
         result = [ (skill.bigIconPath, skill.userName) for skill in self.skills ]
         if self.descriptor.freeXP > 0:
-            result.append((backport.image(R.images.gui.maps.icons.tankmen.skills.big.preview_new_skill_trained()), TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER))
+            newSkills, _ = self.newSkillsCount
+            if newSkills:
+                img = backport.image(R.images.gui.maps.icons.tankmen.skills.big.preview_new_skill_trained())
+                result.extend([(img, TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER)] * newSkills)
         return result
 
     @property

@@ -106,6 +106,9 @@ class VehicleParamsView(ViewImpl):
     def setContext(self, context):
         self.__context = context
 
+    def _getContext(self):
+        return self.__context
+
     def _getComparator(self):
         return params_helper.similarCrewComparator(self._getVehicle())
 
@@ -337,6 +340,16 @@ class VehicleCompareParamsView(VehicleParamsView):
         self._changedVehicle = changedVehicle
         super(VehicleCompareParamsView, self).__init__(*args, **kwargs)
 
+    def createToolTip(self, event):
+        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
+            paramId = event.getArgument('paramId', None)
+            tooltipId = self._getGroupTooltipID() if paramId in self.expandedGroups else self._getTooltipID()
+            toolTipMgr = self._appLoader.getApp().getToolTipMgr()
+            if toolTipMgr is not None:
+                toolTipMgr.onCreateWulfTooltip(tooltipId, (paramId, self._getContext(), True), event.mouse.positionX, event.mouse.positionY)
+                return tooltipId
+        return super(VehicleCompareParamsView, self).createToolTip(event)
+
     def _getComparator(self):
         return params_helper.previewVehiclesComparator(self._getChangedVehicle(), self._getVehicle(), withSituational=True)
 
@@ -361,8 +374,11 @@ class VehicleCompareParamsView(VehicleParamsView):
     def _getTooltipID(self):
         return TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
 
+    def _getGroupTooltipID(self):
+        return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
+
     def _getAdvancedParamTooltip(self, _):
-        return TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS
+        return TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS
 
     def _getChangedVehicle(self):
         return self._changedVehicle

@@ -42,6 +42,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import ITradeInController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui import makeHtmlString
 if typing.TYPE_CHECKING:
     from typing import List, Tuple, Dict, Optional
     from gui.shared.tooltips.contexts import ExtendedAwardContext
@@ -331,8 +332,13 @@ class VehiclePreviewCrewMemberTooltipData(DefaultCrewMemberTooltipData):
             blocks.extend(defaultBlocks)
         if skillsItems:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.VEHICLEPREVIEW_TANKMAN_SKILLSTITLE), padding=formatters.packPadding(top=10, bottom=10)))
+            newSkillCount = sum((1 for skillItem in skillsItems if skillItem[1] == TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER))
+            if newSkillCount:
+                titleText = makeHtmlString('html_templates:lobby/textStyle', 'mainText', {'message': i18n.makeString(skillsItems[0][1], quantity=newSkillCount)})
+                blocks.append(formatters.packImageTextBlockData(img=skillsItems[0][0], title=titleText, txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
             for skillItem in skillsItems:
-                blocks.append(formatters.packImageTextBlockData(img=skillItem[0], title=text_styles.main(skillItem[1]), txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
+                if skillItem[1] != TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER:
+                    blocks.append(formatters.packImageTextBlockData(img=skillItem[0], title=text_styles.main(skillItem[1]), txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
 
         return [formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=10))]
 

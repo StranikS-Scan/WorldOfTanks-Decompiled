@@ -45,6 +45,8 @@ class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
         return self.__viewKey
 
     def onChangeTankman(self, tankmanID):
+        if tankmanID != self.context.tankman.invID:
+            self.__clearAnimationData(self.context.skillAnimationsSkipped)
         if hasattr(self, 'interactionCtrl'):
             self.interactionCtrl.onChangeTankman(tankmanID)
 
@@ -72,7 +74,6 @@ class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
             self.__hasPendingRefresh = True
             return
         super(PersonalFileView, self).refresh()
-        BigWorld.player().crewAccountController.clearTankmanAnimanions(self.context.tankman.invID)
 
     def _getComponents(self):
         return [TankmanInfoComponent(key='tankman_info', parent=self), SkillMatrixComponent(key='skill_matrix', parent=self), PostProgressionWidgetComponent(key='post_progression', parent=self)]
@@ -92,3 +93,11 @@ class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
         if hasPostProgression:
             vm.setIsPostProgressionAnimated(BigWorld.player().crewAccountController.getTankmanVeteranAnimanion(self.context.tankman.invID))
         return
+
+    def _finalize(self):
+        self.__clearAnimationData()
+        super(PersonalFileView, self)._finalize()
+
+    def __clearAnimationData(self, skipped=False):
+        if not skipped:
+            BigWorld.player().crewAccountController.clearTankmanAnimanions(self.context.tankman.invID)

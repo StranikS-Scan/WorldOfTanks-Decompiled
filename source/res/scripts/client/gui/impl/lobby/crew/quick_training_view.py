@@ -357,7 +357,7 @@ class QuickTrainingView(BaseCrewView):
     @jsonArgsConverter(('value',))
     def __onFreeXpManualInput(self, value):
         if self.tankman and not self.tankman.descriptor.isMaxSkillXp():
-            value = max(min(value, self._stepper.getMaxAvailbleStateCostXp()), 1)
+            value = max(min(int(value), self._stepper.getMaxAvailbleStateCostXp()), 1)
         self._uiData.freeXp = value
         self._updateTmanSkillsLevels('update')
 
@@ -451,7 +451,9 @@ class QuickTrainingView(BaseCrewView):
         defaultRate = self.itemsCache.items.shop.defaults.freeXPToTManXPRate
         if self.tankman:
             maxXpCount = self.tankman.descriptor.getXpCostForSkillsLevels(MAX_SKILL_LEVEL, self.tankman.descriptor.maxSkillsCount)
-            vm.freeXpData.setPlayerXp((maxXpCount - self.tankman.descriptor.totalXP()) / self.itemsCache.items.shop.freeXPToTManXPRate)
+            needXp = maxXpCount - self.tankman.descriptor.totalXP()
+            needItems = float(needXp) / self.itemsCache.items.shop.freeXPToTManXPRate
+            vm.freeXpData.setPlayerXp(int(needItems) or int(self.hasSomeFreeXP and needItems > 0))
         vm.freeXpData.setDiscountSize(int(round(abs(1 - float(defaultRate) / discountRate) * 100)))
         vm.freeXpData.setExchangeRate(discountRate)
         vm.freeXpData.setCanApplyFreeXp(not (self.tankman and self.tankman.isMaxSkillEfficiency and self.hasAllCrewMaxedTman and self.hasSomeFreeXP))

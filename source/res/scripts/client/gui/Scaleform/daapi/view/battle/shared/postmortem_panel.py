@@ -342,7 +342,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             self.__healthPercent = 0
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange() and respawnAvailable:
+        if respawnAvailable and (self.sessionProvider.arenaVisitor.gui.isInEpicRange() or self.sessionProvider.arenaVisitor.gui.isBattleRoyale()):
             self._isInPostmortem = False
         else:
             self._isInPostmortem = True

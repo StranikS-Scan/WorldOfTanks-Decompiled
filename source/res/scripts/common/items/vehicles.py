@@ -5079,9 +5079,11 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     if kind.startswith('ARMOR_PIERCING'):
         shellType.normalizationAngle = radians(_xml.readNonNegativeFloat(xmlCtx, section, 'normalizationAngle'))
         shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
+        shellType.enableTraceRicochet = _xml.readBool(xmlCtx, section, 'enableTraceRicochet', component_constants.DEFAULT_ENABLE_TRACE_RICOCHET)
     elif kind == 'HOLLOW_CHARGE':
         shellType.piercingPowerLossFactorByDistance = 10.0 * _xml.readNonNegativeFloat(xmlCtx, section, 'piercingPowerLossFactorByDistance')
         shellType.ricochetAngleCos = cos(radians(_xml.readNonNegativeFloat(xmlCtx, section, 'ricochetAngle')))
+        shellType.enableTraceRicochet = _xml.readBool(xmlCtx, section, 'enableTraceRicochet', component_constants.DEFAULT_ENABLE_TRACE_RICOCHET)
     if kind == 'HIGH_EXPLOSIVE':
         shellType.mechanics = mechanics
         if isModernHighExplosive:

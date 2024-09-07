@@ -1,0 +1,1358 @@
+<Cz20_ShPTK_TVP_100_mm_CO.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
+  <speedLimits>
+    <forward>	55	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.169	</moving>
+    <still>	0.282	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <firePenalty>	0.423	</firePenalty>
+  </invisibility>
+  <optDevsOverrides>
+    <camouflageNet>
+      <invisibilityBonus>	0.15 0.175	</invisibilityBonus>
+    </camouflageNet>
+    <additionalInvisibilityDevice>
+      <invisibilityBonus>	0.05 0.06	</invisibilityBonus>
+    </additionalInvisibilityDevice>
+    <trophyBasicAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.05	</invisibilityBonus>
+    </trophyBasicAdditionalInvisibilityDevice>
+    <trophyUpgradedAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.07	</invisibilityBonus>
+    </trophyUpgradedAdditionalInvisibilityDevice>
+    <deluxeAdditionalInvisibilityDevice>
+      <invisibilityBonus>	0.08	</invisibilityBonus>
+    </deluxeAdditionalInvisibilityDevice>
+  </optDevsOverrides>
+  <repairCost>	6.0	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	65	</armor_1>
+      <armor_2>	65	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	40	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	20	</armor_8>
+      <armor_9>	30	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	20	</armor_11>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	11963	</weight>
+    <maxHealth>	920	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+          <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Hull.model	</exploded>
+        </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+      </sets>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38 0.36 1 0.05 0.34	</pitchParams>
+      <rollParams>	1 0.34 38 0.36 1 0.06 0.4	</rollParams>
+      <sensitivityToImpulse>	0.54	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.508099 0.805154	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/ShPTK-TVP_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	-0.716642 0.283946 3.323279	</rayStart>
+        <rayEnd>	-0.722309 0.108321 3.227762	</rayEnd>
+        <rayUp>	0.017752 0.47726 -0.878583	</rayUp>
+        <size>	0.21	</size>
+      </slot>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	-0 0.506763 -2.59081	</anchorPosition>
+        <anchorDirection>	-0 0.191963 -0.981402	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	-0 0.506763 -2.59081	</anchorPosition>
+        <anchorDirection>	-0 0.191963 -0.981402	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	Cz20_ShPTK_TVP_100_mm_CO_3DSt	</compatibleModels>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+    <camouflage>
+      <density>	106.439 106.33	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_Cz20_ShPTK_TVP_100_mm_CO>
+      <userString>	#czech_vehicles:Chassis_Cz20_ShPTK_TVP_100_mm_CO	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	11000	</weight>
+      <maxLoad>	33500	</maxLoad>
+      <terrainResistance>	1 1.35 1.95	</terrainResistance>
+      <brakeForce>	60000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+            <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Chassis.model	</exploded>
+          </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+        </sets>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	ussr_01	</textureSet>
+        <size>	0.67 0.76	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-4.5	</textureScale>
+          <trackDebris>
+            <isLeft>	true	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.026028	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.108772	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.525991	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	5	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_L4	</wheelName>
+                  <wheelName>	WD_L0	</wheelName>
+                  <groupRadius>	0.261629	</groupRadius>
+                  <groupInnerOffset>	0.387	</groupInnerOffset>
+                  <groupOuterOffset>	-0.287	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_L5	</wheelName>
+                  <wheelName>	W_L4	</wheelName>
+                  <wheelName>	W_L3	</wheelName>
+                  <wheelName>	W_L2	</wheelName>
+                  <wheelName>	W_L1	</wheelName>
+                  <wheelName>	W_L0	</wheelName>
+                  <groupRadius>	0.405001	</groupRadius>
+                  <groupInnerOffset>	0.387	</groupInnerOffset>
+                  <groupOuterOffset>	-0.287	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_L3	</wheelName>
+                  <wheelName>	WD_L2	</wheelName>
+                  <wheelName>	WD_L1	</wheelName>
+                  <groupRadius>	0.12639	</groupRadius>
+                  <groupInnerOffset>	0.387	</groupInnerOffset>
+                  <groupOuterOffset>	-0.287	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.948780 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.359277 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.999993	</row2>
+                  <row3>	0.000000 1.149629 -0.024850	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244392 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.387370 -0.035038	</row1>
+                  <row2>	-0.000001 0.578763 6.398615	</row2>
+                  <row3>	0.000000 1.552283 0.037757	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.345960 -0.177749	</row1>
+                  <row2>	0.000000 0.236056 0.459446	</row2>
+                  <row3>	0.000001 1.174692 -3.311123	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.310886 0.233737	</row1>
+                  <row2>	0.000000 -0.339210 0.451172	</row2>
+                  <row3>	0.000001 1.751061 3.356606	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz20_ShPTK_TVP_100_mm_CO_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.948780 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.402000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.070000	</row2>
+                  <row3>	0.000000 1.149629 0.037000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.502000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.630182 -0.057351	</row1>
+                  <row2>	0.000000 0.650742 7.150450	</row2>
+                  <row3>	0.000000 1.668000 -0.171000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.408000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.345960 -0.177749	</row1>
+                  <row2>	0.000000 0.236056 0.459446	</row2>
+                  <row3>	0.000001 1.174692 -3.311123	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.295569 0.252828	</row1>
+                  <row2>	0.000000 -0.599322 0.700640	</row2>
+                  <row3>	0.000001 1.751061 3.356606	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.424268 -0.038376	</row1>
+                  <row2>	-0.000001 0.600589 6.639893	</row2>
+                  <row3>	-1.767000 1.240724 -0.044735	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+          <trackDebris>
+            <isLeft>	false	</isLeft>
+            <destructionEffect></destructionEffect>
+            <physicalParams>
+              <renderModelOffset>	-0.026058	</renderModelOffset>
+              <interpolationsCount>	1	</interpolationsCount>
+              <lengthwiseSpringLength>	0.108446	</lengthwiseSpringLength>
+              <widthwiseSpringLength>	0.52599	</widthwiseSpringLength>
+              <hingeJointStiffness>	500	</hingeJointStiffness>
+              <torsionStiffnessStep>	5	</torsionStiffnessStep>
+              <wheelGroups>
+                <wheelGroup>
+                  <wheelName>	WD_R4	</wheelName>
+                  <wheelName>	WD_R0	</wheelName>
+                  <groupRadius>	0.260628	</groupRadius>
+                  <groupInnerOffset>	-0.387	</groupInnerOffset>
+                  <groupOuterOffset>	0.287	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	W_R5	</wheelName>
+                  <wheelName>	W_R4	</wheelName>
+                  <wheelName>	W_R3	</wheelName>
+                  <wheelName>	W_R2	</wheelName>
+                  <wheelName>	W_R1	</wheelName>
+                  <wheelName>	W_R0	</wheelName>
+                  <groupRadius>	0.405001	</groupRadius>
+                  <groupInnerOffset>	-0.387	</groupInnerOffset>
+                  <groupOuterOffset>	0.287	</groupOuterOffset>
+                </wheelGroup>
+                <wheelGroup>
+                  <wheelName>	WD_R3	</wheelName>
+                  <wheelName>	WD_R2	</wheelName>
+                  <wheelName>	WD_R1	</wheelName>
+                  <groupRadius>	0.126392	</groupRadius>
+                  <groupInnerOffset>	-0.387	</groupInnerOffset>
+                  <groupOuterOffset>	0.287	</groupOuterOffset>
+                </wheelGroup>
+              </wheelGroups>
+              <hullCollider>
+                <boxCollider>
+                  <row0>	1.948780 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.359277 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.999993	</row2>
+                  <row3>	0.000000 1.149629 -0.024850	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244392 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.387370 -0.035038	</row1>
+                  <row2>	0.000001 0.578762 6.398615	</row2>
+                  <row3>	0.000000 1.552283 0.037757	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.345960 -0.177749	</row1>
+                  <row2>	0.000000 0.236056 0.459446	</row2>
+                  <row3>	-0.000001 1.174692 -3.311123	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.310886 0.233737	</row1>
+                  <row2>	0.000000 -0.339210 0.451172	</row2>
+                  <row3>	-0.000001 1.751061 3.356606	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz20_ShPTK_TVP_100_mm_CO_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.948780 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.402000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.070000	</row2>
+                  <row3>	0.000000 1.149630 0.037000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.502000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.630182 -0.057351	</row1>
+                  <row2>	0.000000 0.650742 7.150452	</row2>
+                  <row3>	0.000000 1.668000 -0.171000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.408000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.345960 -0.177749	</row1>
+                  <row2>	0.000000 0.236056 0.459446	</row2>
+                  <row3>	0.000001 1.174690 -3.311120	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.244390 0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.295569 0.252828	</row1>
+                  <row2>	0.000000 -0.599322 0.700640	</row2>
+                  <row3>	0.000001 1.751060 3.356610	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.430923 -0.030486	</row1>
+                  <row2>	-0.000001 0.484244 6.844893	</row2>
+                  <row3>	1.767000 1.230000 0.126000	</row3>
+                </boxCollider>
+              </hullCollider>
+            </physicalParams>
+          </trackDebris>
+        </trackPair>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.322710 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.705300	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.259283	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.124369	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R4	</name>
+          <radius>	0.314749	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.405001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.259283	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.124369	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	3	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L4	</name>
+          <radius>	0.314749	</radius>
+          <syncAngle>	24	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.405001	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.3225 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.28087 2.17824	</topRightCarryingPoint>
+      <maxClimbAngle>	20	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0162562	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.025	</maxAmplitude>
+        <maxOffset>	0.025	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.26431	</backwardElastK>
+          <offset>	-0.0524476	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.800744	</forwardElastK>
+          <backwardElastK>	1.31822	</backwardElastK>
+          <offset>	-0.167832	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.617472	</forwardElastK>
+          <backwardElastK>	1.09182	</backwardElastK>
+          <offset>	-0.0804196	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.725279	</forwardElastK>
+          <backwardElastK>	1.14572	</backwardElastK>
+          <offset>	-0.0734266	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.74684	</forwardElastK>
+          <backwardElastK>	1.28587	</backwardElastK>
+          <offset>	-0.0629371	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.800744	</forwardElastK>
+          <backwardElastK>	1.31822	</backwardElastK>
+          <offset>	-0.167832	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.62007	</forwardElastK>
+          <backwardElastK>	0.800744	</backwardElastK>
+          <offset>	-0.108392	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.62007	</forwardElastK>
+          <backwardElastK>	0.800744	</backwardElastK>
+          <offset>	-0.108392	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.26431	</backwardElastK>
+          <offset>	-0.0524476	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.617472	</forwardElastK>
+          <backwardElastK>	1.09182	</backwardElastK>
+          <offset>	-0.0804196	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.725279	</forwardElastK>
+          <backwardElastK>	1.14572	</backwardElastK>
+          <offset>	-0.0734266	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.74684	</forwardElastK>
+          <backwardElastK>	1.28587	</backwardElastK>
+          <offset>	-0.0629371	</offset>
+        </node>
+      </trackNodes>
+      <splineDesc>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <segmentModelLeft>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/segment.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/segment.model	</segmentModelRight>
+          <left>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/left.track	</left>
+          <right>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/right.track	</right>
+          <segmentLength>	0.11	</segmentLength>
+          <segmentOffset>	0.228873	</segmentOffset>
+          <atlas>
+            <UTiles>	1	</UTiles>
+            <VTiles>	1	</VTiles>
+          </atlas>
+          <modelSets>
+            <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+              <segmentModelLeft>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/track/segment.model	</segmentModelRight>
+            </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+          </modelSets>
+        </trackPair>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+      </splineDesc>
+      <physicalTracks>
+        <left>
+          <segmentsCount>	134	</segmentsCount>
+          <segmentsOuterThickness>	0.050032	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.002023	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	-1.281	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.110607	</back>
+              <top>	0.070968	</top>
+              <front>	0.105523	</front>
+              <bottom>	0.066369	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.10396	</back>
+              <top>	0.105048	</top>
+              <front>	0.109429	</front>
+              <bottom>	0.066368	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/segment.model	</model>
+            <length>	0.111651	</length>
+          </mainSegment>
+          <modelSets>
+            <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+              <mainSegmentModel>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/track/segment.model	</mainSegmentModel>
+            </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+          </modelSets>
+          <collisionHull>
+            <top>
+              <part>
+                <xStart>	-3.38248	</xStart>
+                <xStep>	0.055825	</xStep>
+                <ySamples>	0.914509 0.960826 0.992029 1.00651 1.01737 1.02251 1.02765 1.03279 1.03794 1.04308 1.04822 1.05337 1.05851 1.06365 1.0688 1.07394 1.07908 1.08422 1.08937 1.09451 1.09965 1.1048 1.10994 1.11508 1.12022 1.12537 1.13051 1.13566 1.14082 1.14598 1.15114 1.15631 1.16147 1.16663 1.17179 1.17695 1.18211 1.18727 1.19244 1.1976 1.20276 1.20792 1.21308 1.21824 1.22341 1.22857 1.23373 1.23889 1.24405 1.24921 1.25437 1.25954 1.2647 1.26986 1.27502 1.28018 1.28534 1.29051 1.29565 1.30079 1.30593 1.31107 1.3162 1.32134 1.32648 1.33162 1.33676 1.3419 1.34704 1.35218 1.35731 1.36245 1.36759 1.37273 1.37787 1.38301 1.38815 1.39329 1.39843 1.40356 1.4087 1.41384 1.41898 1.42412 1.42926 1.4344 1.43954 1.44467 1.44981 1.45495 1.46009 1.46523 1.47037 1.47551 1.48065 1.48578 1.49092 1.49606 1.5012 1.50634 1.51148 1.51662 1.52176 1.52689 1.53203 1.53717 1.54231 1.54745 1.55259 1.55773 1.55786 1.56228 1.56691 1.57166 1.57664 1.58167 1.58595 1.58184 1.56719 1.54753 1.51824 1.47965 1.41935	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_L4	</wheel>
+            <wheel>	W_L5	</wheel>
+            <wheel>	W_L4	</wheel>
+            <wheel>	W_L3	</wheel>
+            <wheel>	W_L2	</wheel>
+            <wheel>	W_L1	</wheel>
+            <wheel>	W_L0	</wheel>
+            <wheel>	WD_L0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_L0	</wheelName>
+              <basePos>	3.14943 1.23156	</basePos>
+              <shiftVec>	0.219556 0.137693	</shiftVec>
+              <jointIdx>	16	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_L4	</wheelName>
+              <basePos>	-3.07475 0.658798	</basePos>
+              <shiftVec>	-0.214759 0.145856	</shiftVec>
+              <jointIdx>	78	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_L5	</wheelName>
+              <basePos>	-2.16484 0.431222	</basePos>
+              <shiftVec>	-0.005906 -0.402935	</shiftVec>
+              <jointIdx>	92	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_L0	</wheelName>
+              <basePos>	2.32515 0.431223	</basePos>
+              <shiftVec>	0.073272 -0.396261	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_L4	</name>
+              <radius>	0.258644	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_L0	</name>
+              <radius>	0.258196	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_L4	</name>
+              <startAngle>	-3.00067	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_L0	</name>
+              <startAngle>	0.154932	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.07068 1.00083 -3.3835	</point>
+                <point>	1.07068 1.04742 -3.32769	</point>
+                <point>	1.07068 1.07894 -3.27189	</point>
+                <point>	1.30068 1.09373 -3.21608	</point>
+                <point>	1.07068 1.10463 -3.16028	</point>
+                <point>	1.07068 1.10978 -3.10447	</point>
+                <point>	1.07068 1.11492 -3.04866	</point>
+                <point>	1.08068 1.12006 -2.99286	</point>
+                <point>	1.10068 1.1252 -2.93705	</point>
+                <point>	1.11068 1.13034 -2.88124	</point>
+                <point>	1.13068 1.13548 -2.82544	</point>
+                <point>	1.14068 1.14062 -2.76963	</point>
+                <point>	1.16068 1.14576 -2.71383	</point>
+                <point>	1.18068 1.1509 -2.65802	</point>
+                <point>	1.19068 1.15604 -2.60221	</point>
+                <point>	1.21068 1.16119 -2.54641	</point>
+                <point>	1.23068 1.16633 -2.4906	</point>
+                <point>	1.24068 1.17147 -2.4348	</point>
+                <point>	1.26069 1.17661 -2.37899	</point>
+                <point>	1.28069 1.18175 -2.32318	</point>
+                <point>	1.29069 1.18689 -2.26738	</point>
+                <point>	1.31069 1.19203 -2.21157	</point>
+                <point>	1.33069 1.19717 -2.15576	</point>
+                <point>	1.34069 1.20231 -2.09996	</point>
+                <point>	1.36069 1.20745 -2.04415	</point>
+                <point>	1.38069 1.2126 -1.98835	</point>
+                <point>	1.39069 1.21774 -1.93254	</point>
+                <point>	1.40069 1.22288 -1.87673	</point>
+                <point>	1.40069 1.22804 -1.82093	</point>
+                <point>	1.40069 1.2332 -1.76512	</point>
+                <point>	1.40069 1.23836 -1.70931	</point>
+                <point>	1.40069 1.24352 -1.65351	</point>
+                <point>	1.40069 1.24868 -1.5977	</point>
+                <point>	1.40069 1.25384 -1.5419	</point>
+                <point>	1.40069 1.259 -1.48609	</point>
+                <point>	1.40069 1.26416 -1.43028	</point>
+                <point>	1.40069 1.26932 -1.37448	</point>
+                <point>	1.40069 1.27448 -1.31867	</point>
+                <point>	1.40069 1.27964 -1.26287	</point>
+                <point>	1.40069 1.2848 -1.20706	</point>
+                <point>	1.40069 1.28996 -1.15125	</point>
+                <point>	1.40069 1.29512 -1.09545	</point>
+                <point>	1.40069 1.30028 -1.03964	</point>
+                <point>	1.40069 1.30544 -0.983834	</point>
+                <point>	1.40069 1.3106 -0.928028	</point>
+                <point>	1.40069 1.31576 -0.872222	</point>
+                <point>	1.40069 1.32092 -0.816416	</point>
+                <point>	1.40069 1.32608 -0.76061	</point>
+                <point>	1.40069 1.33124 -0.704804	</point>
+                <point>	1.40069 1.3364 -0.648997	</point>
+                <point>	1.40069 1.34156 -0.593191	</point>
+                <point>	1.40069 1.34672 -0.537385	</point>
+                <point>	1.40069 1.35188 -0.481579	</point>
+                <point>	1.40069 1.35704 -0.425773	</point>
+                <point>	1.40069 1.3622 -0.369967	</point>
+                <point>	1.40069 1.36736 -0.31416	</point>
+                <point>	1.40069 1.37252 -0.258354	</point>
+                <point>	1.40069 1.37768 -0.202548	</point>
+                <point>	1.40069 1.38282 -0.146742	</point>
+                <point>	1.40069 1.38796 -0.090936	</point>
+                <point>	1.40069 1.39309 -0.03513	</point>
+                <point>	1.40069 1.39823 0.020676	</point>
+                <point>	1.40069 1.40337 0.076483	</point>
+                <point>	1.40069 1.40851 0.132289	</point>
+                <point>	1.40069 1.41364 0.188095	</point>
+                <point>	1.40069 1.41878 0.243902	</point>
+                <point>	1.40069 1.42392 0.299708	</point>
+                <point>	1.40069 1.42905 0.355514	</point>
+                <point>	1.40069 1.43419 0.41132	</point>
+                <point>	1.40069 1.43933 0.467126	</point>
+                <point>	1.40069 1.44447 0.522932	</point>
+                <point>	1.40069 1.4496 0.578739	</point>
+                <point>	1.40069 1.45474 0.634545	</point>
+                <point>	1.40069 1.45988 0.690351	</point>
+                <point>	1.40069 1.46501 0.746157	</point>
+                <point>	1.40069 1.47015 0.801963	</point>
+                <point>	1.40069 1.47529 0.857769	</point>
+                <point>	1.40069 1.48042 0.913575	</point>
+                <point>	1.40069 1.48556 0.969382	</point>
+                <point>	1.40069 1.4907 1.02519	</point>
+                <point>	1.40069 1.49584 1.08099	</point>
+                <point>	1.40069 1.50097 1.1368	</point>
+                <point>	1.40069 1.50611 1.19261	</point>
+                <point>	1.40069 1.51125 1.24841	</point>
+                <point>	1.40069 1.51638 1.30422	</point>
+                <point>	1.40069 1.52152 1.36003	</point>
+                <point>	1.40069 1.52666 1.41583	</point>
+                <point>	1.40069 1.5318 1.47164	</point>
+                <point>	1.40069 1.53693 1.52744	</point>
+                <point>	1.40069 1.54207 1.58325	</point>
+                <point>	1.40069 1.54721 1.63906	</point>
+                <point>	1.40069 1.55234 1.69486	</point>
+                <point>	1.40069 1.55748 1.75067	</point>
+                <point>	1.40069 1.56262 1.80647	</point>
+                <point>	1.40069 1.56775 1.86228	</point>
+                <point>	1.40069 1.57289 1.91809	</point>
+                <point>	1.40069 1.57803 1.97389	</point>
+                <point>	1.40069 1.58317 2.0297	</point>
+                <point>	1.40069 1.5883 2.08551	</point>
+                <point>	1.40069 1.59344 2.14131	</point>
+                <point>	1.40069 1.59858 2.19712	</point>
+                <point>	1.40069 1.60371 2.25292	</point>
+                <point>	1.40069 1.60885 2.30873	</point>
+                <point>	1.40069 1.61399 2.36454	</point>
+                <point>	1.40069 1.61913 2.42034	</point>
+                <point>	1.40069 1.62426 2.47615	</point>
+                <point>	1.40069 1.6294 2.53196	</point>
+                <point>	1.40069 1.63454 2.58776	</point>
+                <point>	1.40069 1.63967 2.64357	</point>
+                <point>	1.40069 1.64481 2.69937	</point>
+                <point>	1.40069 1.64499 2.75518	</point>
+                <point>	1.17069 1.6494 2.81099	</point>
+                <point>	1.07069 1.65401 2.86679	</point>
+                <point>	1.07069 1.65876 2.9226	</point>
+                <point>	1.23069 1.66373 2.9784	</point>
+                <point>	1.40069 1.66873 3.03421	</point>
+                <point>	1.40069 1.67357 3.09002	</point>
+                <point>	1.40069 1.66943 3.14582	</point>
+                <point>	1.40069 1.65575 3.20163	</point>
+                <point>	1.40069 1.63642 3.25744	</point>
+                <point>	1.40069 1.60796 3.31324	</point>
+                <point>	1.40069 1.56892 3.36905	</point>
+                <point>	1.21069 1.51295 3.42485	</point>
+              </range>
+            </top>
+          </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
+        </left>
+        <right>
+          <segmentsCount>	134	</segmentsCount>
+          <segmentsOuterThickness>	0.050063	</segmentsOuterThickness>
+          <segmentsInnerThickness>	-0.002053	</segmentsInnerThickness>
+          <segmentsPlaneOffset>	1.281	</segmentsPlaneOffset>
+          <springsLength>
+            <backwardMovement>
+              <back>	0.110607	</back>
+              <top>	0.070968	</top>
+              <front>	0.105523	</front>
+              <bottom>	0.066369	</bottom>
+            </backwardMovement>
+            <forwardMovement>
+              <back>	0.10396	</back>
+              <top>	0.105048	</top>
+              <front>	0.109429	</front>
+              <bottom>	0.066368	</bottom>
+            </forwardMovement>
+          </springsLength>
+          <mainSegment>
+            <model>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/track/segment.model	</model>
+            <length>	0.111679	</length>
+          </mainSegment>
+          <modelSets>
+            <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+              <mainSegmentModel>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/track/segment.model	</mainSegmentModel>
+            </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+          </modelSets>
+          <collisionHull>
+            <top>
+              <part>
+                <xStart>	-3.38172	</xStart>
+                <xStep>	0.05584	</xStep>
+                <ySamples>	0.915277 0.961399 0.992365 1.00662 1.01744 1.02259 1.02773 1.03287 1.03802 1.04316 1.04831 1.05345 1.0586 1.06374 1.06888 1.07403 1.07917 1.08432 1.08946 1.0946 1.09975 1.10489 1.11004 1.11518 1.12033 1.12547 1.13061 1.13576 1.14093 1.14609 1.15125 1.15642 1.16158 1.16674 1.1719 1.17707 1.18223 1.18739 1.19256 1.19772 1.20288 1.20804 1.21321 1.21837 1.22353 1.2287 1.23386 1.23902 1.24418 1.24935 1.25451 1.25967 1.26484 1.27 1.27516 1.28032 1.28549 1.29065 1.29579 1.30093 1.30607 1.31121 1.31635 1.32149 1.32664 1.33178 1.33692 1.34206 1.3472 1.35234 1.35748 1.36262 1.36776 1.3729 1.37804 1.38318 1.38832 1.39346 1.3986 1.40374 1.40888 1.41402 1.41916 1.4243 1.42944 1.43458 1.43972 1.44486 1.45 1.45514 1.46028 1.46542 1.47056 1.4757 1.48084 1.48598 1.49112 1.49626 1.5014 1.50654 1.51168 1.51682 1.52196 1.5271 1.53224 1.53738 1.54252 1.54766 1.5528 1.55794 1.55822 1.56264 1.5672 1.57184 1.57663 1.58151 1.58565 1.58272 1.57348 1.55803 1.53438 1.49322 1.41128	</ySamples>
+              </part>
+            </top>
+          </collisionHull>
+          <bottomWheels>
+            <wheel>	WD_R4	</wheel>
+            <wheel>	W_R5	</wheel>
+            <wheel>	W_R4	</wheel>
+            <wheel>	W_R3	</wheel>
+            <wheel>	W_R2	</wheel>
+            <wheel>	W_R1	</wheel>
+            <wheel>	W_R0	</wheel>
+            <wheel>	WD_R0	</wheel>
+          </bottomWheels>
+          <snapWheels>
+            <topFront>
+              <wheelName>	WD_R0	</wheelName>
+              <basePos>	3.14943 1.23156	</basePos>
+              <shiftVec>	0.208597 0.151934	</shiftVec>
+              <jointIdx>	17	</jointIdx>
+            </topFront>
+            <topBack>
+              <wheelName>	WD_R4	</wheelName>
+              <basePos>	-3.07475 0.658798	</basePos>
+              <shiftVec>	-0.214376 0.144583	</shiftVec>
+              <jointIdx>	79	</jointIdx>
+            </topBack>
+            <bottomBack>
+              <wheelName>	W_R5	</wheelName>
+              <basePos>	-2.32485 0.431188	</basePos>
+              <shiftVec>	0.025285 -0.402948	</shiftVec>
+              <jointIdx>	92	</jointIdx>
+            </bottomBack>
+            <bottomFront>
+              <wheelName>	W_R0	</wheelName>
+              <basePos>	2.16515 0.431187	</basePos>
+              <shiftVec>	0.090964 -0.392546	</shiftVec>
+              <jointIdx>	0	</jointIdx>
+            </bottomFront>
+          </snapWheels>
+          <radiusOverrides>
+            <wheel>
+              <name>	WD_R4	</name>
+              <radius>	0.257609	</radius>
+            </wheel>
+            <wheel>
+              <name>	WD_R0	</name>
+              <radius>	0.257095	</radius>
+            </wheel>
+          </radiusOverrides>
+          <teethSyncs>
+            <syncWithMainModel>	true	</syncWithMainModel>
+            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
+            <sync>
+              <name>	WD_R4	</name>
+              <startAngle>	3.07526	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+            <sync>
+              <name>	WD_R0	</name>
+              <startAngle>	0.013546	</startAngle>
+              <teethCount>	15	</teethCount>
+            </sync>
+          </teethSyncs>
+          <sourceCollisionHullPoints>
+            <top>
+              <range>
+                <point>	1.07068 1.00083 -3.3835	</point>
+                <point>	1.07068 1.04742 -3.32769	</point>
+                <point>	1.07068 1.07894 -3.27189	</point>
+                <point>	1.30068 1.09373 -3.21608	</point>
+                <point>	1.07068 1.10463 -3.16028	</point>
+                <point>	1.07068 1.10978 -3.10447	</point>
+                <point>	1.07068 1.11492 -3.04866	</point>
+                <point>	1.08068 1.12006 -2.99286	</point>
+                <point>	1.10068 1.1252 -2.93705	</point>
+                <point>	1.11068 1.13034 -2.88124	</point>
+                <point>	1.13068 1.13548 -2.82544	</point>
+                <point>	1.14068 1.14062 -2.76963	</point>
+                <point>	1.16068 1.14576 -2.71383	</point>
+                <point>	1.18068 1.1509 -2.65802	</point>
+                <point>	1.19068 1.15604 -2.60221	</point>
+                <point>	1.21068 1.16119 -2.54641	</point>
+                <point>	1.23068 1.16633 -2.4906	</point>
+                <point>	1.24068 1.17147 -2.4348	</point>
+                <point>	1.26069 1.17661 -2.37899	</point>
+                <point>	1.28069 1.18175 -2.32318	</point>
+                <point>	1.29069 1.18689 -2.26738	</point>
+                <point>	1.31069 1.19203 -2.21157	</point>
+                <point>	1.33069 1.19717 -2.15576	</point>
+                <point>	1.34069 1.20231 -2.09996	</point>
+                <point>	1.36069 1.20745 -2.04415	</point>
+                <point>	1.38069 1.2126 -1.98835	</point>
+                <point>	1.39069 1.21774 -1.93254	</point>
+                <point>	1.40069 1.22288 -1.87673	</point>
+                <point>	1.40069 1.22804 -1.82093	</point>
+                <point>	1.40069 1.2332 -1.76512	</point>
+                <point>	1.40069 1.23836 -1.70931	</point>
+                <point>	1.40069 1.24352 -1.65351	</point>
+                <point>	1.40069 1.24868 -1.5977	</point>
+                <point>	1.40069 1.25384 -1.5419	</point>
+                <point>	1.40069 1.259 -1.48609	</point>
+                <point>	1.40069 1.26416 -1.43028	</point>
+                <point>	1.40069 1.26932 -1.37448	</point>
+                <point>	1.40069 1.27448 -1.31867	</point>
+                <point>	1.40069 1.27964 -1.26287	</point>
+                <point>	1.40069 1.2848 -1.20706	</point>
+                <point>	1.40069 1.28996 -1.15125	</point>
+                <point>	1.40069 1.29512 -1.09545	</point>
+                <point>	1.40069 1.30028 -1.03964	</point>
+                <point>	1.40069 1.30544 -0.983834	</point>
+                <point>	1.40069 1.3106 -0.928028	</point>
+                <point>	1.40069 1.31576 -0.872222	</point>
+                <point>	1.40069 1.32092 -0.816416	</point>
+                <point>	1.40069 1.32608 -0.76061	</point>
+                <point>	1.40069 1.33124 -0.704804	</point>
+                <point>	1.40069 1.3364 -0.648997	</point>
+                <point>	1.40069 1.34156 -0.593191	</point>
+                <point>	1.40069 1.34672 -0.537385	</point>
+                <point>	1.40069 1.35188 -0.481579	</point>
+                <point>	1.40069 1.35704 -0.425773	</point>
+                <point>	1.40069 1.3622 -0.369967	</point>
+                <point>	1.40069 1.36736 -0.31416	</point>
+                <point>	1.40069 1.37252 -0.258354	</point>
+                <point>	1.40069 1.37768 -0.202548	</point>
+                <point>	1.40069 1.38282 -0.146742	</point>
+                <point>	1.40069 1.38796 -0.090936	</point>
+                <point>	1.40069 1.39309 -0.03513	</point>
+                <point>	1.40069 1.39823 0.020676	</point>
+                <point>	1.40069 1.40337 0.076483	</point>
+                <point>	1.40069 1.40851 0.132289	</point>
+                <point>	1.40069 1.41364 0.188095	</point>
+                <point>	1.40069 1.41878 0.243902	</point>
+                <point>	1.40069 1.42392 0.299708	</point>
+                <point>	1.40069 1.42905 0.355514	</point>
+                <point>	1.40069 1.43419 0.41132	</point>
+                <point>	1.40069 1.43933 0.467126	</point>
+                <point>	1.40069 1.44447 0.522932	</point>
+                <point>	1.40069 1.4496 0.578739	</point>
+                <point>	1.40069 1.45474 0.634545	</point>
+                <point>	1.40069 1.45988 0.690351	</point>
+                <point>	1.40069 1.46501 0.746157	</point>
+                <point>	1.40069 1.47015 0.801963	</point>
+                <point>	1.40069 1.47529 0.857769	</point>
+                <point>	1.40069 1.48042 0.913575	</point>
+                <point>	1.40069 1.48556 0.969382	</point>
+                <point>	1.40069 1.4907 1.02519	</point>
+                <point>	1.40069 1.49584 1.08099	</point>
+                <point>	1.40069 1.50097 1.1368	</point>
+                <point>	1.40069 1.50611 1.19261	</point>
+                <point>	1.40069 1.51125 1.24841	</point>
+                <point>	1.40069 1.51638 1.30422	</point>
+                <point>	1.40069 1.52152 1.36003	</point>
+                <point>	1.40069 1.52666 1.41583	</point>
+                <point>	1.40069 1.5318 1.47164	</point>
+                <point>	1.40069 1.53693 1.52744	</point>
+                <point>	1.40069 1.54207 1.58325	</point>
+                <point>	1.40069 1.54721 1.63906	</point>
+                <point>	1.40069 1.55234 1.69486	</point>
+                <point>	1.40069 1.55748 1.75067	</point>
+                <point>	1.40069 1.56262 1.80647	</point>
+                <point>	1.40069 1.56775 1.86228	</point>
+                <point>	1.40069 1.57289 1.91809	</point>
+                <point>	1.40069 1.57803 1.97389	</point>
+                <point>	1.40069 1.58317 2.0297	</point>
+                <point>	1.40069 1.5883 2.08551	</point>
+                <point>	1.40069 1.59344 2.14131	</point>
+                <point>	1.40069 1.59858 2.19712	</point>
+                <point>	1.40069 1.60371 2.25292	</point>
+                <point>	1.40069 1.60885 2.30873	</point>
+                <point>	1.40069 1.61399 2.36454	</point>
+                <point>	1.40069 1.61913 2.42034	</point>
+                <point>	1.40069 1.62426 2.47615	</point>
+                <point>	1.40069 1.6294 2.53196	</point>
+                <point>	1.40069 1.63454 2.58776	</point>
+                <point>	1.40069 1.63967 2.64357	</point>
+                <point>	1.40069 1.64481 2.69937	</point>
+                <point>	1.40069 1.64499 2.75518	</point>
+                <point>	1.17069 1.6494 2.81099	</point>
+                <point>	1.07069 1.65401 2.86679	</point>
+                <point>	1.07069 1.65876 2.9226	</point>
+                <point>	1.23069 1.66373 2.9784	</point>
+                <point>	1.40069 1.66873 3.03421	</point>
+                <point>	1.40069 1.67357 3.09002	</point>
+                <point>	1.40069 1.66943 3.14582	</point>
+                <point>	1.40069 1.65575 3.20163	</point>
+                <point>	1.40069 1.63642 3.25744	</point>
+                <point>	1.40069 1.60796 3.31324	</point>
+                <point>	1.40069 1.56892 3.36905	</point>
+                <point>	1.21069 1.51295 3.42485	</point>
+              </range>
+            </top>
+          </sourceCollisionHullPoints>
+          <trackPairIdx>	0	</trackPairIdx>
+        </right>
+      </physicalTracks>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.56899 0.777569 0.038187	</anchorPosition>
+          <anchorDirection>	-0.895791 0.44394 0.021802	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0.00677 2.49901 -0.26107	</anchorPosition>
+          <anchorDirection>	-0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <repairTime>	6.85714293	</repairTime>
+    </Chassis_Cz20_ShPTK_TVP_100_mm_CO>
+  </chassis>
+  <turrets0>
+    <Turret_1_Cz20_ShPTK_TVP_100_mm_CO>
+      <userString>	#czech_vehicles:Turret_1_Cz20_ShPTK_TVP_100_mm_CO	</userString>
+      <tags>	cannotDetach	</tags>
+      <level>	8	</level>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	65	</armor_1>
+        <armor_2>	50	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	60	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	4500	</weight>
+      <maxHealth>	230	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_100mm_BS_3>	shared	  <maxAmmo>	66	</maxAmmo>
+          <armor>
+            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	40	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 6 0.344444 6 0.388889 4 0.569444 4 0.625 6 1 6	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	5.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.3	</aimingTime>
+          <models>
+            <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+                <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+            </sets>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_mainext_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-20	</row>
+                <row>	0	</row>
+                <row>	6	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	joint_1	</node>
+                  <table>
+                    <row>	18.797	</row>
+                    <row>	0	</row>
+                    <row>	-5.588	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint_2	</node>
+                  <table>
+                    <row>	-19.992	</row>
+                    <row>	0	</row>
+                    <row>	5.505	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0 0.08967 2.60246	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.297683 0.297682	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0 0.089668 2.60246	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0 0.086 4.04	</rayStart>
+              <rayEnd>	0 0.086 4.53	</rayEnd>
+              <rayUp>	0.08102 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	Cz20_ShPTK_TVP_100_mm_CO_3DSt	</compatibleModels>
+              <size>	0.49	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <camouflage>
+            <density>	105.439 105.118	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_100mm_BS_3>
+      </guns>
+      <models>
+        <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+            <undamaged>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/_skins/Cz20_ShPTK_TVP_100_mm_CO_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </Cz20_ShPTK_TVP_100_mm_CO_3DSt>
+        </sets>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz20_ShPTK_TVP_100_mm/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.383669 1.0499	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <physicsShape>	1.031 0.041 1 0 0.523 0.352 0.305 0 0.65 0.5 0.23 0.505 0.149 0.11 0	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0.00677 0.6684 -1.06622	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0.00677 0.6684 -1.06622	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33000	</slotId>
+          <rayStart>	-1.11029 0.363977 0.653551	</rayStart>
+          <rayEnd>	-1.08149 0.344863 0.63341	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.25	</size>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <isMirrored>	true	</isMirrored>
+          <rayStart>	1.11029 0.363977 0.653551	</rayStart>
+          <rayEnd>	1.08149 0.344863 0.63341	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.25	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34000	</slotId>
+          <rayStart>	-1.31997 0.215065 -0.258087	</rayStart>
+          <rayEnd>	-1.28433 0.196894 -0.257965	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.8	</size>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34001	</slotId>
+          <rayStart>	1.31997 0.215065 -0.258087	</rayStart>
+          <rayEnd>	1.28433 0.196894 -0.257965	</rayEnd>
+          <rayUp>	0 1 0	</rayUp>
+          <size>	0.8	</size>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <camouflage>
+        <density>	99.6894 100.049	</density>
+        <aoTextureSize>	1024 512	</aoTextureSize>
+      </camouflage>
+    </Turret_1_Cz20_ShPTK_TVP_100_mm_CO>
+  </turrets0>
+  <engines>
+    <Skoda_16_ADH_140_F>	shared	</Skoda_16_ADH_140_F>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <Radiostanice_RM_31T_A>	shared	</Radiostanice_RM_31T_A>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Skoda_16_ADH_140_F>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+        </Skoda_16_ADH_140_F>
+      </engines>
+      <chassis>
+        <Chassis_Cz20_ShPTK_TVP_100_mm_CO>
+          <axleCount>	5	</axleCount>
+          <grounds>
+            <soft>
+              <rollingFriction>	0.156975	</rollingFriction>
+            </soft>
+            <medium>
+              <rollingFriction>	0.108675	</rollingFriction>
+            </medium>
+            <firm>
+              <rollingFriction>	0.0805	</rollingFriction>
+            </firm>
+          </grounds>
+        </Chassis_Cz20_ShPTK_TVP_100_mm_CO>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	15514	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.8	</alpha>
+  </emblems>
+</Cz20_ShPTK_TVP_100_mm_CO.xml>

@@ -32,7 +32,7 @@ def quickEarnTmanSkills(tankman, possibleXp):
     else:
         possSkillEff = float(tankman.skillsEfficiencyXP + possibleXp) / tankmen.MAX_SKILLS_EFFICIENCY_XP
         possCnt, possLvl = CrewConstants.DONT_SHOW_LEVEL, SkillLvlFormatter()
-    if tankman.currentVehicleSkillsEfficiency < 0 or not possibleXp or tankman.descriptor.isMaxSkillXp():
+    if tankman.currentVehicleSkillsEfficiency < 0 or not possibleXp or tankman.descriptor.isMaxSkillXp() and not tankman.descriptor.needEfficiencyXP:
         possSkillEff = CrewConstants.DONT_SHOW_LEVEL
     return ((currCnt,
       possCnt,

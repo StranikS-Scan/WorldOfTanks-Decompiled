@@ -14,7 +14,7 @@ from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData, PARAMS_NORMALIZATION_MAP
 from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, clipFireRatePreprocessor, shotDispersionAnglePreprocessor
 from gui.shared.items_parameters.params import VehicleParams
-from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, isValidEmptyValue
+from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, isValidEmptyValue, updateCrewBonus
 from gui.shared.utils import SHOT_DISPERSION_ANGLE, AUTO_SHOOT_CLIP_FIRE_RATE
 from helpers import dependency
 from post_progression_common import VehicleState
@@ -190,6 +190,7 @@ class _VehCompareParametersData(object):
                 defRoleLevel = self.__crewLvl
                 nativeVehiclesByIndexes = None
             self.__vehicle.crew = self.__vehicle.getCrewBySkillLevels(defRoleLevel, skillsDict, levelsByIndexes, nativeVehiclesByIndexes, activateBrotherhood=True)
+            updateCrewBonus(self.__vehicle)
             self.__isCrewInvalid = True
             self.__isCurrVehParamsInvalid = True
         return self.__isCrewInvalid

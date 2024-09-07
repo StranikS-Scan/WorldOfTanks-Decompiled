@@ -49,9 +49,9 @@ class FreeXpStepperCalculator(object):
             if self.__possibleSkillLevel == 0:
                 possibleSkillLevel = SkillLvlFormatter(MAX_SKILL_LEVEL, self.__possibleSkillLevel.residualXp, self.__possibleSkillLevel.lvlCostXp)
                 possibleSkillsCount = self.__possibleSkillsCount - 1
-            possibleSkillLevel -= int(possibleSkillLevel.residualXp < self.exchangeRate)
+            possibleSkillLevel -= 1
         targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp)
+        return self._getTargetFreeXp(targetTmanXp) + possibleSkillLevel.residualXp
 
     def getLevelUpXpState(self):
         if not self.__possibleSkillsCount:
@@ -71,7 +71,7 @@ class FreeXpStepperCalculator(object):
         possibleSkillsCount = self.__possibleSkillsCount - int(not self.__possibleSkillLevel.intSkillLvl) if self.__possibleSkillsCount else self.__lastSkillsCount
         possibleSkillLevel = SkillLvlFormatter(0) if self.__possibleSkillsCount else self.__lastSkillLevel
         targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp)
+        return self._getTargetFreeXp(targetTmanXp) + possibleSkillLevel.residualXp
 
     def getSkillUpXpState(self):
         possibleSkillsCount = self.__possibleSkillsCount + 1 if self.__possibleSkillsCount else self.__lastSkillsCount

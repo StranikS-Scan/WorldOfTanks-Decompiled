@@ -9,6 +9,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.quests import PMGetTankwomanReward
 from items import vehicles
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIcon, getTitle, getIconBackground, getIconName, getTitleFromTokenData
+from gui.impl.lobby.crew.crew_sounds import SOUNDS as CREW_SOUNDS
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
 from gui.impl.pub.dialog_window import DialogButtons
 from gui.impl.gen.resources import R
@@ -67,7 +68,7 @@ class TokenRecruitDialog(BaseRecruitDialog):
     __slots__ = ('__tokenName', '__tokenData', '__vehicleSlotToUnpack', '__vehicle')
     _itemsCache = dependency.descriptor(IItemsCache)
     _specialSounds = dependency.descriptor(ISpecialSoundCtrl)
-    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_GARAGE,
+    __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUNDS.STATE_PLACE: CREW_SOUNDS.STATE_PLACE_BARRAKS,
      StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.WOMAN_AWARD_WINDOW, exitEvent='')
     _COMMON_SOUND_SPACE = __SOUND_SETTINGS
 

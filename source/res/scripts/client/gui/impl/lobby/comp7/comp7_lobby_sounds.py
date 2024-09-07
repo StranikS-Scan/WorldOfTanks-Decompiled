@@ -5,6 +5,10 @@ import SoundGroups
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from sound_gui_manager import CommonSoundSpaceSettings
 
+class LobbySounds(Enum):
+    LEAVE_MODE = 'comp_7_hangar_drone_stop'
+
+
 class MetaViewSounds(Enum):
     ENTER_EVENT = 'comp_7_progression_enter'
     EXIT_EVENT = 'comp_7_progression_exit'

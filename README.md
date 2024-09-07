@@ -1,5 +1,5 @@
 ﻿# WorldOfTanks-Decompiled
-Unpacked and decompiled files of **WorldOfTanks/MirTankov**. The base branch contains decompiles of the **RU**-version of the game client (from patch **1.18.1** this is the **MirTankov** from **Lesta Studio**). At the same time, other branches can be added - a test client, a supertest or a client from other regions, if there are main differences in them.
+Unpacked and decompiled files of **WorldOfTanks**. The base branch contains decompiles of the **EU**-version of the game client. At the same time, other branches can be added - a test client, a supertest or a client from other regions, if there are main differences in them.
 
 Each client has its own [**branch**](https://github.com/StranikS-Scan/WorldOfTanks-Decompiled/branches/all). In the default-branch is the latest version of the client. Micropatches that are released after the first release of the client are added only to branch of released client. This allows you to easily track all the stages of the release of the game.
 

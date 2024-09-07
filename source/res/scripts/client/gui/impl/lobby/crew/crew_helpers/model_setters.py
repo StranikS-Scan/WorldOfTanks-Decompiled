@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_helpers/model_setters.py
+import math
 from collections import defaultdict
 from itertools import chain
 from typing import TYPE_CHECKING
@@ -81,7 +82,7 @@ def setTmanSkillsModel(sm, tman, useOnlyFull=False, possibleSkillsLevels=None, f
         if possCnt >= 0:
             possibleTotalMajorSkillProgress = tman.freeSkillsCount * MAX_SKILL_LEVEL + (possCnt - 1) * MAX_SKILL_LEVEL + possLvl.intSkillLvl
             possibleBonusSkillsProgress = possibleTotalMajorSkillProgress / NPS.BONUS_SKILL_ENABLING_FREQUENCY
-            lastBonusSkillLvl = possibleBonusSkillsProgress % MAX_SKILL_LEVEL
+            lastBonusSkillLvl = math.ceil(possibleBonusSkillsProgress % MAX_SKILL_LEVEL)
             possibleFullBonusSkillsCount, possibleLastBonusSkillLvl = int(possibleBonusSkillsProgress) / MAX_SKILL_LEVEL, MAX_SKILL_LEVEL if MAX_SKILL_LEVEL - lastBonusSkillLvl < 1 else int(lastBonusSkillLvl)
             possibleBonusSkillsLvl = [MAX_SKILL_LEVEL] * possibleFullBonusSkillsCount + [possibleLastBonusSkillLvl]
             possibleBonusSkillsLvl = possibleBonusSkillsLvl[:NPS.MAX_BONUS_SKILLS_PER_ROLE]

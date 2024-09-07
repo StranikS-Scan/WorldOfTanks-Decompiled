@@ -4207,10 +4207,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -4235,7 +4235,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -4246,12 +4246,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -4261,9 +4261,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -5186,10 +5186,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -5214,7 +5214,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -5225,12 +5225,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -5240,9 +5240,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -6165,10 +6165,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -6193,7 +6193,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -6204,12 +6204,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -6219,9 +6219,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -12534,10 +12534,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -12562,7 +12562,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.35	</outerRadius>
+          <outerRadius>	1.0	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -12588,9 +12588,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_APCR_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -13508,10 +13508,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -13536,7 +13536,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.35	</outerRadius>
+          <outerRadius>	1.0	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -13562,9 +13562,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_APCR_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -14482,10 +14482,10 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	0.1	</endpixie>
-        <end>	1	</end>
+        <end>	0.8	</end>
       </timeline>
       <effects>
         <friendlyFlashBang>
@@ -14510,7 +14510,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.35	</outerRadius>
+          <outerRadius>	1.0	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -14536,9 +14536,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_small_ricochet_APCR_NPC_PC	</impactNPC_PC>
-          <impactPC_NPC>	imp_small_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_small_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_20_49_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_small_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_small_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -16439,7 +16439,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	4	</soundplaystop>
         <endpixie>	0.1	</endpixie>
       </timeline>
@@ -16466,7 +16466,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -16477,12 +16477,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -16492,10 +16492,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_medium_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -17405,7 +17404,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	4	</soundplaystop>
         <endpixie>	0.1	</endpixie>
       </timeline>
@@ -17432,7 +17431,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -17443,12 +17442,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -17458,10 +17457,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_medium_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -18371,7 +18369,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	4	</soundplaystop>
         <endpixie>	0.1	</endpixie>
       </timeline>
@@ -18398,7 +18396,7 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.5	</outerRadius>
+          <outerRadius>	2.5	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
@@ -18409,12 +18407,12 @@
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	4	</multiplier>
+            <multiplier>	5	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	2	</multiplier>
+            <multiplier>	3	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
@@ -18424,10 +18422,9 @@
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_AP_NPC_PC	</impactNPC_PC>
-          <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_AP_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_AP_NPC_NPC	</impactNPC_NPC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
+          <impactPC_NPC>	imp_medium_not_pierce_AP_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_AP_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -24755,7 +24752,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.17	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	1	</endpixie>
         <end>	0.8	</end>
@@ -24783,36 +24780,36 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.6	</outerRadius>
+          <outerRadius>	1.3	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
             <time>	0.0	</time>
             <color>	255 85 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	1	</multiplier>
+            <multiplier>	2	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	0.5	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
             <color>	0 0 0 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	0.5	</multiplier>
           </animation>
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_APCR_NPC_PC	</impactNPC_PC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
           <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_medium_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -25734,7 +25731,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.17	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	1	</endpixie>
         <end>	0.8	</end>
@@ -25762,36 +25759,36 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.6	</outerRadius>
+          <outerRadius>	1.3	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
             <time>	0.0	</time>
             <color>	255 85 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	1	</multiplier>
+            <multiplier>	2	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	0.5	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
             <color>	0 0 0 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	0.5	</multiplier>
           </animation>
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_APCR_NPC_PC	</impactNPC_PC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
           <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_medium_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>
@@ -26713,7 +26710,7 @@
     </armorBasicRicochet>
     <armorRicochet>
       <timeline>
-        <lightingEnd>	0.13	</lightingEnd>
+        <lightingEnd>	0.17	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
         <endpixie>	1	</endpixie>
         <end>	0.8	</end>
@@ -26741,36 +26738,36 @@
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
           <innerRadius>	0.125	</innerRadius>
-          <outerRadius>	0.6	</outerRadius>
+          <outerRadius>	1.3	</outerRadius>
           <castShadows>	false	</castShadows>
           <position>	Scene Root	</position>
           <animation>
             <time>	0.0	</time>
             <color>	255 85 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	0.25	</time>
             <color>	255 150 100	</color>
-            <multiplier>	1	</multiplier>
+            <multiplier>	2	</multiplier>
           </animation>
           <animation>
             <time>	0.75	</time>
             <color>	125 45 0	</color>
-            <multiplier>	0.5	</multiplier>
+            <multiplier>	1	</multiplier>
           </animation>
           <animation>
             <time>	1.0	</time>
             <color>	0 0 0 0	</color>
-            <multiplier>	0	</multiplier>
+            <multiplier>	0.5	</multiplier>
           </animation>
         </light>
         <sound>
           <startKey>	start	</startKey>
-          <impactNPC_PC>	imp_medium_ricochet_APCR_NPC_PC	</impactNPC_PC>
+          <impactNPC_PC>	imp_auto_shoot_50_75_not_pierce_NPC_PC	</impactNPC_PC>
           <impactFNPC_PC>	imp_ff_NPC_PC	</impactFNPC_PC>
-          <impactPC_NPC>	imp_medium_ricochet_APCR_PC_NPC	</impactPC_NPC>
-          <impactNPC_NPC>	imp_medium_ricochet_APCR_NPC_NPC	</impactNPC_NPC>
+          <impactPC_NPC>	imp_medium_not_pierce_APCR_PC_NPC	</impactPC_NPC>
+          <impactNPC_NPC>	imp_medium_not_pierce_APCR_NPC_NPC	</impactNPC_NPC>
           <SWITCH_ext_shell_type>	SWITCH_ext_shell_type_AP	</SWITCH_ext_shell_type>
         </sound>
       </effects>

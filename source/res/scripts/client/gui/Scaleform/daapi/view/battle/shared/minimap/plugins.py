@@ -727,9 +727,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
                 if vehicleID in self.__tempHealthStorage:
                     currHealth = self.__tempHealthStorage[vehicleID]
                     maxHealth = vInfo.vehicleType.maxHealth
-                    if maxHealth >= currHealth:
-                        del self.__tempHealthStorage[vehicleID]
-                        self._onVehicleHealthChanged(vehicleID, currHealth, maxHealth)
+                    self._onVehicleHealthChanged(vehicleID, currHealth, maxHealth)
                 self._setVehicleInfo(vehicleID, entry, vInfo, arenaDP.getPlayerGuiProps(vehicleID, vInfo.team))
 
     def invalidateVehicleStatus(self, flags, vInfo, arenaDP):
@@ -815,8 +813,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
         if vehicleID not in self._entries:
             return
+        self.__tempHealthStorage[vehicleID] = currH
         if currH > maxH:
-            self.__tempHealthStorage[vehicleID] = currH
             _logger.debug('Max Vehicle Health is less then current. Health will be updated after max health update')
             return
         self._invoke(self._entries[vehicleID].getID(), 'setVehicleHealth', normalizeHealthPercent(currH, maxH))

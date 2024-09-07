@@ -194,8 +194,11 @@ class BattlePassCustomizationsBonusPacker(_BattlePassFinalBonusPacker):
         cls._packCommon(bonus, model)
         customizationItem = bonus.getC11nItem(item)
         iconName = customizationItem.itemTypeName
-        if iconName == 'style' and customizationItem.modelsSet:
-            iconName = 'style_3d'
+        if iconName == 'style':
+            if customizationItem.modelsSet:
+                iconName = 'style_3d'
+            elif customizationItem.isQuestsProgression:
+                iconName = 'progressionStyle'
         bigIcon = '_'.join([iconName, str(customizationItem.intCD)])
         if not R.images.gui.maps.icons.battlePass.rewards.dyn(bigIcon).exists():
             bigIcon = iconName

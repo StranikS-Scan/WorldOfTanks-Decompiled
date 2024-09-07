@@ -100,7 +100,7 @@
       </aimingTimeBuff>
       <shotDispersionFactors>	0.55 0.475 0.3	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <clipReloadTimeBoost>	0.45 0.6 0.75	  <exports>	vse tooltip	</exports>
+      <clipReloadTimeBoost>	0.6 0.75 0.9	  <exports>	vse tooltip	</exports>
       </clipReloadTimeBoost>
     </script>
   </comp7_concentration>
@@ -148,7 +148,7 @@
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	17.5 30 42.5	  <exports>	vse tooltip	</exports>
+      <crewBuff>	20 32.5 45	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_aoe_inspire>
@@ -173,7 +173,7 @@
       </delay>
       <radius>	10 12.5 15	  <exports>	vse tooltip	</exports>
       </radius>
-      <damage>	70 135 225	  <exports>	vse tooltip	</exports>
+      <damage>	90 150 250	  <exports>	vse tooltip	</exports>
       </damage>
       <stunDuration>	0 6 8	  <exports>	vse tooltip	</exports>
       </stunDuration>
@@ -233,7 +233,7 @@
           <plan>	comp7Abilities/juggernaut_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	5	  <exports>	vse	</exports>
+      <cooldownSeconds>	8	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	12 15 20	  <exports>	vse tooltip	</exports>
       </duration>
@@ -325,7 +325,7 @@
       </healDuration>
       <baseHeal>	100	  <exports>	vse tooltip	</exports>
       </baseHeal>
-      <extraHealFactor>	0.35 0.6 0.85	  <exports>	vse	</exports>
+      <extraHealFactor>	0.35 0.55 0.75	  <exports>	vse	</exports>
       </extraHealFactor>
       <fwdSpeedBoost>	10	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>

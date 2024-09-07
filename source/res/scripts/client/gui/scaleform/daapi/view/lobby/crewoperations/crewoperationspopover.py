@@ -9,7 +9,7 @@ from gui.Scaleform.locale.CREW_OPERATIONS import CREW_OPERATIONS
 from gui.impl.dialogs.dialogs import showRetrainMassiveDialog, showRetrainSingleDialog
 from gui.prb_control import prb_getters
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Vehicle import Vehicle, getLowEfficiencyTankmenIds
+from gui.shared.gui_items.Vehicle import Vehicle, getLowEfficiencyCrew
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.processors.tankman import TankmanReturn
 from gui.shared.utils import decorators
@@ -52,12 +52,13 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     def invokeOperation(self, operationName):
         if operationName == OPERATION_RETRAIN:
             if self._ctxData:
-                tankmenIds = self._ctxData.get('tankmenIds', [])
+                crewIds = self._ctxData.get('crewIds', [])
                 vehicleCD = self._ctxData.get('vehicleCD', None)
-                if len(tankmenIds) == 1:
-                    showRetrainSingleDialog(tankmenIds[0], vehicleCD)
+                if len(crewIds) == 1:
+                    slotIdx, tmanIdx = crewIds[0]
+                    showRetrainSingleDialog(tmanIdx, vehicleCD, targetSlotIdx=slotIdx)
                 else:
-                    showRetrainMassiveDialog(tankmenIds, vehicleCD)
+                    showRetrainMassiveDialog([ tmanID for _, tmanID in crewIds ], vehicleCD)
         elif operationName == OPERATION_RETURN:
             self.__processReturnCrew()
         else:
@@ -132,7 +133,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             return self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK, None, CREW_OPERATIONS.DROPINBARRACK_WARNING_CREWISLOCKED_TOOLTIP) if vehicle.isCrewLocked else self.__getInitCrewOperationObject(OPERATION_DROP_IN_BARRACK)
 
     def __isTopCrewForCurrentVehicle(self, vehicle):
-        return not bool(getLowEfficiencyTankmenIds(vehicle))
+        return not bool(getLowEfficiencyCrew(vehicle))
 
     def __isNoCrew(self, crew):
         for _, tman in crew:

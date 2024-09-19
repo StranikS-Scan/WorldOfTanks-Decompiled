@@ -20,6 +20,7 @@ _VEHICLE_STATE_PREFIX = '{0} ('
 _VEHICLE_STATE_SUFFIX = ')'
 _DIFF_FORMAT = '+ {}'
 _LINE_FEED = '\n'
+_DEFAULT_COUNT = 0
 
 def getUnknownPlayerName(isEnemy=False):
     return i18n.makeString(BATTLE_RESULTS.PLAYERS_ENEMY_UNKNOWN) if isEnemy else i18n.makeString(BATTLE_RESULTS.PLAYERS_TEAMMATE_UNKNOWN)
@@ -62,22 +63,19 @@ def getTooltipParamsStyle(paramKey=None):
     return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_params_style', {'text': i18n.makeString(paramKey)})
 
 
-def _makeModuleTooltipLabel(module, suffix):
-    return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}{1}'.format(module, suffix),
-     'value': backport.text(R.strings.item_types.dyn(module).name())})
+def makeCriticalModuleTooltipLabel(module, count=_DEFAULT_COUNT):
+    return _makeModuleTooltipLabel(module, 'Critical', count)
 
 
-def makeCriticalModuleTooltipLabel(module):
-    return _makeModuleTooltipLabel(module, 'Critical')
+def makeDestroyedModuleTooltipLabel(module, count=_DEFAULT_COUNT):
+    return _makeModuleTooltipLabel(module, 'Destroyed', count)
 
 
-def makeDestroyedModuleTooltipLabel(module):
-    return _makeModuleTooltipLabel(module, 'Destroyed')
-
-
-def makeTankmenTooltipLabel(role):
-    return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_crit_label', {'image': '{0}Destroyed'.format(role),
-     'value': backport.text(R.strings.item_types.tankman.roles.dyn(role)())})
+def makeTankmenTooltipLabel(role, count=_DEFAULT_COUNT):
+    args = {'image': '{0}Destroyed'.format(role),
+     'value': backport.text(R.strings.item_types.tankman.roles.dyn(role)())}
+    template, args = _getTemplateAndArgs(args, count)
+    return makeHtmlString('html_templates:lobby/battle_results', template, args)
 
 
 class StatRow(base.StatsItem):
@@ -410,3 +408,19 @@ class XpStatsItem(base.StatsItem):
         if not value:
             converted = markValueAsEmpty(converted)
         return converted
+
+
+def _makeModuleTooltipLabel(module, suffix, count=_DEFAULT_COUNT):
+    args = {'image': '{0}{1}'.format(module, suffix),
+     'value': backport.text(R.strings.item_types.dyn(module).name())}
+    template, args = _getTemplateAndArgs(args, count)
+    return makeHtmlString('html_templates:lobby/battle_results', template, args)
+
+
+def _getTemplateAndArgs(args, count):
+    if count == _DEFAULT_COUNT:
+        template = 'tooltip_crit_label'
+    else:
+        template = 'tooltip_crit_label_with_count'
+        args.update({'count': count})
+    return (template, args)

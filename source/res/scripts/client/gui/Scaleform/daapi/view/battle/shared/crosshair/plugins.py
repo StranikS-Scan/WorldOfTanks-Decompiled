@@ -13,6 +13,7 @@ from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
@@ -176,7 +177,10 @@ class CrosshairPlugin(IPlugin):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def _isHideAmmo(self):
-        return self.sessionProvider.arenaVisitor.gui.isMapsTraining()
+        arenaGuiTypeVisitor = self.sessionProvider.arenaVisitor.gui
+        isAmmoInfinite = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.INFINITE_AMMO)
+        isMapsTraining = arenaGuiTypeVisitor.isMapsTraining()
+        return isAmmoInfinite or isMapsTraining
 
 
 class CorePlugin(CrosshairPlugin):

@@ -58,6 +58,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.badges_controller import BadgesController as _Badges
     from gui.game_control.special_sound_ctrl import SpecialSoundCtrl as _SpecialSoundCtrl
     from gui.game_control.battle_pass_controller import BattlePassController
+    from gui.wt_event.wt_progression_controller import WTProgressionController
     from gui.game_control.clan_notification_controller import ClanNotificationController as _ClanNotification
     from gui.game_control.craftmachine_controller import CraftmachineController
     from gui.game_control.reactive_comm import ReactiveCommunicationService
@@ -91,6 +92,10 @@ def getGameControllersConfig(manager):
     from gui.game_control.achievements_controller import AchievementsController
     from gui.game_control.achievements_earning_controller import Achievements20EarningController
     from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
+    from gui.game_control.wt_lootboxes_controller import WTLootBoxesController
+    from event_settings.event_settings_controller import EventSettingsController
+    from gui.wt_event.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -137,6 +142,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IReferralProgramController, _ReferralController())
     _config(_interface.ISpecialSoundCtrl, _SpecialSoundCtrl())
     _config(_interface.IBattlePassController, BattlePassController())
+    _config(_interface.IWTProgressionController, WTProgressionController())
     _config(_interface.IHangarLoadingController, _HangarLoading())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
@@ -147,6 +153,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
     _config(_interface.IComp7ShopController, Comp7ShopController())
+    _config(_interface.IWTLootBoxesController, WTLootBoxesController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -178,4 +185,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IAchievementsController, AchievementsController())
     _config(_interface.IAchievements20EarningController, Achievements20EarningController())
     _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
+    _config(_interface.IEventSettingsController, EventSettingsController())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

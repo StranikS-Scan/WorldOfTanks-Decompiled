@@ -574,22 +574,27 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentMarkerShown += self.__onEquipmentMarkerShown
+            ctrl.onEquipmentMarkerHide += self.__onEquipmentMarkerHide
         return
 
     def stop(self):
         while self.__callbackIDs:
-            _, callbackID = self.__callbackIDs.popitem()
+            _, (__, callbackID) = self.__callbackIDs.popitem()
             if callbackID is not None:
                 BigWorld.cancelCallback(callbackID)
 
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
+            ctrl.onEquipmentMarkerHide -= self.__onEquipmentMarkerHide
         super(EquipmentsMarkerPlugin, self).stop()
         return
 
+    def _getMarkerLinkage(self, item):
+        return settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER
+
     def __onEquipmentMarkerShown(self, item, position, _, delay, team=None):
-        markerID = self._createMarkerWithPosition(settings.MARKER_SYMBOL_NAME.EQUIPMENT_MARKER, position + settings.MARKER_POSITION_ADJUSTMENT)
+        markerID = self._createMarkerWithPosition(self._getMarkerLinkage(item), position + settings.MARKER_POSITION_ADJUSTMENT)
         arenaDP = self.sessionProvider.getArenaDP()
         if team is None or arenaDP is None or arenaDP.isAllyTeam(team):
             marker = item.getMarker()
@@ -598,26 +603,33 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
             marker = item.getEnemyMarker()
             markerColor = item.getEnemyMarkerColor()
         self._invokeMarker(markerID, 'init', marker, _EQUIPMENT_DELAY_FORMAT.format(round(delay)), self.__defaultPostfix, markerColor)
-        self.__setCallback(markerID, BigWorld.serverTime() + delay)
+        self.__setCallback(item, markerID, BigWorld.serverTime() + delay)
         return
 
-    def __setCallback(self, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):
-        self.__callbackIDs[markerID] = BigWorld.callback(interval, partial(self.__handleCallback, markerID, finishTime))
+    def __onEquipmentMarkerHide(self, item):
+        if item not in self.__callbackIDs:
+            return
+        markerID, _ = self.__callbackIDs[item]
+        self._destroyMarker(markerID)
+        self.__clearCallback(item)
 
-    def __clearCallback(self, markerID):
-        callbackID = self.__callbackIDs.pop(markerID, None)
+    def __setCallback(self, item, markerID, finishTime, interval=_EQUIPMENT_DEFAULT_INTERVAL):
+        self.__callbackIDs[item] = (markerID, BigWorld.callback(interval, partial(self.__handleCallback, item, markerID, finishTime)))
+
+    def __clearCallback(self, item):
+        _, callbackID = self.__callbackIDs.pop(item, (None, None))
         if callbackID is not None:
             BigWorld.cancelCallback(callbackID)
         return
 
-    def __handleCallback(self, markerID, finishTime):
-        self.__callbackIDs[markerID] = None
+    def __handleCallback(self, item, markerID, finishTime):
+        self.__callbackIDs.pop(item, None)
         delay = finishTime - BigWorld.serverTime()
         if delay <= 0:
             self._destroyMarker(markerID)
         else:
             self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(abs(round(delay))))
-            self.__setCallback(markerID, finishTime, min(delay, _EQUIPMENT_DEFAULT_INTERVAL))
+            self.__setCallback(item, markerID, finishTime, min(delay, _EQUIPMENT_DEFAULT_INTERVAL))
         return
 
 

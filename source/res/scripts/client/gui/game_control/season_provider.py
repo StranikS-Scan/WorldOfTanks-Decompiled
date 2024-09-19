@@ -326,6 +326,25 @@ class SeasonProvider(ISeasonProvider):
 
         return min(times) if times else 0
 
+    def isLastSeasonDay(self):
+        season = self.getCurrentSeason()
+        if season is None:
+            return False
+        else:
+            currentCycleEnd = season.getCycleEndDate()
+            timeLeft = time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(currentCycleEnd))
+            return 0 < timeLeft < time_utils.ONE_DAY
+
+    def hasPrimeTimesPassedForCurrentCycle(self):
+        season = self.getCurrentSeason()
+        if season is not None:
+            if season.hasActiveCycle(time_utils.getCurrentLocalServerTimestamp()):
+                startDate = season.getStartDate()
+                primeTimes = self.getPrimeTimes()
+                currentTime = time_utils.getCurrentLocalServerTimestamp()
+                return findFirst(lambda primeTime: bool(primeTime.getPeriodsBetween(startDate, currentTime, includeEnd=False)), primeTimes.values(), default=False)
+        return False
+
     def _hasPrimeStatusServer(self, states, now=None):
         for peripheryID in self._getAllPeripheryIDs():
             primeTimeStatus, _, _ = self.getPrimeTimeStatus(now, peripheryID)

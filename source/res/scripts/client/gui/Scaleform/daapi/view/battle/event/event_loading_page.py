@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/event/event_loading_page.py
 from PlayerEvents import g_playerEvents
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.Scaleform.daapi.view.meta.EventLoadingMeta import EventLoadingMeta
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from helpers import dependency
@@ -21,9 +23,25 @@ class EventLoadingPage(EventLoadingMeta, IArenaLoadController):
         g_playerEvents.onDisconnected += self._onDisconnected
         listSmall = []
         listBig = []
+        defaultValues = {}
+        isHunter = True
+        for index in range(len(self._tutorialPages)):
+            if self._tutorialPages[index].startswith('eventBoss'):
+                isHunter = False
+            key = 'header' + str(index + 1)
+            text = key + 'Text'
+            defaultValues[key + 'AutoSize'] = 'left'
+            if isHunter:
+                defaultValues[text] = backport.text(R.strings.event.loading.hunter.header.dyn('c_' + str(index + 1))())
+            defaultValues[text] = backport.text(R.strings.event.loading.boss.header.dyn('c_' + str(index + 1))())
+
         for pageId in self._tutorialPages:
-            listSmall.append(self._getTutorialPageVO(pageId, False))
-            listBig.append(self._getTutorialPageVO(pageId, True))
+            smallProps = self._getTutorialPageVO(pageId, False)
+            smallProps.update(defaultValues)
+            bigProps = self._getTutorialPageVO(pageId, True)
+            bigProps.update(defaultValues)
+            listSmall.append(smallProps)
+            listBig.append(bigProps)
 
         self.as_setDataS({'lessonPagesSmallData': listSmall,
          'lessonPagesBigData': listBig,

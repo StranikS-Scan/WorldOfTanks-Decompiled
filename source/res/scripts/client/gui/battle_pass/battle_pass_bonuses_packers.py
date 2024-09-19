@@ -149,8 +149,17 @@ class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
             model.setLabel(tankManFullName)
             model.setBigIcon(bonusImageName)
             model.setIsCollectionEntity(cls._isCollectionItem(groupName))
+            model.setLabel(cls._getLabel(bonus, recruitInfo))
             cls._injectAwardID(model, recruitInfo.getGroupName())
             return model
+
+    @classmethod
+    def _getLabel(cls, bonus, recruitInfo):
+        pass
+
+    @classmethod
+    def _getIcon(cls, recruitInfo, bonusImageName):
+        return bonusImageName
 
     @classmethod
     def _getToolTip(cls, bonus):

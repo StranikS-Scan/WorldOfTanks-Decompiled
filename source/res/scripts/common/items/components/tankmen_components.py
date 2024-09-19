@@ -33,6 +33,7 @@ class SPECIAL_VOICE_TAG(object):
     WHITE_TIGER_EVENT_2021 = ('letov_SpecialVoice', 'armand_SpecialVoice', 'elisa_SpecialVoice', 'krieger_SpecialVoice')
     WHITE_TIGER_EVENT_2022 = ('villanelle_SpecialVoice', 'ermelinda_SpecialVoice')
     WHITE_TIGER_EVENT_2023 = ('hannelore_SpecialVoice', 'jana_SpecialVoice')
+    WHITE_TIGER_EVENT_2024 = ('ermelinda24_SpecialVoice', 'krieger24_SpecialVoice', 'mouzAkrobat24_SpecialVoice', 'quickyBaby24_SpecialVoice', 'dakillzor24_SpecialVoice', 'skill4ltu24_SpecialVoice', 'bMeng24_SpecialVoice', 'saoNian24_SpecialVoice', 'yiTuanTuan24_SpecialVoice', 'zhongPengFei24_SpecialVoice')
     SABATON_2021 = 'sabaton21_specialVoice'
     G_I_JOE_2022 = ('baroness22SpecialVoice', 'coverGirl22SpecialVoice')
     BPH_2022 = ('commander_bph_2022_1', 'commander_bph_2022_2', 'commander_bph_2022_3', 'commander_bph_2022_4')
@@ -70,7 +71,7 @@ class SPECIAL_VOICE_TAG(object):
      ERIKA,
      MIKA,
      MARTY_VOLE,
-     MT_LB_1) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M
+     MT_LB_1) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024
 
 
 class SPECIAL_CREW_TAG(object):

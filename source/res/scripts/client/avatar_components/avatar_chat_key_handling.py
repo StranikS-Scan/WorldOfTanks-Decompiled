@@ -337,12 +337,12 @@ class AvatarChatKeyHandling(object):
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, replierID)
             else:
                 matrixProvider = self.__customMatrixProviderGetter[markerType](None, targetID)
-            soundPos = matrixProvider.translation if matrixProvider is not None else None
             enableVoice = True
             if replierID != self.playerVehicleID and targetID != self.playerVehicleID:
                 enableVoice = False
             sentByPlayer = True if replierID == self.playerVehicleID else False
-            self.__playSoundNotification(soundNotificationReply, soundPos, enableVoice, sentByPlayer)
+            if matrixProvider is not None:
+                self.__playSoundNotification(soundNotificationReply, matrixProvider.translation, enableVoice, sentByPlayer)
             return
 
     def __onCommandReceived(self, cmd):

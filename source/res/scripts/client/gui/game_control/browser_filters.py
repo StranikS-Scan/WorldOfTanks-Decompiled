@@ -7,13 +7,18 @@ from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showEventProgressionWindow
 from gui.shared.events import OpenLinkEvent
+from skeletons.gui.game_control import IEventBattlesController
+from helpers import dependency
 
 def getFilters():
     return {_onShowInExternalBrowser,
      _onGoToHangar,
      _onGoToMissions,
-     _onGoToPersonalMissions}
+     _onGoToPersonalMissions,
+     _goToEventPrb,
+     _goToEventMeta}
 
 
 BrowserFilterResult = namedtuple('BrowserFilterResult', 'stopNavigation closeBrowser')
@@ -47,5 +52,26 @@ def _onGoToPersonalMissions(url, tags):
     if 'go_to_campaigns' in tags:
         LOG_DEBUG('Browser url has been processed: going to personal missions. Url: ', url)
         g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        return BrowserFilterResult(stopNavigation=True, closeBrowser=True)
+    return BrowserFilterResult()
+
+
+def _goToEventPrb(url, tags):
+    if 'go_to_event' in tags:
+        LOG_DEBUG('Browser url has been processed: going to event prb. Url: ', url)
+        gameEventCtrl = dependency.instance(IEventBattlesController)
+        gameEventCtrl.doSelectEventPrb()
+        return BrowserFilterResult(stopNavigation=True, closeBrowser=True)
+    return BrowserFilterResult()
+
+
+def _goToEventMeta(url, tags):
+    if 'go_to_event_meta' in tags:
+        LOG_DEBUG('Browser url has been processed: going to event meta. Url: ', url)
+        gameEventCtrl = dependency.instance(IEventBattlesController)
+        if gameEventCtrl.isWelcomeScreenShown():
+            gameEventCtrl.doSelectEventPrbAndCallback(showEventProgressionWindow)
+        else:
+            gameEventCtrl.doSelectEventPrb()
         return BrowserFilterResult(stopNavigation=True, closeBrowser=True)
     return BrowserFilterResult()

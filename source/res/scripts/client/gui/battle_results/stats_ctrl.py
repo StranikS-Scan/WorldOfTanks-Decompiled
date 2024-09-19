@@ -33,7 +33,7 @@ class IBattleResultStatsCtrl(object):
         pass
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
         raise NotImplementedError
 
     @staticmethod

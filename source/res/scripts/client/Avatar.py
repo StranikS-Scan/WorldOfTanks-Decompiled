@@ -9,6 +9,7 @@ from functools import partial
 import BigWorld
 import Keys
 import Math
+import InstantStatuses
 import ResMgr
 import WWISE
 import WoT
@@ -1206,6 +1207,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
         if vehicleID != self.playerVehicleID or not self.userSeesWorld():
             return
+        elif not self.userSeesWorld():
+            return
         else:
             rawHealth = health
             health = max(0, health)
@@ -1267,12 +1270,20 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if not self.__isVehicleAlive and vehicleID == self.inputHandler.ctrl.curVehicleID:
                 self.guiSessionProvider.shared.feedback.setVehicleHasAmmo(vehicleID, timeLeft != -2)
             return
-        if timeLeft == baseTime:
-            self.__gunReloadCommandWaitEndTime = 0.0
-        self.__prevGunReloadTimeLeft = timeLeft
-        ammoCtrl = self.guiSessionProvider.shared.ammo
-        timeLeft, baseTime = ammoCtrl.preprocessGunReloadTime(timeLeft, baseTime)
-        ammoCtrl.setGunReloadTime(timeLeft, baseTime)
+        else:
+            if timeLeft == baseTime:
+                self.__gunReloadCommandWaitEndTime = 0.0
+            self.__prevGunReloadTimeLeft = timeLeft
+            ammoCtrl = self.guiSessionProvider.shared.ammo
+            timeLeft, baseTime = ammoCtrl.preprocessGunReloadTime(timeLeft, baseTime)
+            ammoCtrl.setGunReloadTime(timeLeft, baseTime)
+            vehicle = self.getVehicleAttached()
+            if vehicle is not None and vehicle.appearance is not None:
+                if timeLeft > 0.0:
+                    vehicle.appearance.removeComponentByType(InstantStatuses.GunReloadedComponent)
+                elif vehicle.appearance.findComponentByType(InstantStatuses.GunReloadedComponent) is None:
+                    vehicle.appearance.createComponent(InstantStatuses.GunReloadedComponent)
+            return
 
     def updateVehicleClipReloadTime(self, vehicleID, timeLeft, baseTime, firstTime, stunned, isBoostApplicable):
         self.guiSessionProvider.shared.ammo.setGunAutoReloadTime(timeLeft, baseTime, firstTime, stunned, isBoostApplicable)
@@ -2018,6 +2029,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return
             if self.__isOwnVehicleSwitchingSiegeMode():
                 return
+            if not self.guiSessionProvider.shared.feedback.getVehicleAttrs().get('gunCanShoot', True):
+                self.showVehicleError(self.__cantShootCriticals['gun_locked'])
+                return
             self.cell.vehicle_shoot()
             shotArgs = None
             vehicle = BigWorld.entity(self.playerVehicleID)
@@ -2525,7 +2539,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not g_offlineMapCreator.Active():
             self.inputHandler = AvatarInputHandler.AvatarInputHandler(self.spaceID)
             prereqs += self.inputHandler.prerequisites()
-        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications()
+        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications(self.arena.arenaType)
         self.complexSoundNotifications = IngameSoundNotifications.ComplexSoundNotifications()
         arena = BigWorld.player().arena
         notificationsRemapping = arena.arenaType.notificationsRemapping or {}
@@ -2602,6 +2616,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def showVehicleError(self, msgName, args=None):
         self.guiSessionProvider.shared.messages.showVehicleError(msgName, args)
+
+    def forceShotInfoStatus(self):
+        self.__startWaitingForShot(makePrediction=True, shotArgs=None, reloadWaitBlock=False)
+        return
 
     def __showDamageIconAndPlaySound(self, damageCode, extra, vehicleID, ignoreMessages=False):
         deviceName = None
@@ -2749,7 +2767,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             BigWorld.notifyBattleTime(self.spaceID, 0)
         self.__prevArenaPeriod = period
 
-    def __startWaitingForShot(self, makePrediction, simplifiedPrediction=False, shotArgs=None):
+    def __startWaitingForShot(self, makePrediction, simplifiedPrediction=False, shotArgs=None, reloadWaitBlock=True):
         if self.__shotWaitingTimerID is not None:
             BigWorld.cancelCallback(self.__shotWaitingTimerID)
             self.__shotWaitingTimerID = None
@@ -2762,7 +2780,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.inputHandler.setAimingMode(True, AIMING_MODE.SHOOTING)
             if not self.inputHandler.getAimingMode(AIMING_MODE.USER_DISABLED):
                 self.gunRotator.targetLastShotPoint = True
-            self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
+            if reloadWaitBlock:
+                self.__gunReloadCommandWaitEndTime = BigWorld.time() + 2.0
         elif makePrediction:
             self.__shotWaitingTimerID = BigWorld.callback(1.0, self.__clearTimedOutShooting)
             self.__isWaitingForShot = True

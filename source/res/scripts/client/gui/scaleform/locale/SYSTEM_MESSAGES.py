@@ -403,6 +403,7 @@ class SYSTEM_MESSAGES(object):
     ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:add_tankman_skill/vehicle_need_repair'
     ADD_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:add_tankman_skill/vehicle_locked'
     FILLING_UNTRAINED_PERKS_SUCCESS = '#system_messages:filling_untrained_perks/success'
+    ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED = '#system_messages:add_tankman_skill/crew_skills_locked'
     FILLING_UNTRAINED_PERKS_SERVER_ERROR = '#system_messages:filling_untrained_perks/server_error'
     DROP_TANKMAN_SKILL_SUCCESS = '#system_messages:drop_tankman_skill/success'
     DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS = '#system_messages:drop_tankman_skill/finance_success_credits'
@@ -1913,6 +1914,7 @@ class SYSTEM_MESSAGES(object):
      ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      ADD_TANKMAN_SKILL_VEHICLE_LOCKED,
      FILLING_UNTRAINED_PERKS_SUCCESS,
+     ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED,
      FILLING_UNTRAINED_PERKS_SERVER_ERROR,
      DROP_TANKMAN_SKILL_SUCCESS,
      DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS,

@@ -103,3 +103,8 @@ class BATTLE_VIEW_ALIASES(object):
     COMP7_TANK_CAROUSEL = 'comp7BattleTankCarousel'
     COMP7_TANK_CAROUSEL_FILTER_POPOVER = 'comp7TankCarouselFilterPopover'
     COMP7_RECON_FLIGHT = 'comp7ReconFlight'
+    EVENT_HUNTER_RESPAWN = 'eventHunterRespawn'
+    EVENT_BOSS_TELEPORT = 'eventBossTeleport'
+    EVENT_BOSS_WIDGET = 'eventBossWidget'
+    EVENT_MINI_BOSS_WIDGET = 'eventMiniBossWidget'
+    EVENT_OVERTIME = 'eventOvertime'

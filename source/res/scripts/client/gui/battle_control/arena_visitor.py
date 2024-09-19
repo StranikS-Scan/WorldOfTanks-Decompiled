@@ -380,6 +380,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
     def hasInBattleUpgrade(self):
         return self.hasAnyBonusCap(_CAPS.IN_BATTLE_UPGRADES)
 
+    def hasRoleExpSystem(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
+
     def hasDogTag(self):
         return self.hasAnyBonusCap(_CAPS.DOG_TAG)
 

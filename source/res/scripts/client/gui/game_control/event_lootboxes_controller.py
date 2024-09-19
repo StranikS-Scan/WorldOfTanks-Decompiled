@@ -107,7 +107,6 @@ class EventLootBoxesController(IEventLootBoxesController):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
         self.__statusChangeNotifier.startNotification()
         self.__boxesCount = self.__getBoxesCount()
-        self.__updateBoxInfo()
         self.__isLootBoxesAvailable = self.isLootBoxesAvailable()
         self.__isActive = self.isActive()
         self.onAvailabilityChange(self.__isLootBoxesAvailable, self.isLootBoxesAvailable())

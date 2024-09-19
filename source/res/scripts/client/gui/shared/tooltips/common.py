@@ -259,6 +259,16 @@ class EfficiencyTooltipData(BlocksTooltipData):
         return self._packers[data.type]().pack(data.toDict()) if data is not None and data.type in self._packers else []
 
 
+class TotalEfficiencyTooltipData(EfficiencyTooltipData):
+    _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.TotalArmorItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.TotalDamageItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.TotalKillItemPacker,
+     BATTLE_EFFICIENCY_TYPES.DETECTION: efficiency.TotalDetectionItemPacker,
+     BATTLE_EFFICIENCY_TYPES.ASSIST: efficiency.TotalAssistItemPacker,
+     BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.TotalCritsItemPacker,
+     BATTLE_EFFICIENCY_TYPES.ASSIST_STUN: efficiency.TotalStunItemPacker}
+
+
 _ENV_TOOLTIPS_PATH = '#environment_tooltips:%s'
 _ENV_IMAGES_PATH = '../maps/icons/environmentTooltips/%s.png'
 _ENV_IMAGES_PATH_FOR_CHECK = 'gui/maps/icons/environmentTooltips/%s.png'

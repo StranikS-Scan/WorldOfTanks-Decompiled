@@ -83,6 +83,11 @@ def getTillTimeByResource(seconds, resource, useRoundUp=False, removeLeadingZero
     return time_utils.getTillTimeString(seconds, isRoundUp=useRoundUp, sourceStrGenerator=stringGen, removeLeadingZeros=removeLeadingZeros)
 
 
+def getShortFormatDate(date):
+    timeStamp = time_utils.makeLocalServerTime(date)
+    return backport.getShortDateFormat(timeStamp)
+
+
 class RentLeftFormatter(object):
 
     def __init__(self, rentInfo, isIGR=False):
@@ -95,6 +100,8 @@ class RentLeftFormatter(object):
         activeSeasonRent = self.__rentInfo.getActiveSeasonRent()
         if activeSeasonRent is not None:
             resultStr = self.getRentSeasonLeftStr(activeSeasonRent, localization, formatter, timeStyle, ctx)
+        elif self.__rentInfo.anyExpires:
+            resultStr = self.getRentBattlesLeftStr(localization, formatter)
         elif self.__rentInfo.getTimeLeft() > 0:
             if strForSpecialTimeFormat:
                 finishTime = self.__rentInfo.getTimeLeft() + time_utils.getCurrentTimestamp()
@@ -126,7 +133,7 @@ class RentLeftFormatter(object):
         if formatter is None:
             formatter = defaultFormatter
         battlesLeft = self.__rentInfo.battlesLeft
-        return formatter(localization, RentDurationKeys.BATTLES, battlesLeft) if battlesLeft > 0 else ''
+        return formatter(localization, RentDurationKeys.BATTLES, battlesLeft) if battlesLeft > 0 or self.__rentInfo.anyExpires else ''
 
     def getRentWinsLeftStr(self, localization=None, formatter=None):
         if localization is None:

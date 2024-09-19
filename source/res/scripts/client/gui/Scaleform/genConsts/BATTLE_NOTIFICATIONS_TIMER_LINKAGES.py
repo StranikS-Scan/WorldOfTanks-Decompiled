@@ -34,6 +34,7 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     DROWN_ICON = 'destroyTimerDrownUI'
     GAS_DRAFT_ICON = 'destroyTimerGazDraftUI'
     STUN_ICON = 'secondaryStunIconUI'
+    WT_STUN_ICON = 'secondaryWTStunIconUI'
     BLOCKED_ICON = 'secondaryBlockedIconUI'
     SMOKE_ICON = 'secondarySmokeIconUI'
     INSPIRE_ICON = 'secondaryInspireIconUI'
@@ -75,3 +76,4 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     COMP7_AOE_INSPIRE_ICON = 'Comp7AoeInspireIconUI'
     COMP7_MARCH_ICON = 'Comp7MarchIconUI'
     COMP7_AGGRESSIVE_DETECTION_ICON = 'Comp7AggressiveDetectionIconUI'
+    WT_HYPERION_WARNING_ICON = 'destroyTimerWtHyperionUI'

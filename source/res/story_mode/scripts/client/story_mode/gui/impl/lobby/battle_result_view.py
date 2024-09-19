@@ -6,7 +6,7 @@ import BigWorld
 import SoundGroups
 from constants import DEATH_REASON_ALIVE
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
-from gui.battle_results.settings import PLAYER_TEAM_RESULT
+from gui.battle_results.br_constants import PlayerTeamResult
 from gui.clans.clan_cache import g_clanCache
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
@@ -124,9 +124,9 @@ class BattleResultView(ViewImpl):
                 _logger.error('Mission ID=%s not exists', missionId)
                 return
             model.setIsDifficult(mission.difficulty == MissionsDifficulty.HARD)
-            model.setIsVictory(finishResult == PLAYER_TEAM_RESULT.WIN)
+            model.setIsVictory(finishResult == PlayerTeamResult.WIN)
             model.setIsEvent(mission.isEvent)
-            model.setTitle(rBattleResult.dyn(PLAYER_TEAM_RESULT.DEFEAT if finishResult == PLAYER_TEAM_RESULT.DRAW else finishResult).title())
+            model.setTitle(rBattleResult.dyn(PlayerTeamResult.DEFEAT if finishResult == PlayerTeamResult.DRAW else finishResult).title())
             model.setSubTitle(battleResults['finishReason'])
             model.setInfoName(backport.text(rBattleResult.missionName.num(missionId)()))
             model.setInfoDescription(backport.text(rBattleResult.battleDuration(), date=battleResults['arenaDateTime'], duration=battleResults['arenaDuration']))

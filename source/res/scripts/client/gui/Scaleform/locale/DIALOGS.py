@@ -1080,6 +1080,14 @@ class DIALOGS(object):
     FILLALLPERKS_BUTTON_FILL = '#dialogs:fillAllPerks/button/fill'
     FILLALLPERKS_BUTTON_CANCEL = '#dialogs:fillAllPerks/button/cancel'
     FILLALLPERKS_DESCRIPTION = '#dialogs:fillAllPerks/description'
+    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
+    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
+    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
+    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
+    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
+    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
+    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
+    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -2148,7 +2156,15 @@ class DIALOGS(object):
      FILLALLPERKS_CHECKBOX,
      FILLALLPERKS_BUTTON_FILL,
      FILLALLPERKS_BUTTON_CANCEL,
-     FILLALLPERKS_DESCRIPTION)
+     FILLALLPERKS_DESCRIPTION,
+     CONFIRMREWARD_TITLE,
+     CONFIRMREWARD_MESSAGE,
+     CONFIRMREWARD_SUBMIT,
+     CONFIRMREWARD_CANCEL,
+     REROLLREWARD_TITLE,
+     REROLLREWARD_MESSAGE,
+     REROLLREWARD_CONFIRM,
+     REROLLREWARD_CANCEL)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

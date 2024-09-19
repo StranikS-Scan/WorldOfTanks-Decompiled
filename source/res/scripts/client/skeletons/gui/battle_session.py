@@ -232,6 +232,14 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
+    def playersPanel(self):
+        raise NotImplementedError
+
+    @property
+    def bossPanel(self):
+        raise NotImplementedError
+
+    @property
     def shotsResultSound(self):
         raise NotImplementedError
 

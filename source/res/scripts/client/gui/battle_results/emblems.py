@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/emblems.py
 from adisp import adisp_process
-from gui.battle_results.settings import EMBLEM_TYPE
+from gui.battle_results.br_constants import EmblemType
 from gui.clans.clan_cache import g_clanCache
 
 class EmblemFetcher(object):
@@ -42,6 +42,6 @@ class ClanEmblemFetcher(EmblemFetcher):
 def createFetcher(ctx):
     emblemType = ctx.getEmblemType()
     fetcher = None
-    if emblemType == EMBLEM_TYPE.CLAN:
+    if emblemType == EmblemType.CLAN:
         fetcher = ClanEmblemFetcher(ctx.getFormationDBID(), ctx.getTextureID())
     return fetcher

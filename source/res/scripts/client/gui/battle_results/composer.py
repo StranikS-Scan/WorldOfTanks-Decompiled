@@ -41,8 +41,8 @@ class StatsComposer(IBattleResultStatsCtrl):
         return self._block.getVO()
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
-        return event_dispatcher.showBattleResultsWindow(arenaUniqueID)
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+        return event_dispatcher.showBattleResultsWindow(arenaUniqueID, isPostbattle20Enabled)
 
     @staticmethod
     def onResultsPosted(arenaUniqueID):
@@ -131,7 +131,7 @@ class MapsTrainingStatsComposer(IBattleResultStatsCtrl):
         return self._block.getVO()
 
     @staticmethod
-    def onShowResults(arenaUniqueID):
+    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
         MapsTrainingStatsComposer._fromNotifications.add(arenaUniqueID)
 
     @staticmethod

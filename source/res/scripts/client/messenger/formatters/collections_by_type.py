@@ -30,7 +30,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.SkipNotificationFormatter()))
+ token_quest_subformatters.SkipNotificationFormatter(),
+ token_quest_subformatters.WtEventProgressionQuestFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 
@@ -161,3 +162,4 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.crewBooksConversion.index(), _sc.CrewBooksConversionFormatter())
     registerMessengerServerFormatter(_SM_TYPE.postProgressionUnlocked.index(), _sc.PostProgressionUnlockedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.postProgressionCompleted.index(), _sc.PostProgressionCompletedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.wtEventTicketTokenWithdrawn.index(), _sc.WTEventTicketTokenWithdrawnFormatter())

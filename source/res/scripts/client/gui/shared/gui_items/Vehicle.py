@@ -172,6 +172,12 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     COMP7_BATTLES = 'comp7'
     WOT_PLUS = constants.VEHICLE_WOT_PLUS_TAG
     NO_CREW_TRANSFER_PENALTY_TAG = constants.VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG
+    EVENT_BOSS = 'event_boss'
+    EVENT_MINI_BOSS = 'event_mini_boss'
+    EVENT_HUNTER = 'event_hunter'
+    EVENT_BOT = 'event_bot'
+    EVENT_SPECIAL_BOSS = 'special_event_boss'
+    EVENT_VEHS = frozenset((EVENT_BOSS, EVENT_HUNTER))
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -199,6 +205,7 @@ class Vehicle(FittingItem):
         AMMO_NOT_FULL_EVENTS = 'ammoNotFullEvents'
         SERVER_RESTRICTION = 'serverRestriction'
         RENTAL_IS_OVER = 'rentalIsOver'
+        RENTAL_IS_OVER_BATTLE = 'rentalBattleIsOver'
         IGR_RENTAL_IS_OVER = 'igrRentalIsOver'
         IN_PREMIUM_IGR_ONLY = 'inPremiumIgrOnly'
         GROUP_IS_NOT_READY = 'group_is_not_ready'
@@ -207,8 +214,12 @@ class Vehicle(FittingItem):
         UNSUITABLE_TO_QUEUE = 'unsuitableToQueue'
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         WILL_BE_UNLOCKED_IN_BATTLE = 'willBeUnlockedInBattle'
-        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, WILL_BE_UNLOCKED_IN_BATTLE)
-        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
+        TICKETS_SHORTAGE = 'ticketsShortage'
+        CUSTOM = (UNSUITABLE_TO_QUEUE,
+         UNSUITABLE_TO_UNIT,
+         WILL_BE_UNLOCKED_IN_BATTLE,
+         TICKETS_SHORTAGE)
+        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, TICKETS_SHORTAGE)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -989,6 +1000,10 @@ class Vehicle(FittingItem):
         return set(vehicles.VEHICLE_CLASS_TAGS & self.tags).pop()
 
     @property
+    def eventType(self):
+        return set(VEHICLE_TAGS.EVENT_VEHS & self.tags).pop()
+
+    @property
     def typeUserName(self):
         return getTypeUserName(self.type, self.isElite)
 
@@ -1061,6 +1076,14 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, 'scout')
 
     @property
+    def isSquadRestricted(self):
+        return checkForTags(self.tags, 'squad_restricted')
+
+    @property
+    def isOnlyForRandomBattles(self):
+        return checkForTags(self.tags, 'random_only')
+
+    @property
     def isTrackWithinTrack(self):
         return self._descriptor.isTrackWithinTrack
 
@@ -1119,6 +1142,8 @@ class Vehicle(FittingItem):
             ms = Vehicle.VEHICLE_STATE.NOT_PRESENT
         if self.isInBattle:
             ms = Vehicle.VEHICLE_STATE.BATTLE
+        elif self.rentInfo.anyExpires and self.rentalIsOver and self.rentInfo.getTimeLeft() > 0:
+            ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE
         elif self.rentalIsOver:
             ms = Vehicle.VEHICLE_STATE.RENTAL_IS_OVER
             if self.isPremiumIGR:
@@ -1195,6 +1220,7 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.DESTROYED,
          Vehicle.VEHICLE_STATE.SERVER_RESTRICTION,
          Vehicle.VEHICLE_STATE.RENTAL_IS_OVER,
+         Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE,
          Vehicle.VEHICLE_STATE.IGR_RENTAL_IS_OVER,
          Vehicle.VEHICLE_STATE.TOO_HEAVY,
          Vehicle.VEHICLE_STATE.AMMO_NOT_FULL,
@@ -1204,7 +1230,8 @@ class Vehicle(FittingItem):
          Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT,
          Vehicle.VEHICLE_STATE.ROTATION_GROUP_LOCKED,
          Vehicle.VEHICLE_STATE.SUBSCRIPTION_SUSPENDED,
-         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED):
+         Vehicle.VEHICLE_STATE.WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED,
+         Vehicle.VEHICLE_STATE.TICKETS_SHORTAGE):
             return Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
         if state in (Vehicle.VEHICLE_STATE.UNDAMAGED, Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED):
             return Vehicle.VEHICLE_STATE_LEVEL.INFO
@@ -1247,6 +1274,18 @@ class Vehicle(FittingItem):
     @property
     def isEvent(self):
         return self.isOnlyForEventBattles
+
+    @property
+    def isBoss(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_BOSS)
+
+    @property
+    def isSpecialBoss(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_SPECIAL_BOSS)
+
+    @property
+    def isHunterOrBoss(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT_VEHS)
 
     @property
     def isDisabledInRoaming(self):
@@ -1475,6 +1514,11 @@ class Vehicle(FittingItem):
         if result:
             result = not self.isBroken and self.isCrewFull and not self.isTooHeavy and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
+
+    @property
+    def isUnsuitableToQueue(self):
+        state, _ = self.getState()
+        return state == self.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
     @property
     def isReadyToFight(self):
@@ -2172,6 +2216,10 @@ def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
 
 
+def getSimpleShortUserName(vehicleType):
+    return vehicleType.descriptor.type.shortUserString
+
+
 def _getActualName(name, tags, textPrefix=False):
     if checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
         if textPrefix:
@@ -2234,6 +2282,7 @@ _VEHICLE_STATE_TO_ICON = {Vehicle.VEHICLE_STATE.BATTLE: RES_ICONS.MAPS_ICONS_VEH
  Vehicle.VEHICLE_STATE.EXPLODED: RES_ICONS.MAPS_ICONS_VEHICLESTATES_DAMAGED,
  Vehicle.VEHICLE_STATE.CREW_NOT_FULL: RES_ICONS.MAPS_ICONS_VEHICLESTATES_CREWNOTFULL,
  Vehicle.VEHICLE_STATE.RENTAL_IS_OVER: RES_ICONS.MAPS_ICONS_VEHICLESTATES_RENTALISOVER,
+ Vehicle.VEHICLE_STATE.RENTAL_IS_OVER_BATTLE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_UNIT: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE: RES_ICONS.MAPS_ICONS_VEHICLESTATES_UNSUITABLETOUNIT,
  Vehicle.VEHICLE_STATE.GROUP_IS_NOT_READY: RES_ICONS.MAPS_ICONS_VEHICLESTATES_GROUP_IS_NOT_READY,
@@ -2266,3 +2315,11 @@ def getBattlesLeft(vehicle):
 
 def getLowEfficiencyCrew(vehicle):
     return [ (slotID, tankman.invID) for slotID, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]
+
+
+def getCommander(vehicle):
+    for _, tman in vehicle.crew:
+        if tman.role == Tankman.ROLES.COMMANDER:
+            return tman
+
+    return None

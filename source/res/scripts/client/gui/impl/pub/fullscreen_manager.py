@@ -7,6 +7,7 @@ from frameworks.state_machine import SingleStateObserver
 from frameworks.wulf import WindowLayer, WindowStatus
 from gui.impl.gen import R
 from gui.impl.pub import WindowImpl
+from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from helpers import dependency
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
@@ -49,11 +50,13 @@ class FullscreenManager(IFullscreenManager):
             self.__gui.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
 
     def __onWindowStatusChanged(self, uniqueID, newState):
+        window = self.__gui.windowsManager.getWindow(uniqueID)
         if newState == WindowStatus.LOADING:
-            window = self.__gui.windowsManager.getWindow(uniqueID)
             self.__onWindowOpen(window)
 
     def __onWindowOpen(self, newWindow):
+        if isinstance(newWindow, PreloadableWindow) and newWindow.isPreloading():
+            return
         layer = newWindow.layer
         if not WindowLayer.VIEW <= layer <= WindowLayer.FULLSCREEN_WINDOW:
             return

@@ -1,0 +1,20 @@
+<IndexPool.def>
+  <Properties>
+    <label>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </label>
+    <maxAmount>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </maxAmount>
+    <index>
+      <Type>	INT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </index>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	indexPool	</DefaultKeyName>
+</IndexPool.def>

@@ -40,6 +40,7 @@ class CallHandlerReason(enum.Enum):
 
 _ACC_SETTINGS_SWITCHER_FLAG = 'luiSwitcherState'
 _TUTORIAL_HINTS_CLASS_CONDITION = 'LimitedUIHintChecker'
+_POSTPONED_DELAY = 5.0
 
 class _LimitedUIConditionsService(object):
 
@@ -105,6 +106,7 @@ class LimitedUIController(ILimitedUIController):
         self.__observers = defaultdict(list)
         self.__skippedObserves = defaultdict(list)
         self.__serverSettings = None
+        self.__postponedCallbackID = None
         self.__isEnabled = False
         self.__needCheckNoviceRules = False
         self.__em = EventManager()

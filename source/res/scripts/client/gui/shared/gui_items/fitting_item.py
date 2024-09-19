@@ -107,6 +107,12 @@ class RentalInfoProvider(_RentalInfoProvider):
             return float(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(expiryTime)))
         return float('inf')
 
+    def getExpiryDate(self):
+        if self.rentExpiryTime != float('inf'):
+            expiryTime = max(self.rentExpiryTime, self._getSeasonExpiryTime())
+            return float(time_utils.makeLocalServerTime(expiryTime))
+        return float('inf')
+
     def getExpiryState(self):
         if self.anyExpires:
             return self.rentExpiryTime != float('inf') and self.getTimeLeft() <= 0 or (self.battlesLeft <= 0 or (self.winsLeft <= 0 or (not self.getActiveSeasonRent() if self.seasonRent != {} else False)))

@@ -20,6 +20,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 QUEUE_LEAVE_PREFIX = 'QUEUE_'
 PREBATTLE_LEAVE_PREFIX = 'PREBATTLE_'
+LEAVE_CURRENT_EVENT_PREFIX = 'SQUAD_'
 _R_INVITES = R.strings.invites.invites
 
 class _PrbInvitePart(CONST_CONTAINER):
@@ -99,7 +100,10 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
-            entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
+            if funcState.entityTypeID == PREBATTLE_TYPE.EVENT and invitePrbType == PREBATTLE_TYPE.EVENT:
+                entityName = LEAVE_CURRENT_EVENT_PREFIX + getPrbName(funcState.entityTypeID)
+            else:
+                entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
             kwargs = getModeNameKwargs(funcState.entityTypeID, isQueue=False)
         elif funcState.isInPreQueue() and funcState.entityTypeID:
             entityName = QUEUE_LEAVE_PREFIX + getPreQueueName(funcState.entityTypeID)

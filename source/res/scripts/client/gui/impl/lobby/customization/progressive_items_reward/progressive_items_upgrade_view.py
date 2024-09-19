@@ -27,6 +27,7 @@ from items.components.c11n_constants import SeasonType, UNBOUND_VEH_KEY
 from gui.shared.system_factory import collectCustomizationHangarDecorator
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IEventBattlesController
 from soft_exception import SoftException
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import ProgressiveRewardSoundEvents
 
@@ -34,6 +35,7 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     __slots__ = ('__item', '__vehicle', '__level', '__itemsInNeedToUpgrade')
     __c11nService = dependency.descriptor(ICustomizationService)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __gameEventCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.customization.progressive_items_reward.ProgressiveItemsUpgradeView())
@@ -145,7 +147,8 @@ class ProgressiveItemsUpgradeView(ViewImpl):
     @replaceNoneKwargsModel
     def __updateButtons(self, lock=False, model=None):
         okEnabled = True
-        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled()
+        isEventHangar = self.__gameEventCtrl.isEventPrbActive()
+        c11nEnabled = not lock and self.__vehicle.isCustomizationEnabled() and not isEventHangar
         if any((handler() for handler in collectCustomizationHangarDecorator())):
             c11nEnabled = False
         if self.__itemsInNeedToUpgrade:

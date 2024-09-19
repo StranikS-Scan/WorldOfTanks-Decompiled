@@ -11,6 +11,7 @@
     <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
     <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
     <ap_cr_premium_tray>	ARMOR_PIERCING_CR_PREMIUM_TRAY.png 0 0	</ap_cr_premium_tray>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -4946,6 +4947,43 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </Development_Shell>
+  <_100mm_UBR-412PB_WT>
+    <id>	1001	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PB_WT	</userString>
+    <description>	#ussr_vehicles:_100mm_UBR-412PB_WT_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1100	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	350	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_100mm_UBR-412PB_WT>
+  <_100mm_UBR-412PB_charged_shot_WT>
+    <id>	1002	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412PB_charged_shot_WT	</userString>
+    <icon>	ap_wt	</icon>
+    <price>	1100	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	railgun_wt	</effects>
+    <damage>
+      <armor>	650	</armor>
+      <devices>	450	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+  </_100mm_UBR-412PB_charged_shot_WT>
   <_122mm_BP450SO_SH>
     <id>	277	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO_SH	</userString>

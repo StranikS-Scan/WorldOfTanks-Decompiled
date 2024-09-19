@@ -623,6 +623,10 @@ class TOOLTIPS(object):
     REDBUTTON_DISABLED_LIMITS_CLASSES_AT_SPG_BODY = '#tooltips:redButton/disabled/limits/classes/AT-SPG/body'
     HANGAR_STARTBTN_SQUADNOTREADY_HEADER = '#tooltips:hangar/startBtn/squadNotReady/header'
     HANGAR_STARTBTN_SQUADNOTREADY_BODY = '#tooltips:hangar/startBtn/squadNotReady/body'
+    HANGAR_STARTBTN_PRIMENOTAVAILABLE_HEADER = '#tooltips:hangar/startBtn/primeNotAvailable/header'
+    HANGAR_STARTBTN_PRIMENOTAVAILABLE_BODY = '#tooltips:hangar/startBtn/primeNotAvailable/body'
+    HANGAR_STARTBTN_NOTICKET_HEADER = '#tooltips:hangar/startBtn/noTicket/header'
+    HANGAR_STARTBTN_NOTICKET_BODY = '#tooltips:hangar/startBtn/noTicket/body'
     HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGVEHICLE_HEADER = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongVehicle/header'
     HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGVEHICLE_BODY = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongVehicle/body'
     HANGAR_STARTBTN_BATTLEROYALESQUADNOTREADY_WRONGPLAYERS_HEADER = '#tooltips:hangar/startBtn/battleRoyaleSquadNotReady/wrongPlayers/header'
@@ -1130,6 +1134,7 @@ class TOOLTIPS(object):
     VEHICLE_RENTLEFT_DAYS = '#tooltips:vehicle/rentLeft/days'
     VEHICLE_RENTLEFT_HOURS = '#tooltips:vehicle/rentLeft/hours'
     VEHICLE_RENTLEFT_BATTLES = '#tooltips:vehicle/rentLeft/battles'
+    VEHICLE_RENTLEFT_NOTIMELEFT = '#tooltips:vehicle/rentLeft/noTimeLeft'
     VEHICLE_RENTLEFT_WINS = '#tooltips:vehicle/rentLeft/wins'
     VEHICLE_RENTLEFT_EPIC_BASE = '#tooltips:vehicle/rentLeft/epic/base'
     VEHICLE_RENTLEFT_EPIC_DAYSLEFT = '#tooltips:vehicle/rentLeft/epic/daysLeft'
@@ -1138,6 +1143,10 @@ class TOOLTIPS(object):
     VEHICLE_RENTLEFTFUTURE_DAYS = '#tooltips:vehicle/rentLeftFuture/days'
     VEHICLE_RENTLEFTFUTURE_HOURS = '#tooltips:vehicle/rentLeftFuture/hours'
     VEHICLE_RENTLEFTFUTURE_BATTLES = '#tooltips:vehicle/rentLeftFuture/battles'
+    VEHICLE_RENTLEFTFUTURE_OBTAINEDBY = '#tooltips:vehicle/rentLeftFuture/obtainedBy'
+    VEHICLE_OVERVIEW_TITLE = '#tooltips:vehicle/overview/title'
+    VEHICLE_OVERVIEW_DESC = '#tooltips:vehicle/overview/desc'
+    VEHICLE_AFTEREVENTEND_TITLE = '#tooltips:vehicle/afterEventEnd/title'
     VEHICLE_RENTLEFTFUTURE_WINS = '#tooltips:vehicle/rentLeftFuture/wins'
     VEHICLE_RENTLEFTFUTURE_EPIC_BASE = '#tooltips:vehicle/rentLeftFuture/epic/base'
     VEHICLE_RENTAVAILABLE = '#tooltips:vehicle/rentAvailable'
@@ -2447,6 +2456,8 @@ class TOOLTIPS(object):
     ADVANCED_ARMOR_PIERCING_CR_TRAY = '#tooltips:advanced/ARMOR_PIERCING_CR_TRAY'
     ADVANCED_LARGEREPAIRKIT = '#tooltips:advanced/largeRepairkit'
     ADVANCED_LARGEMEDKIT = '#tooltips:advanced/largeMedkit'
+    ADVANCED_WT_LARGEREPAIRKIT = '#tooltips:advanced/wt_largeRepairkit'
+    ADVANCED_WT_LARGEMEDKIT = '#tooltips:advanced/wt_largeMedkit'
     ADVANCED_RATION = '#tooltips:advanced/ration'
     ADVANCED_AUTOEXTINGUISHERS = '#tooltips:advanced/autoExtinguishers'
     ADVANCED_SMALLREPAIRKIT = '#tooltips:advanced/smallRepairkit'
@@ -2937,6 +2948,7 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_BLUEPRINTS_BODY = '#tooltips:storage/mainMenu/blueprints/body'
     STORAGE_MAINMENU_OFFERS_HEADER = '#tooltips:storage/mainMenu/offers/header'
     STORAGE_MAINMENU_OFFERS_BODY = '#tooltips:storage/mainMenu/offers/body'
+    TANKMAN_SKILLSTITLE = '#tooltips:tankman/skillsTitle'
     NOTRECRUITEDTANKMAN_HOWTOGET = '#tooltips:notrecruitedtankman/howToGet'
     NOTRECRUITEDTANKMAN_SKILLSTITLE = '#tooltips:notrecruitedtankman/skillsTitle'
     NOTRECRUITEDTANKMAN_FREESKILLSTITLE = '#tooltips:notrecruitedtankman/freeSkillsTitle'
@@ -3648,6 +3660,8 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_WT2021_HUNTER_3_LABEL = '#tooltips:notrecruitedtankman/wt2021_hunter_3/label'
     NOTRECRUITEDTANKMAN_WT2021_BOSS_DESC = '#tooltips:notrecruitedtankman/wt2021_boss/desc'
     NOTRECRUITEDTANKMAN_WT2021_BOSS_LABEL = '#tooltips:notrecruitedtankman/wt2021_boss/label'
+    SETTTINGSDISABLEDNOTIFICATION_HEADER = '#tooltips:setttingsDisabledNotification/header'
+    SETTTINGSDISABLEDNOTIFICATION_BODY = '#tooltips:setttingsDisabledNotification/body'
     NOTRECRUITEDTANKMAN_NY22MEN_A_LABEL = '#tooltips:notrecruitedtankman/ny22men_A/label'
     NOTRECRUITEDTANKMAN_NY22MEN_A_DESC = '#tooltips:notrecruitedtankman/ny22men_A/desc'
     NOTRECRUITEDTANKMAN_NY22MEN_LABEL = '#tooltips:notrecruitedtankman/ny22men/label'
@@ -3733,6 +3747,28 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_WT_2023_HANNELORE_LABEL = '#tooltips:notrecruitedtankman/wt_2023_hannelore/label'
     NOTRECRUITEDTANKMAN_WT_2023_DRIVER_DESC = '#tooltips:notrecruitedtankman/wt_2023_driver/desc'
     NOTRECRUITEDTANKMAN_WT_2023_DRIVER_LABEL = '#tooltips:notrecruitedtankman/wt_2023_driver/label'
+    NOTRECRUITEDTANKMAN_WT_2024_VONKRIEGER_DESC = '#tooltips:notrecruitedtankman/wt_2024_vonkrieger/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_VONKRIEGER_LABEL = '#tooltips:notrecruitedtankman/wt_2024_vonkrieger/label'
+    NOTRECRUITEDTANKMAN_WT_2024_ERMELINDA_DESC = '#tooltips:notrecruitedtankman/wt_2024_ermelinda/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_ERMELINDA_LABEL = '#tooltips:notrecruitedtankman/wt_2024_ermelinda/label'
+    NOTRECRUITEDTANKMAN_WT_2024_QUICKYBABY_DESC = '#tooltips:notrecruitedtankman/wt_2024_quickybaby/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_QUICKYBABY_LABEL = '#tooltips:notrecruitedtankman/wt_2024_quickybaby/label'
+    NOTRECRUITEDTANKMAN_WT_2024_DAKILLZOR_DESC = '#tooltips:notrecruitedtankman/wt_2024_dakillzor/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_DAKILLZOR_LABEL = '#tooltips:notrecruitedtankman/wt_2024_dakillzor/label'
+    NOTRECRUITEDTANKMAN_WT_2024_MOUZAKROBAT_DESC = '#tooltips:notrecruitedtankman/wt_2024_mouzakrobat/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_MOUZAKROBAT_LABEL = '#tooltips:notrecruitedtankman/wt_2024_mouzakrobat/label'
+    NOTRECRUITEDTANKMAN_WT_2024_SKILL4LTU_DESC = '#tooltips:notrecruitedtankman/wt_2024_skill4ltu/desc'
+    NOTRECRUITEDTANKMAN_WT_2024_SKILL4LTU_LABEL = '#tooltips:notrecruitedtankman/wt_2024_skill4ltu/label'
+    NOTRECRUITEDTANKMAN_WT_CN2024_ZHONGPENGFEI_DESC = '#tooltips:notrecruitedtankman/wt_CN2024_zhongpengfei/desc'
+    NOTRECRUITEDTANKMAN_WT_CN2024_ZHONGPENGFEI_LABEL = '#tooltips:notrecruitedtankman/wt_CN2024_zhongpengfei/label'
+    NOTRECRUITEDTANKMAN_WT_CN2024_BMENG_DESC = '#tooltips:notrecruitedtankman/wt_CN2024_bmeng/desc'
+    NOTRECRUITEDTANKMAN_WT_CN2024_BMENG_LABEL = '#tooltips:notrecruitedtankman/wt_CN2024_bmeng/label'
+    NOTRECRUITEDTANKMAN_WT_CN2024_YITUANTUAN_DESC = '#tooltips:notrecruitedtankman/wt_CN2024_yituantuan/desc'
+    NOTRECRUITEDTANKMAN_WT_CN2024_YITUANTUAN_LABEL = '#tooltips:notrecruitedtankman/wt_CN2024_yituantuan/label'
+    NOTRECRUITEDTANKMAN_WT_CN2024_SAONIAN_DESC = '#tooltips:notrecruitedtankman/wt_CN2024_saonian/desc'
+    NOTRECRUITEDTANKMAN_WT_CN2024_SAONIAN_LABEL = '#tooltips:notrecruitedtankman/wt_CN2024_saonian/label'
+    EVENTOFFER_TITLE_TANKMEN_GIFT = '#tooltips:eventOffer/title/tankmen_gift'
+    EVENTOFFER_FOOTER_TANKMEN_GIFT = '#tooltips:eventOffer/footer/tankmen_gift'
     NOTRECRUITEDTANKMAN_COSM02_KIRK_LABEL = '#tooltips:notrecruitedtankman/cosm02_Kirk/label'
     NOTRECRUITEDTANKMAN_COSM02_KIRK_DESC = '#tooltips:notrecruitedtankman/cosm02_Kirk/desc'
     NOTRECRUITEDTANKMAN_COSM02_KIRK_HOWTOGETINFO = '#tooltips:notrecruitedtankman/cosm02_Kirk/howToGetInfo'
@@ -4356,6 +4392,8 @@ class TOOLTIPS(object):
      ADVANCED_ARMOR_PIERCING_CR_TRAY,
      ADVANCED_LARGEREPAIRKIT,
      ADVANCED_LARGEMEDKIT,
+     ADVANCED_WT_LARGEREPAIRKIT,
+     ADVANCED_WT_LARGEMEDKIT,
      ADVANCED_RATION,
      ADVANCED_AUTOEXTINGUISHERS,
      ADVANCED_SMALLREPAIRKIT,
@@ -4677,6 +4715,16 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_WT22_HUNTER_COMMANDER_LABEL,
      NOTRECRUITEDTANKMAN_WT_2023_HANNELORE_LABEL,
      NOTRECRUITEDTANKMAN_WT_2023_DRIVER_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_VONKRIEGER_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_ERMELINDA_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_QUICKYBABY_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_DAKILLZOR_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_MOUZAKROBAT_LABEL,
+     NOTRECRUITEDTANKMAN_WT_2024_SKILL4LTU_LABEL,
+     NOTRECRUITEDTANKMAN_WT_CN2024_ZHONGPENGFEI_LABEL,
+     NOTRECRUITEDTANKMAN_WT_CN2024_BMENG_LABEL,
+     NOTRECRUITEDTANKMAN_WT_CN2024_YITUANTUAN_LABEL,
+     NOTRECRUITEDTANKMAN_WT_CN2024_SAONIAN_LABEL,
      NOTRECRUITEDTANKMAN_COSM02_KIRK_LABEL,
      NOTRECRUITEDTANKMAN_COSM02_SPOCK_LABEL,
      NOTRECRUITEDTANKMAN_COSM02_SULU_LABEL,
@@ -4909,6 +4957,16 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_WT22_HUNTER_COMMANDER_DESC,
      NOTRECRUITEDTANKMAN_WT_2023_HANNELORE_DESC,
      NOTRECRUITEDTANKMAN_WT_2023_DRIVER_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_VONKRIEGER_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_ERMELINDA_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_QUICKYBABY_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_DAKILLZOR_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_MOUZAKROBAT_DESC,
+     NOTRECRUITEDTANKMAN_WT_2024_SKILL4LTU_DESC,
+     NOTRECRUITEDTANKMAN_WT_CN2024_ZHONGPENGFEI_DESC,
+     NOTRECRUITEDTANKMAN_WT_CN2024_BMENG_DESC,
+     NOTRECRUITEDTANKMAN_WT_CN2024_YITUANTUAN_DESC,
+     NOTRECRUITEDTANKMAN_WT_CN2024_SAONIAN_DESC,
      NOTRECRUITEDTANKMAN_COSM02_KIRK_DESC,
      NOTRECRUITEDTANKMAN_COSM02_SPOCK_DESC,
      NOTRECRUITEDTANKMAN_COSM02_SULU_DESC,

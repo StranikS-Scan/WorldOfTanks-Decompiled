@@ -18,6 +18,8 @@ class SLOT_TYPE(object):
     ARENA = 'Arena'
     VEHICLE = 'Vehicle'
     ENTITY = 'Entity'
+    SCRIPT_OBJECT = 'ScriptObject'
+    BSP_MODEL = 'BSPCollisionModel'
     PATROL_NODE = 'PatrolNode'
     PVE_SPAWN_POINT = 'PVESpawnPoint'
     SPAWN_POINT = 'SpawnPoint'

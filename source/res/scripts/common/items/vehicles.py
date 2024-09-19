@@ -201,7 +201,9 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'isSetChassisMaxHealthAfterHysteresis',
  'centerRotationFwdSpeedFactor',
  'hullMaxHealth',
- 'turretMaxHealth')
+ 'turretMaxHealth',
+ 'receivedDamageFactor',
+ 'discreteDamageFactor')
 VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = {value:index for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)}
 
 class EnhancementItem(object):
@@ -271,6 +273,7 @@ def vehicleAttributeFactors():
      'repeatedStunDurationFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
+     'receivedDamageFactor': 1.0,
      'enginePowerFactor': 1.0,
      'deathZones/sensitivityFactor': 1.0,
      'xRayFactor': 1.0,
@@ -285,7 +288,8 @@ def vehicleAttributeFactors():
      'invisibilityMultFactor': 1.0,
      'foliageInvisibilityFactor': 1.0,
      'engineReduceFineFactor': 1.0,
-     'ammoBayReduceFineFactor': 1.0}
+     'ammoBayReduceFineFactor': 1.0,
+     'discreteDamageFactor': 1.0}
     for ten in TANKMAN_EXTRA_NAMES:
         factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
 
@@ -1475,6 +1479,7 @@ class VehicleDescriptor(object):
          'radioDistanceFactor': 0.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
+         'receivedDamageFactor': 1.0,
          'enginePowerFactor': 1.0,
          'armorSpallsDamageDevicesFactor': 1.0,
          'increaseEnemySpottingTime': 0.0,
@@ -1514,7 +1519,8 @@ class VehicleDescriptor(object):
          'ammoBayReduceFineFactor': 1.0,
          'engineReduceFineFactor': 1.0,
          'hullMaxHealth': 0,
-         'turretMaxHealth': 0}
+         'turretMaxHealth': 0,
+         'discreteDamageFactor': 1.0}
         if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1953,6 +1959,7 @@ class VehicleType(object):
             self.extrasDict = copyMethod(commonConfig['extrasDict'])
             self.devices = copyMethod(commonConfig['_devices'])
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
+            self.armorMaxHealth = _xml.readIntOrNone(xmlCtx, section, 'armorMaxHealth')
         if IS_CLIENT or IS_WEB or IS_BOT:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT or IS_UE_EDITOR:
@@ -2938,6 +2945,16 @@ def isVehicleTypeCompactDescr(vehDescr):
     return True if cdType is int or cdType is long else False
 
 
+def getEquipmentByName(name):
+    eqID = g_cache.equipmentIDs()[name]
+    return g_cache.equipments()[eqID]
+
+
+def getOptionalDeviceByName(name):
+    optDevID = g_cache.optionalDeviceIDs()[name]
+    return g_cache.optionalDevices()[optDevID]
+
+
 def getVehicleType(compactDescr):
     if isVehicleTypeCompactDescr(compactDescr):
         nationID = compactDescr >> 4 & 15
@@ -3108,8 +3125,12 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
 
 
 def getBuiltinEqsForVehicle(vehType):
-    builtins = vehType.builtins
-    return [ e.compactDescr for e in g_cache.equipments().itervalues() if e.name in builtins ][:vehType.supplySlots.getAmountForType(ITEM_TYPES.equipment, items.EQUIPMENT_TYPES.regular)]
+    result = []
+    for eqName in vehType.builtins:
+        eq = getEquipmentByName(eqName)
+        result.append(eq.compactDescr)
+
+    return sorted(result)
 
 
 def getUnlocksSources():
@@ -5052,8 +5073,9 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.isTracer = section.readBool('isTracer', False)
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
+    shell.skipSelfDamage = section.readBool('skipSelfDamage', False)
     if IS_CLIENT or IS_WEB:
-        shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
+        shell.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
         if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
@@ -5101,7 +5123,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
         if not isModernHighExplosive and shellType.explosionRadius <= 0.0:
             shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
-        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'shellFragmentsDamageAbsorptionFactor')
+        explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'shellFragmentsDamageAbsorptionFactor', 'explosionDisableDamageFalloff')
         for f in explosionSettings:
             factor = section.readFloat(f)
             if factor <= 0:
@@ -6032,6 +6054,7 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
+     'explosionDisableDamageFalloff': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDisableDamageFalloff'),
      'shellFragmentsDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/shellFragmentsDamageAbsorptionFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting'),
      'radarDefaults': {'radarRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarRadius'),
@@ -6845,6 +6868,11 @@ def _readImpactParams(xmlCtx, section, paramName):
             params.damageAbsorptionType = DamageAbsorptionLabelToType.get(label)
         params.isActive = any(params.armorDamage) or any(params.deviceDamage)
         params.hasSplash = params.radius and params.isActive
+        if subsection.has_key('applyExplosionBonus'):
+            value = _xml.readBool(subXmlCtx, subsection, 'applyExplosionBonus', False)
+            params.applyExplosionBonus = value
+            if value and subsection.has_key('splitDamageBonus'):
+                params.splitDamageBonus = _xml.readTupleOfNonNegativeFloats(subXmlCtx, subsection, 'splitDamageBonus')
         return params
 
 

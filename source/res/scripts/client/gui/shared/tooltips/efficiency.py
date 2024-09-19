@@ -8,6 +8,7 @@ from gui.impl.gen import R
 from gui.shared.tooltips import formatters
 from helpers.i18n import makeString as ms
 from gui.shared.formatters import text_styles
+from gui.battle_results.components.style import getTooltipParamsStyle
 
 def makeHtmlText(pattern, text):
     return makeHtmlString('html_templates:lobby/battle_results', pattern, {'text': text})
@@ -64,10 +65,41 @@ class KillItemPacker(TermsItemPacker):
         return [formatters.packTextBlockData(text)]
 
 
+class TotalKillItemPacker(KillItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.kill.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.kill_1.description()
+
+    def pack(self, data):
+        items = super(TotalKillItemPacker, self).pack(data)
+        deathReasons = data.get('deathReasons', {})
+        if deathReasons:
+            packer = formatters.packTextParameterBlockData
+            blocks = [ packer(value=str(value), name=backport.text(R.strings.postbattle_screen.tooltip.kill.num(reason)())) for reason, value in deathReasons.iteritems() ]
+            blocks.append(packer(value=str(sum(deathReasons.values())), name=backport.text(R.strings.postbattle_screen.tooltip.kill.totalKilled(), vals=getTooltipParamsStyle())))
+            blockToInsert = formatters.packBuildUpBlockData(blocks)
+            items.append(blockToInsert)
+        return items
+
+
 class DetectionItemPacker(TermsItemPacker):
 
     def __init__(self):
         super(DetectionItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DETECTION, BATTLE_RESULTS.COMMON_TOOLTIP_SPOTTED_DESCRIPTION)
+
+
+class TotalDetectionItemPacker(DetectionItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.spotted.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.spotted.description()
+
+    def pack(self, data):
+        items = super(TotalDetectionItemPacker, self).pack(data)
+        value = data.get('spotted')
+        if value:
+            packer = formatters.packTextParameterBlockData
+            blocks = [packer(value=backport.getIntegralFormat(value), name=backport.text(R.strings.postbattle_screen.tooltip.spotted.totalTanks()))]
+            blockToInsert = formatters.packBuildUpBlockData(blocks)
+            items.append(blockToInsert)
+        return items
 
 
 class LinerItemPacker(TermsItemPacker):
@@ -90,10 +122,20 @@ class DamageItemPacker(LinerItemPacker):
         super(DamageItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_DAMAGE, BATTLE_RESULTS.COMMON_TOOLTIP_DAMAGE_DESCRIPTION)
 
 
+class TotalDamageItemPacker(DamageItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.damage.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.damage.description()
+
+
 class ArmorItemPacker(LinerItemPacker):
 
     def __init__(self):
         super(ArmorItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_ARMOR, BATTLE_RESULTS.COMMON_TOOLTIP_ARMOR_DESCRIPTION)
+
+
+class TotalArmorItemPacker(ArmorItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.armor.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.armor.description()
 
 
 class StunItemPacker(LinerItemPacker):
@@ -102,10 +144,20 @@ class StunItemPacker(LinerItemPacker):
         super(StunItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_STUN, BATTLE_RESULTS.COMMON_TOOLTIP_STUN_DESCRIPTION)
 
 
+class TotalStunItemPacker(StunItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.stun.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.stun.description()
+
+
 class AssistItemPacker(LinerItemPacker):
 
     def __init__(self):
         super(AssistItemPacker, self).__init__(BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_HEADER, RES_ICONS.MAPS_ICONS_LIBRARY_EFFICIENCY_48X48_HELP, BATTLE_RESULTS.COMMON_TOOLTIP_ASSIST_DESCRIPTION)
+
+
+class TotalAssistItemPacker(AssistItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.assist.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.assist.description()
 
 
 class CaptureItemPacker(LinerItemPacker):
@@ -144,3 +196,19 @@ class CritsItemPacker(TermsItemPacker):
     def __addResultBlock(self, items, title, text):
         htmlTitle = makeHtmlText('tooltip_block_title_label', ms(title))
         items.append(formatters.packResultBlockData(htmlTitle, text))
+
+
+class TotalCritsItemPacker(CritsItemPacker):
+    _titleID = R.strings.postbattle_screen.tooltip.crits.header()
+    _descriptionID = R.strings.postbattle_screen.tooltip.crits.description()
+    _damageLabelID = R.strings.postbattle_screen.tooltip.crits.destroyedDevices()
+    _destructionLabelID = R.strings.postbattle_screen.tooltip.crits.criticalDevices()
+    _woundLabelID = R.strings.postbattle_screen.tooltip.crits.destroyedTankmen()
+
+    def pack(self, data):
+        items = super(TotalCritsItemPacker, self).pack(data)
+        critDamage = data.get('allCritDamage')
+        critDestruction = data.get('allCritDestruction')
+        critWound = data.get('allCritWound')
+        self._addMainText(critDamage, critDestruction, critWound, items)
+        return items

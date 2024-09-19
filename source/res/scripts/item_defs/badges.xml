@@ -4004,5 +4004,32 @@
         </item>
       </value>
     </badge>
+    <badge>
+      <name>	WT24_PG_badge	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	160	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.10	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
   </badges>
 </badges.xml>

@@ -12,7 +12,7 @@ from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.entity import LegacyEntryPoint, LegacyIntroEntryPoint, LegacyIntroEntity, LegacyEntity
-from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
+from gui.prb_control.entities.base.pre_queue.vehicles_watcher import RandomRestrictedVehiclesWatcher, BaseVehiclesWatcher
 from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx, SetPlayerObserverStateCtx
@@ -77,7 +77,7 @@ class TrainingIntroEntity(LegacyIntroEntity):
     def init(self, clientPrb=None, ctx=None):
         result = super(TrainingIntroEntity, self).init(clientPrb=clientPrb, ctx=ctx)
         result = FUNCTIONAL_FLAG.addIfNot(result, FUNCTIONAL_FLAG.LOAD_PAGE)
-        self.__watcher = BaseVehiclesWatcher()
+        self.__watcher = RandomRestrictedVehiclesWatcher()
         self.__watcher.start()
         return result
 

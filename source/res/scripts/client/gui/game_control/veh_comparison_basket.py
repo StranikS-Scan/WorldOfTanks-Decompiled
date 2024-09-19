@@ -28,6 +28,8 @@ if TYPE_CHECKING:
     import typing
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _DEF_SHELL_INDEX = 0
+ComparisonSettings = namedtuple('ComparisonSettings', ('quiet',))
+ComparisonSettings.__new__.__defaults__ = (False,)
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs',
  'addedCDs',
  'removedIDXs',
@@ -499,7 +501,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             LOG_DEBUG('Modules has not been applied because they are not different.')
 
     @_ErrorNotification
-    def addVehicle(self, vehicleCompactDesr, initParameters=None):
+    def addVehicle(self, vehicleCompactDesr, initParameters=None, settings=None):
         if not isinstance(vehicleCompactDesr, (int, float)):
             raise SoftException('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
         if self.__canBeAdded():
@@ -507,7 +509,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
             if vehCmpData:
                 self.__vehicles.append(vehCmpData)
-                self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr])
+                self.__applyChanges(addedIDXs=[len(self.__vehicles) - 1], addedCDs=[vehicleCompactDesr], settings=settings)
                 return True
         return False
 
@@ -696,10 +698,10 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             self._applyVehiclesFromCache(data)
         return
 
-    def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None):
+    def __applyChanges(self, addedIDXs=None, addedCDs=None, removedIDXs=None, removedCDs=None, settings=None):
         oldVal = self.__isFull
         self.__isFull = len(self.__vehicles) == MAX_VEHICLES_TO_COMPARE_COUNT
-        self.onChange(_ChangedData(addedIDXs, addedCDs, removedIDXs, removedCDs, self.__isFull != oldVal))
+        self.onChange(_ChangedData(addedIDXs, addedCDs, removedIDXs, removedCDs, self.__isFull != oldVal), settings)
 
     def __initHandlers(self):
         self.itemsCache.onSyncCompleted += self.__onCacheResync

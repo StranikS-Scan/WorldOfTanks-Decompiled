@@ -323,7 +323,7 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
                 isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
                 isEnabled = isEnabled and (isRandomSquadAction or not self.__winbackController.isModeAvailable())
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
-            if self.__eventBattlesCtrl.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
+            if self.__eventBattlesCtrl.isEnabled() and not self.__eventBattlesCtrl.isFrozen() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
             if self.__battleRoyale.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):

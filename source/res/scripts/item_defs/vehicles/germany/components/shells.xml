@@ -11,6 +11,7 @@
     <ap_premium_tray>	ARMOR_PIERCING_PREMIUM_TRAY.png 0 0	</ap_premium_tray>
     <ap_cr_tray>	ARMOR_PIERCING_CR_TRAY.png 0 0	</ap_cr_tray>
     <ap_cr_premium_tray>	ARMOR_PIERCING_CR_PREMIUM_TRAY.png 0 0	</ap_cr_premium_tray>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -684,6 +685,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_50mm_Pzgr39>
+  <_50mm_Pzgr39_WT>
+    <id>	218	</id>
+    <userString>	#germany_vehicles:_50mm_Pzgr39	</userString>
+    <icon>	ap	</icon>
+    <price>	30	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	35	</armor>
+      <devices>	34	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_50mm_Pzgr39_WT>
   <_50mm_Pzgr40>
     <id>	16	</id>
     <userString>	#germany_vehicles:_50mm_Pzgr40	</userString>
@@ -791,6 +809,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr39>
+  <_75mm_Pzgr39_WT>
+    <id>	217	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr39	</userString>
+    <icon>	ap	</icon>
+    <price>	70	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	55	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Pzgr39_WT>
   <_75mm_Pzgr.40>
     <id>	22	</id>
     <userString>	#germany_vehicles:_75mm_Pzgr.40	</userString>
@@ -1019,6 +1054,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_75mm_Pzgr39L>
+  <_75mm_Pzgr39L_WT>
+    <id>	221	</id>
+    <userString>	#germany_vehicles:_75mm_Pzgr39L	</userString>
+    <icon>	ap	</icon>
+    <price>	109	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	50	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_75mm_Pzgr39L_WT>
   <_75mm_Pzgr.40L>
     <id>	25	</id>
     <userString>	#germany_vehicles:_75mm_Pzgr.40L	</userString>
@@ -1280,6 +1332,23 @@
       </damage>
     </armorSpalls>
   </_88mm_Sprg.18>
+  <_88mm_Pzgr39_WT>
+    <id>	219	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr39	</userString>
+    <icon>	ap	</icon>
+    <price>	252	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	60	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_88mm_Pzgr39_WT>
   <_88mm_Pzgr39_1>
     <id>	109	</id>
     <userString>	#germany_vehicles:_88mm_Pzgr39_1	</userString>
@@ -1369,6 +1438,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_88mm_Pzgr39_43_n>
+  <_88mm_Pzgr39_43_WT>
+    <id>	222	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr39_43	</userString>
+    <icon>	ap	</icon>
+    <price>	252	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	140	</armor>
+      <devices>	60	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_88mm_Pzgr39_43_WT>
   <_88mm_Pzgr_39_43A>
     <id>	198	</id>
     <userString>	#germany_vehicles:_88mm_Pzgr_39_43A	</userString>
@@ -2329,6 +2415,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_PzGr39L>
+  <_105mm_PzGr39L_WT>
+    <id>	223	</id>
+    <userString>	#germany_vehicles:_105mm_PzGr39L	</userString>
+    <icon>	ap	</icon>
+    <price>	1030	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	180	</armor>
+      <devices>	75	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_PzGr39L_WT>
   <_105mm_Pzgr.40>
     <id>	42	</id>
     <userString>	#germany_vehicles:_105mm_Pzgr.40	</userString>
@@ -2476,6 +2579,23 @@
     <normalizationAngle>	2	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_105mm_Pzgr.40K>
+  <_105mm_Pzgr.40K_WT>
+    <id>	414	</id>
+    <userString>	#germany_vehicles:_105mm_Pzgr.40K	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	195	</armor>
+      <devices>	75	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_Pzgr.40K_WT>
   <_105mm_Sprg.18G>
     <id>	59	</id>
     <userString>	#germany_vehicles:_105mm_Sprg.18G	</userString>
@@ -3428,6 +3548,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_128mm_PzGr39>
+  <_128mm_PzGr39_WT>
+    <id>	224	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr39	</userString>
+    <icon>	ap	</icon>
+    <price>	1070	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	265	</armor>
+      <devices>	90	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_128mm_PzGr39_WT>
   <_128mm_PzGr40>
     <id>	45	</id>
     <userString>	#germany_vehicles:_128mm_PzGr40	</userString>
@@ -3805,6 +3942,23 @@
       </damage>
     </armorSpalls>
   </_128mm_SprG19>
+  <_128mm_PzGr39L_WT>
+    <id>	220	</id>
+    <userString>	#germany_vehicles:_128mm_PzGr39L	</userString>
+    <icon>	ap	</icon>
+    <price>	1260	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	90	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_128mm_PzGr39L_WT>
   <_150mm_Sprg>
     <id>	47	</id>
     <userString>	#germany_vehicles:_150mm_Sprg	</userString>
@@ -4074,6 +4228,23 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </_150mm_PzGr42>
+  <_150mm_PzGr42_WT>
+    <id>	216	</id>
+    <userString>	#germany_vehicles:_150mm_PzGr42	</userString>
+    <icon>	ap	</icon>
+    <price>	1260	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	375	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_150mm_PzGr42_WT>
   <_150mm_Pzgr>
     <id>	154	</id>
     <userString>	#germany_vehicles:_150mm_Pzgr	</userString>
@@ -4597,6 +4768,130 @@
     <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
     <tags>	bomber	</tags>
   </bomber_shell_epic_level4>
+  <_128mm_AP_Waffentrager_E100_WT>
+    <id>	501	</id>
+    <userString>	#germany_vehicles:_128mm_AP_Waffentrager_E100_WT	</userString>
+    <description>	#germany_vehicles:_128mm_AP_Waffentrager_E100_WT_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:_128mm_AP_Waffentrager_E100_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:_128mm_AP_Waffentrager_E100_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1070	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	128	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive_wt_2	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	90	</ricochetAngle>
+  </_128mm_AP_Waffentrager_E100_WT>
+  <_128mm_HE_Waffentrager_E100_WT>
+    <id>	402	</id>
+    <userString>	#germany_vehicles:_128mm_HE_Waffentrager_E100_WT	</userString>
+    <icon>	he	</icon>
+    <price>	935	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	128	</caliber>
+    <explosionRadius>	8.0	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	5	</stunDuration>
+    <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.0	</damageDurationCoeff>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive_wt	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	1	</devices>
+    </damage>
+  </_128mm_HE_Waffentrager_E100_WT>
+  <_88mm_Pzgr39L_WT>
+    <id>	503	</id>
+    <userString>	#germany_vehicles:_88mm_Pzgr39L	</userString>
+    <icon>	ap	</icon>
+    <price>	676	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	140	</armor>
+      <devices>	59	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_88mm_Pzgr39L_WT>
+  <_90mm_Mecar_N_AP_WT>
+    <id>	504	</id>
+    <userString>	#germany_vehicles:_90mm_Mecar_N_AP	</userString>
+    <icon>	ap	</icon>
+    <price>	315	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	61	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_Mecar_N_AP_WT>
+  <_105mm_PzGr39G_WT>
+    <id>	505	</id>
+    <userString>	#germany_vehicles:_105mm_PzGr39G	</userString>
+    <icon>	ap	</icon>
+    <price>	1245	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	195	</armor>
+      <devices>	75	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_PzGr39G_WT>
+  <_90mm_DM13A_WT>
+    <id>	506	</id>
+    <userString>	#germany_vehicles:_90mm_DM13A	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	390	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	120	</armor>
+      <devices>	61	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_90mm_DM13A_WT>
+  <_105mm_AP_DM13_WT>
+    <id>	507	</id>
+    <userString>	#germany_vehicles:_105mm_AP_DM13	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1290	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	75	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_AP_DM13_WT>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

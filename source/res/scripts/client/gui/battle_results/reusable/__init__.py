@@ -4,7 +4,7 @@ import weakref
 import typing
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as _CAPS
 from account_helpers import getAccountDatabaseID
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePassProgress
 from gui.battle_control.arena_info import squad_finder
@@ -13,6 +13,7 @@ from gui.battle_results.reusable.extension_utils import ReusableInfoFactory
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD, PLAYER_TEAM_RESULT as _TEAM_RESULT, PREMIUM_STATE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.battle_results.reusable.progress import ProgressInfo
 from skeletons.gui.shared import IItemsCache
 from gui.battle_results.reusable.avatars import AvatarsInfo, AvatarInfo
 from gui.battle_results.reusable.common import CommonInfo
@@ -61,6 +62,7 @@ def createReusableInfo(results):
             return
         personalInfoCls = ReusableInfoFactory.personalInfoForBonusType(bonusType)
         personalInfo = _checkInfo(personalInfoCls(bonusType, record, bonusCapsOverrides), _RECORD.PERSONAL)
+        progressInfo = _checkInfo(ProgressInfo(record), _RECORD.PERSONAL)
         record = _fetchRecord(results, _RECORD.PLAYERS)
         if record is None:
             return
@@ -77,17 +79,17 @@ def createReusableInfo(results):
         avatarsInfoCls = ReusableInfoFactory.avatarsInfoForBonusType(bonusType)
         avatarsInfo = _checkInfo(avatarsInfoCls(bonusType, record), _RECORD.AVATARS)
         if not unpackedRecords:
-            return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
+            return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo, progressInfo)
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
 
 class _ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress')
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress', '__progress')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars):
+    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars, progress):
         super(_ReusableInfo, self).__init__()
         self.__arenaUniqueID = arenaUniqueID
         self.__clientIndex = 0
@@ -99,6 +101,7 @@ class _ReusableInfo(object):
         self.__players = players
         self.__vehicles = vehicles
         self.__avatars = avatars
+        self.__progress = progress
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
         self.__battlePassProgress = BattlePassProgress(self.__common.arenaBonusType, **self.__personal.avatar.extensionInfo)
@@ -171,6 +174,14 @@ class _ReusableInfo(object):
     def canUpgradeToPremiumPlus(self):
         return self.__premiumPlusState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumPlusState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremiumPlus and self.__common.arenaBonusType in ARENA_BONUS_TYPE.RANDOM_RANGE + (ARENA_BONUS_TYPE.EPIC_BATTLE,)
 
+    def getPremiumType(self):
+        premiumType = PREMIUM_TYPE.NONE
+        if self.__personal.isPremiumPlus:
+            premiumType = PREMIUM_TYPE.PLUS
+        elif self.__personal.isPremium:
+            premiumType = PREMIUM_TYPE.BASIC
+        return premiumType
+
     @property
     def canResourceBeFaded(self):
         return not self.__personal.avatar.hasPenalties()
@@ -202,6 +213,10 @@ class _ReusableInfo(object):
     @property
     def avatars(self):
         return self.__avatars
+
+    @property
+    def progress(self):
+        return self.__progress
 
     @property
     def battlePassProgress(self):

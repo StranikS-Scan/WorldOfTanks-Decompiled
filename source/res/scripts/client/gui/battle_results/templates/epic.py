@@ -9,7 +9,7 @@ from gui.battle_results.components import vehicles
 from gui.battle_results.components import common
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
-from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
+from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
 regular.FINISH_RESULT_VO_META.bind(common.EpicBattleBattleFinishResultBlock)
 _EPIC_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_EPICSTATS),
   'linkage': 'EpicStatsUI',

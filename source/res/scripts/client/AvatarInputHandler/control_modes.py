@@ -1350,8 +1350,11 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
             isRespawnEnabled = self.guiSessionProvider.dynamic.respawn is not None
             isDelayRequired = bool(args.get('bPostmortemDelay'))
             isDelayOrRespawnEnabled = isRespawnEnabled or self._isPostmortemDelayEnabled()
+            arenaGuiType = BigWorld.player().arenaGuiType
             if isDelayRequired and isDelayOrRespawnEnabled and not playerPostmortemViewPointDefined:
                 self.__startPostmortemDelay()
+            elif arenaGuiType == constants.ARENA_GUI_TYPE.EVENT_BATTLES:
+                self._onPostmortemDelayStop()
             if isRespawnEnabled and self.__processRespawn():
                 return
             if playerPostmortemViewPointDefined:

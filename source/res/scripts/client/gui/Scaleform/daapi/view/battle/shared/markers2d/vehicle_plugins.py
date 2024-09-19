@@ -221,7 +221,16 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         self.__checkInspireMarker(marker)
 
     def _setupHealth(self, marker, _):
-        self._invokeMarker(marker.getMarkerID(), 'setHealth', marker.getHealth())
+        self._setHealthMarker(marker.getVehicleID(), marker.getMarkerID(), marker.getHealth())
+
+    def _setHealthMarker(self, vehicleID, handle, newHealth):
+        self._invokeMarker(handle, 'setHealth', newHealth)
+
+    def _updateHealthMarker(self, vehicleID, handle, newHealth, *args):
+        self._invokeMarker(handle, 'updateHealth', newHealth, *args)
+
+    def _setVehicleInfoMarker(self, vehicleID, handle, *args):
+        self._invokeMarker(handle, 'setVehicleInfo', *args)
 
     def _hideVehicleMarker(self, vehicleID):
         if vehicleID in self._markers:
@@ -256,11 +265,11 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         handle = marker.getMarkerID()
         if eventID in MARKER_HIT_EVENTS and self.__showDamageIcon:
             newState, stateText, iconAnimation, isFrequent = self.__getHitStateVO(eventID, vehicleID)
-            self.__updateMarkerState(handle, newState, False, stateText, iconAnimation, isFrequent)
+            self._updateMarkerState(handle, newState, False, stateText, iconAnimation, isFrequent)
         elif eventID == _EVENT_ID.VEHICLE_DEAD:
             self.__hide(handle, vehicleID)
             self.__stopActionMarker(handle, vehicleID)
-            self.__updateMarkerState(handle, 'dead', value)
+            self._updateMarkerState(handle, 'dead', value)
             self._setMarkerReplied(marker, False)
             self._setMarkerSticky(handle, False)
             self._setMarkerBoundEnabled(handle, False)
@@ -375,9 +384,15 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             newHealth = 0
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
-            self._invokeMarker(handle, 'setHealth', newHealth)
+            self._setHealthMarker(vehicleID, handle, newHealth)
         else:
-            self._invokeMarker(handle, 'updateHealth', newHealth, bool(aInfo and aInfo.vehicleID == self._playerVehicleID), constants.ATTACK_REASONS[attackReasonID])
+            self._updateHealthMarker(vehicleID, handle, newHealth, bool(aInfo and aInfo.vehicleID == self._playerVehicleID), constants.ATTACK_REASONS[attackReasonID])
+
+    def _getVehicleClassTag(self, vInfo):
+        return vInfo.getDisplayedClassTag()
+
+    def _getVehicleName(self, nameParts, vInfo):
+        return vInfo.getDisplayedName(nameParts.vehicleName)
 
     def _getVehicleLevel(self, vInfo):
         return vInfo.vehicleType.level
@@ -414,9 +429,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        classTag = vInfo.getDisplayedClassTag()
-        vehicleName = vInfo.getDisplayedName(nameParts.vehicleName)
-        self._invokeMarker(markerID, 'setVehicleInfo', classTag, vType.iconPath, vehicleName, self._getVehicleLevel(vInfo), nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, backport.text(R.strings.ingame_gui.stun.seconds()))
+        classTag = self._getVehicleClassTag(vInfo)
+        vehicleName = self._getVehicleName(nameParts, vInfo)
+        self._setVehicleInfoMarker(vInfo.vehicleID, markerID, classTag, vType.iconPath, vehicleName, self._getVehicleLevel(vInfo), nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiPropsName, hunting, squadIndex, backport.text(R.strings.ingame_gui.stun.seconds()))
         self._invokeMarker(markerID, 'update')
 
     def __onEquipmentComponentUpdated(self, _, vehicleID, equipmentInfo):
@@ -517,7 +532,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self._markers[vehicleID] = marker
             if marker.isActive():
                 if not marker.isAlive():
-                    self.__updateMarkerState(markerID, 'dead', True, '')
+                    self._updateMarkerState(markerID, 'dead', True, '')
                     self._setMarkerBoundEnabled(markerID, False)
             return marker
 
@@ -664,7 +679,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if GAME.SHOW_DAMAGE_ICON in diff:
             self.__showDamageIcon = diff[GAME.SHOW_DAMAGE_ICON]
 
-    def __updateMarkerState(self, handle, newState, immediate, text='', iconAnimation='', isFrequent=False):
+    def _updateMarkerState(self, handle, newState, immediate, text='', iconAnimation='', isFrequent=False):
         if newState or text or iconAnimation:
             self._invokeMarker(handle, 'updateState', newState, immediate, text, iconAnimation, isFrequent)
 
@@ -691,7 +706,9 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def __handleCallback(self, markerID, targetID):
         self.__removeMarkerCallback(markerID)
-        marker = self._markers[targetID]
+        marker = self._markers.get(targetID)
+        if not marker:
+            return
         if marker.getReplyCount() > 0:
             self._setMarkerReplied(marker, True)
             self.__showActionMarker(markerID, marker.getActionState(), targetID, marker.getReplyCount(), marker.getIsRepliedByPlayer(), True)

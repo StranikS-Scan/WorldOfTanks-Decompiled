@@ -649,6 +649,8 @@ class EpicBattleMetaGameController(Notifiable, SeasonProvider, IEpicBattleMetaGa
         return None
 
     def __onSyncCompleted(self, _, invalidItems):
+        if not self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.EPIC:
+            return
         if not invalidItems or GUI_ITEM_TYPE.BATTLE_ABILITY in invalidItems:
             self.__invalidateBattleAbilityItems()
         self.__invalidateBattleAbilitiesForVehicle()

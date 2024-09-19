@@ -40,7 +40,7 @@ class SelectionWindow(PreloadableWindow):
         super(SelectionWindow, self).hide(destroy)
 
     def _onContentReady(self):
-        if not self._isPreloading():
+        if not self.isPreloading():
             g_eventBus.handleEvent(PlatoonDropdownEvent(PlatoonDropdownEvent.NAME, ctx={'showing': True}))
         super(SelectionWindow, self)._onContentReady()
 

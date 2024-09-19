@@ -64,6 +64,11 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
     def getPlugins(self):
         return self.__plugins
 
+    def addPlugins(self, plugin):
+        if self.__plugins is not None:
+            self.__plugins.addPlugins(plugin)
+        return
+
     def getViewID(self):
         return self.__viewID
 

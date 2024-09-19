@@ -84,6 +84,11 @@
           <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Hull.model	</exploded>
         </G89_Leopard1_BVII_3DSt>
+        <G89_Leopard1_WT24_Mini_Boss_3Dst>
+          <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Hull.model	</exploded>
+        </G89_Leopard1_WT24_Mini_Boss_3Dst>
       </sets>
     </models>
     <swinging>
@@ -744,6 +749,12 @@
         <clipAngle>	0.848635	</clipAngle>
         <anchorShift>	0.023453	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -797,6 +808,11 @@
             <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Chassis.model	</exploded>
           </G89_Leopard1_BVII_3DSt>
+          <G89_Leopard1_WT24_Mini_Boss_3Dst>
+            <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G89_Leopard1_WT24_Mini_Boss_3Dst>
         </sets>
       </models>
       <traces>
@@ -2090,6 +2106,11 @@
                 <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Gun_01.model	</exploded>
               </G89_Leopard1_BVII_3DSt>
+              <G89_Leopard1_WT24_Mini_Boss_3Dst>
+                <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G89_Leopard1_WT24_Mini_Boss_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2139,6 +2160,16 @@
               <rayUp>	0.110156 0 0	</rayUp>
               <size>	0.274	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0.000001 0 2.89	</rayStart>
+              <rayEnd>	-0.000001 0 3.62077	</rayEnd>
+              <rayUp>	0.110156 0 0	</rayUp>
+              <compatibleModels>	G89_Leopard1_WT24_Mini_Boss_3Dst	</compatibleModels>
+              <size>	0.274	</size>
+              <isUVProportional>	true	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2169,6 +2200,11 @@
             <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_BVII_3DSt/crash/lod0/Turret_01.model	</exploded>
           </G89_Leopard1_BVII_3DSt>
+          <G89_Leopard1_WT24_Mini_Boss_3Dst>
+            <undamaged>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G89_Leopard1/_skins/G89_Leopard1_WT24_Mini_Boss_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G89_Leopard1_WT24_Mini_Boss_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2631,6 +2667,12 @@
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_light1	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0 0 0	</position>
+          <rotation>	0 0 0	</rotation>
         </slot>
       </customizationSlots>
       <customization>

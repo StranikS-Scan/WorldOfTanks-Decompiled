@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/hangar_presets/__init__.py
 from constants import QUEUE_TYPE
 from gui.hangar_presets.hangar_presets_reader import DefaultPresetReader, SpecBattlePresetReader
-from gui.hangar_presets.hangar_presets_getters import DefaultPresetsGetter, EventPresetsGetter, RankedPresetsGetter, MapboxPresetsGetter, MapsTrainingPresetsGetter, Comp7PresetsGetter, WinbackPresetsGetter, RandomNP2PresetsGetter, SpecBattlePresetsGetter
+from gui.hangar_presets.hangar_presets_getters import DefaultPresetsGetter, EventPresetsGetter, RankedPresetsGetter, MapboxPresetsGetter, MapsTrainingPresetsGetter, Comp7PresetsGetter, WinbackPresetsGetter, RandomNP2PresetsGetter, SpecBattlePresetsGetter, WtEventPresetsGetter
 from gui.shared.system_factory import registerHangarPresetsReader, registerHangarPresetGetter
 registerHangarPresetsReader(DefaultPresetReader)
 registerHangarPresetsReader(SpecBattlePresetReader)
@@ -15,3 +15,4 @@ registerHangarPresetGetter(QUEUE_TYPE.COMP7, Comp7PresetsGetter)
 registerHangarPresetGetter(QUEUE_TYPE.WINBACK, WinbackPresetsGetter)
 registerHangarPresetGetter(QUEUE_TYPE.RANDOM_NP2, RandomNP2PresetsGetter)
 registerHangarPresetGetter(QUEUE_TYPE.SPEC_BATTLE, SpecBattlePresetsGetter)
+registerHangarPresetGetter(QUEUE_TYPE.EVENT_BATTLES, WtEventPresetsGetter)

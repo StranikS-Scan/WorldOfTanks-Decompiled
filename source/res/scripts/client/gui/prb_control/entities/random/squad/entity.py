@@ -5,6 +5,7 @@ from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, PREBATTLE_TYPE, QUEU
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
 from gui.prb_control.entities.base.squad.entity import SquadEntryPoint, SquadEntity
+from gui.prb_control.entities.base.squad.components import RestrictedSquadDataProvider
 from gui.prb_control.entities.base.squad.mixins import RestrictedRoleTagMixin
 from gui.prb_control.entities.random.squad.actions_handler import RandomSquadActionsHandler, BalancedSquadActionsHandler
 from gui.prb_control.entities.random.squad.actions_validator import VehTypeForbiddenSquadActionsValidator, VehTypeForbiddenBalancedSquadActionsValidator
@@ -65,6 +66,7 @@ class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
 
     def __init__(self):
         self._isBalancedSquad = False
+        self.__restrictedSquadRestrictedDataProvider = RestrictedSquadDataProvider()
         self._mmData = 0
         self.__watcher = None
         super(RandomSquadEntity, self).__init__(FUNCTIONAL_FLAG.RANDOM, PREBATTLE_TYPE.SQUAD)
@@ -72,6 +74,7 @@ class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
 
     def init(self, ctx=None):
         self.initRestrictedRoleDataProvider(self)
+        self.__restrictedSquadRestrictedDataProvider.init(self)
         rv = super(RandomSquadEntity, self).init(ctx)
         self._isBalancedSquad = self.isBalancedSquadEnabled()
         self._switchActionsValidator()
@@ -89,11 +92,13 @@ class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
         self.eventsCache.onSyncCompleted -= self._onServerSettingChanged
         g_clientUpdateManager.removeObjectCallbacks(self, force=True)
         self._isBalancedSquad = False
+        self._isUseSquadRestrictedValidateRule = False
         self.invalidateVehicleStates()
         if self.__watcher is not None:
             self.__watcher.stop()
             self.__watcher = None
         self.finiRestrictedRoleDataProvider()
+        self.__restrictedSquadRestrictedDataProvider.fini()
         return super(RandomSquadEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
     def getQueueType(self):
@@ -118,6 +123,12 @@ class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
     @property
     def squadRestrictions(self):
         return self.lobbyContext.getServerSettings().getSquadRestrictions()
+
+    def hasSlotForSquadRestricted(self):
+        return self.__restrictedSquadRestrictedDataProvider.hasSlotForVehicle('')
+
+    def getMaxSquadRestrictedCount(self):
+        return self.__restrictedSquadRestrictedDataProvider.getMaxPossibleVehicles(None)
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
         super(RandomSquadEntity, self).unit_onUnitVehicleChanged(dbID, vehInvID, vehTypeCD)
@@ -166,7 +177,9 @@ class RandomSquadEntity(SquadEntity, RestrictedRoleTagMixin):
         if self._isBalancedSquad:
             if v.level not in self._rosterSettings.getLevelsRange():
                 return False
-        return self.isTagVehicleAvailable(v.tags) if self.isRoleRestrictionValid() else super(RandomSquadEntity, self)._vehicleStateCondition(v)
+        if self.isRoleRestrictionValid():
+            return self.isTagVehicleAvailable(v.tags)
+        return self.__restrictedSquadRestrictedDataProvider.isTagVehicleAvailable(v.tags) if self._isUseSquadRestrictedValidateRule and v.isSquadRestricted else super(RandomSquadEntity, self)._vehicleStateCondition(v)
 
     def _onServerSettingChanged(self, *args, **kwargs):
         balancedEnabled = self.isBalancedSquadEnabled()

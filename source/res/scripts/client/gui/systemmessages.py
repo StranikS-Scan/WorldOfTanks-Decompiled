@@ -91,7 +91,10 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'CollectionsEnabled',
  'SimpleGift',
  'NotEnoughBerthError',
- 'FairplayViolation'])
+ 'FairplayViolation',
+ 'WTEventSwitchOnLootboxes',
+ 'WTEventProgression',
+ 'WTEventStart'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal,

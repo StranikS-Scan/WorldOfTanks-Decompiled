@@ -55,7 +55,7 @@ def _needToShowComp7Intro(comp7Controller=None):
         return False
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
     season = comp7Controller.getCurrentSeason()
-    return settings[COMP7_LAST_SEASON] != seasonNameBySeasonNumber(season.getNumber())
+    return settings.get(COMP7_LAST_SEASON) != seasonNameBySeasonNumber(season.getNumber())
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller, itemsCache=IItemsCache)

@@ -28,7 +28,7 @@ from gui.shared.system_factory import registerReplayModeTag, collectReplayModeTa
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID, IS_DEVELOPMENT
 from helpers import dependency
 from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -62,6 +62,10 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE_ARCADE,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD)
+if not IS_DEVELOPMENT:
+    _BONUS_TYPES_WITHOUT_REPlAY = constants.ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE
+else:
+    _BONUS_TYPES_WITHOUT_REPlAY = ()
 registerReplayModeTag(ARENA_GUI_TYPE.COMP7, 'Onslaught')
 
 class CallbackDataNames(object):
@@ -201,6 +205,7 @@ class BattleReplay(object):
         self.__updateGunOnTimeWarp = False
 
     isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     gameplay = dependency.descriptor(IGameplayLogic)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -1195,7 +1200,7 @@ class BattleReplay(object):
             return
 
     def __onAvatarBecomePlayer(self):
-        if self.sessionProvider.arenaVisitor.getArenaBonusType() in constants.ARENA_BONUS_TYPE.REPLAY_DISABLE_RANGE:
+        if self.sessionProvider.arenaVisitor.getArenaBonusType() in _BONUS_TYPES_WITHOUT_REPlAY:
             self.enableAutoRecordingBattles(False, True)
 
     def __onSettingsChanging(self, *_):

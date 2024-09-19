@@ -147,7 +147,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl):
      'isWotPlusSlot': vehicle.isWotPlus,
      'extraImage': extraImage}
     if earlyAccessCtrl.isEnabled():
-        data.update({'isEarlyAccess': not earlyAccessCtrl.isPostprogressionBlockedByQuestFinisher() and vehicle.intCD in earlyAccessCtrl.getPostProgressionVehicles() and earlyAccessCtrl.isPostProgressionQueueSelected()})
+        data.update({'isEarlyAccess': vehicle.intCD in earlyAccessCtrl.getPostProgressionVehicles() and earlyAccessCtrl.isPostProgressionQueueSelected()})
     return data
 
 

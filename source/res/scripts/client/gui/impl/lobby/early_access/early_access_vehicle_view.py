@@ -148,7 +148,7 @@ class EarlyAccessVehicleView(ViewImpl):
                 self.__setAnimationParams(vModel.animationParams, prevVehiclesStates[idx], state, model.getTokensBalance(), price)
             vModel.setState(state)
             vModel.setPrice(price)
-            vModel.setIsPostProgression(not self.__earlyAccessController.isPostprogressionBlockedByQuestFinisher() and veh.compactDescr in self.__earlyAccessController.getPostProgressionVehicles())
+            vModel.setIsPostProgression(veh.compactDescr in self.__earlyAccessController.getPostProgressionVehicles())
             if state in (State.LOCKED, State.INPROGRESS):
                 vModel.setUnlockPriceAfterEA(unlockProps.xpCost)
             elif state == State.PURCHASABLE:

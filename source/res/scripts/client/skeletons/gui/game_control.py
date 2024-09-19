@@ -3752,9 +3752,6 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
     def iterAllCycles(self, now=None):
         raise NotImplementedError
 
-    def isPostprogressionBlockedByQuestFinisher(self):
-        raise NotImplementedError
-
     def isQuestActive(self):
         raise NotImplementedError
 
@@ -3779,6 +3776,9 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
     def getProgressionTimes(self):
         raise NotImplementedError
 
+    def getPostprogressionTimes(self):
+        raise NotImplementedError
+
     def getCycleProgressionTimes(self, cycleId=None):
         raise NotImplementedError
 
@@ -3792,6 +3792,9 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def isPostProgressionQueueSelected(self):
+        raise NotImplementedError
+
+    def isAnyQuestAvailable(self):
         raise NotImplementedError
 
     def isFilterDisabledInQueue(self):

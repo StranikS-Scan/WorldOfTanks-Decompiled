@@ -110,7 +110,7 @@ class EarlyAccessBuyView(ViewImpl):
             state = EarlyAccessVehicleView.getVehicleState(veh, isNext2Unlock)
             vModel.setState(state)
             vModel.setPrice(self.__earlyAccessCtrl.getVehiclePrice(veh.compactDescr))
-            vModel.setIsPostProgression(not self.__earlyAccessCtrl.isPostprogressionBlockedByQuestFinisher() and veh.compactDescr in self.__earlyAccessCtrl.getPostProgressionVehicles())
+            vModel.setIsPostProgression(veh.compactDescr in self.__earlyAccessCtrl.getPostProgressionVehicles())
             vehicleModelArray.addViewModel(vModel)
 
         vehicleModelArray.invalidate()

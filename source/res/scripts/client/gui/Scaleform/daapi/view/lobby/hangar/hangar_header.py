@@ -447,7 +447,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             if personalMissions:
                 quests.append(personalMissions)
         isBattleMissionsVisible = self.__limitedUIController.isRuleCompleted(LuiRules.BATTLE_MISSIONS)
-        isEarlyAccessFlagVisible = self.__earlyAccessCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.EARLY_ACCESS_ENTRY_POINT) and self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7) and not self.__earlyAccessCtrl.isPostprogressionBlockedByQuestFinisher()
+        isEarlyAccessFlagVisible = self.__earlyAccessCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.EARLY_ACCESS_ENTRY_POINT) and self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7) and self.__earlyAccessCtrl.isAnyQuestAvailable()
         isArmoryYardFlagVisible = self.__armoryYardCtrl.isEnabled() and self.__limitedUIController.isRuleCompleted(LuiRules.ARMORY_YARD_ENTRY_POINT) and self.__getCurrentArenaBonusType() in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.EPIC_RANDOM, constants.ARENA_BONUS_TYPE.COMP7)
         isNeedsToWrapFlags = self.__screenWidth <= _SCREEN_WIDTH_FOR_WRAP_GROUPS
         missionFlagsVisibility = [isBattleMissionsVisible, isEarlyAccessFlagVisible, isArmoryYardFlagVisible]

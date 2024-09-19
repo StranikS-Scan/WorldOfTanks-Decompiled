@@ -37,13 +37,12 @@ class EarlyAccessEntryPointTooltipView(ViewImpl):
         ctrl = self.__earlyAccessController
         if not ctrl.isQuestActive():
             return
-        currentSeason = ctrl.getCurrentSeason()
         _, endMainProgressionTime = ctrl.getProgressionTimes()
-        endSeasonTime = currentSeason.getEndDate()
+        _, endPostProgressionTime = ctrl.getPostprogressionTimes()
         earlyAccessState = ctrl.getState()
         self.__isHavePostprVehicle = ctrl.hasPostprogressionVehicle()
         self.__isPostprActive = self.__showOnlyPostProgression or earlyAccessState == State.POSTPROGRESSION or earlyAccessState == State.BUY
-        endTimestamp = endMainProgressionTime if not self.__isPostprActive else endSeasonTime
+        endTimestamp = endMainProgressionTime if not self.__isPostprActive else endPostProgressionTime
         currentTime = time_utils.getServerUTCTime()
         totalTokens = self.__earlyAccessController.getTotalVehiclesPrice()
         receivedTokens = self.__earlyAccessController.getReceivedTokensCount()

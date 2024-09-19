@@ -37,9 +37,9 @@ class TooltipBuilder(object):
         startDateString = backport.text(self._RES_ROOT.questsView.chapter.disabled.doFuture.noteDate(), color_open='%(brown_open)s', startDate=backport.getDateTimeFormat(startDate), color_close='%(brown_close)s')
         return backport.text(self._RES_ROOT.questsView.chapter.disabled.doFuture.note(), startText=startDateString)
 
-    def _formNoteRangeDate(self, startDate, endDate, endSeasonDate):
+    def _formNoteRangeDate(self, startDate, endDate, endPostprogressionDate):
         mainProgressString = backport.text(self._RES_ROOT.tankView.questsWidget.mainProgress.noteDate(), color_open='%(brown_open)s', startDate=backport.getShortDateFormat(startDate), endDate=backport.getShortDateFormat(endDate), color_close='%(brown_close)s')
-        postProgressString = backport.text(self._RES_ROOT.tankView.questsWidget.postprogression.noteDate(), color_open='%(brown_open)s', endDate=backport.getShortDateFormat(endSeasonDate), color_close='%(brown_close)s')
+        postProgressString = backport.text(self._RES_ROOT.tankView.questsWidget.postprogression.noteDate(), color_open='%(brown_open)s', endDate=backport.getShortDateFormat(endPostprogressionDate), color_close='%(brown_close)s')
         return backport.text(self._RES_ROOT.tankView.questsWidget.progress(), mainProgress=mainProgressString, postProgress=postProgressString)
 
 
@@ -117,9 +117,9 @@ class VehicleTooltipBuilder(TooltipBuilder):
 
     def getNote(self):
         if self._state == VehicleViewTooltipStates.QUESTSWIDGET.value:
-            currentSeason = self._earlyAccessCtrl.getCurrentSeason()
             startDate, endDate = self._earlyAccessCtrl.getProgressionTimes()
-            return self._formNoteRangeDate(startDate, endDate, currentSeason.getEndDate())
+            _, postprEndDate = self._earlyAccessCtrl.getPostprogressionTimes()
+            return self._formNoteRangeDate(startDate, endDate, postprEndDate)
 
 
 class TooltipBuilderProvider(object):

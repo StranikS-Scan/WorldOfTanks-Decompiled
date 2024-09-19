@@ -3,7 +3,7 @@
 import math
 from Event import Event
 from adisp import adisp_process
-from constants import ARENA_GUI_TYPE, IS_CHINA, PREBATTLE_TYPE, QUEUE_TYPE
+from constants import ARENA_GUI_TYPE, IS_CHINA, PREBATTLE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
@@ -288,9 +288,6 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
              PREBATTLE_TYPE.FUN_RANDOM,
              PREBATTLE_TYPE.VERSUS_AI) ]):
                 isEnabled = self.__epicCtrl.isCurrentCycleActive() if self.__epicCtrl.isEpicPrbActive() else True
-                state = self.prbDispatcher.getFunctionalState()
-                isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
-                isEnabled = isEnabled and isRandomSquadAction
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
             if self.__eventBattlesCtrl.isEnabled() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,

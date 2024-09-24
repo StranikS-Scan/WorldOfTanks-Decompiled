@@ -3,28 +3,29 @@
 import logging
 from datetime import datetime
 import typing
-import WWISE
 from frameworks.wulf import ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
 from gui.impl.gen import R
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import i18n, dependency
 from items import vehicles
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from PlayerEvents import g_playerEvents
 from story_mode.account_settings import setUnlockedTaskShown, isUnlockedTaskShown, isWelcomeScreenSeen
-from story_mode.gui.impl.gen.view_models.views.lobby.mission_model import MissionModel, MissionsDifficulty
+from story_mode.gui.impl.gen.view_models.views.lobby.mission_model import MissionModel
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_selection_view_model import MissionSelectionViewModel, TabsEnum
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_task_tooltip_model import TaskStateEnum as TooltipTaskStateEnum
 from story_mode.gui.impl.gen.view_models.views.lobby.task_model import TaskModel, TaskStateEnum
 from story_mode.gui.impl.lobby.base_prb_view import BasePrbView
 from story_mode.gui.impl.lobby.difficulty_tooltip import DifficultyTooltip
-from story_mode.gui.impl.lobby.entry_point_view import EntryPointView
+from story_mode.gui.impl.lobby.event_entry_point_view import EventEntryPointView
 from story_mode.gui.impl.lobby.mission_tooltip import MissionTooltip
 from story_mode.gui.impl.lobby.task_tooltip import TaskTooltip
-from story_mode.gui.shared.event_dispatcher import sendViewLoadedEvent, showWelcomeWindow
-from story_mode.gui.story_mode_gui_constants import STORY_MODE_SOUND_SPACE, EventLobbySoundState, EventMusicState
+from story_mode.gui.shared.event_dispatcher import sendViewLoadedEvent, showEventWelcomeWindow
+from story_mode.gui.story_mode_gui_constants import STORY_MODE_SOUND_SPACE
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogButtons
@@ -54,7 +55,7 @@ class MissionSelectionView(BasePrbView):
         self._isBackgroundLoaded = False
         self._uiLogger = SelectMissionWindow()
         self.__isAnimationPlayedAfterWindowMap = {R.views.story_mode.lobby.BattleResultView(): False,
-         R.views.story_mode.lobby.WelcomeView(): False,
+         R.views.story_mode.lobby.EventWelcomeView(): False,
          R.views.story_mode.common.CongratulationsWindow(): False}
 
     def createToolTipContent(self, event, contentID):
@@ -103,7 +104,7 @@ class MissionSelectionView(BasePrbView):
         self._storyModeCtrl.startMusic()
         if self._storyModeCtrl.missions.isEventEnabled:
             if not isWelcomeScreenSeen():
-                showWelcomeWindow()
+                showEventWelcomeWindow()
 
     def _finalize(self):
         self._uiLogger.logClose()
@@ -119,7 +120,8 @@ class MissionSelectionView(BasePrbView):
          (viewModel.onAboutClick, self.__openAbout),
          (self._gui.windowsManager.onViewStatusChanged, self.__onViewStatusChanged),
          (self._storyModeCtrl.onSyncDataUpdated, self.__onMissionsDataUpdated),
-         (self._storyModeCtrl.onMissionsConfigUpdated, self.__onMissionsDataUpdated))
+         (self._storyModeCtrl.onMissionsConfigUpdated, self.__onMissionsDataUpdated),
+         (g_playerEvents.onDossiersResync, self.__onDossiersResync))
 
     def _onBackgroundLoaded(self):
         sendViewLoadedEvent(self.LAYOUT_ID)
@@ -147,6 +149,7 @@ class MissionSelectionView(BasePrbView):
             isMissionChanged = self.__updateSelectedMission(model, updateMissions)
         model = self.getViewModel()
         if isMissionChanged and model:
+            g_eventDispatcher.updateUI()
             self._uiLogger.logMissionSelectClick(model.selectedMission.getMissionId())
             self._storyModeCtrl.startMusic()
 
@@ -176,18 +179,11 @@ class MissionSelectionView(BasePrbView):
         prevMissionId = model.selectedMission.getMissionId()
         missionConfig = self._storyModeCtrl.missions.getMission(missionId)
         currentTab = TabsEnum.EVENT if missionConfig.isEvent else TabsEnum.NEWBIES
-        if missionConfig.isEvent:
-            if missionConfig.difficulty.value == MissionsDifficulty.HARD.value:
-                WWISE.WW_setState(EventLobbySoundState.GROUP, EventLobbySoundState.DIFFICULTY_HARD)
-                WWISE.WW_setState(EventMusicState.GROUP, EventMusicState.DIFFICULTY_HARD)
-            else:
-                WWISE.WW_setState(EventLobbySoundState.GROUP, EventLobbySoundState.DIFFICULTY_NORMAL)
-                WWISE.WW_setState(EventMusicState.GROUP, EventMusicState.DIFFICULTY_NORMAL)
         model.setSelectedTab(currentTab)
         self.__updateSelectedMissionModel(model, missionConfig)
         if updateMissions:
             self.__updateMissionsModels(model, currentTab)
-        EntryPointView.onMissionSelected(missionId)
+        EventEntryPointView.onMissionSelected(missionId)
         return prevMissionId != missionId
 
     def __onTaskUnlocked(self, args):
@@ -197,12 +193,17 @@ class MissionSelectionView(BasePrbView):
         selectedMissionModel = model.selectedMission
         selectedMissionModel.setMissionId(missionConfig.missionId)
         selectedMissionModel.setIsCompleted(self._storyModeCtrl.isMissionCompleted(missionConfig.missionId))
+        selectedMissionModel.setLocked(False)
         selectedMissionModel.setIsCountdownVisible(False)
         if missionConfig.disabledTimer:
             utcnow = datetime.utcnow()
             if missionConfig.disabledTimer.showAt <= utcnow:
                 selectedMissionModel.setIsCountdownVisible(True)
                 selectedMissionModel.setSecondsCountdown(_totalSeconds(missionConfig.disabledTimer.endAt))
+        battlesCount = self._itemsCache.items.getAccountDossier().getRandomStats().getBattlesCount()
+        if missionConfig.isMissionLocked(battlesCount):
+            selectedMissionModel.setLocked(True)
+            selectedMissionModel.setBattlesToUnlock(missionConfig.unlockBattlesCount - battlesCount)
         self.__updateTasks(model, missionConfig)
 
     def __updateMissionsModels(self, model, currentTab):
@@ -210,7 +211,7 @@ class MissionSelectionView(BasePrbView):
         missionsModel.clear()
         isEventTab = currentTab == TabsEnum.EVENT
         tabsWithMissions = set()
-        for mission in self._storyModeCtrl.missions.filter(enabled=True):
+        for mission in self._storyModeCtrl.filterMissions():
             tabsWithMissions.add(TabsEnum.EVENT if mission.isEvent else TabsEnum.NEWBIES)
             if isEventTab != mission.isEvent:
                 continue
@@ -222,6 +223,9 @@ class MissionSelectionView(BasePrbView):
             missionModel.setIsCompleted(self._storyModeCtrl.isMissionCompleted(mission.missionId))
             missionModel.setMissionId(mission.missionId)
             missionModel.setDifficulty(mission.difficulty)
+            battlesCount = self._itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
+            if mission.isMissionLocked(battlesCount):
+                missionModel.setLocked(True)
             missionsModel.addViewModel(missionModel)
 
         missionsModel.invalidate()
@@ -258,6 +262,12 @@ class MissionSelectionView(BasePrbView):
         if self._storyModeCtrl.isMissionTaskCompleted(missionId, task.id):
             return TaskStateEnum.COMPLETED
         return TaskStateEnum.LOCKED if task.isLocked() else TaskStateEnum.UNCOMPLETED
+
+    def __onDossiersResync(self, *args):
+        model = self.getViewModel()
+        if model is not None:
+            self.__updateSelectedMission(model, True)
+        return
 
 
 def _totalSeconds(endDate):

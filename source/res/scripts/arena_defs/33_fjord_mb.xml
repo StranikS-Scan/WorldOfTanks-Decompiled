@@ -1,0 +1,65 @@
+<33_fjord_mb.xml>
+  <name>	#arenas:33_fjord_mb/name	</name>
+  <description>	#arenas:33_fjord_mb/description	</description>
+  <geometry>	spaces/33_fjord_mb	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/33_fjord_mb/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	mmap_33_ls_fog01	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/33_fjord_mb/mmap_33_ls_fog01.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	mmap_33_ls_fog02	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/33_fjord_mb/mmap_33_ls_fog02.dds	</path>
+    </layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_fjords_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_fjords_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_fjords_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_fjords_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_fjords_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_fjords_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	map_box_battle.bnk	</name>
+      </bank>
+      <bank>
+        <name>	map_box_battle.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	399.095856 -42.143211	</position1>
+        </team1>
+        <team2>
+          <position1>	-392.068329 127.515427	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</33_fjord_mb.xml>

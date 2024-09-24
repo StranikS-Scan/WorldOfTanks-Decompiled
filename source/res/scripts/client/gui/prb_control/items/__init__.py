@@ -68,7 +68,10 @@ class FunctionalState(object):
             return True
         if self.isIntroMode:
             return prbType != self.entityTypeID
-        return True if self.isInLegacy() or self.isInUnit() else self.entityTypeID != self.__getQueueTypeByPrbType(prbType)
+        if self.isInLegacy() or self.isInUnit():
+            return True
+        queueTypes = self.__getQueueTypeByPrbType(prbType)
+        return self.entityTypeID not in queueTypes
 
     def isReadyActionSupported(self):
         return self.hasModalEntity and not self.isIntroMode and (self.isInLegacy() or self.isInUnit())
@@ -77,7 +80,7 @@ class FunctionalState(object):
         return self.hasLockedState
 
     def __getQueueTypeByPrbType(self, prbType):
-        return PREBATTLE_TYPE_TO_QUEUE_TYPE.get(prbType, QUEUE_TYPE.UNKNOWN)
+        return PREBATTLE_TYPE_TO_QUEUE_TYPE.get(prbType, [QUEUE_TYPE.UNKNOWN])
 
 
 @ReprInjector.simple('isCreator', 'isReady')

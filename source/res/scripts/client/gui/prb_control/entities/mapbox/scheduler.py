@@ -32,6 +32,6 @@ class MapboxScheduler(BaseScheduler):
             if isPrimeTime != self.__isPrimeTime:
                 self.__isPrimeTime = isPrimeTime
                 if not isPrimeTime and self.__mapboxController.getCurrentCycleID() is not None:
-                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.mapbox.notification.primeTime()), type=SystemMessages.SM_TYPE.PrimeTime, messageData={'title': backport.text(R.strings.system_messages.royale.notification.primeTime.title())})
+                    SystemMessages.pushMessage(backport.text(R.strings.system_messages.mapbox.notification.primeTime()), type=SystemMessages.SM_TYPE.PrimeTime, messageData={'title': backport.text(R.strings.system_messages.mapbox.notification.primeTime.title())})
                 g_eventDispatcher.updateUI()
             return

@@ -99,8 +99,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             self.__logEntryError(entryID)
 
     def playSound2D(self, soundID):
-        if soundID:
-            SoundGroups.g_instance.playSound2D(soundID)
+        SoundGroups.g_instance.playSafeSound2D(soundID)
 
     def isModalViewShown(self):
         return self.app is not None and self.app.isModalViewShown()

@@ -1,19 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/mapbox/mapbox_progression_view.py
 import logging
-from ArenaType import g_geometryNamesToIDs
 from wg_async import wg_async, wg_await
 from constants import QUEUE_TYPE
 from frameworks.wulf import ViewSettings, ViewFlags, WindowStatus
 from frameworks.wulf.gui_constants import ViewStatus, WindowLayer
-from gui import GUI_SETTINGS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.mapbox_progression_model import MapboxProgressionModel
 from gui.impl.gen.view_models.views.lobby.mapbox.progression_reward_model import ProgressionRewardModel
 from gui.impl.gen.view_models.views.lobby.mapbox.map_model import MapModel
 from gui.impl.pub import ViewImpl
-from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker
-from gui.mapbox.mapbox_helpers import packMapboxRewardModelAndTooltip, getMapboxRewardTooltip
+from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker, packMapboxRewardModelAndTooltip
+from gui.mapbox.mapbox_helpers import getMapboxRewardTooltip, prepareProgressionData, SPECIAL_CARDS
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -21,16 +19,14 @@ from gui.Scaleform.daapi.view.meta.MissionsMapboxViewMeta import MissionsMapboxV
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.Waiting import Waiting
 from gui.server_events import IEventsCache
-from gui.shared.event_dispatcher import showMapboxRewardChoice, showHangar, showMapboxIntro, showBrowserOverlayView
+from gui.shared.event_dispatcher import showHangar, showMapboxIntro, showBrowserOverlayView
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
 from helpers import dependency, time_utils
-from shared_utils import first
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
-_ALL_MAPS = 'all'
 
 class MapboxProgressionsComponent(InjectComponentAdaptor, MissionsMapboxViewMeta):
     __slots__ = ()
@@ -97,7 +93,6 @@ class MapboxProgressionView(ViewImpl):
         self.viewModel.onShowInfo += self.__onShowInfo
         self.viewModel.onRemoveBubble += self.__onRemoveBubble
         self.viewModel.onShowSurvey += self.__onShowSurvey
-        self.viewModel.onTakeReward += self.__onTakeReward
         self.viewModel.onAnimationEnded += self.__onAnimationEnded
         self.__mapboxController.addProgressionListener(self.__onProgressionDataUpdated)
         self.__mapboxController.onMapboxSurveyShown += self.__doRemoveBubble
@@ -114,7 +109,6 @@ class MapboxProgressionView(ViewImpl):
         self.__mapboxController.removeProgressionListener(self.__onProgressionDataUpdated)
         self.__mapboxController.onUpdated -= self.__onSettingsUpdated
         self.viewModel.onAnimationEnded -= self.__onAnimationEnded
-        self.viewModel.onTakeReward -= self.__onTakeReward
         self.viewModel.onShowSurvey -= self.__onShowSurvey
         self.viewModel.onShowInfo -= self.__onShowInfo
         self.viewModel.onRemoveBubble -= self.__onRemoveBubble
@@ -157,8 +151,7 @@ class MapboxProgressionView(ViewImpl):
         self.__updateProgressionData()
 
     def __onShowInfo(self):
-        url = GUI_SETTINGS.lookup('infoPageMapbox')
-        showBrowserOverlayView(url, VIEW_ALIAS.MAP_BOX_INFO_OVERLAY)
+        showBrowserOverlayView(self.__getInfoPageUrl(), VIEW_ALIAS.MAPBOX_INFO_OVERLAY)
 
     def __onSurveyCompleted(self, mapId):
         with self.viewModel.transaction() as model:
@@ -189,16 +182,6 @@ class MapboxProgressionView(ViewImpl):
     def __onShowSurvey(self, args):
         self.__mapboxController.showSurvey(args.get('mapName'))
 
-    def __onTakeReward(self, args):
-        numBattles = args.get('numBattles')
-        itemIdx = args.get('itemIdx')
-        itemName = args.get('name')
-        if itemIdx is not None and numBattles is not None and itemName is not None:
-            progressionData = self.__mapboxController.getProgressionData()
-            crewbook = first([ crewbook for crewbook in progressionData.rewards[int(numBattles)].bonusList[int(itemIdx)].getItems() if crewbook.name == itemName ])
-            showMapboxRewardChoice(crewbook)
-        return
-
     def __onSettingsUpdated(self):
         progressionData = self.__mapboxController.getProgressionData()
         if progressionData is None:
@@ -208,6 +191,7 @@ class MapboxProgressionView(ViewImpl):
             with self.viewModel.transaction() as model:
                 actualSeason = self.__mapboxController.getCurrentSeason()
                 if actualSeason is not None:
+                    model.setHasInfoPage(bool(self.__getInfoPageUrl()))
                     model.setStartEvent(actualSeason.getCycleStartDate())
                     model.setEndEvent(actualSeason.getCycleEndDate())
                     self.__fillMaps(model, progressionData, actualSeason)
@@ -222,12 +206,14 @@ class MapboxProgressionView(ViewImpl):
             with self.viewModel.transaction() as model:
                 model.setIsDataSynced(True)
                 model.setIsError(False)
+                model.setHasInfoPage(bool(self.__getInfoPageUrl()))
                 actualSeason = self.__mapboxController.getCurrentSeason() or self.__mapboxController.getNextSeason()
                 model.setPrevTotalBattlesPlayed(self.__mapboxController.getPrevBattlesPlayed())
                 self.__mapboxController.setPrevBattlesPlayed(progressionData.totalBattles)
                 totalRequeredBattles = max(progressionData.rewards.keys())
                 model.setTotalBattlesPlayed(min(progressionData.totalBattles, totalRequeredBattles))
                 model.setTotalBattles(totalRequeredBattles)
+                model.setRating(progressionData.minRank)
                 self.__fillMaps(model, progressionData, actualSeason)
                 model.setIsMapboxModeSelected(self.__mapboxController.isMapboxMode())
                 model.setStartEvent(actualSeason.getCycleStartDate())
@@ -255,36 +241,34 @@ class MapboxProgressionView(ViewImpl):
         rewardModelsList.invalidate()
 
     def __fillMaps(self, model, progressionData, actualSeason):
-        geometryIDsToNames = {geometryID:geometryName for geometryName, geometryID in g_geometryNamesToIDs.iteritems()}
-        geometryNames = [_ALL_MAPS] + sorted([ geometryIDsToNames[geometryID] for geometryID in self.__mapboxController.getModeSettings().geometryIDs[actualSeason.getSeasonID()] ])
-        mapsData = progressionData.surveys
+        validMaps = self.__mapboxController.getModeSettings().geometryIDs[actualSeason.getSeasonID()]
+        mapsData = prepareProgressionData(progressionData.surveys, validMaps)
         mapsList = model.getMaps()
         mapsList.clear()
-        for mapName in geometryNames:
-            if mapName not in mapsData:
-                continue
-            mapData = mapsData[mapName]
+        for mapName, mapData in mapsData:
             mapModel = MapModel()
             mapModel.setMapBattles(mapData.total)
             mapModel.setMapBattlesPlayed(mapData.progress)
             mapModel.setMapName(mapName)
-            mapModel.setIsSpecial(mapName == _ALL_MAPS)
+            mapModel.setIsSpecial(mapName in SPECIAL_CARDS)
             mapModel.setRating(progressionData.minRank)
-            mapModel.setIsBubble(not self.__mapboxController.isMapVisited(mapName) and mapData.available and mapData.progress == mapData.total)
+            mapModel.setIsBubble(not self.__mapboxController.isMapVisited(mapName) and mapData.progress == mapData.total)
             mapModel.setMapSurveyPassed(mapData.passed)
-            mapModel.setIsSurveyAvailable(mapData.available)
             mapsList.addViewModel(mapModel)
 
         mapsList.invalidate()
+
+    def __getDeltaTime(self):
+        endTime = self.__mapboxController.getProgressionRestartTime()
+        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(endTime))
+
+    def __getInfoPageUrl(self):
+        return self.__mapboxController.getModeSettings().infoPageUrl
 
     def __setErrorStatus(self):
         with self.viewModel.transaction() as model:
             model.setIsDataSynced(True)
             model.setIsError(True)
-
-    def __getDeltaTime(self):
-        endTime = self.__mapboxController.getProgressionRestartTime()
-        return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(endTime))
 
     def __updateProgressionAlert(self, endTime=None):
         if endTime is None:

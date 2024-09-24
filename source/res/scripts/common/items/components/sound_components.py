@@ -10,7 +10,9 @@ SoundSiegeModeStateChange = namedtuple('SoundSiegeModeStateChange', ['on',
  'off',
  'npcOn',
  'npcOff',
- 'isEngine'])
+ 'isEngine',
+ 'trigger',
+ 'unavailable'])
 
 class WWTripleSoundConfig(object):
     __slots__ = ('__eventNames',)

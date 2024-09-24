@@ -1050,8 +1050,8 @@
       <level>	8	</level>
       <price>	37520	</price>
       <armor>
-        <leftTrack>	40	</leftTrack>
-        <rightTrack>	40	</rightTrack>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	22350	</weight>
       <maxLoad>	74000	</maxLoad>
@@ -1065,8 +1065,8 @@
         <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/german/G16_PzVIB_Tiger_II/normal/lod0/Chassis.model	</undamaged>
@@ -1544,27 +1544,19 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelRight>
           <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
           <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
           <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
           <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
           <segmentLength>	0.29	</segmentLength>
-          <segmentOffset>	0.058	</segmentOffset>
+          <segmentOffset>	0.25	</segmentOffset>
           <segment2Offset>	0.142	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
-          <modelSets>
-            <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</segmentModelLeft>
-              <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</segmentModelRight>
-              <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
-              <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
-            </G16_PzVIB_Tiger_II_3DSt_NEx>
-          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1589,7 +1581,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
             <length>	0.146335	</length>
           </mainSegment>
           <secSegment>
@@ -1598,12 +1590,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -1789,7 +1780,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
             <length>	0.149904	</length>
           </mainSegment>
           <secSegment>
@@ -1798,12 +1789,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -1990,7 +1980,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6	</repairTime>
     </PzVIB_Vetstaerktketten_StoryMode>
   </chassis>
   <turrets0>

@@ -1054,15 +1054,17 @@
     <tags>	heavyTank private HD epic_battles heavyTank1 improvedVentilation_class1_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </F74_AMX_M4_1949_FL>
-  <F18_Bat_Chatillon25t_hound_TLXXL>
-    <id>	254	</id>
-    <userString>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL	</userString>
-    <shortUserString>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_short	</shortUserString>
-    <description>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:F18_Bat_Chatillon25t_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support event_hunter event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals builtinRepairkit_wt_user builtinLargeMedkit_wt_user builtinAfterburning_wt_user builtinShield_wt_user mode_hidden hideStorage hideCrew	</tags>
-    <level>	10	</level>
-  </F18_Bat_Chatillon25t_hound_TLXXL>
+  <F128_SFAC_105>
+    <id>	256	</id>
+    <userString>	#france_vehicles:F128_SFAC_105	</userString>
+    <description>	#france_vehicles:F128_SFAC_105_descr	</description>
+    <shortUserString>	#france_vehicles:F128_SFAC_105_short	</shortUserString>
+    <shortDescriptionSpecial>	#france_vehicles:F128_SFAC_105_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F128_SFAC_105_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+    <tags>	AT-SPG role_ATSPG_support HD mediumAT-SPG siegeMode dualgun charger extraHealthReserve_class1_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </F128_SFAC_105>
 </list.xml>

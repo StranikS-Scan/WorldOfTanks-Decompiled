@@ -1,15 +1,15 @@
 <germany.xml>
-  <germany:G02_Hummel57>	ussr	</germany:G02_Hummel57>
-  <germany:G02_Hummel50>	germany	</germany:G02_Hummel50>
-  <germany:G02_Hummel56>	usa	</germany:G02_Hummel56>
-  <germany:G02_Hummel47>	china	</germany:G02_Hummel47>
-  <germany:G02_Hummel49>	france	</germany:G02_Hummel49>
-  <germany:G02_Hummel55>	uk	</germany:G02_Hummel55>
-  <germany:G02_Hummel52>	japan	</germany:G02_Hummel52>
-  <germany:G02_Hummel48>	czech	</germany:G02_Hummel48>
-  <germany:G02_Hummel54>	sweden	</germany:G02_Hummel54>
-  <germany:G02_Hummel53>	poland	</germany:G02_Hummel53>
-  <germany:G02_Hummel51>	italy	</germany:G02_Hummel51>
+  <germany:G02_Hummel55>	ussr	</germany:G02_Hummel55>
+  <germany:G02_Hummel48>	germany	</germany:G02_Hummel48>
+  <germany:G02_Hummel54>	usa	</germany:G02_Hummel54>
+  <germany:G02_Hummel45>	china	</germany:G02_Hummel45>
+  <germany:G02_Hummel47>	france	</germany:G02_Hummel47>
+  <germany:G02_Hummel53>	uk	</germany:G02_Hummel53>
+  <germany:G02_Hummel50>	japan	</germany:G02_Hummel50>
+  <germany:G02_Hummel46>	czech	</germany:G02_Hummel46>
+  <germany:G02_Hummel52>	sweden	</germany:G02_Hummel52>
+  <germany:G02_Hummel51>	poland	</germany:G02_Hummel51>
+  <germany:G02_Hummel49>	italy	</germany:G02_Hummel49>
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	summer	</season>
@@ -1495,7 +1495,6 @@
         <germany:G05_StuG_40_AusfG5>	1.37 1.37 0.84 0.000000	</germany:G05_StuG_40_AusfG5>
         <germany:G05_StuG_40_AusfG6>	1.37 1.37 0.84 0.000000	</germany:G05_StuG_40_AusfG6>
         <germany:G06_PzII3>	2.7 2.8 0.64 0.28	</germany:G06_PzII3>
-        <germany:G02_Hummel44>	3 3 3.7 0.81	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7320,7 +7319,7 @@
         <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
         <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
-        <germany:G02_Hummel46>	3.4 3.4 1.68 3.18	</germany:G02_Hummel46>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7504,7 +7503,7 @@
         <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
         <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
-        <germany:G02_Hummel46>	3.4 3.4 1.68 3.18	</germany:G02_Hummel46>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -7688,7 +7687,7 @@
         <germany:G02_Hummel41>	6 6 0.91 1.8	</germany:G02_Hummel41>
         <germany:G02_Hummel42>	3 3 0.06 1.43	</germany:G02_Hummel42>
         <germany:G02_Hummel43>	3 3 0.06 1.43	</germany:G02_Hummel43>
-        <germany:G02_Hummel46>	3.4 3.4 1.68 3.18	</germany:G02_Hummel46>
+        <germany:G02_Hummel44>	3.4 3.4 1.68 3.18	</germany:G02_Hummel44>
       </tiling>
       <tilingSettings>
         <type>	relative	</type>
@@ -8797,47 +8796,6 @@
         <type>	relativewithfactor	</type>
         <factor>	1.7 1.7	</factor>
         <offset>	0 -3.98	</offset>
-      </tilingSettings>
-    </camouflage>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:camouflage/opaque	</userString>
-    <season>	ALL	</season>
-    <historical>	0	</historical>
-    <priceGroup>	camouflages 50g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	germany:G98_Waffentrager_E100_TLXXL_S	</vehicles>
-      </include>
-    </vehicleFilter>
-    <camouflage>
-      <id>	899	</id>
-      <texture>	vehicles/german/Camouflage/Polylines.dds	</texture>
-      <description>	#vehicle_customization:camouflage/waffentrager_e100_tlxxl_s/description	</description>
-      <scales>	1.3 1 0.7	</scales>
-      <userString>	#vehicle_customization:camouflage/waffentrager_e100_tlxxl_s/label	</userString>
-      <tags>	hiddenInUI	</tags>
-      <invisibilityFactor>	0	</invisibilityFactor>
-      <palettes>
-        <palette>
-          <c0>	183 149 69 255	</c0>
-          <c1>	80 85 89 255	</c1>
-          <c2>	0 0 0 0	</c2>
-          <c3>	0 0 0 0	</c3>
-        </palette>
-      </palettes>
-      <rotation>
-        <HULL>	2.30174	</HULL>
-        <TURRET>	2.30174	</TURRET>
-        <GUN>	2.30174	</GUN>
-      </rotation>
-      <tiling>
-        <germany:G02_Hummel45>	1.84 1.84 1.65 0.2	</germany:G02_Hummel45>
-      </tiling>
-      <tilingSettings>
-        <type>	relative	</type>
-        <factor>	1.88487 1.88554	</factor>
-        <offset>	0.000000 0.000000	</offset>
       </tilingSettings>
     </camouflage>
   </itemGroup>

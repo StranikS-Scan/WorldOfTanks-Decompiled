@@ -2,10 +2,10 @@
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/tournament_banner_inject.py
 from battle_royale.gui.impl.lobby.views.tournament_banner_view import TournamentBannerView
 from frameworks.wulf import ViewFlags
-from gui.Scaleform.daapi.view.meta.EventTournamentBannerInjectMeta import EventTournamentBannerInjectMeta
+from gui.Scaleform.daapi.view.meta.CarouselBannerInjectMeta import CarouselBannerInjectMeta
 from shared_utils import nextTick
 
-class TournamentBannerComponent(EventTournamentBannerInjectMeta):
+class TournamentBannerComponent(CarouselBannerInjectMeta):
     __slots__ = ('__view', '__isExtended')
 
     def __init__(self):

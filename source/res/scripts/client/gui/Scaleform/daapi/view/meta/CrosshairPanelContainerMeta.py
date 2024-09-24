@@ -136,8 +136,14 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_updateDualGunMarkerStateS(self, markerState):
         return self.flashObject.as_updateDualGunMarkerState(markerState) if self._isDAAPIInited() else None
 
-    def as_runCameraTransitionFxS(self, activeGunId, animationDuration):
-        return self.flashObject.as_runCameraTransitionFx(activeGunId, animationDuration) if self._isDAAPIInited() else None
+    def as_setTwinGunMarkerActiveS(self, value):
+        return self.flashObject.as_setTwinGunMarkerActive(value) if self._isDAAPIInited() else None
+
+    def as_setTwinGunMarkerStateS(self, value):
+        return self.flashObject.as_setTwinGunMarkerState(value) if self._isDAAPIInited() else None
+
+    def as_runCameraTransitionFxS(self, direction, duration):
+        return self.flashObject.as_runCameraTransitionFx(direction, duration) if self._isDAAPIInited() else None
 
     def as_updateScaleWidgetS(self, positionValue):
         return self.flashObject.as_updateScaleWidget(positionValue) if self._isDAAPIInited() else None
@@ -162,9 +168,3 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_setAimDamageStageS(self, value):
         return self.flashObject.as_setAimDamageStage(value) if self._isDAAPIInited() else None
-
-    def as_showPlasmaIndicatorS(self, plasmaValue, isPlasmaChanged, plasmaMultiplicatorText):
-        return self.flashObject.as_showPlasmaIndicator(plasmaValue, isPlasmaChanged, plasmaMultiplicatorText) if self._isDAAPIInited() else None
-
-    def as_showExplosiveShotIndicatorS(self, isActive):
-        return self.flashObject.as_showExplosiveShotIndicator(isActive) if self._isDAAPIInited() else None

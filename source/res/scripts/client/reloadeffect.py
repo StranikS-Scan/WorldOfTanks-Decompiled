@@ -20,6 +20,7 @@ class ReloadEffectsType(object):
     BARREL_RELOAD = 'BarrelReload'
     AUTO_RELOAD = 'AutoReload'
     DUALGUN_RELOAD = 'DualGunReload'
+    TWINGUN_RELOAD = 'TwinGunReload'
 
 
 def _createReloadEffectDesc(eType, dataSection):
@@ -31,8 +32,10 @@ def _createReloadEffectDesc(eType, dataSection):
         return _BarrelReloadDesc(dataSection, eType)
     elif eType == ReloadEffectsType.AUTO_RELOAD:
         return _AutoReloadDesc(dataSection, eType)
+    elif eType == ReloadEffectsType.DUALGUN_RELOAD:
+        return _DualGunReloadDesc(dataSection, eType)
     else:
-        return _DualGunReloadDesc(dataSection, eType) if eType == ReloadEffectsType.DUALGUN_RELOAD else None
+        return _TwinGunReloadDesc(dataSection, eType) if eType == ReloadEffectsType.TWINGUN_RELOAD else None
 
 
 class _ReloadDesc(object):
@@ -90,6 +93,23 @@ class _DualGunReloadDesc(_SimpleReloadDesc):
 
     def createIntuitionReload(self):
         return DualGunReload(self)
+
+
+class _TwinGunReloadDesc(_SimpleReloadDesc):
+    __slots__ = ('twinGunSound', 'runTimeDeltaOneGun', 'runTimeDeltaTwinGun', 'caliber')
+
+    def __init__(self, dataSection, eType):
+        super(_TwinGunReloadDesc, self).__init__(dataSection, eType)
+        self.twinGunSound = dataSection.readString('twinGunSound', '')
+        self.runTimeDeltaOneGun = dataSection.readFloat('runTimeDeltaOneGun', 0.0)
+        self.runTimeDeltaTwinGun = dataSection.readFloat('runTimeDeltaTwinGun', 0.0)
+        self.caliber = dataSection.readString('caliber', '')
+
+    def create(self):
+        return TwinGunReload(self)
+
+    def createIntuitionReload(self):
+        return TwinGunReload(self)
 
 
 class _BarrelReloadDesc(_SimpleReloadDesc):
@@ -172,12 +192,22 @@ def effectFromSection(section):
     return _createReloadEffectDesc(eType, section)
 
 
-def playByName(soundName):
+def isReplayPlayingWithTimeWarp():
     import BattleReplay
     replayCtrl = BattleReplay.g_replayCtrl
-    if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+    return replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress
+
+
+def playByName(soundName):
+    if isReplayPlayingWithTimeWarp():
         return
     SoundGroups.g_instance.playSound2D(soundName)
+
+
+def playByInstance(soundInstance):
+    if isReplayPlayingWithTimeWarp():
+        return
+    soundInstance.play()
 
 
 class _GunReload(CallbackDelayer):
@@ -258,9 +288,7 @@ class SimpleReload(_GunReload):
     def __playSound(self):
         if self._sound is not None:
             self._sound.stop()
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            if isReplayPlayingWithTimeWarp():
                 return
             self._sound.play()
         return
@@ -339,9 +367,7 @@ class BarrelReload(SimpleReload):
     def __playStartLongSound(self):
         if self._startLongSound is not None:
             self._startLongSound.stop()
-            import BattleReplay
-            replayCtrl = BattleReplay.g_replayCtrl
-            if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+            if isReplayPlayingWithTimeWarp():
                 return
             self._startLongSound.play()
         return
@@ -534,9 +560,7 @@ class AutoReload(_GunReload):
         else:
             if self._sound is not None:
                 self._sound.stop()
-                import BattleReplay
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                if isReplayPlayingWithTimeWarp():
                     return
                 self._sound.play()
                 if shellCount == 1 and reloadShellCount > 2:
@@ -609,9 +633,7 @@ class DualGunReload(_GunReload):
             return
         else:
             if self.__sound is not None:
-                import BattleReplay
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                if isReplayPlayingWithTimeWarp():
                     return
                 self.__sound.play()
             return
@@ -621,11 +643,53 @@ class DualGunReload(_GunReload):
             return
         else:
             if self.__ammoLowSound is not None:
-                import BattleReplay
-                replayCtrl = BattleReplay.g_replayCtrl
-                if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
+                if isReplayPlayingWithTimeWarp():
                     return
                 self.__ammoLowSound.play()
+            return
+
+
+class TwinGunReload(_GunReload):
+
+    def __init__(self, effectDesc):
+        _GunReload.__init__(self, effectDesc)
+        self.__sound = None
+        return
+
+    def __del__(self):
+        self.stop()
+        CallbackDelayer.destroy(self)
+
+    def start(self, shellReloadTime, isTwinShot=False):
+        if gEffectsDisabled():
+            return
+        SoundGroups.g_instance.setSwitch(_CALIBER_RELOAD_SOUND_SWITCH, self._desc.caliber)
+        self.stopCallback(self.__onReloadStart)
+        soundEvent = self._desc.soundEvent
+        runTimeDelta = self._desc.runTimeDeltaOneGun
+        if isTwinShot:
+            soundEvent = self._desc.twinGunSound
+            runTimeDelta = self._desc.runTimeDeltaTwinGun
+        timeToStart = shellReloadTime - runTimeDelta
+        if timeToStart > 0:
+            self.__sound = SoundGroups.g_instance.getSound2D(soundEvent)
+            self.delayCallback(timeToStart, self.__onReloadStart, BigWorld.time() + timeToStart)
+
+    def stop(self):
+        if self.__sound is not None:
+            self.__sound.stop()
+            self.__sound = None
+        self.stopCallback(self.__onReloadStart)
+        return
+
+    def reloadEnd(self):
+        pass
+
+    def __onReloadStart(self, time):
+        if fabs(time - BigWorld.time()) > 0.1 or self.__sound is None:
+            return
+        else:
+            playByInstance(self.__sound)
             return
 
 
@@ -643,10 +707,10 @@ class ReloadEffectStrategy(object):
         self.__reloadInProgress = False
         return
 
-    def start(self, timeLeft, baseTime, clipCapacity, directTrigger=False):
+    def start(self, timeLeft, baseTime, clipCapacity, directTrigger=False, shotsAmount=-1):
         reloadFromStart = fabs(timeLeft - baseTime) < 0.001 if not self.__reloadInProgress else False
         self.__reloadInProgress = True
-        self.__reloadStartEffect(timeLeft, clipCapacity, reloadFromStart, directTrigger)
+        self.__reloadStartEffect(timeLeft, clipCapacity, reloadFromStart, directTrigger, shotsAmount)
 
     def stop(self):
         self.__reloadInProgress = False
@@ -684,7 +748,7 @@ class ReloadEffectStrategy(object):
     def getGunReloadType(self):
         return self.__gunReloadEffect.getEffectType()
 
-    def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, directTrigger=False):
+    def __reloadStartEffect(self, timeLeft, clipCapacity, reloadFromStart, directTrigger=False, shotsAmount=1):
         ammoCtrl = self.__sessionProvider.shared.ammo
         currentShellCD = ammoCtrl.getCurrentShellCD()
         shellCounts = ammoCtrl.getShells(currentShellCD)
@@ -707,6 +771,8 @@ class ReloadEffectStrategy(object):
                 if shellsQuantityLeft == 1:
                     ammoLow = True
                 relloadEffect.start(timeLeft, ammoLow, directTrigger)
+            elif self.getGunReloadType() == ReloadEffectsType.TWINGUN_RELOAD:
+                relloadEffect.start(timeLeft, shotsAmount > 1)
             else:
                 relloadEffect.start(timeLeft, ammoLow, shellCounts[1], reloadShellCount, currentShellCD, reloadFromStart, clipCapacity)
         return

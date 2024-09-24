@@ -203,14 +203,14 @@ class PersonalInfo(shared.UnpackedInfo):
                 continue
             data = result[intCD]
             achievements = shared.makeAchievementFromPersonal(data)
-            for direction, achievement, achievementID in achievements:
+            for direction, achievement in achievements:
                 if direction == 1:
-                    right.append((achievement, True, achievementID))
-                left.append((achievement, True, achievementID))
+                    right.append((achievement, True))
+                left.append((achievement, True))
 
             achievement = shared.makeMarkOfMasteryFromPersonal(data)
             if achievement is not None:
-                left.append((achievement, False, 0))
+                left.append((achievement, False))
 
         return (left, sorted(right, key=sort_keys.AchievementSortKey))
 
@@ -259,12 +259,6 @@ class PersonalInfo(shared.UnpackedInfo):
     def getCrystalRecords(self):
         return self._economicsRecords.getCrystalRecords()
 
-    def getUnpackedCrystalRecords(self):
-        return self._economicsRecords.getUnpackedCrystalRecords()
-
-    def haveCrystalsChanged(self):
-        return self._economicsRecords.haveCrystalsChanged()
-
     def getBaseXPRecords(self):
         return self._economicsRecords.getBaseXPRecords()
 
@@ -282,12 +276,6 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getTmenXPRecords(self):
         return self._economicsRecords.getTmenXPRecords(self.__premiumMask, self.__isAddXPBonusApplied)
-
-    def getXPToShow(self, isDiffShow=False):
-        return self._economicsRecords.getXPToShow(isDiffShow)
-
-    def getCreditsToShow(self, isDiffShow=False):
-        return self._economicsRecords.getCreditsToShow(isDiffShow)
 
     def getCrystalDetailsRecords(self):
         return self._economicsRecords.getCrystalDetails()

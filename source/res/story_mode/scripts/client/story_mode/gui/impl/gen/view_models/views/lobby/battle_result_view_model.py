@@ -75,10 +75,10 @@ class BattleResultViewModel(ViewModel):
     def setIsDifficult(self, value):
         self._setBool(9, value)
 
-    def getIsEvent(self):
+    def getIsOnboarding(self):
         return self._getBool(10)
 
-    def setIsEvent(self, value):
+    def setIsOnboarding(self, value):
         self._setBool(10, value)
 
     def getProgressLevels(self):
@@ -113,7 +113,7 @@ class BattleResultViewModel(ViewModel):
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('playerStatus', '')
         self._addBoolProperty('isDifficult', False)
-        self._addBoolProperty('isEvent', False)
+        self._addBoolProperty('isOnboarding', False)
         self._addArrayProperty('progressLevels', Array())
         self._addArrayProperty('rewards', Array())
         self.onQuit = self._addCommand('onQuit')

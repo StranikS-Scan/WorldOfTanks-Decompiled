@@ -363,7 +363,6 @@ class ARENA_BONUS_TYPE:
     BATTLE_ROYALE_SQUAD_RANGE = (BATTLE_ROYALE_SQUAD, BATTLE_ROYALE_TRN_SQUAD)
     RTS_RANGE = (RTS, RTS_1x1, RTS_BOOTCAMP)
     RTS_BATTLES = (RTS, RTS_1x1)
-    EVENT_BATTLES_RANGE = (EVENT_BATTLES, EVENT_BATTLES_2)
     EXTERNAL_RANGE = (SORTIE_2,
      FORT_BATTLE_2,
      GLOBAL_MAP,
@@ -372,7 +371,7 @@ class ARENA_BONUS_TYPE:
      TOURNAMENT_REGULAR,
      TOURNAMENT_EVENT,
      TOURNAMENT_COMP7)
-    REPLAY_DISABLE_RANGE = [EVENT_BATTLES, EVENT_BATTLES_2]
+    REPLAY_DISABLE_RANGE = []
 
 
 ARENA_BONUS_TYPE_NAMES = dict([ (k, v) for k, v in ARENA_BONUS_TYPE.__dict__.iteritems() if isinstance(v, int) ])
@@ -703,6 +702,7 @@ OBSERVERS_BONUS_TYPES = (ARENA_BONUS_TYPE.TRAINING,
 
 class PREBATTLE_ERRORS:
     ROSTER_LIMIT = 'ROSTER_LIMIT'
+    ONSLAUGHT_ROSTER_LIMIT = 'ONSLAUGHT_ROSTER_LIMIT'
     INVALID_VEHICLE = 'INVALID_VEHICLE'
     OBSERVERS_LIMIT = 'OBSERVERS_LIMIT'
     PLAYERS_LIMIT = 'PLAYERS_LIMIT'
@@ -913,7 +913,6 @@ class PremiumConfigs(object):
     PREM_SQUAD = 'premSquad_config'
 
 
-POSTBATTLE20_CONFIG = 'postbattle20_config'
 BASE_PREM_FACTOR = 1.0
 DAILY_QUESTS_CONFIG = 'daily_quests_config'
 DOG_TAGS_CONFIG = 'dog_tags_config'
@@ -968,8 +967,6 @@ class Configs(enum.Enum):
     ADVANCED_ACHIEVEMENTS_CONFIG = 'advanced_achievements_config'
     LOOTBOXES_TOOLTIP_CONFIG = 'lootboxes_tooltip_config'
     UNIT_ASSEMBLER_CONFIG = 'unit_assembler_config'
-    EVENT_BATTLES_CONFIG = 'event_battles_config'
-    LOOTBOX_CONFIG = 'lootBoxes_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -985,8 +982,12 @@ class RESTRICTION_TYPE:
     BAN = 1
     CHAT_BAN = 3
     CLAN = 5
+    MINORS_RESTRICTION = 6
     ARENA_BAN = 101
-    RANGE = (BAN, CHAT_BAN, CLAN)
+    RANGE = (BAN,
+     CHAT_BAN,
+     CLAN,
+     MINORS_RESTRICTION)
     LOCAL_RANGE = (ARENA_BAN,)
 
 
@@ -1014,7 +1015,8 @@ class RESTRICTION_SOURCE:
 
 SPA_RESTR_NAME_TO_RESTR_TYPE = {'game': RESTRICTION_TYPE.BAN,
  'chat': RESTRICTION_TYPE.CHAT_BAN,
- 'clan': RESTRICTION_TYPE.CLAN}
+ 'clan': RESTRICTION_TYPE.CLAN,
+ 'all': RESTRICTION_TYPE.MINORS_RESTRICTION}
 RESTR_TYPE_TO_SPA_NAME = dict(((x[1], x[0]) for x in SPA_RESTR_NAME_TO_RESTR_TYPE.iteritems()))
 
 class SPA_ATTRS:
@@ -1052,6 +1054,47 @@ class CLAN_MEMBER_FLAGS(object):
     MAY_REMOVE_CLAN = LEADER
     MAY_ACTIVATE_ORDER = LEADER | VICE_LEADER | STAFF | COMMANDER
     MAY_EXCHANGE_MONEY = LEADER | VICE_LEADER | STAFF | COMMANDER | DIPLOMAT | TREASURER | RECRUITER | JUNIOR | PRIVATE
+
+
+class BAN_TYPE(object):
+    ACCESS_DENIED = 'access_denied'
+    COMMUNICATION_DENIED = 'communication_denied'
+    PUBLIC_COMMUNICATION_DENIED = 'public_communication_denied'
+    PRIVATE_COMMUNICATION_DENIED = 'private_communication_denied'
+    NONFRIEND_PRIVATE_COMMUNICATION_DENIED = 'nonfriend_private_communication_denied'
+    _PRIVATE_MESSAGE_BANS = (COMMUNICATION_DENIED, PRIVATE_COMMUNICATION_DENIED, NONFRIEND_PRIVATE_COMMUNICATION_DENIED)
+    _COMMUNICATION_BANS = _PRIVATE_MESSAGE_BANS + (PUBLIC_COMMUNICATION_DENIED,)
+    _BATTLE_MESSAGES_BANS = (COMMUNICATION_DENIED, PUBLIC_COMMUNICATION_DENIED)
+
+    @classmethod
+    def isAnyCommunicationBan(cls, ban):
+        return ban in cls._COMMUNICATION_BANS
+
+    @classmethod
+    def isPrivateMessagesBan(cls, ban):
+        return ban in cls._PRIVATE_MESSAGE_BANS
+
+    @classmethod
+    def isBattleMessagesBan(cls, ban):
+        return ban in cls._BATTLE_MESSAGES_BANS
+
+
+class BAN_REASON(object):
+    PARENTAL_CONTROL = '#ban_reason:parental_control'
+    COUNTRY = '#ban_reason:country'
+    OTHER = '#ban_reason:other'
+
+
+BAN_REASONS = [BAN_REASON.PARENTAL_CONTROL, BAN_REASON.COUNTRY, BAN_REASON.OTHER]
+BAN_REASON_BY_ID = {index:value for index, value in enumerate(BAN_REASONS)}
+ID_BY_BAN_REASON = {value:index for index, value in BAN_REASON_BY_ID.iteritems()}
+
+class RESTRICTION_KEY(object):
+    PRIVATE_CHAT = 'privateChat'
+    PUBLIC_CHAT = 'publicChat'
+    SETTINGS = 'settings'
+    SESSION = 'session'
+    PAYMENT = 'payment'
 
 
 class CLAN_ROLES(object):
@@ -1157,7 +1200,6 @@ class EQUIPMENT_STAGES:
     SHARED_COOLDOWN = 7
     STARTUP_COOLDOWN = 8
     WAIT_FOR_CHOICE = 9
-    INTERRUPTED = 10
     EXHAUSTED = 255
     ALL = (NOT_RUNNING,
      DEPLOYING,
@@ -1167,7 +1209,6 @@ class EQUIPMENT_STAGES:
      ACTIVE,
      COOLDOWN,
      SHARED_COOLDOWN,
-     INTERRUPTED,
      STARTUP_COOLDOWN,
      EXHAUSTED)
 
@@ -1181,8 +1222,19 @@ class EQUIPMENT_STAGES:
          cls.ACTIVE: 'active',
          cls.COOLDOWN: 'cooldown',
          cls.STARTUP_COOLDOWN: 'startupCooldown',
-         cls.INTERRUPTED: 'interrupted',
          cls.EXHAUSTED: 'exhausted'}.get(value)
+
+
+class TEAM_BASE_STAGES:
+    NONE = 0
+    CAPTURING = 1
+    BLOCKED = 2
+    CAPTURED = 3
+
+
+class VEHICLE_SPECIAL_DEATH:
+    NONE = 0
+    AMMO_BAY_EXPLOSION = 1
 
 
 class DEVELOPMENT_INFO:
@@ -1270,8 +1322,7 @@ class ATTACK_REASON(object):
     MINEFIELD_ZONE = 'minefield_zone'
     BATTLESHIP = 'battleship'
     DESTROYER = 'destroyer'
-    CIRCUIT_OVERLOAD = 'circuitOverload'
-    HYPERION = 'hyperion'
+    DAMAGE_ZONE = 'damage_zone'
     NONE = 'none'
 
     @classmethod
@@ -1318,9 +1369,8 @@ ATTACK_REASONS = [ATTACK_REASON.SHOT,
  ATTACK_REASON.MINEFIELD_ZONE,
  ATTACK_REASON.BATTLESHIP,
  ATTACK_REASON.DESTROYER,
- ATTACK_REASON.CIRCUIT_OVERLOAD,
- ATTACK_REASON.HYPERION]
-ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
+ ATTACK_REASON.DAMAGE_ZONE]
+ATTACK_REASON_INDICES = {value:index for index, value in enumerate(ATTACK_REASONS)}
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
 WORLD_ATTACK_REASONS = (ATTACK_REASON.WORLD_COLLISION, ATTACK_REASON.CGF_WORLD)
 BATTLE_FEEDBACK_REASONS_AFTER_DEATH = frozenset((ATTACK_REASON.SHOT,
@@ -1386,9 +1436,58 @@ class VEHICLE_HIT_FLAGS:
 
 
 VEHICLE_HIT_FLAGS_BY_NAME = dict([ (k, v) for k, v in VEHICLE_HIT_FLAGS.__dict__.iteritems() if not k.startswith('_') ])
-FIRE_NOTIFICATION_CODES = ('DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'DEVICE_STARTED_FIRE_AT_CIRCUIT_OVERLOAD', 'FIRE_STOPPED')
+FIRE_NOTIFICATION_CODES = ('DEVICE_STARTED_FIRE_AT_SHOT', 'DEVICE_STARTED_FIRE_AT_RAMMING', 'FIRE_STOPPED')
 FIRE_NOTIFICATION_INDICES = dict(((x[1], x[0]) for x in enumerate(FIRE_NOTIFICATION_CODES)))
-DAMAGE_INFO_CODES = ('DEVICE_CRITICAL', 'DEVICE_DESTROYED', 'TANKMAN_HIT', 'DEVICE_CRITICAL_AT_SHOT', 'DEVICE_DESTROYED_AT_SHOT', 'DEVICE_CRITICAL_AT_RAMMING', 'DEVICE_DESTROYED_AT_RAMMING', 'TANKMAN_HIT_AT_SHOT', 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT', 'DEVICE_CRITICAL_AT_FIRE', 'DEVICE_DESTROYED_AT_FIRE', 'DEVICE_CRITICAL_AT_WORLD_COLLISION', 'DEVICE_DESTROYED_AT_WORLD_COLLISION', 'DEVICE_CRITICAL_AT_DROWNING', 'DEVICE_DESTROYED_AT_DROWNING', 'DEVICE_REPAIRED_TO_CRITICAL', 'DEVICE_REPAIRED', 'TANKMAN_HIT_AT_WORLD_COLLISION', 'TANKMAN_HIT_AT_DROWNING', 'TANKMAN_RESTORED', 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE', 'ENGINE_CRITICAL_AT_UNLIMITED_RPM', 'ENGINE_DESTROYED_AT_UNLIMITED_RPM', 'ENGINE_CRITICAL_AT_BURNOUT', 'ENGINE_DESTROYED_AT_BURNOUT', 'DEATH_FROM_SHOT', 'DEATH_FROM_INACTIVE_CREW_AT_SHOT', 'DEATH_FROM_RAMMING', 'DEATH_FROM_MINE_EXPLOSION', 'DEATH_FROM_FIRE', 'DEATH_FROM_INACTIVE_CREW', 'DEATH_FROM_DROWNING', 'DEATH_FROM_WORLD_COLLISION', 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION', 'DEATH_FROM_DEATH_ZONE', 'DEATH_FROM_STATIC_DEATH_ZONE', 'DEATH_FROM_MINEFIELD_ZONE', 'DEATH_FROM_GAS_ATTACK', 'DEATH_FROM_OVERTURN', 'DEATH_FROM_ARTILLERY_PROTECTION', 'DEATH_FROM_ARTILLERY_SECTOR', 'DEATH_FROM_BOMBER', 'DEATH_FROM_RECOVERY', 'DEATH_FROM_KAMIKAZE', 'DEATH_FROM_FIRE_CIRCLE', 'DEATH_FROM_THUNDER_STRIKE', 'DEATH_FROM_CORRODING_SHOT', 'DEATH_FROM_CLING_BRANDER', 'DEVICE_DESTROYED_AT_MINEFIELD_ZONE', 'HYPERION')
+DAMAGE_INFO_CODES = ['DEVICE_CRITICAL',
+ 'DEVICE_DESTROYED',
+ 'TANKMAN_HIT',
+ 'DEVICE_CRITICAL_AT_SHOT',
+ 'DEVICE_DESTROYED_AT_SHOT',
+ 'DEVICE_CRITICAL_AT_RAMMING',
+ 'DEVICE_DESTROYED_AT_RAMMING',
+ 'TANKMAN_HIT_AT_SHOT',
+ 'DEATH_FROM_DEVICE_EXPLOSION_AT_SHOT',
+ 'DEVICE_CRITICAL_AT_FIRE',
+ 'DEVICE_DESTROYED_AT_FIRE',
+ 'DEVICE_CRITICAL_AT_WORLD_COLLISION',
+ 'DEVICE_DESTROYED_AT_WORLD_COLLISION',
+ 'DEVICE_CRITICAL_AT_DROWNING',
+ 'DEVICE_DESTROYED_AT_DROWNING',
+ 'DEVICE_REPAIRED_TO_CRITICAL',
+ 'DEVICE_REPAIRED',
+ 'TANKMAN_HIT_AT_WORLD_COLLISION',
+ 'TANKMAN_HIT_AT_DROWNING',
+ 'TANKMAN_RESTORED',
+ 'DEATH_FROM_DEVICE_EXPLOSION_AT_FIRE',
+ 'ENGINE_CRITICAL_AT_UNLIMITED_RPM',
+ 'ENGINE_DESTROYED_AT_UNLIMITED_RPM',
+ 'ENGINE_CRITICAL_AT_BURNOUT',
+ 'ENGINE_DESTROYED_AT_BURNOUT',
+ 'DEATH_FROM_SHOT',
+ 'DEATH_FROM_INACTIVE_CREW_AT_SHOT',
+ 'DEATH_FROM_RAMMING',
+ 'DEATH_FROM_MINE_EXPLOSION',
+ 'DEATH_FROM_FIRE',
+ 'DEATH_FROM_INACTIVE_CREW',
+ 'DEATH_FROM_DROWNING',
+ 'DEATH_FROM_WORLD_COLLISION',
+ 'DEATH_FROM_INACTIVE_CREW_AT_WORLD_COLLISION',
+ 'DEATH_FROM_DEATH_ZONE',
+ 'DEATH_FROM_STATIC_DEATH_ZONE',
+ 'DEATH_FROM_MINEFIELD_ZONE',
+ 'DEATH_FROM_GAS_ATTACK',
+ 'DEATH_FROM_OVERTURN',
+ 'DEATH_FROM_ARTILLERY_PROTECTION',
+ 'DEATH_FROM_ARTILLERY_SECTOR',
+ 'DEATH_FROM_BOMBER',
+ 'DEATH_FROM_RECOVERY',
+ 'DEATH_FROM_KAMIKAZE',
+ 'DEATH_FROM_FIRE_CIRCLE',
+ 'DEATH_FROM_THUNDER_STRIKE',
+ 'DEATH_FROM_CORRODING_SHOT',
+ 'DEATH_FROM_CLING_BRANDER',
+ 'DEVICE_DESTROYED_AT_MINEFIELD_ZONE',
+ 'DEATH_FROM_DAMAGE_ZONE']
 
 class IGR_TYPE:
     NONE = 0
@@ -1539,7 +1638,8 @@ class QUEST_CODE_TYPE:
     HANDCODED = 1
 
 
-DAMAGE_INFO_INDICES = dict(((x[1], x[0]) for x in enumerate(DAMAGE_INFO_CODES)))
+DAMAGE_INFO_INDICES = {code:index for index, code in enumerate(DAMAGE_INFO_CODES)}
+DAMAGE_INFO_CODES_PER_ATTACK_REASON = {}
 CLIENT_INACTIVITY_TIMEOUT = 40
 
 class CHAT_LOG:
@@ -1867,8 +1967,6 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
-    LOOTBOX_REROLL = 1.0
-    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1917,6 +2015,9 @@ class REQUEST_COOLDOWN:
     CMD_FREE_XP_CONV = 1.0
     RESET_ALL_TANKMEN_SKILLS = 60.0
     FILL_ALL_TANKMEN_SKILLS = 60.0
+    CMD_TRADE_IN_TREES = 5
+    CMD_TRADE_IN_TREES_DRY_RUN = 5
+    CMD_TRADE_IN_TREES_PRICE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2269,7 +2370,6 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.GAME_EXTENDED_2: 'Game extended section settings 2',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
- 105: 'Event Storage',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
  107: 'Fun Random carousel filter 1',
  108: 'Fun Random carousel filter 2',
@@ -2677,13 +2777,9 @@ class VISIBILITY:
     MIN_RADIUS = 50.0
 
 
-VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius',
- 'gun/piercing',
- 'gun/shots/speed',
- 'gun/canShoot'])
+VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing', 'gun/shots/speed'])
 VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing',
- 'gun/shots/speed': 'gunShotsSpeed',
- 'gun/canShoot': 'gunCanShoot'}
+ 'gun/shots/speed': 'gunShotsSpeed'}
 
 class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
@@ -2945,12 +3041,10 @@ class BotNamingType(object):
     CREW_MEMBER = 1
     VEHICLE_MODEL = 2
     CUSTOM = 3
-    LABEL = 4
     DEFAULT = CREW_MEMBER
     _parseDict = {'crew': CREW_MEMBER,
      'vehicle': VEHICLE_MODEL,
      'custom': CUSTOM,
-     'label': LABEL,
      'default': DEFAULT}
 
     @classmethod
@@ -3138,6 +3232,9 @@ class DUAL_GUN:
         COUNT = 4
 
 
+DUPLET_GUN_INDEXES = [DUAL_GUN.ACTIVE_GUN.LEFT, DUAL_GUN.ACTIVE_GUN.RIGHT]
+DUPLET_GUN_INDEXES_TUPLE = tuple(DUPLET_GUN_INDEXES)
+
 class MarathonConfig(object):
     EMPTY_PATH = ''
     URL = 'marathonUrl'
@@ -3321,13 +3418,11 @@ class DamageAbsorptionTypes(object):
     FRAGMENTS = 0
     BLAST = 1
     SPALLS = 2
-    NONE = 3
 
 
 DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
  'BLAST': DamageAbsorptionTypes.BLAST,
- 'SPALLS': DamageAbsorptionTypes.SPALLS,
- 'NONE': DamageAbsorptionTypes.NONE}
+ 'SPALLS': DamageAbsorptionTypes.SPALLS}
 DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))
 EQUIPMENT_COOLDOWN_MOD_SUFFIX = 'CooldownMod'
 CHANCE_TO_HIT_SUFFIX_FACTOR = 'ChanceToHitDeviceMod'
@@ -3433,9 +3528,7 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'battle_royale',
  'clanWarsBattles',
  'fun_random',
- 'comp7',
- 'clanWarsBattles',
- 'random_only'}
+ 'comp7'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EVENT = BATTLE_MODE_VEHICLE_TAGS - {'event_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC = BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN = BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}
@@ -3531,7 +3624,6 @@ QUESTS_SUPPORTED_EXCLUDE_TAGS = {'collectorVehicle',
  'testTank',
  'premium',
  'event_battles'}
-GUARANTEED_RANDOMIZED_DAMAGE = 1.0
 VEHICLE_HEALTH_DECIMALS = 1
 
 class VehicleDirection(object):
@@ -3583,7 +3675,6 @@ class BuffDisplayedState(enum.IntEnum):
 
 class EntityCaptured(object):
     POI_CAPTURABLE = 'poiCapturable'
-    WT_GENERATOR = 'captureGenerator'
 
 
 class VehicleSelectionPlayerStatus(object):
@@ -3641,20 +3732,6 @@ class WINBACK_BATTLE_TOKEN_DRAW_REASON(enum.IntEnum):
     SQUAD = 2
 
 
-class MarkerItem(object):
-    DEFAULT = 0
-    COMP7_RECON = 1
-    POLYGONAL_ZONE = 2
-    STATIC_DEATH_ZONE = 3
-    STATIC_DEATH_ZONE_PROXIMITY = 4
-    GEN_ON = 5
-    GEN_OFF = 6
-
-
-class DROP_SKILL_OPTIONS(object):
-    FREE_DROP_WITH_TOKEN_INDEX = 99
-
-
 class BOT_DISPLAY_CLASS_NAMES(enum.Enum):
     LIGHT_TANK_ELITE = 'lightTank_elite'
     MEDIUM_TANK_ELITE = 'mediumTank_elite'
@@ -3683,6 +3760,10 @@ class AchievementsLayoutStates(enum.IntEnum):
 
 DEATH_ZONE_MASK_PATTERN = 'deathzone_mask_'
 
+class DamageResistanceReason(object):
+    NONE = 0
+
+
 class ShootImpulseApplicationPoint(object):
     VEHICLE_COM = 'vehicleCOM'
     SHOOT_POINT = 'shootPoint'
@@ -3703,6 +3784,10 @@ class RandomizationType(object):
 class RANDOM_FLAGS:
     IS_ONLY_10_MODE_ENABLED = 1
     IS_MAPS_IN_DEVELOPMENT_ENABLED = 2
+
+
+class WINBACK_FLAGS:
+    IS_MAPS_IN_DEVELOPMENT_ENABLED = 1
 
 
 class JUNK_TANKMAN_NOVELTY:
@@ -3744,6 +3829,7 @@ PVE_MINIMAP_DEFAULT_ZOOM = 1.0
 PVE_MINIMAP_DEFAULT_BORDERS = (Vector2(), Vector2())
 INFINITE_SHELL_TAG = 'infinite'
 INFINITE_SHELL_COUNT = 9
+FORCE_FINITE_SHELL_TAG = 'forceFinite'
 
 class SCENARIO_RESULT:
     LOSE = -1
@@ -3765,36 +3851,3 @@ class DIRECT_DETECTION_TYPE:
     FORCED = 2
     STEALTH_RADAR = 3
     SPECIAL_RECON = 4
-
-
-class WT_COMPONENT_NAMES(object):
-    SHIELD_DEBUFF_ARENA_TIMER = 'wtShieldDebuffDuration'
-    ACTIVATION_ARENA_TIMER = 'activationTimer'
-    GENERATORS_COUNTER = 'wtCapturesTillEndgame'
-    HYPERION_COUNTER = 'wtHyperionCharge'
-
-
-class WT_BATTLE_STAGE(object):
-    INVINCIBLE = 0
-    DEBUFF = 1
-    END_GAME = 2
-
-    @staticmethod
-    def getCurrent(arenaInfo):
-        if WT_COMPONENT_NAMES.SHIELD_DEBUFF_ARENA_TIMER in arenaInfo.dynamicComponents:
-            return WT_BATTLE_STAGE.DEBUFF
-        else:
-            generatorsCounterComponent = arenaInfo.dynamicComponents.get(WT_COMPONENT_NAMES.GENERATORS_COUNTER)
-            return WT_BATTLE_STAGE.END_GAME if generatorsCounterComponent is not None and generatorsCounterComponent.counter == 0 else WT_BATTLE_STAGE.INVINCIBLE
-
-
-class WT_TEAMS(object):
-    BOSS_TEAM = 1
-    HUNTERS_TEAM = 2
-
-
-class WT_TAGS(object):
-    BOSS = 'event_boss'
-    HUNTER = 'event_hunter'
-    PRIORITY_BOSS = 'special_event_boss'
-    MINIBOSS = 'event_mini_boss'

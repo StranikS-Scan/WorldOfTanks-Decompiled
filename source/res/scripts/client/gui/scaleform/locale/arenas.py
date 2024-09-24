@@ -65,6 +65,8 @@ class ARENAS(object):
     C_10_HILLS_DESCRIPTION = '#arenas:10_hills/description'
     C_11_MUROVANKA_NAME = '#arenas:11_murovanka/name'
     C_11_MUROVANKA_DESCRIPTION = '#arenas:11_murovanka/description'
+    C_11_MUROVANKA_MB_NAME = '#arenas:11_murovanka_mb/name'
+    C_11_MUROVANKA_MB_DESCRIPTION = '#arenas:11_murovanka_mb/description'
     C_13_ERLENBERG_NAME = '#arenas:13_erlenberg/name'
     C_13_ERLENBERG_DESCRIPTION = '#arenas:13_erlenberg/description'
     C_14_SIEGFRIED_LINE_NAME = '#arenas:14_siegfried_line/name'
@@ -78,12 +80,16 @@ class ARENAS(object):
     C_31_AIRFIELD_DESCRIPTION = '#arenas:31_airfield/description'
     C_33_FJORD_NAME = '#arenas:33_fjord/name'
     C_33_FJORD_DESCRIPTION = '#arenas:33_fjord/description'
+    C_33_FJORD_MB_NAME = '#arenas:33_fjord_mb/name'
+    C_33_FJORD_MB_DESCRIPTION = '#arenas:33_fjord_mb/description'
     C_34_REDSHIRE_NAME = '#arenas:34_redshire/name'
     C_34_REDSHIRE_DESCRIPTION = '#arenas:34_redshire/description'
     C_35_STEPPES_NAME = '#arenas:35_steppes/name'
     C_35_STEPPES_DESCRIPTION = '#arenas:35_steppes/description'
     C_36_FISHING_BAY_NAME = '#arenas:36_fishing_bay/name'
     C_36_FISHING_BAY_DESCRIPTION = '#arenas:36_fishing_bay/description'
+    C_36_FISHING_BAY_MB_NAME = '#arenas:36_fishing_bay_mb/name'
+    C_36_FISHING_BAY_MB_DESCRIPTION = '#arenas:36_fishing_bay_mb/description'
     C_37_CAUCASUS_NAME = '#arenas:37_caucasus/name'
     C_37_CAUCASUS_DESCRIPTION = '#arenas:37_caucasus/description'
     C_38_MANNERHEIM_LINE_NAME = '#arenas:38_mannerheim_line/name'
@@ -94,8 +100,12 @@ class ARENAS(object):
     C_19_MONASTERY_DESCRIPTION = '#arenas:19_monastery/description'
     C_23_WESTFELD_NAME = '#arenas:23_westfeld/name'
     C_23_WESTFELD_DESCRIPTION = '#arenas:23_westfeld/description'
+    C_23_WESTFELD_MB_NAME = '#arenas:23_westfeld_mb/name'
+    C_23_WESTFELD_MB_DESCRIPTION = '#arenas:23_westfeld_mb/description'
     C_28_DESERT_NAME = '#arenas:28_desert/name'
     C_28_DESERT_DESCRIPTION = '#arenas:28_desert/description'
+    C_28_DESERT_MB_NAME = '#arenas:28_desert_mb/name'
+    C_28_DESERT_MB_DESCRIPTION = '#arenas:28_desert_mb/description'
     C_29_EL_HALLOUF_NAME = '#arenas:29_el_hallouf/name'
     C_45_NORTH_AMERICA_NAME = '#arenas:45_north_america/name'
     C_45_NORTH_AMERICA_DESCRIPTION = '#arenas:45_north_america/description'
@@ -141,6 +151,8 @@ class ARENAS(object):
     C_83_KHARKIV_DESCRIPTION = '#arenas:83_kharkiv/description'
     C_209_WG_EPIC_SUBURBIA_NAME = '#arenas:209_wg_epic_suburbia/name'
     C_209_WG_EPIC_SUBURBIA_DESCRIPTION = '#arenas:209_wg_epic_suburbia/description'
+    C_105_GERMANY_SM24_NAME = '#arenas:105_germany_sm24/name'
+    C_105_GERMANY_SM24_DESCRIPTION = '#arenas:105_germany_sm24/description'
     C_105_GERMANY_NAME = '#arenas:105_germany/name'
     C_105_GERMANY_DESCRIPTION = '#arenas:105_germany/description'
     C_60_ASIA_MIAO_NAME = '#arenas:60_asia_miao/name'
@@ -152,6 +164,8 @@ class ARENAS(object):
     C_252_BR_BATTLE_CITY4_DESCRIPTION = '#arenas:252_br_battle_city4/description'
     C_128_LAST_FRONTIER_V_NAME = '#arenas:128_last_frontier_v/name'
     C_128_LAST_FRONTIER_V_DESCRIPTION = '#arenas:128_last_frontier_v/description'
+    C_128_LAST_FRONTIER_V_MB_NAME = '#arenas:128_last_frontier_v_mb/name'
+    C_128_LAST_FRONTIER_V_MB_DESCRIPTION = '#arenas:128_last_frontier_v_mb/description'
     C_108_NORMANDY_NOM_NAME = '#arenas:108_normandy_nom/name'
     C_108_NORMANDY_NOM_DESCRIPTION = '#arenas:108_normandy_nom/description'
     C_14_SIEGFRIED_LINE_NOM_NAME = '#arenas:14_siegfried_line_nom/name'
@@ -162,9 +176,8 @@ class ARENAS(object):
     TYPE_WINBACK_DESCRIPTION = '#arenas:type/winback/description'
     C_210_BF_EPIC_DESERT_NAME = '#arenas:210_bf_epic_desert/name'
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
-    C_14_SIEGFRIED_LINE_WT_NAME = '#arenas:14_siegfried_line_wt/name'
-    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
-    C_35_STEPPES_WT_NAME = '#arenas:35_steppes_wt/name'
+    C_08_RUINBERG_SM24_NAME = '#arenas:08_ruinberg_sm24/name'
+    C_08_RUINBERG_SM24_DESCRIPTION = '#arenas:08_ruinberg_sm24/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -227,6 +240,8 @@ class ARENAS(object):
      C_10_HILLS_DESCRIPTION,
      C_11_MUROVANKA_NAME,
      C_11_MUROVANKA_DESCRIPTION,
+     C_11_MUROVANKA_MB_NAME,
+     C_11_MUROVANKA_MB_DESCRIPTION,
      C_13_ERLENBERG_NAME,
      C_13_ERLENBERG_DESCRIPTION,
      C_14_SIEGFRIED_LINE_NAME,
@@ -240,12 +255,16 @@ class ARENAS(object):
      C_31_AIRFIELD_DESCRIPTION,
      C_33_FJORD_NAME,
      C_33_FJORD_DESCRIPTION,
+     C_33_FJORD_MB_NAME,
+     C_33_FJORD_MB_DESCRIPTION,
      C_34_REDSHIRE_NAME,
      C_34_REDSHIRE_DESCRIPTION,
      C_35_STEPPES_NAME,
      C_35_STEPPES_DESCRIPTION,
      C_36_FISHING_BAY_NAME,
      C_36_FISHING_BAY_DESCRIPTION,
+     C_36_FISHING_BAY_MB_NAME,
+     C_36_FISHING_BAY_MB_DESCRIPTION,
      C_37_CAUCASUS_NAME,
      C_37_CAUCASUS_DESCRIPTION,
      C_38_MANNERHEIM_LINE_NAME,
@@ -256,8 +275,12 @@ class ARENAS(object):
      C_19_MONASTERY_DESCRIPTION,
      C_23_WESTFELD_NAME,
      C_23_WESTFELD_DESCRIPTION,
+     C_23_WESTFELD_MB_NAME,
+     C_23_WESTFELD_MB_DESCRIPTION,
      C_28_DESERT_NAME,
      C_28_DESERT_DESCRIPTION,
+     C_28_DESERT_MB_NAME,
+     C_28_DESERT_MB_DESCRIPTION,
      C_29_EL_HALLOUF_NAME,
      C_45_NORTH_AMERICA_NAME,
      C_45_NORTH_AMERICA_DESCRIPTION,
@@ -303,6 +326,8 @@ class ARENAS(object):
      C_83_KHARKIV_DESCRIPTION,
      C_209_WG_EPIC_SUBURBIA_NAME,
      C_209_WG_EPIC_SUBURBIA_DESCRIPTION,
+     C_105_GERMANY_SM24_NAME,
+     C_105_GERMANY_SM24_DESCRIPTION,
      C_105_GERMANY_NAME,
      C_105_GERMANY_DESCRIPTION,
      C_60_ASIA_MIAO_NAME,
@@ -314,6 +339,8 @@ class ARENAS(object):
      C_252_BR_BATTLE_CITY4_DESCRIPTION,
      C_128_LAST_FRONTIER_V_NAME,
      C_128_LAST_FRONTIER_V_DESCRIPTION,
+     C_128_LAST_FRONTIER_V_MB_NAME,
+     C_128_LAST_FRONTIER_V_MB_DESCRIPTION,
      C_108_NORMANDY_NOM_NAME,
      C_108_NORMANDY_NOM_DESCRIPTION,
      C_14_SIEGFRIED_LINE_NOM_NAME,
@@ -324,9 +351,8 @@ class ARENAS(object):
      TYPE_WINBACK_DESCRIPTION,
      C_210_BF_EPIC_DESERT_NAME,
      C_210_BF_EPIC_DESERT_DESCRIPTION,
-     C_14_SIEGFRIED_LINE_WT_NAME,
-     C_34_REDSHIRE_WT_NAME,
-     C_35_STEPPES_WT_NAME)
+     C_08_RUINBERG_SM24_NAME,
+     C_08_RUINBERG_SM24_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

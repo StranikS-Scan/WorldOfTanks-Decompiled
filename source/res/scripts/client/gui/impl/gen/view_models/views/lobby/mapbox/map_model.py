@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class MapModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(MapModel, self).__init__(properties=properties, commands=commands)
 
     def getMapName(self):
@@ -32,29 +32,23 @@ class MapModel(ViewModel):
     def setMapSurveyPassed(self, value):
         self._setBool(3, value)
 
-    def getIsSurveyAvailable(self):
-        return self._getBool(4)
-
-    def setIsSurveyAvailable(self, value):
-        self._setBool(4, value)
-
     def getRating(self):
-        return self._getNumber(5)
+        return self._getNumber(4)
 
     def setRating(self, value):
-        self._setNumber(5, value)
+        self._setNumber(4, value)
 
     def getIsBubble(self):
-        return self._getBool(6)
+        return self._getBool(5)
 
     def setIsBubble(self, value):
-        self._setBool(6, value)
+        self._setBool(5, value)
 
     def getIsSpecial(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setIsSpecial(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def _initialize(self):
         super(MapModel, self)._initialize()
@@ -62,7 +56,6 @@ class MapModel(ViewModel):
         self._addNumberProperty('mapBattles', 0)
         self._addNumberProperty('mapBattlesPlayed', 0)
         self._addBoolProperty('mapSurveyPassed', False)
-        self._addBoolProperty('isSurveyAvailable', False)
         self._addNumberProperty('rating', 0)
         self._addBoolProperty('isBubble', False)
         self._addBoolProperty('isSpecial', False)

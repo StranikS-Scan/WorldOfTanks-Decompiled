@@ -95,6 +95,19 @@
       <min>	0.1	</min>
     </restrictions>
   </reloadTime>
+  <twinGunReloadTime>
+    <scope>	base cell client hangar	</scope>
+    <dataType>	float	</dataType>
+    <domain>	gun	</domain>
+    <client>
+      <domain>	damageDealing	</domain>
+      <physicalType>	seconds	</physicalType>
+      <useTypes>	val mul add	</useTypes>
+    </client>
+    <restrictions>
+      <min>	0.1	</min>
+    </restrictions>
+  </twinGunReloadTime>
   <clipInterval>
     <scope>	base cell client hangar	</scope>
     <dataType>	float	</dataType>

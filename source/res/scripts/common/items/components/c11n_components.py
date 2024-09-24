@@ -204,26 +204,51 @@ class PaintItem(BaseCustomizationItem):
                     continue
         return result
 
+class EmissionParams:
+    def __init__(self):
+        self.emissionTexture = ''
+        self.emissionDeferredPower = 1.0
+        self.emissionForwardPower = 1.0
+
 class DecalItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.DECAL
-    __slots__ = ('type', 'canBeMirrored')
+    __slots__ = ('type', 'canBeMirrored', 'emissionParams')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.type = 0
         self.canBeMirrored = False
+        self.emissionParams = EmissionParams()
         super(DecalItem, self).__init__(parentGroup)
+
+    def __deepcopy__(self, memodict = {}):
+        newItem = type(self)()
+        newItem.type = self.type
+        newItem.canBeMirrored = self.canBeMirrored
+        newItem.emissionParams = deepcopy(self.emissionParams)
+        super(DecalItem, self)._copy(newItem)
+        return newItem
 
 class ProjectionDecalItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.PROJECTION_DECAL
-    __slots__ = ('canBeMirroredHorizontally', 'glossTexture', 'scaleFactorId')
+    __slots__ = ('canBeMirroredHorizontally', 'glossTexture', 'scaleFactorId', 'emissionParams')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.canBeMirroredHorizontally = False
         self.glossTexture = ''
         self.scaleFactorId = DEFAULT_SCALE_FACTOR_ID
+        self.emissionParams = EmissionParams()
         super(ProjectionDecalItem, self).__init__(parentGroup)
+
+    def __deepcopy__(self, memodict = {}):
+        newItem = type(self)()
+        newItem.canBeMirroredHorizontally = self.canBeMirroredHorizontally
+        newItem.glossTexture = self.glossTexture
+        newItem.scaleFactorId = self.scaleFactorId
+        newItem.emissionParams = deepcopy(self.emissionParams)
+        super(ProjectionDecalItem, self)._copy(newItem)
+        return newItem
 
     @property
     def canBeMirroredVertically(self):
@@ -236,7 +261,7 @@ class ProjectionDecalItem(BaseCustomizationItem):
 class CamouflageItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.CAMOUFLAGE
-    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation', 'glossMetallicSettings', 'styleId')
+    __slots__ = ('palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation', 'glossMetallicSettings', 'styleId', 'emissionParams')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     def __init__(self, parentGroup = None):
         self.compatibleParts = ApplyArea.CAMOUFLAGE_REGIONS_VALUE
@@ -249,6 +274,7 @@ class CamouflageItem(BaseCustomizationItem):
         self.scales = (1.2, 1.0, 0.7)
         self.glossMetallicSettings = {'glossMetallicMap': '', 'gloss': Math.Vector4(0.0), 'metallic': Math.Vector4(0.0)}
         self.styleId = None
+        self.emissionParams = EmissionParams()
         super(CamouflageItem, self).__init__(parentGroup)
 
     def __deepcopy__(self, memodict = {}):
@@ -261,6 +287,9 @@ class CamouflageItem(BaseCustomizationItem):
         newItem.tiling = deepcopy(self.tiling)
         newItem.tilingSettings = deepcopy(self.tilingSettings)
         newItem.scales = self.scales
+        newItem.glossMetallicSettings = deepcopy(self.glossMetallicSettings)
+        newItem.styleId = self.styleId
+        newItem.emissionParams = deepcopy(self.emissionParams)
         super(CamouflageItem, self)._copy(newItem)
         return newItem
 
@@ -506,7 +535,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.FONT: Font}
+    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.DECAL: DecalItem, CustomizationType.FONT: Font, CustomizationType.INSIGNIA: InsigniaItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -738,7 +767,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.SEQUENCE: self.sequences, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias, CustomizationType.STYLE: self.styles, CustomizationType.DECAL: self.decals, CustomizationType.MODIFICATION: self.modifications, CustomizationType.CAMOUFLAGE: self.camouflages}
+        self.itemTypes = {CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.MODIFICATION: self.modifications, CustomizationType.DECAL: self.decals, CustomizationType.PAINT: self.paints, CustomizationType.STYLE: self.styles, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.SEQUENCE: self.sequences, CustomizationType.PERSONAL_NUMBER: self.personal_numbers}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
@@ -1142,7 +1171,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

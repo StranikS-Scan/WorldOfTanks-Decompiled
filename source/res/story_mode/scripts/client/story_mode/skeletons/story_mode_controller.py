@@ -6,6 +6,7 @@ if typing.TYPE_CHECKING:
     from story_mode_common.configs.story_mode_missions import MissionsModel, MissionModel
     from story_mode_common.configs.story_mode_settings import SettingsModel
     from Event import Event
+    from story_mode_common.story_mode_constants import MissionType
 
 class IStoryModeController(IGameController):
     onSyncDataUpdated = None
@@ -58,10 +59,6 @@ class IStoryModeController(IGameController):
     def needToShowAward(self):
         raise NotImplementedError
 
-    @property
-    def isSelectedMissionEvent(self):
-        raise NotImplementedError
-
     def popMissionProgressDiff(self, missionId):
         raise NotImplementedError
 
@@ -69,6 +66,18 @@ class IStoryModeController(IGameController):
         raise NotImplementedError
 
     def isMissionCompleted(self, missionId):
+        raise NotImplementedError
+
+    def isEventMissionSuitable(self, mission):
+        raise NotImplementedError
+
+    def isFirstTaskNotCompleted(self, mission):
+        raise NotImplementedError
+
+    def isAnyTaskNotCompleted(self, mission):
+        raise NotImplementedError
+
+    def isSelectedMissionLocked(self):
         raise NotImplementedError
 
     def getNextMission(self, missionId):
@@ -105,6 +114,18 @@ class IStoryModeController(IGameController):
         raise NotImplementedError
 
     def isMissionTaskCompleted(self, missionId, taskId):
+        raise NotImplementedError
+
+    def filterMissions(self, missionType=None):
+        raise NotImplementedError
+
+    def isNewbieGuidanceNeeded(self):
+        raise NotImplementedError
+
+    def isNewNeededForNewbies(self):
+        raise NotImplementedError
+
+    def setNewForNewbiesSeen(self):
         raise NotImplementedError
 
     def chooseSelectedMissionId(self, isEvent=False):

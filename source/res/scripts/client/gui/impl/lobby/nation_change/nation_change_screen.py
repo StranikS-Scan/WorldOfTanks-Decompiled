@@ -164,7 +164,7 @@ class NationChangeScreen(ViewImpl):
         crew = sortCrew(guiVh.crew, roles)
         skillsConfig = getSkillsConfig()
         isDogInCrew = 'dog' in guiVh.tags
-        iconsSmall = self.__icons.tankmen.icons.small
+        iconsSmall = self.__icons.tankmen.icons.barracks
         for slotIdx, tankman in crew:
             tankmanVM = NationChangeTankmanModel()
             if tankman is not None:
@@ -176,7 +176,7 @@ class NationChangeScreen(ViewImpl):
                 tankmanVM.setInvID(tankman.invID)
             else:
                 role = roles[slotIdx][0]
-                tankmanVM.setImage(self.__icons.tankmen.icons.small.silhouette_mask())
+                tankmanVM.setImage(self.__icons.tankmen.icons.barracks.silhouette_mask())
                 tankmanVM.setIsSimpleTooltip(True)
                 tankmanVM.setSimpleTooltipHeader(convert(skillsConfig.getSkill(role).userString))
                 tankmanVM.setSimpleTooltipBody(guiVh.longUserName)

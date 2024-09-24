@@ -7,7 +7,6 @@
     <ap_npd>	ARMOR_PIERCING_NPD.png 0 0	</ap_npd>
     <ap_cr_npd>	ARMOR_PIERCING_CR_NPD.png 0 0	</ap_cr_npd>
     <ap_cr_premium_npd>	ARMOR_PIERCING_CR_NPD_PREMIUM.png 0 0	</ap_cr_premium_npd>
-    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -1897,6 +1896,63 @@
       </damage>
     </armorSpalls>
   </_105mm_HE_OE_F1>
+  <_105mm_APCR_OFL_105>
+    <id>	191	</id>
+    <userString>	#france_vehicles:_105mm_APCR_OFL_105	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_APCR_OFL_105>
+  <_105mm_HEAT_OCC_105>
+    <id>	192	</id>
+    <userString>	#france_vehicles:_105mm_HEAT_OCC_105	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_105mm_HEAT_OCC_105>
+  <_105mm_HE_OE_105_Mle_60_D>
+    <id>	193	</id>
+    <userString>	#france_vehicles:_105mm_HE_OE_105_Mle_60_D	</userString>
+    <icon>	he_modern	</icon>
+    <price>	680	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_OE_105_Mle_60_D>
   <_105mm_APCR_OFL_105E3>
     <id>	154	</id>
     <userString>	#france_vehicles:_105mm_APCR_OFL_105E3	</userString>
@@ -2757,26 +2813,6 @@
     <normalizationAngle>	5	</normalizationAngle>
     <ricochetAngle>	70	</ricochetAngle>
   </Development_Shell>
-  <_105mm_APCR_OFL_E1_WT>
-    <id>	1001	</id>
-    <userString>	#france_vehicles:_105mm_APCR_OFL_E1_WT	</userString>
-    <description>	#france_vehicles:_105mm_APCR_OFL_E1_WT_descr	</description>
-    <shortDescriptionSpecial>	#france_vehicles:_105mm_APCR_OFL_E1_WT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#france_vehicles:_105mm_APCR_OFL_E1_WT_long_special	</longDescriptionSpecial>
-    <icon>	ap_wt	</icon>
-    <price>	1200	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	105	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	150	</devices>
-    </damage>
-    <normalizationAngle>	2	</normalizationAngle>
-    <ricochetAngle>	70	</ricochetAngle>
-  </_105mm_APCR_OFL_E1_WT>
   <_105mm_OCO_mle._1936_SH>
     <id>	265	</id>
     <userString>	#france_vehicles:_105mm_OCO_mle._1936_SH	</userString>

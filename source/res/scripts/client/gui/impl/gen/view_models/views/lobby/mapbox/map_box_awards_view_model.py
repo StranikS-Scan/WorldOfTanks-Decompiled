@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/mapbox/map_box_awards_view_model.py
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
-from gui.impl.gen.view_models.views.lobby.mapbox.reward_item_model import RewardItemModel
+from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 
 class MapBoxAwardsViewModel(ViewModel):
-    __slots__ = ('onPick',)
+    __slots__ = ()
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=2, commands=0):
         super(MapBoxAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -16,7 +16,7 @@ class MapBoxAwardsViewModel(ViewModel):
 
     @staticmethod
     def getRewardsType():
-        return RewardItemModel
+        return IconBonusModel
 
     def getBattlesNumber(self):
         return self._getNumber(1)
@@ -28,4 +28,3 @@ class MapBoxAwardsViewModel(ViewModel):
         super(MapBoxAwardsViewModel, self)._initialize()
         self._addViewModelProperty('rewards', UserListModel())
         self._addNumberProperty('battlesNumber', 0)
-        self.onPick = self._addCommand('onPick')

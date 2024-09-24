@@ -9,3 +9,9 @@ class IHangarCameraSounds(object):
 
     def fini(self):
         raise NotImplementedError
+
+    def playMotionToObject(self):
+        raise NotImplementedError
+
+    def playMotionToMain(self):
+        raise NotImplementedError

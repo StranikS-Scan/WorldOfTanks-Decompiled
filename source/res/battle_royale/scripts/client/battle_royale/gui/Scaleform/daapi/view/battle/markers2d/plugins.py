@@ -5,7 +5,7 @@ from collections import defaultdict
 import BattleReplay
 from AvatarInputHandler import aih_global_binding
 from aih_constants import CTRL_MODE_NAME
-from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin
+from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import VehicleMarkerTargetPlugin, settings as commonSettings
 from items.battle_royale import isSpawnedBot, isHunterBot
 import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import settings
@@ -14,7 +14,7 @@ from cgf_components.zone_components import avatar_getter
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import VehicleMarkerPlugin
 from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_VIEW_STATE, PLAYER_GUI_PROPS
 from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -185,6 +185,15 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         if avatar_getter.isVehiclesColorized() and not isBot:
             entryName = 'team{}'.format(vInfo.team)
         return entryName
+
+    def _getVehicleDamageType(self, attackerInfo, targetID):
+        if attackerInfo:
+            attackerID = attackerInfo.vehicleID
+            if attackerID not in (targetID, self._playerVehicleID):
+                entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
+                if entityName == PLAYER_GUI_PROPS.ally and not isSpawnedBot(attackerInfo.vehicleType.tags):
+                    return commonSettings.DamageType.FROM_SQUAD
+        super(BattleRoyaleVehicleMarkerPlugin, self)._getVehicleDamageType(attackerInfo, targetID)
 
     def __statusInActive(self, vehicleID, statusID):
         for status, _ in self.__markersStatesExtended[vehicleID]:

@@ -17,7 +17,6 @@
     <explosionDamageFactor>	0.5	</explosionDamageFactor>
     <explosionDamageAbsorptionFactor>	1.3	</explosionDamageAbsorptionFactor>
     <explosionEdgeDamageFactor>	0.05	</explosionEdgeDamageFactor>
-    <explosionDisableDamageFalloff>	0.0	</explosionDisableDamageFalloff>
     <shellFragmentsDamageAbsorptionFactor>	1.3	</shellFragmentsDamageAbsorptionFactor>
     <collisionEffectVelocities>
       <hull>	1.4 4.5	</hull>
@@ -97,6 +96,7 @@
     </pull>
   </defaultTurretDetachmentEffects>
   <extras>
+    <undefined>	NoneExtra : NoneExtra	</undefined>
     <attributeModifier>	NoneExtra : AttributeModifier	</attributeModifier>
     <improvedConfigurationBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedConfigurationBattleBooster>
     <improvedVentilationBattleBooster>	NoneExtra : BattleBoosterForOptionalDevice	</improvedVentilationBattleBooster>
@@ -112,10 +112,8 @@
     <virtuosoBattleBooster>	NoneExtra : BattleBoosterForPerk	</virtuosoBattleBooster>
     <smoothDrivingBattleBooster>	NoneExtra : BattleBoosterForPerk	</smoothDrivingBattleBooster>
     <fireFightingBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</fireFightingBattleBooster>
-    <sixthSenseBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</sixthSenseBattleBooster>
     <rancorousBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</rancorousBattleBooster>
     <pedantBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</pedantBattleBooster>
-    <lastEffortBattleBooster>	NoneExtra : BattleBoosterForCrewSkill	</lastEffortBattleBooster>
     <practicalityBattleBooster>	NoneExtra : BattleBoosterForPerk	</practicalityBattleBooster>
     <enemyShotPredictorBattleBooster>	NoneExtra: BattleBoosterForPerk	</enemyShotPredictorBattleBooster>
     <shoot>	ShowShooting : Shoot	</shoot>
@@ -174,18 +172,6 @@
     <afterburning>	NoneExtra : Afterburning	</afterburning>
     <exampleAbility>	NoneExtra : VisualScriptEquipmentExtra	</exampleAbility>
     <poi_radar>	NoneExtra : VisualScriptEquipmentExtra	</poi_radar>
-    <builtinAfterburning_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinAfterburning_wt>
-    <builtinImpulse_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinImpulse_wt>
-    <builtinLargeMedkit_wt>	NoneExtra : Repairkit	</builtinLargeMedkit_wt>
-    <builtinRepairkit_wt>	NoneExtra : Repairkit	</builtinRepairkit_wt>
-    <builtinInstantStunShoot_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinInstantStunShoot_wt>
-    <builtinShield_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinShield_wt>
-    <builtinSelfRepair_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinSelfRepair_wt>
-    <builtinStronghold_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinStronghold_wt>
-    <builtinChargedShot_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinChargedShot_wt>
-    <builtinExplosiveShot_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinExplosiveShot_wt>
-    <builtinTeleport_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinTeleport_wt>
-    <builtinHyperion_wt>	NoneExtra : VisualScriptEquipmentExtra	</builtinHyperion_wt>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>

@@ -15,7 +15,6 @@ class AreaMarkersController(BaseMarkerController):
         super(AreaMarkersController, self).__init__()
         self._battleCtx = None
         self._arenaVisitor = None
-        self._prevGlobalVisibility = None
         return
 
     def startControl(self, battleCtx, arenaVisitor):
@@ -55,11 +54,6 @@ class AreaMarkersController(BaseMarkerController):
                     continue
                 marker.setVisible(self._globalVisibility)
                 marker.update(int(max(0, distanceToArea)))
-                if self._prevGlobalVisibility != self._globalVisibility:
-                    self._prevGlobalVisibility = self._globalVisibility
-                    marker.setVisible(self._globalVisibility)
-                if marker.isVisible:
-                    marker.update(int(round(max(0, distanceToArea))))
 
             return
 

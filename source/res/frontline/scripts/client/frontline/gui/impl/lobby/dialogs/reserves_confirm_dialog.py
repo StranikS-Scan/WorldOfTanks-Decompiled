@@ -14,33 +14,37 @@ from uilogging.epic_battle.loggers import EpicBattleLogger
 
 class ReservesConfirmDialog(DialogTemplateView):
     __epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __slots__ = ('__skillIds', '__vehicleType', '__applyForAllOfType', '__isBuy', '__isCloseButtonClicked', '__uiEpicBattleLogger')
+    __slots__ = ('__skillsInteractor', '__vehicleType', '__isBuy', '__isCloseButtonClicked', '__uiEpicBattleLogger')
     LAYOUT_ID = R.views.frontline.lobby.dialogs.ReservesConfirmDialog()
     VIEW_MODEL = ReservesConfirmDialogModel
 
-    def __init__(self, skillIds, vehicleType='', applyForAllOfType=False, isBuy=True):
+    def __init__(self, skillsInteractor, vehicleType='', isBuy=True):
         super(ReservesConfirmDialog, self).__init__()
-        self.__skillIds = skillIds
+        self.__skillsInteractor = skillsInteractor
         self.__vehicleType = vehicleType
-        self.__applyForAllOfType = applyForAllOfType
         self.__isBuy = isBuy
         self.__uiEpicBattleLogger = EpicBattleLogger()
         self.__isCloseButtonClicked = False
 
     def _onLoading(self, *args, **kwargs):
-        btnLabel = R.strings.fl_dialogs.confirm.btn
         self.setDisplayFlags(DisplayFlags.RESPONSIVEHEADER.value)
-        self.addButton(ConfirmButton(btnLabel.buy() if self.__isBuy else btnLabel.install()))
+        self.addButton(ConfirmButton())
         self.addButton(CancelButton())
+        self._setConfirmBtnLabel()
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.OPEN.value, item=EpicBattleLogKeys.ABILITIES_CONFIRM.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
         self._fillViewModel()
         super(ReservesConfirmDialog, self)._onLoading(*args, **kwargs)
 
+    def _getEvents(self):
+        return ((self.viewModel.onCheckBoxClick, self._onCheckBoxClick),)
+
     def _fillViewModel(self):
         with self.viewModel.transaction() as vm:
             price = 0
-            isMultipleReserves = len(self.__skillIds) > 1
-            mainText = R.strings.fl_dialogs.confirm.title
+            epicSkills = self.__epicMetaGameCtrl.getEpicSkills()
+            skills = [ epicSkills[item.innationID] for item in self.__skillsInteractor.getChangedList() ]
+            skillIds = [ skill.skillID for skill in skills if not self.__isBuy or not skill.isActivated ]
+            isMultipleReserves = len(skillIds) > 1
             orderedSkillsData = self.__epicMetaGameCtrl.getGroupedSkills()
             icons = vm.getIcons()
             names = vm.getNames()
@@ -48,7 +52,7 @@ class ReservesConfirmDialog(DialogTemplateView):
             names.clear()
             for _, categorySkills in orderedSkillsData:
                 for skill in categorySkills:
-                    if skill.skillID in self.__skillIds:
+                    if skill.skillID in skillIds:
                         price = price + skill.price
                         skillInfo = skill.getSkillInfo()
                         icons.addString(skillInfo.icon)
@@ -57,21 +61,31 @@ class ReservesConfirmDialog(DialogTemplateView):
                             vm.setSelectedSkillName(skill.getSkillInfo().name)
                         break
 
-            if self.__isBuy:
-                mainText = mainText.buy
-            else:
-                mainText = mainText.install
-                if self.__applyForAllOfType:
-                    mainText = mainText.forAllOfType
+            vm.setIsTypeSelected(self.__skillsInteractor.getCheckboxState())
             vm.setPrice(price)
             vm.setIsBuy(self.__isBuy)
             vm.setIsMultipleReserves(isMultipleReserves)
             vm.setVehicleType(self.__vehicleType)
             vm.setBonus(self.__epicMetaGameCtrl.getRandomReservesBonusProbability())
-            vm.setTitleText(backport.text(mainText.items() if isMultipleReserves else mainText.item()))
 
     def _getAdditionalData(self):
-        return {'rollBack': not self.__isCloseButtonClicked}
+        return {'rollBack': not self.__isCloseButtonClicked,
+         'applyForAllOfType': self.__skillsInteractor.getCheckboxState()}
+
+    def _onCheckBoxClick(self, *_):
+        state = not self.viewModel.getIsTypeSelected()
+        self.__skillsInteractor.setCheckboxState(state)
+        self._fillViewModel()
+        self._setConfirmBtnLabel()
+
+    def _setConfirmBtnLabel(self):
+        btnLabelPrefix = R.strings.fl_dialogs.confirm.btn
+        btnLabel = btnLabelPrefix.install()
+        if self.__isBuy:
+            btnLabel = btnLabelPrefix.buy()
+            if self.viewModel.getIsTypeSelected():
+                btnLabel = btnLabelPrefix.buyAndMount()
+        self.getButton(DialogButtons.SUBMIT).label = btnLabel
 
     def _closeClickHandler(self, _=None):
         self.__isCloseButtonClicked = True

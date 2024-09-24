@@ -6,14 +6,14 @@ import math
 import typing
 import sys
 from constants import BonusTypes
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isAutoShootGun, isDualGun, isDualAccuracy
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isAutoShootGun, isDualGun, isDualAccuracy, isTwinGun
 from gui.shared.items_parameters import xml_reader
 from gui.shared.utils.decorators import debugTime
 import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
-from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT
+from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_TWIN_GUN, GUN_CAN_BE_TWIN_GUN
 from post_progression_common import ACTION_TYPES
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -64,6 +64,7 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
  'autoReloadVehicles',
  'autoShootVehicles',
  'dualGunVehicles',
+ 'twinGunVehicles',
  'dualAccuracyVehicles',
  'params',
  'turretsByVehicles'))):
@@ -89,6 +90,8 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
                 reloadingType = GUN_CAN_BE_CLIP
             elif self.dualGunVehicles:
                 reloadingType = GUN_CAN_BE_DUAL_GUN
+            elif self.twinGunVehicles:
+                reloadingType = GUN_CAN_BE_TWIN_GUN
         elif self.autoReloadVehicles and vehicleCD in self.autoReloadVehicles:
             reloadingType = GUN_AUTO_RELOAD
         elif self.autoShootVehicles and vehicleCD in self.autoShootVehicles:
@@ -97,6 +100,8 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
             reloadingType = GUN_CLIP
         elif self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
             reloadingType = GUN_DUAL_GUN
+        elif self.twinGunVehicles and vehicleCD in self.twinGunVehicles:
+            reloadingType = GUN_TWIN_GUN
         return reloadingType
 
     def getTurretsForVehicle(self, vehicleCD):
@@ -328,6 +333,7 @@ class _ParamsCache(object):
                 autoShootVehsList = set()
                 dualGunVehsList = set()
                 dualAccuracyVehsList = set()
+                twinGunVehsList = set()
                 for vDescr in vehiclesCache.generator(nationIdx):
                     del curVehicleTurretsCDs[:]
                     vehCD = vDescr.type.compactDescr
@@ -348,11 +354,13 @@ class _ParamsCache(object):
                                         dualGunVehsList.add(vehCD)
                                     if isDualAccuracy(gun):
                                         dualAccuracyVehsList.add(vehCD)
+                                    if isTwinGun(gun):
+                                        twinGunVehsList.add(vehCD)
 
                     if curVehicleTurretsCDs:
                         turretsIntCDs[vDescr.type.compactDescr] = tuple(curVehicleTurretsCDs)
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, autoShootVehicles=frozenset(autoShootVehsList) if autoShootVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, dualAccuracyVehicles=frozenset(dualAccuracyVehsList) if dualAccuracyVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, autoShootVehicles=frozenset(autoShootVehsList) if autoShootVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, dualAccuracyVehicles=frozenset(dualAccuracyVehsList) if dualAccuracyVehsList else None, twinGunVehicles=frozenset(twinGunVehsList) if twinGunVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
         return
 

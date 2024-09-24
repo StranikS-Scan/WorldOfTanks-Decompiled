@@ -69,24 +69,6 @@ class SafeEvent(Event):
                 LOG_CURRENT_EXCEPTION()
 
 
-class HoldBackEvent(Event):
-    __slots__ = ('__isHoldBack',)
-
-    def __init__(self, manager=None):
-        super(HoldBackEvent, self).__init__(manager)
-        self.__isHoldBack = False
-
-    def halt(self):
-        self.__isHoldBack = True
-
-    def proceed(self):
-        self.__isHoldBack = False
-
-    def __call__(self, *args, **kwargs):
-        if not self.__isHoldBack:
-            super(HoldBackEvent, self).__call__(*args, **kwargs)
-
-
 class Handler(object):
     __slots__ = ('__delegate',)
 

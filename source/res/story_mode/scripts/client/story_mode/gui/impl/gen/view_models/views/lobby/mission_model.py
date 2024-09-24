@@ -12,7 +12,7 @@ class MissionsDifficulty(Enum):
 class MissionModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(MissionModel, self).__init__(properties=properties, commands=commands)
 
     def getMissionId(self):
@@ -33,15 +33,22 @@ class MissionModel(ViewModel):
     def setIsCompleted(self, value):
         self._setBool(2, value)
 
+    def getLocked(self):
+        return self._getBool(3)
+
+    def setLocked(self, value):
+        self._setBool(3, value)
+
     def getDifficulty(self):
-        return MissionsDifficulty(self._getString(3))
+        return MissionsDifficulty(self._getString(4))
 
     def setDifficulty(self, value):
-        self._setString(3, value.value)
+        self._setString(4, value.value)
 
     def _initialize(self):
         super(MissionModel, self)._initialize()
         self._addNumberProperty('missionId', 0)
         self._addStringProperty('displayName', '')
         self._addBoolProperty('isCompleted', False)
+        self._addBoolProperty('locked', False)
         self._addStringProperty('difficulty')

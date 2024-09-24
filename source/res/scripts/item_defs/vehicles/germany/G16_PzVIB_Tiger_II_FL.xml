@@ -1504,14 +1504,14 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelRight>
           <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
           <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
           <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
           <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
           <segmentLength>	0.29	</segmentLength>
-          <segmentOffset>	0.058	</segmentOffset>
+          <segmentOffset>	0.25	</segmentOffset>
           <segment2Offset>	0.142	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -1541,7 +1541,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
             <length>	0.146335	</length>
           </mainSegment>
           <secSegment>
@@ -1549,7 +1549,6 @@
             <length>	0.148016	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -1735,7 +1734,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
             <length>	0.149904	</length>
           </mainSegment>
           <secSegment>
@@ -1743,7 +1742,6 @@
             <length>	0.137683	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>

@@ -29,10 +29,11 @@ class DeathZonesController(IArenaLoadController):
         elif zoneId in self.__timersData:
             self.__timersData.pop(zoneId)
         player = BigWorld.player()
-        if player is None:
+        vehicle = player.vehicle if player else None
+        if not vehicle:
             return
         else:
-            if self.__timersData:
+            if self.__timersData and vehicle.isAlive():
                 closestStrikeData = min(self.__timersData.itervalues(), key=lambda timersData: timersData.timeToStrike)
                 if closestStrikeData.timeToStrike != self.__timeToStrikeInCurrentNotification:
                     player.updateDeathZoneWarningNotification(True, not self.__playerEnterZone, closestStrikeData.timeToStrike, closestStrikeData.waveDuration)

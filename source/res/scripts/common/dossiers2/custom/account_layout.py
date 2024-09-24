@@ -305,7 +305,8 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wt2023MaxPlasma',
  'wt2024HunterWins',
  'wt2024BossWins',
- 'wt2024HunterWinsEpic']
+ 'wt2024HunterWinsEpic',
+ 'mapboxClimateExpert']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -470,7 +471,8 @@ _achievements15x15PopUps = ['warrior',
  'wt2023MaxPlasma',
  'wt2024HunterWins',
  'wt2024BossWins',
- 'wt2024HunterWinsEpic']
+ 'wt2024HunterWinsEpic',
+ 'mapboxClimateExpert']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',

@@ -5,6 +5,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import CrewPerksTooltipModel
 from gui.impl.pub import ViewImpl
+from gui.shared.gui_items.Tankman import COMMANDER_BONUS
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from items.components.skills_constants import SkillTypeName
@@ -32,8 +33,8 @@ class CommanderBonusTooltip(ViewImpl):
 
     def _fillModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setIcon(backport.image(R.images.gui.maps.icons.tankmen.skills.big.commander_bonus()))
-            vm.setTitle(backport.text(R.strings.tooltips.commanderBonus.name()))
+            vm.setIconName(COMMANDER_BONUS)
+            vm.setUserName(backport.text(R.strings.tooltips.commanderBonus.name()))
             vm.setSkillType(SkillTypeName.COMMANDER_SPECIAL)
             vm.setIsAdvancedTooltipEnable(True)
             commanderBonus = int(self._tankman.vehicleBonuses.get('commander', 10) if self._tankman else DEF_COMMANDER_BONUS)

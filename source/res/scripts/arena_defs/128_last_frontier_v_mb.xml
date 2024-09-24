@@ -1,0 +1,63 @@
+<128_last_frontier_v_mb.xml>
+  <name>	#arenas:128_last_frontier_v_mb/name	</name>
+  <description>	#arenas:128_last_frontier_v_mb/description	</description>
+  <geometry>	spaces/128_last_frontier_v_mb	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -600.000000	</bottomLeft>
+    <upperRight>	600.000000 400.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/128_last_frontier_v_mb/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	mmap_128_ls_fog01	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/128_last_frontier_v_mb/mmap_128_ls_fog01.dds	</path>
+    </layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_last_frontier_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_last_frontier_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_last_frontier_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_last_frontier_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_last_frontier_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_last_frontier_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	map_box_battle.bnk	</name>
+      </bank>
+      <bank>
+        <name>	map_box_battle.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	333.301971 177.748627	</position1>
+        </team1>
+        <team2>
+          <position1>	-198.579941 -275.586884	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</128_last_frontier_v_mb.xml>

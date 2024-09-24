@@ -304,8 +304,3 @@ class SpecBattlePresetsGetter(DefaultPresetsGetter):
 
     def _getQuestFlagsGetter(self):
         return self._GUI_TYPE_TO_SETTINGS.get(self._guiType, self._DEFAULT_GUI_SETTINGS).flagsGetter
-
-
-class WtEventPresetsGetter(DefaultPresetsGetter):
-    __slots__ = ()
-    _QUEUE_TYPE = QUEUE_TYPE.EVENT_BATTLES

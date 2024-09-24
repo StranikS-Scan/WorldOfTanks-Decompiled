@@ -20,7 +20,6 @@ class CONTAINER_NAME(object):
     ZONES = 'zones'
     PROTECTION_ZONE = 'landingZone'
     HQS = 'hqs'
-    WT_DEPLOY = 'deploymentPoints'
 
 
 class ENTRY_SYMBOL_NAME(object):

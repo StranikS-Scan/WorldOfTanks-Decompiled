@@ -4,9 +4,9 @@ from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.dialogs.dialog_template_view_model import DialogTemplateViewModel
 
 class ReservesConfirmDialogModel(DialogTemplateViewModel):
-    __slots__ = ()
+    __slots__ = ('onCheckBoxClick',)
 
-    def __init__(self, properties=15, commands=2):
+    def __init__(self, properties=15, commands=3):
         super(ReservesConfirmDialogModel, self).__init__(properties=properties, commands=commands)
 
     def getPrice(self):
@@ -33,11 +33,11 @@ class ReservesConfirmDialogModel(DialogTemplateViewModel):
     def setIsMultipleReserves(self, value):
         self._setBool(9, value)
 
-    def getTitleText(self):
-        return self._getString(10)
+    def getIsTypeSelected(self):
+        return self._getBool(10)
 
-    def setTitleText(self, value):
-        self._setString(10, value)
+    def setIsTypeSelected(self, value):
+        self._setBool(10, value)
 
     def getSelectedSkillName(self):
         return self._getString(11)
@@ -77,8 +77,9 @@ class ReservesConfirmDialogModel(DialogTemplateViewModel):
         self._addNumberProperty('bonus', 0)
         self._addBoolProperty('isBuy', False)
         self._addBoolProperty('isMultipleReserves', False)
-        self._addStringProperty('titleText', '')
+        self._addBoolProperty('isTypeSelected', False)
         self._addStringProperty('selectedSkillName', '')
         self._addStringProperty('vehicleType', '')
         self._addArrayProperty('icons', Array())
         self._addArrayProperty('names', Array())
+        self.onCheckBoxClick = self._addCommand('onCheckBoxClick')

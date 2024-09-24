@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/comp7_prebattle_setup_ctrl.py
 import logging
+import typing
 import BigWorld
 import CGF
 import GenericComponents
@@ -15,8 +16,11 @@ from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.gui_vehicle_builder import VehicleBuilder
 from gui.veh_post_progression.sounds import playSound, Sounds
 from helpers import dependency
+from post_progression_common import TankSetups
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from skeletons.gui.battle_session import IBattleSessionProvider
+if typing.TYPE_CHECKING:
+    from typing import Dict
 _logger = logging.getLogger(__name__)
 
 class _SceneController(object):
@@ -128,11 +132,20 @@ class Comp7PrebattleSetupController(IComp7PrebattleSetupController):
         switchComponent = avatar_getter.getInBattleVehicleSwitchComponent()
         return switchComponent.vehicleSpawnList if switchComponent else []
 
+    def _updatePreBattleSetup(self, vehicleInfo):
+        setups = vehicleInfo['vehSetups'].copy()
+        if TankSetups.SHELLS in setups and not isinstance(setups[TankSetups.SHELLS], dict):
+            shellsLayoutKey = (self.__guiVehicle.turret.intCD, self.__guiVehicle.gun.intCD)
+            setups[TankSetups.SHELLS] = {shellsLayoutKey: setups[TankSetups.SHELLS]}
+        self.__sessionProvider.shared.prebattleSetups.setInvData(setups)
+        self.__sessionProvider.shared.prebattleSetups.updateLayoutIndexes(vehicleInfo['vehSetupsIndexes'])
+
     def updateVehicleInfo(self, vehicleInfo):
         if vehicleInfo is not None and self.__currentArenaPeriod < ARENA_PERIOD.BATTLE and self.__started:
             prevSetups = self.__guiVehicle.setupLayouts.groups if self.__guiVehicle else None
             prevCD = self.__guiVehicle.intCD if self.__guiVehicle else None
             self.__guiVehicle = self.__makeGUIVehicle(vehicleInfo)
+            self._updatePreBattleSetup(vehicleInfo)
             if prevSetups != self.__guiVehicle.setupLayouts.groups or prevCD != self.__guiVehicle.intCD:
                 if prevCD == self.__guiVehicle.intCD:
                     self.__sessionProvider.shared.ammo.updateForNewSetup(self.__guiVehicle.descriptor.gun, self.__guiVehicle.shells.installed.getItems())

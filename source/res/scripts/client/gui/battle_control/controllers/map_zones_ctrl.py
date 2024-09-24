@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/map_zones_ctrl.py
 import Event
 import SoundGroups
-from cgf_components.zone_components import ZoneUINotificationType
+from cgf_components.zone_components import RandomEventZoneUINotificationType, WeatherZoneUINotificationType
 from gui.battle_control.arena_info.interfaces import IMapZonesController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, VEHICLE_VIEW_STATE, DestroyTimerViewState, TIMER_VIEW_STATE
 from helpers import dependency
@@ -15,9 +15,16 @@ class SoundNotifications(object):
     DANGER_ZONE_EXIT = 'dstrct_death_zone_exit'
 
 
-_notificationMapping = {ZoneUINotificationType.WARNING_ZONE: (VEHICLE_VIEW_STATE.WARNING_ZONE, TIMER_VIEW_STATE.WARNING),
- ZoneUINotificationType.DANGER_ZONE: (VEHICLE_VIEW_STATE.DANGER_ZONE, TIMER_VIEW_STATE.CRITICAL),
- ZoneUINotificationType.MAP_DEATH_ZONE: (VEHICLE_VIEW_STATE.MAP_DEATH_ZONE, TIMER_VIEW_STATE.WARNING)}
+_randomEventsNotificationMapping = {RandomEventZoneUINotificationType.WARNING_ZONE: (VEHICLE_VIEW_STATE.WARNING_ZONE, TIMER_VIEW_STATE.WARNING),
+ RandomEventZoneUINotificationType.DANGER_ZONE: (VEHICLE_VIEW_STATE.DANGER_ZONE, TIMER_VIEW_STATE.CRITICAL),
+ RandomEventZoneUINotificationType.MAP_DEATH_ZONE: (VEHICLE_VIEW_STATE.MAP_DEATH_ZONE, TIMER_VIEW_STATE.WARNING)}
+_weatherNotificationMapping = {WeatherZoneUINotificationType.BLIZZARD_ZONE: (VEHICLE_VIEW_STATE.BLIZZARD_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.FIRE_ZONE: (VEHICLE_VIEW_STATE.FIRE_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.FOG_ZONE: (VEHICLE_VIEW_STATE.FOG_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.RAIN_ZONE: (VEHICLE_VIEW_STATE.RAIN_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.SANDSTORM_ZONE: (VEHICLE_VIEW_STATE.SANDSTORM_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.SMOKE_ZONE: (VEHICLE_VIEW_STATE.SMOKE_ZONE, TIMER_VIEW_STATE.WARNING),
+ WeatherZoneUINotificationType.TORNADO_ZONE: (VEHICLE_VIEW_STATE.TORNADO_ZONE, TIMER_VIEW_STATE.WARNING)}
 
 class MapZonesController(IMapZonesController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -30,7 +37,8 @@ class MapZonesController(IMapZonesController):
         self.onMarkerProgressUpdated = Event.Event(self.__eManager)
         self.onZoneTransformed = Event.Event(self.__eManager)
         self.onTransformedZoneRemoved = Event.Event(self.__eManager)
-        self.__activeDangerZones = set()
+        self.__activeRandomEventZones = set()
+        self.__activeWeatherZones = set()
         self.__zoneMarkers = {}
         self.__transformedZones = {}
 
@@ -63,25 +71,41 @@ class MapZonesController(IMapZonesController):
         self.__transformedZones.pop(zone.layerId)
         self.onTransformedZoneRemoved(zone)
 
-    def enterDangerZone(self, zone):
-        self.__activeDangerZones.add(zone.id)
-        vehicleState, timerState = _notificationMapping[zone.zoneType]
+    def enterRandomEventZone(self, zone):
+        self.__activeRandomEventZones.add(zone.id)
+        vehicleState, timerState = _randomEventsNotificationMapping[zone.zoneType]
         state = DestroyTimerViewState(vehicleState, zone.finishTime - zone.startTime, timerState, startTime=zone.startTime)
         self.sessionProvider.invalidateVehicleState(vehicleState, state)
         if vehicleState == VEHICLE_VIEW_STATE.DANGER_ZONE:
             SoundGroups.g_instance.playSound2D(SoundNotifications.DANGER_ZONE_ENTER)
 
-    def exitDangerZone(self, zone):
-        self.__activeDangerZones.discard(zone.id)
-        vehicleState, _ = _notificationMapping[zone.zoneType]
+    def exitRandomEventZone(self, zone):
+        self.__activeRandomEventZones.discard(zone.id)
+        vehicleState, _ = _randomEventsNotificationMapping[zone.zoneType]
         state = DestroyTimerViewState.makeCloseTimerState(vehicleState)
         self.sessionProvider.invalidateVehicleState(vehicleState, state)
         if vehicleState == VEHICLE_VIEW_STATE.DANGER_ZONE:
             SoundGroups.g_instance.playSound2D(SoundNotifications.DANGER_ZONE_EXIT)
 
-    def removeDangerZone(self, zone):
-        if zone.id in self.__activeDangerZones:
-            self.exitDangerZone(zone)
+    def removeRandomEventZone(self, zone):
+        if zone.id in self.__activeRandomEventZones:
+            self.exitRandomEventZone(zone)
+
+    def enterWeatherZone(self, zone):
+        self.__activeWeatherZones.add(zone.id)
+        vehicleState, timerState = _weatherNotificationMapping[zone.zoneType]
+        state = DestroyTimerViewState(vehicleState, 0, timerState)
+        self.sessionProvider.invalidateVehicleState(vehicleState, state)
+
+    def exitWeatherZone(self, zone):
+        self.__activeWeatherZones.discard(zone.id)
+        vehicleState, _ = _weatherNotificationMapping[zone.zoneType]
+        state = DestroyTimerViewState.makeCloseTimerState(vehicleState)
+        self.sessionProvider.invalidateVehicleState(vehicleState, state)
+
+    def removeWeatherZone(self, zone):
+        if zone.id in self.__activeWeatherZones:
+            self.exitWeatherZone(zone)
 
     def getZoneMarkers(self):
         return self.__zoneMarkers

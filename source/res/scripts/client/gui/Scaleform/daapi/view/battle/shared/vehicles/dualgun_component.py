@@ -177,7 +177,6 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         add(GameEvent.CHARGE_RELEASED, self.__chargeReleased, scope=EVENT_BUS_SCOPE.BATTLE)
         add(GameEvent.PRE_CHARGE, self.__onPreCharge, scope=EVENT_BUS_SCOPE.BATTLE)
         add(GameEvent.CONTROL_MODE_CHANGE, self.__onControlModeChange, scope=EVENT_BUS_SCOPE.BATTLE)
-        add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange += self.__onArenaPeriodChange
@@ -225,7 +224,6 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         remove(GameEvent.CHARGE_RELEASED, self.__chargeReleased, scope=EVENT_BUS_SCOPE.BATTLE)
         remove(GameEvent.PRE_CHARGE, self.__onPreCharge, scope=EVENT_BUS_SCOPE.BATTLE)
         remove(GameEvent.CONTROL_MODE_CHANGE, self.__onControlModeChange, scope=EVENT_BUS_SCOPE.BATTLE)
-        remove(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
         arena = self.__sessionProvider.arenaVisitor.getArenaSubscription()
         if arena is not None:
             arena.onPeriodChange -= self.__onArenaPeriodChange
@@ -394,9 +392,6 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
     def __onPreCharge(self, _):
         if self.__inBattle:
             self.__soundManager.onPreChargeStarted()
-
-    def __onSniperCameraTransition(self, _):
-        self.__soundManager.onSniperCameraTransition()
 
     def __onControlModeChange(self, event):
         mode = event.ctx.get('mode')

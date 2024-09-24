@@ -8,36 +8,36 @@ class EntryPointViewModel(ViewModel):
     def __init__(self, properties=4, commands=3):
         super(EntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getStartDate(self):
-        return self._getNumber(0)
-
-    def setStartDate(self, value):
-        self._setNumber(0, value)
-
-    def getEndDate(self):
-        return self._getNumber(1)
-
-    def setEndDate(self, value):
-        self._setNumber(1, value)
-
     def getIsNew(self):
-        return self._getBool(2)
+        return self._getBool(0)
 
     def setIsNew(self, value):
-        self._setBool(2, value)
+        self._setBool(0, value)
 
-    def getIsNewTasksUnlocked(self):
-        return self._getBool(3)
+    def getTitle(self):
+        return self._getString(1)
 
-    def setIsNewTasksUnlocked(self, value):
-        self._setBool(3, value)
+    def setTitle(self, value):
+        self._setString(1, value)
+
+    def getSubtitle(self):
+        return self._getString(2)
+
+    def setSubtitle(self, value):
+        self._setString(2, value)
+
+    def getBgFolderName(self):
+        return self._getString(3)
+
+    def setBgFolderName(self, value):
+        self._setString(3, value)
 
     def _initialize(self):
         super(EntryPointViewModel, self)._initialize()
-        self._addNumberProperty('startDate', 0)
-        self._addNumberProperty('endDate', 0)
         self._addBoolProperty('isNew', False)
-        self._addBoolProperty('isNewTasksUnlocked', False)
+        self._addStringProperty('title', '')
+        self._addStringProperty('subtitle', '')
+        self._addStringProperty('bgFolderName', '')
         self.onClick = self._addCommand('onClick')
         self.onHoverForSetTime = self._addCommand('onHoverForSetTime')
         self.onLeaveAfterSetTime = self._addCommand('onLeaveAfterSetTime')

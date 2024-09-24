@@ -16,8 +16,7 @@
   <invisibility>
     <moving>	0.172	</moving>
     <still>	0.287	</still>
-    <camouflageBonus>	0.03	</camouflageBonus>
-    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <camouflageBonus>	0.04	</camouflageBonus>
     <firePenalty>	0.431	</firePenalty>
   </invisibility>
   <optDevsOverrides>
@@ -1096,7 +1095,7 @@
           <offset>	-0.14	</offset>
         </node>
       </trackNodes>
-      <trackThickness>	-0.05	</trackThickness>
+      <trackThickness>	-0.03	</trackThickness>
       <groundNodes>
         <group>
           <template>	Track_L	</template>
@@ -1138,16 +1137,16 @@
         <left>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	206	</segmentsCount>
-          <segmentsOuterThickness>	0.015	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.066483	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.005023	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.484	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A168_XM_57/track/segment_01.model	</model>
-            <length>	0.068101	</length>
+            <length>	0.070013	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A168_XM_57/track/segment_02.model	</model>
-            <length>	0.07088	</length>
+            <length>	0.077332	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
@@ -1159,7 +1158,7 @@
             <forwardMovement>
               <back>	0.066546	</back>
               <top>	0.06981	</top>
-              <front>	0.07323	</front>
+              <front>	0.071807	</front>
               <bottom>	0.041183	</bottom>
             </forwardMovement>
           </springsLength>
@@ -1178,25 +1177,25 @@
             <topFront>
               <wheelName>	WD_L0	</wheelName>
               <basePos>	3.089317 0.813324	</basePos>
-              <shiftVec>	0.303703 0.077625	</shiftVec>
+              <shiftVec>	0.306083 0.06789	</shiftVec>
               <jointIdx>	21	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_L4	</wheelName>
               <basePos>	-3.390497 0.883144	</basePos>
-              <shiftVec>	-0.286647 0.107005	</shiftVec>
+              <shiftVec>	-0.287559 0.104985	</shiftVec>
               <jointIdx>	120	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_L6	</wheelName>
-              <basePos>	-2.519766 0.353325	</basePos>
-              <shiftVec>	0.032978 -0.258686	</shiftVec>
+              <basePos>	-2.519766 0.373325	</basePos>
+              <shiftVec>	0.022956 -0.306841	</shiftVec>
               <jointIdx>	142	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_L0	</wheelName>
-              <basePos>	2.160227 0.353324	</basePos>
-              <shiftVec>	0.038617 -0.255788	</shiftVec>
+              <basePos>	2.160227 0.373324	</basePos>
+              <shiftVec>	0.037858 -0.304496	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
@@ -1207,11 +1206,7 @@
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.312231	</radius>
-            </wheel>
-            <wheel>
-              <name>	W_L6	</name>
-              <radius>	0.301818	</radius>
+              <radius>	0.312134	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1224,7 +1219,7 @@
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-0.192782	</startAngle>
+              <startAngle>	-0.193337	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>
@@ -1458,16 +1453,16 @@
         <right>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	206	</segmentsCount>
-          <segmentsOuterThickness>	0.015	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.066433	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.005069	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.484	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A168_XM_57/track/segment_01.model	</model>
-            <length>	0.068103	</length>
+            <length>	0.070014	</length>
           </mainSegment>
           <secSegment>
             <model>	vehicles/american/A168_XM_57/track/segment_02.model	</model>
-            <length>	0.07088	</length>
+            <length>	0.07733	</length>
           </secSegment>
           <springsLength>
             <backwardMovement>
@@ -1479,7 +1474,7 @@
             <forwardMovement>
               <back>	0.066546	</back>
               <top>	0.06981	</top>
-              <front>	0.07323	</front>
+              <front>	0.072	</front>
               <bottom>	0.041183	</bottom>
             </forwardMovement>
           </springsLength>
@@ -1498,36 +1493,36 @@
             <topFront>
               <wheelName>	WD_R0	</wheelName>
               <basePos>	3.089321 0.813322	</basePos>
-              <shiftVec>	0.303698 0.07763	</shiftVec>
+              <shiftVec>	0.306083 0.067877	</shiftVec>
               <jointIdx>	21	</jointIdx>
             </topFront>
             <topBack>
               <wheelName>	WD_R4	</wheelName>
               <basePos>	-3.390502 0.88315	</basePos>
-              <shiftVec>	-0.286644 0.106999	</shiftVec>
+              <shiftVec>	-0.287558 0.104976	</shiftVec>
               <jointIdx>	120	</jointIdx>
             </topBack>
             <bottomBack>
               <wheelName>	W_R6	</wheelName>
-              <basePos>	-2.519766 0.353321	</basePos>
-              <shiftVec>	0.032982 -0.258682	</shiftVec>
+              <basePos>	-2.519766 0.373321	</basePos>
+              <shiftVec>	0.022941 -0.306887	</shiftVec>
               <jointIdx>	142	</jointIdx>
             </bottomBack>
             <bottomFront>
               <wheelName>	W_R0	</wheelName>
-              <basePos>	2.160227 0.35332	</basePos>
-              <shiftVec>	0.038621 -0.255783	</shiftVec>
+              <basePos>	2.160227 0.37332	</basePos>
+              <shiftVec>	0.037862 -0.304543	</shiftVec>
               <jointIdx>	0	</jointIdx>
             </bottomFront>
           </snapWheels>
           <radiusOverrides>
             <wheel>
               <name>	WD_R4	</name>
-              <radius>	0.304703	</radius>
+              <radius>	0.304698	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.312231	</radius>
+              <radius>	0.312131	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -1535,12 +1530,12 @@
             <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	3.051656	</startAngle>
+              <startAngle>	3.051674	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-0.192782	</startAngle>
+              <startAngle>	-0.193331	</startAngle>
               <teethCount>	13	</teethCount>
             </sync>
           </teethSyncs>

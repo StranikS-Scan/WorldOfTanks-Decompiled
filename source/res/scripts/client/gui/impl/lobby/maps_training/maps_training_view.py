@@ -110,8 +110,7 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         self.__blur.fini()
         if self.__tickCallback is not None:
             BigWorld.cancelCallback(self.__tickCallback)
-        if not self.__selectedMap:
-            MapsTrainingSound.onSelectedMap(True)
+        self.mapsTrainingController.setExitSoundState()
         super(MapsTrainingView, self)._finalize()
         return
 

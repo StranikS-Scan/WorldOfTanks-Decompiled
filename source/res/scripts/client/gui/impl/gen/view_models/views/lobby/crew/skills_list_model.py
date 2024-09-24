@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/skills_list_model.py
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.lobby.crew.components.component_base_model import ComponentBaseModel
-from gui.impl.gen.view_models.views.lobby.crew.skill_model import SkillModel
+from gui.impl.gen.view_models.views.lobby.crew.skill_training_model import SkillTrainingModel
 
 class SkillsListModel(ComponentBaseModel):
     __slots__ = ('onSkillClick', 'onSkillHover', 'onSkillOut', 'onTrain', 'onCancel')
@@ -18,7 +18,7 @@ class SkillsListModel(ComponentBaseModel):
 
     @staticmethod
     def getIrrelevantSkillsListType():
-        return SkillModel
+        return SkillTrainingModel
 
     def getCommonSkillsList(self):
         return self._getArray(2)
@@ -28,7 +28,7 @@ class SkillsListModel(ComponentBaseModel):
 
     @staticmethod
     def getCommonSkillsListType():
-        return SkillModel
+        return SkillTrainingModel
 
     def getRegularSkillsList(self):
         return self._getArray(3)
@@ -38,7 +38,7 @@ class SkillsListModel(ComponentBaseModel):
 
     @staticmethod
     def getRegularSkillsListType():
-        return SkillModel
+        return SkillTrainingModel
 
     def _initialize(self):
         super(SkillsListModel, self)._initialize()

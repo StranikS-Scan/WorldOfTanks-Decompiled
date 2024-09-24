@@ -249,25 +249,6 @@
         </kpi>
       </UISettings>
     </commander_practical>
-    <driver_tidyPerson>
-      <UISettings>
-        <tooltipSection>	skills	</tooltipSection>
-        <descr>
-          <arg>
-            <situationalParam>	false	</situationalParam>
-            <paramName>	vehicleFireChance	</paramName>
-            <measureType>	percents	</measureType>
-            <value>	-0.0025	</value>
-          </arg>
-        </descr>
-        <kpi>
-          <mul>
-            <name>	vehicleFireChance	</name>
-            <value>	0.75	</value>
-          </mul>
-        </kpi>
-      </UISettings>
-    </driver_tidyPerson>
     <driver_smoothDriving>
       <vsePerk>	302	</vsePerk>
       <UISettings>
@@ -892,30 +873,6 @@
         </descr>
       </UISettings>
     </radioman_expert>
-    <radioman_lastEffort>
-      <durationPerLevel>	0.02	</durationPerLevel>
-      <chanceToHitPerLevel>	0.0	</chanceToHitPerLevel>
-      <UISettings>
-        <tooltipSection>	skills	</tooltipSection>
-        <typeName>	situational	</typeName>
-        <descr>
-          <arg>
-            <situationalParam>	true	</situationalParam>
-            <paramName>	radiomanDurationPerLevel	</paramName>
-            <measureType>	seconds	</measureType>
-            <sign>	signLess	</sign>
-            <value>	0.02	</value>
-          </arg>
-        </descr>
-        <kpi>
-          <add>
-            <name>	radiomanActivityTimeAfterVehicleDestroy	</name>
-            <value>	2	</value>
-            <situationalKpi>	true	</situationalKpi>
-          </add>
-        </kpi>
-      </UISettings>
-    </radioman_lastEffort>
     <radioman_sideBySide>
       <crewLevelIncrease>	2.5	</crewLevelIncrease>
       <vsePerk>	502	</vsePerk>

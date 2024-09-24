@@ -23,7 +23,7 @@ class ErrorType(IntEnum):
 class SlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(SlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -76,35 +76,29 @@ class SlotModel(ViewModel):
     def setIsInBattle(self, value):
         self._setBool(7, value)
 
-    def getIsEvent(self):
-        return self._getBool(8)
-
-    def setIsEvent(self, value):
-        self._setBool(8, value)
-
     def getInfoText(self):
-        return self._getString(9)
+        return self._getString(8)
 
     def setInfoText(self, value):
-        self._setString(9, value)
+        self._setString(8, value)
 
     def getEstimatedTime(self):
-        return self._getString(10)
+        return self._getString(9)
 
     def setEstimatedTime(self, value):
-        self._setString(10, value)
+        self._setString(9, value)
 
     def getErrorType(self):
-        return ErrorType(self._getNumber(11))
+        return ErrorType(self._getNumber(10))
 
     def setErrorType(self, value):
-        self._setNumber(11, value.value)
+        self._setNumber(10, value.value)
 
     def getSlotLabelElements(self):
-        return self._getArray(12)
+        return self._getArray(11)
 
     def setSlotLabelElements(self, value):
-        self._setArray(12, value)
+        self._setArray(11, value)
 
     @staticmethod
     def getSlotLabelElementsType():
@@ -120,7 +114,6 @@ class SlotModel(ViewModel):
         self._addBoolProperty('isEmpty', False)
         self._addBoolProperty('isDisabled', False)
         self._addBoolProperty('isInBattle', False)
-        self._addBoolProperty('isEvent', False)
         self._addStringProperty('infoText', '')
         self._addStringProperty('estimatedTime', '')
         self._addNumberProperty('errorType')

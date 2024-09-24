@@ -7,19 +7,20 @@ from constants import NEW_PERK_SYSTEM as NPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport.backport_tooltip import createAndLoadBackportTooltipWindow
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_model import BattleBooster
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
 from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skill_model import TankmanSkillModel, AnimationType
 from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_group_model import TankmanSkillsGroupModel
 from gui.impl.lobby.container_views.base.components import ComponentBase
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from gui.impl.lobby.crew.crew_helpers.tankman_helpers import getPerksResetGracePeriod
 from gui.impl.lobby.crew.tooltips.bonus_perks_tooltip import BonusPerksTooltip
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
-from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableTooltip
 from gui.impl.lobby.crew.tooltips.qualification_tooltip import QualificationTooltip
 from gui.shared.gui_items.artefacts import TAG_CREW_BATTLE_BOOSTER
-from gui.shared.gui_items.Tankman import TankmanSkill, getBattleBooster, isSkillLearnt
+from gui.shared.gui_items.Tankman import TankmanSkill
 from helpers import dependency
-from items.tankmen import MAX_SKILL_LEVEL, SKILLS_BY_ROLES, COMMON_SKILLS
+from items.tankmen import SKILLS_BY_ROLES, COMMON_SKILLS
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewTankmanInfoLogger, CrewTooltipLogger
@@ -63,8 +64,6 @@ class SkillMatrixComponent(ComponentBase):
         return
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.crew.tooltips.PerkAvailableTooltip():
-            return PerkAvailableTooltip(self.context.tankmanID)
         if contentID == R.views.lobby.crew.tooltips.QualificationTooltip():
             return QualificationTooltip(event.getArgument('index'), event.getArgument('role'), event.getArgument('isBonusQualification'), self.context.tankman.isFemale)
         if contentID == R.views.lobby.crew.tooltips.BonusPerksTooltip():
@@ -88,7 +87,7 @@ class SkillMatrixComponent(ComponentBase):
             currentAnimationType = tankmanSkillModel.getAnimationType()
             if currentAnimationType == AnimationType.SELECTED or currentAnimationType == AnimationType.UNLOCKED:
                 return
-            skillName = tankmanSkillModel.getSkillId()
+            skillName = tankmanSkillModel.getName()
             crewAccountController = BigWorld.player().crewAccountController
             unlockIndexBefore = crewAccountController.indexSkillsUnlockAnimation(self.context.tankman.invID)
             hasLearnedSkillAnimation = crewAccountController.hasLearnedSkillAnimation(self.context.tankman.invID, skillName)
@@ -139,13 +138,12 @@ class SkillMatrixComponent(ComponentBase):
         skillsList = gm.getSkills()
         skillsList.clear()
         for index, (skill, level) in enumerate(zip(skills, skillsLevels)):
-            isFree = isMajor and index < self.context.tankman.freeSkillsCount
-            level = MAX_SKILL_LEVEL if isFree else level
-            tankmanSkillModel = self._getSkillModel(skill, level, role, isFree)
+            tankmanSkillModel = self._getSkillModel(skill, level, role, index)
             animationType = self._getSkillAnimationType(tankmanSkillModel, index, not isMajor)
             if animationType is not None:
                 tankmanSkillModel.setAnimationType(animationType)
-            skillsWithDirectives.append(tankmanSkillModel.getWithDirective())
+            battleBooster = tankmanSkillModel.getBattleBooster()
+            skillsWithDirectives.append(battleBooster != BattleBooster.NONE)
             skillsList.addViewModel(tankmanSkillModel)
 
         skillsList.invalidate()
@@ -153,21 +151,17 @@ class SkillMatrixComponent(ComponentBase):
             self._fillGroupDirective(gm, role, isMajor)
         return
 
-    def _getSkillModel(self, skill, level, role, isFree):
+    def _getSkillModel(self, skill, level, role, index):
         sm = TankmanSkillModel()
-        sm.setSkillProgress(level or 0)
         sm.setIsLocked(level is None)
-        sm.setIsZero(isFree)
         if skill:
-            sm.setSkillId(skill.name)
-            sm.setSkillUserName(skill.userName)
-            sm.setSkillIcon(skill.extensionLessIconName)
-            sm.setIsInProgress(skill.level < MAX_SKILL_LEVEL)
-            sm.setWithDirective(getBattleBooster(self.context.tankmanCurrentVehicle, skill.name) is not None)
-            if self.context.tankman.isInTank:
-                sm.setIsFullDirective(isSkillLearnt(skill.name, self.context.tankmanCurrentVehicle))
+            skillModelSetup(sm, skill=skill, tankman=self.context.tankman, role=role)
+            sm.setUserName(skill.userName)
             sm.setIsDisabled(not skill.isEnable)
-            sm.setIsIrrelevant(not skill.isRelevantForRole(role))
+        else:
+            isZero = role == self.context.tankman.role and index < self.context.tankman.freeSkillsCount
+            sm.setIsZero(isZero)
+            sm.setLevel(level or 0)
         return sm
 
     def _fillGroupDirective(self, vm, role, isMajorRole):

@@ -24,5 +24,4 @@ class PerkMasks(object):
 
 
 class StubPerkIDs(object):
-    RADIOMAN_LAST_EFFORT = 504
     COMMANDER_TUTOR = 103

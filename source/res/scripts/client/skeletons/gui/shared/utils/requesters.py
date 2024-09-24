@@ -6,6 +6,7 @@ if typing.TYPE_CHECKING:
     from collections import OrderedDict
     from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
     from gui.shared.gui_items.gui_item_economics import ItemPrice
+    from gui.shared.gui_items.loot_box import LootBox
     from gui.shared.money import Money, DynamicMoney
     from gui.shared.utils.requesters import InventoryRequester
     from gui.shared.utils.requesters.ShopRequester import DefaultShopRequester
@@ -424,8 +425,7 @@ class IStatsRequester(IRequester):
     def luiVersion(self):
         raise NotImplementedError
 
-    @property
-    def newbieHintsGroup(self):
+    def getABGroup(self, feature):
         raise NotImplementedError
 
 
@@ -972,6 +972,9 @@ class ITokensRequester(IRequester):
     def getAttemptsAfterGuaranteedRewards(self, box):
         raise NotImplementedError
 
+    def getLootBoxesStats(self):
+        raise NotImplementedError
+
     def getLootBoxes(self):
         raise NotImplementedError
 
@@ -1176,6 +1179,10 @@ class IGameRestrictionsRequester(IRequester):
 
     @property
     def settings(self):
+        raise NotImplementedError
+
+    @property
+    def privateChat(self):
         raise NotImplementedError
 
 

@@ -8,7 +8,7 @@ from account_helpers import AccountSettings
 from constants import ARENA_BONUS_TYPE
 from gui.doc_loaders.surveys_loader import getSurvey
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_question_model import QuestionType
-from gui.mapbox.mapbox_survey_helper import AlternativeQuestion
+from gui.mapbox.mapbox_survey_helper import AlternativeQuestion, findQuestionById
 from shared_utils import findFirst, first
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -95,11 +95,10 @@ class MapboxSurveyManager(object):
                         answer['optionId'] = first(selectedAnswers)
 
             surveyData[questionId] = answers
-            if question.getQuestionType() == QuestionType.TEXT:
-                if answers:
-                    choice = first(first(answers)['choices'])
-                    if not choice:
-                        surveyData.pop(questionId, None)
+            if question.getQuestionType() == QuestionType.TEXT and answers:
+                choice = first(first(answers)['choices'])
+                if not choice:
+                    surveyData.pop(questionId, None)
             surveys = AccountSettings.getSettings(MAPBOX_SURVEYS)
             surveys[self.__mapId] = self.__surveyData
             AccountSettings.setSettings(MAPBOX_SURVEYS, surveys)
@@ -119,11 +118,7 @@ class MapboxSurveyManager(object):
 
     def getQuestion(self, qId=None):
         if qId is not None:
-            parts = qId.split('_')
-            if len(parts) > 1:
-                question = findFirst(lambda q: q.getQuestionId() == parts[0], self.__questions)
-                return question.getAlternative(qId)
-            return findFirst(lambda q: q.getQuestionId() == qId, self.__questions)
+            return findQuestionById(qId, self.__questions)
         else:
             return self.__questions[self.__currentQuestionIdx] if not self.__isShownAllQuestions() else None
 
@@ -133,20 +128,19 @@ class MapboxSurveyManager(object):
         return question
 
     def getNextQuestion(self):
-        prevIdx = self.__currentQuestionIdx
         question, idx = self.__findQuestionToShow(self.__questions[self.__currentQuestionIdx + 1:])
+        prevIdx = self.__currentQuestionIdx
+        skippedQuestionsIndexes = list(range(prevIdx + 1, idx))
+        prevQuestion = self.__questions[prevIdx]
+        skippedDependedQuestionsIndexes = []
+        for qId in prevQuestion.getDependedQuestions():
+            dependedQuestion = self.getQuestion(qId)
+            if not dependedQuestion.isReadyToShow():
+                skippedDependedQuestionsIndexes.append(self.__questions.index(dependedQuestion))
+
+        if skippedQuestionsIndexes or skippedDependedQuestionsIndexes:
+            self.__clearSavedAnswers(set(skippedQuestionsIndexes + skippedDependedQuestionsIndexes))
         self.__currentQuestionIdx = idx
-        surveyData = self.__surveyData['data']
-        if self.__currentQuestionIdx - prevIdx > 1:
-            skippedIdxs = range(prevIdx + 1, self.__currentQuestionIdx)
-            for idx in skippedIdxs:
-                skippedQuestion = self.__questions[idx]
-                if skippedQuestion.getQuestionType() == QuestionType.ALTERNATIVE:
-                    for alternative in skippedQuestion.getAlternatives():
-                        surveyData.pop(alternative.getQuestionId(), None)
-
-                surveyData.pop(skippedQuestion.getQuestionId(), None)
-
         return question
 
     def getTotalQuestionsCount(self):
@@ -193,5 +187,17 @@ class MapboxSurveyManager(object):
                         surveyData.pop(altQuestion.getQuestionId(), None)
 
             surveyData.pop(q.getQuestionId(), None)
+
+        return
+
+    def __clearSavedAnswers(self, questionsGlobalIndexes):
+        surveyData = self.__surveyData['data']
+        for idx in questionsGlobalIndexes:
+            skippedQuestion = self.__questions[idx]
+            if skippedQuestion.getQuestionType() == QuestionType.ALTERNATIVE:
+                for alternative in skippedQuestion.getAlternatives():
+                    surveyData.pop(alternative.getQuestionId(), None)
+
+            surveyData.pop(skippedQuestion.getQuestionId(), None)
 
         return

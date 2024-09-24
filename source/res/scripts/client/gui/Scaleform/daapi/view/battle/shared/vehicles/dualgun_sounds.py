@@ -92,10 +92,6 @@ class DualGunSounds(CallbackDelayer):
         self.stopCallback(self.__runCooldownEndSound)
 
     @staticmethod
-    def onSniperCameraTransition():
-        WWISE.WW_eventGlobal(DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH)
-
-    @staticmethod
     def onPreChargeStarted():
         WWISE.WW_eventGlobal(DualGunSoundEvents.CHARGE_PRE)
 

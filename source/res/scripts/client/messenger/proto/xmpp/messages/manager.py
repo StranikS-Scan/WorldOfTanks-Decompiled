@@ -101,6 +101,12 @@ class MessagesManager(ClientEventsHandler):
         self.__msgFilters.reset(contactId)
         self.__chatSessions.requestHistory(jid.getBareJID())
 
+    def sendNonFriendMessagesRestrictedNotification(self):
+        self.__chatSessions.sendNonFriendMessagesRestrictedNotification()
+
+    def sendPrivateMessagesRestrictedNotification(self):
+        self.__chatSessions.sendPrivateMessagesRestrictedNotification()
+
     @xmpp_query()
     def createUserRoom(self, name, password=''):
         return self.__muc.createRoom(name, password=password)

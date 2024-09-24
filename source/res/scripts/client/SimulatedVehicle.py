@@ -178,8 +178,9 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase, ScriptGameObject):
 
     @property
     def gunFireMatrix(self, gunIndex=0):
-        multiGun = self.typeDescriptor.turret.multiGun
-        if self.typeDescriptor.isDualgunVehicle and multiGun is not None:
+        typeDescriptor = self.typeDescriptor
+        multiGun = typeDescriptor.turret.multiGun
+        if multiGun and (typeDescriptor.isDualgunVehicle or typeDescriptor.isTwinGunVehicle):
             gunFireHP = multiGun[gunIndex].gunFire
             gunMatrix = self.appearance.compoundModel.node(gunFireHP)
         else:

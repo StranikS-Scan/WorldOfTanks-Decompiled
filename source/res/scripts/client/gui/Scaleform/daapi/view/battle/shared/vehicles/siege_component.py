@@ -5,20 +5,20 @@ from gui.shared.utils.TimeInterval import TimeInterval
 from constants import VEHICLE_SIEGE_STATE
 
 class _ComponentUpdater(object):
-    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_engineState', '_isSmooth', '_staticMode')
+    __slots__ = ('_parentObj', '_totalTime', '_timeLeft', '_siegeState', '_deviceState', '_isSmooth', '_staticMode')
 
-    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
+    def __init__(self, parentObj, totalTime, timeLeft, siegeState, deviceState, isSmooth):
         super(_ComponentUpdater, self).__init__()
         self._parentObj = parentObj
         self._totalTime = totalTime
         self._timeLeft = timeLeft
         self._siegeState = siegeState
-        self._engineState = engineState
+        self._deviceState = deviceState
         self._isSmooth = isSmooth
         self._staticMode = False
 
     def __repr__(self):
-        return '_UpdaterComponent(totalTime = {}, timeLeft = {}, siegeState = {}, engineState = {})'.format(self._totalTime, self._timeLeft, self._siegeState, self._engineState)
+        return '_UpdaterComponent(totalTime = {}, timeLeft = {}, siegeState = {}, deviceState = {})'.format(self._totalTime, self._timeLeft, self._siegeState, self._deviceState)
 
     def clear(self):
         self._stopTick()
@@ -45,9 +45,9 @@ class _ActionScriptUpdater(_ComponentUpdater):
 
     def _startTick(self):
         if self._staticMode:
-            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._engineState)
+            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._deviceState)
         else:
-            self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._engineState, self._isSmooth)
+            self._parentObj.as_switchSiegeStateS(self._totalTime, self._timeLeft, self._siegeState, self._deviceState, self._isSmooth)
 
     def _stopTick(self):
         pass
@@ -56,8 +56,8 @@ class _ActionScriptUpdater(_ComponentUpdater):
 class _PythonUpdater(_ComponentUpdater):
     __slots__ = ('_timeInterval', '_startTime', '_finishTime', '__weakref__')
 
-    def __init__(self, parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth):
-        super(_PythonUpdater, self).__init__(parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth)
+    def __init__(self, parentObj, totalTime, timeLeft, siegeState, deviceState, isSmooth):
+        super(_PythonUpdater, self).__init__(parentObj, totalTime, timeLeft, siegeState, deviceState, isSmooth)
         self._timeInterval = TimeInterval(0.05, self, '_tick')
         self._startTime = BigWorld.serverTime()
         self._finishTime = self._startTime + timeLeft
@@ -83,14 +83,14 @@ class _PythonUpdater(_ComponentUpdater):
         if self._staticMode:
             return
         timeLeft = self._finishTime - BigWorld.serverTime()
-        if timeLeft >= 0 and self._engineState != 'destroyed':
+        if timeLeft >= 0 and self._deviceState != 'destroyed':
             self._updateSnapshot(timeLeft)
 
     def _updateSnapshot(self, timeLeft):
         if self._staticMode:
-            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._engineState)
+            self._parentObj.as_setAutoSiegeModeStateS(self._siegeState, self._deviceState)
         else:
-            self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._engineState, self._isSmooth)
+            self._parentObj.as_switchSiegeStateSnapshotS(self._totalTime, timeLeft, self._siegeState, self._deviceState, self._isSmooth)
 
 
 class _SiegeComponent(object):
@@ -104,9 +104,9 @@ class _SiegeComponent(object):
         self._staticMode = False
         return
 
-    def invalidate(self, totalTime, timeLeft, siegeState, engineState, isSmooth):
+    def invalidate(self, totalTime, timeLeft, siegeState, deviceState, isSmooth):
         self._clearUpdater()
-        self._componentUpdater = self._clazz(self._parentObj, totalTime, timeLeft, siegeState, engineState, isSmooth)
+        self._componentUpdater = self._clazz(self._parentObj, totalTime, timeLeft, siegeState, deviceState, isSmooth)
         self._componentUpdater.staticMode = self._staticMode
         self._componentUpdater.show()
 

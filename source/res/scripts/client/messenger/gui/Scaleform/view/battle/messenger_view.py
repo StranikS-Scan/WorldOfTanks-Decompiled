@@ -6,7 +6,7 @@ from gui.battle_control import avatar_getter
 from helpers import dependency
 from helpers import i18n
 import BattleReplay
-from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE, ARENA_BONUS_TYPE
+from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE, ARENA_BONUS_TYPE, BAN_REASON_BY_ID, BAN_REASON
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_UNEXPECTED
 from gui import makeHtmlString
 from avatar_helpers import getAvatarSessionID
@@ -38,11 +38,20 @@ _CONSUMERS_LOCK_ENTER = (BATTLE_VIEW_ALIASES.RADIAL_MENU, BATTLE_VIEW_ALIASES.FU
 
 def _getToolTipText(arenaVisitor):
     settings = g_settings.battle
+    battleChatRestriction = BigWorld.player().battleChatRestriction
+    restrictionReason = BAN_REASON_BY_ID.get(battleChatRestriction['restrictionReasonID'])
     if arenaVisitor is not None:
         if arenaVisitor.gui.isTrainingBattle():
             result = settings.toolTipText
         elif arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD:
             result = settings.battleRoyaleTooltip
+        elif arenaVisitor.gui.isBattleChatSupported() and battleChatRestriction['isBattleChatDisabled'] and not BattleReplay.isPlaying():
+            if restrictionReason == BAN_REASON.PARENTAL_CONTROL:
+                result = settings.chatIsLockedParentalControlToolTipText
+            elif restrictionReason == BAN_REASON.COUNTRY:
+                result = settings.chatIsLockedCountryControlToolTipText
+            else:
+                result = settings.chatIsLockedOtherControlToolTipText
         elif arenaVisitor.gui.isRandomBattle() and g_settings.userPrefs.disableBattleChat:
             result = settings.chatIsLockedToolTipText
         else:

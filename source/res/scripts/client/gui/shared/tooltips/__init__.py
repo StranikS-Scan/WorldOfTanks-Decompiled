@@ -79,8 +79,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BATTLE_PASS_POINTS = 'battlePassPoints'
     EPIC_BATTLE_GIFT_TOKEN = 'epicBattleGiftToken'
     MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
-    SELECTABLE_CREWBOOK = 'selectableCrewbook'
-    RANDOM_CREWBOOK = 'randomCrewbook'
+    MAPBOX_CALENDAR_DAY = 'mapboxCalendarDay'
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
     RANKED_SELECTABLE_REWARD = 'rankedSelectableReward'
@@ -89,9 +88,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
     COMP7_SELECTABLE_REWARD = 'comp7SelectableReward'
-    EVENT_BATTLES_SELECTOR_INFO = 'eventBattlesSelectorInfo'
-    EVENT_BATTLES_CALENDAR = 'eventBattlesCalendar'
-    EVENT_GIFT_TOKEN = 'eventGiftToken'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

@@ -1,36 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AutoShootGunController.py
-import logging
 import typing
 import BigWorld
-import CGF
 from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
-from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_wrappers import checkStateStatus
-from vehicle_systems.entity_components.vehicle_mechanic_component import getPlayerVehicleMechanic, VehicleMechanicComponent
+from vehicle_systems.entity_components.vehicle_mechanic_component import getPlayerVehicleMechanic, checkStateStatus, VehicleMechanicGunPrefabComponent
 from vehicle_systems.auto_shoot_guns.shooting_events import AutoShootingEvents
 from vehicle_systems.auto_shoot_guns.custom_integrations import AutoShootCustomIntegrations
-from vehicle_systems.model_assembler import loadAppearancePrefab
 if typing.TYPE_CHECKING:
     from vehicle_systems.auto_shoot_guns.system_interfaces import IAutoShootingEvents
-_logger = logging.getLogger(__name__)
 
 def getPlayerVehicleAutoShootGunController():
     return getPlayerVehicleMechanic('autoShootGunController')
 
 
-class AutoShootGunController(VehicleMechanicComponent):
+class AutoShootGunController(VehicleMechanicGunPrefabComponent):
 
     def __init__(self):
         super(AutoShootGunController, self).__init__()
-        self.__prefabRoot = None
         self.__gunsGroupSize = 0
         self.__groupRatePerSecond = 0.0
         self.__shotRatePerSecond = 0.0
-        self.__shootingPrefab = ''
         self.__shootingEvents = AutoShootingEvents(self)
         AutoShootCustomIntegrations(self.entity, self).subscribe(self.__shootingEvents)
         self._initMechanic()
-        return
 
     @property
     def shootingEvents(self):
@@ -60,12 +52,7 @@ class AutoShootGunController(VehicleMechanicComponent):
 
     def onDestroy(self):
         self.__shootingEvents.destroy()
-        if self.__prefabRoot is not None:
-            _logger.debug('[AutoShoot] removeGameObject (onDestroy) for %s', self.entity.id)
-            CGF.removeGameObject(self.__prefabRoot)
-            self.__prefabRoot = None
         super(AutoShootGunController, self).onDestroy()
-        return
 
     def onDiscreteShot(self):
         self.__shootingEvents.processDiscreteShot()
@@ -75,15 +62,11 @@ class AutoShootGunController(VehicleMechanicComponent):
         super(AutoShootGunController, self)._initMechanic()
 
     def _onAppearanceReady(self):
-        appearance = self.entity.appearance
         typeDescriptor = self.entity.typeDescriptor
-        skin = appearance.modelsSetParams.skin or 'default'
         self.__gunsGroupSize = typeDescriptor.gun.autoShoot.groupSize
-        self.__shootingPrefab = typeDescriptor.gun.prefabs[skin]['main'][0]
         self.__shootingEvents.processAppearanceReady()
         self.__updateShootingRates()
-        loadAppearancePrefab(self.__shootingPrefab, appearance, self.__onShootingPrefabLoaded)
-        _logger.debug('[AutoShoot] loadAppearancePrefab for %s', self.entity.id)
+        super(AutoShootGunController, self)._onAppearanceReady()
 
     def _onMechanicAvatarUpdate(self, player):
         player.getOwnVehicleShotDispersionAngle(player.gunRotator.turretRotationSpeed)
@@ -96,13 +79,3 @@ class AutoShootGunController(VehicleMechanicComponent):
         self.__groupRatePerSecond = 1.0 / defaultShotRate if defaultShotRate else 0.0
         self.__shotRatePerSecond = self.__groupRatePerSecond * self.__gunsGroupSize
         self.__shootingEvents.onShotRateUpdate(self.getShotRatePerSecond())
-
-    def __onShootingPrefabLoaded(self, root):
-        if not root.isValid:
-            _logger.error('[AutoShoot] failed to load prefab: %s', self.__shootingPrefab)
-            return
-        if self.isComponentDestroyed():
-            _logger.debug('[AutoShoot] removeGameObject (onLoaded) for %s', self.entity.id)
-            CGF.removeGameObject(root)
-            return
-        self.__prefabRoot = root

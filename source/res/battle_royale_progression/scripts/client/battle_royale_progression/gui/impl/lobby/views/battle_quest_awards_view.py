@@ -3,7 +3,7 @@
 from battle_royale_progression.gui.impl.gen.view_models.views.lobby.views.battle_quest_awards_model import BattleQuestAwardsModel, BattleStatus
 from battle_royale_progression.gui.impl.lobby.views.bonus_packer import getBonusPacker
 from battle_royale_progression.gui.sounds_constants import GENERAL_SOUND_SPACE
-from frameworks.wulf import ViewSettings, WindowFlags
+from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
@@ -82,4 +82,4 @@ class BattleQuestAwardsViewWindow(LobbyNotificationWindow):
     __slots__ = ()
 
     def __init__(self, stage, parent=None):
-        super(BattleQuestAwardsViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattleQuestAwardsView(stage), parent=parent)
+        super(BattleQuestAwardsViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=BattleQuestAwardsView(stage), layer=WindowLayer.TOP_WINDOW, parent=parent)

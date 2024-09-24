@@ -170,8 +170,13 @@ def readPositiveInt(xmlCtx, section, subsectionName):
     return readInt(xmlCtx, section, subsectionName, minVal=1)
 
 
-def readNonNegativeInt(xmlCtx, section, subsectionName):
-    return readInt(xmlCtx, section, subsectionName, minVal=0)
+def readNonNegativeInt(xmlCtx, section, subsectionName, defaultValue=None):
+    if defaultValue is not None and not section.has_key(subsectionName):
+        if defaultValue < 0:
+            raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
+        return defaultValue
+    else:
+        return readInt(xmlCtx, section, subsectionName, minVal=0)
 
 
 def readIntOrNone(xmlCtx, section, subsectionName):

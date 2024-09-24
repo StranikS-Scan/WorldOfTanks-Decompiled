@@ -240,6 +240,7 @@ class DIALOGS(object):
     BUYVEHICLEWINDOW_TRADEIN_WARNING = '#dialogs:buyVehicleWindow/tradein/warning'
     BUYVEHICLEWINDOW_FREERENTSLOT = '#dialogs:buyVehicleWindow/freeRentSlot'
     BUYVEHICLEWINDOW_FULLAMMO = '#dialogs:buyVehicleWindow/fullAmmo'
+    BUYVEHICLEWINDOW_NOTEMPTYAMMO = '#dialogs:buyVehicleWindow/notEmptyAmmo'
     BUYVEHICLEWINDOW_TANKMENCHECKBOX = '#dialogs:buyVehicleWindow/tankmenCheckbox'
     BUYVEHICLEWINDOW_TRADEIN_TANKMENCHECKBOX = '#dialogs:buyVehicleWindow/tradein/tankmenCheckbox'
     BUYVEHICLEWINDOW_TANKMENLABEL = '#dialogs:buyVehicleWindow/tankmenLabel'
@@ -1025,12 +1026,6 @@ class DIALOGS(object):
     RETRAIN_DISCOUNTTOOLTIP_BODY = '#dialogs:retrain/discountTooltip/body'
     RECRUIT_TITLE = '#dialogs:recruit/title'
     RECRUIT_WARNING_PREMIUMVEHICLE = '#dialogs:recruit/warning/premiumVehicle'
-    RECRUIT_PRICECARD_FREE_TITLE = '#dialogs:recruit/priceCard/free/title'
-    RECRUIT_PRICECARD_CREDITS_TITLE = '#dialogs:recruit/priceCard/credits/title'
-    RECRUIT_PRICECARD_GOLD_TITLE = '#dialogs:recruit/priceCard/gold/title'
-    RECRUIT_PRICECARD_FREE_DESCRIPTION = '#dialogs:recruit/priceCard/free/description'
-    RECRUIT_PRICECARD_CREDITS_DESCRIPTION = '#dialogs:recruit/priceCard/credits/description'
-    RECRUIT_PRICECARD_GOLD_DESCRIPTION = '#dialogs:recruit/priceCard/gold/description'
     RECRUIT_SUBMIT = '#dialogs:recruit/submit'
     RECRUIT_CANCEL = '#dialogs:recruit/cancel'
     RECRUIT_VOICEOVERTEXT = '#dialogs:recruit/voiceoverText'
@@ -1080,14 +1075,6 @@ class DIALOGS(object):
     FILLALLPERKS_BUTTON_FILL = '#dialogs:fillAllPerks/button/fill'
     FILLALLPERKS_BUTTON_CANCEL = '#dialogs:fillAllPerks/button/cancel'
     FILLALLPERKS_DESCRIPTION = '#dialogs:fillAllPerks/description'
-    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
-    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
-    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
-    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
-    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
-    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
-    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
-    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -1317,6 +1304,7 @@ class DIALOGS(object):
      BUYVEHICLEWINDOW_TRADEIN_WARNING,
      BUYVEHICLEWINDOW_FREERENTSLOT,
      BUYVEHICLEWINDOW_FULLAMMO,
+     BUYVEHICLEWINDOW_NOTEMPTYAMMO,
      BUYVEHICLEWINDOW_TANKMENCHECKBOX,
      BUYVEHICLEWINDOW_TRADEIN_TANKMENCHECKBOX,
      BUYVEHICLEWINDOW_TANKMENLABEL,
@@ -2102,12 +2090,6 @@ class DIALOGS(object):
      RETRAIN_DISCOUNTTOOLTIP_BODY,
      RECRUIT_TITLE,
      RECRUIT_WARNING_PREMIUMVEHICLE,
-     RECRUIT_PRICECARD_FREE_TITLE,
-     RECRUIT_PRICECARD_CREDITS_TITLE,
-     RECRUIT_PRICECARD_GOLD_TITLE,
-     RECRUIT_PRICECARD_FREE_DESCRIPTION,
-     RECRUIT_PRICECARD_CREDITS_DESCRIPTION,
-     RECRUIT_PRICECARD_GOLD_DESCRIPTION,
      RECRUIT_SUBMIT,
      RECRUIT_CANCEL,
      RECRUIT_VOICEOVERTEXT,
@@ -2156,15 +2138,7 @@ class DIALOGS(object):
      FILLALLPERKS_CHECKBOX,
      FILLALLPERKS_BUTTON_FILL,
      FILLALLPERKS_BUTTON_CANCEL,
-     FILLALLPERKS_DESCRIPTION,
-     CONFIRMREWARD_TITLE,
-     CONFIRMREWARD_MESSAGE,
-     CONFIRMREWARD_SUBMIT,
-     CONFIRMREWARD_CANCEL,
-     REROLLREWARD_TITLE,
-     REROLLREWARD_MESSAGE,
-     REROLLREWARD_CONFIRM,
-     REROLLREWARD_CANCEL)
+     FILLALLPERKS_DESCRIPTION)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

@@ -1,22 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/common/fade_manager.py
-import logging
 import typing
-import BigWorld
 from frameworks.wulf import Window, View, WindowSettings, ViewSettings, WindowFlags, WindowStatus
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.fading_cover_view_model import FadingCoverViewModel
 from gui.impl.gen_utils import DynAccessor
-from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import IFadingController
 from skeletons.gui.impl import IGuiLoader
-from wg_async import wg_async, await_callback, AsyncSemaphore, BrokenPromiseError
+from wg_async import AsyncSemaphore, AsyncEvent
+import logging
+import time
+from functools import wraps
+import BattleReplay
+import BigWorld
+import adisp
+from frameworks.wulf import WindowLayer
+from gui.shared import g_eventBus, events
+from helpers import dependency
+from wg_async import wg_await, wg_async, BrokenPromiseError, await_callback, forwardAsFuture
 if typing.TYPE_CHECKING:
     from typing import Callable, Optional, Union
 _logger = logging.getLogger(__name__)
 FADE_IN_DURATION = 0.15
 FADE_OUT_DURATION = 0.4
 BRING_TO_FRONT_FRAMES_COUNT = 2
+WAIT_FOR_EVENT_TIMEOUT = 10.0
 
 class ICover(object):
     __slots__ = ()
@@ -199,7 +208,104 @@ class FadeManager(object):
 
     def _bringToFront(self, framesLeft):
         if self._currentWindow:
-            self._currentWindow.tryFocus()
+            if not (self._currentWindow.isHidden() or self._currentWindow.isFocused):
+                self._currentWindow.tryFocus()
             framesLeft -= 1
             if framesLeft > 0:
                 BigWorld.callback(0.0, lambda : self._bringToFront(framesLeft))
+
+
+class AsyncEventWithTimout(AsyncEvent):
+
+    def __init__(self, warning, state=False, scope=None):
+        super(AsyncEventWithTimout, self).__init__(state, scope)
+        self._warning = warning
+        self._expireTime = None
+        self._updateTimeoutID = None
+        return
+
+    def wait(self):
+        if not self.is_set():
+            self._updateTimeoutID = BigWorld.callback(0, self.update)
+            self._expireTime = time.time() + WAIT_FOR_EVENT_TIMEOUT
+        return super(AsyncEventWithTimout, self).wait()
+
+    def set(self):
+        if self._updateTimeoutID is not None:
+            BigWorld.cancelCallback(self._updateTimeoutID)
+            self._updateTimeoutID = None
+        super(AsyncEventWithTimout, self).set()
+        return
+
+    def update(self):
+        if self._expireTime > time.time():
+            self._updateTimeoutID = BigWorld.callback(0, self.update)
+        else:
+            _logger.warning(self._warning)
+            self.set()
+
+
+class UseFading(object):
+    __slots__ = ('_hide', '_show', '_layer', '_waitForLayoutReady', '_currentFunctions', '_callback')
+    _fadeManager = dependency.descriptor(IFadingController)
+
+    def __init__(self, show=True, hide=True, layer=WindowLayer.OVERLAY, waitForLayoutReady=None, callback=None):
+        super(UseFading, self).__init__()
+        self._hide = hide
+        self._show = show
+        self._layer = layer
+        self._waitForLayoutReady = waitForLayoutReady
+        self._currentFunctions = set()
+        self._callback = callback
+
+    def __call__(self, func):
+
+        @wraps(func)
+        @wg_async
+        def wrapper(*args, **kwargs):
+            if func in self._currentFunctions:
+                return
+            else:
+                self._currentFunctions.add(func)
+                try:
+                    asyncEvent = AsyncEventWithTimout('Got time-out during the fade-in/fade-out animation.')
+
+                    def viewReadyHandler(event):
+                        if event.viewID == self._waitForLayoutReady:
+                            asyncEvent.set()
+
+                    if self._waitForLayoutReady is None:
+                        asyncEvent.set()
+                    else:
+                        g_eventBus.addListener(events.ViewReadyEvent.VIEW_READY, viewReadyHandler)
+                    if not BattleReplay.isPlaying() and self._show:
+                        yield wg_await(self._fadeManager.show(self._layer))
+                    if adisp.isAsync(func):
+                        yield await_callback(func)(*args, **kwargs)
+                    else:
+                        yield wg_await(forwardAsFuture(func(*args, **kwargs)))
+                    yield wg_await(asyncEvent.wait())
+                    g_eventBus.removeListener(events.ViewReadyEvent.VIEW_READY, viewReadyHandler)
+                    if not BattleReplay.isPlaying() and self._hide:
+                        yield wg_await(self._fadeManager.hide(self._layer))
+                except BrokenPromiseError:
+                    _logger.debug('%s got BrokenPromiseError during the fade-in/fade-out animation.', func)
+
+                self._currentFunctions.remove(func)
+                if self._callback is not None:
+                    self._callback()
+                return
+
+        return wrapper
+
+
+def dispatcherFadeWrapper(func, fadeCtx, *args, **kwargs):
+    if not fadeCtx:
+        func(*args, **kwargs)
+        return
+
+    @UseFading(**fadeCtx)
+    def wrapper(func, *args, **kwargs):
+        func(*args, **kwargs)
+
+    wrapper(func, *args, **kwargs)

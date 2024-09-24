@@ -34,6 +34,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         super(ReferralProgramController, self).__init__()
         self.__isReferralEnabled = False
         self.__isEnabled = False
+        self.__isReferralHardDisabled = False
         self.__serverSettings = None
         self.__referralConfig = None
         self.onReferralStateChanged = Event()
@@ -43,7 +44,11 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     @property
     def isEnabled(self):
-        return self.__isEnabled
+        return self.__isEnabled and not self.__isReferralHardDisabled
+
+    def setReferralHardDisabled(self, isDisabled=True):
+        self.__isReferralHardDisabled = isDisabled
+        self.__updateReferralState(hardStateChange=True)
 
     def onAccountBecomePlayer(self):
         super(ReferralProgramController, self).onAccountBecomePlayer()
@@ -103,8 +108,8 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
     def _getUrl(self):
         return getReferralProgramURL()
 
-    def __updateReferralState(self):
-        if self.__isEnabled != self.__isReferralEnabled:
+    def __updateReferralState(self, hardStateChange=False):
+        if self.__isEnabled != self.__isReferralEnabled or hardStateChange:
             self.__isEnabled = self.__isReferralEnabled
             if not self.__isEnabled:
                 self.hideWindow()

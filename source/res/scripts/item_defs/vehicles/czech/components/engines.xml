@@ -44,7 +44,7 @@
     <DG_TK_62>	48	</DG_TK_62>
     <Skoda_V8_diesel>	49	</Skoda_V8_diesel>
     <Skoda_V8_turbodiesel>	50	</Skoda_V8_turbodiesel>
-    <Praga_AXK_WT>	401	</Praga_AXK_WT>
+    <_5_TD_DBV>	52	</_5_TD_DBV>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -665,6 +665,23 @@
       <rpm_min>	320	</rpm_min>
       <rpm_max>	2240	</rpm_max>
     </Skoda_V16_AHK_2>
+    <_5_TD_DBV>
+      <userString>	#czech_vehicles:_5_TD_DBV	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	117000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </_5_TD_DBV>
     <Skoda_AHK>
       <userString>	#czech_vehicles:Skoda_AHK	</userString>
       <tags>	diesel	</tags>
@@ -698,23 +715,6 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </Praga_AXK>
-    <Praga_AXK_WT>
-      <userString>	#czech_vehicles:Praga_AXK	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	110000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1200	</power>
-      <weight>	1700	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
-    </Praga_AXK_WT>
     <CKD_AXL>
       <userString>	#czech_vehicles:CKD_AXL	</userString>
       <tags>	diesel	</tags>

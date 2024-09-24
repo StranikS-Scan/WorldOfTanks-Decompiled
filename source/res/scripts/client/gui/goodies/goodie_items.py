@@ -192,6 +192,9 @@ class _Goodie(object):
     def description(self):
         raise NotImplementedError
 
+    def getFullNameForResource(self):
+        raise NotImplementedError
+
     def getTimeLeftToNextExpiry(self):
         nextExpiry = self.nextExpiryTime
         return time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(nextExpiry)) if nextExpiry else 0
@@ -673,6 +676,9 @@ class DemountKit(_Goodie):
     def demountKitGuiType(self):
         return DEMOUNT_KIT_NAMES[self.demountKitType]
 
+    def getFullNameForResource(self):
+        return self.demountKitGuiType
+
 
 class RecertificationForm(_Goodie):
 
@@ -744,6 +750,9 @@ class RecertificationForm(_Goodie):
     @property
     def inventoryCount(self):
         return self.count
+
+    def getFullNameForResource(self):
+        return self.itemTypeName
 
 
 GoodieType = typing.TypeVar('GoodieType', bound=_Goodie)

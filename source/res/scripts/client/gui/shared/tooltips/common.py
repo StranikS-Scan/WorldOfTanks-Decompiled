@@ -57,6 +57,7 @@ from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField, WulfTooltipData
 from gui.shared.tooltips import efficiency
 from gui.shared.tooltips import formatters
+from gui.shared.utils.functions import getArenaImage
 from gui.shared.view_helpers import UsersInfoHelper
 from helpers import dependency
 from helpers import i18n, time_utils, html, int2roman
@@ -257,16 +258,6 @@ class EfficiencyTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, data):
         return self._packers[data.type]().pack(data.toDict()) if data is not None and data.type in self._packers else []
-
-
-class TotalEfficiencyTooltipData(EfficiencyTooltipData):
-    _packers = {BATTLE_EFFICIENCY_TYPES.ARMOR: efficiency.TotalArmorItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DAMAGE: efficiency.TotalDamageItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DESTRUCTION: efficiency.TotalKillItemPacker,
-     BATTLE_EFFICIENCY_TYPES.DETECTION: efficiency.TotalDetectionItemPacker,
-     BATTLE_EFFICIENCY_TYPES.ASSIST: efficiency.TotalAssistItemPacker,
-     BATTLE_EFFICIENCY_TYPES.CRITS: efficiency.TotalCritsItemPacker,
-     BATTLE_EFFICIENCY_TYPES.ASSIST_STUN: efficiency.TotalStunItemPacker}
 
 
 _ENV_TOOLTIPS_PATH = '#environment_tooltips:%s'
@@ -501,10 +492,12 @@ class MapTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, arenaID):
         arenaType = ArenaType.g_cache[int(arenaID)]
-        return {'mapName': i18n.makeString('#arenas:%s/name' % arenaType.geometryName),
+        geometryName = arenaType.geometryName
+        dynAccessor = R.strings.arenas.num(geometryName)
+        return {'mapName': backport.text(dynAccessor.name()) if dynAccessor.isValid() else geometryName,
          'gameplayName': i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName),
-         'imageURL': '../maps/icons/map/%s.png' % arenaType.geometryName,
-         'description': i18n.makeString('#arenas:%s/description' % arenaType.geometryName)}
+         'imageURL': getArenaImage(geometryName),
+         'description': backport.text(dynAccessor.description()) if dynAccessor.isValid() else geometryName}
 
 
 class SettingsControlTooltipData(ToolTipBaseData):

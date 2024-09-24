@@ -19,9 +19,9 @@ class EntryPointSettingsModel(models.Model):
 
 
 class SettingsModel(models.Model):
-    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'isModeSelectorCardBig')
+    __slots__ = ('enabled', 'waitTimeQueue', 'hideGameLoadingTimeout', 'joinToQueueFromLogin', 'afk', 'entryPoint', 'isModeSelectorCardBig', 'newbieBannerEnabled')
 
-    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, isModeSelectorCardBig):
+    def __init__(self, enabled, waitTimeQueue, hideGameLoadingTimeout, joinToQueueFromLogin, afk, entryPoint, isModeSelectorCardBig, newbieBannerEnabled):
         super(SettingsModel, self).__init__()
         self.enabled = enabled
         self.waitTimeQueue = waitTimeQueue
@@ -30,9 +30,10 @@ class SettingsModel(models.Model):
         self.afk = afk
         self.entryPoint = entryPoint
         self.isModeSelectorCardBig = isModeSelectorCardBig
+        self.newbieBannerEnabled = newbieBannerEnabled
 
     def __repr__(self):
-        return '<SettingsModel(enabled={}, waitTimeQueue={}, hideGameLoadingTimeout={}, joinToQueueFromLogin={}, afk={}, entryPoint={}, isModeSelectorCardBig ={}>'.format(self.enabled, self.waitTimeQueue, self.hideGameLoadingTimeout, self.joinToQueueFromLogin, self.afk, self.entryPoint, self.isModeSelectorCardBig)
+        return '<SettingsModel(enabled={}, waitTimeQueue={}, hideGameLoadingTimeout={}, joinToQueueFromLogin={}, afk={}, entryPoint={}, isModeSelectorCardBig={}, newbieBannerEnabled={}>'.format(self.enabled, self.waitTimeQueue, self.hideGameLoadingTimeout, self.joinToQueueFromLogin, self.afk, self.entryPoint, self.isModeSelectorCardBig, self.newbieBannerEnabled)
 
 
 class AfkModel(models.Model):
@@ -71,4 +72,5 @@ settingsSchema = GameParamsSchema[SettingsModel](gameParamsKey='story_mode_setti
  'joinToQueueFromLogin': fields.Boolean(required=True, public=False),
  'isModeSelectorCardBig': fields.Boolean(required=True),
  'afk': fields.Nested(schema=afkModesSchema, required=True, public=False),
- 'entryPoint': fields.Nested(schema=_bannerSettingsSchema)}, modelClass=SettingsModel, checkUnknown=True)
+ 'entryPoint': fields.Nested(schema=_bannerSettingsSchema),
+ 'newbieBannerEnabled': fields.Boolean(required=True)}, modelClass=SettingsModel, checkUnknown=True)

@@ -1,133 +1,43 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/mapbox/mapbox_bonus_packers.py
-from constants import PREMIUM_ENTITLEMENTS
-from gui.impl.backport import TooltipData, text
-from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.mapbox.reward_item_model import RewardItemModel
-from gui.impl.gen.view_models.views.lobby.mapbox.crew_book_reward_option_model import CrewBookRewardOptionModel
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.server_events.bonuses import PlusPremiumDaysBonus
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, SimpleBonusUIPacker, BonusUIPacker, GoodiesBonusUIPacker, CustomizationBonusUIPacker, getLocalizedBonusName, BaseBonusUIPacker, CrewBookBonusUIPacker, ItemBonusUIPacker
+import typing
+from gui.impl.auxiliary.rewards_helper import BlueprintBonusTypes
+from gui.shared.missions.packers.bonus import BonusUIPacker, BlueprintBonusUIPacker, getDefaultBonusPackersMap
+from shared_utils import first
+if typing.TYPE_CHECKING:
+    from frameworks.wulf import Array
 
 def getMapboxBonusPacker():
     mapping = getDefaultBonusPackersMap()
-    mapping.update({'goodies': MapboxGoodiesPacker(),
-     PREMIUM_ENTITLEMENTS.PLUS: MapboxPremiumDaysPacker(),
-     'customizations': MapboxCustomizationPacker(),
-     'items': MapboxItemPacker(),
-     'selectableCrewbook': MapboxSelectablePacker(),
-     'crewBooks': MapboxCrewBookPacker(),
-     'randomCrewbook': MapboxRandomCrewbookPacker()})
+    mapping.update({BlueprintBonusTypes.BLUEPRINTS: _MapboxBlueprintBonusUIPacker,
+     BlueprintBonusTypes.FINAL_BLUEPRINTS: _MapboxBlueprintBonusUIPacker,
+     BlueprintBonusTypes.BLUEPRINTS_ANY: _MapboxBlueprintBonusUIPacker})
     return BonusUIPacker(mapping)
 
 
-class MapboxPremiumDaysPacker(SimpleBonusUIPacker):
-    _ICONS_AVAILABLE = (1,)
+def packMapboxRewardModelAndTooltip(rewardsList, bonusList, packer, numBattles, tooltipsList=None):
+    groupStartIdx = len(tooltipsList)
+    groupIdx = 0
+    for bonusItem in bonusList:
+        totalIdx = groupStartIdx + groupIdx
+        tooltipsData = packer.getToolTip(bonusItem)
+        for bonusIdx, bonusModel in enumerate(packer.pack(bonusItem)):
+            bonusModel.setTooltipId(str(totalIdx + bonusIdx))
+            bonusModel.setIndex(groupIdx)
+            if tooltipsList is not None:
+                tooltipsList.append(tooltipsData[bonusIdx])
+            groupIdx += 1
+            rewardsList.addViewModel(bonusModel)
 
-    @classmethod
-    def _packSingleBonus(cls, bonus, label=''):
-        model = RewardItemModel()
-        cls._packCommon(bonus, model)
-        model.setValue(str(bonus.getValue()))
-        model.setLabel(label)
-        model.setIsOpenable(False)
-        days = bonus.getValue()
-        if days in cls._ICONS_AVAILABLE:
-            model.setIcon('{}_{}'.format(bonus.getName(), days))
-        else:
-            model.setIcon('premium_universal')
-        return model
-
-
-class MapboxGoodiesPacker(GoodiesBonusUIPacker):
-
-    @classmethod
-    def _packSingleBoosterBonus(cls, bonus, booster, count):
-        model = RewardItemModel()
-        cls._packCommon(bonus, model)
-        model.setValue(str(count))
-        model.setIcon(booster.boosterGuiType)
-        model.setLabel(booster.userName)
-        model.setIsOpenable(False)
-        return model
+    return
 
 
-class MapboxItemPacker(ItemBonusUIPacker):
-
-    @classmethod
-    def _packSingleBonus(cls, bonus, item, count):
-        model = RewardItemModel()
-        cls._packCommon(bonus, model)
-        model.setValue(str(count))
-        model.setIcon(item.name)
-        model.setLabel(item.userName)
-        return model
-
-
-class MapboxCustomizationPacker(CustomizationBonusUIPacker):
-
-    @classmethod
-    def _packSingleBonus(cls, bonus, item, label):
-        model = RewardItemModel()
-        cls._packCommon(bonus, model)
-        model.setValue(str(item.get('value', 0)))
-        model.setIcon(str(bonus.getC11nItem(item).itemTypeName))
-        model.setLabel(label)
-        model.setIsOpenable(False)
-        return model
-
-
-class MapboxSelectablePacker(BaseBonusUIPacker):
+class _MapboxBlueprintBonusUIPacker(BlueprintBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
-        return [ cls._packSingleItem(item) for item in bonus.getItems() ]
-
-    @classmethod
-    def _packSingleItem(cls, item):
-        model = RewardItemModel()
-        model.setName(item.name)
-        model.setValue(str(item.count))
-        label = getLocalizedBonusName(item.name) or ''
-        model.setLabel(label)
-        model.setIcon(item.name)
-        model.setIsOpenable(True)
-        return model
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SELECTABLE_CREWBOOK, specialArgs=[item]) for item in bonus.getItems() ]
-
-
-class MapboxCrewBookPacker(CrewBookBonusUIPacker):
-
-    @classmethod
-    def _packSingleBonus(cls, bonus, book, count):
-        model = CrewBookRewardOptionModel()
-        cls._packCommon(bonus, model)
-        model.setIcon(book.getBonusIconName())
-        model.setValue(str(count))
-        model.setLabel(text(R.strings.nations.dyn(book.getNation())()))
-        description = text(R.strings.mapbox.rewardDescription.dyn(book.itemTypeName)(), exp=book.getXP(), nation=text(R.strings.nations.dyn(book.getNation()).genetiveCase()))
-        model.setDescription(description)
-        model.setItemID(book.intCD)
-        return model
-
-
-class MapboxRandomCrewbookPacker(BaseBonusUIPacker):
-
-    @classmethod
-    def _pack(cls, bonus):
-        return [ cls._packSingleItem(item) for item in bonus.getItems() ]
-
-    @classmethod
-    def _packSingleItem(cls, item):
-        model = RewardItemModel()
-        model.setName(item.name)
-        model.setValue(str(item.count))
-        model.setIcon(item.name)
-        return model
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK, specialArgs=[item]) for item in sorted(bonus.getItems()) ]
+        models = super(_MapboxBlueprintBonusUIPacker, cls)._pack(bonus)
+        model = first(models)
+        if model:
+            model.setLabel(bonus.getLabel())
+        return models

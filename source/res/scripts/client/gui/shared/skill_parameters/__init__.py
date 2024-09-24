@@ -8,7 +8,6 @@ class SKILLS(CONST_CONTAINER):
     BROTHERHOOD = 'brotherhood'
     COMMANDER_TUTOR = 'commander_tutor'
     COMMANDER_SIXTH_SENSE = 'commander_sixthSense'
-    RADIOMAN_LAST_EFFORT = 'radioman_lastEffort'
     GUNNER_RANCOROUS = 'gunner_rancorous'
     COMMANDER_ENEMY_SHOT_PREDICTOR = 'commander_enemyShotPredictor'
     GUNNER_ARMORER = 'gunner_armorer'

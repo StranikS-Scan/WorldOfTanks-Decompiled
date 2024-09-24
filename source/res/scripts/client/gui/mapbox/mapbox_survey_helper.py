@@ -34,6 +34,10 @@ class Condition(object):
         self.__quantifier = quantifier
         self.__isRequiredAnswer = isRequired
 
+    @property
+    def requiredQuestionId(self):
+        return self.__requiredQuestionId
+
     def isValid(self):
         surveyManager = self.__mapboxCtrl.surveyManager
         selectedAnswers = surveyManager.getSelectedAnswers(self.__requiredQuestionId, self.__requiredOptionId)
@@ -47,17 +51,11 @@ class Condition(object):
 
 class IQuestion(object):
 
-    def getQuestionId(self):
-        raise NotImplementedError
-
-    def getQuestionType(self):
-        raise NotImplementedError
-
-    def isRequired(self):
+    def clear(self):
         pass
 
-    def isReadyToShow(self):
-        raise NotImplementedError
+    def convertAnswers(self, answers, optionId):
+        pass
 
     def getLinkedQuestionId(self):
         pass
@@ -65,7 +63,25 @@ class IQuestion(object):
     def getOptions(self):
         pass
 
+    def getQuestionId(self):
+        raise NotImplementedError
+
+    def getQuestionType(self):
+        raise NotImplementedError
+
+    def getDependedQuestions(self, questionId=None):
+        raise NotImplementedError
+
+    def getConditions(self):
+        raise NotImplementedError
+
     def isMultipleChoice(self):
+        pass
+
+    def isReadyToShow(self):
+        raise NotImplementedError
+
+    def isRequired(self):
         pass
 
     def isSyncronizedAnswers(self):
@@ -74,18 +90,15 @@ class IQuestion(object):
     def synchronizeAnswers(self, *args, **kwargs):
         pass
 
-    def clear(self):
-        pass
-
-    def convertAnswers(self, answers, optionId):
-        pass
-
     def validateAnswers(self, answers, previousAnswers):
+        pass
+
+    def updateDependedQuestions(self, questionId):
         pass
 
 
 class Question(IQuestion):
-    __slots__ = ('__surveyGroup', '__questionId', '__isMultiple', '__isRequired', '__condition', '__answers', '__guiParameters', '__linkedParameters')
+    __slots__ = ('__surveyGroup', '__questionId', '__isMultiple', '__isRequired', '__conditions', '__answers', '__guiParameters', '__linkedParameters', '__dependedQuestions')
     _mapboxCtrl = dependency.descriptor(IMapboxController)
 
     def __init__(self, *args, **kwargs):
@@ -93,13 +106,20 @@ class Question(IQuestion):
         self.__questionId = kwargs.get('questionId')
         self.__isRequired = kwargs.get('isRequired', False)
         self.__isMultiple = kwargs.get('isMultiple', False)
-        self.__condition = kwargs.get('condition')
+        self.__conditions = kwargs.get('conditions')
         self.__answers = kwargs.get('answers')
         self.__guiParameters = kwargs.get('guiParameters')
         self.__linkedParameters = kwargs.get('linkedParameters')
+        self.__dependedQuestions = set()
 
     def getQuestionId(self):
         return self.__questionId
+
+    def getDependedQuestions(self, _=None):
+        return self.__dependedQuestions
+
+    def getConditions(self):
+        return self.__conditions
 
     def isRequired(self):
         return self.__isRequired
@@ -111,7 +131,7 @@ class Question(IQuestion):
         return self.__guiParameters.showIcons if self.__guiParameters is not None else False
 
     def isReadyToShow(self):
-        return self.__condition is None or self.__condition.isValid()
+        return not self.__conditions or bool(findFirst(lambda c: c.isValid(), self.__conditions))
 
     def getImage(self):
         if self.__guiParameters.useMapId:
@@ -169,13 +189,19 @@ class Question(IQuestion):
             answers[0]['choices'] = set(requiredGroup).intersection(newChoices)
             return answers
 
+    def updateDependedQuestions(self, questionId):
+        self.__dependedQuestions.add(questionId)
+
     def clear(self):
-        if self.__condition is not None:
-            self.__condition.clear()
-            self.__condition = None
+        if self.__conditions is not None:
+            for condition in self.__conditions:
+                condition.clear()
+
+            self.__conditions = None
         self.__guiParameters = None
         self.__linkedParameters = None
         self.__answers = None
+        self.__dependedQuestions = None
         return
 
 
@@ -272,21 +298,11 @@ class AlternativeQuestion(IQuestion):
         self.__isSynchronizedAnswers = kwargs.get('isSynchronizedAnswers', False)
         return
 
-    def getQuestionType(self):
-        return QuestionType.ALTERNATIVE
-
-    def getQuestionId(self):
-        return self.__questionId
-
-    def isSyncronizedAnswers(self):
-        return self.__isSynchronizedAnswers
-
-    def selectAlternative(self):
-        question = findFirst(lambda q: q.isReadyToShow(), self._alternatives)
-        return question
-
     def getAlternative(self, questionId):
         return findFirst(lambda q: q.getQuestionId() == questionId, self._alternatives)
+
+    def getAlternatives(self):
+        return self._alternatives
 
     def getLinkedQuestionId(self):
         for q in self._alternatives:
@@ -295,11 +311,28 @@ class AlternativeQuestion(IQuestion):
 
         return None
 
-    def getAlternatives(self):
-        return self._alternatives
+    def getQuestionType(self):
+        return QuestionType.ALTERNATIVE
+
+    def getQuestionId(self):
+        return self.__questionId
+
+    def getDependedQuestions(self, questionId=None):
+        question = findFirst(lambda q: q.getQuestionId() == questionId, self._alternatives)
+        return question.getDependedQuestions() if question is not None else []
+
+    def getConditions(self):
+        return [ c for q in self._alternatives for c in q.getConditions() ]
 
     def isReadyToShow(self):
         return any((q.isReadyToShow() for q in self._alternatives))
+
+    def isSyncronizedAnswers(self):
+        return self.__isSynchronizedAnswers
+
+    def selectAlternative(self):
+        question = findFirst(lambda q: q.isReadyToShow(), self._alternatives)
+        return question
 
     def clear(self):
         for question in self._alternatives:
@@ -339,16 +372,16 @@ class AlternativeOneManyQuestion(AlternativeQuestion):
         return
 
     @staticmethod
+    def __findSavedAnswers(qId, surveyData, choices):
+        return [ answer for answer in surveyData.get(qId, []) if answer.get('optionId') in choices ]
+
+    @staticmethod
     def __updateAnswers(qId, surveyData, leftAnswers):
         if leftAnswers:
             surveyData[qId] = leftAnswers
         else:
             surveyData.pop(qId, None)
         return
-
-    @staticmethod
-    def __findSavedAnswers(qId, surveyData, choices):
-        return [ answer for answer in surveyData.get(qId, []) if answer.get('optionId') in choices ]
 
 
 _SUPPORTED_QUESTION_TYPES = {QuestionType.IMAGE.value: _ImageQuestion,
@@ -361,3 +394,11 @@ _SUPPORTED_QUESTION_TYPES = {QuestionType.IMAGE.value: _ImageQuestion,
 
 def getQuestionClass(questionType):
     return _SUPPORTED_QUESTION_TYPES.get(questionType)
+
+
+def findQuestionById(qId, questions):
+    parts = qId.split('_')
+    if len(parts) > 1:
+        question = findFirst(lambda q: q.getQuestionId() == parts[0], questions)
+        return question.getAlternative(qId)
+    return findFirst(lambda q: q.getQuestionId() == qId, questions)

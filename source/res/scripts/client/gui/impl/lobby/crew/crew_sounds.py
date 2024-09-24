@@ -23,8 +23,6 @@ class SOUNDS(CONST_CONTAINER):
     CREW_RESET_PERK_HUGE_LOSS = 'crew_reset_perks_break'
     CREW_PERK_UPGRADE = 'crew_perks_upgrade'
     CREW_CHANGE_ROLE = 'crew_change_qualification'
-    CREW_RECRUIT_IN = 'crew_tank_recruit_fadein'
-    CREW_RECRUIT_OUT = 'crew_tank_recruit_fadeout'
     CONVERSION_AWARD = 'gui_reward_screen_general'
 
 

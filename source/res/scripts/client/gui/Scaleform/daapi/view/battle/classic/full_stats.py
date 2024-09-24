@@ -17,11 +17,22 @@ from helpers.i18n import makeString
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from uilogging.player_satisfaction_rating.loggers import BattleTeamStatsViewLogger
 
 class FullStatsComponent(ClassicFullStatsMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __eventsCache = dependency.descriptor(IEventsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def __init__(self):
+        super(FullStatsComponent, self).__init__()
+        self._uiPlayerSatisfactionRatingLogger = BattleTeamStatsViewLogger()
+
+    def onStatsTableVisibiltyToggled(self, isVisible):
+        if isVisible:
+            self._uiPlayerSatisfactionRatingLogger.onViewInitialize()
+        else:
+            self._uiPlayerSatisfactionRatingLogger.onViewFinalize()
 
     def onSelectQuest(self, questID):
         qProgressCtrl = self.sessionProvider.shared.questProgress

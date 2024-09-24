@@ -1,0 +1,12 @@
+<extension.xml>
+  <FeatureName>	tech_tree_trade_in	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	TechTreeTradeInPersonality	</Personality>
+  <Entities></Entities>
+  <Components>
+    <StaticComponents>
+      <TechTreeTradeInAccountComponent></TechTreeTradeInAccountComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+</extension.xml>

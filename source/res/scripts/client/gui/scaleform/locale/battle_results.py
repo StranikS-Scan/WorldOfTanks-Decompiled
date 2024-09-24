@@ -140,6 +140,7 @@ class BATTLE_RESULTS(object):
     COMMON_VEHICLESTATE_DEAD13 = '#battle_results:common/vehicleState/dead13'
     COMMON_VEHICLESTATE_DEAD27 = '#battle_results:common/vehicleState/dead27'
     COMMON_VEHICLESTATE_DEAD29 = '#battle_results:common/vehicleState/dead29'
+    COMMON_VEHICLESTATE_DEAD35 = '#battle_results:common/vehicleState/dead35'
     COMMON_VEHICLESTATE_PREMATURELEAVE = '#battle_results:common/vehicleState/prematureLeave'
     COMMON_DETAILS_NOPREMTITLE = '#battle_results:common/details/noPremTitle'
     COMMON_DETAILS_PREMTITLE = '#battle_results:common/details/premTitle'
@@ -522,7 +523,8 @@ class BATTLE_RESULTS(object):
      COMMON_VEHICLESTATE_DEAD12,
      COMMON_VEHICLESTATE_DEAD13,
      COMMON_VEHICLESTATE_DEAD27,
-     COMMON_VEHICLESTATE_DEAD29)
+     COMMON_VEHICLESTATE_DEAD29,
+     COMMON_VEHICLESTATE_DEAD35)
 
     @classmethod
     def getDetailsTimeLbl(cls, statName):

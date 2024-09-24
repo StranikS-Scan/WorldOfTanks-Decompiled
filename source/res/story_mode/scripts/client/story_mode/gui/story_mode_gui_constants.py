@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/story_mode_gui_constants.py
 from constants_utils import ConstInjector
-from shared_utils import CONST_CONTAINER
 from gui.Scaleform.daapi.settings import views
 from gui.prb_control import settings
 from sound_gui_manager import CommonSoundSpaceSettings
@@ -26,7 +25,8 @@ class VIEW_ALIAS(views.VIEW_ALIAS, ConstInjector):
     ONBOARDING_BATTLE_PAGE = 'OnboardingBattlePage'
     ONBOARDING_SETTINGS_WINDOW = 'onboardingSettingsWindow'
     STORY_MODE_INTRO_VIDEO_WINDOW = 'storyModeIntroVideoWindow'
-    STORY_MODE_ENTRY_POINT = 'StoryModeEntryPoint'
+    STORY_MODE_EVENT_ENTRY_POINT = 'StoryModeEventEntryPoint'
+    STORY_MODE_NEWBIE_ENTRY_POINT = 'StoryModeNewbieEntryPoint'
     STORY_MODE_WEB_VIEW_TRANSPARENT = 'StoryModeWebViewTransparent'
 
 
@@ -44,32 +44,12 @@ HANGAR_STATE = 'STATE_hangar_place_garage'
 POST_BATTLE_MUSIC_WIN = 'gui_reward_v1_special'
 POST_BATTLE_MUSIC_LOSE = 'reward_tank_marathon_A122_TS_5'
 CONGRATULATION_MUSIC = 'gui_reward_v1_special'
-STORY_MODE_SOUND_SPACE = CommonSoundSpaceSettings(name=COMMON_SOUND_SPACE, entranceStates={GAMEMODE_GROUP: GAMEMODE_STATE,
- HANGAR_GROUP: HANGAR_STATE}, exitStates={GAMEMODE_GROUP: GAMEMODE_DEFAULT}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
-
-class Ambience(CONST_CONTAINER):
-    ONBOARDING_START = 'sm_lobby_enter'
-    ONBOARDING_STOP = 'sm_lobby_exit'
-    EVENT_START = 'sm_lobby_dday_enter'
-    EVENT_STOP = 'sm_lobby_dday_exit'
-
-
-class Music(CONST_CONTAINER):
-    ONBOARDING_START = 'ob_music_start'
-    ONBOARDING_STOP = 'ob_music_stop'
-    EVENT_START = 'sm_lobby_dday_music_start'
-    EVENT_STOP = 'sm_lobby_dday_music_stop'
-
-
-class EventLobbySoundState(CONST_CONTAINER):
-    GROUP = 'STATE_sm_lobby_dday_difficulty'
-    DIFFICULTY_NORMAL = 'STATE_sm_lobby_dday_difficulty_01'
-    DIFFICULTY_HARD = 'STATE_sm_lobby_dday_difficulty_02'
-
-
-class EventMusicState(CONST_CONTAINER):
-    GROUP = 'STATE_sm_dday_music'
-    DIFFICULTY_NORMAL = 'STATE_sm_dday_music_00_lobby_easy'
-    DIFFICULTY_HARD = 'STATE_sm_dday_music_00_lobby_hard'
-    VIDEO = 'STATE_sm_dday_music_00_lobby_video'
-    LORE = 'STATE_sm_dday_music_00_lobby_hard'
+STORY_MODE_SOUND_SPACE = CommonSoundSpaceSettings(name=COMMON_SOUND_SPACE, entranceStates={HANGAR_GROUP: HANGAR_STATE}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+BONUS_ORDER = ['bpcoin',
+ 'battlePassPoints',
+ 'crystal',
+ 'freeXP',
+ 'credits',
+ 'premium_plus',
+ 'items',
+ 'customizations']

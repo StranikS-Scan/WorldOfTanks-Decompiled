@@ -25,5 +25,4 @@ class MapsTrainingSound(CONST_CONTAINER):
             WWISE.WW_eventGlobal(MapsTrainingSound.MAP_CHOICE_ENTER)
 
 
-MAPS_TRAINING_SOUND_SPACE = CommonSoundSpaceSettings(name=MapsTrainingSound.COMMON_SOUND_SPACE, entranceStates={MapsTrainingSound.GAMEMODE_GROUP: MapsTrainingSound.GAMEMODE_STATE,
- MapsTrainingSound.HANGAR_GROUP: MapsTrainingSound.HANGAR_STATE}, exitStates={MapsTrainingSound.GAMEMODE_GROUP: MapsTrainingSound.GAMEMODE_DEFAULT}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=MapsTrainingSound.ENTER_EVENT, exitEvent=MapsTrainingSound.EXIT_EVENT)
+MAPS_TRAINING_SOUND_SPACE = CommonSoundSpaceSettings(name=MapsTrainingSound.COMMON_SOUND_SPACE, entranceStates={MapsTrainingSound.HANGAR_GROUP: MapsTrainingSound.HANGAR_STATE}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=MapsTrainingSound.ENTER_EVENT, exitEvent=MapsTrainingSound.EXIT_EVENT)

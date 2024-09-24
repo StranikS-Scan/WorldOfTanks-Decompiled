@@ -175,6 +175,14 @@ def getArenaFullName(arenaTypeID):
     return arenaName
 
 
+def getArenaImage(geometryName, subdir=''):
+    dynAccessor = R.images.gui.maps.icons.map
+    if subdir:
+        dynAccessor = dynAccessor.dyn(subdir)
+    imgDynAccessor = dynAccessor.num(geometryName)
+    return backport.image(imgDynAccessor()) if imgDynAccessor.isValid() else ''
+
+
 def getBattleSubTypeWinText(arenaTypeID, teamID):
     root = R.strings.arenas.type.dyn(ArenaType.g_cache[arenaTypeID].gameplayName)
     description = root.dyn('description')

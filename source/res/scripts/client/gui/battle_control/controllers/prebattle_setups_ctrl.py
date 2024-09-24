@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/prebattle_setups_ctrl.py
 import logging
-import typing
 import BigWorld
+import typing
 from account_helpers.settings_core.settings_constants import GAME
 from battle_modifiers_common import EXT_DATA_MODIFIERS_KEY
 from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE
 from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from gui.shared.items_parameters.functions import getVehicleFactors
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.items_parameters.functions import getVehicleFactors
 from gui.shared.utils.MethodsRules import MethodsRules
+from gui.veh_post_progression.battle_cooldown_manager import BattleCooldownManager
 from gui.veh_post_progression.helpers import setFeatures, setDisabledSwitches, getInstalledShells, updateInvInstalled
 from gui.veh_post_progression.sounds import playSound, Sounds
-from gui.veh_post_progression.battle_cooldown_manager import BattleCooldownManager
 from helpers import dependency
 from items import vehicles
 from items.components.post_progression_components import getActiveModifications
@@ -196,8 +196,11 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
     def setSetups(self, vehicleID, setups):
         if self.__playerVehicleID != vehicleID or self.__isSelectionStopped() or self.__state & _States.SETUPS:
             return
-        self.__invData.update({_SETUP_NAME_TO_LAYOUT[key]:value for key, value in setups.iteritems()})
+        self.setInvData(setups)
         self.__onInitStepCompleted(_States.SETUPS)
+
+    def setInvData(self, setups):
+        self.__invData.update({_SETUP_NAME_TO_LAYOUT[key]:value for key, value in setups.iteritems()})
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setSetupsIndexes(self, vehicleID, setupsIndexes):
@@ -209,6 +212,9 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             self.__updateSetupIndexes()
             return
         self.__onInitStepCompleted(_States.SETUPS_INDEXES)
+
+    def updateLayoutIndexes(self, setupsIndexes):
+        self.__invData['layoutIndexes'] = setupsIndexes.copy()
 
     @MethodsRules.delayable('setPlayerVehicle')
     def setSiegeState(self, vehicleID, siegeState):
@@ -235,6 +241,12 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
         if self.isSelectionStarted():
             for component in components:
                 component.showSetupsView(self.__vehicle, self.__arenaLoaded)
+
+    @MethodsRules.delayable('setPlayerVehicle')
+    def onCurrentShellUpdate(self, vehicleID):
+        if not self.isSelectionStarted() or self.__playerVehicleID != vehicleID:
+            return
+        self.__updateAmmoCtrlParams(self.__updateGuiVehicle())
 
     def arenaLoadCompleted(self):
         self.__arenaLoaded = True
@@ -269,6 +281,13 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
             playerVehicle.cell.switchSetup(groupID, layoutIdx)
             playSound(Sounds.GAMEPLAY_SETUP_SWITCH)
             return
+
+    def getSlotItem(self, group, layout, slotId):
+        if group not in self.__invData:
+            return None
+        else:
+            layoutIndex = 0 if not self.__invData['layoutIndexes'] else self.__invData['layoutIndexes'][layout]
+            return self.__invData[group][layoutIndex][slotId] if layoutIndex < len(self.__invData[group]) and slotId < len(self.__invData[group][layoutIndex]) else None
 
     def __isSelectionAvailable(self):
         if not self.__hasValidCaps:
@@ -318,8 +337,9 @@ class PrebattleSetupsController(MethodsRules, IPrebattleSetupsController):
 
     def __updateAmmoCtrlParams(self, factors):
         ammoCtrl = self.__sessionProvider.shared.ammo
+        quantity = ammoCtrl.getShellsQuantityLeft()
         hasAmmo = any((shell.count for shell in self.__vehicle.shells.installed.getItems()))
-        reloadTime = getFirstReloadTime(self.__vehicle.descriptor, factors) if hasAmmo else 0.0
+        reloadTime = getFirstReloadTime(self.__vehicle.descriptor, factors, shellsAmount=quantity) if hasAmmo else 0.0
         ammoCtrl.setGunReloadTime(-1, reloadTime, skipAutoLoader=True)
 
     def __updateFeedbackParams(self, factors):

@@ -597,7 +597,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
         return ammoPrice
 
     def __getAmmoIsAvailable(self, ammoPrice):
-        return not self.__vehicle.isAmmoFull and self.__isAvailablePrice(ammoPrice)
+        return self.__vehicle.isAmmoEmpty and self.__isAvailablePrice(ammoPrice)
 
     def __hasFreeSlots(self):
         return self.__itemsCache.items.inventory.getFreeSlots(self.__stats.vehicleSlots) > 0
@@ -764,9 +764,13 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
 
     def __createAmmoOptionModel(self):
         ammoPrice = self.__getAmmoItemPrice()
-        isAmmoFull = self.__vehicle.isAmmoFull
         isAvailable = self.__getAmmoIsAvailable(ammoPrice.price)
-        return self.__createOptionModel(VehicleOptions.AMMO, ammoPrice, R.images.gui.maps.icons.hangar.buyVehicle.ammo(), backport.text(R.strings.hangar.buyVehicleWindow.equipment.ammo()), customState=None if isAvailable else OptionState.DISABLED, tooltipBody=backport.text(R.strings.dialogs.buyVehicleWindow.fullAmmo()) if isAmmoFull else None)
+        tooltipBody = None
+        if not self.__vehicle.isAmmoEmpty:
+            tooltipBody = backport.text(R.strings.dialogs.buyVehicleWindow.notEmptyAmmo())
+            if self.__vehicle.isAmmoFull:
+                tooltipBody = backport.text(R.strings.dialogs.buyVehicleWindow.fullAmmo())
+        return self.__createOptionModel(VehicleOptions.AMMO, ammoPrice, R.images.gui.maps.icons.hangar.buyVehicle.ammo(), backport.text(R.strings.hangar.buyVehicleWindow.equipment.ammo()), customState=None if isAvailable else OptionState.DISABLED, tooltipBody=tooltipBody)
 
     def __createSlotOptionModel(self):
         slotItemPrice = self.__shop.getVehicleSlotsItemPrice(self.__stats.vehicleSlots)

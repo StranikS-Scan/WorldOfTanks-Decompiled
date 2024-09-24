@@ -63,7 +63,6 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IEventBattlesController
 from vehicle_outfit.outfit import Area
 from constants import NC_MESSAGE_PRIORITY
 if typing.TYPE_CHECKING:
@@ -201,7 +200,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     appLoader = dependency.descriptor(IAppLoader)
     guiLoader = dependency.descriptor(IGuiLoader)
     settingsCore = dependency.descriptor(ISettingsCore)
-    gameEventController = dependency.descriptor(IEventBattlesController)
 
     def __init__(self, ctx=None):
         super(MainView, self).__init__()
@@ -836,7 +834,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroyHandler
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
-        if g_currentVehicle.isPresent() and not self.gameEventController.isEventPrbActive():
+        if g_currentVehicle.isPresent():
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.__ctx.season
             g_currentVehicle.refreshModel()
         self.__propertiesSheet = None

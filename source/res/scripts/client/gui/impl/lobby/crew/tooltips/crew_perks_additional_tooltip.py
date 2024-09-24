@@ -40,9 +40,9 @@ class CrewPerksAdditionalTooltip(ViewImpl):
 
     def _fillModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setIcon(self._skill.bigIconPath)
+            vm.setIconName(self._skill.extensionLessIconName)
             vm.setSkillType(self._skill.typeName)
-            vm.setTitle(self._skill.userName)
+            vm.setUserName(self._skill.userName)
             vm.setDescription(self._skill.altDescription)
             vm.setInfo(self._skill.altInfo)
             movieName = SKILL_MOVIES.get(self._skill.name, None)

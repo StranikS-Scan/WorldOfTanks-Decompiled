@@ -794,9 +794,6 @@
       <gunShotsSpeed>
         <Type>	FLOAT	</Type>
       </gunShotsSpeed>
-      <gunCanShoot>
-        <Type>	BOOL	</Type>
-      </gunCanShoot>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <IS_OBSERVED_BY_ENEMY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -971,6 +968,9 @@
       <lastDeathReasonID>
         <Type>	UINT8	</Type>
       </lastDeathReasonID>
+      <attackReasonExtID>
+        <Type>	INT8	</Type>
+      </attackReasonExtID>
     </Properties>
   </BATTLE_EVENTS_SUMMARY>
   <REMOTE_CAMERA_DATA>	FIXED_DICT	  <Properties>
@@ -1502,6 +1502,15 @@
       </sessionLimit>
     </Properties>
   </PLAY_LIMITS>
+  <BATTLE_CHAT_RESTRICTION>	FIXED_DICT	  <Properties>
+      <isBattleChatDisabled>
+        <Type>	BOOL	</Type>
+      </isBattleChatDisabled>
+      <restrictionReasonID>
+        <Type>	INT8	</Type>
+      </restrictionReasonID>
+    </Properties>
+  </BATTLE_CHAT_RESTRICTION>
   <VEHICLE_IN_DEATHZONE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <vehicleId>
@@ -1619,6 +1628,9 @@
       <isRespawnActive>
         <Type>	BOOL	</Type>
       </isRespawnActive>
+      <deathReasonExtID>
+        <Type>	INT8	</Type>
+      </deathReasonExtID>
     </Properties>
   </VEHICLE_HEALTH_INFO>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1900,6 +1912,9 @@
       <isBoostApplicable>
         <Type>	BOOL	</Type>
       </isBoostApplicable>
+      <clipTime>
+        <Type>	FLOAT32	</Type>
+      </clipTime>
     </Properties>
   </VEHICLE_CLIP_RELOAD_TIME>
   <VEHICLE_GUN_RELOAD_TIME>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1913,6 +1928,9 @@
       <timeLeft>
         <Type>	FLOAT32	</Type>
       </timeLeft>
+      <clipTime>
+        <Type>	FLOAT32	</Type>
+      </clipTime>
     </Properties>
   </VEHICLE_GUN_RELOAD_TIME>
   <OWN_VEHICLE_POSITION>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1994,6 +2012,9 @@
       <equipmentID>
         <Type>	UINT16	</Type>
       </equipmentID>
+      <damageExtIndex>
+        <Type>	INT8	</Type>
+      </damageExtIndex>
     </Properties>
   </VEHICLE_DAMAGE_INFO>
   <VEHICLE_DAMAGE_INFO_LIST>	ARRAY	  <of>	VEHICLE_DAMAGE_INFO	</of>
@@ -2158,38 +2179,6 @@
   </DEBUFF_INFO>
   <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
   </DEBUFF_INFO_LIST>
-  <TIMER_INFO>	FIXED_DICT	  <Properties>
-      <factor>
-        <Type>	FLOAT32	</Type>
-      </factor>
-      <left>
-        <Type>	FLOAT32	</Type>
-      </left>
-      <endTime>
-        <Type>	FLOAT32	</Type>
-      </endTime>
-    </Properties>
-  </TIMER_INFO>
-  <HEALTH_INFO>	FIXED_DICT	  <Properties>
-      <vehicleID>
-        <Type>	OBJECT_ID	</Type>
-      </vehicleID>
-      <health>
-        <Type>	UINT16	</Type>
-      </health>
-    </Properties>
-  </HEALTH_INFO>
-  <HEALTH_INFO_LIST>	ARRAY	  <of>	HEALTH_INFO	</of>
-  </HEALTH_INFO_LIST>
-  <UDO_INFO>	FIXED_DICT	  <Properties>
-      <guid>
-        <Type>	STRING	</Type>
-      </guid>
-      <position>
-        <Type>	VECTOR2	</Type>
-      </position>
-    </Properties>
-  </UDO_INFO>
   <ROCKET_ACCELERATION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -2336,9 +2325,6 @@
       <stage>
         <Type>	UINT8	</Type>
       </stage>
-      <locked>
-        <Type>	BOOL	</Type>
-      </locked>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_STATE>
   <VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>	FIXED_DICT	  <Properties>
@@ -2459,7 +2445,7 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
-  <DEATH_INFO>	FIXED_DICT	  <AllowNone>	True	</AllowNone>
+  <DEATH_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <victimID>
         <Type>	OBJECT_ID	</Type>
@@ -2610,36 +2596,231 @@
       </lastVisiblePosition>
     </Properties>
   </PVE_TARGET_MARKER>
-  <RESPAWN_TIME_INFO>	FIXED_DICT	  <Properties>
+  <COMP7_PLAYER_STATS>	FIXED_DICT	  <Properties>
+      <damageDone>
+        <Type>	INT16	</Type>
+      </damageDone>
+      <damageBlocked>
+        <Type>	INT16	</Type>
+      </damageBlocked>
+      <damageAssisted>
+        <Type>	INT16	</Type>
+      </damageAssisted>
+      <spottedCount>
+        <Type>	INT16	</Type>
+      </spottedCount>
+      <shotCount>
+        <Type>	INT16	</Type>
+      </shotCount>
+      <hitCount>
+        <Type>	INT16	</Type>
+      </hitCount>
+      <killCount>
+        <Type>	INT16	</Type>
+      </killCount>
+    </Properties>
+  </COMP7_PLAYER_STATS>
+  <COMP7_EQUIPMENT>	FIXED_DICT	  <Properties>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <compactDescr>
+        <Type>	INT32	</Type>
+      </compactDescr>
+      <stage>
+        <Type>	UINT8	</Type>
+      </stage>
+      <endTime>
+        <Type>	FLOAT64	</Type>
+      </endTime>
+      <totalTime>
+        <Type>	FLOAT64	</Type>
+      </totalTime>
+      <level>
+        <Type>	UINT8	</Type>
+      </level>
+      <progress>
+        <Type>	FLOAT32	</Type>
+      </progress>
+    </Properties>
+  </COMP7_EQUIPMENT>
+  <GUN_RELOAD_INFO>	FIXED_DICT	  <Properties>
+      <activeGun>
+        <Type>	UINT8	</Type>
+      </activeGun>
+      <clipSize>
+        <Type>	UINT16	</Type>
+      </clipSize>
+      <clipLeft>
+        <Type>	UINT16	</Type>
+      </clipLeft>
+      <reloadEndTime>
+        <Type>	FLOAT64	</Type>
+      </reloadEndTime>
+      <reloadTotalTime>
+        <Type>	FLOAT64	</Type>
+      </reloadTotalTime>
+      <switchEndTime>
+        <Type>	FLOAT64	</Type>
+      </switchEndTime>
+      <switchTotalTime>
+        <Type>	FLOAT64	</Type>
+      </switchTotalTime>
+    </Properties>
+  </GUN_RELOAD_INFO>
+  <COMP7_VEHICLE_INFO>	FIXED_DICT	  <Properties>
       <vehicleID>
         <Type>	OBJECT_ID	</Type>
       </vehicleID>
-      <spawnTime>
-        <Type>	FLOAT32	</Type>
-      </spawnTime>
-      <delay>
-        <Type>	FLOAT32	</Type>
-      </delay>
-    </Properties>
-  </RESPAWN_TIME_INFO>
-  <CIRCUIT_OVERLOAD_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <notificationIndex>
-        <Type>	UINT8	</Type>
-      </notificationIndex>
-      <prefabPath>
+      <accountDBID>
+        <Type>	UINT64	</Type>
+      </accountDBID>
+      <name>
         <Type>	STRING	</Type>
-      </prefabPath>
-    </Properties>
-  </CIRCUIT_OVERLOAD_INFO>
-  <IMPACT_AREA_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <timeBeforeDamage>
-        <Type>	FLOAT	</Type>
-      </timeBeforeDamage>
+      </name>
+      <fakeName>
+        <Type>	STRING	</Type>
+      </fakeName>
+      <team>
+        <Type>	INT8	</Type>
+      </team>
+      <clanDBID>
+        <Type>	DB_ID	</Type>
+      </clanDBID>
+      <clanAbbrev>
+        <Type>	STRING	</Type>
+      </clanAbbrev>
+      <outfitCD>
+        <Type>	STRING	</Type>
+      </outfitCD>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <maxHealth>
+        <Type>	INT16	</Type>
+      </maxHealth>
+      <curHealth>
+        <Type>	INT16	</Type>
+      </curHealth>
+      <isAlive>
+        <Type>	BOOL	</Type>
+      </isAlive>
+      <deathInfo>
+        <Type>	DEATH_INFO	</Type>
+      </deathInfo>
+      <gunReloadInfo>
+        <Type>	GUN_RELOAD_INFO	</Type>
+      </gunReloadInfo>
+      <criticalDevices>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </criticalDevices>
+      <destroyedDevices>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </destroyedDevices>
+      <injuredTankmen>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </injuredTankmen>
+      <vehicleAmmoList>
+        <Type>	VEHICLE_AMMO_LIST	</Type>
+      </vehicleAmmoList>
+      <consumableEquipment>
+        <Type>	ARRAY	  <of>	COMP7_EQUIPMENT	</of>
+        </Type>
+      </consumableEquipment>
+      <deviceEquipment>
+        <Type>	ARRAY	  <of>	COMP7_EQUIPMENT	</of>
+        </Type>
+      </deviceEquipment>
+      <boosterEquipment>
+        <Type>	ARRAY	  <of>	COMP7_EQUIPMENT	</of>
+        </Type>
+      </boosterEquipment>
+      <poiEquipment>
+        <Type>	ARRAY	  <of>	COMP7_EQUIPMENT	</of>
+        </Type>
+      </poiEquipment>
+      <roleEquipment>
+        <Type>	COMP7_EQUIPMENT	</Type>
+      </roleEquipment>
+      <isInspired>
+        <Type>	BOOL	</Type>
+      </isInspired>
+      <isHealing>
+        <Type>	BOOL	</Type>
+      </isHealing>
+      <isStunned>
+        <Type>	BOOL	</Type>
+      </isStunned>
+      <isOnFire>
+        <Type>	BOOL	</Type>
+      </isOnFire>
       <isVisible>
         <Type>	BOOL	</Type>
       </isVisible>
+      <isAmmoBayDestroyed>
+        <Type>	BOOL	</Type>
+      </isAmmoBayDestroyed>
+      <attackerSetOnFire>
+        <Type>	OBJECT_ID	</Type>
+      </attackerSetOnFire>
+      <attackerAmmoBayDestroyed>
+        <Type>	OBJECT_ID	</Type>
+      </attackerAmmoBayDestroyed>
+      <playerStats>
+        <Type>	COMP7_PLAYER_STATS	</Type>
+      </playerStats>
     </Properties>
-  </IMPACT_AREA_INFO>
+  </COMP7_VEHICLE_INFO>
+  <COMP7_POI_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	OBJECT_ID	</Type>
+      </id>
+      <status>
+        <Type>	STATUS_WITH_TIME_INTERVAL	</Type>
+      </status>
+      <type>
+        <Type>	UINT8	</Type>
+      </type>
+      <invader>
+        <Type>	OBJECT_ID	</Type>
+      </invader>
+    </Properties>
+  </COMP7_POI_INFO>
+  <INVADER_CAPTURE_POINTS>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <capturePoints>
+        <Type>	FLOAT32	</Type>
+      </capturePoints>
+    </Properties>
+  </INVADER_CAPTURE_POINTS>
+  <COMP7_BASE_INFO>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	OBJECT_ID	</Type>
+      </id>
+      <baseID>
+        <Type>	UINT8	</Type>
+      </baseID>
+      <teamID>
+        <Type>	INT8	</Type>
+      </teamID>
+      <status>
+        <Type>	INT8	</Type>
+      </status>
+      <capturePoints>
+        <Type>	INT32	</Type>
+      </capturePoints>
+      <captureTimeLeft>
+        <Type>	INT32	</Type>
+      </captureTimeLeft>
+      <invaderCapturePoints>
+        <Type>	ARRAY	  <of>	INVADER_CAPTURE_POINTS	</of>
+        </Type>
+      </invaderCapturePoints>
+    </Properties>
+  </COMP7_BASE_INFO>
 </alias.xml>

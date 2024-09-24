@@ -7,10 +7,12 @@ import adisp
 from BattleReplay import g_replayCtrl, CallbackDataNames
 import BigWorld
 import Event
+import WWISE
 from CurrentVehicle import g_currentPreviewVehicle
 from PlayerEvents import g_playerEvents
 from constants import ARENA_BONUS_TYPE, REQUEST_COOLDOWN
 from gui.impl.lobby.maps_training.maps_training_client_settings import MapsTrainingClientSettings
+from gui.impl.lobby.maps_training.sound_constants import MapsTrainingSound
 from gui.prb_control.entities.base.ctx import PrbAction
 from helpers import dependency
 from helpers import isPlayerAccount
@@ -48,6 +50,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         self.__preferences = MapsTrainingClientSettings()
         self.__configIsOld = False
         self.__lastRequestTime = 0
+        self.__exitSoundStateSet = False
         self.onUpdated = Event.Event()
 
     @property
@@ -68,6 +71,8 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
         if ctx is None:
             ctx = self.getPageCtx()
         event_dispatcher.showMapsTrainingPage(ctx)
+        self.__exitSoundStateSet = False
+        WWISE.WW_setState(MapsTrainingSound.GAMEMODE_GROUP, MapsTrainingSound.GAMEMODE_STATE)
         return
 
     @ifEnabled
@@ -167,6 +172,7 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
             self.showMapsTrainingPage()
 
     def onExit(self):
+        self.setExitSoundState()
         self.reset()
         self.__preferences.resetSessionFilters()
         g_currentPreviewVehicle.resetAppearance()
@@ -179,6 +185,13 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
 
     def onAccountBecomeNonPlayer(self):
         self.__replayConfigStored = False
+
+    def setExitSoundState(self):
+        if not self.__exitSoundStateSet:
+            if self.__mapGeometryID == self._UNDEFINED_VALUE:
+                MapsTrainingSound.onSelectedMap(True)
+            self.__exitSoundStateSet = True
+            WWISE.WW_setState(MapsTrainingSound.GAMEMODE_GROUP, MapsTrainingSound.GAMEMODE_DEFAULT)
 
     def requestInitialDataFromServer(self, callback=None):
         if g_replayCtrl.isRecording and not self.__replayConfigStored:

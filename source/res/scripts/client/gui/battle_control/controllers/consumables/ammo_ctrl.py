@@ -8,9 +8,10 @@ from math import fabs, ceil
 import BigWorld
 import CommandMapping
 import Event
+import math_utils
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from constants import VEHICLE_SETTING, ReloadRestriction, ARENA_PERIOD
-from shared_utils import CONST_CONTAINER
+from shared_utils import CONST_CONTAINER, first
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, SHELL_QUANTITY_UNKNOWN
@@ -28,16 +29,25 @@ _HUNDRED_PERCENT = 100.0
 _DualGunShellChangeTime = namedtuple('_DualGunShellChangeTime', 'left right activeIdx')
 _TIME_CORRECTION_THRESHOLD = 0.01
 _IGNORED_RELOADING_TIME = 0.15
+_DUPLET_SHELLS_AMOUNT = 2
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
     from items.vehicle_items import Gun
 
-class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect autoReload autoShoot isDualGun shellChangeFactor')):
+class _GunSettings(namedtuple('_GunSettings', ('clip',
+ 'burst',
+ 'shots',
+ 'reloadEffect',
+ 'autoReload',
+ 'autoShoot',
+ 'isDualGun',
+ 'twinGunFactor',
+ 'shellChangeFactor'))):
 
     @classmethod
     def default(cls):
-        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None, None, None, False, 0.0)
+        return cls.__new__(cls, _ClipBurstSettings(1, 0.0), _ClipBurstSettings(1, 0.0), {}, None, None, None, False, 0.0, 0.0)
 
     @classmethod
     def make(cls, gun):
@@ -60,14 +70,18 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         isAutoReload = 'autoreload' in gun.tags
         autoReload = gun.autoreload if isAutoReload else None
         autoShoot = gun.autoShoot if 'autoShoot' in gun.tags else None
+        twinGunFactor = gun.twinGun.twinGunReloadTime / gun.reloadTime if 'twinGun' in gun.tags else 0.0
         shellChangeFactor = gun.forcedReloadTime / (gun.autoreload.reloadTime[-1] if isAutoReload else gun.reloadTime)
-        return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload, autoShoot, isDualGun, shellChangeFactor)
+        return cls.__new__(cls, clip, burst, shots, reloadEffect, autoReload, autoShoot, isDualGun, twinGunFactor, shellChangeFactor)
 
     def isCassetteClip(self):
         return self.clip.size > 1 or self.burst.size > 1
 
     def isBurstAndClip(self):
         return self.clip.size > 1 and self.burst.size > 1
+
+    def isTwinGun(self):
+        return self.twinGunFactor > 0.0
 
     def hasAutoShoot(self):
         return self.autoShoot is not None
@@ -81,8 +95,9 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
     def getClipInterval(self):
         return 0.0 if self.hasAutoShoot() else self.clip.interval
 
-    def getLastAmmoCount(self):
-        lastAmmoCount = self.burst.size if self.isBurstAndClip() else 1
+    def getLastAmmoCount(self, shellsAmount):
+        lastAmmoCount = shellsAmount if shellsAmount > 0 else 1
+        lastAmmoCount = self.burst.size if self.isBurstAndClip() else lastAmmoCount
         return self.clip.size if self.hasAutoShoot() else lastAmmoCount
 
     def getPiercingPower(self, intCD):
@@ -115,6 +130,11 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect aut
         else:
             speed = -1
         return speed
+
+    def getTwinGunFactor(self, currShellsAmount, nextShellsAmount):
+        if currShellsAmount > nextShellsAmount:
+            return 1.0 / self.twinGunFactor
+        return self.twinGunFactor if currShellsAmount < nextShellsAmount else 1.0
 
 
 class AutoReloadingBoostStates(CONST_CONTAINER):
@@ -296,7 +316,7 @@ class _AutoShootsCtrl(object):
 
 
 class _AutoReloadingBoostStateCtrl(object):
-    __slots__ = ('__changeEventDispatcher', '__state', '__stateDuration', '__stateTotalTime', '__nextStateCallbackID', '__snapshot', '__prevSnapshot', '__gunSettings')
+    __slots__ = ('__changeEventDispatcher', '__state', '__stateDuration', '__stateTotalTime', '__nextStateCallbackID', '__snapshot', '__prevSnapshot', '__gunSettings', '__serverClipTime')
     _SHOOT_MIN_TIME_TRASHOLD = 0.2
 
     def __init__(self, changeEvtDispatcher):
@@ -309,6 +329,7 @@ class _AutoReloadingBoostStateCtrl(object):
         self.__snapshot = None
         self.__nextStateCallbackID = None
         self.__gunSettings = None
+        self.__serverClipTime = None
         return
 
     def clear(self):
@@ -325,10 +346,11 @@ class _AutoReloadingBoostStateCtrl(object):
         self.__cancelCallback()
         return
 
-    def setReloadingTimeSnapshot(self, snapshot, isBoostApplicable, gunSettings):
+    def setReloadingTimeSnapshot(self, snapshot, isBoostApplicable, gunSettings, clipTime=None):
         self.__prevSnapshot = self.__snapshot
         self.__snapshot = snapshot
         self.__gunSettings = gunSettings
+        self.__serverClipTime = clipTime
         newState, newStateDuration, totalTime, extraData = self.__getNewState(isBoostApplicable)
         if newState != self.__state or newStateDuration != self.__stateDuration or totalTime != self.__stateTotalTime:
             self.__cancelCallback()
@@ -374,7 +396,8 @@ class _AutoReloadingBoostStateCtrl(object):
         else:
             timePassed = self.__snapshot.getTimePassed()
             fullReloadingTime = self.__snapshot.getBaseValue()
-            boostStartDelay = self.__gunSettings.clip[1] + autoReloadSetting.boostStartTime
+            timeBetweenShots = self.__serverClipTime or self.__gunSettings.clip[1]
+            boostStartDelay = timeBetweenShots + autoReloadSetting.boostStartTime
             if boostStartDelay > timePassed:
                 timeToStartBoostCharging = boostStartDelay - timePassed
                 if self.__state == AutoReloadingBoostStates.WAITING_FOR_START:
@@ -572,11 +595,11 @@ class AmmoController(MethodsRules, ViewComponentsController):
         return result
 
     @MethodsRules.delayable('setCurrentShellCD')
-    def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False):
+    def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False, shotsAmount=-1, clipTime=None):
         if not self.__gunSettings.hasAutoReload():
             self.__shellChangeTime = baseTime * self.__gunSettings.getShellChangeFactor()
-        self.triggerReloadEffect(timeLeft, baseTime)
-        interval = self.__gunSettings.getClipInterval()
+        self.triggerReloadEffect(timeLeft, baseTime, shotsAmount=shotsAmount)
+        interval = clipTime or self.__gunSettings.getClipInterval()
         if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:
             shellsInClip = self.__ammo[self.__currShellCD][1]
             if self.__gunSettings.isBurstAndClip():
@@ -599,22 +622,28 @@ class AmmoController(MethodsRules, ViewComponentsController):
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot(), skipAutoLoader)
         self.updateShellChangeTime()
 
-    def preprocessGunReloadTime(self, timeLeft, baseTime):
-        shellsLeft = self.getShellsQuantityLeft()
-        lastAmmoCount = self.__gunSettings.getLastAmmoCount()
-        if shellsLeft <= lastAmmoCount and timeLeft <= 0.0:
-            if shellsLeft == sum((layout[2] for layout in self.getOrderedShellsLayout())):
-                baseTime = -1
+    def preprocessGunReloadTime(self, timeLeft, baseTime, shotsAmount):
+        isBattlePeriod = self.__isBattlePeriod()
+        currShellsCount = self.getShellsQuantityLeft()
+        lastAmmoCount = self.__gunSettings.getLastAmmoCount(shotsAmount)
+        if timeLeft <= 0.0:
+            isLastCurrShells = currShellsCount <= lastAmmoCount
+            if isLastCurrShells and currShellsCount == sum((item[2] for item in self.getOrderedShellsLayout())):
+                baseTime = -1 if isBattlePeriod else baseTime
+            elif self.__gunSettings.isTwinGun():
+                intCD, quantity = self.__getPredictedLoadShells(isBattlePeriod, isLastCurrShells, shotsAmount)
+                maxAmount = shotsAmount if intCD == self.__currShellCD and isBattlePeriod else _DUPLET_SHELLS_AMOUNT
+                baseTime *= self.__gunSettings.getTwinGunFactor(shotsAmount, math_utils.clamp(1, maxAmount, quantity))
         if timeLeft < 0.0:
             timeLeft = -1
-        return (timeLeft, baseTime)
+        return (timeLeft, baseTime, shotsAmount)
 
-    def setGunAutoReloadTime(self, timeLeft, baseTime, firstClipBaseTime, isSlowed, isBoostApplicable):
+    def setGunAutoReloadTime(self, timeLeft, baseTime, firstClipBaseTime, isSlowed, isBoostApplicable, clipTime=None):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
         if self.__gunSettings.hasAutoReload():
             self.__shellChangeTime = firstClipBaseTime * self.__gunSettings.getShellChangeFactor()
         self.__notifyAboutAutoReloadTimeChanges(isSlowed)
-        self._autoReloadingBoostState.setReloadingTimeSnapshot(self._autoReloadingState.getSnapshot(), isBoostApplicable, self.__gunSettings)
+        self._autoReloadingBoostState.setReloadingTimeSnapshot(self._autoReloadingState.getSnapshot(), isBoostApplicable, self.__gunSettings, clipTime=clipTime)
         if self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             shellCounts = self.__ammo[self.__currShellCD]
             shellsInClip = shellCounts[1]
@@ -632,10 +661,10 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.updateShellChangeTime()
         return
 
-    def triggerReloadEffect(self, timeLeft, baseTime, directTrigger=False):
+    def triggerReloadEffect(self, timeLeft, baseTime, directTrigger=False, shotsAmount=-1):
         if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             clipCapacity = self.__gunSettings.clip.size
-            self.__gunSettings.reloadEffect.start(timeLeft, baseTime, clipCapacity, directTrigger=directTrigger)
+            self.__gunSettings.reloadEffect.start(timeLeft, baseTime, clipCapacity, directTrigger=directTrigger, shotsAmount=shotsAmount)
         elif timeLeft <= 0.0 and self.__gunSettings.reloadEffect is not None:
             self.__gunSettings.reloadEffect.reloadEnd()
         return
@@ -808,6 +837,9 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def setDualGunShellChangeTime(self, left, right, activeIdx):
         self.__dualGunShellChangeTime = _DualGunShellChangeTime(left, right, activeIdx)
 
+    def getDualGunShellChangeTime(self):
+        return self.__dualGunShellChangeTime
+
     def setDualGunQuickChangeReady(self, ready):
         self.__dualGunQuickChangeReady = ready
         self.updateShellChangeTime()
@@ -863,16 +895,20 @@ class AmmoController(MethodsRules, ViewComponentsController):
             shellChangeTime = self.getQuickShellChangeTime() if self.canQuickShellChange() else shellChangeTime
         elif self.__quickChangerActive:
             isVisible, shellChangeTime = self.canQuickShellChange(), self.getQuickShellChangeTime()
-        isVisible = isVisible and self.__guiSessionProvider.shared.arenaPeriod.getPeriod() == ARENA_PERIOD.BATTLE
+        isVisible = isVisible and self.__isBattlePeriod()
         if self.__quickChangerActive or self.__gunSettings.hasShellChangeFactor() or forced:
             self.onShellChangeTimeUpdated(isVisible, shellChangeTime)
         return (isVisible, shellChangeTime)
+
+    def __isBattlePeriod(self):
+        return self.__guiSessionProvider.shared.arenaPeriod.getPeriod() == ARENA_PERIOD.BATTLE
 
     def __isInfiniteShell(self, intCD):
         if intCD not in self.__infinity:
             arena = avatar_getter.getArena()
             isInfiniteBonusCap = arena.hasBonusCap(BONUS_CAPS.INFINITE_AMMO) if arena else False
-            self.__infinity[intCD] = isInfiniteBonusCap or self.__gunSettings.getShellDescriptor(intCD).isInfinite
+            isInfinite = self.__gunSettings.getShellDescriptor(intCD).isInfinite or isInfiniteBonusCap and not self.__gunSettings.getShellDescriptor(intCD).isForceFinite
+            self.__infinity[intCD] = isInfinite
         return self.__infinity[intCD]
 
     def __onCurrentShellChanged(self, intCD):
@@ -898,13 +934,20 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def __notifyAboutAutoReloadTimeChanges(self, isSlowed):
         self.onGunAutoReloadTimeSet(self._autoReloadingState.getSnapshot(), isSlowed)
 
-    def __getFirstAvailableShell(self):
-        for intCD in self._order:
-            curQuantity, _ = self.__ammo[intCD]
-            if curQuantity > 0:
-                return intCD
+    def __getFirstAvailableShell(self, notAvailableCD=None):
+        return first((cd for cd in self._order if cd != notAvailableCD and self.__ammo[cd][0] > 0))
 
-        return None
+    def __getPredictedLoadShells(self, isBattlePeriod, isLastCurrShells, shotsAmount):
+        return self.__getPredictedNextShells(isLastCurrShells, shotsAmount) if isBattlePeriod else (self.__currShellCD, self.getShellsQuantityLeft())
+
+    def __getPredictedNextShells(self, isLastCurrShells, shotsAmount):
+        predictedShellCD = self.__nextShellCD
+        if predictedShellCD is None or predictedShellCD == self.__currShellCD and isLastCurrShells:
+            predictedShellCD = self.__getFirstAvailableShell(self.__currShellCD)
+        quantity = self.getShells(predictedShellCD)[0]
+        if predictedShellCD == self.__currShellCD:
+            quantity -= shotsAmount
+        return (predictedShellCD, quantity)
 
 
 class AmmoReplayRecorder(AmmoController):
@@ -922,14 +965,14 @@ class AmmoReplayRecorder(AmmoController):
             self.__timeRecord = None
         return
 
-    def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False):
+    def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False, shotsAmount=-1, clipTime=None):
         if self.__timeRecord is not None:
             if timeLeft < 0:
                 self.__timeRecord(0, -1)
             else:
                 startTime = baseTime - timeLeft
                 self.__timeRecord(startTime, baseTime)
-        super(AmmoReplayRecorder, self).setGunReloadTime(timeLeft, baseTime, skipAutoLoader)
+        super(AmmoReplayRecorder, self).setGunReloadTime(timeLeft, baseTime, skipAutoLoader, shotsAmount, clipTime)
         return
 
     def changeSetting(self, intCD, avatar=None):

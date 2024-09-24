@@ -1547,14 +1547,14 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelRight>
           <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
           <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
           <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
           <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
           <segmentLength>	0.29	</segmentLength>
-          <segmentOffset>	0.058	</segmentOffset>
+          <segmentOffset>	0.25	</segmentOffset>
           <segment2Offset>	0.142	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -1562,8 +1562,8 @@
           </atlas>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</segmentModelLeft>
-              <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</segmentModelRight>
+              <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</segmentModelRight>
               <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
               <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
@@ -1592,7 +1592,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
             <length>	0.146335	</length>
           </mainSegment>
           <secSegment>
@@ -1601,12 +1601,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -1792,7 +1791,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
             <length>	0.149904	</length>
           </mainSegment>
           <secSegment>
@@ -1801,12 +1800,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -2275,10 +2273,10 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	5.152750 0.000000 0.000000	</row0>
+            <row0>	5.155860 0.000000 0.000000	</row0>
             <row1>	0.000000 1.815900 0.000000	</row1>
             <row2>	0.000000 0.000000 7.970920	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
+            <row3>	0.000000 0.000000 0.000001	</row3>
           </transform>
         </decal>
       </AODecals>
@@ -2308,6 +2306,30 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1094	</elasticity>
         <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+        </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -2386,30 +2408,6 @@
           <backwardElastK>	0.89	</backwardElastK>
           <offset>	-0.129	</offset>
           <leftSibling>	Track_VT_L7	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.89	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.9	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.9	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -2495,14 +2493,14 @@
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelRight>
+          <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</segmentModelLeft>
+          <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</segmentModelRight>
           <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_L.model	</segment2ModelLeft>
           <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/track/segment2_R.model	</segment2ModelRight>
           <left>	vehicles/german/G16_PzVIB_Tiger_II/track/left.track	</left>
           <right>	vehicles/german/G16_PzVIB_Tiger_II/track/right.track	</right>
           <segmentLength>	0.29	</segmentLength>
-          <segmentOffset>	0.058	</segmentOffset>
+          <segmentOffset>	0.25	</segmentOffset>
           <segment2Offset>	0.142	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -2510,8 +2508,8 @@
           </atlas>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</segmentModelLeft>
-              <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</segmentModelRight>
+              <segmentModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</segmentModelRight>
               <segment2ModelLeft>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</segment2ModelLeft>
               <segment2ModelRight>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</segment2ModelRight>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
@@ -2540,7 +2538,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
             <length>	0.146335	</length>
           </mainSegment>
           <secSegment>
@@ -2549,12 +2547,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_L.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -2605,11 +2602,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_L1	</name>
-              <radius>	0.346066	</radius>
+              <radius>	0.35	</radius>
             </wheel>
             <wheel>
               <name>	WD_L0	</name>
-              <radius>	0.416	</radius>
+              <radius>	0.415	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2740,7 +2737,7 @@
             </forwardMovement>
           </springsLength>
           <mainSegment>
-            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_L.model	</model>
+            <model>	vehicles/german/G16_PzVIB_Tiger_II/track/segment1_R.model	</model>
             <length>	0.149904	</length>
           </mainSegment>
           <secSegment>
@@ -2749,12 +2746,11 @@
           </secSegment>
           <modelSets>
             <G16_PzVIB_Tiger_II_3DSt_NEx>
-              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_L.model	</mainSegmentModel>
+              <mainSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment1_R.model	</mainSegmentModel>
               <secSegmentModel>	vehicles/german/G16_PzVIB_Tiger_II/_skins/G16_PzVIB_Tiger_II_3DSt_NEx/track/segment2_R.model	</secSegmentModel>
             </G16_PzVIB_Tiger_II_3DSt_NEx>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.16656	</xStart>
@@ -2805,11 +2801,11 @@
           <radiusOverrides>
             <wheel>
               <name>	WD_R1	</name>
-              <radius>	0.346	</radius>
+              <radius>	0.35	</radius>
             </wheel>
             <wheel>
               <name>	WD_R0	</name>
-              <radius>	0.41565	</radius>
+              <radius>	0.415	</radius>
             </wheel>
           </radiusOverrides>
           <teethSyncs>
@@ -2931,8 +2927,8 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	0.000095 2.8265 -0.178715	</anchorPosition>
-          <anchorDirection>	0 1 0	</anchorDirection>
+          <anchorPosition>	0.000099 2.8265 -0.178711	</anchorPosition>
+          <anchorDirection>	-0 1 0	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>

@@ -38,7 +38,7 @@ _PROGRESSION_STATUS_MAP = {(False, False, False): FunRandomProgressionStatus.ACT
  (True, False, True): FunRandomProgressionStatus.ACTIVE_INFINITE_RESETTABLE,
  (True, True, True): FunRandomProgressionStatus.ACTIVE_INFINITE_FINAL}
 FUN_RANDOM_MAPPING = {'tokens': FunRandomLootBoxTokenBonusPacker,
- 'battleToken': FunRandomLootBoxTokenBonusPacker,
+ 'lootBox': FunRandomLootBoxTokenBonusPacker,
  'tmanToken': TmanTemplateBonusPacker,
  'vehicles': VehiclesBonusUIPacker,
  'customizations': Customization3Dand2DbonusUIPacker,
@@ -85,7 +85,7 @@ def getFunRandomSpecialBonusPacker():
     mapping = getDefaultBonusPackersMap()
     mapping.update(FUN_RANDOM_MAPPING)
     mapping.update({'tokens': FunRandomRewardLootBoxTokenBonusPacker,
-     'battleToken': FunRandomRewardLootBoxTokenBonusPacker})
+     'lootBox': FunRandomRewardLootBoxTokenBonusPacker})
     return BonusUIPacker(mapping)
 
 

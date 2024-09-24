@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/components/vehicles.py
-import typing
 from constants import DEATH_REASON_ALIVE
 from epic_constants import EPIC_BATTLE_TEAM_ID
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -10,7 +9,6 @@ from gui.Scaleform.settings import ICONS_SIZES
 from gui.battle_results.components import base, shared, style, ranked
 from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.components.personal import fillKillerInfoBlock, NO_OWNER_DEATH_REASON_IDS
-from gui.battle_results.br_constants import COMMON_STATS_ITEMS_TO_PERSONAL, STAT_STUN_FIELD_NAMES
 from gui.battle_results.reusable import sort_keys
 from gui.battle_results.reusable.avatars import AvatarInfo
 from gui.impl import backport
@@ -22,12 +20,15 @@ from messenger.m_constants import USER_TAG
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
+_STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
+ 'damageAssistedStun': 'damageAssistedStunSelf'}
+_STAT_STUN_FIELD_NAMES = ('damageAssistedStun', 'stunNum', 'stunDuration')
 
 def _getStunFilter():
     lobbyContext = dependency.instance(ILobbyContext)
     filters = ()
     if not lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
-        filters += STAT_STUN_FIELD_NAMES
+        filters += _STAT_STUN_FIELD_NAMES
     return filters
 
 
@@ -228,7 +229,7 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum
         if self.__rawStunNum == 0:
-            self.addFilters(STAT_STUN_FIELD_NAMES)
+            self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
         self.hits = (result.directEnemyHits, result.piercingEnemyHits)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
@@ -256,8 +257,8 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
             if field in list(self._filters):
                 continue
             value = component.getVO()
-            if self._isPersonal and field in COMMON_STATS_ITEMS_TO_PERSONAL:
-                field = COMMON_STATS_ITEMS_TO_PERSONAL[field]
+            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
+                field = _STAT_VALUES_VO_REPLACER[field]
             vo.append(style.makeStatValue(field, value))
 
         return vo
@@ -308,7 +309,7 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum
         if self.__rawStunNum == 0:
-            self.addFilters(STAT_STUN_FIELD_NAMES)
+            self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
         self.directHits = style.getIntegralFormatIfNoEmpty(result.directEnemyHits)
         self.piercingHits = style.getIntegralFormatIfNoEmpty(result.piercingEnemyHits)
@@ -342,8 +343,8 @@ class EpicVehicleStatValuesBlock(base.StatsBlock):
             if field == 'teamSpecificStat':
                 field = _TEAM_SPECIFIC_STAT_REPLACE[self._team]
             value = component.getVO()
-            if self._isPersonal and field in COMMON_STATS_ITEMS_TO_PERSONAL:
-                field = COMMON_STATS_ITEMS_TO_PERSONAL[field]
+            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
+                field = _STAT_VALUES_VO_REPLACER[field]
             vo.append(style.makeStatValue(field, value))
 
         return vo

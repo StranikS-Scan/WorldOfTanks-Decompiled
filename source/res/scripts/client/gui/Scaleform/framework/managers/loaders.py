@@ -12,6 +12,7 @@ from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.Scaleform.framework.entities.view_impl_adaptor import ViewImplAdaptor
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.view_overrider import ViewOverrider
+from gui.impl.common.fade_manager import UseFading
 from helpers import dependency, uniprof
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.impl import IGuiLoader
@@ -148,9 +149,9 @@ class LoaderManager(LoaderManagerMeta):
         override = g_viewOverrider.getOverrideData(loadParams, *args, **kwargs)
         if override:
             self.cancelLoading(loadParams.viewKey)
-            return self.__doLoadGuiImplView(override.loadParams, *override.args, **override.kwargs)
+            return self.__doLoadGuiImplView(override.loadParams, override.getFadeCtx(), *override.args, **override.kwargs)
         if loadParams.uiImpl == UIFrameworkImpl.GUI_IMPL:
-            return self.__doLoadGuiImplView(loadParams, *args, **kwargs)
+            return self.__doLoadGuiImplView(loadParams, {}, *args, **kwargs)
         if loadParams.uiImpl == UIFrameworkImpl.SCALEFORM:
             return self.__doLoadSFView(loadParams, *args, **kwargs)
         raise SoftException('View can not be loaded. UI implementation "{}" is not handled'.format(loadParams.uiImpl))
@@ -325,7 +326,7 @@ class LoaderManager(LoaderManagerMeta):
                 window.destroy()
         return pyEntity
 
-    def __doLoadGuiImplView(self, loadParams, *args, **kwargs):
+    def __doLoadGuiImplView(self, loadParams, fadeParams, *args, **kwargs):
         key = loadParams.viewKey
         if key in self.__loadingItems:
             raise SoftException('This case in not implemented: {}'.format(loadParams))
@@ -343,7 +344,16 @@ class LoaderManager(LoaderManagerMeta):
         adaptor.onCreated += self.__handleViewLoaded
         self.__loadingItems[adaptor.key] = _LoadingItem(loadParams, -1, adaptor, -1, False, args, kwargs)
         self.onViewLoadInit(adaptor)
-        adaptor.loadView()
+        if fadeParams:
+
+            @UseFading(**fadeParams)
+            def wrapper(adaptor):
+                if adaptor.isWindowValid():
+                    adaptor.loadView()
+
+            wrapper(adaptor)
+        else:
+            adaptor.loadView()
         return adaptor
 
 

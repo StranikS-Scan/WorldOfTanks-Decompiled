@@ -337,11 +337,8 @@ class KPI(object):
         FOLIAGE_MASKING_FACTOR = 'foliageMaskingFactor'
         ENEMY_MODULES_CREW_CRIT_CHANCE = 'enemyModulesCrewCritChance'
         VEHICLE_RAM_CHASSIS_DAMAGE_RESISTANCE = 'vehicleRamChassisDamageResistance'
-        RADIOMAN_HIT_CHANCE = 'radiomanHitChance'
-        RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY = 'radiomanActivityTimeAfterVehicleDestroy'
         DAMAGED_MODULES_DETECTION_TIME = 'damagedModulesDetectionTime'
         FIRE_EXTINGUISHING_RATE = 'fireExtinguishingRate'
-        COMMANDER_HIT_CHANCE = 'commanderHitChance'
         WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
         VEHICLE_HE_SHELL_DAMAGE_RESISTANCE = 'vehicleHEShellDamageResistance'
         VEHICLE_FALLING_DAMAGE_RESISTANCE = 'vehicleFallingDamageResistance'
@@ -363,8 +360,6 @@ class KPI(object):
         CREW_SKILL_SIXTH_SENSE_DELAY = 'crewSkillSixthSenseDelay'
         CREW_SKILL_VIRTUOSO = 'crewSkillVirtuoso'
         CREW_SKILL_SMOOTH_DRIVING = 'crewSkillSmoothRiding'
-        CREW_SKILL_LAST_EFFORT = 'crewSkillLastEffort'
-        CREW_SKILL_LAST_EFFORT_DURATION = 'crewSkillLastEffortDuration'
         CREW_SKILL_RANCOROUS = 'crewSkillRancorous'
         CREW_SKILL_RANCOROUS_DURATION = 'crewSkillRancorousDuration'
         CREW_SKILL_PEDANT = 'crewSkillPedant'
@@ -547,6 +542,5 @@ CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
  'driver_smoothDriving': KPI.Name.CREW_SKILL_SMOOTH_DRIVING,
  'gunner_smoothTurret': KPI.Name.CREW_SKILL_SMOOTH_TURRET,
  'loader_pedant': KPI.Name.CREW_SKILL_PEDANT,
- 'radioman_lastEffort': KPI.Name.CREW_SKILL_LAST_EFFORT,
  'gunner_rancorous': KPI.Name.CREW_SKILL_RANCOROUS}
 AGGREGATE_TO_SINGLE_TYPE_KPI_MAP = {KPI.Type.AGGREGATE_MUL: KPI.Type.MUL}

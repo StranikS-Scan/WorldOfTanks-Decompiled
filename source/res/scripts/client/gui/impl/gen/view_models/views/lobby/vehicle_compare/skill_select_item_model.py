@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/vehicle_compare/skill_select_item_model.py
 from enum import Enum
-from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_simple_model import SkillSimpleModel
 
 class SkillState(Enum):
     DEFAULT = 'default'
@@ -15,25 +15,18 @@ class SkillType(Enum):
     BONUS = 'bonus'
 
 
-class SkillSelectItemModel(ViewModel):
+class SkillSelectItemModel(SkillSimpleModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(SkillSelectItemModel, self).__init__(properties=properties, commands=commands)
 
-    def getName(self):
-        return self._getString(0)
-
-    def setName(self, value):
-        self._setString(0, value)
-
     def getState(self):
-        return SkillState(self._getString(1))
+        return SkillState(self._getString(3))
 
     def setState(self, value):
-        self._setString(1, value.value)
+        self._setString(3, value.value)
 
     def _initialize(self):
         super(SkillSelectItemModel, self)._initialize()
-        self._addStringProperty('name', '')
         self._addStringProperty('state')

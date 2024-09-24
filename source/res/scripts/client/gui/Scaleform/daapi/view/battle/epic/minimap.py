@@ -67,6 +67,8 @@ class MINIMAP_SCALE_TYPES(object):
     NO_SCALE = 0
     REAL_SCALE = 1
     ADAPTED_SCALE = 2
+    NATIVE = 42
+    PROPORTIONAL = 43
 
 
 class EpicMinimapComponent(EpicMinimapMeta):

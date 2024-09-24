@@ -119,10 +119,6 @@ def getPlayerSeniorityAwardsUrl():
     return _getUrl('seniorityAwardsProducts')
 
 
-def getBuyLootboxesUrl():
-    return _getUrl('buyLootboxes')
-
-
 def getSplitPageUrl(params):
     url = _getUrl('splitUrl')
     return addParamsToUrlQuery(url, params, True)
@@ -146,6 +142,10 @@ def getIntegratedAuctionUrl():
 
 def getEventLootBoxesUrl():
     return _getUrl('eventLootboxes')
+
+
+def getLootBoxSystemShopUrl():
+    return _getUrl('lootBoxSystem')
 
 
 def getShowcaseUrl():

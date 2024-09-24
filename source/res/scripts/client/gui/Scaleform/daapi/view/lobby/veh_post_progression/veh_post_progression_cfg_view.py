@@ -114,7 +114,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     def _updateTitle(self):
         self.as_setVehicleTitleS(getTitleVO(self._vehicle))
 
-    def __onCmpBasketChange(self, changedData, _=None):
+    def __onCmpBasketChange(self, changedData):
         if changedData.isFullChanged:
             self._updateData()
 

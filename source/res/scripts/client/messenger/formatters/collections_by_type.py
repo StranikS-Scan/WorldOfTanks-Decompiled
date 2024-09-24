@@ -12,7 +12,8 @@ registerLootBoxAutoOpenSubFormatters((auto_boxes_subformatters.EventBoxesFormatt
  auto_boxes_subformatters.EventLootBoxesFormatter(),
  auto_boxes_subformatters.NYPostEventBoxesFormatter(),
  auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
- auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter()))
+ auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter(),
+ auto_boxes_subformatters.LootBoxSystemAutoOpenFormatter()))
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -30,8 +31,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WinbackRewardFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.SteamCompletionFormatter(),
- token_quest_subformatters.SkipNotificationFormatter(),
- token_quest_subformatters.WtEventProgressionQuestFormatter()))
+ token_quest_subformatters.SkipNotificationFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 
@@ -162,4 +162,5 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.crewBooksConversion.index(), _sc.CrewBooksConversionFormatter())
     registerMessengerServerFormatter(_SM_TYPE.postProgressionUnlocked.index(), _sc.PostProgressionUnlockedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.postProgressionCompleted.index(), _sc.PostProgressionCompletedFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.wtEventTicketTokenWithdrawn.index(), _sc.WTEventTicketTokenWithdrawnFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.externalVehicleRentStarted.index(), _sc.ExternalVehicleRentFormatter(isStarted=True))
+    registerMessengerServerFormatter(_SM_TYPE.externalVehicleRentExpired.index(), _sc.ExternalVehicleRentFormatter(isStarted=False))

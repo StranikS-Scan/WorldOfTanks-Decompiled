@@ -51,13 +51,13 @@ class SelectableViewImpl(ViewImpl, ISelectableLogicCallback):
 
     def _subscribe(self):
         super(SelectableViewImpl, self)._subscribe()
-        self.viewModel.onMoveSpace += self.__onMoveSpace
-        self.viewModel.onOverScene += self.__onCursorOver3DScene
+        self.viewModel.onMoveSpace += self._onMoveSpace
+        self.viewModel.onOverScene += self._onCursorOver3DScene
 
     def _unsubscribe(self):
         super(SelectableViewImpl, self)._unsubscribe()
-        self.viewModel.onMoveSpace -= self.__onMoveSpace
-        self.viewModel.onOverScene -= self.__onCursorOver3DScene
+        self.viewModel.onMoveSpace -= self._onMoveSpace
+        self.viewModel.onOverScene -= self._onCursorOver3DScene
 
     def _highlight3DEntityAndShowTT(self, entity):
         pass
@@ -82,7 +82,7 @@ class SelectableViewImpl(ViewImpl, ISelectableLogicCallback):
     def _createSelectableLogic(self):
         return HangarSelectableLogic()
 
-    def __onMoveSpace(self, args=None):
+    def _onMoveSpace(self, args=None):
         if args is None:
             return
         else:
@@ -92,7 +92,7 @@ class SelectableViewImpl(ViewImpl, ISelectableLogicCallback):
             moveCamera(dx, dy, dz)
             return
 
-    def __onCursorOver3DScene(self, args=None):
+    def _onCursorOver3DScene(self, args=None):
         if args is None:
             _logger.error("Can't notified cursor over changed. args=None. Please fix JS")
             return

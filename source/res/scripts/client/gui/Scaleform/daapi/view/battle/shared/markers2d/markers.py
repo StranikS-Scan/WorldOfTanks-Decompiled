@@ -194,13 +194,8 @@ class VehicleMarker(Marker):
             matrix.setTranslate(vProxy.position + HIDDEN_VEHICLE_OFFSET)
             return matrix
         else:
-            rootMP = vProxy.model.node(TankNodeNames.HULL_SWINGING)
-            guiMP = vProxy.model.node(TankNodeNames.GUI)
-            rootM = rootMP.localMatrix
-            guiM = guiMP.localMatrix
-            offset = guiM.translation - rootM.translation
             rootCalculator = vProxy.model.getWorldMatrixCalculator(TankNodeNames.HULL_SWINGING)
-            return GUI.WGVehicleMarkersMatrixProvider(rootCalculator, offset)
+            return GUI.WGVehicleMarkersMatrixProvider(rootCalculator, cls._calculateGuiOffset(vProxy))
 
     def getMatrixProvider(self):
         return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None
@@ -222,6 +217,14 @@ class VehicleMarker(Marker):
 
     def getIsActionMarkerActive(self):
         return self._isActionMarkerActive
+
+    @classmethod
+    def _calculateGuiOffset(cls, vProxy):
+        rootMP = vProxy.model.node(TankNodeNames.HULL_SWINGING)
+        guiMP = vProxy.model.node(TankNodeNames.GUI)
+        rootM = rootMP.localMatrix
+        guiM = guiMP.localMatrix
+        return guiM.translation - rootM.translation
 
 
 class VehicleTargetMarker(VehicleMarker):

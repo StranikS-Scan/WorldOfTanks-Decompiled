@@ -5,6 +5,7 @@ from gui.impl.dialogs.dialog_template_button import ConfirmButton, CancelButton
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.recruit_window.confirm_irrelevant_dialog_model import ConfirmIrrelevantDialogModel
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import ModelProps
 from gui.impl.lobby.crew.dialogs.base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIcon, getIconBackground, getIconName, getTitleFromTokenData
 
@@ -35,7 +36,10 @@ class ConfirmIrrelevantPerkResetDialog(BaseCrewDialogTemplateView):
             self.viewModel.iconModel.bgIcon.setPath(getIconBackground(self.__tokenData.getSourceID(), self.__tokenData.getSmallIcon()))
         self.viewModel.tankmanBefore.skillList.setSkillsEfficiency(CrewConstants.SKILL_EFFICIENCY_MAX_LEVEL)
         self.viewModel.tankmanAfter.skillList.setSkillsEfficiency(CrewConstants.SKILL_EFFICIENCY_MAX_LEVEL)
-        packMajorSkills(self.viewModel.tankmanBefore.skillList, self.__tankman, skipIrrelevantCheck=True)
+        packMajorSkills(self.viewModel.tankmanBefore.skillList, self.__tankman, _CUSTOM_PROPS_GETTERS)
         packMajorSkills(self.viewModel.tankmanAfter.skillList, self.__tankmanAfter)
         self.addButton(ConfirmButton(R.strings.dialogs.recruitWindow.submit()))
         self.addButton(CancelButton(R.strings.dialogs.recruitWindow.cancel()))
+
+
+_CUSTOM_PROPS_GETTERS = {ModelProps.IS_IRRELEVANT: lambda **_: False}

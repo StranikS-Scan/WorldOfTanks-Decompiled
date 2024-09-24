@@ -35,6 +35,8 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
+    PLAYER_ERRORS_CANT_SWITCH_GUN_DESTROYED = '#ingame_gui:player_errors/cant_switch/gun_destroyed'
+    PLAYER_ERRORS_CANT_SWITCH_ONE_SHELL_LEFT = '#ingame_gui:player_errors/cant_switch/one_shell_left'
     PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
@@ -45,11 +47,9 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_ERRORS_EQUIPMENT_POI_UNAVAILABLE = '#ingame_gui:player_errors/equipment/poi/unavailable'
-    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HEALTHATFULLHP = '#ingame_gui:player_messages/equipment/wtEvent/healthAtFullHP'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
-    PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_CIRCUIT_OVERLOAD = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_CIRCUIT_OVERLOAD'
     PLAYER_MESSAGES_TANKMAN_HIT_AT_SHOT = '#ingame_gui:player_messages/TANKMAN_HIT_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_FIRE = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_FIRE'
     PLAYER_MESSAGES_ENGINE_CRITICAL_AT_UNLIMITED_RPM = '#ingame_gui:player_messages/ENGINE_CRITICAL_AT_UNLIMITED_RPM'
@@ -644,7 +644,14 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_HEALTHADDED = '#ingame_gui:efficiencyRibbons/healthAdded'
     EFFICIENCYRIBBONS_DAMAGEBYBATTLESHIP = '#ingame_gui:efficiencyRibbons/damageByBattleship'
     EFFICIENCYRIBBONS_DAMAGEBYDESTROYER = '#ingame_gui:efficiencyRibbons/damageByDestroyer'
-    EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD = '#ingame_gui:efficiencyRibbons/wtReceivedCircuitOverload'
+    EFFICIENCYRIBBONS_ZONEBLIZZARD = '#ingame_gui:efficiencyRibbons/zoneBlizzard'
+    EFFICIENCYRIBBONS_ZONEFIRE = '#ingame_gui:efficiencyRibbons/zoneFire'
+    EFFICIENCYRIBBONS_ZONEFOG = '#ingame_gui:efficiencyRibbons/zoneFog'
+    EFFICIENCYRIBBONS_ZONERAIN = '#ingame_gui:efficiencyRibbons/zoneRain'
+    EFFICIENCYRIBBONS_ZONESANDSTORM = '#ingame_gui:efficiencyRibbons/zoneSandstorm'
+    EFFICIENCYRIBBONS_ZONESMOKE = '#ingame_gui:efficiencyRibbons/zoneSmoke'
+    EFFICIENCYRIBBONS_ZONETORNADO = '#ingame_gui:efficiencyRibbons/zoneTornado'
+    EFFICIENCYRIBBONS_FIREDAMAGEZONE = '#ingame_gui:efficiencyRibbons/fireDamageZone'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
@@ -716,6 +723,7 @@ class INGAME_GUI(object):
     SIEGEMODE_HINT_WHEELED = '#ingame_gui:siegeMode/hint/wheeled'
     SIEGEMODE_HINT_TURBOSHAFTENGINE = '#ingame_gui:siegeMode/hint/turboshaftEngine'
     SIEGEMODE_HINT_ROCKETACCELERATION = '#ingame_gui:siegeMode/hint/rocketAcceleration'
+    SIEGEMODE_HINT_TWINGUN = '#ingame_gui:siegeMode/hint/twinGun'
     EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED = '#ingame_gui:efficiencyRibbons/enemySectorCaptured'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED = '#ingame_gui:efficiencyRibbons/destructibleDamaged'
     EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED = '#ingame_gui:efficiencyRibbons/destructibleDestroyed'
@@ -1156,7 +1164,14 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_HEALTHADDED,
      EFFICIENCYRIBBONS_DAMAGEBYBATTLESHIP,
      EFFICIENCYRIBBONS_DAMAGEBYDESTROYER,
-     EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD,
+     EFFICIENCYRIBBONS_ZONEBLIZZARD,
+     EFFICIENCYRIBBONS_ZONEFIRE,
+     EFFICIENCYRIBBONS_ZONEFOG,
+     EFFICIENCYRIBBONS_ZONERAIN,
+     EFFICIENCYRIBBONS_ZONESANDSTORM,
+     EFFICIENCYRIBBONS_ZONESMOKE,
+     EFFICIENCYRIBBONS_ZONETORNADO,
+     EFFICIENCYRIBBONS_FIREDAMAGEZONE,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

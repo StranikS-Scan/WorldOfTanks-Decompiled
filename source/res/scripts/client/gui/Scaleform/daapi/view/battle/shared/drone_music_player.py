@@ -459,8 +459,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
     def _launchEvent(self, soundType):
         soundID = self._musicSetup[soundType]
         LOG_DEBUG('[Drone] Attempt to launch Drone event "{}"'.format(soundID))
-        if soundID:
-            SoundGroups.g_instance.playSound2D(soundID)
+        SoundGroups.g_instance.playSafeSound2D(soundID)
 
     def __onConditionChangedItself(self):
         if self.__isProperBattlePeroid():

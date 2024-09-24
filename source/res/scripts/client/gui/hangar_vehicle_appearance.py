@@ -27,7 +27,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.turret_gun_angles import ITurretAndGunAngles
-from vehicle_systems import camouflages
+from vehicle_systems import camouflages, vehicle_composition
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
@@ -126,7 +126,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
-    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -282,6 +281,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
         self.__loadState.unload()
+        vehicle_composition.removeComposition(self.gameObject)
         if self.fashion is not None:
             self.fashion.removePhysicalTracks()
         if self.tracks is not None:
@@ -547,6 +547,9 @@ class HangarVehicleAppearance(ScriptGameObject):
                 self.__staticGunPitch = 0.0
         gunPitchMatrix = math_utils.createRotationMatrix((0.0, self.__staticGunPitch, 0.0))
         self.__setGunMatrix(gunPitchMatrix)
+        if self.gameObject.findComponentByType(GenericComponents.DynamicModelComponent) is None:
+            self.gameObject.createComponent(GenericComponents.DynamicModelComponent, self.compoundModel)
+        vehicle_composition.createVehicleComposition(self.gameObject, followNodes=False)
         return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):

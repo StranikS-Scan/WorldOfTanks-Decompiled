@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
 from collections import namedtuple
+import GenericComponents
 import Math
 import BigWorld
 from ClientSelectableCameraObject import ClientSelectableCameraObject
@@ -9,7 +10,7 @@ from items.vehicles import stripOptionalDeviceFromVehicleCompactDescr
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
-from EdgeDrawer import HighlightComponent
+from EdgeDrawer import HighlightComponent, EdgeHighlightComponent
 _VehicleTransformParams = namedtuple('_VehicleTransformParams', ('targetPos', 'rotateYPR', 'shadowModelYOffset'))
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
@@ -154,12 +155,16 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             super(ClientSelectableCameraVehicle, self)._addEdgeDetect()
             go = self.__vAppearance.gameObject
             go.createComponent(HighlightComponent, 0, False, self.edgeMode, False, False)
+            compositionRoot = GenericComponents.findRootSlot(go)
+            compositionRoot.createComponent(EdgeHighlightComponent, 0, False, self.edgeMode, False, False)
 
     def _delEdgeDetect(self):
         if self.__isHighlightable():
             super(ClientSelectableCameraVehicle, self)._delEdgeDetect()
             go = self.__vAppearance.gameObject
             go.removeComponentByType(HighlightComponent)
+            compositionRoot = GenericComponents.findRootSlot(go)
+            compositionRoot.removeComponentByType(EdgeHighlightComponent)
 
     def __isHighlightable(self):
         return self.__vAppearance is not None and not self.__vAppearance.isVehicleDestroyed

@@ -238,11 +238,14 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
     def __updateProvider(self):
         self._provider.updateAbiblities()
 
-    def __onChangeApplyAbilitiesToTypeSettings(self, *_):
-        state = not self._viewModel.getIsTypeSelected()
+    def __applyAbilitiesToTypeSettings(self, state):
         self._interactor.setCheckboxState(state)
         self._viewModel.setIsTypeSelected(state)
         self.__uiEpicBattleLogger.log(EpicBattleLogActions.CLICK.value, item=EpicBattleLogButtons.CHECKBOX.value, parentScreen=EpicBattleLogKeys.SETUP_VIEW.value)
+
+    def __onChangeApplyAbilitiesToTypeSettings(self, *_):
+        state = not self._viewModel.getIsTypeSelected()
+        self.__applyAbilitiesToTypeSettings(state)
 
     def __onPurchaseConfirmed(self, skillIds, callback):
         self._interactor.buyAbilities(skillIds, callback)
@@ -252,9 +255,13 @@ class EpicBattleSetupSubView(BaseEquipmentSetupSubView):
         result = True
         data = {}
         if self.__pendingPurchaseSkillIds:
-            dialogResult = yield self._interactor.showBuyConfirmDialog(self.__pendingPurchaseSkillIds)
+            dialogResult = yield self._interactor.showBuyConfirmDialog()
             isOk, data = dialogResult.result
             if isOk:
+                applyForAllOfType = data.get('applyForAllOfType', False)
+                self.__applyAbilitiesToTypeSettings(applyForAllOfType)
+                if applyForAllOfType:
+                    self._onDealConfirmed()
                 result = yield await_callback(self.__onPurchaseConfirmed)(self.__pendingPurchaseSkillIds)
             else:
                 result = False

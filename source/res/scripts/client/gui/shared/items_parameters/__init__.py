@@ -4,8 +4,10 @@ import math
 import sys
 from math import ceil
 from constants import DAMAGE_INTERPOLATION_DIST_LAST
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, DISPERSION_RADIUS_PROP_NAME, AIMING_TIME_PROP_NAME, PIERCING_POWER_PROP_NAME, DAMAGE_PROP_NAME, SHELLS_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, RELOAD_TIME_SECS_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, MAX_MUTABLE_DAMAGE_PROP_NAME, MIN_MUTABLE_DAMAGE_PROP_NAME
-from helpers import i18n, time_utils
+from helpers import time_utils
 from helpers_common import computeDamageAtDist
 from items import vehicles, artefacts
 from items.components import component_constants
@@ -16,6 +18,7 @@ _AUTO_RELOAD_TAG = 'autoreload'
 _AUTO_SHOOT_TAG = 'autoShoot'
 _DUAL_GUN_TAG = 'dualGun'
 _DUAL_ACCURACY_TAG = 'dualAccuracy'
+_TWIN_GUN_TAG = 'twinGun'
 
 def _updateMinMaxValues(targetDict, key, value):
     targetDict[key] = (min(targetDict[key][0], value), max(targetDict[key][1], value))
@@ -55,6 +58,10 @@ def isDualAccuracy(gun):
 
 def isBurstGun(gunDescr):
     return gunDescr.burst != component_constants.DEFAULT_GUN_BURST if gunDescr is not None else False
+
+
+def isTwinGun(gun):
+    return _TWIN_GUN_TAG in gun.tags if gun is not None else False
 
 
 def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
@@ -107,14 +114,15 @@ def calcGunParams(gunDescr, descriptors):
         curAimingTime = round(descr.aimingTime, 1)
         _updateMinMaxValues(result, DISPERSION_RADIUS_PROP_NAME, curDispRadius)
         _updateMinMaxValues(result, AIMING_TIME_PROP_NAME, curAimingTime)
+        chargeTime = ()
+        rateTime = -1
+        reloadTimeSecs = (reloadTime,)
         if isDualGun(descr):
             chargeTime = (descr.dualGun.chargeTime, descr.dualGun.reloadLockTime)
             rateTime = descr.dualGun.rateTime
             reloadTimeSecs = descr.dualGun.reloadTimes
-        else:
-            chargeTime = ()
-            rateTime = -1
-            reloadTimeSecs = (reloadTime,)
+        elif isTwinGun(descr):
+            reloadTimeSecs = ()
         _updateMinMaxValues(result, DUAL_GUN_RATE_TIME, rateTime)
         result[DUAL_GUN_CHARGE_TIME] = chargeTime
         result[RELOAD_TIME_SECS_PROP_NAME] = reloadTimeSecs
@@ -126,7 +134,7 @@ def calcGunParams(gunDescr, descriptors):
         shell = shot.shell
         result[PIERCING_POWER_PROP_NAME].append(shot.piercingPower[0])
         result[DAMAGE_PROP_NAME].append(shell.armorDamage[0])
-        shellKind = i18n.makeString('#item_types:shell/kinds/' + shell.kind)
+        shellKind = backport.text(R.strings.item_types.shell.kinds.dyn(shell.kind)())
         result[MAX_MUTABLE_DAMAGE_PROP_NAME].append(shell.armorDamage[0])
         result[MIN_MUTABLE_DAMAGE_PROP_NAME].append(computeDamageAtDist(shell.armorDamage, min(shot.maxDistance, DAMAGE_INTERPOLATION_DIST_LAST)) if shell.isDamageMutable else shell.armorDamage[0])
         result[SHELLS_PROP_NAME].append(shellKind)

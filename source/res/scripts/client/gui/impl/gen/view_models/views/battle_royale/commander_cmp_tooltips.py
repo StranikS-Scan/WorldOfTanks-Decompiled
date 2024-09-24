@@ -5,7 +5,6 @@ from frameworks.wulf import ViewModel
 class CommanderCmpTooltips(ViewModel):
     __slots__ = ()
     TOOLTIP_SIXTH_SENSE_SKILL = 'commander_sixthSense'
-    TOOLTIP_EXPERT_SKILL = 'commander_expert'
     TOOLTIP_TANKMAN = 'battleRoyaleTankman'
 
     def __init__(self, properties=0, commands=0):

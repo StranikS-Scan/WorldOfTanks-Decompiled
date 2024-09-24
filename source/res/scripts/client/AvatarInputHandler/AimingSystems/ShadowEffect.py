@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/ShadowEffect.py
 import GUI
 import math_utils
-from constants import DUAL_GUN
 
 class ShadowEffect(object):
 
@@ -38,11 +37,8 @@ class ShadowEffect(object):
         GUI.addRoot(shadow)
         return shadow
 
-    def onGunIndexChanged(self, gunIndex):
-        if gunIndex == DUAL_GUN.ACTIVE_GUN.RIGHT:
-            self.cachedPosition = self.__startPositionX
-        else:
-            self.cachedPosition = -self.__startPositionX
+    def onGunIndexChanged(self, transitionSide):
+        self.cachedPosition = self.__startPositionX * transitionSide
         self.move(self.cachedPosition)
 
     def spawn(self):

@@ -1694,4 +1694,140 @@
       <displayCount>	3	</displayCount>
     </history>
   </hint>
+  <hint>
+    <props>
+      <name>	LSH_FOG	</name>
+      <scope>	local_story	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	MAPBOX	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/LSH_FOG	</key>
+    </text>
+    <visual>
+      <image>	animations/localStory/lsh_common.swf	</image>
+    </visual>
+    <sound>
+      <fx>	gui_hangar_hover	</fx>
+    </sound>
+    <lifecycle>
+      <showTime>	11	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <cooldown>	180	</cooldown>
+      <perBattleCount>	2	</perBattleCount>
+      <totalDisplayCount>	10	</totalDisplayCount>
+    </history>
+  </hint>
+  <hint>
+    <props>
+      <name>	LSH_SMOKEFIRE	</name>
+      <scope>	local_story	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	MAPBOX	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/LSH_FIRE	</key>
+    </text>
+    <visual>
+      <image>	animations/localStory/lsh_fire.swf	</image>
+    </visual>
+    <sound>
+      <fx>	gui_hangar_hover	</fx>
+    </sound>
+    <lifecycle>
+      <showTime>	12	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <cooldown>	180	</cooldown>
+      <perBattleCount>	2	</perBattleCount>
+      <totalDisplayCount>	10	</totalDisplayCount>
+    </history>
+  </hint>
+  <hint>
+    <props>
+      <name>	LSH_RAIN	</name>
+      <scope>	local_story	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	MAPBOX	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/LSH_RAIN	</key>
+    </text>
+    <visual>
+      <image>	animations/localStory/lsh_common.swf	</image>
+    </visual>
+    <sound>
+      <fx>	gui_hangar_hover	</fx>
+    </sound>
+    <lifecycle>
+      <showTime>	11	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <cooldown>	180	</cooldown>
+      <perBattleCount>	2	</perBattleCount>
+      <totalDisplayCount>	10	</totalDisplayCount>
+    </history>
+  </hint>
+  <hint>
+    <props>
+      <name>	LSH_SANDSTORM	</name>
+      <scope>	local_story	</scope>
+      <component>	newbieHint	</component>
+      <battleTypes>
+        <arenaBonusType>	REGULAR	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+      <battleTypes>
+        <arenaBonusType>	MAPBOX	</arenaBonusType>
+        <gameplayNames>	ctf	</gameplayNames>
+      </battleTypes>
+    </props>
+    <text>
+      <key>	#battle_hints:hint/LSH_SANDSTORM	</key>
+    </text>
+    <visual>
+      <image>	animations/localStory/lsh_common.swf	</image>
+    </visual>
+    <sound>
+      <fx>	gui_hangar_hover	</fx>
+    </sound>
+    <lifecycle>
+      <showTime>	11	</showTime>
+      <waitTime>	3	</waitTime>
+      <minShowTime>	7	</minShowTime>
+    </lifecycle>
+    <history>
+      <cooldown>	180	</cooldown>
+      <perBattleCount>	2	</perBattleCount>
+      <totalDisplayCount>	10	</totalDisplayCount>
+    </history>
+  </hint>
 </battle_hints.xml>

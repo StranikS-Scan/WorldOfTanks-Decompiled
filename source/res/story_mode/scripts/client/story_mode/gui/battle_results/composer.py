@@ -29,7 +29,7 @@ class StoryModeStatsComposer(IBattleResultStatsCtrl):
         return self._block.getVO()
 
     @staticmethod
-    def onShowResults(arenaUniqueID, isPostbattle20Enabled=False):
+    def onShowResults(arenaUniqueID):
         pass
 
     def onResultsPosted(self, arenaUniqueID):

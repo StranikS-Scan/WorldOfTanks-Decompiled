@@ -36,6 +36,7 @@ class HelpPagePriority(object):
     SIEGE_MODE = 11
     ROLE_TYPE = 12
     COMP7 = 13
+    TWIN_GUN = 14
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -338,6 +339,29 @@ class AutoShootGunPagesBuilder(DetailedHelpPagesBuilder):
         return
 
 
+class TwinGunPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isTwinGunVehicle',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.TWIN_GUN
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.twinGun.mechanics.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.twinGun.mechanics.page1())), [getVirtualKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)], [getReadableKey(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)], backport.image(R.images.gui.maps.icons.battleHelp.twinGun.mechanics_page_1()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.twinGun.mechanics.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.twinGun.mechanics.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.twinGun.mechanics_page_2()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        isTwinGunVehicle = vehicle is not None and vehicle.typeDescriptor.isTwinGunVehicle
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isTwinGunVehicle
+        ctx['isTwinGunVehicle'] = isTwinGunVehicle
+        return
+
+
 class RoleTypePagesBuilder(DetailedHelpPagesBuilder):
     _SUITABLE_CTX_KEYS = ('roleType',)
 
@@ -402,9 +426,7 @@ class MapboxPagesBuilder(DetailedHelpPagesBuilder):
         pages = []
         header = backport.text(cls._STR_PATH.headerTitle())
         hintCtx = HelpHintContext.MAPBOX
-        addPage(pages, header, backport.text(cls._STR_PATH.markers.title()), text_styles.mainBig(backport.text(cls._STR_PATH.markers.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.markers()), hintCtx=hintCtx)
-        addPage(pages, header, backport.text(cls._STR_PATH.environment.title()), text_styles.mainBig(backport.text(cls._STR_PATH.environment.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.environment()), hintCtx=hintCtx)
-        addPage(pages, header, backport.text(cls._STR_PATH.artefacts.title()), text_styles.mainBig(backport.text(cls._STR_PATH.artefacts.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.artefacts()), hintCtx=hintCtx)
+        addPage(pages, header, backport.text(cls._STR_PATH.localWeather.title()), text_styles.mainBig(backport.text(cls._STR_PATH.localWeather.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.mapbox.localWeather()), hintCtx=hintCtx)
         return pages
 
     @classmethod
@@ -447,4 +469,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  MapboxPagesBuilder,
  AutoShootGunPagesBuilder,
  DualAccuracyPagesBuilder,
+ TwinGunPagesBuilder,
  DevMapsPagesBuilder))

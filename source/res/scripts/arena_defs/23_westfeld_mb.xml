@@ -1,0 +1,57 @@
+<23_westfeld_mb.xml>
+  <name>	#arenas:23_westfeld_mb/name	</name>
+  <description>	#arenas:23_westfeld_mb/description	</description>
+  <geometry>	spaces/23_westfeld_mb	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/23_westfeld_mb/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	mmap_23_ls_rain01	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/23_westfeld_mb/mmap_23_ls_rain01.dds	</path>
+    </layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_westfield_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_westfield_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_westfield_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_westfield_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_westfield_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_westfield_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	amb_map_23_westfield_wind_spring	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	map_box_battle.bnk	</name>
+      </bank>
+      <bank>
+        <name>	map_box_battle.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-300.099518 -339.599609	</position1>
+        </team1>
+        <team2>
+          <position1>	339.399506 299.766785	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+</23_westfeld_mb.xml>

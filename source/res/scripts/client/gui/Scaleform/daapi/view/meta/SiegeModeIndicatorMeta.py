@@ -4,14 +4,14 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class SiegeModeIndicatorMeta(BaseDAAPIComponent):
 
-    def as_switchSiegeStateS(self, totalTime, leftTime, siegeState, engineState, isSmooth):
-        return self.flashObject.as_switchSiegeState(totalTime, leftTime, siegeState, engineState, isSmooth) if self._isDAAPIInited() else None
+    def as_switchSiegeStateS(self, totalTime, leftTime, siegeState, moduleState, isSmooth):
+        return self.flashObject.as_switchSiegeState(totalTime, leftTime, siegeState, moduleState, isSmooth) if self._isDAAPIInited() else None
 
-    def as_setAutoSiegeModeStateS(self, siegeState, engineState):
-        return self.flashObject.as_setAutoSiegeModeState(siegeState, engineState) if self._isDAAPIInited() else None
+    def as_setAutoSiegeModeStateS(self, siegeState, moduleState):
+        return self.flashObject.as_setAutoSiegeModeState(siegeState, moduleState) if self._isDAAPIInited() else None
 
-    def as_switchSiegeStateSnapshotS(self, totalTime, leftTime, siegeState, engineState, isSmooth):
-        return self.flashObject.as_switchSiegeStateSnapshot(totalTime, leftTime, siegeState, engineState, isSmooth) if self._isDAAPIInited() else None
+    def as_switchSiegeStateSnapshotS(self, totalTime, leftTime, siegeState, moduleState, isSmooth):
+        return self.flashObject.as_switchSiegeStateSnapshot(totalTime, leftTime, siegeState, moduleState, isSmooth) if self._isDAAPIInited() else None
 
     def as_updateDeviceStateS(self, deviceName, deviceState):
         return self.flashObject.as_updateDeviceState(deviceName, deviceState) if self._isDAAPIInited() else None

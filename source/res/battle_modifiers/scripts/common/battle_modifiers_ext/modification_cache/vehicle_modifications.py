@@ -7,7 +7,7 @@ from battle_modifiers_ext.constants_ext import USE_VEHICLE_CACHE, MAX_VEHICLE_CA
 from battle_modifiers_ext.modification_cache.modification_cache import ModificationCache
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE
 from math import tan, atan, cos, acos
-from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT
+from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH, DEFAULT_GUN_AUTOSHOOT, DynamicShotEffect, ZERO_FLOAT, DEFAULT_GUN_TWINGUN
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple
 from Math import Vector2
 from debug_utils import LOG_DEBUG
@@ -109,8 +109,11 @@ class VehicleModifier(object):
             if gun.dualGun != DEFAULT_GUN_DUALGUN:
                 reloadTimes = [ modifiers(BattleParams.RELOAD_TIME, reloadTime) for reloadTime in gun.dualGun.reloadTimes ]
                 gun.dualGun = gun.dualGun._replace(reloadTimes=tuple(reloadTimes))
+            if gun.twinGun != DEFAULT_GUN_TWINGUN:
+                reloadTime = modifiers(BattleParams.TWIN_GUN_RELOAD_TIME, gun.twinGun.twinGunReloadTime)
+                gun.twinGun = gun.twinGun._replace(twinGunReloadTime=reloadTime)
             if IS_CLIENT:
-                if gun.dualGun != DEFAULT_GUN_DUALGUN:
+                if gun.dualGun != DEFAULT_GUN_DUALGUN or gun.twinGun != DEFAULT_GUN_TWINGUN:
                     gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
                 else:
                     gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
@@ -118,7 +121,7 @@ class VehicleModifier(object):
                     gunPrefabs = copy.deepcopy(gun.prefabs)
                     for outfit, prefabs in gunPrefabs.iteritems():
                         modifiers.modificationCtx['outfit'] = outfit
-                        prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, path) for path in prefabs['main']))
+                        prefabs['main'] = tuple((modifiers(BattleParams.GUN_MAIN_PREFAB, p) for p in prefabs['main']))
 
                     gun.prefabs = gunPrefabs
                     modifiers.modificationCtx.pop('outfit', None)

@@ -3,7 +3,9 @@
 import GUI
 from gui.Scaleform.daapi.view.battle.classic.minimap import GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.pve_base.minimap import PveMinimapComponent
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import PersonalEntriesPlugin
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
+from gui.battle_control import minimap_utils
 _FLASH_NAME = 'pveFullMap'
 _MINIMAP_COMPONENT_PATH = '_level0.root.{}.main.{}.entriesContainer'.format(LAYER_NAMES.VIEWS, _FLASH_NAME)
 _MINIMAP_SIZE = (352, 352)
@@ -12,6 +14,16 @@ class PveFullMapGlobalSettingsPlugin(GlobalSettingsPlugin):
 
     def _toogleVisible(self):
         pass
+
+
+class PveFullMapPersonalEntriesPlugin(PersonalEntriesPlugin):
+    __slots__ = ()
+
+    def __init__(self, parentObj):
+        super(PveFullMapPersonalEntriesPlugin, self).__init__(parentObj)
+        bottomLeft, upperRight = self._parentObj.getBoundingBox()
+        width = upperRight[0] - bottomLeft[0]
+        self.setDefaultViewRangeCircleSize(width * minimap_utils.MINIMAP_SIZE[0] / _MINIMAP_SIZE[0])
 
 
 class PveFullMapComponent(PveMinimapComponent):
@@ -28,6 +40,7 @@ class PveFullMapComponent(PveMinimapComponent):
     def _setupPlugins(self, arenaVisitor):
         setup = super(PveFullMapComponent, self)._setupPlugins(arenaVisitor)
         setup['settings'] = PveFullMapGlobalSettingsPlugin
+        setup['personal'] = PveFullMapPersonalEntriesPlugin
         return setup
 
     def _getFlashName(self):

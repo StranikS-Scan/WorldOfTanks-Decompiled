@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import ChatCommuni
 from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController
-from gui.battle_control.battle_constants import ENTITY_IN_FOCUS_TYPE
+from gui.battle_control.battle_constants import ENTITY_IN_FOCUS_TYPE, PLAYER_GUI_PROPS
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE
 from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
@@ -693,9 +693,18 @@ class HeadquartersPlugin(EpicMissionsPlugin, ChatCommunicationComponent):
             aInfo = self.sessionProvider.getArenaDP().getVehicleInfo(attackerID)
             if hasImpactMask and battleSpamCtrl is not None and aInfo and aInfo.isAutoShootGunVehicle():
                 hasImpactMask = battleSpamCtrl.filterMarkersHitState(entityId, 'impact{}'.format(attackerID))
-            self.__entitiesDamageType[entityId] = bool(aInfo and aInfo.vehicleID == BigWorld.player().playerVehicleID)
+            self.__entitiesDamageType[entityId] = self.__getVehicleDamageType(aInfo)
             self._invokeMarker(marker.getMarkerID(), 'setHealth', newHealth, self.__entitiesDamageType[entityId], hasImpactMask)
             return
+
+    def __getVehicleDamageType(self, attackerInfo):
+        if not attackerInfo:
+            return settings.DamageType.FROM_OTHER
+        attackerID = attackerInfo.vehicleID
+        if attackerID == BigWorld.player().playerVehicleID:
+            return settings.DamageType.FROM_PLAYER
+        entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
+        return settings.DamageType.FROM_SQUAD if entityName == PLAYER_GUI_PROPS.squadman else settings.DamageType.FROM_OTHER
 
     def __activateDestructibleMarker(self, entityId, isActive):
         marker = self._markers.get(entityId, None)

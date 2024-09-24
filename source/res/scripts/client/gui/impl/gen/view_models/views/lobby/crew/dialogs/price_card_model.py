@@ -10,7 +10,6 @@ class CardType(Enum):
     DEFAULT = 'default'
     RESET = 'reset'
     RETRAIN = 'retrain'
-    RECRUIT = 'recruit'
 
 
 class CardState(Enum):

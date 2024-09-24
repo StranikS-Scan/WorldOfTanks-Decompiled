@@ -497,13 +497,13 @@ class SoundGroups(object):
     def preloadSoundGroups(self, arenaName):
         MusicControllerWWISE.init(arenaName)
 
-    def getSound3D(self, node, event, soundObjectName=None):
+    def getSound3D(self, node, event):
         if DEBUG_TRACE_SOUND is True:
             LOG_DEBUG('SOUND: getSound3D', event, node)
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return self.WWgetSound(event, soundObjectName, node) if soundObjectName else self.WWgetSound(event, event + ' : ' + str(node), node)
+        return self.WWgetSound(event, event + ' : ' + str(node), node)
 
     def prepareMP3(self, event):
         if event in CUSTOM_MP3_EVENTS:
@@ -527,6 +527,10 @@ class SoundGroups(object):
             import traceback
             traceback.print_stack()
         return WWISE.WW_eventGlobal(event)
+
+    def playSafeSound2D(self, event):
+        if event:
+            self.playSound2D(event)
 
     def playSoundPos(self, event, pos):
         if DEBUG_TRACE_SOUND is True:

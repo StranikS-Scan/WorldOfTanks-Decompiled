@@ -1,0 +1,30 @@
+<TwinGunController.def>
+  <Properties>
+    <vehTypeCD>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehTypeCD>
+    <activeGunIndexes>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </activeGunIndexes>
+    <nextGunIndexes>
+      <Type>	ARRAY	  <of>	UINT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </nextGunIndexes>
+    <shotsCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </shotsCount>
+  </Properties>
+  <ClientMethods>
+    <onDiscreteShot>
+      <Arg>	UINT8	</Arg>
+    </onDiscreteShot>
+    <onDoubleShot></onDoubleShot>
+  </ClientMethods>
+  <DefaultKeyName>	twinGunController	</DefaultKeyName>
+</TwinGunController.def>

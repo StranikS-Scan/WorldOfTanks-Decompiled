@@ -1211,7 +1211,7 @@ def _migrateTo120(core, data, initialized):
     battlesCount = itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
     data['gameExtData2'][GAME.NEWBIE_PREBATTLE_HINTS] = not disabled and battlesCount <= gui.prebattle_hints.newbie_controller.IS_NEWBIE_MAX_BATTLES
     data['gameExtData2'][GAME.NEWBIE_BATTLE_HINTS] = not disabled and battlesCount <= BH_NEWBIE_MAX_BATTLES
-    newbieGroup = itemsCache.items.stats.newbieHintsGroup
+    newbieGroup = itemsCache.items.stats.getABGroup(feature='newbieHints')
     abConfig = lobbyContext.getServerSettings().abFeatureTestConfig
     if not disabled and newbieGroup and hasattr(abConfig, 'newbieHints'):
         properties = abConfig.newbieHints.get(newbieGroup)['properties']

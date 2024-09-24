@@ -5,7 +5,7 @@ from cgf_script.managers_registrator import registerManager, Rule, registerRule
 from hover_component import HoverManager
 from highlight_component import HighlightManager
 from on_click_components import ClickManager
-from hangar_camera_manager import HangarCameraManager, WTHangarManager
+from hangar_camera_manager import HangarCameraManager
 
 @registerRule
 class SelectionRule(Rule):
@@ -31,15 +31,5 @@ class CameraRule(Rule):
     domain = CGF.DomainOption.DomainClient
 
     @registerManager(HangarCameraManager)
-    def reg1(self):
-        return None
-
-
-@registerRule
-class WTHangarRule(Rule):
-    category = 'Hangar rules'
-    domain = CGF.DomainOption.DomainClient
-
-    @registerManager(WTHangarManager)
     def reg1(self):
         return None

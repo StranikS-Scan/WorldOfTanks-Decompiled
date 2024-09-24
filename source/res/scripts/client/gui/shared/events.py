@@ -9,7 +9,7 @@ from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
     from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent', 'HangarSimpleEvent')
+__all__ = ('ArgsEvent', 'ComponentEvent', 'LoadViewEvent', 'LoadGuiImplViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent', 'GameEvent', 'ViewEventType', 'OpenLinkEvent', 'ChannelManagementEvent', 'PreBattleChannelEvent', 'AmmunitionSetupViewEvent', 'HasCtxEvent', 'DogTagsEvent', 'DeathCamEvent', 'FullscreenModeSelectorEvent', 'ModeSelectorPopoverEvent', 'ModeSubSelectorEvent')
 _logger = logging.getLogger(__name__)
 
 class HasCtxEvent(SharedEvent):
@@ -87,8 +87,6 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
-    SHOW_SPAWN_POINTS = 'game/showSpawnPoints'
-    HIDE_SPAWN_POINTS = 'game/hideSpawnPoints'
 
 
 class GUICommonEvent(SharedEvent):
@@ -527,6 +525,7 @@ class OpenLinkEvent(SharedEvent):
     WOT_PLUS_STEAM_SHOP = 'wotPlusSteamURL'
     WOT_PLUS_SHOP = 'wotPlusShopURL'
     STEAM_SUBSCRIPTION_MANAGEMENT = 'steamSubscriptionManagementURL'
+    LOOT_BOXES_LIST = 'lootBoxesList'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)
@@ -624,10 +623,6 @@ class SeniorityAwardsEvent(HasCtxEvent):
     ON_ENTRY_VIEW_LOADED = 'seniorityAwards/onEntryViewLoaded'
 
 
-class WtEventPortalsEvent(HasCtxEvent):
-    ON_PORTAL_AWARD_VIEW_CLOSED = 'wtEvent/onPortalAwardViewClosed'
-
-
 class ReferralProgramEvent(HasCtxEvent):
     REFERRAL_PROGRAM_ACTIVATED = 'referralProgramActivated'
     REFERRAL_PROGRAM_DEACTIVATED = 'referralProgrammDeactivated'
@@ -677,6 +672,11 @@ class BattlePassEvent(HasCtxEvent):
     ON_PREVIEW_PROGRESSION_STYLE_CLOSE = 'onPreviewProgressionStyleClose'
     ON_FINISH_BATTLE_PASS_PURCHASE = 'onFinishBattlePassPurchase'
     VIDEO_SHOWN = 'videoShown'
+
+
+class LootBoxSystemEvent(HasCtxEvent):
+    ON_STATISTICS_RESET = 'onStatisticsReset'
+    OPENING_ERROR = 'openingError'
 
 
 class ItemRemovalByDemountKitEvent(HasCtxEvent):
@@ -880,15 +880,9 @@ class ExchangeRatesDiscountsEvent(HasCtxEvent):
     ON_PERSONAL_DISCOUNT_VIEWED = 'onPersonalDiscountViewed'
 
 
-class HangarSimpleEvent(HasCtxEvent):
-    HANGAR_LOADED = 'HangarSimpleEvent/hangarLoaded'
-    HANGAR_UNLOADED = 'HangarSimpleEvent/hangarUnLoaded'
-    VEHICLE_PREVIEW_LOADED = 'HangarSimpleEvent/vehiclePreviewLoaded'
-    VEHICLE_PREVIEW_UNLOADED = 'HangarSimpleEvent/vehiclePreviewUnLoaded'
-    EVENT_PORTAL_SELECTED = 'HangarSimpleEvent/eventPortalSelected'
-    EVENT_VEHICLE_SELECTED = 'HangarSimpleEvent/eventVehicleSelected'
-    SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
-    CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
-    DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
-    PORTAL_MANAGER_ACTIVATED = 'HangarSimpleEvent/PortalManagerActivated'
-    UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'
+class ViewReadyEvent(SharedEvent):
+    VIEW_READY = 'ViewReadyEvent.VIEW_READY'
+
+    def __init__(self, viewID):
+        super(ViewReadyEvent, self).__init__(self.VIEW_READY)
+        self.viewID = viewID

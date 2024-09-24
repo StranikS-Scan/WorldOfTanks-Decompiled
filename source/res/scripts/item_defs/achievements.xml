@@ -5911,7 +5911,7 @@
         </item>
         <item>	memorial	  <name>	section	</name>
         </item>
-        <item>	1447.1	  <name>	weight	</name>
+        <item>	1447.12	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -5926,7 +5926,7 @@
         </item>
         <item>	memorial	  <name>	section	</name>
         </item>
-        <item>	1447.1	  <name>	weight	</name>
+        <item>	1447.13	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -6999,6 +6999,51 @@
       </value>
     </achievement>
     <achievement>
+      <name>	achievements:wt2024HunterWins	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	repeatable	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1468.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:wt2024BossWins	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1468.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:wt2024HunterWinsEpic	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1468.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	singleAchievements:comp7_4_1	</name>
       <type>	dict	</type>
       <value>
@@ -7134,44 +7179,14 @@
       </value>
     </achievement>
     <achievement>
-      <name>	achievements:wt2024HunterWins	</name>
+      <name>	achievements:mapboxClimateExpert	</name>
       <type>	dict	</type>
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	action	  <name>	section	</name>
+        <item>	memorial	  <name>	section	</name>
         </item>
-        <item>	1468.1	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	achievements:wt2024BossWins	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1468.2	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>	random	  <name>	mode	</name>
-        </item>
-      </value>
-    </achievement>
-    <achievement>
-      <name>	achievements:wt2024HunterWinsEpic	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	single	  <name>	type	</name>
-        </item>
-        <item>	action	  <name>	section	</name>
-        </item>
-        <item>	1468.3	  <name>	weight	</name>
+        <item>	1449.05	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

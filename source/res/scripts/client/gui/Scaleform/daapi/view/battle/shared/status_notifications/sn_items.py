@@ -52,16 +52,16 @@ class SimpleSnapshotHandler(TimeSnapshotHandler):
         self._updateHandler(self.getCurrentTimeSnapshot(), totalTime)
 
 
-class _VehicleStateSN(StatusNotificationItem):
+class VehicleStateSN(StatusNotificationItem):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
     _HIDE_STATES_TRIGGERS = (VEHICLE_VIEW_STATE.DESTROYED, VEHICLE_VIEW_STATE.CREW_DEACTIVATED, VEHICLE_VIEW_STATE.SWITCHING)
 
     def __init__(self, updateCallback):
-        super(_VehicleStateSN, self).__init__(updateCallback)
+        super(VehicleStateSN, self).__init__(updateCallback)
         self._isCameraFixed = True
 
     def start(self):
-        super(_VehicleStateSN, self).start()
+        super(VehicleStateSN, self).start()
         ctrl = self._sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
@@ -93,7 +93,7 @@ class _VehicleStateSN(StatusNotificationItem):
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
                 handler.onCameraChanged -= self.__onCameraChanged
-        super(_VehicleStateSN, self).destroy()
+        super(VehicleStateSN, self).destroy()
         return
 
     def isVisible(self):
@@ -145,7 +145,7 @@ class _VehicleStateSN(StatusNotificationItem):
         self._update(value)
 
 
-class TimerSN(_VehicleStateSN):
+class TimerSN(VehicleStateSN):
 
     def __init__(self, updateCallback):
         super(TimerSN, self).__init__(updateCallback)
@@ -382,7 +382,7 @@ class DrownSN(DestroyMiscTimerSN):
         return VEHICLE_MISC_STATUS.VEHICLE_DROWN_WARNING
 
 
-class UnderFireSN(_VehicleStateSN):
+class UnderFireSN(VehicleStateSN):
 
     def start(self):
         super(UnderFireSN, self).start()
@@ -398,7 +398,7 @@ class UnderFireSN(_VehicleStateSN):
         self._setVisible(isUnderFire)
 
 
-class FireSN(_VehicleStateSN):
+class FireSN(VehicleStateSN):
 
     def start(self):
         super(FireSN, self).start()

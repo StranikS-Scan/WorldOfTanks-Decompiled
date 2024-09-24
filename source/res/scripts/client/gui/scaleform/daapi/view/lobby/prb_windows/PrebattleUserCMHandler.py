@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/PrebattleUserCMHandler.py
 from adisp import adisp_process
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import AppealCMHandler, USER
+from gui.Scaleform.daapi.view.lobby.user_cm_handlers import AppealCMHandler
+from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from gui.prb_control.entities.base.legacy.ctx import KickPlayerCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.shared.system_factory import registerLobbyContexMenuHandler

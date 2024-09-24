@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/highlighter.py
+import typing
 import BigWorld
+import GenericComponents
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from EdgeDrawer import HighlightComponent
+from EdgeDrawer import HighlightComponent, EdgeHighlightComponent
 import cgf_obsolete_script.py_component
+if typing.TYPE_CHECKING:
+    import CGF
 
 class Highlighter(cgf_obsolete_script.py_component.Component):
     HIGHLIGHT_OFF = 0
@@ -132,10 +136,21 @@ class Highlighter(cgf_obsolete_script.py_component.Component):
     def __updateHighlightComponent(self, status, args):
         appearance = self.__vehicle.appearance
         if appearance is not None:
+            isOn = status & self.HIGHLIGHT_ON
             root = appearance.gameObject
-            highlight = root.findComponentByType(HighlightComponent)
-            if highlight is not None:
-                root.removeComponent(highlight)
-            if status & self.HIGHLIGHT_ON:
-                root.createComponent(HighlightComponent, args[0], args[1], args[2], args[3], False)
+            compositionRoot = GenericComponents.findRootSlot(root)
+            _setCgfHighlighter(root, HighlightComponent, args, isOn)
+            _setCgfHighlighter(compositionRoot, EdgeHighlightComponent, args, isOn)
+        return
+
+
+def _setCgfHighlighter(gameObject, componentType, args, isOn):
+    if gameObject is None or not gameObject.isValid():
+        return
+    else:
+        highlight = gameObject.findComponentByType(componentType)
+        if highlight is not None:
+            gameObject.removeComponent(highlight)
+        if isOn:
+            gameObject.createComponent(componentType, args[0], args[1], args[2], args[3], False)
         return

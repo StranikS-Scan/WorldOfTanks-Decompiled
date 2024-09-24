@@ -3,7 +3,8 @@
 import json
 import typing
 from constants import Configs
-from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer, Array
+from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from frameworks.wulf.view.array import fillStringsArray
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_survey_view_model import MapBoxSurveyViewModel
 from gui.impl.gen.view_models.views.lobby.mapbox.map_box_option_model import MapBoxOptionModel
@@ -91,18 +92,13 @@ class MapBoxSurvey(ViewImpl):
         model.setPathPrefix(question.getPathPrefix())
         model.setQuestionId(question.getQuestionId())
         model.setShowIcons(question.isUsingIcons())
-        self.__fillTitleParameters(model, question)
+        fillStringsArray(question.getTitleParameters(), model.getTitleParams())
         self.__fillAnswers(model.answers, question)
         self.__fillOptions(model.options, question)
 
     def __fillAnswers(self, model, question, optionId=None):
         model.setIsMultipleChoice(question.isMultipleChoice())
-        variants = model.getVariants()
-        variants.clear()
-        for answer in question.getAnswers():
-            variants.addString(answer)
-
-        variants.invalidate()
+        fillStringsArray(question.getAnswers(), model.getVariants())
         self.__updateSelectedVariants(model, question.getQuestionId(), optionId)
 
     def __fillOptions(self, model, question):
@@ -116,21 +112,9 @@ class MapBoxSurvey(ViewImpl):
 
         model.invalidate()
 
-    def __fillTitleParameters(self, model, question):
-        titleParameters = model.getTitleParams()
-        titleParameters.clear()
-        for parameter in question.getTitleParameters():
-            titleParameters.addString(parameter)
-
-        titleParameters.invalidate()
-
     def __updateSelectedVariants(self, model, questionId, optionId=None):
-        selectedVariants = model.getSelectedVariants()
-        selectedVariants.clear()
-        for answer in self.__mapboxCtrl.surveyManager.getSelectedAnswers(questionId, optionId):
-            selectedVariants.addString(answer)
-
-        selectedVariants.invalidate()
+        answers = self.__mapboxCtrl.surveyManager.getSelectedAnswers(questionId, optionId)
+        fillStringsArray(answers, model.getSelectedVariants())
 
     def __onConfirmCompletion(self):
         self.__onClose()
@@ -194,9 +178,7 @@ class MapBoxSurvey(ViewImpl):
             model.question.setPathPrefix('')
             model.question.setQuestionId('')
             model.question.setType(QuestionType.UNDEFINED)
-            titleParameters = model.question.getTitleParams()
-            titleParameters.clear()
-            titleParameters.invalidate()
+            fillStringsArray([], model.question.getTitleParams())
 
 
 class MapBoxSurveyWindow(LobbyWindow):

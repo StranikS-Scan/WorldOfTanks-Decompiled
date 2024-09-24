@@ -5,7 +5,7 @@ from gui.game_loading import loading as gameLoading
 from helpers import dependency
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import Features, LogActions, LogWindows, LogButtons, LogBattleResultStats
-from story_mode_common.story_mode_constants import EVENT_NAME
+from story_mode_common.story_mode_constants import EVENT_NAME, EXTENSION_NAME
 from uilogging.base.logger import MetricsLogger
 from wotdecorators import noexcept
 if typing.TYPE_CHECKING:
@@ -124,6 +124,19 @@ class EntryPointLogger(MetricsLogger):
 
     def __init__(self):
         super(EntryPointLogger, self).__init__(EVENT_NAME)
+
+    def logClick(self, state):
+        self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, itemState=state.name.lower())
+
+    def logUnhover(self, state):
+        self.log(LogActions.UNHOVER, LogWindows.ENTRY_POINT, itemState=state.name.lower())
+
+
+class NewbieEntryPointLogger(MetricsLogger):
+    __slots__ = ()
+
+    def __init__(self):
+        super(NewbieEntryPointLogger, self).__init__(EXTENSION_NAME)
 
     def logClick(self, state):
         self.log(LogActions.CLICK, LogWindows.ENTRY_POINT, itemState=state.name.lower())

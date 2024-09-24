@@ -10,32 +10,32 @@ class StrikeSelector(MapCaseMode._ArcadeBomberStrikeSelector):
 
     def __init__(self, position, equipment):
         super(StrikeSelector, self).__init__(position, equipment)
-        self.__edgedBunkers = []
+        self._edgedBunkers = []
 
     def destroy(self):
-        self.__clearEdgedDestructibles()
+        self._clearEdgedDestructibles()
         super(StrikeSelector, self).destroy()
 
     def highlightVehicles(self):
         super(StrikeSelector, self).highlightVehicles()
-        self.__clearEdgedDestructibles()
+        self._clearEdgedDestructibles()
         for entity in BigWorld.entities.valuesOfType('DestructibleEntity'):
             if self.area.pointInside(entity.position):
-                bunkerComponent = self.__getBunkerComponent(entity.destructibleEntityID)
+                bunkerComponent = self._getBunkerComponent(entity.destructibleEntityID)
                 if bunkerComponent:
                     bunkerComponent.highlightBunker(True)
-                    self.__edgedBunkers.append(bunkerComponent)
+                    self._edgedBunkers.append(bunkerComponent)
 
     def _validateVehicle(self, vehicle):
         return super(StrikeSelector, self)._validateVehicle(vehicle) and VEHICLE_BUNKER_TURRET_TAG not in vehicle.typeDescriptor.type.tags
 
-    def __clearEdgedDestructibles(self):
-        for bunkerComponent in self.__edgedBunkers:
+    def _clearEdgedDestructibles(self):
+        for bunkerComponent in self._edgedBunkers:
             bunkerComponent.highlightBunker(False)
 
-        self.__edgedBunkers = []
+        self._edgedBunkers = []
 
     @staticmethod
-    def __getBunkerComponent(destructibleEntityID):
+    def _getBunkerComponent(destructibleEntityID):
         bunkerQuery = CGF.Query(BigWorld.player().spaceID, (CGF.GameObject, BunkerLogicComponent))
         return next((bunker for _, bunker in bunkerQuery if bunker.destructibleEntityId == destructibleEntityID), None)

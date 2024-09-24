@@ -502,13 +502,6 @@ class TankmanDescr(object):
     def vehicleTypeCompDescr(self):
         return vehicles.makeIntCompactDescrByID('vehicle', self.nationID, self.vehicleTypeID)
 
-    def canUseSkills(self, vehicleDescrType):
-        isPremium, _ = self.__paramsOnVehicle(vehicleDescrType)
-        if isPremium:
-            return True
-        tagList = [VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG]
-        return any((tag in vehicleDescrType.tags for tag in tagList))
-
     def isOwnVehicleOrPremium(self, vehicleDescrType, isCheckWotPlus=True):
         tagList = [VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG]
         if isCheckWotPlus:

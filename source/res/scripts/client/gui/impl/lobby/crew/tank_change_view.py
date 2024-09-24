@@ -98,7 +98,7 @@ class TankChangeView(BaseCrewView):
         self._filterPanelWidget = None
         self.__filterState = None
         self.__dataProvider = None
-        if not self.vehicle or not self.vehicle.hasCrew:
+        if self.tankman.isInTank and (not self.vehicle or not self.vehicle.hasCrew):
             self._destroySubViews()
         self._clear()
         return

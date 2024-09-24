@@ -12,9 +12,8 @@ import BigWorld
 from BWUtil import AsyncReturn
 from constants import QUEUE_TYPE, PREBATTLE_TYPE, Configs
 import Event
-from gui import SystemMessages
-from gui.impl import backport
-from gui.impl.gen import R
+from frameworks.wulf import WindowLayer
+from gui.mapbox import mapbox_helpers
 from gui.mapbox.mapbox_helpers import formatMapboxBonuses, convertTimeFromISO
 from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
 from gui.periodic_battles.models import PrimeTimeStatus
@@ -22,15 +21,15 @@ from gui.prb_control import prb_getters
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, SELECTOR_BATTLE_TYPES, FUNCTIONAL_FLAG
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.server_events import caches
-from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey, showMapboxPrimeTimeWindow
+from gui.shared.event_dispatcher import showMapboxIntro, showMapboxSurvey, showBrowserOverlayView, showMapboxPrimeTimeWindow
 from gui.shared.utils import SelectorBattleTypesUtils
 from gui.shared.utils.SelectorBattleTypesUtils import setBattleTypeAsUnknown
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier, TimerNotifier
-from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxRequestCrewbookCtx, MapboxCompleteSurveyCtx
+from gui.wgcg.mapbox.contexts import MapboxProgressionCtx, MapboxCompleteSurveyCtx
 from helpers import dependency, server_settings, time_utils
-from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from season_provider import SeasonProvider
 from skeletons.gui.game_control import IMapboxController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -43,11 +42,7 @@ ProgressionData = namedtuple('ProgressionData', ('surveys',
  'minRank',
  'totalBattles',
  'nextSubstage'))
-MapData = namedtuple('MapData', ('progress',
- 'total',
- 'passed',
- 'available',
- 'url'))
+MapData = namedtuple('MapData', ('progress', 'total', 'passed'))
 RewardData = namedtuple('RewardData', ('bonusList', 'status'))
 _LAST_PERIOD = 0
 _RESTART_PROGRESSION_DELAY = 30
@@ -142,14 +137,17 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         self.__stopSubsystems()
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
 
-    def isEnabled(self):
-        return self.getModeSettings().isEnabled
-
-    def getModeSettings(self):
-        return dependency.instance(ILobbyContext).getServerSettings().mapbox
+    def onPrbEntitySwitched(self):
+        self.__modeEntered()
 
     def isActive(self):
         return self.isEnabled() and self.getCurrentSeason() is not None and self.getCurrentCycleInfo()[1]
+
+    def isAvailable(self):
+        return self.isEnabled() and not self.isFrozen() and self.getCurrentSeason() is not None
+
+    def isEnabled(self):
+        return self.getModeSettings().isEnabled
 
     def isMapboxMode(self):
         dispatcher = self.prbDispatcher
@@ -162,15 +160,8 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def isMapboxPrbActive(self):
         return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.MAPBOX)
 
-    @adisp.adisp_process
-    def selectMapboxBattle(self):
-        dispatcher = self.prbDispatcher
-        if dispatcher is None:
-            _logger.error('Prebattle dispatcher is not defined')
-            return
-        else:
-            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.MAPBOX))
-            return
+    def isMapVisited(self, mapName):
+        return self.__settingsManager.isMapVisited(mapName)
 
     def getAlertBlock(self):
         status, _, _ = self.getPrimeTimeStatus()
@@ -178,18 +169,26 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         isBlockedStatus = status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN)
         return (isBlockedStatus, alertData, alertData.packCallbacks(showMapboxPrimeTimeWindow))
 
+    def getModeSettings(self):
+        return dependency.instance(ILobbyContext).getServerSettings().mapbox
+
     def getProgressionData(self):
         return self.__progressionDataProvider.getProgressionData()
 
     def getProgressionRestartTime(self):
         return self.__progressionDataProvider.getProgressionRestartTime()
 
-    @adisp.adisp_process
-    def selectCrewbookNation(self, itemID):
-        if self.__webCtrl.isAvailable():
-            result = yield self.__webCtrl.sendRequest(MapboxRequestCrewbookCtx(itemID))
-            if not result.isSuccess():
-                SystemMessages.pushMessage(backport.text(R.strings.messenger.serviceChannelMessages.mapbox.crewbookRequestError()), SystemMessages.SM_TYPE.ErrorSimple)
+    def getUnseenItemsCount(self):
+        progressionData = self.__progressionDataProvider.getProgressionData()
+        if not self.isEnabled() or self.getCurrentCycleID() is None or progressionData is None:
+            return 0
+        else:
+            return len([ mapName for mapName, mapData in progressionData.surveys.iteritems() if not self.__settingsManager.isMapVisited(mapName) and mapData.progress >= mapData.total ])
+
+    @wg_async
+    def forceUpdateProgressData(self):
+        result = yield wg_await(self.__progressionDataProvider.forceUpdateProgressData())
+        raise AsyncReturn(result)
 
     @adisp.adisp_process
     def handleSurveyCompleted(self, surveyData):
@@ -210,12 +209,19 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
         else:
             _logger.error('Survey completed request not sent due to WGCG unavailability')
 
-    def getUnseenItemsCount(self):
-        progressionData = self.__progressionDataProvider.getProgressionData()
-        if not self.isEnabled() or self.getCurrentCycleID() is None or progressionData is None:
-            return 0
+    @adisp.adisp_process
+    def selectMapboxBattle(self):
+        dispatcher = self.prbDispatcher
+        if dispatcher is None:
+            _logger.error('Prebattle dispatcher is not defined')
+            return
         else:
-            return len([ mapName for mapName, mapData in progressionData.surveys.iteritems() if not self.__settingsManager.isMapVisited(mapName) and mapData.available and mapData.progress >= mapData.total ]) + len([ rewardItem for battles, reward in progressionData.rewards.iteritems() if battles <= progressionData.totalBattles for rewardItem in reward.bonusList if rewardItem.getName() == 'selectableCrewbook' ])
+            yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.MAPBOX))
+            return
+
+    def showMapboxInfoPage(self):
+        url = self.getModeSettings().infoPageUrl
+        showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
     def showSurvey(self, mapName):
         progressionData = self.getProgressionData()
@@ -231,31 +237,14 @@ class MapboxController(Notifiable, SeasonProvider, IMapboxController, IGlobalLis
     def addVisitedMap(self, mapName):
         self.__settingsManager.addVisitedMap(mapName)
 
-    def storeReward(self, numBattles, rewardIdx, rewardIconName):
-        self.__settingsManager.storeReward(numBattles, rewardIdx, rewardIconName)
-
-    def getStoredReward(self, numBattles, rewardIdx):
-        return self.__settingsManager.getStoredReward(numBattles, rewardIdx)
-
     def setPrevBattlesPlayed(self, numBattles):
         self.__settingsManager.setPrevBattlesPlayed(numBattles)
 
     def getPrevBattlesPlayed(self):
         return self.__settingsManager.getPrevBattlesPlayed()
 
-    def isMapVisited(self, mapName):
-        return self.__settingsManager.isMapVisited(mapName)
-
     def storeCycle(self):
         self.__settingsManager.storeCycle(self.isActive(), self.getCurrentCycleID())
-
-    @wg_async
-    def forceUpdateProgressData(self):
-        result = yield wg_await(self.__progressionDataProvider.forceUpdateProgressData())
-        raise AsyncReturn(result)
-
-    def onPrbEntitySwitched(self):
-        self.__modeEntered()
 
     def getEventEndTimestamp(self):
         if self.hasPrimeTimesLeftForCurrentCycle() or self.isInPrimeTime():
@@ -388,7 +377,7 @@ class MapboxProgressionDataProvider(Notifiable):
         self.__isStarted = False
 
     def getProgressionData(self):
-        return None if not self.__progressionData else ProgressionData({key:MapData(value['progress'], value['total'], value['passed'], value['available'], value['url']) for key, value in self.__progressionData.get('surveys', {}).iteritems()}, {value['battles']:RewardData(formatMapboxBonuses(value['reward']), value['status']) for value in self.__progressionData.get('rewards', [])}, self.__progressionData.get('min_rank'), self.__progressionData.get('total_battles_amount'), self.__getProgressionRestartTimeWithRandomDelay())
+        return None if not self.__progressionData else ProgressionData({key:MapData(value['progress'], value['total'], value['passed']) for key, value in self.__progressionData.get('surveys', {}).iteritems()}, {value['battles']:RewardData(formatMapboxBonuses(value['reward']), value['status']) for value in self.__progressionData.get('rewards', [])}, self.__progressionData.get('min_rank'), self.__progressionData.get('total_battles_amount'), self.__getProgressionRestartTimeWithRandomDelay())
 
     def getProgressionRestartTime(self):
         return self.__getProgressionRestartTimeWithRandomDelay() if self.__progressionData else _LAST_PERIOD
@@ -485,13 +474,6 @@ class MapboxSettingsManager(object):
     def addVisitedMap(self, mapName):
         if mapName not in self.__settings['visited_maps']:
             self.__settings['visited_maps'].append(mapName)
-
-    def storeReward(self, numBattles, rewardIdx, rewardIconName):
-        self.__settings['stored_rewards'].setdefault(numBattles, {})
-        self.__settings['stored_rewards'][numBattles].update({rewardIdx: rewardIconName})
-
-    def getStoredReward(self, numBattles, rewardIdx):
-        return self.__settings['stored_rewards'].get(numBattles, {}).pop(rewardIdx, '')
 
     def setPrevBattlesPlayed(self, numBattles):
         self.__settings['previous_battles_played'] = numBattles

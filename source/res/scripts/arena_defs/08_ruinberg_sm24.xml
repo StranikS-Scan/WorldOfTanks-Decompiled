@@ -1,0 +1,305 @@
+<08_ruinberg_sm24.xml>
+  <name>	#arenas:08_ruinberg_sm24/name	</name>
+  <description>	#arenas:08_ruinberg_sm24/description	</description>
+  <geometry>	spaces/08_ruinberg_sm24	</geometry>
+  <runDelay>	3	</runDelay>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.16	</estimatedLoad>
+  <roundLength>	1500	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/08_ruinberg_sm24/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/08_ruinberg_sm24/mmap_destroyed_1.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/08_ruinberg_sm24/mmap_destroyed_2.dds	</path>
+    </layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	1	</maxPlayersInTeam>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <wwmusicSetup></wwmusicSetup>
+  <wwmusicDroneSetup></wwmusicDroneSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	onboarding_gameplay.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_gameplay.pck	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+      <bank>
+        <name>	story_mode_voiceover.bnk	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>
+        <name>	custom_styles.bnk	</name>
+      </bank>
+      <bank>
+        <name>	rocket_accelerator.bnk	</name>
+      </bank>
+      <bank>
+        <name>	consumables.bnk	</name>
+      </bank>
+      <bank>
+        <name>	mechanisms.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_voiceover.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_music.bnk	</name>
+      </bank>
+      <bank>
+        <name>	onboarding_music.pck	</name>
+      </bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_wind_autumn_01	</name>
+        <mod>	sm_gp_dday_enter	</mod>
+        <modAUX>	ambient_wind_autumn_01	</modAUX>
+      </event>
+      <event>
+        <name>	imp_small_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_small_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_small_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_small_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_meduim_PC	</name>
+        <mod>	wpn_ob_main_PC	</mod>
+      </event>
+      <event>
+        <name>	imp_medium_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_medium_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_medium_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_medium_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_main_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_main_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_not_pierce_AP_NPC_PC	</name>
+        <mod>	imp_not_pierce_NPC_PC_OB	</mod>
+        <modAUX>	imp_large_not_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_pierce_AP_NPC_PC	</name>
+        <mod>	imp_pierce_NPC_PC_FG_OB	</mod>
+        <modAUX>	imp_large_pierce_AP_NPC_PC	</modAUX>
+      </event>
+      <event>
+        <name>	lightbulb	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	lightbulb_02	</name>
+        <mod></mod>
+      </event>
+      <event>
+        <name>	hit_barrage_expl_close_ground	</name>
+        <mod>	dstrct_explosion_small	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <gameplayTypes>
+    <ctf>
+      <visualScript>
+        <server>
+          <plan>	plans/StoryMode_Ruinberg_arena	</plan>
+        </server>
+        <client>
+          <plan>	plans/StoryMode_Ruinberg_client	</plan>
+          <plan>	plans/StoryMode_Ruinberg_clientHUD	</plan>
+          <plan>	plans/StoryMode_Ruinberg_clientMusic	</plan>
+        </client>
+      </visualScript>
+      <notificationsRemapping>
+        <notification>
+          <name>	start_battle	</name>
+        </notification>
+        <notification>
+          <name>	respawn	</name>
+        </notification>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_piercing_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_ricochet_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_fire_started_by_player	</name>
+        </notification>
+        <notification>
+          <name>	damage_by_near_explosion_by_enemy	</name>
+        </notification>
+        <notification>
+          <name>	target_captured	</name>
+        </notification>
+        <notification>
+          <name>	target_lost	</name>
+        </notification>
+        <notification>
+          <name>	target_unlocked	</name>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+        </notification>
+        <notification>
+          <name>	engine_damaged	</name>
+        </notification>
+        <notification>
+          <name>	engine_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	engine_functional	</name>
+        </notification>
+        <notification>
+          <name>	ammo_bay_damaged	</name>
+        </notification>
+        <notification>
+          <name>	fuel_tank_damaged	</name>
+        </notification>
+        <notification>
+          <name>	radio_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	track_functional	</name>
+        </notification>
+        <notification>
+          <name>	track_functional_can_move	</name>
+        </notification>
+        <notification>
+          <name>	gun_damaged	</name>
+        </notification>
+        <notification>
+          <name>	gun_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	gun_functional	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_damaged	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_functional	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_damaged	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_functional	</name>
+        </notification>
+        <notification>
+          <name>	commander_killed	</name>
+        </notification>
+        <notification>
+          <name>	driver_killed	</name>
+        </notification>
+        <notification>
+          <name>	radioman_killed	</name>
+        </notification>
+        <notification>
+          <name>	gunner_killed	</name>
+        </notification>
+        <notification>
+          <name>	loader_killed	</name>
+        </notification>
+        <notification>
+          <name>	fire_started	</name>
+        </notification>
+        <notification>
+          <name>	fire_stopped	</name>
+        </notification>
+        <notification>
+          <name>	enemy_killed_by_player	</name>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+  </gameplayTypes>
+</08_ruinberg_sm24.xml>

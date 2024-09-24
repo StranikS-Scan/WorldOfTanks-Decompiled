@@ -17,6 +17,7 @@ class BattleParams(object):
     TURRET_ROTATION_SPEED = 'turretRotationSpeed'
     GUN_ROTATION_SPEED = 'gunRotationSpeed'
     RELOAD_TIME = 'reloadTime'
+    TWIN_GUN_RELOAD_TIME = 'twinGunReloadTime'
     CLIP_INTERVAL = 'clipInterval'
     BURST_INTERVAL = 'burstInterval'
     AUTORELOAD_TIME = 'autoreloadTime'

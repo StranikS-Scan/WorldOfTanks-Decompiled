@@ -260,7 +260,7 @@ class _ComponentsVisibilityManager(object):
          BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL: self.__carouselPredicate,
          BATTLE_VIEW_ALIASES.POINT_OF_INTEREST_NOTIFICATIONS_PANEL: self.__POINotificationsPredicate,
          BATTLE_VIEW_ALIASES.RIBBONS_PANEL: self.__ribbonPanelPredicate,
-         BATTLE_VIEW_ALIASES.PERKS_PANEL: self.__perksPanelPredicate,
+         BATTLE_VIEW_ALIASES.SITUATION_INDICATORS: self.__perksPanelPredicate,
          BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL: self.__prebattleAmmoPredicate}
         self.__isSelectionConfirmed = isSelectionConfirmed
         self.__arenaPeriod = arenaPeriod

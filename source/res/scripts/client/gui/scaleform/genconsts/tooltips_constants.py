@@ -59,7 +59,6 @@ class TOOLTIPS_CONSTANTS(object):
     EXTENDED_AWARD_VEHICLE = 'extendedAwardVehicle'
     WINBACK_DISCOUNT_AWARD_VEHICLE = 'winbackDiscountAwardVehicle'
     SENIORITY_AWARD_VEHICLE = 'seniorityAwardVehicle'
-    WT_PORTAL_VEHICLE = 'portalVehicle'
     DEFAULT_SHELL = 'defaultShell'
     HANGAR_SHELL = 'hangarShell'
     NATION_CHANGE_HANGAR_SHELL = 'nationChangeHangarShell'
@@ -85,7 +84,6 @@ class TOOLTIPS_CONSTANTS(object):
     CREW_SKILL_UNTRAINED = 'crewSkillUntrained'
     COMMANDER_BONUS = 'commanderBonus'
     EFFICIENCY_PARAM = 'efficiencyParam'
-    TOTAL_EFFICIENCY_PARAM = 'totalEfficiencyParam'
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
@@ -119,7 +117,6 @@ class TOOLTIPS_CONSTANTS(object):
     QUESTS_PREVIEW = 'questsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
-    EVENT_BATTLES_QUESTS_PREVIEW = 'eventBattlesQuestsReview'
     SHEDULE_QUEST = 'scheduleQuest'
     MISSION_VEHICLE = 'missionVehicle'
     MISSION_VEHICLE_TYPE = 'missionVehicleType'
@@ -270,15 +267,6 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_ROYALE_PERF_ADVANCED = 'battleRoyalePerfAdvanced'
     BATTLE_ROYALE_SELECTOR_INFO = 'battleRoyaleSelectorInfo'
     BATTLE_ROYALE_SELECTOR_CALENDAR_INFO = 'battleRoyaleSelectorCalendarInfo'
-    EVENT_BATTLES_SELECTOR_INFO = 'eventBattlesSelectorInfo'
-    EVENT_BATTLES_SERVER_PRIMETIME = 'eventBattlesServerPrimeTime'
-    EVENT_BATTLES_CALENDAR = 'eventBattlesCalendar'
-    EVENT_BATTLES_TICKET = 'eventBattlesTicket'
-    EVENT_STAMP = 'eventStamp'
-    EVENT_CAROUSEL_VEHICLE = 'eventCarouselVehicle'
-    EVENT_LOOTBOX = 'eventLootbox'
-    EVENT_BUY_LOOTBOX = 'eventBuyLootbox'
-    EVENT_VEHICLE_COMPENSATION = 'eventVehicleCompensation'
     BLUEPRINT_INFO = 'blueprintInfo'
     BLUEPRINT_CONVERT_INFO = 'blueprintConvertInfo'
     BLUEPRINT_FRAGMENT_INFO = 'blueprintFragmentInfo'
@@ -288,6 +276,7 @@ class TOOLTIPS_CONSTANTS(object):
     MAPBOX_SELECTOR_INFO = 'mapboxSelectorInfo'
     MAPBOX_PROGRESSION_PREVIEW = 'mapboxProgressionPreview'
     MAPBOX_CALENDAR = 'mapboxCalendar'
+    MAPBOX_CALENDAR_DAY = 'mapboxCalendarDay'
     FUN_RANDOM_CALENDAR_DAY = 'funRandomCalendarDay'
     FUN_RANDOM_MODE_SELECTOR_CALENDAR_DAY = 'funRandomModeSelectorCalendarDay'
     FUN_RANDOM_REWARDS = 'funRandomRewards'
@@ -389,8 +378,6 @@ class TOOLTIPS_CONSTANTS(object):
     BATTLE_PASS_GIFT_TOKEN = 'battlePassGiftToken'
     BATTLE_PASS_GIFT_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     BATTLE_ROYALE_COMPLETED_QUESTS_INFO = 'BattleRoyaleQuestsTooltipData'
-    SELECTABLE_CREWBOOK = 'SelectableCrewbookTooltipData'
-    RANDOM_CREWBOOK = 'RandomCrewbookTooltipData'
     ACCOUNT_COMPLETION = 'AccountCompletion'
     VEH_POST_PROGRESSION_ENTRY_POINT = 'VehPostProgressionEntryPoint'
     ADDITIONAL_REWARDS = 'AdditionalRewards'
@@ -399,8 +386,6 @@ class TOOLTIPS_CONSTANTS(object):
     RESOURCE_WELL_CRYSTAL = 'ResourceWellCrystal'
     RESOURCE_WELL_FREE_XP = 'ResourceWellFreeXP'
     PERSONAL_RESERVES_WIDGET = 'PersonalReservesWidget'
-    EVENT_GIFT_TOKEN = 'eventGiftToken'
-    EVENT_GIFT_TOKEN_UI = 'ToolTipInblocksDefaultUI'
     EPIC_RANK_UNLOCK_INFO = 'epicRankUnlockTooltip'
     OPTDEV_SLOT_STATE_EMPTY = 'empty'
     OPTDEV_SLOT_STATE_EMPTY_SELECTED = 'emptySelected'
@@ -432,7 +417,6 @@ class TOOLTIPS_CONSTANTS(object):
      NATION_CHANGE_BATTLE_BOOSTER,
      PERSONAL_RESERVES_WIDGET]
     COMMON_SET = [EFFICIENCY_PARAM,
-     TOTAL_EFFICIENCY_PARAM,
      IGR_INFO,
      CONTACT,
      SORTIE_DIVISION,
@@ -598,8 +582,7 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_POST_PROGRESSION_PARAMETERS,
      VEHICLE_ROLES,
      WINBACK_DISCOUNT_AWARD_VEHICLE,
-     VEHICLE_COMPENSATION,
-     WT_PORTAL_VEHICLE]
+     VEHICLE_COMPENSATION]
     BLUEPRINTS_SET = [BLUEPRINT_INFO,
      BLUEPRINT_FRAGMENT_INFO,
      BLUEPRINT_EMPTY_SLOT_INFO,
@@ -664,9 +647,8 @@ class TOOLTIPS_CONSTANTS(object):
      BATTLE_ROYALE_PROXY_CURRENCY]
     MAPBOX_LOBBY_SET = [MAPBOX_SELECTOR_INFO,
      MAPBOX_PROGRESSION_PREVIEW,
-     SELECTABLE_CREWBOOK,
-     RANDOM_CREWBOOK,
-     MAPBOX_CALENDAR]
+     MAPBOX_CALENDAR,
+     MAPBOX_CALENDAR_DAY]
     ACCOUNT_COMPLETION_SET = [ACCOUNT_COMPLETION]
     FUN_RANDOM_LOBBY_SET = [FUN_RANDOM_CALENDAR_DAY, FUN_RANDOM_MODE_SELECTOR_CALENDAR_DAY, FUN_RANDOM_REWARDS]
     REFERRAL_PROGRAM_SET = [REFERRAL_AWARDS]
@@ -686,13 +668,3 @@ class TOOLTIPS_CONSTANTS(object):
     COMP7_BATTLE_SET = [COMP7_ROLE_SKILL_BATTLE_TOOLTIP, VEHICLE_ROLES]
     EVLB_LOBBY_SET = [EVENT_LOOT_BOXES_VEHICLE_BLUEPRINT_FRAGMENT]
     WOT_PLUS_SET = [WOT_PLUS]
-    EVENT_BATTLES_SET = [EVENT_BATTLES_SELECTOR_INFO,
-     EVENT_BATTLES_SERVER_PRIMETIME,
-     EVENT_BATTLES_CALENDAR,
-     EVENT_LOOTBOX,
-     EVENT_BATTLES_QUESTS_PREVIEW,
-     EVENT_BATTLES_TICKET,
-     EVENT_STAMP,
-     EVENT_CAROUSEL_VEHICLE,
-     EVENT_BUY_LOOTBOX,
-     EVENT_GIFT_TOKEN]

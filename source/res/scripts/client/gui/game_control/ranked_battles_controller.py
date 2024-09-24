@@ -767,7 +767,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             self.updateClientValues()
             rankInfo = reusableInfo.personal.getRankInfo()
-            questsProgress = reusableInfo.progress.getQuestsProgress()
+            questsProgress = reusableInfo.personal.getQuestsProgress()
             rankedResultsVO = composer.getResultsTeamsVO()
             event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, resultsWindow)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)

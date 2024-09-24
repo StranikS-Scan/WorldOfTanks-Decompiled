@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.26.0.1</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.26.0.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.26.1.0 Common Test</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.26.1.0 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -29,12 +29,16 @@
       <Package type="hd">./res/packages/07_lakeville_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg.pkg</Package>
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/08_ruinberg_sm24.pkg</Package>
+      <Package type="hd">./res/packages/08_ruinberg_sm24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
       <Package type="hd">./res/packages/101_dday_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday_sm24.pkg</Package>
       <Package type="hd">./res/packages/101_dday_sm24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/105_germany.pkg</Package>
       <Package type="hd">./res/packages/105_germany_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/105_germany_sm24.pkg</Package>
+      <Package type="hd">./res/packages/105_germany_sm24_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/108_normandy_nom.pkg</Package>
       <Package type="hd">./res/packages/108_normandy_nom_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/10_hills.pkg</Package>
@@ -47,19 +51,20 @@
       <Package type="hd">./res/packages/115_sweden_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/11_murovanka_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
       <Package type="hd">./res/packages/121_lost_paradise_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/127_japort.pkg</Package>
       <Package type="hd">./res/packages/127_japort_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/128_last_frontier_v.pkg</Package>
       <Package type="hd">./res/packages/128_last_frontier_v_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/128_last_frontier_v_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/13_erlenberg.pkg</Package>
       <Package type="hd">./res/packages/13_erlenberg_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/14_siegfried_line_nom.pkg</Package>
       <Package type="hd">./res/packages/14_siegfried_line_nom_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/14_siegfried_line_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/17_munchen.pkg</Package>
       <Package type="hd">./res/packages/17_munchen_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/18_cliff.pkg</Package>
@@ -80,6 +85,7 @@
       <Package type="hd">./res/packages/222_er_clime_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
       <Package type="hd">./res/packages/23_westfeld_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/23_westfeld_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/250_br_battle_city2-1.pkg</Package>
       <Package type="hd">./res/packages/250_br_battle_city2-1_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/251_br_battle_city3.pkg</Package>
@@ -88,21 +94,21 @@
       <Package type="hd">./res/packages/252_br_battle_city4_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
       <Package type="hd">./res/packages/28_desert_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/28_desert_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf.pkg</Package>
       <Package type="hd">./res/packages/29_el_hallouf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/31_airfield.pkg</Package>
       <Package type="hd">./res/packages/31_airfield_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/33_fjord.pkg</Package>
       <Package type="hd">./res/packages/33_fjord_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/33_fjord_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/34_redshire.pkg</Package>
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/34_redshire_wt.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/35_steppes_wt.pkg</Package>
-      <Package type="hd">./res/packages/35_steppes_wt_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
       <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/36_fishing_bay_mb.pkg</Package>
       <Package type="sd,hd">./res/packages/37_caucasus.pkg</Package>
       <Package type="hd">./res/packages/37_caucasus_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/38_mannerheim_line.pkg</Package>
@@ -131,8 +137,6 @@
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h33_hangar_v3_wt_2021.pkg</Package>
-      <Package type="hd">./res/packages/h33_hangar_v3_wt_2021_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
@@ -141,7 +145,6 @@
       <Package type="sandbox,sd,hd">./res/packages/battle_modifiers.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/battle_royale_progression.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/common_ext.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/comp7.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/content_exclude.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/event_lootboxes.pkg</Package>
@@ -160,6 +163,7 @@
       <Package type="sandbox,sd,hd">./res/packages/scripts.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/server_side_replay.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/story_mode.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/tech_tree_trade_in.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/vehicles_level_01.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_01_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/vehicles_level_02.pkg</Package>
@@ -183,20 +187,19 @@
       <Package type="sd,hd">./res/packages/vehicles_level_08-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_08-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_08-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_08_hd-part3.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_08_hd-part2.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_08_hd-part3.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_09-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_09-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_09-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_09_hd-part2.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_10-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_10-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_10-part2.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part3.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/wt.pkg</Package>
     </Packages>
     <Path>./res</Path>
   </Paths>

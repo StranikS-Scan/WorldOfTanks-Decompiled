@@ -178,4 +178,52 @@
       <fx>	ob_main_tips_activity_start	</fx>
     </sound>
   </hint>
+  <hint>
+    <props>
+      <name>	Berlin_DetrackEnemy	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:berlin/hint01	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/berlin_detrack.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	Berlin_Stop	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:berlin/hint02	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/berlin_stop.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
+  <hint>
+    <props>
+      <name>	Ruinberg_detour	</name>
+      <scope>	story_mode	</scope>
+    </props>
+    <text>
+      <key>	#story_mode.sm_battle:ruinberg/hint01	</key>
+      <highlight>	img://story_mode/gui/maps/icons/hints/highlight_blue.png	</highlight>
+    </text>
+    <visual>
+      <image>	img://story_mode/gui/maps/icons/hints/ruinberg_detour.png	</image>
+    </visual>
+    <sound>
+      <fx>	ob_main_tips_activity_start	</fx>
+    </sound>
+  </hint>
 </battle_hints.xml>

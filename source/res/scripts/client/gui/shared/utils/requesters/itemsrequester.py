@@ -277,6 +277,7 @@ class REQ_CRITERIA(object):
         IS_STORAGE_HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isStorageHidden))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         RENT_PROMOTION = RequestCriteria(PredicateCondition(lambda item: item.isRentPromotion))
+        EXTERNAL_RENT = RequestCriteria(PredicateCondition(lambda item: item.isExternalRent))
         WOT_PLUS_VEHICLE = RequestCriteria(PredicateCondition(lambda item: item.isWotPlus))
         TELECOM_RENT = RequestCriteria(PredicateCondition(lambda item: item.isTelecomRent))
         SEASON_RENT = RequestCriteria(PredicateCondition(lambda item: item.isSeasonRent))
@@ -289,7 +290,6 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
-        RANDOM_ONLY = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForRandomBattles))
         EPIC_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEpicBattles))
         BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBattleRoyaleBattles))
         MAPS_TRAINING = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForMapsTrainingBattles))
@@ -310,7 +310,6 @@ class REQ_CRITERIA(object):
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
         HAS_TAGS = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: item.tags.issuperset(tags))))
         HAS_ANY_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: bool(item.tags & tags))))
-        HAS_NO_TAG = staticmethod(lambda tags: RequestCriteria(PredicateCondition(lambda item: not bool(item.tags & tags))))
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
         HAS_ROLE = staticmethod(lambda roleName: RequestCriteria(PredicateCondition(lambda item: roleName in {roles[0] for roles in item.descriptor.type.crewRoles})))
         HAS_ROLES = staticmethod(lambda tankmanRoles: RequestCriteria(PredicateCondition(lambda item: any((roles[0] in tankmanRoles for roles in item.descriptor.type.crewRoles)))))
@@ -323,6 +322,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_NAME = staticmethod(lambda name: RequestCriteria(PredicateCondition(lambda item: item.isSearchableByName(name))))
         SPECIFIC_BY_NAME_OR_SKIN = staticmethod(lambda name: RequestCriteria(PredicateCondition(lambda item: item.isSearchableByName(name) or item.isSearchableBySkinName(name))))
         VEHICLE_BATTLE_ROYALE = RequestCriteria(PredicateCondition(lambda item: False if not item.vehicleDescr else checkForTags(item.vehicleDescr.type.tags, VEHICLE_TAGS.BATTLE_ROYALE)))
+        VEHICLE_EVENT_BATTLES = RequestCriteria(PredicateCondition(lambda item: False if not item.vehicleDescr else checkForTags(item.vehicleDescr.type.tags, VEHICLE_TAGS.EVENT)))
         VEHICLE_HIDDEN_IN_HANGAR = RequestCriteria(PredicateCondition(lambda item: False if not item.vehicleDescr else checkForTags(item.vehicleDescr.type.tags, VEHICLE_TAGS.MODE_HIDDEN)))
         VEHICLE_NATIVE_TYPE = staticmethod(lambda vehicleNativeType: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeType == vehicleNativeType)))
         VEHICLE_NATIVE_TYPES = staticmethod(lambda vehicleNativeTypes: RequestCriteria(PredicateCondition(lambda item: item.vehicleNativeType in vehicleNativeTypes)))
@@ -418,7 +418,7 @@ class REQ_CRITERIA(object):
 
 
 class RESEARCH_CRITERIA(object):
-    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING | ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(constants.BATTLE_MODE_VEHICLE_TAGS) | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+    VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING | ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(constants.BATTLE_MODE_VEHICLE_TAGS) | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
 
 class ItemsRequester(IItemsRequester):
@@ -463,7 +463,6 @@ class ItemsRequester(IItemsRequester):
          self.__shop,
          self.__vehicleRotation,
          self.__recycleBin}
-        self.__ignoreFittingItemsSync = False
         self.__vehCustomStateCache = defaultdict(dict)
         self.__tankmenStatsCache = TankmenStatsCache()
         self._invTmenRO = None
@@ -687,7 +686,6 @@ class ItemsRequester(IItemsRequester):
         self.__gameRestrictions.clear()
         self.__tankmenStatsCache.setNeedUpdate()
         self._invTmenRO = None
-        self.__ignoreFittingItemsSync = True
         return
 
     def onDisconnected(self):
@@ -698,7 +696,6 @@ class ItemsRequester(IItemsRequester):
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
-        self.__ignoreFittingItemsSync = False
         if diff is None:
             LOG_DEBUG('Gui items cache full invalidation')
             for itemTypeID, cache in self.__itemsCache.iteritems():
@@ -708,7 +705,7 @@ class ItemsRequester(IItemsRequester):
             self.inventory.initC11nItemsNoveltyData()
         else:
             for statName, data in diff.get('stats', {}).iteritems():
-                if statName in ('unlocks', ('unlocks', '_r')):
+                if statName in ('unlocks', ('unlocks', '_r'), ('unlocks', '_d')):
                     self._invalidateUnlocks(data, invalidate)
                 if statName == 'eliteVehicles':
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
@@ -1253,8 +1250,6 @@ class ItemsRequester(IItemsRequester):
         return {vehData.descriptor.type.compactDescr} if vehData is not None else set()
 
     def __checkFittingItemsSync(self, itemTypeID):
-        if self.__ignoreFittingItemsSync:
-            return
         unsyncedList = [ r.__class__.__name__ for r in self.__fittingItemRequesters if not r.isSynced() ]
         if not unsyncedList or itemTypeID in self.__brokenSyncAlreadyLoggedTypes:
             return

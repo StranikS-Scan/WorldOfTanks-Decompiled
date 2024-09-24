@@ -6,13 +6,13 @@ import BigWorld
 import SoundGroups
 from constants import DEATH_REASON_ALIVE
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
-from gui.battle_results.br_constants import PlayerTeamResult
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.clans.clan_cache import g_clanCache
 from gui.impl import backport
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl, WindowImpl
-from gui.server_events.awards_formatters import AwardsPacker, getDefaultFormattersMap, AWARDS_SIZES
+from gui.server_events.awards_formatters import AwardsPacker, AWARDS_SIZES
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.battle_results import IBattleResultsService
@@ -25,13 +25,14 @@ from story_mode.gui.impl.lobby.battle_result_stat_tooltip import BattleResultSta
 from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
 from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgName
 from story_mode.gui.shared.event_dispatcher import showCongratulationsWindow
+from story_mode.gui.shared.packers.bonus import getSMFormattersMap
 from story_mode.gui.shared.utils import getTasksCount
 from story_mode.gui.story_mode_gui_constants import POST_BATTLE_MUSIC_WIN, POST_BATTLE_MUSIC_LOSE
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
 from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import PostBattleWindowLogger
-from story_mode_common.story_mode_constants import LOGGER_NAME, MissionsDifficulty
+from story_mode_common.story_mode_constants import LOGGER_NAME, MissionsDifficulty, MissionType
 from wg_async import wg_async
 _logger = getLogger(LOGGER_NAME)
 
@@ -124,9 +125,9 @@ class BattleResultView(ViewImpl):
                 _logger.error('Mission ID=%s not exists', missionId)
                 return
             model.setIsDifficult(mission.difficulty == MissionsDifficulty.HARD)
-            model.setIsVictory(finishResult == PlayerTeamResult.WIN)
-            model.setIsEvent(mission.isEvent)
-            model.setTitle(rBattleResult.dyn(PlayerTeamResult.DEFEAT if finishResult == PlayerTeamResult.DRAW else finishResult).title())
+            model.setIsVictory(finishResult == PLAYER_TEAM_RESULT.WIN)
+            model.setIsOnboarding(mission.missionType == MissionType.ONBOARDING)
+            model.setTitle(rBattleResult.dyn(PLAYER_TEAM_RESULT.DEFEAT if finishResult == PLAYER_TEAM_RESULT.DRAW else finishResult).title())
             model.setSubTitle(battleResults['finishReason'])
             model.setInfoName(backport.text(rBattleResult.missionName.num(missionId)()))
             model.setInfoDescription(backport.text(rBattleResult.battleDuration(), date=battleResults['arenaDateTime'], duration=battleResults['arenaDuration']))
@@ -162,19 +163,21 @@ class BattleResultView(ViewImpl):
     def __fillRewards(self, rewardsModel):
         battleResults = self._battleResultsService.getResultsVO(self.__arenaUniqueId)
         with rewardsModel.transaction() as model:
-            formatter = StoryModeBonusesAwardsComposer(self._MAX_BONUSES_IN_VIEW, AwardsPacker(getDefaultFormattersMap()))
+            formatter = StoryModeBonusesAwardsComposer(self._MAX_BONUSES_IN_VIEW, AwardsPacker(getSMFormattersMap()))
             bonusRewards = formatter.getFormattedBonuses(battleResults['rewards'], AWARDS_SIZES.BIG)
             for bonus in bonusRewards:
                 tooltipId = '{}'.format(self.__idGen.next())
                 self.__bonusCache[tooltipId] = bonus
                 rewardItem = RewardModel()
                 rewardItem.setName(bonus.bonusName)
-                rewardItem.setValue(str(bonus.label))
+                rewardItem.setValue(str(bonus.label if bonus.label is not None else ''))
                 rewardItem.setIcon(getImgName(bonus.getImage(AWARDS_SIZES.BIG)))
                 rewardItem.setTooltipId(tooltipId)
                 if isinstance(bonus.tooltip, int):
                     rewardItem.setTooltipContentId(str(bonus.tooltip))
                 model.addViewModel(rewardItem)
+
+        return
 
     @wg_async
     def __onClose(self):

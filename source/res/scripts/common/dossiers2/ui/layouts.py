@@ -61,7 +61,8 @@ PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _single('mapboxSeason1'),
  _single('mapboxSeason2'),
  _single('mapboxSeason3'),
- _total('mapboxUniversal')]
+ _total('mapboxUniversal'),
+ _total('mapboxClimateExpert')]
 CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
 HE17_QUESTS_GROUP = [_single('HE17A1'), _single('HE17A2'), _single('HE17A3')]
 NY18_QUESTS_GROUP = [_single('NY18A1'), _single('NY18A2'), _single('NY18A3')]

@@ -13,7 +13,7 @@ from TriggersManager import TRIGGER_TYPE
 from vehicle_systems.auto_shoot_guns.system_interfaces import IAutoShootingListener
 from vehicle_systems.entity_components.vehicle_mechanic_component import ifPlayerVehicle
 from vehicle_systems.shake_helpers import shakePlayerDynamicCamera
-from vehicle_systems.instant_status_helpers import invokeInstantStatusForVehicle
+from vehicle_systems.instant_status_helpers import invokeInstantStatusForVehicle, invokeShotsDoneStatus
 if typing.TYPE_CHECKING:
     from AutoShootGunController import AutoShootGunController
     from Vehicle import Vehicle
@@ -58,7 +58,7 @@ class AutoShootCustomIntegrations(IAutoShootingListener):
 
     @eventHandler
     def onDiscreteShot(self):
-        invokeInstantStatusForVehicle(self.__vehicle, InstantStatuses.ShotsDoneComponent)
+        invokeShotsDoneStatus(self.__vehicle)
         shakePlayerDynamicCamera(self.__vehicle, ShakeReason.OWN_SHOT_DELAYED)
         self.__processAvatarSingleDiscreteShot()
 

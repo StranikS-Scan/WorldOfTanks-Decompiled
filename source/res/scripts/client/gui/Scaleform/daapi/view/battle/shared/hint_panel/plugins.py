@@ -7,7 +7,7 @@ from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListen
 import CommandMapping
 from Event import EventsSubscriber
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION, TWIN_GUN_HINT_SECTION
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG
@@ -248,6 +248,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__hasTurboshaftEngine = False
         self.__hasHydraulicChassis = False
         self.__hasRocketAcceleration = False
+        self.__hasTwinGun = False
         self.__isSuitableVehicle = False
         self.__period = None
         self.__isInDisplayPeriod = False
@@ -271,7 +272,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__settings = {setting:AccountSettings.getSettings(setting) for setting in (SIEGE_HINT_SECTION,
          WHEELED_MODE_HINT_SECTION,
          TURBO_SHAFT_ENGINE_MODE_HINT_SECTION,
-         ROCKET_ACCELERATION_MODE_HINT_SECTION)}
+         ROCKET_ACCELERATION_MODE_HINT_SECTION,
+         TWIN_GUN_HINT_SECTION)}
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
@@ -344,6 +346,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__hasTurboshaftEngine = vTypeDesc.hasTurboshaftEngine
         self.__hasHydraulicChassis = vTypeDesc.hasHydraulicChassis
         self.__hasRocketAcceleration = vTypeDesc.hasRocketAcceleration
+        self.__hasTwinGun = vTypeDesc.isTwinGunVehicle
         self.__isSuitableVehicle = (vTypeDesc.hasSiegeMode or self.__hasRocketAcceleration) and not (vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasAutoSiegeMode)
         if self.__hasRocketAcceleration:
             if self.__rocketCmp:
@@ -426,6 +429,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.turboshaftEngine())
             elif self.__hasRocketAcceleration:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.rocketAcceleration())
+            elif self.__hasTwinGun:
+                hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.twinGun())
             else:
                 hintTextID = R.strings.ingame_gui.siegeMode.hint.forMode.dyn(attr='c_{}'.format(self.__siegeState))
                 hintText = backport.text(hintTextID()) if hintTextID.exists() else None
@@ -443,7 +448,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             return self.__settings[SIEGE_HINT_SECTION]
         if self.__hasTurboshaftEngine:
             return self.__settings[TURBO_SHAFT_ENGINE_MODE_HINT_SECTION]
-        return self.__settings[ROCKET_ACCELERATION_MODE_HINT_SECTION] if self.__hasRocketAcceleration else {}
+        if self.__hasRocketAcceleration:
+            return self.__settings[ROCKET_ACCELERATION_MODE_HINT_SECTION]
+        return self.__settings[TWIN_GUN_HINT_SECTION] if self.__hasTwinGun else {}
 
 
 class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
@@ -764,7 +771,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return
 
     def __hasVehicleHelpHint(self, vTypeDesc):
-        return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy or vTypeDesc.isAutoShootGunVehicle
+        return vTypeDesc.isWheeledVehicle or vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTrackWithinTrack or vTypeDesc.hasRocketAcceleration or vTypeDesc.hasDualAccuracy or vTypeDesc.isAutoShootGunVehicle or vTypeDesc.isTwinGunVehicle
 
     def __canDisplayVehicleHelpHint(self, vTypeDesc):
         return self.__isInDisplayPeriod and self.__hasVehicleHelpHint(vTypeDesc) and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])

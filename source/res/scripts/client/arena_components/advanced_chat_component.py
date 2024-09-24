@@ -294,7 +294,7 @@ class AdvancedChatComponent(ClientArenaComponent):
                             actionMarker = _ACTIONS.battleChatCommandFromActionID(self._markerInFocus.commandID).vehMarker
                             chatStats[senderVehID] = (actionMarker, TARGET_CHAT_CMD_FLAG)
             elif typeOfUpdate in (ChatCommandChange.CHAT_CMD_WAS_REPLIED, ChatCommandChange.CHAT_CMD_TRIGGERED):
-                actionMarker = _ACTIONS.battleChatCommandFromActionID(cmdID).vehMarker
+                actionMarker = self._getActionMarker(cmdID, cmdTargetID)
                 isOneShot = typeOfUpdate == ChatCommandChange.CHAT_CMD_TRIGGERED or playerVehID not in commandData.owners
                 if not isOneShot:
                     chatStats = dict(((vehID, (actionMarker, EMPTY_CHAT_CMD_FLAG)) for vehID in commandData.owners))
@@ -313,6 +313,9 @@ class AdvancedChatComponent(ClientArenaComponent):
                 else:
                     arena.onChatCommandTargetUpdate(True, chatStats)
             return
+
+    def _getActionMarker(self, cmdID, cmdTargetID):
+        return _ACTIONS.battleChatCommandFromActionID(cmdID).vehMarker
 
     def _onDestructibleEntityStateChanged(self, entityID):
         if self._markerInFocus is None:
@@ -355,7 +358,7 @@ class AdvancedChatComponent(ClientArenaComponent):
 
     def _removeActualTargetIfDestroyed(self, commands, playerVehID, targetID, markerType):
         if self._markerInFocus and self._markerInFocus.isFocused(targetID, markerType):
-            listOfCommands = self._chatCommands[markerType][targetID]
+            listOfCommands = self._chatCommands[markerType].get(targetID, {})
             for _, commandData in listOfCommands.iteritems():
                 if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
                     commands.sendClearChatCommandsFromTarget(targetID, markerType.name)

@@ -44,6 +44,7 @@ class CrewTypes(object):
 
 
 BROTHERHOOD_SKILL_NAME = 'brotherhood'
+COMMANDER_BONUS = 'commander_bonus'
 NO_TANKMAN = -1
 NO_SLOT = -1
 MAX_ROLE_LEVEL = 100
@@ -433,10 +434,6 @@ class Tankman(GUIItem):
         return getExtensionLessIconName(self.nationID, self.descriptor.iconID)
 
     @property
-    def smallIconPath(self):
-        return getSmallIconPath(self.nationID, self.descriptor.iconID)
-
-    @property
     def iconRank(self):
         return getRankIconName(self.nationID, self.descriptor.rankID)
 
@@ -744,7 +741,7 @@ class Tankman(GUIItem):
 
 
 class TankmanSkill(GUIItem):
-    __slots__ = ('_name', '_level', '_roleType', '_isEnable', '_isFemale', '_isPermanent', '_customName', '_tankmanRole', '_isLearnedAsMajor', '_isLearnedAsBonus', '_packer', '_typeName', '_isSkillActive')
+    __slots__ = ('_name', '_level', '_roleType', '_isEnable', '_isFemale', '_isZero', '_customName', '_tankmanRole', '_isLearnedAsMajor', '_isLearnedAsBonus', '_packer', '_typeName', '_isSkillActive')
     CUSTOM_NAME_EXT = ''
 
     def __init__(self, skillName, tankman=None, proxy=None, skillLevel=None):
@@ -757,14 +754,14 @@ class TankmanSkill(GUIItem):
             skills = tdescr.skills
             self._tankmanRole = tankman.role
             self._isFemale = tankman.isFemale
-            self._isPermanent = False
+            self._isZero = False
             skillRole = tankman.role
             if skillName in skills and skillLevel is None:
                 if skills.index(skillName) == len(skills) - 1:
                     self._level = tdescr.lastSkillLevel
                 else:
                     self._level = tankmen.MAX_SKILL_LEVEL
-                self._isPermanent = skills.index(skillName) < tdescr.freeSkillsNumber
+                self._isZero = skills.index(skillName) < tdescr.freeSkillsNumber
             else:
                 roles = list(tankmen.ROLES_BY_SKILLS[skillName])
                 bonusSkillsRole = roles[0]
@@ -778,12 +775,12 @@ class TankmanSkill(GUIItem):
                         self._level = bonusSkillsLevels[idx]
             self._roleType = tankmen.getSkillRoleType(skillName)
             self._isEnable = self.__getEnabledSkill(tankman)
-            self._isLearnedAsMajor = self.name in tankman.descriptor.earnedSkills or self._isPermanent
+            self._isLearnedAsMajor = self.name in tankman.descriptor.earnedSkills or self._isZero
             self._isLearnedAsBonus = self.name in tankman.descriptor.getPossibleBonusSkills(tankman.bonusRoles())
             self._isSkillActive = self.isEnable and self.isRelevantForRole(skillRole) and tankman.canUseSkillsInCurrentVehicle
         else:
             self._isFemale = False
-            self._isPermanent = False
+            self._isZero = False
             self._roleType = None
             self._isEnable = False
             self._tankmanRole = None
@@ -844,8 +841,8 @@ class TankmanSkill(GUIItem):
         return self._isFemale
 
     @property
-    def isPermanent(self):
-        return self._isPermanent
+    def isZero(self):
+        return self._isZero
 
     @property
     def isSituational(self):
@@ -1084,10 +1081,6 @@ def getSpecialIconPath(nationID, iconID):
     return __getIconPath(nationID, iconID, 'special')
 
 
-def getSmallIconPath(nationID, iconID):
-    return __getIconPath(nationID, iconID, 'small')
-
-
 def getBarracksIconPath(nationID, iconID):
     return __getIconPath(nationID, iconID, 'barracks')
 
@@ -1126,15 +1119,6 @@ def getSkillIconPath(skillName, size='big'):
 
 def getCrewSkinIconBig(iconID):
     return backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(iconID)())
-
-
-def getCrewSkinIconSmall(iconID):
-    return backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(iconID)())
-
-
-def getCrewSkinIconSmallWithoutPath(iconID):
-    fullPath = backport.image(R.images.gui.maps.icons.tankmen.icons.small.crewSkins.dyn(iconID)())
-    return '/'.join(fullPath.rsplit('/')[-2:])
 
 
 def getSkillUserName(skillName):

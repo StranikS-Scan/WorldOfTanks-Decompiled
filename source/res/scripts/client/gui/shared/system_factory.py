@@ -59,6 +59,7 @@ REPLAY_MODE_TAG = 55
 QUEST_FLAGS = 56
 BATTLE_RESULTS_STATS_SORTING = 57
 LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
+EQUIPMENT_TRIGGERS = 59
 
 class _CollectEventsManager(object):
 
@@ -141,7 +142,23 @@ def registerEquipmentItem(equipmentName, itemCls, replayItemCls):
 
 def collectEquipmentItem(equipmentName, isReplay, args):
     return __collectEM.handleEvent((EQUIPMENT_ITEMS, equipmentName), {'args': args,
-     'isReplay': isReplay}).get('item')
+     'isReplay': isReplay}).get('item', None)
+
+
+def registerEquipmentTrigger(equipmentPrefix, itemCls, replayItemCls):
+
+    def onCollect(ctx):
+        if not ctx['equipmentName'].startswith(equipmentPrefix):
+            return
+        cls = replayItemCls if ctx['isReplay'] else itemCls
+        ctx['item'] = cls
+
+    __collectEM.addListener(EQUIPMENT_TRIGGERS, onCollect)
+
+
+def collectEquipmentTrigger(equipmentName, isReplay):
+    return __collectEM.handleEvent(EQUIPMENT_TRIGGERS, {'equipmentName': equipmentName,
+     'isReplay': isReplay}).get('item', None)
 
 
 def registerGameControllers(controllersList):

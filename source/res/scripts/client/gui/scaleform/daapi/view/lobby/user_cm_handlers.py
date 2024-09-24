@@ -6,6 +6,7 @@ from adisp import adisp_process
 from constants import DENUNCIATIONS_PER_DAY, ARENA_GUI_TYPE, IS_CHINA, PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
+from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuCollectEventsHandler
 from gui.Scaleform.locale.MENU import MENU
@@ -39,33 +40,10 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from uilogging.player_satisfaction_rating.loggers import PostBattleContextMenuLogger
 
 class _EXTENDED_OPT_IDS(object):
     VEHICLE_COMPARE = 'userVehicleCompare'
-
-
-class USER(object):
-    INFO = 'userInfo'
-    CLAN_INFO = 'clanInfo'
-    SEND_CLAN_INVITE = 'sendClanInvite'
-    CREATE_PRIVATE_CHANNEL = 'createPrivateChannel'
-    ADD_TO_FRIENDS = 'addToFriends'
-    REQUEST_FRIENDSHIP = 'requestFriendship'
-    REMOVE_FROM_FRIENDS = 'removeFromFriends'
-    ADD_TO_IGNORED = 'addToIgnored'
-    REMOVE_FROM_IGNORED = 'removeFromIgnored'
-    COPY_TO_CLIPBOARD = 'copyToClipBoard'
-    SET_MUTED = 'setMuted'
-    UNSET_MUTED = 'unsetMuted'
-    CREATE_SQUAD = 'createSquad'
-    CREATE_EVENT_SQUAD = 'createEventSquad'
-    CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
-    INVITE = 'invite'
-    VEHICLE_INFO = 'vehicleInfoEx'
-    VEHICLE_PREVIEW = 'vehiclePreview'
-    END_REFERRAL_COMPANY = 'endReferralCompany'
-    CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
-    CREATE_COMP7_SQUAD = 'createComp7Squad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
@@ -211,8 +189,8 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
     def prbEntity(self):
         return None
 
-    def doSelect(self, prebattleActionName, accountsToInvite=None):
-        action = PrbAction(prebattleActionName, accountsToInvite=accountsToInvite)
+    def doSelect(self, prebattleActionName, accountsToInvite=None, extData=None):
+        action = PrbAction(prebattleActionName, accountsToInvite=accountsToInvite, extData=extData)
         event = events.PrbActionEvent(action, events.PrbActionEvent.SELECT)
         g_eventBus.handleEvent(event, EVENT_BUS_SCOPE.LOBBY)
 
@@ -323,7 +301,7 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
                 isRandomSquadAction = state.isInPreQueue(queueType=QUEUE_TYPE.EPIC) or state.isInPreQueue(queueType=QUEUE_TYPE.FUN_RANDOM)
                 isEnabled = isEnabled and (isRandomSquadAction or not self.__winbackController.isModeAvailable())
                 options.append(self._makeItem(USER.CREATE_SQUAD, MENU.contextmenu(USER.CREATE_SQUAD), optInitData={'enabled': canCreate and isEnabled}))
-            if self.__eventBattlesCtrl.isEnabled() and not self.__eventBattlesCtrl.isFrozen() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
+            if self.__eventBattlesCtrl.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.EVENT):
                 options.append(self._makeItem(USER.CREATE_EVENT_SQUAD, MENU.contextmenu(USER.CREATE_EVENT_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
             if self.__battleRoyale.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT) and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.BATTLE_ROYALE):
@@ -510,6 +488,19 @@ registerLobbyContexMenuHandler(_EXTENDED_OPT_IDS.VEHICLE_COMPARE, compareVehicle
 
 class UserVehicleCMHandler(AppealCMHandler):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+
+    def __init__(self, cmProxy, ctx=None):
+        super(UserVehicleCMHandler, self).__init__(cmProxy, ctx)
+        self._uiPlayerSatisfactionRatingLogger = PostBattleContextMenuLogger()
+        self._uiPlayerSatisfactionRatingLogger.onViewInitialize()
+
+    def fini(self):
+        self._uiPlayerSatisfactionRatingLogger.onViewFinalize()
+        super(UserVehicleCMHandler, self).fini()
+
+    def onOptionSelect(self, optionId):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(optionId)
+        return super(UserVehicleCMHandler, self).onOptionSelect(optionId)
 
     def _generateOptions(self, ctx=None):
         options = super(AppealCMHandler, self)._generateOptions(ctx)

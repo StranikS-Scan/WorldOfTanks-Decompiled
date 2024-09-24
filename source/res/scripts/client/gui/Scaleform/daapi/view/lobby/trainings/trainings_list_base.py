@@ -8,13 +8,12 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.settings import ICONS_SIZES
 from helpers import dependency
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.TrainingFormMeta import TrainingFormMeta
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.shared.utils.functions import getArenaFullName
+from gui.shared.utils.functions import getArenaFullName, getArenaImage
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
@@ -54,9 +53,9 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
         playersTotal = 0
         addObservers = self.prbEntity.getEntityType() in OBSERVERS_BONUS_TYPES
         for item in prebattles:
-            arena = ArenaType.g_cache[item.arenaTypeID]
+            arenaType = ArenaType.g_cache[item.arenaTypeID]
             playersTotal += item.playersCount
-            maxPlayersInTeam = arena.maxPlayersInTeam
+            maxPlayersInTeam = arenaType.maxPlayersInTeam
             if addObservers:
                 maxPlayersInTeam += PREBATTLE_MAX_OBSERVERS_IN_TEAM
             badge = item.getBadge()
@@ -71,7 +70,7 @@ class TrainingsListBase(LobbySubView, TrainingFormMeta, ILegacyListener):
              'creatorClan': item.clanAbbrev,
              'creatorIgrType': item.creatorIgrType,
              'creatorRegion': self._lobbyContext.getRegionCode(item.creatorDbId),
-             'icon': formatters.getMapIconPath(arena, prefix='small/'),
+             'icon': getArenaImage(arenaType.geometryName, 'small'),
              'disabled': not item.isOpened,
              'badgeVisualVO': badgeVO})
 

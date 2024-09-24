@@ -15,6 +15,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.dynamic_tooltip_model impo
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.dialog_tankman_model import DialogTankmanModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_card_model import PriceCardModel, CardType, CardState
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency, Money, MONEY_ZERO_CREDITS, MONEY_ZERO_GOLD
@@ -28,7 +29,6 @@ if TYPE_CHECKING:
 _DEFAULT_TITLE_LOC = R.strings.dialogs.priceCard
 _RESET_LOC = R.strings.dialogs.perksReset.priceCard
 _RETRAIN_LOC = R.strings.dialogs.retrain.priceCard
-_RECRUIT_LOC = R.strings.dialogs.recruit.priceCard
 _IMAGE = R.images.gui.maps.icons.common.components.price_card
 _LEVEL_TO_HIGHLIGHT = 100
 _MINIMUM_TO_HIGHLIGHT = 1
@@ -184,18 +184,18 @@ def packSkills(skillsData, tankman, skillEfficiency=None):
     return
 
 
-def packMajorSkills(skillsData, tankman, skipIrrelevantCheck=False):
+def packMajorSkills(skillsData, tankman, customGetters=None):
     notFullEarnedSkillMdl = None
     majorSkills = skillsData.getMajorSkills()
     majorSkills.clear()
     for skill in tankman.skills:
-        skillModel = getSkillModel(skill=skill, tman=tankman, skipIrrelevantCheck=skipIrrelevantCheck)
+        skillModel = getSkillModel(tankman, skill, tankman.role, customGetters)
         if skill.isMaxLevel:
             majorSkills.addViewModel(skillModel)
         notFullEarnedSkillMdl = skillModel
 
     for _ in xrange(tankman.newFreeSkillsCount):
-        majorSkills.addViewModel(getSkillModel())
+        majorSkills.addViewModel(getNewSkillModel())
 
     if notFullEarnedSkillMdl:
         majorSkills.addViewModel(notFullEarnedSkillMdl)
@@ -206,7 +206,7 @@ def packMajorSkills(skillsData, tankman, skipIrrelevantCheck=False):
         for idx in xrange(count):
             if idx == lastIdx >= maxAvailbleSkillsNum and not lastSkillLevel:
                 break
-            majorSkills.addViewModel(getSkillModel(level=lastSkillLevel if idx == lastIdx else MAX_SKILL_LEVEL))
+            majorSkills.addViewModel(getNewSkillModel(level=lastSkillLevel if idx == lastIdx else MAX_SKILL_LEVEL))
 
     majorSkills.invalidate()
     return
@@ -220,7 +220,9 @@ def packBonusSkills(skillsData, tankman):
         for skill, level in zip(skills, tankman.bonusSlotsLevels):
             if level is None:
                 continue
-            skillModels.append(getSkillModel(level=level, skill=skill, tman=tankman, role=role))
+            if skill is None:
+                skillModels.append(getNewSkillModel(level))
+            skillModels.append(getSkillModel(tankman, skill, role))
 
     skillModels.sort(key=lambda sm: MAX_SKILL_LEVEL - sm.getLevel() + int(sm.getName() == CrewConstants.NEW_SKILL))
     for model in skillModels:
@@ -230,18 +232,17 @@ def packBonusSkills(skillsData, tankman):
     return
 
 
-def getSkillModel(level=MAX_SKILL_LEVEL, skill=None, tman=None, role=None, skipIrrelevantCheck=False):
+def getSkillModel(tman, skill, role, customGetters=None):
+    skillModel = CrewSkillModel()
+    skillModelSetup(skillModel, customGetters, skill=skill, tankman=tman, role=role)
+    return skillModel
+
+
+def getNewSkillModel(level=MAX_SKILL_LEVEL):
     skillModel = CrewSkillModel()
     skillModel.setLevel(level)
-    if skill:
-        skillModel.setName(skill.name)
-        skillModel.setIcon(skill.extensionLessIconName)
-        skillModel.setLevel(skill.level)
-    else:
-        skillModel.setName(CrewConstants.NEW_SKILL)
-        skillModel.setIcon(CrewConstants.NEW_SKILL)
-    if skill and tman and not skipIrrelevantCheck:
-        skillModel.setIsIrrelevant(not skill.isRelevantForRole(role or tman.descriptor.role))
+    skillModel.setName(CrewConstants.NEW_SKILL)
+    skillModel.setIconName(CrewConstants.NEW_SKILL)
     return skillModel
 
 
@@ -279,22 +280,3 @@ def packSingleRetrain(wulfList, priceData):
         return
 
     packPriceList(wulfList, priceData, _packCustomValues, _IMAGE.retrain, _RETRAIN_LOC)
-
-
-def packRecruit(wulfList, priceData):
-
-    def _packCustomValues(cardVM, customData):
-        itemPrice, cardData, _ = customData
-        xp = cardData['xp']
-        skillLevel = TankmanDescr.getSkillLevelFromXp(1, xp)
-        description, _ = getPriceDescriptionData(itemPrice, skillLevel, _RECRUIT_LOC)
-        kwargs = json.dumps({'value': skillLevel,
-         'isFreeCrew': cardData.get('isFreeCrew', False),
-         'isHighlight': skillLevel == _LEVEL_TO_HIGHLIGHT}, True)
-        cardVM.setDescription(description)
-        cardVM.setKwargs(kwargs)
-        cardVM.setCardType(CardType.RECRUIT)
-        if cardData.get('disabled', False):
-            cardVM.setCardState(CardState.DISABLED)
-
-    packPriceList(wulfList, priceData, _packCustomValues, rTitlePath=_RECRUIT_LOC)

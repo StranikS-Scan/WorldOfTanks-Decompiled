@@ -25,8 +25,7 @@ class VehicleObserverGunRotator(VehicleGunRotator):
     def setShotPosition(self, vehicleID, shotPos, shotVec, dispersionAngle, forceValueRefresh=False):
         self._avatar.observedVehicleData[vehicleID].dispAngle = dispersionAngle
         super(VehicleObserverGunRotator, self).setShotPosition(vehicleID, shotPos, shotVec, dispersionAngle, True)
-        if self._avatar.inCharge:
-            self._updateMultiGunCollisionData()
+        self.updateMultiGunCollisionData()
 
     def updateRotationAndGunMarker(self, shotPoint, timeDiff):
         pass

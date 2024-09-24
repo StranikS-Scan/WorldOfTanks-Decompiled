@@ -160,14 +160,14 @@ class OptDeviceActionSound(ActionSoundHelper):
 
 class BattleBoostersActionSoundHelper(ActionSoundHelper):
     _CREW_BOOSTER_SOUND = {'smoothTurretBattleBooster': 'cons_instructions_steady_hand',
-     'lastEffortBattleBooster': 'cons_instructions_duty_first',
      'virtuosoBattleBooster': 'cons_instructions_combat_course',
      'pedantBattleBooster': 'cons_instructions_shell_organizer',
      'smoothDrivingBattleBooster': 'cons_instructions_gearbox_intricacy',
      'fireFightingBattleBooster': 'cons_instructions_firefighters',
      'rancorousBattleBooster': 'cons_instructions_focus_target',
-     'sixthSenseBattleBooster': 'cons_instructions_increased_focus',
-     'camouflageBattleBooster': 'cons_instructions_natural_cover'}
+     'camouflageBattleBooster': 'cons_instructions_natural_cover',
+     'enemyShotPredictorBattleBooster': 'cons_instructions_heightened_vigilance',
+     'practicalityBattleBooster': 'cons_instructions_thorough_preparations'}
 
     @classmethod
     def playSelectSound(cls, vehicle, intCD):

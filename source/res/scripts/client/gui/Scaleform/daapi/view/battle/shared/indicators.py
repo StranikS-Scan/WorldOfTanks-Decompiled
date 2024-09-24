@@ -166,7 +166,7 @@ class _MarkerVOBuilder(object):
          'priority': _MARKER_TYPE_TO_PRIORITY[markerData.markerType]}
 
     def _getIndicatorFrameRate(self):
-        return DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
+        return _DamageIndicator._DAMAGE_INDICATOR_FRAME_RATE
 
     def _getBackground(self, markerData):
         pass
@@ -294,7 +294,6 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = root.as_hide
         self._as_setScreenSettings = root.as_setScreenSettings
         self._as_setPosition = root.as_setPosition
-        self._as_setAlpha = root.as_setAlpha
 
     def destroy(self):
         self._as_updateSettings = None
@@ -304,7 +303,6 @@ class DamageIndicatorMeta(Flash):
         self._as_hide = None
         self._as_setScreenSettings = None
         self._as_setPosition = None
-        self._as_setAlpha = None
         self.movie.root.dmgIndicator.dispose()
         return
 
@@ -329,11 +327,8 @@ class DamageIndicatorMeta(Flash):
     def as_setPosition(self, posX, posY):
         self._as_setPosition(posX, posY)
 
-    def as_setAlphaS(self, itemIdx, alpha):
-        self._as_setAlpha(itemIdx, alpha)
 
-
-class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
+class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
     _DAMAGE_INDICATOR_SWF = 'battleDamageIndicatorApp.swf'
     _DAMAGE_INDICATOR_COMPONENT = 'WGHitIndicatorFlash'
     _DAMAGE_INDICATOR_MC_NAME = '_root.dmgIndicator.hit_{0}'
@@ -348,7 +343,7 @@ class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
     def __init__(self, hitsCount):
         names = tuple((self._DAMAGE_INDICATOR_MC_NAME.format(x) for x in xrange(hitsCount)))
-        super(DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
+        super(_DamageIndicator, self).__init__(self._DAMAGE_INDICATOR_SWF, self._DAMAGE_INDICATOR_COMPONENT, (names,))
         self.__voBuilderFactory = None
         self.__updateMethod = None
         self.component.wg_inputKeyMode = InputKeyMode.NO_HANDLE
@@ -381,7 +376,7 @@ class DamageIndicator(DamageIndicatorMeta, IHitIndicator):
         return HitType.HIT_DAMAGE
 
     def destroy(self):
-        super(DamageIndicator, self).destroy()
+        super(_DamageIndicator, self).destroy()
         self.settingsCore.interfaceScale.onScaleChanged -= self.__setMarkersScale
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
@@ -470,7 +465,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         return
 
     def _dispose(self):
-        self.__cancelCallback()
+        self._cancelCallback()
         if self.sessionProvider.isReplayPlaying and self._getPyReloading():
             self.as_hideS(True)
         ctrl = self.sessionProvider.shared.vehicleState
@@ -481,14 +476,14 @@ class SixthSenseIndicator(SixthSenseMeta):
         super(SixthSenseIndicator, self)._dispose()
         return
 
-    def __show(self):
+    def _show(self):
         if not self.__enabled:
             return
         self.__sound.play()
         self.as_showS()
-        self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__hide)
+        self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self._hide)
 
-    def __hide(self):
+    def _hide(self):
         self.__callbackID = None
         if not self.__enabled:
             return
@@ -496,7 +491,7 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.as_hideS(False)
             return
 
-    def __cancelCallback(self):
+    def _cancelCallback(self):
         if self.__callbackID is not None:
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
@@ -506,11 +501,11 @@ class SixthSenseIndicator(SixthSenseMeta):
         if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
             if value.get('detectionType') != DIRECT_DETECTION_TYPE.SPECIAL_RECON:
                 if value.get('isObserved', False):
-                    self.__cancelCallback()
-                    self.__show()
+                    self._cancelCallback()
+                    self._show()
                 else:
-                    self.__cancelCallback()
-                    self.__hide()
+                    self._cancelCallback()
+                    self._hide()
 
 
 class SixthSenseSound(object):
@@ -571,6 +566,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__isEnabled = False
         self.__isAllowedByContext = True
         self._siegeState = _SIEGE_STATE.DISABLED
+        self._siegeDevice = 'engine'
         self._devices = {}
         self._switchTime = 0.0
         self._startTime = BigWorld.serverTime()
@@ -619,14 +615,17 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._siegeComponent = None
         return
 
+    def __hasSiegeMode(self, vTypeDesc):
+        return vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode
+
     def __updateIndicatorView(self, isSmooth=False):
         if self._siegeState not in self._switchTimeTable:
             LOG_WARNING('Invalid state: indicator is not properly configured')
             return
         LOG_DEBUG('Updating siege mode: indicator')
-        engineState = self._devices.get('engine', DEVICE_STATE_NORMAL)
-        totalTime = self._switchTimeTable[self._siegeState][engineState]
-        self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
+        deviceState = self._devices.get(self._siegeDevice, DEVICE_STATE_NORMAL)
+        totalTime = self._switchTimeTable[self._siegeState][deviceState]
+        self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, deviceState, isSmooth)
 
     def __updateDevicesView(self):
         if self._siegeComponent.staticMode or not self._devices:
@@ -644,10 +643,11 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         vType = vTypeDesc.type
         self.__resetDevices()
         self.__updateDevicesView()
-        hasSiegeMode = vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode)
+        hasSiegeMode = vTypeDesc.hasSiegeMode and self.__hasSiegeMode(vTypeDesc)
         if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack) and (vehicle.isPlayerVehicle or avatar_getter.getIsObserverFPV()):
             uiType = self.__getUIType(vTypeDesc)
             self.as_setSiegeModeTypeS(uiType)
+            self._siegeDevice = vTypeDesc.type.siegeDeviceName
             self._devices = self.__createDevicesMap(vTypeDesc)
             self._deviceStateConverter = self.__getDeviceStateConverter(vTypeDesc)
             self.__isEnabled = True
@@ -674,6 +674,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDevicesView()
         else:
             self._siegeState = _SIEGE_STATE.DISABLED
+            self._siegeDevice = 'engine'
             self.__isEnabled = False
         self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
         return
@@ -751,6 +752,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             converter = cls.__hydraulicDeviceStateConverter
         elif vTypeDesc.hasTurboshaftEngine:
             converter = cls.__turboshaftDeviceStateConverter
+        elif vTypeDesc.isTwinGunVehicle:
+            converter = cls.__twinGunVehicleDeviceStateConverter
         elif vTypeDesc.isTrackWithinTrack:
             converter = cls.__trackWithinTrackDeviceStateConverter
         if converter is None:
@@ -773,6 +776,10 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return state
 
     @staticmethod
+    def __twinGunVehicleDeviceStateConverter(deviceName, state):
+        return DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName == 'gun' else state
+
+    @staticmethod
     def __turboshaftDeviceStateConverter(deviceName, state):
         return DEVICE_STATE_NORMAL if state == DEVICE_STATE_CRITICAL and deviceName == 'engine' else state
 
@@ -783,6 +790,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             uiType = SIEGE_MODE_CONSTS.HYDRAULIC_CHASSIS_TYPE
         elif vTypeDesc.hasTurboshaftEngine:
             uiType = SIEGE_MODE_CONSTS.TURBOSHAFT_ENGINE_TYPE
+        elif vTypeDesc.isTwinGunVehicle:
+            uiType = SIEGE_MODE_CONSTS.TWIN_GUN_TYPE
         elif vTypeDesc.isTrackWithinTrack:
             uiType = SIEGE_MODE_CONSTS.TRACK_WITHIN_TRACK_TYPE
         if uiType is None:
@@ -795,6 +804,8 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             deviceNames = ('engine', 'leftTrack0', 'rightTrack0')
         elif vTypeDesc.hasTurboshaftEngine:
             deviceNames = ('engine',)
+        elif vTypeDesc.isTwinGunVehicle:
+            deviceNames = ('gun',)
         elif vTypeDesc.isTrackWithinTrack:
             deviceNames = ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1')
         else:
@@ -885,7 +896,7 @@ def createDirectIndicator(swf=_DIRECT_INDICATOR_SWF, mcName=_DIRECT_INDICATOR_MC
 
 
 def createDamageIndicator():
-    return DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
+    return _DamageIndicator(HIT_INDICATOR_MAX_ON_SCREEN)
 
 
 def createPredictionIndicator():

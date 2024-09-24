@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class CharacterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(CharacterModel, self).__init__(properties=properties, commands=commands)
 
     def getTankman(self):
@@ -39,6 +39,12 @@ class CharacterModel(ViewModel):
     def setGroupName(self, value):
         self._setString(4, value)
 
+    def getHasVoice(self):
+        return self._getBool(5)
+
+    def setHasVoice(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(CharacterModel, self)._initialize()
         self._addStringProperty('tankman', '')
@@ -46,3 +52,4 @@ class CharacterModel(ViewModel):
         self._addArrayProperty('skills', Array())
         self._addStringProperty('tooltipId', '')
         self._addStringProperty('groupName', '')
+        self._addBoolProperty('hasVoice', False)

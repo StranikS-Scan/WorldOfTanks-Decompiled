@@ -27,7 +27,6 @@ from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.money import Currency
-from gui.wt_event.wt_event_helpers import isWTEventProgressionQuest
 from helpers import dependency
 from helpers import time_utils
 from messenger import g_settings
@@ -212,7 +211,7 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         customizations = data.get('customizations', [])
         for customizationItem in customizations:
             customizationType = customizationItem['custType']
-            _, itemUserName, _ = getCustomizationItemData(customizationItem['id'], customizationType)
+            _, itemUserName = getCustomizationItemData(customizationItem['id'], customizationType)
             if customizationType == 'style':
                 result.append(itemUserName)
 
@@ -1161,10 +1160,3 @@ class SkipNotificationFormatter(ServiceChannelFormatter, TokenQuestsSubFormatter
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.endswith(cls.__NOTIFICATION_QUEST_POSTFIX)
-
-
-class WtEventProgressionQuestFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return isWTEventProgressionQuest(questID)

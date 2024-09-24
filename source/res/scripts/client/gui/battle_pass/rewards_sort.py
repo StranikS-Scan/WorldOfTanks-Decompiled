@@ -29,7 +29,6 @@ class _RewardType(_Enum):
     GUIDE = 'guide'
     MODERNIZED_DEVICE = 'modernized_device'
     TROPHY = 'trophy'
-    TANKMEN = 'tankmen'
 
 
 @unique
@@ -59,7 +58,6 @@ class _Reward(_Enum):
     TURBOCHARGER_ROT_MECHANISM = 'TurbochargerRotationMechanism'
     RAMMER = 'Rammer'
     VENTILATION = 'Ventilation'
-    CREW = 'Wt'
 
 
 _REWARDS_TYPES_ORDER = (_RewardType.TROPHY,
@@ -108,7 +106,7 @@ _REWARDS_ORDER = {_RewardType.TROPHY: (_Reward.TURBOCHARGER,
                               _Reward.SIGHTS,
                               _Reward.ADDIT_INVISIBILITY_DEVICE),
  _RewardType.MODERNIZED_DEVICE: (_Reward.AIM_DRIVES_AIM_STABILIZER, _Reward.HEALTH_RESERVE_ANTI_FRAGMENTATION, _Reward.TURBOCHARGER_ROT_MECHANISM)}
-_BASE_PATTERN = '(basic|enhanced|improved|trophy|modernized|crew)*([a-z]+)'
+_BASE_PATTERN = '(basic|enhanced|improved|trophy|modernized)*([a-z]+)'
 _REWARD_NAME_EXTRACTOR = re.compile(_BASE_PATTERN + '(_+\\w+\\d*|\\d*)*', re.I)
 _REWARD_BATTLE_BOOSTER_EXTRACTOR = re.compile(_BASE_PATTERN + '(battleBooster*)', re.I)
 _REWARD_NATION_EXTRACTOR = re.compile('.*({})'.format('|'.join(GUI_NATIONS)), re.I)
@@ -146,8 +144,7 @@ _REWARDS_COMPARATORS = {_RewardType.TROPHY: partial(_compareRewardsByType, _Rewa
  _RewardType.BROCHURE: _compareRewardsByNation,
  _RewardType.BLUEPRINT: _compareRewardsByNation,
  _RewardType.BATTLE_BOOSTER: partial(_compareRewardsByType, _RewardType.BATTLE_BOOSTER),
- _RewardType.MODERNIZED_DEVICE: partial(_compareRewardsByType, _RewardType.MODERNIZED_DEVICE),
- _RewardType.TANKMEN: _defaultComparator}
+ _RewardType.MODERNIZED_DEVICE: partial(_compareRewardsByType, _RewardType.MODERNIZED_DEVICE)}
 
 def getRewardTypesComparator():
     return _rewardTypeComparator

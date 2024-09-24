@@ -4,12 +4,12 @@ import ArenaType
 from account_helpers import gameplay_ctx
 from constants import PREBATTLE_TYPE, Configs
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.daapi.view.lobby.trainings import formatters
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prbEntityProperty
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.utils.functions import getArenaImage
 from helpers import dependency
 from helpers import i18n
 from gui.impl import backport
@@ -66,7 +66,7 @@ class ArenasCache(object):
                  'size': arenaType.maxPlayersInTeam,
                  'time': arenaType.roundLength / 60,
                  'description': '',
-                 'icon': formatters.getMapIconPath(arenaType),
+                 'icon': getArenaImage(arenaType.geometryName),
                  'canChangeArenaTime': not self.__isEpic,
                  'alertText': ''}
                 dataGetter = _ARENA_TYPE_DATA_GETTERS.get(arenaType.gameplayName)
@@ -132,7 +132,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
             accountAttrs = self.itemsCache.items.stats.attributes
         else:
             accountAttrs = 0
-        _, maxBound = getTrainingBattleRoundLimits(accountAttrs)
+        minBound, maxBound = getTrainingBattleRoundLimits(accountAttrs)
         if self.__isEpic:
             rTitle = R.strings.menu.epic_training.create.title() if self.__isCreateRequest else R.strings.menu.epic_training.info.settings.title()
         else:
@@ -148,6 +148,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
          'canChangeComment': canChangeComment,
          'isShowComment': isShowComment,
          'canChangeArena': True,
+         'minBattleTime': minBound / 60,
          'maxBattleTime': maxBound / 60}
         if not self.__isCreateRequest:
             permissions = self.prbEntity.getPermissions()

@@ -3,15 +3,15 @@
 from gui import makeHtmlString
 from gui.impl.gen import R
 from gui.impl import backport
+from gui.mapbox.mapbox_helpers import getTillTimeString
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.Scaleform.daapi.view.lobby.formatters import tooltips
-from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
+from gui.shared.formatters import text_styles
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from skeletons.gui.game_control import IMapboxController
-from gui.shared.formatters import text_styles
 
 class MapboxSelectorTooltip(BlocksTooltipData):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
@@ -30,7 +30,7 @@ class MapboxSelectorTooltip(BlocksTooltipData):
         else:
             actualSeason = self.__mapboxCtrl.getCurrentSeason() or self.__mapboxCtrl.getNextSeason()
             seasonIsStarted = self.__mapboxCtrl.getCurrentSeason() is not None
-            timeStrGetter = mapbox_helpers.getTillTimeString if seasonIsStarted else backport.getDateTimeFormat
+            timeStrGetter = getTillTimeString if seasonIsStarted else backport.getDateTimeFormat
             items += tooltips.getScheduleBlock(self.__mapboxCtrl, SELECTOR_BATTLE_TYPES.MAPBOX, actualSeason, seasonIsStarted, timeStrGetter)
         return items
 

@@ -18,7 +18,7 @@ class StoryModeStateValidator(BaseActionsValidator):
 
     def _validate(self):
         ctrl = dependency.instance(IStoryModeController)
-        return ValidationResult(False) if not ctrl.isEnabled() else super(StoryModeStateValidator, self)._validate()
+        return ValidationResult(False) if not ctrl.isEnabled() or ctrl.isSelectedMissionLocked() else super(StoryModeStateValidator, self)._validate()
 
 
 class StoryModeActionsValidator(ActionsValidatorComposite):

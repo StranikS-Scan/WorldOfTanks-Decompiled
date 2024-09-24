@@ -32,7 +32,7 @@ class SquadActionsHandler(AbstractActionsHandler):
             vInfos = unit.getMemberVehicles(pInfo.dbID)
             if vInfos is not None:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
-            self._loadBattleQueue()
+            g_eventDispatcher.loadBattleQueue()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
         return
@@ -46,7 +46,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeInit(self, ctx):
         initResult = FUNCTIONAL_FLAG.UNDEFINED
         if self._entity.getPlayerInfo().isReady and self._entity.getFlags().isInQueue():
-            self._loadBattleQueue()
+            g_eventDispatcher.loadBattleQueue()
             initResult = FUNCTIONAL_FLAG.LOAD_PAGE
         squadCtx = None
         if ctx is not None:
@@ -58,6 +58,7 @@ class SquadActionsHandler(AbstractActionsHandler):
                     showInvitesWindow = False
                     self.processInvites(accountsToInvite)
                 squadCtx = {'showInvitesWindow': showInvitesWindow}
+            self._updateSquadCtx(ctx, squadCtx)
         self._loadWindow(squadCtx)
         return initResult
 
@@ -148,12 +149,11 @@ class SquadActionsHandler(AbstractActionsHandler):
 
         return
 
-    @classmethod
-    def _loadBattleQueue(cls):
-        g_eventDispatcher.loadBattleQueue()
-
     def _onKickedFromQueue(self, _):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)
+
+    def _updateSquadCtx(self, initCtx, squadCtx):
+        pass
 
     @staticmethod
     def _isSquadHavePlayersInBattle(slotPlayer, playerInfo):

@@ -27,7 +27,7 @@ class BlankGiftView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(BlankGiftView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as tx:
-            tx.setBackground(R.images.gui.maps.icons.windows.crewWelcomeScreens.bg.crew22Welcome())
+            tx.setBackground(R.images.gui.maps.icons.windows.crewWelcomeScreens.bg.common())
             tx.setTitle(R.strings.awards.multipleAwards.status.gift())
             tx.setButtonTitle(R.strings.lootboxes.specialReward.continueBtn())
             mainRewards = tx.mainRewards

@@ -456,14 +456,15 @@ def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage
      'horizontalGap': horizontalGap}, padding)
 
 
-def packMapBoxBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None, verticalGap=0, horizontalGap=0, blockWidth=0):
+def packMapBoxBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None, verticalGap=0, horizontalGap=0, blockWidth=0, renderersAlign=RENDERERS_ALIGN_LEFT):
     return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.hangar.mapBox.data.MapBoxItemVO',
      'rendererType': 'MapBoxItemRendererUI',
      'listIconSrc': listIconSrc,
      'columnWidth': columnWidth,
      'rowHeight': rowHeight,
      'verticalGap': verticalGap,
-     'horizontalGap': horizontalGap}, padding, blockWidth=blockWidth)
+     'horizontalGap': horizontalGap,
+     'renderersAlign': renderersAlign}, padding, blockWidth=blockWidth)
 
 
 def packQuestAwardsBlockData(listData, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):

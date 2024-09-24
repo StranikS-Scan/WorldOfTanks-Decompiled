@@ -302,11 +302,11 @@ class ClientArena(object):
         yield self.awaitVehiclesAdded(awaitVehicles)
         self.onNewStatisticsReceived()
 
-    @wg_async
     def __onVehicleStatisticsUpdate(self, argStr):
         vehicleID, stats = self.__vehicleStatisticsAsDict(cPickle.loads(zlib.decompress(argStr)))
-        yield self.awaitVehiclesAdded([vehicleID])
         self.__statistics[vehicleID] = stats
+        if vehicleID not in self.__vehicles:
+            return
         self.onVehicleStatisticsUpdate(vehicleID)
 
     def __getArenaPlans(self):
@@ -421,6 +421,8 @@ class ClientArena(object):
         self.__rebuildIndexToId()
         if notify:
             self.onVehicleAdded(vehID)
+        if vehID in self.__statistics:
+            self.onVehicleStatisticsUpdate(vehID)
 
     def updateVehicleIsAlive(self, vehID, compDescr, isPlayerVehicle):
         vehInfo = self.__vehicles[vehID]
@@ -446,9 +448,9 @@ class ClientArena(object):
         self.onGameModeSpecificStats(isStatic, stats)
 
     @wg_async
-    def awaitVehiclesAdded(self, vehIDs):
+    def awaitVehiclesAdded(self, vehIDs, timeout=None):
         try:
-            yield wg_await(_ArenaVehiclesAwaiter(self._awaitVehiclesScope, self, vehIDs).wait(), self.VEHICLES_AWAIT_TIMEOUT)
+            yield wg_await(_ArenaVehiclesAwaiter(self._awaitVehiclesScope, self, vehIDs).wait(), timeout or self.VEHICLES_AWAIT_TIMEOUT)
         except BrokenPromiseError:
             pass
 

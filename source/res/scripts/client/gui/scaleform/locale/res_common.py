@@ -34,5 +34,4 @@ class RES_COMMON(object):
     MAPS_ICONS_RESOURCEWELL_INTRO_BG = '../maps/icons/resourceWell/intro/bg.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'
-    MAPS_ICONS_WTEVENT_POPOVER_BG = '../maps/icons/wtevent/popover/bg.png'
     MAPS_UIKIT_DIALOG_TEMPLATES_SELECT_OPTION_BG = '../maps/uiKit/dialog_templates/select_option/bg.png'

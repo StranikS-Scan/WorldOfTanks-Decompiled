@@ -6,7 +6,6 @@ from account_helpers.settings_core.options import BattleLoadingTipSetting
 from helpers import dependency
 from helpers import tips
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.arena_info.settings import SMALL_MAP_IMAGE_SF_PATH
 from gui.shared.formatters import text_styles
 from gui.Scaleform.daapi.view.meta.BaseBattleLoadingMeta import BaseBattleLoadingMeta
 from ReplayEvents import g_replayEvents
@@ -102,7 +101,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         return text_styles.playerOnline(tipBody)
 
     def _addArenaTypeData(self):
-        self.as_setMapIconS(SMALL_MAP_IMAGE_SF_PATH % self._arenaVisitor.type.getGeometryName())
+        self.as_setMapIconS(self._arenaVisitor.getArenaIcon('battleLoading'))
 
     def _getSettingsID(self, loadingInfo):
         return self.settingsCore.options.getSetting(loadingInfo).getSettingID(isVisualOnly=self._arenaVisitor.gui.isEventBattle())

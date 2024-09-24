@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/miniclient/lobby/user_cm_handlers.py
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import USER
+from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from helpers import aop
 
 class UserCmClanUnavailableAspect(aop.Aspect):

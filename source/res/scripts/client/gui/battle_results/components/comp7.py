@@ -7,7 +7,7 @@ from gui.Scaleform.genConsts.COMP7_CONSTS import COMP7_CONSTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_results.components import base, style
 from gui.battle_results.components.vehicles import RegularVehicleStatValuesBlock, RegularVehicleStatsBlock, TeamStatsBlock, _getStunFilter
-from gui.battle_results.br_constants import PlayerTeamResult
+from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.qualification_battle import BattleState
@@ -182,7 +182,7 @@ class Comp7RankBlock(base.StatsBlock):
 
     @staticmethod
     def __getQualificationIcon(teamResult, isDeserter):
-        if teamResult == PlayerTeamResult.WIN and not isDeserter:
+        if teamResult == PLAYER_TEAM_RESULT.WIN and not isDeserter:
             battleState = BattleState.VICTORY
         else:
             battleState = BattleState.DEFEAT

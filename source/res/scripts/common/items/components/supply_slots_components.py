@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/supply_slots_components.py
 from typing import *
-import ResMgr
+from extension_utils import ResMgr, importClass
 from ResMgr import DataSection
 from WeakMixin import WeakMixin
 from items import ITEM_TYPES, parseIntCompactDescr, makeIntCompactDescrByID, EQUIPMENT_TYPES, vehicles
@@ -54,8 +54,12 @@ class SupplySlot(CategoriesHolder):
 
     @staticmethod
     def initSlot(slotSection):
-        slotType = slotSection.readString('type')
-        slotObj = getSlotByItemTypeName(slotType)()
+        slotClass = slotSection.readString('slotClass')
+        if slotClass:
+            slotObj = importClass(slotClass, 'items.components.supply_slots_components')()
+        else:
+            slotType = slotSection.readString('type')
+            slotObj = getSlotByItemTypeName(slotType)()
         slotObj.readFromSection(slotSection)
         return slotObj
 

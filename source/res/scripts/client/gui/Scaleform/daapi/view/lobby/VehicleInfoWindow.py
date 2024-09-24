@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.VehicleInfoMeta import VehicleInfoMeta
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, AVG_DAMAGE_PER_SECOND, CONTINUOUS_SHOTS_PER_MINUTE
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, AVG_DAMAGE_PER_SECOND, CONTINUOUS_SHOTS_PER_MINUTE, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, RELOAD_TIME_SECS_PROP_NAME, TWIN_GUN_RELOAD_TIME
 from helpers import i18n, dependency
 from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
@@ -49,7 +49,8 @@ def _highlightsMap(settings, vehicle=None):
        TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
        TURBOSHAFT_INVISIBILITY_MOVING_FACTOR), _Highlight(lambda : settings.checkTurboshaftHighlights(increase=True))),
      ((ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION), _Highlight(lambda : settings.checkRocketAccelerationHighlights(increase=True))),
-     ((DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE), _Highlight(lambda : vehicle.descriptor.hasDualAccuracy and settings.checkDualAccuracyHighlights(increase=True))))
+     ((DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE), _Highlight(lambda : vehicle.descriptor.hasDualAccuracy and settings.checkDualAccuracyHighlights(increase=True))),
+     ((TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, RELOAD_TIME_SECS_PROP_NAME), _Highlight(lambda : vehicle.descriptor.isTwinGunVehicle and settings.checkTwinGunHighlights(increase=True))))
     mapping = [ zip(params, [highlight] * len(params)) for params, highlight in config ]
     return dict([ item for sub in mapping for item in sub ])
 
@@ -59,6 +60,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
     _comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     _settingsCore = dependency.descriptor(ISettingsCore)
     _lobbyContext = dependency.instance(ILobbyContext)
+    __OVERRIDED_PARAM_NAMES = (('isTwinGunVehicle', {RELOAD_TIME_SECS_PROP_NAME: TWIN_GUN_RELOAD_TIME}),)
 
     def __init__(self, ctx=None):
         super(VehicleInfoWindow, self).__init__()
@@ -137,8 +139,10 @@ class VehicleInfoWindow(VehicleInfoMeta):
 
     def __packParams(self, paramsList):
         result = []
+        vehDesc = self._itemsCache.items.getItemByCD(self.__vehicleCompactDescr).descriptor
+        overridedNamesMap = {source:target for vehType, params in self.__OVERRIDED_PARAM_NAMES if getattr(vehDesc, vehType) for source, target in params.items()}
         for name, value in paramsList:
-            paramVO = {'name': name,
+            paramVO = {'name': overridedNamesMap.get(name, name),
              'value': value}
             if self.__highlightsMap.get(name, False):
                 paramVO['highlight'] = True
@@ -158,7 +162,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 
-    def __onVehCompareBasketChanged(self, changedData, _=None):
+    def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self.__updateCompareButtonState()
 

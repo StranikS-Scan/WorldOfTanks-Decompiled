@@ -74,7 +74,7 @@ class BattleHint(object):
         return (self._model.props.priority, currentTime - lastDisplayTime)
 
     def canBeShown(self, currentTime=None):
-        return self._model.canBeShown() and not self._isOnCooldown(currentTime)
+        return self._model.canBeShown(self._history) and not self._isOnCooldown(currentTime)
 
     def enqueued(self):
         self._enqueueTime = time.time()

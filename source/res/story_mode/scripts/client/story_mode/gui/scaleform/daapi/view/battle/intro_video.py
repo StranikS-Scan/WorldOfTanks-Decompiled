@@ -20,7 +20,6 @@ from story_mode.gui.fade_in_out import UseStoryModeFading
 from story_mode.gui.scaleform.daapi.view.meta.IntroVideoMeta import IntroVideoMeta
 from story_mode.gui.scaleform.daapi.view.model.intro_video_settings_model import getSettings
 from story_mode.gui.shared.event_dispatcher import showPrebattleWindow
-from story_mode.gui.story_mode_gui_constants import EventMusicState, Music, Ambience
 from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import IntroVideoLogger
@@ -65,15 +64,16 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
     def onVideoStarted(self):
         self._isVideoStarted = True
         self._uiLogger.logVideoStarted(self._missionId)
-        if self._storyModeCtrl.isSelectedMissionEvent:
-            WWISE.WW_setState(EventMusicState.GROUP, EventMusicState.VIDEO)
-        else:
-            SoundGroups.g_instance.playSound2D(Music.ONBOARDING_STOP)
-            SoundGroups.g_instance.playSound2D(Ambience.ONBOARDING_STOP)
-        if self._introVideoSettings.music.start:
-            self.soundManager.playSound(self._introVideoSettings.music.start)
+        if self._introVideoSettings is not None:
+            if self._introVideoSettings.music.group and self._introVideoSettings.music.state:
+                WWISE.WW_setState(self._introVideoSettings.music.group, self._introVideoSettings.music.state)
+            else:
+                self._storyModeCtrl.stopMusic()
+            if self._introVideoSettings.music.start:
+                self.soundManager.playSound(self._introVideoSettings.music.start)
         self.soundManager.playSound(self._introVideoSettings.vo)
         g_keyEventHandlers.add(self._handleKeyEvent)
+        return
 
     @UseStoryModeFading(hide=False)
     def onVideoComplete(self):
@@ -105,12 +105,14 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
          'video': self._introVideoSettings.videoPath,
          'isPausedAfterLoad': isPausedAfterLoad})
         self._sessionProvider.addArenaCtrl(self)
-        if not self._storyModeCtrl.isSelectedMissionEvent:
-            self._storyModeCtrl.startMusic()
+        if self._introVideoSettings is not None:
+            if not self._introVideoSettings.music.group and not self._introVideoSettings.music.state:
+                self._storyModeCtrl.startMusic()
         if AccountSettings.getSettings(SOUND.SUBTITLES):
             WWISE.WW_addMarkerListener(self._soundMarkerHandler)
         self.app.detachCursor()
         self._uiLogger.logOpen(state=str(self._missionId))
+        return
 
     def _dispose(self):
         self._sessionProvider.removeArenaCtrl(self)
@@ -122,11 +124,11 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
         super(IntroVideo, self)._dispose()
 
     def _closeWindow(self):
-        sendWWISEEventGlobal(self._introVideoSettings.music.stop)
         self.soundManager.stopSound(self._introVideoSettings.vo)
-        if not self._storyModeCtrl.isSelectedMissionEvent:
-            SoundGroups.g_instance.playSound2D(Music.ONBOARDING_START)
+        if self._introVideoSettings.playSoundOnClose is not None:
+            SoundGroups.g_instance.playSound2D(self._introVideoSettings.playSoundOnClose)
         self.destroy()
+        return
 
     def _onWindowAccessibilityChanged(self, isAccessible):
         if isAccessible:

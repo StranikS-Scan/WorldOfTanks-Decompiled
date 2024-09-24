@@ -3,7 +3,6 @@
 import BattleReplay
 import CommandMapping
 from constants import ARENA_PERIOD
-from gui.Scaleform.daapi.view.battle.shared.consumables_panel import TOOLTIP_FORMAT
 from gui.Scaleform.daapi.view.meta.RadarButtonMeta import RadarButtonMeta
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -12,6 +11,7 @@ from battle_royale.gui.battle_control.controllers.radar_ctrl import RadarRespons
 from gui.impl import backport
 from gui.impl.backport import image
 from gui.impl.gen import R
+from gui.shared.tooltips.consumables_panel import TOOLTIP_FORMAT
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider

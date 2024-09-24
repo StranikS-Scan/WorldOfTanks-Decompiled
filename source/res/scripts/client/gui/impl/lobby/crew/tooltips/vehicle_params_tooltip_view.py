@@ -16,7 +16,6 @@ from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
-from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params import PIERCING_DISTANCES
@@ -24,7 +23,6 @@ from gui.shared.utils import CHASSIS_REPAIR_TIME, SHOT_DISPERSION_ANGLE, DUAL_AC
 from helpers import i18n
 from items import perks, vehicles, tankmen, parseIntCompactDescr
 from post_progression_common import ACTION_TYPES
-from shared_utils import first
 if TYPE_CHECKING:
     from typing import Optional
     from gui.shared.gui_items import Vehicle
@@ -166,29 +164,6 @@ def _getBonusName(bnsType, bnsId, enabled=True, archetype=None):
     return itemStr
 
 
-def _getNumNotNullPenaltyTankman(penalties):
-    nullPenaltyTypes = []
-    actualPenalties = []
-    for penalty in penalties:
-        if penalty.value != 0:
-            actualPenalties.append(penalty)
-        nullPenaltyTypes.append(penalty.roleName)
-
-    return (actualPenalties, nullPenaltyTypes)
-
-
-def _formatValueChange(paramName, value, colorScheme):
-    if not param_formatter.isRelativeParameter(paramName):
-        if isinstance(value, collections.Sized):
-            state = zip([PARAM_STATE.WORSE] * len(value), value)
-        else:
-            state = (PARAM_STATE.WORSE, value)
-        valueStr = param_formatter.formatParameter(paramName, value, state, colorScheme=colorScheme, formatSettings=param_formatter.DELTA_PARAMS_SETTING, allowSmartRound=False)
-        return valueStr or ''
-    else:
-        return ''
-
-
 def _isUpgradedInstanceOfInstalled(installedDevices, deviceDescr):
     if not deviceDescr.isUpgradable:
         return False
@@ -266,6 +241,10 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
                 desc = backport.text(R.strings.tooltips.tank_params.desc.chassisRepairTimeYoh())
             elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.hasDualAccuracy:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.withDualAccuracy())
+            elif self._paramName == RELOAD_TIME_SECS_PROP_NAME and vehicle and vehicle.descriptor.isTwinGunVehicle:
+                desc = backport.text(R.strings.tooltips.tank_params.desc.reloadTimeSecs.twinGun())
+            elif self._paramName == SHOT_DISPERSION_ANGLE and vehicle and vehicle.descriptor.isTwinGunVehicle:
+                desc = backport.text(R.strings.tooltips.tank_params.desc.shotDispersionAngle.twinGun())
             else:
                 desc = backport.text(R.strings.tooltips.tank_params.desc.dyn(self._paramName)())
         if isRelativeParameter(self._paramName) and self._context.isApproximately:
@@ -311,7 +290,6 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         super(VehicleAdvancedParamsTooltipView, self)._fillModel(model)
         hasSituational = self._fillBonuses(model)
         if self.vehicle:
-            self._fillPenalties(model)
             self._fillFootNotes(model, hasSituational)
 
     def _fillBonuses(self, model):
@@ -400,25 +378,6 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
         return hasSituational
 
-    def _fillPenalties(self, model):
-        baseColorScheme = (partial(self._formatValueText, ValueStyleEnum.RED), partial(self._formatValueText, ValueStyleEnum.WHITESPANISH), partial(self._formatValueText, ValueStyleEnum.GREENBRIGHT))
-        modelPenalties = model.getPenalties()
-        penalties = self._extendedData.penalties
-        actualPenalties, _ = _getNumNotNullPenaltyTankman(penalties)
-        penaltiesLen = len(penalties)
-        numNotNullPenaltyTankman = len(actualPenalties)
-        if penaltiesLen > numNotNullPenaltyTankman:
-            model.setIsNotFullCrew(True)
-            penaltyModel = VehicleParamsItem()
-            penaltyModel.setTitle(backport.text(R.strings.tooltips.vehicleParams.penalty.crewNotFull.template()))
-            penaltyModel.setIcon(R.images.gui.maps.icons.vehParams.tooltips.penalties.all())
-            modelPenalties.addViewModel(penaltyModel)
-        if numNotNullPenaltyTankman > 0:
-            if self._paramName in _PARAMS_WITH_AGGREGATED_PENALTIES:
-                self.__fillAggregatedNotNullPenalties(penalties, modelPenalties, baseColorScheme)
-            else:
-                self.__fillNotNullPenaltyTankmen(penalties, modelPenalties, baseColorScheme)
-
     def _fillFootNotes(self, model, hasSituational):
         notes = model.getFooterNotes()
         result = []
@@ -467,53 +426,6 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
     def _getAutoReloadTimeExtendedDescription(self):
         return backport.text(R.strings.tooltips.tank_params.desc.autoReloadTime.boost.description())
-
-    def __fillAggregatedNotNullPenalties(self, penalties, model, baseColorScheme):
-        rootStr = R.strings.tooltips.vehicleParams.penalty
-        notNativeTankmenPenalties, otherPenalties = [], []
-        for penalty in penalties:
-            if penalty.vehicleIsNotNative:
-                notNativeTankmenPenalties.append(penalty)
-            if penalty.value != 0:
-                otherPenalties.append(penalty)
-
-        self.__fillGroupPenalties(model, otherPenalties, rootStr.tankmanLevel, rootStr.crewLevel, baseColorScheme)
-        self.__fillGroupPenalties(model, notNativeTankmenPenalties, rootStr.tankmanDifferentVehicle, rootStr.crewDifferentVehicle, baseColorScheme)
-
-    def __fillGroupPenalties(self, modelPenalties, penalties, templateStr, crewStr, baseColorScheme):
-        if not penalties:
-            return
-        if len(penalties) == 1:
-            penaltyItem = first(penalties)
-            roleName = penaltyItem.roleName
-            title = backport.text(templateStr.template(), tankmanType=backport.text(R.strings.item_types.tankman.roles.dyn(roleName)()))
-            valueStr = _formatValueChange(self._extendedData.name, penaltyItem.value, baseColorScheme)
-            model = self.__createPenaltyModel(valueStr, title, roleName)
-        else:
-            value = sum((penalty.value for penalty in penalties))
-            valueStr = _formatValueChange(self._extendedData.name, value, baseColorScheme)
-            model = self.__createPenaltyModel(valueStr, backport.text(crewStr()), _CREW_ICON)
-        modelPenalties.addViewModel(model)
-
-    def __fillNotNullPenaltyTankmen(self, penalties, modelPenalties, baseColorScheme):
-        for penalty in penalties:
-            valueStr = _formatValueChange(self._extendedData.name, penalty.value, baseColorScheme)
-            if valueStr:
-                if penalty.vehicleIsNotNative:
-                    template = R.strings.tooltips.vehicleParams.penalty.tankmanDifferentVehicle.template()
-                else:
-                    template = R.strings.tooltips.vehicleParams.penalty.tankmanLevel.template()
-                penaltyStr = backport.text(template, tankmanType=backport.text(R.strings.item_types.tankman.roles.dyn(penalty.roleName)()))
-                penaltyModel = self.__createPenaltyModel(valueStr, penaltyStr, penalty.roleName)
-                modelPenalties.addViewModel(penaltyModel)
-
-    @staticmethod
-    def __createPenaltyModel(value, title, iconName):
-        penaltyModel = VehicleParamsItem()
-        penaltyModel.setValue(value)
-        penaltyModel.setTitle(title)
-        penaltyModel.setIcon(param_formatter.getPenaltyIconRes(iconName))
-        return penaltyModel
 
     @staticmethod
     def __getLevelIcon(bnsID, bnsType, vehPostProgressionBonusLevels):

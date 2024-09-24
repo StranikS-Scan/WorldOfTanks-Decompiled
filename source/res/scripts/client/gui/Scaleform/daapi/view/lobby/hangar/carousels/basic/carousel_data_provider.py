@@ -130,6 +130,7 @@ class HangarCarouselDataProvider(CarouselDataProvider):
         self._baseCriteria = REQ_CRITERIA.INVENTORY
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+        self._baseCriteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
 
     def _onTelecomRentalsChanged(self, diff):
         if PARTNERSHIP_TOKEN_NAME in diff or ROSTER_EXPIRATION_TOKEN_NAME in diff:

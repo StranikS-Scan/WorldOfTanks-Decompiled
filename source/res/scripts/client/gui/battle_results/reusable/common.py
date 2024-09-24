@@ -95,8 +95,8 @@ class CommonInfo(shared.UnpackedInfo):
     def canTakeSquadXP(self):
         return self.__arenaVisitor.bonus.canTakeSquadXP()
 
-    def getArenaIcon(self, iconKey):
-        return self.__arenaVisitor.getArenaIcon(iconKey)
+    def getArenaIcon(self, subdir=''):
+        return self.__arenaVisitor.getArenaIcon(subdir)
 
     def getBotInfo(self, vehicleID):
         return self.__bots[vehicleID] if vehicleID in self.__bots else None

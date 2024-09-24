@@ -343,9 +343,8 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     def luiVersion(self):
         return self.getCacheValue('limitedUi', {}).get('ver', 1)
 
-    @property
-    def newbieHintsGroup(self):
-        return self.getCacheValue('abFeatureTest', {}).get('newbieHints')
+    def getABGroup(self, feature):
+        return self.getCacheValue('abFeatureTest', {}).get(feature)
 
     @adisp_async
     def _requestCache(self, callback):

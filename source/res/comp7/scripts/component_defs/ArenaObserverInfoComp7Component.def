@@ -1,0 +1,23 @@
+<ArenaObserverInfoComp7Component.def>
+  <Properties>
+    <vehiclesInfo>
+      <Type>	ARRAY	  <of>	COMP7_VEHICLE_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </vehiclesInfo>
+    <poiInfo>
+      <Type>	ARRAY	  <of>	COMP7_POI_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </poiInfo>
+    <teamBasesInfo>
+      <Type>	ARRAY	  <of>	COMP7_BASE_INFO	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </teamBasesInfo>
+  </Properties>
+  <DefaultKeyName>	arenaObserverInfoComp7Component	</DefaultKeyName>
+</ArenaObserverInfoComp7Component.def>

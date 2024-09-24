@@ -9,7 +9,6 @@ from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import T
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.container_views.base.components import ComponentBase
-from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableTooltip
 from gui.impl.lobby.crew.tooltips.premium_vehicle_tooltip import PremiumVehicleTooltip
 from gui.impl.lobby.crew.utils import convertMoneyToTuple, playRecruitVoiceover, VEHICLE_TAGS_FILTER
 from helpers import dependency
@@ -20,6 +19,7 @@ from uilogging.crew.logging_constants import CrewPersonalFileKeys
 if typing.TYPE_CHECKING:
     from typing import Any, Callable, Tuple
     from gui.impl.gen.view_models.views.lobby.crew.common.tankman_info_model import TankmanInfoModel
+    from gui.impl.gen.view_models.views.lobby.crew.personal_case.personal_file_view_model import PersonalFileViewModel
 
 class TankmanInfoComponent(ComponentBase):
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -107,8 +107,6 @@ class TankmanInfoComponent(ComponentBase):
         return
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.crew.tooltips.PerkAvailableTooltip():
-            return PerkAvailableTooltip(self.context.tankmanID)
         if contentID == R.views.lobby.crew.tooltips.PremiumVehicleTooltip():
             return PremiumVehicleTooltip(vehicleCD=self.context.tankman.vehicleNativeDescr.type.compactDescr)
         if contentID == R.views.lobby.common.tooltips.ExtendedTextTooltip():

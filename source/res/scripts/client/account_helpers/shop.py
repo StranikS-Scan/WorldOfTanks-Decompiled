@@ -105,6 +105,9 @@ class Shop(object):
         self.__getValue(None, callback)
         return
 
+    def getCacheRevision(self):
+        return self.__cache.get('rev', 0)
+
     def getAllItems(self, callback):
         self.__getValue('items', callback)
 

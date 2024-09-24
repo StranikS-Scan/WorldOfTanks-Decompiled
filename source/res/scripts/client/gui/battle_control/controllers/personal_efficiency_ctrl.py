@@ -124,6 +124,9 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isDestroyerStrike(self, primary=True):
         return self.__damage.isDestroyerStrike(primary=primary)
 
+    def isFireDamageZone(self, primary=True):
+        return self.__damage.isFireDamageZone(primary=primary)
+
     def getShellType(self):
         return self.__damage.getShellType()
 
@@ -203,6 +206,9 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isDestroyerStrike(self, primary=True):
         return self.__critsExtra.isDestroyerStrike(primary=primary)
+
+    def isFireDamageZone(self, primary=True):
+        return self.__critsExtra.isFireDamageZone(primary=primary)
 
     def isClingBrander(self):
         return self.__critsExtra.isClingBrander()

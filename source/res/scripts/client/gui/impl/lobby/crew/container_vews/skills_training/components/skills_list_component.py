@@ -4,11 +4,11 @@ import typing
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
-from gui.impl.gen.view_models.views.lobby.crew.skill_model import SkillModel
+from gui.impl.gen.view_models.views.lobby.crew.skill_training_model import SkillTrainingModel
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.container_views.base.components import ComponentBase
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import formatDescription, getSkillParams
-from gui.shared.gui_items.Tankman import TankmanSkill, getBattleBooster, isSkillLearnt
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from helpers import dependency
 from items.components.skills_constants import COMMON_ROLE
 from items.tankmen import MAX_SKILL_LEVEL
@@ -17,6 +17,7 @@ if typing.TYPE_CHECKING:
     from typing import Any, Callable, Tuple
     from gui.impl.gen.view_models.views.lobby.crew.skills_training_view_model import SkillsTrainingViewModel
     from gui.impl.gen.view_models.views.lobby.crew.skills_list_model import SkillsListModel
+    from gui.shared.gui_items.Tankman import TankmanSkill
 
 class SkillsListComponent(ComponentBase):
     __slots__ = ('__toolTipMgr',)
@@ -77,42 +78,31 @@ class SkillsListComponent(ComponentBase):
         irrelevantSkills = [ skill for skill in self.context.tankman.skills if not skill.isRelevantForRole(role) ]
         self.__fillSkillsList(commonSkillsList, commonSkills)
         self.__fillSkillsList(regularSkillsList, regularSkills)
-        self.__fillSkillsList(irrelevantSkillsList, irrelevantSkills, True)
+        self.__fillSkillsList(irrelevantSkillsList, irrelevantSkills)
 
     def __fillBonusSkillsList(self, skillsByRoles, regularSkillsList):
         bonusSkills = skillsByRoles[self.context.role]
         self.__fillSkillsList(regularSkillsList, bonusSkills)
 
-    def __fillSkillsList(self, skillsListVM, skills, isIrrelevant=False):
+    def __fillSkillsList(self, skillsListVM, skills):
         tankman = self.context.tankman
         bonusSlotsLevels = self.context.tankman.bonusSlotsLevels
         for skill in skills:
-            skillVM = SkillModel()
-            skillVM.setId(skill.name)
-            skillVM.setIcon(skill.extensionLessIconName)
-            skillVM.setName(skill.userName)
-            skillVM.setIsIrrelevant(isIrrelevant)
-            skillVM.setIsLearned(skill.isLearnedAsMajor if self.context.isMajorQualification else skill.isLearnedAsBonus)
-            isImprovedByDirective = getBattleBooster(self.context.tankmanCurrentVehicle, skill.name) is not None
-            skillVM.setIsImprovedByDirective(isImprovedByDirective)
-            if isImprovedByDirective:
-                skillVM.setIsDirectiveFull(isSkillLearnt(skill.name, self.context.tankmanCurrentVehicle))
+            skillVM = SkillTrainingModel()
             isSelected = skill.name in self.context.selectedSkills
-            skillVM.setIsSelected(isSelected)
-            level = 0
-            isZero = False
-            if self.context.isMajorQualification and skill.isLearnedAsMajor:
-                level = skill.level
-                isZero = skill.name in tankman.freeSkillsNames
-            elif skill.isLearnedAsBonus:
+            level = skill.level
+            skillParams = getSkillParams(tankman, self.context.tankmanCurrentVehicle, None, skill, skill.name, MAX_SKILL_LEVEL, not skill.isLearnedAsMajor)
+            isZero = None
+            if not self.context.isMajorQualification and skill.isLearnedAsBonus:
                 idx = tankman.bonusSkills[self.context.role].index(skill)
                 level = bonusSlotsLevels[idx]
             elif isSelected:
                 idx = self.context.selectedSkills.index(skill.name)
                 level, isZero = self.context.availableSkillsData[idx]
-            skillVM.setLevel(level)
-            skillVM.setIsZero(isZero)
-            skillParams = getSkillParams(tankman, self.context.tankmanCurrentVehicle, None, skill, skill.name, MAX_SKILL_LEVEL, not skill.isLearnedAsMajor)
+            skillModelSetup(skillVM, skill=skill, tankman=tankman, role=self.context.role, skillLevel=level, isZero=isZero)
+            skillVM.setIsSelected(isSelected)
+            skillVM.setUserName(skill.userName)
+            skillVM.setIsLearned(skill.isLearnedAsMajor if self.context.isMajorQualification else skill.isLearnedAsBonus)
             skillVM.setDescription(formatDescription(skill.maxLvlDescription, skillParams.get('keyArgs', {})))
             skillsListVM.addViewModel(skillVM)
 

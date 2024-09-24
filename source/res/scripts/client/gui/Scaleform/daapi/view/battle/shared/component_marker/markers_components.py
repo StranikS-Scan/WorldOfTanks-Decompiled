@@ -748,9 +748,7 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
             return
 
     def _addMask(self, guid):
-        arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
-        xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
-        yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+        xc, yc = self._getSize()
         udo = BigWorld.userDataObjects.get(guid, None)
         if udo:
             delta = udo.position - self.position
@@ -763,9 +761,7 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         if not polygon:
             return
         else:
-            arenaSize = BigWorld.player().arena.arenaType.boundingBox[1]
-            xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0]
-            yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1]
+            xc, yc = self._getSize()
             self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), list())
             for mask in self._entity.masks:
                 udo = BigWorld.userDataObjects.get(mask.udoGuid, None)
@@ -774,6 +770,13 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
                     self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), list()))
 
             return
+
+    def _getSize(self):
+        boundingBox = BigWorld.player().arena.arenaType.boundingBox
+        arenaSize = boundingBox[1] - boundingBox[0]
+        xc = minimap_utils.MINIMAP_SIZE[0] / arenaSize[0] * 2
+        yc = minimap_utils.MINIMAP_SIZE[1] / arenaSize[1] * 2
+        return (xc, yc)
 
     def _updatePolygon(self):
         self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(self.__isColorBlind()))

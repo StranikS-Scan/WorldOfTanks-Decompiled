@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.mapbox.mapbox_helpers import getMapboxBattlesStatus
 from gui.prb_control.formatters.tooltips import getAbsenceCrewList
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, PREBATTLE_RESTRICTION
@@ -142,28 +143,10 @@ def getComp7BattlesOnlyVehicleTooltipData(result):
         return makeTooltip(header, body)
 
 
-def getEventTooltipData(result=UNIT_RESTRICTION.UNDEFINED):
-    state = result.restriction
-    rClass = R.strings.tooltips.hangar.startBtn
-    rSubClass = rClass.primeNotAvailable
-    if state == UNIT_RESTRICTION.UNDEFINED:
-        header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
-        body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
-        return makeTooltip(header, body)
-    else:
-        if state == UNIT_RESTRICTION.COMMANDER_VEHICLE_NOT_SELECTED:
-            rSubClass = R.strings.event.hangar.startBtn.eventSquadNotReady.wrongVehicleCount
-        elif state == UNIT_RESTRICTION.EVENT_VEHICLE_NOT_SELECTED:
-            rSubClass = rClass.squadNotReady
-        elif state == PREBATTLE_RESTRICTION.TICKETS_SHORTAGE:
-            rSubClass = rClass.noTicket
-        elif state == PREBATTLE_RESTRICTION.VEHICLE_IN_BATTLE:
-            rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
-        elif state == UNIT_RESTRICTION.VEHICLE_IS_IN_BATTLE:
-            rSubClass = R.strings.tooltips.redButton.disabled.vehicle.inBattle
-        elif state == UNIT_RESTRICTION.IS_IN_ARENA:
-            return makeTooltip(None, None)
-        return makeTooltip(backport.text(rSubClass.header()), backport.text(rSubClass.body()))
+def getEventTooltipData():
+    header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
+    body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
+    return makeTooltip(header, body)
 
 
 def getPreviewTooltipData():
@@ -208,8 +191,13 @@ def getMapboxFightBtnTooltipData(result, isInSquad):
     strPath = R.strings.mapbox.headerButtons.fightBtn.tooltip
     restriction = result.restriction
     if restriction in (PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE, UNIT_RESTRICTION.CURFEW):
-        header = backport.text(strPath.disabled.header())
-        body = backport.text(strPath.disabled.text())
+        _, isBattleEnded = getMapboxBattlesStatus()
+        if isBattleEnded:
+            header = backport.text(strPath.battlesEnded.header())
+            body = backport.text(strPath.battlesEnded.text())
+        else:
+            header = backport.text(strPath.disabled.header())
+            body = backport.text(strPath.disabled.text())
     elif restriction == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
         header = backport.text(strPath.mapboxVehLevel.header())
         levels = backport.text(strPath.mapboxVehLevel.levelSubStr(), levels=toRomanRangeString(result.ctx['levels']))

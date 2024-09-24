@@ -399,35 +399,6 @@ def _setupGunMarkerSizeLimits(dataProvider, scale=None):
     return limits
 
 
-class _SizeFilter(object):
-
-    def __init__(self):
-        self.__outSize = 0.0
-        self.__inSize = 0.0
-        self.__k = 0.0
-        self.__minLimit = 0.0
-
-    def getSize(self):
-        return self.__outSize
-
-    def setStartSize(self, startSize):
-        self.__outSize = self.__inSize = startSize
-
-    def setMinLimit(self, minLimit):
-        self.__minLimit = minLimit
-        self.__k = 0.0
-
-    def update(self, inSize, ideal):
-        if inSize >= self.__inSize or self.__minLimit <= ideal:
-            self.__outSize = self.__inSize = inSize
-            self.__k = 0.0
-            return
-        if self.__k == 0.0 and inSize != ideal:
-            self.__k = (inSize - self.__minLimit) / (inSize - ideal)
-        self.__inSize = inSize
-        self.__outSize = self.__minLimit + self.__k * (self.__inSize - ideal)
-
-
 class IGunMarkerController(object):
 
     def create(self):
@@ -445,7 +416,7 @@ class IGunMarkerController(object):
     def reset(self):
         raise NotImplementedError
 
-    def update(self, markerType, position, direction, size, relaxTime, collData):
+    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
         raise NotImplementedError
 
     def setFlag(self, positive, bit):
@@ -463,10 +434,10 @@ class IGunMarkerController(object):
     def onRecreateDevice(self):
         raise NotImplementedError
 
-    def getSize(self):
+    def getSizes(self):
         raise NotImplementedError
 
-    def setSize(self, newSize):
+    def setSizes(self, newSizes):
         raise NotImplementedError
 
 
@@ -506,7 +477,7 @@ class _GunMarkersDPFactory(object):
     def _makeDefaultProvider():
         dataProvider = GUI.WGGunMarkerDataProvider()
         dataProvider.positionMatrixProvider = Math.MatrixAnimation()
-        dataProvider.setStartSize(_setupGunMarkerSizeLimits(dataProvider)[0])
+        dataProvider.setStartSizes(_setupGunMarkerSizeLimits(dataProvider)[0], 0.0)
         return dataProvider
 
     @staticmethod
@@ -591,33 +562,33 @@ class _GunMarkersDecorator(IGunMarkerController):
             self.__gunMarkersFlags |= bit
             if bit == _MARKER_FLAG.SERVER_MODE_ENABLED:
                 self.__serverMarker.setPosition(self.__clientMarker.getPosition())
-                self.__serverMarker.setSize(self.__clientMarker.getSize())
+                self.__serverMarker.setSizes(self.__clientMarker.getSizes())
         else:
             self.__gunMarkersFlags &= ~bit
 
-    def update(self, markerType, position, direction, size, relaxTime, collData):
+    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
         if markerType == _MARKER_TYPE.CLIENT:
             self.__clientState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
-                self.__clientMarker.update(markerType, position, direction, size, relaxTime, collData)
+                self.__clientMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
         elif markerType == _MARKER_TYPE.SERVER:
             self.__serverState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
-                self.__serverMarker.update(markerType, position, direction, size, relaxTime, collData)
+                self.__serverMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
         elif markerType == _MARKER_TYPE.DUAL_ACC:
             self.__dualAccState = (position, direction, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
-                self.__dualAccMarker.update(markerType, position, direction, size, relaxTime, collData)
+                self.__dualAccMarker.update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
         else:
             _logger.warning('Gun maker control is not found by type: %d', markerType)
 
     def setVisible(self, flag):
         pass
 
-    def getSize(self):
+    def getSizes(self):
         pass
 
-    def setSize(self, newSize):
+    def setSizes(self, newSizes):
         pass
 
 
@@ -649,7 +620,7 @@ class _GunMarkerController(IGunMarkerController):
     def reset(self):
         pass
 
-    def update(self, markerType, position, direction, size, relaxTime, collData):
+    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
         if self._gunMarkerType == markerType:
             self._position = position
         else:
@@ -676,10 +647,10 @@ class _GunMarkerController(IGunMarkerController):
     def setVisible(self, flag):
         pass
 
-    def getSize(self):
+    def getSizes(self):
         pass
 
-    def setSize(self, newSize):
+    def setSizes(self, newSizes):
         pass
 
     def _updateMatrixProvider(self, positionMatrix, relaxTime=0.0):
@@ -693,24 +664,22 @@ class _EmptyGunMarkerController(_GunMarkerController):
     def setPosition(self, position):
         pass
 
-    def update(self, markerType, position, direction, size, relaxTime, collData):
+    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
         pass
 
 
 class _DefaultGunMarkerController(_GunMarkerController):
     settingsCore = dependency.descriptor(ISettingsCore)
+    _OFFSET_DEFAULT_INERTNESS = 1.0
+    _OFFSET_SLOWDOWN_INERTNESS = 0.7
 
     def __init__(self, gunMakerType, dataProvider, enabledFlag=_MARKER_FLAG.UNDEFINED):
         super(_DefaultGunMarkerController, self).__init__(gunMakerType, dataProvider, enabledFlag=enabledFlag)
-        self.__replSwitchTime = 0.0
-        self.__sizeFilter = _SizeFilter()
-        self.__curSize = 0.0
+        self.__currentSize = self.__currentSizeOffset = 0.0
+        self.__offsetInertness = self._OFFSET_DEFAULT_INERTNESS
         self.__screenRatio = 0.0
 
     def create(self):
-        minSize = self._dataProvider.sizeConstraint[0]
-        self.__sizeFilter.setStartSize(minSize)
-        self.__sizeFilter.setMinLimit(0)
         self.settingsCore.interfaceScale.onScaleChanged += self.__onScaleChanged
 
     def destroy(self):
@@ -719,18 +688,14 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
     def enable(self):
         super(_DefaultGunMarkerController, self).enable()
+        self.__offsetInertness = self._OFFSET_DEFAULT_INERTNESS
         self.__updateScreenRatio()
-        replayCtrl = BattleReplay.g_replayCtrl
-        if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            self.__replSwitchTime = 0.2
 
-    def update(self, markerType, pos, direction, sizeVector, relaxTime, collData):
-        super(_DefaultGunMarkerController, self).update(markerType, pos, direction, sizeVector, relaxTime, collData)
+    def update(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
+        super(_DefaultGunMarkerController, self).update(markerType, pos, direction, size, sizeOffset, relaxTime, collData)
         positionMatrix = Math.Matrix()
         positionMatrix.setTranslate(pos)
         self._updateMatrixProvider(positionMatrix, relaxTime)
-        size = sizeVector[0]
-        idealSize = sizeVector[1]
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
             s = self._replayReader(replayCtrl)()
@@ -743,22 +708,18 @@ class _DefaultGunMarkerController(_GunMarkerController):
                 self._replayWriter(replayCtrl)(size)
         positionMatrixForScale = BigWorld.checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
         worldMatrix = _makeWorldMatrix(positionMatrixForScale)
-        currentSize = BigWorld.markerHelperScale(worldMatrix, size) * self.__screenRatio
-        idealSize = BigWorld.markerHelperScale(worldMatrix, idealSize) * self.__screenRatio
-        self.__sizeFilter.update(currentSize, idealSize)
-        self.__curSize = self.__sizeFilter.getSize()
-        if self.__replSwitchTime > 0.0:
-            self.__replSwitchTime -= relaxTime
-            self._dataProvider.updateSize(self.__curSize, 0.0)
-        else:
-            self._dataProvider.updateSize(self.__curSize, relaxTime)
+        self.__currentSize = BigWorld.markerHelperScale(worldMatrix, size) * self.__screenRatio
+        self.__currentSizeOffset = BigWorld.markerHelperScale(worldMatrix, sizeOffset) * self.__screenRatio
+        self._dataProvider.updateSizes(self.__currentSize, self.__currentSizeOffset, relaxTime, self.__offsetInertness)
+        if self.__offsetInertness == self._OFFSET_DEFAULT_INERTNESS:
+            self.__offsetInertness = self._OFFSET_SLOWDOWN_INERTNESS
 
-    def getSize(self):
-        return self.__curSize
+    def getSizes(self):
+        return (self.__currentSize, self.__currentSizeOffset)
 
-    def setSize(self, newSize):
-        self.__curSize = newSize
-        self._dataProvider.setStartSize(newSize)
+    def setSizes(self, newSizes):
+        self.__currentSize, self.__currentSizeOffset = newSizes
+        self._dataProvider.setStartSizes(*newSizes)
 
     def onRecreateDevice(self):
         self.__updateScreenRatio()
@@ -840,11 +801,11 @@ class _SPGGunMarkerController(_GunMarkerController):
         super(_SPGGunMarkerController, self).disable()
         return
 
-    def update(self, markerType, position, direction, size, relaxTime, collData):
-        super(_SPGGunMarkerController, self).update(markerType, position, direction, size, relaxTime, collData)
+    def update(self, markerType, position, direction, size, sizeOffset, relaxTime, collData):
+        super(_SPGGunMarkerController, self).update(markerType, position, direction, size, sizeOffset, relaxTime, collData)
         positionMatrix = Math.createTranslationMatrix(position)
         self._updateMatrixProvider(positionMatrix, relaxTime)
-        self._size = size[0]
+        self._size = size + sizeOffset
         self._update()
 
     def reset(self):

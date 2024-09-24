@@ -5,9 +5,10 @@ from frameworks.wulf import ViewSettings, ViewFlags
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_simple_model import SkillSimpleModel
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
-from gui.impl.gen.view_models.views.lobby.vehicle_compare.compare_skill_model import CompareSkillModel
 from gui.impl.gen.view_models.views.lobby.vehicle_compare.compare_skills_panel_view_model import CompareSkillsPanelViewModel
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillSimpleModelSetup, ModelProps
 from gui.impl.lobby.crew.tooltips.veh_cmp_skills_tooltip import VehCmpSkillsTooltip
 from gui.impl.pub import ViewImpl
 from gui.shared.event_dispatcher import showSkillSelectWindow
@@ -17,6 +18,19 @@ from items.components.skills_constants import SKILL_INDICES_ORDERED
 from skeletons.gui.app_loader import IAppLoader
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import CrewSkillsManager, VehicleCompareConfiguratorMain
+
+def compareIconGetter(skillName, **__):
+    return skillName
+
+
+def compareLevelGetter(vehicle, skillName, **__):
+    skillLevel = round(crewMemberRealSkillLevel(vehicle, skillName), 2)
+    return skillLevel
+
+
+propsGetters = {ModelProps.NAME: None,
+ ModelProps.ICON_NAME: compareIconGetter,
+ ModelProps.LEVEL: compareLevelGetter}
 
 class CompareSkillsPanelView(ViewImpl):
     __slots__ = ('__toolTipMgr', '__cmpConf')
@@ -62,11 +76,9 @@ class CompareSkillsPanelView(ViewImpl):
         with self.viewModel.transaction() as vm:
             skills = vm.getSkills()
             skills.clear()
-            for skill in skillsToShow:
-                compareSkillVM = CompareSkillModel()
-                compareSkillVM.setIcon(skill)
-                skillLevel = round(crewMemberRealSkillLevel(vehicle, skill), 2)
-                compareSkillVM.setLevel(skillLevel)
+            for skillName in skillsToShow:
+                compareSkillVM = SkillSimpleModel()
+                skillSimpleModelSetup(compareSkillVM, propsGetters, vehicle=vehicle, skillName=skillName)
                 skills.addViewModel(compareSkillVM)
 
             skills.invalidate()

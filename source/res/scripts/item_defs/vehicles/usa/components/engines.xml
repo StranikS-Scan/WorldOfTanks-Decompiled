@@ -130,7 +130,7 @@
     <Continental_AVDS_1790_2D>	156	</Continental_AVDS_1790_2D>
     <Ford_GAN_M>	157	</Ford_GAN_M>
     <Wright_Continental_R_975EC2A1>	158	</Wright_Continental_R_975EC2A1>
-    <Continental_AV-1790-7B_WT>	1001	</Continental_AV-1790-7B_WT>
+    <Continental_AV-1790-7M>	160	</Continental_AV-1790-7M>
     <Continental_AOI-628-2_IGR>	60001	</Continental_AOI-628-2_IGR>
     <Continental_AOSI-895-5_IGR>	60002	</Continental_AOSI-895-5_IGR>
     <Continental_AV-1790-3A1_IGR>	60003	</Continental_AV-1790-3A1_IGR>
@@ -157,6 +157,8 @@
     <Ford_GAA_StoryMode>	64008	</Ford_GAA_StoryMode>
     <Wright_Continental_R-975C4_StoryMode>	64009	</Wright_Continental_R-975C4_StoryMode>
     <Ford_GAA_StoryModeHard>	64010	</Ford_GAA_StoryModeHard>
+    <Ford_GAA_StoryMode_3_4>	64011	</Ford_GAA_StoryMode_3_4>
+    <Wright_Continental_R-975C4L_StoryMode>	64012	</Wright_Continental_R-975C4L_StoryMode>
   </ids>
   <shared>
     <Ford_GAC>
@@ -673,8 +675,8 @@
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	37200	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	620	</power>
       <weight>	569	</weight>
       <maxHealth>	234	</maxHealth>
@@ -1186,6 +1188,23 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2000	</rpm_max>
     </Continental_AV-1790-7C>
+    <Continental_AV-1790-7M>
+      <userString>	#usa_vehicles:Continental_AV-1790-7M	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-7M_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Continental_AV-1790-7M>
     <Continental_AV_1790_5C>
       <userString>	#usa_vehicles:Continental_AV_1790_5C	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_short	</shortUserString>
@@ -1857,16 +1876,16 @@
       <level>	10	</level>
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	960	</power>
       <weight>	1171	</weight>
       <maxHealth>	285	</maxHealth>
       <maxRegenHealth>	142	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	416	</rpm_min>
-      <rpm_max>	2848	</rpm_max>
+      <rpm_min>	471	</rpm_min>
+      <rpm_max>	2089	</rpm_max>
     </Continental_AV-1790-7B_7x7>
     <Continental_AVDS_1790_2D>
       <userString>	#usa_vehicles:Continental_AVDS_1790_2D	</userString>
@@ -1874,8 +1893,8 @@
       <tags>	gasoline	</tags>
       <level>	10	</level>
       <price>	100000	</price>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
       <power>	960	</power>
       <weight>	1171	</weight>
       <maxHealth>	285	</maxHealth>
@@ -2634,23 +2653,6 @@
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2072	</rpm_max>
     </Development_Engine>
-    <Continental_AV-1790-7B_WT>
-      <userString>	#usa_vehicles:Continental_AV-1790-7B_WT	</userString>
-      <tags>	gasoline	</tags>
-      <level>	10	</level>
-      <price>	100000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	1300	</power>
-      <weight>	1171	</weight>
-      <maxHealth>	285	</maxHealth>
-      <maxRegenHealth>	142	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	416	</rpm_min>
-      <rpm_max>	2848	</rpm_max>
-    </Continental_AV-1790-7B_WT>
     <Ford_GAN_SH>
       <userString>	#usa_vehicles:Ford_GAN_SH	</userString>
       <tags>	gasoline	</tags>
@@ -2862,5 +2864,41 @@
       <rpm_max>	2841	</rpm_max>
       <notInShop>	True	</notInShop>
     </Ford_GAA_StoryModeHard>
+    <Ford_GAA_StoryMode_3_4>
+      <userString>	#usa_vehicles:Ford_GAA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	569	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2841	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Ford_GAA_StoryMode_3_4>
+    <Wright_Continental_R-975C4L_StoryMode>
+      <userString>	#usa_vehicles:Wright_Continental_R-975C4L	</userString>
+      <shortUserString>	#usa_vehicles:Wright_Continental_R-975C4L_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	550	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <notInShop>	True	</notInShop>
+      <rpm_max>	2801	</rpm_max>
+    </Wright_Continental_R-975C4L_StoryMode>
   </shared>
 </engines.xml>

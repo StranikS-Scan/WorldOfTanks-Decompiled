@@ -546,42 +546,15 @@ class _PointsOfInterestConfig(object):
         return cls(points)
 
 
-class _EventBattleDynObjects(DynObjectsBase):
-
-    def __init__(self):
-        super(_EventBattleDynObjects, self).__init__()
-        self.__cachedIDs = []
-
-    def init(self, dataSection):
-        if self._initialized:
-            return
-        self.__cachedIDs = [ value.asString for key, value in dataSection['prefabs'].items() if key == 'path' and value.asString ]
-        if self.__cachedIDs:
-            CGF.cacheGameObjects(self.__cachedIDs, False)
-        super(_EventBattleDynObjects, self).init(dataSection)
-
-    def clear(self):
-        if self.__cachedIDs:
-            CGF.clearGameObjectsCache(self.__cachedIDs)
-        self.__cachedIDs = []
-        super(_EventBattleDynObjects, self).clear()
-
-    def getInspiringEffect(self):
-        return {}
-
-    def getHealPointEffect(self):
-        return {}
-
-
 registerDynObjCache(ARENA_GUI_TYPE.SORTIE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.FORT_BATTLE_2, _StrongholdDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.BATTLE_ROYALE, _BattleRoyaleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_BATTLE, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_TRAINING, _EpicBattleDynObjects)
+registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.COMP7, _Comp7DynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7DynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.TRAINING_COMP7, _Comp7DynObjects)
-registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EventBattleDynObjects)
 _FEATURES_CONF_STORAGES = {'KillCamEffectDynObjects': _KillCamEffectDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):

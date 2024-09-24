@@ -15,6 +15,9 @@ from constants import DEATH_ZONE_MASK_PATTERN
 _TIME_TO_STOP_FIRE_ON_LEAVE_ZONE = 5.0
 
 class StaticDeathZone(BigWorld.Entity):
+    onVehicleEntered = Event.Event()
+    onVehicleLeft = Event.Event()
+    onDamage = Event.Event()
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -65,6 +68,8 @@ class StaticDeathZone(BigWorld.Entity):
             BigWorld.cancelCallback(self.__callbackOnLeaveDeathZone)
             self.__callbackOnLeaveDeathZone = None
         g_playerEvents.onAvatarReady -= self._onAvatarReady
+        if BigWorld.player():
+            BigWorld.player().onAvatarVehicleChanged -= self._onAvatarVehicleChanged
         return
 
     def getClosestPoint(self, pos, searchRadius):
@@ -79,16 +84,20 @@ class StaticDeathZone(BigWorld.Entity):
     def onEntityEnteredInZone(self, entityID):
         if self._marker is not None:
             self._marker.onVehicleEnteredZone(entityID)
+        if self.isActive:
+            StaticDeathZone.onVehicleEntered(self.zoneId, entityID)
         return
 
     def onEntityLeftZone(self, entityID):
         if self._marker is not None:
             self._marker.onVehicleLeftZone(entityID)
+        if self.isActive:
+            StaticDeathZone.onVehicleLeft(self.zoneId, entityID)
         return
 
     def onDeathZoneNotification(self, show, entityID, timeToStrike, waveDuration):
         player = BigWorld.player()
-        if player.playerVehicleID == entityID:
+        if player.vehicle and player.vehicle.id == entityID:
             deathzonesCtrl = self.sessionProvider.shared.deathzones
             if deathzonesCtrl:
                 deathzonesCtrl.updateDeathZoneWarningNotification(self.zoneId, show, timeToStrike, waveDuration)
@@ -97,6 +106,7 @@ class StaticDeathZone(BigWorld.Entity):
 
     def onDeathZoneDamage(self, vehicleId, vfx):
         self._playDamageEffect(vehicleId, vfx)
+        StaticDeathZone.onDamage(self.zoneId, vehicleId)
 
     def _playDamageEffect(self, vehicleId, vfx):
         effects = vehicles.g_cache.getVehicleEffect(vfx)
@@ -117,25 +127,37 @@ class StaticDeathZone(BigWorld.Entity):
             self._removeMarker()
 
     def _onAvatarReady(self):
+        BigWorld.player().onAvatarVehicleChanged += self._onAvatarVehicleChanged
         if self.isActive:
             self._createMarker()
+            self._updateVehicleUnderFire()
+
+    def _onAvatarVehicleChanged(self):
+        self._updateVehicleUnderFire()
+
+    def _updateVehicleUnderFire(self):
+        deathzonesCtrl = self.sessionProvider.shared.deathzones
+        if not deathzonesCtrl:
+            return
+        else:
             vehicleUnderFire = self._getVehicleUnderFire()
-            if vehicleUnderFire is not None:
-                timeToStrike = vehicleUnderFire['nextStrikeTime']
-                if timeToStrike > 0:
-                    deathzonesCtrl = self.sessionProvider.shared.deathzones
-                    if deathzonesCtrl:
-                        deathzonesCtrl.updateDeathZoneWarningNotification(self.zoneId, True, timeToStrike, vehicleUnderFire['waveDuration'])
-                    self._warningIsVisible = True
-        return
+            timeToStrike = vehicleUnderFire['nextStrikeTime'] if vehicleUnderFire is not None else 0
+            visible = timeToStrike > 0
+            waveDuration = vehicleUnderFire['waveDuration'] if visible else 0
+            deathzonesCtrl.updateDeathZoneWarningNotification(self.zoneId, visible, timeToStrike, waveDuration)
+            self._warningIsVisible = visible
+            return
 
     def _getVehicleUnderFire(self):
-        playerVehicleId = BigWorld.player().playerVehicleID
-        for vehicleUnderFire in self.vehiclesUnderFire:
-            if vehicleUnderFire['vehicleId'] == playerVehicleId:
-                return vehicleUnderFire
+        vehicle = BigWorld.player().vehicle if BigWorld.player().vehicle else None
+        if not vehicle:
+            return
+        else:
+            for vehicleUnderFire in self.vehiclesUnderFire:
+                if vehicleUnderFire['vehicleId'] == vehicle.id:
+                    return vehicleUnderFire
 
-        return None
+            return
 
     def _onLeaveDeathZone(self, callback):
         self.__callbackOnLeaveDeathZone = None

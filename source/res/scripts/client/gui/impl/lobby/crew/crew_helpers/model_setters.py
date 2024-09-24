@@ -9,12 +9,12 @@ from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_list_model import CrewSkillListModel
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_model import CrewSkillModel
-from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_skill_model import CrewWidgetTankmanSkillModel, SkillType
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanCardState, TankmanKind, TankmanLocation, TankmanRole
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIconBackground
-from gui.shared.gui_items.Tankman import SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
+from gui.shared.gui_items.Tankman import SKILL_EFFICIENCY_UNTRAINED
 from helpers import dependency, time_utils
 from items.tankmen import MAX_SKILLS_EFFICIENCY, MAX_SKILL_LEVEL
 from skeletons.gui.game_control import ISpecialSoundCtrl
@@ -99,13 +99,15 @@ def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevel
     for skill in tman.skills:
         if skillWrapper:
             skill = skillWrapper(skill.name, skillLevel=skill.level)
-        skillVM = getCrewWidgetTmanSkillModelNPS(tman, skill, isRecruit=isRecruit)
+        skillVM = getCrewWidgetTmanSkillModelNPS(tman, skill, tman.role)
+        if isRecruit:
+            skillVM.setIsIrrelevant(False)
         if skill.isMaxLevel:
             listVM.addViewModel(skillVM)
         notFullEarnedSkillMdl = skillVM
 
     for _ in xrange(tman.newFreeSkillsCount):
-        listVM.addViewModel(getCrewWidgetTmanSkillModelNPS(tman, level=100.0, isRecruit=isRecruit))
+        listVM.addViewModel(getNewSkillCrewWidgetTmanSkillModelNPS(level=100.0))
 
     if notFullEarnedSkillMdl:
         listVM.addViewModel(notFullEarnedSkillMdl)
@@ -113,7 +115,7 @@ def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevel
         newSkillsCount, lastNewSkillLevel = getTmanNewSkillCount(tman, useOnlyFull)
         for index in xrange(newSkillsCount):
             lvl = 100.0 if index < newSkillsCount - 1 else lastNewSkillLevel.intSkillLvl
-            listVM.addViewModel(getCrewWidgetTmanSkillModelNPS(tman, level=lvl, isRecruit=isRecruit))
+            listVM.addViewModel(getNewSkillCrewWidgetTmanSkillModelNPS(level=lvl))
 
     if possibleSkillsLevels is not None:
         currSkillsCount, possibleSkillsCount, _, possibleLastSkillLevel = possibleSkillsLevels
@@ -122,7 +124,7 @@ def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevel
             newSkillsCount = possibleSkillsCount - currSkillsCount
             for index in xrange(newSkillsCount):
                 lvl = 100.0 if index < newSkillsCount - 1 else possibleLastSkillLevel.formattedSkillLvl
-                listVM.addViewModel(getCrewWidgetTmanSkillModelNPS(tman, level=lvl, isRecruit=isRecruit))
+                listVM.addViewModel(getNewSkillCrewWidgetTmanSkillModelNPS(level=lvl))
 
         elif possibleLastSkillLevel.realSkillLvl != -1:
             listVM.getValue(len(listVM) - 1).setLevel(possibleLastSkillLevel.formattedSkillLvl)
@@ -142,12 +144,15 @@ def setTmanBonusSkillsModel(listVM, tman, bonusSlotsLevels=None, selectedRole=No
                 skillName = selectedSkills[selectedSkillIndex]
                 skillVM = CrewSkillModel()
                 skillVM.setName(selectedSkills[selectedSkillIndex])
-                skillVM.setIcon(selectedSkills[selectedSkillIndex])
+                skillVM.setIconName(selectedSkills[selectedSkillIndex])
                 skillVM.setLevel(lvl)
                 selectedSkillIndex += 1
             else:
                 skillName = skill.name if skill else None
-                skillVM = getCrewWidgetTmanSkillModelNPS(tman, skill, level=lvl, isMajorSkill=False)
+                if skill is None:
+                    skillVM = getNewSkillCrewWidgetTmanSkillModelNPS(level=lvl)
+                else:
+                    skillVM = getCrewWidgetTmanSkillModelNPS(tman, skill, role, level=lvl)
             key = 'full' if lvl == MAX_SKILL_LEVEL else 'notfull'
             if skillName:
                 selected[key].append(skillVM)
@@ -161,42 +166,21 @@ def setTmanBonusSkillsModel(listVM, tman, bonusSlotsLevels=None, selectedRole=No
     return
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getCrewWidgetTmanSkillModelNPS(tman, skill=None, isFreeSkill=False, level=None, itemsCache=None, isMajorSkill=True, isRecruit=False):
+def getCrewWidgetTmanSkillModelNPS(tman, skill, role, level=None):
     skillVM = CrewSkillModel()
-    if skill is None:
-        skillVM.setName(CrewConstants.NEW_SKILL)
-        skillVM.setIcon(CrewConstants.NEW_SKILL)
-        if level:
-            skillVM.setLevel(level)
-    else:
-        skillVM.setName(skill.name)
-        skillVM.setIcon(skill.extensionLessIconName)
-        skillVM.setLevel(level if level and level > skill.level else skill.level)
-        skillVM.setCustomName(skill.customName)
-        if isRecruit:
-            skillVM.setIsIrrelevant(False)
-        else:
-            skillVM.setIsIrrelevant(isMajorSkill and not (isFreeSkill or skill.isRelevantForRole(tman.descriptor.role)))
-        hasBoosters = getBattleBooster(itemsCache.items.getVehicle(tman.vehicleInvID), skill.name) is not None
-        skillVM.setHasInstruction(hasBoosters)
+    skillLevel = level if level and level > skill.level else skill.level
+    skillModelSetup(skillVM, skill=skill, role=role, tankman=tman, skillLevel=skillLevel)
+    skillVM.setCustomName(skill.customName)
     return skillVM
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def getCrewWidgetTmanSkillModel(tman, skill=None, isFreeSkill=False, itemsCache=None):
-    tsm = CrewWidgetTankmanSkillModel()
-    if skill is None:
-        tsm.setType(SkillType.NEW)
-        tsm.setIcon(CrewConstants.NEW_SKILL)
-        return tsm
-    else:
-        tsm.setName(skill.name)
-        tsm.setIcon(skill.extensionLessIconName)
-        tsm.setType(SkillType.IRRELEVANT if not isFreeSkill and not skill.isRelevantForRole(tman.descriptor.role) else (SkillType.LEARNED if skill.isMaxLevel else (SkillType.LEARNING if skill.level < MAX_SKILL_LEVEL else SkillType.LEARNED)))
-        hasBoosters = getBattleBooster(itemsCache.items.getVehicle(tman.vehicleInvID), skill.name) is not None
-        tsm.setHasInstruction(hasBoosters)
-        return tsm
+def getNewSkillCrewWidgetTmanSkillModelNPS(level=None):
+    skillVM = CrewSkillModel()
+    skillVM.setName(CrewConstants.NEW_SKILL)
+    skillVM.setIconName(CrewConstants.NEW_SKILL)
+    if level:
+        skillVM.setLevel(level)
+    return skillVM
 
 
 def setReplacedTankmanModel(tm, tman, tmanNativeVeh):

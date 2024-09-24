@@ -30,8 +30,7 @@ def isSituationalBonus(bonusName, bonusType='', paramName=''):
 
 _SITUATIONAL_BONUSES = ('camouflageNet', 'stereoscope', 'removedRpmLimiter', 'radioman_expert', 'radioman_sideBySide', 'commander_emergency')
 CREW_MASTERY_BONUSES = ('radioman_expert', 'radioman_sideBySide', 'commander_emergency')
-_PARTIALLY_SITUATIONAL_BONUSES = {'lastEffortBattleBooster': KPI.Name.RADIOMAN_ACTIVITY_TIME_AFTER_VEHICLE_DESTROY,
- 'enemyShotPredictorBattleBooster': KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
+_PARTIALLY_SITUATIONAL_BONUSES = {'enemyShotPredictorBattleBooster': KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  'rancorousBattleBooster': KPI.Name.DAMAGED_MODULES_DETECTION_TIME}
 
 def _removeCamouflageModifier(vehicle, bonusID):
@@ -115,9 +114,7 @@ _NOT_STACK_BONUSES = {'circularVisionRadius': (('stereoscope_tier1', BonusTypes.
  'vehicleGunShotDispersionTurretRotation': (('smoothTurretBattleBooster', BonusTypes.BATTLE_BOOSTER),),
  'vehicleGunShotDispersionChassisMovement': (('smoothDrivingBattleBooster', BonusTypes.BATTLE_BOOSTER),),
  'vehicleEnemySpottingTime': (('rancorousBattleBooster', BonusTypes.BATTLE_BOOSTER),),
- 'vehicleAmmoBayStrength': (('pedantBattleBooster', BonusTypes.BATTLE_BOOSTER),),
- 'radiomanHitChance': (('lastEffortBattleBooster', BonusTypes.BATTLE_BOOSTER),),
- 'radiomanActivityTimeAfterVehicleDestroy': (('lastEffortBattleBooster', BonusTypes.BATTLE_BOOSTER),)}
+ 'vehicleAmmoBayStrength': (('pedantBattleBooster', BonusTypes.BATTLE_BOOSTER),)}
 
 class _BonusSorter(object):
 

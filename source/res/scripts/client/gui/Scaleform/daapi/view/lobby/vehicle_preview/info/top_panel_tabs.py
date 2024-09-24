@@ -88,7 +88,8 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         command = _TAB_COMMAND.get(self.__currentTabID)
         if callable(command):
             backCallback = self.__parentCtx.get('backCallback') or self.__parentCtx.get('previewBackCb')
-            command(self.__parentCtx.get('itemCD'), style=self.__style if self.__currentTabID == TabID.STYLE else None, topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback)
+            commandCtx = self.__getBackBtnLabel()
+            command(self.__parentCtx.get('itemCD'), style=(self.__style if self.__currentTabID == TabID.STYLE else None), topPanelData=self.__makeTopPanelData(), itemsPack=self.__parentCtx.get('itemsPack'), backCallback=backCallback, **commandCtx)
         elif self.__currentTabID in PERSONAL_NUMBER_STYLE_TABS:
             self.__processPersonalNumberStyleTab()
         return
@@ -104,3 +105,12 @@ class VehiclePreviewTopPanelTabsView(ViewImpl):
         g_currentPreviewVehicle.selectNoVehicle()
         g_currentPreviewVehicle.selectVehicle(self.__parentCtx.get('itemCD'), style=style)
         return
+
+    def __getBackBtnLabel(self):
+        backBtnLabel = self.__parentCtx.get('backBtnLabel') or self.__parentCtx.get('backBtnDescrLabel')
+        if backBtnLabel is not None and backBtnLabel:
+            if self.__currentTabID == TabID.STYLE:
+                return {'backBtnDescrLabel': backBtnLabel}
+            if self.__currentTabID == TabID.VEHICLE:
+                return {'backBtnLabel': backBtnLabel}
+        return {}

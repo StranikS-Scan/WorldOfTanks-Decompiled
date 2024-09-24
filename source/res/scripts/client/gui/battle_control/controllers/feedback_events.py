@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/feedback_events.py
 import logging
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE as _BET, NONE_SHELL_TYPE
+from DamageComponents import DamageZoneType
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _FET
 from constants import ATTACK_REASON, ATTACK_REASONS, BATTLE_LOG_SHELL_TYPES, ROLE_TYPE, ROLE_TYPE_TO_LABEL
 _logger = logging.getLogger(__name__)
@@ -76,9 +77,9 @@ def _getShellType(shellTypeID):
 
 
 class _DamageExtra(object):
-    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID', '__isRoleAction', '__isAutoShoot')
+    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID', '__isRoleAction', '__isAutoShoot', '__attackReasonExtID')
 
-    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isRoleAction=False, isAutoShoot=False):
+    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isRoleAction=False, isAutoShoot=False, attackReasonExtID=-1):
         super(_DamageExtra, self).__init__()
         self.__damage = damage
         self.__attackReasonID = attackReasonID
@@ -88,6 +89,7 @@ class _DamageExtra(object):
         self.__secondaryAttackReasonID = secondaryAttackReasonID
         self.__isRoleAction = bool(isRoleAction)
         self.__isAutoShoot = bool(isAutoShoot)
+        self.__attackReasonExtID = attackReasonExtID
         _logger.debug('_DamageExtra isRoleAction = %s', isRoleAction)
 
     def getDamage(self):
@@ -147,12 +149,6 @@ class _DamageExtra(object):
     def isFortArtilleryEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.FORT_ARTILLERY_EQ)
 
-    def isCircuitOverload(self, primary=True):
-        return self.isAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD) if primary else self.isSecondaryAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD)
-
-    def isDamageByHyperion(self, primary=True):
-        return self.isAttackReason(ATTACK_REASON.HYPERION) if primary else self.isSecondaryAttackReason(ATTACK_REASON.HYPERION)
-
     def isBomberEq(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
 
@@ -179,6 +175,13 @@ class _DamageExtra(object):
 
     def isDestroyerStrike(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.DESTROYER) if primary else self.isSecondaryAttackReason(ATTACK_REASON.DESTROYER)
+
+    def isFireDamageZone(self, primary=True):
+        if self.__attackReasonExtID == int(DamageZoneType.FIRE_DAMAGE_ZONE):
+            if primary:
+                return self.isAttackReason(ATTACK_REASON.DAMAGE_ZONE)
+            return self.isSecondaryAttackReason(ATTACK_REASON.DAMAGE_ZONE)
+        return False
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
@@ -244,9 +247,9 @@ class _MultiStunExtra(object):
 
 
 class _CritsExtra(object):
-    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID', '__isAutoShoot')
+    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID', '__isAutoShoot', '__attackReasonExtID')
 
-    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isAutoShoot=False):
+    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0, isAutoShoot=False, attackReasonExtID=-1):
         super(_CritsExtra, self).__init__()
         self.__critsCount = critsCount
         self.__attackReasonID = attackReasonID
@@ -254,6 +257,7 @@ class _CritsExtra(object):
         self.__isShellGold = bool(shellIsGold)
         self.__secondaryAttackReasonID = secondaryAttackReasonID
         self.__isAutoShoot = isAutoShoot
+        self.__attackReasonExtID = attackReasonExtID
 
     def getCritsCount(self):
         return self.__critsCount
@@ -284,12 +288,6 @@ class _CritsExtra(object):
 
     def isThunderStrike(self):
         return self.isAttackReason(ATTACK_REASON.THUNDER_STRIKE)
-
-    def isCircuitOverload(self):
-        return self.isAttackReason(ATTACK_REASON.CIRCUIT_OVERLOAD)
-
-    def isDamageByHyperion(self):
-        return self.isAttackReason(ATTACK_REASON.HYPERION)
 
     def isRam(self):
         return self.isAttackReason(ATTACK_REASON.RAM)
@@ -329,6 +327,13 @@ class _CritsExtra(object):
 
     def isDestroyerStrike(self, primary=True):
         return self.isAttackReason(ATTACK_REASON.DESTROYER) if primary else self.isSecondaryAttackReason(ATTACK_REASON.DESTROYER)
+
+    def isFireDamageZone(self, primary=True):
+        if self.__attackReasonExtID == int(DamageZoneType.FIRE_DAMAGE_ZONE):
+            if primary:
+                return self.isAttackReason(ATTACK_REASON.DAMAGE_ZONE)
+            return self.isSecondaryAttackReason(ATTACK_REASON.DAMAGE_ZONE)
+        return False
 
     def isSecondaryAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason

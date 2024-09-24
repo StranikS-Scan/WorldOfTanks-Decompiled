@@ -4,27 +4,36 @@ import ResMgr
 import section2dict
 import typing
 from dict2model import models, schemas, fields, validate
+from story_mode_common.configs.sounds_schema import SoundModel, SoundSchema
 INTRO_VIDEO_SETTINGS_PATH = 'story_mode/gui/intro_video.xml'
 
-class SoundEventsModel(models.Model):
-    __slots__ = ('start', 'pause', 'resume', 'stop')
+class SoundEventsModel(SoundModel):
+    __slots__ = ('pause', 'resume')
 
-    def __init__(self, start, pause, resume, stop):
-        super(SoundEventsModel, self).__init__()
-        self.start = start
+    def __init__(self, start, pause, resume, stop, group, state):
+        super(SoundEventsModel, self).__init__(start, stop, group, state)
         self.pause = pause
         self.resume = resume
-        self.stop = stop
 
+
+class SoundEventsSchema(SoundSchema[SoundEventsModel]):
+
+    def __init__(self):
+        super(SoundEventsSchema, self).__init__(fields={'pause': fields.String(required=True, default=''),
+         'resume': fields.String(required=True, default='')}, checkUnknown=True, modelClass=SoundEventsModel)
+
+
+soundEventsSchema = SoundEventsSchema()
 
 class VideoModel(models.Model):
-    __slots__ = ('id', 'videoPath', 'music', 'vo')
+    __slots__ = ('id', 'videoPath', 'music', 'playSoundOnClose', 'vo')
 
-    def __init__(self, id, videoPath, music, vo):
+    def __init__(self, id, videoPath, music, playSoundOnClose, vo):
         super(VideoModel, self).__init__()
         self.id = id
         self.videoPath = videoPath
         self.music = music
+        self.playSoundOnClose = playSoundOnClose
         self.vo = vo
 
 
@@ -36,13 +45,10 @@ class IntroVideoSettingsModel(models.Model):
         self.missions = missions
 
 
-soundEventSchema = schemas.Schema(fields={'start': fields.String(required=False, default=''),
- 'pause': fields.String(required=False, default=''),
- 'resume': fields.String(required=False, default=''),
- 'stop': fields.String(required=False, default='')}, modelClass=SoundEventsModel, checkUnknown=True)
 videoSchema = schemas.Schema(fields={'id': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=1)),
  'videoPath': fields.String(required=True),
- 'music': fields.Nested(soundEventSchema, required=True),
+ 'music': fields.Nested(soundEventsSchema, required=True),
+ 'playSoundOnClose': fields.String(required=False),
  'vo': fields.String(required=True)}, modelClass=VideoModel, checkUnknown=True)
 introVideoSchema = schemas.Schema(fields={'missions': fields.UniCapList(fieldOrSchema=videoSchema, required=True, deserializedValidators=validate.Length(minValue=1))}, modelClass=IntroVideoSettingsModel, checkUnknown=True)
 __introVideoSchema = None

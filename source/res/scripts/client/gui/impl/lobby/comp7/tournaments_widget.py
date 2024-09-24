@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/tournaments_widget.py
 import logging
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.Scaleform.daapi.view.meta.EventTournamentBannerInjectMeta import EventTournamentBannerInjectMeta
+from gui.Scaleform.daapi.view.meta.CarouselBannerInjectMeta import CarouselBannerInjectMeta
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.tournaments_widget_model import TournamentsWidgetModel, TournamentsState
 from gui.impl.pub import ViewImpl
@@ -13,7 +13,7 @@ _logger = logging.getLogger(__name__)
 WIDGET_TO_TOURNAMENT_STATE = {'active': TournamentsState.ACTIVE,
  'registration': TournamentsState.REGISTRATION}
 
-class TournamentsWidgetComponent(EventTournamentBannerInjectMeta):
+class TournamentsWidgetComponent(CarouselBannerInjectMeta):
     __slots__ = ('__view',)
 
     def __init__(self):

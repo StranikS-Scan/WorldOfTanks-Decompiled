@@ -75,7 +75,7 @@ def onBattleRoyalePrerequisites(vehicle, oldTypeDescriptor, forceReloading):
                 if player.isObserver():
                     vehicle.guiSessionProvider.shared.ammo.clearAmmo()
                     vehicle.guiSessionProvider.shared.ammo.setGunSettings(newModule)
-                player.gunRotator.switchActiveGun(0)
+                player.gunRotator.switchActiveGun([0])
 
     if forceReloading:
         vehicle.isForceReloading = True

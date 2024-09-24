@@ -460,6 +460,7 @@ class DecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed = self.writeBase(item, section)
         changed |= rewriteBool(section, 'mirror', item, 'canBeMirrored')
         changed |= self.writeBaseGroup(item, section)
+        changed |= rewriteEmissionParams(section, item)
         if _needWrite(item, 'type'):
             if group:
                 if group.type != item.type:
@@ -480,6 +481,7 @@ class ProjectionDecalXmlWriter(BaseCustomizationItemXmlWriter):
         changed |= rewriteBool(section, 'mirror', item, 'canBeMirroredHorizontally')
         changed |= rewriteString(section, 'glossTexture', item, 'glossTexture', getDefaultGlossTexture())
         changed |= rewriteInt(section, 'scaleFactorId', item, 'scaleFactorId', DEFAULT_SCALE_FACTOR_ID)
+        changed |= rewriteEmissionParams(section, item)
         changed |= self.writeBaseGroup(item, section)
         return changed
 
@@ -498,6 +500,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteCamouflageTiling(section, item)
             changed |= rewriteCamouflageTilingSettings(section, item)
             changed |= rewriteCamouflageGlossMetallicSettings(section, item)
+            changed |= rewriteEmissionParams(section, item)
         return changed
 
 
@@ -1123,6 +1126,18 @@ def rewriteCamouflageGlossMetallicSettings(section, camouflageItem):
         changed |= section.deleteSection('metallic')
         changed |= _xml.rewriteString(section, 'glossMetallicMap', camouflageItem.glossMetallicSettings['glossMetallicMap'])
     return changed
+
+
+def rewriteEmissionParams(section, item):
+    if item.emissionParams is None or item.emissionParams.emissionTexture == '':
+        return section.deleteSection('emission')
+    else:
+        changed = False
+        emissionSection = findOrCreate(section, 'emission')
+        changed |= rewriteString(emissionSection, 'emission_texture', item, 'emissionParams.emissionTexture', '')
+        changed |= rewriteFloat(emissionSection, 'emission_deferred_power', item, 'emissionParams.emissionDeferredPower', 1.0)
+        changed |= rewriteFloat(emissionSection, 'emission_forward_power', item, 'emissionParams.emissionForwardPower', 1.0)
+        return changed
 
 
 def encodeFlagEnum(enumClass, intValue):

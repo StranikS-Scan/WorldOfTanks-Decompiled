@@ -361,7 +361,7 @@ class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider
          self._getSearchCriteria()]
 
     def _getInitialFilterCriteria(self):
-        return ~REQ_CRITERIA.TANKMAN.VEHICLE_BATTLE_ROYALE | ~REQ_CRITERIA.TANKMAN.VEHICLE_HIDDEN_IN_HANGAR
+        return ~REQ_CRITERIA.TANKMAN.VEHICLE_BATTLE_ROYALE | ~REQ_CRITERIA.TANKMAN.VEHICLE_HIDDEN_IN_HANGAR | ~REQ_CRITERIA.TANKMAN.VEHICLE_EVENT_BATTLES
 
     def _getFilterByVehicleTypeCriteria(self):
         vehicleTypes = self._state[ToggleGroupType.VEHICLETYPE.value]

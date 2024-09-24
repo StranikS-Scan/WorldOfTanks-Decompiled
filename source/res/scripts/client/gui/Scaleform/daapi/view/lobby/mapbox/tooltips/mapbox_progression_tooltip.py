@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/mapbox/tooltips/mapbox_progression_tooltip.py
 import logging
-import string
 from gui.impl.gen import R
 from gui.impl import backport
+from gui.impl.gen_utils import INVALID_RES_ID
+from gui.mapbox.mapbox_helpers import getTillTimeString, prepareProgressionData
 from gui.Scaleform.genConsts.PROGRESSCOLOR_CONSTANTS import PROGRESSCOLOR_CONSTANTS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.daapi.view.lobby.mapbox import mapbox_helpers
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.tooltips.formatters import RENDERERS_ALIGN_CENTER
 from helpers import dependency
 from skeletons.gui.game_control import IMapboxController
 _logger = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ _IMG_PATH = R.images.gui.maps.icons.mapbox
 _STR_PATH = R.strings.mapbox.questFlag
 _MAPS_IN_ROW = 3
 _MAX_MAPS_IN_ROW = 4
-_NAME_MAPPING = {'all': 'all'}
+_MAP_ICON_SIZE = (54, 54)
 
 class MapboxProgressionTooltip(BlocksTooltipData):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
@@ -41,24 +42,21 @@ class MapboxProgressionTooltip(BlocksTooltipData):
 
     def __packHeaderBlock(self):
         header = backport.text(R.strings.tooltips.battleTypes.mapbox.header())
-        timeLeftStr = text_styles.stats(mapbox_helpers.getTillTimeString(self.__mapboxCtrl.getEventEndTimestamp()))
+        timeLeftStr = text_styles.stats(getTillTimeString(self.__mapboxCtrl.getEventEndTimestamp()))
         body = backport.text(R.strings.menu.headerButtons.battle.types.mapbox.extra.endsIn(), timeLeft=timeLeftStr)
         return formatters.packImageTextBlockData(title=text_styles.highTitle(header), desc=text_styles.main(body), img=backport.image(_IMG_PATH.quests.tooltip_header_bg()), txtOffset=1, txtPadding=formatters.packPadding(top=15, left=17), padding=formatters.packPadding(bottom=-10))
 
     def __packMapsProgressionBlock(self, progressionData):
         items = []
         mapVOs = []
-        sortedProgressionData = sorted(progressionData.surveys.items(), key=lambda item: (item[0].startswith(tuple(string.digits)), item[0]))
+        actualSeason = self.__mapboxCtrl.getCurrentSeason()
+        validMaps = self.__mapboxCtrl.getModeSettings().geometryIDs[actualSeason.getSeasonID()]
+        sortedProgressionData = prepareProgressionData(progressionData.surveys, validMaps)
         passedSurveys = 0
         for mapName, mapData in sortedProgressionData:
             counter = backport.text(_STR_PATH.counter(), progress=text_styles.bonusPreviewText(min(mapData.progress, mapData.total)), total=mapData.total) if not mapData.passed else ''
-            iconPath = _IMG_PATH.progressionTooltip.dyn(self.__formatMapName(_NAME_MAPPING.get(mapName, mapName)))()
-            if iconPath == -1:
-                _logger.error('Invalid icon for map with name %s', mapName)
-                icon = ''
-            else:
-                icon = backport.image(iconPath)
-            mapVOs.append({'icon': icon,
+            iconPath = _IMG_PATH.progressionTooltip.num(mapName, _IMG_PATH.progressionTooltip.dyn(mapName))()
+            mapVOs.append({'icon': backport.image(iconPath) if iconPath != INVALID_RES_ID else '',
              'count': counter,
              'isCompleted': mapData.passed})
             if mapData.passed:
@@ -70,17 +68,16 @@ class MapboxProgressionTooltip(BlocksTooltipData):
             progressStyle = text_styles.bonusPreviewText
         countStr = backport.text(_STR_PATH.counter(), progress=progressStyle(passedSurveys), total=text_styles.main(len(sortedProgressionData)))
         items.append(formatters.packTextBlockData(text_styles.stats(backport.text(_STR_PATH.surveysTitle(), count=countStr)), padding=formatters.packPadding(left=17)))
-        columnWidth = 60
+        iconBorders = 2
+        columnWidth = _MAP_ICON_SIZE[0] + iconBorders
+        rowHeight = _MAP_ICON_SIZE[1] + iconBorders
         horizontalGap = 10
-        sublists = self.__getMapsSublistsWithPaddings(mapVOs, columnWidth, horizontalGap, defaultPaddind=42)
-        for leftPadding, mapsList in sublists:
-            items.append(formatters.packMapBoxBlockData(mapsList, columnWidth, 60, padding=formatters.packPadding(left=leftPadding, top=8), horizontalGap=horizontalGap))
+        paddingTop = 8
+        sublists = self.__getMapsSublists(mapVOs)
+        for mapsList in sublists:
+            items.append(formatters.packMapBoxBlockData(mapsList, columnWidth, rowHeight, padding=formatters.packPadding(top=paddingTop), horizontalGap=horizontalGap, renderersAlign=RENDERERS_ALIGN_CENTER))
 
         return formatters.packBuildUpBlockData(items)
-
-    @staticmethod
-    def __formatMapName(mapName):
-        return 'c_' + mapName if mapName.startswith(tuple(string.digits)) else mapName
 
     @staticmethod
     def __packTotalProgressionBlock(progressionData):
@@ -106,23 +103,7 @@ class MapboxProgressionTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(items, padding=formatters.packPadding(top=20, left=18))
 
     @staticmethod
-    def __getMapsSublistsWithPaddings(mapsVOs, columnWidth, horizontalGap, defaultPaddind):
-        result = []
+    def __getMapsSublists(mapsVOs):
         mapsCount = len(mapsVOs)
-        if mapsCount % _MAX_MAPS_IN_ROW == 0:
-            subListsFullCount = mapsCount / _MAX_MAPS_IN_ROW
-            for _ in range(subListsFullCount):
-                subList = [ mapsVOs.pop(0) for _ in range(_MAX_MAPS_IN_ROW) ]
-                result.append((defaultPaddind, subList))
-
-        else:
-            subListsFullCount = mapsCount / _MAPS_IN_ROW
-            fullRowLeftPadding = defaultPaddind + columnWidth / 2 + horizontalGap / 2
-            for _ in range(subListsFullCount):
-                subList = [ mapsVOs.pop(0) for _ in range(_MAPS_IN_ROW) ]
-                result.append((fullRowLeftPadding, subList))
-
-            if mapsVOs:
-                restLeftPadding = defaultPaddind + columnWidth + horizontalGap
-                result.append((restLeftPadding, mapsVOs))
-        return result
+        itemsInOneRow = _MAX_MAPS_IN_ROW if mapsCount % _MAX_MAPS_IN_ROW == 0 else _MAPS_IN_ROW
+        return [ mapsVOs[rowNumber:rowNumber + itemsInOneRow] for rowNumber in range(0, mapsCount, itemsInOneRow) ]

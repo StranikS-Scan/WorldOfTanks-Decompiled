@@ -115,10 +115,10 @@ class ModeSelectorItem(object):
 
     def handleInfoPageClick(self):
         url = self._urlProcessing(GUI_SETTINGS.lookup(getInfoPageKey(self.modeName)))
-        showBrowserOverlayView(url, VIEW_ALIAS.BROWSER_OVERLAY, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
+        showBrowserOverlayView(url, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
     def _onInitializing(self):
-        self.viewModel.setIsDisabled(self._isDisabled())
+        self.viewModel.setIsDisabled(self._getIsDisabled())
         self.viewModel.setIsNew(self._isNewLabelVisible())
         self.viewModel.setIsInfoIconVisible(self._isInfoIconVisible())
         self.viewModel.setModeName(self.modeName)
@@ -130,9 +130,6 @@ class ModeSelectorItem(object):
     def _isNewLabelVisible(self):
         isNewbie = not self.__limitedUIController.isRuleCompleted(LUI_RULES.ModeSelectorWidgetsBtnHint)
         return self._getIsNew() and not isNewbie
-
-    def _isDisabled(self):
-        return self._getIsDisabled()
 
     def _onDisposing(self):
         pass
@@ -224,6 +221,7 @@ class ModeSelectorNormalCardItem(ModeSelectorItem):
         if rewardID == ModeSelectorRewardID.VEHICLE:
             item.setVehicleLevel(params.get('level', ''))
             item.setVehicleType(params.get('type', ''))
+            item.setIsPremium(params.get('isPremium', False))
         self.viewModel.getRewardList().addViewModel(item)
         return
 

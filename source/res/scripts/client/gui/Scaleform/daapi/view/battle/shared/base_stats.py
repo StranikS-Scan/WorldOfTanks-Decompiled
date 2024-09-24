@@ -4,9 +4,14 @@ from gui.Scaleform.daapi.view.meta.StatsBaseMeta import StatsBaseMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from uilogging.player_satisfaction_rating.loggers import InviteToPlatoonLogger
 
 class StatsBase(StatsBaseMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self):
+        super(StatsBase, self).__init__()
+        self._logger = InviteToPlatoonLogger()
 
     @property
     def hasTabs(self):
@@ -15,7 +20,8 @@ class StatsBase(StatsBaseMeta):
     def acceptSquad(self, sessionID):
         self.sessionProvider.invitations.accept(sessionID)
 
-    def addToSquad(self, sessionID):
+    def addToSquad(self, sessionID, source):
+        self._logger.logPlatoonInvite(source)
         self.sessionProvider.invitations.send(sessionID)
 
     def onToggleVisibility(self, isVisible):

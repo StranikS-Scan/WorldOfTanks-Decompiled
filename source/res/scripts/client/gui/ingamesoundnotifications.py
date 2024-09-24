@@ -3,7 +3,7 @@
 from random import randrange
 from functools import partial
 from collections import namedtuple
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_DEBUG
 import Math
 import BigWorld
 import ResMgr
@@ -11,21 +11,30 @@ import BattleReplay
 import Event
 import SoundGroups
 import VSE
+import WWISE
 from helpers import isPlayerAvatar
-import importlib
+from account_helpers import AccountSettings
+from account_helpers.settings_core.settings_constants import SOUND
+from visual_script_client.contexts.sound_notifications_context import SoundNotificationsContext
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
+_ENABLE_VO_LOGS = False
+_SUBTITLE_PREFIX = '#'
+_SUBTITLES_END_MARKER = '#end'
+
+def LOG_VO(msg, *kargs, **kwargs):
+    if _ENABLE_VO_LOGS:
+        LOG_DEBUG('[SOUND][VO] {}'.format(msg), *kargs, **kwargs)
+
 
 class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     __EVENTS_PATH = 'gui/sound_notifications.xml'
     __CIRCUMSTANCES_PATH = 'gui/sound_circumstances.xml'
     __DEFAULT_LIFETIME = 3.0
     __TICK_DELAY = 0.5
-    __WT_SOUND_NOTIFICATIONS_PLAN = 'wtSoundNotifications'
-    __VO_NOTIFICATION_USING_SOUND_GROUPS = ('wt_both_vo_w_win', 'wt_both_vo_hunters_win')
     QueueItem = namedtuple('QueueItem', ('eventName', 'priority', 'time', 'vehicleID', 'checkFn', 'position', 'boundVehicleID'))
     PlayingEvent = namedtuple('PlayingEvent', ('eventName', 'vehicle', 'position', 'boundVehicle', 'is2D'))
 
-    def __init__(self, arenaType):
+    def __init__(self):
         CallbackDelayer.__init__(self)
         TimeDeltaMeter.__init__(self)
         self.__isEnabled = False
@@ -40,22 +49,22 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self.__circumstancesGroupsWeights = {}
         self.__playingEvents = {}
         self.__queues = {}
+        self._currentSubtitle = ''
         self.onPlayEvent = Event.Event()
         self.onAddEvent = Event.Event()
+        self.onSubtitleShow = Event.Event()
+        self.onSubtitleHide = Event.Event()
         self.__readConfigs()
-        planPath = arenaType.soundNotificationsPlan
-        planContextPath = arenaType.soundNotificationsContext
-        self.__vseContextClass = self.__importVSEContextClass(planContextPath)
         self._vsePlan = VSE.Plan()
-        self._vsePlan.load(planPath, 'CLIENT')
+        self._vsePlan.load('soundNotifications', 'CLIENT')
         self.__soundNotificationsContext = None
-        self.__isWtArenaActive = True if self.__WT_SOUND_NOTIFICATIONS_PLAN == planPath else False
         return
 
     def start(self):
         self.__enabledSoundCategories = set(('fx', 'voice'))
         self.__isEnabled = True
-        self.__soundNotificationsContext = self.__vseContextClass()
+        self.__soundNotificationsContext = SoundNotificationsContext()
+        WWISE.WW_addMarkerListener(self._soundMarkerHandler)
         self._vsePlan.setContext(self.__soundNotificationsContext)
         self._vsePlan.start()
         self.measureDeltaTime()
@@ -66,6 +75,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         self.__isEnabled = False
         self._vsePlan.stop()
         self._vsePlan = None
+        WWISE.WW_removeMarkerListener(self._soundMarkerHandler)
         if self.__soundNotificationsContext is not None:
             self.__soundNotificationsContext.destroy()
             self.__soundNotificationsContext = None
@@ -88,78 +98,81 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     def setRemapping(self, remap):
         self.__remappedNotifications = remap
 
-    def play(self, eventName, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
+    def play(self, vo, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
+        LOG_VO('Request: "{}"'.format(vo))
         if self.__checkPause():
+            LOG_VO('Request "{}" is rejected. Reason: {}'.format(vo, 'pause'))
             return
         else:
-            eventName = self.__remappedNotifications.get(eventName, eventName)
+            eventName = self.__remappedNotifications.get(vo, vo)
             if eventName is None:
+                LOG_VO('Request "{}" is rejected. Reason: {}'.format(vo, 'remapping with empty'))
                 return
+            if vo in self.__remappedNotifications:
+                LOG_VO('"{}" is overrode with "{}"'.format(vo, eventName))
             event = self.__events.get(eventName, None)
             if event is None:
                 LOG_WARNING("Couldn't find %s event" % eventName)
+                LOG_VO('Request "{}" is rejected. Reason: {}'.format(eventName, 'missed in sound_notifications.xml'))
                 return
             if 'chance' in event and randrange(1, 100) > int(event['chance']):
+                LOG_VO('Request "{}" is rejected. Reason: {}'.format(eventName, 'chance'))
                 return
             self.__playFX(eventName, vehicleID, position)
-            if 'queue' not in event or not self.isCategoryEnabled('voice'):
+            isQueueSpecified = 'queue' not in event
+            if isQueueSpecified or not self.isCategoryEnabled('voice'):
+                if 'fxEvent' not in event:
+                    LOG_VO('Request "{}" is rejected. Reason: {}'.format(vo, 'queue is not specified' if isQueueSpecified else 'voices are disabled'))
                 return
             predelay = float(event['predelay']) if 'predelay' in event else 0
             BigWorld.callback(predelay, partial(self.__playDelayed, eventName, vehicleID, checkFn, position, boundVehicleID))
             return
 
     def __playDelayed(self, eventName, vehicleID=None, checkFn=None, position=None, boundVehicleID=None):
-        if self.__isWtArenaActive and not self.isCategoryEnabled('voice'):
-            return
-        else:
-            event = self.__events.get(eventName, None)
-            queueNum = int(event['queue'])
-            priority = int(self.getEventInfo(eventName, 'priority'))
-            queueItem = self.QueueItem(eventName, priority, BigWorld.time(), vehicleID, checkFn, position, boundVehicleID)
-            index = 0
-            for item in self.__queues[queueNum]:
-                if item.priority < queueItem.priority:
-                    break
-                index += 1
+        event = self.__events.get(eventName, None)
+        queueNum = int(event['queue'])
+        priority = int(self.getEventInfo(eventName, 'priority'))
+        queueItem = self.QueueItem(eventName, priority, BigWorld.time(), vehicleID, checkFn, position, boundVehicleID)
+        index = 0
+        for item in self.__queues[queueNum]:
+            if item.priority < queueItem.priority:
+                break
+            index += 1
 
-            self.__queues[queueNum].insert(index, queueItem)
-            if not self.__playingEvents[queueNum]:
-                self.__playFirstFromQueue(queueNum)
-            else:
-                self.onAddEvent(eventName)
-            return
+        self.__queues[queueNum].insert(index, queueItem)
+        LOG_VO('Event "{}" added to queue "{}". {}'.format(eventName, queueNum, [ item.eventName for item in self.__queues[queueNum] ]))
+        if not self.__playingEvents[queueNum]:
+            self.__playFirstFromQueue(queueNum)
+        else:
+            LOG_VO('"{}" is playing now'.format(self.__playingEvents[queueNum].eventName))
+            self.onAddEvent(eventName)
+        return
 
     def __playFX(self, eventName, vehicleID, position):
+        event = self.__events.get(eventName, {})
+        isFX = 'fxEvent' in event
         if eventName in self.__fxCooldowns and self.__fxCooldowns[eventName]:
+            if isFX:
+                LOG_VO('Request "{}" is rejected. Reason: {}'.format(eventName, 'FX cooldown'))
+            return
+        elif not isFX or not self.isCategoryEnabled('fx'):
+            if isFX:
+                LOG_VO('Request "{}" is rejected. Reason: {}'.format(eventName, 'FX sounds are disabled'))
             return
         else:
-            event = self.__events.get(eventName, None)
-            if 'fxEvent' not in event or not self.isCategoryEnabled('fx'):
-                return
             if 'cooldownFx' in event and float(event['cooldownFx']) > 0:
                 self.__fxCooldowns[eventName] = {'time': float(event['cooldownFx'])}
+            fxEvent = event['fxEvent']
+            LOG_VO('Play fx  "{}". fxEvent: "{}"'.format(eventName, fxEvent))
             if vehicleID is not None:
                 vehicle = BigWorld.entity(vehicleID)
                 if vehicle:
-                    SoundGroups.g_instance.playSoundPos(event['fxEvent'], vehicle.position)
+                    SoundGroups.g_instance.playSoundPos(fxEvent, vehicle.position)
             elif position is not None:
-                SoundGroups.g_instance.playSoundPos(event['fxEvent'], position)
+                SoundGroups.g_instance.playSoundPos(fxEvent, position)
             else:
-                SoundGroups.g_instance.playSound2D(event['fxEvent'])
+                SoundGroups.g_instance.playSound2D(fxEvent)
             return
-
-    @staticmethod
-    def __importVSEContextClass(contextPath):
-        classPathParts = contextPath.split('.')
-        class_name = classPathParts[-1]
-        python_module_path = '.'.join(classPathParts[:-1])
-        try:
-            python_module = importlib.import_module(python_module_path)
-        except ImportError:
-            LOG_ERROR('Failed to load Module ', contextPath)
-            raise
-
-        return getattr(python_module, class_name)
 
     def playNextQueueEvent(self, queueNum):
         if self.__checkPause():
@@ -180,6 +193,7 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
 
     def clear(self):
         for queueNum in self.__queues:
+            LOG_VO('Clear queue "{}". Removed events: {}'.format(queueNum, [ eventItem.eventName for eventItem in self.__queues[queueNum] ]))
             self.__queues[queueNum] = []
 
         for queueNum in self.__playingEvents:
@@ -188,15 +202,18 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         return
 
     def clearQueue(self, queueNum):
+        LOG_VO('Clear queue "{}". Removed events: {}'.format(queueNum, [ eventItem.eventName for eventItem in self.__queues[queueNum] ]))
         self.__queues[queueNum] = []
 
     def enableFX(self, isEnabled):
+        LOG_VO('fx sounds are {}'.format('enabled' if isEnabled else 'disabled'))
         if isEnabled:
             self.__enabledSoundCategories.add('fx')
         else:
             self.__enabledSoundCategories.remove('fx')
 
     def enableVoices(self, isEnabled, clearQueues=True):
+        LOG_VO('voice sounds are {}'.format('enabled' if isEnabled else 'disabled'))
         if isEnabled:
             self.__enabledSoundCategories.add('voice')
         else:
@@ -240,9 +257,6 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             self.__eventsPriorities[eventName] = {'priority': priority,
              'time': hold}
 
-    def hasEvent(self, eventName):
-        return eventName in self.__events
-
     def setCircumstanceWeight(self, circIndex, weight, hold):
         if circIndex in self.__circumstances:
             self.__circumstancesWeights[circIndex] = {'weight': weight,
@@ -251,6 +265,13 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
     def setCircumstanceGroupWeight(self, groupName, weight, hold):
         self.__circumstancesGroupsWeights[groupName] = {'weight': weight,
          'time': hold}
+
+    def onNotificationBegins(self, eventName):
+        LOG_VO('Play voice "{}"'.format(eventName))
+        self._hideSubtitle()
+
+    def log(self, msg):
+        LOG_VO(msg)
 
     def __checkPause(self):
         shouldPause = False
@@ -275,18 +296,15 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
             checkVehicle = queueItem.vehicleID is None or BigWorld.entity(queueItem.vehicleID) is not None
             checkFunction = queueItem.checkFn() if isPlayerAvatar() and queueItem.checkFn else True
             if checkFunction and checkVehicle and checkCooldown:
+                LOG_VO('Try to play voice "{}". infEvent: "{}"'.format(queueItem.eventName, self.__events[queueItem.eventName].get('infEvent')))
                 vehicle = BigWorld.entity(queueItem.vehicleID) if queueItem.vehicleID is not None else None
                 boundVehicle = BigWorld.entity(queueItem.boundVehicleID) if queueItem.boundVehicleID is not None else None
                 position = vehicle.position if vehicle else queueItem.position
-                if queueItem.eventName in self.__VO_NOTIFICATION_USING_SOUND_GROUPS:
-                    wwEventName = self.getEventInfo(queueItem.eventName, 'infEvent')
-                    if wwEventName:
-                        SoundGroups.g_instance.playSound2D(wwEventName)
-                        self.enableVoices(False)
-                    return
                 self.__playingEvents[queueNum] = self.PlayingEvent(queueItem.eventName, vehicle, position, boundVehicle, position is None)
                 self.onPlayEvent(queueItem.eventName)
             else:
+                skipReason = 'cooldown' if checkCooldown else ("vehicle doesn't found" if checkVehicle else 'external')
+                LOG_VO('Skip "{}". Reason: {}'.format(queueItem.eventName, skipReason))
                 self.__playFirstFromQueue(queueNum)
             return
 
@@ -322,12 +340,17 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
         for queueNum in self.__queues:
             self.__queues[queueNum] = [ item for item in self.__queues[queueNum] if self.__checkLifetime(item) ]
 
+        if not BigWorld.isWindowVisible():
+            self._hideSubtitle()
         return self.__TICK_DELAY
 
     def __checkLifetime(self, queueItem):
         event = self.__events[queueItem.eventName]
         lifetime = float(event['lifetime']) if 'lifetime' in event else self.__DEFAULT_LIFETIME
-        return queueItem.time + lifetime > BigWorld.time()
+        result = queueItem.time + lifetime > BigWorld.time()
+        if not result:
+            LOG_VO('"{}" is removed from queue. Reason: lifetime'.format(queueItem.eventName))
+        return result
 
     @staticmethod
     def __tickGroup(group, delta):
@@ -339,6 +362,26 @@ class IngameSoundNotifications(CallbackDelayer, TimeDeltaMeter):
                 group[name] = None
 
         return
+
+    def _showSubtitle(self, subtitle):
+        self._currentSubtitle = subtitle
+        LOG_VO('Request subtitle: "{}"'.format(subtitle))
+        self.onSubtitleShow(subtitle)
+
+    def _hideSubtitle(self):
+        if self._currentSubtitle:
+            self._currentSubtitle = ''
+            LOG_VO('Hide subtitle')
+            self.onSubtitleHide()
+
+    def _soundMarkerHandler(self, marker):
+        if not AccountSettings.getSettings(SOUND.SUBTITLES):
+            return
+        marker = marker.strip()
+        if marker == _SUBTITLES_END_MARKER:
+            self._hideSubtitle()
+        elif marker.startswith(_SUBTITLE_PREFIX):
+            self._showSubtitle(marker)
 
 
 class ComplexSoundNotifications(object):

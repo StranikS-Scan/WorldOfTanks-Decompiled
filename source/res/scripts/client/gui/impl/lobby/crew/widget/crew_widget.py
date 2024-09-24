@@ -33,7 +33,6 @@ from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel, s
 from gui.impl.lobby.crew.crew_helpers.skill_formatters import SkillLvlFormatter
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
-from gui.impl.lobby.crew.tooltips.perk_available_tooltip import PerkAvailableTooltip
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED, getTankmanSkill, Tankman
@@ -54,6 +53,7 @@ from uilogging.crew.logging_constants import CrewWidgetKeys
 from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_model import CrewWidgetTankmanModel
+    from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_model import CrewSkillModel
     from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
     from typing import Union
 BuildedMessage = NamedTuple('BuildedMessage', [('text', str),
@@ -189,9 +189,6 @@ class CrewWidget(ViewImpl):
         tooltipId = event.getArgument('tooltipId')
         if contentID == R.views.lobby.crew.CrewHeaderTooltipView():
             return CrewHeaderTooltipView(self.__getIdleCrewState())
-        elif contentID == R.views.lobby.crew.tooltips.PerkAvailableTooltip():
-            tankmanID = event.getArgument('tankmanID')
-            return PerkAvailableTooltip(tankmanID)
         elif tooltipId == TooltipConstants.VEHICLE_CREW_MEMBER_IN_HANGAR:
             slotIdx = int(event.getArgument('slotIdx'))
             tankmanID = int(event.getArgument('tankmanID'))
@@ -709,7 +706,7 @@ class SkillsTrainingCrewWidget(CrewWidget):
                                 if skillVM.getName() == CrewConstants.NEW_SKILL:
                                     skill = getTankmanSkill(skillName, tankman=tankman)
                                     skillVM.setName(skillName)
-                                    skillVM.setIcon(skill.extensionLessIconName)
+                                    skillVM.setIconName(skill.extensionLessIconName)
                                     break
 
                     else:

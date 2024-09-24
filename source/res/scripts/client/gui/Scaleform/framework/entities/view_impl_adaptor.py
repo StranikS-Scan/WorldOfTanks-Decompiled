@@ -90,6 +90,9 @@ class ViewImplAdaptor(DisposableEntity, ViewInterface):
     def isLoaded(self):
         return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 
+    def isWindowValid(self):
+        return self.__window is not None
+
     def setView(self, view, parent=None):
         if self.__window is not None:
             _logger.exception('View has been already set! %r new value: %r', self, view)

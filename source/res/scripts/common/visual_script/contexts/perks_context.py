@@ -50,7 +50,7 @@ class PerkContext(VScriptContext):
     OnVehicleInRange = vse_forward_event(OnVehicleInRange.__name__, zip(OnVehicleInRange._fields, (SLOT_TYPE.INT, SLOT_TYPE.STR, SLOT_TYPE.BOOL)), display_name='OnVehicleInRange', description='On vehicle in range')
     OnVehicleShotDamagedEnemyVehicle = vse_forward_event(OnVehicleShotDamagedEnemyVehicle.__name__, zip(OnVehicleShotDamagedEnemyVehicle._fields, (SLOT_TYPE.INT,)), display_name='OnVehicleShotDamagedEnemyVehicle', description='On vehicle shot damaged enemy vehicle')
     OnWitnessEnemyDamaged = vse_forward_event(OnWitnessEnemyDamaged.__name__, zip(OnWitnessEnemyDamaged._fields, (SLOT_TYPE.INT,)), display_name='OnWitnessEnemyDamaged', description='Vehicle has been damage in our vision')
-    OnVehicleRadioDistanceChange = vse_forward_event(OnVehicleRadioDistanceChange.__name__, zip(OnVehicleRadioDistanceChange._fields, (SLOT_TYPE.FLOAT,)), display_name='OnVehicleRadioDistanceChange', description='On vehicle radio distance change', display_group='Aura')
+    OnVehicleRadioDistanceChange = vse_forward_event(OnVehicleRadioDistanceChange.__name__, zip(OnVehicleRadioDistanceChange._fields, (SLOT_TYPE.FLOAT,)), display_name='OnVehicleRadioDistanceChange', description='On vehicle radio distance change')
     OnPerkRestarted = vse_forward_event('OnPerkRestarted', (), display_name='onPerkRestarted', description='On perk restarted', display_group='Perk')
 
     def __init__(self, aspectImplClass, perksControllerWeakRef, perkID, perkLevel, scopeID):
@@ -96,22 +96,6 @@ class PerkContext(VScriptContext):
     @vse_func_call(None, (SLOT_TYPE.STR, SLOT_TYPE.FLOAT), display_name='AddFactorModifier', description='Adds a modifier for a specified factor', display_group='Perk')
     def addFactorModifier(self, factor, value):
         self._aspectImpl.addFactorModifier(factor, value)
-
-    @vse_func_call(None, (SLOT_TYPE.STR, SLOT_TYPE.FLOAT), display_name='AddAuraModifier', description='Adds a modifier to aura scope', display_group='Aura')
-    def addAuraModifier(self, factor, value):
-        self._aspectImpl.addAuraModifier(factor, value)
-
-    @vse_func_call(None, (), display_name='DropAuraModifiers', description='Reset aura modifiers', display_group='Aura')
-    def dropAuraModifiers(self):
-        self._aspectImpl.dropAuraModifiers()
-
-    @vse_func_call(None, (SLOT_TYPE.INT, SLOT_TYPE.FLOAT, SLOT_TYPE.FLOAT), display_name='StartAura', descrption='Starts aura loop', display_group='Aura')
-    def startAura(self, targetTeam, startRadius, interval):
-        self._aspectImpl.startAura(targetTeam, startRadius, interval)
-
-    @vse_func_call(None, (SLOT_TYPE.FLOAT,), display_name='SetAuraRange', description='Set range for aura', display_group='Aura')
-    def setAuraRange(self, radius):
-        self._aspectImpl.setAuraRange(radius)
 
     @vse_func_call(None, (SLOT_TYPE.STR, SLOT_TYPE.INT), display_name='RemoveFactorModifiers', description='Remove modifier by count', display_group='Perk')
     def removeFactorModifiers(self, factor, numMods):

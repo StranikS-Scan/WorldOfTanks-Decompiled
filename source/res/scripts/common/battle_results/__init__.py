@@ -4,7 +4,7 @@ import importlib
 from DictPackers import Meta, MergeDictPacker
 from battle_pass_integration import getAllIntergatedGameModes
 from battle_results_common import BATTLE_RESULTS, BATTLE_PASS_RESULTS
-from battle_results_constants import BATTLE_RESULT_ENTRY_TYPE as ENTRY_TYPE, PATH_TO_CONFIG, POSSIBLE_TYPES, ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE
+from battle_results_constants import BATTLE_RESULT_ENTRY_TYPE as ENTRY_TYPE, PATH_TO_CONFIG, POSSIBLE_TYPES, ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
 from constants import ARENA_BONUS_TYPE
 g_config = {'checksums': {},
  'bonusTypes': {},
@@ -78,7 +78,7 @@ def getBattleResultsNames():
 
 
 def getBattleResultsSysMsgType(bonusType):
-    return ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE[ARENA_BONUS_TYPE.REGULAR] if bonusType not in ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE else ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE[bonusType]
+    return ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT[ARENA_BONUS_TYPE.REGULAR] if bonusType not in ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT else ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT[bonusType]
 
 
 def init():

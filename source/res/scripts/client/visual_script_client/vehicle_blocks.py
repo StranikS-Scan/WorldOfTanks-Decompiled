@@ -4,7 +4,6 @@ import random
 import weakref
 import BigWorld
 import GenericComponents
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import IS_VS_EDITOR, VEHICLE_CLASSES
 from visual_script.block import Block, InitParam, buildStrKeysValue
 from visual_script.misc import ASPECT, EDITOR_TYPE, errorVScript
@@ -12,18 +11,10 @@ from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
-from visual_script.contexts.cgf_context import GameObjectWrapper
-from visual_script.dependency import dependencyImporter
-from soft_exception import SoftException
 if not IS_VS_EDITOR:
     from helpers import dependency, isPlayerAccount
     from skeletons.gui.shared import IItemsCache
     from VehicleRespawnComponent import VehicleRespawnComponent
-CGF, tankStructure = dependencyImporter('CGF', 'vehicle_systems.tankStructure')
-
-class InputSlotError(SoftException):
-    pass
-
 
 class GetVehicleLabel(Block, VehicleMeta):
 
@@ -39,25 +30,6 @@ class GetVehicleLabel(Block, VehicleMeta):
             label = ''
         self._label.setValue(label)
         return
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-
-class GetVehicleName(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(GetVehicleName, self).__init__(*args, **kwargs)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._name = self._makeDataOutputSlot('name', SLOT_TYPE.STR, self._getName)
-
-    def _getName(self):
-        vehicle = self._vehicle.getValue()
-        name = ''
-        if vehicle.typeDescriptor:
-            name = vehicle.typeDescriptor.name
-        self._name.setValue(name)
 
     @classmethod
     def blockAspects(cls):
@@ -392,61 +364,6 @@ class GameObjectToVehicle(Block, VehicleMeta):
         return [ASPECT.CLIENT]
 
 
-class GetGameObjectOfVehicle(Block, VehicleMeta):
-    components = {'EntityGameObject': 'EntityGO',
-     'TankRootGameObject': tankStructure.CgfTankNodes.TANK_ROOT,
-     'HullGameObject': 'HullGO',
-     'TurretGameObject': tankStructure.CgfTankNodes.TURRET_ROOT,
-     'GunGameObject': tankStructure.CgfTankNodes.GUN_ROOT}
-
-    def __init__(self, *args, **kwargs):
-        super(GetGameObjectOfVehicle, self).__init__(*args, **kwargs)
-        self._goToGet = self._getInitParams()
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._go = self._makeDataOutputSlot('gameObject', SLOT_TYPE.GAME_OBJECT, self._exec)
-
-    def _exec(self):
-        vehicle = self._vehicle.getValue()
-        if vehicle is None:
-            errorVScript(self, 'Please check input vehicle entity.')
-            return
-        elif vehicle.entityGameObject is None:
-            errorVScript(self, 'Vehicle has no gameObject assigned to it.')
-            return
-        else:
-            entityGameObject = vehicle.entityGameObject
-            hierarchy = CGF.HierarchyManager(entityGameObject.spaceID)
-            topGO = hierarchy.getTopMostParent(entityGameObject)
-            requestedGOName = self.components[self._goToGet]
-            requestedGO = entityGameObject
-            if requestedGOName == 'HullGO':
-                try:
-                    requestedGO = hierarchy.getChildren(topGO)[0]
-                except (IndexError, TypeError):
-                    raise InputSlotError('Entity {0} has no {1}'.format(entityGameObject.name, self._goToGet))
-
-            elif requestedGOName != 'EntityGO':
-                tempGO = hierarchy.findFirstNode(topGO, requestedGOName)
-                if tempGO:
-                    requestedGO = tempGO
-                else:
-                    raise InputSlotError('Entity {0} has no {1}'.format(entityGameObject.name, self._goToGet))
-            goWrapper = GameObjectWrapper(requestedGO)
-            self._go.setValue(weakref.proxy(goWrapper))
-            return
-
-    @classmethod
-    def initParams(cls):
-        return [InitParam('GO to get', SLOT_TYPE.STR, buildStrKeysValue(*cls.components.keys()), EDITOR_TYPE.STR_KEY_SELECTOR)]
-
-    def captionText(self):
-        return 'Get {}'.format(self._goToGet)
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]
-
-
 class IsInHangar(IsInHangarBase):
 
     def _execute(self):
@@ -504,45 +421,3 @@ class OnAnyVehicleRespawned(TunableEventBlock, VehicleMeta):
     @TunableEventBlock.eventProcessor
     def _vehicleRespawnHandler(self, vehicle):
         self._vehicle.setValue(weakref.proxy(vehicle))
-
-
-class SetInspireMarker(Block):
-
-    def __init__(self, *args, **kwargs):
-        super(SetInspireMarker, self).__init__(*args, **kwargs)
-        self._inputSlot = self._makeEventInputSlot('in', self._execute)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._active = self._makeDataInputSlot('isActive', SLOT_TYPE.BOOL)
-        self._outSlot = self._makeEventOutputSlot('out')
-
-    def _execute(self):
-        from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-        vehicle = self._vehicle.getValue()
-        active = self._active.getValue()
-        if not vehicle:
-            return
-        ctrl = vehicle.guiSessionProvider.shared.vehicleState
-        ctrl.notifyStateChanged(VEHICLE_VIEW_STATE.WT_INSPIRE, (vehicle.id, active))
-        self._outSlot.call()
-
-
-class SetCommand(Block):
-
-    def __init__(self, *args, **kwargs):
-        super(SetCommand, self).__init__(*args, **kwargs)
-        self._inputSlot = self._makeEventInputSlot('in', self._execute)
-        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
-        self._command = self._makeDataInputSlot('command', SLOT_TYPE.STR)
-        self._base = self._makeDataInputSlot('base', SLOT_TYPE.INT)
-        self._outSlot = self._makeEventOutputSlot('out')
-
-    def _execute(self):
-        vehicle = self._vehicle.getValue()
-        if not vehicle:
-            return
-        command = self._command.getValue()
-        if command not in (BATTLE_CHAT_COMMAND_NAMES.ATTACK_BASE, BATTLE_CHAT_COMMAND_NAMES.DEFEND_BASE):
-            return
-        ctrl = vehicle.guiSessionProvider.shared.chatCommands
-        ctrl.handleChatCommand(command, self._base.getValue())
-        self._outSlot.call()

@@ -51,6 +51,10 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
             self._priceListContent = PerksResetPriceList(tankmanId)
         return
 
+    @property
+    def viewModel(self):
+        return self.getViewModel()
+
     def _onLoading(self, *args, **kwargs):
         self.setBackgroundImagePath(R.images.gui.maps.icons.windows.background())
         if self._isFreePerkReset:

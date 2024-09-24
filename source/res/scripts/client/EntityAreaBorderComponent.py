@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/EntityAreaBorderComponent.py
 import BigWorld
+from Math import Vector3
+from cache import cached_property
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from account_helpers.settings_core import ISettingsCore, settings_constants
 from helpers import dependency
@@ -53,7 +55,22 @@ class EntityAreaBorderComponent(DynamicScriptComponent):
             self._border.setMaterialBoolParam(self.STRIPES_ENABLED_MATERIAL_PARAM_NAME, stripesEnabled)
 
     def getDimensions(self):
-        return self._border.getDimensions() if self._border is not None else (0, 0, 0)
+        return Vector3() if not self._border else self._border.getDimensions()
+
+    @cached_property
+    def polygonCenter(self):
+        udo = BigWorld.userDataObjects.get(self.udoGuid, None)
+        if not udo:
+            return Vector3()
+        else:
+            cX, cZ = [], []
+            for x, z in udo.minimapMarkerPolygon:
+                cX.append(x)
+                cZ.append(z)
+
+            resX = (min(cX) + max(cX)) / 2
+            resZ = (min(cZ) + max(cZ)) / 2
+            return Vector3(resX, 0, -resZ) + udo.position
 
     def _onAvatarReady(self):
         super(EntityAreaBorderComponent, self)._onAvatarReady()

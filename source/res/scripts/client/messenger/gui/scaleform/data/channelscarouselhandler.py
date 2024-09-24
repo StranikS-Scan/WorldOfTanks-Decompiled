@@ -10,6 +10,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ChannelManagementEvent, ChannelCarouselEvent, PreBattleChannelEvent
 from messenger.ext import channel_num_gen
 from messenger.gui import events_dispatcher
+from messenger.gui.Scaleform.channels.xmpp.lobby_controllers import ChatSessionController
 from messenger.gui.Scaleform.data.ChannelsDataProvider import ChannelsDataProvider
 from skeletons.gui.game_control import IPlatoonController
 from helpers import dependency
@@ -262,7 +263,12 @@ class ChannelsCarouselHandler(object):
 
     def __handleOpenButtonClick(self, event):
         clientID = event.clientID
-        if not clientID:
+        controller = self.__guiEntry.channelsCtrl.getController(clientID)
+        if isinstance(controller, ChatSessionController) and controller.isMinorMessagesRestricted():
+            controller.notifyMinorChatRestriction()
+            self.__closeNonSystemChannel(clientID)
+            return
+        elif not clientID:
             return
         elif clientID not in self.__handlers:
             return
@@ -290,7 +296,7 @@ class ChannelsCarouselHandler(object):
                 self.__preBattleChannelsDP.setItemFields(clientID, fields)
             if clientID in self.__notifiedMessages:
                 notifiedMessages = self.__notifiedMessages[clientID]
-                channel = self.__guiEntry.channelsCtrl.getController(clientID).getChannel()
+                channel = controller.getChannel()
                 for message in notifiedMessages:
                     channel.setMessageShown(message)
 
@@ -324,6 +330,9 @@ class ChannelsCarouselHandler(object):
 
     def __handleCloseButtonClick(self, event):
         clientID = event.clientID
+        self.__closeNonSystemChannel(clientID)
+
+    def __closeNonSystemChannel(self, clientID):
         channel = self.__guiEntry.channelsCtrl.getController(clientID).getChannel()
         if not channel.isSystem():
             self.__closeChannel(clientID)

@@ -3,7 +3,8 @@
 from account_helpers import getAccountDatabaseID
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler, USER
+from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler
+from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from gui.Scaleform.locale.MENU import MENU
 from gui.prb_control.entities.base.unit.ctx import KickPlayerUnitCtx, GiveLeadershipUnitCtx
 from gui.prb_control.entities.listener import IGlobalListener

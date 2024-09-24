@@ -1,9 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages/chat_session.py
+import logging
 import operator
 import time
 import BigWorld
+from constants import BAN_REASON
+from gui import SystemMessages
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared import utils
+from helpers import dependency
 from messenger import g_settings
 from messenger.m_constants import CLIENT_ACTION_ID, PROTO_TYPE, USER_TAG, USER_ACTION_ID
 from messenger.proto.events import g_messengerEvents
@@ -13,10 +19,11 @@ from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
 from messenger.proto.xmpp.extensions import chat as chat_ext
 from messenger.proto.xmpp.gloox_constants import IQ_TYPE, PRESENCE, MESSAGE_TYPE
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
-from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.messages.provider import ChatProvider
 from messenger.proto.xmpp.wrappers import ChatMessage
 from messenger.storage import storage_getter
+from skeletons.gui.game_control import IGameSessionController
+_logger = logging.getLogger(__name__)
 
 class _HISTORY_RQ_STATE(object):
     FREE = 0
@@ -156,6 +163,7 @@ class ChatSessionHistoryRequester(ClientHolder):
 
 
 class ChatSessionsProvider(ChatProvider):
+    __gameSession = dependency.descriptor(IGameSessionController)
     __slots__ = ('__historyRQ',)
 
     def __init__(self, limits):
@@ -229,10 +237,13 @@ class ChatSessionsProvider(ChatProvider):
             contactDBID = message.accountDBID or jid.getDatabaseID()
             nickname = message.accountName or jid.getNode()
             created, exists = self._searchChannel(jid, nickname)
-            if exists is None and g_settings.userPrefs.chatContactsListOnly:
+            if self.__gameSession.isPrivateMessagesForbidden:
+                _logger.info('Account has restriction with PrivateMessagesForbidden')
+                return
+            if exists is None and (g_settings.userPrefs.chatContactsListOnly or self.__gameSession.isNonFriendPrivateMessagesForbidden):
                 contact = self.usersStorage.getUser(contactDBID)
                 if not contact or not USER_TAG.filterClosedContactsTags(contact.getTags()):
-                    g_logOutput.debug(CLIENT_LOG_AREA.MESSAGE, "There is not closed contact in player's contacts list,contact's message is ignored", jid, nickname)
+                    _logger.info("There is not closed contact in player's contacts list, contact's message is ignored id=%d, nickname=%s", jid.getDatabaseID(), nickname)
                     return
             if exists is None:
                 if self.__addSession(created, contactDBID):
@@ -260,11 +271,31 @@ class ChatSessionsProvider(ChatProvider):
         name = utils.getPlayerName()
         g_messengerEvents.channels.onMessageReceived(ChatMessage(dbID, name, filters.chainIn(dbID, body), time.time()), channel)
 
+    def __getPrivateMessagesForbiddenText(self):
+        if self.__gameSession.privateMessagesRestrictionReason == BAN_REASON.PARENTAL_CONTROL:
+            return backport.text(R.strings.system_messages.parentControl.privateMessagesForbidden())
+        return backport.text(R.strings.system_messages.countryRestriction.privateMessagesForbidden()) if self.__gameSession.privateMessagesRestrictionReason == BAN_REASON.COUNTRY else backport.text(R.strings.system_messages.otherRestriction.privateMessagesForbidden())
+
+    def __getNonFriendPrivateMessagesForbiddenText(self):
+        return backport.text(R.strings.system_messages.parentControl.nonFriendPrivateMessagesForbidden()) if self.__gameSession.privateMessagesRestrictionReason == BAN_REASON.PARENTAL_CONTROL else backport.text(R.strings.system_messages.otherRestriction.nonFriendPrivateMessagesForbidden())
+
+    def sendPrivateMessagesRestrictedNotification(self):
+        SystemMessages.pushI18nMessage(self.__getPrivateMessagesForbiddenText(), type=SystemMessages.SM_TYPE.Error)
+
+    def sendNonFriendMessagesRestrictedNotification(self):
+        SystemMessages.pushI18nMessage(self.__getNonFriendPrivateMessagesForbiddenText(), type=SystemMessages.SM_TYPE.Error)
+
     def __addSession(self, session, contactDBID=0L, byAction=False):
         jid = session.getID()
         presence = PRESENCE.UNAVAILABLE
         if contactDBID:
             contact = self.usersStorage.getUser(contactDBID)
+            if self.__gameSession.isPrivateMessagesForbidden:
+                SystemMessages.pushI18nMessage(self.__getPrivateMessagesForbiddenText(), type=SystemMessages.SM_TYPE.Error)
+                return False
+            if contact and self.__gameSession.isNonFriendPrivateMessagesForbidden and not USER_TAG.filterClosedContactsTags(contact.getTags()):
+                SystemMessages.pushI18nMessage(self.__getNonFriendPrivateMessagesForbiddenText(), type=SystemMessages.SM_TYPE.Error)
+                return False
             if contact is not None:
                 if contact.isIgnored():
                     return False

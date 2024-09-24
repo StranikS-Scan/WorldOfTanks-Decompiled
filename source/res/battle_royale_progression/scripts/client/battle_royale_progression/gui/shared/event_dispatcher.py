@@ -3,7 +3,10 @@
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.managers.loaders import GuiImplViewLoadParams
 from gui.impl.gen import R
+from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from helpers import dependency
+from skeletons.gui.impl import INotificationWindowController
 
 def showProgressionView(activeTab=None):
     from battle_royale_progression.gui.impl.lobby.views.progression_main_view import ProgressionMainView
@@ -15,6 +18,8 @@ def showProgressionView(activeTab=None):
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(viewRes, view, scope=ScopeTemplates.LOBBY_SUB_SCOPE), ctx={'menuName': activeTab}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showAwardsView(stage):
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showAwardsView(stage, notificationMgr=None):
     from battle_royale_progression.gui.impl.lobby.views.battle_quest_awards_view import BattleQuestAwardsViewWindow
-    BattleQuestAwardsViewWindow(stage).load()
+    window = BattleQuestAwardsViewWindow(stage)
+    notificationMgr.append(WindowNotificationCommand(window))

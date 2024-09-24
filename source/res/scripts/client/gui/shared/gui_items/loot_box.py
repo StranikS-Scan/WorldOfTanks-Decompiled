@@ -1,10 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/loot_box.py
 from enum import Enum
+from typing import TYPE_CHECKING
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.lootbox_system.common import getTextResource
 from gui.shared.gui_items.gui_item import GUIItem
+from helpers import dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import ILootBoxSystemController
+if TYPE_CHECKING:
+    from typing import Dict, Optional
 
 class NewYearLootBoxes(CONST_CONTAINER):
     PREMIUM = 'newYear_premium'
@@ -27,6 +33,7 @@ class EventCategories(CONST_CONTAINER):
 class WTLootBoxes(CONST_CONTAINER):
     WT_HUNTER = 'wt_hunter'
     WT_BOSS = 'wt_boss'
+    WT_SPECIAL = 'wt_special'
 
 
 class LunarNYLootBoxTypes(Enum):
@@ -38,20 +45,6 @@ class LunarNYLootBoxTypes(Enum):
 class EventLootBoxes(CONST_CONTAINER):
     PREMIUM = 'event_premium'
     COMMON = 'event_common'
-    WT_HUNTER = 'wt_hunter'
-    WT_BOSS = 'wt_boss'
-
-
-class WTPortalStatus(Enum):
-    EVENT_ENDED = 'event_ended'
-    NO_PRIME_TIME = 'no_prime_time'
-    UNOPENED_LOOTBOXES = 'unopened_lootboxes'
-    NO_UNOPENED_LOOTBOXES = 'no_unopened_lootboxes'
-    ALL_OPEN = 'all_open'
-    ALL_CLOSED = 'all_closed'
-    ONLY_SHOP_OPEN = 'only_shop_open'
-    ONLY_PORTAL_OPEN = 'only_portal_open'
-    ERROR = 'server_error'
 
 
 ALL_LUNAR_NY_LOOT_BOX_TYPES = ('lunar_base', 'lunar_simple', 'lunar_special')
@@ -65,7 +58,8 @@ CATEGORIES_GUI_ORDER_NY = (NewYearCategories.NEWYEAR,
  NewYearCategories.FAIRYTALE)
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__guaranteedFrequencyName')
+    __slots__ = ('__id', '__invCount', '__isEnabled', '__type', '__category', '__bonus', '__historyName', '__statsName', '__guaranteedFrequency', '__guaranteedFrequencyName', '__probabilityBonusName', '__probabilityBonusLimit')
+    __lootBoxSystem = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
@@ -91,10 +85,16 @@ class LootBox(GUIItem):
     def getInventoryCount(self):
         return self.__invCount
 
+    def isEnabled(self):
+        return self.__isEnabled
+
     def getID(self):
         return self.__id
 
     def getUserName(self):
+        if self.__lootBoxSystem.isEnabled and self.__lootBoxSystem.eventName == self.__type:
+            name = getTextResource('common/boxCategory/lowerCase'.split('/') + [self.__category])
+            return backport.text(name() if name.exists() else R.strings.lootbox_system.common.boxCategory.lowerCase.default())
         return backport.text(R.strings.lootboxes.type.dyn(self.__type)())
 
     def getType(self):
@@ -106,25 +106,53 @@ class LootBox(GUIItem):
     def isFree(self):
         return self.__type == NewYearLootBoxes.COMMON
 
+    def getBonusInfo(self):
+        return self.__bonus
+
     def getGuaranteedFrequency(self):
         return self.__guaranteedFrequency
 
     def getGuaranteedFrequencyName(self):
         return self.__guaranteedFrequencyName
 
+    def getProbabilityBonusLimit(self):
+        return self.__probabilityBonusLimit
+
+    def getProbabilityBonusLimitName(self):
+        return self.__probabilityBonusName
+
     def getHistoryName(self):
         return self.__historyName
 
+    def getStatsName(self):
+        return self.__statsName
+
+    def getUseStats(self):
+        return bool(self.__statsName)
+
     def __updateByConfig(self, lootBoxConfig):
+        self.__isEnabled = lootBoxConfig.get('enabled')
         self.__type = lootBoxConfig.get('type')
         self.__category = lootBoxConfig.get('category')
+        self.__bonus = lootBoxConfig.get('bonus', {})
+        self.__statsName = lootBoxConfig.get('statsInfo', '')
         self.__historyName = lootBoxConfig.get('historyName')
-        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readGuaranteedFreqLimits(lootBoxConfig.get('guaranteedFrequency', {}))
+        limitsConfig = lootBoxConfig.get('limits', {})
+        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readFrequencyLimit(limitsConfig)
+        self.__probabilityBonusName, self.__probabilityBonusLimit = self.__readProbabilityBonusLimit(limitsConfig)
 
     @staticmethod
-    def __readGuaranteedFreqLimits(limitsCfg):
-        for limitName, limits in limitsCfg.iteritems():
-            if 'guaranteedFrequency' in limits:
-                return (limitName, limits['guaranteedFrequency'])
+    def __readProbabilityBonusLimit(limitsCfg):
+        for probabilityBonusName, limit in limitsCfg.iteritems():
+            if 'useBonusProbabilityAfter' in limit:
+                return (probabilityBonusName, limit['useBonusProbabilityAfter'] + 1)
+
+        return (None, 0)
+
+    @staticmethod
+    def __readFrequencyLimit(limitsCfg):
+        for limitName, limit in limitsCfg.iteritems():
+            if 'guaranteedFrequency' in limit:
+                return (limitName, limit['guaranteedFrequency'])
 
         return (None, 0)

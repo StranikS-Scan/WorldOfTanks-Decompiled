@@ -95,9 +95,6 @@ class EventDispatcher(object):
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
 
-    def loadEventBattleQueue(self):
-        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
-
     def loadTrainingList(self):
         self.addTrainingToCarousel()
         self.__showTrainingList()
@@ -345,9 +342,6 @@ class EventDispatcher(object):
                 res = True
         return res
 
-    def entityWasUpdated(self):
-        self.__fireEvent(events.FightButtonEvent(events.HangarSimpleEvent.DISPATCHER_ENTITY_WAS_UPDATED))
-
     def _showUnitProgress(self, prbType, show):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)
         if not clientID:
@@ -384,15 +378,15 @@ class EventDispatcher(object):
         if self.__getLoadedEvent() == eventName:
             LOG_DEBUG('View already is loaded', eventName)
             return
+        elif self.__loadingEvent and self.__loadingEvent == eventName:
+            LOG_DEBUG('View is still loading. It is ignored', self.__loadingEvent, eventName)
+            return
         else:
-            if self.__loadingEvent:
-                LOG_DEBUG('View is still loading. It is ignored', self.__loadingEvent, eventName)
+            self.__loadingEvent = eventName
+            if arg is None:
+                self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName)))
             else:
-                self.__loadingEvent = eventName
-                if arg is None:
-                    self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName)))
-                else:
-                    self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName), ctx=arg))
+                self.__fireEvent(events.LoadViewEvent(SFViewLoadParams(eventName), ctx=arg))
             return
 
     def __handleRemoveRequest(self, clientID, closeWindow=True):

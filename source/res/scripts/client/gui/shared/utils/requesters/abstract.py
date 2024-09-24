@@ -115,11 +115,11 @@ class RequestCtx(object):
             self._callback = callback
         return
 
-    def stopProcessing(self, result=False):
+    def stopProcessing(self, result=False, errorCode=None):
         if self._callback is not None:
             callback = self._callback
             self._callback = None
-            callback(result)
+            callback(result if errorCode is None else (result, errorCode))
         if self._waitingID:
             Waiting.hide(self._waitingID)
         return

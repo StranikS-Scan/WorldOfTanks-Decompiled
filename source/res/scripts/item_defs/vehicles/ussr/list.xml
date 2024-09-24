@@ -879,6 +879,19 @@
     <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </R180_Object_274_A>
+  <R182_ST_66>
+    <id>	127	</id>
+    <userString>	#ussr_vehicles:R182_ST_66	</userString>
+    <description>	#ussr_vehicles:R182_ST_66_descr	</description>
+    <shortUserString>	#ussr_vehicles:R182_ST_66_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R182_ST_66_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R182_ST_66_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </R182_ST_66>
   <R183_K_91_PT>
     <id>	128	</id>
     <userString>	#ussr_vehicles:R183_K_91_PT	</userString>
@@ -2070,6 +2083,19 @@
     <tags>	AT-SPG HD mediumAT-SPG siegeMode dualgun charger improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </R202_SU_2_122>
+  <R200_KV_4_Turchaninov>
+    <id>	116	</id>
+    <userString>	#ussr_vehicles:R200_KV_4_Turchaninov	</userString>
+    <description>	#ussr_vehicles:R200_KV_4_Turchaninov_descr	</description>
+    <shortUserString>	#ussr_vehicles:R200_KV_4_Turchaninov_short	</shortUserString>
+    <shortDescriptionSpecial>	#ussr_vehicles:R200_KV_4_Turchaninov_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R200_KV_4_Turchaninov_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </R200_KV_4_Turchaninov>
   <R198_LTS_85>
     <id>	117	</id>
     <userString>	#ussr_vehicles:R198_LTS_85	</userString>
@@ -2209,15 +2235,13 @@
     <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle	</tags>
     <level>	8	</level>
   </R205_Tank_Rozanova_Obsidian>
-  <R97_Object_140_hound_TLXXL>
-    <id>	248	</id>
-    <userString>	#ussr_vehicles:R97_Object_140_hound_TLXXL	</userString>
-    <description>	#ussr_vehicles:R97_Object_140_hound_TLXXL_descr	</description>
-    <shortUserString>	#ussr_vehicles:R97_Object_140_hound_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#ussr_vehicles:R97_Object_140_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal event_hunter event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals builtinRepairkit_wt_user builtinLargeMedkit_wt_user builtinSelfRepair_wt_user builtinExplosiveShot_wt_user mode_hidden hideStorage hideCrew	</tags>
-    <level>	10	</level>
-  </R97_Object_140_hound_TLXXL>
+  <R1004_T-34_StoryMode>
+    <id>	401	</id>
+    <userString>	#ussr_vehicles:T-34	</userString>
+    <description>	#ussr_vehicles:T-34_descr	</description>
+    <price>	356700	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </R1004_T-34_StoryMode>
 </list.xml>

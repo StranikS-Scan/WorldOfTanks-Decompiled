@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/doc_loaders/surveys_loader.py
 from collections import namedtuple, defaultdict
 import logging
-from gui.mapbox.mapbox_survey_helper import Condition, QuantifierTypes, AlternativeOneManyQuestion, AlternativeQuestion, getQuestionClass
+from gui.mapbox.mapbox_survey_helper import Condition, QuantifierTypes, AlternativeOneManyQuestion, AlternativeQuestion, getQuestionClass, findQuestionById
 import resource_helper
 from soft_exception import SoftException
 from shared_utils import findFirst
@@ -15,21 +15,31 @@ _AdditionalParam = namedtuple('_AdditionalParam', ('fromQuestion', 'answers', 'o
 _TextParams = namedtuple('_TextParams', ('param', 'isJoined'))
 _Responses = namedtuple('_Responses', ('variants', 'responseGroups'))
 
-def _readCondition(section, isRequired):
-    if not section.has_key('condition'):
-        return None
+def _readConditions(section, isRequired):
+    if section.has_key('condition'):
+        simpleCondition = [_readCondition(section['condition'], isRequired)]
     else:
-        subSection = section['condition']
-        requiredQuestionId = subSection['requiredQuestionId'].asString
-        requiredOptionId = subSection.readString('requiredOptionId')
-        requiredAnswers = [ answerId for answerId in subSection['requiredAnswers'].asString.split(' ') ]
-        if not requiredAnswers:
-            raise SoftException('Unfilled required answers for the condition')
-        innerSubsection = subSection['requiredAnswers']
-        quantifier = QuantifierTypes.SINGLE.value if not innerSubsection.keys() else innerSubsection['quantifier'].asString
-        if not QuantifierTypes.hasValue(quantifier):
-            raise SoftException('Unsupported condition type for the mapbox survey')
-        return Condition(requiredQuestionId, requiredOptionId, requiredAnswers, quantifier, isRequired)
+        simpleCondition = None
+    if section.has_key('optionalConditions'):
+        optionalConditions = [ _readCondition(subSection, isRequired) for subSection in section['optionalConditions'].values() ]
+    else:
+        optionalConditions = None
+    if simpleCondition and optionalConditions:
+        raise SoftException('Incorrect conditions section for the question')
+    return simpleCondition or optionalConditions or ()
+
+
+def _readCondition(section, isRequired):
+    requiredQuestionId = section['requiredQuestionId'].asString
+    requiredOptionId = section.readString('requiredOptionId')
+    requiredAnswers = [ answerId for answerId in section['requiredAnswers'].asString.split(' ') ]
+    if not requiredAnswers:
+        raise SoftException('Unfilled required answers for the condition')
+    innerSubsection = section['requiredAnswers']
+    quantifier = QuantifierTypes.SINGLE.value if not innerSubsection.keys() else innerSubsection['quantifier'].asString
+    if not QuantifierTypes.hasValue(quantifier):
+        raise SoftException('Unsupported condition type for the mapbox survey')
+    return Condition(requiredQuestionId, requiredOptionId, requiredAnswers, quantifier, isRequired)
 
 
 def _readSourceSection(section):
@@ -92,7 +102,7 @@ def _readQuestion(surveyGroup, questionSection, questionTypes):
     qId = questionSection['questionId'].asString
     isRequired = questionSection['isRequired'].asBool
     isMultiple = questionSection['isMultiple'].asBool
-    condition = _readCondition(questionSection, isRequired)
+    conditions = _readConditions(questionSection, isRequired)
     guiParameters = _readGuiParameters(questionSection)
     responses = _readResponses(questionSection)
     options = _readOptions(questionSection)
@@ -101,7 +111,7 @@ def _readQuestion(surveyGroup, questionSection, questionTypes):
     if qType not in questionTypes:
         raise SoftException('Incorrect question type "%s" in the survey settings' % qType)
     clz = getQuestionClass(qType)
-    return clz(surveyGroup=surveyGroup, questionId=qId, questionType=qType, isMultiple=isMultiple, isRequired=isRequired, condition=condition, answers=responses, options=options, linkedParameters=linkedParameters, guiParameters=guiParameters)
+    return clz(surveyGroup=surveyGroup, questionId=qId, questionType=qType, isMultiple=isMultiple, isRequired=isRequired, conditions=conditions, answers=responses, options=options, linkedParameters=linkedParameters, guiParameters=guiParameters)
 
 
 def _readAlternativeQuestion(surveyGroup, questionSection, questionTypes, qId):
@@ -132,6 +142,14 @@ def _readSurveys():
                 question = _readAlternativeQuestion(surveyGroup, questionSection, questionTypes, qId)
             else:
                 question = _readQuestion(surveyGroup, questionSection, questionTypes)
+            conditions = question.getConditions()
+            for condition in conditions:
+                requiredQuestionId = condition.requiredQuestionId
+                requiredQuestion = findQuestionById(requiredQuestionId, questions)
+                if requiredQuestion is None:
+                    raise SoftException('Incorrect question id "%s" for condition in the survey settings' % requiredQuestionId)
+                requiredQuestion.updateDependedQuestions(question.getQuestionId())
+
             questions.append(question)
 
         result[bonusType].append(_Survey(surveyGroup, surveyId, questions))

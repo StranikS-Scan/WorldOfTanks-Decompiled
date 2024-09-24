@@ -126,7 +126,7 @@ def getVehicleShotSpeedByFactors(factors, speed, gravity=1.0):
     return (speed, gravity)
 
 
-def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):
+def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False, shellsAmount=0):
     respawnReloadFactor = max(factors['respawnReloadTimeFactor'], 0.0)
     factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
     firstShellReload = vehicleDescr.gun.reloadTime
@@ -134,6 +134,8 @@ def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):
         firstShellReload = vehicleDescr.gun.dualGun.reloadTimes[0]
     elif 'clip' in vehicleDescr.gun.tags and 'autoreload' in vehicleDescr.gun.tags:
         firstShellReload = vehicleDescr.gun.autoreload.reloadTime[-1]
+    elif 'twinGun' in vehicleDescr.gun.tags and shellsAmount > 1:
+        firstShellReload = vehicleDescr.gun.twinGun.twinGunReloadTime
     return firstShellReload * factor if ignoreRespawn else firstShellReload * factor * respawnReloadFactor
 
 
@@ -160,6 +162,14 @@ def getDualGunReloadTime(vehicleDescr, factors):
         return tuple((reloadTime * factor for reloadTime in vehicleDescr.gun.dualGun.reloadTimes))
     else:
         return (0.0,)
+
+
+def geTwinGunReloadTime(vehicleDescr, factors):
+    if 'twinGun' in vehicleDescr.gun.tags:
+        factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+        oneGunReloadTime = vehicleDescr.gun.reloadTime * factor
+        twinGunsReloadTime = vehicleDescr.gun.twinGun.twinGunReloadTime * factor
+        return (oneGunReloadTime, twinGunsReloadTime)
 
 
 def getTurretRotationSpeed(vehicleDescr, factors):
@@ -239,6 +249,8 @@ if IS_CLIENT:
         if 'dualAccuracy' in gun.tags:
             values.append(gun.dualAccuracy.afterShotDispersionAngle)
         values.append(gun.shotDispersionAngle)
+        if 'twinGun' in gun.tags:
+            values.append(vehicleDescr.siegeVehicleDescr.gun.shotDispersionAngle)
         return (value * vehicleDescr.miscAttrs['multShotDispersionFactor'] * shotDispersionFactor for value in values)
 
 

@@ -11,10 +11,8 @@ import CGF
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus
 from helpers import dependency
-from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 from GenericComponents import TransformComponent
 from cgf_script.component_meta_class import registerComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery
@@ -585,26 +583,3 @@ class HangarCameraManager(CGF.ComponentManager):
                 farDist = self.__prevDOFParams.farDist + progress * (self.__currentDOFParams.farDist - self.__prevDOFParams.farDist)
                 self.__customizationHelper.setDOFenabled(True)
                 self.__customizationHelper.setDOFparams(nearStart, nearDist, farStart, farDist)
-
-
-class WTHangarManager(CGF.ComponentManager):
-    _prbVehicle = dependency.descriptor(IPrebattleVehicle)
-    __WTEVENT_CAMERA_NAMES = {'EventTankHunter', 'EventTankBoss', 'Tank'}
-
-    def __init__(self, *args):
-        super(WTHangarManager, self).__init__(*args)
-        self.__camerasAvailable = set()
-
-    def activate(self):
-        _logger.info('WTHangarManager::activate')
-        self.__camerasAvailable.clear()
-
-    def deactivate(self):
-        self.__camerasAvailable.clear()
-
-    @onAddedQuery(CameraComponent, tickGroup='postHierarchyUpdate')
-    def onNewCameraAdded(self, cameraComponent):
-        _logger.info('WTHangarManager::new cam %s', cameraComponent.name)
-        self.__camerasAvailable.add(cameraComponent.name)
-        if self.__WTEVENT_CAMERA_NAMES.issubset(self.__camerasAvailable):
-            nextTick(self._prbVehicle.selectPreviousVehicle)()

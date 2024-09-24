@@ -6,6 +6,7 @@ from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOP
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.battle_control.view_components import ViewComponentsController
 if typing.TYPE_CHECKING:
+    from typing import Optional
     from Math import Matrix
     from EmptyEntity import EmptyEntity
     from items.vehicles import VehicleDescr
@@ -13,7 +14,7 @@ if typing.TYPE_CHECKING:
     from vehicle_systems.appearance_cache import VehicleAppearanceCacheInfo
     from vehicle_systems.CompoundAppearance import CompoundAppearance
     from points_of_interest.components import PoiStateComponent
-    from cgf_components.zone_components import ZoneMarker, ZoneUINotification
+    from cgf_components.zone_components import ZoneMarker, RandomEventZoneUINotification, WeatherZoneUINotification
     from UIComponents import MinimapChangerComponent
     from pve_battle_hud import WidgetType
     from gui.battle_control.controllers.vse_hud_settings_ctrl.vse_hud_settings_ctrl import SettingsTypes, ItemSettingsTypes
@@ -319,20 +320,7 @@ class IRadarController(object):
 
 class ISpawnController(object):
 
-    @property
-    def isSpawnPointsVisible(self):
-        raise NotImplementedError
-
-    def showSpawnPoints(self, points, pointGuid=None):
-        raise NotImplementedError
-
-    def updateSpawnPoints(self, points, pointGuid=None):
-        raise NotImplementedError
-
-    def closeSpawnPoints(self):
-        raise NotImplementedError
-
-    def chooseSpawnKeyPoint(self, pointId):
+    def showSpawnPoints(self, points):
         raise NotImplementedError
 
 
@@ -398,7 +386,13 @@ class IPrebattleSetupsController(IArenaPeriodController, IArenaLoadController, V
     def setVehicleAttrs(self, vehicleID, attrs):
         raise NotImplementedError
 
+    def onCurrentShellUpdate(self, vehicleID):
+        raise NotImplementedError
+
     def switchLayout(self, groupID, layoutIdx):
+        raise NotImplementedError
+
+    def getSlotItem(self, group, layout, slotId):
         raise NotImplementedError
 
 
@@ -546,13 +540,22 @@ class IMapZonesController(IBattleController):
     def removeTransformedZone(self, zone):
         raise NotImplementedError
 
-    def enterDangerZone(self, zone):
+    def enterRandomEventZone(self, zone):
         raise NotImplementedError
 
-    def exitDangerZone(self, zone):
+    def exitRandomEventZone(self, zone):
         raise NotImplementedError
 
-    def removeDangerZone(self, zone):
+    def removeRandomEventZone(self, zone):
+        raise NotImplementedError
+
+    def enterWeatherZone(self, zone):
+        raise NotImplementedError
+
+    def exitWeatherZone(self, zone):
+        raise NotImplementedError
+
+    def removeWeatherZone(self, zone):
         raise NotImplementedError
 
     def getZoneMarkers(self):
@@ -631,16 +634,4 @@ class IBattleSpamController(IBattleController):
         raise NotImplementedError
 
     def filterMarkersHitState(self, targetID, stateKey):
-        raise NotImplementedError
-
-
-class IPlayersPanelController(IArenaVehiclesController, ViewComponentsController):
-
-    def show(self, params):
-        raise NotImplementedError
-
-    def hide(self, params):
-        raise NotImplementedError
-
-    def processReplay(self, params):
         raise NotImplementedError

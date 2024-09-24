@@ -272,11 +272,19 @@ class ComponentBase(object):
             event = getattr(self.parent.lifecycleEvents, name)
             if not isinstance(event, Event):
                 continue
-            event += getattr(self, '_' + name)
+            method = getattr(self, '_' + name, None)
+            if method:
+                event += method
+
+        return
 
     def __unsubscribeFromLifecycleEvents(self):
         for name in dir(self.parent.lifecycleEvents):
             event = getattr(self.parent.lifecycleEvents, name)
             if not isinstance(event, Event):
                 continue
-            event -= getattr(self, '_' + name)
+            method = getattr(self, '_' + name, None)
+            if method:
+                event -= method
+
+        return

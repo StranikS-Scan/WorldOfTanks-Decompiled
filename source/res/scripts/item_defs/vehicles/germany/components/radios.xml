@@ -46,6 +46,7 @@
     <FuG5_KW>	257	</FuG5_KW>
     <SEM_25B>	258	</SEM_25B>
     <Fu_8_SE_30_M>	259	</Fu_8_SE_30_M>
+    <SEM_25C>	260	</SEM_25C>
     <R_5a_S>	263	</R_5a_S>
     <FuG5_SH>	314	</FuG5_SH>
     <FuG7_SH>	315	</FuG7_SH>
@@ -55,10 +56,6 @@
     <FuG_Spr.1_SH>	319	</FuG_Spr.1_SH>
     <FuG5A_SH_bot>	320	</FuG5A_SH_bot>
     <FuG7A_SH_B>	321	</FuG7A_SH_B>
-    <R113_WT>	402	</R113_WT>
-    <FuG_WT>	403	</FuG_WT>
-    <AN-GRC-7_WT>	404	</AN-GRC-7_WT>
-    <FuG12_WT>	405	</FuG12_WT>
     <FuG12_FL>	501	</FuG12_FL>
     <FuG7A_IGR>	60001	</FuG7A_IGR>
     <FuG12_IGR>	60002	</FuG12_IGR>
@@ -76,6 +73,7 @@
     <_10WSc_StoryMode>	64012	</_10WSc_StoryMode>
     <FuG12_StoryMode__1>	64013	</FuG12_StoryMode__1>
     <FuG12_StoryMode_2>	64014	</FuG12_StoryMode_2>
+    <FuG5_StoryMode>	64040	</FuG5_StoryMode>
   </ids>
   <shared>
     <FuG2>
@@ -323,18 +321,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12>
-    <FuG12_WT>
-      <userString>	#germany_vehicles:FuG12	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	150	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </FuG12_WT>
     <FuG12_FL>
       <userString>	#germany_vehicles:FuG12	</userString>
       <tags></tags>
@@ -476,18 +462,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </FuG12A>
-    <FuG_WT>
-      <userString>	#germany_vehicles:FuG_WT	</userString>
-      <notInShop>	true	</notInShop>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	7200	</price>
-      <weight>	150	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </FuG_WT>
     <SEM25>
       <userString>	#germany_vehicles:SEM25	</userString>
       <tags></tags>
@@ -533,18 +507,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-GRC-7>
-    <AN-GRC-7_WT>
-      <userString>	#germany_vehicles:AN-GRC-7	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	120	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN-GRC-7_WT>
     <AN_GRC_8>
       <userString>	#germany_vehicles:AN_GRC_8	</userString>
       <tags></tags>
@@ -593,6 +555,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM_25B>
+    <SEM_25C>
+      <userString>	#germany_vehicles:SEM_25C	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM_25C>
     <SEM_25_funkgerat>
       <userString>	#germany_vehicles:SEM_25_funkgerat	</userString>
       <tags></tags>
@@ -688,18 +662,6 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </Kenttaradioasema_P_12_7>
-    <R113_WT>
-      <userString>	#germany_vehicles:R113	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113_WT>
     <FuG7A_IGR>
       <userString>	#igr_vehicles:FuG7A_IGR	</userString>
       <tags></tags>
@@ -985,5 +947,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </FuG12_StoryMode_2>
+    <FuG5_StoryMode>
+      <userString>	#germany_vehicles:FuG5	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	630	</price>
+      <weight>	50	</weight>
+      <distance>	310	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </FuG5_StoryMode>
   </shared>
 </radios.xml>

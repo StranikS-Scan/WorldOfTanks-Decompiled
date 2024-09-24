@@ -40,7 +40,7 @@ class EpilogueView(ViewImpl):
         super(EpilogueView, self)._onLoaded(*args, **kwargs)
         self._uiLogger.logOpen()
         data = getLoreSettings()
-        SoundGroups.g_instance.playSound2D(data.epilogue.music)
+        SoundGroups.g_instance.playSound2D(data.epilogue.music.start)
         SoundGroups.g_instance.playSound2D(data.epilogue.vo)
 
     def _finalize(self):

@@ -15,7 +15,7 @@ class IAutoShootingEvents(object):
     onShotRateUpdate = None
 
     def destroy(self):
-        raise NotImplementedError
+        pass
 
     def lateSubscribe(self, listener):
         raise NotImplementedError

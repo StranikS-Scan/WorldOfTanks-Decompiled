@@ -6,10 +6,8 @@ from gui.impl.gen.view_models.views.lobby.mapbox.map_box_awards_view_model impor
 from gui.impl.lobby.mapbox.sound import getMapboxViewSoundSpace, MapBoxSounds, playSound
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker
-from gui.mapbox.mapbox_helpers import packMapboxRewardModelAndTooltip, getMapboxRewardTooltip
-from gui.shared.event_dispatcher import showMapboxRewardChoice
-from shared_utils import first
+from gui.mapbox.mapbox_bonus_packers import getMapboxBonusPacker, packMapboxRewardModelAndTooltip
+from gui.mapbox.mapbox_helpers import getMapboxRewardTooltip
 
 class MapBoxAwardsView(ViewImpl):
     __slots__ = ('__numBattles', '__tooltips', '__reward')
@@ -32,14 +30,6 @@ class MapBoxAwardsView(ViewImpl):
         tooltip = getMapboxRewardTooltip(event, self.__tooltips, self.getParentWindow())
         return tooltip or super(MapBoxAwardsView, self).createToolTip(event)
 
-    def _initialize(self, *args, **kwargs):
-        super(MapBoxAwardsView, self)._initialize(*args, **kwargs)
-        self.viewModel.onPick += self.__onPick
-
-    def _finalize(self):
-        self.viewModel.onPick -= self.__onPick
-        super(MapBoxAwardsView, self)._finalize()
-
     def _onLoading(self, *args, **kwargs):
         super(MapBoxAwardsView, self)._onLoading(*args, **kwargs)
         packer = getMapboxBonusPacker()
@@ -49,12 +39,6 @@ class MapBoxAwardsView(ViewImpl):
             packMapboxRewardModelAndTooltip(rewardsList, self.__reward, packer, self.__numBattles, self.__tooltips)
             rewardsList.invalidate()
         playSound(MapBoxSounds.REWARD_SCREEN.value)
-
-    def __onPick(self, args):
-        rewardModel = self.viewModel.rewards.getItem(int(args['index']))
-        selectableCrewbook = first([ item for item in self.__reward if item.getName() == 'selectableCrewbook' ])
-        reward = first([ item for item in selectableCrewbook.getItems() if item.name == rewardModel.getName() ])
-        showMapboxRewardChoice(reward)
 
 
 class MapBoxAwardsViewWindow(LobbyNotificationWindow):

@@ -87,13 +87,3 @@ class RestrictedRoleTagDataProvider(object):
     @property
     def squadRestrictions(self):
         return self._unitEntity.squadRestrictions
-
-
-class RestrictedSquadDataProvider(RestrictedRoleTagDataProvider):
-    _VEHICLE_TAG = 'squad_restricted'
-
-    def getRestrictionLevels(self, roleTag):
-        return None
-
-    def getMaxPossibleVehicles(self, roleTag):
-        pass

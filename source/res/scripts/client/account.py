@@ -736,10 +736,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_MAPS_TRAINING, 0, 0, 0)
 
-    def enqueueWinback(self, vehInvID):
+    def enqueueWinback(self, vehInvID, winbackFlags=0):
         if events.isPlayerEntityChanging:
             return
-        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.WINBACK, vehInvID])
+        self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.WINBACK, vehInvID, winbackFlags])
 
     def dequeueWinback(self):
         if not events.isPlayerEntityChanging:
@@ -827,7 +827,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def prb_changeArena(self, arenaTypeID, callback):
         if events.isPlayerEntityChanging:
             return
-        self._doCmdInt3(AccountCommands.CMD_PRB_CH_ARENA, arenaTypeID, 0, 0, lambda requestID, resultID, errorStr: callback(resultID))
+        self._doCmdInt3(AccountCommands.CMD_PRB_CH_ARENA, arenaTypeID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode=errorCode))
 
     def prb_changeRoundLength(self, roundLength, callback):
         if events.isPlayerEntityChanging:

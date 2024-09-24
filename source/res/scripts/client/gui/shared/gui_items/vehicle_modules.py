@@ -10,7 +10,7 @@ from gui.impl.gen import R
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT
+from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN
 from gui.shared.money import Currency
 import nations
 from items import vehicles as veh_core
@@ -188,6 +188,10 @@ class VehicleGun(VehicleModule):
         typeToCheck = GUN_DUAL_GUN if vehicleDescr is not None else GUN_CAN_BE_DUAL_GUN
         return self.getReloadingType(vehicleDescr) == typeToCheck
 
+    def isTwinGun(self, vehicleDescr=None):
+        typeToCheck = GUN_TWIN_GUN if vehicleDescr is not None else GUN_CAN_BE_TWIN_GUN
+        return self.getReloadingType(vehicleDescr) == typeToCheck
+
     def isDamageMutable(self):
         return self.descriptor.isDamageMutable
 
@@ -223,7 +227,9 @@ class VehicleGun(VehicleModule):
     @property
     def userType(self):
         userType = super(VehicleGun, self).userType
-        return backport.text(R.strings.item_types.dualGun.name()) if self.isDualGun() else userType
+        if self.isDualGun():
+            return backport.text(R.strings.item_types.dualGun.name())
+        return backport.text(R.strings.item_types.twinGun.name()) if self.isTwinGun() else userType
 
     def getExtraIconInfo(self, vehDescr=None):
         if self.isClipGun(vehDescr):
@@ -241,8 +247,10 @@ class VehicleGun(VehicleModule):
             return backport.image(R.images.gui.maps.icons.modules.dualGun())
         elif self.hasDualAccuracy(vehDescr):
             return backport.image(R.images.gui.maps.icons.modules.dualAccuracy())
+        elif self.isDamageMutable():
+            return backport.image(R.images.gui.maps.icons.modules.damageMutable())
         else:
-            return backport.image(R.images.gui.maps.icons.modules.damageMutable()) if self.isDamageMutable() else None
+            return backport.image(R.images.gui.maps.icons.modules.twinGun()) if self.isTwinGun(vehDescr) else None
 
     def getGUIEmblemID(self):
         return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
@@ -264,7 +272,9 @@ class VehicleGun(VehicleModule):
             return '/'.join((key, 'autoReload'))
         if self.isAutoShoot(vehicleDescr):
             return '/'.join((key, 'autoShoot'))
-        return '/'.join((key, 'dualGun')) if self.isDualGun(vehicleDescr) else key
+        if self.isDualGun(vehicleDescr):
+            return '/'.join((key, 'dualGun'))
+        return '/'.join((key, 'twinGun')) if self.isTwinGun(vehicleDescr) else key
 
 
 class VehicleEngine(VehicleModule):

@@ -17,7 +17,7 @@ from story_mode.gui import story_mode_gui_constants
 from story_mode.gui.app_loader import observers
 from story_mode.gui.battle_control.controllers import equipments_items
 from story_mode.gui.battle_control.controllers.repository import OnboardingRepository, StoryModeRepository, StoryModeSharedRepository
-from story_mode.gui.game_control.story_mode_controller import entryPointValidator
+from story_mode.gui.game_control.story_mode_controller import eventEntryPointValidator, newbieEntryPointValidator
 from story_mode.gui.game_control.story_mode_fading_controller import StoryModeFadingController
 from story_mode.gui.scaleform.genConsts.STORY_MODE_BATTLE_VIEW_ALIASES import STORY_MODE_BATTLE_VIEW_ALIASES
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
@@ -30,11 +30,11 @@ from story_mode_common.configs.story_mode_settings import settingsSchema
 class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
     _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE
     _CLIENT_PRB_ACTION_NAME = story_mode_gui_constants.PREBATTLE_ACTION_NAME.STORY_MODE
-    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_ENTRY_POINT
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_NEWBIE_ENTRY_POINT
 
     @property
     def _client_bannerEntryPointValidatorMethod(self):
-        return entryPointValidator
+        return newbieEntryPointValidator
 
     @property
     def _client_prbEntityClass(self):
@@ -122,6 +122,14 @@ class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
         return []
 
 
+class ClientEventBattleMode(ClientStoryModeBattleMode):
+    _CLIENT_BANNER_ENTRY_POINT_ALIAS = VIEW_ALIAS.STORY_MODE_EVENT_ENTRY_POINT
+
+    @property
+    def _client_bannerEntryPointValidatorMethod(self):
+        return eventEntryPointValidator
+
+
 def preInit():
     LOG_DEBUG('preInit personality:', __name__)
     schemaManager = getSchemaManager()
@@ -158,6 +166,8 @@ def preInit():
     onboardingBattleMode.registerClientBattleResultsCtrl()
     onboardingBattleMode.registerBattleResultSysMsgType()
     onboardingBattleMode.registerBattleControllersRepository()
+    eventBattleMode = ClientEventBattleMode(__name__)
+    eventBattleMode.registerBannerEntryPointValidatorMethod()
     observers.preInit()
 
 

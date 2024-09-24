@@ -1,0 +1,63 @@
+<11_murovanka_mb.xml>
+  <name>	#arenas:11_murovanka_mb/name	</name>
+  <description>	#arenas:11_murovanka_mb/description	</description>
+  <geometry>	spaces/11_murovanka_mb	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/11_murovanka_mb/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	mmap_11_ls_forestfire01	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/11_murovanka_mb/mmap_11_ls_forestfire01.dds	</path>
+    </layer>
+  </minimapLayers>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <defaultGroundEffect>	None	</defaultGroundEffect>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_murovanka_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_murovanka_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_murovanka_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_murovanka_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_murovanka_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_murovanka_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	map_box_battle.bnk	</name>
+      </bank>
+      <bank>
+        <name>	map_box_battle.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-55.000191 417.299988	</position1>
+        </team1>
+        <team2>
+          <position1>	-55.000278 -407.199982	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</11_murovanka_mb.xml>

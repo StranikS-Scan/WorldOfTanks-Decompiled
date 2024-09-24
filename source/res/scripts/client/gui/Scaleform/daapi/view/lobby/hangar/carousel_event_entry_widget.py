@@ -4,13 +4,14 @@ import itertools
 import typing
 from gui.Scaleform.daapi.view.meta.CarouselEventEntryMeta import CarouselEventEntryMeta
 from gui.impl.gen import R
+from gui.impl.lobby.lootbox_system.entry_point import LootBoxSystemEntryPoint
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.listener import IPrbListener
 from gui.shared.system_factory import collectCarouselEventEntryPoints
 if typing.TYPE_CHECKING:
     from typing import Dict, Type
     from skeletons.gui.hangar import ICarouselEventEntry
-_VIEWS = {}
+_VIEWS = {R.views.lobby.lootbox_system.EntryPointView(): LootBoxSystemEntryPoint}
 
 class CarouselEventEntryHolder(CarouselEventEntryMeta, IPrbListener):
 
@@ -30,8 +31,7 @@ class CarouselEventEntryHolder(CarouselEventEntryMeta, IPrbListener):
         self.updateState()
 
     def _makeInjectView(self, viewID=None):
-        view = _VIEWS.get(viewID) or collectCarouselEventEntryPoints().get(viewID)
-        return view()
+        return (_VIEWS.get(viewID) or collectCarouselEventEntryPoints().get(viewID))()
 
 
 def isAnyEntryVisible():

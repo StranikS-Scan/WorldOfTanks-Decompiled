@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/AvatarInputHandler/aih_global_binding.py
 import logging
 import Math
-from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CHARGE_MARKER_STATE
+from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _FLOAT_EPSILON = 0.003
@@ -21,7 +21,7 @@ class BINDING_ID(object):
     SERVER_SPG_GUN_MARKER_DATA_PROVIDER = 11
     DUAL_ACC_GUN_MARKER_DATA_PROVIDER = 12
     STRATEGIC_CAMERA = 13
-    CHARGE_MARKER_STATE = 14
+    MULTI_GUN_COLLISIONS = 14
     SPG_SHOTS_INDICATOR_STATE = 15
     RANGE = (CTRL_MODE_NAME,
      AIM_OFFSET,
@@ -35,7 +35,7 @@ class BINDING_ID(object):
      SERVER_GUN_MARKER_DATA_PROVIDER,
      SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
      STRATEGIC_CAMERA,
-     CHARGE_MARKER_STATE,
+     MULTI_GUN_COLLISIONS,
      SPG_SHOTS_INDICATOR_STATE,
      DUAL_ACC_GUN_MARKER_DATA_PROVIDER)
 
@@ -95,7 +95,7 @@ _DEFAULT_VALUES = {BINDING_ID.CTRL_MODE_NAME: lambda : _Observable(CTRL_MODE_NAM
  BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.DUAL_ACC_GUN_MARKER_DATA_PROVIDER: lambda : _Observable(None),
  BINDING_ID.STRATEGIC_CAMERA: lambda : _Observable(STRATEGIC_CAMERA.DEFAULT),
- BINDING_ID.CHARGE_MARKER_STATE: lambda : _Observable(CHARGE_MARKER_STATE.DEFAULT),
+ BINDING_ID.MULTI_GUN_COLLISIONS: lambda : _Observable(()),
  BINDING_ID.SPG_SHOTS_INDICATOR_STATE: lambda : _Observable({})}
 
 class _GlobalDataDescriptor(object):

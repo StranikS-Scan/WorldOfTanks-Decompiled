@@ -245,10 +245,6 @@ class _BaseRecruitInfo(object):
         dynAccessor = R.images.gui.maps.icons.tankmen.icons.big.dyn(self.getDynIconName())
         return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.big.tankman())
 
-    def getSmallIconPath(self):
-        dynAccessor = R.images.gui.maps.icons.tankmen.icons.small.dyn(self.getDynIconName())
-        return backport.image(dynAccessor()) if dynAccessor.isValid() else backport.image(R.images.gui.maps.icons.tankmen.icons.small.tankman())
-
     def getBarracksIcon(self):
         return self._icon
 

@@ -271,6 +271,7 @@ class SYSTEM_MESSAGES(object):
     TRAINING_ERROR_DOACTION = '#system_messages:training/error/doAction'
     TRAINING_ERROR_SELECTOBSERVER = '#system_messages:training/error/selectObserver'
     TRAINING_ERROR_ADDPLAYER = '#system_messages:training/error/AddPlayer'
+    TRAINING_ERROR_ONSLAUGHTROSTERLIMIT = '#system_messages:training/error/onslaughtRosterLimit'
     BATTLESESSION_ERROR_ADDPLAYER = '#system_messages:battlesession/error/AddPlayer'
     BATTLESESSION_ERROR_ADDOBSERVER = '#system_messages:battlesession/error/AddObserver'
     BATTLESESSION_ERROR_LIMITS = '#system_messages:battlesession/error/Limits'
@@ -403,7 +404,6 @@ class SYSTEM_MESSAGES(object):
     ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR = '#system_messages:add_tankman_skill/vehicle_need_repair'
     ADD_TANKMAN_SKILL_VEHICLE_LOCKED = '#system_messages:add_tankman_skill/vehicle_locked'
     FILLING_UNTRAINED_PERKS_SUCCESS = '#system_messages:filling_untrained_perks/success'
-    ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED = '#system_messages:add_tankman_skill/crew_skills_locked'
     FILLING_UNTRAINED_PERKS_SERVER_ERROR = '#system_messages:filling_untrained_perks/server_error'
     DROP_TANKMAN_SKILL_SUCCESS = '#system_messages:drop_tankman_skill/success'
     DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS = '#system_messages:drop_tankman_skill/finance_success_credits'
@@ -1146,6 +1146,7 @@ class SYSTEM_MESSAGES(object):
     ROYALE_NOTIFICATION_PRIMETIME_TITLE = '#system_messages:royale/notification/primeTime/title'
     ROYALE_NOTIFICATION_CONGRATULATIONS = '#system_messages:royale/notification/congratulations'
     ROYALE_NOTIFICATIONS_SINGLELEVEL_TEXT = '#system_messages:royale/notifications/singleLevel/text'
+    MAPBOX_NOTIFICATION_PRIMETIME_TITLE = '#system_messages:mapbox/notification/primeTime/title'
     MAPBOX_NOTIFICATION_PRIMETIME = '#system_messages:mapbox/notification/primeTime'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
     RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE = '#system_messages:ranked/notification/yearLB/positive/title'
@@ -1355,6 +1356,11 @@ class SYSTEM_MESSAGES(object):
     PARENTCONTROL_TITLE = '#system_messages:parentControl/title'
     PARENTCONTROL_MAINTEXT = '#system_messages:parentControl/mainText'
     PARENTCONTROL_LINKTEXT = '#system_messages:parentControl/linkText'
+    PARENTCONTROL_PRIVATEMESSAGESFORBIDDEN = '#system_messages:parentControl/privateMessagesForbidden'
+    PARENTCONTROL_NONFRIENDPRIVATEMESSAGESFORBIDDEN = '#system_messages:parentControl/nonFriendPrivateMessagesForbidden'
+    COUNTRYRESTRICTION_PRIVATEMESSAGESFORBIDDEN = '#system_messages:countryRestriction/privateMessagesForbidden'
+    OTHERRESTRICTION_PRIVATEMESSAGESFORBIDDEN = '#system_messages:otherRestriction/privateMessagesForbidden'
+    OTHERRESTRICTION_NONFRIENDPRIVATEMESSAGESFORBIDDEN = '#system_messages:otherRestriction/nonFriendPrivateMessagesForbidden'
     RESOURCEWELL_RESOURCESLOADINGERROR = '#system_messages:resourceWell/resourcesLoadingError'
     RESOURCEWELL_RESOURCESRETURNERROR = '#system_messages:resourceWell/resourcesReturnError'
     UNIT_WARNINGS_EXPIRED_PLAY_LIMITS = '#system_messages:unit/warnings/EXPIRED_PLAY_LIMITS'
@@ -1782,6 +1788,7 @@ class SYSTEM_MESSAGES(object):
      TRAINING_ERROR_DOACTION,
      TRAINING_ERROR_SELECTOBSERVER,
      TRAINING_ERROR_ADDPLAYER,
+     TRAINING_ERROR_ONSLAUGHTROSTERLIMIT,
      BATTLESESSION_ERROR_ADDPLAYER,
      BATTLESESSION_ERROR_ADDOBSERVER,
      BATTLESESSION_ERROR_LIMITS,
@@ -1914,7 +1921,6 @@ class SYSTEM_MESSAGES(object):
      ADD_TANKMAN_SKILL_VEHICLE_NEED_REPAIR,
      ADD_TANKMAN_SKILL_VEHICLE_LOCKED,
      FILLING_UNTRAINED_PERKS_SUCCESS,
-     ADD_TANKMAN_SKILL_CREW_SKILLS_LOCKED,
      FILLING_UNTRAINED_PERKS_SERVER_ERROR,
      DROP_TANKMAN_SKILL_SUCCESS,
      DROP_TANKMAN_SKILL_FINANCE_SUCCESS_CREDITS,
@@ -2657,6 +2663,7 @@ class SYSTEM_MESSAGES(object):
      ROYALE_NOTIFICATION_PRIMETIME_TITLE,
      ROYALE_NOTIFICATION_CONGRATULATIONS,
      ROYALE_NOTIFICATIONS_SINGLELEVEL_TEXT,
+     MAPBOX_NOTIFICATION_PRIMETIME_TITLE,
      MAPBOX_NOTIFICATION_PRIMETIME,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
      RANKED_NOTIFICATION_YEARLB_POSITIVE_TITLE,
@@ -2866,6 +2873,11 @@ class SYSTEM_MESSAGES(object):
      PARENTCONTROL_TITLE,
      PARENTCONTROL_MAINTEXT,
      PARENTCONTROL_LINKTEXT,
+     PARENTCONTROL_PRIVATEMESSAGESFORBIDDEN,
+     PARENTCONTROL_NONFRIENDPRIVATEMESSAGESFORBIDDEN,
+     COUNTRYRESTRICTION_PRIVATEMESSAGESFORBIDDEN,
+     OTHERRESTRICTION_PRIVATEMESSAGESFORBIDDEN,
+     OTHERRESTRICTION_NONFRIENDPRIVATEMESSAGESFORBIDDEN,
      RESOURCEWELL_RESOURCESLOADINGERROR,
      RESOURCEWELL_RESOURCESRETURNERROR,
      UNIT_WARNINGS_EXPIRED_PLAY_LIMITS,

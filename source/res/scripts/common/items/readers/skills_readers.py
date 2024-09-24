@@ -108,11 +108,6 @@ def _readCommonSkill(xmlCtx, section, subsectionName):
     return skills_components.CommonSkill(skill)
 
 
-def _readRadiomanLastEffortSkill(xmlCtx, section, subsectionName):
-    skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.RadiomanLastEffortSkill(skill, _xml.readFloat(xmlCtx, section, 'durationPerLevel'), _xml.readFloat(xmlCtx, section, 'chanceToHitPerLevel'))
-
-
 def _readCrewMasterySkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
     return skills_components.CrewMasterySkill(skill, _xml.readFloat(xmlCtx, section, 'crewLevelIncrease'))
@@ -133,7 +128,6 @@ _g_skillConfigReaders = {'repair': _readRole,
  'commander_enemyShotPredictor': _readCommanderEnemyShotPredictorSkill,
  'commander_eagleEye': _readCommonSkill,
  'commander_practical': _readCommonSkill,
- 'driver_tidyPerson': _readCommonSkill,
  'driver_smoothDriving': _readCommonSkill,
  'driver_virtuoso': _readCommonSkill,
  'driver_badRoadsKing': _readCommonSkill,
@@ -154,7 +148,6 @@ _g_skillConfigReaders = {'repair': _readRole,
  'loader_melee': _readCommonSkill,
  'radioman_finder': _readCommonSkill,
  'radioman_expert': _readCrewMasterySkill,
- 'radioman_lastEffort': _readRadiomanLastEffortSkill,
  'radioman_sideBySide': _readCrewMasterySkill,
  'fireFighting': _readCommonSkill,
  'radioman_interference': _readCommonSkill,

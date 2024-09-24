@@ -47,7 +47,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.pve_base.pve_prebattle_timer import PvePrebattleTimer
     from messenger.gui.Scaleform.view.battle import messenger_view
     from gui.Scaleform.daapi.view.battle.shared.messages import VehicleMessages, VehicleErrorMessages
-    from gui.Scaleform.daapi.view.battle.shared.perks_panel import PerksPanel
+    from gui.Scaleform.daapi.view.battle.shared.situation_indicators import SituationIndicators
     from gui.Scaleform.daapi.view.battle.shared.indicators import RocketAcceleratorIndicator
     from gui.Scaleform.daapi.view.battle.shared.indicators import SiegeModeIndicator
     from gui.Scaleform.daapi.view.battle.shared.vehicles import DualGunComponent
@@ -110,7 +110,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DEBUG_PANEL, DebugPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CALLOUT_PANEL, CalloutPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SITUATION_INDICATORS, SituationIndicators, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_MESSAGES, VehicleMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.VEHICLE_ERROR_MESSAGES, VehicleErrorMessages, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_MESSENGER, messenger_view.BattleMessengerView, ScopeTemplates.DEFAULT_SCOPE),

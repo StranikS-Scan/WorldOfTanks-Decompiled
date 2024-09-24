@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class ModeSelectorRewardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(ModeSelectorRewardModel, self).__init__(properties=properties, commands=commands)
 
     def getIconName(self):
@@ -39,11 +39,17 @@ class ModeSelectorRewardModel(ViewModel):
     def setVehicleType(self, value):
         self._setString(4, value)
 
+    def getIsPremium(self):
+        return self._getBool(5)
+
+    def setIsPremium(self, value):
+        self._setBool(5, value)
+
     def getTooltipID(self):
-        return self._getString(5)
+        return self._getString(6)
 
     def setTooltipID(self, value):
-        self._setString(5, value)
+        self._setString(6, value)
 
     def _initialize(self):
         super(ModeSelectorRewardModel, self)._initialize()
@@ -52,4 +58,5 @@ class ModeSelectorRewardModel(ViewModel):
         self._addStringProperty('description', '')
         self._addStringProperty('vehicleLevel', '')
         self._addStringProperty('vehicleType', '')
+        self._addBoolProperty('isPremium', False)
         self._addStringProperty('tooltipID', '')

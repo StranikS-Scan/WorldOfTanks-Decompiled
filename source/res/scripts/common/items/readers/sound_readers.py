@@ -45,8 +45,4 @@ def readHullAimingSound(xmlCtx, section, cache):
 
 
 def readSoundSiegeModeStateChange(xmlCtx, section):
-    pcOn = _xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/on')
-    pcOff = _xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/off')
-    npcOn = _xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/npcOn')
-    npcOff = _xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/npcOff')
-    return sound_components.SoundSiegeModeStateChange(on=pcOn, off=pcOff, npcOn=npcOn, npcOff=npcOff, isEngine=_xml.readBool(xmlCtx, section, 'soundStateChange/isEngine', False))
+    return sound_components.SoundSiegeModeStateChange(on=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/on'), off=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/off'), npcOn=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/npcOn'), npcOff=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/npcOff'), isEngine=_xml.readBool(xmlCtx, section, 'soundStateChange/isEngine', False), trigger=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/trigger'), unavailable=_xml.readStringOrEmpty(xmlCtx, section, 'soundStateChange/unavailable'))

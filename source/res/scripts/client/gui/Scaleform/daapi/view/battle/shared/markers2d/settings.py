@@ -25,8 +25,12 @@ class MARKER_SYMBOL_NAME(object):
     STEP_REPAIR_MARKER_TYPE = 'ResupplyMarkerUI'
     WAYPOINT_MARKER = 'SectorWaypointMarkerUI'
     SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
-    EVENT_VEHICLE_MARKER = 'EventVehicleMarkerUI'
-    EVENT_GENERATOR_MARKER = 'GeneratorLocationMarkerUI'
+
+
+class DamageType(object):
+    FROM_OTHER = 0
+    FROM_SQUAD = 1
+    FROM_PLAYER = 2
 
 
 class CommonMarkerType(IntEnum):

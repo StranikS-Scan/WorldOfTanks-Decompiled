@@ -13,8 +13,9 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from story_mode.gui.scaleform.daapi.view.lobby.story_mode_entry_point_view import StoryModeEntryPointView
-    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE), ComponentSettings(VIEW_ALIAS.STORY_MODE_ENTRY_POINT, StoryModeEntryPointView, ScopeTemplates.DEFAULT_SCOPE))
+    from story_mode.gui.scaleform.daapi.view.lobby.story_mode_event_entry_point_view import StoryModeEventEntryPointView
+    from story_mode.gui.scaleform.daapi.view.lobby.story_mode_newbie_entry_point_view import StoryModeNewbieEntryPointView
+    return (ViewSettings(VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, StoryModeWebViewTransparent, 'browserScreen.swf', WindowLayer.FULLSCREEN_WINDOW, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, ScopeTemplates.LOBBY_SUB_SCOPE), ComponentSettings(VIEW_ALIAS.STORY_MODE_EVENT_ENTRY_POINT, StoryModeEventEntryPointView, ScopeTemplates.DEFAULT_SCOPE), ComponentSettings(VIEW_ALIAS.STORY_MODE_NEWBIE_ENTRY_POINT, StoryModeNewbieEntryPointView, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

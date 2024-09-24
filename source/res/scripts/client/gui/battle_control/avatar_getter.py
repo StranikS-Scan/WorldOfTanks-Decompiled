@@ -280,17 +280,6 @@ def activateAvatarEquipment(equipmentID, avatar=None, index=0):
     return
 
 
-def activateVehicleEquipment(equipmentID, param, avatar=None):
-    if avatar is None:
-        avatar = BigWorld.player()
-    try:
-        avatar.cell.activateVehicleEquipment(equipmentID, param)
-    except AttributeError:
-        _logger.exception('Attribute "cell.activateVehicleEquipment" not found')
-
-    return
-
-
 def leaveArena(avatar=None):
     if avatar is None:
         avatar = BigWorld.player()
@@ -532,3 +521,8 @@ def isPostmortemFeatureEnabled(ctrlModeName, avatar=None):
 def getIsObserverFPV():
     player = BigWorld.player()
     return player.isObserverFPV if player else False
+
+
+def getTargetID(undefinedTargetID=None):
+    player = BigWorld.player()
+    return player.target.id if player is not None and player.target is not None else undefinedTargetID

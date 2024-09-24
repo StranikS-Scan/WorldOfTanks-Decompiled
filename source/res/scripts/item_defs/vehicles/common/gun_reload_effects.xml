@@ -170,6 +170,14 @@
     <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
   </dualgun_reload85_107>
+  <twingun_reload85_107>
+    <type>	TwinGunReload	</type>
+    <sound>	gun_rld_dgp_reloading_oneshell	</sound>
+    <twinGunSound>	gun_rld_dgp_reloading_dualshell	</twinGunSound>
+    <runTimeDeltaOneGun>	0.9	</runTimeDeltaOneGun>
+    <runTimeDeltaTwinGun>	2.0	</runTimeDeltaTwinGun>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_85_107mm	</caliber>
+  </twingun_reload85_107>
   <reload115_152>
     <type>	SimpleReload	</type>
     <duration>	2150.0	</duration>
@@ -210,6 +218,14 @@
     <runTimeDeltaAmmoLow>	0.5	</runTimeDeltaAmmoLow>
     <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
   </dualgun_reload115_152>
+  <twingun_reload115_152>
+    <type>	TwinGunReload	</type>
+    <sound>	gun_rld_dgp_reloading_oneshell	</sound>
+    <twinGunSound>	gun_rld_dgp_reloading_dualshell	</twinGunSound>
+    <runTimeDeltaOneGun>	2.0	</runTimeDeltaOneGun>
+    <runTimeDeltaTwinGun>	2.0	</runTimeDeltaTwinGun>
+    <caliber>	SWITCH_ext_rld_autoloader_caliber_115_152mm	</caliber>
+  </twingun_reload115_152>
   <reload155_170>
     <type>	SimpleReload	</type>
     <duration>	2100.0	</duration>

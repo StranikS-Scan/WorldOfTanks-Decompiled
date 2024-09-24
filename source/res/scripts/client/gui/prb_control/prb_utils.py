@@ -134,11 +134,14 @@ def addQueueTypeToPrbType(queueType, prbType, personality):
 
 
 def addPrbTypeToQueueType(queueType, prbType, personality):
-    if queueType in PREBATTLE_TYPE_TO_QUEUE_TYPE:
-        raise SoftException('PREBATTLE_TYPE_TO_QUEUE_TYPE already has pre battle type:{prbType}. Personality: {p}'.format(prbType=prbType, p=personality))
-    PREBATTLE_TYPE_TO_QUEUE_TYPE.update({prbType: queueType})
-    msg = 'prbType:{prbType} was added to PREBATTLE_TYPE_TO_QUEUE_TYPE. Personality: {p}'.format(prbType=prbType, p=personality)
+    queueTypes = PREBATTLE_TYPE_TO_QUEUE_TYPE.get(prbType)
+    if queueTypes is not None:
+        PREBATTLE_TYPE_TO_QUEUE_TYPE[prbType].append(queueType)
+    else:
+        PREBATTLE_TYPE_TO_QUEUE_TYPE.update({prbType: [queueType]})
+    msg = 'queueType:{q} was added to PREBATTLE_TYPE_TO_QUEUE_TYPE (prbType={prbType}). Personality: {p}'.format(prbType=prbType, q=queueType, p=personality)
     logging.debug(msg)
+    return
 
 
 def addArenaDescrs(arenaGuiType, arenaDescrClass, personality):

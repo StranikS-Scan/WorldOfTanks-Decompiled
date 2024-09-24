@@ -3,7 +3,6 @@
 import typing
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.battle.shared import personal_reserves_tab
 from gui.Scaleform.daapi.view.battle.shared.page import SharedPage
 from gui.Scaleform.framework import ViewSettings, ScopeTemplates, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -31,6 +30,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared.vehicles import dualgun_component
     from gui.Scaleform.daapi.view.battle.shared import callout_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_notifier
+    from gui.Scaleform.daapi.view.battle.shared import personal_reserves_tab
     from gui.Scaleform.daapi.view.battle.shared import death_cam_ui
     from gui.Scaleform.daapi.view.battle.shared import postmortem_info_panel
     from gui.Scaleform.daapi.view.battle.shared import spectator_view

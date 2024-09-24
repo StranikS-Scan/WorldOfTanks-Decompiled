@@ -16,7 +16,6 @@ from items.artefacts import ArcadeEquipmentConfigReader, AreaOfEffectEquipment
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
 from AvatarInputHandler.DynamicCameras import StrategicCamera, ArcadeCamera
-from AvatarInputHandler.DynamicCameras.camera_switcher import SwitchToPlaces
 import BattleReplay
 import BigWorld
 import CommandMapping
@@ -171,7 +170,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         return gun_marker_ctrl.createArtyHit(myArtyEquipment, areaRadius)
 
     def __markerForceUpdate(self):
-        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), 1000.0, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, 1000.0, None)
         return
 
     def processHover(self, position, force=False):
@@ -183,7 +182,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
                 self.__marker.setPosition(position)
                 BigWorld.callback(SERVER_TICK_LENGTH, self.__markerForceUpdate)
             else:
-                self.__marker.update(GUN_MARKER_TYPE.CLIENT, position, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
+                self.__marker.update(GUN_MARKER_TYPE.CLIENT, position, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, SERVER_TICK_LENGTH, None)
             self.hitPosition = position
             self.writeStateToReplay()
             return
@@ -194,7 +193,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
         _, _, self.hitPosition, _ = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
-        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
+        self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), 10.0, 0.0, SERVER_TICK_LENGTH, None)
         return
 
     def writeStateToReplay(self):
@@ -224,7 +223,7 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
         _DefaultStrikeSelector.__init__(self, position, equipment)
-        self.area = self._createArea(equipment, position, direction)
+        self.area = BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, self._getAreaSize())
         self.maxHeightShift = None
         self.minHeightShift = None
         self.direction = direction
@@ -276,9 +275,6 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         replayCtrl = BattleReplay.g_replayCtrl
         _, _, hitPosition, direction = replayCtrl.getGunMarkerParams(self.area.position, self.direction)
         self.area.setNextPosition(hitPosition, direction)
-
-    def _createArea(self, equipment, position, direction):
-        return BigWorld.player().createEquipmentSelectedArea(position, direction, equipment, self._getAreaSize())
 
     def _getAreaSize(self):
         return Vector2(self.equipment.areaWidth, self.equipment.areaLength)
@@ -434,52 +430,6 @@ class _ReconStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
     def __intersected(self, vehicles):
         for v in vehicles:
             if self.area.pointInside(v.position):
-                yield v
-
-
-class HyperionStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
-    RADIUS_PARAM_NAME = 'HYPERION_RADIUS'
-    AREA_VISUAL_PARAM_NAME = 'areaVisual'
-
-    def __init__(self, position, equipment, direction=_DEFAULT_STRIKE_DIRECTION):
-        self._radius = float(self.__getParam(equipment, HyperionStrikeSelector.RADIUS_PARAM_NAME, 0.0))
-        _AreaStrikeSelector.__init__(self, position, equipment)
-        _VehiclesSelector.__init__(self, self.__intersected, selectPlayer=True)
-
-    def destroy(self):
-        _VehiclesSelector.destroy(self)
-        _AreaStrikeSelector.destroy(self)
-
-    def tick(self):
-        self.highlightVehicles()
-
-    def _getAreaSize(self):
-        return 2.0 * Vector2(self._radius, self._radius)
-
-    def _createArea(self, equipment, position, direction):
-        visualPath = self.__getParam(equipment, HyperionStrikeSelector.AREA_VISUAL_PARAM_NAME)
-        if visualPath is None:
-            LOG_ERROR("Cannot find the 'visual' parameter")
-            return
-        else:
-            area = CombatSelectedArea()
-            area.setup(position, direction, self._getAreaSize(), visualPath, color=None, marker=None)
-            return area
-
-    def __getParam(self, equipment, paramName, default=None):
-        from visual_script.misc import ASPECT
-        config = equipment.visualScript.get(ASPECT.CLIENT, [])
-        for data in config:
-            params = data.get('params', {})
-            if paramName not in params:
-                continue
-            return params[paramName]
-
-        return None
-
-    def __intersected(self, vehicles):
-        for v in vehicles:
-            if self.area.pointInsideCircle(v.position, self._radius):
                 yield v
 
 
@@ -937,7 +887,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     def isManualBind(self):
         return True
 
-    def updateGunMarker(self, markerType, pos, direction, size, relaxTime, collData):
+    def updateGunMarker(self, markerType, pos, direction, size, sizeOffset, relaxTime, collData):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             self.__activeSelector.processReplayHover()
@@ -1046,37 +996,6 @@ class AracdeMinefieldControleMode(ArcadeMapCaseControlMode):
 
     def _createCamera(self, config, offset=Math.Vector2(0, 0)):
         return ArcadeCamera.ArcadeCameraEpic(config, offset)
-
-
-class HyperionMapCaseControlMode(MapCaseControlMode):
-    MODE_NAME = CTRL_MODE_NAME.MAP_CASE_HYPERION
-    _WT_HYPERION_OVERLAY_SOUND_ID = {True: 'ev_white_tiger_waiting_overlay_ambient',
-     False: 'ev_white_tiger_waiting_overlay_ambient_stop'}
-    _WT_HYPERION_OVERLAY_STATE_GROUP = 'STATE_white_tiger_gameplay_waiting'
-    _WT_HYPERION_OVERLAY_STATE = {True: 'STATE_white_tiger_gameplay_waiting_on',
-     False: 'STATE_white_tiger_gameplay_waiting_off'}
-
-    def _enableCamera(self, arcadeState):
-        self.camera.enable(BigWorld.player().position, False, switchToPos=1.0, switchToPlace=SwitchToPlaces.TO_RELATIVE_POS)
-
-    def enable(self, **args):
-        super(HyperionMapCaseControlMode, self).enable(**args)
-        self.__playSound(True)
-
-    def disable(self):
-        wasEnabled = self.isEnabled
-        super(HyperionMapCaseControlMode, self).disable()
-        if wasEnabled:
-            self.__playSound(False)
-
-    def __playSound(self, start):
-        soundEventName = self._WT_HYPERION_OVERLAY_SOUND_ID.get(start)
-        SoundGroups.g_instance.playSound2D(soundEventName)
-        self.__setSoundState(start)
-
-    def __setSoundState(self, setState):
-        stateName = self._WT_HYPERION_OVERLAY_STATE.get(setState)
-        SoundGroups.g_instance.setState(self._WT_HYPERION_OVERLAY_STATE_GROUP, stateName)
 
 
 def activateMapCase(equipmentID, deactivateCallback, controlMode):

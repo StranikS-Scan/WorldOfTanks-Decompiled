@@ -67,10 +67,6 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__livesLeft = 0
         return
 
-    @property
-    def isSpawnPointsVisible(self):
-        return self.__isSpawnPointsVisible
-
     def getControllerID(self):
         return BATTLE_CTRL_ID.SPAWN_CTRL
 
@@ -110,10 +106,6 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__isSpawnPointsVisible = True
         for viewComponent in self._viewComponents:
             viewComponent.showSpawnPoints()
-
-    def updateSpawnPoints(self, points):
-        for viewComponent in self._viewComponents:
-            viewComponent.setSpawnPoints(points)
 
     def setupCloseTime(self, closeTime):
         self.__closeTime = closeTime

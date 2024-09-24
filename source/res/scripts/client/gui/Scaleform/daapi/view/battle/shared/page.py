@@ -110,11 +110,7 @@ class SharedPage(BattlePageMeta):
         if components is None:
             components = _SHARED_COMPONENTS_CONFIG
         else:
-            config = _SHARED_COMPONENTS_CONFIG.getConfig()
-            overridedViewAliases = tuple((alias for alias, _ in components.getViewsConfig()))
-            viewConfig = tuple(((alias, obj) for alias, obj in _SHARED_COMPONENTS_CONFIG.getViewsConfig() if alias not in overridedViewAliases))
-            sharedComponents = ComponentsConfig(config, viewConfig)
-            components += sharedComponents
+            components += _SHARED_COMPONENTS_CONFIG
         components = self._addDefaultHitDirectionController(components)
         self.__componentsConfig = components
         self._battleSessionES = EventsSubscriber()

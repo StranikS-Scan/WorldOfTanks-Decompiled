@@ -45,7 +45,7 @@
     <N19Mk1_Crab>	86	</N19Mk1_Crab>
     <AN_VRC_3_XM>	88	</AN_VRC_3_XM>
     <AN_VRC-3_Rush_Ep1>	89	</AN_VRC-3_Rush_Ep1>
-    <AN-VRC-7_WT>	1001	</AN-VRC-7_WT>
+    <AN-ARC-27M>	91	</AN-ARC-27M>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -68,6 +68,7 @@
     <SCR_506_StoryMode>	64008	</SCR_506_StoryMode>
     <SCR_506_StoryMode__0>	64009	</SCR_506_StoryMode__0>
     <SCR_506_StoryModeHard>	64010	</SCR_506_StoryModeHard>
+    <SCR_528_StoryMode>	64011	</SCR_528_StoryMode>
   </ids>
   <shared>
     <SCR_200>
@@ -467,6 +468,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-ARC-27>
+    <AN-ARC-27M>
+      <userString>	#usa_vehicles:AN-ARC-27M	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	120	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN-ARC-27M>
     <AN_GRC_7A>
       <userString>	#usa_vehicles:AN_GRC_7A	</userString>
       <tags></tags>
@@ -633,18 +645,6 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.2	</repairCost>
     </T23radio>
-    <AN-VRC-7_WT>
-      <userString>	#usa_vehicles:AN-VRC-7_WT	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	945	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN-VRC-7_WT>
     <AN-ARC-27_IGR>
       <userString>	#igr_vehicles:AN-ARC-27_IGR	</userString>
       <tags></tags>
@@ -883,5 +883,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_506_StoryModeHard>
+    <SCR_528_StoryMode>
+      <userString>	#usa_vehicles:SCR_528	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	80	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </SCR_528_StoryMode>
   </shared>
 </radios.xml>

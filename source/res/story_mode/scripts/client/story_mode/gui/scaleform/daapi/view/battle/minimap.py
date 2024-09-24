@@ -1,22 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/minimap.py
-import typing
+import BattleReplay
 import BigWorld
 import CGF
 import Math
 from BunkerLogicComponent import BunkerLogicComponent
 from constants import IS_DEVELOPMENT
-from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicTeleportPlugin
+from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicTeleportPlugin, ClassicMinimapPingPlugin
 from gui.Scaleform.daapi.view.battle.pve_base.minimap import PveMinimapComponent, PveMinimapGlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.entries import VehicleEntry
 from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import ArenaVehiclesPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NAME
-from gui.battle_control import avatar_getter
+from gui.battle_control import avatar_getter, minimap_utils
 from gui.impl import backport
 from gui.impl.gen import R
-if typing.TYPE_CHECKING:
-    from Math import Vector2
 _MINIMAP_DIMENSIONS = 10
 _ANIMATION_SPG = 'enemySPG'
 _ANIMATION_ENEMY = 'firstEnemy'
@@ -26,10 +24,10 @@ class StoryModeVehicleEntry(VehicleEntry):
     __slots__ = ()
 
     def getSpottedAnimation(self, pool):
-        if self._isEnemy and self._isActive and self._isInAoI:
-            if self.getActualSpottedCount() == 1:
-                if self._classTag == 'SPG':
-                    return _ANIMATION_SPG
+        if self._isEnemy and self._isActive and self._isInAoI and self.getActualSpottedCount() == 1:
+            if self._classTag == 'SPG':
+                return _ANIMATION_SPG
+            else:
                 return _ANIMATION_ENEMY
 
 
@@ -131,6 +129,12 @@ class BunkersPlugin(SimplePlugin):
         return entryID
 
 
+class StoryModeMinimapPingPlugin(ClassicMinimapPingPlugin):
+
+    def _getClickPosition(self, x, y):
+        return minimap_utils.makePointMatrixByLocal(x, y, *adjustBoundingBox(*self._boundingBox)).translation
+
+
 class StoryModeMinimapComponent(PveMinimapComponent):
 
     def _setupPlugins(self, arenaVisitor):
@@ -138,6 +142,8 @@ class StoryModeMinimapComponent(PveMinimapComponent):
         setup['settings'] = PveMinimapGlobalSettingsPlugin
         setup['vehicles'] = StoryModeArenaVehiclesPlugin
         setup['bunkers'] = BunkersPlugin
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            setup['pinging'] = StoryModeMinimapPingPlugin
         if IS_DEVELOPMENT:
             setup['teleport'] = ClassicTeleportPlugin
         return setup
@@ -159,9 +165,9 @@ def adjustBoundingBox(bl, tr):
     vSide = topRightX - bottomLeftX
     hSide = topRightY - bottomLeftY
     if vSide > hSide:
-        bl = (bottomLeftX, bottomLeftX)
-        tr = (topRightX, topRightX)
+        bl = Math.Vector2(bottomLeftX, bottomLeftX)
+        tr = Math.Vector2(topRightX, topRightX)
     else:
-        bl = (bottomLeftY, bottomLeftY)
-        tr = (topRightY, topRightY)
+        bl = Math.Vector2(bottomLeftY, bottomLeftY)
+        tr = Math.Vector2(topRightY, topRightY)
     return (bl, tr)

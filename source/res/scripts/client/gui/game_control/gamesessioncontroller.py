@@ -166,6 +166,18 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
         gameRestrictions = self._gameRestrictions.hasSessionLimit and self._gameRestrictions.getKickAt() - _getSevUtc() <= playTimeForBattle
         return parentControl or curfewControl or gameRestrictions
 
+    @property
+    def isPrivateMessagesForbidden(self):
+        return self._gameRestrictions.privateChat.get('bantype') in (constants.BAN_TYPE.PRIVATE_COMMUNICATION_DENIED, constants.BAN_TYPE.COMMUNICATION_DENIED)
+
+    @property
+    def isNonFriendPrivateMessagesForbidden(self):
+        return self._gameRestrictions.privateChat.get('bantype') == constants.BAN_TYPE.NONFRIEND_PRIVATE_COMMUNICATION_DENIED
+
+    @property
+    def privateMessagesRestrictionReason(self):
+        return self._gameRestrictions.privateChat.get('reason', None)
+
     @prbEntityProperty
     def prbEntity(self):
         pass

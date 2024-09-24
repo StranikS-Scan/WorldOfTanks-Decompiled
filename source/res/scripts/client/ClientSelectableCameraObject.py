@@ -29,7 +29,7 @@ class ClientSelectableCameraObject(ClientSelectableObject):
         return self.state != CameraMovementStates.FROM_OBJECT
 
     @classmethod
-    def switchCamera(cls, clickedObject=None, cameraName=None, instantly=False, init=False):
+    def switchCamera(cls, clickedObject=None, cameraName=None, instantly=False):
         if not cls.hangarSpace.spaceInited:
             return
         else:
@@ -37,10 +37,8 @@ class ClientSelectableCameraObject(ClientSelectableObject):
                 clickedObject = cls.hangarSpace.space.getVehicleEntity()
             if clickedObject is None or clickedObject.state != CameraMovementStates.FROM_OBJECT:
                 return
-            cameraManager = CGF.getManager(cls.hangarSpace.spaceID, HangarCameraManager)
-            if init and cameraManager and 'Event' in cameraManager.getCurrentCameraName():
-                return
             cls.deselectAll()
+            cameraManager = CGF.getManager(cls.hangarSpace.spaceID, HangarCameraManager)
             if cameraName is None:
                 cameraManager.switchToTank(instantly)
             else:

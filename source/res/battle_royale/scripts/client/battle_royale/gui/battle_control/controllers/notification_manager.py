@@ -33,6 +33,7 @@ class RespawnMessage(CallbackDelayer):
         self.__stopCallbackID = None
         self.hideCallback = None
         self.__panel = None
+        self.__hiddenFromPanel = False
         return
 
     def setHideCallback(self, hideCallback):
@@ -63,7 +64,9 @@ class RespawnMessage(CallbackDelayer):
             BigWorld.cancelCallback(self.__msgCallbackID)
             self.__msgCallbackID = None
         if not self.__delayCallbackID and not self.__postDelayCallbackID:
-            self.__panel.hideMessage()
+            if not self.__hiddenFromPanel:
+                self.__panel.hideMessage()
+                self.__hiddenFromPanel = True
         if self.__delayCallbackID or skipPostDelay or not self.postDelay:
             if self.__delayCallbackID is not None:
                 BigWorld.cancelCallback(self.__delayCallbackID)

@@ -1263,13 +1263,13 @@ class InstallBattleAbilities(AsyncGUIItemAction):
 
 
 class FrontlineInstallReserves(AsyncGUIItemAction):
-    __slots__ = ('__vehicle', '__applyForAllOfType', '__skillIds')
+    __slots__ = ('__vehicle', '__applyForAllOfType', '__skillsInteractor')
 
-    def __init__(self, vehicle, applyForAllOfType=False, skillIds=None):
+    def __init__(self, vehicle, skillsInteractor=None):
         super(FrontlineInstallReserves, self).__init__()
         self.__vehicle = vehicle
-        self.__applyForAllOfType = applyForAllOfType
-        self.__skillIds = skillIds
+        self.__skillsInteractor = skillsInteractor
+        self.__applyForAllOfType = self.__skillsInteractor.getCheckboxState() if skillsInteractor else False
 
     @adisp_async
     @decorators.adisp_process('techMaintenance')
@@ -1280,13 +1280,14 @@ class FrontlineInstallReserves(AsyncGUIItemAction):
     @adisp_async
     @future_async.wg_async
     def _confirm(self, callback):
-        if not self.__skillIds:
+        if not self.__skillsInteractor:
             callback(True)
         else:
-            dialogResult = yield future_async.wg_await(shared_events.showFrontlineConfirmDialog(skillIds=self.__skillIds, vehicleType=self.__vehicle.type, applyForAllOfType=self.__applyForAllOfType, isBuy=False))
+            dialogResult = yield future_async.wg_await(shared_events.showFrontlineConfirmDialog(skillsInteractor=self.__skillsInteractor, vehicleType=self.__vehicle.type, isBuy=False))
             if dialogResult is None or dialogResult.busy:
                 callback(False)
-            isOK, _ = dialogResult.result
+            isOK, data = dialogResult.result
+            self.__applyForAllOfType = data.get('applyForAllOfType', False)
             callback(isOK)
         return
 

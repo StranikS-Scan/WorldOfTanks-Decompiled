@@ -35,6 +35,12 @@ class MissionsDifficulty(str, enum.Enum):
         return hard if battlesCount > HARD_DIFFICULTY_BATTLES_COUNT else other
 
 
+class MissionType(str, enum.Enum):
+    ONBOARDING = 'onboarding'
+    REGULAR = 'regular'
+    EVENT = 'event'
+
+
 HARD_DIFFICULTY_BATTLES_COUNT = 1000
 PROGRESS_PDATA_KEY = 'progress'
 STORY_MODE_PDATA_KEY = 'storyMode'
@@ -42,3 +48,5 @@ UNDEFINED_MISSION_ID = -1
 FIRST_MISSION_ID = 1
 FIRST_MISSION_TASK_ID = 1
 LONG_INT_HALF_SHIFT = 32
+STORY_MODE_AB_FEATURE = 'storyMode'
+DISABLE_REGULAR_OPERATIONS = 'disableRegularOperations'

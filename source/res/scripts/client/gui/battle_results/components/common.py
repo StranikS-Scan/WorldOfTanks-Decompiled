@@ -6,7 +6,7 @@ from gui.impl.gen import R
 from gui.battle_results.pbs_helpers.common import getArenaNameStr, getRegularFinishResultResource
 from gui.battle_results.components import base
 from gui.battle_results.components import style
-from gui.battle_results.br_constants import PlayerTeamResult as _TEAM_RESULT, UIVisibility
+from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
 from gui.shared.utils import toUpper
 from helpers import i18n, dependency
 from helpers.time_utils import ONE_MINUTE
@@ -15,7 +15,6 @@ from gui.battle_control.battle_constants import WinStatus
 _ARENA_TYPE_FORMAT = '#arenas:type/{0}/name'
 _ARENA_TYPE_EXT_FORMAT = '#menu:loading/battleTypes/{0}'
 _ARENA_FULL_NAME_FORMAT = '#battle_results:common/arena/fullName'
-_ARENA_ICON_PATH = '../maps/icons/map/stats/%s.png'
 
 def makeArenaFullName(arenaTypeName, i18nKey):
     arenaFullName = i18n.makeString(_ARENA_FULL_NAME_FORMAT)
@@ -73,7 +72,7 @@ class ArenaIconItem(base.StatsItem):
     __slots__ = ()
 
     def _convert(self, record, reusable):
-        return reusable.common.getArenaIcon(_ARENA_ICON_PATH)
+        return reusable.common.arenaVisitor.getArenaIcon('stats')
 
 
 class ArenaDurationItem(base.StatsItem):
@@ -276,7 +275,7 @@ class TeamsUiVisibility(base.StatsItem):
     def _convert(self, value, reusable):
         ui_visibility = 0
         if reusable.isSquadSupported:
-            ui_visibility |= UIVisibility.SHOW_SQUAD
+            ui_visibility |= UI_VISIBILITY.SHOW_SQUAD
         return ui_visibility
 
 
@@ -290,5 +289,5 @@ class SortieTeamsUiVisibility(TeamsUiVisibility):
 
     def _convert(self, value, reusable):
         ui_visibility = super(SortieTeamsUiVisibility, self)._convert(value, reusable)
-        ui_visibility |= UIVisibility.SHOW_RESOURCES
+        ui_visibility |= UI_VISIBILITY.SHOW_RESOURCES
         return ui_visibility

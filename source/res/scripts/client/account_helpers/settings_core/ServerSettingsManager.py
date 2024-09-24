@@ -5,7 +5,7 @@ from collections import namedtuple
 from itertools import chain
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, ReferralProgram, WTEventStorageKeys
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, ReferralProgram
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -77,7 +77,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     REFERRAL_PROGRAM = 'REFERRAL_PROGRAM'
     ADVANCED_ACHIEVEMENTS_STORAGE = 'ADVANCED_ACHIEVEMENTS_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
-    EVENT_STORAGE = 'EVENT_STORAGE'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -101,6 +100,7 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     MUTABLE_DAMAGE_SHELL_MARK_IS_SHOWN = 'mutable_damage_shell_mark_is_shown'
     AUTO_SHOOT_HIGHLIGHTS_COUNTER = 'auto_shoot_highlights_count'
     AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN = 'auto_shot_npd_shells_mark_is_shown'
+    TWIN_GUN_HIGHLIGHTS_COUNTER = 'twin_gun_highlights_count'
 
 
 class ADVANCED_ACHIEVEMENTS_STORAGE_KEYS(CONST_CONTAINER):
@@ -591,8 +591,7 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.RECEIVED_CRITS: 16,
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17,
                                        BATTLE_EVENTS.ENEMIES_STUN: 18,
-                                       BATTLE_EVENTS.CREW_PERKS: 19,
-                                       BATTLE_EVENTS.HEALTH_ADDED: 20}, offsets={}),
+                                       BATTLE_EVENTS.CREW_PERKS: 19}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: 0,
@@ -619,7 +618,8 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED: 10,
                                       UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN: 14}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224),
-                                      UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER: Offset(11, 14336)}),
+                                      UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER: Offset(11, 14336),
+                                      UI_STORAGE_KEYS.TWIN_GUN_HIGHLIGHTS_COUNTER: Offset(15, 229376)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -807,7 +807,6 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.REFERRAL_PROGRAM: Section(masks={}, offsets={ReferralProgram.VIEWED_REFERRAL_PROGRAM_SEASON: Offset(0, 4095)}),
-     SETTINGS_SECTIONS.EVENT_STORAGE: Section(masks={WTEventStorageKeys.WT_INTRO_SHOWN: 31}, offsets={}),
      SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: Section(masks={}, offsets={ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
@@ -828,6 +827,7 @@ class ServerSettingsManager(object):
     _MAX_TURBOSHAFT_HIGHLIGHTS_COUNT = 5
     _MAX_ROCKET_ACCELERATION_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_ACCURACY_HIGHLIGHTS_COUNT = 5
+    _MAX_TWIN_GUN_HIGHLIGHTS_COUNTER = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -922,13 +922,6 @@ class ServerSettingsManager(object):
         if self.settingsCache.isSynced():
             self.setSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, settings)
 
-    def getEventStorage(self, defaults=None):
-        storageData = self.getSection(SETTINGS_SECTIONS.EVENT_STORAGE, defaults)
-        return storageData
-
-    def saveInEventStorage(self, settings):
-        return self.setSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, settings)
-
     def checkAutoReloadHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER, self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT, increase)
 
@@ -946,6 +939,9 @@ class ServerSettingsManager(object):
 
     def checkDualAccuracyHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER, self._MAX_DUAL_ACCURACY_HIGHLIGHTS_COUNT, increase)
+
+    def checkTwinGunHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.TWIN_GUN_HIGHLIGHTS_COUNTER, self._MAX_TWIN_GUN_HIGHLIGHTS_COUNTER, increase)
 
     def updateUIStorageCounter(self, key, step=1):
         storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
@@ -1236,7 +1232,6 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
          SETTINGS_SECTIONS.SENIORITY_AWARDS_STORAGE: {},
-         'eventStorage': {},
          'clear': {},
          'delete': [],
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
@@ -1378,10 +1373,6 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
-        EventStorage = data.get('eventStorage', {})
-        clearEventStorage = clear.get('eventStorage', 0)
-        if EventStorage or clearEventStorage:
-            settings[SETTINGS_SECTIONS.EVENT_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.EVENT_STORAGE, EventStorage) ^ clearEventStorage
         spgAimData = data.get('spgAim', {})
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:

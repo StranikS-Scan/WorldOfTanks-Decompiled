@@ -120,8 +120,8 @@ class CrewPerksTooltip(ViewImpl):
 
     def _fillModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setIcon(self._skill.bigIconPath)
-            vm.setTitle(self._skill.userName)
+            vm.setIconName(self._skill.extensionLessIconName)
+            vm.setUserName(self._skill.userName)
             vm.setLevel(self._skillLevelWithoutEff)
             vm.setRealLevel(self._skillLevel)
             vm.setSkillType(self._skill.typeName)
@@ -131,7 +131,7 @@ class CrewPerksTooltip(ViewImpl):
             vm.setIsAnyMemberUntrained(self._isGroupSkillHasUntrained() if isGroupSkill else False)
             vm.setIsAdvancedTooltipEnable(bool(SKILL_MOVIES.get(self._skill.name, None)))
             isZeroPerk, isIrrelevant = (self._tankman and self._skill.name in self._tankman.freeSkillsNames, self._isIrrelevant) if self._showAdditionalInfo else (False, False)
-            vm.setIsZeroPerk(isZeroPerk)
+            vm.setIsZero(isZeroPerk)
             vm.setIsIrrelevant(isIrrelevant)
             skillEfficiency = self._tankman.currentVehicleSkillsEfficiency if self._tankman else MAX_SKILLS_EFFICIENCY
             if self._skill.name in perks_constants.SKIP_SE_PERKS or isIrrelevant:

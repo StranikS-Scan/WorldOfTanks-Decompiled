@@ -6,7 +6,7 @@ import typing
 from Event import EventsSubscriber
 from comp7_common import ROLE_EQUIPMENT_TAG
 from constants import ROLE_TYPE_TO_LABEL, ARENA_PERIOD
-from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel, TOOLTIP_FORMAT
+from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.poi_helpers import getPoiTypeByEquipment
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
@@ -14,6 +14,7 @@ from gui.battle_control import avatar_getter
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.tooltips.comp7_tooltips import getRoleEquipmentTooltipParts, getPoIEquipmentDescription
+from gui.shared.tooltips.consumables_panel import TOOLTIP_FORMAT
 from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import dependency
 from points_of_interest_shared import PoiType, POI_EQUIPMENT_TAG

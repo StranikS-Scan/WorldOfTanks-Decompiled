@@ -55,7 +55,6 @@ _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.PAUSED: ChapterStates.PAUSED,
  ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED}
 _FREE_POINTS_INDEX = 0
-_VOICED_TANKMAN = 'voicedTankman'
 
 class BattlePassProgressionsView(ViewImpl):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -299,6 +298,7 @@ class BattlePassProgressionsView(ViewImpl):
         model.setSkills(skillsArray)
         model.setTooltipId(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED)
         model.setGroupName(groupName)
+        model.setHasVoice(self.__battlePass.isVoicedTankman(groupName))
         packSpecialTooltipData(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, self.__specialTooltipItems, character.getRecruitID())
 
     def __setFinalRewardsWidget(self, model):
@@ -790,16 +790,12 @@ class BattlePassProgressionsView(ViewImpl):
         freeArray = model.getFreeFinalRewards()
         freeArray.clear()
         for freeReward in self.__battlePass.getFreeFinalRewardTypes(self.__chapterID):
-            if freeReward == FinalReward.TANKMAN and self.__isFinalTankmanVoiced(BattlePassConsts.REWARD_FREE):
-                freeReward = _VOICED_TANKMAN
             freeArray.addString(freeReward)
 
         freeArray.invalidate()
         paidArray = model.getPaidFinalRewards()
         paidArray.clear()
         for paidReward in self.__battlePass.getPaidFinalRewardTypes(self.__chapterID):
-            if paidReward == FinalReward.TANKMAN and self.__isFinalTankmanVoiced(BattlePassConsts.REWARD_PAID):
-                paidReward = _VOICED_TANKMAN
             paidArray.addString(paidReward)
 
         paidArray.invalidate()
@@ -807,10 +803,6 @@ class BattlePassProgressionsView(ViewImpl):
     def __getFinalTankman(self, awardType):
         finalTankmen = getFinalTankmen(self.__chapterID, awardType, battlePass=self.__battlePass)
         return first(finalTankmen)
-
-    def __isFinalTankmanVoiced(self, awardType):
-        tankman = self.__getFinalTankman(awardType)
-        return tankman is not None and self.__battlePass.isVoicedTankman(tankman.getGroupName())
 
     @staticmethod
     def __switchCamera():

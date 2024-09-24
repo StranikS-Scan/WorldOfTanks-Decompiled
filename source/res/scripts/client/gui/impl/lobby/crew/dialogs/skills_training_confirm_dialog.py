@@ -5,8 +5,9 @@ from gui.impl.dialogs.dialog_template_button import ConfirmButton, CancelButton
 from gui.impl.dialogs.sub_views.title.simple_text_title import SimpleTextTitle
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
-from gui.impl.gen.view_models.views.lobby.crew.dialogs.skill_model import SkillModel
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_model import SkillModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.skills_training_confirm_dialog_model import SkillsTrainingConfirmDialogModel
+from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillSimpleModelSetup
 from gui.shared.gui_items.Tankman import getTankmanSkill
 
 class SkillsTrainingConfirmDialog(DialogTemplateView):
@@ -32,14 +33,12 @@ class SkillsTrainingConfirmDialog(DialogTemplateView):
         self.addButton(CancelButton())
         with self.viewModel.transaction() as vm:
             skillsListVM = vm.getSkillsList()
-            for idx, skillId in enumerate(self.__skillsList):
-                skill = getTankmanSkill(skillId, tankman=self.__tankman)
+            for idx, skillName in enumerate(self.__skillsList):
+                skill = getTankmanSkill(skillName, tankman=self.__tankman)
                 skillVM = SkillModel()
-                skillVM.setId(skillId)
-                skillVM.setIcon(skill.extensionLessIconName)
                 level, isZero = self.__availableSkillsData[idx]
+                skillSimpleModelSetup(skillVM, skill=skill, skillLevel=level, skillName=skillName)
                 skillVM.setIsZero(isZero)
-                skillVM.setLevel(level)
                 skillsListVM.addViewModel(skillVM)
 
             skillsListVM.invalidate()

@@ -3,6 +3,7 @@
 import os
 import Math
 from string import lower, upper
+from copy import deepcopy
 import re
 import items._xml as ix
 import items.components.c11n_components as cc
@@ -163,6 +164,7 @@ class DecalXmlReader(BaseCustomizationItemXmlReader):
             target.texture = section.readString('texture')
         if section.has_key('mirror'):
             target.canBeMirrored = ix.readBool(xmlCtx, section, 'mirror')
+        readEmissionParams(target, xmlCtx, section)
 
 
 class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
@@ -186,6 +188,7 @@ class ProjectionDecalXmlReader(BaseCustomizationItemXmlReader):
             target.glossTexture = section.readString('glossTexture')
         if section.has_key('scaleFactorId'):
             target.scaleFactorId = section.readInt('scaleFactorId')
+        readEmissionParams(target, xmlCtx, section)
 
 
 class PersonalNumberXmlReader(BaseCustomizationItemXmlReader):
@@ -313,6 +316,7 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
             target.rotation = {'hull': rotation.readFloat('HULL', 0.0),
              'turret': rotation.readFloat('TURRET', 0.0),
              'gun': rotation.readFloat('GUN', 0.0)}
+        readEmissionParams(target, xmlCtx, section)
 
     @staticmethod
     def getDefaultNationId(target):
@@ -908,6 +912,22 @@ def readEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):
         if valueInt is None:
             ix.raiseWrongXml(xmlCtx, subsectionName, 'Invalid enum value %s in class %s' % (value, enumClass))
         return valueInt
+
+
+def readEmissionParams(target, xmlCtx, section):
+    if section.has_key('emission'):
+        emissionSection = ix.getSubsection(xmlCtx, section, 'emission')
+        if target.emissionParams is not None:
+            target.emissionParams = deepcopy(target.emissionParams)
+        else:
+            target.emissionParams = cc.EmissionParams()
+        if emissionSection.has_key('emission_texture'):
+            target.emissionParams.emissionTexture = emissionSection.readString('emission_texture')
+        if emissionSection.has_key('emission_deferred_power'):
+            target.emissionParams.emissionDeferredPower = emissionSection.readFloat('emission_deferred_power')
+        if emissionSection.has_key('emission_forward_power'):
+            target.emissionParams.emissionForwardPower = emissionSection.readFloat('emission_forward_power')
+    return
 
 
 __xmlReaders = {cc.PaintItem: PaintXmlReader(),

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/vehicle_compare/compare_skills_panel_view_model.py
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.lobby.vehicle_compare.compare_skill_model import CompareSkillModel
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_simple_model import SkillSimpleModel
 
 class CompareSkillsPanelViewModel(ViewModel):
     __slots__ = ('onClick', 'onReset')
@@ -18,7 +18,7 @@ class CompareSkillsPanelViewModel(ViewModel):
 
     @staticmethod
     def getSkillsType():
-        return CompareSkillModel
+        return SkillSimpleModel
 
     def _initialize(self):
         super(CompareSkillsPanelViewModel, self)._initialize()

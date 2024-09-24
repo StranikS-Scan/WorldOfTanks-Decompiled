@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/event/squad/entity.py
 import BigWorld
+from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_DEBUG
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
@@ -20,7 +21,6 @@ from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from helpers import dependency
 from skeletons.gui.game_control import IEventBattlesController
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 
 @ReprInjector.withParent()
 class EventSquadSettingsCtx(SquadSettingsCtx):
@@ -52,7 +52,6 @@ class EventBattleSquadEntryPoint(SquadEntryPoint):
 
 class EventBattleSquadEntity(SquadEntity):
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
 
     def __init__(self):
         super(EventBattleSquadEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, PREBATTLE_TYPE.EVENT)
@@ -107,7 +106,7 @@ class EventBattleSquadEntity(SquadEntity):
         if launchChain:
             if notReady:
                 BigWorld.player().changeEventEnqueueData({})
-                selVehCtx = SetVehicleUnitCtx(vTypeCD=self._getSelectedVehCD(), waitingID='prebattle/change_settings')
+                selVehCtx = SetVehicleUnitCtx(vTypeCD=g_currentVehicle.item.intCD, waitingID='prebattle/change_settings')
                 selVehCtx.setReady = True
                 self.setVehicle(selVehCtx)
             else:
@@ -132,10 +131,6 @@ class EventBattleSquadEntity(SquadEntity):
                 else:
                     g_eventDispatcher.loadHangar()
             return
-
-    def _getSelectedVehCD(self):
-        vehicle = self.__prebattleVehicle.item
-        return vehicle.intCD if vehicle is not None else None
 
     @property
     def _showUnitActionNames(self):

@@ -7,7 +7,7 @@ class StatsBaseMeta(BaseDAAPIComponent):
     def acceptSquad(self, sessionID):
         self._printOverrideError('acceptSquad')
 
-    def addToSquad(self, sessionID):
+    def addToSquad(self, sessionID, source):
         self._printOverrideError('addToSquad')
 
     def as_setIsInteractiveS(self, value):

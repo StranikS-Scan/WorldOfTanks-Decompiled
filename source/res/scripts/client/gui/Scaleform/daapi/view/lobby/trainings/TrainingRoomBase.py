@@ -338,7 +338,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def _showActionErrorMessage(self, errType=None):
         errors = {PREBATTLE_ERRORS.ROSTER_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_ADDPLAYER, {}),
-         PREBATTLE_ERRORS.PLAYERS_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_SELECTOBSERVER, {'numPlayers': self.__getPlayersMaxCount()})}
+         PREBATTLE_ERRORS.PLAYERS_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_SELECTOBSERVER, {'numPlayers': self.__getPlayersMaxCount()}),
+         PREBATTLE_ERRORS.ONSLAUGHT_ROSTER_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_ONSLAUGHTROSTERLIMIT, {'numPlayers': self.__getComp7MaxPlayersInTeam()})}
         errMsg = errors.get(errType, (SYSTEM_MESSAGES.TRAINING_ERROR_DOACTION, {}))
         SystemMessages.pushMessage(i18n.makeString(errMsg[0], **errMsg[1]), type=SystemMessages.SM_TYPE.Error)
 
@@ -362,9 +363,9 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     def __changeTrainingRoomSettings(self, settings):
         if settings and settings.areSettingsChanged(self.prbEntity.getSettings()):
             settings.setWaitingID('prebattle/change_settings')
-            result = yield self.prbDispatcher.sendPrbRequest(settings)
+            result, errorCode = yield self.prbDispatcher.sendPrbRequest(settings)
             if not result:
-                self._showActionErrorMessage()
+                self._showActionErrorMessage(errorCode)
 
     def __getPlayersMaxCount(self):
         playersMaxCount = self.prbEntity.getTeamLimits()['maxCount'][0]
@@ -431,10 +432,13 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def __getMaxPlayersInTeam(self):
         if self.__isComp7Arena():
-            return self.lobbyContext.getServerSettings().comp7Config.numPlayers
+            return self.__getComp7MaxPlayersInTeam()
         arenaTypeID = self.prbEntity.getSettings()['arenaTypeID']
         arenaType = ArenaType.g_cache.get(arenaTypeID)
         return arenaType.maxPlayersInTeam
+
+    def __getComp7MaxPlayersInTeam(self):
+        return self.lobbyContext.getServerSettings().comp7Config.numPlayers
 
     def __isComp7Arena(self):
         return isinstance(self.prbEntity, TrainingEntity) and self.prbEntity.isComp7Arena()

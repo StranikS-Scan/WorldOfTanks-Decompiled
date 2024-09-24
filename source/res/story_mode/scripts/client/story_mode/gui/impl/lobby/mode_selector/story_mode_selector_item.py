@@ -7,9 +7,11 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_columns import ModeSelectorColumns
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, getInfoPageKey
 from gui.shared.event_dispatcher import showBrowserOverlayView
+from helpers import dependency
 from story_mode.account_settings import isWelcomeScreenSeen
 from story_mode.gui.fade_in_out import UseStoryModeFading, UseHeaderNavigationImpossible
 from story_mode.gui.story_mode_gui_constants import VIEW_ALIAS
+from story_mode.skeletons.story_mode_controller import IStoryModeController
 from story_mode.uilogging.story_mode.loggers import SelectorCardLogger
 from story_mode_common.configs.story_mode_missions import missionsSchema
 from story_mode_common.configs.story_mode_settings import settingsSchema
@@ -19,7 +21,8 @@ MODE_SELECTOR_CARD_EVENT_PRIORITY = 40
 EVENT_SUFFIX = '_event'
 
 class StoryModeSelectorItem(ModeSelectorLegacyItem):
-    __slots__ = ('_uiLogger',)
+    __slots__ = ('_uiLogger', '_storyModeCtrl')
+    _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     def __init__(self, oldSelectorItem):
         super(StoryModeSelectorItem, self).__init__(oldSelectorItem)
@@ -45,6 +48,8 @@ class StoryModeSelectorItem(ModeSelectorLegacyItem):
     def handleClick(self):
         self._uiLogger.logSelfClick()
         super(StoryModeSelectorItem, self).handleClick()
+        if self._storyModeCtrl.isNewNeededForNewbies():
+            self._storyModeCtrl.setNewForNewbiesSeen()
         if not self.viewModel.getIsSelected():
             yield self.animateSelection()
 
@@ -59,8 +64,8 @@ class StoryModeSelectorItem(ModeSelectorLegacyItem):
         showBrowserOverlayView(url, VIEW_ALIAS.STORY_MODE_WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
     def _isNewLabelVisible(self):
-        missionSettings = missionsSchema.getModel()
-        return True if missionSettings is not None and missionSettings.isEventEnabled and not isWelcomeScreenSeen() else super(StoryModeSelectorItem, self)._isNewLabelVisible()
+        missionsSettings = missionsSchema.getModel()
+        return True if missionsSettings is not None and missionsSettings.isEventEnabled and not isWelcomeScreenSeen() or self._storyModeCtrl.isNewNeededForNewbies() else super(StoryModeSelectorItem, self)._isNewLabelVisible()
 
     @property
     def eventSuffix(self):

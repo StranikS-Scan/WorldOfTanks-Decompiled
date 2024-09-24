@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -320,6 +319,19 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
   </A66_M103>
+  <A176_M103_110>
+    <id>	258	</id>
+    <userString>	#usa_vehicles:A176_M103_110	</userString>
+    <description>	#usa_vehicles:A176_M103_110_descr	</description>
+    <shortUserString>	#usa_vehicles:A176_M103_110_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A176_M103_110_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A176_M103_110_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </A176_M103_110>
   <A34_M24_Chaffee>
     <id>	38	</id>
     <userString>	#usa_vehicles:M24_Chaffee	</userString>
@@ -1118,7 +1130,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1725,15 +1736,24 @@
     <level>	6	</level>
     <notInShop>	True	</notInShop>
   </A1006_M4A3E8_Sherman_StoryModeHard>
-  <A120_M48A5_hound_TLXXL>
-    <id>	254	</id>
-    <userString>	#usa_vehicles:A120_M48A5_hound_TLXXL	</userString>
-    <description>	#usa_vehicles:A120_M48A5_hound_TLXXL_descr	</description>
-    <shortUserString>	#usa_vehicles:A120_M48A5_hound_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#usa_vehicles:A120_M48A5_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal event_hunter event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals builtinRepairkit_wt_user builtinLargeMedkit_wt_user builtinAfterburning_wt_user builtinStronghold_wt_user mode_hidden hideStorage hideCrew	</tags>
-    <level>	10	</level>
-  </A120_M48A5_hound_TLXXL>
+  <A1006_M4A3E8_Sherman_StoryMode_3_4>
+    <id>	406	</id>
+    <userString>	#usa_vehicles:M4A3E8_Sherman	</userString>
+    <description>	#usa_vehicles:M4A3E8_Sherman_descr	</description>
+    <shortUserString>	#usa_vehicles:M4A3E8_Sherman_short	</shortUserString>
+    <price>	930500	</price>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	6	</level>
+    <notInShop>	True	</notInShop>
+  </A1006_M4A3E8_Sherman_StoryMode_3_4>
+  <A1034_M24_Chaffee_StoryMode>
+    <id>	407	</id>
+    <userString>	#usa_vehicles:M24_Chaffee	</userString>
+    <description>	#usa_vehicles:M24_Chaffee_descr	</description>
+    <shortUserString>	#usa_vehicles:M24_Chaffee_short	</shortUserString>
+    <price>	405000	</price>
+    <tags>	lightTank HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user cannot_be_sold lockOutfit lockCrew secret private	</tags>
+    <level>	5	</level>
+    <notInShop>	True	</notInShop>
+  </A1034_M24_Chaffee_StoryMode>
 </list.xml>

@@ -6,7 +6,7 @@ from collections import namedtuple
 import typing
 from enum import Enum
 import nations
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_STARTED, LAST_BATTLE_PASS_POINTS_SEEN
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
@@ -396,7 +396,7 @@ def updateBattlePassSettings(data, battlePass=None):
 
 def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
-    AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_STARTED, False)
+    AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, False)
     AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, False)
 
 

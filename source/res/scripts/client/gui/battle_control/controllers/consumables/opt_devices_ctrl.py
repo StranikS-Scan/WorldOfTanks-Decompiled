@@ -139,10 +139,13 @@ class OptionalDevicesController(IBattleController):
         self.__soundManager.vehicleStateUpdated(state, value)
 
     def __onVehicleInfoUpdated(self, vehicleID):
-        vehicle = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
-        if vehicle is not None and vehicleID == vehicle.id and vehicle.isPlayerVehicle and vehicle.isAlive():
-            self.__invalidateOptionalDevices(vehicleID)
-        return
+        if self.__sessionProvider is None:
+            return
+        else:
+            vehicle = self.__sessionProvider.shared.vehicleState.getControllingVehicle()
+            if vehicle is not None and vehicleID == vehicle.id and vehicle.isPlayerVehicle and vehicle.isAlive():
+                self.__invalidateOptionalDevices(vehicleID)
+            return
 
     def __invalidateOptionalDevices(self, vehicleID):
         optionalDevices = vehicle_getter.getOptionalDevicesByVehID(vehicleID)

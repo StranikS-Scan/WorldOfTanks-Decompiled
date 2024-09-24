@@ -6,19 +6,14 @@ from frameworks.wulf.view.view import ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 from gui.server_events.bonuses import getNonQuestBonuses
-from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_task_tooltip_model import MissionTaskTooltipModel
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_task_tooltip_model import TaskStateEnum
+from story_mode.gui.shared.packers.bonus import getSMBonusPacker
+from story_mode.gui.story_mode_gui_constants import BONUS_ORDER
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
     from gui.impl.gen_utils import DynAccessor
-_BONUS_ORDER = ['bpcoin',
- 'battlePassPoints',
- 'crystal',
- 'credits',
- 'freeXP',
- 'customizations']
 
 class TaskTooltip(ViewImpl):
 
@@ -33,7 +28,7 @@ class TaskTooltip(ViewImpl):
             self._rewards.extend(getNonQuestBonuses(rewardName, rewardData))
 
         self._rewards.sort(key=self._bonusesSortFunction)
-        self.__packer = getDefaultBonusPacker()
+        self.__packer = getSMBonusPacker()
 
     @property
     def viewModel(self):
@@ -60,4 +55,4 @@ class TaskTooltip(ViewImpl):
     @staticmethod
     def _bonusesSortFunction(bonus):
         name = bonus.getName()
-        return _BONUS_ORDER.index(name) if name in _BONUS_ORDER else len(_BONUS_ORDER) + 1
+        return BONUS_ORDER.index(name) if name in BONUS_ORDER else len(BONUS_ORDER) + 1

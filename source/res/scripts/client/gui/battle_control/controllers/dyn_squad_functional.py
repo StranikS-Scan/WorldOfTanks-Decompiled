@@ -75,10 +75,12 @@ class DynSquadArenaController(object):
             otherTeams = arenaDP.getEnemyTeams()
             for myTeam in myTeams:
                 for squadIdx, squadSize in squadSizes[myTeam].iteritems():
+                    self.__sentAllyCreatePlatoons.append(squadIdx)
                     self.__squadMembersAlly[squadIdx] = squadSize
 
             for otherTeam in otherTeams:
                 for squadIdx, squadSize in squadSizes[otherTeam].iteritems():
+                    self.__sentEnemyCreatePlatoons.append(squadIdx)
                     self.__squadMembersEnemy[squadIdx] = squadSize
 
     def process(self, playerVehVO, arenaDP):

@@ -131,4 +131,59 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	980	</id>
+      <texture>	gui/maps/vehicles/styles/polish_independence_day.png	</texture>
+      <userString>	#vehicle_customization:special_style/polish_independence_day	</userString>
+      <description>	#vehicle_customization:special_style/polish_independence_day_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/polish_independence_day_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	501	</id>
+              <appliedTo>	30464	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	1111	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	1112	</id>
+              <tags>	formfactor_rect1x2 cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </poland_nonCN.xml>

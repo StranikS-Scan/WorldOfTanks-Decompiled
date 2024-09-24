@@ -16,10 +16,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import canInstallStyle, getCDFromId
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.preview_bottom_panel_constants import ObtainingMethods
+from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.customization.constants import CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showHangar, showMarathonRewardScreen, showStyleBuyingPreview, showStylePreview, showStyleProgressionPreview
@@ -396,6 +398,14 @@ class _BPBitStylePreviewSchema(W2CSchema):
     alternate_item = Field(required=False, type=list)
 
 
+class _VehicleStylePreviewWithTabsSchema(W2CSchema):
+    vehicle_cd = Field(required=False, type=int)
+    style_id = Field(required=True, type=int)
+    back_btn_descr = Field(required=False, type=basestring)
+    back_url = Field(required=False, type=basestring)
+    items = Field(required=True, type=(list, NoneType), validator=_validateItemsPack)
+
+
 class VehicleSellWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -541,6 +551,16 @@ class VehiclePreviewWebApiMixin(object):
             previewMethod = None
             obtainingMethod = None
         return self._openVehicleStylePreview(cmd, previewMethod, obtainingMethod=obtainingMethod)
+
+    @w2c(_VehicleStylePreviewWithTabsSchema, 'vehicle_style_preview_with_tabs')
+    def openVehicleStylePreviewWithTabs(self, cmd):
+        styleInfo = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
+        descrLabelResPath = R.strings.vehicle_preview.header.backBtn.descrLabel
+        ClientSelectableCameraObject.switchCamera()
+        showStylePreview(vehCD=cmd.vehicle_cd, style=styleInfo, itemsPack=_parseItemsPack(cmd.items), backCallback=self._getVehicleStylePreviewCallback(cmd), backPreviewAlias=self._getVehiclePreviewReturnAlias(cmd), backBtnDescrLabel=backport.text(descrLabelResPath.dyn(cmd.back_btn_descr or 'hangar')()), topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,
+         'tabIDs': (TabID.VEHICLE, TabID.STYLE),
+         'currentTabID': TabID.STYLE,
+         'style': styleInfo})
 
     def _openVehicleStylePreview(self, cmd, showStyleFunc=None, **additionalStyleFuncKwargs):
         if cmd.vehicle_cd:

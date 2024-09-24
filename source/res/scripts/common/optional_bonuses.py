@@ -7,6 +7,7 @@ import typing
 from itertools import izip
 from account_shared import getCustomizationItem
 from battle_pass_common import NON_VEH_CD
+from constants import LOOTBOX_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -273,17 +274,7 @@ ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.g
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}
 RENT_ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._rent.isVehicleRented(account._inventory.getVehicleInvID(key))}
-
-def getProbableBonuses(bonusType, value):
-    if bonusType == 'allof':
-        bonusData = value[0]
-        probability, bonuses = bonusData[0], bonusData[3]
-        return (probability, [bonuses] if bonuses is not None else [])
-    elif bonusType == 'oneof':
-        return (None, [ bonus for _, _, _, bonus in value[1] ])
-    else:
-        return (None, [])
-
+SKIP_INVENTORY_CHANGE_CHECKERS = {'tokens': lambda key: key.startswith(LOOTBOX_TOKEN_PREFIX)}
 
 class BonusItemsCache(object):
 
@@ -298,38 +289,24 @@ class BonusItemsCache(object):
         cache = self.__cache.setdefault(itemName, {})
         state = cache.setdefault(itemKey, {}).get(isRent, None)
         if state is not None:
-            wasInInventory, wasAccepted, acceptedCount = state
+            wasInInventory, wasAccepted = state
         else:
             wasInInventory = (RENT_ITEM_INVENTORY_CHECKERS if isRent else ITEM_INVENTORY_CHECKERS)[itemName](self.__account, itemKey)
-            acceptedCount = 0
-        cache[itemKey][isRent] = (wasInInventory, True, acceptedCount + 1)
+        cache[itemKey][isRent] = (wasInInventory, True)
         return
 
     def isItemExists(self, itemName, itemKey, isRent=False):
         cache = self.__cache.setdefault(itemName, {})
         state = cache.setdefault(itemKey, {}).get(isRent, None)
         if state is not None:
-            wasInInventory, wasAccepted, _ = state
+            wasInInventory, wasAccepted = state
         else:
             wasInInventory = (RENT_ITEM_INVENTORY_CHECKERS if isRent else ITEM_INVENTORY_CHECKERS)[itemName](self.__account, itemKey)
             wasAccepted = False
-            acceptedCount = 0
-            cache[itemKey][isRent] = (wasInInventory, wasAccepted, acceptedCount)
+            cache[itemKey][isRent] = (wasInInventory, wasAccepted)
         if isRent and itemName in ITEM_INVENTORY_CHECKERS and cache[itemKey].get(False, None) is None:
-            cache[itemKey][False] = (ITEM_INVENTORY_CHECKERS[itemName](self.__account, itemKey), False, 0)
+            cache[itemKey][False] = (ITEM_INVENTORY_CHECKERS[itemName](self.__account, itemKey), False)
         return wasInInventory or wasAccepted or isRent and any((state for state in cache[itemKey].get(False, ())))
-
-    def getAcceptedCount(self, itemName, itemKey, isRent=False):
-        cache = self.__cache.setdefault(itemName, {})
-        state = cache.setdefault(itemKey, {}).get(isRent, None)
-        if state is not None:
-            _, _, acceptedCount = state
-        else:
-            wasInInventory = (RENT_ITEM_INVENTORY_CHECKERS if isRent else ITEM_INVENTORY_CHECKERS)[itemName](self.__account, itemKey)
-            wasAccepted = False
-            acceptedCount = 0
-            cache[itemKey][isRent] = (wasInInventory, wasAccepted, acceptedCount)
-        return acceptedCount
 
     def getFinalizedCache(self):
         result = {}
@@ -337,8 +314,8 @@ class BonusItemsCache(object):
             bonusResult = result.setdefault(bonus, {})
             for key, keyData in checks.iteritems():
                 keyResult = bonusResult.setdefault(key, {})
-                for flag, (wasInInventory, wasAccepted, acceptedCount) in keyData.iteritems():
-                    keyResult[flag] = (wasInInventory or wasAccepted, False, acceptedCount)
+                for flag, (wasInInventory, wasAccepted) in keyData.iteritems():
+                    keyResult[flag] = (wasInInventory or wasAccepted, False)
 
         return result
 
@@ -346,7 +323,10 @@ class BonusItemsCache(object):
     def isInventoryChanged(account, itemsCache):
         for bonus, checks in itemsCache.iteritems():
             checker = ITEM_INVENTORY_CHECKERS[bonus]
+            skipChecker = SKIP_INVENTORY_CHANGE_CHECKERS.get(bonus)
             for key, keyData in checks.iteritems():
+                if skipChecker and skipChecker(key):
+                    continue
                 if False in keyData and checker(account, key) != keyData[False][0]:
                     return True
 
@@ -359,7 +339,7 @@ DEEP_CHECKERS = {'groups': lambda nodeAcceptor, bonusNode, checkInventory, depth
 
 class BonusNodeAcceptor(object):
 
-    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True, ignoredLimits=None):
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
         self.__account = account
         self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
         self.__maxStage = bonusConfig.get('probabilityStageCount', 1) - 1 if bonusConfig else 0
@@ -377,7 +357,6 @@ class BonusNodeAcceptor(object):
         self.__logTracker = logTracker
         self.__usedLimits = set()
         self.__shouldResetUsedLimits = shouldResetUsedLimits
-        self.__ignoredLimits = ignoredLimits or set()
         self.__initCounters(counters or {})
         return
 
@@ -422,8 +401,6 @@ class BonusNodeAcceptor(object):
         limitID = bonusNode.get('properties', {}).get('limitID', None)
         if not limitID:
             return False
-        elif limitID in self.__ignoredLimits:
-            return False
         elif self.__locals.get(limitID, 1) <= 0:
             return True
         else:
@@ -445,9 +422,6 @@ class BonusNodeAcceptor(object):
                 cache.onItemAccepted('customizations', c11nItem.compactDescr)
 
         return
-
-    def updateIgnoredLimits(self, ignoredLimits):
-        self.__ignoredLimits = ignoredLimits
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
@@ -512,7 +486,7 @@ class BonusNodeAcceptor(object):
         if bonusNode.get('properties', {}).get('probabilityStageDependence', False):
             self.__increaseProbabilityStage()
         limitID = bonusNode.get('properties', {}).get('limitID', None)
-        if limitID and limitID not in self.__ignoredLimits:
+        if limitID:
             limitConfig = self.__limitsConfig[limitID]
             if not limitConfig.get('countDuplicates', True) and self.isBonusExists(bonusNode):
                 return
@@ -541,8 +515,6 @@ class BonusNodeAcceptor(object):
             if self.__shouldResetUsedLimits:
                 self.__usedLimits = set()
             for limitID, limitConfig in self.__limitsConfig.iteritems():
-                if limitID in self.__ignoredLimits:
-                    continue
                 bonusLimit = limitConfig.get('bonusLimit', None)
                 if bonusLimit is not None:
                     locals[limitID] = bonusLimit

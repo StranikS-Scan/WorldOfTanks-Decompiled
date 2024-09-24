@@ -20,7 +20,7 @@ from gui.Scaleform.genConsts.BATTLE_MARKER_STATES import BATTLE_MARKER_STATES
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
-from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID, ENTITY_IN_FOCUS_TYPE
+from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID, ENTITY_IN_FOCUS_TYPE, PLAYER_GUI_PROPS
 from gui.battle_control.battle_constants import MARKER_DEFAULT_HIT_STATES, MARKER_FREQUENT_HIT_STATES, MARKER_EMPTY_HIT_STATE, MARKER_HIT_EVENTS
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.battle_control.controllers.feedback_adaptor import EntityInFocusData
@@ -386,7 +386,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if replayCtrl.isPlaying and replayCtrl.isTimeWarpInProgress:
             self._setHealthMarker(vehicleID, handle, newHealth)
         else:
-            self._updateHealthMarker(vehicleID, handle, newHealth, bool(aInfo and aInfo.vehicleID == self._playerVehicleID), constants.ATTACK_REASONS[attackReasonID])
+            self._updateHealthMarker(vehicleID, handle, newHealth, self._getVehicleDamageType(aInfo, vehicleID), constants.ATTACK_REASONS[attackReasonID])
 
     def _getVehicleClassTag(self, vInfo):
         return vInfo.getDisplayedClassTag()
@@ -399,6 +399,17 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
 
     def _getGuiPropsName(self, vInfo, guiProps):
         return 'team{}'.format(vInfo.team) if avatar_getter.isVehiclesColorized() else guiProps.name()
+
+    def _getVehicleDamageType(self, attackerInfo, targetID):
+        if not attackerInfo:
+            return settings.DamageType.FROM_OTHER
+        attackerID = attackerInfo.vehicleID
+        if attackerID == targetID:
+            return settings.DamageType.FROM_OTHER
+        if attackerID == self._playerVehicleID:
+            return settings.DamageType.FROM_PLAYER
+        entityName = self.sessionProvider.getCtx().getPlayerGuiProps(attackerID, attackerInfo.team)
+        return settings.DamageType.FROM_SQUAD if entityName == PLAYER_GUI_PROPS.squadman else settings.DamageType.FROM_OTHER
 
     @staticmethod
     def __isStatusActive(statusID, activeStatuses):

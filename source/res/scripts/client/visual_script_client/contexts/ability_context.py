@@ -54,10 +54,6 @@ class AbilityContextClient(VehicleContextClient):
     def startupCooldown(self):
         pass
 
-    @vse_event_out(display_name='OnInterrupted', description='Calls when interrupted by player', aspects=[ASPECT.CLIENT])
-    def interrupted(self):
-        pass
-
     @vse_event_out(display_name='OnExhausted', description='Calls when ability becomes exhausted', aspects=[ASPECT.CLIENT])
     def exhausted(self):
         pass

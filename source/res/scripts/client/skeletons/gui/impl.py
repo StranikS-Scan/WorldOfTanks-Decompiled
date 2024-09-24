@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/skeletons/gui/impl.py
+import types
 import typing
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
@@ -62,7 +63,7 @@ class INotificationWindowController(IGameController):
     def postponeActive(self):
         raise NotImplementedError
 
-    def releasePostponed(self):
+    def releasePostponed(self, fireReleased=True):
         raise NotImplementedError
 
     def lock(self, key):
@@ -74,12 +75,21 @@ class INotificationWindowController(IGameController):
     def hasLock(self, key):
         raise NotImplementedError
 
+    def activeQueueLength(self):
+        raise NotImplementedError
+
     def clear(self):
         raise NotImplementedError
 
     @property
     def postponedCount(self):
         raise NotImplementedError
+
+    def setFilterPredicate(self, predicate):
+        raise NotImplementedError
+
+    def getFilterPredicate(self):
+        return self.__predicate
 
 
 class IFullscreenManager(object):

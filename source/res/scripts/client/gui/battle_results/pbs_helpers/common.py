@@ -28,7 +28,7 @@ def isRealNameVisible(reusable, playerInfo):
 
 
 def getArenaNameStr(reusable):
-    return backport.text(R.strings.arenas.dyn('c_{}'.format(reusable.common.arenaType.getGeometryName())).name())
+    return backport.text(R.strings.arenas.num(reusable.common.arenaType.getGeometryName()).name())
 
 
 def getRegularFinishResultResource(finishReason, teamResult):

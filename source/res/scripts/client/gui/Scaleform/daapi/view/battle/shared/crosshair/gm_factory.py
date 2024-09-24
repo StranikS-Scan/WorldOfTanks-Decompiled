@@ -18,6 +18,8 @@ _GUN_MARKER_LINKAGES = {_CONSTANTS.ARCADE_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER
  _CONSTANTS.SPG_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_SPG_LINKAGE,
  _CONSTANTS.DUAL_GUN_ARCADE_MARKER_NAME: _CONSTANTS.DUAL_GUN_ARCADE_MARKER_LINKAGE,
  _CONSTANTS.DUAL_GUN_SNIPER_MARKER_NAME: _CONSTANTS.DUAL_GUN_SNIPER_MARKER_LINKAGE,
+ _CONSTANTS.TWIN_GUN_ARCADE_MARKER_NAME: _CONSTANTS.TWIN_GUN_MARKER_LINKAGE,
+ _CONSTANTS.TWIN_GUN_SNIPER_MARKER_NAME: _CONSTANTS.TWIN_GUN_MARKER_LINKAGE,
  _CONSTANTS.ARCADE_DUAL_ACC_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_LINKAGE,
  _CONSTANTS.SNIPER_DUAL_ACC_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_LINKAGE,
  _CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_DEBUG_LINKAGE,
@@ -25,6 +27,8 @@ _GUN_MARKER_LINKAGES = {_CONSTANTS.ARCADE_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER
  _CONSTANTS.DEBUG_SPG_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_SPG_DEBUG_LINKAGE,
  _CONSTANTS.DEBUG_DUAL_GUN_ARCADE_MARKER_NAME: _CONSTANTS.DUAL_GUN_ARCADE_MARKER_DEBUG_LINKAGE,
  _CONSTANTS.DEBUG_DUAL_GUN_SNIPER_MARKER_NAME: _CONSTANTS.DUAL_GUN_SNIPER_MARKER_DEBUG_LINKAGE,
+ _CONSTANTS.DEBUG_TWIN_GUN_ARCADE_MARKER_NAME: _CONSTANTS.TWIN_GUN_MARKER_DEBUG_LINKAGE,
+ _CONSTANTS.DEBUG_TWIN_GUN_SNIPER_MARKER_NAME: _CONSTANTS.TWIN_GUN_MARKER_DEBUG_LINKAGE,
  _CONSTANTS.ARTY_HIT_MARKER_NAME: _CONSTANTS.ARTY_HIT_MARKER_LINKAGE,
  _CONSTANTS.VIDEO_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_LINKAGE}
 
@@ -99,6 +103,8 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             markers = self._createSPGMarkers()
         elif self._vehicleInfo.isDualGunVehicle():
             markers = self._createDualGunMarkers()
+        elif self._vehicleInfo.isTwinGunVehicle():
+            markers = self._createTwinGunMarkers()
         elif self._hasDualAccuracyMarkers():
             markers = self._createDualAccMarkers()
         else:
@@ -118,6 +124,10 @@ class _ControlMarkersFactory(_GunMarkersFactory):
     def _createDualGunMarkers(self):
         markerType = self._getMarkerType()
         return (self._createArcadeMarker(markerType, _CONSTANTS.DUAL_GUN_ARCADE_MARKER_NAME), self._createSniperMarker(markerType, _CONSTANTS.DUAL_GUN_SNIPER_MARKER_NAME))
+
+    def _createTwinGunMarkers(self):
+        markerType = self._getMarkerType()
+        return (self._createArcadeMarker(markerType, _CONSTANTS.TWIN_GUN_ARCADE_MARKER_NAME), self._createSniperMarker(markerType, _CONSTANTS.TWIN_GUN_SNIPER_MARKER_NAME))
 
     def _createDualAccMarkers(self):
         return self._createDefaultMarkers() + (self._createArcadeMarker(GUN_MARKER_TYPE.DUAL_ACC, _CONSTANTS.ARCADE_DUAL_ACC_GUN_MARKER_NAME), self._createSniperMarker(GUN_MARKER_TYPE.DUAL_ACC, _CONSTANTS.SNIPER_DUAL_ACC_GUN_MARKER_NAME))
@@ -160,11 +170,20 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
     def _createDualGunMarkers(self):
         return self._createDualGunDebugMarkers() if self._useDebugMarkers() else super(_DevControlMarkersFactory, self)._createDualGunMarkers()
 
+    def _createTwinGunMarkers(self):
+        return self._createTwinGunDebugMarkers() if self._useDebugMarkers() else super(_DevControlMarkersFactory, self)._createTwinGunMarkers()
+
     def _createDualGunDebugMarkers(self):
         return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.DUAL_GUN_ARCADE_MARKER_NAME),
          self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_DUAL_GUN_ARCADE_MARKER_NAME),
          self._createSniperMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.DUAL_GUN_SNIPER_MARKER_NAME),
          self._createSniperMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_DUAL_GUN_SNIPER_MARKER_NAME))
+
+    def _createTwinGunDebugMarkers(self):
+        return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.TWIN_GUN_ARCADE_MARKER_NAME),
+         self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_TWIN_GUN_ARCADE_MARKER_NAME),
+         self._createSniperMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.TWIN_GUN_SNIPER_MARKER_NAME),
+         self._createSniperMarker(GUN_MARKER_TYPE.SERVER, _CONSTANTS.DEBUG_TWIN_GUN_SNIPER_MARKER_NAME))
 
     def _createDebugMarkers(self):
         return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, _CONSTANTS.ARCADE_GUN_MARKER_NAME),

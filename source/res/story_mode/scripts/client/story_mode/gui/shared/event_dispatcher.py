@@ -141,10 +141,14 @@ def showBattleResultWindow(arenaUniqueId):
 
 
 def sendViewLoadedEvent(layoutID):
-    from story_mode.gui.shared.event import StoryModeViewReadyEvent
-    g_eventBus.handleEvent(StoryModeViewReadyEvent(layoutID))
+    g_eventBus.handleEvent(events.ViewReadyEvent(layoutID))
 
 
-def showWelcomeWindow():
-    from story_mode.gui.impl.lobby.welcome_view import WelcomeWindow
-    WelcomeWindow(R.views.story_mode.lobby.WelcomeView()).load()
+def showEventWelcomeWindow():
+    from story_mode.gui.impl.lobby.event_welcome_view import EventWelcomeWindow
+    EventWelcomeWindow(R.views.story_mode.lobby.EventWelcomeView()).load()
+
+
+def showNewbieAdvertisingWindow():
+    from story_mode.gui.impl.lobby.newbie_advertising_view import NewbieAdvertisingWindow
+    NewbieAdvertisingWindow(R.views.story_mode.lobby.NewbieAdvertisingView()).load()

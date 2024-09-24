@@ -498,79 +498,6 @@
       </actions>
     </script>
   </arcade_artillery_smn_battleship_lvl3_hard>
-  <arcade_artillery_smn_airplane_dday>
-    <id>	14010	</id>
-    <type>	battleAbilities	</type>
-    <playerMessagesKey>	AIRSTRIKE	</playerMessagesKey>
-    <userString>	#artefacts:artillery/name	</userString>
-    <description>	#artefacts:artillery/shortDescr	</description>
-    <icon>	airstrike	</icon>
-    <price>	0	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger	</tags>
-    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <reuseCount>	-1	</reuseCount>
-      <consumeAmmo>	false	</consumeAmmo>
-      <disableAllyDamage>	false	</disableAllyDamage>
-      <cooldownTime>	4.5	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	0	</sharedCooldownTime>
-      <minApplyRadius>	25	</minApplyRadius>
-      <maxApplyRadius>	200	</maxApplyRadius>
-      <applyRadiusVisible>	true	</applyRadiusVisible>
-      <arenaAimLimits>
-        <insetRadius>	5	</insetRadius>
-        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
-        <areaColor>	0xFFFF0000	</areaColor>
-      </arenaAimLimits>
-      <markers>
-        <ally>
-          <name>	bomber	</name>
-          <textColor>	green	</textColor>
-        </ally>
-      </markers>
-      <delay>	5	</delay>
-      <duration>	5	</duration>
-      <lifetime>	13	</lifetime>
-      <areaShow>	before	</areaShow>
-      <attackerType>	BOMBER_EQ	</attackerType>
-      <noOwner>	true	</noOwner>
-      <explodeDestructible>	true	</explodeDestructible>
-      <areaRadius>	10	</areaRadius>
-      <shotsNumber>	1	</shotsNumber>
-      <shotSoundPreDelay>	1	</shotSoundPreDelay>
-      <effects>
-        <start>
-          <sequences>
-            <sequence>
-              <name>	particles/eff_sequence/Storymode/ability_airstrike_Typhoon.seq	</name>
-            </sequence>
-          </sequences>
-        </start>
-        <action>
-          <shotEffects>	storymodeAirbombStrike	</shotEffects>
-        </action>
-      </effects>
-      <actions>
-        <action>
-          <type>	DamageVehicle	</type>
-          <applyTo>	all	</applyTo>
-          <args>
-            <damage>	750	</damage>
-          </args>
-        </action>
-        <action>
-          <type>	actions.destructible.DamageDestructibleEntity	</type>
-          <args>
-            <damage>	3000	</damage>
-          </args>
-        </action>
-      </actions>
-    </script>
-  </arcade_artillery_smn_airplane_dday>
   <arcade_artillery_smn_airplane>
     <id>	14006	</id>
     <type>	battleAbilities	</type>
@@ -595,11 +522,6 @@
       <minApplyRadius>	25	</minApplyRadius>
       <maxApplyRadius>	200	</maxApplyRadius>
       <applyRadiusVisible>	true	</applyRadiusVisible>
-      <arenaAimLimits>
-        <insetRadius>	5	</insetRadius>
-        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
-        <areaColor>	0xFFFF0000	</areaColor>
-      </arenaAimLimits>
       <markers>
         <ally>
           <name>	bomber	</name>
@@ -609,9 +531,9 @@
       <delay>	5	</delay>
       <duration>	5.0	</duration>
       <lifetime>	6.0	</lifetime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <areaVisual>	content/Interface/TargetPoint/circle_heal.visual	</areaVisual>
       <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
-      <areaColor>	0x3FFFFF00	</areaColor>
+      <areaColor>	0xFF00FD00	</areaColor>
       <areaShow>	before	</areaShow>
       <attackerType>	BOMBER_EQ	</attackerType>
       <noOwner>	false	</noOwner>
@@ -629,7 +551,6 @@
         </start>
         <action>
           <shotEffects>	storymodeAirbombStrike	</shotEffects>
-          <areaColor>	0x3FFFFF00	</areaColor>
         </action>
       </effects>
       <actions>
@@ -643,7 +564,7 @@
       </actions>
     </script>
   </arcade_artillery_smn_airplane>
-  <arcade_artillery_smn_airplane_boss>
+  <arcade_artillery_smn_airplane1>
     <id>	14007	</id>
     <type>	battleAbilities	</type>
     <soundNotification>	vo_ob_char01_m01_stg01_01	</soundNotification>
@@ -667,11 +588,6 @@
       <minApplyRadius>	25	</minApplyRadius>
       <maxApplyRadius>	200	</maxApplyRadius>
       <applyRadiusVisible>	true	</applyRadiusVisible>
-      <arenaAimLimits>
-        <insetRadius>	5	</insetRadius>
-        <areaSwitch>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaSwitch>
-        <areaColor>	0xFFFF0000	</areaColor>
-      </arenaAimLimits>
       <markers>
         <ally>
           <name>	bomber	</name>
@@ -681,9 +597,9 @@
       <delay>	5	</delay>
       <duration>	5.0	</duration>
       <lifetime>	6.0	</lifetime>
-      <areaVisual>	content/Interface/TargetPoint/TargetPoint.visual	</areaVisual>
+      <areaVisual>	content/Interface/TargetPoint/circle_heal.visual	</areaVisual>
       <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
-      <areaColor>	0x3FFFFF00	</areaColor>
+      <areaColor>	0xFF00FD00	</areaColor>
       <areaShow>	before	</areaShow>
       <attackerType>	BOMBER_EQ	</attackerType>
       <noOwner>	false	</noOwner>
@@ -701,7 +617,6 @@
         </start>
         <action>
           <shotEffects>	storymodeAirbombStrike	</shotEffects>
-          <areaColor>	0x3FFFFF00	</areaColor>
         </action>
       </effects>
       <actions>
@@ -709,12 +624,144 @@
           <type>	DamageVehicle	</type>
           <applyTo>	enemy_team	</applyTo>
           <args>
-            <damage>	1000	</damage>
+            <damage>	750	</damage>
           </args>
         </action>
       </actions>
     </script>
-  </arcade_artillery_smn_airplane_boss>
+  </arcade_artillery_smn_airplane1>
+  <arcade_artillery_smn_airplane2>
+    <id>	14008	</id>
+    <type>	battleAbilities	</type>
+    <soundNotification>	vo_ob_char01_m01_stg01_01	</soundNotification>
+    <playerMessagesKey>	AIRSTRIKE	</playerMessagesKey>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/shortDescr	</description>
+    <icon>	airstrike	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTime>	4.5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	200	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <markers>
+        <ally>
+          <name>	bomber	</name>
+          <textColor>	green	</textColor>
+        </ally>
+      </markers>
+      <delay>	5	</delay>
+      <duration>	5.0	</duration>
+      <lifetime>	6.0	</lifetime>
+      <areaVisual>	content/Interface/TargetPoint/circle_heal.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaColor>	0xFF00FD00	</areaColor>
+      <areaShow>	before	</areaShow>
+      <attackerType>	BOMBER_EQ	</attackerType>
+      <noOwner>	false	</noOwner>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	10	</areaRadius>
+      <shotsNumber>	1	</shotsNumber>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <start>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/Storymode/ability_airstrike_Typhoon.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	1050	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </arcade_artillery_smn_airplane2>
+  <arcade_artillery_smn_airplane3>
+    <id>	14009	</id>
+    <type>	battleAbilities	</type>
+    <soundNotification>	vo_ob_char01_m01_stg01_01	</soundNotification>
+    <playerMessagesKey>	AIRSTRIKE	</playerMessagesKey>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/shortDescr	</description>
+    <icon>	airstrike	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <reuseCount>	-1	</reuseCount>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTime>	4.5	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <minApplyRadius>	25	</minApplyRadius>
+      <maxApplyRadius>	200	</maxApplyRadius>
+      <applyRadiusVisible>	true	</applyRadiusVisible>
+      <markers>
+        <ally>
+          <name>	bomber	</name>
+          <textColor>	green	</textColor>
+        </ally>
+      </markers>
+      <delay>	5	</delay>
+      <duration>	5.0	</duration>
+      <lifetime>	6.0	</lifetime>
+      <areaVisual>	content/Interface/TargetPoint/circle_heal.visual	</areaVisual>
+      <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
+      <areaColor>	0xFF00FD00	</areaColor>
+      <areaShow>	before	</areaShow>
+      <attackerType>	BOMBER_EQ	</attackerType>
+      <noOwner>	false	</noOwner>
+      <explodeDestructible>	true	</explodeDestructible>
+      <areaRadius>	10	</areaRadius>
+      <shotsNumber>	1	</shotsNumber>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <effects>
+        <start>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/Storymode/ability_airstrike_Typhoon.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	storymodeAirbombStrike	</shotEffects>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	enemy_team	</applyTo>
+          <args>
+            <damage>	1200	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </arcade_artillery_smn_airplane3>
   <arcade_artillery_smn_destroyer>
     <id>	14021	</id>
     <userString>	#artefacts:artillery/name	</userString>
@@ -748,6 +795,7 @@
         <areaColor>	0xFFFF0000	</areaColor>
       </arenaAimLimits>
       <delay>	2.5	</delay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
       <duration>	3.0	</duration>
       <shotsNumber>	3	</shotsNumber>
       <explodeDestructible>	false	</explodeDestructible>

@@ -6,7 +6,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
 from gui.battle_control.controllers import aiming_sounds_ctrl
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, spectator_ctrl, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl, arena_info_ctrl, players_panel_ctrl, boss_info_ctrl, teleport_spawn_ctrl, miniboss_info_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, spectator_ctrl, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers.battle_hints import controller as battle_hints_ctrl
@@ -22,7 +22,6 @@ from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
 from gui.battle_control.controllers.spam_protection import battle_spam_ctrl
 from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
-from gui.battle_control.controllers.sound_ctrls.event_battle_sounds import EventBattleSoundController
 from gui.battle_control.controllers.vse_hud_settings_ctrl import vse_hud_settings_ctrl
 from gui.shared.system_factory import registerBattleControllerRepo
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
@@ -250,10 +249,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
 
     @property
-    def arenaInfo(self):
-        return self._repository.getController(BATTLE_CTRL_ID.ARENA_INFO_CTRL)
-
-    @property
     def repair(self):
         return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
 
@@ -280,10 +275,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def spawn(self):
         return self._repository.getController(BATTLE_CTRL_ID.SPAWN_CTRL)
-
-    @property
-    def teleport(self):
-        return self._repository.getController(BATTLE_CTRL_ID.TELEPORT_CTRL)
 
     @property
     def deathScreen(self):
@@ -340,18 +331,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def vseHUDSettings(self):
         return self._repository.getController(BATTLE_CTRL_ID.VSE_HUD_SETTINGS_CTRL)
-
-    @property
-    def playersPanel(self):
-        return self._repository.getController(BATTLE_CTRL_ID.PLAYERS_PANEL_CTRL)
-
-    @property
-    def bossPanel(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BOSS_INFO_CTRL)
-
-    @property
-    def miniBossPanel(self):
-        return self._repository.getController(BATTLE_CTRL_ID.MINI_BOSS_INFO_CTRL)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -475,12 +454,12 @@ class SharedControllersRepository(_ControllersRepository):
         return area_marker_ctrl.AreaMarkersController()
 
 
-class _ControllersRepositoryByBonuses(_ControllersRepository):
+class ControllersRepositoryByBonuses(_ControllersRepository):
     __slots__ = ()
 
     @classmethod
     def create(cls, setup):
-        repository = super(_ControllersRepositoryByBonuses, cls).create(setup)
+        repository = super(ControllersRepositoryByBonuses, cls).create(setup)
         arenaVisitor = setup.arenaVisitor
         if arenaVisitor.hasRespawns():
             repository.addViewController(respawn_ctrl.RespawnsController(setup), setup)
@@ -497,7 +476,7 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
         return repository
 
 
-class ClassicControllersRepository(_ControllersRepositoryByBonuses):
+class ClassicControllersRepository(ControllersRepositoryByBonuses):
     __slots__ = ()
 
     @classmethod
@@ -518,7 +497,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         return DefaultAppearanceCacheController(setup)
 
 
-class EventControllerRepository(_ControllersRepositoryByBonuses):
+class EventControllerRepository(ControllersRepositoryByBonuses):
     __slots__ = ()
 
     @classmethod
@@ -529,20 +508,13 @@ class EventControllerRepository(_ControllersRepositoryByBonuses):
         repository.addViewController(default_maps_ctrl.DefaultMapsController(setup), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addViewController(perk_ctrl.PerksController(), setup)
-        repository.addArenaViewController(boss_info_ctrl.BossInfoController(), setup)
-        repository.addArenaViewController(miniboss_info_ctrl.MiniBossInfoController(), setup)
         repository.addViewController(battle_hints_ctrl.BattleHintsController(), setup)
-        repository.addArenaController(arena_info_ctrl.ArenaInfoController(), setup)
-        repository.addViewController(teleport_spawn_ctrl.TeleportSpawnController(), setup)
         repository.addArenaController(EventAppearanceCacheController(setup), setup)
-        repository.addController(EventBattleSoundController())
-        from gui.battle_control.controllers import area_marker_ctrl
-        repository.addArenaController(area_marker_ctrl.AreaMarkersController(), setup)
-        repository.addArenaViewController(players_panel_ctrl.PlayersPanelController(), setup)
+        repository.addController(ShotsResultSoundController())
         return repository
 
 
-class MapsTrainingControllerRepository(_ControllersRepositoryByBonuses):
+class MapsTrainingControllerRepository(ControllersRepositoryByBonuses):
     __slots__ = ()
 
     @classmethod

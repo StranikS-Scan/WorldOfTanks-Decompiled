@@ -5,7 +5,7 @@ from gui.impl.gen import R
 from gui.battle_results.components import base, vehicles, ranked
 from gui.battle_results.components import style
 from gui.battle_results.templates import regular
-from gui.battle_results.br_constants import BattleResultsRecord as _RECORD
+from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.shared.formatters import text_styles
 RANKED_COMMON_STATS_BLOCK = regular.REGULAR_COMMON_STATS_BLOCK.clone()
 _RANK_COMMON_VO_META = base.PropertyMeta((('state', '', 'state'),

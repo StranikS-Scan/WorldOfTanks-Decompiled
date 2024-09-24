@@ -247,27 +247,6 @@ class EconomicsRecordsChains(object):
     def getPremiumXPAddRecords(self):
         return self._premiumXPAdd
 
-    def getXPToShow(self, isDiffShow=False):
-        values = []
-        for xpRecords in self.getXPRecords():
-            baseXP, premiumXP = xpRecords[:2]
-            xp = premiumXP.getRecord('xpToShow')
-            value = xp - baseXP.getRecord('xpToShow') if isDiffShow else xp
-            values.append(value)
-
-        return values
-
-    def getCreditsToShow(self, isDiffShow=False):
-        values = []
-        for creditRecords in self.getMoneyRecords():
-            baseCredits, premiumCredits = creditRecords[:2]
-            value = premiumCredits.getRecord('credits', 'originalCreditsToDraw')
-            if isDiffShow and value > 0:
-                value -= baseCredits.getRecord('credits', 'originalCreditsToDraw')
-            values.append(value)
-
-        return values
-
     def getMoneyRecords(self, premiumType=PREMIUM_TYPE.NONE):
         if premiumType == PREMIUM_TYPE.NONE or premiumType & (PREMIUM_TYPE.VIP | PREMIUM_TYPE.PLUS):
             resultPremiumData = self._premiumPlusCredits
@@ -280,16 +259,8 @@ class EconomicsRecordsChains(object):
     def getCrystalRecords(self):
         return itertools.izip(self._crystal, self._crystal)
 
-    def getUnpackedCrystalRecords(self):
-        return self._crystal
-
     def getCrystalDetails(self):
         return self._crystalDetails
-
-    def haveCrystalsChanged(self):
-        spent = self._additionalRecords.getRecord('autoBoostersCrystal')
-        received = self._crystal.getRecord('originalCrystal')
-        return any((spent, received)) or self._crystalDetails
 
     def getXPRecords(self, premiumType=PREMIUM_TYPE.NONE, addBonusApplied=False):
         if premiumType == PREMIUM_TYPE.NONE or premiumType & (PREMIUM_TYPE.VIP | PREMIUM_TYPE.PLUS):

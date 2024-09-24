@@ -59,6 +59,9 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
     def hideCountdown(self, state, speed):
         self.as_setMessageS(backport.text(_STATE_TO_MESSAGE[state]))
         self._clearTimeShiftCallback()
+        self._onHideAll(speed)
+
+    def _onHideAll(self, speed):
         self.as_hideAllS(speed != 0)
 
     def _getMessage(self):

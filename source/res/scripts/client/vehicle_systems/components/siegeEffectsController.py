@@ -10,9 +10,10 @@ class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
     HIGH_PRIORITY_TICK_RATE = 0.1
     NPC_TICK_RATE = 0.25
 
-    def __init__(self, appearance, isHighPriority):
+    def __init__(self, appearance, isHighPriority, hasSwitchImpulse):
         self.__appearance = appearance
         self.__effectManager = appearance.customEffectManager
+        self.__hasSwitchImpulse = hasSwitchImpulse
         self.__siegeTimeOut = 0.0
         self.__siegeInProgress = 0
         self.__state = VEHICLE_SIEGE_STATE.DISABLED
@@ -27,9 +28,10 @@ class SiegeEffectsController(cgf_obsolete_script.py_component.Component):
         return
 
     def __shake(self):
-        matrix = Math.Matrix(self.__appearance.compoundModel.matrix)
-        impulseDir = -matrix.applyToAxis(2)
-        self.__appearance.receiveShotImpulse(impulseDir, self.SIEGE_IMPULSE)
+        if self.__hasSwitchImpulse:
+            matrix = Math.Matrix(self.__appearance.compoundModel.matrix)
+            impulseDir = -matrix.applyToAxis(2)
+            self.__appearance.receiveShotImpulse(impulseDir, self.SIEGE_IMPULSE)
 
     def onSiegeStateChanged(self, newState, timeToNextMode):
         switchingTime = timeToNextMode if timeToNextMode > 0.0 else self.SIEGE_TIMEOUT

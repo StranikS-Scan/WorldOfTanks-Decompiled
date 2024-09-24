@@ -149,6 +149,9 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
         if info.isDamagingSmoke():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
+        if info.isFireDamageZone():
+            vehicleVO.vehicleName = ''
+            vehicleVO.vehicleTypeImg = ''
         if info.isProtectionZoneDamage() or info.isProtectionZoneDamage(primary=False):
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
@@ -227,6 +230,15 @@ class _EpicDeathZoneVOBuilder(_ShellVOBuilder):
         return HIDDEN_SHELL
 
 
+class _FireDamageZoneVOBuilder(_ShellVOBuilder):
+
+    def _getShellTypeStr(self, info):
+        return HIDDEN_SHELL
+
+    def _getShellTypeBg(self, info, arenaDP=None):
+        return HIDDEN_SHELL
+
+
 class _DamageShellVOBuilder(_ShellVOBuilder):
 
     def buildVO(self, info, arenaDP):
@@ -238,6 +250,8 @@ class _DamageShellVOBuilder(_ShellVOBuilder):
             shellVOBuilder = _MinefieldZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
+        elif info.isFireDamageZone():
+            shellVOBuilder = _FireDamageZoneVOBuilder()
         else:
             shellVOBuilder = _EmptyShellVOBuilder()
         return shellVOBuilder.buildVO(info, arenaDP)
@@ -254,6 +268,8 @@ class _CritsShellVOBuilder(_ShellVOBuilder):
             shellVOBuilder = _MinefieldZoneVOBuilder()
         elif info.isProtectionZoneDamage() or info.isBombersDamage():
             shellVOBuilder = _EpicDeathZoneVOBuilder()
+        elif info.isFireDamageZone():
+            shellVOBuilder = _FireDamageZoneVOBuilder()
         else:
             shellVOBuilder = _EmptyShellVOBuilder()
         return shellVOBuilder.buildVO(info, arenaDP)
@@ -366,7 +382,9 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
             return self.__thunderStrikeIcon
         if info.isBattleshipStrike():
             return self.__battleshipIcon
-        return self.__destroyerIcon if info.isDestroyerStrike() else self.__ramIcon
+        if info.isDestroyerStrike():
+            return self.__destroyerIcon
+        return self.__fireIcon if info.isFireDamageZone() else self.__ramIcon
 
 
 class _AssistActionImgVOBuilder(_ActionImgVOBuilder):

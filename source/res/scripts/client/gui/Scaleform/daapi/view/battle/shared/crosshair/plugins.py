@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
 import logging
 import math
+import typing
 from collections import defaultdict, namedtuple, deque
 from itertools import takewhile
 import BigWorld
@@ -9,12 +10,14 @@ from account_helpers.settings_core.settings_constants import GRAPHICS, AIM, GAME
 from enum import IntEnum
 from helpers.time_utils import MS_IN_SECOND
 import BattleReplay
-from AvatarInputHandler import gun_marker_ctrl, aih_global_binding
+import SoundGroups
+from AvatarInputHandler import gun_marker_ctrl
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import SPGShotResultEnum
+from DualAccuracy import getVehicleDualAccuracy
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from aih_constants import CHARGE_MARKER_STATE, CTRL_MODE_NAME
+from TwinGunController import getVehicleTwinGunController
+from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, DUALGUN_CHARGER_STATUS, SERVER_TICK_LENGTH
 from debug_utils import LOG_WARNING
 from gui import makeHtmlString, GUI_SETTINGS
@@ -22,6 +25,7 @@ from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESUL
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
 from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
+from gui.Scaleform.daapi.view.battle.shared.vehicles.dualgun_sounds import DualGunSoundEvents
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSTATES import AUTOLOADERBOOSTVIEWSTATES
 from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.DUAL_GUN_MARKER_STATE import DUAL_GUN_MARKER_STATE
@@ -43,6 +47,10 @@ from helpers_common import computeDamageAtDist
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from DualAccuracy import DualAccuracy
+    from TwinGunController import TwinGunController
+    from Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
 _SETTINGS_KEY_TO_VIEW_ID = {AIM.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  AIM.SNIPER: CROSSHAIR_VIEW_ID.SNIPER}
@@ -53,10 +61,6 @@ _DEVICE_ENGINE_NAME = 'engine'
 _DEVICE_REPAIRED = 'repaired'
 _LISTENING_SETTINGS = {SPGAim.SPG_SCALE_WIDGET, GRAPHICS.COLOR_BLIND}
 _TARGET_UPDATE_INTERVAL = 0.2
-_DUAL_GUN_MARKER_STATES_MAP = {CHARGE_MARKER_STATE.VISIBLE: DUAL_GUN_MARKER_STATE.VISIBLE,
- CHARGE_MARKER_STATE.LEFT_ACTIVE: DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE,
- CHARGE_MARKER_STATE.RIGHT_ACTIVE: DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE,
- CHARGE_MARKER_STATE.DIMMED: DUAL_GUN_MARKER_STATE.DIMMED}
 
 def createPlugins():
     resultPlugins = {'core': CorePlugin,
@@ -76,7 +80,9 @@ def createPlugins():
      'spgShotResultIndicator': SPGShotResultIndicatorPlugin,
      'dualAccuracyMechanics': DualAccuracyGunPlugin,
      'mutableDamage': MutableDamagePlugin,
-     'aimDamage': AimDamagePlugin}
+     'aimDamage': AimDamagePlugin,
+     'cameraTransition': CameraTransitionPlugin,
+     'twinGun': TwinGunPlugin}
     return resultPlugins
 
 
@@ -177,10 +183,10 @@ class CrosshairPlugin(IPlugin):
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def _isHideAmmo(self):
-        arenaGuiTypeVisitor = self.sessionProvider.arenaVisitor.gui
-        isAmmoInfinite = ARENA_BONUS_TYPE_CAPS.checkAny(BigWorld.player().arena.bonusType, ARENA_BONUS_TYPE_CAPS.INFINITE_AMMO)
-        isMapsTraining = arenaGuiTypeVisitor.isMapsTraining()
-        return isAmmoInfinite or isMapsTraining
+        return self.sessionProvider.arenaVisitor.gui.isMapsTraining()
+
+    def _playSound2D(self, soundID):
+        SoundGroups.g_instance.playSafeSound2D(soundID)
 
 
 class CorePlugin(CrosshairPlugin):
@@ -541,6 +547,9 @@ class AmmoPlugin(CrosshairPlugin):
             self.__notifyAutoLoader(state)
 
     def __notifyAutoLoader(self, state):
+        if not state.isReloading() and self.__autoReloadCallbackID is not None:
+            BigWorld.cancelCallback(self.__autoReloadCallbackID)
+            self.__autoReloadCallbackID = None
         actualTime = state.getActualValue()
         baseTime = state.getBaseValue()
         if self.__shellsInClip <= 0 and state.isReloading():
@@ -651,7 +660,7 @@ class VehicleStatePlugin(CrosshairPlugin):
         if vehicle is not None:
             self.__setPlayerInfo(vehicle.id)
             self.__onVehicleControlling(vehicle)
-        ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+        ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
         ctrl = self.sessionProvider.shared.feedback
@@ -663,13 +672,16 @@ class VehicleStatePlugin(CrosshairPlugin):
     def stop(self):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleControlling
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         return
+
+    def _setMaxHealth(self, value):
+        self.__maxHealth = value
 
     def __setHealth(self, health):
         if self.__maxHealth != 0 and self.__maxHealth >= health:
@@ -701,7 +713,7 @@ class VehicleStatePlugin(CrosshairPlugin):
         self.__setHealth(vehicle.health)
         self.__updateVehicleInfo()
 
-    def __onVehicleStateUpdated(self, state, value):
+    def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
             self.__setHealth(value)
             self.__updateVehicleInfo()
@@ -1024,6 +1036,15 @@ class SiegeModePlugin(CrosshairPlugin):
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
         return
 
+    def __hasStaticNetOverride(self, vTypeDescr):
+        return vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.type.isDualgunVehicleType or vTypeDescr.isTwinGunVehicle
+
+    def __getStaticNetOverride(self, vTypeDescr):
+        return (not vTypeDescr.type.isDualgunVehicleType, NET_TYPE_OVERRIDE.DISABLED)
+
+    def __getSiegeEnabledNetOverride(self, vTypeDescr):
+        return NET_TYPE_OVERRIDE.DISABLED if vTypeDescr.hasTurboshaftEngine else NET_TYPE_OVERRIDE.SIEGE_MODE
+
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
@@ -1051,28 +1072,25 @@ class SiegeModePlugin(CrosshairPlugin):
             self.__updateView()
 
     def __updateView(self):
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        vehicle = vStateCtrl.getControllingVehicle()
-        if vehicle is not None:
-            vTypeDescr = vehicle.typeDescriptor
-            if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.type.isDualgunVehicleType:
-                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-                return
-        else:
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        if vehicle is None:
             return
-        self._parentObj.as_setNetSeparatorVisibleS(self.__siegeState == _SIEGE_STATE.DISABLED)
-        if self.__siegeState == _SIEGE_STATE.ENABLED:
-            self._parentObj.as_setNetTypeS(self.__getEnabledNetType(vTypeDescr))
-        elif self.__siegeState == _SIEGE_STATE.DISABLED:
-            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
-        visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
-        self._parentObj.as_setNetVisibleS(visibleMask)
-        return
-
-    @staticmethod
-    def __getEnabledNetType(vTypeDescr):
-        return NET_TYPE_OVERRIDE.DISABLED if vTypeDescr.hasTurboshaftEngine else NET_TYPE_OVERRIDE.SIEGE_MODE
+        else:
+            vTypeDescr = vehicle.typeDescriptor
+            if self.__hasStaticNetOverride(vTypeDescr):
+                separatorVisibility, netType = self.__getStaticNetOverride(vTypeDescr)
+                self._parentObj.as_setNetSeparatorVisibleS(separatorVisibility)
+                self._parentObj.as_setNetTypeS(netType)
+                return
+            self._parentObj.as_setNetSeparatorVisibleS(self.__siegeState == _SIEGE_STATE.DISABLED)
+            if self.__siegeState == _SIEGE_STATE.ENABLED:
+                self._parentObj.as_setNetTypeS(self.__getSiegeEnabledNetOverride(vTypeDescr))
+            elif self.__siegeState == _SIEGE_STATE.DISABLED:
+                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
+            visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
+            visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
+            self._parentObj.as_setNetVisibleS(visibleMask)
+            return
 
 
 class ShotDonePlugin(CrosshairPlugin):
@@ -1302,58 +1320,78 @@ class SpeedometerWheeledTech(CrosshairPlugin):
 
 
 class DualGunPlugin(CrosshairPlugin):
-    __chargeMarkerState = aih_global_binding.bindRO(aih_global_binding.BINDING_ID.CHARGE_MARKER_STATE)
+    __slots__ = ('__isDualGunVehicle',)
+
+    def __init__(self, parentObj):
+        super(DualGunPlugin, self).__init__(parentObj)
+        self.__isDualGunVehicle = False
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if vStateCtrl is not None:
-            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vehicle = vStateCtrl.getControllingVehicle()
             self.__onVehicleControlling(vehicle)
         if crosshairCtrl is not None:
-            crosshairCtrl.onChargeMarkerStateUpdated += self.__dualGunMarkerStateUpdated
-        add = g_eventBus.addListener
-        add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
+            crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
+            crosshairCtrl.onMultiGunCollisionsUpdated += self.__onMultiGunCollisionsUpdated
         return
 
     def stop(self):
+        self.__isDualGunVehicle = False
         vStateCtrl = self.sessionProvider.shared.vehicleState
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if vStateCtrl is not None:
-            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+            vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
         if crosshairCtrl is not None:
-            crosshairCtrl.onChargeMarkerStateUpdated -= self.__dualGunMarkerStateUpdated
-        remove = g_eventBus.removeListener
-        remove(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
+            crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+            crosshairCtrl.onMultiGunCollisionsUpdated -= self.__onMultiGunCollisionsUpdated
         return
 
+    def __getChargeMarkerState(self, viewID, collisions):
+        if len(collisions) != 2:
+            return DUAL_GUN_MARKER_STATE.DIMMED
+        if viewID == CROSSHAIR_VIEW_ID.ARCADE:
+            if any(collisions):
+                return DUAL_GUN_MARKER_STATE.VISIBLE
+            return DUAL_GUN_MARKER_STATE.DIMMED
+        if viewID == CROSSHAIR_VIEW_ID.SNIPER:
+            hasLeft, hasRight = collisions
+            chargeState = DUAL_GUN_MARKER_STATE.DIMMED
+            if hasLeft and hasRight:
+                chargeState = DUAL_GUN_MARKER_STATE.VISIBLE
+            elif hasLeft:
+                chargeState = DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE
+            elif hasRight:
+                chargeState = DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE
+            return chargeState
+        return DUAL_GUN_MARKER_STATE.DIMMED
+
     def __onVehicleControlling(self, vehicle):
-        if vehicle is None or not vehicle.isAlive():
-            return
-        else:
-            vTypeDesc = vehicle.typeDescriptor
-            if vTypeDesc.type.isDualgunVehicleType:
-                self._parentObj.as_setNetSeparatorVisibleS(False)
-                if vTypeDesc.isDualgunVehicle:
-                    self.__dualGunMarkerStateUpdated(self.__chargeMarkerState)
-            return
+        self.__isDualGunVehicle = vehicle is not None and vehicle.isAlive() and vehicle.typeDescriptor.isDualgunVehicle
+        self.__updateDualGunMarkerState()
+        return
 
     def __onVehicleStateUpdated(self, stateID, value):
         if stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:
-            self.__onSiegeStateUpdated(value)
+            self.__updateSiegeState(*value)
         if stateID == VEHICLE_VIEW_STATE.DUAL_GUN_CHARGER:
-            self.__onDualGunChargeStateUpdated(value)
+            self.__updateDualGunChargeState(*value)
 
-    def __onSiegeStateUpdated(self, value):
-        siegeState, _ = value
-        if siegeState is _SIEGE_STATE.DISABLED:
+    def __onCrosshairViewChanged(self, viewID):
+        self.__updateDualGunMarkerState(viewID=viewID)
+
+    def __onMultiGunCollisionsUpdated(self, collisions):
+        self.__updateDualGunMarkerState(collisions=collisions)
+
+    def __updateSiegeState(self, siegeState, _):
+        if siegeState == _SIEGE_STATE.DISABLED:
             self.parentObj.as_cancelDualGunChargeS()
 
-    def __onDualGunChargeStateUpdated(self, value):
-        state, time = value
+    def __updateDualGunChargeState(self, state, time):
         pingCompensation = SERVER_TICK_LENGTH * MS_IN_SECOND
         if state == DUALGUN_CHARGER_STATUS.PREPARING:
             baseTime, timeLeft = time
@@ -1361,14 +1399,17 @@ class DualGunPlugin(CrosshairPlugin):
         elif state in (DUALGUN_CHARGER_STATUS.CANCELED, DUALGUN_CHARGER_STATUS.UNAVAILABLE):
             self.parentObj.as_cancelDualGunChargeS()
 
-    def __dualGunMarkerStateUpdated(self, markerState):
-        dualGunMarkerState = _DUAL_GUN_MARKER_STATES_MAP[markerState]
-        self.parentObj.as_updateDualGunMarkerStateS(dualGunMarkerState)
-
-    def __onSniperCameraTransition(self, event):
-        transitionTimeInSeconds = event.ctx.get('transitionTime')
-        gunIndex = event.ctx.get('currentGunIndex')
-        self.parentObj.as_runCameraTransitionFxS(gunIndex, transitionTimeInSeconds * MS_IN_SECOND)
+    def __updateDualGunMarkerState(self, viewID=None, collisions=None):
+        if not self.__isDualGunVehicle:
+            return
+        else:
+            crosshairCtrl = self.sessionProvider.shared.crosshair
+            if crosshairCtrl is None and (viewID is None or collisions is None):
+                return
+            viewID = viewID if viewID is not None else crosshairCtrl.getViewID()
+            collisions = collisions if collisions is not None else crosshairCtrl.getMultiGunCollisions()
+            self.parentObj.as_updateDualGunMarkerStateS(self.__getChargeMarkerState(viewID, collisions))
+            return
 
 
 class ArtyCameraDistancePlugin(_DistancePlugin):
@@ -1575,54 +1616,6 @@ class SPGShotResultIndicatorPlugin(CrosshairPlugin):
         return shotResult == SPGShotResultEnum.HIT and shellState not in (SPGShotIndicatorState.ACTIVE_EMPTY_SHELL, SPGShotIndicatorState.EMPTY_SHELL)
 
 
-class DualAccuracyGunPlugin(CrosshairPlugin):
-
-    def __init__(self, parentObj):
-        super(DualAccuracyGunPlugin, self).__init__(parentObj)
-        self.__dualAccGunCtrl = None
-        return
-
-    def start(self):
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
-            vehicle = vStateCtrl.getControllingVehicle()
-            self.__onVehicleControlling(vehicle)
-        return
-
-    def stop(self):
-        vStateCtrl = self.sessionProvider.shared.vehicleState
-        if vStateCtrl is not None:
-            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
-        self.__unsubscribeDualAccuracyCtrl()
-        return
-
-    def __onSetDualAccuracyState(self, *_):
-        isVisible = not self.__dualAccGunCtrl.isActive() if self.__dualAccGunCtrl is not None else False
-        self.parentObj.as_setDualAccActiveS(isVisible)
-        return
-
-    def __onVehicleControlling(self, vehicle):
-        if vehicle is not None and vehicle.typeDescriptor.hasDualAccuracy:
-            self.__subscribeDualAccuracyCtrl(vehicle.dynamicComponents.get('dualAccuracy'))
-        else:
-            self.__unsubscribeDualAccuracyCtrl()
-        return
-
-    def __subscribeDualAccuracyCtrl(self, dualAccuracyGunCtrl):
-        if dualAccuracyGunCtrl:
-            self.__dualAccGunCtrl = dualAccuracyGunCtrl
-            self.__dualAccGunCtrl.onSetDualAccState += self.__onSetDualAccuracyState
-        self.__onSetDualAccuracyState()
-
-    def __unsubscribeDualAccuracyCtrl(self):
-        if self.__dualAccGunCtrl:
-            self.__dualAccGunCtrl.onSetDualAccState -= self.__onSetDualAccuracyState
-            self.__dualAccGunCtrl = None
-        self.__onSetDualAccuracyState()
-        return
-
-
 class MutableDamagePlugin(_DistancePlugin):
     __slots__ = ('__targetID', '__shellDescr')
 
@@ -1714,6 +1707,7 @@ class MutableDamagePlugin(_DistancePlugin):
 
 
 class AimDamagePlugin(CrosshairPlugin):
+    __slots__ = ('__shellDamage', '__vehicleDamageRate', '__highDamageReference', '__mediumDamageReference', '__hasDamageReferences', '__damageEvents')
     _AGGREGATION_COUNT = 3
     _AGGREGATION_DELTA = _AGGREGATION_COUNT * 0.1
     _HIGH_DAMAGE_RATE = 0.7
@@ -1810,3 +1804,181 @@ class AimDamagePlugin(CrosshairPlugin):
         else:
             stage = _VIEW_CONSTANTS.AIM_DAMAGE_STAGE_0
         self.parentObj.as_setAimDamageStageS(stage)
+
+
+class CameraTransitionPlugin(CrosshairPlugin):
+    __slots__ = ()
+    _TRANSITION_SOUNDS = {CTRL_MODE_NAME.DUAL_GUN: DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH,
+     CTRL_MODE_NAME.TWIN_GUN: DualGunSoundEvents.DAULGUN_RELOAD_SNIPER_SWITCH}
+
+    def start(self):
+        add = g_eventBus.addListener
+        add(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def stop(self):
+        remove = g_eventBus.removeListener
+        remove(GameEvent.SNIPER_CAMERA_TRANSITION, self.__onSniperCameraTransition, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def __onSniperCameraTransition(self, event):
+        transitionSide, transitionTime = event.ctx.get('transitionSide'), event.ctx.get('transitionTime')
+        self.parentObj.as_runCameraTransitionFxS(transitionSide, transitionTime * MS_IN_SECOND)
+        self._playSound2D(self._TRANSITION_SOUNDS.get(event.ctx.get('ctrlModeName')))
+
+
+class VehicleMechanicPlugin(CrosshairPlugin):
+    __slots__ = ('__vehicleMechanicCtrl',)
+
+    def __init__(self, parentObj):
+        super(VehicleMechanicPlugin, self).__init__(parentObj)
+        self.__vehicleMechanicCtrl = None
+        return
+
+    @property
+    def hasVehicleMechanic(self):
+        return self.vehicleMechanicCtrl is not None
+
+    @property
+    def vehicleMechanicCtrl(self):
+        return self.__vehicleMechanicCtrl
+
+    def start(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling += self.__onVehicleControlling
+            vehicle = vStateCtrl.getControllingVehicle()
+            self.__onVehicleControlling(vehicle)
+        return
+
+    def stop(self):
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        if vStateCtrl is not None:
+            vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
+        self.__releaseVehicleMechanicCtrl()
+        return
+
+    def _getVehicleMechanicCtrl(self, vehicle):
+        raise NotImplementedError
+
+    def _onVehicleMechanicUpdate(self):
+        raise NotImplementedError
+
+    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        raise NotImplementedError
+
+    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        raise NotImplementedError
+
+    def __onVehicleControlling(self, vehicle):
+        self.__releaseVehicleMechanicCtrl()
+        self.__catchVehicleMechanicCtrl(self._getVehicleMechanicCtrl(vehicle))
+        self._onVehicleMechanicUpdate()
+
+    def __catchVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        if vehicleMechanicCtrl:
+            self.__vehicleMechanicCtrl = vehicleMechanicCtrl
+            self._subscribeVehicleMechanicCtrl(vehicleMechanicCtrl)
+
+    def __releaseVehicleMechanicCtrl(self):
+        if self.__vehicleMechanicCtrl:
+            self._unsubscribeVehicleMechanicCtrl(self.__vehicleMechanicCtrl)
+            self.__vehicleMechanicCtrl = None
+        return
+
+
+class DualAccuracyGunPlugin(VehicleMechanicPlugin):
+    __slots__ = ()
+
+    def _getVehicleMechanicCtrl(self, vehicle):
+        return getVehicleDualAccuracy(vehicle)
+
+    def _onVehicleMechanicUpdate(self, *_):
+        isVisible = self.hasVehicleMechanic and not self.vehicleMechanicCtrl.isActive()
+        self.parentObj.as_setDualAccActiveS(isVisible)
+
+    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        vehicleMechanicCtrl.onSetDualAccState += self._onVehicleMechanicUpdate
+
+    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        vehicleMechanicCtrl.onSetDualAccState -= self._onVehicleMechanicUpdate
+
+
+class TwinGunPlugin(VehicleMechanicPlugin):
+    __slots__ = ('__targetID',)
+    _UNDEFINED_TARGET_ID = -1
+
+    def __init__(self, parentObj):
+        super(TwinGunPlugin, self).__init__(parentObj)
+        self.__targetID = self._UNDEFINED_TARGET_ID
+
+    def start(self):
+        self.__targetID = avatar_getter.getTargetID(self._UNDEFINED_TARGET_ID)
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            feedbackCtrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onMultiGunCollisionsUpdated += self.__onMultiGunCollisionsUpdated
+        super(TwinGunPlugin, self).start()
+        return
+
+    def stop(self):
+        self.__targetID = self._UNDEFINED_TARGET_ID
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            feedbackCtrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            crosshairCtrl.onMultiGunCollisionsUpdated -= self.__onMultiGunCollisionsUpdated
+        super(TwinGunPlugin, self).stop()
+        return
+
+    def _isAliveEnemyInFocus(self):
+        targetEntity = BigWorld.entity(self.__targetID) if self.__targetID != self._UNDEFINED_TARGET_ID else None
+        return targetEntity is not None and targetEntity.isAlive() and not targetEntity.isPlayerTeam
+
+    def _getTwinGunMarkerState(self, collisions):
+        if len(collisions) != 2 or not self._isAliveEnemyInFocus():
+            return DUAL_GUN_MARKER_STATE.VISIBLE
+        hasLeft, hasRight = collisions
+        if hasLeft and hasRight:
+            markerState = DUAL_GUN_MARKER_STATE.VISIBLE
+        elif hasLeft:
+            markerState = DUAL_GUN_MARKER_STATE.LEFT_PART_ACTIVE
+        elif hasRight:
+            markerState = DUAL_GUN_MARKER_STATE.RIGHT_PART_ACTIVE
+        else:
+            markerState = DUAL_GUN_MARKER_STATE.DIMMED
+        return markerState
+
+    def _getVehicleMechanicCtrl(self, vehicle):
+        return getVehicleTwinGunController(vehicle)
+
+    def _onVehicleMechanicUpdate(self, *_):
+        self.__updateTwinGunMarkerState()
+        isVisible = self.hasVehicleMechanic and self.vehicleMechanicCtrl.isDoubleBarrelMode()
+        self.parentObj.as_setTwinGunMarkerActiveS(isVisible)
+
+    def _subscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        vehicleMechanicCtrl.shootingEvents.onActiveGunsUpdate += self._onVehicleMechanicUpdate
+
+    def _unsubscribeVehicleMechanicCtrl(self, vehicleMechanicCtrl):
+        vehicleMechanicCtrl.shootingEvents.onActiveGunsUpdate -= self._onVehicleMechanicUpdate
+
+    def __onMultiGunCollisionsUpdated(self, collisions):
+        self.__updateTwinGunMarkerState(collisions=collisions)
+
+    def __onVehicleFeedbackReceived(self, eventID, entityID, value):
+        if eventID == _FET.ENTITY_IN_FOCUS:
+            self.__targetID = entityID if value.isInFocus else self._UNDEFINED_TARGET_ID
+            self.__updateTwinGunMarkerState()
+
+    def __updateTwinGunMarkerState(self, collisions=None):
+        if not self.hasVehicleMechanic:
+            return
+        else:
+            crosshairCtrl = self.sessionProvider.shared.crosshair
+            if crosshairCtrl is None and collisions is None:
+                return
+            collisions = collisions if collisions is not None else crosshairCtrl.getMultiGunCollisions()
+            self.parentObj.as_setTwinGunMarkerStateS(self._getTwinGunMarkerState(collisions))
+            return

@@ -4,6 +4,7 @@ import BigWorld
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from gui.shared.utils import backoff
+from helpers import dependency
 from messenger import g_settings
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import LobbyLayout
@@ -15,6 +16,7 @@ from messenger.proto.xmpp.jid import makeContactJID
 from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder, XmppLobbyUsersChatBuilder
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
 from messenger.storage import storage_getter
+from skeletons.gui.game_control import IGameSessionController
 _LAZY_EXIT_DELAY = 10.0
 _BACK_OFF_MIN_DELAY = 60
 _BACK_OFF_MAX_DELAY = 1200
@@ -98,6 +100,7 @@ class _ChannelController(LobbyLayout):
 
 
 class ChatSessionController(_ChannelController):
+    __gameSession = dependency.descriptor(IGameSessionController)
 
     def __init__(self, channel):
         super(ChatSessionController, self).__init__(channel, XmppLobbyUsersChatBuilder())
@@ -109,6 +112,21 @@ class ChatSessionController(_ChannelController):
 
     def isJoined(self):
         return self._channel.isJoined() and not self._isHistoryRqRequired
+
+    def isMinorMessagesRestricted(self):
+        if self.__gameSession.isPrivateMessagesForbidden:
+            return True
+        if self.__gameSession.isNonFriendPrivateMessagesForbidden:
+            contact = self.usersStorage.getUser(self._channel.getID().getDatabaseID())
+            if not contact or not USER_TAG.filterClosedContactsTags(contact.getTags()):
+                return True
+        return False
+
+    def notifyMinorChatRestriction(self):
+        if self.__gameSession.isNonFriendPrivateMessagesForbidden:
+            self.proto.messages.sendNonFriendMessagesRestrictedNotification()
+        elif self.__gameSession.isPrivateMessagesForbidden:
+            self.proto.messages.sendPrivateMessagesRestrictedNotification()
 
     def activate(self):
         if self._isHistoryRqRequired:

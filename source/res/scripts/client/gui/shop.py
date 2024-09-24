@@ -43,7 +43,6 @@ class _GoldPurchaseReason(object):
     BATTLE_PASS = 'battle_pass'
     BATTLE_PASS_LEVELS = 'battle_pass_levels'
     PERSONAL_RESERVES = 'personal_reserves'
-    LOOTBOX_REROLL = 'loot_box_re_roll'
 
 
 class Source(object):
@@ -180,14 +179,11 @@ def showBuyGoldForPersonalReserves(fullPrice):
     showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.PERSONAL_RESERVES, fullPrice))
 
 
-def showBuyGoldForReroll(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.LOOTBOX_REROLL, fullPrice))
-
-
-def showBuyGoldForBundle(fullPrice, params=None):
-    params = dict(params) or {}
+def showBuyGoldForBundle(fullPrice, params=None, parent=None):
+    params = dict(params) if params is not None else {}
     params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
-    showBuyGoldWebOverlay(params)
+    showBuyGoldWebOverlay(params, parent)
+    return
 
 
 def showBlueprintsExchangeOverlay(url=None, parent=None):
@@ -231,14 +227,6 @@ def showIngameShop(url, origin=None):
     if origin:
         params['origin'] = origin
     showShop(url, params=params)
-
-
-@adisp_process
-def showBuyLootboxOverlay(parent=None, alias=VIEW_ALIAS.OVERLAY_WEB_STORE):
-    url = helpers.getBuyLootboxesUrl()
-    if url:
-        url = yield URLMacros().parse(url)
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBuyProductOverlay(params=None):

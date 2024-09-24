@@ -26,6 +26,8 @@ from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.impl import IGuiLoader
+from uilogging.player_satisfaction_rating.loggers import BattleResponseLogger
 _logger = logging.getLogger(__name__)
 _CALLOUT_MESSAGES_BLOCK_DURATION = 15
 _HINT_TIMEOUT = 10
@@ -47,7 +49,8 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
     __appLoader = dependency.descriptor(IAppLoader)
-    __slots__ = ('__isActive', '__isCalloutEnabled', '__isIBCEnabled', '__commandReceivedData', '__lastPersonalMsgTimestamp', '__lastCalloutTimestamp', '__ui', '__radialKeyDown', '__radialMenuIsOpen', '__previousForcedGuiControlModeFlags')
+    __guiLoader = dependency.descriptor(IGuiLoader)
+    __slots__ = ('__isActive', '__isCalloutEnabled', '__isIBCEnabled', '__commandReceivedData', '__lastPersonalMsgTimestamp', '__lastCalloutTimestamp', '__ui', '__radialKeyDown', '__radialMenuIsOpen', '__previousForcedGuiControlModeFlags', '_uiPlayerSatisfactionRatingLogger')
 
     def __init__(self, setup):
         super(CalloutController, self).__init__()
@@ -61,6 +64,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         self.__radialKeyDown = None
         self.__radialMenuIsOpen = False
         self.__previousForcedGuiControlModeFlags = None
+        self._uiPlayerSatisfactionRatingLogger = BattleResponseLogger()
         return
 
     def getControllerID(self):
@@ -123,6 +127,8 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 return False
             elif containerManager.isModalViewsIsExists() or self.__appLoader.getApp().hasGuiControlModeConsumers(*_CONSUMERS_LOCKS):
                 return False
+            elif self.__guiLoader.windowsManager.findWindows(lambda w: w.isModal()):
+                return False
             isPlayerObserver = self.sessionProvider.getCtx().isPlayerObserver()
             if self.__radialKeyDown is None and isDown:
                 self.__radialKeyDown = key
@@ -177,6 +183,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                         self.__ui.setShowData(vehicleIDToAnswer, commandName)
                         self.__isActive = True
                         self.delayCallback(_HINT_TIMEOUT, self.__executeHide)
+                        self._uiPlayerSatisfactionRatingLogger.onViewInitialize()
                     self.__lastCalloutTimestamp = currentTime + _CALLOUT_MESSAGES_BLOCK_DURATION
                     CalloutController.fireCalloutDisplayEvent(True)
                 if cmd.isPrivate() and not hasRecentPersonalMsg:
@@ -192,6 +199,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 return
             if self.__commandReceivedData.name in _CALLOUT_COMMANDS_TO_REPLY_COMMANDS:
                 commands.handleChatCommand(_CALLOUT_COMMANDS_TO_REPLY_COMMANDS[self.__commandReceivedData.name], self.__commandReceivedData.targetIdToAnswer)
+                self._uiPlayerSatisfactionRatingLogger.setResponse(self.__commandReceivedData.name)
             else:
                 _logger.error('Unsupported chat command name(%s) for replying to player(%d)', self.__commandReceivedData.name, self.__commandReceivedData.targetIdToAnswer)
             self.__executeHide(True, self.__commandReceivedData.name)
@@ -216,6 +224,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
             self.__commandReceivedData = None
             if self.__ui:
                 self.__ui.setHideData(wasAnswered, commandReceived)
+            self._uiPlayerSatisfactionRatingLogger.onViewFinalize()
             CalloutController.fireCalloutDisplayEvent(False)
         return
 

@@ -39,6 +39,10 @@ class FadingMessages(BattleMessageListMeta):
     def setSettingFile(self, mFile):
         self.__settingsFilePath = _MESSAGES_SETTINGS_PATH.format(mFile)
 
+    @property
+    def messages(self):
+        return self._messages
+
     @sf_battle
     def app(self):
         return None

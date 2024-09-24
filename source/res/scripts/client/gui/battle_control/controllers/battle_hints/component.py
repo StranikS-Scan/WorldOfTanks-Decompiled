@@ -10,16 +10,7 @@ if typing.TYPE_CHECKING:
     from gui.battle_control.controllers.battle_hints.controller import BattleHintsController
 _logger = getLogger('Component')
 
-class IBattleHintView(object):
-
-    def showHint(self, hint, data):
-        pass
-
-    def hideHint(self, hint=None):
-        pass
-
-
-class BattleHintComponent(IBattleHintView):
+class BattleHintComponent(object):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, battleHintsQueueParams=None, *args, **kwargs):

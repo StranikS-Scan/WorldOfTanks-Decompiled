@@ -7,14 +7,17 @@ from hints_common.battle.schemas.base import HMCContextType, HMCPropsType
 from hints.battle.newbie import getLogger
 from hints.battle.schemas.base import ClientHintHistoryModel, ClientHintHistorySchema, ClientHintModel, ClientHintSchema, CHMTextType, CHMVisualType, CHMSoundType, CHMLifecycleType
 from skeletons.gui.battle_hints.newbie_battle_hints_controller import INewbieBattleHintsController
+if typing.TYPE_CHECKING:
+    from gui.battle_control.controllers.battle_hints.history import BattleHintsHistory
+    from typing import Optional
 _logger = getLogger('Model')
 _DEFAULT_DISPLAY_COUNT = 5
 
 class NewbieClientHintHistoryModel(ClientHintHistoryModel):
     __slots__ = ('displayCount',)
 
-    def __init__(self, modifyPriority, cooldown, displayCount):
-        super(NewbieClientHintHistoryModel, self).__init__(modifyPriority, cooldown)
+    def __init__(self, modifyPriority, cooldown, totalDisplayCount, perBattleCount, displayCount):
+        super(NewbieClientHintHistoryModel, self).__init__(modifyPriority, cooldown, totalDisplayCount, perBattleCount)
         self.displayCount = displayCount
 
     def _reprArgs(self):
@@ -39,7 +42,7 @@ class NewbieClientHintModel(ClientHintModel[HMCPropsType, HMCContextType, CHMTex
             return False
         return super(NewbieClientHintModel, self).validate(*args, **kwargs)
 
-    def canBeShown(self):
+    def canBeShown(self, historyStorage=None):
         if not self._newbieHintsCtrl.isEnabled() or not self._newbieHintsCtrl.isUserSettingEnabled():
             _logger.debug('Can not show <%s>. Disabled by server or user.', self.uniqueName)
             return False
@@ -52,7 +55,7 @@ class NewbieClientHintModel(ClientHintModel[HMCPropsType, HMCContextType, CHMTex
                 if displayCount >= self.history.displayCount:
                     _logger.debug('Can not show <%s>. Hint reached display limit.', self.uniqueName)
                     return False
-            return super(NewbieClientHintModel, self).canBeShown()
+            return super(NewbieClientHintModel, self).canBeShown(historyStorage)
 
 
 hintSchema = ClientHintSchema[NewbieClientHintModel](historySchema=NewbieClientHintHistorySchema(), modelClass=NewbieClientHintModel)

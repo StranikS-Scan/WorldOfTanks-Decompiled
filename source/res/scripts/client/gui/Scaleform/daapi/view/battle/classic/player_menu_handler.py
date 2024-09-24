@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/player_menu_handler.py
-from gui.Scaleform.daapi.view.lobby.user_cm_handlers import USER
+from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS as _D_STATUS
@@ -13,6 +13,8 @@ from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.storage import storage_getter
 from skeletons.gui.battle_session import IBattleSessionProvider
+from uilogging.player_satisfaction_rating.loggers import InBattleContextMenuLogger
+from uilogging.player_satisfaction_rating.logging_constants import PlayerSatisfactionRatingCMActions
 
 class DYN_SQUAD_OPTION_ID(object):
     SENT_INVITATION = 'sendInvitationToSquad'
@@ -90,6 +92,8 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
     def __init__(self, cmProxy, ctx=None):
         self.__denunciator = BattleDenunciator()
         self.__arenaUniqueID = BattleDenunciator.getArenaUniqueID()
+        self._uiPlayerSatisfactionRatingLogger = InBattleContextMenuLogger()
+        self._uiPlayerSatisfactionRatingLogger.onViewInitialize()
         g_eventBus.addListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         super(PlayerMenuHandler, self).__init__(cmProxy, ctx=ctx, handlers=_OPTIONS_HANDLERS)
 
@@ -104,52 +108,68 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
     def fini(self):
         g_eventBus.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
         self.__denunciator = None
+        self._uiPlayerSatisfactionRatingLogger.onViewFinalize()
         super(PlayerMenuHandler, self).fini()
         return
 
     def addFriend(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.FRIEND_ACTION)
         self.sessionProvider.shared.anonymizerFakesCtrl.addBattleFriend(self.__userInfo.avatarSessionID)
 
     def removeFriend(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.FRIEND_ACTION)
         self.sessionProvider.shared.anonymizerFakesCtrl.removeBattleFriend(self.__userInfo.avatarSessionID)
 
     def setIgnored(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.BLACKLIST)
         self.sessionProvider.shared.anonymizerFakesCtrl.addBattleIgnored(self.__userInfo.avatarSessionID)
 
     def unsetIgnored(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.BLACKLIST)
         self.sessionProvider.shared.anonymizerFakesCtrl.removeBattleIgnored(self.__userInfo.avatarSessionID)
 
     def disableCommunications(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.BLACKLIST)
         self.sessionProvider.shared.anonymizerFakesCtrl.addTmpIgnored(self.__userInfo.avatarSessionID, self.__userInfo.userName)
 
     def enableCommunications(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.BLACKLIST)
         self.sessionProvider.shared.anonymizerFakesCtrl.removeTmpIgnored(self.__userInfo.avatarSessionID)
 
     def setMuted(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.VOICE_MESSAGES)
         self.sessionProvider.shared.anonymizerFakesCtrl.mute(self.__userInfo.avatarSessionID, self.__userInfo.userName)
 
     def unsetMuted(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.VOICE_MESSAGES)
         self.sessionProvider.shared.anonymizerFakesCtrl.unmute(self.__userInfo.avatarSessionID)
 
     def appealIncorrectBehavior(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.COMPLAIN)
         self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.INCORRECT_BEHAVIOR, self.__arenaUniqueID)
 
     def appealNotFairPlay(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.COMPLAIN)
         self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.NOT_FAIR_PLAY, self.__arenaUniqueID)
 
     def appealForbiddenNick(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.COMPLAIN)
         self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.FORBIDDEN_NICK, self.__arenaUniqueID)
 
     def appealBot(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.COMPLAIN)
         self.__denunciator.makeAppeal(self.__vInfo.vehicleID, self.__userInfo.userName, DENUNCIATIONS.BOT, self.__arenaUniqueID)
 
     def sendInvitation(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.CREATE_PLATOON)
         self.sessionProvider.invitations.send(self.__userInfo.avatarSessionID)
 
     def acceptInvitation(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.UNTRACKED_ACTION)
         self.sessionProvider.invitations.accept(self.__userInfo.avatarSessionID)
 
     def rejectInvitation(self):
+        self._uiPlayerSatisfactionRatingLogger.setContextMenuAction(PlayerSatisfactionRatingCMActions.UNTRACKED_ACTION)
         self.sessionProvider.invitations.reject(self.__userInfo.avatarSessionID)
 
     def _initFlashValues(self, ctx):

@@ -94,6 +94,8 @@ class ResearchView(LobbySubView, ResearchViewMeta):
         if prevUnlocked:
             _logger.info('previouslyUnlocked %s', prevUnlocked)
             self._updatePrevUnlockedItems(prevUnlocked)
+        if any((not item[1] for item in unlocked)):
+            self.redraw()
 
     def invalidateInventory(self, data):
         result = self._data.invalidateInventory(data)

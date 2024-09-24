@@ -18,6 +18,7 @@ class NotificationsModel(object):
         self.onNotificationUpdated = Event.Event()
         self.onNotificationRemoved = Event.Event()
         self.onNotifiedMessagesCountChanged = Event.Event()
+        self.onPopUpPaddingChanged = Event.Event()
         self.__setDisplayState(NOTIFICATION_STATE.POPUPS, {})
         return
 

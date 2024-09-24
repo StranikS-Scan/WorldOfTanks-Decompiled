@@ -308,8 +308,6 @@ class TankmanAddSkills(ItemProcessor):
         super(TankmanAddSkills, self).__init__(tankman, (plugins.TankmanAddSkillsValidator(tankman.descriptor, utilizationType, skillNames),))
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if 'lockCrewSkills' in self.item.vehicleDescr.type.tags:
-            errStr = 'crew_skills_locked'
         return makeI18nError(sysMsgKey='{}/{}'.format(self.__getSysMsgKey(), errStr), defaultSysMsgKey='{}/server_error'.format(self.__getSysMsgKey()))
 
     def _successHandler(self, code, ctx=None):

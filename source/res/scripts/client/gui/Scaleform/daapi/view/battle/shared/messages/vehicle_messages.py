@@ -52,6 +52,13 @@ class VehicleMessages(fading_messages.FadingMessages):
         super(VehicleMessages, self)._removeGameListeners()
         return
 
+    def _getPlayerInfo(self, entityID):
+        ctx = self.sessionProvider.getCtx()
+        vInfoVO = ctx.getArenaDP().getVehicleInfo(entityID)
+        playerName = ctx.getPlayerFullName(entityID, showVehShortName=False)
+        playerInfo = '%s | %s' % (playerName, vInfoVO.getDisplayedName())
+        return playerInfo
+
     def __handleMemoryCriticalMessage(self, message):
         self.showMessage(message[1])
 
@@ -83,9 +90,6 @@ class VehicleMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __formatEntity(self, entityID):
-        ctx = self.sessionProvider.getCtx()
-        vInfoVO = ctx.getArenaDP().getVehicleInfo(entityID)
-        playerName = ctx.getPlayerFullName(entityID, showVehShortName=False)
-        playerInfo = '%s | %s' % (playerName, vInfoVO.getDisplayedName())
+        playerInfo = self._getPlayerInfo(entityID)
         entityInfo = self.__styleFormatter.format(playerInfo)
         return entityInfo

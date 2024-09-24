@@ -13,9 +13,7 @@ class DualGunCamera(SniperCamera):
     def _aimingSystemClass(self):
         return DualGunAimingSystemRemote if BigWorld.player().isObserver() else DualGunAimingSystem
 
-    def _readCfg(self, dataSec):
-        super(DualGunCamera, self)._readCfg(dataSec)
+    def _readConfigs(self, dataSec):
+        super(DualGunCamera, self)._readConfigs(dataSec)
         transitionTime = dataSec.readFloat('transitionTime', 0.3)
         DualGunAimingSystem.setTransitionTime(transitionTime)
-        transitionDelay = dataSec.readFloat('transitionDelay', 0.0)
-        DualGunAimingSystem.setTransitionDelay(transitionDelay)

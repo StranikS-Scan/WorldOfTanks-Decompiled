@@ -76,7 +76,7 @@ class StatsConfiguration(object):
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isSpecialWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
 
     def __init__(self):
         self.vehicle = None
@@ -93,7 +93,6 @@ class StatusConfiguration(object):
         self.isCompare = False
         self.eqSetupIDx = None
         self.battleRoyale = None
-        self.isSpecialWindow = False
         return
 
 
@@ -237,7 +236,7 @@ class AwardContext(DefaultContext):
         self._isSeniority = False
         return
 
-    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False, anyExpires=False):
+    def buildItem(self, intCD, tmanCrewLevel=None, rentExpiryTime=None, rentBattles=None, rentWins=None, rentSeason=None, rentCycle=None, isSeniority=False):
         self._tmanRoleLevel = tmanCrewLevel
         self._rentExpiryTime = rentExpiryTime
         self._rentBattlesLeft = rentBattles
@@ -245,7 +244,6 @@ class AwardContext(DefaultContext):
         self._seasonRent = {'season': rentSeason or [],
          'cycle': rentCycle or []}
         self._isSeniority = isSeniority
-        self._anyExpires = anyExpires
         return self.itemsCache.items.getItemByCD(int(intCD))
 
     def getStatsConfiguration(self, item):
@@ -281,8 +279,7 @@ class AwardContext(DefaultContext):
          'rentBattlesLeft': self._rentBattlesLeft,
          'rentWinsLeft': self._rentWinsLeft,
          'rentSeason': seasonRent,
-         'isSeniority': self._isSeniority,
-         'anyExpires:': self._anyExpires}
+         'isSeniority': self._isSeniority}
 
 
 class ExtendedAwardContext(AwardContext):
@@ -362,24 +359,6 @@ class ShopContext(AwardContext):
         value = super(ShopContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
-        return value
-
-
-class WtEventPortalContext(DefaultContext):
-
-    def buildItem(self, *args, **kwargs):
-        return super(WtEventPortalContext, self).buildItem(args[0])
-
-    def getStatsConfiguration(self, item):
-        value = super(WtEventPortalContext, self).getStatsConfiguration(item)
-        value.sellPrice = False
-        value.buyPrice = False
-        value.unlockPrice = False
-        return value
-
-    def getStatusConfiguration(self, item):
-        value = super(WtEventPortalContext, self).getStatusConfiguration(item)
-        value.isSpecialWindow = True
         return value
 
 

@@ -3,6 +3,7 @@
 import typing
 import BigWorld
 from adisp import adisp_async
+from constants import RESTRICTION_KEY
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IGameRestrictionsRequester
 
@@ -10,18 +11,22 @@ class GameRestrictionsRequester(AbstractSyncDataRequester, IGameRestrictionsRequ
 
     @property
     def session(self):
-        return self.getCacheValue('session', {})
+        return self.getCacheValue(RESTRICTION_KEY.SESSION) or {}
 
     @property
     def hasSessionLimit(self):
         return len(self.session) > 0
 
     def getKickAt(self):
-        return self.getCacheValue('session', {}).get('kick_at', 0)
+        return self.session.get('kick_at', 0)
 
     @property
     def settings(self):
-        return self.getCacheValue('settings', {})
+        return self.getCacheValue(RESTRICTION_KEY.SETTINGS) or {}
+
+    @property
+    def privateChat(self):
+        return self.getCacheValue(RESTRICTION_KEY.PRIVATE_CHAT) or {}
 
     @adisp_async
     def _requestCache(self, callback):

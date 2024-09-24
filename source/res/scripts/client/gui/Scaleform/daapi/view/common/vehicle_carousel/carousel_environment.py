@@ -187,7 +187,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.igrCtrl.onIgrTypeChanged += self.__updateIgrType
         self.clanLock.onClanLockUpdate += self.__updateClanLocks
         self.itemsCache.onSyncCompleted += self.__onCacheResync
-        self._currentVehicle.onChanged += self._onCurrentVehicleChanged
+        self._currentVehicle.onChanged += self.__onCurrentVehicleChanged
         self.epicController.onUpdated += self.__updateEpicSeasonRent
         self.rankedController.onUpdated += self.__updateRankedBonusBattles
         self.settingsCore.onSettingsChanged += self._onCarouselSettingsChange
@@ -204,7 +204,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         self.igrCtrl.onIgrTypeChanged -= self.__updateIgrType
         self.clanLock.onClanLockUpdate -= self.__updateClanLocks
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
-        self._currentVehicle.onChanged -= self._onCurrentVehicleChanged
+        self._currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.epicController.onUpdated -= self.__updateEpicSeasonRent
         self.rankedController.onUpdated -= self.__updateRankedBonusBattles
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self._onServerSettingChanged
@@ -284,10 +284,10 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnv
         if GUI_ITEM_TYPE.VEHICLE in diff:
             self.updateVehicles(diff.get(GUI_ITEM_TYPE.VEHICLE))
 
-    def _onCurrentVehicleChanged(self):
+    def __onCurrentVehicleChanged(self):
         self.updateAvailability()
         if self._carouselDP is not None:
-            filteredIndex = self._carouselDP.findVehicleFilteredIndex(self._currentVehicle.item)
+            filteredIndex = self._carouselDP.findVehicleFilteredIndex(g_currentVehicle.item)
             if self._carouselDP.pyGetSelectedIdx() != filteredIndex and filteredIndex > -1:
                 self._carouselDP.selectVehicle(filteredIndex)
         return

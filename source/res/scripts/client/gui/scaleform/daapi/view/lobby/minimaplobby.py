@@ -4,6 +4,8 @@ import ArenaType
 from gui.Scaleform.daapi.view.meta.MinimapPresentationMeta import MinimapPresentationMeta
 from gui.Scaleform.genConsts.MINIMAPENTRIES_CONSTANTS import MINIMAPENTRIES_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from points_of_interest_shared import PoiType
@@ -58,11 +60,12 @@ class MinimapLobby(MinimapPresentationMeta):
     def setArena(self, arenaTypeID):
         self.__arenaTypeID = int(arenaTypeID)
         arenaType = ArenaType.g_cache[self.__arenaTypeID]
-        gameplayTypeIconPath = '../maps/icons/map/{}/{}.png'.format(arenaType.gameplayName, arenaType.geometryName)
-        if gameplayTypeIconPath in RES_ICONS.MAPS_ICONS_MAP_ENUM:
-            mapIconPath = gameplayTypeIconPath
+        gameplayAccessor = R.images.gui.maps.icons.map.dyn(arenaType.gameplayName)
+        if gameplayAccessor.isValid():
+            mapIconDynAccessor = gameplayAccessor.dyn('c_{}'.format(arenaType.geometryName))
         else:
-            mapIconPath = RES_ICONS.getMapPath(arenaType.geometryName)
+            mapIconDynAccessor = R.images.gui.maps.icons.map.dyn('c_{}'.format(arenaType.geometryName))
+        mapIconPath = backport.image(mapIconDynAccessor()) if mapIconDynAccessor.isValid() else ''
         cfg = {'texture': mapIconPath,
          'size': arenaType.boundingBox,
          'teamBasePositions': arenaType.teamBasePositions,

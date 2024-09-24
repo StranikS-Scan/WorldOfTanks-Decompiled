@@ -15,9 +15,8 @@ from helpers import i18n
 from helpers.EffectsList import EffectsListPlayer
 from helpers.EntityExtra import EntityExtra
 from helpers.laser_sight_matrix_provider import LaserSightMatrixProvider
-from vehicle_systems.instant_status_helpers import invokeInstantStatusForVehicle
+from vehicle_systems.instant_status_helpers import invokeShotsDoneStatus
 from constants import IS_EDITOR, CollisionFlags
-import InstantStatuses
 
 def reload():
     modNames = (reload.__module__,)
@@ -67,7 +66,7 @@ class ShowShooting(EntityExtra):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            invokeInstantStatusForVehicle(vehicle, InstantStatuses.ShotsDoneComponent)
+            invokeShotsDoneStatus(vehicle)
             burstCount, burstInterval = data['_burst']
             gunModel = data['_gunModel']
             effPlayer = data['_effectsListPlayer']
@@ -176,7 +175,7 @@ class ShowShootingMultiGun(ShowShooting):
             if not vehicle.isAlive():
                 self.stop(data)
                 return
-            invokeInstantStatusForVehicle(vehicle, InstantStatuses.ShotsDoneComponent)
+            invokeShotsDoneStatus(vehicle)
             burstSize, burstCount, burstInterval = data['_burst']
             burstNumber = burstSize - burstCount
             if burstCount == 1:

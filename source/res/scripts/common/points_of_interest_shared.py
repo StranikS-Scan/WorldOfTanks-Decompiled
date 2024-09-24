@@ -18,6 +18,8 @@ class PoiStatus(enum.IntEnum):
     COOLDOWN = 3
 
 
+INT_2_POI_STATUS = dict([ (int(v), v) for k, v in PoiStatus.__members__.items() ])
+
 @enum.unique
 class PoiBlockReasons(enum.IntEnum):
     DAMAGE = 1

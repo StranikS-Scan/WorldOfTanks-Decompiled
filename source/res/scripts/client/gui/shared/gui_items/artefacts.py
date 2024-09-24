@@ -17,7 +17,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags, replaceHyphenToUnderscore
 from helpers import i18n, dependency
-from items import artefacts, tankmen, ITEM_OPERATION, EQUIPMENT_TYPES
+from items import artefacts, tankmen, ITEM_OPERATION
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -28,7 +28,6 @@ TAG_TRIGGER = 'trigger'
 TAG_BUILTIN_PERK_BOOSTER = 'builtinPerkBooster'
 TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
 TAG_EQUEPMENT_BUILTIN = 'builtin'
-TAG_EQUEPMENT_HIDE_BUILTIN_INFO = 'hideBuiltinInfo'
 TAG_OPT_DEVICE_DELUXE = 'deluxe'
 TAG_OPT_DEVICE_TROPHY_BASIC = 'trophyBasic'
 TAG_OPT_DEVICE_TROPHY_UPGRADED = 'trophyUpgraded'
@@ -121,10 +120,6 @@ class Equipment(VehicleArtefact):
     def isBuiltIn(self):
         return TAG_EQUEPMENT_BUILTIN in self.tags
 
-    @property
-    def isBuiltInInfoHidden(self):
-        return TAG_EQUEPMENT_HIDE_BUILTIN_INFO in self.tags
-
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.consumables.installed.containsIntCD(self.intCD, slotIdx)
 
@@ -137,10 +132,6 @@ class Equipment(VehicleArtefact):
     @property
     def isTrigger(self):
         return TAG_TRIGGER in self.tags
-
-    @property
-    def isRegular(self):
-        return self.descriptor.equipmentType == EQUIPMENT_TYPES.regular
 
     def mayInstall(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.consumables.installed):
@@ -213,7 +204,7 @@ class Equipment(VehicleArtefact):
         pass
 
     def getHighlightType(self, vehicle=None):
-        return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn and not self.isBuiltInInfoHidden else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def getBuiltinPerkBoosterDescription(self, formatter=None):
         pass
@@ -293,6 +284,12 @@ class BattleBooster(Equipment):
 
     def getBonusIcon(self, size='small'):
         return RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
+
+    def getGUIEmblemID(self):
+        return self.descriptor.iconName
+
+    def getOverlayType(self, vehicle=None):
+        return 'battleBoosterReplace' if self.isCrewBooster() else 'battleBooster'
 
     def isOptionalDeviceCompatible(self, optionalDevice):
         return not self.isCrewBooster() and optionalDevice is not None and self.descriptor.getLevelParamsForDevice(optionalDevice.descriptor) is not None
@@ -560,6 +557,9 @@ class OptionalDevice(RemovableDevice):
         if result is None:
             result = RES_ICONS.getBonusIcon(size, self.name.split('_')[0])
         return result
+
+    def getBonusOverlay(self, size='small'):
+        return RES_ICONS.getBonusOverlay(size, self.getOverlayType())
 
     def isInstalled(self, vehicle, slotIdx=None):
         for idx, op in enumerate(vehicle.optDevices.installed):

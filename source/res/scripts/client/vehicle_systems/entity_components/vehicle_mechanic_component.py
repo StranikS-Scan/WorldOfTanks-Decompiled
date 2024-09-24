@@ -1,9 +1,28 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/entity_components/vehicle_mechanic_component.py
+import logging
+import operator
 import typing
 from functools import wraps
 import BigWorld
+import CGF
 from PlayerEvents import g_playerEvents
+from vehicle_systems.model_assembler import loadAppearancePrefab
+if typing.TYPE_CHECKING:
+    from Avatar import PlayerAvatar
+    from items.vehicles import VehicleDescriptor
+    from Vehicle import Vehicle
+_logger = logging.getLogger(__name__)
+
+def ifAppearanceReady(method):
+
+    @wraps(method)
+    def wrapper(mechanicComponent, *args, **kwargs):
+        if mechanicComponent.isAppearanceReady():
+            method(mechanicComponent, *args, **kwargs)
+
+    return wrapper
+
 
 def ifPlayerVehicle(method):
 
@@ -16,9 +35,43 @@ def ifPlayerVehicle(method):
     return wrapper
 
 
+def ifObservedVehicle(method):
+
+    @wraps(method)
+    def wrapper(mechanicComponent, *args, **kwargs):
+        player = BigWorld.player()
+        vehicle = None if player is None else player.getVehicleAttached()
+        if mechanicComponent.isObservedVehicle(player, vehicle):
+            method(mechanicComponent, player, vehicle, *args, **kwargs)
+        return
+
+    return wrapper
+
+
+def getVehicleMechanic(mechanicName, vehicle):
+    return vehicle.dynamicComponents.get(mechanicName, None) if vehicle is not None else None
+
+
 def getPlayerVehicleMechanic(mechanicName):
     vehicle = BigWorld.player().getVehicleAttached()
     return vehicle.dynamicComponents.get(mechanicName, None) if vehicle is not None and vehicle.isPlayerVehicle and vehicle.isAlive() else None
+
+
+def checkStateStatus(states=(), defReturn=None, abortAction=None):
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(controller, *args, **kwargs):
+            stateStatus = controller.stateStatus
+            if stateStatus is not None and stateStatus.state in states:
+                return method(controller, stateStatus, *args, **kwargs)
+            else:
+                return operator.methodcaller(abortAction)(controller) if abortAction is not None else defReturn
+
+        return wrapper
+
+    return decorator
 
 
 class VehicleMechanicComponent(BigWorld.DynamicScriptComponent):
@@ -28,11 +81,17 @@ class VehicleMechanicComponent(BigWorld.DynamicScriptComponent):
         self.__componentDestroyed = False
         self.__appearanceInited = False
 
+    def isAppearanceReady(self):
+        return self.__appearanceInited and self.__isAppearanceReady()
+
     def isComponentDestroyed(self):
         return self.__componentDestroyed
 
     def isPlayerVehicle(self, player):
         return self.__isAvatarReady(player) and self.entity.id == player.playerVehicleID
+
+    def isObservedVehicle(self, player, vehicle):
+        return self.__isAvatarReady(player) and vehicle is not None and self.entity.id == vehicle.id
 
     def onDestroy(self):
         if self.__componentDestroyed:
@@ -111,3 +170,51 @@ class VehicleMechanicComponent(BigWorld.DynamicScriptComponent):
         self._onAppearanceReady()
         self._onMechanicAppearanceUpdate()
         self.__appearanceInited = True
+
+
+class VehicleMechanicPrefabComponent(VehicleMechanicComponent):
+    _DEFAULT_OUTFIT = 'default'
+
+    def __init__(self):
+        super(VehicleMechanicPrefabComponent, self).__init__()
+        self.__mechanicPrefab = ''
+        self.__prefabRoot = None
+        return
+
+    def onDestroy(self):
+        self.__mechanicPrefab = ''
+        if self.__prefabRoot is not None:
+            _logger.debug('[VehicleMechanic] removeGameObject (onDestroy) for %s', self.entity.id)
+            CGF.removeGameObject(self.__prefabRoot)
+            self.__prefabRoot = None
+        super(VehicleMechanicPrefabComponent, self).onDestroy()
+        return
+
+    def _getMechanicPrefab(self, typeDescriptor, skin):
+        raise NotImplementedError
+
+    def _onAppearanceReady(self):
+        appearance = self.entity.appearance
+        skin = appearance.modelsSetParams.skin or self._DEFAULT_OUTFIT
+        self.__mechanicPrefab = self._getMechanicPrefab(self.entity.typeDescriptor, skin)
+        loadAppearancePrefab(self.__mechanicPrefab, appearance, self.__onMechanicPrefabLoaded)
+        _logger.debug('[VehicleMechanic] loadAppearancePrefab for %s', self.entity.id)
+
+    def __onMechanicPrefabLoaded(self, root):
+        if not root.isValid:
+            _logger.error('[VehicleMechanic] failed to load prefab: %s', self.__mechanicPrefab)
+            return
+        if self.isComponentDestroyed():
+            _logger.debug('[VehicleMechanic] removeGameObject (onLoaded) for %s', self.entity.id)
+            CGF.removeGameObject(root)
+            return
+        self.__prefabRoot = root
+
+
+class VehicleMechanicGunPrefabComponent(VehicleMechanicPrefabComponent):
+    _GUN_MAIN_PREFAB = 'main'
+
+    def _getMechanicPrefab(self, typeDescriptor, skin):
+        gunPrefabs = typeDescriptor.gun.prefabs
+        skin = skin if skin in gunPrefabs else self._DEFAULT_OUTFIT
+        return gunPrefabs[skin][self._GUN_MAIN_PREFAB][0]

@@ -30,16 +30,16 @@ from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
-from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE, TOOLTIP_COMPONENT
+from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHOT_DISPERSION_ANGLE, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, ROCKET_ACCELERATION_SPEED_LIMITS, DUAL_ACCURACY_COOLING_DELAY
+from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHOT_DISPERSION_ANGLE, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, ROCKET_ACCELERATION_SPEED_LIMITS, DUAL_ACCURACY_COOLING_DELAY, TWIN_GUN_SWITCH_FIRE_MODE_TIME, RELOAD_TIME_SECS_PROP_NAME, TWIN_GUN_RELOAD_TIME
 from gui.impl.lobby.crew.tooltips.vehicle_params_tooltip_view import BaseVehicleParamsTooltipView, BaseVehicleAdvancedParamsTooltipView, VehicleAdvancedParamsTooltipView, VehicleAvgParamsTooltipView
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from items.components.skills_constants import ORDERED_ROLES
 from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IWotPlusController, IEventBattlesController
+from skeletons.gui.game_control import ITradeInController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui import makeHtmlString
@@ -77,7 +77,6 @@ _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
     __wotPlusController = dependency.descriptor(IWotPlusController)
-    __gameEventController = dependency.descriptor(IEventBattlesController)
     _LEFT_PADDING = 20
     _RIGHT_PADDING = 20
 
@@ -104,41 +103,32 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
         valueWidth = 77
         textGap = -2
-        anyExpires = any((arg == 'anyExpires' for arg in args if isinstance(arg, str)))
-        if vehicle.rentInfo and vehicle.rentInfo.anyExpires or anyExpires:
-            if self._context.getComponent() == TOOLTIP_COMPONENT.CAROUSEL:
-                items = self.__createRentTankTooltip(items, vehicle, statsConfig, paramsConfig, statusConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding, blockTopPadding, blockPadding, valueWidth, textGap)
-            else:
-                items = self.__createSimplifiedRentTankTooltip(items, vehicle, statsConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding)
-        else:
-            items = self.__createDefaultTankTooltip(items, vehicle, statsConfig, paramsConfig, statusConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding, blockTopPadding, blockPadding, valueWidth, textGap)
-        return items
-
-    def __createMainHeaderItems(self, items, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding):
         headerItems = [formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding, blockWidth=410), formatters.packBuildUpBlockData(self._getCrewIconBlock(), gap=2, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=14, right=0), blockWidth=20)]
-        items.append(formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16)))
-
-    def __createCommonStatsItems(self, items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockTopPadding):
+        headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
+        telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
+        if telecomBlock:
+            headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
+        self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
+        items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
+        if vehicle.isWotPlus:
+            wotPlusBlock, linkage = WotPlusBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
+            if wotPlusBlock:
+                items.append(formatters.packBuildUpBlockData(wotPlusBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=0, bottom=0)))
+        if vehicle.isEarnCrystals and statsConfig.showEarnCrystals:
+            crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
+            if crystalBlock:
+                items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=-3)))
+        simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
+        if simplifiedStatsBlock:
+            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=-3)))
-
-    def __createStatusItems(self, items, vehicle, statusConfig, bottomPadding, blockPadding, shouldBeCut):
-        if not vehicle.isRotationGroupLocked and not self.context.getParams().get(_HIDE_STATUS, False):
-            statusBlock, operationError, _ = StatusBlockConstructor(vehicle, statusConfig).construct()
-            if statusBlock and not (operationError and shouldBeCut):
-                items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
-            else:
-                self._setContentMargin(bottom=bottomPadding)
-
-    def __createPriceItems(self, items, vehicle, statsConfig, valueWidth, leftPadding, rightPadding, shouldBeCut):
-        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        if priceBlock and not shouldBeCut:
-            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
-            items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
-
-    def __createAdditionalStatsItems(self, items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockPadding):
+        if self.context.getParams().get(_IS_SENIORITY, False):
+            awardCrewAndHangarBlock = VehicleAdditionalItems(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100).construct()
+            if awardCrewAndHangarBlock:
+                items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
         statsBlockConstructor = None
         if vehicle.isRotationGroupLocked:
             statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
@@ -148,7 +138,18 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             statsBlockConstructor = ClanLockAdditionalStatsBlockConstructor
         if statsBlockConstructor is not None:
             items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
-        return
+        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
+        if priceBlock and not shouldBeCut:
+            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
+            items.append(formatters.packBuildUpBlockData(priceBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, gap=5, padding=formatters.packPadding(left=98), layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL))
+        if not vehicle.isRotationGroupLocked and not self.context.getParams().get(_HIDE_STATUS, False):
+            statusBlock, operationError, _ = StatusBlockConstructor(vehicle, statusConfig).construct()
+            if statusBlock and not (operationError and shouldBeCut):
+                items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding, blockWidth=440))
+            else:
+                self._setContentMargin(bottom=bottomPadding)
+        return items
 
     def _getCrewIconBlock(self):
         block = []
@@ -184,108 +185,30 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             else:
                 rentLeftKey = '#tooltips:vehicle/rentLeft/%s'
                 rentInfo = vehicle.rentInfo
-            if rentInfo.anyExpires:
-                rentFormatter = RentLeftFormatter(rentInfo)
-                rentEndDate = backport.getDateTimeFormat(time_utils.makeLocalServerTime(rentInfo.getExpiryDate()))
-                descStrTime = backport.text(R.strings.tooltips.vehicle.rentLeft.days()) % {'date': rentEndDate}
-                descStrbattle = rentFormatter.getRentBattlesLeftStr(rentLeftKey)
-                rentTimeLeft = rentInfo.getTimeLeft()
+            descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
+            leftStr = ''
+            rentTimeLeft = rentInfo.getTimeLeft()
+            if rentTimeLeft:
                 _, formattedTime = getTimeLeftInfo(rentTimeLeft)
-                leftStrTime = formattedTime
-                leftStrBattle = str(rentInfo.battlesLeft)
-                if rentTimeLeft > 0:
-                    valueTextStyle = text_styles.error(leftStrBattle) if rentInfo.battlesLeft <= 0 else text_styles.gold(leftStrBattle)
-                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.gold(descStrbattle), value=valueTextStyle, icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=5)))
-                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descStrTime), value=text_styles.main(leftStrTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2)))
-            else:
-                descrStr = RentLeftFormatter(rentInfo).getRentLeftStr(rentLeftKey)
-                leftStr = ''
-                rentTimeLeft = rentInfo.getTimeLeft()
-                if rentTimeLeft:
-                    _, formattedTime = getTimeLeftInfo(rentTimeLeft)
-                    leftStr = str(formattedTime)
-                elif rentInfo.battlesLeft:
-                    leftStr = str(rentInfo.battlesLeft)
-                elif rentInfo.winsLeft > 0:
-                    leftStr = str(rentInfo.winsLeft)
-                if descrStr or leftStr:
-                    items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2)))
+                leftStr = str(formattedTime)
+            elif rentInfo.battlesLeft:
+                leftStr = str(rentInfo.battlesLeft)
+            elif rentInfo.winsLeft > 0:
+                leftStr = str(rentInfo.winsLeft)
+            if descrStr or leftStr:
+                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=2, bottom=-10)))
         if statsConfig.showRankedBonusBattle:
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
-        self.__createDailyXpItem(items, vehicle, statsConfig, valueWidth)
-        if statsConfig.restorePrice:
-            if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
-                timeKey, formattedTime = getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
-                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(''.join(('#tooltips:vehicle/restoreLeft/', timeKey))), value=text_styles.stats(formattedTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
-        return
-
-    def __createDailyXpItem(self, items, vehicle, statsConfig, valueWidth):
         if statsConfig.dailyXP and not vehicle.isWotPlus:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                 dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
-
-    def __createRentTankTooltip(self, items, vehicle, statsConfig, paramsConfig, statusConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding, blockTopPadding, blockPadding, valueWidth, textGap):
-        self.__createMainHeaderItems(items, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding)
-        headerBlockItems = []
-        if vehicle.rentInfo.getTimeLeft() <= 0 or not self.__gameEventController.isModeActive():
-            txt = backport.text(R.strings.tooltips.vehicle.afterEventEnd.title())
-            headerBlockItems.append(formatters.packTextBlockData(text_styles.highlightText(txt), blockWidth=400, padding=formatters.packPadding(left=100, top=30, bottom=30)))
-        else:
-            self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
-            txt = backport.text(R.strings.tooltips.vehicle.rentLeftFuture.obtainedBy())
-            headerBlockItems.append(formatters.packTextBlockData(text_styles.highlightText(txt), blockWidth=400, padding=formatters.packPadding(left=25, top=15, bottom=15)))
-        items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_GOLD_LINKAGE, padding=formatters.packPadding(bottom=-8)))
-        txt = backport.text(R.strings.tooltips.vehicle.overview.title())
-        items.append(formatters.packTextBlockData(text_styles.middleTitle(txt), blockWidth=440, padding=formatters.packPadding(left=25)))
-        txt = backport.text(R.strings.tooltips.vehicle.overview.desc())
-        items.append(formatters.packTextBlockData(text_styles.main(txt), blockWidth=440, padding=formatters.packPadding(left=25, top=-20, bottom=bottomPadding)))
-        self.__createCommonStatsItems(items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockTopPadding)
-        self.__createAdditionalStatsItems(items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockPadding)
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
-        self.__createPriceItems(items, vehicle, statsConfig, valueWidth, leftPadding, rightPadding, shouldBeCut)
-        self.__createStatusItems(items, vehicle, statusConfig, bottomPadding, blockPadding, shouldBeCut)
-        return items
-
-    def __createSimplifiedRentTankTooltip(self, items, vehicle, statsConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding):
-        self.__createMainHeaderItems(items, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding)
-        txt = backport.text(R.strings.tooltips.vehicle.overview.title())
-        items.append(formatters.packTextBlockData(text_styles.middleTitle(txt), blockWidth=440, padding=formatters.packPadding(left=25)))
-        txt = backport.text(R.strings.tooltips.vehicle.overview.desc())
-        items.append(formatters.packTextBlockData(text_styles.main(txt), blockWidth=440, padding=formatters.packPadding(left=25, top=-20, bottom=bottomPadding)))
-        return items
-
-    def __createDefaultTankTooltip(self, items, vehicle, statsConfig, paramsConfig, statusConfig, leftPadding, rightPadding, bottomPadding, leftRightPadding, blockTopPadding, blockPadding, valueWidth, textGap):
-        headerItems = []
-        self.__createMainHeaderItems(headerItems, vehicle, statsConfig, leftPadding, rightPadding, leftRightPadding)
-        headerBlockItems = [formatters.packBuildUpBlockData(headerItems, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_HORIZONTAL, padding=formatters.packPadding(bottom=-16))]
-        telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-        if telecomBlock:
-            headerBlockItems.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
-        self.__createStatusBlock(vehicle, headerBlockItems, statsConfig, paramsConfig, valueWidth)
-        items.append(formatters.packBuildUpBlockData(headerBlockItems, gap=-4, padding=formatters.packPadding(bottom=-12)))
-        if vehicle.isWotPlus:
-            wotPlusBlock, linkage = WotPlusBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
-            if wotPlusBlock:
-                items.append(formatters.packBuildUpBlockData(wotPlusBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=0, bottom=0)))
-        if vehicle.isEarnCrystals and statsConfig.showEarnCrystals:
-            crystalBlock, linkage = CrystalBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
-            if crystalBlock:
-                items.append(formatters.packBuildUpBlockData(crystalBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=-3)))
-        simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if simplifiedStatsBlock:
-            items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        self.__createCommonStatsItems(items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockTopPadding)
-        if self.context.getParams().get(_IS_SENIORITY, False):
-            awardCrewAndHangarBlock = VehicleAdditionalItems(vehicle, paramsConfig, leftPadding, rightPadding, showVehicleSlot=True, crewLevel=100).construct()
-            if awardCrewAndHangarBlock:
-                items.append(formatters.packBuildUpBlockData(awardCrewAndHangarBlock))
-        self.__createAdditionalStatsItems(items, vehicle, paramsConfig, valueWidth, leftPadding, rightPadding, textGap, blockPadding)
-        shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES or vehicle.isOnlyForEpicBattles or vehicle.isOnlyForClanWarsBattles
-        self.__createPriceItems(items, vehicle, statsConfig, valueWidth, leftPadding, rightPadding, shouldBeCut)
-        self.__createStatusItems(items, vehicle, statusConfig, bottomPadding, blockPadding, shouldBeCut)
-        return items
+        if statsConfig.restorePrice:
+            if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
+                timeKey, formattedTime = getTimeLeftInfo(vehicle.restoreInfo.getRestoreTimeLeft(), None)
+                items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(''.join(('#tooltips:vehicle/restoreLeft/', timeKey))), value=text_styles.stats(formattedTime), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
+        return
 
 
 class ExtendedVehicleInfoTooltipData(VehicleInfoTooltipData):
@@ -734,10 +657,12 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
                                      'avgPiercingPower',
                                      'hullArmor',
                                      'turretArmor',
-                                     DUAL_GUN_CHARGE_TIME),
+                                     DUAL_GUN_CHARGE_TIME,
+                                     TWIN_GUN_SWITCH_FIRE_MODE_TIME),
      VEHICLE_CLASS_NAME.SPG: ('avgDamage', 'stunMinDuration', 'stunMaxDuration', 'reloadTimeSecs', 'aimingTime', 'explosionRadius'),
      VEHICLE_CLASS_NAME.AT_SPG: ('avgPiercingPower', 'shotDispersionAngle', 'avgDamagePerMinute', 'speedLimits', 'chassisRotationSpeed', 'switchTime')}
-    __CONDITIONAL_PARAMS = ((ROCKET_ACCELERATION_SPEED_LIMITS, ('speedLimits', ROCKET_ACCELERATION_SPEED_LIMITS)),)
+    __CONDITIONAL_PARAMS = ((ROCKET_ACCELERATION_SPEED_LIMITS, ('speedLimits', ROCKET_ACCELERATION_SPEED_LIMITS)), (TWIN_GUN_SWITCH_FIRE_MODE_TIME, (RELOAD_TIME_SECS_PROP_NAME,)))
+    __OVERRIDED_PARAM_NAMES = (('isTwinGunVehicle', {RELOAD_TIME_SECS_PROP_NAME: TWIN_GUN_RELOAD_TIME}),)
 
     def __init__(self, vehicle, configuration, valueWidth, leftPadding, rightPadding):
         super(CommonStatsBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
@@ -749,11 +674,12 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         highlightedParams = self.__getHighlightedParams()
         comparator = params_helper.similarCrewComparator(self.vehicle)
         if self.configuration.params and not self.configuration.simplifiedOnly:
+            overridedNamesMap = {source:target for vehType, params in self.__OVERRIDED_PARAM_NAMES if getattr(self.vehicle.descriptor, vehType) for source, target in params.items()}
             for paramName in self.__getShownParameters(paramsDict):
                 paramInfo = comparator.getExtendedData(paramName)
                 fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.BASE_SCHEME)
                 if fmtValue is not None:
-                    block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1), highlight=paramName in highlightedParams))
+                    block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(overridedNamesMap.get(paramName, paramName)), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1), highlight=paramName in highlightedParams))
 
         if block:
             title = text_styles.middleTitle(backport.text(R.strings.tooltips.vehicleParams.common.title()))
@@ -771,6 +697,9 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
         if descr.hasDualAccuracy and serverSettings.checkDualAccuracyHighlights(increase=True):
             params.append(DUAL_ACCURACY_COOLING_DELAY)
             params.append(SHOT_DISPERSION_ANGLE)
+        if descr.isTwinGunVehicle and serverSettings.checkTwinGunHighlights(increase=True):
+            params.append(TWIN_GUN_SWITCH_FIRE_MODE_TIME)
+            params.append(RELOAD_TIME_SECS_PROP_NAME)
         return params
 
     def __getShownParameters(self, paramsDict):
@@ -917,7 +846,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             elif self.configuration.isAwardWindow:
                 result = None
             else:
-                result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle, self.configuration.isSpecialWindow)
+                result = self.__getVehicleStatus(self.configuration.showCustomStates, self.vehicle)
             if result is not None:
                 headerFormatter = self._getHeaderFormatter(result['level'])
                 header = headerFormatter(result['header'])
@@ -975,7 +904,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
          'text': text,
          'level': level}
 
-    def __getVehicleStatus(self, showCustomStates, vehicle, isSpecial=False):
+    def __getVehicleStatus(self, showCustomStates, vehicle):
         if showCustomStates:
             isInInventory = vehicle.isInInventory
             level = Vehicle.VEHICLE_STATE_LEVEL.WARNING
@@ -992,7 +921,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 msg = 'notUnlocked'
             elif isInInventory:
                 msg = 'inHangar'
-            elif not mayObtain and not isSpecial:
+            elif not mayObtain:
                 level = Vehicle.VEHICLE_STATE_LEVEL.CRITICAL
                 if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_GOLD:
                     msg = 'notEnoughGold'
@@ -1002,8 +931,6 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     msg = 'operationError'
                     operationError = True
             if msg:
-                if isSpecial:
-                    level = Vehicle.VEHICLE_STATE_LEVEL.INFO
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % msg)
                 return {'header': header,
                  'text': text,

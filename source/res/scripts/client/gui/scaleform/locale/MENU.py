@@ -246,7 +246,6 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
-    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -274,7 +273,6 @@ class MENU(object):
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
-    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -317,7 +315,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
-    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -352,7 +349,6 @@ class MENU(object):
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
     CURRENTVEHICLESTATUS_SUBSCRIPTION_SUSPENDED = '#menu:currentVehicleStatus/subscription_suspended'
     CURRENTVEHICLESTATUS_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = '#menu:currentVehicleStatus/wot_plus_exclusive_vehicle_disabled'
-    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
     REPAIR_CURIENCY = '#menu:repair/curiency'
     REPAIR_BUTTON = '#menu:repair/button'
@@ -558,6 +554,9 @@ class MENU(object):
     TANK_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:tank_params/chassisRepairTimeYoh'
     TANK_PARAMS_TURBOSHAFTINVISIBILITYSTILLFACTOR = '#menu:tank_params/turboshaftInvisibilityStillFactor'
     TANK_PARAMS_TURBOSHAFTINVISIBILITYMOVINGFACTOR = '#menu:tank_params/turboshaftInvisibilityMovingFactor'
+    TANK_PARAMS_TWINGUNRELOADTIME = '#menu:tank_params/twinGunReloadTime'
+    TANK_PARAMS_TWINGUNSWITCHFIREMODETIME = '#menu:tank_params/twinGunSwitchFireModeTime'
+    TANK_PARAMS_TWINGUNTOPSPEED = '#menu:tank_params/twinGunTopSpeed'
     TANK_PARAMS_VALUES_PARAM12_VALUE0 = '#menu:tank_params/values/param12/value0'
     TANK_PARAMS_VALUES_PARAM12_VALUE1 = '#menu:tank_params/values/param12/value1'
     TANK_PARAMS_VALUES_PARAM12_VALUE2 = '#menu:tank_params/values/param12/value2'
@@ -644,7 +643,6 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSIONWHILEGUNDAMAGED = '#menu:extraParams/name/vehicleGunShotDispersionWhileGunDamaged'
     EXTRAPARAMS_NAME_VEHICLERAMDAMAGERESISTANCE = '#menu:extraParams/name/vehicleRamDamageResistance'
     EXTRAPARAMS_NAME_STUNRESISTANCEEFFECTFACTOR = '#menu:extraParams/name/stunResistanceEffectFactor'
-    EXTRAPARAMS_NAME_COMMANDERHITCHANCE = '#menu:extraParams/name/commanderHitChance'
     EXTRAPARAMS_NAME_RADIOMANHITCHANCE = '#menu:extraParams/name/radiomanHitChance'
     EXTRAPARAMS_NAME_WOUNDEDCREWEFFICIENCY = '#menu:extraParams/name/woundedCrewEfficiency'
     EXTRAPARAMS_NAME_VEHICLEFUELTANKLESIONCHANCE = '#menu:extraParams/name/vehicleFuelTankLesionChance'
@@ -661,6 +659,7 @@ class MENU(object):
     DESCRIPTIONS_VEHICLEGUN_AUTOSHOOT = '#menu:descriptions/vehicleGun/autoShoot'
     DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
     DESCRIPTIONS_VEHICLEGUN_DUALGUN = '#menu:descriptions/vehicleGun/dualGun'
+    DESCRIPTIONS_VEHICLEGUN_TWINGUN = '#menu:descriptions/vehicleGun/twinGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
@@ -704,7 +703,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
-    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
@@ -1151,6 +1149,9 @@ class MENU(object):
     MODULEINFO_PARAMS_RELOADTIME = '#menu:moduleInfo/params/reloadTime'
     MODULEINFO_PARAMS_CONTINUOUSSHOTSPERMINUTE = '#menu:moduleInfo/params/continuousShotsPerMinute'
     MODULEINFO_PARAMS_RELOADTIMESECS = '#menu:moduleInfo/params/reloadTimeSecs'
+    MODULEINFO_TWINGUNLABEL = '#menu:moduleInfo/twinGunLabel'
+    MODULEINFO_PARAMS_RELOADTIMETWINGUN = '#menu:moduleInfo/params/reloadTimeTwinGun'
+    MODULEINFO_PARAMS_RELOADTIMESINGLEGUN = '#menu:moduleInfo/params/reloadTimeSingleGun'
     MODULEINFO_PARAMS_CHARGETIME = '#menu:moduleInfo/params/chargeTime'
     MODULEINFO_PARAMS_RATETIME = '#menu:moduleInfo/params/rateTime'
     MODULEINFO_PARAMS_PIERCINGPOWER = '#menu:moduleInfo/params/piercingPower'
@@ -1252,6 +1253,9 @@ class MENU(object):
     VEHICLEINFO_PARAMS_TURBOSHAFTINVISIBILITYMOVINGFACTOR = '#menu:vehicleInfo/params/turboshaftInvisibilityMovingFactor'
     VEHICLEINFO_PARAMS_RELOADTIMESECS = '#menu:vehicleInfo/params/reloadTimeSecs'
     VEHICLEINFO_PARAMS_CHARGETIME = '#menu:vehicleInfo/params/chargeTime'
+    VEHICLEINFO_PARAMS_TWINGUNTOPSPEED = '#menu:vehicleInfo/params/twinGunTopSpeed'
+    VEHICLEINFO_PARAMS_TWINGUNRELOADTIME = '#menu:vehicleInfo/params/twinGunReloadTime'
+    VEHICLEINFO_PARAMS_TWINGUNSWITCHFIREMODETIME = '#menu:vehicleInfo/params/twinGunSwitchFireModeTime'
     VEHICLEINFO_PARAMS_RATETIME = '#menu:vehicleInfo/params/rateTime'
     VEHICLEINFO_PARAMS_SWITCHONTIME = '#menu:vehicleInfo/params/switchOnTime'
     VEHICLEINFO_PARAMS_SWITCHOFFTIME = '#menu:vehicleInfo/params/switchOffTime'
@@ -1994,26 +1998,31 @@ class MENU(object):
     BOOSTER_DESCRIPTION_BOOSTER_XP = '#menu:booster/description/booster_xp'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_XP = '#menu:booster/description/bonusValueTime/booster_xp'
     BOOSTER_BONUS_BOOSTER_XP = '#menu:booster/bonus/booster_xp'
+    BOOSTER_LABEL_BOOSTER_XP = '#menu:booster/label/booster_xp'
     BOOSTER_USERNAME_BOOSTER_FREE_XP = '#menu:booster/userName/booster_free_xp'
     BOOSTER_INFLUENCE_BOOSTER_FREE_XP = '#menu:booster/influence/booster_free_xp'
     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP = '#menu:booster/description/booster_free_xp'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP = '#menu:booster/description/bonusValueTime/booster_free_xp'
     BOOSTER_BONUS_BOOSTER_FREE_XP = '#menu:booster/bonus/booster_free_xp'
+    BOOSTER_LABEL_BOOSTER_FREE_XP = '#menu:booster/label/booster_free_xp'
     BOOSTER_USERNAME_BOOSTER_CREW_XP = '#menu:booster/userName/booster_crew_xp'
     BOOSTER_INFLUENCE_BOOSTER_CREW_XP = '#menu:booster/influence/booster_crew_xp'
     BOOSTER_DESCRIPTION_BOOSTER_CREW_XP = '#menu:booster/description/booster_crew_xp'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREW_XP = '#menu:booster/description/bonusValueTime/booster_crew_xp'
     BOOSTER_BONUS_BOOSTER_CREW_XP = '#menu:booster/bonus/booster_crew_xp'
+    BOOSTER_LABEL_BOOSTER_CREW_XP = '#menu:booster/label/booster_crew_xp'
     BOOSTER_USERNAME_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/userName/booster_free_xp_and_crew_xp'
     BOOSTER_INFLUENCE_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/influence/booster_free_xp_and_crew_xp'
     BOOSTER_DESCRIPTION_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/description/booster_free_xp_and_crew_xp'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/description/bonusValueTime/booster_free_xp_and_crew_xp'
     BOOSTER_BONUS_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/bonus/booster_free_xp_and_crew_xp'
+    BOOSTER_LABEL_BOOSTER_FREE_XP_AND_CREW_XP = '#menu:booster/label/booster_free_xp_and_crew_xp'
     BOOSTER_USERNAME_BOOSTER_CREDITS = '#menu:booster/userName/booster_credits'
     BOOSTER_INFLUENCE_BOOSTER_CREDITS = '#menu:booster/influence/booster_credits'
     BOOSTER_DESCRIPTION_BOOSTER_CREDITS = '#menu:booster/description/booster_credits'
     BOOSTER_DESCRIPTION_BONUSVALUETIME_BOOSTER_CREDITS = '#menu:booster/description/bonusValueTime/booster_credits'
     BOOSTER_BONUS_BOOSTER_CREDITS = '#menu:booster/bonus/booster_credits'
+    BOOSTER_LABEL_BOOSTER_CREDITS = '#menu:booster/label/booster_credits'
     BOOSTER_USERNAME_BOOSTER_REPAIR = '#menu:booster/userName/booster_repair'
     BOOSTER_DESCRIPTION_BOOSTER_REPAIR = '#menu:booster/description/booster_repair'
     BOOSTER_DESCRIPTION_EFFECTTIME = '#menu:booster/description/effectTime'
@@ -2410,7 +2419,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
-     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2435,7 +2443,6 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_TOOHEAVY,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
-     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,
@@ -2693,6 +2700,9 @@ class MENU(object):
      TANK_PARAMS_CHASSISREPAIRTIMEYOH,
      TANK_PARAMS_TURBOSHAFTINVISIBILITYSTILLFACTOR,
      TANK_PARAMS_TURBOSHAFTINVISIBILITYMOVINGFACTOR,
+     TANK_PARAMS_TWINGUNRELOADTIME,
+     TANK_PARAMS_TWINGUNSWITCHFIREMODETIME,
+     TANK_PARAMS_TWINGUNTOPSPEED,
      TANK_PARAMS_VALUES_PARAM12_VALUE0,
      TANK_PARAMS_VALUES_PARAM12_VALUE1,
      TANK_PARAMS_VALUES_PARAM12_VALUE2,

@@ -37,6 +37,12 @@ class HangarCameraSounds(IHangarCameraSounds):
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
 
+    def playMotionToObject(self):
+        self.__playMotionSounds(False)
+
+    def playMotionToMain(self):
+        self.__playMotionSounds(True)
+
     def __handleEntityUpdated(self, event):
         ctx = event.ctx
         state = ctx['state']
@@ -46,7 +52,10 @@ class HangarCameraSounds(IHangarCameraSounds):
             isMainView = ctx['entityId'] == self.hangarSpace.space.vehicleEntityId
         else:
             isMainView = True
-        if state == CameraMovementStates.MOVING_TO_OBJECT:
+        self.__playMotionSounds(isMainView, state)
+
+    def __playMotionSounds(self, isMainView, state=None):
+        if state != CameraMovementStates.ON_OBJECT:
             SoundGroupsInstance.playSound2D(self._MoveCameraEvents.MOVE_TO_MAIN if isMainView else self._MoveCameraEvents.MOVE_TO_HERO)
         if isMainView != self.__isMainView:
             self.__isMainView = isMainView

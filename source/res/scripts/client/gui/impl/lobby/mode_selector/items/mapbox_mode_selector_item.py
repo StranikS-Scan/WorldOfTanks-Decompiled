@@ -3,11 +3,13 @@
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import PerformanceRiskEnum
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.lobby.mode_selector.items import setBattlePassState
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem, formatSeasonLeftTime
 from gui.impl.lobby.mode_selector.items.items_constants import ModeSelectorRewardID
 from gui.shared.event_dispatcher import showMapboxIntro
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IMapboxController
 if typing.TYPE_CHECKING:
@@ -22,6 +24,9 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
         if not self.isSelectable:
             showMapboxIntro()
 
+    def handleInfoPageClick(self):
+        self.__mapboxCtrl.showMapboxInfoPage()
+
     @property
     def calendarTooltipText(self):
         return backport.text(R.strings.mapbox.selector.tooltip.body(), day=self.__getCurrentSeasonDate())
@@ -30,11 +35,14 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
     def isSelectable(self):
         return self.__mapboxCtrl.isActive()
 
-    def _getIsDisabled(self):
-        return False
+    def _isInfoIconVisible(self):
+        return bool(self.__mapboxCtrl.getModeSettings().infoPageUrl)
 
     def _isNeedToHideCard(self):
         return self.__mapboxCtrl.getCurrentCycleID() is None
+
+    def _getIsDisabled(self):
+        return self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isFrozen()
 
     def _onInitializing(self):
         super(MapboxModeSelectorItem, self)._onInitializing()
@@ -56,11 +64,16 @@ class MapboxModeSelectorItem(ModeSelectorLegacyItem):
         with self.viewModel.transaction() as vm:
             vm.setTimeLeft(formatSeasonLeftTime(self.__mapboxCtrl.getCurrentSeason()))
             vm.setStatusNotActive(self.__getNotActiveStatus())
+            vm.setIsDisabled(self._getIsDisabled())
             setBattlePassState(self.viewModel)
+            hasRisk = not isRendererPipelineDeferred()
+            riskType = PerformanceRiskEnum.MEDIUMRISK if hasRisk else PerformanceRiskEnum.LOWRISK
+            vm.performance.setShowPerfRisk(hasRisk)
+            vm.performance.setPerformanceRisk(riskType)
 
     def __getNotActiveStatus(self):
         nextSeason = self.__mapboxCtrl.getNextSeason()
-        return backport.text(R.strings.mapbox.selector.startEvent(), day=self.__getDate(nextSeason.getStartDate())) if not self._isDisabled() and not self.__mapboxCtrl.isActive() and nextSeason is not None else ''
+        return backport.text(R.strings.mapbox.selector.startEvent(), day=self.__getDate(nextSeason.getStartDate())) if not self._getIsDisabled() and not self.__mapboxCtrl.isActive() and nextSeason is not None else ''
 
     def __getCurrentSeasonDate(self):
         currentSeason = self.__mapboxCtrl.getCurrentSeason()

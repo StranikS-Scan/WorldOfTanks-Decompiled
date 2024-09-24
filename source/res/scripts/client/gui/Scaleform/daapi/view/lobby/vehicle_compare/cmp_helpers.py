@@ -76,7 +76,7 @@ def getSuitableCamouflage(vehicle, c11nService=None):
 
 
 def isCamouflageSet(vehicle):
-    return bool(vehicle.getBonusCamo())
+    return vehicle.hasBonusCamo()
 
 
 @dependency.replace_none_kwargs(factory=IGuiItemsFactory, itemsCache=IItemsCache)

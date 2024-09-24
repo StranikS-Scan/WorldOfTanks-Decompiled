@@ -1,18 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/consumables/__init__.py
 from constants import ARENA_BONUS_TYPE
-from gui.battle_control.controllers.consumables import ammo_ctrl, event_equipment_ctrl
+from gui.battle_control.controllers.consumables import ammo_ctrl
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.battle_control.controllers.consumables import opt_devices_ctrl
 from gui.battle_control.controllers.consumables import comp7_equipment_ctrl
 _EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
  ARENA_BONUS_TYPE.TOURNAMENT_COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
- ARENA_BONUS_TYPE.TRAINING_COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
- ARENA_BONUS_TYPE.EVENT_BATTLES: event_equipment_ctrl.EventEquipmentController,
- ARENA_BONUS_TYPE.EVENT_BATTLES_2: event_equipment_ctrl.EventEquipmentController}
-_REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController,
- ARENA_BONUS_TYPE.EVENT_BATTLES: event_equipment_ctrl.EventReplayConsumablesPanelMeta,
- ARENA_BONUS_TYPE.EVENT_BATTLES_2: event_equipment_ctrl.EventReplayConsumablesPanelMeta}
+ ARENA_BONUS_TYPE.TRAINING_COMP7: comp7_equipment_ctrl.Comp7EquipmentController}
+_REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController}
 
 def extendEquipmentController(equipmentItems, replayEquipmentItems):
     _EQUIPMENT_CONTROLLERS.update(equipmentItems)

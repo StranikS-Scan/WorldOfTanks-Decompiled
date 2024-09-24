@@ -4,6 +4,9 @@ import ResMgr
 import section2dict
 import typing
 from dict2model import models, schemas, fields, validate
+from story_mode_common.configs.sounds_schema import soundSchema
+if typing.TYPE_CHECKING:
+    from story_mode_common.configs.sounds_schema import SoundModel
 _LORE_SETTINGS_PATH = 'story_mode/gui/lore.xml'
 
 class MissionLoreModel(models.Model):
@@ -36,10 +39,10 @@ class LoreSettingsModel(models.Model):
 
 
 missionLoreSchema = schemas.Schema(fields={'id': fields.Integer(required=True, serializedValidators=validate.Range(minValue=1), deserializedValidators=validate.Range(minValue=1)),
- 'music': fields.String(required=False, default=''),
+ 'music': fields.Nested(schema=soundSchema, required=True),
  'vo': fields.String(required=True),
  'battleMusic': fields.String(required=True)}, modelClass=MissionLoreModel, checkUnknown=True)
-epilogueLoreSchema = schemas.Schema(fields={'music': fields.String(required=True),
+epilogueLoreSchema = schemas.Schema(fields={'music': fields.Nested(schema=soundSchema, required=True),
  'vo': fields.String(required=True)}, modelClass=EpilogueLoreModel, checkUnknown=True)
 loreSchema = schemas.Schema(fields={'mission': fields.UniCapList(fieldOrSchema=missionLoreSchema, required=True, deserializedValidators=validate.Length(minValue=1)),
  'epilogue': fields.Nested(schema=epilogueLoreSchema, required=True, public=False)}, modelClass=LoreSettingsModel, checkUnknown=True)

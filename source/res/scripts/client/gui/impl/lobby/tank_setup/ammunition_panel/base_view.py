@@ -43,11 +43,7 @@ class BaseAmmunitionPanelView(ViewImpl):
             if self._hangarSpace.spaceLoading():
                 _logger.warning('Failed to get slotData. HangarSpace is currently loading.')
                 return
-            tooltipId = event.getArgument('tooltip')
-            if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC:
-                tooltipData = getSlotSpecTooltipData(event, tooltipId)
-            else:
-                tooltipData = getSlotTooltipData(event, self.vehItem, self.viewModel.ammunitionPanel.getSelectedSlot())
+            tooltipData = self._getBackportTooltipData(event)
             if tooltipData is not None:
                 window = BackportTooltipWindow(tooltipData, self.getParentWindow())
                 window.load()
@@ -175,3 +171,7 @@ class BaseAmmunitionPanelView(ViewImpl):
 
     def _updateView(self):
         self.update(fullUpdate=False)
+
+    def _getBackportTooltipData(self, event):
+        tooltipId = event.getArgument('tooltip')
+        return getSlotSpecTooltipData(event, tooltipId) if tooltipId == TOOLTIPS_CONSTANTS.HANGAR_SLOT_SPEC else getSlotTooltipData(event, self.vehItem, self.viewModel.ammunitionPanel.getSelectedSlot())

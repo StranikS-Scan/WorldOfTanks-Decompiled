@@ -41,3 +41,8 @@ class BATTLE_HINTS(object):
     HINT_PPH_OTHER_04 = '#battle_hints:hint/PPH_OTHER_04'
     HINT_PPH_OTHER_05 = '#battle_hints:hint/PPH_OTHER_05'
     HINT_PPH_OTHER_06 = '#battle_hints:hint/PPH_OTHER_06'
+    HINT_LSH_FOG = '#battle_hints:hint/LSH_FOG'
+    HINT_LSH_SANDSTORM = '#battle_hints:hint/LSH_SANDSTORM'
+    HINT_LSH_FIRE = '#battle_hints:hint/LSH_FIRE'
+    HINT_LSH_SMOKE = '#battle_hints:hint/LSH_SMOKE'
+    HINT_LSH_RAIN = '#battle_hints:hint/LSH_RAIN'

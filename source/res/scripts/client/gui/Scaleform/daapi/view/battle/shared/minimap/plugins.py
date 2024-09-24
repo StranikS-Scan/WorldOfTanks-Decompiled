@@ -614,7 +614,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             ctrl.onMinimapVehicleAdded += self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved += self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived += self._onMinimapFeedbackReceived
-            ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+            ctrl.onVehicleFeedbackReceived += self._onVehicleFeedbackReceived
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         self.sessionProvider.addArenaCtrl(self)
         return
@@ -637,7 +637,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             ctrl.onMinimapVehicleAdded -= self.__onMinimapVehicleAdded
             ctrl.onMinimapVehicleRemoved -= self.__onMinimapVehicleRemoved
             ctrl.onMinimapFeedbackReceived -= self._onMinimapFeedbackReceived
-            ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+            ctrl.onVehicleFeedbackReceived -= self._onVehicleFeedbackReceived
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         super(ArenaVehiclesPlugin, self).stop()
         return
@@ -792,6 +792,9 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def _getIsObserver(self):
         return self.__isObserver
 
+    def _getDisplayedVehicleClassTag(self, vInfo):
+        return vInfo.getDisplayedClassTag()
+
     def _getDisplayedName(self, vInfo):
         return vInfo.getDisplayedName()
 
@@ -807,7 +810,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             animation = self.__getSpottedAnimation(entry, isSpotted)
             if animation:
                 self.__playSpottedSound(entry)
-            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, vInfo.getDisplayedClassTag(), name, guiProps.name(), animation)
+            self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, self._getDisplayedVehicleClassTag(vInfo), name, guiProps.name(), animation)
         return
 
     def _onVehicleHealthChanged(self, vehicleID, currH, maxH):
@@ -819,13 +822,10 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             return
         self._invoke(self._entries[vehicleID].getID(), 'setVehicleHealth', normalizeHealthPercent(currH, maxH))
 
-    def __onVehicleFeedbackReceived(self, eventID, vehicleID, value):
+    def _onVehicleFeedbackReceived(self, eventID, vehicleID, value):
         if eventID == FEEDBACK_EVENT_ID.VEHICLE_HEALTH:
             info = self.sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
             self._onVehicleHealthChanged(vehicleID, value[0], info.vehicleType.maxHealth)
-        elif eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD:
-            info = self.sessionProvider.getArenaDP().getVehicleInfo(vehicleID)
-            self._onVehicleHealthChanged(info, 0, info.vehicleType.maxHealth)
 
     def __addEntryToPool(self, vehicleID, location=VEHICLE_LOCATION.UNDEFINED, positions=None):
         if location != VEHICLE_LOCATION.UNDEFINED:
@@ -1045,9 +1045,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
     def __onTeamChanged(self, teamID):
         self.invalidateArenaInfo()
 
-    def hideMinimapHP(self):
-        self.__showMinimapHP(False)
-
     def __handleShowExtendedInfo(self, event):
         if self._parentObj.isModalViewShown():
             return
@@ -1091,23 +1088,26 @@ class EquipmentsPlugin(common.IntervalPlugin):
         super(EquipmentsPlugin, self).stop()
         return
 
+    def _getSymbolFromMarker(self, marker):
+        return settings.EQ_MARKER_TO_SYMBOL.get(marker, None)
+
     def __onEquipmentMarkerShown(self, equipment, position, _, interval, team=None):
         uniqueID = self.__generator.next()
         arenaDP = self.sessionProvider.getArenaDP()
         isAllyTeam = team is None or arenaDP is None or arenaDP.isAllyTeam(team)
         marker = equipment.getMarker() if isAllyTeam else equipment.getEnemyMarker()
-        if marker in settings.EQ_MARKER_TO_SYMBOL:
-            symbol = settings.EQ_MARKER_TO_SYMBOL[marker]
-        else:
+        symbol = self._getSymbolFromMarker(marker)
+        if symbol is None:
             LOG_ERROR('Symbol is not found for equipment', equipment)
             return
-        matrix = minimap_utils.makePositionMatrix(position)
-        model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
-        if model is not None:
-            if team is not None:
-                self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
-            self._setCallback(uniqueID, interval)
-        return
+        else:
+            matrix = minimap_utils.makePositionMatrix(position)
+            model = self._addEntryEx(uniqueID, symbol, _C_NAME.EQUIPMENTS, matrix=matrix, active=True)
+            if model is not None:
+                if team is not None:
+                    self._invoke(model.getID(), 'setOwningTeam', isAllyTeam)
+                self._setCallback(uniqueID, interval)
+            return
 
 
 class AreaStaticMarkerPlugin(common.EntriesPlugin):
@@ -1274,10 +1274,6 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def getHintSection(self):
         return dict(AccountSettings.getSettings(MINIMAP_IBC_HINT_SECTION))
 
-    def hideHintPanel(self, instantHide=False):
-        self.__isHintPanelEnabled = False
-        self.parentObj.as_disableHintPanelS(instantHide)
-
     def __handleKeyDownEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
@@ -1292,9 +1288,10 @@ class MinimapPingPlugin(SimpleMinimapPingPlugin):
     def __handleKeyUpEvent(self, event):
         if event.key not in (Keys.KEY_LCONTROL, Keys.KEY_RCONTROL):
             return
-        if not self.__isHintPanelEnabled or self._parentObj.isModalViewShown():
+        if not self.__isHintPanelEnabled:
             return
-        self.hideHintPanel()
+        self.__isHintPanelEnabled = False
+        self.parentObj.as_disableHintPanelS()
 
     def updateControlMode(self, crtlMode, vehicleID):
         super(MinimapPingPlugin, self).updateControlMode(crtlMode, vehicleID)

@@ -11,46 +11,11 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 @dependency.replace_none_kwargs(dynamicObjectsCache=IBattleDynamicObjectsCache, battleSession=IBattleSessionProvider)
-def loadLootById(typeID, position, dynamicObjectsCache=None, battleSession=None):
-    lootDscr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getLoots().get(typeID, None)
-    if lootDscr is not None:
-        return LootEffect(lootDscr, position)
-    else:
+def loadLootById(typeID, dynamicObjectsCache=None, battleSession=None):
+    descr = dynamicObjectsCache.getConfig(battleSession.arenaVisitor.getArenaGuiType()).getLoots().get(typeID, None)
+    if descr is None:
         _logger.error('[Loot] Could not find loot types for %s.', typeID)
-        return
-
-
-class LootEffect(object):
-
-    def __init__(self, descr, position):
-        self.__descr = descr
-        self.__position = position
-        self.__prefabGO = None
-        self.__isPickUpEffectShown = False
-        return
-
-    def show(self, isPickedUp):
-        if isPickedUp:
-            if self.__isPickUpEffectShown:
-                return
-            prefabPath = self.__descr.prefabPickup
-        else:
-            prefabPath = self.__descr.prefab
-        CGF.loadGameObject(prefabPath, BigWorld.player().spaceID, self.__position, self.__onPrefabLoaded)
-        if isPickedUp:
-            self.__isPickUpEffectShown = True
-
-    def clear(self):
-        if not self.__prefabGO:
-            return
-        else:
-            if not self.__isPickUpEffectShown:
-                CGF.removeGameObject(self.__prefabGO)
-            self.__prefabGO = None
-            return
-
-    def __onPrefabLoaded(self, go):
-        self.__prefabGO = go
+    return descr
 
 
 @bonusCapsManager(ARENA_BONUS_TYPE_CAPS.BATTLEROYALE, CGF.DomainOption.DomainClient)

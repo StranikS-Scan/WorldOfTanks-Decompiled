@@ -199,9 +199,6 @@ class BRInspireSN(BRBuffSN):
     def _getTitle(self, value):
         return backport.text(self._stringResource.inspire.inspired())
 
-    def _getIsPulseVisible(self):
-        return True
-
 
 class BerserkerSN(BRBuffSN):
 

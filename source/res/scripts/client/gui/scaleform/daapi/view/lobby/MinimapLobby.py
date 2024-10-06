@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/MinimapLobby.py
+from typing import Union
 import ArenaType
 from gui.Scaleform.daapi.view.meta.MinimapPresentationMeta import MinimapPresentationMeta
 from gui.Scaleform.genConsts.MINIMAPENTRIES_CONSTANTS import MINIMAPENTRIES_CONSTANTS
@@ -11,6 +12,17 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from points_of_interest_shared import PoiType
 _POI_TYPE_TO_STR = {PoiType.ARTILLERY: MINIMAPENTRIES_CONSTANTS.POI_TYPE_ARTY,
  PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON}
+
+def _resilientMapIconPathGetter(gameplayName, geometryName):
+    prefixedGeometryName = 'c_%s' % geometryName
+    gamemodeFolderAccessor = R.images.gui.maps.icons.map.dyn(gameplayName)
+    if gamemodeFolderAccessor.isValid():
+        mapIconDynAccessor = gamemodeFolderAccessor.dyn(prefixedGeometryName)
+        if mapIconDynAccessor.isValid():
+            return backport.image(mapIconDynAccessor())
+    commonFolderMapIconAccessor = R.images.gui.maps.icons.map.dyn(prefixedGeometryName)
+    return backport.image(commonFolderMapIconAccessor()) if commonFolderMapIconAccessor.isValid() else ''
+
 
 class MinimapLobby(MinimapPresentationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -60,19 +72,12 @@ class MinimapLobby(MinimapPresentationMeta):
     def setArena(self, arenaTypeID):
         self.__arenaTypeID = int(arenaTypeID)
         arenaType = ArenaType.g_cache[self.__arenaTypeID]
-        gameplayAccessor = R.images.gui.maps.icons.map.dyn(arenaType.gameplayName)
-        if gameplayAccessor.isValid():
-            mapIconDynAccessor = gameplayAccessor.dyn('c_{}'.format(arenaType.geometryName))
-        else:
-            mapIconDynAccessor = R.images.gui.maps.icons.map.dyn('c_{}'.format(arenaType.geometryName))
-        mapIconPath = backport.image(mapIconDynAccessor()) if mapIconDynAccessor.isValid() else ''
-        cfg = {'texture': mapIconPath,
+        self.setConfig({'texture': _resilientMapIconPathGetter(arenaType.gameplayName, arenaType.geometryName),
          'size': arenaType.boundingBox,
          'teamBasePositions': arenaType.teamBasePositions,
          'teamSpawnPoints': arenaType.teamSpawnPoints,
          'controlPoints': arenaType.controlPoints,
-         'pointsOfInterest': arenaType.pointsOfInterest}
-        self.setConfig(cfg)
+         'pointsOfInterest': arenaType.pointsOfInterest})
 
     def setEmpty(self):
         self.as_clearS()

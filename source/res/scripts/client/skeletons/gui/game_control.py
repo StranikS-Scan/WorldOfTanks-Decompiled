@@ -1459,9 +1459,6 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def selectRandomBattle(self):
         raise NotImplementedError
 
-    def wasInLobby(self):
-        raise NotImplementedError
-
     def getBrVehicleEquipmentIds(self, vehicleName):
         raise NotImplementedError
 

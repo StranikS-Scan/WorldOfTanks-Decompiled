@@ -76,7 +76,7 @@ class BorderVisual(object):
                 self.__modelOffsets[idx] = offset = Matrix()
                 self.__attachNodes[idx] = attachNode = rootModel.node('', offset)
                 attachNode.attach(area)
-                area.setup(g_borderVisualSettings.modelPath, dashesParams.size, g_borderVisualSettings.overTerrainHeight, dashesParams.color)
+                area.setup(g_borderVisualSettings.modelPath, dashesParams.size, g_borderVisualSettings.overTerrainHeight, dashesParams.color, BigWorld.player().spaceID)
                 area.enableYCutOff(False)
                 area.enableAccurateCollision(False)
                 offset.translation = dashesParams.offset

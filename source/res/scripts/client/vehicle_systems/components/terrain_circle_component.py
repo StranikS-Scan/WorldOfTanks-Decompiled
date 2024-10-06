@@ -34,7 +34,7 @@ class TerrainCircleComponent(CallbackDelayer):
             g_logger.warning('The color of Terrain Circle is 0! Terrain circle will be invisible!')
         self.__maxUpdateInterval = terrainCircleSettings.maxUpdateInterval
         visual = self.__areaVisual
-        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainColor)
+        visual.setup(terrainCircleSettings.modelPath, Vector2(radius + radius, radius + radius), terrainCircleSettings.overTerrainHeight, terrainColor, BigWorld.player().spaceID)
         visual.enableAccurateCollision(terrainCircleSettings.enableAccurateCollision)
         visual.enableWaterCollision(terrainCircleSettings.enableWaterCollision)
         if self.__isVisible:

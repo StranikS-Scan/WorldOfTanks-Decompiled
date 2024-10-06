@@ -107,8 +107,8 @@ def _formatVehicleOwnership(item):
             info = item.rentInfo
             event = info.getActiveSeasonRent()
 
-            def _formatTime(rawTime):
-                return rawTime if rawTime < float('inf') else -1
+            def _formatInfinite(val):
+                return val if val < float('inf') else -1
 
             if event:
                 rentType = 'event'
@@ -121,9 +121,9 @@ def _formatVehicleOwnership(item):
                        'duration': _RENT_DURATION_MAP.get(event.duration, 'undefined'),
                        'expire': event.expiryTime} if event else None,
              'rentType': rentType,
-             'time': _formatTime(info.getTimeLeft()),
-             'battles': info.battlesLeft,
-             'wins': info.winsLeft}
+             'time': _formatInfinite(info.getTimeLeft()),
+             'battles': _formatInfinite(info.battlesLeft),
+             'wins': _formatInfinite(info.winsLeft)}
         return result
     else:
         return

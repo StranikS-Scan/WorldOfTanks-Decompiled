@@ -4,9 +4,9 @@ import math
 from collections import namedtuple
 import BigWorld
 from shared_utils import CONST_CONTAINER
-MIN_SCREEN_WIDTH = 1024
+MIN_SCREEN_WIDTH = 1280
 MIN_SCREEN_HEIGHT = 768
-MIN_COLOR_DEPTH = 23
+MIN_COLOR_DEPTH = 32
 VideoMode = namedtuple('VideoMode', 'index width height colorDepth label refreshRate')
 WindowSize = namedtuple('WindowSize', 'width height refreshRate')
 BorderlessSize = namedtuple('BorderlessSize', 'behaviour posX posY width height monitor')

@@ -63,6 +63,9 @@ class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
     def getDisplayableData(self, intCD, *args, **kwargs):
         return DecoratedTooltipWindow(VehicleTooltipView(intCD, self.context), useDecorator=False)
 
+    def buildToolTip(self, *args, **kwargs):
+        return None
+
 
 class BrCoinTooltipViewTooltipWindowData(ToolTipBaseData):
 

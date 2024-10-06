@@ -74,6 +74,17 @@ def checkStateStatus(states=(), defReturn=None, abortAction=None):
     return decorator
 
 
+def initOnce(method):
+
+    @wraps(method)
+    def wrapper(mechanicComponent, *args, **kwargs):
+        if not hasattr(mechanicComponent, 'wasInited'):
+            mechanicComponent.wasInited = True
+            method(mechanicComponent, *args, **kwargs)
+
+    return wrapper
+
+
 class VehicleMechanicComponent(BigWorld.DynamicScriptComponent):
 
     def __init__(self):

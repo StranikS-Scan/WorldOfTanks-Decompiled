@@ -86,7 +86,6 @@ class TankmanContainerView(BaseCrewView):
 
     def toggleContentVisibility(self, isVisible):
         self._isContentVisible = isVisible
-        self.viewModel.setIsContentVisible(isVisible)
 
     def setAnimationInProgress(self, isEnabled):
         self._isAnimationEnabled = isEnabled

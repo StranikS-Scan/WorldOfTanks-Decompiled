@@ -32,7 +32,7 @@ class BattleOptDeviceTooltipData(BlocksTooltipData):
         leftPadding = 20
         rightPadding = 20
         topPadding = 20
-        battleDescr = R.strings.artefacts.dyn(descriptor.groupName).battle_descr
+        battleDescr = R.strings.artefacts.dyn(descriptor.groupName).battleDescr
         if battleDescr:
             desc = backport.text(battleDescr())
         else:

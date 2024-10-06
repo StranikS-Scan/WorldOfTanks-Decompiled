@@ -115,7 +115,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         self.__performanceGroup = None
         self.__serverSettings = None
         self.__battleRoyaleSettings = None
-        self.__wasInLobby = False
         self.__equipmentCount = {}
         self.__equipmentSlots = tuple()
         self.__isBRLogicEnabled = False
@@ -161,9 +160,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         super(BattleRoyaleController, self).fini()
         return
 
-    def wasInLobby(self):
-        return self.__wasInLobby
-
     def onLobbyInited(self, event):
         super(BattleRoyaleController, self).onLobbyInited(event)
         if not self.__clientValuesInited:
@@ -184,7 +180,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         g_eventBus.addListener(ProfileTechniqueEvent.SELECT_BATTLE_TYPE, self.__onProfileTechniqueSelectBattlesType, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(ProfileTechniqueEvent.DISPOSE, self.__onProfileTechniqueDispose, scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, self.__onSelectVehicleInHangar, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__wasInLobby = True
         nextTick(self.__eventAvailabilityUpdate)()
 
     def onPrbEntitySwitched(self):
@@ -226,7 +221,6 @@ class BattleRoyaleController(Notifiable, SeasonProvider, IBattleRoyaleController
         return
 
     def onDisconnected(self):
-        self.__wasInLobby = False
         self.__clearClientValues()
         self.__clear()
         super(BattleRoyaleController, self).onDisconnected()

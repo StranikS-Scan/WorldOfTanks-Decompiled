@@ -53,6 +53,7 @@ class OnboardingBattlePage(StoryModeBattlePageBase, ClassicPage):
     def _onBattleLoadingStart(self):
         if not self._visibleComponents:
             self._visibleComponents = set(self.as_getComponentsVisibilityS())
+        self._visibleComponents.discard(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
         self._blToggling = set(self._visibleComponents)
         super(OnboardingBattlePage, self)._onBattleLoadingStart()
 

@@ -81,7 +81,7 @@ class SectorBase(BigWorld.Entity):
         flagSettings = FlagSettings(prereqs[_g_sectorBaseSettings.flagStaffModelName], _g_sectorBaseSettings.flagNodeAliasName, prereqs[_g_sectorBaseSettings.flagAnim], _g_sectorBaseSettings.flagBackgroundTex, _g_sectorBaseSettings.flagEmblemTex, _g_sectorBaseSettings.flagEmblemTexCoords, self.spaceID)
         self.__flagModel.setupFlag(self.position, flagSettings, teamParams[0])
         self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
-        self.__terrainSelectedArea.setup(_g_sectorBaseSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, teamParams[0])
+        self.__terrainSelectedArea.setup(_g_sectorBaseSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, teamParams[0], BigWorld.player().spaceID)
         self.__flagModel.model.root.attach(self.__terrainSelectedArea)
         self.model = self.__flagModel.model
         self.__flagModel.startFlagAnimation()

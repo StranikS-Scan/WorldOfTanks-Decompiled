@@ -60,7 +60,7 @@ class StepRepairPoint(BigWorld.Entity):
             self.__animator.bindTo(AnimationSequence.CompoundWrapperContainer(self.model))
             self.__animator.start()
         self.__terrainSelectedArea = BigWorld.PyTerrainSelectedArea()
-        self.__terrainSelectedArea.setup(_g_stepRepairPointSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, self._COLOR)
+        self.__terrainSelectedArea.setup(_g_stepRepairPointSettings.radiusModel, Vector2(self.radius * 2.0, self.radius * 2.0), self._OVER_TERRAIN_HEIGHT, self._COLOR, BigWorld.player().spaceID)
         self.model.root.attach(self.__terrainSelectedArea)
         return
 

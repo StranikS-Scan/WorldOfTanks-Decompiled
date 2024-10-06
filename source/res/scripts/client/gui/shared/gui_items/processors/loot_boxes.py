@@ -17,7 +17,7 @@ from gui.shared.gui_items.processors import Processor, makeI18nError, makeSucces
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.money import Currency, ZERO_MONEY, Money
 from helpers import dependency
-from messenger.formatters.service_channel import QuestAchievesFormatter, LootBoxSystemAchievesFormatter
+from messenger.formatters.service_channel import LootBoxAchievesFormatter, LootBoxSystemAchievesFormatter
 from skeletons.gui.game_control import ILootBoxSystemController
 _logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ class LootBoxOpenProcessor(Processor):
     def _successHandler(self, code, ctx=None):
         bonus = ctx.get('bonus', [])
         self._preformatCompensationValue(bonus)
-        fmt = QuestAchievesFormatter.formatQuestAchieves(getMergedBonusesFromDicts(bonus), False)
+        fmt = LootBoxAchievesFormatter.formatQuestAchieves(getMergedBonusesFromDicts(bonus), False)
         if fmt is not None:
             SystemMessages.pushMessage(fmt, SystemMessages.SM_TYPE.LootBoxRewards)
         return super(LootBoxOpenProcessor, self)._successHandler(code, ctx)

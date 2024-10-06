@@ -3523,17 +3523,17 @@ class artefacts(DynAccessor):
 
     class _actionStub(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3499)
+        name = DynAccessor(3498)
 
     actionStub = _actionStub()
 
     class _adaptationHealthRestore(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3705)
-        descr = DynAccessor(3817)
-        longDescr = DynAccessor(3853)
-        name = DynAccessor(3807)
-        shortDescr = DynAccessor(3475)
+        battleDescr = DynAccessor(3704)
+        descr = DynAccessor(3816)
+        longDescr = DynAccessor(3852)
+        name = DynAccessor(3806)
+        shortDescr = DynAccessor(3474)
 
     adaptationHealthRestore = _adaptationHealthRestore()
 
@@ -3543,19 +3543,19 @@ class artefacts(DynAccessor):
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3731)
+            deluxe = DynAccessor(3730)
             simple = DynAccessor(3299)
 
         gain = _gain()
-        long_special = DynAccessor(3533)
-        name = DynAccessor(3889)
-        short_special = DynAccessor(3904)
+        long_special = DynAccessor(3532)
+        name = DynAccessor(3888)
+        short_special = DynAccessor(3903)
 
     additInvisibilityDeviceBattleBooster = _additInvisibilityDeviceBattleBooster()
 
     class _additional_armor_plates_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3865)
+        name = DynAccessor(3864)
 
     additional_armor_plates_1 = _additional_armor_plates_1()
 
@@ -3567,21 +3567,21 @@ class artefacts(DynAccessor):
 
     class _additionalInvisibilityDevice(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3622)
-        name = DynAccessor(3595)
+        long_special = DynAccessor(3621)
+        name = DynAccessor(3594)
         short_special = DynAccessor(4049)
 
     additionalInvisibilityDevice = _additionalInvisibilityDevice()
 
     class _additionalInvisibilityDevice_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3482)
+        name = DynAccessor(3481)
 
     additionalInvisibilityDevice_tier1 = _additionalInvisibilityDevice_tier1()
 
     class _additionalInvisibilityDevice_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3800)
+        name = DynAccessor(3799)
 
     additionalInvisibilityDevice_tier2 = _additionalInvisibilityDevice_tier2()
 
@@ -3593,27 +3593,27 @@ class artefacts(DynAccessor):
 
     class _afterburning(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3855)
-        name = DynAccessor(3525)
+        descr = DynAccessor(3854)
+        name = DynAccessor(3524)
 
     afterburning = _afterburning()
 
     class _aimingStabilizer(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(4039)
-        name = DynAccessor(3882)
+        name = DynAccessor(3881)
 
     aimingStabilizer = _aimingStabilizer()
 
     class _aimingStabilizer_Mk1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3557)
+        name = DynAccessor(3556)
 
     aimingStabilizer_Mk1 = _aimingStabilizer_Mk1()
 
     class _aimingStabilizer_Mk2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3422)
+        name = DynAccessor(3421)
 
     aimingStabilizer_Mk2 = _aimingStabilizer_Mk2()
 
@@ -3631,25 +3631,25 @@ class artefacts(DynAccessor):
 
     class _aimingStabilizerBattleBooster(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3456)
+        descr = DynAccessor(3455)
 
         class _gain(DynAccessor):
             __slots__ = ()
             deluxe = DynAccessor(3232)
-            simple = DynAccessor(3916)
+            simple = DynAccessor(3915)
 
         gain = _gain()
-        long_special = DynAccessor(3458)
-        name = DynAccessor(3809)
-        short_special = DynAccessor(3419)
+        long_special = DynAccessor(3457)
+        name = DynAccessor(3808)
+        short_special = DynAccessor(3418)
 
     aimingStabilizerBattleBooster = _aimingStabilizerBattleBooster()
 
     class _antifragmentationLining(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3713)
-        name = DynAccessor(3708)
-        short_special = DynAccessor(3868)
+        long_special = DynAccessor(3712)
+        name = DynAccessor(3707)
+        short_special = DynAccessor(3867)
 
     antifragmentationLining = _antifragmentationLining()
 
@@ -3661,7 +3661,7 @@ class artefacts(DynAccessor):
 
     class _antifragmentationLining_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3728)
+        name = DynAccessor(3727)
 
     antifragmentationLining_tier2 = _antifragmentationLining_tier2()
 
@@ -3673,7 +3673,7 @@ class artefacts(DynAccessor):
 
     class _antifragmentationLining_tier4(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3550)
+        name = DynAccessor(3549)
 
     antifragmentationLining_tier4 = _antifragmentationLining_tier4()
 
@@ -3694,7 +3694,7 @@ class artefacts(DynAccessor):
 
         class _antifragmentationLining(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3917)
+            name = DynAccessor(3916)
 
         antifragmentationLining = _antifragmentationLining()
 
@@ -3706,19 +3706,19 @@ class artefacts(DynAccessor):
 
         class _coatedOptics(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3545)
+            name = DynAccessor(3544)
 
         coatedOptics = _coatedOptics()
 
         class _commandersView(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3646)
+            name = DynAccessor(3645)
 
         commandersView = _commandersView()
 
         class _enhancedAimDrives(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3898)
+            name = DynAccessor(3897)
 
         enhancedAimDrives = _enhancedAimDrives()
 
@@ -3730,13 +3730,13 @@ class artefacts(DynAccessor):
 
         class _grousers(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3907)
+            name = DynAccessor(3906)
 
         grousers = _grousers()
 
         class _improvedConfiguration(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3549)
+            name = DynAccessor(3548)
 
         improvedConfiguration = _improvedConfiguration()
 
@@ -3748,19 +3748,19 @@ class artefacts(DynAccessor):
 
         class _improvedRotationMechanism(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3590)
+            name = DynAccessor(3589)
 
         improvedRotationMechanism = _improvedRotationMechanism()
 
         class _improvedSights(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3827)
+            name = DynAccessor(3826)
 
         improvedSights = _improvedSights()
 
         class _improvedVentilation(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3497)
+            name = DynAccessor(3496)
 
         improvedVentilation = _improvedVentilation()
 
@@ -3769,7 +3769,7 @@ class artefacts(DynAccessor):
 
             class _name(DynAccessor):
                 __slots__ = ()
-                noTemplate = DynAccessor(3556)
+                noTemplate = DynAccessor(3555)
 
             name = _name()
 
@@ -3780,7 +3780,7 @@ class artefacts(DynAccessor):
 
             class _name(DynAccessor):
                 __slots__ = ()
-                noTemplate = DynAccessor(3486)
+                noTemplate = DynAccessor(3485)
 
             name = _name()
 
@@ -3791,7 +3791,7 @@ class artefacts(DynAccessor):
 
             class _name(DynAccessor):
                 __slots__ = ()
-                noTemplate = DynAccessor(3570)
+                noTemplate = DynAccessor(3569)
 
             name = _name()
 
@@ -3799,7 +3799,7 @@ class artefacts(DynAccessor):
 
         class _stereoscope(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3470)
+            name = DynAccessor(3469)
 
         stereoscope = _stereoscope()
 
@@ -3808,11 +3808,11 @@ class artefacts(DynAccessor):
             name = DynAccessor(3220)
 
         tankRammer = _tankRammer()
-        template = DynAccessor(3493)
+        template = DynAccessor(3492)
 
         class _turbocharger(DynAccessor):
             __slots__ = ()
-            name = DynAccessor(3402)
+            name = DynAccessor(3345)
 
         turbocharger = _turbocharger()
 
@@ -3828,20 +3828,20 @@ class artefacts(DynAccessor):
 
     class _autoExtinguishers(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3429)
-        descr = DynAccessor(3440)
+        always = DynAccessor(3428)
+        descr = DynAccessor(3439)
         long_special = DynAccessor(3398)
         name = DynAccessor(3296)
-        onUse = DynAccessor(3828)
-        restriction = DynAccessor(3527)
-        short_special = DynAccessor(3529)
+        onUse = DynAccessor(3827)
+        restriction = DynAccessor(3526)
+        short_special = DynAccessor(3528)
 
     autoExtinguishers = _autoExtinguishers()
 
     class _battleship(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3857)
-        shortDescr = DynAccessor(3674)
+        name = DynAccessor(3856)
+        shortDescr = DynAccessor(3673)
 
     battleship = _battleship()
 
@@ -3849,59 +3849,59 @@ class artefacts(DynAccessor):
         __slots__ = ()
         battleDescr = DynAccessor(3778)
         descr = DynAccessor(3307)
-        longDescr = DynAccessor(3869)
+        longDescr = DynAccessor(3868)
         name = DynAccessor(3782)
-        shortDescr = DynAccessor(3879)
+        shortDescr = DynAccessor(3878)
 
     berserker = _berserker()
 
     class _blackout_headlights_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3885)
+        name = DynAccessor(3884)
 
     blackout_headlights_1 = _blackout_headlights_1()
 
     class _bomber(DynAccessor):
         __slots__ = ()
         longDescr = DynAccessor(3287)
-        name = DynAccessor(3833)
-        shortDescr = DynAccessor(3906)
+        name = DynAccessor(3832)
+        shortDescr = DynAccessor(3905)
 
     bomber = _bomber()
 
     class _br_bomber(DynAccessor):
         __slots__ = ()
         battleDescr = DynAccessor(3785)
-        descr = DynAccessor(3899)
+        descr = DynAccessor(3898)
         longDescr = DynAccessor(3797)
-        name = DynAccessor(3714)
-        shortDescr = DynAccessor(3894)
+        name = DynAccessor(3713)
+        shortDescr = DynAccessor(3893)
 
     br_bomber = _br_bomber()
 
     class _br_minefield(DynAccessor):
         __slots__ = ()
         battleDescr = DynAccessor(3972)
-        descr = DynAccessor(3503)
-        longDescr = DynAccessor(3735)
-        name = DynAccessor(3593)
-        shortDescr = DynAccessor(3469)
+        descr = DynAccessor(3502)
+        longDescr = DynAccessor(3734)
+        name = DynAccessor(3592)
+        shortDescr = DynAccessor(3468)
 
     br_minefield = _br_minefield()
 
     class _br_respawn(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3816)
+        name = DynAccessor(3815)
 
         class _platoon(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(3824)
+            descr = DynAccessor(3823)
 
         platoon = _platoon()
 
         class _solo(DynAccessor):
             __slots__ = ()
-            descr = DynAccessor(3598)
+            descr = DynAccessor(3597)
 
         solo = _solo()
 
@@ -3909,9 +3909,9 @@ class artefacts(DynAccessor):
 
     class _br_smoke(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3846)
+        battleDescr = DynAccessor(3845)
         descr = DynAccessor(3365)
-        longDescr = DynAccessor(3804)
+        longDescr = DynAccessor(3803)
         name = DynAccessor(3272)
         shortDescr = DynAccessor(3793)
 
@@ -3919,40 +3919,40 @@ class artefacts(DynAccessor):
 
     class _br_smoke_with_damage(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3466)
+        battleDescr = DynAccessor(3465)
         descr = DynAccessor(3399)
-        longDescr = DynAccessor(3580)
+        longDescr = DynAccessor(3579)
         name = DynAccessor(3980)
-        shortDescr = DynAccessor(3742)
+        shortDescr = DynAccessor(3741)
 
     br_smoke_with_damage = _br_smoke_with_damage()
 
     class _brRegenerationKit(DynAccessor):
         __slots__ = ()
         battleDescr = DynAccessor(3974)
-        descr = DynAccessor(3839)
+        descr = DynAccessor(3838)
         long_special = DynAccessor(3340)
         name = DynAccessor(3283)
-        short_special = DynAccessor(3730)
+        short_special = DynAccessor(3729)
 
     brRegenerationKit = _brRegenerationKit()
 
     class _brRepairkit(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3732)
-        long_special = DynAccessor(3912)
+        descr = DynAccessor(3731)
+        long_special = DynAccessor(3911)
         name = DynAccessor(3199)
-        short_special = DynAccessor(3430)
+        short_special = DynAccessor(3429)
 
     brRepairkit = _brRepairkit()
 
     class _builtinRepairkit(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3442)
+        always = DynAccessor(3441)
         long_special = DynAccessor(3346)
         name = DynAccessor(3277)
-        onUse = DynAccessor(3929)
-        restriction = DynAccessor(3518)
+        onUse = DynAccessor(3928)
+        restriction = DynAccessor(3517)
 
     builtinRepairkit = _builtinRepairkit()
 
@@ -3962,21 +3962,21 @@ class artefacts(DynAccessor):
         class _action(DynAccessor):
             __slots__ = ()
             boost = DynAccessor(4031)
-            perk = DynAccessor(3427)
+            perk = DynAccessor(3426)
 
         action = _action()
-        long_special = DynAccessor(3891)
+        long_special = DynAccessor(3890)
         name = DynAccessor(3979)
-        short_special = DynAccessor(3831)
+        short_special = DynAccessor(3830)
 
     camouflageBattleBooster = _camouflageBattleBooster()
 
     class _camouflageNet(DynAccessor):
         __slots__ = ()
-        battle_descr = DynAccessor(3799)
-        long_special = DynAccessor(3501)
-        name = DynAccessor(3566)
-        short_special = DynAccessor(3587)
+        battleDescr = DynAccessor(3746)
+        long_special = DynAccessor(3500)
+        name = DynAccessor(3565)
+        short_special = DynAccessor(3586)
 
     camouflageNet = _camouflageNet()
 
@@ -3996,9 +3996,9 @@ class artefacts(DynAccessor):
         __slots__ = ()
         always = DynAccessor(4012)
         descr = DynAccessor(3975)
-        long_special = DynAccessor(3618)
-        name = DynAccessor(3569)
-        onUse = DynAccessor(3668)
+        long_special = DynAccessor(3617)
+        name = DynAccessor(3568)
+        onUse = DynAccessor(3667)
         restriction = DynAccessor(3379)
         short_special = DynAccessor(3268)
 
@@ -4006,11 +4006,11 @@ class artefacts(DynAccessor):
 
     class _clingBrander(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3861)
-        descr = DynAccessor(3818)
-        longDescr = DynAccessor(3722)
+        battleDescr = DynAccessor(3860)
+        descr = DynAccessor(3817)
+        longDescr = DynAccessor(3721)
         name = DynAccessor(3955)
-        shortDescr = DynAccessor(3448)
+        shortDescr = DynAccessor(3447)
 
     clingBrander = _clingBrander()
 
@@ -4022,7 +4022,7 @@ class artefacts(DynAccessor):
 
     class _clutches_replace_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3604)
+        name = DynAccessor(3603)
 
     clutches_replace_2 = _clutches_replace_2()
 
@@ -4041,13 +4041,13 @@ class artefacts(DynAccessor):
 
     class _coatedOptics_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3628)
+        name = DynAccessor(3627)
 
     coatedOptics_tier2 = _coatedOptics_tier2()
 
     class _coatedOptics_tier3(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3596)
+        name = DynAccessor(3595)
 
     coatedOptics_tier3 = _coatedOptics_tier3()
 
@@ -4057,19 +4057,19 @@ class artefacts(DynAccessor):
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3454)
+            deluxe = DynAccessor(3453)
             simple = DynAccessor(3971)
 
         gain = _gain()
         long_special = DynAccessor(3228)
-        name = DynAccessor(3468)
-        short_special = DynAccessor(3854)
+        name = DynAccessor(3467)
+        short_special = DynAccessor(3853)
 
     coatedOpticsBattleBooster = _coatedOpticsBattleBooster()
 
     class _cocacola(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3620)
+        always = DynAccessor(3619)
         descr = DynAccessor(3320)
         long_special = DynAccessor(4002)
         name = DynAccessor(3358)
@@ -4095,7 +4095,7 @@ class artefacts(DynAccessor):
             active = DynAccessor(3994)
 
         descr = _descr()
-        name = DynAccessor(3444)
+        name = DynAccessor(3443)
 
     comp7_aggressive_detection = _comp7_aggressive_detection()
 
@@ -4104,7 +4104,7 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3585)
+            active = DynAccessor(3584)
 
         descr = _descr()
         name = DynAccessor(3968)
@@ -4128,10 +4128,10 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3425)
+            active = DynAccessor(3424)
 
         descr = _descr()
-        name = DynAccessor(3673)
+        name = DynAccessor(3672)
 
     comp7_aoe_inspire = _comp7_aoe_inspire()
 
@@ -4140,10 +4140,10 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3704)
+            active = DynAccessor(3703)
 
         descr = _descr()
-        name = DynAccessor(3603)
+        name = DynAccessor(3602)
 
     comp7_berserk = _comp7_berserk()
 
@@ -4152,7 +4152,7 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3693)
+            active = DynAccessor(3692)
 
         descr = _descr()
         name = DynAccessor(3269)
@@ -4164,7 +4164,7 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3634)
+            active = DynAccessor(3633)
 
         descr = _descr()
         name = DynAccessor(3330)
@@ -4180,7 +4180,7 @@ class artefacts(DynAccessor):
             passive = DynAccessor(4035)
 
         descr = _descr()
-        name = DynAccessor(3645)
+        name = DynAccessor(3644)
 
     comp7_hunter = _comp7_hunter()
 
@@ -4189,10 +4189,10 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3441)
+            active = DynAccessor(3440)
 
         descr = _descr()
-        name = DynAccessor(3826)
+        name = DynAccessor(3825)
 
     comp7_juggernaut = _comp7_juggernaut()
 
@@ -4204,7 +4204,7 @@ class artefacts(DynAccessor):
             active = DynAccessor(3777)
 
         descr = _descr()
-        name = DynAccessor(3627)
+        name = DynAccessor(3626)
 
     comp7_march = _comp7_march()
 
@@ -4213,7 +4213,7 @@ class artefacts(DynAccessor):
 
         class _descr(DynAccessor):
             __slots__ = ()
-            active = DynAccessor(3867)
+            active = DynAccessor(3866)
 
         descr = _descr()
         name = DynAccessor(4008)
@@ -4240,7 +4240,7 @@ class artefacts(DynAccessor):
             active = DynAccessor(3962)
 
         descr = _descr()
-        name = DynAccessor(3936)
+        name = DynAccessor(3935)
 
     comp7_risky_attack = _comp7_risky_attack()
 
@@ -4264,7 +4264,7 @@ class artefacts(DynAccessor):
             active = DynAccessor(4054)
 
         descr = _descr()
-        name = DynAccessor(3542)
+        name = DynAccessor(3541)
 
     comp7_sure_shot = _comp7_sure_shot()
 
@@ -4272,8 +4272,8 @@ class artefacts(DynAccessor):
         __slots__ = ()
         battleDescr = DynAccessor(3373)
         descr = DynAccessor(3389)
-        longDescr = DynAccessor(3582)
-        name = DynAccessor(3406)
+        longDescr = DynAccessor(3581)
+        name = DynAccessor(3405)
         shortDescr = DynAccessor(3341)
 
     corrodingShot = _corrodingShot()
@@ -4284,11 +4284,11 @@ class artefacts(DynAccessor):
         class _descr(DynAccessor):
             __slots__ = ()
             boost = DynAccessor(3958)
-            commander_special = DynAccessor(3692)
-            common = DynAccessor(3449)
-            perk = DynAccessor(3462)
+            commander_special = DynAccessor(3691)
+            common = DynAccessor(3448)
+            perk = DynAccessor(3461)
             replace = DynAccessor(3997)
-            skill = DynAccessor(3609)
+            skill = DynAccessor(3608)
 
         descr = _descr()
 
@@ -4297,14 +4297,14 @@ class artefacts(DynAccessor):
     class _deluxAimingStabilizer(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3359)
-        name = DynAccessor(3943)
+        name = DynAccessor(3942)
 
     deluxAimingStabilizer = _deluxAimingStabilizer()
 
     class _deluxCoatedOptics(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3303)
-        name = DynAccessor(3537)
+        name = DynAccessor(3536)
 
     deluxCoatedOptics = _deluxCoatedOptics()
 
@@ -4322,12 +4322,12 @@ class artefacts(DynAccessor):
 
         class _effect(DynAccessor):
             __slots__ = ()
-            chassisRestoration = DynAccessor(3829)
+            chassisRestoration = DynAccessor(3828)
 
         effect = _effect()
-        long_special = DynAccessor(3564)
-        name = DynAccessor(3514)
-        short_special = DynAccessor(3914)
+        long_special = DynAccessor(3563)
+        name = DynAccessor(3513)
+        short_special = DynAccessor(3913)
 
     deluxeExtraHealthReserve = _deluxeExtraHealthReserve()
 
@@ -4335,14 +4335,14 @@ class artefacts(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3254)
         name = DynAccessor(4050)
-        short_special = DynAccessor(3858)
+        short_special = DynAccessor(3857)
 
     deluxeImprovedRotationMechanism = _deluxeImprovedRotationMechanism()
 
     class _deluxeImprovedSights(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3504)
-        name = DynAccessor(3445)
+        long_special = DynAccessor(3503)
+        name = DynAccessor(3444)
         short_special = DynAccessor(3313)
 
     deluxeImprovedSights = _deluxeImprovedSights()
@@ -4356,23 +4356,23 @@ class artefacts(DynAccessor):
 
     class _deluxeTurbocharger(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3416)
+        long_special = DynAccessor(3415)
         name = DynAccessor(4045)
-        short_special = DynAccessor(3452)
+        short_special = DynAccessor(3451)
 
     deluxeTurbocharger = _deluxeTurbocharger()
 
     class _deluxImprovedConfiguration(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3460)
-        name = DynAccessor(3909)
+        long_special = DynAccessor(3459)
+        name = DynAccessor(3908)
         short_special = DynAccessor(3400)
 
     deluxImprovedConfiguration = _deluxImprovedConfiguration()
 
     class _deluxImprovedVentilation(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3403)
+        long_special = DynAccessor(3402)
         name = DynAccessor(3760)
 
     deluxImprovedVentilation = _deluxImprovedVentilation()
@@ -4388,7 +4388,7 @@ class artefacts(DynAccessor):
         __slots__ = ()
         descr = DynAccessor(3366)
         long_descr = DynAccessor(3184)
-        name = DynAccessor(3459)
+        name = DynAccessor(3458)
         short_descr = DynAccessor(3233)
 
     eb_minefield = _eb_minefield()
@@ -4397,8 +4397,8 @@ class artefacts(DynAccessor):
         __slots__ = ()
         descr = DynAccessor(3393)
         long_descr = DynAccessor(3198)
-        name = DynAccessor(3902)
-        short_descr = DynAccessor(3547)
+        name = DynAccessor(3901)
+        short_descr = DynAccessor(3546)
 
     eb_regenerationKit = _eb_regenerationKit()
     empty = DynAccessor(3761)
@@ -4407,7 +4407,7 @@ class artefacts(DynAccessor):
         __slots__ = ()
         descr = DynAccessor(3789)
         name = DynAccessor(3951)
-        short_descr = DynAccessor(3911)
+        short_descr = DynAccessor(3910)
 
     empty_slot = _empty_slot()
 
@@ -4416,38 +4416,38 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3554)
-            perk = DynAccessor(3678)
+            boost = DynAccessor(3363)
+            perk = DynAccessor(3677)
 
         action = _action()
         long_special = DynAccessor(4037)
         name = DynAccessor(3964)
-        short_special = DynAccessor(3913)
+        short_special = DynAccessor(3912)
 
     enemyShotPredictorBattleBooster = _enemyShotPredictorBattleBooster()
 
     class _enhancedAimDrives(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3247)
-        name = DynAccessor(3930)
+        name = DynAccessor(3929)
 
     enhancedAimDrives = _enhancedAimDrives()
 
     class _enhancedAimDrives_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3600)
+        name = DynAccessor(3599)
 
     enhancedAimDrives_tier1 = _enhancedAimDrives_tier1()
 
     class _enhancedAimDrives_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3494)
+        name = DynAccessor(3493)
 
     enhancedAimDrives_tier2 = _enhancedAimDrives_tier2()
 
     class _enhancedAimDrives_tier3(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3420)
+        name = DynAccessor(3419)
 
     enhancedAimDrives_tier3 = _enhancedAimDrives_tier3()
 
@@ -4458,24 +4458,24 @@ class artefacts(DynAccessor):
         class _gain(DynAccessor):
             __slots__ = ()
             deluxe = DynAccessor(3780)
-            simple = DynAccessor(3696)
+            simple = DynAccessor(3695)
 
         gain = _gain()
         long_special = DynAccessor(3338)
-        name = DynAccessor(3859)
+        name = DynAccessor(3858)
         short_special = DynAccessor(4029)
 
     enhancedAimDrivesBattleBooster = _enhancedAimDrivesBattleBooster()
 
     class _enhancedBelwillWashers(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3411)
+        name = DynAccessor(3410)
 
     enhancedBelwillWashers = _enhancedBelwillWashers()
 
     class _enhancedExtraHealthReserve(DynAccessor):
         __slots__ = ()
-        additional_descr = DynAccessor(3709)
+        additional_descr = DynAccessor(3708)
 
         class _effect(DynAccessor):
             __slots__ = ()
@@ -4493,71 +4493,71 @@ class artefacts(DynAccessor):
 
     class _enhancedLongitudinalTorsions(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3940)
+        name = DynAccessor(3939)
 
     enhancedLongitudinalTorsions = _enhancedLongitudinalTorsions()
 
     class _enhancedSprings(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3561)
+        name = DynAccessor(3560)
 
     enhancedSprings = _enhancedSprings()
 
     class _enhancedTorsions1t(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3830)
+        name = DynAccessor(3829)
 
     enhancedTorsions1t = _enhancedTorsions1t()
 
     class _enhancedTorsions3t(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3875)
+        name = DynAccessor(3874)
 
     enhancedTorsions3t = _enhancedTorsions3t()
 
     class _enhancedTorsions5t(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3536)
+        name = DynAccessor(3535)
 
     enhancedTorsions5t = _enhancedTorsions5t()
 
     class _exampleAbility(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3740)
+        descr = DynAccessor(3739)
         name = DynAccessor(4051)
 
     exampleAbility = _exampleAbility()
 
     class _excellentFuel(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3647)
-        descr = DynAccessor(3852)
-        long_special = DynAccessor(3727)
-        name = DynAccessor(3935)
+        always = DynAccessor(3646)
+        descr = DynAccessor(3851)
+        long_special = DynAccessor(3726)
+        name = DynAccessor(3934)
         onUse = DynAccessor(4024)
-        restriction = DynAccessor(3874)
+        restriction = DynAccessor(3873)
         short_special = DynAccessor(3957)
 
     excellentFuel = _excellentFuel()
 
     class _extraHealthReserve(DynAccessor):
         __slots__ = ()
-        additional_descr = DynAccessor(3685)
+        additional_descr = DynAccessor(3684)
 
         class _effect(DynAccessor):
             __slots__ = ()
             chassisRestoration = DynAccessor(3350)
 
         effect = _effect()
-        long_special = DynAccessor(3688)
+        long_special = DynAccessor(3687)
         name = DynAccessor(3239)
-        short_special = DynAccessor(3856)
+        short_special = DynAccessor(3855)
 
     extraHealthReserve = _extraHealthReserve()
 
     class _extraHealthReserve_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3484)
+        name = DynAccessor(3483)
 
     extraHealthReserve_tier1 = _extraHealthReserve_tier1()
 
@@ -4569,16 +4569,16 @@ class artefacts(DynAccessor):
 
     class _extraHealthReserve_tier3(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3560)
+        name = DynAccessor(3559)
 
     extraHealthReserve_tier3 = _extraHealthReserve_tier3()
 
     class _fireCircle(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3572)
+        battleDescr = DynAccessor(3571)
         descr = DynAccessor(3767)
         longDescr = DynAccessor(3758)
-        name = DynAccessor(3700)
+        name = DynAccessor(3699)
         shortDescr = DynAccessor(3356)
 
     fireCircle = _fireCircle()
@@ -4588,55 +4588,55 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3676)
-            perk = DynAccessor(3802)
+            boost = DynAccessor(3675)
+            perk = DynAccessor(3801)
 
         action = _action()
-        long_special = DynAccessor(3915)
-        name = DynAccessor(3878)
+        long_special = DynAccessor(3914)
+        name = DynAccessor(3877)
         short_special = DynAccessor(4026)
 
     fireFightingBattleBooster = _fireFightingBattleBooster()
 
     class _fort_aoe_artillery(DynAccessor):
         __slots__ = ()
-        longDescr = DynAccessor(3455)
-        name = DynAccessor(3524)
+        longDescr = DynAccessor(3454)
+        name = DynAccessor(3523)
         shortDescr = DynAccessor(3218)
 
     fort_aoe_artillery = _fort_aoe_artillery()
 
     class _fort_inspire(DynAccessor):
         __slots__ = ()
-        longDescr = DynAccessor(3815)
+        longDescr = DynAccessor(3814)
         name = DynAccessor(3784)
-        shortDescr = DynAccessor(3521)
+        shortDescr = DynAccessor(3520)
 
     fort_inspire = _fort_inspire()
 
     class _fuel_system_revision_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3510)
+        name = DynAccessor(3509)
 
     fuel_system_revision_1 = _fuel_system_revision_1()
 
     class _grousers(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3405)
-        name = DynAccessor(3474)
-        short_special = DynAccessor(3581)
+        long_special = DynAccessor(3404)
+        name = DynAccessor(3473)
+        short_special = DynAccessor(3580)
 
     grousers = _grousers()
 
     class _grousers_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3738)
+        name = DynAccessor(3737)
 
     grousers_tier1 = _grousers_tier1()
 
     class _grousers_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3558)
+        name = DynAccessor(3557)
 
     grousers_tier2 = _grousers_tier2()
 
@@ -4654,35 +4654,35 @@ class artefacts(DynAccessor):
 
     class _handExtinguishers(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3363)
+        always = DynAccessor(3643)
         descr = DynAccessor(3289)
         long_special = DynAccessor(4001)
         name = DynAccessor(3259)
-        onUse = DynAccessor(3671)
-        restriction = DynAccessor(3836)
+        onUse = DynAccessor(3670)
+        restriction = DynAccessor(3835)
         short_special = DynAccessor(3203)
 
     handExtinguishers = _handExtinguishers()
 
     class _healPoint(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3733)
-        descr = DynAccessor(3532)
+        battleDescr = DynAccessor(3732)
+        descr = DynAccessor(3531)
         longDescr = DynAccessor(3984)
-        name = DynAccessor(3535)
-        shortDescr = DynAccessor(3653)
+        name = DynAccessor(3534)
+        shortDescr = DynAccessor(3652)
 
     healPoint = _healPoint()
 
     class _hotCoffee(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3575)
-        descr = DynAccessor(3471)
-        long_special = DynAccessor(3737)
-        name = DynAccessor(3428)
-        onUse = DynAccessor(3932)
-        restriction = DynAccessor(3863)
-        short_special = DynAccessor(3745)
+        always = DynAccessor(3574)
+        descr = DynAccessor(3470)
+        long_special = DynAccessor(3736)
+        name = DynAccessor(3427)
+        onUse = DynAccessor(3931)
+        restriction = DynAccessor(3862)
+        short_special = DynAccessor(3744)
 
     hotCoffee = _hotCoffee()
 
@@ -4694,14 +4694,14 @@ class artefacts(DynAccessor):
 
     class _improved_suspension_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3496)
+        name = DynAccessor(3495)
 
     improved_suspension_2 = _improved_suspension_2()
 
     class _improvedConfiguration(DynAccessor):
         __slots__ = ()
-        additional_descr = DynAccessor(3531)
-        battle_descr = DynAccessor(3644)
+        additional_descr = DynAccessor(3530)
+        battleDescr = DynAccessor(3945)
 
         class _battleStatus(DynAccessor):
             __slots__ = ()
@@ -4709,7 +4709,7 @@ class artefacts(DynAccessor):
             class _ammoBay(DynAccessor):
                 __slots__ = ()
                 ready = DynAccessor(4052)
-                used = DynAccessor(3511)
+                used = DynAccessor(3510)
 
             ammoBay = _ammoBay()
 
@@ -4722,8 +4722,8 @@ class artefacts(DynAccessor):
 
             class _fuelTank(DynAccessor):
                 __slots__ = ()
-                ready = DynAccessor(3492)
-                used = DynAccessor(3409)
+                ready = DynAccessor(3491)
+                used = DynAccessor(3408)
 
             fuelTank = _fuelTank()
 
@@ -4731,12 +4731,12 @@ class artefacts(DynAccessor):
 
         class _effect(DynAccessor):
             __slots__ = ()
-            ammoBayFuelEngineRestoration = DynAccessor(3602)
+            ammoBayFuelEngineRestoration = DynAccessor(3601)
 
         effect = _effect()
-        long_special = DynAccessor(3433)
-        name = DynAccessor(3594)
-        short_special = DynAccessor(3922)
+        long_special = DynAccessor(3432)
+        name = DynAccessor(3593)
+        short_special = DynAccessor(3921)
 
     improvedConfiguration = _improvedConfiguration()
 
@@ -4754,33 +4754,33 @@ class artefacts(DynAccessor):
 
     class _improvedConfigurationBattleBooster(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3640)
+        descr = DynAccessor(3639)
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3495)
-            simple = DynAccessor(3658)
+            deluxe = DynAccessor(3494)
+            simple = DynAccessor(3657)
 
         gain = _gain()
         long_special = DynAccessor(3238)
-        name = DynAccessor(3689)
-        short_special = DynAccessor(3711)
+        name = DynAccessor(3688)
+        short_special = DynAccessor(3710)
 
     improvedConfigurationBattleBooster = _improvedConfigurationBattleBooster()
 
     class _improvedRadioCommunication(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3624)
-        name = DynAccessor(3884)
-        short_special = DynAccessor(3636)
+        long_special = DynAccessor(3623)
+        name = DynAccessor(3883)
+        short_special = DynAccessor(3635)
 
     improvedRadioCommunication = _improvedRadioCommunication()
 
     class _improvedRotationMechanism(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3642)
+        long_special = DynAccessor(3641)
         name = DynAccessor(3191)
-        short_special = DynAccessor(3666)
+        short_special = DynAccessor(3665)
 
     improvedRotationMechanism = _improvedRotationMechanism()
 
@@ -4798,21 +4798,21 @@ class artefacts(DynAccessor):
 
     class _improvedSights(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3938)
-        name = DynAccessor(3847)
-        short_special = DynAccessor(3563)
+        long_special = DynAccessor(3937)
+        name = DynAccessor(3846)
+        short_special = DynAccessor(3562)
 
     improvedSights = _improvedSights()
 
     class _improvedSights_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3577)
+        name = DynAccessor(3576)
 
     improvedSights_tier1 = _improvedSights_tier1()
 
     class _improvedSights_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3464)
+        name = DynAccessor(3463)
 
     improvedSights_tier2 = _improvedSights_tier2()
 
@@ -4828,26 +4828,26 @@ class artefacts(DynAccessor):
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3516)
+            deluxe = DynAccessor(3515)
             simple = DynAccessor(3333)
 
         gain = _gain()
         long_special = DynAccessor(3260)
         name = DynAccessor(3329)
-        short_special = DynAccessor(3945)
+        short_special = DynAccessor(3944)
 
     improvedSightsBattleBooster = _improvedSightsBattleBooster()
 
     class _improvedVentilation(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3476)
+        long_special = DynAccessor(3475)
         name = DynAccessor(3348)
 
     improvedVentilation = _improvedVentilation()
 
     class _improvedVentilation_class1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3541)
+        name = DynAccessor(3540)
 
     improvedVentilation_class1 = _improvedVentilation_class1()
 
@@ -4859,19 +4859,19 @@ class artefacts(DynAccessor):
 
     class _improvedVentilation_class3(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3900)
+        name = DynAccessor(3899)
 
     improvedVentilation_class3 = _improvedVentilation_class3()
 
     class _improvedVentilation_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3426)
+        name = DynAccessor(3425)
 
     improvedVentilation_tier1 = _improvedVentilation_tier1()
 
     class _improvedVentilation_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3860)
+        name = DynAccessor(3859)
 
     improvedVentilation_tier2 = _improvedVentilation_tier2()
 
@@ -4883,31 +4883,31 @@ class artefacts(DynAccessor):
 
     class _improvedVentilationBattleBooster(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3721)
+        descr = DynAccessor(3720)
 
         class _gain(DynAccessor):
             __slots__ = ()
             deluxe = DynAccessor(3310)
-            simple = DynAccessor(3450)
+            simple = DynAccessor(3449)
 
         gain = _gain()
-        long_special = DynAccessor(3555)
-        name = DynAccessor(3937)
-        short_special = DynAccessor(3477)
+        long_special = DynAccessor(3554)
+        name = DynAccessor(3936)
+        short_special = DynAccessor(3476)
 
     improvedVentilationBattleBooster = _improvedVentilationBattleBooster()
 
     class _inspire(DynAccessor):
         __slots__ = ()
         longDescr = DynAccessor(3188)
-        name = DynAccessor(3706)
-        shortDescr = DynAccessor(3588)
+        name = DynAccessor(3705)
+        shortDescr = DynAccessor(3587)
 
     inspire = _inspire()
 
     class _largeCaliberHowitzerRammer(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3716)
+        name = DynAccessor(3715)
 
     largeCaliberHowitzerRammer = _largeCaliberHowitzerRammer()
 
@@ -4920,9 +4920,9 @@ class artefacts(DynAccessor):
     class _largeMedkit(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3970)
-        descr = DynAccessor(3923)
-        long_special = DynAccessor(3862)
-        name = DynAccessor(3734)
+        descr = DynAccessor(3922)
+        long_special = DynAccessor(3861)
+        name = DynAccessor(3733)
         onUse = DynAccessor(3284)
 
         class _removingStun(DynAccessor):
@@ -4930,20 +4930,20 @@ class artefacts(DynAccessor):
             onUse = DynAccessor(3196)
 
         removingStun = _removingStun()
-        restriction = DynAccessor(3461)
+        restriction = DynAccessor(3460)
         short_special = DynAccessor(3321)
 
     largeMedkit = _largeMedkit()
 
     class _largeRepairkit(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3467)
-        descr = DynAccessor(3845)
+        always = DynAccessor(3466)
+        descr = DynAccessor(3844)
         long_special = DynAccessor(3266)
         name = DynAccessor(3757)
         onUse = DynAccessor(3210)
         restriction = DynAccessor(3781)
-        short_special = DynAccessor(3472)
+        short_special = DynAccessor(3471)
 
     largeRepairkit = _largeRepairkit()
 
@@ -4952,25 +4952,25 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3725)
-            perk = DynAccessor(3650)
+            boost = DynAccessor(3724)
+            perk = DynAccessor(3649)
 
         action = _action()
-        long_special = DynAccessor(3707)
+        long_special = DynAccessor(3706)
         name = DynAccessor(3362)
-        short_special = DynAccessor(3881)
+        short_special = DynAccessor(3880)
 
     lastEffortBattleBooster = _lastEffortBattleBooster()
 
     class _mediumCaliberHowitzerRammer(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3599)
+        name = DynAccessor(3598)
 
     mediumCaliberHowitzerRammer = _mediumCaliberHowitzerRammer()
 
     class _mediumCaliberTankRammer(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3919)
+        name = DynAccessor(3918)
 
     mediumCaliberTankRammer = _mediumCaliberTankRammer()
 
@@ -4978,47 +4978,47 @@ class artefacts(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3788)
         name = DynAccessor(3202)
-        short_special = DynAccessor(3805)
+        short_special = DynAccessor(3804)
 
     modernizedAimDrivesAimingStabilizer1 = _modernizedAimDrivesAimingStabilizer1()
 
     class _modernizedAimDrivesAimingStabilizer2(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3843)
+        long_special = DynAccessor(3842)
         name = DynAccessor(3759)
-        short_special = DynAccessor(3638)
+        short_special = DynAccessor(3637)
 
     modernizedAimDrivesAimingStabilizer2 = _modernizedAimDrivesAimingStabilizer2()
 
     class _modernizedAimDrivesAimingStabilizer3(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3237)
-        name = DynAccessor(3680)
+        name = DynAccessor(3679)
         short_special = DynAccessor(3327)
 
     modernizedAimDrivesAimingStabilizer3 = _modernizedAimDrivesAimingStabilizer3()
 
     class _modernizedExtraHealthReserveAntifragmentationLining1(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3586)
-        name = DynAccessor(3873)
-        short_special = DynAccessor(3832)
+        long_special = DynAccessor(3585)
+        name = DynAccessor(3872)
+        short_special = DynAccessor(3831)
 
     modernizedExtraHealthReserveAntifragmentationLining1 = _modernizedExtraHealthReserveAntifragmentationLining1()
 
     class _modernizedExtraHealthReserveAntifragmentationLining2(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3447)
-        name = DynAccessor(3534)
+        long_special = DynAccessor(3446)
+        name = DynAccessor(3533)
         short_special = DynAccessor(3255)
 
     modernizedExtraHealthReserveAntifragmentationLining2 = _modernizedExtraHealthReserveAntifragmentationLining2()
 
     class _modernizedExtraHealthReserveAntifragmentationLining3(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3446)
-        name = DynAccessor(3451)
-        short_special = DynAccessor(3608)
+        long_special = DynAccessor(3445)
+        name = DynAccessor(3450)
+        short_special = DynAccessor(3607)
 
     modernizedExtraHealthReserveAntifragmentationLining3 = _modernizedExtraHealthReserveAntifragmentationLining3()
 
@@ -5026,14 +5026,14 @@ class artefacts(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3197)
         name = DynAccessor(3999)
-        short_special = DynAccessor(3842)
+        short_special = DynAccessor(3841)
 
     modernizedTurbochargerRotationMechanism1 = _modernizedTurbochargerRotationMechanism1()
 
     class _modernizedTurbochargerRotationMechanism2(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3814)
-        name = DynAccessor(3592)
+        long_special = DynAccessor(3813)
+        name = DynAccessor(3591)
         short_special = DynAccessor(3787)
 
     modernizedTurbochargerRotationMechanism2 = _modernizedTurbochargerRotationMechanism2()
@@ -5041,18 +5041,18 @@ class artefacts(DynAccessor):
     class _modernizedTurbochargerRotationMechanism3(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3347)
-        name = DynAccessor(3431)
-        short_special = DynAccessor(3553)
+        name = DynAccessor(3430)
+        short_special = DynAccessor(3552)
 
     modernizedTurbochargerRotationMechanism3 = _modernizedTurbochargerRotationMechanism3()
 
     class _nitro(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3746)
+        battleDescr = DynAccessor(3745)
         descr = DynAccessor(3351)
-        long_special = DynAccessor(3825)
-        name = DynAccessor(3724)
-        short_special = DynAccessor(3687)
+        long_special = DynAccessor(3824)
+        name = DynAccessor(3723)
+        short_special = DynAccessor(3686)
 
     nitro = _nitro()
 
@@ -5064,10 +5064,10 @@ class artefacts(DynAccessor):
 
     class _passive_engineering(DynAccessor):
         __slots__ = ()
-        longDescr = DynAccessor(3870)
-        longFilterAlert = DynAccessor(3656)
+        longDescr = DynAccessor(3869)
+        longFilterAlert = DynAccessor(3655)
         name = DynAccessor(3374)
-        shortDescr = DynAccessor(3502)
+        shortDescr = DynAccessor(3501)
         shortFilterAlert = DynAccessor(3267)
 
     passive_engineering = _passive_engineering()
@@ -5077,27 +5077,27 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3597)
-            perk = DynAccessor(3665)
+            boost = DynAccessor(3596)
+            perk = DynAccessor(3664)
 
         action = _action()
         long_special = DynAccessor(3250)
         name = DynAccessor(3950)
-        short_special = DynAccessor(3567)
+        short_special = DynAccessor(3566)
 
     pedantBattleBooster = _pedantBattleBooster()
 
     class _poi_artillery_aoe(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3439)
-        name = DynAccessor(3684)
+        descr = DynAccessor(3438)
+        name = DynAccessor(3683)
 
     poi_artillery_aoe = _poi_artillery_aoe()
 
     class _poi_radar(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3657)
-        name = DynAccessor(3675)
+        descr = DynAccessor(3656)
+        name = DynAccessor(3674)
 
     poi_radar = _poi_radar()
 
@@ -5111,27 +5111,27 @@ class artefacts(DynAccessor):
 
         action = _action()
         long_special = DynAccessor(3342)
-        name = DynAccessor(3488)
-        short_special = DynAccessor(3667)
+        name = DynAccessor(3487)
+        short_special = DynAccessor(3666)
 
     practicalityBattleBooster = _practicalityBattleBooster()
 
     class _qualityFuel(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3578)
+        always = DynAccessor(3577)
         descr = DynAccessor(4032)
         long_special = DynAccessor(3794)
         name = DynAccessor(3236)
-        onUse = DynAccessor(3443)
-        restriction = DynAccessor(3610)
-        short_special = DynAccessor(3651)
+        onUse = DynAccessor(3442)
+        restriction = DynAccessor(3609)
+        short_special = DynAccessor(3650)
 
     qualityFuel = _qualityFuel()
 
     class _radar(DynAccessor):
         __slots__ = ()
         descr = DynAccessor(4018)
-        name = DynAccessor(3606)
+        name = DynAccessor(3605)
 
     radar = _radar()
 
@@ -5147,13 +5147,13 @@ class artefacts(DynAccessor):
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3803)
-            simple = DynAccessor(3806)
+            deluxe = DynAccessor(3802)
+            simple = DynAccessor(3805)
 
         gain = _gain()
         long_special = DynAccessor(3314)
-        name = DynAccessor(3631)
-        short_special = DynAccessor(3690)
+        name = DynAccessor(3630)
+        short_special = DynAccessor(3689)
 
     rammerBattleBooster = _rammerBattleBooster()
 
@@ -5162,11 +5162,11 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3485)
+            boost = DynAccessor(3484)
             perk = DynAccessor(3397)
 
         action = _action()
-        long_special = DynAccessor(3540)
+        long_special = DynAccessor(3539)
         name = DynAccessor(3185)
         short_special = DynAccessor(3395)
 
@@ -5175,12 +5175,12 @@ class artefacts(DynAccessor):
     class _ration(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3357)
-        descr = DynAccessor(3623)
-        long_special = DynAccessor(3813)
+        descr = DynAccessor(3622)
+        long_special = DynAccessor(3812)
         name = DynAccessor(3952)
         onUse = DynAccessor(3961)
-        restriction = DynAccessor(3505)
-        short_special = DynAccessor(3491)
+        restriction = DynAccessor(3504)
+        short_special = DynAccessor(3490)
 
     ration = _ration()
 
@@ -5188,22 +5188,22 @@ class artefacts(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3295)
         descr = DynAccessor(3790)
-        long_special = DynAccessor(3632)
-        name = DynAccessor(3811)
-        onUse = DynAccessor(3509)
-        restriction = DynAccessor(3921)
-        short_special = DynAccessor(3479)
+        long_special = DynAccessor(3631)
+        name = DynAccessor(3810)
+        onUse = DynAccessor(3508)
+        restriction = DynAccessor(3920)
+        short_special = DynAccessor(3478)
 
     ration_china = _ration_china()
 
     class _ration_czech(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3892)
-        descr = DynAccessor(3702)
-        long_special = DynAccessor(3834)
+        always = DynAccessor(3891)
+        descr = DynAccessor(3701)
+        long_special = DynAccessor(3833)
         name = DynAccessor(3193)
-        onUse = DynAccessor(3664)
-        restriction = DynAccessor(3888)
+        onUse = DynAccessor(3663)
+        restriction = DynAccessor(3887)
         short_special = DynAccessor(3257)
 
     ration_czech = _ration_czech()
@@ -5214,16 +5214,16 @@ class artefacts(DynAccessor):
         descr = DynAccessor(3380)
         long_special = DynAccessor(3243)
         name = DynAccessor(4056)
-        onUse = DynAccessor(3619)
-        restriction = DynAccessor(3522)
-        short_special = DynAccessor(3920)
+        onUse = DynAccessor(3618)
+        restriction = DynAccessor(3521)
+        short_special = DynAccessor(3919)
 
     ration_italy = _ration_italy()
 
     class _ration_japan(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3337)
-        descr = DynAccessor(3633)
+        descr = DynAccessor(3632)
         long_special = DynAccessor(3383)
         name = DynAccessor(4010)
         onUse = DynAccessor(3323)
@@ -5235,12 +5235,12 @@ class artefacts(DynAccessor):
     class _ration_poland(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3192)
-        descr = DynAccessor(3530)
-        long_special = DynAccessor(3617)
-        name = DynAccessor(3695)
-        onUse = DynAccessor(3942)
-        restriction = DynAccessor(3649)
-        short_special = DynAccessor(3883)
+        descr = DynAccessor(3529)
+        long_special = DynAccessor(3616)
+        name = DynAccessor(3694)
+        onUse = DynAccessor(3941)
+        restriction = DynAccessor(3648)
+        short_special = DynAccessor(3882)
 
     ration_poland = _ration_poland()
 
@@ -5249,7 +5249,7 @@ class artefacts(DynAccessor):
         always = DynAccessor(3270)
         descr = DynAccessor(3206)
         long_special = DynAccessor(3991)
-        name = DynAccessor(3850)
+        name = DynAccessor(3849)
         onUse = DynAccessor(3222)
         restriction = DynAccessor(3748)
         short_special = DynAccessor(4038)
@@ -5258,10 +5258,10 @@ class artefacts(DynAccessor):
 
     class _ration_uk(DynAccessor):
         __slots__ = ()
-        always = DynAccessor(3576)
-        descr = DynAccessor(3480)
+        always = DynAccessor(3575)
+        descr = DynAccessor(3479)
         long_special = DynAccessor(3200)
-        name = DynAccessor(3613)
+        name = DynAccessor(3612)
         onUse = DynAccessor(3969)
         restriction = DynAccessor(3371)
         short_special = DynAccessor(3231)
@@ -5282,7 +5282,7 @@ class artefacts(DynAccessor):
         descr = DynAccessor(3292)
         long_special = DynAccessor(3334)
         name = DynAccessor(3394)
-        onUse = DynAccessor(3568)
+        onUse = DynAccessor(3567)
         restriction = DynAccessor(3772)
         short_special = DynAccessor(3977)
 
@@ -5290,11 +5290,11 @@ class artefacts(DynAccessor):
 
     class _repairpoint(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3669)
-        descr = DynAccessor(3552)
+        battleDescr = DynAccessor(3668)
+        descr = DynAccessor(3551)
         long_special = DynAccessor(3189)
         name = DynAccessor(3764)
-        short_special = DynAccessor(3487)
+        short_special = DynAccessor(3486)
 
     repairpoint = _repairpoint()
 
@@ -5314,13 +5314,13 @@ class artefacts(DynAccessor):
     class _role_ATSPG_assault_pair_4_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3753)
-        splitName = DynAccessor(3739)
+        splitName = DynAccessor(3738)
 
     role_ATSPG_assault_pair_4_2 = _role_ATSPG_assault_pair_4_2()
 
     class _role_ATSPG_assault_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3723)
+        name = DynAccessor(3722)
         splitName = DynAccessor(3959)
 
     role_ATSPG_assault_pair_5_1 = _role_ATSPG_assault_pair_5_1()
@@ -5335,97 +5335,97 @@ class artefacts(DynAccessor):
     class _role_ATSPG_pair_1_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3251)
-        splitName = DynAccessor(3691)
+        splitName = DynAccessor(3553)
 
     role_ATSPG_pair_1_1 = _role_ATSPG_pair_1_1()
 
     class _role_ATSPG_pair_1_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3682)
+        name = DynAccessor(3681)
         splitName = DynAccessor(3281)
 
     role_ATSPG_pair_1_2 = _role_ATSPG_pair_1_2()
 
     class _role_ATSPG_pair_2_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3616)
-        splitName = DynAccessor(3637)
+        name = DynAccessor(3615)
+        splitName = DynAccessor(3636)
 
     role_ATSPG_pair_2_1 = _role_ATSPG_pair_2_1()
 
     class _role_ATSPG_pair_2_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3798)
-        splitName = DynAccessor(3410)
+        splitName = DynAccessor(3409)
 
     role_ATSPG_pair_2_2 = _role_ATSPG_pair_2_2()
 
     class _role_ATSPG_pair_3_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3607)
-        splitName = DynAccessor(3526)
+        name = DynAccessor(3606)
+        splitName = DynAccessor(3525)
 
     role_ATSPG_pair_3_1 = _role_ATSPG_pair_3_1()
 
     class _role_ATSPG_pair_3_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3271)
-        splitName = DynAccessor(3621)
+        splitName = DynAccessor(3620)
 
     role_ATSPG_pair_3_2 = _role_ATSPG_pair_3_2()
 
     class _role_ATSPG_sniper_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3941)
+        name = DynAccessor(3940)
         splitName = DynAccessor(4042)
 
     role_ATSPG_sniper_pair_4_1 = _role_ATSPG_sniper_pair_4_1()
 
     class _role_ATSPG_sniper_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3672)
-        splitName = DynAccessor(3500)
+        name = DynAccessor(3671)
+        splitName = DynAccessor(3499)
 
     role_ATSPG_sniper_pair_4_2 = _role_ATSPG_sniper_pair_4_2()
 
     class _role_ATSPG_sniper_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3743)
-        splitName = DynAccessor(3614)
+        name = DynAccessor(3742)
+        splitName = DynAccessor(3613)
 
     role_ATSPG_sniper_pair_5_1 = _role_ATSPG_sniper_pair_5_1()
 
     class _role_ATSPG_sniper_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3683)
-        splitName = DynAccessor(3345)
+        name = DynAccessor(3682)
+        splitName = DynAccessor(3690)
 
     role_ATSPG_sniper_pair_5_2 = _role_ATSPG_sniper_pair_5_2()
 
     class _role_ATSPG_support_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3844)
+        name = DynAccessor(3843)
         splitName = DynAccessor(3779)
 
     role_ATSPG_support_pair_4_1 = _role_ATSPG_support_pair_4_1()
 
     class _role_ATSPG_support_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3840)
-        splitName = DynAccessor(3438)
+        name = DynAccessor(3839)
+        splitName = DynAccessor(3437)
 
     role_ATSPG_support_pair_4_2 = _role_ATSPG_support_pair_4_2()
 
     class _role_ATSPG_support_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3901)
-        splitName = DynAccessor(3660)
+        name = DynAccessor(3900)
+        splitName = DynAccessor(3659)
 
     role_ATSPG_support_pair_5_1 = _role_ATSPG_support_pair_5_1()
 
     class _role_ATSPG_support_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3515)
+        name = DynAccessor(3514)
         splitName = DynAccessor(3224)
 
     role_ATSPG_support_pair_5_2 = _role_ATSPG_support_pair_5_2()
@@ -5433,20 +5433,20 @@ class artefacts(DynAccessor):
     class _role_ATSPG_universal_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(4036)
-        splitName = DynAccessor(3744)
+        splitName = DynAccessor(3743)
 
     role_ATSPG_universal_pair_4_1 = _role_ATSPG_universal_pair_4_1()
 
     class _role_ATSPG_universal_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3543)
+        name = DynAccessor(3542)
         splitName = DynAccessor(3989)
 
     role_ATSPG_universal_pair_4_2 = _role_ATSPG_universal_pair_4_2()
 
     class _role_ATSPG_universal_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3819)
+        name = DynAccessor(3818)
         splitName = DynAccessor(3244)
 
     role_ATSPG_universal_pair_5_1 = _role_ATSPG_universal_pair_5_1()
@@ -5467,21 +5467,21 @@ class artefacts(DynAccessor):
 
     class _role_heavyTank_pair_1_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3612)
+        name = DynAccessor(3611)
         splitName = DynAccessor(3747)
 
     role_heavyTank_pair_1_2 = _role_heavyTank_pair_1_2()
 
     class _role_heavyTank_pair_2_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3591)
-        splitName = DynAccessor(3415)
+        name = DynAccessor(3590)
+        splitName = DynAccessor(3414)
 
     role_heavyTank_pair_2_1 = _role_heavyTank_pair_2_1()
 
     class _role_heavyTank_pair_2_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3694)
+        name = DynAccessor(3693)
         splitName = DynAccessor(3261)
 
     role_heavyTank_pair_2_2 = _role_heavyTank_pair_2_2()
@@ -5496,14 +5496,14 @@ class artefacts(DynAccessor):
     class _role_heavyTank_pair_3_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3963)
-        splitName = DynAccessor(3421)
+        splitName = DynAccessor(3420)
 
     role_heavyTank_pair_3_2 = _role_heavyTank_pair_3_2()
 
     class _role_HT_assault_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3670)
-        splitName = DynAccessor(3871)
+        name = DynAccessor(3669)
+        splitName = DynAccessor(3870)
 
     role_HT_assault_pair_4_1 = _role_HT_assault_pair_4_1()
 
@@ -5516,8 +5516,8 @@ class artefacts(DynAccessor):
 
     class _role_HT_assault_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3418)
-        splitName = DynAccessor(3933)
+        name = DynAccessor(3417)
+        splitName = DynAccessor(3932)
 
     role_HT_assault_pair_5_1 = _role_HT_assault_pair_5_1()
 
@@ -5545,13 +5545,13 @@ class artefacts(DynAccessor):
     class _role_HT_break_pair_5_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(4048)
-        splitName = DynAccessor(3626)
+        splitName = DynAccessor(3625)
 
     role_HT_break_pair_5_1 = _role_HT_break_pair_5_1()
 
     class _role_HT_break_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3473)
+        name = DynAccessor(3472)
         splitName = DynAccessor(3297)
 
     role_HT_break_pair_5_2 = _role_HT_break_pair_5_2()
@@ -5559,14 +5559,14 @@ class artefacts(DynAccessor):
     class _role_HT_support_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3791)
-        splitName = DynAccessor(3648)
+        splitName = DynAccessor(3647)
 
     role_HT_support_pair_4_1 = _role_HT_support_pair_4_1()
 
     class _role_HT_support_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3886)
-        splitName = DynAccessor(3872)
+        name = DynAccessor(3885)
+        splitName = DynAccessor(3871)
 
     role_HT_support_pair_4_2 = _role_HT_support_pair_4_2()
 
@@ -5579,15 +5579,15 @@ class artefacts(DynAccessor):
 
     class _role_HT_support_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3903)
+        name = DynAccessor(3902)
         splitName = DynAccessor(3265)
 
     role_HT_support_pair_5_2 = _role_HT_support_pair_5_2()
 
     class _role_HT_universal_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3659)
-        splitName = DynAccessor(3918)
+        name = DynAccessor(3658)
+        splitName = DynAccessor(3917)
 
     role_HT_universal_pair_4_1 = _role_HT_universal_pair_4_1()
 
@@ -5600,22 +5600,22 @@ class artefacts(DynAccessor):
 
     class _role_HT_universal_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3661)
+        name = DynAccessor(3660)
         splitName = DynAccessor(3965)
 
     role_HT_universal_pair_5_1 = _role_HT_universal_pair_5_1()
 
     class _role_HT_universal_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3498)
-        splitName = DynAccessor(3699)
+        name = DynAccessor(3497)
+        splitName = DynAccessor(3698)
 
     role_HT_universal_pair_5_2 = _role_HT_universal_pair_5_2()
 
     class _role_lightTank_pair_1_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3926)
-        splitName = DynAccessor(3513)
+        name = DynAccessor(3925)
+        splitName = DynAccessor(3512)
 
     role_lightTank_pair_1_1 = _role_lightTank_pair_1_1()
 
@@ -5628,7 +5628,7 @@ class artefacts(DynAccessor):
 
     class _role_lightTank_pair_2_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3512)
+        name = DynAccessor(3511)
         splitName = DynAccessor(3985)
 
     role_lightTank_pair_2_1 = _role_lightTank_pair_2_1()
@@ -5643,21 +5643,21 @@ class artefacts(DynAccessor):
     class _role_lightTank_pair_3_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3768)
-        splitName = DynAccessor(3605)
+        splitName = DynAccessor(3604)
 
     role_lightTank_pair_3_1 = _role_lightTank_pair_3_1()
 
     class _role_lightTank_pair_3_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3820)
+        name = DynAccessor(3819)
         splitName = DynAccessor(4000)
 
     role_lightTank_pair_3_2 = _role_lightTank_pair_3_2()
 
     class _role_LT_universal_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3908)
-        splitName = DynAccessor(3848)
+        name = DynAccessor(3907)
+        splitName = DynAccessor(3847)
 
     role_LT_universal_pair_4_1 = _role_LT_universal_pair_4_1()
 
@@ -5671,27 +5671,27 @@ class artefacts(DynAccessor):
     class _role_LT_universal_pair_5_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3201)
-        splitName = DynAccessor(3841)
+        splitName = DynAccessor(3840)
 
     role_LT_universal_pair_5_1 = _role_LT_universal_pair_5_1()
 
     class _role_LT_universal_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3539)
-        splitName = DynAccessor(3437)
+        name = DynAccessor(3538)
+        splitName = DynAccessor(3436)
 
     role_LT_universal_pair_5_2 = _role_LT_universal_pair_5_2()
 
     class _role_LT_wheeled_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(4046)
-        splitName = DynAccessor(3481)
+        splitName = DynAccessor(3480)
 
     role_LT_wheeled_pair_4_1 = _role_LT_wheeled_pair_4_1()
 
     class _role_LT_wheeled_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3679)
+        name = DynAccessor(3678)
         splitName = DynAccessor(4053)
 
     role_LT_wheeled_pair_4_2 = _role_LT_wheeled_pair_4_2()
@@ -5699,14 +5699,14 @@ class artefacts(DynAccessor):
     class _role_LT_wheeled_pair_5_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3219)
-        splitName = DynAccessor(3663)
+        splitName = DynAccessor(3662)
 
     role_LT_wheeled_pair_5_1 = _role_LT_wheeled_pair_5_1()
 
     class _role_LT_wheeled_pair_5_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(4014)
-        splitName = DynAccessor(3681)
+        splitName = DynAccessor(3680)
 
     role_LT_wheeled_pair_5_2 = _role_LT_wheeled_pair_5_2()
 
@@ -5719,15 +5719,15 @@ class artefacts(DynAccessor):
 
     class _role_mediumTank_pair_1_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3507)
-        splitName = DynAccessor(3490)
+        name = DynAccessor(3506)
+        splitName = DynAccessor(3489)
 
     role_mediumTank_pair_1_2 = _role_mediumTank_pair_1_2()
 
     class _role_mediumTank_pair_2_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3436)
-        splitName = DynAccessor(3565)
+        name = DynAccessor(3435)
+        splitName = DynAccessor(3564)
 
     role_mediumTank_pair_2_1 = _role_mediumTank_pair_2_1()
 
@@ -5740,8 +5740,8 @@ class artefacts(DynAccessor):
 
     class _role_mediumTank_pair_3_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3639)
-        splitName = DynAccessor(3701)
+        name = DynAccessor(3638)
+        splitName = DynAccessor(3700)
 
     role_mediumTank_pair_3_1 = _role_mediumTank_pair_3_1()
 
@@ -5754,22 +5754,22 @@ class artefacts(DynAccessor):
 
     class _role_MT_assault_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3717)
-        splitName = DynAccessor(3655)
+        name = DynAccessor(3716)
+        splitName = DynAccessor(3654)
 
     role_MT_assault_pair_4_1 = _role_MT_assault_pair_4_1()
 
     class _role_MT_assault_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3611)
-        splitName = DynAccessor(3925)
+        name = DynAccessor(3610)
+        splitName = DynAccessor(3924)
 
     role_MT_assault_pair_4_2 = _role_MT_assault_pair_4_2()
 
     class _role_MT_assault_pair_5_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3279)
-        splitName = DynAccessor(3893)
+        splitName = DynAccessor(3892)
 
     role_MT_assault_pair_5_1 = _role_MT_assault_pair_5_1()
 
@@ -5783,21 +5783,21 @@ class artefacts(DynAccessor):
     class _role_MT_sniper_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3987)
-        splitName = DynAccessor(3877)
+        splitName = DynAccessor(3876)
 
     role_MT_sniper_pair_4_1 = _role_MT_sniper_pair_4_1()
 
     class _role_MT_sniper_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3404)
-        splitName = DynAccessor(3584)
+        name = DynAccessor(3403)
+        splitName = DynAccessor(3583)
 
     role_MT_sniper_pair_4_2 = _role_MT_sniper_pair_4_2()
 
     class _role_MT_sniper_pair_5_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3949)
-        splitName = DynAccessor(3551)
+        splitName = DynAccessor(3550)
 
     role_MT_sniper_pair_5_1 = _role_MT_sniper_pair_5_1()
 
@@ -5811,55 +5811,55 @@ class artefacts(DynAccessor):
     class _role_MT_support_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3274)
-        splitName = DynAccessor(3630)
+        splitName = DynAccessor(3629)
 
     role_MT_support_pair_4_1 = _role_MT_support_pair_4_1()
 
     class _role_MT_support_pair_4_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3293)
-        splitName = DynAccessor(3601)
+        splitName = DynAccessor(3600)
 
     role_MT_support_pair_4_2 = _role_MT_support_pair_4_2()
 
     class _role_MT_support_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3849)
+        name = DynAccessor(3848)
         splitName = DynAccessor(4027)
 
     role_MT_support_pair_5_1 = _role_MT_support_pair_5_1()
 
     class _role_MT_support_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3544)
-        splitName = DynAccessor(3835)
+        name = DynAccessor(3543)
+        splitName = DynAccessor(3834)
 
     role_MT_support_pair_5_2 = _role_MT_support_pair_5_2()
 
     class _role_MT_universal_pair_4_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(4019)
-        splitName = DynAccessor(3808)
+        splitName = DynAccessor(3807)
 
     role_MT_universal_pair_4_1 = _role_MT_universal_pair_4_1()
 
     class _role_MT_universal_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3837)
+        name = DynAccessor(3836)
         splitName = DynAccessor(3376)
 
     role_MT_universal_pair_4_2 = _role_MT_universal_pair_4_2()
 
     class _role_MT_universal_pair_5_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3457)
+        name = DynAccessor(3456)
         splitName = DynAccessor(3326)
 
     role_MT_universal_pair_5_1 = _role_MT_universal_pair_5_1()
 
     class _role_MT_universal_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3562)
+        name = DynAccessor(3561)
         splitName = DynAccessor(3391)
 
     role_MT_universal_pair_5_2 = _role_MT_universal_pair_5_2()
@@ -5867,20 +5867,20 @@ class artefacts(DynAccessor):
     class _role_SPG_pair_1_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3221)
-        splitName = DynAccessor(3686)
+        splitName = DynAccessor(3685)
 
     role_SPG_pair_1_1 = _role_SPG_pair_1_1()
 
     class _role_SPG_pair_1_2(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3993)
-        splitName = DynAccessor(3573)
+        splitName = DynAccessor(3572)
 
     role_SPG_pair_1_2 = _role_SPG_pair_1_2()
 
     class _role_SPG_pair_2_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3465)
+        name = DynAccessor(3464)
         splitName = DynAccessor(3324)
 
     role_SPG_pair_2_1 = _role_SPG_pair_2_1()
@@ -5895,7 +5895,7 @@ class artefacts(DynAccessor):
     class _role_SPG_pair_3_1(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3286)
-        splitName = DynAccessor(3589)
+        splitName = DynAccessor(3588)
 
     role_SPG_pair_3_1 = _role_SPG_pair_3_1()
 
@@ -5908,14 +5908,14 @@ class artefacts(DynAccessor):
 
     class _role_SPG_pair_4_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3423)
+        name = DynAccessor(3422)
         splitName = DynAccessor(3368)
 
     role_SPG_pair_4_1 = _role_SPG_pair_4_1()
 
     class _role_SPG_pair_4_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3546)
+        name = DynAccessor(3545)
         splitName = DynAccessor(3278)
 
     role_SPG_pair_4_2 = _role_SPG_pair_4_2()
@@ -5929,8 +5929,8 @@ class artefacts(DynAccessor):
 
     class _role_SPG_pair_5_2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3697)
-        splitName = DynAccessor(3414)
+        name = DynAccessor(3696)
+        splitName = DynAccessor(3413)
 
     role_SPG_pair_5_2 = _role_SPG_pair_5_2()
 
@@ -5942,26 +5942,26 @@ class artefacts(DynAccessor):
 
     class _selfBuff(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3931)
+        battleDescr = DynAccessor(3930)
         descr = DynAccessor(3770)
-        longDescr = DynAccessor(3944)
+        longDescr = DynAccessor(3943)
         name = DynAccessor(3349)
-        shortDescr = DynAccessor(3726)
+        shortDescr = DynAccessor(3725)
 
     selfBuff = _selfBuff()
 
     class _shells_consumables_switch(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3890)
+        name = DynAccessor(3889)
 
     shells_consumables_switch = _shells_consumables_switch()
 
     class _shotPassion(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3508)
+        battleDescr = DynAccessor(3507)
         descr = DynAccessor(4047)
-        longDescr = DynAccessor(3838)
-        name = DynAccessor(3520)
+        longDescr = DynAccessor(3837)
+        name = DynAccessor(3519)
         shortDescr = DynAccessor(3194)
 
     shotPassion = _shotPassion()
@@ -5981,46 +5981,46 @@ class artefacts(DynAccessor):
 
         description = _description()
         long_special = DynAccessor(3318)
-        name = DynAccessor(3408)
-        short_special = DynAccessor(3851)
+        name = DynAccessor(3407)
+        short_special = DynAccessor(3850)
 
     sixthSenseBattleBooster = _sixthSenseBattleBooster()
 
     class _smallMedkit(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3209)
-        descr = DynAccessor(3928)
-        long_special = DynAccessor(3934)
+        descr = DynAccessor(3927)
+        long_special = DynAccessor(3933)
         name = DynAccessor(3204)
-        onUse = DynAccessor(3927)
+        onUse = DynAccessor(3926)
 
         class _removingStun(DynAccessor):
             __slots__ = ()
             onUse = DynAccessor(3273)
 
         removingStun = _removingStun()
-        restriction = DynAccessor(3489)
-        short_special = DynAccessor(3822)
+        restriction = DynAccessor(3488)
+        short_special = DynAccessor(3821)
 
     smallMedkit = _smallMedkit()
 
     class _smallRepairkit(DynAccessor):
         __slots__ = ()
         always = DynAccessor(3256)
-        descr = DynAccessor(3571)
-        long_special = DynAccessor(3910)
-        name = DynAccessor(3715)
-        onUse = DynAccessor(3424)
-        restriction = DynAccessor(3517)
-        short_special = DynAccessor(3417)
+        descr = DynAccessor(3570)
+        long_special = DynAccessor(3909)
+        name = DynAccessor(3714)
+        onUse = DynAccessor(3423)
+        restriction = DynAccessor(3516)
+        short_special = DynAccessor(3416)
 
     smallRepairkit = _smallRepairkit()
 
     class _smoke(DynAccessor):
         __slots__ = ()
         longDescr = DynAccessor(3355)
-        name = DynAccessor(3523)
-        shortDescr = DynAccessor(3641)
+        name = DynAccessor(3522)
+        shortDescr = DynAccessor(3640)
 
     smoke = _smoke()
 
@@ -6030,7 +6030,7 @@ class artefacts(DynAccessor):
         class _action(DynAccessor):
             __slots__ = ()
             boost = DynAccessor(3308)
-            perk = DynAccessor(3905)
+            perk = DynAccessor(3904)
 
         action = _action()
         long_special = DynAccessor(3215)
@@ -6044,11 +6044,11 @@ class artefacts(DynAccessor):
 
         class _action(DynAccessor):
             __slots__ = ()
-            boost = DynAccessor(3478)
+            boost = DynAccessor(3477)
             perk = DynAccessor(3370)
 
         action = _action()
-        long_special = DynAccessor(3719)
+        long_special = DynAccessor(3718)
         name = DynAccessor(3306)
         short_special = DynAccessor(3364)
 
@@ -6056,7 +6056,7 @@ class artefacts(DynAccessor):
 
     class _spawn_kamikaze(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3887)
+        battleDescr = DynAccessor(3886)
         descr = DynAccessor(4007)
         longDescr = DynAccessor(3986)
         name = DynAccessor(3751)
@@ -6066,24 +6066,24 @@ class artefacts(DynAccessor):
 
     class _stealthRadar(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3654)
-        long_descr = DynAccessor(3821)
-        name = DynAccessor(3698)
-        short_descr = DynAccessor(3453)
+        descr = DynAccessor(3653)
+        long_descr = DynAccessor(3820)
+        name = DynAccessor(3697)
+        short_descr = DynAccessor(3452)
 
     stealthRadar = _stealthRadar()
 
     class _stereoscope(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3736)
-        long_special = DynAccessor(3538)
-        name = DynAccessor(3812)
+        battleDescr = DynAccessor(3735)
+        long_special = DynAccessor(3537)
+        name = DynAccessor(3811)
 
     stereoscope = _stereoscope()
 
     class _stereoscope_tier1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3432)
+        name = DynAccessor(3431)
 
     stereoscope_tier1 = _stereoscope_tier1()
 
@@ -6101,7 +6101,7 @@ class artefacts(DynAccessor):
 
     class _suspension_elements_replace_1(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3506)
+        name = DynAccessor(3505)
 
     suspension_elements_replace_1 = _suspension_elements_replace_1()
 
@@ -6131,7 +6131,7 @@ class artefacts(DynAccessor):
 
     class _tankRammer_tier2(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3729)
+        name = DynAccessor(3728)
 
     tankRammer_tier2 = _tankRammer_tier2()
 
@@ -6140,33 +6140,33 @@ class artefacts(DynAccessor):
         battleDescr = DynAccessor(4033)
         descr = DynAccessor(3956)
         longDescr = DynAccessor(3223)
-        name = DynAccessor(3583)
-        shortDescr = DynAccessor(3718)
+        name = DynAccessor(3582)
+        shortDescr = DynAccessor(3717)
 
     thunderStrike = _thunderStrike()
 
     class _trappoint(DynAccessor):
         __slots__ = ()
-        battleDescr = DynAccessor(3710)
+        battleDescr = DynAccessor(3709)
         descr = DynAccessor(3181)
-        long_special = DynAccessor(3574)
+        long_special = DynAccessor(3573)
         name = DynAccessor(4025)
-        short_special = DynAccessor(3519)
+        short_special = DynAccessor(3518)
 
     trappoint = _trappoint()
 
     class _trophyBasicAdditionalInvisibilityDevice(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3361)
-        name = DynAccessor(3434)
-        short_special = DynAccessor(3924)
+        name = DynAccessor(3433)
+        short_special = DynAccessor(3923)
 
     trophyBasicAdditionalInvisibilityDevice = _trophyBasicAdditionalInvisibilityDevice()
 
     class _trophyBasicAimDrives(DynAccessor):
         __slots__ = ()
         name = DynAccessor(3947)
-        short_special = DynAccessor(3463)
+        short_special = DynAccessor(3462)
 
     trophyBasicAimDrives = _trophyBasicAimDrives()
 
@@ -6179,7 +6179,7 @@ class artefacts(DynAccessor):
 
     class _trophyBasicCoatedOptics(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3741)
+        name = DynAccessor(3740)
         short_special = DynAccessor(3795)
 
     trophyBasicCoatedOptics = _trophyBasicCoatedOptics()
@@ -6190,18 +6190,18 @@ class artefacts(DynAccessor):
 
         class _effect(DynAccessor):
             __slots__ = ()
-            chassisRestoration = DynAccessor(3412)
+            chassisRestoration = DynAccessor(3411)
 
         effect = _effect()
-        long_special = DynAccessor(3635)
-        name = DynAccessor(3677)
-        short_special = DynAccessor(3864)
+        long_special = DynAccessor(3634)
+        name = DynAccessor(3676)
+        short_special = DynAccessor(3863)
 
     trophyBasicExtraHealthReserve = _trophyBasicExtraHealthReserve()
 
     class _trophyBasicImprovedConfiguration(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3866)
+        name = DynAccessor(3865)
 
     trophyBasicImprovedConfiguration = _trophyBasicImprovedConfiguration()
 
@@ -6213,30 +6213,30 @@ class artefacts(DynAccessor):
 
     class _trophyBasicImprovedSights(DynAccessor):
         __slots__ = ()
-        long_special = DynAccessor(3712)
-        name = DynAccessor(3810)
-        short_special = DynAccessor(3483)
+        long_special = DynAccessor(3711)
+        name = DynAccessor(3809)
+        short_special = DynAccessor(3482)
 
     trophyBasicImprovedSights = _trophyBasicImprovedSights()
 
     class _trophyBasicImprovedVentilation(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3579)
-        short_special = DynAccessor(3801)
+        name = DynAccessor(3578)
+        short_special = DynAccessor(3800)
 
     trophyBasicImprovedVentilation = _trophyBasicImprovedVentilation()
 
     class _trophyBasicTankRammer(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3876)
-        short_special = DynAccessor(3548)
+        name = DynAccessor(3875)
+        short_special = DynAccessor(3547)
 
     trophyBasicTankRammer = _trophyBasicTankRammer()
 
     class _trophyBasicTurbocharger(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(3212)
-        name = DynAccessor(3625)
+        name = DynAccessor(3624)
         short_special = DynAccessor(3252)
 
     trophyBasicTurbocharger = _trophyBasicTurbocharger()
@@ -6244,7 +6244,7 @@ class artefacts(DynAccessor):
     class _trophyOptics(DynAccessor):
         __slots__ = ()
         descr = DynAccessor(3226)
-        name = DynAccessor(3720)
+        name = DynAccessor(3719)
 
     trophyOptics = _trophyOptics()
 
@@ -6274,44 +6274,44 @@ class artefacts(DynAccessor):
 
     class _trophyUpgradedExtraHealthReserve(DynAccessor):
         __slots__ = ()
-        additional_descr = DynAccessor(3880)
+        additional_descr = DynAccessor(3879)
 
         class _effect(DynAccessor):
             __slots__ = ()
-            chassisRestoration = DynAccessor(3615)
+            chassisRestoration = DynAccessor(3614)
 
         effect = _effect()
-        name = DynAccessor(3652)
+        name = DynAccessor(3651)
 
     trophyUpgradedExtraHealthReserve = _trophyUpgradedExtraHealthReserve()
 
     class _trophyUpgradedImprovedConfiguration(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3528)
+        name = DynAccessor(3527)
 
     trophyUpgradedImprovedConfiguration = _trophyUpgradedImprovedConfiguration()
 
     class _trophyUpgradedImprovedRotationMechanism(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3703)
+        name = DynAccessor(3702)
 
     trophyUpgradedImprovedRotationMechanism = _trophyUpgradedImprovedRotationMechanism()
 
     class _trophyUpgradedImprovedSights(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3435)
+        name = DynAccessor(3434)
 
     trophyUpgradedImprovedSights = _trophyUpgradedImprovedSights()
 
     class _trophyUpgradedImprovedVentilation(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3629)
+        name = DynAccessor(3628)
 
     trophyUpgradedImprovedVentilation = _trophyUpgradedImprovedVentilation()
 
     class _trophyUpgradedTankRammer(DynAccessor):
         __slots__ = ()
-        name = DynAccessor(3407)
+        name = DynAccessor(3406)
 
     trophyUpgradedTankRammer = _trophyUpgradedTankRammer()
 
@@ -6324,8 +6324,8 @@ class artefacts(DynAccessor):
     class _turbocharger(DynAccessor):
         __slots__ = ()
         long_special = DynAccessor(4005)
-        name = DynAccessor(3413)
-        short_special = DynAccessor(3897)
+        name = DynAccessor(3412)
+        short_special = DynAccessor(3896)
 
     turbocharger = _turbocharger()
 
@@ -6349,17 +6349,17 @@ class artefacts(DynAccessor):
 
     class _turbochargerBattleBooster(DynAccessor):
         __slots__ = ()
-        descr = DynAccessor(3823)
+        descr = DynAccessor(3822)
 
         class _gain(DynAccessor):
             __slots__ = ()
-            deluxe = DynAccessor(3896)
+            deluxe = DynAccessor(3895)
             simple = DynAccessor(3946)
 
         gain = _gain()
-        long_special = DynAccessor(3559)
-        name = DynAccessor(3662)
-        short_special = DynAccessor(3895)
+        long_special = DynAccessor(3558)
+        name = DynAccessor(3661)
+        short_special = DynAccessor(3894)
 
     turbochargerBattleBooster = _turbochargerBattleBooster()
 
@@ -6369,10 +6369,10 @@ class artefacts(DynAccessor):
         class _action(DynAccessor):
             __slots__ = ()
             boost = DynAccessor(3316)
-            perk = DynAccessor(3939)
+            perk = DynAccessor(3938)
 
         action = _action()
-        long_special = DynAccessor(3643)
+        long_special = DynAccessor(3642)
         name = DynAccessor(4004)
         short_special = DynAccessor(4011)
 
@@ -34786,33 +34786,33 @@ class invites(DynAccessor):
 class italy_vehicles(DynAccessor):
     __slots__ = ()
     _102mm_c_g_102_HE = DynAccessor(18307)
-    _102mm_c_p_102_AP_Rh = DynAccessor(18042)
+    _102mm_c_p_102_AP_Rh = DynAccessor(18041)
     _102mm_c_p_102_APDS_Rh = DynAccessor(18162)
-    _102mm_Cannone_da_102_40 = DynAccessor(17950)
+    _102mm_Cannone_da_102_40 = DynAccessor(17949)
     _105mm_AP_T_M131 = DynAccessor(18133)
     _105mm_AP_T_M181 = DynAccessor(18194)
     _105mm_APDS305 = DynAccessor(18164)
     _105mm_APP305 = DynAccessor(17916)
-    _105mm_c_g_105_51_HEAT_M456 = DynAccessor(17952)
-    _105mm_c_g_105_51_HESH_M353 = DynAccessor(18108)
-    _105mm_c_g_105_55_HEAT_M456 = DynAccessor(17976)
+    _105mm_c_g_105_51_HEAT_M456 = DynAccessor(17951)
+    _105mm_c_g_105_51_HESH_M353 = DynAccessor(18106)
+    _105mm_c_g_105_55_HEAT_M456 = DynAccessor(17975)
     _105mm_c_g_105_55_HESH_M353 = DynAccessor(18143)
-    _105mm_c_g_105_57_HEAT_M456 = DynAccessor(18001)
+    _105mm_c_g_105_57_HEAT_M456 = DynAccessor(18000)
     _105mm_c_g_105_57_HESH_M353 = DynAccessor(18166)
-    _105mm_c_g_105_c_c_HEAT_Effetto_Pronto = DynAccessor(18006)
-    _105mm_c_g_105_c_c_HEAT_Rh_V1 = DynAccessor(18117)
-    _105mm_c_g_105_HE_Rh = DynAccessor(18246)
+    _105mm_c_g_105_c_c_HEAT_Effetto_Pronto = DynAccessor(18005)
+    _105mm_c_g_105_c_c_HEAT_Rh_V1 = DynAccessor(18116)
+    _105mm_c_g_105_HE_Rh = DynAccessor(18245)
     _105mm_c_g_105_HESH_Rh_V1 = DynAccessor(18310)
-    _105mm_c_p_105_51_APDS_M352 = DynAccessor(17974)
-    _105mm_c_p_105_55_AP_M352 = DynAccessor(17951)
+    _105mm_c_p_105_51_APDS_M352 = DynAccessor(17973)
+    _105mm_c_p_105_55_AP_M352 = DynAccessor(17950)
     _105mm_c_p_105_57_APDS_M352 = DynAccessor(18201)
-    _105mm_c_p_105_58_AP = DynAccessor(17977)
+    _105mm_c_p_105_58_AP = DynAccessor(17976)
     _105mm_c_p_105_58_APCR = DynAccessor(18225)
     _105mm_c_p_105_APDS_Rh_V1 = DynAccessor(18281)
-    _105mm_Cannone_da_105_25 = DynAccessor(17965)
-    _105mm_Cannone_Da_105_53 = DynAccessor(17989)
-    _105mm_Cannone_Da_105_56 = DynAccessor(17988)
-    _105mm_Cannone_Da_105_57 = DynAccessor(17987)
+    _105mm_Cannone_da_105_25 = DynAccessor(17964)
+    _105mm_Cannone_Da_105_53 = DynAccessor(17988)
+    _105mm_Cannone_Da_105_56 = DynAccessor(17987)
+    _105mm_Cannone_Da_105_57 = DynAccessor(17986)
     _105mm_Cannone_da_105_58 = DynAccessor(17917)
     _105mm_Cannone_Da_105_71 = DynAccessor(18209)
     _105mm_Cannone_Da_105_73 = DynAccessor(18210)
@@ -34821,239 +34821,239 @@ class italy_vehicles(DynAccessor):
     _105mm_HE_M393 = DynAccessor(18140)
     _105mm_HVAPDS_T_M139 = DynAccessor(18286)
     _105mm_HVAPDS_T_M279 = DynAccessor(18235)
-    _105mm_HVHE_105_51 = DynAccessor(17963)
-    _105mm_OTO_M_105_51 = DynAccessor(18029)
+    _105mm_HVHE_105_51 = DynAccessor(17962)
+    _105mm_OTO_M_105_51 = DynAccessor(18028)
     _120mm_a_e_T15HE = DynAccessor(18147)
-    _120mm_AP_T_M365 = DynAccessor(18123)
+    _120mm_AP_T_M365 = DynAccessor(18122)
     _120mm_c_p_APCBC_T14E = DynAccessor(18297)
-    _120mm_c_p_HVAP_T17B = DynAccessor(18104)
-    _120mm_c_p_HVAP_T17E = DynAccessor(18103)
+    _120mm_c_p_HVAP_T17B = DynAccessor(18102)
+    _120mm_c_p_HVAP_T17E = DynAccessor(18101)
     _120mm_Cannone_Da_120_55 = DynAccessor(18296)
     _120mm_Cannone_Da_120_59 = DynAccessor(18295)
-    _120mm_Cannone_Da_120_60 = DynAccessor(17941)
-    _120mm_Cannone_Da_120_62 = DynAccessor(18083)
-    _120mm_Cannone_da_120_67_T53 = DynAccessor(17972)
+    _120mm_Cannone_Da_120_60 = DynAccessor(17940)
+    _120mm_Cannone_Da_120_62 = DynAccessor(18082)
+    _120mm_Cannone_da_120_67_T53 = DynAccessor(17971)
     _120mm_HE_M356 = DynAccessor(18131)
-    _120mm_HEAT_T_M469 = DynAccessor(18044)
-    _127mm_a_e_127F = DynAccessor(18241)
-    _127mm_AP_127_54 = DynAccessor(17980)
+    _120mm_HEAT_T_M469 = DynAccessor(18043)
+    _127mm_a_e_127_51 = DynAccessor(18080)
+    _127mm_AP_127_54 = DynAccessor(17979)
     _127mm_APDS_127_54 = DynAccessor(18236)
-    _127mm_c_c_127F = DynAccessor(18097)
-    _127mm_c_p_127F = DynAccessor(18076)
-    _127mm_Cannone_Da_127_58 = DynAccessor(18247)
-    _127mm_Cannone_Da_127F = DynAccessor(17929)
+    _127mm_c_c_127_51 = DynAccessor(18107)
+    _127mm_c_p_127_51 = DynAccessor(18125)
+    _127mm_Cannone_Da_127_51 = DynAccessor(18248)
+    _127mm_Cannone_Da_127_58 = DynAccessor(18246)
     _127mm_HEAT_127_54 = DynAccessor(18188)
     _127mm_Mark_116 = DynAccessor(18146)
-    _127mm_OTO_Melara = DynAccessor(18102)
+    _127mm_OTO_Melara = DynAccessor(18100)
     _130mm_AP_Mark_46 = DynAccessor(18288)
     _130mm_Cannone_da_130_45 = DynAccessor(18126)
-    _130mm_Cannone_da_130_45_7x7 = DynAccessor(18064)
-    _130mm_HE_Mark_80 = DynAccessor(18037)
-    _130mm_HEAT_Mark_71 = DynAccessor(18068)
-    _20mm_c_p_20_138_B = DynAccessor(18036)
+    _130mm_Cannone_da_130_45_7x7 = DynAccessor(18063)
+    _130mm_HE_Mark_80 = DynAccessor(18036)
+    _130mm_HEAT_Mark_71 = DynAccessor(18067)
+    _20mm_c_p_20_138_B = DynAccessor(18035)
     _20mm_c_p_20_mod_35 = DynAccessor(18226)
     _37mm_c_g_p_37_40 = DynAccessor(18144)
     _37mm_c_g_scoppiante = DynAccessor(18181)
     _37mm_c_mitraglia_37_40 = DynAccessor(18312)
     _37mm_c_p_37_40 = DynAccessor(18175)
-    _37mm_c_p_AZ_BT = DynAccessor(18035)
-    _37mm_c_p_K_ogival = DynAccessor(17940)
-    _47_mm_Cannone_Da_47_40_bis = DynAccessor(18243)
+    _37mm_c_p_AZ_BT = DynAccessor(18034)
+    _37mm_c_p_K_ogival = DynAccessor(17939)
+    _47_mm_Cannone_Da_47_40_bis = DynAccessor(18242)
     _47mm_c_g_47_32_EP = DynAccessor(18269)
     _47mm_c_g_47_32_EPS = DynAccessor(18170)
     _47mm_c_g_47_32_EPS_1 = DynAccessor(18160)
-    _47mm_c_g_47_32_mod_35 = DynAccessor(18248)
-    _47mm_c_p_47_32_mod_39 = DynAccessor(18015)
-    _47mm_c_p_47_32_mod_40 = DynAccessor(17957)
+    _47mm_c_g_47_32_mod_35 = DynAccessor(18247)
+    _47mm_c_p_47_32_mod_39 = DynAccessor(18014)
+    _47mm_c_p_47_32_mod_40 = DynAccessor(17956)
     _75mm_c_g_75_27_EP_mod_32 = DynAccessor(17910)
     _75mm_c_g_75_27_EP_mod_42 = DynAccessor(18305)
     _75mm_c_g_75_50_mod_37_Skoda = DynAccessor(18238)
-    _75mm_c_g_75_EPS_mod_42 = DynAccessor(18114)
-    _75mm_c_p_75_32 = DynAccessor(18049)
+    _75mm_c_g_75_EPS_mod_42 = DynAccessor(18113)
+    _75mm_c_p_75_32 = DynAccessor(18048)
     _75mm_c_p_75_46 = DynAccessor(18151)
     _75mm_c_p_75_50 = DynAccessor(18267)
     _75mm_c_p_75_50_Skoda = DynAccessor(17924)
-    _75mm_Cannone_da_75_18 = DynAccessor(17949)
-    _75mm_Cannone_da_75_27 = DynAccessor(18067)
+    _75mm_Cannone_da_75_18 = DynAccessor(17948)
+    _75mm_Cannone_da_75_27 = DynAccessor(18066)
     _88mm_c_g_88_47_53 = DynAccessor(18206)
     _88mm_c_p_88_47_mod_09 = DynAccessor(17925)
     _88mm_c_p_88_47_mod_43 = DynAccessor(18282)
-    _88mm_Cannone_da_88_47 = DynAccessor(18010)
-    _90mm_c_g_90_42_53 = DynAccessor(18081)
+    _88mm_Cannone_da_88_47 = DynAccessor(18009)
+    _90mm_c_g_90_42_53 = DynAccessor(18079)
     _90mm_c_g_90_50_HE_T_COMP_B_T91 = DynAccessor(18294)
-    _90mm_c_g_90_HE_Rh = DynAccessor(18122)
+    _90mm_c_g_90_HE_Rh = DynAccessor(18121)
     _90mm_c_p_90_42_mod_43 = DynAccessor(18222)
-    _90mm_c_p_90_50_AP_T_T33E4 = DynAccessor(17964)
+    _90mm_c_p_90_50_AP_T_T33E4 = DynAccessor(17963)
     _90mm_c_p_90_50_HVAP_T_M332_T67 = DynAccessor(17922)
     _90mm_c_p_90_53_mod_09 = DynAccessor(18293)
-    _90mm_c_p_90_AP_Rh = DynAccessor(18013)
+    _90mm_c_p_90_AP_Rh = DynAccessor(18012)
     _90mm_c_p_90_APDS_Rh = DynAccessor(18300)
     _90mm_Cannone_da_90_53_semovente = DynAccessor(18265)
     _90mm_Cannone_da_90_60 = DynAccessor(18252)
     _90mm_Cannone_da_90_62 = DynAccessor(18253)
-    Alfa_RA1000_41 = DynAccessor(18098)
+    Alfa_RA1000_41 = DynAccessor(18096)
     Alfa_RA1000I_C_A = DynAccessor(18178)
-    AN_GRS_3 = DynAccessor(17932)
+    AN_GRS_3 = DynAccessor(17931)
     AVDS_1790 = DynAccessor(18211)
     AVDS_1790_2D = DynAccessor(18141)
     AVDS_1790M = DynAccessor(18308)
     Cannone_da_105_51_M68 = DynAccessor(18159)
-    Cannone_da_105_55 = DynAccessor(17994)
+    Cannone_da_105_55 = DynAccessor(17993)
     Cannone_da_105_Rh_V1 = DynAccessor(18215)
     Cannone_da_37_20 = DynAccessor(18239)
-    Cannone_da_37_40 = DynAccessor(18017)
-    Cannone_da_47_32 = DynAccessor(17968)
-    Cannone_da_47_40 = DynAccessor(17959)
-    Cannone_da_75_32 = DynAccessor(18003)
-    Cannone_da_75_34 = DynAccessor(17999)
-    Cannone_da_75_34_semovente = DynAccessor(18084)
-    Cannone_da_75_46 = DynAccessor(18022)
-    Cannone_da_75_50_Skoda = DynAccessor(18071)
-    Cannone_da_90_42 = DynAccessor(18082)
+    Cannone_da_37_40 = DynAccessor(18016)
+    Cannone_da_47_32 = DynAccessor(17967)
+    Cannone_da_47_40 = DynAccessor(17958)
+    Cannone_da_75_32 = DynAccessor(18002)
+    Cannone_da_75_34 = DynAccessor(17998)
+    Cannone_da_75_34_semovente = DynAccessor(18083)
+    Cannone_da_75_46 = DynAccessor(18021)
+    Cannone_da_75_50_Skoda = DynAccessor(18070)
+    Cannone_da_90_42 = DynAccessor(18081)
     Cannone_da_90_50_T119E1 = DynAccessor(18283)
-    Cannone_da_90_50_T119E1_LE = DynAccessor(18021)
-    Cannone_da_90_53 = DynAccessor(18088)
+    Cannone_da_90_50_T119E1_LE = DynAccessor(18020)
+    Cannone_da_90_53 = DynAccessor(18087)
     Cannone_da_90_74 = DynAccessor(18264)
-    Cannone_da_90_Rh = DynAccessor(18070)
+    Cannone_da_90_Rh = DynAccessor(18069)
     Chassis_It03_M15_42 = DynAccessor(18302)
     Chassis_It03_M15_42_2 = DynAccessor(18186)
     Chassis_It04_Fiat_3000 = DynAccessor(18279)
     Chassis_It05_Carro_L6_40 = DynAccessor(18240)
-    Chassis_It05_Carro_L6_40_2 = DynAccessor(17947)
-    Chassis_It06_M14_41 = DynAccessor(17992)
-    Chassis_It06_M14_41_2 = DynAccessor(18041)
-    Chassis_It07_P26_40 = DynAccessor(18060)
-    Chassis_It07_P26_40_2 = DynAccessor(17954)
+    Chassis_It05_Carro_L6_40_2 = DynAccessor(17946)
+    Chassis_It06_M14_41 = DynAccessor(17991)
+    Chassis_It06_M14_41_2 = DynAccessor(18040)
+    Chassis_It07_P26_40 = DynAccessor(18059)
+    Chassis_It07_P26_40_2 = DynAccessor(17953)
     Chassis_It08_Progetto_M40_mod_65 = DynAccessor(18168)
-    Chassis_It09_P43_ter = DynAccessor(18094)
-    Chassis_It09_P43_ter_2 = DynAccessor(17942)
+    Chassis_It09_P43_ter = DynAccessor(18093)
+    Chassis_It09_P43_ter_2 = DynAccessor(17941)
     Chassis_It10_P43_bis = DynAccessor(18197)
     Chassis_It10_P43_bis_2 = DynAccessor(18163)
-    Chassis_It11_P43 = DynAccessor(18031)
-    Chassis_It11_P43_2 = DynAccessor(18054)
-    Chassis_It12_Prototipo_Standard_B = DynAccessor(18012)
-    Chassis_It12_Prototipo_Standard_B_2 = DynAccessor(17995)
+    Chassis_It11_P43 = DynAccessor(18030)
+    Chassis_It11_P43_2 = DynAccessor(18053)
+    Chassis_It12_Prototipo_Standard_B = DynAccessor(18011)
+    Chassis_It12_Prototipo_Standard_B_2 = DynAccessor(17994)
     Chassis_It13_Progetto_M35_mod_46 = DynAccessor(18259)
-    Chassis_It13_Progetto_M35_mod_46_LE = DynAccessor(18106)
-    Chassis_It14_P44_Pantera = DynAccessor(18038)
-    Chassis_It14_P44_Pantera_2 = DynAccessor(17997)
-    Chassis_It15_Rinoceronte = DynAccessor(17948)
+    Chassis_It13_Progetto_M35_mod_46_LE = DynAccessor(18104)
+    Chassis_It14_P44_Pantera = DynAccessor(18037)
+    Chassis_It14_P44_Pantera_2 = DynAccessor(17996)
+    Chassis_It15_Rinoceronte = DynAccessor(17947)
     Chassis_It16_Carrodassalto_P88 = DynAccessor(18270)
     Chassis_It16_Carrodassalto_P88_2 = DynAccessor(18257)
     Chassis_It17_Progetto_CC55_mod_54 = DynAccessor(17921)
     Chassis_It17_Progetto_CC55_mod_54_2 = DynAccessor(18272)
-    Chassis_It18_Progetto_C45_mod_71 = DynAccessor(17958)
-    Chassis_It19_Progetto_C50_mod_66 = DynAccessor(18056)
+    Chassis_It18_Progetto_C45_mod_71 = DynAccessor(17957)
+    Chassis_It19_Progetto_C50_mod_66 = DynAccessor(18055)
     Chassis_It19_Progetto_C50_mod_66_2 = DynAccessor(18193)
     Chassis_It20_Carro_Combattimento_45t = DynAccessor(18156)
-    Chassis_It21_Lion = DynAccessor(18016)
-    Chassis_It23_CC_3 = DynAccessor(18008)
+    Chassis_It21_Lion = DynAccessor(18015)
+    Chassis_It23_CC_3 = DynAccessor(18007)
     Chassis_It23_CC_3_7x7 = DynAccessor(18150)
-    Chassis_It24_Controcarro_1_Mk2 = DynAccessor(18077)
-    Chassis_It24_Controcarro_1_Mk2_2 = DynAccessor(18051)
+    Chassis_It24_Controcarro_1_Mk2 = DynAccessor(18075)
+    Chassis_It24_Controcarro_1_Mk2_2 = DynAccessor(18050)
     Chassis_It26_CC_56 = DynAccessor(18278)
-    Chassis_It26_CC_56_2 = DynAccessor(18011)
+    Chassis_It26_CC_56_2 = DynAccessor(18010)
     Chassis_It27_M43_da_105_25_Bassoto = DynAccessor(18128)
-    Chassis_It27_M43_da_105_25_Bassoto_2 = DynAccessor(18027)
-    Chassis_It28_Semovente_M41_Da_75_18 = DynAccessor(18124)
+    Chassis_It27_M43_da_105_25_Bassoto_2 = DynAccessor(18026)
+    Chassis_It28_Semovente_M41_Da_75_18 = DynAccessor(18123)
     Chassis_It28_Semovente_M41_Da_75_18_2 = DynAccessor(18184)
-    Chassis_It29_Carro_Celere_Sahariano = DynAccessor(18048)
-    Chassis_It30_CC_mod_64_Prem_2 = DynAccessor(17970)
+    Chassis_It29_Carro_Celere_Sahariano = DynAccessor(18047)
+    Chassis_It30_CC_mod_64_Prem_2 = DynAccessor(17969)
     Chassis_It31_CC_67_B = DynAccessor(18192)
     Chassis_It31_CC_67_B_2 = DynAccessor(18191)
-    Chassis_It34_Toro = DynAccessor(18093)
+    Chassis_It34_Toro = DynAccessor(18092)
     Chassis_It35_Felice = DynAccessor(18137)
-    Chassis_It36_Progetto_C45_mod_71_M = DynAccessor(17937)
-    Continental_AOI_1490_italy = DynAccessor(18110)
-    Daimler_Benz_Typ_MB_837_A = DynAccessor(18099)
+    Chassis_It36_Progetto_C45_mod_71_M = DynAccessor(17936)
+    Continental_AOI_1490_italy = DynAccessor(18109)
+    Daimler_Benz_Typ_MB_837_A = DynAccessor(18097)
     Daimler_Benz_Typ_MB_838 = DynAccessor(18165)
-    Daimler_Benz_Typ_MB_838_P = DynAccessor(18074)
+    Daimler_Benz_Typ_MB_838_P = DynAccessor(18073)
     FIAT_604 = DynAccessor(18171)
-    FIAT_RA1050I_C_A = DynAccessor(18105)
+    FIAT_RA1050I_C_A = DynAccessor(18103)
     FIAT_V_10 = DynAccessor(17912)
     Hanomag_D831_A = DynAccessor(18258)
-    Hispano_Suiza_HS_110 = DynAccessor(18000)
+    Hispano_Suiza_HS_110 = DynAccessor(17999)
     Hispano_Suiza_HS_120 = DynAccessor(18284)
     HS_110 = DynAccessor(18218)
     ID36S_6V_CA = DynAccessor(18291)
     ID36S_6V_CA_LE = DynAccessor(18172)
     IIt18_Progetto_C45_mod_71_long_special = DynAccessor(18180)
     It03_M15_42 = DynAccessor(18299)
-    It03_M15_42_descr = DynAccessor(18111)
+    It03_M15_42_descr = DynAccessor(18110)
     It03_M15_42_short = DynAccessor(18157)
     It04_Fiat_3000 = DynAccessor(18220)
-    It04_Fiat_3000_descr = DynAccessor(17962)
-    It04_Fiat_3000_short = DynAccessor(17967)
-    It05_Carro_L6_40 = DynAccessor(18072)
-    It05_Carro_L6_40_descr = DynAccessor(17975)
-    It05_Carro_L6_40_short = DynAccessor(18058)
-    It06_M14_41 = DynAccessor(18062)
-    It06_M14_41_descr = DynAccessor(18007)
+    It04_Fiat_3000_descr = DynAccessor(17961)
+    It04_Fiat_3000_short = DynAccessor(17966)
+    It05_Carro_L6_40 = DynAccessor(18071)
+    It05_Carro_L6_40_descr = DynAccessor(17974)
+    It05_Carro_L6_40_short = DynAccessor(18057)
+    It06_M14_41 = DynAccessor(18061)
+    It06_M14_41_descr = DynAccessor(18006)
     It06_M14_41_short = DynAccessor(18207)
     It07_P26_40 = DynAccessor(18224)
-    It07_P26_40_descr = DynAccessor(17969)
-    It07_P26_40_short = DynAccessor(18053)
-    It08_Progetto_M40_mod_65 = DynAccessor(17986)
+    It07_P26_40_descr = DynAccessor(17968)
+    It07_P26_40_short = DynAccessor(18052)
+    It08_Progetto_M40_mod_65 = DynAccessor(17985)
     It08_Progetto_M40_mod_65_bob = DynAccessor(18155)
     It08_Progetto_M40_mod_65_bob_short = DynAccessor(18195)
-    It08_Progetto_M40_mod_65_descr = DynAccessor(18244)
+    It08_Progetto_M40_mod_65_descr = DynAccessor(18243)
     It08_Progetto_M40_mod_65_short = DynAccessor(17923)
-    It09_P43_ter = DynAccessor(17998)
+    It09_P43_ter = DynAccessor(17997)
     It09_P43_ter_descr = DynAccessor(18303)
     It09_P43_ter_short = DynAccessor(18251)
-    It10_P43_bis = DynAccessor(17936)
+    It10_P43_bis = DynAccessor(17935)
     It10_P43_bis_descr = DynAccessor(18255)
-    It10_P43_bis_short = DynAccessor(18063)
+    It10_P43_bis_short = DynAccessor(18062)
     It11_P43 = DynAccessor(18256)
     It11_P43_descr = DynAccessor(18183)
     It11_P43_short = DynAccessor(18185)
-    It12_Prototipo_Standard_B = DynAccessor(18046)
-    It12_Prototipo_Standard_B_descr = DynAccessor(17946)
-    It12_Prototipo_Standard_B_short = DynAccessor(17966)
-    It13_Progetto_M35_mod_46 = DynAccessor(17931)
-    It13_Progetto_M35_mod_46_descr = DynAccessor(18066)
+    It12_Prototipo_Standard_B = DynAccessor(18045)
+    It12_Prototipo_Standard_B_descr = DynAccessor(17945)
+    It12_Prototipo_Standard_B_short = DynAccessor(17965)
+    It13_Progetto_M35_mod_46 = DynAccessor(17930)
+    It13_Progetto_M35_mod_46_descr = DynAccessor(18065)
     It13_Progetto_M35_mod_46_LE = DynAccessor(18129)
-    It13_Progetto_M35_mod_46_LE_descr = DynAccessor(17978)
+    It13_Progetto_M35_mod_46_LE_descr = DynAccessor(17977)
     It13_Progetto_M35_mod_46_LE_long_special = DynAccessor(18161)
-    It13_Progetto_M35_mod_46_LE_short = DynAccessor(18047)
+    It13_Progetto_M35_mod_46_LE_short = DynAccessor(18046)
     It13_Progetto_M35_mod_46_LE_short_special = DynAccessor(18234)
     It13_Progetto_M35_mod_46_long_special = DynAccessor(18313)
-    It13_Progetto_M35_mod_46_short = DynAccessor(18069)
-    It13_Progetto_M35_mod_46_short_special = DynAccessor(18107)
-    It14_P44_Pantera = DynAccessor(18089)
-    It14_P44_Pantera_descr = DynAccessor(18073)
+    It13_Progetto_M35_mod_46_short = DynAccessor(18068)
+    It13_Progetto_M35_mod_46_short_special = DynAccessor(18105)
+    It14_P44_Pantera = DynAccessor(18088)
+    It14_P44_Pantera_descr = DynAccessor(18072)
     It14_P44_Pantera_short = DynAccessor(18237)
     It15_Rinoceronte = DynAccessor(17928)
-    It15_Rinoceronte_descr = DynAccessor(18109)
+    It15_Rinoceronte_descr = DynAccessor(18108)
     It15_Rinoceronte_short = DynAccessor(18205)
-    It16_It16_Carrodassalto_P88 = DynAccessor(17981)
-    It16_It16_Carrodassalto_P88_descr = DynAccessor(17979)
-    It16_It16_Carrodassalto_P88_short = DynAccessor(18024)
+    It16_It16_Carrodassalto_P88 = DynAccessor(17980)
+    It16_It16_Carrodassalto_P88_descr = DynAccessor(17978)
+    It16_It16_Carrodassalto_P88_short = DynAccessor(18023)
     It17_Progetto_CC55_mod_54 = DynAccessor(18268)
-    It17_Progetto_CC55_mod_54_descr = DynAccessor(17935)
-    It17_Progetto_CC55_mod_54_short = DynAccessor(18057)
-    It18_Progetto_C45_mod_71 = DynAccessor(17955)
-    It18_Progetto_C45_mod_71_descr = DynAccessor(18065)
+    It17_Progetto_CC55_mod_54_descr = DynAccessor(17934)
+    It17_Progetto_CC55_mod_54_short = DynAccessor(18056)
+    It18_Progetto_C45_mod_71 = DynAccessor(17954)
+    It18_Progetto_C45_mod_71_descr = DynAccessor(18064)
     It18_Progetto_C45_mod_71_short = DynAccessor(18142)
     It18_Progetto_C45_mod_71_short_special = DynAccessor(18304)
-    It19_Progetto_C50_mod_66 = DynAccessor(18112)
+    It19_Progetto_C50_mod_66 = DynAccessor(18111)
     It19_Progetto_C50_mod_66_descr = DynAccessor(18139)
     It19_Progetto_C50_mod_66_short = DynAccessor(18190)
     It20_Carro_Combattimento_45t = DynAccessor(17914)
     It20_Carro_Combattimento_45t_descr = DynAccessor(18154)
-    It20_Carro_Combattimento_45t_long_special = DynAccessor(18116)
-    It20_Carro_Combattimento_45t_short = DynAccessor(18080)
+    It20_Carro_Combattimento_45t_long_special = DynAccessor(18115)
+    It20_Carro_Combattimento_45t_short = DynAccessor(18078)
     It20_Carro_Combattimento_45t_short_special = DynAccessor(18148)
-    It21_Lion = DynAccessor(18092)
-    It21_Lion_descr = DynAccessor(17930)
+    It21_Lion = DynAccessor(18091)
+    It21_Lion_descr = DynAccessor(17929)
     It21_Lion_long_special = DynAccessor(18289)
     It21_Lion_short = DynAccessor(18202)
-    It21_Lion_short_special = DynAccessor(18033)
+    It21_Lion_short_special = DynAccessor(18032)
     It23_CC_3 = DynAccessor(17920)
     It23_CC_3_7x7 = DynAccessor(18130)
     It23_CC_3_7x7_descr = DynAccessor(18203)
     It23_CC_3_7x7_short = DynAccessor(18158)
-    It23_CC_3_descr = DynAccessor(18075)
+    It23_CC_3_descr = DynAccessor(18074)
     It23_CC_3_short = DynAccessor(18298)
     It24_Controcarro_1_Mk2 = DynAccessor(18250)
     It24_Controcarro_1_Mk2_descr = DynAccessor(18169)
@@ -35061,131 +35061,131 @@ class italy_vehicles(DynAccessor):
     It26_CC_56 = DynAccessor(18167)
     It26_CC_56_descr = DynAccessor(18262)
     It26_CC_56_short = DynAccessor(18290)
-    It27_M43_da_105_25_Bassoto = DynAccessor(18045)
-    It27_M43_da_105_25_Bassoto_descr = DynAccessor(18245)
-    It27_M43_da_105_25_Bassoto_short = DynAccessor(18009)
-    It28_Semovente_M41_Da_75_18 = DynAccessor(18125)
+    It27_M43_da_105_25_Bassoto = DynAccessor(18044)
+    It27_M43_da_105_25_Bassoto_descr = DynAccessor(18244)
+    It27_M43_da_105_25_Bassoto_short = DynAccessor(18008)
+    It28_Semovente_M41_Da_75_18 = DynAccessor(18124)
     It28_Semovente_M41_Da_75_18_descr = DynAccessor(18198)
-    It28_Semovente_M41_Da_75_18_short = DynAccessor(17985)
+    It28_Semovente_M41_Da_75_18_short = DynAccessor(17984)
     It29_Carro_Celere_Sahariano = DynAccessor(18138)
     It29_Carro_Celere_Sahariano_descr = DynAccessor(18187)
-    It29_Carro_Celere_Sahariano_long_special = DynAccessor(18039)
-    It29_Carro_Celere_Sahariano_short = DynAccessor(18100)
+    It29_Carro_Celere_Sahariano_long_special = DynAccessor(18038)
+    It29_Carro_Celere_Sahariano_short = DynAccessor(18098)
     It29_Carro_Celere_Sahariano_short_special = DynAccessor(18182)
-    It30_CC_mod_64_Prem = DynAccessor(18002)
+    It30_CC_mod_64_Prem = DynAccessor(18001)
     It30_CC_mod_64_Prem_descr = DynAccessor(18285)
     It30_CC_mod_64_Prem_long_special = DynAccessor(17913)
     It30_CC_mod_64_Prem_short = DynAccessor(18254)
     It30_CC_mod_64_Prem_short_special = DynAccessor(18271)
-    It31_CC_67_B = DynAccessor(17945)
-    It31_CC_67_B_descr = DynAccessor(18121)
-    It31_CC_67_B_short = DynAccessor(17984)
-    It34_Toro = DynAccessor(18115)
+    It31_CC_67_B = DynAccessor(17944)
+    It31_CC_67_B_descr = DynAccessor(18120)
+    It31_CC_67_B_short = DynAccessor(17983)
+    It34_Toro = DynAccessor(18114)
     It34_Toro_descr = DynAccessor(17915)
-    It34_Toro_long_special = DynAccessor(18050)
+    It34_Toro_long_special = DynAccessor(18049)
     It34_Toro_short = DynAccessor(18249)
-    It34_Toro_short_special = DynAccessor(17943)
+    It34_Toro_short_special = DynAccessor(17942)
     It35_Felice = DynAccessor(18309)
     It35_Felice_descr = DynAccessor(17918)
     It35_Felice_long_special = DynAccessor(18260)
-    It35_Felice_short = DynAccessor(18087)
+    It35_Felice_short = DynAccessor(18086)
     It35_Felice_short_special = DynAccessor(18314)
     It36_Progetto_C45_mod_71_M = DynAccessor(18196)
     It36_Progetto_C45_mod_71_M_descr = DynAccessor(18301)
     It36_Progetto_C45_mod_71_M_long_special = DynAccessor(18223)
-    It36_Progetto_C45_mod_71_M_short = DynAccessor(18004)
-    It36_Progetto_C45_mod_71_M_short_special = DynAccessor(18119)
+    It36_Progetto_C45_mod_71_M_short = DynAccessor(18003)
+    It36_Progetto_C45_mod_71_M_short_special = DynAccessor(18118)
     Maybach_HL_120 = DynAccessor(18229)
     Maybach_HL_120_evoluzione = DynAccessor(18221)
-    Maybach_HL_120_S = DynAccessor(17933)
+    Maybach_HL_120_S = DynAccessor(17932)
     MB_822_Ka_500 = DynAccessor(18200)
     MB_837_Aa = DynAccessor(18228)
     MB_837_Ea = DynAccessor(18135)
     MB_838 = DynAccessor(18136)
-    Mitragliera_Breda_cal_20_mod_35 = DynAccessor(18059)
-    Mitsubishi_10ZF = DynAccessor(17956)
+    Mitragliera_Breda_cal_20_mod_35 = DynAccessor(18058)
+    Mitsubishi_10ZF = DynAccessor(17955)
     MTU_870 = DynAccessor(18214)
     MTU_870_P = DynAccessor(18306)
-    MTU_873 = DynAccessor(18090)
+    MTU_873 = DynAccessor(18089)
     MTU_MB_837_Ba_500A = DynAccessor(18275)
-    MTU_MB_837_Ba_500A_7x7 = DynAccessor(18091)
-    MTU_MB_838_Ca_M_500 = DynAccessor(18034)
+    MTU_MB_837_Ba_500A_7x7 = DynAccessor(18090)
+    MTU_MB_838_Ca_M_500 = DynAccessor(18033)
     MTU_MB_838_Ca_M_500_short = DynAccessor(18153)
-    R300 = DynAccessor(18118)
-    R528 = DynAccessor(18055)
+    R300 = DynAccessor(18117)
+    R528 = DynAccessor(18054)
     R528_LE = DynAccessor(18217)
     R_19 = DynAccessor(18212)
     R_F_1_C_A = DynAccessor(18261)
-    R_F_2_C_A = DynAccessor(18078)
+    R_F_2_C_A = DynAccessor(18076)
     R_F_2_C_A_mod_1 = DynAccessor(18134)
     R_F_3_M_2 = DynAccessor(18174)
-    R_F_4_M = DynAccessor(17938)
-    R_F_C_R = DynAccessor(18086)
+    R_F_4_M = DynAccessor(17937)
+    R_F_C_R = DynAccessor(18085)
     RV_4 = DynAccessor(17926)
     RV_4_213_V = DynAccessor(18213)
-    RV_4_213_V_7x7 = DynAccessor(17996)
+    RV_4_213_V_7x7 = DynAccessor(17995)
     RV_4F = DynAccessor(18176)
     Selex_STR_633P = DynAccessor(18280)
-    Selex_STR_70 = DynAccessor(17973)
+    Selex_STR_70 = DynAccessor(17972)
     SEM_24 = DynAccessor(18173)
     SEM_25 = DynAccessor(18216)
-    SEM_35 = DynAccessor(17939)
+    SEM_35 = DynAccessor(17938)
     SEM_80 = DynAccessor(18276)
-    SEM_90 = DynAccessor(17993)
+    SEM_90 = DynAccessor(17992)
     SPA_15T = DynAccessor(18204)
     SPA_15TB = DynAccessor(18274)
-    SPA_18VT_v2 = DynAccessor(18061)
+    SPA_18VT_v2 = DynAccessor(18060)
     SPA_19TB_mod_43 = DynAccessor(18273)
     SPA_242 = DynAccessor(17919)
-    SPA_342 = DynAccessor(18026)
-    SPA_343 = DynAccessor(18025)
-    SPA_343_4 = DynAccessor(18079)
-    SPA_344 = DynAccessor(18028)
-    SPA_8T = DynAccessor(18040)
+    SPA_342 = DynAccessor(18025)
+    SPA_343 = DynAccessor(18024)
+    SPA_343_4 = DynAccessor(18077)
+    SPA_344 = DynAccessor(18027)
+    SPA_8T = DynAccessor(18039)
     SPA_ABM_2 = DynAccessor(18233)
-    SPA_Tipo_343 = DynAccessor(18018)
+    SPA_Tipo_343 = DynAccessor(18017)
     Turret_1_It03_M15_42 = DynAccessor(18145)
     Turret_1_It04_Fiat_3000 = DynAccessor(17911)
-    Turret_1_It05_Carro_L6_40 = DynAccessor(17982)
-    Turret_1_It06_M14_41 = DynAccessor(18095)
+    Turret_1_It05_Carro_L6_40 = DynAccessor(17981)
+    Turret_1_It06_M14_41 = DynAccessor(18094)
     Turret_1_It07_P26_40 = DynAccessor(18132)
-    Turret_1_It08_Progetto_M40_mod_65 = DynAccessor(18043)
+    Turret_1_It08_Progetto_M40_mod_65 = DynAccessor(18042)
     Turret_1_It09_P43_ter = DynAccessor(18219)
-    Turret_1_It10_P43_bis = DynAccessor(18096)
+    Turret_1_It10_P43_bis = DynAccessor(18095)
     Turret_1_It11_P43 = DynAccessor(18230)
-    Turret_1_It12_Prototipo_Standard_B = DynAccessor(18014)
-    Turret_1_It13_Progetto_M35_mod_46 = DynAccessor(18005)
-    Turret_1_It13_Progetto_M35_mod_46_LE = DynAccessor(18120)
-    Turret_1_It14_P44_Pantera = DynAccessor(18020)
+    Turret_1_It12_Prototipo_Standard_B = DynAccessor(18013)
+    Turret_1_It13_Progetto_M35_mod_46 = DynAccessor(18004)
+    Turret_1_It13_Progetto_M35_mod_46_LE = DynAccessor(18119)
+    Turret_1_It14_P44_Pantera = DynAccessor(18019)
     Turret_1_It15_Rinoceronte = DynAccessor(18266)
-    Turret_1_It16_Carrodassalto_P88 = DynAccessor(17960)
-    Turret_1_It17_Progetto_CC55_mod_54 = DynAccessor(18113)
-    Turret_1_It18_Progetto_C45_mod_71 = DynAccessor(17990)
+    Turret_1_It16_Carrodassalto_P88 = DynAccessor(17959)
+    Turret_1_It17_Progetto_CC55_mod_54 = DynAccessor(18112)
+    Turret_1_It18_Progetto_C45_mod_71 = DynAccessor(17989)
     Turret_1_It19_Progetto_C50_mod_66 = DynAccessor(18292)
     Turret_1_It20_Carro_Combattimento_45t = DynAccessor(18232)
     Turret_1_It21_Lion = DynAccessor(18152)
     Turret_1_It23_CC_3 = DynAccessor(18179)
-    Turret_1_It23_CC_3_7x7 = DynAccessor(18032)
-    Turret_1_It24_Controcarro_1_Mk2 = DynAccessor(18101)
+    Turret_1_It23_CC_3_7x7 = DynAccessor(18031)
+    Turret_1_It24_Controcarro_1_Mk2 = DynAccessor(18099)
     Turret_1_It26_CC_56 = DynAccessor(18189)
-    Turret_1_It27_M43_da_105_25_Bassoto = DynAccessor(18019)
-    Turret_1_It28_Semovente_M41_Da_75_18 = DynAccessor(17971)
+    Turret_1_It27_M43_da_105_25_Bassoto = DynAccessor(18018)
+    Turret_1_It28_Semovente_M41_Da_75_18 = DynAccessor(17970)
     Turret_1_It29_Carro_Celere_Sahariano = DynAccessor(18263)
-    Turret_1_It30_CC_mod_64_Prem = DynAccessor(18242)
-    Turret_1_It31_CC_67_B = DynAccessor(18085)
+    Turret_1_It30_CC_mod_64_Prem = DynAccessor(18241)
+    Turret_1_It31_CC_67_B = DynAccessor(18084)
     Turret_1_It34_Toro = DynAccessor(18127)
-    Turret_1_It35_Felice = DynAccessor(18030)
-    Turret_1_It36_Progetto_C45_mod_71_M = DynAccessor(17944)
-    Turret_2_It03_M15_42 = DynAccessor(17991)
-    Turret_2_It07_P26_40 = DynAccessor(18023)
-    Turret_2_It09_P43_ter = DynAccessor(18052)
-    Turret_2_It10_P43_bis = DynAccessor(17953)
+    Turret_1_It35_Felice = DynAccessor(18029)
+    Turret_1_It36_Progetto_C45_mod_71_M = DynAccessor(17943)
+    Turret_2_It03_M15_42 = DynAccessor(17990)
+    Turret_2_It07_P26_40 = DynAccessor(18022)
+    Turret_2_It09_P43_ter = DynAccessor(18051)
+    Turret_2_It10_P43_bis = DynAccessor(17952)
     Turret_2_It11_P43 = DynAccessor(18231)
-    Turret_2_It12_Prototipo_Standard_B = DynAccessor(17934)
+    Turret_2_It12_Prototipo_Standard_B = DynAccessor(17933)
     Turret_2_It14_P44_Pantera = DynAccessor(18149)
-    Turret_2_It16_Carrodassalto_P88 = DynAccessor(17961)
+    Turret_2_It16_Carrodassalto_P88 = DynAccessor(17960)
     Turret_2_It17_Progetto_CC55_mod_54 = DynAccessor(18227)
-    Turret_2_It19_Progetto_C50_mod_66 = DynAccessor(17983)
+    Turret_2_It19_Progetto_C50_mod_66 = DynAccessor(17982)
     Turret_2_It24_Controcarro_1_Mk2 = DynAccessor(18199)
     Turret_2_It26_CC_56 = DynAccessor(18287)
     Turret_2_It31_CC_67_B = DynAccessor(17927)
@@ -114703,40 +114703,40 @@ class tech_tree_trade_in(DynAccessor):
 
     class _branchSelection(DynAccessor):
         __slots__ = ()
-        congrats = DynAccessor(51954)
-        title = DynAccessor(51918)
+        congrats = DynAccessor(51953)
+        title = DynAccessor(51917)
 
     branchSelection = _branchSelection()
 
     class _entryPoint(DynAccessor):
         __slots__ = ()
-        text = DynAccessor(51919)
+        text = DynAccessor(51918)
 
     entryPoint = _entryPoint()
 
     class _exchangeConfirmation(DynAccessor):
         __slots__ = ()
-        cancel = DynAccessor(51953)
-        message = DynAccessor(51931)
+        cancel = DynAccessor(51952)
+        message = DynAccessor(51930)
         purchase = DynAccessor(51875)
-        title = DynAccessor(51986)
+        title = DynAccessor(51985)
 
     exchangeConfirmation = _exchangeConfirmation()
 
     class _exchangeCost(DynAccessor):
         __slots__ = ()
-        button = DynAccessor(51957)
-        confirm = DynAccessor(51942)
-        preview = DynAccessor(51895)
-        resources = DynAccessor(51903)
+        button = DynAccessor(51956)
+        confirm = DynAccessor(51941)
+        preview = DynAccessor(51894)
+        resources = DynAccessor(51902)
 
         class _tooltip(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(51915)
-            header = DynAccessor(51956)
+            body = DynAccessor(51914)
+            header = DynAccessor(51955)
 
         tooltip = _tooltip()
-        updating = DynAccessor(51944)
+        updating = DynAccessor(51943)
 
     exchangeCost = _exchangeCost()
 
@@ -114755,22 +114755,22 @@ class tech_tree_trade_in(DynAccessor):
 
             class _section1(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(51973)
+                description = DynAccessor(51972)
                 title = DynAccessor(51869)
 
             section1 = _section1()
 
             class _section2(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(52003)
-                title = DynAccessor(51977)
+                description = DynAccessor(52002)
+                title = DynAccessor(51976)
 
             section2 = _section2()
 
             class _section3(DynAccessor):
                 __slots__ = ()
-                description = DynAccessor(51963)
-                title = DynAccessor(51968)
+                description = DynAccessor(51962)
+                title = DynAccessor(51967)
 
             section3 = _section3()
 
@@ -114779,10 +114779,10 @@ class tech_tree_trade_in(DynAccessor):
 
         class _timer(DynAccessor):
             __slots__ = ()
-            text = DynAccessor(51988)
+            text = DynAccessor(51987)
 
         timer = _timer()
-        title = DynAccessor(51992)
+        title = DynAccessor(51991)
 
     introPage = _introPage()
 
@@ -114791,13 +114791,13 @@ class tech_tree_trade_in(DynAccessor):
 
         class _button(DynAccessor):
             __slots__ = ()
-            label = DynAccessor(51962)
+            label = DynAccessor(51961)
 
         button = _button()
 
         class _limitContainer(DynAccessor):
             __slots__ = ()
-            text = DynAccessor(51951)
+            text = DynAccessor(51950)
 
         limitContainer = _limitContainer()
 
@@ -114809,34 +114809,34 @@ class tech_tree_trade_in(DynAccessor):
 
         class _resourceType(DynAccessor):
             __slots__ = ()
-            crystal = DynAccessor(51938)
-            fragments = DynAccessor(51913)
-            freeXP = DynAccessor(51983)
-            intelligence = DynAccessor(51989)
+            crystal = DynAccessor(51937)
+            fragments = DynAccessor(51912)
+            freeXP = DynAccessor(51982)
+            intelligence = DynAccessor(51988)
 
             class _tooltip(DynAccessor):
                 __slots__ = ()
 
                 class _body(DynAccessor):
                     __slots__ = ()
-                    crystal = DynAccessor(51965)
-                    fragments = DynAccessor(51930)
-                    freeXP = DynAccessor(51990)
-                    intelligence = DynAccessor(51910)
+                    crystal = DynAccessor(51964)
+                    fragments = DynAccessor(51929)
+                    freeXP = DynAccessor(51989)
+                    intelligence = DynAccessor(51909)
 
                 body = _body()
-                currentlyInvested = DynAccessor(51937)
+                currentlyInvested = DynAccessor(51936)
 
                 class _header(DynAccessor):
                     __slots__ = ()
-                    crystal = DynAccessor(51993)
-                    fragments = DynAccessor(51912)
-                    freeXP = DynAccessor(51934)
-                    intelligence = DynAccessor(51959)
+                    crystal = DynAccessor(51992)
+                    fragments = DynAccessor(51911)
+                    freeXP = DynAccessor(51933)
+                    intelligence = DynAccessor(51958)
 
                 header = _header()
-                limited = DynAccessor(51921)
-                unlimited = DynAccessor(51932)
+                limited = DynAccessor(51920)
+                unlimited = DynAccessor(51931)
 
             tooltip = _tooltip()
 
@@ -114844,7 +114844,7 @@ class tech_tree_trade_in(DynAccessor):
 
         class _separator(DynAccessor):
             __slots__ = ()
-            text = DynAccessor(51975)
+            text = DynAccessor(51974)
 
         separator = _separator()
 
@@ -114864,56 +114864,56 @@ class tech_tree_trade_in(DynAccessor):
 
     class _nations(DynAccessor):
         __slots__ = ()
-        china = DynAccessor(52005)
-        czech = DynAccessor(51997)
-        france = DynAccessor(51916)
+        china = DynAccessor(52004)
+        czech = DynAccessor(51996)
+        france = DynAccessor(51915)
 
         class _genetiveCase(DynAccessor):
             __slots__ = ()
-            china = DynAccessor(51972)
-            czech = DynAccessor(51911)
+            china = DynAccessor(51971)
+            czech = DynAccessor(51910)
             france = DynAccessor(51870)
-            germany = DynAccessor(51950)
-            italy = DynAccessor(51941)
+            germany = DynAccessor(51949)
+            italy = DynAccessor(51940)
             japan = DynAccessor(51877)
-            poland = DynAccessor(51985)
-            sweden = DynAccessor(51964)
-            uk = DynAccessor(51897)
-            usa = DynAccessor(51945)
-            ussr = DynAccessor(51922)
+            poland = DynAccessor(51984)
+            sweden = DynAccessor(51963)
+            uk = DynAccessor(51896)
+            usa = DynAccessor(51944)
+            ussr = DynAccessor(51921)
 
         genetiveCase = _genetiveCase()
-        germany = DynAccessor(51969)
+        germany = DynAccessor(51968)
         italy = DynAccessor(51884)
         japan = DynAccessor(51890)
-        poland = DynAccessor(51892)
-        sweden = DynAccessor(51939)
-        uk = DynAccessor(51958)
+        poland = DynAccessor(51891)
+        sweden = DynAccessor(51938)
+        uk = DynAccessor(51957)
         usa = DynAccessor(51883)
-        ussr = DynAccessor(52002)
+        ussr = DynAccessor(52001)
 
     nations = _nations()
 
     class _navigation(DynAccessor):
         __slots__ = ()
-        branchSelection = DynAccessor(51898)
-        multicurrencySelection = DynAccessor(51896)
-        summary = DynAccessor(51955)
+        branchSelection = DynAccessor(51897)
+        multicurrencySelection = DynAccessor(51895)
+        summary = DynAccessor(51954)
 
     navigation = _navigation()
 
     class _postTrade(DynAccessor):
         __slots__ = ()
-        acquired = DynAccessor(51961)
+        acquired = DynAccessor(51960)
 
         class _button(DynAccessor):
             __slots__ = ()
-            confirm = DynAccessor(51899)
+            confirm = DynAccessor(51898)
 
         button = _button()
-        researched = DynAccessor(51894)
-        subTitle = DynAccessor(51936)
-        title = DynAccessor(51998)
+        researched = DynAccessor(51893)
+        subTitle = DynAccessor(51935)
+        title = DynAccessor(51997)
 
     postTrade = _postTrade()
 
@@ -114926,21 +114926,21 @@ class tech_tree_trade_in(DynAccessor):
             class _garage(DynAccessor):
                 __slots__ = ()
                 branchGet = DynAccessor(51874)
-                branchTrade = DynAccessor(51905)
+                branchTrade = DynAccessor(51904)
 
             garage = _garage()
 
             class _notApplicable(DynAccessor):
                 __slots__ = ()
-                branchGet = DynAccessor(51996)
-                branchTrade = DynAccessor(51929)
+                branchGet = DynAccessor(51995)
+                branchTrade = DynAccessor(51928)
 
             notApplicable = _notApplicable()
 
             class _researched(DynAccessor):
                 __slots__ = ()
-                branchGet = DynAccessor(51948)
-                branchTrade = DynAccessor(51974)
+                branchGet = DynAccessor(51947)
+                branchTrade = DynAccessor(51973)
 
             researched = _researched()
 
@@ -114948,16 +114948,16 @@ class tech_tree_trade_in(DynAccessor):
 
         class _subtitle(DynAccessor):
             __slots__ = ()
-            branchGet = DynAccessor(51908)
-            branchTrade = DynAccessor(51926)
-            proceed = DynAccessor(51920)
+            branchGet = DynAccessor(51907)
+            branchTrade = DynAccessor(51925)
+            proceed = DynAccessor(51919)
 
         subtitle = _subtitle()
 
         class _title(DynAccessor):
             __slots__ = ()
-            branchGet = DynAccessor(51976)
-            branchTrade = DynAccessor(51907)
+            branchGet = DynAccessor(51975)
+            branchTrade = DynAccessor(51906)
 
         title = _title()
 
@@ -114971,25 +114971,25 @@ class tech_tree_trade_in(DynAccessor):
 
             class _receive(DynAccessor):
                 __slots__ = ()
-                notTradedResearch = DynAccessor(51904)
-                notTradedResearchInventory = DynAccessor(51949)
-                tradedResearch = DynAccessor(52004)
-                tradedResearchInventory = DynAccessor(51979)
+                notTradedResearch = DynAccessor(51903)
+                notTradedResearchInventory = DynAccessor(51948)
+                tradedResearch = DynAccessor(52003)
+                tradedResearchInventory = DynAccessor(51978)
 
             receive = _receive()
 
             class _title(DynAccessor):
                 __slots__ = ()
-                receive = DynAccessor(51940)
+                receive = DynAccessor(51939)
                 tradeIn = DynAccessor(51872)
 
             title = _title()
 
             class _tradeIn(DynAccessor):
                 __slots__ = ()
-                notTradedResearch = DynAccessor(51960)
-                notTradedResearchInventory = DynAccessor(51994)
-                tradedResearch = DynAccessor(51980)
+                notTradedResearch = DynAccessor(51959)
+                notTradedResearchInventory = DynAccessor(51993)
+                tradedResearch = DynAccessor(51979)
                 tradedResearchInventory = DynAccessor(51873)
 
             tradeIn = _tradeIn()
@@ -115001,7 +115001,7 @@ class tech_tree_trade_in(DynAccessor):
 
             class _hideDetails(DynAccessor):
                 __slots__ = ()
-                label = DynAccessor(51906)
+                label = DynAccessor(51905)
 
             hideDetails = _hideDetails()
 
@@ -115015,49 +115015,49 @@ class tech_tree_trade_in(DynAccessor):
 
         class _emptyColumn(DynAccessor):
             __slots__ = ()
-            notTradedResearch = DynAccessor(51991)
-            notTradedResearchInventory = DynAccessor(52000)
+            notTradedResearch = DynAccessor(51990)
+            notTradedResearchInventory = DynAccessor(51999)
 
         emptyColumn = _emptyColumn()
-        subtitle = DynAccessor(51982)
-        title = DynAccessor(51947)
+        subtitle = DynAccessor(51981)
+        title = DynAccessor(51946)
 
         class _vehicleProperties(DynAccessor):
             __slots__ = ()
 
             class _category(DynAccessor):
                 __slots__ = ()
-                ammunition = DynAccessor(51943)
-                consumables = DynAccessor(51928)
-                crew = DynAccessor(51970)
-                crewEmpty = DynAccessor(52001)
+                ammunition = DynAccessor(51942)
+                consumables = DynAccessor(51927)
+                crew = DynAccessor(51969)
+                crewEmpty = DynAccessor(52000)
 
                 class _crewSubcategory(DynAccessor):
                     __slots__ = ()
-                    barracks = DynAccessor(51987)
+                    barracks = DynAccessor(51986)
                     recruits = DynAccessor(51876)
 
                 crewSubcategory = _crewSubcategory()
-                directives = DynAccessor(51971)
-                equipment = DynAccessor(51923)
+                directives = DynAccessor(51970)
+                equipment = DynAccessor(51922)
                 experience = DynAccessor(51878)
-                experienceEmpty = DynAccessor(51946)
-                experienceSubcategory = DynAccessor(51893)
-                experienceSubcategoryAmount = DynAccessor(51924)
-                exteriorElements = DynAccessor(51927)
-                fieldModification = DynAccessor(51901)
+                experienceEmpty = DynAccessor(51945)
+                experienceSubcategory = DynAccessor(51892)
+                experienceSubcategoryAmount = DynAccessor(51923)
+                exteriorElements = DynAccessor(51926)
+                fieldModification = DynAccessor(51900)
                 fieldModificationCredits = DynAccessor(51887)
-                fieldModificationEmpty = DynAccessor(51933)
-                fieldModificationMessage = DynAccessor(51909)
-                modules = DynAccessor(51917)
-                modulesDescription = DynAccessor(51900)
-                movedItemsSubcategory = DynAccessor(51978)
-                rentalVehicle = DynAccessor(51902)
+                fieldModificationEmpty = DynAccessor(51932)
+                fieldModificationMessage = DynAccessor(51908)
+                modules = DynAccessor(51916)
+                modulesDescription = DynAccessor(51899)
+                movedItemsSubcategory = DynAccessor(51977)
+                rentalVehicle = DynAccessor(51901)
 
                 class _tooltip(DynAccessor):
                     __slots__ = ()
-                    body = DynAccessor(51925)
-                    header = DynAccessor(51952)
+                    body = DynAccessor(51924)
+                    header = DynAccessor(51951)
 
                 tooltip = _tooltip()
 
@@ -115072,17 +115072,16 @@ class tech_tree_trade_in(DynAccessor):
 
         class _branchSelection(DynAccessor):
             __slots__ = ()
-            nation = DynAccessor(51891)
-            researchedNationForGet = DynAccessor(51967)
-            researchedNationForTrade = DynAccessor(51914)
+            researchedNationForGet = DynAccessor(51966)
+            researchedNationForTrade = DynAccessor(51913)
 
         branchSelection = _branchSelection()
 
         class _entryPoint(DynAccessor):
             __slots__ = ()
             description = DynAccessor(51871)
-            timerText = DynAccessor(51981)
-            title = DynAccessor(51999)
+            timerText = DynAccessor(51980)
+            title = DynAccessor(51998)
 
         entryPoint = _entryPoint()
 
@@ -115091,14 +115090,14 @@ class tech_tree_trade_in(DynAccessor):
 
             class _limitedResource(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(51984)
+                title = DynAccessor(51983)
 
             limitedResource = _limitedResource()
 
             class _priceReached(DynAccessor):
                 __slots__ = ()
-                subtitle = DynAccessor(51966)
-                title = DynAccessor(51935)
+                subtitle = DynAccessor(51965)
+                title = DynAccessor(51934)
 
             priceReached = _priceReached()
 
@@ -115110,7 +115109,7 @@ class tech_tree_trade_in(DynAccessor):
 
             class _unLimitedResource(DynAccessor):
                 __slots__ = ()
-                title = DynAccessor(51995)
+                title = DynAccessor(51994)
 
             unLimitedResource = _unLimitedResource()
 
@@ -115127,8 +115126,8 @@ class tech_tree_trade_in_messenger(DynAccessor):
 
         class _error(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(52018)
-            title = DynAccessor(52009)
+            body = DynAccessor(52017)
+            title = DynAccessor(52008)
 
         error = _error()
 
@@ -115137,19 +115136,19 @@ class tech_tree_trade_in_messenger(DynAccessor):
 
             class _blueprints(DynAccessor):
                 __slots__ = ()
-                amount = DynAccessor(52020)
-                national = DynAccessor(52016)
-                title = DynAccessor(52014)
-                universal = DynAccessor(52015)
+                amount = DynAccessor(52019)
+                national = DynAccessor(52015)
+                title = DynAccessor(52013)
+                universal = DynAccessor(52014)
 
             blueprints = _blueprints()
-            crystal = DynAccessor(52017)
-            freeXP = DynAccessor(52012)
-            gold = DynAccessor(52007)
-            lockedVehicles = DynAccessor(52021)
-            spentResources = DynAccessor(52019)
-            title = DynAccessor(52011)
-            unlockedVehicles = DynAccessor(52024)
+            crystal = DynAccessor(52016)
+            freeXP = DynAccessor(52011)
+            gold = DynAccessor(52006)
+            lockedVehicles = DynAccessor(52020)
+            spentResources = DynAccessor(52018)
+            title = DynAccessor(52010)
+            unlockedVehicles = DynAccessor(52023)
 
         techTreeTradeInComplete = _techTreeTradeInComplete()
 
@@ -115158,20 +115157,20 @@ class tech_tree_trade_in_messenger(DynAccessor):
 
             class _details(DynAccessor):
                 __slots__ = ()
-                crew = DynAccessor(52025)
-                postProgressionCompensation = DynAccessor(52006)
-                xpTransfer = DynAccessor(52010)
+                crew = DynAccessor(52024)
+                postProgressionCompensation = DynAccessor(52005)
+                xpTransfer = DynAccessor(52009)
 
             details = _details()
-            paragraph = DynAccessor(52023)
-            title = DynAccessor(52008)
+            paragraph = DynAccessor(52022)
+            title = DynAccessor(52007)
 
         techTreeTradeInDetails = _techTreeTradeInDetails()
 
         class _vehicleUnavailable(DynAccessor):
             __slots__ = ()
-            body = DynAccessor(52022)
-            title = DynAccessor(52013)
+            body = DynAccessor(52021)
+            title = DynAccessor(52012)
 
         vehicleUnavailable = _vehicleUnavailable()
 

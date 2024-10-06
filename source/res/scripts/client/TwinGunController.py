@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/TwinGunController.py
 import typing
-from vehicle_systems.entity_components.vehicle_mechanic_component import ifAppearanceReady, getVehicleMechanic, getPlayerVehicleMechanic, VehicleMechanicGunPrefabComponent
+from vehicle_systems.entity_components.vehicle_mechanic_component import ifAppearanceReady, getVehicleMechanic, getPlayerVehicleMechanic, initOnce, VehicleMechanicGunPrefabComponent
 from vehicle_systems.twin_guns.custom_integrations import TwinGunCustomIntegrations
 from vehicle_systems.twin_guns.shooting_events import TwinGunShootingEvents
 if typing.TYPE_CHECKING:
@@ -18,6 +18,7 @@ def getPlayerVehicleTwinGunController():
 
 class TwinGunController(VehicleMechanicGunPrefabComponent):
 
+    @initOnce
     def __init__(self):
         super(TwinGunController, self).__init__()
         self.__afterShotDelay = 0.0

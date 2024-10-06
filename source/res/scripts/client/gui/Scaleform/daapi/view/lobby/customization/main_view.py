@@ -218,6 +218,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.__billPopoverButtonsCallbacks = {BillPopoverButtons.CUSTOMIZATION_CLEAR: self.__onCustomizationClear,
          BillPopoverButtons.CUSTOMIZATION_CLEAR_LOCKED: self.__onCustomizationClearLocked}
         self.__dontPlayTabChangeSound = False
+        self.__resetCameraDistance = False
         self.__itemsGrabMode = False
         self.__finishGrabModeCallback = None
         self.__closeConfirmatorHelper = _CustomizationCloseConfirmatorsHelper()
@@ -418,6 +419,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
     def __onModeChanged(self, modeId, prevModeId):
         self.soundManager.playInstantSound(SOUNDS.TAB_SWITCH)
         self.__dontPlayTabChangeSound = True
+        self.__resetCameraDistance = True
         if modeId == CustomizationModes.EDITABLE_STYLE:
             self.soundManager.playInstantSound(SOUNDS.EDIT_MODE_SWITCH_ON)
         elif prevModeId == CustomizationModes.EDITABLE_STYLE:
@@ -435,7 +437,11 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             modeId = self.__ctx.modeId
             highlightingMode = chooseMode(slotType, modeId, g_currentVehicle.item)
             self.service.startHighlighter(highlightingMode)
-        self.__resetCustomizationCamera(False, False)
+        if self.__resetCameraDistance:
+            self.__resetCameraDistance = False
+            self.__resetCustomizationCamera(False)
+        else:
+            self.__resetCustomizationCamera(False, False)
         self.__setAnchorsInitData()
         self.__updateAnchorsData()
         self.__updateDnd()

@@ -88,14 +88,10 @@ class CustomMode(CustomizationMode):
                 df = slotData.weakDiff(otherSlotData)
                 if not otherSlotData.intCD or df.intCD:
                     slotId = C11nId(areaId=areaId, slotType=slotType, regionIdx=regionIdx)
-                    res = self.installItem(intCD=slotData.intCD, slotId=slotId, season=season, component=slotData.component, refresh=False)
+                    res = self.installItem(intCD=slotData.intCD, slotId=slotId, season=season, component=slotData.component, refresh=True)
                     if res:
-                        item = self._service.getItemByCD(slotData.intCD)
-                        self._events.onItemInstalled(item, slotId, season, slotData.component)
                         additionallyAppliedItems += 1
 
-        if additionallyAppliedItems > 0:
-            self._ctx.refreshOutfit(season)
         return additionallyAppliedItems
 
     def installItemToAllSeasons(self, slotId, slotData):

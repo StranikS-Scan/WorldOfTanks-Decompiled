@@ -196,66 +196,9 @@ class _BaseSeasonManager(object):
 class _RankedSeasonsManager(_BaseSeasonManager):
     __rankedController = dependency.descriptor(IRankedBattlesController)
 
-    def __init__(self, entryFactory):
-        super(_RankedSeasonsManager, self).__init__(entryFactory)
-        self._seasonKey = _RANKED_SEASONS_ARCHIVE
-        seasonID = self.__getLastActiveSeasonID()
-        if seasonID is not None and not self.__rankedController.hasSpecialSeason():
-            self._seasonKey = str(seasonID)
-        return
-
     def addSeasonsDropdown(self, targetVO):
-        showDropDown = self.__hasRankedSeasonsHistory() and not self.__rankedController.hasSpecialSeason()
-        targetVO['showSeasonDropdown'] = showDropDown
-        if showDropDown:
-            seasonItems = targetVO['seasonItems'] = [self._entryFactory(_RANKED_SEASONS_ARCHIVE, backport.text(R.strings.profile.profile.ranked.seasonsdropdown.archive()))]
-            seasonIndex = 0
-            sortedSeasons = sorted(self.__rankedController.getSeasonPassed(), key=lambda seasonData: seasonData[1])
-            seasonIds = [ seasonID for seasonID, _ in sortedSeasons ]
-            currentSeason = self.__rankedController.getCurrentSeason()
-            if currentSeason:
-                seasonIds.append(currentSeason.getSeasonID())
-            for seasonID in seasonIds:
-                season = self.__rankedController.getSeason(seasonID)
-                if season:
-                    seasonsdropdown = R.strings.profile.profile.ranked.seasonsdropdown
-                    seasonItems.append(self._entryFactory(str(seasonID), backport.text(seasonsdropdown.num(season.getNumber())())))
-
-            for i, seasonItem in enumerate(seasonItems):
-                if seasonItem['key'] == self._seasonKey:
-                    seasonIndex = i
-
-            targetVO['seasonIndex'] = seasonIndex
-            targetVO['seasonEnabled'] = True
-        targetVO['playersStats'] = self.getPlayersStatsBtnEnabled()
-
-    def getPlayersStatsBtnEnabled(self):
-        if self.__rankedController.isEnabled():
-            statsSeasonID = self.__getLastActiveSeasonID()
-            if statsSeasonID is not None:
-                return str(statsSeasonID) == self._seasonKey
-        return False
+        targetVO['showSeasonDropdown'] = False
+        targetVO['playersStats'] = False
 
     def getStats(self, accountDossier):
-        if self._seasonKey == _RANKED_SEASONS_ARCHIVE:
-            return accountDossier.getSeasonRankedStats(RANKED_SEASONS_ARCHIVE_10x10, 0)
-        season = self.__rankedController.getSeason(int(self._seasonKey))
-        if season:
-            seasonKey = RankedDossierKeys.SEASON % season.getNumber()
-            seasonID = season.getSeasonID()
-            return accountDossier.getSeasonRankedStats(seasonKey, seasonID)
-
-    def __getLastActiveSeasonID(self):
-        currentSeason = self.__rankedController.getCurrentSeason()
-        if currentSeason:
-            statsSeasonID = currentSeason.getSeasonID()
-        else:
-            seasons = self.__rankedController.getSeasonPassed()
-            seasons.sort()
-            hasSeasons = bool(len(seasons))
-            statsSeasonID = seasons[-1][0] if hasSeasons else None
-        return statsSeasonID
-
-    def __hasRankedSeasonsHistory(self):
-        passedSeasons = len(self.__rankedController.getSeasonPassed())
-        return passedSeasons >= 1 or self.__rankedController.getCurrentSeason() is not None
+        return accountDossier.getSeasonRankedStats(RANKED_SEASONS_ARCHIVE_10x10, 0)

@@ -31,6 +31,8 @@ if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
     from gui.shared.money import CURRENCY_TYPE
     from season_common import GameSeasonCycle
+    from gui.shared.gui_items import Vehicle
+    from typing import List
 
 class EarlyAccessController(IEarlyAccessController, SeasonProvider, IGlobalListener):
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -90,7 +92,11 @@ class EarlyAccessController(IEarlyAccessController, SeasonProvider, IGlobalListe
         self.sysMessageController.stopNotify()
         g_clientUpdateManager.removeObjectCallbacks(self)
 
+    def init(self):
+        self.__hangarFeatureState.init()
+
     def fini(self):
+        self.__hangarFeatureState.fini()
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.sysMessageController.fini()
         self.__sysMessagesController = None
@@ -116,6 +122,11 @@ class EarlyAccessController(IEarlyAccessController, SeasonProvider, IGlobalListe
 
     def getInfoPageLink(self):
         return self.getModeSettings().infoPageLink
+
+    def getAffectedVehiclesOrderedList(self):
+        vehicles = ((self.__itemsCache.items.getItemByCD(cd), price) for cd, price in self.getAffectedVehicles().items())
+        vehicles = sorted(vehicles, key=lambda item: item[0].level)
+        return vehicles
 
     def getAffectedVehicles(self):
         return self.getModeSettings().getAffectedVehicles(self.getCurrentSeasonID())

@@ -15,6 +15,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
+from gui.techtree.go_back_helper import WulfPreviewAlias
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket
@@ -25,7 +26,7 @@ from tutorial.hints_manager import HINT_SHOWN_STATUS
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
- VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree'}
+ WulfPreviewAlias.WULF_TECHTREE: 'researchTree'}
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def _updateVehicleConfigHint(settingsCore=None):

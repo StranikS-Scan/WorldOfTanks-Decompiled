@@ -195,29 +195,6 @@
       <ignore-outside-click>	True	</ignore-outside-click>
       <update-runtime>	True	</update-runtime>
     </hint>
-    <hint>	BlueprintsTechtreeConvertButtonHint	  <item-id>	BlueprintsTechtreeConvertButton	</item-id>
-      <text>	_(#tutorial:blueprints/convertButton)	</text>
-      <arrow>
-        <direction>	L	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <condition>
-        <condition-hint-showed>
-          <hint-id>	BlueprintsResearchConvertButtonHint	</hint-id>
-          <value>	False	</value>
-        </condition-hint-showed>
-      </condition>
-      <update-runtime>	True	</update-runtime>
-      <check-view-area>	True	</check-view-area>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
     <hint>	BlueprintsResearchConvertButtonHint	  <item-id>	BlueprintsResearchConvertButton	</item-id>
       <text>	_(#tutorial:blueprints/convertButton)	</text>
       <arrow>
@@ -232,10 +209,6 @@
       </checked-ui-state>
       <condition>
         <condition-and>
-          <condition-hint-showed>
-            <hint-id>	BlueprintsTechtreeConvertButtonHint	</hint-id>
-            <value>	False	</value>
-          </condition-hint-showed>
           <condition-hint-showed>
             <hint-id>	BlueprintsResearchButtonHint	</hint-id>
             <value>	True	</value>

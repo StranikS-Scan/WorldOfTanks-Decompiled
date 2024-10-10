@@ -648,7 +648,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return False
 
     def __checkHintConditions(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or typeDescriptor.isMultiTrack or self.__checkFlameThrowerConditions(typeDescriptor)
+        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or typeDescriptor.isMultiTrack or typeDescriptor.isTankWithAbility or self.__checkFlameThrowerConditions(typeDescriptor)
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():

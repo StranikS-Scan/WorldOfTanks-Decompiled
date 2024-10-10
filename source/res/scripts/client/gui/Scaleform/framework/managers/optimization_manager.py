@@ -5,11 +5,13 @@ import GUI
 import Math
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.GraphicsOptimizationManagerMeta import GraphicsOptimizationManagerMeta
-from gui.shared import events
+from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from helpers import dependency
 from ids_generators import Int32IDGenerator
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.app_loader import IAppLoader
 _PERMANENT_SETTING_ID = ''
 _logger = logging.getLogger(__name__)
 
@@ -128,3 +130,35 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
 
     def __getSettingsIds(self, config):
         return set([ setting.id for setting in config.itervalues() ])
+
+
+class ExternalFullscreenGraphicsOptimizationComponent(object):
+    __appLoader = dependency.descriptor(IAppLoader)
+    __slots__ = ('__optimizationID',)
+
+    def __init__(self):
+        super(ExternalFullscreenGraphicsOptimizationComponent, self).__init__()
+        self.__optimizationID = None
+        return
+
+    def init(self):
+        g_eventBus.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
+        app = self.__appLoader.getApp()
+        if app:
+            width, height = GUI.screenResolution()[:2]
+            self.__optimizationID = app.graphicsOptimizationManager.registerOptimizationArea(0, 0, width, height)
+
+    def fini(self):
+        g_eventBus.removeListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
+        app = self.__appLoader.getApp()
+        if app and self.__optimizationID is not None:
+            app.graphicsOptimizationManager.unregisterOptimizationArea(self.__optimizationID)
+            self.__optimizationID = None
+        return
+
+    def __onAppResolutionChanged(self, event):
+        app = self.__appLoader.getApp()
+        ctx = event.ctx
+        if app and self.__optimizationID is not None and 'width' in ctx and 'height' in ctx:
+            app.graphicsOptimizationManager.updateOptimizationArea(self.__optimizationID, 0, 0, ctx['width'], ctx['height'])
+        return

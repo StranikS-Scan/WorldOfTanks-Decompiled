@@ -1111,6 +1111,22 @@ class DIALOGS(object):
     RESTORETANKMAN_PRICE = '#dialogs:restoreTankman/price'
     RESTORETANKMAN_FREE = '#dialogs:restoreTankman/free'
     RESTORETANKMAN_BUTTONS_RECOVER = '#dialogs:restoreTankman/buttons/recover'
+    BUYBERTHSCONFIRMATION_MESSAGE = '#dialogs:buyBerthsConfirmation/message'
+    BUYBERTHSCONFIRMATION_TITLE = '#dialogs:buyBerthsConfirmation/title'
+    BUYBERTHSCONFIRMATION_SUBMIT = '#dialogs:buyBerthsConfirmation/submit'
+    BUYBERTHSCONFIRMATION_CANCEL = '#dialogs:buyBerthsConfirmation/cancel'
+    BUYBERTHSNOTENOUGH_CREDITS_TITLE = '#dialogs:buyBerthsNotEnough/credits/title'
+    BUYBERTHSNOTENOUGH_CREDITS_MESSAGE = '#dialogs:buyBerthsNotEnough/credits/message'
+    BUYBERTHSNOTENOUGH_CREDITS_CANCEL = '#dialogs:buyBerthsNotEnough/credits/cancel'
+    BUYBERTHS_HANGARBERTHS_HEADER = '#dialogs:buyBerths/hangarBerths/header'
+    CONFIRMREWARD_TITLE = '#dialogs:confirmReward/title'
+    CONFIRMREWARD_MESSAGE = '#dialogs:confirmReward/message'
+    CONFIRMREWARD_SUBMIT = '#dialogs:confirmReward/submit'
+    CONFIRMREWARD_CANCEL = '#dialogs:confirmReward/cancel'
+    REROLLREWARD_TITLE = '#dialogs:rerollReward/title'
+    REROLLREWARD_MESSAGE = '#dialogs:rerollReward/message'
+    REROLLREWARD_CONFIRM = '#dialogs:rerollReward/confirm'
+    REROLLREWARD_CANCEL = '#dialogs:rerollReward/cancel'
     VEHICLESELLDIALOG_VEHICLETYPE_ENUM = (VEHICLESELLDIALOG_VEHICLETYPE_LIGHTTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_MEDIUMTANK,
      VEHICLESELLDIALOG_VEHICLETYPE_HEAVYTANK,
@@ -2210,7 +2226,23 @@ class DIALOGS(object):
      RESTORETANKMAN_DESCRIPTION,
      RESTORETANKMAN_PRICE,
      RESTORETANKMAN_FREE,
-     RESTORETANKMAN_BUTTONS_RECOVER)
+     RESTORETANKMAN_BUTTONS_RECOVER,
+     BUYBERTHSCONFIRMATION_MESSAGE,
+     BUYBERTHSCONFIRMATION_TITLE,
+     BUYBERTHSCONFIRMATION_SUBMIT,
+     BUYBERTHSCONFIRMATION_CANCEL,
+     BUYBERTHSNOTENOUGH_CREDITS_TITLE,
+     BUYBERTHSNOTENOUGH_CREDITS_MESSAGE,
+     BUYBERTHSNOTENOUGH_CREDITS_CANCEL,
+     BUYBERTHS_HANGARBERTHS_HEADER,
+     CONFIRMREWARD_TITLE,
+     CONFIRMREWARD_MESSAGE,
+     CONFIRMREWARD_SUBMIT,
+     CONFIRMREWARD_CANCEL,
+     REROLLREWARD_TITLE,
+     REROLLREWARD_MESSAGE,
+     REROLLREWARD_CONFIRM,
+     REROLLREWARD_CANCEL)
 
     @classmethod
     def vehicleselldialog_vehicletype(cls, key0):

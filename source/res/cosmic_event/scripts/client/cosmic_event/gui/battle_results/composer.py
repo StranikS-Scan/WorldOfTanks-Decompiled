@@ -15,7 +15,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
-    from gui.battle_results.reusable import _ReusableInfo
+    from gui.battle_results.reusable import ReusableInfo
     from typing import Dict
 _logger = logging.getLogger(__name__)
 BattleResult = namedtuple('BattleResult', ('results', 'reusable'))

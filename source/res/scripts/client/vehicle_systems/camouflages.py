@@ -600,6 +600,9 @@ def getModelAnimators(outfit, vehicleDescr, spaceId, loadedAnimators, compoundMo
             continue
         fakeModel = newFakeModel()
         node = compoundModel.node(param.attachNode)
+        if node is None:
+            _logger.error('Failed to attach sequence: "%s", node "%s" not found', param.animatorName, param.attachNode)
+            continue
         node.attach(fakeModel, param.transform)
         animWrapper = AnimationSequence.ModelWrapperContainer(fakeModel, spaceId)
         animator = __prepareAnimator(loadedAnimators, param.animatorName, animWrapper, node)

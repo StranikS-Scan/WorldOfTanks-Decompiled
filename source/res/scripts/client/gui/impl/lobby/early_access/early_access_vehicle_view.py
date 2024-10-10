@@ -3,7 +3,8 @@
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from frameworks.wulf import ViewFlags, ViewSettings
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.impl.lobby.early_access.early_access_view_impl import EarlyAccessViewImpl
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.sound_constants import RESEARCH_PREVIEW_SOUND_SPACE
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
@@ -18,7 +19,6 @@ from gui.impl.lobby.early_access.early_access_window_events import showEarlyAcce
 from gui.impl.lobby.early_access.sounds import setResearchesPreviewSoundState
 from gui.impl.lobby.early_access.tooltips.early_access_currency_tooltip_view import EarlyAccessCurrencyTooltipView
 from gui.impl.lobby.early_access.tooltips.early_access_state_tooltip import EarlyAccessStateTooltipView
-from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared import event_dispatcher
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -34,7 +34,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from frameworks.wulf import ViewEvent, View, Window
 
-class EarlyAccessVehicleView(ViewImpl):
+class EarlyAccessVehicleView(EarlyAccessViewImpl):
     __slots__ = ('__isAnimationPlaying', '__hasDelayedBalanceUpdates', '__currentVehicleCD', '__isFromTechTree', '__isAnimationFreeze')
     __itemsCache = dependency.descriptor(IItemsCache)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
@@ -80,14 +80,14 @@ class EarlyAccessVehicleView(ViewImpl):
         return State.INPROGRESS if isNext2Unlock else State.LOCKED
 
     def _initialize(self, *args, **kwargs):
+        g_currentPreviewVehicle.onSelectedNoVehicle += self.__onSelectNoVehicle
         super(EarlyAccessVehicleView, self)._initialize(*args, **kwargs)
         app = self.__appLoader.getApp()
         app.setBackgroundAlpha(0)
-        self.__earlyAccessController.hangarFeatureState.enter(self.layoutID, activateVehicleState=True)
 
     def _finalize(self):
-        self.__earlyAccessController.hangarFeatureState.exit(self.layoutID)
         self.soundManager.playSound('comp_7_progressbar_stop')
+        g_currentPreviewVehicle.onSelectedNoVehicle -= self.__onSelectNoVehicle
         super(EarlyAccessVehicleView, self)._finalize()
 
     def _onLoading(self, *args, **kwargs):
@@ -126,8 +126,9 @@ class EarlyAccessVehicleView(ViewImpl):
             model.setEndProgressionDate(endProgressionDate)
             model.setFeatureState(self.__earlyAccessController.getState().value)
             model.setIsFromTechTree(self.__isFromTechTree)
+            model.setIsQuestWidgetEnabled(self.__earlyAccessController.isAnyQuestAvailable())
             if shouldUpdateSelectedVehicle:
-                self.__updateSelectedVehicle(model)
+                self.__updateSelectedVehicle()
             model.setCurrentVehicleCD(self.__currentVehicleCD)
             self.__fillVehicles(model, showCarouselSliderAnimation)
             model.setTokensBalance(self.__earlyAccessController.getTokensBalance())
@@ -181,12 +182,10 @@ class EarlyAccessVehicleView(ViewImpl):
         self.__comparisonBasket.addVehicle(vehicleCD)
 
     def __onShowVehiclePreview(self, event):
-        self.destroy()
         vehicleCD = int(event.get(EarlyAccessVehicleViewModel.ARG_VEHICLE_CD, 0))
         showVehiclePreview(vehicleCD, previewBackCb=self.__previewBackCallback, isFromVehicleView=True)
 
     def __onShowInHangar(self, event):
-        self.destroy()
         vehicleCD = int(event.get(EarlyAccessVehicleViewModel.ARG_VEHICLE_CD, 0))
         event_dispatcher.selectVehicleInHangar(vehicleCD)
 
@@ -196,8 +195,6 @@ class EarlyAccessVehicleView(ViewImpl):
         showBuyTokensWindow(parent=self.getWindow(), backCallback=self.__buyViewBackCallback)
 
     def __onShowQuestsView(self):
-        self.__earlyAccessController.hangarFeatureState.enter(R.views.lobby.early_access.EarlyAccessQuestsView())
-        self.destroy()
         showEarlyAccessQuestsView(isFromTechTree=self.__isFromTechTree)
 
     def __onBuyVehicle(self, event):
@@ -206,12 +203,10 @@ class EarlyAccessVehicleView(ViewImpl):
         showVehicleBuyDialog(vehicle)
 
     def __onBackToHangar(self):
-        self.destroy()
         event_dispatcher.showHangar()
 
     def __onBackToPrevScreen(self):
-        self.destroy()
-        event_dispatcher.showTechTree(self.__currentVehicleCD)
+        event_dispatcher.showVehicleTechTreeView(self.__currentVehicleCD)
 
     def __buyViewBackCallback(self):
         self.__isAnimationFreeze = False
@@ -221,7 +216,7 @@ class EarlyAccessVehicleView(ViewImpl):
     def __previewBackCallback(self):
         showEarlyAccessVehicleView(isFromTechTree=self.__isFromTechTree, selectedVehicleCD=self.__currentVehicleCD)
 
-    def __updateSelectedVehicle(self, model):
+    def __updateSelectedVehicle(self):
         currProgressVehicleCD = self.__earlyAccessController.getCurrProgressVehicleCD()
         if self.__currentVehicleCD != currProgressVehicleCD:
             self.__currentVehicleCD = currProgressVehicleCD
@@ -253,6 +248,11 @@ class EarlyAccessVehicleView(ViewImpl):
         if self.__hasDelayedBalanceUpdates:
             self.__updateModel(shouldUpdateSelectedVehicle=False, showCarouselSliderAnimation=True)
             self.__hasDelayedBalanceUpdates = False
+
+    def __onSelectNoVehicle(self):
+        if self.__currentVehicleCD is not None and g_currentPreviewVehicle != self.__currentVehicleCD:
+            g_currentPreviewVehicle.selectVehicle(self.__currentVehicleCD)
+        return
 
     def __onStartMoving(self):
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)

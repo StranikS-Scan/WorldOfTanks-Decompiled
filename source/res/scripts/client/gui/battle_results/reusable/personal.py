@@ -18,6 +18,7 @@ from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.battle_results.br_constants import UNKNOWN_ACHIEVEMENT_ID
 if typing.TYPE_CHECKING:
     from gui.battle_results.reusable.vehicles import VehiclesInfo
     from gui.shared.utils.requesters.StatsRequester import _ControllableXPData
@@ -517,14 +518,14 @@ class PersonalInfo(shared.UnpackedInfo):
                 continue
             data = result[intCD]
             achievements = shared.makeAchievementFromPersonal(data)
-            for direction, achievement in achievements:
+            for direction, achievement, achievementID in achievements:
                 if direction == 1:
-                    right.append((achievement, True))
-                left.append((achievement, True))
+                    right.append(shared.AchievementSimpleData(achievement=achievement, isUnique=True, achievementID=achievementID, isPersonal=True))
+                left.append(shared.AchievementSimpleData(achievement=achievement, isUnique=True, achievementID=achievementID, isPersonal=True))
 
             achievement = shared.makeMarkOfMasteryFromPersonal(data)
             if achievement is not None:
-                left.append((achievement, False))
+                left.append(shared.AchievementSimpleData(achievement=achievement, isUnique=False, achievementID=UNKNOWN_ACHIEVEMENT_ID, isPersonal=True))
 
         return (left, sorted(right, key=sort_keys.AchievementSortKey))
 

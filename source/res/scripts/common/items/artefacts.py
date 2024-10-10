@@ -1,14 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
-import math
 import os
 from re import findall
 from enum import Enum, unique
-from typing import TYPE_CHECKING, NamedTuple, Set, Dict, Optional, Any, Tuple
+from typing import TYPE_CHECKING, NamedTuple
 import items
 import nations
 from ArenaType import readVisualScriptSection
-from ResMgr import DataSection
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH, SkillProcessorArgs, GroupSkillProcessorArgs, TTC_TOOLTIP_SECTIONS
 from debug_utils import LOG_DEBUG_DEV
 from items import ITEM_OPERATION, PREDEFINED_HEAL_GROUPS
@@ -24,6 +22,7 @@ from vehicles import _readPriceForOperation
 from Math import Vector3
 if TYPE_CHECKING:
     from ResMgr import DataSection
+    from typing import Set, Dict, Optional, Any, Tuple
 if IS_CLIENT:
     from helpers import i18n
     from gui.impl.backport import text
@@ -48,6 +47,8 @@ class ExportParamsTag(Enum):
     VSE = 'vse'
     TOOLTIP = 'tooltip'
 
+
+ArtefactID = NamedTuple('ArtefactID', [('nationIdx', int), ('itemID', int)])
 
 class CommonXmlSectionReader(object):
 
@@ -197,7 +198,7 @@ class Artefact(BasicItem):
 
     def _readBasicConfig(self, xmlCtx, section):
         self.name = section.name
-        self.id = (nations.NONE_INDEX, _xml.readInt(xmlCtx, section, 'id', 0, 65535))
+        self.id = ArtefactID(nations.NONE_INDEX, _xml.readInt(xmlCtx, section, 'id', 0, 65535))
         self.compactDescr = vehicles.makeIntCompactDescrByID(self.itemTypeName, *self.id)
         if not section.has_key('tags'):
             self.tags = frozenset()
@@ -507,7 +508,7 @@ class ImprovedConfiguration(StaticOptionalDevice):
 
 
 class Equipment(Artefact):
-    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'code')
+    __slots__ = ('equipmentType', 'reuseCount', 'cooldownSeconds', 'soundNotification', 'stunResistanceEffect', 'stunResistanceDuration', 'repeatedStunDurationFactor', 'clientSelector', 'ownerPrefab', 'usagePrefab', 'playerMessagesKey', 'code', 'activationSound', 'deactivationSound', 'refillSound', 'consumeSeconds', 'deploySeconds', 'rechargeSeconds', 'soundPressedReady', 'soundPressedNotReady', 'soundPressedCancel')
 
     def __init__(self):
         super(Equipment, self).__init__(items.ITEM_TYPES.equipment, 0, '', 0)
@@ -517,21 +518,37 @@ class Equipment(Artefact):
         self.repeatedStunDurationFactor = 1.0
         self.reuseCount = component_constants.ZERO_INT
         self.cooldownSeconds = component_constants.ZERO_INT
+        self.consumeSeconds = component_constants.ZERO_INT
+        self.rechargeSeconds = component_constants.ZERO_INT
+        self.deploySeconds = component_constants.ZERO_INT
         self.soundNotification = None
         self.clientSelector = None
         self.playerMessagesKey = None
         self.clientSelector = None
         self.code = None
+        self.activationSound = None
+        self.deactivationSound = None
+        self.refillSound = None
+        self.soundPressedReady = None
+        self.soundPressedNotReady = None
+        self.soundPressedCancel = None
         return
 
     def _readBasicConfig(self, xmlCtx, section):
         super(Equipment, self)._readBasicConfig(xmlCtx, section)
         self.equipmentType = items.EQUIPMENT_TYPES[section.readString('type', 'regular')]
         self.soundNotification = _xml.readStringOrNone(xmlCtx, section, 'soundNotification')
+        self.activationSound = _xml.readStringOrNone(xmlCtx, section, 'activationSound')
+        self.deactivationSound = _xml.readStringOrNone(xmlCtx, section, 'deactivationSound')
+        self.refillSound = _xml.readStringOrNone(xmlCtx, section, 'refillSound')
         self.playerMessagesKey = _xml.readStringOrNone(xmlCtx, section, 'playerMessagesKey')
+        self.soundPressedReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedReady')
+        self.soundPressedNotReady = _xml.readStringOrNone(xmlCtx, section, 'soundPressedNotReady')
+        self.soundPressedCancel = _xml.readStringOrNone(xmlCtx, section, 'soundPressedCancel')
         scriptSection = section['script']
         self.stunResistanceEffect, self.stunResistanceDuration, self.repeatedStunDurationFactor = _readStun(xmlCtx, scriptSection)
-        self.reuseCount, self.cooldownSeconds = _readReuseParams(xmlCtx, scriptSection)
+        params = _readReuseParams(xmlCtx, scriptSection)
+        self.reuseCount, self.cooldownSeconds, self.consumeSeconds, self.deploySeconds, self.rechargeSeconds = params
         self.clientSelector = _xml.readStringOrNone(xmlCtx, scriptSection, 'clientSelector')
         self.ownerPrefab = _xml.readStringOrNone(xmlCtx, section, 'ownerPrefab')
         self.usagePrefab = _xml.readStringOrNone(xmlCtx, section, 'usagePrefab')
@@ -2405,6 +2422,78 @@ class LevelBasedVisualScriptEquipment(VisualScriptEquipment):
         return self.radius[skillLevel - 1]
 
 
+class SureShotEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'stabMovement', 'stabTurns', 'stabTurret', 'stabShot', 'reloadBonus', 'finalDispersion')
+
+    @property
+    def tooltipParams(self):
+        params = super(SureShotEquipment, self).tooltipParams
+        params['stabMovement'] = (self.stabMovement - 1.0) * 100
+        params['stabTurns'] = (self.stabTurns - 1.0) * 100
+        params['stabTurret'] = (self.stabTurret - 1.0) * 100
+        params['stabShot'] = (self.stabShot - 1.0) * 100
+        params['reloadBonus'] = (self.reloadBonus - 1.0) * 100
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(SureShotEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.finalDispersion = section.readFloat('finalDispersion')
+        self.stabMovement = section.readFloat('stabMovement')
+        self.stabTurns = section.readFloat('stabTurns')
+        self.stabTurret = section.readFloat('stabTurret')
+        self.stabShot = section.readFloat('stabShot')
+        self.reloadBonus = section.readFloat('reloadBonus')
+        self._exportSlotsToVSE()
+
+
+class JuggernautEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'enginePowerFactor', 'stunDurationFactor', 'repairBuff', 'gunReloadBoostSeconds', 'shotsLimitForGunBoost', 'minTimeBetweenReloadBoost')
+
+    @property
+    def tooltipParams(self):
+        params = super(JuggernautEquipment, self).tooltipParams
+        params['enginePowerFactor'] = (self.enginePowerFactor - 1.0) * 100
+        params['stunDurationFactor'] = self.stunDurationFactor * 100
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(JuggernautEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.enginePowerFactor = section.readFloat('enginePowerFactor')
+        self.stunDurationFactor = section.readFloat('stunDurationFactor')
+        self.repairBuff = section.readFloat('repairBuff')
+        self.gunReloadBoostSeconds = section.readFloat('gunReloadBoostSeconds')
+        self.shotsLimitForGunBoost = section.readInt('shotsLimitForGunBoost')
+        self.minTimeBetweenReloadBoost = section.readFloat('minTimeBetweenReloadBoost')
+        self._exportSlotsToVSE()
+
+
+class ConcentrationEquipment(VisualScriptEquipment):
+    __slots__ = ('duration', 'stabMovement', 'stabTurns', 'stabTurret', 'stabShot', 'addSecToTimeBtmClips', 'reloadFactor')
+
+    @property
+    def tooltipParams(self):
+        params = super(ConcentrationEquipment, self).tooltipParams
+        params['stabMovement'] = (self.stabMovement - 1.0) * 100
+        params['stabTurns'] = (self.stabTurns - 1.0) * 100
+        params['stabTurret'] = (self.stabTurret - 1.0) * 100
+        params['stabShot'] = (self.stabShot - 1.0) * 100
+        params['reloadFactor'] = (self.reloadFactor - 1.0) * 100
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(ConcentrationEquipment, self)._readConfig(xmlCtx, section)
+        self.duration = section.readFloat('duration')
+        self.stabMovement = section.readFloat('stabMovement')
+        self.stabTurns = section.readFloat('stabTurns')
+        self.stabTurret = section.readFloat('stabTurret')
+        self.stabShot = section.readFloat('stabShot')
+        self.addSecToTimeBtmClips = section.readFloat('addSecToTimeBtmClips')
+        self.reloadFactor = section.readFloat('reloadFactor')
+        self._exportSlotsToVSE()
+
+
 class Comp7AoeHealEquipment(VisualScriptEquipment):
     __slots__ = ('duration', 'radius', 'heal', 'secondaryHealDebuff', 'tickInterval')
 
@@ -2733,7 +2822,11 @@ def _readStun(xmlCtx, scriptSection):
 
 
 def _readReuseParams(xmlCtx, scriptSection):
-    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0, _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0)
+    return (_xml.readInt(xmlCtx, scriptSection, 'reuseCount', minVal=-1) if scriptSection.has_key('reuseCount') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', minVal=0) if scriptSection.has_key('cooldownSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'consumeSeconds', minVal=0) if scriptSection.has_key('consumeSeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'deploySeconds', minVal=0) if scriptSection.has_key('deploySeconds') else 0,
+     _xml.readInt(xmlCtx, scriptSection, 'rechargeSeconds', minVal=0) if scriptSection.has_key('rechargeSeconds') else 0)
 
 
 class OPT_DEV_TYPE_TAG(object):

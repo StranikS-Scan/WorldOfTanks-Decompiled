@@ -173,6 +173,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__isObserver = False
         self.__attachments = []
         self.__modelAnimators = []
+        self.__customAnimators = []
         self.turretMatrix = None
         self.gunMatrix = None
         self.__allLodCalculators = []
@@ -191,6 +192,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.undamagedStateChildren = []
         self.createComponent(VehicleAppearanceComponent, self)
         self._loadingQueue = []
+        self.enableExhaust = True
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD, renderMode=None):
@@ -322,8 +324,9 @@ class CommonTankAppearance(ScriptGameObject):
         camouflages.updateFashions(self)
         model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
         self._createStickers()
-        from prefab_attachment_utils import addPrefabAttachments
-        addPrefabAttachments(self, self.typeDescriptor)
+        if not self.damageState.isCurrentModelDamaged:
+            from prefab_attachment_utils import addPrefabAttachments
+            addPrefabAttachments(self, self.typeDescriptor)
         while self._loadingQueue:
             prefab, go, vector, callback = self._loadingQueue.pop()
             CGF.loadGameObjectIntoHierarchy(prefab, go, vector, callback)
@@ -333,6 +336,7 @@ class CommonTankAppearance(ScriptGameObject):
     def destroy(self):
         self._vehicleInfo = {}
         self.flagComponent = None
+        self.clearCustomAnimators()
         self._destroySystems()
         fashions = VehiclePartsTuple(None, None, None, None)
         self._setFashions(fashions, self._isTurretDetached)
@@ -393,6 +397,7 @@ class CommonTankAppearance(ScriptGameObject):
             modelAnimator.animator.setEnabled(False)
 
         super(CommonTankAppearance, self).deactivate()
+        self.__customAnimators = []
         self.shadowManager.unregisterCompoundModel(self.compoundModel)
         self._stopSystems()
         self.wheelsGameObject.deactivate()
@@ -420,17 +425,14 @@ class CommonTankAppearance(ScriptGameObject):
         self._initiateRecoil(TankNodeNames.GUN_INCLINATION, 'HP_gunFire', self.gunRecoil)
 
     def multiGunRecoil(self, indexes):
-        if self.gunAnimators is None:
-            return
-        else:
-            for index in indexes:
-                typeDescr = self.typeDescriptor
-                gunNodeName = typeDescr.turret.multiGun[index].node
-                gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
-                gunAnimator = self.gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator)
-                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+        gunAnimators = self.gunAnimators
+        for index in indexes:
+            typeDescr = self.typeDescriptor
+            gunNodeName = typeDescr.turret.multiGun[index].node
+            gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+            self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator) if gunAnimators else None)
 
-            return
+        return
 
     def computeFullVehicleLength(self):
         vehicleLength = 0.0
@@ -444,7 +446,8 @@ class CommonTankAppearance(ScriptGameObject):
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.typeDescriptor.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        gunAnimator.recoil()
+        if gunAnimator is not None:
+            gunAnimator.recoil()
         return impulseDir
 
     def _connectCollider(self):
@@ -606,15 +609,19 @@ class CommonTankAppearance(ScriptGameObject):
             self.__periodicTimerID = None
         self.__modelAnimators = []
         self.filter.enableLagDetection(False)
+        self.clearUndamagedStateChildren()
+        return
+
+    def clearUndamagedStateChildren(self):
         for go in self.undamagedStateChildren:
             CGF.removeGameObject(go)
 
         self.undamagedStateChildren = []
-        return
 
     def _onRequestModelsRefresh(self):
         self.flagComponent = None
         self.__updateModelStatus()
+        self.clearCustomAnimators()
         return
 
     def __updateModelStatus(self):
@@ -720,7 +727,7 @@ class CommonTankAppearance(ScriptGameObject):
     def __updateEffectsLOD(self):
         if self.customEffectManager:
             distanceFromPlayer = self.lodCalculator.lodDistance
-            enableExhaust = distanceFromPlayer <= _LOD_DISTANCE_EXHAUST and not self.isUnderwater
+            enableExhaust = distanceFromPlayer <= _LOD_DISTANCE_EXHAUST and not self.isUnderwater and self.enableExhaust
             enableTrails = distanceFromPlayer <= _LOD_DISTANCE_TRAIL_PARTICLES and BigWorld.wg_isVehicleDustEnabled()
             self.customEffectManager.enable(enableTrails, EffectSettings.SETTING_DUST)
             self.customEffectManager.enable(enableExhaust, EffectSettings.SETTING_EXHAUST)
@@ -826,6 +833,21 @@ class CommonTankAppearance(ScriptGameObject):
          go,
          vector,
          callback))
+
+    def addCustomAnimator(self, modelAnimator):
+        self.__customAnimators.append(modelAnimator)
+        self.registerComponent(modelAnimator)
+
+    def removeCustomAnimator(self, modelAnimator):
+        if modelAnimator in self.__customAnimators:
+            self.__customAnimators.remove(modelAnimator)
+            self.removeComponent(modelAnimator)
+
+    def clearCustomAnimators(self):
+        for animator in self.__customAnimators:
+            self.removeComponent(animator)
+
+        self.__customAnimators = []
 
     def _onCameraChanged(self, cameraName, currentVehicleId=None):
         if self.id != BigWorld.player().playerVehicleID:

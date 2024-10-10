@@ -486,6 +486,11 @@ class InsigniaXmlReader(BaseCustomizationItemXmlReader):
         if section.has_key('texture'):
             target.texture = section.readString('texture')
         target.canBeMirrored = section.readBool('canBeMirrored', False)
+        target.emissionSettings = {'emissionMap': section.readString('emissionMap', ''),
+         'emissionPatternMap': section.readString('emissionPatternMap', ''),
+         'forwardEmissionBrightness': section.readFloat('forwardEmissionBrightness', DEFAULT_FORWARD_EMISSION),
+         'deferredEmissionBrightness': section.readFloat('deferredEmissionBrightness', DEFAULT_DEFERRED_EMISSION),
+         'emissionAnimationSpeed': section.readFloat('emissionAnimationSpeed', DEFAULT_EMISSION_ANIMATION_SPEED)}
 
 
 def readCustomizationCacheFromXml(cache, folder):

@@ -6,11 +6,11 @@ import inspect
 import logging
 import math
 import operator
-import typing
 from collections import namedtuple, defaultdict
-from math import ceil, floor
 from itertools import izip_longest
+from math import ceil, floor
 import BigWorld
+import typing
 from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, HAS_EXPLOSION, PenaltyTypes
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
@@ -355,6 +355,9 @@ class VehicleParams(_ParameterBase):
     def __getattr__(self, item):
         if KPI.Name.hasValue(item):
             return self.__kpi.getFactor(item)
+        suffix = 'AbilityKpi'
+        if item.endswith(suffix):
+            return self.__readAbilityKpi(item[:-len(suffix)])
         suffix = 'Situational'
         if item.endswith(suffix):
             return getattr(self, item[:-len(suffix)])
@@ -644,6 +647,22 @@ class VehicleParams(_ParameterBase):
         return max(value, MIN_RELATIVE_VALUE)
 
     @property
+    def relativeAbility(self):
+        pass
+
+    @property
+    def duration(self):
+        return self.__readAbilityParam('duration')
+
+    @property
+    def reuseCount(self):
+        return self.__readAbilityParam('reuseCount')
+
+    @property
+    def cooldown(self):
+        return self.__readAbilityParam('cooldownSeconds')
+
+    @property
     def damagedModulesDetectionTimeSituational(self):
         return max(MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, self.__kpi.getFactor(KPI.Name.DAMAGED_MODULES_DETECTION_TIME))
 
@@ -840,8 +859,6 @@ class VehicleParams(_ParameterBase):
                 repairTime.append(self.__calcRealChassisRepairTime(track.healthParams.repairTime))
 
             repairTime.reverse()
-            if chassis.isMultiTrack and repairTime:
-                repairTime = [min(repairTime), max(repairTime)]
         elif chassis.repairTime is not None:
             repairTime.append(self.__calcRealChassisRepairTime(chassis.repairTime))
         return repairTime
@@ -1158,6 +1175,28 @@ class VehicleParams(_ParameterBase):
 
         return result
 
+    def __readAbilityParam(self, item):
+        abilityID = self.__vehicle.typeDescr.ability
+        if abilityID is None:
+            return
+        else:
+            ability = vehicles.g_cache.getEquipmentByID(abilityID)
+            return getattr(ability, item)
+
+    def __readAbilityKpi(self, item):
+        abilityID = self.__vehicle.typeDescr.ability
+        if abilityID is None:
+            return
+        else:
+            ability = vehicles.g_cache.getEquipmentByID(abilityID)
+            for kpi in ability.kpi:
+                if kpi.name == item:
+                    if kpi.specValue is not None:
+                        return (kpi.value, kpi.specValue)
+                    return kpi.value
+
+            return
+
 
 class GunParams(WeightedParam):
     SHELLS_COUNT_PROPS = (SHELLS_COUNT_PROP_NAME, SHELLS_BURST_COUNT_PROP_NAME, SHELLS_FLAME_BURST_COUNT_PROP_NAME)
@@ -1367,7 +1406,20 @@ class ShellParams(CompatibleParams):
 
     @property
     def damage(self):
-        return self._getRawParams()[DAMAGE_PROP_NAME]
+        return None if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else self._getRawParams()[DAMAGE_PROP_NAME]
+
+    @property
+    def distanceDamage(self):
+        distanceDmg = self._itemDescr.distanceDmg
+        return distanceDmg.damage if distanceDmg is not None else None
+
+    @property
+    def damagePerSecond(self):
+        if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle:
+            gun = self._vehicleDescr.gun
+            return self.avgDamage / (gun.clip[1] if gun.clip[1] > 0 else round(gun.reloadTime, 2))
+        else:
+            return None
 
     @property
     def avgDamage(self):

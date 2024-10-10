@@ -498,7 +498,7 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerSharedControllerRepo
         registerSharedControllerRepo(self._ARENA_GUI_TYPE, self._client_sharedControllersRepository)
 
-    def registerBattleResultsConfig(self):
+    def registerBattleResultsConfig(self, arenaRange=None):
         config = self._BATTLE_RESULTS_CONFIG
         if config is None:
             LOG_DEBUG('initBattleResultsConfigFromExtension: config is None')
@@ -506,7 +506,12 @@ class AbstractBattleMode(object):
         else:
             from battle_results import battle_results_constants
             module = config.__name__
-            battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
+            if arenaRange is None:
+                battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
+            else:
+                for arena in arenaRange:
+                    battle_results_constants.PATH_TO_CONFIG.update({arena: module})
+
             return
 
     def registerClientBattleResultsComposer(self):
@@ -552,7 +557,7 @@ class AbstractBattleMode(object):
         from chat_shared import SYS_MESSAGE_TYPE
         SYS_MESSAGE_TYPE.inject(self._SM_TYPES)
 
-    def registerBattleResultSysMsgType(self):
+    def registerBattleResultSysMsgType(self, arenaRanges=None):
         from battle_results import ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE
         from chat_shared import SYS_MESSAGE_TYPE
         if self._ARENA_BONUS_TYPE in ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE:
@@ -562,7 +567,12 @@ class AbstractBattleMode(object):
         except AttributeError:
             raise SoftException('No index for {attr} found. Use registerSystemMessagesTypes before')
 
-        ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({self._ARENA_BONUS_TYPE: msgTypeIndex})
+        if arenaRanges:
+            for arenaBonusType in arenaRanges:
+                ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({arenaBonusType: msgTypeIndex})
+
+        else:
+            ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({self._ARENA_BONUS_TYPE: msgTypeIndex})
         msg = 'ARENA_BONUS_TYPE:{type}->{sysMsg} was added to UNIT_MGR_FLAGS_TO_QUEUE_TYPE. Personality: {p}'.format(type=self._ARENA_BONUS_TYPE, sysMsg=self._SM_TYPE_BATTLE_RESULT, p=self._personality)
         LOG_DEBUG(msg)
 

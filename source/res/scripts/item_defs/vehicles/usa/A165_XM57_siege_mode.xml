@@ -46,15 +46,15 @@
       <armor_2>	180	</armor_2>
       <armor_3>	125	</armor_3>
       <armor_4>	50	</armor_4>
-      <armor_5>	35	</armor_5>
+      <armor_5>	40	</armor_5>
       <armor_6>	150	</armor_6>
-      <armor_7>	110	</armor_7>
+      <armor_7>	170	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	170	</armor_9>
+      <armor_9>	105	</armor_9>
       <armor_10>	35	</armor_10>
       <armor_11>	140	</armor_11>
       <armor_12>	115	</armor_12>
-      <armor_13>	55	</armor_13>
+      <armor_13>	65	</armor_13>
       <armor_14>	95	</armor_14>
       <armor_15>	100	</armor_15>
       <armor_16>	250	</armor_16>
@@ -62,15 +62,15 @@
       <armor_18>	200	</armor_18>
       <armor_19>	160	</armor_19>
       <armor_20>	225	</armor_20>
-      <armor_21>	220	</armor_21>
+      <armor_21>	240	</armor_21>
       <armor_22>	60	</armor_22>
       <armor_23>	80	</armor_23>
       <armor_24>	280	</armor_24>
-      <armor_25>	260	</armor_25>
+      <armor_25>	85	</armor_25>
       <armor_26>	120	</armor_26>
       <armor_27>	85	</armor_27>
       <armor_28>	70	</armor_28>
-      <armor_29>	105	</armor_29>
+      <armor_29>	85	</armor_29>
       <armor_30>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_30>
       <leftTrack>	20	</leftTrack>
@@ -88,6 +88,13 @@
       <undamaged>	vehicles/american/A165_XM57/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A165_XM57/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A165_XM57/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A165_XM57_3Dst>
+          <undamaged>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Hull.model	</exploded>
+        </A165_XM57_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -110,9 +117,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.638811 0.809043 3.015722	</rayStart>
-        <rayEnd>	-0.638811 -0.175765 2.842074	</rayEnd>
-        <rayUp>	-0 0.173648 -0.984808	</rayUp>
+        <rayStart>	0.639 0.809043 3.015722	</rayStart>
+        <rayEnd>	0.639 -0.175765 2.842074	</rayEnd>
+        <rayUp>	0 0.173648 -0.984808	</rayUp>
         <size>	0.299999	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
         <isUVProportional>	false	</isUVProportional>
@@ -171,7 +178,7 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15000	</slotId>
-        <tags>	front safe formfactor_rect1x2	</tags>
+        <tags>	front formfactor_rect1x2 safe	</tags>
         <position>	0 1.250185 3.390631	</position>
         <rotation>	0.436333 0 3.141593	</rotation>
         <scale>	0.85 2.000006 0.85	</scale>
@@ -182,7 +189,7 @@
       <slot>
         <slotType>	projectionDecal	</slotType>
         <slotId>	15001	</slotId>
-        <tags>	formfactor_square front safe	</tags>
+        <tags>	front formfactor_square safe	</tags>
         <position>	0 1.242317 3.268306	</position>
         <rotation>	0.483018 -0 3.141593	</rotation>
         <scale>	0.68 1.000003 0.68	</scale>
@@ -1161,6 +1168,52 @@
         <clipAngle>	1.24634	</clipAngle>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15103	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	A165_XM57_3Dst	</compatibleModels>
+        <position>	-1.271385 1.951681 0.721051	</position>
+        <rotation>	0.660212 -0.894905 -3.11189	</rotation>
+        <scale>	0.488152 3.089554 0.488152	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15104	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	A165_XM57_3Dst	</compatibleModels>
+        <position>	-1.45955 1.4244 3.25109	</position>
+        <rotation>	0.135709 0 3.141593	</rotation>
+        <scale>	0.775 0.5 0.775	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.379435	</clipAngle>
+        <verticalMirror>	true	</verticalMirror>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15105	</slotId>
+        <tags>	formfactor_square direction_right_to_left	</tags>
+        <compatibleModels>	A165_XM57_3Dst	</compatibleModels>
+        <position>	1.46436 1.44307 3.25364	</position>
+        <rotation>	0.135709 0 3.141593	</rotation>
+        <scale>	0.775 0.5 0.775	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.301418	</clipAngle>
+        <verticalMirror>	true	</verticalMirror>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1170,8 +1223,8 @@
     </customization>
     <hangarShadowTexture>	vehicles/american/A165_XM57/XM57_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <density>	144.645493 143.547943	</density>
-      <aoTextureSize>	512 512	</aoTextureSize>
+      <density>	128.936829 128.614563	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1202,6 +1255,13 @@
         <undamaged>	vehicles/american/A165_XM57/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A165_XM57/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A165_XM57/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A165_XM57_3Dst>
+            <undamaged>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A165_XM57_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1305,7 +1365,7 @@
                 </boxCollider>
               </hullCollider>
               <hullCollider>
-                <modelsSet>	R165_Object_703_II_2_3dst	</modelsSet>
+                <modelsSet>	A165_XM57_3Dst	</modelsSet>
                 <boxCollider>
                   <row0>	0.530084 0.468024 0.000000	</row0>
                   <row1>	-0.468024 0.530084 0.000000	</row1>
@@ -1440,7 +1500,7 @@
                 </boxCollider>
               </hullCollider>
               <hullCollider>
-                <modelsSet>	R165_Object_703_II_2_3dst	</modelsSet>
+                <modelsSet>	A165_XM57_3Dst	</modelsSet>
                 <boxCollider>
                   <row0>	0.530101 0.468005 0.000000	</row0>
                   <row1>	-0.468005 0.530101 0.000000	</row1>
@@ -1562,8 +1622,8 @@
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>
       </effects>
-      <wwsoundPC>	trds_chf_npc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.081696 0.000000	</hullPosition>
       <customizationSlots>
         <slot>
@@ -2410,7 +2470,7 @@
         <armor_2>	310	</armor_2>
         <armor_3>	130	</armor_3>
         <armor_4>	40	</armor_4>
-        <armor_5>	40	</armor_5>
+        <armor_5>	70	</armor_5>
         <armor_6>	130	</armor_6>
         <armor_7>	155	</armor_7>
         <armor_8>	0	</armor_8>
@@ -2418,12 +2478,12 @@
         <armor_10>	30	</armor_10>
         <armor_11>	145	</armor_11>
         <armor_12>	135	</armor_12>
-        <armor_13>	120	</armor_13>
+        <armor_13>	135	</armor_13>
         <armor_14>	110	</armor_14>
         <armor_15>	100	</armor_15>
-        <armor_16>	85	</armor_16>
-        <armor_17>	70	</armor_17>
-        <armor_18>	60	</armor_18>
+        <armor_16>	100	</armor_16>
+        <armor_17>	90	</armor_17>
+        <armor_18>	80	</armor_18>
         <armor_19>	175	</armor_19>
         <armor_20>	160	</armor_20>
         <armor_21>	190	</armor_21>
@@ -2434,8 +2494,8 @@
         <armor_26>	225	</armor_26>
         <armor_27>	170	</armor_27>
         <armor_28>	150	</armor_28>
-        <armor_29>	215	</armor_29>
-        <armor_30>	75	</armor_30>
+        <armor_29>	130	</armor_29>
+        <armor_30>	115	</armor_30>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5300	</weight>
@@ -2469,15 +2529,15 @@
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <turretYawLimits>	-75 75	</turretYawLimits>
           <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
@@ -2489,24 +2549,12 @@
             </armor_9>
             <armor_10>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
-            <armor_11>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_11>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_11>
-            <armor_12>	340	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_12>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_12>
             <armor_13>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_13>
-            <armor_14>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_14>
-            <armor_15>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_16>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_16>
-            <armor_17>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_17>
-            <armor_18>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_18>
-            <armor_19>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_19>
             <gun>	50	</gun>
           </armor>
           <customizationSlots>
@@ -2532,12 +2580,39 @@
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	direction_left_to_right formfactor_square	</tags>
+              <compatibleModels>	A165_XM57_3Dst	</compatibleModels>
+              <position>	-0 2.040595 2.87308	</position>
+              <rotation>	0.148108 0 3.141593	</rotation>
+              <scale>	0.56162 0.56162 0.561621	</scale>
+              <showOn>	4096	</showOn>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	0 0 0	</position>
+              <rotation>	0 0 0	</rotation>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.01 0 2.8	</rayStart>
               <rayEnd>	-0.01 0 3.57	</rayEnd>
               <rayUp>	0.14 0 0	</rayUp>
+              <compatibleModels>	default	</compatibleModels>
               <size>	0.77	</size>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0 0 2.64	</rayStart>
+              <rayEnd>	0 0 3.29	</rayEnd>
+              <rayUp>	0.2 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	A165_XM57_3Dst	</compatibleModels>
+              <size>	0.65	</size>
             </slot>
           </customizationSlots>
           <customization>
@@ -2550,6 +2625,13 @@
             <undamaged>	vehicles/american/A165_XM57/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A165_XM57/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A165_XM57/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A165_XM57_3Dst>
+                <undamaged>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </A165_XM57_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A165_XM57/collision/Gun_02.model	</collisionModelServer>
@@ -2558,8 +2640,8 @@
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <shotOffset>	-0.01 -0.005624 0	</shotOffset>
           <camouflage>
-            <density>	253.621323 244.8806	</density>
-            <aoTextureSize>	1024 1024	</aoTextureSize>
+            <density>	104.430885 114.091507	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_155mm_AT_Gun_T7E1_57>
       </guns>
@@ -2567,6 +2649,13 @@
         <undamaged>	vehicles/american/A165_XM57/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A165_XM57/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A165_XM57/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A165_XM57_3Dst>
+            <undamaged>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A165_XM57/_skins/A165_XM57_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A165_XM57_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A165_XM57/collision/Turret_01.model	</collisionModelServer>

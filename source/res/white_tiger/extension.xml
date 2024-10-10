@@ -1,0 +1,28 @@
+<extension.xml>
+  <FeatureName>	white_tiger	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	WhiteTigerPersonality	</Personality>
+  <EditorPersonality>	editor_white_tiger_personality	</EditorPersonality>
+  <Entities>
+    <ClientServerEntities></ClientServerEntities>
+    <ServerOnlyEntities>
+      <WhiteTigerUnitMgr></WhiteTigerUnitMgr>
+      <WhiteTigerBattlesMgr></WhiteTigerBattlesMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <AccountWhiteTigerComponent></AccountWhiteTigerComponent>
+      <ArenaWhiteTigerComponent></ArenaWhiteTigerComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <EntityWTGeneratorComponent></EntityWTGeneratorComponent>
+      <GeneratorDestroyedComponent></GeneratorDestroyedComponent>
+      <TeamInfoWTPlasmaBonusComponentController></TeamInfoWTPlasmaBonusComponentController>
+      <VehicleWTGeneratorActivation></VehicleWTGeneratorActivation>
+      <VehicleWTStatCollectorHarrier></VehicleWTStatCollectorHarrier>
+      <VehicleWTStatTotalGeneratorsCaptured></VehicleWTStatTotalGeneratorsCaptured>
+    </DynamicComponents>
+  </Components>
+  <ExternalComponents></ExternalComponents>
+</extension.xml>

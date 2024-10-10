@@ -2058,7 +2058,7 @@
             </customizableVehicleAreas>
           </customization>
           <effects>	shot_large_APFSDS_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
+          <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <camouflage>
             <density>	104.744 107.736	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -2495,6 +2495,7 @@
       </chassis>
     </detailed>
   </physics>
+  <ability>	concentration	</ability>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>
@@ -2504,4 +2505,15 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.86	</alpha>
   </emblems>
+  <prefabAttachments>
+    <ability>
+      <attachmentId>	31031	</attachmentId>
+    </ability>
+    <commTurret>
+      <attachmentId>	31032	</attachmentId>
+    </commTurret>
+    <sleeveEjection>
+      <attachmentId>	31033	</attachmentId>
+    </sleeveEjection>
+  </prefabAttachments>
 </A150_MBT_B.xml>

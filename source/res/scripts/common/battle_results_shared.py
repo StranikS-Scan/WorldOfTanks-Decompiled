@@ -150,4 +150,8 @@ class VehicleInteractionDetails(object):
         return packed
 
     def toDict(self):
-        return dict([ ((vehID, vehIdx), dict(_VehicleInteractionDetailsItem(self.__values, offset))) for (vehID, vehIdx), offset in self.__offsets.iteritems() ])
+        return dict(self.iteritems())
+
+    def iteritems(self):
+        for vehInfo, offset in self.__offsets.iteritems():
+            yield (vehInfo, dict(_VehicleInteractionDetailsItem(self.__values, offset)))

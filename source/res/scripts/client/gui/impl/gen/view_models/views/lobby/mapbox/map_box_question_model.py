@@ -16,6 +16,7 @@ class QuestionType(Enum):
     UNDEFINED = 'undefined'
     ALTERNATIVE = 'alternative'
     MULTIPLE_CHOICE = 'multipleChoice'
+    BIG_PICTURE = 'bigPicture'
 
 
 class MapBoxQuestionModel(ViewModel):

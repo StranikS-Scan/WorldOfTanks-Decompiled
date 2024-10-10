@@ -42,30 +42,30 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	150	</armor_1>
-      <armor_2>	140	</armor_2>
-      <armor_3>	90	</armor_3>
+      <armor_1>	170	</armor_1>
+      <armor_2>	150	</armor_2>
+      <armor_3>	110	</armor_3>
       <armor_4>	60	</armor_4>
-      <armor_5>	30	</armor_5>
-      <armor_6>	90	</armor_6>
-      <armor_7>	150	</armor_7>
+      <armor_5>	45	</armor_5>
+      <armor_6>	120	</armor_6>
+      <armor_7>	170	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	30	</armor_9>
-      <armor_10>	25	</armor_10>
-      <armor_11>	100	</armor_11>
-      <armor_12>	35	</armor_12>
-      <armor_13>	60	</armor_13>
+      <armor_9>	45	</armor_9>
+      <armor_10>	30	</armor_10>
+      <armor_11>	120	</armor_11>
+      <armor_12>	40	</armor_12>
+      <armor_13>	100	</armor_13>
       <armor_14>	90	</armor_14>
-      <armor_15>	45	</armor_15>
+      <armor_15>	50	</armor_15>
       <armor_16>	40	</armor_16>
-      <armor_17>	150	</armor_17>
-      <armor_18>	90	</armor_18>
-      <armor_19>	90	</armor_19>
-      <armor_20>	35	</armor_20>
+      <armor_17>	200	</armor_17>
+      <armor_18>	150	</armor_18>
+      <armor_19>	120	</armor_19>
+      <armor_20>	50	</armor_20>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22635	</weight>
-    <maxHealth>	1300	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1359,7 +1359,7 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
-          <anchorPosition>	-1.758918 0.657097 -0.000001	</anchorPosition>
+          <anchorPosition>	-1.447102 0.657093 -0.000001	</anchorPosition>
           <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
         <slot>
@@ -2061,36 +2061,36 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	250	</armor_1>
-        <armor_2>	250	</armor_2>
-        <armor_3>	160	</armor_3>
+        <armor_1>	270	</armor_1>
+        <armor_2>	260	</armor_2>
+        <armor_3>	180	</armor_3>
         <armor_4>	100	</armor_4>
-        <armor_5>	50	</armor_5>
-        <armor_6>	250	</armor_6>
+        <armor_5>	60	</armor_5>
+        <armor_6>	260	</armor_6>
         <armor_7>	245	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	200	</armor_9>
         <armor_10>	35	</armor_10>
         <armor_11>	245	</armor_11>
-        <armor_12>	240	</armor_12>
-        <armor_13>	240	</armor_13>
-        <armor_14>	110	</armor_14>
+        <armor_12>	210	</armor_12>
+        <armor_13>	210	</armor_13>
+        <armor_14>	200	</armor_14>
         <armor_15>	200	</armor_15>
         <armor_16>	200	</armor_16>
-        <armor_17>	200	</armor_17>
-        <armor_18>	200	</armor_18>
+        <armor_17>	250	</armor_17>
+        <armor_18>	250	</armor_18>
         <armor_19>	200	</armor_19>
-        <armor_20>	200	</armor_20>
-        <armor_21>	200	</armor_21>
-        <armor_22>	190	</armor_22>
-        <armor_23>	190	</armor_23>
-        <armor_24>	180	</armor_24>
-        <armor_25>	180	</armor_25>
-        <armor_26>	50	</armor_26>
+        <armor_20>	230	</armor_20>
+        <armor_21>	230	</armor_21>
+        <armor_22>	200	</armor_22>
+        <armor_23>	200	</armor_23>
+        <armor_24>	190	</armor_24>
+        <armor_25>	190	</armor_25>
+        <armor_26>	60	</armor_26>
         <armor_27>	120	</armor_27>
         <armor_28>	120	</armor_28>
         <armor_29>	150	</armor_29>
-        <armor_30>	150	</armor_30>
+        <armor_30>	180	</armor_30>
         <armor_31>	120	</armor_31>
         <armor_32>	100	</armor_32>
       </armor>
@@ -2120,7 +2120,7 @@
             <maxPitch>	0.00000 6.00 0.06944 6.00 0.09722 8.00 0.36111 8.00 0.38889 6.00 0.61111 6.00 0.63889 8.00 0.90278 8.00 0.93056 6.00 1.00000 6.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	11.5	</reloadTime>
+          <reloadTime>	12.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -2152,11 +2152,11 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.3	</rayStart>
-              <rayEnd>	0 0 1.8	</rayEnd>
-              <rayUp>	0.13 0 0	</rayUp>
+              <rayStart>	0 0 2.52	</rayStart>
+              <rayEnd>	0 0 3.02	</rayEnd>
+              <rayUp>	0.1 0 0	</rayUp>
               <applyToFabric>	false	</applyToFabric>
-              <size>	0.5	</size>
+              <size>	0.52	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
           </customizationSlots>
@@ -2248,9 +2248,9 @@
           <slotType>	projectionDecal	</slotType>
           <slotId>	35000	</slotId>
           <tags>	direction_right_to_left safe formfactor_square left	</tags>
-          <position>	-0.908492 1.94922 0.111211	</position>
+          <position>	-0.953581 1.941954 0.115898	</position>
           <rotation>	0.995445 -0.769615 3.051596	</rotation>
-          <scale>	0.611449 0.611449 0.611448	</scale>
+          <scale>	0.575273 0.575273 0.575272	</scale>
           <hiddenForUser>	true	</hiddenForUser>
           <showOn>	256	</showOn>
         </slot>

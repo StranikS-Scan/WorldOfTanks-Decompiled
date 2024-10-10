@@ -39,6 +39,7 @@ class HelpPagePriority(object):
     COMP7 = 12
     FLAMETHROWER = 11
     ASSAULT_SPG = 11
+    TANK_WITH_ABILITY = 11
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -193,6 +194,27 @@ class FlameTankPagesBuilder(DetailedHelpPagesBuilder):
         ctx['isFlamethrower'] = isFlamethrower = vehicle is not None and vehicle.typeDescriptor.isFlamethrower
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isFlamethrower
         return
+
+
+class TankWithAbilityPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isTankWithAbility',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.TANK_WITH_ABILITY
+
+    @classmethod
+    def buildPages(cls, ctx):
+        vehName = buildTitle(ctx)
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.tankWithAbility.header(), vehName=vehName), backport.text(R.strings.ingame_help.detailsHelp.tankWithAbility.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.tankWithAbility.modifications())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.tankWithAbility.modifications()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        isTankWithAbility = vehicle.typeDescriptor.isTankWithAbility
+        ctx['isTankWithAbility'] = isTankWithAbility
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isTankWithAbility
 
 
 class AssaultTankPagesBuilder(DetailedHelpPagesBuilder):
@@ -500,4 +522,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  DevMapsPagesBuilder,
  FlameTankPagesBuilder,
  AssaultTankPagesBuilder,
- MultiTrackPagesBuilder))
+ MultiTrackPagesBuilder,
+ TankWithAbilityPagesBuilder))

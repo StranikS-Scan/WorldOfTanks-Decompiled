@@ -5,26 +5,26 @@ from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 class ArmoryYardIntroViewModel(VehicleInfoModel):
     __slots__ = ('onClose', 'onContinue', 'onGoBack')
 
-    def __init__(self, properties=11, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(ArmoryYardIntroViewModel, self).__init__(properties=properties, commands=commands)
 
     def getStartDate(self):
-        return self._getNumber(8)
+        return self._getNumber(10)
 
     def setStartDate(self, value):
-        self._setNumber(8, value)
+        self._setNumber(10, value)
 
     def getEndDate(self):
-        return self._getNumber(9)
+        return self._getNumber(11)
 
     def setEndDate(self, value):
-        self._setNumber(9, value)
+        self._setNumber(11, value)
 
     def getHasIntroVideoLink(self):
-        return self._getBool(10)
+        return self._getBool(12)
 
     def setHasIntroVideoLink(self, value):
-        self._setBool(10, value)
+        self._setBool(12, value)
 
     def _initialize(self):
         super(ArmoryYardIntroViewModel, self)._initialize()

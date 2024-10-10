@@ -20,7 +20,7 @@ from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.player_e
 if typing.TYPE_CHECKING:
     from typing import Sequence, Dict, Tuple, Callable, Optional, Any
     from Event import Event
-    from gui.battle_results.reusable import _ReusableInfo
+    from gui.battle_results.reusable import ReusableInfo
     from gui.server_events.event_items import Quest
     from gui.server_events.conditions import _Cumulativable
 _logger = logging.getLogger(__name__)

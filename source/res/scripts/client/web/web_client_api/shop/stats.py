@@ -52,11 +52,13 @@ class BalanceWebApiMixin(object):
 
             return None
 
+        currentStats = self.itemsCache.items.shop
+        defaultStats = self.itemsCache.items.shop.defaults
         getters = {'changeRoleCost': lambda stats: stats.changeRoleCost,
          'freeXPConversionDiscrecity': lambda stats: stats.freeXPConversion[0],
          'creditsSlotsPrices': lambda stats: stats.slotsPrices[1][0][1] if stats.slotsPrices[1][0][0] == Currency.CREDITS else 0,
          'goldSlotsPrices': lambda stats: stats.slotsPrices[1][0][1] if stats.slotsPrices[1][0][0] == Currency.GOLD else 0,
-         'berthsPrices': lambda stats: stats.berthsPrices[2][0],
+         currentStats.berthsPrices[2][0] + 'BerthsPrices': lambda stats: stats.berthsPrices[2][1][0],
          'goldTankmanCost': lambda stats: getTrainingCost(stats.tankmanCost, Currency.GOLD),
          'creditsTankmanCost': lambda stats: getTrainingCost(stats.tankmanCost, Currency.CREDITS),
          'goldDropSkillsCost': lambda stats: getTrainingCost(stats.dropSkillsCost, Currency.GOLD),
@@ -66,8 +68,6 @@ class BalanceWebApiMixin(object):
          'exchangeRate': lambda stats: stats.exchangeRate,
          'dailyXPFactor': lambda stats: stats.dailyXPFactor,
          'clanCreationCost': lambda stats: stats.clanCreationCost}
-        currentStats = self.itemsCache.items.shop
-        defaultStats = self.itemsCache.items.shop.defaults
         return {key:{'current': getter(currentStats),
          'default': getter(defaultStats)} for key, getter in getters.iteritems()}
 

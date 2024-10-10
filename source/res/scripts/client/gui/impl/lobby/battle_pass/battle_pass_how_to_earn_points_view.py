@@ -190,6 +190,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createRankedCardsModel(self, viewModel, gameType):
         self.__createSpecialVehCard(viewModel, gameType)
         self.__createLimitCard(viewModel)
+        self.__createDailyCard(ARENA_BONUS_TYPE.REGULAR, viewModel)
 
     def __createEpicBattleCardsModel(self, viewModel):
         self.__createEpicBattlePointsCard(viewModel)

@@ -6,7 +6,6 @@ from copy import deepcopy
 import typing
 from helpers import dependency
 from constants import VERSUS_AI_PROGRESSION_TOKEN_PREFIX
-from account_helpers.offers.offer_bonuses import NationalBlueprintOfferBonus
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from goodies.goodie_constants import GOODIE_VARIETY
@@ -41,6 +40,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf.view.array import Array
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus
+    from account_helpers.offers.offer_bonuses import NationalBlueprintOfferBonus
 _logger = logging.getLogger(__name__)
 WINBACK_DISCOUNTS = 'winbackDiscounts'
 _BONUS_COUNT = 'count'

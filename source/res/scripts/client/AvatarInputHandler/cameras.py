@@ -252,6 +252,10 @@ class FovExtended(object):
         return math.radians(horizontalFovValue / FovExtended.arWide) if BigWorld.getAspectRatio() > FovExtended.arWide else math.radians(horizontalFovValue / FovExtended.arNormal)
 
     @staticmethod
+    def calculateHorizontalFov(verticalFov):
+        return math.radians(verticalFov * FovExtended.arWide) if BigWorld.getAspectRatio() > FovExtended.arWide else math.radians(verticalFov * FovExtended.arNormal)
+
+    @staticmethod
     def clampFov(fov):
         return math_utils.clamp(0.017, 3.12, fov)
 

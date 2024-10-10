@@ -70,7 +70,7 @@ class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
          'tableHeaders': headers})
         self.__updateButtonsState()
 
-    def __onBasketChange(self, _):
+    def __onBasketChange(self, *args):
         self.__updateButtonsState()
 
     def __updateButtonsState(self):

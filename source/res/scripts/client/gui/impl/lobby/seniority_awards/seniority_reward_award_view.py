@@ -33,22 +33,20 @@ _EXCLUDED_BONUSES = ('slots',)
 _BONUSES_ORDER = ({'getLabel': _T50_2_STYLE_NAME},
  {'getName': 'crystal'},
  {'getName': 'credits'},
- {'getIcon': 'personalBook'},
- {'getIcon': 'universalBook'},
- {'getOverlayType': 'equipmentModernized'},
  {'getName': 'premium_plus'},
- {'getIconSmall': 'bonus_battle'},
+ {'getName': 'customizations',
+  'getIcon': 'style'},
  {'getName': 'goodies',
   'getIcon': 'credits'},
  {'getName': 'goodies',
   'getIcon': 'xp'},
+ {'getIcon': 'universalBook'},
+ {'getIcon': 'recertificationForm'},
  {'getName': 'badge'},
- {'getName': 'customizations',
-  'getIcon': 'style'},
  {'getIcon': 'projectionDecal'},
- {'getName': 'dossier_achievement'},
  {'getName': 'customizations',
-  'getIcon': 'emblem'})
+  'getIcon': 'emblem'},
+ {'getName': 'dossier_achievement'})
 
 def _keySortOrder(bonus, _):
     for index, criteria in enumerate(_BONUSES_ORDER):
@@ -61,7 +59,7 @@ def _keySortOrder(bonus, _):
     return len(_BONUSES_ORDER)
 
 
-_SENIORITY_VEHICLES_ORDER = ('ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
+_SENIORITY_VEHICLES_ORDER = ('germany:G15_VK3601H_C', 'ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _vehiclesSortOrder(vehicleCD, itemsCache=None):

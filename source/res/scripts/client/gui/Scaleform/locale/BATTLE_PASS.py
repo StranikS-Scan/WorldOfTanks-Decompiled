@@ -495,5 +495,6 @@ class BATTLE_PASS(object):
     SELECTBONUS_BOOK_GIFT = '#battle_pass:selectBonus/book_gift'
     SELECTBONUS_EXPEQUIPMENTS_GIFT = '#battle_pass:selectBonus/expequipments_gift'
     SELECTBONUS_BLUEPRINT_GIFT = '#battle_pass:selectBonus/blueprint_gift'
+    SELECTBONUS_DELUXE_GIFT = '#battle_pass:selectBonus/deluxe_gift'
     QUESTCHAINBONUS = '#battle_pass:questChainBonus'
     RANDOMQUESTBONUS = '#battle_pass:randomQuestBonus'

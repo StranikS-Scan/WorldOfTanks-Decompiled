@@ -13,7 +13,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS, CONTROLS
+from account_helpers.settings_core.settings_constants import AIM, BattleCommStorageKeys, CONTOUR, GAME, GuiSettingsBehavior, SOUND, SPGAim, ScorePanelStorageKeys, SETTINGS_GROUP, MARKERS, MARKER_SETTINGS, CONTROLS, BATTLE_EVENTS
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -77,6 +77,8 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
+EVENT_VEHICLE = 'EVENT_VEHICLE'
+EVENT_SAVED_VEHICLE = 'EVENT_SAVED_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
@@ -217,6 +219,7 @@ UNLOCK_VEHICLES_IN_BATTLE_HINTS = 'unlockVehiclesInBattleHints'
 BECOME_ELITE_VEHICLES_WATCHED = 'becomeEliteWatched'
 VPP_ENTRY_POINT_LAST_SEEN_STEP = 'vehiclePostProgressionLastSeenStep'
 CLAN_PREBATTLE_SORTING_KEY = 'ClanPrebattleSortingKey'
+SHOW_ABILITY_ADVANCE_ANIM = 'showAbilityAdvanceAnim'
 SHOW_DEMO_ACC_REGISTRATION = 'showDemoAccRegistration'
 RESOURCE_WELL_START_SHOWN = 'resourceWellStartShown'
 RESOURCE_WELL_END_SHOWN = 'resourceWellEndShown'
@@ -249,6 +252,11 @@ LOOT_BOXES_VIEWED_HAS_INFINITE = 'lootBoxesViewedHasInfinite'
 LOOT_BOXES_COUNT = 'lootBoxesCount'
 LOOT_BOXES_LAST_ADDED_ID = 'lootBoxesLastAdded'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
+LOOT_BOXES = 'lootBoxes'
+EVENT_LOOT_BOXES = 'eventLootBoxes'
+LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
+LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
+LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
 BIRTHDAY_2023_INTRO_SHOWN = 'birthday2023IntroShown'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
@@ -281,6 +289,8 @@ ACHIEVEMENTS_EDITING_ENABLED_STATUS = 'achievementsEditingEnabledStatus'
 ACHIEVEMENTS_MEDAL_ADDED_STATUS = 'achievementsMedalAddedStatus'
 ACHIEVEMENTS_RATING_CHANGED_STATUS = 'achievementsRatingChangedStatus'
 ACHIEVEMENTS_MEDAL_COUNT_INFO = 'achievementsMedalCountInfo'
+WT_BATTLES_DONE_HUNTER = 'wtBattlesDoneHunter'
+WT_BATTLES_DONE_BOSS = 'wtBattlesDoneBoss'
 NEW_YEAR = 'newYear'
 NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
 NY_BONUS_DAILY_QUEST_VISITED = 'NYBonusDailyQuestVisited'
@@ -289,6 +299,10 @@ NY_OLD_REWARDS_BY_YEAR_VISITED = 'NYOldRewardsByYearVisited'
 NY_LAST_SEEN_LEVEL_INFO = 'NYLastSeenLevelInfo'
 NY_LAST_SEEN_TOTAL_BONUS = 'NYLastSeenTotalBonus'
 NY_INTRO_SEEN = 'NYIntroSeen'
+EVENT_LAST_LEVEL_SEEN = 'eventLastLevelSeen'
+EVENT_LAST_STAMPS_SEEN = 'eventLastStampsSeen'
+WT_PROGRESSION_QUESTS_TAB = 'wtProgressionQuestsTab'
+IS_LAUNCH_ANIMATED = 'isLaunchAnimated'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -896,6 +910,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
+                 EVENT_VEHICLE: 0,
+                 EVENT_SAVED_VEHICLE: None,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -1091,6 +1107,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'relativeMobility': False,
                 'relativeVisibility': False,
                 'relativeCamouflage': False,
+                'relativeAbility': False,
                 'interfaceScale': 0,
                 'medKitInstalled': False,
                 'repairKitInstalled': False,
@@ -1147,6 +1164,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        'progressViewType': True,
                                                                                        'progressViewConditions': True},
                                                             'feedbackDamageIndicator': {'damageIndicatorAllies': True},
+                                                            'feedbackBattleEvents': {BATTLE_EVENTS.CREW_PERKS: True},
                                                             'feedbackSixthSense': {'indicatorSize': 0,
                                                                                    'indicatorAlpha': 100}},
                                        'ControlsSettings': {'highlightLocation': True,
@@ -1243,6 +1261,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
+                EVENT_LAST_STAMPS_SEEN: 0,
+                EVENT_LAST_LEVEL_SEEN: 0,
+                WT_PROGRESSION_QUESTS_TAB: 1,
+                IS_LAUNCH_ANIMATED: True,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 GAME.GAMEPLAY_DEV_MAPS: True,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
@@ -1255,6 +1277,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_LAST_CYCLE_ID: None,
                 EPIC_LAST_CYCLE_ID: None,
                 FUN_RANDOM_LAST_PRESET: 'undefined',
+                SHOW_ABILITY_ADVANCE_ANIM: True,
                 SHOW_DEMO_ACC_REGISTRATION: False,
                 IS_CUSTOMIZATION_INTRO_VIEWED: False,
                 CUSTOMIZATION_STYLE_ITEMS_VISITED: set(),
@@ -1272,6 +1295,13 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN: False,
+                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
+                                                LOOT_BOXES_WAS_FINISHED: False,
+                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
+                                                LOOT_BOXES_VIEWED_COUNT: 0,
+                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
+                WT_BATTLES_DONE_HUNTER: 0,
+                WT_BATTLES_DONE_BOSS: 0,
                 Winback.WINBACK_SETTINGS: {Winback.INTRO_LAST_TIME_SHOWN: 0,
                                            Winback.NEED_SHOW_INTRO: True,
                                            Winback.HAS_LEFT_VERSUS_AI_FROM_WINBACK: False,
@@ -2508,4 +2538,4 @@ class AccountSettings(object):
     @classmethod
     def __getPlayerName(cls):
         playerName = getattr(BigWorld.player(), 'name', '')
-        return Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user', playerName) if not playerName else playerName
+        return Settings.g_instance.userPrefs[Settings.KEY_LOGIN_INFO].readString('user', str(playerName)) if not playerName else playerName

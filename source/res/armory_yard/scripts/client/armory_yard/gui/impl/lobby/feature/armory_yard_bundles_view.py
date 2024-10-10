@@ -11,6 +11,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
+from gui.shared.money import Currency
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IArmoryYardController, IWalletController
@@ -86,7 +87,8 @@ class ArmoryYardBundlesView(ViewImpl):
             return
         packsSettings = self.__armoryYardCtrl.getStarterPackSettings()
         with self.viewModel.transaction() as vm:
-            PriceModelBuilder.fillPriceModel(vm.tokenPrice, self.__armoryYardCtrl.getCurrencyTokenCost())
+            tokenGoldCost = self.__armoryYardCtrl.getCurrencyTokenCost(Currency.GOLD)
+            PriceModelBuilder.fillPriceModel(vm.tokenPrice, tokenGoldCost)
             vm.setCurrentTime(time_utils.getServerUTCTime())
             vm.setEndTime(packsSettings['endTime'])
             bundles = vm.getBundles()
@@ -94,7 +96,7 @@ class ArmoryYardBundlesView(ViewImpl):
             for product in self.__armoryYardCtrl.bundlesProducts:
                 bundleModel = ArmoryYardBundleModel()
                 tokensCount = product['tokens']
-                price = self.__armoryYardCtrl.getCurrencyTokenCost() * tokensCount
+                price = tokenGoldCost * tokensCount
                 discountPrice = product['price']
                 discount = price - discountPrice
                 currency = discountPrice.getCurrency()

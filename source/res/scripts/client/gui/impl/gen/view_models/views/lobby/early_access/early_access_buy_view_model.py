@@ -15,7 +15,7 @@ class EarlyAccessBuyViewModel(ViewModel):
     __slots__ = ('onAboutEvent', 'onBuyTokens', 'onBackToPrevScreen')
     ARG_BUY_TOKENS_AMOUNT = 'tokens'
 
-    def __init__(self, properties=10, commands=3):
+    def __init__(self, properties=11, commands=3):
         super(EarlyAccessBuyViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -54,29 +54,35 @@ class EarlyAccessBuyViewModel(ViewModel):
     def setRecievedTokensCount(self, value):
         self._setNumber(5, value)
 
-    def getCurrentTokensBalance(self):
+    def getInitialTokensCount(self):
         return self._getNumber(6)
 
-    def setCurrentTokensBalance(self, value):
+    def setInitialTokensCount(self, value):
         self._setNumber(6, value)
 
-    def getTokenPriceInGold(self):
+    def getCurrentTokensBalance(self):
         return self._getNumber(7)
 
-    def setTokenPriceInGold(self, value):
+    def setCurrentTokensBalance(self, value):
         self._setNumber(7, value)
 
-    def getGoldBalance(self):
+    def getTokenPriceInGold(self):
         return self._getNumber(8)
 
-    def setGoldBalance(self, value):
+    def setTokenPriceInGold(self, value):
         self._setNumber(8, value)
 
+    def getGoldBalance(self):
+        return self._getNumber(9)
+
+    def setGoldBalance(self, value):
+        self._setNumber(9, value)
+
     def getVehicles(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setVehicles(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getVehiclesType():
@@ -90,6 +96,7 @@ class EarlyAccessBuyViewModel(ViewModel):
         self._addNumberProperty('toTimestamp', 0)
         self._addNumberProperty('totalTokensCount', 0)
         self._addNumberProperty('recievedTokensCount', 0)
+        self._addNumberProperty('initialTokensCount', 0)
         self._addNumberProperty('currentTokensBalance', 0)
         self._addNumberProperty('tokenPriceInGold', 0)
         self._addNumberProperty('goldBalance', 0)

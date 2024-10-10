@@ -283,9 +283,12 @@ class KPI(object):
         VEHICLE_STILL_CAMOUFLAGE = 'vehicleStillCamouflage'
         VEHICLE_FIRE_CHANCE = 'vehicleFireChance'
         VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
+        VEHICLE_GUN_KILL_RELOAD_TIME = 'vehicleGunKillReloadTime'
+        VEHICLE_GUN_RELOAD_TIME_RECEIVE_SHOT = 'vehicleGunReloadTimeReceiveShot'
         VEHICLE_GUN_AIM_SPEED = 'vehicleGunAimSpeed'
         VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
         VEHICLE_GUN_SHOT_DISPERSION_AFTER_SHOT = 'vehicleGunShotDispersionAfterShot'
+        VEHICLE_FINAL_DISPERSION = 'vehicleFinalDispersion'
         VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT = 'vehicleGunShotDispersionChassisMovement'
         VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION = 'vehicleGunShotDispersionChassisRotation'
         VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION = 'vehicleGunShotDispersionTurretRotation'
@@ -313,6 +316,9 @@ class KPI(object):
         VEHICLE_TURRET_OR_CUTTING_ROTATION_SPEED = 'vehicleTurretOrCuttingRotationSpeed'
         VEHICLE_FORWARD_MAX_SPEED = 'vehicleForwardMaxSpeed'
         VEHICLE_BACKWARD_MAX_SPEED = 'vehicleBackwardMaxSpeed'
+        SHOTS_LIMIT_FOR_GUN_BOOST = 'shotsLimitForGunBoost'
+        MIN_TIME_BETWEEN_RELOAD_BOOST = 'minTimeBetweenReloadBoost'
+        VEHICLE_GUN_AND_GUN_CLIP_COOLDOWN = 'vehicleGunAndGunClipCooldown'
         EQUIPMENT_PREPARATION_TIME = 'equipmentPreparationTime'
         DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND = 'damageAndPiercingDistributionLowerBound'
         DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND = 'damageAndPiercingDistributionUpperBound'
@@ -437,6 +443,11 @@ def kpiFormatValue(kpiName, value, addEnding=True):
 def kpiFormatNoSignValue(kpiName, value, addEnding=True):
     res = getNiceNumberFormat(value)
     return kpiAddEnding(kpiName, res) if addEnding else res
+
+
+def kpiFormatWithSpec(kpiName, values, addEnding=True):
+    value, specValue = values
+    return (kpiFormatValue(kpiName, value, addEnding), kpiFormatNoSignValue(kpiName + 'Spec', specValue, addEnding))
 
 
 def kpiFormatValueRange(kpiName, valueRange, addEnding=True):

@@ -53,6 +53,7 @@ class LuiRules(enum.Enum):
     GUI_COSMIC_ENTRY_POINT = 'CosmicEntryPoint'
     SUBSCRIPTION_STATE = 'SubscriptionState'
     EARLY_ACCESS_ENTRY_POINT = 'EarlyAccessEntryPoint'
+    GUI_WHITE_TIGER_ENTRY_POINT = 'WhiteTigerEntryPoint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

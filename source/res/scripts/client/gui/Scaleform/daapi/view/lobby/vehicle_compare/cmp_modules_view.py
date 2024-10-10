@@ -3,12 +3,12 @@
 import logging
 import BigWorld
 from adisp import adisp_process
-from gui.Scaleform.daapi.view.lobby.techtree import dumpers, nodes
-from gui.Scaleform.daapi.view.lobby.techtree.data.research_items_data import ResearchItemsData
+from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
+from gui.techtree import dumpers, nodes
+from gui.techtree.research_items_data import ResearchItemsData
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 from gui.Scaleform.daapi.view.meta.VehicleModulesViewMeta import VehicleModulesViewMeta
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -67,16 +67,16 @@ class _PreviewItemsData(ResearchItemsData):
             renderer = 'root' if self._rootCD == nodeCD else 'vehicle'
         else:
             renderer = 'item'
-        state = NODE_STATE_FLAGS.LOCKED
+        state = NodeStateFlags.LOCKED
         if itemTypeID != GUI_ITEM_TYPE.VEHICLE:
             if guiItem.isInstalled(previewItem):
-                state |= NODE_STATE_FLAGS.SELECTED
+                state |= NodeStateFlags.SELECTED
         else:
             inventoryVehicle = self.getItem(nodeCD)
             if inventoryVehicle.isUnlocked:
-                state = NODE_STATE_FLAGS.UNLOCKED
+                state = NodeStateFlags.UNLOCKED
                 if inventoryVehicle.isInInventory:
-                    state |= NODE_STATE_FLAGS.IN_INVENTORY
+                    state |= NodeStateFlags.IN_INVENTORY
         displayInfo = {'path': path,
          'renderer': renderer,
          'level': level}
@@ -172,7 +172,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
                 for conflictedIntCD in modulesByType:
                     for mData in self.__nodes:
                         if mData['id'] == conflictedIntCD:
-                            mData['state'] |= NODE_STATE_FLAGS.DASHED
+                            mData['state'] |= NodeStateFlags.DASHED
                             changedNodesStates.append((conflictedIntCD, mData['state']))
 
             finishTime = BigWorld.timeExact()
@@ -190,7 +190,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
                     for conflictedIntCD in modulesByType:
                         for mData in self.__nodes:
                             if mData['id'] == conflictedIntCD:
-                                mData['state'] &= ~NODE_STATE_FLAGS.DASHED
+                                mData['state'] &= ~NodeStateFlags.DASHED
                                 changedNodesStates.append((conflictedIntCD, mData['state']))
 
                 finishTime = BigWorld.timeExact()

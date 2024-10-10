@@ -1,0 +1,198 @@
+<ability_equipments.xml>
+  <sure_shot>
+    <id>	11000	</id>
+    <userString>	#artefacts:sure_shot/name	</userString>
+    <description>	#artefacts:sure_shot/descr/active	</description>
+    <icon>	sure_shot 0 0	</icon>
+    <price>	100	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment trigger public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	SureShotEquipment	  <visualScript>
+        <server>
+          <plan>	abilities/sure_shot_server	</plan>
+        </server>
+        <client>
+          <plan>	abilities/sure_shot_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <reuseCount>	2	  <exports>	tooltip	</exports>
+      </reuseCount>
+      <duration>	20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <stabMovement>	0.3	  <exports>	vse tooltip	</exports>
+      </stabMovement>
+      <stabTurns>	0.3	  <exports>	vse tooltip	</exports>
+      </stabTurns>
+      <stabTurret>	0.3	  <exports>	vse tooltip	</exports>
+      </stabTurret>
+      <stabShot>	0.3	  <exports>	vse tooltip	</exports>
+      </stabShot>
+      <reloadBonus>	0.5	  <exports>	vse tooltip	</exports>
+      </reloadBonus>
+      <finalDispersion>	0.5	  <exports>	vse tooltip	</exports>
+      </finalDispersion>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	-70	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	-70	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	-70	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	-70	</value>
+      </mul>
+      <mul>
+        <name>	vehicleFinalDispersion	</name>
+        <value>	-50	</value>
+      </mul>
+      <add>
+        <name>	vehicleGunKillReloadTime	</name>
+        <value>	-50	</value>
+      </add>
+    </kpi>
+    <tooltipSection>	equipment	</tooltipSection>
+  </sure_shot>
+  <juggernaut>
+    <id>	11001	</id>
+    <userString>	#artefacts:juggernaut/name	</userString>
+    <description>	#artefacts:juggernaut/descr/active	</description>
+    <icon>	juggernaut 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	JuggernautEquipment	  <visualScript>
+        <server>
+          <plan>	abilities/juggernaut_server	</plan>
+        </server>
+        <client>
+          <plan>	abilities/juggernaut_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <reuseCount>	2	  <exports>	tooltip	</exports>
+      </reuseCount>
+      <duration>	20	  <exports>	vse tooltip	</exports>
+      </duration>
+      <enginePowerFactor>	1.75	  <exports>	vse	</exports>
+      </enginePowerFactor>
+      <stunDurationFactor>	0.25	  <exports>	vse	</exports>
+      </stunDurationFactor>
+      <repairBuff>	75	  <exports>	vse tooltip	</exports>
+      </repairBuff>
+      <gunReloadBoostSeconds>	3	  <exports>	vse tooltip	</exports>
+      </gunReloadBoostSeconds>
+      <shotsLimitForGunBoost>	10	  <exports>	vse tooltip	</exports>
+      </shotsLimitForGunBoost>
+      <minTimeBetweenReloadBoost>	1	  <exports>	vse tooltip	</exports>
+      </minTimeBetweenReloadBoost>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	75	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	75	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	-25	</value>
+      </mul>
+      <add>
+        <name>	vehicleGunReloadTimeReceiveShot	</name>
+        <value>	-3	</value>
+      </add>
+      <add>
+        <name>	shotsLimitForGunBoost	</name>
+        <value>	10	</value>
+      </add>
+      <add>
+        <name>	minTimeBetweenReloadBoost	</name>
+        <value>	1	</value>
+      </add>
+    </kpi>
+  </juggernaut>
+  <concentration>
+    <id>	11002	</id>
+    <userString>	#artefacts:concentration/name	</userString>
+    <description>	#artefacts:concentration/descr/active	</description>
+    <icon>	concentration 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale abilityEquipment public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <activationSound>	ability_start_button	</activationSound>
+    <deactivationSound>	ability_stop_button	</deactivationSound>
+    <refillSound>	ability_recharging	</refillSound>
+    <script>	ConcentrationEquipment	  <visualScript>
+        <server>
+          <plan>	abilities/concentration_server	</plan>
+        </server>
+        <client>
+          <plan>	abilities/concentration_client	</plan>
+        </client>
+      </visualScript>
+      <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>
+      </cooldownSeconds>
+      <reuseCount>	2	  <exports>	tooltip	</exports>
+      </reuseCount>
+      <duration>	15	  <exports>	vse tooltip	</exports>
+      </duration>
+      <stabMovement>	1.25	  <exports>	vse tooltip	</exports>
+      </stabMovement>
+      <stabTurns>	1.25	  <exports>	vse tooltip	</exports>
+      </stabTurns>
+      <stabTurret>	1.25	  <exports>	vse tooltip	</exports>
+      </stabTurret>
+      <stabShot>	1.25	  <exports>	vse tooltip	</exports>
+      </stabShot>
+      <addSecToTimeBtmClips>	1.25	  <exports>	vse tooltip	</exports>
+      </addSecToTimeBtmClips>
+      <reloadFactor>	0.5	  <exports>	vse tooltip	</exports>
+      </reloadFactor>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisMovement	</name>
+        <value>	25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionChassisRotation	</name>
+        <value>	25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	25	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	25	</value>
+      </mul>
+      <add>
+        <name>	vehicleGunAndGunClipCooldown	</name>
+        <value>	-50	</value>
+        <specValue>	1.25	</specValue>
+      </add>
+    </kpi>
+  </concentration>
+</ability_equipments.xml>

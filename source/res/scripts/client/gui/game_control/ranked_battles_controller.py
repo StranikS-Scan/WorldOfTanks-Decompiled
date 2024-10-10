@@ -16,6 +16,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
+from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.base.ctx import PrbAction
@@ -33,10 +34,12 @@ from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeaso
 from gui.ranked_battles.ranked_helpers.year_position_provider import RankedYearPositionProvider
 from gui.ranked_battles.ranked_models import BattleRankInfo, Division, Rank, RankChangeStates, RankData, RankProgress, RankState, RankStep, RankedAlertData, RankedSeason, ShieldStatus
 from gui.selectable_reward.common import RankedSelectableRewardManager
+from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.event_items import RankedQuest
 from gui.server_events.events_helpers import EventInfoModel
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher, events, g_eventBus
+from gui.shared.event_dispatcher import showRankedSelectableReward
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.money import Currency
@@ -47,13 +50,12 @@ from helpers import dependency, time_utils
 from ranked_common import SwitchState
 from season_provider import SeasonProvider
 from shared_utils import findFirst, first
-from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.web import IWebController
 from web.web_client_api.ranked_battles import createRankedBattlesWebHandlers
 if typing.TYPE_CHECKING:
     from gui.ranked_battles.constants import YearAwardsNames
@@ -91,9 +93,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battleResultsService = dependency.descriptor(IBattleResultsService)
-    __connectionMgr = dependency.descriptor(IConnectionManager)
-    __clansController = dependency.descriptor(IWebController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
 
     def __init__(self):
         super(RankedBattlesController, self).__init__()
@@ -217,6 +218,60 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
 
     def getStepsToEarnRank(self, rankID):
         return self.getStepsList()[rankID - 1]
+
+    def getCanTakeReward(self, rankID):
+        if rankID > self.getMaxRank().rank:
+            return (False, False)
+        else:
+            needTakeReward = False
+            canTakeReward = False
+            rankQuest = first(self.getQuestsForRank(rankID).values())
+            bonuses = rankQuest.getBonuses()
+            for bonus in bonuses:
+                if bonus.getName() == SELECTABLE_BONUS_NAME:
+                    for tokenID in bonus.getTokens().iterkeys():
+                        if self.__itemsCache.items.tokens.getToken(tokenID) is not None:
+                            needTakeReward = True
+                            canTakeReward = self.__offersProvider.getOfferByToken(getOfferTokenByGift(tokenID)) is not None
+                            break
+
+            return (needTakeReward, canTakeReward)
+
+    def takeRewardForRank(self, rankID):
+        if rankID == 0 and self.hasAnyRewardToTake():
+            showRankedSelectableReward()
+            return
+        _, canTakeReward = self.getCanTakeReward(rankID)
+        if canTakeReward:
+            showRankedSelectableReward(rankID)
+
+    def hasAnyRewardToTake(self):
+        return any([ canTake for _, canTake in map(self.getCanTakeReward, range(1, self.getMaxPossibleRank() + 1)) ])
+
+    def replaceOfferByReward(self, bonuses):
+        result = []
+        for bonus in bonuses:
+            if bonus.getName() == SELECTABLE_BONUS_NAME:
+                bonus.updateContext({'isReceived': False})
+                hasGift = False
+                for tokenID in bonus.getTokens().iterkeys():
+                    offerToken = getOfferTokenByGift(tokenID)
+                    offer = self.__offersProvider.getOfferByToken(offerToken)
+                    if offer is not None:
+                        receivedGifts = self.__offersProvider.getReceivedGifts(offer.id)
+                        if receivedGifts:
+                            for giftId, count in receivedGifts.iteritems():
+                                if count > 0:
+                                    gift = offer.getGift(giftId)
+                                    if gift is not None:
+                                        hasGift = True
+                                        result.extend(gift.bonuses)
+
+                if not hasGift:
+                    result.append(bonus)
+            result.append(bonus)
+
+        return result
 
     def isUnburnableRank(self, rankID):
         return rankID in self.__rankedSettings.unburnableRanks
@@ -494,19 +549,10 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
                 isShifted = True
                 division = self.getDivision(rankID + 1)
                 divisionID += 1
-            groups = self.__getGroupsForBattle()
-            if self.__hasMatchMakerGroups(division, groups[divisionID]):
-                for idx, ranksRange in enumerate(reversed(groups[divisionID]), start=1):
-                    if rankID in ranksRange:
-                        return BattleRankInfo(idx, divisionID, True)
-
-            else:
-                if isShifted:
-                    return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
-                level = division.getRankUserId(rankID) if rankID else rankID
-                return BattleRankInfo(level, divisionID, False)
-            _logger.error('Wrong ranked_config.xml, wrong rankGroups section!!!')
-            return BattleRankInfo(-1, -1, False)
+            if isShifted:
+                return BattleRankInfo(ZERO_RANK_ID, divisionID, False)
+            level = division.getRankUserId(rankID) if rankID else rankID
+            return BattleRankInfo(level, divisionID, False)
 
     def getRankedWelcomeCallback(self):
         return self.__rankedWelcomeCallback
@@ -777,7 +823,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable, SeasonProvid
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             self.updateClientValues()
             rankInfo = reusableInfo.personal.getRankInfo()
-            questsProgress = reusableInfo.personal.getQuestsProgress()
+            questsProgress = reusableInfo.progress.getQuestsProgress()
             rankedResultsVO = composer.getResultsTeamsVO()
             event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, rankInfo, questsProgress, resultsWindow)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)

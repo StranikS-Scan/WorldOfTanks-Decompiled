@@ -394,12 +394,19 @@ def assembleVehicleTraces(appearance, f, lodStateLink=None):
     return
 
 
-def assembleRecoil(appearance, lodLink):
+def createGunRecoil(appearance, lodLink):
     gunAnimatorNode = appearance.compoundModel.node(TankNodeNames.GUN_RECOIL)
     localGunMatrix = gunAnimatorNode.localMatrix
-    appearance.gunRecoil = gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
+    gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
     gunRecoilMProv = gunRecoil.animatedMProv
     appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
+    return gunRecoil
+
+
+def assembleRecoil(appearance, lodLink):
+    recoil = appearance.typeDescriptor.gun.recoil
+    appearance.gunRecoil = createGunRecoil(appearance, lodLink) if recoil is not None else None
+    return
 
 
 def createMultiGunRecoils(appearance, lodLink, gunNodes):
@@ -420,9 +427,12 @@ def createMultiGunRecoils(appearance, lodLink, gunNodes):
 
 
 def assembleMultiGunRecoil(appearance, lodLink):
+    recoil = appearance.typeDescriptor.gun.recoil
     multiGun = appearance.typeDescriptor.turret.multiGun
-    if multiGun is not None:
+    if multiGun is not None and recoil is not None:
         appearance.gunAnimators = createMultiGunRecoils(appearance, lodLink, multiGun)
+    else:
+        appearance.gunAnimators = None
     return
 
 
@@ -922,16 +932,17 @@ def updatePrefabAttachments(editorTank):
     if appearance is None or typeDescriptor is None:
         return
     else:
+        isUndamaged = appearance.damageState.isCurrentModelUndamaged
         newPrefabAttachments = []
         shouldOverrideDefault = False
         tankStyle = getTankStyle(typeDescriptor)
-        if tankStyle is not None:
+        if tankStyle is not None and isUndamaged:
             modelsSet = tankStyle.modelsSet
             if modelsSet == '' or modelsSet == typeDescriptor.type.edModelsSets.activeModelsSet:
                 outfit = tankStyle.outfitsProxyList[tankStyle.editorData.selectedOutfitIndex]
                 shouldOverrideDefault = outfit.overrideDefault
                 newPrefabAttachments = getStyleAttachments(outfit)
-        if not shouldOverrideDefault:
+        if not shouldOverrideDefault and isUndamaged:
             newPrefabAttachments = newPrefabAttachments + typeDescriptor.type.edModelsSets.getPrefabAttachments()
         typeDescriptor.type.prefabAttachments = newPrefabAttachments
         from prefab_attachment_utils import addPrefabAttachments

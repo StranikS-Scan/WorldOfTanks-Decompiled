@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import R
 class RankModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(RankModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -36,9 +36,23 @@ class RankModel(ViewModel):
     def setIsUnburnable(self, value):
         self._setBool(3, value)
 
+    def getNeedTakeReward(self):
+        return self._getBool(4)
+
+    def setNeedTakeReward(self, value):
+        self._setBool(4, value)
+
+    def getCanTakeReward(self):
+        return self._getBool(5)
+
+    def setCanTakeReward(self, value):
+        self._setBool(5, value)
+
     def _initialize(self):
         super(RankModel, self)._initialize()
         self._addViewModelProperty('rewards', UserListModel())
         self._addNumberProperty('rankID', 0)
         self._addNumberProperty('stepsToRank', 0)
         self._addBoolProperty('isUnburnable', False)
+        self._addBoolProperty('needTakeReward', False)
+        self._addBoolProperty('canTakeReward', False)

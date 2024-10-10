@@ -56,7 +56,7 @@ def getScaleformConfig(manager):
     messages = SystemMessagesInterface()
     messages.init()
     manager.addInstance(ISystemMessages, messages, finalizer='destroy')
-    from gui.Scaleform.daapi.view.lobby.techtree.techtree_events import TechTreeEventsListener
+    from gui.techtree.techtree_events import TechTreeEventsListener
     listener = TechTreeEventsListener()
     listener.init()
     manager.addInstance(ITechTreeEventsListener, listener, finalizer='fini')

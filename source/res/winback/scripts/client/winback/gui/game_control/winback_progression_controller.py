@@ -9,6 +9,7 @@ from skeletons.gui.server_events import IEventsCache
 from shared_utils import first
 from winback.gui.impl.lobby.views.winback_bonus_packer import getWinbackBonuses
 from winback.gui.winback_helpers import getWinbackSetting, setWinbackSetting
+from winback.gui.shared.event_dispatcher import fireUpdateVOHeaderEvent
 if typing.TYPE_CHECKING:
     from typing import Dict, List
     from gui.server_events.event_items import Quest
@@ -90,6 +91,7 @@ class WinbackProgressionController(object):
         self.questContainer.setQuestsIds(questsIds)
         filterFunc = lambda quest: quest.getID() in questsIds
         self.__eventsCache.questsProgress.addFilterFunc(filterFunc, key=self.PROGRESSION_FILTER_FUNC_KEY)
+        fireUpdateVOHeaderEvent()
         self.onSettingsChanged(isProgressionSwitched)
         return
 

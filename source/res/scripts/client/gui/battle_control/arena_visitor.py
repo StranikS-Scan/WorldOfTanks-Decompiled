@@ -279,6 +279,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
+    def isWhiteTigerBattle(self):
+        return self._guiType == _GUI_TYPE.WHITE_TIGER
+
     def isMultiTeam(self):
         return self._guiType == _GUI_TYPE.FALLOUT_MULTITEAM
 
@@ -385,6 +388,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasInBattleUpgrade(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.IN_BATTLE_UPGRADES)
+
+    def hasRoleExpSystem(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.ROLE_SYSTEM)
 
     def hasDogTag(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.DOG_TAG)

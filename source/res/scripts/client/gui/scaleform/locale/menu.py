@@ -243,6 +243,7 @@ class MENU(object):
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED = '#menu:tankCarousel/vehicleStates/fallout_required'
     TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN = '#menu:tankCarousel/vehicleStates/fallout_broken'
     TANKCAROUSEL_VEHICLESTATES_RENTALISOVER = '#menu:tankCarousel/vehicleStates/rentalIsOver'
+    TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER = '#menu:tankCarousel/vehicleStates/rentalBattleIsOver'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE = '#menu:tankCarousel/vehicleStates/rentable'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC = '#menu:tankCarousel/vehicleStates/rentable/epic'
     TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED = '#menu:tankCarousel/vehicleStates/rentable/ranked'
@@ -270,6 +271,7 @@ class MENU(object):
     TANKCAROUSEL_WOTPLUSSELECTIONPENDING = '#menu:tankCarousel/wotPlusSelectionPending'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED = '#menu:tankCarousel/vehicleStates/xpMultReceived'
     TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT = '#menu:tankCarousel/vehicleStates/xpMultReceived/not'
+    TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE = '#menu:tankCarousel/vehicleStates/ticketsShortage'
     STORE_VEHICLESTATES_BATTLE = '#menu:store/vehicleStates/battle'
     STORE_VEHICLESTATES_LOCKED = '#menu:store/vehicleStates/locked'
     STORE_VEHICLESTATES_CLANLOCKED = '#menu:store/vehicleStates/clanLocked'
@@ -312,6 +314,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_BATTLE = '#menu:currentVehicleStatus/battle'
     CURRENTVEHICLESTATUS_INPREBATTLE = '#menu:currentVehicleStatus/inPrebattle'
     CURRENTVEHICLESTATUS_RENTALISOVER = '#menu:currentVehicleStatus/rentalIsOver'
+    CURRENTVEHICLESTATUS_RENTALBATTLEISOVER = '#menu:currentVehicleStatus/rentalBattleIsOver'
     CURRENTVEHICLESTATUS_IGRRENTALISOVER = '#menu:currentVehicleStatus/igrRentalIsOver'
     CURRENTVEHICLESTATUS_ISRENTABLE = '#menu:currentVehicleStatus/isRentable'
     CURRENTVEHICLESTATUS_RENTABLE = '#menu:currentVehicleStatus/rentable'
@@ -344,6 +347,7 @@ class MENU(object):
     CURRENTVEHICLESTATUS_ROTATIONGROUPUNLOCKED = '#menu:currentVehicleStatus/rotationGroupUnlocked'
     CURRENTVEHICLESTATUS_ROTATIONGROUPLOCKED = '#menu:currentVehicleStatus/rotationGroupLocked'
     CURRENTVEHICLESTATUS_WILLBEUNLOCKEDINBATTLE = '#menu:currentVehicleStatus/willBeUnlockedInBattle'
+    CURRENTVEHICLESTATUS_TICKETSSHORTAGE = '#menu:currentVehicleStatus/ticketsShortage'
     CURRENTVEHICLESTATUS_SUBSCRIPTION_SUSPENDED = '#menu:currentVehicleStatus/subscription_suspended'
     CURRENTVEHICLESTATUS_WOT_PLUS_EXCLUSIVE_VEHICLE_DISABLED = '#menu:currentVehicleStatus/wot_plus_exclusive_vehicle_disabled'
     REPAIR_REPAIRSTATUS = '#menu:repair/repairstatus'
@@ -519,6 +523,7 @@ class MENU(object):
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
     TANK_PARAMS_DAMAGE = '#menu:tank_params/damage'
+    TANK_PARAMS_DISTANCEDAMAGE = '#menu:tank_params/distanceDamage'
     TANK_PARAMS_AVGDAMAGE = '#menu:tank_params/avgDamage'
     TANK_PARAMS_SHOTSPEED = '#menu:tank_params/shotSpeed'
     TANK_PARAMS_AVGPIERCINGPOWER = '#menu:tank_params/avgPiercingPower'
@@ -540,6 +545,11 @@ class MENU(object):
     TANK_PARAMS_RELATIVEMOBILITY = '#menu:tank_params/relativeMobility'
     TANK_PARAMS_RELATIVEVISIBILITY = '#menu:tank_params/relativeVisibility'
     TANK_PARAMS_RELATIVECAMOUFLAGE = '#menu:tank_params/relativeCamouflage'
+    TANK_PARAMS_RELATIVEABILITY = '#menu:tank_params/relativeAbility'
+    TANK_PARAMS_REUSECOUNT = '#menu:tank_params/reuseCount'
+    TANK_PARAMS_REUSECOUNT_EXTENDEDTITLE = '#menu:tank_params/reuseCount/extendedTitle'
+    TANK_PARAMS_DURATION = '#menu:tank_params/duration'
+    TANK_PARAMS_COOLDOWN = '#menu:tank_params/cooldown'
     TANK_PARAMS_PARAM12 = '#menu:tank_params/param12'
     TANK_PARAMS_SHOTDISPERSIONANGLE = '#menu:tank_params/shotDispersionAngle'
     TANK_PARAMS_AIMINGTIME = '#menu:tank_params/aimingTime'
@@ -574,9 +584,12 @@ class MENU(object):
     TANK_PARAMS_SPM = '#menu:tank_params/spm'
     TANK_PARAMS_S = '#menu:tank_params/s'
     TANK_PARAMS_YOH_S_S = '#menu:tank_params/yoh_s_s'
+    TANK_PARAMS_MULTITRACKSEQUENT_S_S = '#menu:tank_params/multiTrackSequent_s_s'
+    TANK_PARAMS_MULTITRACKPARALLEL_S_S = '#menu:tank_params/multiTrackParallel_s_s'
     TANK_PARAMS_MM = '#menu:tank_params/mm'
     TANK_PARAMS_VAL = '#menu:tank_params/val'
     TANK_PARAMS_VPM = '#menu:tank_params/vpm'
+    TANK_PARAMS_VPS = '#menu:tank_params/vps'
     TANK_PARAMS_QPT = '#menu:tank_params/qpt'
     TANK_PARAMS_M = '#menu:tank_params/m'
     TANK_PARAMS_H = '#menu:tank_params/h'
@@ -593,12 +606,20 @@ class MENU(object):
     TANK_PARAMS_CHARGETIME = '#menu:tank_params/chargeTime'
     TANK_PARAMS_NO_BRACKETS_KG = '#menu:tank_params/no_brackets/kg'
     TANK_PARAMS_NO_BRACKETS_S = '#menu:tank_params/no_brackets/s'
+    TANK_PARAMS_EMPTY = '#menu:tank_params/empty'
     TANK_PARAMS_NO_BRACKETS_MM = '#menu:tank_params/no_brackets/mm'
     EXTRAPARAMS_HEADER = '#menu:extraParams/header'
     EXTRAPARAMS_MULTIDESC = '#menu:extraParams/multiDesc'
     EXTRAPARAMS_DESC = '#menu:extraParams/desc'
     EXTRAPARAMS_NAME_VEHICLEGUNSHOTDISPERSION = '#menu:extraParams/name/vehicleGunShotDispersion'
+    EXTRAPARAMS_NAME_VEHICLEGUNRELOADTIMERECEIVESHOT = '#menu:extraParams/name/vehicleGunReloadTimeReceiveShot'
+    EXTRAPARAMS_NAME_SHOTSLIMITFORGUNBOOST = '#menu:extraParams/name/shotsLimitForGunBoost'
+    EXTRAPARAMS_NAME_MINTIMEBETWEENRELOADBOOST = '#menu:extraParams/name/minTimeBetweenReloadBoost'
+    EXTRAPARAMS_NAME_VEHICLEGUNANDGUNCLIPCOOLDOWN = '#menu:extraParams/name/vehicleGunAndGunClipCooldown'
     EXTRAPARAMS_NAME_VEHICLERELOADTIMEAFTERSHELLCHANGE = '#menu:extraParams/name/vehicleReloadTimeAfterShellChange'
+    EXTRAPARAMS_NAME_VEHICLEFINALDISPERSION = '#menu:extraParams/name/vehicleFinalDispersion'
+    EXTRAPARAMS_NAME_VEHICLEENGINEPOWER = '#menu:extraParams/name/vehicleEnginePower'
+    EXTRAPARAMS_NAME_VEHICLEGUNKILLRELOADTIME = '#menu:extraParams/name/vehicleGunKillReloadTime'
     EXTRAPARAMS_NAME_EQUIPMENTPREPARATIONTIME = '#menu:extraParams/name/equipmentPreparationTime'
     EXTRAPARAMS_NAME_VEHICLEREPAIRSPEED = '#menu:extraParams/name/vehicleRepairSpeed'
     EXTRAPARAMS_NAME_FIREEXTINGUISHINGRATE = '#menu:extraParams/name/fireExtinguishingRate'
@@ -689,6 +710,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCRIPTION = '#menu:headerButtons/battle/types/squad/description'
     HEADERBUTTONS_BATTLE_TYPES_SIMPLESQUAD = '#menu:headerButtons/battle/types/simpleSquad'
+    HEADERBUTTONS_BATTLE_TYPES_EVENT = '#menu:headerButtons/battle/types/event'
     HEADERBUTTONS_BATTLE_TYPES_EVENTSQUAD = '#menu:headerButtons/battle/types/eventSquad'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE = '#menu:headerButtons/battle/types/battleRoyale'
     HEADERBUTTONS_BATTLE_TYPES_BATTLEROYALE_EXTRA_FROZEN = '#menu:headerButtons/battle/types/battleRoyale/extra/frozen'
@@ -1086,6 +1108,7 @@ class MENU(object):
     BLUEPRINTS_CONVERSIONVIEW_MULTICONVERSION_DESCRIPTION = '#menu:blueprints/conversionView/multiConversion/description'
     BLUEPRINTS_CONVERSIONVIEW_BTNCONVERT = '#menu:blueprints/conversionView/btnConvert'
     BLUEPRINTS_CONVERSIONVIEW_BTNCANCEL = '#menu:blueprints/conversionView/btnCancel'
+    ABILITY_TITLE = '#menu:ability/title'
     MODULEINFO_TITLE = '#menu:moduleInfo/title'
     MODULEINFO_PARAMETERSLABEL = '#menu:moduleInfo/parametersLabel'
     MODULEINFO_PARAMETERSCLIPGUNLABEL = '#menu:moduleInfo/parametersClipGunLabel'
@@ -1146,6 +1169,7 @@ class MENU(object):
     MODULEINFO_PARAMS_AVGDAMAGELIST = '#menu:moduleInfo/params/avgDamageList'
     MODULEINFO_PARAMS_AVGDAMAGE = '#menu:moduleInfo/params/avgDamage'
     MODULEINFO_PARAMS_AVGDAMAGEPERMINUTE = '#menu:moduleInfo/params/avgDamagePerMinute'
+    MODULEINFO_PARAMS_DAMAGEPERSECOND = '#menu:moduleInfo/params/damagePerSecond'
     MODULEINFO_PARAMS_ARMOR = '#menu:moduleInfo/params/armor'
     MODULEINFO_PARAMS_ROTATIONSPEED = '#menu:moduleInfo/params/rotationSpeed'
     MODULEINFO_PARAMS_DISPERTIONRADIUS = '#menu:moduleInfo/params/dispertionRadius'
@@ -1161,7 +1185,6 @@ class MENU(object):
     MODULEINFO_PARAMS_PIERCINGDISTANCEHEADER = '#menu:moduleInfo/params/piercingDistanceHeader'
     MODULEINFO_PARAMS_PIERCINGDISTANCE = '#menu:moduleInfo/params/piercingDistance'
     MODULEINFO_PARAMS_MAXSHOTDISTANCE = '#menu:moduleInfo/params/maxShotDistance'
-    MODULEINFO_PARAMS_MAXSHOTDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/maxShotDistance/footnote'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTEFLAME = '#menu:moduleInfo/params/noPiercingDistance/footnoteFlame'
     MODULEINFO_PARAMS_NOPIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/noPiercingDistance/footnote'
     MODULEINFO_PARAMS_PIERCINGDISTANCE_FOOTNOTE = '#menu:moduleInfo/params/piercingDistance/footnote'
@@ -1249,10 +1272,13 @@ class MENU(object):
     VEHICLEINFO_PARAMS_STUNMAXDURATION = '#menu:vehicleInfo/params/stunMaxDuration'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIME = '#menu:vehicleInfo/params/chassisRepairTime'
     VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEYOH = '#menu:vehicleInfo/params/chassisRepairTimeYoh'
+    VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEMULTITRACKSEQUENT = '#menu:vehicleInfo/params/chassisRepairTimeMultiTrackSequent'
+    VEHICLEINFO_PARAMS_CHASSISREPAIRTIMEMULTITRACKPARALLEL = '#menu:vehicleInfo/params/chassisRepairTimeMultiTrackParallel'
     VEHICLEINFO_TABS_PROPERTIES = '#menu:vehicleInfo/tabs/properties'
     VEHICLEINFO_TABS_BASE = '#menu:vehicleInfo/tabs/base'
     VEHICLEINFO_TABS_STATISTIC = '#menu:vehicleInfo/tabs/statistic'
     VEHICLEINFO_TABS_CREW = '#menu:vehicleInfo/tabs/crew'
+    VEHICLEINFO_TABS_ABILITY = '#menu:vehicleInfo/tabs/ability'
     VEHICLEINFO_CLOSEBTN = '#menu:vehicleInfo/closeBtn'
     VEHICLEINFO_COMPAREBTN_LABEL = '#menu:vehicleInfo/compareBtn/label'
     VEHICLEINFO_NATIONCHANGEBTN_LABEL = '#menu:vehicleInfo/nationChangeBtn/label'
@@ -1284,6 +1310,7 @@ class MENU(object):
     RESEARCH_LABELS_BUTTON_RENT = '#menu:research/labels/button/rent'
     RESEARCH_LABELS_BUTTON_TOCOLLECTION = '#menu:research/labels/button/toCollection'
     RESEARCH_LABELS_BUTTON_TOEARLYACCESSQUESTSBUTTON = '#menu:research/labels/button/toEarlyAccessQuestsButton'
+    RESEARCH_LABELS_BUTTON_TOEARLYACCESSBUYBUTTON = '#menu:research/labels/button/toEarlyAccessBuyButton'
     RESEARCH_STATUS_EARLYACCESS = '#menu:research/status/earlyAccess'
     TRADE_IN = '#menu:trade/in'
     BARRACKS_MENU_ROLEFILTER_TEXTFIELD = '#menu:barracks/menu/roleFilter/textfield'
@@ -1569,6 +1596,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_CLOSE = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/close'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_LABELTOTAL = '#menu:hangar/ammunitionPanel/technicalMaitenance/buttons/labelTotal'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENTDISABLED = '#menu:hangar/ammunitionPanel/technicalMaitenance/equipmentDisabled'
+    HANGAR_CLOSEBTN = '#menu:hangar/closeBtn'
     FITTINGLISTITEMRENDERER_UNLOAD = '#menu:fittingListItemRenderer/unload'
     FITTINGLISTITEMRENDERER_REPLACE = '#menu:fittingListItemRenderer/replace'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
@@ -1629,6 +1657,7 @@ class MENU(object):
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
+    CONTEXTMENU_CREATEWHITETIGERSQUAD = '#menu:contextMenu/createWhiteTigerSquad'
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
@@ -2334,6 +2363,7 @@ class MENU(object):
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,
+     CONTEXTMENU_CREATEWHITETIGERSQUAD,
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
@@ -2428,6 +2458,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_REQUIRED,
      TANKCAROUSEL_VEHICLESTATES_FALLOUT_BROKEN,
      TANKCAROUSEL_VEHICLESTATES_RENTALISOVER,
+     TANKCAROUSEL_VEHICLESTATES_RENTALBATTLEISOVER,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_EPIC,
      TANKCAROUSEL_VEHICLESTATES_RENTABLE_RANKED,
@@ -2452,6 +2483,7 @@ class MENU(object):
      TANKCAROUSEL_VEHICLESTATES_DISABLED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED,
      TANKCAROUSEL_VEHICLESTATES_XPMULTRECEIVED_NOT,
+     TANKCAROUSEL_VEHICLESTATES_TICKETSSHORTAGE,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPUNLOCKED,
      TANKCAROUSEL_VEHICLESTATES_ROTATIONGROUPLOCKED)
     DATETIME_WEEKDAYS_FULL_ENUM = (DATETIME_WEEKDAYS_FULL_1,
@@ -2655,6 +2687,7 @@ class MENU(object):
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
      TANK_PARAMS_DAMAGE,
+     TANK_PARAMS_DISTANCEDAMAGE,
      TANK_PARAMS_AVGDAMAGE,
      TANK_PARAMS_SHOTSPEED,
      TANK_PARAMS_AVGPIERCINGPOWER,
@@ -2676,6 +2709,11 @@ class MENU(object):
      TANK_PARAMS_RELATIVEMOBILITY,
      TANK_PARAMS_RELATIVEVISIBILITY,
      TANK_PARAMS_RELATIVECAMOUFLAGE,
+     TANK_PARAMS_RELATIVEABILITY,
+     TANK_PARAMS_REUSECOUNT,
+     TANK_PARAMS_REUSECOUNT_EXTENDEDTITLE,
+     TANK_PARAMS_DURATION,
+     TANK_PARAMS_COOLDOWN,
      TANK_PARAMS_PARAM12,
      TANK_PARAMS_SHOTDISPERSIONANGLE,
      TANK_PARAMS_AIMINGTIME,
@@ -2710,9 +2748,12 @@ class MENU(object):
      TANK_PARAMS_SPM,
      TANK_PARAMS_S,
      TANK_PARAMS_YOH_S_S,
+     TANK_PARAMS_MULTITRACKSEQUENT_S_S,
+     TANK_PARAMS_MULTITRACKPARALLEL_S_S,
      TANK_PARAMS_MM,
      TANK_PARAMS_VAL,
      TANK_PARAMS_VPM,
+     TANK_PARAMS_VPS,
      TANK_PARAMS_QPT,
      TANK_PARAMS_M,
      TANK_PARAMS_H,
@@ -2729,6 +2770,7 @@ class MENU(object):
      TANK_PARAMS_CHARGETIME,
      TANK_PARAMS_NO_BRACKETS_KG,
      TANK_PARAMS_NO_BRACKETS_S,
+     TANK_PARAMS_EMPTY,
      TANK_PARAMS_NO_BRACKETS_MM)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,

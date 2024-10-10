@@ -118,6 +118,8 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         for bonus in quest.getBonuses():
             if bonus.getName() == 'battleToken':
                 bonusNames.extend(StringTokenBonusFormatter().format(bonus))
+            if bonus.getName() == 'ticket':
+                bonusNames.extend(StringTokenBonusFormatter().format(bonus))
             bonusFormat = bonus.format()
             if bonusFormat:
                 if isinstance(bonus, CustomizationsBonus):
@@ -275,7 +277,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
 
     def __getRankedOverrides(self, quest):
         header = body = ''
-        isLeagues = self.__rankedController.isAccountMastered()
         isAnyPrimeNow = self.__rankedController.hasAvailablePrimeTimeServers()
         isAnyPrimeLeftTotal = self.__rankedController.hasPrimeTimesTotalLeft()
         isAnyPrimeLeftNext = self.__rankedController.hasPrimeTimesNextDayLeft()
@@ -287,9 +288,6 @@ class UnavailableQuestTooltipData(BlocksTooltipData):
                 seasonEnd = time_utils.getTimeDeltaFromNowInLocal(time_utils.makeLocalServerTime(season.getEndDate()))
                 timeRes = R.strings.ranked_battles.quests.tooltip.unavailable.body.seasonEnd
                 body = backport.getTillTimeStringByRClass(seasonEnd, timeRes)
-        elif not isLeagues:
-            header = backport.text(R.strings.ranked_battles.quests.tooltip.unavailable.header.notInLeagues())
-            body = backport.text(R.strings.ranked_battles.quests.tooltip.unavailable.body.notInLeagues())
         elif not isAnyPrimeNow:
             header = backport.text(R.strings.ranked_battles.quests.tooltip.unavailable.header.allServersPrime())
             body = backport.text(R.strings.ranked_battles.quests.tooltip.unavailable.body.allServersPrime())

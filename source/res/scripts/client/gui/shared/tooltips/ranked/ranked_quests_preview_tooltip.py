@@ -30,14 +30,13 @@ class RankedQuestsPreviewTooltip(BlocksTooltipData):
         quests.sort(key=lambda q: (q.isCompleted(), not q.isAvailable().isValid, -q.getPriority()))
         season = self.__rankedController.getCurrentSeason()
         if quests and season is not None:
-            isLeagues = self.__rankedController.isAccountMastered()
             isAnyPrimeNow = self.__rankedController.hasAvailablePrimeTimeServers()
             isAnyPrimeLeftTotal = self.__rankedController.hasPrimeTimesTotalLeft()
-            isGlobalAvailable = not isLeagues or not isAnyPrimeNow or not isAnyPrimeLeftTotal
+            isGlobalAvailable = not isAnyPrimeNow or not isAnyPrimeLeftTotal
             diff = len(quests) - _MAX_VISIBLE_QUESTS
             visibleQuests = quests[:_MAX_VISIBLE_QUESTS]
             awardsFormatter = getDefaultAwardFormatter()
-            description = self.__packDescription(quests, season, isLeagues, isAnyPrimeNow, isAnyPrimeLeftTotal)
+            description = self.__packDescription(quests, season, isAnyPrimeNow, isAnyPrimeLeftTotal)
             items.append(self.__packHeader(description))
             items.extend([ self.__packQuest(q, isGlobalAvailable, awardsFormatter) for q in visibleQuests ])
             items.extend(self.__packBottom(diff))
@@ -47,7 +46,7 @@ class RankedQuestsPreviewTooltip(BlocksTooltipData):
         text = text_styles.main(backport.text(R.strings.ranked_battles.questsTooltip.bottom(), number=diff))
         return [formatters.packTextBlockData(text_styles.alignText(text, 'center'), padding=formatters.packPadding(top=-7, bottom=12))] if diff > 0 else []
 
-    def __packDescription(self, quests, season, isLeagues, isAnyPrimeNow, isAnyPrimeLeftTotal):
+    def __packDescription(self, quests, season, isAnyPrimeNow, isAnyPrimeLeftTotal):
         resShortCut = R.strings.ranked_battles.questsTooltip
         isAllCompleted = all((q.isCompleted() for q in quests))
         isAnyPrimeLeftNextDay = self.__rankedController.hasPrimeTimesNextDayLeft()
@@ -57,8 +56,6 @@ class RankedQuestsPreviewTooltip(BlocksTooltipData):
         text = text_styles.main(backport.text(resShortCut.available(), timeDelta=timeDeltaStr))
         if not isAnyPrimeLeftTotal:
             text = text_styles.error(backport.getTillTimeStringByRClass(timeDelta, resShortCut.unavailable.seasonEnd))
-        elif not isLeagues:
-            text = text_styles.error(backport.text(resShortCut.unavailable.notInLeagues()))
         elif not isAllCompleted:
             if isAnyPrimeNow:
                 icon = icons.inProgress(vspace=-3)

@@ -141,20 +141,21 @@ def readTrackSplineParams(xmlCtx, section):
         return None
     else:
         trackPairs = {}
+        trackThicknessDef = section.readFloat('trackThickness', -0.0339)
         for sname, subsection in _xml.getChildren(xmlCtx, section, 'trackNodes'):
             if sname == 'trackPair':
                 ctx = (xmlCtx, 'trackNodes/trackPair')
-                pairParams = readSplineTrackPairParams(ctx, subsection)
+                pairParams = readSplineTrackPairParams(ctx, subsection, trackThicknessDef)
                 trackPairs[pairParams.trackPairIdx] = pairParams
 
         if not trackPairs:
-            trackPairs[component_constants.MAIN_TRACK_PAIR_IDX] = readSplineTrackPairParams((xmlCtx, 'trackNodes'), section['trackNodes'])
+            trackPairs[component_constants.MAIN_TRACK_PAIR_IDX] = readSplineTrackPairParams((xmlCtx, 'trackNodes'), section['trackNodes'], trackThicknessDef)
         return trackPairs
 
 
-def readSplineTrackPairParams(xmlCtx, section):
+def readSplineTrackPairParams(xmlCtx, section, trackThicknessDef):
     if section is not None:
-        trackSplineParams = chassis_components.TrackSplineParams(trackPairIdx=section.readInt('trackPairIdx', 0), thickness=section.readFloat('trackThickness', -0.0339), maxAmplitude=section.readFloat('maxAmplitude', 0.01), maxOffset=section.readFloat('maxOffset', 0.01), gravity=section.readFloat('gravity', -9.8))
+        trackSplineParams = chassis_components.TrackSplineParams(trackPairIdx=section.readInt('trackPairIdx', 0), thickness=section.readFloat('trackThickness', trackThicknessDef), maxAmplitude=section.readFloat('maxAmplitude', 0.01), maxOffset=section.readFloat('maxOffset', 0.01), gravity=section.readFloat('gravity', -9.8))
         if IS_EDITOR:
             trackSplineParams.editorData._enable = section.readBool('enable', True)
             trackSplineParams.editorData.linkBones = section.readBool('linkBones', False)

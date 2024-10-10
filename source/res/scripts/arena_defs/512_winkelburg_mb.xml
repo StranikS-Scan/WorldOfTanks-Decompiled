@@ -1,0 +1,54 @@
+<512_winkelburg_mb.xml>
+  <name>	#arenas:512_winkelburg_mb/name	</name>
+  <description>	#arenas:512_winkelburg_mb/description	</description>
+  <estimatedLoad>	0.3	</estimatedLoad>
+  <geometry>	spaces/512_winkelburg_mb	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/512_winkelburg_mb/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_ruinberg_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_ruinberg_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_ruinberg_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_ruinberg_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_ruinberg_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-236.266388 -259.332520	</position1>
+        </team1>
+        <team2>
+          <position1>	240.778915 281.653748	</position1>
+        </team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-264.807068 -409.422363	</position>
+        </team1>
+        <team2>
+          <position>	411.209595 310.049744	</position>
+        </team2>
+      </teamSpawnPoints>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</512_winkelburg_mb.xml>

@@ -9,7 +9,7 @@ from CameraComponents import CameraComponent
 from cgf_components.hover_component import SelectionComponent
 from cache import cached_property
 from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
+from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery
 from debug_utils import LOG_ERROR
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.tankStructure import ColliderTypes
@@ -179,7 +179,6 @@ def partAnimatorComponent(part):
     return (partComponent, partComponent.animGO.findComponentByType(GenericComponents.AnimatorComponent)) if partComponent is not None else (None, None)
 
 
-@autoregister(presentInAllWorlds=True, category='UI')
 class AssemblyStageIndexManager(CGF.ComponentManager):
 
     def __init__(self):

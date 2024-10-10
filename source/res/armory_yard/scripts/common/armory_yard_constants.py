@@ -17,6 +17,7 @@ FEATURE_NAME_BASE = 'armory_yard'
 STAGE_TOKEN_POSTFIX = 'C'
 BATTLE_TOKEN_POSTFIX = 'B'
 CURRENCY_TOKEN_POSTFIX = 'S'
+SUBTRAHEND_STAGE_TOKEN_POSTFIX = 'D'
 END_TOKEN_POSTFIX = 'end'
 POST_PROGRESSION_PAID_TOKEN_POSTFIX = 'paid'
 END_QUEST_POSTFIX = 'end'
@@ -30,7 +31,7 @@ POSTBATTLE_QUEST = 'postBattle'
 INTRO_VIDEO = None
 STYLE_QUEST_POSTFIX = 'style'
 VEHICLE_NAME = 'ussr:R75_SU122_54'
-AY_VIDEOS = ('ay_ep3_armour.usm', 'ay_ep3_tracks.usm', 'ay_ep3_gun.usm', 'ay_ep3_turret.usm')
+AY_VIDEOS = ('ay_armour.usm', 'ay_tracks.usm', 'ay_gun.usm', 'ay_turret.usm')
 
 class State(Enum):
     BEFOREPROGRESSION = 'beforeProgression'
@@ -44,6 +45,10 @@ DISABLED_STATES = (State.DISABLED, State.BEFOREPROGRESSION)
 
 def getStageToken(cycleID):
     return ':'.join((FEATURE_NAME_BASE, 'cycle_{}'.format(cycleID), STAGE_TOKEN_POSTFIX))
+
+
+def getSubtrahendStageToken(seasonID):
+    return ':'.join((FEATURE_NAME_BASE, 'season_{}'.format(seasonID), SUBTRAHEND_STAGE_TOKEN_POSTFIX))
 
 
 def getCurrencyToken(seasonID):

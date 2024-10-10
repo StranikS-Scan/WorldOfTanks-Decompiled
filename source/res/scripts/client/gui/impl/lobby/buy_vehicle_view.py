@@ -16,6 +16,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.base.listener import IPrbListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.shared.event_dispatcher import getTechTreeLoadEvent
 from items import UNDEFINED_ITEM_CD
 from rent_common import parseRentID
 from gui import SystemMessages
@@ -430,7 +431,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
                 if self.__returnCallback:
                     returnCallback = self.__returnCallback
                 elif self.__returnAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
-                    returnCallback = partial(event_dispatcher.showResearchView, g_currentPreviewVehicle.item.intCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
+                    returnCallback = partial(event_dispatcher.showResearchView, g_currentPreviewVehicle.item.intCD, exitEvent=getTechTreeLoadEvent(g_currentPreviewVehicle.item.nationName))
                 elif self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
                     returnCallback = partial(event_dispatcher.showShop)
                 else:

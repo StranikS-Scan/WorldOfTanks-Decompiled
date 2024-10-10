@@ -78,12 +78,6 @@ TABS_WITHOUT_COMMON_MUSIC = (QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS,)
 for marathonIndex, marathon in enumerate(getMarathons(), MARATHONS_START_TAB_INDEX):
     TABS_DATA_ORDERED.insert(marathonIndex, TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, marathon.tabTooltip, marathon.tabTooltip, backport.text(marathon.label), marathon.prefix))
 
-def setHideDoneFilter():
-    filterData = {'hideDone': True,
-     'hideUnavailable': False}
-    AccountSettings.setFilter(MISSIONS_PAGE, filterData)
-
-
 class MissionsPage(LobbySubView, MissionsPageMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     _COMMON_SOUND_SPACE = TASKS_SOUND_SPACE

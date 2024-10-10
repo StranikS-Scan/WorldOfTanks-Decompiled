@@ -11,7 +11,7 @@ from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
@@ -75,7 +75,7 @@ class StatsConfiguration(object):
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isSpecialWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
 
     def __init__(self):
         self.vehicle = None
@@ -92,6 +92,7 @@ class StatusConfiguration(object):
         self.isCompare = False
         self.eqSetupIDx = None
         self.battleRoyale = None
+        self.isSpecialWindow = False
         return
 
 
@@ -334,6 +335,24 @@ class ShopContext(AwardContext):
         value = super(ShopContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
+        return value
+
+
+class WtEventPortalContext(DefaultContext):
+
+    def buildItem(self, *args, **kwargs):
+        return super(WtEventPortalContext, self).buildItem(args[0])
+
+    def getStatsConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatsConfiguration(item)
+        value.sellPrice = False
+        value.buyPrice = False
+        value.unlockPrice = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatusConfiguration(item)
+        value.isSpecialWindow = True
         return value
 
 

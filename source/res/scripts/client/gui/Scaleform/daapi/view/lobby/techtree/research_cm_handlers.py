@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_cm_handlers.py
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import MODULE, SimpleVehicleCMHandler, VEHICLE
-from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE, UnlockProps
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.techtree.go_back_helper import WulfPreviewAlias
+from gui.techtree.settings import NODE_STATE
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
+from gui.techtree.settings import UnlockProps
 from gui.shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -132,7 +133,7 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
         self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
         vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
-        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
+        self._previewAlias = getattr(ctx, 'previewAlias', WulfPreviewAlias.WULF_TECHTREE)
         self._nodeInvID = vehicle.invID if vehicle is not None else None
         return
 
@@ -208,7 +209,7 @@ class BlueprintVehicleContextMenuHandler(SimpleVehicleCMHandler):
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.vehCD)
         self._nodeState = int(ctx.nodeState)
-        self._previewAlias = getattr(ctx, 'previewAlias', VIEW_ALIAS.LOBBY_TECHTREE)
+        self._previewAlias = getattr(ctx, 'previewAlias', WulfPreviewAlias.WULF_TECHTREE)
 
     def _clearFlashValues(self):
         self._nodeCD = None

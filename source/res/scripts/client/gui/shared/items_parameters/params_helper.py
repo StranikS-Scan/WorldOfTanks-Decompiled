@@ -7,7 +7,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI
-from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
+from gui.shared.items_parameters import params, MAX_RELATIVE_VALUE, RELATIVE_PARAMS, RELATIVE_PARAMS_WITHOUT_ABILITY
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
@@ -16,6 +16,7 @@ from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TUR
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 RELATIVE_POWER_PARAMS = ('avgDamage',
  'avgPiercingPower',
@@ -60,11 +61,13 @@ RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor',
  TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
  TURBOSHAFT_INVISIBILITY_MOVING_FACTOR)
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
+RELATIVE_ABILITY_PARAMS = ('reuseCount', 'duration', 'cooldown')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeArmor': RELATIVE_ARMOR_PARAMS,
  'relativeMobility': RELATIVE_MOBILITY_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
- 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+ 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS,
+ 'relativeAbility': RELATIVE_ABILITY_PARAMS}
 EXTRA_POWER_PARAMS = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
  KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
  KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION,
@@ -108,11 +111,26 @@ EXTRA_VISIBILITY_PARAMS = (KPI.Name.VEHICLE_ENEMY_SPOTTING_TIME,
  KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
  KPI.Name.VEHICLE_ALLY_RADIO_DISTANCE)
+EXTRA_ABILITY_PARAMS_BASE = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION,
+ KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_AFTER_SHOT,
+ KPI.Name.VEHICLE_FINAL_DISPERSION,
+ KPI.Name.VEHICLE_ENGINE_POWER,
+ KPI.Name.VEHICLE_REPAIR_SPEED,
+ KPI.Name.CREW_STUN_DURATION,
+ KPI.Name.VEHICLE_GUN_RELOAD_TIME_RECEIVE_SHOT,
+ KPI.Name.VEHICLE_GUN_KILL_RELOAD_TIME,
+ KPI.Name.VEHICLE_GUN_AND_GUN_CLIP_COOLDOWN,
+ KPI.Name.SHOTS_LIMIT_FOR_GUN_BOOST,
+ KPI.Name.MIN_TIME_BETWEEN_RELOAD_BOOST)
+EXTRA_ABILITY_PARAMS = tuple((item + 'AbilityKpi' for item in EXTRA_ABILITY_PARAMS_BASE))
 EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeArmor': EXTRA_ARMOR_PARAMS,
  'relativeMobility': EXTRA_MOBILITY_PARAMS,
  'relativeCamouflage': EXTRA_CAMOUFLAGE_PARAMS,
- 'relativeVisibility': EXTRA_VISIBILITY_PARAMS}
+ 'relativeVisibility': EXTRA_VISIBILITY_PARAMS,
+ 'relativeAbility': EXTRA_ABILITY_PARAMS}
 _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.vehicleEngine: params.EngineParams,
  ITEM_TYPES.vehicleChassis: params.ChassisParams,
@@ -392,14 +410,29 @@ class SimplifiedBarVO(dict):
 
 
 class VehParamsBaseGenerator(object):
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def getFormattedParams(self, comparator, expandedGroups=None, vehIntCD=None, diffParams=None, hasNormalization=False):
         result = []
         if not GUI_SETTINGS.technicalInfo:
             return result
         else:
+            hasParams = False
             diffParams = diffParams if diffParams is not None else {}
             for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
+                if groupName == 'relativeAbility':
+                    if vehIntCD is None:
+                        hasParams = False
+                        continue
+                    vehicle = self.itemsCache.items.getStockVehicle(vehIntCD)
+                    if not vehicle.isTankWithAbility:
+                        hasParams = False
+                        continue
+                if hasParams:
+                    prevGroupName = RELATIVE_PARAMS[groupIdx - 1]
+                    separator = self._makeSeparator(prevGroupName)
+                    if separator:
+                        result.append(separator)
                 hasParams = False
                 relativeParam = comparator.getExtendedData(groupName)
                 isOpened = expandedGroups is None or expandedGroups.get(groupName, False)
@@ -417,10 +450,6 @@ class VehParamsBaseGenerator(object):
                             hasParams = True
 
                     result.extend(self._getExtraParams(comparator, groupName, diffParams))
-                if hasParams and groupIdx < len(RELATIVE_PARAMS) - 1:
-                    separator = self._makeSeparator(groupName)
-                    if separator:
-                        result.append(separator)
 
             return result
 
@@ -429,7 +458,7 @@ class VehParamsBaseGenerator(object):
         if comparator is None:
             return result
         else:
-            for groupName in RELATIVE_PARAMS:
+            for groupName in RELATIVE_PARAMS_WITHOUT_ABILITY:
                 needOpenGroup = False
                 extraParams = EXTRA_PARAMS_GROUP[groupName] if self._isExtraParamEnabled() else []
                 for paramName in PARAMS_GROUPS[groupName] + extraParams:
@@ -452,6 +481,10 @@ class VehParamsBaseGenerator(object):
                 param = comparator.getExtendedData(extraParamName)
                 if extraParamName in HIDDEN_PARAM_DEFAULTS and param.value == HIDDEN_PARAM_DEFAULTS[extraParamName]:
                     continue
+                if groupName == 'relativeAbility':
+                    suffix = 'AbilityKpi'
+                    resourceParamName = extraParamName[:-len(suffix)]
+                    param = param._replace(name=resourceParamName)
                 highlight = diffParams.get(extraParamName, HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE)
                 formattedParam, nSlashCount = self._makeExtraParamVO(param, groupName, highlight)
                 if formattedParam:
@@ -491,7 +524,7 @@ class VehParamsBaseGenerator(object):
     def _makeExtraParamVO(self, param, parentID, highlight):
         return (getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_EXTRA, param.name, parentID, highlight), 0)
 
-    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+    def _makeSimpleParamBottomVO(self, param, vehIntCD):
         return None
 
     def _makeExtraAdditionalBlock(self, paramID, parentID, tooltip):

@@ -6,7 +6,7 @@ import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from CurrentVehicle import g_currentVehicle
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.managers.view_lifecycle_watcher import ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.base import cooldown
@@ -19,13 +19,14 @@ from gui.prb_control.entities.epic_battle_training.permissions import EpicBattle
 from gui.prb_control.entities.epic_battle_training.requester import EpicBattleTrainingListRequester
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_items, SelectResult, ValidationResult
+from gui.prb_control.prb_helpers import TrainingEntityViewLifecycleHandler
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.prb_control.storages import legacy_storage_getter
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import ViewEventType
+from helpers import dependency
 from prebattle_shared import decodeRoster
+from skeletons.gui.app_loader import IAppLoader
 
 class EpicBattleTrainingEntryPoint(LegacyEntryPoint):
 
@@ -101,13 +102,7 @@ class EpicBattleTrainingIntroEntity(LegacyIntroEntity):
 
 
 class EpicBattleTrainingEntity(LegacyEntity):
-    __loadEvents = (VIEW_ALIAS.LOBBY_HANGAR,
-     VIEW_ALIAS.LOBBY_STORE,
-     VIEW_ALIAS.LOBBY_STORAGE,
-     VIEW_ALIAS.LOBBY_TECHTREE,
-     VIEW_ALIAS.LOBBY_BARRACKS,
-     VIEW_ALIAS.LOBBY_PROFILE,
-     VIEW_ALIAS.VEHICLE_COMPARE)
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, settings):
         requests = {REQUEST_TYPE.ASSIGN: self.assign,
@@ -122,11 +117,12 @@ class EpicBattleTrainingEntity(LegacyEntity):
          REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM: self.swapBetweenTeam}
         super(EpicBattleTrainingEntity, self).__init__(FUNCTIONAL_FLAG.EPIC_TRAINING, settings, permClass=EpicBattleTrainingPermissions, limits=EpicBattleTrainingLimits(self), requestHandlers=requests)
         self.__settingRecords = []
+        self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.storage = legacy_storage_getter(PREBATTLE_TYPE.EPIC_TRAINING)()
 
     def init(self, clientPrb=None, ctx=None):
         result = super(EpicBattleTrainingEntity, self).init(clientPrb=clientPrb)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__viewLifecycleWatcher.start(self.__appLoader.getApp().containerManager, [TrainingEntityViewLifecycleHandler(self)])
         if clientPrb is None:
             clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
@@ -142,7 +138,7 @@ class EpicBattleTrainingEntity(LegacyEntity):
         clientPrb = prb_getters.getClientPrebattle()
         if clientPrb is not None:
             clientPrb.onPlayerGroupChanged -= self.__prb_onPlayerGroupChanged
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__handleViewLoad, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__viewLifecycleWatcher.stop()
         if not woEvents:
             aliasToLoad = [PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY]
             if not self.canSwitch(ctx) and g_eventDispatcher.needToLoadHangar(ctx, self.getModeFlags(), aliasToLoad):
@@ -408,10 +404,6 @@ class EpicBattleTrainingEntity(LegacyEntity):
             if not self.__settingRecords and callback is not None:
                 callback(True)
             return
-
-    def __handleViewLoad(self, event):
-        if event.alias in self.__loadEvents:
-            self.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))
 
     def __prb_onPlayerGroupChanged(self, pID, prevRoster, roster, group, actorID):
         rosters = self.getRosters(keys=[prevRoster, roster])

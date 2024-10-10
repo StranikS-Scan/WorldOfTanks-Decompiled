@@ -16,7 +16,7 @@ from gui.impl.lobby.hangar.sub_views.veh_param_helpers import getGroupIcon, form
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.items_parameters import RELATIVE_PARAMS, params_helper
+from gui.shared.items_parameters import params_helper, RELATIVE_PARAMS_WITHOUT_ABILITY
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
@@ -216,7 +216,7 @@ class VehicleParamsView(ViewImpl):
 
     def _prepareData(self, diffParams=None, concreteGroup=None):
         diffParams = diffParams if diffParams is not None else {}
-        for _, groupName in enumerate(RELATIVE_PARAMS):
+        for groupName in RELATIVE_PARAMS_WITHOUT_ABILITY:
             if concreteGroup is not None and concreteGroup != groupName:
                 continue
             group = self._createGroupViewModel(groupName=groupName, comparator=self.comparator)

@@ -35,9 +35,9 @@ def showEarlyAccessInfoPage(parent=None, closeCallback=None, earlyAccessCtrl=Non
     window.load()
 
 
-def showBuyTokensWindow(parent=None, backCallback=None):
+def showBuyTokensWindow(parent=None, desiredVehCD=None, backCallback=None):
     from gui.impl.lobby.early_access.early_access_buy_view import EarlyAccessBuyViewWindow
-    window = EarlyAccessBuyViewWindow(parent=parent, backCallback=backCallback)
+    window = EarlyAccessBuyViewWindow(parent=parent, desiredVehCD=desiredVehCD, backCallback=backCallback)
     window.load()
 
 

@@ -4,9 +4,10 @@ from functools import partial
 from adisp import adisp_process
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys
+from gui.shared.event_dispatcher import getTechTreeLoadEvent
+from gui.techtree.go_back_helper import BackButtonContextKeys
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_vehicle import g_postProgressionVehicle
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VEHICLE_PREVIEW_ALIASES
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_constants import VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.daapi.view.meta.VehiclePostProgressionViewMeta import VehiclePostProgressionViewMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -114,7 +115,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     def _updateTitle(self):
         self.as_setVehicleTitleS(getTitleVO(self._vehicle))
 
-    def __onCmpBasketChange(self, changedData):
+    def __onCmpBasketChange(self, changedData, _=None):
         if changedData.isFullChanged:
             self._updateData()
 
@@ -122,7 +123,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
         self.as_onEscPressedS()
 
     def __onResearchAction(self):
-        exitToTechTree = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={BackButtonContextKeys.NATION: self._vehicle.nationName})
+        exitToTechTree = getTechTreeLoadEvent(self._vehicle.nationName)
         exitToResearchPage = events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_RESEARCH), ctx={BackButtonContextKeys.ROOT_CD: self._vehicle.intCD,
          BackButtonContextKeys.EXIT: exitToTechTree})
         g_eventBus.handleEvent(exitToResearchPage, scope=EVENT_BUS_SCOPE.LOBBY)

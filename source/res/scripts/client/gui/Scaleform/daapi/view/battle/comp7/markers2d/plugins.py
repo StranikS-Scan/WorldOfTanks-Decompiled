@@ -1,8 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/comp7/markers2d/plugins.py
-import BigWorld
 import settings
-from constants import ROLE_TYPE_TO_LABEL, ROLE_TYPE, INVALID_TIMESTAMP, ARENA_PERIOD
+from constants import ROLE_TYPE_TO_LABEL, ROLE_TYPE, ARENA_PERIOD
 from account_helpers.settings_core.settings_constants import MARKERS
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import SettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import VehicleMarkerPlugin
@@ -195,68 +194,56 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
 
     def __updateAoeHealMarker(self, vehicleID, handle, state):
         showCountdown = state.get('isSourceVehicle', False)
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AOE_HEAL_STATE, showCountdown=showCountdown)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AOE_HEAL_STATE, showCountdown=showCountdown)
 
     def __updateAoeInspireMarker(self, vehicleID, handle, state):
         showCountdown = state.get('isSourceVehicle', False)
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AOE_INSPIRE_STATE, showCountdown=showCountdown)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AOE_INSPIRE_STATE, showCountdown=showCountdown)
 
     def __updateBerserkMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_BERSERK_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_BERSERK_STATE)
 
     def __updateAllySupportMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ALLY_SUPPORT_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ALLY_SUPPORT_STATE)
 
     def __updateHunterMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_HUNTER_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_HUNTER_STATE)
 
     def __updateRiskyAttackBuffMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_RISKY_ATTACK_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_RISKY_ATTACK_STATE)
 
     def __updateRiskyAttackHealMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_RISKY_ATTACK_HEAL_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_RISKY_ATTACK_HEAL_STATE)
 
     def __updateFastRechargeMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_FAST_RECHARGE_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_FAST_RECHARGE_STATE)
 
     def __updateJuggernautMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_JUGGERNAUT_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_JUGGERNAUT_STATE)
 
     def __updateSureShotMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_SURE_SHOT_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_SURE_SHOT_STATE)
 
     def __updateConcentrationMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_CONCENTRATION_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_CONCENTRATION_STATE)
 
     def __updateSniperMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_SNIPER_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_SNIPER_STATE)
 
     def __updateMarchMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_MARCH_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_MARCH_STATE)
 
     def __updateAggressiveDetectionMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AGGRESSIVE_DETECTION_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_AGGRESSIVE_DETECTION_STATE)
 
     def __updatePointReconMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_POINT_RECON_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_POINT_RECON_STATE)
 
     def __updateRedLineMarker(self, vehicleID, handle, state):
-        self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ARTYLLERY_SUPPORT_STATE)
+        self._updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ARTYLLERY_SUPPORT_STATE)
 
     def __updateConfirmedMarker(self, vehicleID, handle, isShown):
         self._updateStatusMarkerState(vehicleID=vehicleID, isShown=isShown, handle=handle, statusID=BATTLE_MARKER_STATES.CONFIRMED_STATE, duration=0, animated=True, isSourceVehicle=False, blinkAnim=False)
-
-    def __updateAbilityMarker(self, vehicleID, state, handle, stateID, showCountdown=False):
-        vehicle = BigWorld.entities.get(vehicleID)
-        if vehicle is None or not vehicle.isAlive():
-            return
-        else:
-            show = not state.get('finishing', False)
-            isSourceVehicle = state.get('isSourceVehicle', False)
-            endTime = state.get('endTime', INVALID_TIMESTAMP)
-            duration = max(endTime - BigWorld.serverTime(), 0) if show and endTime != INVALID_TIMESTAMP else 0
-            self._updateMarkerTimer(vehicleID, handle=handle, duration=duration, statusID=stateID, showCountdown=showCountdown, isSourceVehicle=isSourceVehicle)
-            return
 
     def __onTeammateSelectionStatuses(self, statuses):
         for vehicleID, status in statuses.iteritems():

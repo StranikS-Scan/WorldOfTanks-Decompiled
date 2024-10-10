@@ -4,12 +4,12 @@ import typing
 import nations
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.lobby.techtree.listeners import TTListenerDecorator
-from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
+from gui.impl.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import getTreeNodeCompareData
 from gui.Scaleform.daapi.view.meta.ResearchViewMeta import ResearchViewMeta
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
-from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView
+from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView, showBuyTokensWindow
+from gui.techtree.listeners import TTListenerDecorator, IPage
 from gui.shared import event_dispatcher as shared_events
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
@@ -19,7 +19,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _logger = getLogger(__name__)
 
-class ResearchView(LobbySubView, ResearchViewMeta):
+class ResearchView(LobbySubView, ResearchViewMeta, IPage):
     __sound_env__ = LobbySubViewEnv
     _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
     _itemsCache = dependency.descriptor(IItemsCache)
@@ -36,8 +36,11 @@ class ResearchView(LobbySubView, ResearchViewMeta):
     def goToBlueprintView(self, vehicleCD):
         shared_events.showBlueprintView(vehicleCD, self._createExitEvent())
 
-    def goToEarlyAccess(self):
+    def goToEarlyAccessQuestsView(self):
         showEarlyAccessQuestsView()
+
+    def goToEarlyAccessBuyView(self, vehCD):
+        showBuyTokensWindow(parent=self.getParentWindow(), desiredVehCD=vehCD)
 
     def goToNationChangeView(self, vehicleCD):
         shared_events.showChangeVehicleNationDialog(vehicleCD)
@@ -149,6 +152,9 @@ class ResearchView(LobbySubView, ResearchViewMeta):
             self.as_setNodesStatesS(NODE_STATE_FLAGS.PURCHASE_DISABLED, result)
 
     def invalidateVehPostProgression(self):
+        pass
+
+    def invalidateEarlyAccess(self):
         pass
 
     def _updateUnlockedItems(self, unlocked):

@@ -296,7 +296,10 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'wclParticipant',
  'wt2022HunterWins',
  'wt2022BossWins',
- 'wt2022SpecBossDefeat']
+ 'wt2022SpecBossDefeat',
+ 'wt2024HunterWins',
+ 'wt2024BossWins',
+ 'wt2024MaxPlasma']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',
@@ -455,7 +458,10 @@ _achievements15x15PopUps = ['warrior',
  'wclParticipant',
  'wt2022HunterWins',
  'wt2022BossWins',
- 'wt2022SpecBossDefeat']
+ 'wt2022SpecBossDefeat',
+ 'wt2024HunterWins',
+ 'wt2024BossWins',
+ 'wt2024MaxPlasma']
 _achievements15x15BlockBuilder = StaticSizeBlockBuilder('achievements', _ACHIEVEMENTS15X15_BLOCK_LAYOUT, ACHIEVEMENT15X15_DEPENDENCIES, _achievements15x15PopUps)
 _STEAM_BLOCK_LAYOUT = ['steamBattleCredits',
  'steamLittleSavingsMedal',
@@ -899,7 +905,8 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'comp7_4_1',
  'comp7_4_1_champion',
  'comp7_4_1_legend',
- 'BattlePassCommonPr_15']
+ 'BattlePassCommonPr_15',
+ '14YearsOfService']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1132,7 +1139,8 @@ _singleAchievementsPopUps = ['titleSniper',
  'comp7_4_1',
  'comp7_4_1_champion',
  'comp7_4_1_legend',
- 'BattlePassCommonPr_15']
+ 'BattlePassCommonPr_15',
+ '14YearsOfService']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

@@ -242,6 +242,11 @@ class _AggressiveDetectionStateUpdater(ViewStateUpdater):
     _VEHICLE_VIEW_STATE = VEHICLE_VIEW_STATE.AGGRESSIVE_DETECTION
 
 
+class _AbilityStateUpdater(ViewStateUpdater):
+    _FEEDBACK_EVENT_ID = FEEDBACK_EVENT_ID.ABILITY
+    _VEHICLE_VIEW_STATE = VEHICLE_VIEW_STATE.ABILITY
+
+
 _VIEW_STATE_UPDATERS = {BuffDisplayedState.AOE_INSPIRE: _AoeInspireStateUpdater,
  BuffDisplayedState.AOE_HEAL: _AoeHealStateUpdater,
  BuffDisplayedState.RISKY_ATTACK_BUFF: _RiskyAttackBuffStateUpdater,
@@ -255,4 +260,7 @@ _VIEW_STATE_UPDATERS = {BuffDisplayedState.AOE_INSPIRE: _AoeInspireStateUpdater,
  BuffDisplayedState.SURE_SHOT: _SureShotStateUpdater,
  BuffDisplayedState.CONCENTRATION: _ConcentrationStateUpdater,
  BuffDisplayedState.MARCH: _MarchStateUpdater,
- BuffDisplayedState.AGGRESSIVE_DETECTION: _AggressiveDetectionStateUpdater}
+ BuffDisplayedState.AGGRESSIVE_DETECTION: _AggressiveDetectionStateUpdater,
+ BuffDisplayedState.ABILITY_JUGGERNAUT: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_CONCENTRATION: _AbilityStateUpdater,
+ BuffDisplayedState.ABILITY_SURE_SHOT: _AbilityStateUpdater}

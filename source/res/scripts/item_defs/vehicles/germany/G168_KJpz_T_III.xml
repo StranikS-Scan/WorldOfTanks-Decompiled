@@ -10,7 +10,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	55	</forward>
-    <backward>	20	</backward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.154	</moving>
@@ -42,7 +42,7 @@
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16130	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -453,10 +453,10 @@
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	50000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -1375,8 +1375,8 @@
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	330	</maxHealth>
-      <rotationSpeed>	30	</rotationSpeed>
+      <maxHealth>	200	</maxHealth>
+      <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1414,7 +1414,7 @@
             <rate>	20	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	9.6 10.5 11.6	</reloadTime>
+            <reloadTime>	10.6 12.5 14.4	</reloadTime>
           </autoreload>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -1422,8 +1422,8 @@
             <afterShot>	7	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.6	</aimingTime>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <pitchLimits>
             <minPitch>	0 -12 1 -12	</minPitch>
             <maxPitch>	0.00000 8.00 0.05556 8.00 0.08333 10.00 0.91667 10.00 0.94444 8.00 1.00000 8.00	</maxPitch>
@@ -1880,7 +1880,7 @@
     <detailed>
       <engines>
         <MTU803>
-          <smplEnginePower>	1800	</smplEnginePower>
+          <smplEnginePower>	1150	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </MTU803>
       </engines>

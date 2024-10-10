@@ -133,8 +133,7 @@ class _ControlMarkersFactory(_GunMarkersFactory):
         return self._createDefaultMarkers() + (self._createArcadeMarker(GUN_MARKER_TYPE.DUAL_ACC, _CONSTANTS.ARCADE_DUAL_ACC_GUN_MARKER_NAME), self._createSniperMarker(GUN_MARKER_TYPE.DUAL_ACC, _CONSTANTS.SNIPER_DUAL_ACC_GUN_MARKER_NAME))
 
     def _createFlamethrowerMarkers(self):
-        markerType = self._getMarkerType()
-        return (self._createArcadeMarker(markerType, name=_CONSTANTS.ARCADE_GUN_MARKER_NAME), self._createSPGMarker(markerType, name=_CONSTANTS.SPG_GUN_MARKER_NAME))
+        return self._createSPGMarkers() if self._vehicleInfo.vehicleType.classTag == 'SPG' else self._createDefaultMarkers()
 
     def _createDefaultMarkers(self):
         markerType = self._getMarkerType()

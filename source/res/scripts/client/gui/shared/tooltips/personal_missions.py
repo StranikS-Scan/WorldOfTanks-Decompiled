@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/personal_missions.py
 from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
+from frameworks.wulf import ViewSettings, ViewModel
 from gui import GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HANGAR_HEADER_QUESTS_TO_PM_BRANCH
@@ -12,18 +13,21 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.NATIONS import NATIONS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import BADGES_ICONS, BADGES_STRIPS_ICONS
 from gui.impl import backport
+from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
+from gui.impl.pub import ViewImpl
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter
 from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.server_events.personal_progress.formatters import PMTooltipConditionsFormatters
 from gui.shared.formatters import text_styles, icons
-from gui.shared.tooltips import TOOLTIP_TYPE, formatters
+from gui.shared.tooltips import TOOLTIP_TYPE, formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.utils import getPlayerName
 from helpers import dependency
@@ -36,6 +40,7 @@ from shared_utils import first, findFirst
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.impl.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_view import PersonalMissionsOldCampaignTooltipView
 
 class UniqueCamouflageTooltip(BlocksTooltipData):
 
@@ -574,3 +579,21 @@ class TankModuleTooltipData(BlocksTooltipData):
 
     def __getAvailableStatus(self, pawnsCount):
         return text_styles.warning(_ms(PERSONAL_MISSIONS.TANKMODULETOOLTIPDATA_STATUS_AVAILABLE, count=pawnsCount, img=icons.makeImageTag(AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.TINY), 24, 24, -6, 0)))
+
+
+class PMMissionAnnounceTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(PMMissionAnnounceTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_ANNOUNCE)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(ViewImpl(ViewSettings(R.views.lobby.pm_announce.tooltips.PersonalMissionsNewCampaignTooltipView(), model=ViewModel())), useDecorator=False)
+
+
+class PMOldOperationsTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(PMOldOperationsTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_OLD_OPERATIONS)
+
+    def getDisplayableData(self, *args, **kwargs):
+        return DecoratedTooltipWindow(PersonalMissionsOldCampaignTooltipView(R.views.lobby.pm_announce.tooltips.PersonalMissionsOldCampaignTooltipView()), useDecorator=False)

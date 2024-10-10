@@ -81,6 +81,8 @@ class _PlayerEvents(object):
         self.onLoadingMilestoneReached = Event.Event()
         self.onConfigModelUpdated = Event.Event()
         self.onShowShooterTracer = Event.Event()
+        self.onOverturnLevelUpdated = Event.Event()
+        self.onProjectileExplosion = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

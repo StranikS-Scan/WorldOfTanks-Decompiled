@@ -28,6 +28,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
+from gui.battle_results.presenter.presenter import DataPresenter
 _logger = logging.getLogger(__name__)
 
 class BattleResultsService(IBattleResultsService):
@@ -36,7 +37,7 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
+    __slots__ = ('__composers', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus', '__presenter')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
@@ -45,8 +46,11 @@ class BattleResultsService(IBattleResultsService):
         self.__appliedAddXPBonus = set()
         self.__eventsManager = Event.EventManager()
         self.onResultPosted = Event.Event(self.__eventsManager)
+        self.__presenter = None
+        return
 
     def init(self):
+        self.__presenter = DataPresenter()
         g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyViewLoaded)
         g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
 
@@ -54,6 +58,9 @@ class BattleResultsService(IBattleResultsService):
         g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__handleLobbyViewLoaded)
         g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_BOUGHT, self.__onPremiumBought)
         self.clear()
+        self.__presenter.fini()
+        self.__presenter = None
+        return
 
     def clear(self):
         while self.__composers:
@@ -61,6 +68,7 @@ class BattleResultsService(IBattleResultsService):
             item.clear()
 
         self.__eventsManager.clear()
+        self.__presenter.clear()
 
     @adisp_async
     @adisp_process
@@ -111,6 +119,7 @@ class BattleResultsService(IBattleResultsService):
             arenaUniqueID = reusableInfo.arenaUniqueID
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
+            self.__presenter.addBattleResult(reusableInfo, result)
             self.__composers[arenaUniqueID] = composerObj
             resultsWindow = self.__notifyBattleResultsPosted(arenaUniqueID, needToShowUI=needToShowUI)
             self.onResultPosted(reusableInfo, composerObj, resultsWindow)
@@ -127,6 +136,10 @@ class BattleResultsService(IBattleResultsService):
         else:
             vo = None
         return vo
+
+    @property
+    def presenter(self):
+        return self.__presenter
 
     def popResultsAnimation(self, arenaUniqueID):
         if arenaUniqueID in self.__composers:
@@ -302,6 +315,7 @@ class BattleResultsService(IBattleResultsService):
             composerObj = composer.createComposer(reusableInfo)
             composerObj.setResults(result, reusableInfo)
             self.__composers[arenaUniqueID] = composerObj
+            self.__presenter.updateBattleResult(reusableInfo, result)
         callback(True)
         return
 

@@ -38,7 +38,7 @@
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.8	</priceFactor>
-    <density>	0.39342 0.39342	</density>
+    <density>	1.065563 1.065563	</density>
   </camouflage>
   <hull>
     <armor>
@@ -949,14 +949,14 @@
     </customization>
     <hangarShadowTexture>	vehicles/american/A162_ATAC_II/ATAC_II_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <density>	104.245697 104.849693	</density>
-      <aoTextureSize>	1024 512	</aoTextureSize>
+      <density>	80 80	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
     <Chassis_A162_ATAC_II>
       <userString>	#usa_vehicles:Chassis_A162_ATAC_II	</userString>
-      <tags></tags>
+      <tags>	trackWithinTrack	</tags>
       <level>	9	</level>
       <price>	63400	</price>
       <notInShop>	true	</notInShop>
@@ -966,8 +966,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.1	</vehicleMovement>
-        <vehicleRotation>	0.1	</vehicleRotation>
+        <vehicleMovement>	0.08	</vehicleMovement>
+        <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -979,7 +979,7 @@
         <maxHealth>	240	</maxHealth>
         <maxRegenHealth>	180	</maxRegenHealth>
         <repairCost>	5.0	</repairCost>
-        <repairTime>	4.59770107	</repairTime>
+        <repairTime>	4.57142878	</repairTime>
       </trackPairParams>
       <trackPairParams>
         <trackPairIdx>	1	</trackPairIdx>
@@ -990,13 +990,7 @@
         <maxHealth>	180	</maxHealth>
         <maxRegenHealth>	140	</maxRegenHealth>
         <repairCost>	5.0	</repairCost>
-        <repairSpeedLimiter>
-          <repairSpeedModifier>	0.33	</repairSpeedModifier>
-          <speedToStartLimitedRepair>	5	</speedToStartLimitedRepair>
-          <speedToStopLimitedRepair>	3	</speedToStopLimitedRepair>
-        </repairSpeedLimiter>
-        <breakMode>	SLOW	</breakMode>
-        <repairTime>	4.59770107	</repairTime>
+        <repairTime>	4.57142878	</repairTime>
       </trackPairParams>
       <models>
         <undamaged>	vehicles/american/A162_ATAC_II/normal/lod0/Chassis.model	</undamaged>
@@ -2442,7 +2436,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Gun_T208_atac>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_90mm_Gun_T208_atac>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 9 1 9	</maxPitch>
@@ -2459,16 +2453,16 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	17	</reloadTime>
+          <reloadTime>	30	</reloadTime>
           <clip>
-            <count>	3	</count>
+            <count>	5	</count>
             <rate>	33.33	</rate>
           </clip>
           <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <customizationSlots>
@@ -2521,7 +2515,7 @@
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
-            <density>	108.504578 113.3731	</density>
+            <density>	80 80	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_90mm_Gun_T208_atac>
@@ -2935,7 +2929,7 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.037 -0.011 1.101 0.001 0.766 0.164 0.337 0.027 0.464 0.494 0.265 0.508 0.094 0.159 0.237	</physicsShape>
       <camouflage>
-        <density>	104.245697 104.849693	</density>
+        <density>	80 80	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
       </camouflage>
     </Turret_1_A162_ATAC_II>
@@ -2977,6 +2971,26 @@
     </detailed>
   </physics>
   <extras>
+    <leftTrack0Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
+    </leftTrack0Health>
+    <rightTrack0Health>	TrackWithinTrackHealth : TrackHealth	  <isLeft>	false	</isLeft>
+      <trackPairIdx>	0	</trackPairIdx>
+      <sounds>
+        <destroyed>	track_destroyed	</destroyed>
+        <critical>	track_damaged	</critical>
+        <functional>	track_functional	</functional>
+        <functionalCanMove>	track_functional_can_move	</functionalCanMove>
+      </sounds>
+      <deviceUserString>	#ingame_gui:devices/track	</deviceUserString>
+    </rightTrack0Health>
     <leftTrack1Health>	TrackHealth : TrackHealth	  <isLeft>	true	</isLeft>
       <trackPairIdx>	1	</trackPairIdx>
       <sounds>

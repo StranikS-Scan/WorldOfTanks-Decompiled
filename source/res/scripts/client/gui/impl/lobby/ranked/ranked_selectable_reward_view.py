@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/ranked/ranked_selectable_reward_view.py
+from functools import partial
 import typing
 from AccountCommands import RES_SUCCESS
 from frameworks.wulf import WindowFlags
@@ -7,7 +8,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.ranked.ranked_selectable_reward_view_model import RankedSelectableRewardViewModel
 from gui.impl.lobby.common.selectable_reward_base import SelectableRewardBase
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.ranked_battles.constants import YEAR_AWARDS_ORDER
 from gui.selectable_reward.common import RankedSelectableRewardManager
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.event_dispatcher import showRankedYearAwardWindow
@@ -29,9 +29,9 @@ class RankedSelectableRewardView(SelectableRewardBase):
      'deluxeExtraHealthReserve']
     _helper = RankedSelectableRewardManager
 
-    def __init__(self, receivedRewards=None):
-        super(RankedSelectableRewardView, self).__init__(R.views.lobby.ranked.RankedSelectableRewardView(), self._helper.getAvailableSelectableBonuses(), RankedSelectableRewardViewModel)
-        self.__allRewards = receivedRewards or {}
+    def __init__(self, rankID):
+        super(RankedSelectableRewardView, self).__init__(R.views.lobby.ranked.RankedSelectableRewardView(), self._helper.getAvailableSelectableBonuses(partial(_isValidReward, rankID)), RankedSelectableRewardViewModel)
+        self.__allRewards = {}
         self.__points = 0
         completedYearQuest = self.__rankedController.getCompletedYearQuest()
         if completedYearQuest is not None:
@@ -42,22 +42,12 @@ class RankedSelectableRewardView(SelectableRewardBase):
     def viewModel(self):
         return super(RankedSelectableRewardView, self).getViewModel()
 
-    def _onLoading(self, *args, **kwargs):
-        super(RankedSelectableRewardView, self)._onLoading()
-        rankedType = self.__rankedController.getAwardTypeByPoints(self.__points) or YEAR_AWARDS_ORDER[0]
-        with self.viewModel.transaction() as tx:
-            tx.setRewardType(rankedType)
-
     def _processReceivedRewards(self, result):
         receivedRewards = result.auxData[RES_SUCCESS]
         isFirstShow = bool(self.__allRewards)
         self.__allRewards = getMergedBonusesFromDicts([self.__allRewards, receivedRewards])
         self.__tryToShowRewardsWindow(not isFirstShow)
         self.destroyWindow()
-
-    def _onCloseClick(self):
-        self.__tryToShowRewardsWindow()
-        super(RankedSelectableRewardView, self)._onCloseClick()
 
     def _getItemsComparator(self, _):
         return self.__rewardsComparator
@@ -76,5 +66,10 @@ class RankedSelectableRewardView(SelectableRewardBase):
 
 class RankedSelectableRewardWindow(LobbyNotificationWindow):
 
-    def __init__(self, rewards):
-        super(RankedSelectableRewardWindow, self).__init__(content=RankedSelectableRewardView(rewards), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+    def __init__(self, rankID=None):
+        super(RankedSelectableRewardWindow, self).__init__(content=RankedSelectableRewardView(rankID), wndFlags=WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN)
+
+
+def _isValidReward(rankID, tokenID):
+    tokenRank = tokenID.split(':')[-1]
+    return not rankID or int(tokenRank) == rankID

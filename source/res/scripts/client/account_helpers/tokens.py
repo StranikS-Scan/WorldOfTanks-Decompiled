@@ -60,6 +60,22 @@ class Tokens(object):
         self.__commandsProxy.perform(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
         return
 
+    def reRollLootBox(self, boxID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__account._doCmdInt(AccountCommands.CMD_LOOTBOX_REROLL, boxID, proxy)
+        return
+
+    def getLootBoxReRollRecords(self, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+        else:
+            proxy = None
+        self.__account._doCmdInt(AccountCommands.CMD_LOOTBOX_REROLL_RECORDS, 0, proxy)
+        return
+
     def __onGetCacheResponse(self, callback, resultID):
         if resultID < 0:
             if callback is not None:

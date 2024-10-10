@@ -2440,6 +2440,7 @@
       <devices>	240	</devices>
     </damage>
     <maxDistanceInsideVehicle>	40	</maxDistanceInsideVehicle>
+    <damageRandomization>	0.0	</damageRandomization>
     <distanceDamage>
       <isEnabled>	true	</isEnabled>
       <damage>
@@ -2447,7 +2448,7 @@
         <max>	1470	</max>
       </damage>
       <distance>
-        <min>	1.5	</min>
+        <min>	1.0	</min>
         <max>	6.0	</max>
       </distance>
       <ignoreModules>	true	</ignoreModules>

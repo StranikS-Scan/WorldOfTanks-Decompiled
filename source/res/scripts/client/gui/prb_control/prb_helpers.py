@@ -1,6 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/prb_helpers.py
 import logging
+import weakref
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKeyDynamic, ViewKey
+from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler
+from gui.impl.gen import R
+from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.shared.badges import buildBadge
 from gui.shared.gui_items.badge import BadgeLayouts
 from gui.shared.system_factory import collectModeNameKwargsByPrbType, collectModeNameKwargsByQueueType
@@ -64,3 +70,23 @@ class BadgesHelper(object):
 def getModeNameKwargs(entityType, isQueue=True):
     collector = collectModeNameKwargsByQueueType if isQueue else collectModeNameKwargsByPrbType
     return collector(entityType) or {}
+
+
+class TrainingEntityViewLifecycleHandler(IViewLifecycleHandler):
+
+    def __init__(self, entity):
+        super(TrainingEntityViewLifecycleHandler, self).__init__([ViewKey(VIEW_ALIAS.LOBBY_HANGAR),
+         ViewKey(VIEW_ALIAS.LOBBY_STORE),
+         ViewKey(VIEW_ALIAS.LOBBY_STORAGE),
+         ViewKey(VIEW_ALIAS.LOBBY_BARRACKS),
+         ViewKey(VIEW_ALIAS.LOBBY_PROFILE),
+         ViewKey(VIEW_ALIAS.VEHICLE_COMPARE),
+         ViewKey(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS),
+         ViewKey(VIEW_ALIAS.LOBBY_MISSIONS),
+         ViewKey(VIEW_ALIAS.LOBBY_STRONGHOLD),
+         ViewKeyDynamic(R.views.lobby.techtree.VehicleTechTree()),
+         ViewKeyDynamic(R.views.lobby.crew.BarracksView())])
+        self.__entity = weakref.proxy(entity)
+
+    def onViewCreated(self, _):
+        self.__entity.setPlayerState(SetPlayerStateCtx(False, waitingID='prebattle/player_not_ready'))

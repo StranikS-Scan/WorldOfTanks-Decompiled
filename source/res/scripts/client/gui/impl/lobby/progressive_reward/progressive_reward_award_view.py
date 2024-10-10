@@ -12,7 +12,7 @@ from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundS
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView
 from helpers import dependency

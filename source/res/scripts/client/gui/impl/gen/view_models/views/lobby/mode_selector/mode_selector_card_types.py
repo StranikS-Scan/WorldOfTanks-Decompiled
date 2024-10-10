@@ -14,6 +14,7 @@ class ModeSelectorCardTypes(ViewModel):
     COMP7 = 7
     VERSUS_AI = 8
     COSMIC = 9
+    WT = 10
 
     def __init__(self, properties=0, commands=0):
         super(ModeSelectorCardTypes, self).__init__(properties=properties, commands=commands)

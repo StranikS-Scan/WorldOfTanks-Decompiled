@@ -82,6 +82,12 @@
       <private></private>
       <disabledInRoaming></disabledInRoaming>
       <event_battles></event_battles>
+      <event_boss></event_boss>
+      <event_hunter></event_hunter>
+      <special_event_boss></special_event_boss>
+      <squad_restricted></squad_restricted>
+      <random_only></random_only>
+      <event_bot></event_bot>
       <fallout></fallout>
       <epic_battles></epic_battles>
       <bob></bob>
@@ -161,6 +167,18 @@
       <rentEligible></rentEligible>
       <bot_hunter></bot_hunter>
       <debutBoxes></debutBoxes>
+      <builtinLargeMedkit_wt_user></builtinLargeMedkit_wt_user>
+      <builtinRepairkit_wt_user></builtinRepairkit_wt_user>
+      <builtinInstantStunShoot_wt_user></builtinInstantStunShoot_wt_user>
+      <builtinImpulse_wt_user></builtinImpulse_wt_user>
+      <builtinAfterburning_wt_user></builtinAfterburning_wt_user>
+      <builtinShield_wt_user></builtinShield_wt_user>
+      <builtinSelfRepair_wt_user></builtinSelfRepair_wt_user>
+      <builtinStronghold_wt_user></builtinStronghold_wt_user>
+      <builtinTeleport_wt_user></builtinTeleport_wt_user>
+      <builtinChargedShot_wt_user></builtinChargedShot_wt_user>
+      <builtinExplosiveShot_wt_user></builtinExplosiveShot_wt_user>
+      <builtinHyperion_wt_user></builtinHyperion_wt_user>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -185,6 +203,7 @@
     <description>	#item_types:gun/desc	</description>
     <tags>
       <clip></clip>
+      <lockedReloadTime></lockedReloadTime>
     </tags>
   </vehicleGun>
   <vehicleEngine>
@@ -281,7 +300,9 @@
       <firepower></firepower>
       <mobility></mobility>
       <premium_equipment></premium_equipment>
+      <eventShellOverride></eventShellOverride>
       <builtin></builtin>
+      <hideBuiltinInfo></hideBuiltinInfo>
       <trophyUpgraded></trophyUpgraded>
       <turbocharger></turbocharger>
       <healthReserve></healthReserve>
@@ -296,8 +317,12 @@
       <builtinPerkBooster></builtinPerkBooster>
       <roleEquipment></roleEquipment>
       <poiEquipment></poiEquipment>
+      <abilityEquipment></abilityEquipment>
       <public></public>
       <stopOutsideBattle></stopOutsideBattle>
+      <eventItem></eventItem>
+      <eventPassiveItem></eventPassiveItem>
+      <hidden></hidden>
     </tags>
   </equipment>
   <customizationItem>
@@ -364,6 +389,7 @@
       <offspringArenaMusic></offspringArenaMusic>
       <sabatonArenaMusic></sabatonArenaMusic>
       <ariaArenaMusic></ariaArenaMusic>
+      <WTEvent></WTEvent>
     </tags>
   </customizationItem>
   <crewSkin>

@@ -1977,6 +1977,8 @@ class ArmoryYardListener(_NotificationListener):
     __timeDelay = 2
     ARMORY_YARD_TEXT = R.strings.armory_yard.notifications
     ARMORY_YARD_SHOP_TEXT = R.strings.armory_shop.notifications
+    CURRENCY_TYPE_MAP = {Currency.GOLD: (SM_TYPE.FinancialTransactionWithGold, ARMORY_YARD_TEXT.payed.priceGold),
+     Currency.CRYSTAL: (SM_TYPE.FinancialTransactionWithCrystal, ARMORY_YARD_TEXT.payed.priceCrystal)}
 
     def start(self, model):
         super(ArmoryYardListener, self).start(model)
@@ -2067,15 +2069,15 @@ class ArmoryYardListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time.time()), currencies=formatSpentCurrencies(currencies)), type=self.__getShopPurchaseSMType(currencies), priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
         SystemMessages.pushMessage(text=formatBundlePurchase(productId, rewards) if isBundle else formatPurchaseItems(rewards), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.purchase())})
 
-    def __payed(self, isPostProgression, count, price=None):
+    def __payed(self, isPostProgression, count, price=None, currency=Currency.GOLD):
         bodySection = self.ARMORY_YARD_TEXT.postPayed if isPostProgression else self.ARMORY_YARD_TEXT.payed
         messageResID = bodySection.single() if count == 1 else bodySection.multiple()
         SystemMessages.pushMessage(text=backport.text(messageResID, count=count), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        if price is None:
+        if price is None or currency not in self.CURRENCY_TYPE_MAP:
             return
         else:
-            messagePriceGoldResID = self.ARMORY_YARD_TEXT.payed.priceGold()
-            SystemMessages.pushMessage(text=backport.text(messagePriceGoldResID, price=backport.getGoldFormat(price.getSignValue(Currency.GOLD))), type=SystemMessages.SM_TYPE.FinancialTransactionWithGold, priority=NotificationPriorityLevel.MEDIUM)
+            systemMessageType, messagePriceResID = self.CURRENCY_TYPE_MAP[currency]
+            SystemMessages.pushMessage(text=backport.text(messagePriceResID(), price=backport.getGoldFormat(price.getSignValue(currency))), type=systemMessageType, priority=NotificationPriorityLevel.MEDIUM)
             return
 
     def __paymentError(self):
@@ -2383,17 +2385,24 @@ class EarlyAccessListener(_NotificationListener):
             SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.feature.state.finished()), type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM)
 
     def __onStartAnnouncement(self, cycleID, cycleIndex=None):
-        key = '%s_%s' % (EarlyAccess.STARTED_CHAPTER_PREFIX, cycleID)
-        if AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN) and not AccountSettings.getEarlyAccess(key):
-            self.__earlyAccessController.setEarlyAccessSetting(key)
-            SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.start.chapter.body(), count=int2roman(cycleIndex)) if cycleIndex is not None else backport.text(self.__EARLY_ACCESS_TEXT.start.postprogression.chapter.body()), type=SystemMessages.SM_TYPE.EarlyAccessStartChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
-        return
+        ctrl = self.__earlyAccessController
+        if not ctrl.isAnyQuestAvailable():
+            return
+        else:
+            key = '%s_%s' % (EarlyAccess.STARTED_CHAPTER_PREFIX, cycleID)
+            if AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN) and not AccountSettings.getEarlyAccess(key):
+                ctrl.setEarlyAccessSetting(key)
+                SystemMessages.pushMessage(text=backport.text(self.__EARLY_ACCESS_TEXT.start.chapter.body(), count=int2roman(cycleIndex)) if cycleIndex is not None else backport.text(self.__EARLY_ACCESS_TEXT.start.postprogression.chapter.body()), type=SystemMessages.SM_TYPE.EarlyAccessStartChapter, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': self.__getHeader()})
+            return
 
     def __onFinishAnnouncement(self, endDate, isProgression=True):
+        ctrl = self.__earlyAccessController
+        if not ctrl.isAnyQuestAvailable():
+            return
         text = backport.text(self.__EARLY_ACCESS_TEXT.progression.finishSoon.body() if isProgression else self.__EARLY_ACCESS_TEXT.postprogression.finishSoon.body(), endDate=backport.getDateTimeFormat(endDate))
         key = EarlyAccess.FINISHED_PROGRESSION if isProgression else EarlyAccess.FINISHED_POSTRPOGRESSION
         if not AccountSettings.getEarlyAccess(key):
-            self.__earlyAccessController.setEarlyAccessSetting(key)
+            ctrl.setEarlyAccessSetting(key)
             self.__pushCommonMessage(text)
 
     def __onPayed(self, result, buyTokensAmount):
@@ -2408,28 +2417,31 @@ class EarlyAccessListener(_NotificationListener):
 
     def __onQuestsUpdated(self):
         ctrl = self.__earlyAccessController
-        allCycles = list(ctrl.iterAllCycles())
-        for idx, (cycleID, cycle) in enumerate(allCycles):
-            key = '%s_%s' % (EarlyAccess.COMPLETED_PROGRESSION_PREFIX, cycleID)
-            if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(cycleID):
-                ctrl.setEarlyAccessSetting(key)
-                self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.progression.completed(), count=int2roman(cycle.ordinalNumber)), header=self.__getRewardHeader())
-                currSeason = ctrl.getCurrentSeason()
-                if currSeason:
-                    nowTime = time_utils.getServerUTCTime()
-                    _, nextCycle = allCycles[idx + 1] if idx + 1 < len(allCycles) else (None, None)
-                    if nextCycle is not None and nowTime < nextCycle.startDate:
-                        self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.nextchapter.available(), count=int2roman(nextCycle.ordinalNumber), date=backport.getDateTimeFormat(nextCycle.startDate)))
+        if not ctrl.isAnyQuestAvailable():
+            return
+        else:
+            allCycles = list(ctrl.iterAllCycles())
+            for idx, (cycleID, cycle) in enumerate(allCycles):
+                key = '%s_%s' % (EarlyAccess.COMPLETED_PROGRESSION_PREFIX, cycleID)
+                if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(cycleID):
+                    ctrl.setEarlyAccessSetting(key)
+                    self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.progression.completed(), count=int2roman(cycle.ordinalNumber)), header=self.__getRewardHeader())
+                    currSeason = ctrl.getCurrentSeason()
+                    if currSeason:
+                        nowTime = time_utils.getServerUTCTime()
+                        _, nextCycle = allCycles[idx + 1] if idx + 1 < len(allCycles) else (None, None)
+                        if nextCycle is not None and nowTime < nextCycle.startDate:
+                            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.nextchapter.available(), count=int2roman(nextCycle.ordinalNumber), date=backport.getDateTimeFormat(nextCycle.startDate)))
 
-        key = EarlyAccess.COMPLETED_POSTPROGRESSION
-        if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(EARLY_ACCESS_POSTPR_KEY):
-            ctrl.setEarlyAccessSetting(key)
-            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.postprogression.completed()), header=self.__getRewardHeader())
-        isAllTokensRecieved = ctrl.getReceivedTokensCount() >= ctrl.getTotalVehiclesPrice()
-        if isAllTokensRecieved and not AccountSettings.getEarlyAccess(EarlyAccess.ALL_TOKENS_RECEIVED):
-            self.__earlyAccessController.setEarlyAccessSetting(EarlyAccess.ALL_TOKENS_RECEIVED)
-            self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.buy.success.allTokens.body()), NotificationPriorityLevel.LOW, self.__getRewardHeader())
-        return
+            key = EarlyAccess.COMPLETED_POSTPROGRESSION
+            if not AccountSettings.getEarlyAccess(key) and ctrl.isGroupQuestsCompleted(EARLY_ACCESS_POSTPR_KEY):
+                ctrl.setEarlyAccessSetting(key)
+                self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.quests.postprogression.completed()), header=self.__getRewardHeader())
+            isAllTokensRecieved = ctrl.getReceivedTokensCount() >= ctrl.getTotalVehiclesPrice()
+            if isAllTokensRecieved and not AccountSettings.getEarlyAccess(EarlyAccess.ALL_TOKENS_RECEIVED):
+                self.__earlyAccessController.setEarlyAccessSetting(EarlyAccess.ALL_TOKENS_RECEIVED)
+                self.__pushCommonMessage(backport.text(self.__EARLY_ACCESS_TEXT.buy.success.allTokens.body()), NotificationPriorityLevel.LOW, self.__getRewardHeader())
+            return
 
     def __onFeatureStateChanged(self, isPaused, newEndDate=None):
         if isPaused:

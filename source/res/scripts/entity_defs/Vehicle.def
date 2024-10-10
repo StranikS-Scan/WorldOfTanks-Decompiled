@@ -389,7 +389,7 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	INT8	</Arg>
     </showShooting>
     <updateLaserSight>
       <Arg>	OBJECT_ID	</Arg>
@@ -403,12 +403,14 @@
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	BOOL	</Arg>
+      <Arg>	FLOAT32	</Arg>
     </showDamageFromShot>
     <showDamageFromExplosion>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	FLOAT32	</Arg>
     </showDamageFromExplosion>
     <showAmmoBayEffect>
       <Arg>	UINT8	</Arg>
@@ -535,6 +537,7 @@
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>

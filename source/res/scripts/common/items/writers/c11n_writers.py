@@ -748,7 +748,8 @@ class StyleXmlWriter(BaseCustomizationItemXmlWriter):
         defaultValuesDict = {'styleProgressionLevel': 0,
          'slotId': 0,
          'scaleFactorId': DEFAULT_SCALE_FACTOR_ID,
-         'options': 0}
+         'options': 0,
+         'overrideDefaultAttachments': 0}
         for projectionDecal in outfit.projection_decals:
             if projectionDecal.editorData.decalType == ProjectionDecalType.POSITION:
                 projectionDecal.tags = None
@@ -908,6 +909,7 @@ class InsigniaXmlWriter(BaseCustomizationItemXmlWriter):
             changed |= rewriteString(section, 'atlas', item, 'atlas', '')
             changed |= rewriteString(section, 'alphabet', item, 'alphabet', '')
             changed |= rewriteBool(section, 'canBeMirrored', item, 'canBeMirrored', False)
+            changed |= rewriteEmissionSettings(section, item.emissionSettings)
         changed |= self.writeBaseGroup(item, section)
         return changed
 

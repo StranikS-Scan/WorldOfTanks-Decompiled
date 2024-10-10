@@ -24,7 +24,7 @@ from gui.battle_results.reusable import records
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Dict
-    from gui.battle_results.reusable import _ReusableInfo
+    from gui.battle_results.reusable import ReusableInfo
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 _THE_BEST_RANK = 1

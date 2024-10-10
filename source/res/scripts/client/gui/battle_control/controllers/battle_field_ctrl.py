@@ -8,7 +8,10 @@ from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.arena_info.interfaces import IBattleFieldController, IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE, VehicleSpottedStatus, INVALIDATE_OP
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
+from gui.battle_control.controllers.battle_spam_ctrl.spam_constants import SpamEvents
 from gui.battle_control.view_components import ViewComponentsController
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, List
     from Math import Vector3
@@ -26,8 +29,12 @@ class IBattleFieldListener(object):
     def updateTeamHealth(self, alliesHP, enemiesHP, totalAlliesHP, totalEnemiesHP):
         pass
 
+    def updateSpottedStatus(self, vehicleID, status):
+        pass
+
 
 class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, ViewComponentsController):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(BattleFieldCtrl, self).__init__()
@@ -42,6 +49,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         self.__deadEnemies = set()
         self.__eManager = Event.EventManager()
         self.onSpottedStatusChanged = Event.Event(self.__eManager)
+        self.__updateVehiclesHealthCallbackFn = None
         return
 
     def getCtrlScope(self):
@@ -216,8 +224,18 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             setter = self.__setAllyHealth
         if setter is not None and currentHealth != newHealth:
             setter(vehicleID, currentHealth, newHealth)
+            spamCtrl = self.__sessionProvider.shared.battleSpamCtrl
+            if spamCtrl is not None and needUpdate:
+                needUpdate = spamCtrl.filterTeamHealthBarUpdate(vehicleID)
+                if self.__updateVehiclesHealthCallbackFn is None:
+                    self.__updateVehiclesHealthCallbackFn = BigWorld.callback(spamCtrl.getSpamCooldown(SpamEvents.TEAM_HEALTH_BAR_UPDATE), self.__updateVehiclesHealthCallback)
             if needUpdate:
                 self.__updateVehiclesHealth()
+        return
+
+    def __updateVehiclesHealthCallback(self):
+        self.__updateVehiclesHealthCallbackFn = None
+        self.__updateVehiclesHealth()
         return
 
     def __setEnemyHealth(self, vehicleID, currentHealth, newHealth):
@@ -275,6 +293,9 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             flags, vo = self.__battleCtx.getArenaDP().updateVehicleSpottedStatus(vehicleID, spottedState)
             if flags != INVALIDATE_OP.NONE:
                 self.onSpottedStatusChanged([(flags, vo)], self.__battleCtx.getArenaDP())
+                for viewCmp in self._viewComponents:
+                    viewCmp.updateSpottedStatus(vehicleID, spottedState)
+
             return
 
     def __clear(self):
@@ -286,3 +307,7 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
         self.__enemiesHealth = 0
         self.__totalAlliesHealth = 0
         self.__totalEnemiesHealth = 0
+        if self.__updateVehiclesHealthCallbackFn is not None:
+            BigWorld.cancelCallback(self.__updateVehiclesHealthCallbackFn)
+            self.__updateVehiclesHealthCallbackFn = None
+        return

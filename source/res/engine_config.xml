@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -521,6 +522,12 @@
           <name>	double_eleven_day.bnk	</name>
         </bank>
         <bank>
+          <name>	custom_styles.bnk	</name>
+        </bank>
+        <bank>
+          <name>	custom_styles.pck	</name>
+        </bank>
+        <bank>
           <name>	style_3D_It23_CC_3_3DSt.bnk	</name>
         </bank>
         <bank>
@@ -540,6 +547,9 @@
         </bank>
         <bank>
           <name>	style_3D_J40_Type_71_3dst_Magnus.bnk	</name>
+        </bank>
+        <bank>
+          <name>	style_3D_Pl26_Czolg_P_Wz_46_Verbesserter.bnk	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -686,7 +696,23 @@
         <bank>
           <name>	style_3D_J40_Type_71_3dst_Magnus.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_Pl26_Czolg_P_Wz_46_Verbesserter.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ability.bnk	</name>
+        </bank>
       </SFX_soundbanks_arena>
+      <SFX_soundbanks_custom>
+        <white_tiger_2022>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.pck	</name>
+          </bank>
+        </white_tiger_2022>
+      </SFX_soundbanks_custom>
       <SFX_soundbanks_editor>
         <bank>
           <name>	fort_area.bnk	</name>

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/VehicleInfoWindow.py
 import typing
 from debug_utils import LOG_ERROR
+from items.vehicles import g_cache
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.Scaleform import MENU
@@ -23,6 +24,7 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 if typing.TYPE_CHECKING:
+    from typing import Optional, List, Dict
     from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager
 
 class _Highlight(object):
@@ -105,7 +107,8 @@ class VehicleInfoWindow(VehicleInfoMeta):
              'propsData': self.__packParams(paramsList),
              'baseData': params['base'],
              'crewData': tankmenParams,
-             'roleStr': roleStr}
+             'roleStr': roleStr,
+             'abilityData': self.__getAbilityData(vehicle.typeDescr.ability)}
             self.as_setVehicleInfoS(info)
             return
 
@@ -134,6 +137,14 @@ class VehicleInfoWindow(VehicleInfoMeta):
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateNationChangeBtn
         super(VehicleInfoWindow, self)._dispose()
 
+    def __getAbilityData(self, abilityId):
+        if abilityId is not None:
+            abilityEquipment = g_cache.getEquipmentByID(abilityId)
+            return [{'abilityName': i18n.convert(abilityEquipment.userString),
+              'description': i18n.convert(abilityEquipment.description)}]
+        else:
+            return
+
     def __packParams(self, paramsList):
         result = []
         for name, value in paramsList:
@@ -157,7 +168,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
          'label': MENU.VEHICLEINFO_COMPAREBTN_LABEL,
          'tooltip': tooltip})
 
-    def __onVehCompareBasketChanged(self, changedData):
+    def __onVehCompareBasketChanged(self, changedData, _=None):
         if changedData.isFullChanged:
             self.__updateCompareButtonState()
 

@@ -27,7 +27,14 @@ class RankedBattlesStatsComposer(object):
 
     @property
     def amountSteps(self):
-        return self.__getSeasonDossier().getStepsCount()
+        if self.divisionsStats is None:
+            return
+        else:
+            steps = 0
+            for division in self.divisionsStats.itervalues():
+                steps += division.get('rankChanges', 0)
+
+            return steps
 
     @property
     def amountStepsInLeagues(self):
@@ -69,10 +76,16 @@ class RankedBattlesStatsComposer(object):
 
     @property
     def currentSeasonEfficiency(self):
-        if self.amountBattles:
-            efficiency = float(self.__getSeasonDossier().getStepsCount()) / self.amountBattles
-        else:
-            efficiency = None
+        efficiency = None
+        if self.divisionsStats is not None:
+            rankChanges = 0
+            battles = 0
+            for division in self.divisionsStats.itervalues():
+                rankChanges += division.get('rankChanges', 0)
+                battles += division.get('battles', 0)
+
+            if battles:
+                efficiency = rankChanges / float(battles)
         return EfficiencyStamp(efficiency, time.time())
 
     @property

@@ -5,13 +5,13 @@ import typing
 from battle_modifiers_common import BattleParams
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.backport import backport_r
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
+from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE, getKpiValueString
 from gui.shared.gui_items.gui_item_economics import isItemBuyPriceAvailable
@@ -304,7 +304,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                     paramName = ModuleTooltipBlockConstructor.COOLDOWN_SECONDS
                     paramValue = params_formatters.formatParameter(paramName, cooldownSeconds)
                     descParts.append(params_formatters.formatParamNameColonValueUnits(paramName=paramName, paramValue=paramValue))
-                if module.isBuiltIn:
+                if module.isBuiltIn and not module.isBuiltInInfoHidden:
                     descParts.append(text_styles.main(backport.text(R.strings.tooltips.equipment.builtIn())))
                 descList.append(text_styles.concatStylesToMultiLine(*descParts))
         block.append(formatters.packTitleDescBlock(title=text_styles.highTitle(title), desc='\n'.join(descList), gap=-3, padding=formatters.packPadding(top=-6)))
@@ -333,7 +333,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         bottomOffset = -60
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe:
             overlayPath = backport.image(R.images.gui.maps.shop.artefacts.c_180x135.equipmentPlus_overlay())
-        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn:
+        elif self.module.itemTypeID is GUI_ITEM_TYPE.EQUIPMENT and self.module.isBuiltIn and not self.module.isBuiltInInfoHidden:
             padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.TOOLTIP_BUILD_IN_180_X_135_OVERLAY_PADDING_LEFT)
             overlayPath = backport.image(R.images.gui.maps.icons.quests.bonuses.small.builtInEquipment_overlay())
             bottomOffset = 0
@@ -410,11 +410,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 return bool(int(researchNode.state) & state) if researchNode is not None else False
 
             isEqOrDev = module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS
-            isNextToUnlock = checkState(NODE_STATE_FLAGS.NEXT_2_UNLOCK)
-            isInstalled = checkState(NODE_STATE_FLAGS.INSTALLED)
-            isInInventory = checkState(NODE_STATE_FLAGS.IN_INVENTORY)
-            isUnlocked = checkState(NODE_STATE_FLAGS.UNLOCKED)
-            isAutoUnlock = checkState(NODE_STATE_FLAGS.AUTO_UNLOCKED)
+            isNextToUnlock = checkState(NodeStateFlags.NEXT_2_UNLOCK)
+            isInstalled = checkState(NodeStateFlags.INSTALLED)
+            isInInventory = checkState(NodeStateFlags.IN_INVENTORY)
+            isUnlocked = checkState(NodeStateFlags.UNLOCKED)
+            isAutoUnlock = checkState(NodeStateFlags.AUTO_UNLOCKED)
             items = self.itemsCache.items
             money = items.stats.money
             itemPrice = MONEY_UNDEFINED
@@ -970,10 +970,10 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                 block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(title) if title is not None else '', desc=text_styles.main(desc) if desc is not None else '', gap=-1))
             return block
 
-        if not nodeState & NODE_STATE_FLAGS.UNLOCKED:
+        if not nodeState & NodeStateFlags.UNLOCKED:
             if not vehicle.isUnlocked:
                 header, text = getComplexStatusWULF(statusTemplate.rootVehicleIsLocked)
-            elif not nodeState & NODE_STATE_FLAGS.NEXT_2_UNLOCK:
+            elif not nodeState & NodeStateFlags.NEXT_2_UNLOCK:
                 header, text = getComplexStatusWULF(statusTemplate.parentModuleIsLocked)
             elif need > 0:
                 header, text = getComplexStatusWULF(statusTemplate.notEnoughXP)
@@ -982,7 +982,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         elif not vehicle.isInInventory:
             header, text = getComplexStatusWULF(statusTemplate.needToBuyTank, vehiclename=vehicle.userName)
             return status(header, text)
-        elif nodeState & NODE_STATE_FLAGS.INSTALLED:
+        elif nodeState & NodeStateFlags.INSTALLED:
             return status()
         else:
             if vehicle is not None:

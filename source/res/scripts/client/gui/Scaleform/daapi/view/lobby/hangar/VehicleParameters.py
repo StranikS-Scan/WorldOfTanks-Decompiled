@@ -6,14 +6,14 @@ from gui.Scaleform.daapi.view.meta.VehicleParametersMeta import VehicleParameter
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.items_parameters.comparator import PARAM_STATE
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, getParameters, getCommonParam, isValidEmptyValue, SimplifiedBarVO
-from helpers import dependency
-from skeletons.gui.shared import IItemsCache
+from items import vehicles
 
 class VehicleParameters(VehicleParametersMeta):
 
@@ -25,7 +25,8 @@ class VehicleParameters(VehicleParametersMeta):
          'relativeArmor': AccountSettings.getSettings('relativeArmor'),
          'relativeMobility': AccountSettings.getSettings('relativeMobility'),
          'relativeVisibility': AccountSettings.getSettings('relativeVisibility'),
-         'relativeCamouflage': AccountSettings.getSettings('relativeCamouflage')}
+         'relativeCamouflage': AccountSettings.getSettings('relativeCamouflage'),
+         'relativeAbility': AccountSettings.getSettings('relativeAbility')}
         return
 
     def onParamClick(self, paramID):
@@ -98,7 +99,6 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
     _AVERAGE_PARAMS = ('avgDamage', 'avgPiercingPower')
     _AVERAGE_TOOLTIPS_MAP = {TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS: TOOLTIPS_CONSTANTS.VEHICLE_AVG_PARAMETERS,
      TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS: TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_AVG_PARAMETERS}
-    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tooltipType=TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS):
         super(_VehParamsGenerator, self).__init__()
@@ -114,8 +114,11 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
     def _getSimplifiedValue(self, param):
         return formatters.colorizedFormatParameter(param, formatters.NO_BONUS_SIMPLIFIED_SCHEME)
 
-    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
-        stockParams = getParameters(self.itemsCache.items.getStockVehicle(vehIntCD))
+    def _makeSimpleParamBottomVO(self, param, vehIntCD):
+        vehicle = self.itemsCache.items.getStockVehicle(vehIntCD)
+        if param.name == 'relativeAbility':
+            return self.__makeRelativeAbilityBottomVO(param, vehicle)
+        stockParams = getParameters(vehicle)
         data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM, param.name, param.name)
         delta = 0
         state, diff = param.state
@@ -126,9 +129,6 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
          'indicatorVO': SimplifiedBarVO(value=param.value, delta=delta, markerValue=stockParams[param.name], useAnim=self.useAnim)})
         return data
 
-    def _getAdvancedParamTooltip(self, param):
-        return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType] if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP else self._tooltipType
-
     def _makeAdvancedParamVO(self, param, parentID, highlight):
         if param.value or isValidEmptyValue(param.name, param.value):
             data = super(_VehParamsGenerator, self)._makeAdvancedParamVO(param, parentID, highlight)
@@ -136,7 +136,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
              'valueText': formatters.colorizedFullFormatParameter(param, self._getAdvancedFormatters()),
              'iconSource': formatters.getParameterSmallIconPath(param.name),
              'isEnabled': False,
-             'tooltip': self._getAdvancedParamTooltip(param)})
+             'tooltip': self.__getAdvancedParamTooltip(param)})
             return data
         else:
             return None
@@ -152,7 +152,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
             data.update({'titleText': text_styles.leadingText(text_styles.main(title), 2),
              'valueText': formatters.colorizedFullFormatParameter(param, self._getExtraFormatters()),
              'isEnabled': False,
-             'tooltip': self._getAdvancedParamTooltip(param),
+             'tooltip': self.__getAdvancedParamTooltip(param, parentID),
              'iconSource': formatters.getParameterSmallIconPath(param.name)})
             return (data, title.count('\n'))
         else:
@@ -161,7 +161,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
     def _makeSimpleParamHeaderVO(self, param, isOpen, comparator):
         data = super(_VehParamsGenerator, self)._makeSimpleParamHeaderVO(param, isOpen, comparator)
         data.update({'titleText': formatters.formatVehicleParamName(param.name),
-         'valueText': self._getSimplifiedValue(param),
+         'valueText': ' ' if param.name == 'relativeAbility' else self._getSimplifiedValue(param),
          'isEnabled': True,
          'tooltip': self._tooltipType,
          'isOpen': isOpen,
@@ -187,6 +187,24 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
          'tooltip': '',
          'parentID': parentID}
 
+    def __makeRelativeAbilityBottomVO(self, param, vehicle):
+        data = getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_ABILITY, param.name, param.name)
+        abilityID = vehicle.typeDescr.ability
+        if abilityID is None:
+            abilityName = ''
+        else:
+            abilityName = vehicles.g_cache.getEquipmentByID(abilityID).userString
+        data.update({'isEnabled': True,
+         'tooltip': self._tooltipType,
+         'iconSource': RES_ICONS.MAPS_ICONS_VEHPARAMS_BG_ABILITY,
+         'titleText': text_styles.stats(abilityName)})
+        return data
+
+    def __getAdvancedParamTooltip(self, param, parentID=''):
+        if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP:
+            return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType]
+        return TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS if parentID == 'relativeAbility' else self._tooltipType
+
 
 class _PreviewVehParamsGenerator(_VehParamsGenerator):
 
@@ -199,8 +217,10 @@ class _PreviewVehParamsGenerator(_VehParamsGenerator):
     def _getAdvancedFormatters(self):
         return formatters.BASE_SCHEME
 
-    def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
+    def _makeSimpleParamBottomVO(self, param, vehIntCD):
         vo = super(_PreviewVehParamsGenerator, self)._makeSimpleParamBottomVO(param, vehIntCD)
+        if param.name == 'relativeAbility':
+            return vo
         delta = param.state[1]
         value = param.value
         if delta > 0:

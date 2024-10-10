@@ -1,0 +1,49 @@
+<h00_armory_yard.xml>
+  <name>	#arenas:h00_armory_yard_ep3/name	</name>
+  <description>	#arenas:h00_armory_yard_ep3/description	</description>
+  <geometry>	spaces/h00_armory_yard_ep3	</geometry>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	900	</roundLength>
+  <minimap>	spaces/h00_armory_yard_ep3/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	15	</maxPlayersInTeam>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	armory_yard.bnk	</name>
+      </bank>
+      <bank>
+        <name>	armory_yard.pck	</name>
+      </bank>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+    </loadBanks>
+    <events>
+      <event>
+        <name>	ambient_trees_coniferous_01	</name>
+        <mod>	armory_yard_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_coniferous_comb_big_01	</name>
+        <mod>	armory_yard_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <wwmusic>	armory_yard_silence	</wwmusic>
+  <wwambientSound>	armory_yard_ambient_main	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</h00_armory_yard.xml>

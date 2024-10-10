@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/visual_script_client/player_blocks.py
 import weakref
 import BigWorld
+from skeletons.gui.battle_session import IBattleSessionProvider
+from PlayerEvents import g_playerEvents
 from visual_script import ASPECT
 from visual_script.block import Meta, Block
 from visual_script.dependency import dependencyImporter
@@ -10,7 +12,8 @@ from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
 import items.vehicles as vehicles
-helpers, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
+from constants import EQUIPMENT_STAGES
+helpers, dependency, TriggersManager, gun_marker_ctrl, Avatar = dependencyImporter('helpers', 'helpers.dependency', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'Avatar')
 
 class PlayerMeta(Meta):
 
@@ -475,3 +478,63 @@ class GetPlayerGunDispersionAngles(Block, PlayerMeta):
         if avatar:
             td = avatar.getVehicleDescriptor()
             self._ideal.setValue(td.gun.shotDispersionAngle)
+
+
+class OnProjectileExplosion(Block, PlayerMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnProjectileExplosion, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._position = self._makeDataOutputSlot('position', SLOT_TYPE.VECTOR3, None)
+        self._hitDirection = self._makeDataOutputSlot('hitDirection', SLOT_TYPE.VECTOR3, None)
+        self._shellVelocity = self._makeDataOutputSlot('shellVelocity', SLOT_TYPE.FLOAT, None)
+        self._shellMass = self._makeDataOutputSlot('shellMass', SLOT_TYPE.FLOAT, None)
+        self._splashRadius = self._makeDataOutputSlot('splashRadius', SLOT_TYPE.FLOAT, None)
+        self._splashStrength = self._makeDataOutputSlot('splashStrength', SLOT_TYPE.FLOAT, None)
+        return
+
+    def onStartScript(self):
+        g_playerEvents.onProjectileExplosion += self.__onProjectileExplosion
+
+    def onFinishScript(self):
+        g_playerEvents.onProjectileExplosion -= self.__onProjectileExplosion
+
+    def __onProjectileExplosion(self, position, hitDirection, shellVelocity, shellMass, splashRadius, splashStrength):
+        self._position.setValue(position)
+        self._hitDirection.setValue(hitDirection)
+        self._shellVelocity.setValue(shellVelocity)
+        self._shellMass.setValue(shellMass)
+        self._splashRadius.setValue(splashRadius)
+        self._splashStrength.setValue(splashStrength)
+        self._out.call()
+
+
+class OnEquipmentUpdated(Block, PlayerMeta):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, *args, **kwargs):
+        super(OnEquipmentUpdated, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._equipmentName = self._makeDataOutputSlot('equipmentName', SLOT_TYPE.STR, None)
+        self._equipmentStage = self._makeDataOutputSlot('equipmentStage', SLOT_TYPE.INT, None)
+        self._equipmentStageName = self._makeDataOutputSlot('equipmentStageName', SLOT_TYPE.STR, None)
+        return
+
+    def onStartScript(self):
+        ctrl = self.__sessionProvider.shared.equipments
+        if ctrl is not None:
+            ctrl.onEquipmentUpdated += self.__onEquipmentUpdated
+        return
+
+    def onFinishScript(self):
+        ctrl = self.__sessionProvider.shared.equipments
+        if ctrl is not None:
+            ctrl.onEquipmentUpdated -= self.__onEquipmentUpdated
+        return
+
+    def __onEquipmentUpdated(self, intCD, item):
+        descriptor = item.getDescriptor()
+        self._equipmentName.setValue(descriptor.name)
+        self._equipmentStage.setValue(item.getStage())
+        self._equipmentStageName.setValue(EQUIPMENT_STAGES.toString(item.getStage()))
+        self._out.call()

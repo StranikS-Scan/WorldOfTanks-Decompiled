@@ -8,7 +8,7 @@ from gui.impl.gen import R
 from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
-from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnDescription
+from gui.techtree.go_back_helper import getBackBtnDescription
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.veh_post_progression.vo_builders.base_page_vos import getBaseButtonsVO, getBaseDataVO, getBaseTitleVO

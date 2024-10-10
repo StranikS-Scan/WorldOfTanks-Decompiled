@@ -14,6 +14,7 @@ BARREL_DEBUG_ENABLED = False
 GUN_RAMMER_TIME = 1.5
 GUN_RAMMER_EFFECT_NAME = 'cons_gun_rammer_start'
 _CALIBER_RELOAD_SOUND_SWITCH = 'SWITCH_ext_rld_autoloader_caliber'
+MIN_RELOAD_TIME = 1
 
 class ReloadEffectsType(object):
     SIMPLE_RELOAD = 'SimpleReload'
@@ -229,7 +230,8 @@ class SimpleReload(_GunReload):
             if time < 0.0:
                 time = 0.0
             self._checkAndPlayGunRammerEffect(shellReloadTime)
-            self.delayCallback(time, self.__playSound)
+            if shellReloadTime >= MIN_RELOAD_TIME:
+                self.delayCallback(time, self.__playSound)
             return
 
     def stop(self):

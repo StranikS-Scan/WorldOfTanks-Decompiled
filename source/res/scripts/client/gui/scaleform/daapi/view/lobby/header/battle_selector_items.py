@@ -45,6 +45,7 @@ _R_BATTLE_TYPES = R.strings.menu.headerButtons.battle.types
 _R_BATTLE_MENU = R.strings.menu.headerButtons.battle.menu
 _R_ICONS = R.images.gui.maps.icons
 _R_BR_TOURNAMENT_BUTTON = R.strings.battle_royale.tournament.fightButton
+_R_EVENT_BATTLE = R.strings.event.menu.selector
 
 @total_ordering
 class _SelectorItem(object):
@@ -998,7 +999,7 @@ def _addEpicTrainingBattleType(items, lobbyContext=None):
 
 
 def _addEventBattlesType(items):
-    items.append(_EventBattlesItem('Event Battle', PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
+    items.append(_EventBattlesItem(backport.text(_R_BATTLE_TYPES.event()), PREBATTLE_ACTION_NAME.EVENT_BATTLE, 2, SELECTOR_BATTLE_TYPES.EVENT))
 
 
 BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,

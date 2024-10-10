@@ -4,7 +4,7 @@ import CGF
 from constants import IS_UE_EDITOR
 from gui import g_tankActiveCamouflage
 from helpers import isPlayerAvatar
-from cgf_components.prefab_attachment_component import PrefabAttachmentsComponent, PrefabAttachmentComponent
+from cgf_components.prefab_attachment_component import PrefabAttachmentsLoader, PrefabAttachmentComponent
 from items.components.c11n_constants import SeasonType
 
 class ModelTypesList(object):
@@ -28,15 +28,15 @@ def addPrefabAttachments(appearance, typeDescriptor, force=False):
         season = g_tankActiveCamouflage.get(typeDescriptor.type.compactDescr, SeasonType.SUMMER)
         if style is None or season is SeasonType.UNDEFINED or not style.outfits[season].overrideDefaultAttachments:
             prefabsToLoad = [ (attachment.modelName if isPlayerAvatar() else attachment.hangarModelName) for attachment in typeDescriptor.type.prefabAttachments ]
-    if appearance.findComponentByType(PrefabAttachmentsComponent):
+    if appearance.findComponentByType(PrefabAttachmentsLoader):
         if force:
             hm = CGF.HierarchyManager(appearance.spaceID)
             childPrefabAttachments = hm.findComponentsInHierarchy(appearance.gameObject, PrefabAttachmentComponent)
             for childGO, _ in childPrefabAttachments:
                 CGF.removeGameObject(childGO)
 
-            appearance.removeComponentByType(PrefabAttachmentsComponent)
-            appearance.createComponent(PrefabAttachmentsComponent, appearance, prefabsToLoad)
+            appearance.removeComponentByType(PrefabAttachmentsLoader)
+            appearance.createComponent(PrefabAttachmentsLoader, appearance, prefabsToLoad)
     else:
-        appearance.createComponent(PrefabAttachmentsComponent, appearance, prefabsToLoad)
+        appearance.createComponent(PrefabAttachmentsLoader, appearance, prefabsToLoad)
     return

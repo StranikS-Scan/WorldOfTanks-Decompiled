@@ -18,13 +18,22 @@ class CameraManager(object):
 
     def init(self):
         self.cgfCameraManager.allowSetMinDist(False)
-        self.cgfCameraManager.onCameraSwitched += self.__onCameraSwitched
+        g_eventBus.removeListener(ArmoryYardEvent.POI_ACTIVATED, self.__poiActivated)
         g_eventBus.addListener(ArmoryYardEvent.POI_ACTIVATED, self.__poiActivated)
+        if self.cgfCameraManager.isActive:
+            self.cgfCameraManager.onCameraSwitched += self.__onCameraSwitched
+        else:
+            self.cgfCameraManager.onStateChange += self.__onStateChange
 
     def destroy(self):
         g_eventBus.removeListener(ArmoryYardEvent.POI_ACTIVATED, self.__poiActivated)
         self.__camName = None
         return
+
+    def __onStateChange(self, active):
+        if active:
+            self.cgfCameraManager.onCameraSwitched += self.__onCameraSwitched
+            self.cgfCameraManager.onStateChange -= self.__onStateChange
 
     @dependency.replace_none_kwargs(hangarSpace=IHangarSpace)
     def goToPosition(self, data, instantly=True, hangarSpace=None):

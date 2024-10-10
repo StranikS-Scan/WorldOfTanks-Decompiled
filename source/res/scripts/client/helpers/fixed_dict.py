@@ -6,8 +6,8 @@ RoleEquipmentState = namedtuple('RoleEquipmentState', ('level', 'progress'))
 StatusWithTimeInterval = namedtuple('StatusWithTimeInterval', ('statusID', 'startTime', 'endTime'))
 TimeInterval = namedtuple('TimeInterval', ('startTime', 'endTime'))
 StateWithTimeInterval = namedtuple('TimeInterval', ('stateID', 'timeInterval', 'isSourceVehicle'))
-VisualScriptEquipmentState = namedtuple('VisualScriptEquipmentState', ('quantity', 'endTime', 'totalTime', 'prevStage', 'stage'))
-VisualScriptEquipmentPublicState = namedtuple('VisualScriptEquipmentPublicState', ('stage',))
+VisualScriptEquipmentState = namedtuple('VisualScriptEquipmentState', ('quantity', 'endTime', 'totalTime', 'prevStage', 'stage', 'locked'))
+VisualScriptEquipmentPublicState = namedtuple('VisualScriptEquipmentPublicState', ('stage', 'prevStage'))
 if typing.TYPE_CHECKING:
     from enum import Enum
 
@@ -32,10 +32,10 @@ def getStateWithTimeInterval(fixedDict):
 
 
 def getVisualScriptEquipmentState(fixedDict):
-    state = VisualScriptEquipmentState(quantity=fixedDict['quantity'], endTime=fixedDict['endTime'], totalTime=fixedDict['totalTime'], prevStage=fixedDict['prevStage'], stage=fixedDict['stage'])
+    state = VisualScriptEquipmentState(quantity=fixedDict['quantity'], endTime=fixedDict['endTime'], totalTime=fixedDict['totalTime'], prevStage=fixedDict['prevStage'], stage=fixedDict['stage'], locked=fixedDict['locked'])
     return state
 
 
 def getVisualScriptEquipmentPublicState(fixedDict):
-    state = VisualScriptEquipmentPublicState(stage=fixedDict['stage'])
+    state = VisualScriptEquipmentPublicState(stage=fixedDict['stage'], prevStage=fixedDict['prevStage'])
     return state

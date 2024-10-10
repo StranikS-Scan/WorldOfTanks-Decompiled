@@ -181,7 +181,8 @@ class VehicleParametersAdvanced(ToolTipBaseData):
      'relativeArmor': 'statSurvivability',
      'relativeMobility': 'statMobility',
      'relativeCamouflage': 'statConcealment',
-     'relativeVisibility': 'statSpotting'}
+     'relativeVisibility': 'statSpotting',
+     'relativeAbility': 'abilityPreview'}
 
     def __init__(self, context):
         super(VehicleParametersAdvanced, self).__init__(context, None)
@@ -306,7 +307,9 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'improvedRotationMechanism': 'equipmentImprovedRotationMechanism',
  'additionalInvisibilityDevice': 'equipmentLowNoiseExhaustSystem',
  'improvedConfiguration': 'equipmentModifiedConfiguration',
- 'turbocharger': 'equipmentTurbocharger'}
+ 'turbocharger': 'equipmentTurbocharger',
+ 'wt_largeMedkit': 'consumablesFirstAidWt',
+ 'wt_largeRepairkit': 'consumablesRepairKitBig'}
 TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

@@ -31,68 +31,69 @@ class ArmoryYardBuyViewModel(ViewModel):
     def getFinalRewardType():
         return ArmoryYardRewardsVehicleModel
 
-    @property
-    def price(self):
-        return self._getViewModel(1)
-
-    @staticmethod
-    def getPriceType():
-        return PriceModel
-
     def getStepSelected(self):
-        return self._getNumber(2)
+        return self._getNumber(1)
 
     def setStepSelected(self, value):
-        self._setNumber(2, value)
+        self._setNumber(1, value)
 
     def getStepsPassed(self):
-        return self._getNumber(3)
+        return self._getNumber(2)
 
     def setStepsPassed(self, value):
-        self._setNumber(3, value)
+        self._setNumber(2, value)
 
     def getParentAlias(self):
-        return ParentAlias(self._getString(4))
+        return ParentAlias(self._getString(3))
 
     def setParentAlias(self, value):
-        self._setString(4, value.value)
+        self._setString(3, value.value)
 
     def getRewards(self):
-        return self._getArray(5)
+        return self._getArray(4)
 
     def setRewards(self, value):
-        self._setArray(5, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getRewardsType():
         return ItemBonusModel
 
     def getSteps(self):
-        return self._getArray(6)
+        return self._getArray(5)
 
     def setSteps(self, value):
-        self._setArray(6, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getStepsType():
         return ArmoryYardBuyStepConfig
 
     def getIsWalletAvailable(self):
-        return self._getBool(7)
+        return self._getBool(6)
 
     def setIsWalletAvailable(self, value):
-        self._setBool(7, value)
+        self._setBool(6, value)
 
     def getIsBlurEnabled(self):
-        return self._getBool(8)
+        return self._getBool(7)
 
     def setIsBlurEnabled(self, value):
-        self._setBool(8, value)
+        self._setBool(7, value)
+
+    def getPrices(self):
+        return self._getArray(8)
+
+    def setPrices(self, value):
+        self._setArray(8, value)
+
+    @staticmethod
+    def getPricesType():
+        return PriceModel
 
     def _initialize(self):
         super(ArmoryYardBuyViewModel, self)._initialize()
         self._addViewModelProperty('finalReward', ArmoryYardRewardsVehicleModel())
-        self._addViewModelProperty('price', PriceModel())
         self._addNumberProperty('stepSelected', 0)
         self._addNumberProperty('stepsPassed', 0)
         self._addStringProperty('parentAlias')
@@ -100,6 +101,7 @@ class ArmoryYardBuyViewModel(ViewModel):
         self._addArrayProperty('steps', Array())
         self._addBoolProperty('isWalletAvailable', True)
         self._addBoolProperty('isBlurEnabled', False)
+        self._addArrayProperty('prices', Array())
         self.onChangeSelectedStep = self._addCommand('onChangeSelectedStep')
         self.onBuySteps = self._addCommand('onBuySteps')
         self.onCancel = self._addCommand('onCancel')

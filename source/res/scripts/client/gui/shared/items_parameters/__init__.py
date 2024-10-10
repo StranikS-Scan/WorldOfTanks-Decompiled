@@ -6,7 +6,8 @@ from gui.shared.utils import SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELO
 from helpers import i18n, time_utils
 from items import vehicles, artefacts
 from items.components import component_constants
-RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
+RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility', 'relativeAbility')
+RELATIVE_PARAMS_WITHOUT_ABILITY = RELATIVE_PARAMS[:-1]
 MAX_RELATIVE_VALUE = 1000
 NO_DATA = 'no data'
 _AUTO_RELOAD_TAG = 'autoreload'
@@ -39,6 +40,10 @@ def isAutoReloadGun(gun):
 
 def isDualGun(gun):
     return _DUAL_GUN_TAG in gun.tags if gun is not None else False
+
+
+def isAutoShootGun(gun):
+    return 'autoShoot' in gun.tags if gun is not None else False
 
 
 def isDualAccuracy(gun):

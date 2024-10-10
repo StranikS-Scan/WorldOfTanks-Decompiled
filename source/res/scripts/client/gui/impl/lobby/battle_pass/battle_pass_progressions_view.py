@@ -187,11 +187,11 @@ class BattlePassProgressionsView(ViewImpl):
             if ctrl.isBought(chapterID=self.__chapterID):
                 self.__showBuyLevelsWindow()
             else:
-                self.__showBuyWindow()
+                self.__showBuyWindow(self.__getPreviewCallback())
         elif not ctrl.isChapterCompleted(self.__chapterID):
             ctrl.activateChapter(self.__chapterID)
         elif not ctrl.isBought(chapterID=self.__chapterID):
-            self.__showBuyWindow()
+            self.__showBuyWindow(self.__getPreviewCallback())
 
     def __onAboutClick(self):
         self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isMarathonChapter(self.__chapterID) else getInfoPageURL())
@@ -646,7 +646,9 @@ class BattlePassProgressionsView(ViewImpl):
         return backport.text(endStringRes(), seasonNum=int2roman(self.__battlePass.getSeasonNum()), endDay=endTime.tm_mday, endMonth=backport.text(R.strings.menu.dateTime.months.num(endTime.tm_mon)()), endTime=formatDate('%H:%M', endTimestamp))
 
     def __showBuyWindow(self, backCallback=None):
-        showBattlePassBuyWindow({'backCallback': backCallback})
+        showBattlePassBuyWindow({'backCallback': backCallback,
+         'destroyAfterCallback': True})
+        self.destroy()
 
     def __showBuyLevelsWindow(self, backCallback=None):
         showBattlePassBuyLevelWindow({'backCallback': backCallback,

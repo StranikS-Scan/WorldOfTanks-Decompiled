@@ -3,7 +3,7 @@
 from bootcamp.Bootcamp import g_bootcamp
 from gui import DialogsInterface
 from gui.Scaleform.daapi.view import dialogs
-from gui.Scaleform.daapi.view.lobby.techtree.unlock import UnlockItemConfirmator
+from gui.techtree.unlock import UnlockItemConfirmator
 from gui.impl import backport
 from gui.impl.gen import R
 

@@ -5,15 +5,14 @@ import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEHICLES_WITH_BLUEPRINT_CONFIRM, STORAGE_BLUEPRINTS_CAROUSEL_FILTER
 from adisp import adisp_process
+from gui.shared.event_dispatcher import getTechTreeLoadEvent
 from wg_async import wg_async, wg_await
 from blueprints.BlueprintTypes import BlueprintTypes
 from frameworks.wulf import ViewSettings
 from frameworks.wulf.gui_constants import ViewFlags, ViewStatus
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import getBackBtnDescription
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.techtree.go_back_helper import getBackBtnDescription
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.dialogs import dialogs
@@ -26,7 +25,7 @@ from gui.impl.lobby.blueprints import getBlueprintTooltipData
 from gui.impl.lobby.blueprints.fragments_balance_content import FragmentsBalanceContent
 from gui.impl.pub import ViewImpl
 from gui.server_events.formatters import DISCOUNT_TYPE
-from gui.shared import g_eventBus, event_dispatcher, events
+from gui.shared import g_eventBus, event_dispatcher
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.gui_items.items_actions.actions import UnlockItemActionWithResult
@@ -180,7 +179,7 @@ class BlueprintScreen(ViewImpl):
         self.__accountSettings.add(self.__vehicle.intCD)
 
     def __onOpenVehicleViewBtnClicked(self):
-        event_dispatcher.showResearchView(self.__vehicle.intCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': self.__vehicle.nationName}))
+        event_dispatcher.showResearchView(self.__vehicle.intCD, exitEvent=getTechTreeLoadEvent(self.__vehicle.nationName))
 
     @adisp_process
     def __onResearchVehicle(self, _=None):

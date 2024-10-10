@@ -52,7 +52,10 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         return DailyQuestsWidgetView()
 
     def _isQueueEnabled(self):
-        enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.MAPBOX, QUEUE_TYPE.COMP7)
+        enabledQueues = (QUEUE_TYPE.RANDOMS,
+         QUEUE_TYPE.MAPBOX,
+         QUEUE_TYPE.COMP7,
+         QUEUE_TYPE.RANKED)
         return any((self.__isQueueSelected(queueType) for queueType in enabledQueues))
 
     def isLimitedUiRuleCompleted(self):

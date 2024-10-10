@@ -32,7 +32,7 @@ class SquadActionsHandler(AbstractActionsHandler):
             vInfos = unit.getMemberVehicles(pInfo.dbID)
             if vInfos is not None:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
-            g_eventDispatcher.loadBattleQueue()
+            self._loadBattleQueue()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
         return
@@ -46,7 +46,7 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeInit(self, ctx):
         initResult = FUNCTIONAL_FLAG.UNDEFINED
         if self._entity.getPlayerInfo().isReady and self._entity.getFlags().isInQueue():
-            g_eventDispatcher.loadBattleQueue()
+            self._loadBattleQueue()
             initResult = FUNCTIONAL_FLAG.LOAD_PAGE
         squadCtx = None
         if ctx is not None:
@@ -103,14 +103,17 @@ class SquadActionsHandler(AbstractActionsHandler):
                 result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNotReadyPlayer))
             if not result:
                 raise AsyncReturn(result)
-            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            result = yield await_callback(checkVehicleAmmoFull)(self._getActiveVehicleItem())
             if not result:
                 raise AsyncReturn(result)
         elif not fullData.playerInfo.isReady:
-            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            result = yield await_callback(checkVehicleAmmoFull)(self._getActiveVehicleItem())
             if not result:
                 raise AsyncReturn(result)
         raise AsyncReturn(True)
+
+    def _getActiveVehicleItem(self):
+        return g_currentVehicle.item
 
     def exitFromQueue(self):
         self._sendBattleQueueRequest(action=0)
@@ -147,6 +150,10 @@ class SquadActionsHandler(AbstractActionsHandler):
             SystemMessages.pushI18nMessage('#system_messages:prebattle/invites/sendInvite', type=SystemMessages.SM_TYPE.Information)
 
         return
+
+    @classmethod
+    def _loadBattleQueue(cls):
+        g_eventDispatcher.loadBattleQueue()
 
     def _onKickedFromQueue(self, _):
         SystemMessages.pushI18nMessage('#system_messages:arena_start_errors/prb/kick/timeout', type=SystemMessages.SM_TYPE.Warning)

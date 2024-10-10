@@ -20,6 +20,8 @@
     <wwmusicResultDefeat>	music_ruinberg_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
+  <soundNotificationsPlan>	soundNotifications	</soundNotificationsPlan>
+  <soundNotificationsContext>	visual_script_client.contexts.sound_notifications_context.SoundNotificationsContext	</soundNotificationsContext>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultReverbPreset></defaultReverbPreset>
@@ -174,6 +176,14 @@
     <BATTLE_ROYALE_TRN_SQUAD>
       <runDelayDev>	15	</runDelayDev>
     </BATTLE_ROYALE_TRN_SQUAD>
+    <WHITE_TIGER>
+      <runDelayDev>	30	</runDelayDev>
+      <maxPlayersInTeam>	6	</maxPlayersInTeam>
+    </WHITE_TIGER>
+    <WHITE_TIGER_2>
+      <runDelayDev>	30	</runDelayDev>
+      <maxPlayersInTeam>	6	</maxPlayersInTeam>
+    </WHITE_TIGER_2>
   </bonusTypeOverrides>
   <gameplayTypes>
     <ctf>

@@ -633,6 +633,7 @@ class ArcadeControlMode(_GunControlMode):
     def __getAssaultSpgTargetPos(self, ownVehicle):
         pos = None
         normal = -math_utils.VectorConstant.Vector3J
+        player = BigWorld.player()
         cursorPosition = GUI.mcursor().position
         ray, wpoint = cameras.getWorldRayAndPoint(cursorPosition.x, cursorPosition.y)
         ray.normalise()
@@ -641,7 +642,7 @@ class ArcadeControlMode(_GunControlMode):
         vecToPivot = pivotPos - wpoint
         if vecToPivot.x != 0:
             wpoint += ray * (vecToPivot.x / ray.x)
-        res = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 1, BigWorld.player().playerVehicleID, -1, 0)
+        res = BigWorld.wg_collideDynamicStatic(player.spaceID, wpoint, wpoint + ray * AssaultCamera.MAX_COLLISION_DISTANCE_FROM_SCREEN, 1, player.playerVehicleID, -1, 0)
         if res is not None:
             pos = res[0]
             normal = res[6]
@@ -652,7 +653,7 @@ class ArcadeControlMode(_GunControlMode):
         if pos is not None:
             rayUp = math_utils.VectorConstant.Vector3J.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
             farPos = pos + rayUp
-            shotPosition, velocity, gravity = BigWorld.player().gunRotator.getShotParams(farPos, ignoreYawLimits=True)
+            shotPosition, velocity, gravity = player.gunRotator.getShotParams(farPos, ignoreYawLimits=True)
             velocityXZ = Math.Vector3(velocity.x, 0.0, velocity.z)
             distanceXZ = pos - shotPosition
             distanceXZ.y = 0.0
@@ -660,13 +661,13 @@ class ArcadeControlMode(_GunControlMode):
             resultY = shotPosition.y + velocity.y * timeToReach + gravity.y * timeToReach ** 2 / 2.0
             if resultY < pos.y:
                 pos = None
-        if pos is not None and not BigWorld.player().arena.isPointInsideArenaBB(pos):
+        if pos is not None and not player.arena.isPointInsideArenaBB(pos):
             pos = None
         if pos is None:
             pos = self.camera.aimingSystem.getDesiredShotPoint()
-            vehicle = BigWorld.player().getVehicleAttached()
-            hitPoint, projectileDir = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
-            shotPosition, velocity, gravity = BigWorld.player().gunRotator.getShotParams(hitPoint, ignoreYawLimits=True)
+            vehicle = player.getVehicleAttached()
+            hitPoint, projectileDir = getShotTargetInfo(vehicle, pos, player.gunRotator)
+            shotPosition, velocity, gravity = player.gunRotator.getShotParams(hitPoint, ignoreYawLimits=True)
             result = BigWorld.wg_simulateProjectileTrajectory(shotPosition, velocity, gravity, constants.SERVER_TICK_LENGTH, constants.SHELL_TRAJECTORY_EPSILON_CLIENT, 4)
             if result is not None:
                 hitPoint = result[1]
@@ -676,13 +677,13 @@ class ArcadeControlMode(_GunControlMode):
                 gunNode = ownVehicle.model.node('gun')
                 if gunNode is not None:
                     gunPosition = Math.Matrix(gunNode).translation
-                    checkHitPoint = BigWorld.player().arena.isPointInsideArenaBB(gunPosition)
+                    checkHitPoint = player.arena.isPointInsideArenaBB(gunPosition)
             checkWaterDirection = -math_utils.VectorConstant.Vector3J
             if checkHitPoint and hitPoint is not None:
                 pos = hitPoint
                 projectileDir.normalise()
                 checkWaterDirection = projectileDir
-                hit = BigWorld.wg_collideDynamicStatic(BigWorld.player().spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 1, BigWorld.player().playerVehicleID, -1, 0)
+                hit = BigWorld.wg_collideDynamicStatic(player.spaceID, pos - projectileDir.scale(0.1), pos + projectileDir.scale(0.1), 1, player.playerVehicleID, -1, 0)
                 if hit is not None:
                     normal = hit[6]
             if checkWaterDirection.y < 0.0:
@@ -1182,11 +1183,12 @@ class AssaultControlMode(_TrajectoryControlMode):
         direction = self._cam.getMinStateDirection(targetPoint)
         start = targetPoint - direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
         end = targetPoint + direction.scale(self._VEHICLE_MAX_LENGTH_ERROR)
-        result = BigWorld.wg_collideDynamic(BigWorld.player().spaceID, start, end, BigWorld.player().playerVehicleID)
+        player = BigWorld.player()
+        result = BigWorld.wg_collideDynamic(player.spaceID, start, end, player.playerVehicleID)
         vehiclePoint = None
         if result is not None:
             vehiclePoint = start + direction.scale(result[0])
-        vehiclePosition = BigWorld.player().getVehicleAttached().position
+        vehiclePosition = player.getVehicleAttached().position
         return (targetPoint, normal) if vehiclePoint is None or vehiclePosition.distSqrTo(targetPoint) < vehiclePosition.distSqrTo(vehiclePoint) else (vehiclePoint, result[1])
 
     def __findDownTargetPosition(self, targetPos, normal):
@@ -1200,22 +1202,29 @@ class AssaultControlMode(_TrajectoryControlMode):
         return targetPos
 
     def __generateSafeTargetPoint(self, targetPoint):
-        direction = self._cam.getMaxStateDirection(targetPoint)
-        shotPosition, _, _ = BigWorld.player().gunRotator.getShotParams(targetPoint, ignoreYawLimits=True)
-        start = shotPosition
-        end = shotPosition + direction.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
-        point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), 0)
+        player = BigWorld.player()
+        directionMinState = self._cam.getMinStateDirection(targetPoint)
+        shotPosition, _ = player.gunRotator.getCurShotPosition()
+        vehiclePosition = player.getVehicleAttached().position
+        vehiclePosition.y = shotPosition.y
+        vehToTarget = targetPoint - vehiclePosition
+        vehToTarget.normalise()
+        directionMinState = Math.Vector3(vehToTarget.x, directionMinState.y, vehToTarget.z)
+        start = vehiclePosition
+        end = vehiclePosition + directionMinState.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
+        point = collideDynamicAndStatic(start, end, (player.playerVehicleID,), 0)
         return point[0] if point is not None else None
 
     def __convertToMaxStateTarget(self, worldPos):
+        player = BigWorld.player()
         rayDown = -math_utils.VectorConstant.Vector3J.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
-        hitPointDown = collideDynamicAndStatic(worldPos - rayDown, worldPos + rayDown, (BigWorld.player().playerVehicleID,), 0)
+        hitPointDown = collideDynamicAndStatic(worldPos - rayDown, worldPos + rayDown, (player.playerVehicleID,), 0)
         if hitPointDown is None:
             return
         else:
             maxDirection = self._cam.getMaxStateDirection(hitPointDown[0])
             maxDirectionScaled = maxDirection.scale(AssaultCamera.MAX_COLLISION_DISTANCE)
-            hitPointAngle = collideDynamicAndStatic(hitPointDown[0] - maxDirectionScaled, hitPointDown[0] + maxDirectionScaled, (BigWorld.player().playerVehicleID,), 0)
+            hitPointAngle = collideDynamicAndStatic(hitPointDown[0] - maxDirectionScaled, hitPointDown[0] + maxDirectionScaled, (player.playerVehicleID,), 0)
             if hitPointAngle is None:
                 return
             result = hitPointAngle[0]

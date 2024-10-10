@@ -45,3 +45,7 @@ def showWinbackIntroView(parent=None):
 def showWinbackSelectRewardView(selectableBonusTokens=None):
     from winback.gui.impl.lobby.views.winback_selectable_reward_view import WinbackSelectableRewardWindow
     WinbackSelectableRewardWindow(selectableBonusTokens).load()
+
+
+def fireUpdateVOHeaderEvent():
+    g_eventBus.handleEvent(events.HangarHeaderEvent(events.HangarHeaderEvent.UPDATE_VO_HEADER), scope=EVENT_BUS_SCOPE.LOBBY)

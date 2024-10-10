@@ -7,8 +7,8 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import EarlyAccess
 from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from frameworks.wulf import ViewSettings, ViewFlags
-from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
-from gui.impl.pub import ViewImpl
+from gui.impl.lobby.early_access.early_access_view_impl import EarlyAccessViewImpl
+from gui.impl.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.early_access.early_access_quests_view_model import EarlyAccessQuestsViewModel
 from gui.impl.gen.view_models.views.lobby.early_access.early_access_chapter_model import EarlyAccessChapterModel, ChapterState
@@ -34,7 +34,7 @@ if typing.TYPE_CHECKING:
     from typing import Callable
     from frameworks.wulf import ViewEvent, Window, Array
 
-class EarlyAccessQuestsView(ViewImpl):
+class EarlyAccessQuestsView(EarlyAccessViewImpl):
     __slots__ = ('__tooltipData', '__currQuestsInProgressID', '__isHavePostprVehicle', '__isFromTechTree', '__remainTokensCount', '__receivedTokensForQuests')
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -84,14 +84,6 @@ class EarlyAccessQuestsView(ViewImpl):
             return EarlyAccessCurrencyTooltipView()
         return EarlyAccessStateTooltipView(event.getArgument('state'), event.getArgument('id')) if contentID == R.views.lobby.early_access.tooltips.EarlyAccessSimpleTooltipView() else super(EarlyAccessQuestsView, self).createToolTipContent(event, contentID)
 
-    def _initialize(self, *args, **kwargs):
-        super(EarlyAccessQuestsView, self)._initialize(*args, **kwargs)
-        self.__earlyAccessCtrl.hangarFeatureState.enter(self.layoutID)
-
-    def _finalize(self):
-        self.__earlyAccessCtrl.hangarFeatureState.exit(self.layoutID)
-        super(EarlyAccessQuestsView, self)._finalize()
-
     def _getEvents(self):
         return ((self.__earlyAccessCtrl.onUpdated, self.__onUpdated),
          (self.__earlyAccessCtrl.onQuestsUpdated, self.__updateData),
@@ -105,12 +97,9 @@ class EarlyAccessQuestsView(ViewImpl):
         self.__updateData()
 
     def __closeView(self):
-        self.destroy()
         showHangar()
 
     def __goToVehicle(self):
-        self.__earlyAccessCtrl.hangarFeatureState.enter(R.views.lobby.early_access.EarlyAccessVehicleView(), activateVehicleState=True)
-        self.destroy()
         showEarlyAccessVehicleView(isFromTechTree=self.__isFromTechTree)
 
     def __goToInfo(self):

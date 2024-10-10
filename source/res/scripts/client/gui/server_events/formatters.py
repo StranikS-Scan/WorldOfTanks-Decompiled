@@ -272,6 +272,17 @@ def packSimpleBonusesBlock(bonusesList, endlineSymbol='', complexTooltip=''):
     return UiElement(data)
 
 
+def packTypedBonusesBlock(bonusesList, endlineSymbol='', typedTooltip='', typedTooltipArg=''):
+    data = {'linkage': 'QuestTextAwardBlockUI',
+     'items': bonusesList,
+     'separator': ', ',
+     'ellipsis': '..',
+     'endline': endlineSymbol,
+     'typedTooltip': typedTooltip,
+     'typedTooltipArg': typedTooltipArg}
+    return UiElement(data)
+
+
 def packWulfTooltipSimpleBonusesBlock(bonusesList, endlineSymbol='', wulfTooltip='', wulfTooltipArg=''):
     data = {'linkage': 'QuestTextAwardBlockUI',
      'items': bonusesList,

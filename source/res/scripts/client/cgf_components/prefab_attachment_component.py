@@ -6,7 +6,7 @@ from cgf_script.managers_registrator import onAddedQuery, autoregister
 from vehicle_systems.model_assembler import loadAppearancePrefab
 
 @registerComponent
-class PrefabAttachmentsComponent(object):
+class PrefabAttachmentsLoader(object):
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
 
     def __init__(self, appearance, prefabs):
@@ -23,9 +23,11 @@ class PrefabAttachmentComponent(object):
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor)
 class PrefabAttachmentsManager(CGF.ComponentManager):
 
-    @onAddedQuery(PrefabAttachmentsComponent)
+    @onAddedQuery(PrefabAttachmentsLoader)
     def onAdded(self, component):
-        if not component.inited:
+        appearance = component.appearance
+        damagedState = hasattr(appearance, 'isVehicleDestroyed') and appearance.isVehicleDestroyed or hasattr(appearance, 'damageState') and appearance.damageState.isCurrentModelDamaged
+        if not component.inited and not damagedState:
             for prefab in component.prefabs:
                 loadAppearancePrefab(prefab, component.appearance, self.__onLoaded)
 

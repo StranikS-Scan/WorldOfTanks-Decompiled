@@ -820,4 +820,57 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	czech:Cz04_T50_51	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	805	</id>
+      <texture>	gui/maps/vehicles/styles/Cz04_T50_51_Waf_3DSt.png	</texture>
+      <description>	#vehicle_customization:special_style/Cz04_T50_51_Waf_3DSt_desc	</description>
+      <modelsSet>	Cz04_T50_51_Waf_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Cz04_T50_51_Waf_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Cz04_T50_51_Waf_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <slotId>	18000	</slotId>
+              <id>	78	</id>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	44	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </czech.xml>

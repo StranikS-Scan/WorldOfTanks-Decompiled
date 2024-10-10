@@ -12,9 +12,9 @@ class States(IntEnum):
 
 
 class RankedProgressionViewModel(ViewModel):
-    __slots__ = ('onClose', 'onAbout', 'onSelectDivision', 'onOpenFinalState')
+    __slots__ = ('onClose', 'onAbout', 'onSelectDivision', 'onOpenFinalState', 'onSelectReward')
 
-    def __init__(self, properties=12, commands=4):
+    def __init__(self, properties=14, commands=5):
         super(RankedProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -93,6 +93,18 @@ class RankedProgressionViewModel(ViewModel):
     def setIsFinalStateAvailable(self, value):
         self._setBool(11, value)
 
+    def getBonusBattles(self):
+        return self._getNumber(12)
+
+    def setBonusBattles(self, value):
+        self._setNumber(12, value)
+
+    def getHasRewardToSelect(self):
+        return self._getBool(13)
+
+    def setHasRewardToSelect(self, value):
+        self._setBool(13, value)
+
     def _initialize(self):
         super(RankedProgressionViewModel, self)._initialize()
         self._addViewModelProperty('divisions', UserListModel())
@@ -107,7 +119,10 @@ class RankedProgressionViewModel(ViewModel):
         self._addNumberProperty('selectedDivision', 0)
         self._addNumberProperty('selectedState')
         self._addBoolProperty('isFinalStateAvailable', True)
+        self._addNumberProperty('bonusBattles', 0)
+        self._addBoolProperty('hasRewardToSelect', False)
         self.onClose = self._addCommand('onClose')
         self.onAbout = self._addCommand('onAbout')
         self.onSelectDivision = self._addCommand('onSelectDivision')
         self.onOpenFinalState = self._addCommand('onOpenFinalState')
+        self.onSelectReward = self._addCommand('onSelectReward')

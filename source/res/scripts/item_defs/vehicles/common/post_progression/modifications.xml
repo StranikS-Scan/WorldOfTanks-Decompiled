@@ -4567,4 +4567,316 @@
       </mul>
     </kpi>
   </role_XI_MBT_B_pair_5_2>
+  <role_HT_flame_base_4>
+    <id>	7353	</id>
+    <locName>	fuel_system_revision_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	1.01	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.01	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_base_4>
+  <role_HT_flame_base_5>
+    <id>	7354	</id>
+    <locName>	fuel_system_revision_1	</locName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	1.01	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.01	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_base_5>
+  <role_HT_flame_pair_4_1>
+    <id>	7355	</id>
+    <imgName>	improvedSpallingResistance	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/antifragmentationLiningFactor	</name>
+        <value>	1.15	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/stunResistanceDuration	</name>
+        <value>	0.08	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	0.8	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/healthFactor	</name>
+        <value>	0.98	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/afterShot	</name>
+        <value>	1.15	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.92	</value>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.2	</value>
+      </mul>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	0.98	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_4_1>
+  <role_HT_flame_pair_4_2>
+    <id>	7356	</id>
+    <imgName>	increasedThickness	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/healthFactor	</name>
+        <value>	1.02	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/afterShot	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/antifragmentationLiningFactor	</name>
+        <value>	0.85	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/stunResistanceDuration	</name>
+        <value>	-0.08	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/crewChanceToHitFactor	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleStrength	</name>
+        <value>	1.02	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionAfterShot	</name>
+        <value>	0.85	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamOrExplosionDamageResistance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	0.8	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_4_2>
+  <role_HT_flame_pair_2_1>
+    <id>	7357	</id>
+    <imgName>	reinforcedInteriorModules	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/turretRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	0.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	0.8	</value>
+      </mul>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	0.96	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_2_1>
+  <role_HT_flame_pair_2_2>
+    <id>	7358	</id>
+    <imgName>	betterFriction	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/onStillRotationSpeedFactor	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/turretRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/engineReduceFineFactor	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/ammoBayReduceFineFactor	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/whileGunDamaged	</name>
+        <value>	1.2	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleAllGroundRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehicleTurretOrCuttingRotationSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+      <mul>
+        <name>	vehPenaltyForDamageEngineAndCombat	</name>
+        <value>	1.5	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionWhileGunDamaged	</name>
+        <value>	1.2	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_2_2>
+  <role_HT_flame_pair_5_1>
+    <id>	7359	</id>
+    <imgName>	improvedObservationDevice	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
+        <value>	1.03	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	0.98	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/rammingFactor	</name>
+        <value>	-0.08	</value>
+      </add>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	1.03	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	0.98	</value>
+      </mul>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	0.97	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	damageEnemiesByRamming	</name>
+        <value>	0.92	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_5_1>
+  <role_HT_flame_pair_5_2>
+    <id>	7360	</id>
+    <imgName>	improvedEnginePower	</imgName>
+    <modifiers>
+      <mul>
+        <name>	miscAttrs/enginePowerFactor	</name>
+        <value>	1.03	</value>
+      </mul>
+      <add>
+        <name>	miscAttrs/rammingFactor	</name>
+        <value>	0.08	</value>
+      </add>
+      <mul>
+        <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
+        <value>	0.97	</value>
+      </mul>
+      <mul>
+        <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
+        <value>	1.02	</value>
+      </mul>
+    </modifiers>
+    <kpi>
+      <mul>
+        <name>	vehicleEnginePower	</name>
+        <value>	1.03	</value>
+      </mul>
+      <mul>
+        <name>	vehicleRamDamageResistance	</name>
+        <value>	0.92	</value>
+      </mul>
+      <mul>
+        <name>	damageEnemiesByRamming	</name>
+        <value>	1.08	</value>
+      </mul>
+      <mul>
+        <name>	vehicleCircularVisionRadius	</name>
+        <value>	0.97	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunShotDispersionTurretRotation	</name>
+        <value>	1.02	</value>
+      </mul>
+    </kpi>
+  </role_HT_flame_pair_5_2>
 </modifications.xml>

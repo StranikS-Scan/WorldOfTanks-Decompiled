@@ -11,6 +11,7 @@ from gui.impl.gen import R
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import OptDeviceBonusesDescriptionBuilder, getCategoriesIcons, getStorageItemName, getStorageItemIcon, getItemNationID, getTypeUserName
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
+from gui.shared.gui_items.customization.c11n_items import Style
 from gui.shared.money import Currency
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 from helpers import int2roman, dependency
@@ -211,6 +212,7 @@ class CustomizationPacker(ShopBaseUIPacker):
         self.__item = self.__service.getItemByID(self.__itemTypeID, styleParams['id'])
         if not self.__item:
             _logger.warning('ArmoryYardShop style %s not found', styleParams['id'])
+        self.__is3DStyle = isinstance(self.__item, Style) and self.__item.is3D
 
     @property
     def isSupported(self):
@@ -228,7 +230,7 @@ class CustomizationPacker(ShopBaseUIPacker):
     def title(self):
         if self.__itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             title = self.__customizationTitle.decals()
-        elif self.__item.texture.find('3dst') != -1:
+        elif self.__is3DStyle:
             title = self.__customizationTitle.style3D()
         else:
             title = self.__customizationTitle.style2D()
@@ -254,7 +256,7 @@ class CustomizationPacker(ShopBaseUIPacker):
         if not super(CustomizationPacker, self).pack(model, isLargeIcon):
             return False
         model.setItemType(self.itemType)
-        if self.__itemTypeID != GUI_ITEM_TYPE.PROJECTION_DECAL:
+        if self.__is3DStyle:
             model.setAvailable(not self.__item.inventoryCount)
         return True
 

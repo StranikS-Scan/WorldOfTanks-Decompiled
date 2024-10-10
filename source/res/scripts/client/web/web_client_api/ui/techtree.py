@@ -16,7 +16,7 @@ class TechTreeTabWebApiMixin(object):
 
     @w2c(_OpenTechTreeSchema, 'tech_tree')
     def openTechTree(self, cmd):
-        event_dispatcher.showTechTree(cmd.vehicle_id)
+        event_dispatcher.showVehicleTechTreeView(cmd.vehicle_id)
 
     @w2c(_OpenTechTreeSchema, 'research')
     def openResearch(self, cmd):

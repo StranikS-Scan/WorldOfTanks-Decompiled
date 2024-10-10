@@ -133,7 +133,7 @@ class BattleMessagesController(IBattleController):
         self.onShowVehicleErrorByKey(key, args, None)
         return
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
     def _getAttackReasonCodes(self, reason):
@@ -239,10 +239,10 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleError(key, args)
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
-        super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+        super(BattleMessagesPlayer, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showInfoMessage(self, key, withBuffer=False, args=None):
         if withBuffer and not self._isUIPopulated:
@@ -323,12 +323,12 @@ def _getSpawnedBotMsgData(vehicleID, battleSessionProvider=None):
 
 class BattleRoyaleBattleMessagesController(BattleMessagesController):
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         spawnBotData = _getSpawnedBotMsgData(vehicleID)
         if spawnBotData:
             self.onShowPlayerMessageByKey(*spawnBotData)
             return
-        super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID)
+        super(BattleRoyaleBattleMessagesController, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if _isHideVehicleKilledMsg(targetID):
@@ -350,14 +350,14 @@ class BattleRoyaleBattleMessagesController(BattleMessagesController):
 
 class BattleRoyaleBattleMessagesPlayer(BattleMessagesPlayer):
 
-    def showAllyHitMessage(self, vehicleID=None):
+    def showAllyHitMessage(self, vehicleID=None, isMultiHit=False):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
         spawnBotData = _getSpawnedBotMsgData(vehicleID)
         if spawnBotData:
             self.onShowPlayerMessageByKey(*spawnBotData)
             return
-        super(BattleRoyaleBattleMessagesPlayer, self).showAllyHitMessage(vehicleID)
+        super(BattleRoyaleBattleMessagesPlayer, self).showAllyHitMessage(vehicleID, isMultiHit)
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:

@@ -5,7 +5,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, getRoleTextWithIcon
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
+from gui.shared.gui_items.artefacts import getAbilityVO
 if typing.TYPE_CHECKING:
+    from typing import Dict
     from gui.shared.gui_items.Vehicle import Vehicle
 
 def getBaseButtonsVO(vehicle):
@@ -33,4 +35,5 @@ def getBaseTitleVO(vehicle):
      'tankNameStrSmall': text_styles.promoTitle(tankUserName),
      'statusStr': '',
      'roleText': getRoleTextWithIcon(vehicle.role, vehicle.roleLabel),
-     'showInfoIcon': False}
+     'showInfoIcon': False,
+     'ability': getAbilityVO(vehicle)}

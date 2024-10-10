@@ -3467,8 +3467,8 @@
       <price>	32000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	203.2	</armor_1>
-        <armor_2>	139.7	</armor_2>
+        <armor_1>	254	</armor_1>
+        <armor_2>	152.4	</armor_2>
         <armor_3>	127	</armor_3>
         <armor_4>	101.6	</armor_4>
         <armor_5>	203.2	</armor_5>
@@ -3482,7 +3482,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6570	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -4352,12 +4352,12 @@
     </Turret_1_T28_Prototype>
   </turrets0>
   <engines>
-    <Ford_GAF>	shared	  <unlocks>
-        <engine>	Ford_GAFM2	  <cost>	5250	</cost>
+    <Ford_GAF_A68_T28_Prototype>	shared	  <unlocks>
+        <engine>	Ford_GAFM2_A68_T28_Prototype	  <cost>	5250	</cost>
         </engine>
       </unlocks>
-    </Ford_GAF>
-    <Ford_GAFM2>	shared	</Ford_GAFM2>
+    </Ford_GAF_A68_T28_Prototype>
+    <Ford_GAFM2_A68_T28_Prototype>	shared	</Ford_GAFM2_A68_T28_Prototype>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -4373,14 +4373,14 @@
   <physics>
     <detailed>
       <engines>
-        <Ford_GAF>
-          <smplEnginePower>	670	</smplEnginePower>
+        <Ford_GAF_A68_T28_Prototype>
+          <smplEnginePower>	740	</smplEnginePower>
           <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
-        </Ford_GAF>
-        <Ford_GAFM2>
-          <smplEnginePower>	780	</smplEnginePower>
+        </Ford_GAF_A68_T28_Prototype>
+        <Ford_GAFM2_A68_T28_Prototype>
+          <smplEnginePower>	860	</smplEnginePower>
           <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
-        </Ford_GAFM2>
+        </Ford_GAFM2_A68_T28_Prototype>
       </engines>
       <chassis>
         <Chassis_T28_Prototype>

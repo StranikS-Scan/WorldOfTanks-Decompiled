@@ -249,7 +249,7 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         isExtraParam = KPI.Name.hasValue(self._paramName)
         model.setIsAdvanced(self._supportAdvanced)
         if isExtraParam:
-            title = backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(getVehicleParameterText(self._paramName, isPositive=True)))
+            title = self.__getKpiTitle()
             desc = backport.text(R.strings.menu.extraParams.name.dyn(self._paramName, R.strings.menu.extraParams.desc)())
         else:
             titleParamName = param_formatter.getTitleParamName(vehicle, self._paramName)
@@ -303,6 +303,10 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         strRootPath = R.strings.menu.tank_params.dyn(titleParamName)
         strPath = strRootPath.extendedTitle if strRootPath.dyn('extendedTitle').exists() else strRootPath
         return backport.text(strPath())
+
+    def __getKpiTitle(self):
+        customTitlePath = R.strings.tank_setup.kpi.title.dyn(self._paramName)
+        return backport.text(customTitlePath()) if customTitlePath else backport.text(R.strings.menu.extraParams.header(), paramName=backport.text(getVehicleParameterText(self._paramName, isPositive=True)))
 
 
 class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):

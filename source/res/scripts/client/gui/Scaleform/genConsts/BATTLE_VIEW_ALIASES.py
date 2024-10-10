@@ -97,3 +97,6 @@ class BATTLE_VIEW_ALIASES(object):
     COMP7_TANK_CAROUSEL = 'comp7BattleTankCarousel'
     COMP7_TANK_CAROUSEL_FILTER_POPOVER = 'comp7TankCarouselFilterPopover'
     COSMIC_HUD = 'cosmicHud'
+    EVENT_HUNTER_RESPAWN = 'eventHunterRespawn'
+    EVENT_BOSS_TELEPORT = 'eventBossTeleport'
+    EVENT_BOSS_WIDGET = 'eventBossWidget'

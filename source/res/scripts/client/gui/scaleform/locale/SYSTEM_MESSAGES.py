@@ -524,11 +524,10 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
     VEHICLE_REPAIR_CREDITS_ERROR = '#system_messages:vehicle_repair/credits_error'
     VEHICLE_REPAIR_SERVER_ERROR = '#system_messages:vehicle_repair/server_error'
-    BUY_TANKMEN_BERTHS_SUCCESS = '#system_messages:buy_tankmen_berths/success'
+    BUY_TANKMEN_BERTHS_GOLD_SUCCESS = '#system_messages:buy_tankmen_berths/gold/success'
+    BUY_TANKMEN_BERTHS_CREDITS_SUCCESS = '#system_messages:buy_tankmen_berths/credits/success'
     BUY_TANKMEN_BERTHS_SERVER_ERROR = '#system_messages:buy_tankmen_berths/server_error'
-    BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS = '#system_messages:buy_tankmen_berths/not_enough_credits'
-    BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD = '#system_messages:buy_tankmen_berths/not_enough_gold'
-    BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE = '#system_messages:buy_tankmen_berths/wallet_not_available'
+    BUY_TANKMEN_BERTHS_BUY_ERROR = '#system_messages:buy_tankmen_berths/buy_error'
     RESTORE_TANKMAN_SUCCESS = '#system_messages:restore_tankman/success'
     RESTORE_TANKMAN_FINANCIAL_SUCCESS = '#system_messages:restore_tankman/financial_success'
     RESTORE_TANKMAN_NOT_ENOUGH_SPACE = '#system_messages:restore_tankman/not_enough_space'
@@ -1090,11 +1089,12 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATIONS_QUALIFICATIONFINISH = '#system_messages:ranked/notifications/qualificationFinish'
     RANKED_NOTIFICATIONS_SINGLERANK_TEXT = '#system_messages:ranked/notifications/singleRank/text'
     RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS = '#system_messages:ranked/notifications/bonusName/yearPoints'
-    RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD = '#system_messages:ranked/notifications/bonusName/selectableReward'
+    RANKED_NOTIFICATIONS_DELUXE_GIFT = '#system_messages:ranked/notifications/deluxe_gift'
     RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL = '#system_messages:ranked/notifications/bonusName/crystal'
     RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN = '#system_messages:ranked/notifications/bonusName/eventCoin'
     RANKED_NOTIFICATIONS_BONUSNAME_CREDITS = '#system_messages:ranked/notifications/bonusName/credits'
     RANKED_NOTIFICATIONS_BONUSNAME_GOLD = '#system_messages:ranked/notifications/bonusName/gold'
+    RANKED_NOTIFICATIONS_BONUSNAME_EQUIPCOIN = '#system_messages:ranked/notifications/bonusName/equipCoin'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY = '#system_messages:ranked/notifications/bonusValue/premiumDay'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS = '#system_messages:ranked/notifications/bonusValue/premiumDays'
     RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAY = '#system_messages:ranked/notifications/bonusValue/premiumPlusDay'
@@ -1466,11 +1466,11 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_REQUEST_NAME_AUTO_SEARCH,
      PREBATTLE_REQUEST_NAME_CHANGE_FUN_SUB_MODE)
     RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM = (RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
-     RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
      RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
      RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_BONUSNAME_EQUIPCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_BADGE,
      RANKED_NOTIFICATIONS_BONUSNAME_BADGES,
      RANKED_NOTIFICATIONS_BONUSNAME_STYLE,
@@ -2002,11 +2002,10 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
      VEHICLE_REPAIR_CREDITS_ERROR,
      VEHICLE_REPAIR_SERVER_ERROR,
-     BUY_TANKMEN_BERTHS_SUCCESS,
+     BUY_TANKMEN_BERTHS_GOLD_SUCCESS,
+     BUY_TANKMEN_BERTHS_CREDITS_SUCCESS,
      BUY_TANKMEN_BERTHS_SERVER_ERROR,
-     BUY_TANKMEN_BERTHS_NOT_ENOUGH_CREDITS,
-     BUY_TANKMEN_BERTHS_NOT_ENOUGH_GOLD,
-     BUY_TANKMEN_BERTHS_WALLET_NOT_AVAILABLE,
+     BUY_TANKMEN_BERTHS_BUY_ERROR,
      RESTORE_TANKMAN_SUCCESS,
      RESTORE_TANKMAN_FINANCIAL_SUCCESS,
      RESTORE_TANKMAN_NOT_ENOUGH_SPACE,
@@ -2568,11 +2567,12 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_QUALIFICATIONFINISH,
      RANKED_NOTIFICATIONS_SINGLERANK_TEXT,
      RANKED_NOTIFICATIONS_BONUSNAME_YEARPOINTS,
-     RANKED_NOTIFICATIONS_BONUSNAME_SELECTABLEREWARD,
+     RANKED_NOTIFICATIONS_DELUXE_GIFT,
      RANKED_NOTIFICATIONS_BONUSNAME_CRYSTAL,
      RANKED_NOTIFICATIONS_BONUSNAME_EVENTCOIN,
      RANKED_NOTIFICATIONS_BONUSNAME_CREDITS,
      RANKED_NOTIFICATIONS_BONUSNAME_GOLD,
+     RANKED_NOTIFICATIONS_BONUSNAME_EQUIPCOIN,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAY,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMDAYS,
      RANKED_NOTIFICATIONS_BONUSVALUE_PREMIUMPLUSDAY,

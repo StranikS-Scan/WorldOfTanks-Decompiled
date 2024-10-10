@@ -89,6 +89,10 @@ def getGameControllersConfig(manager):
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
     from gui.game_control.extension_stubs.gui_lootboxes_controller import GuiLootBoxesControllerStub
     from gui.game_control.early_access_controller import EarlyAccessController
+    from gui.impl.lobby.mode_selector.mode_selector_controller import ModeSelectorController
+    from event_settings.event_settings_controller import EventSettingsController
+    from white_tiger.gui.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -174,4 +178,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IGuiLootBoxesController, GuiLootBoxesControllerStub())
     _config(_interface.IShopSalesEventController, _ShopSalesController())
     _config(_interface.IEarlyAccessController, EarlyAccessController())
+    _config(_interface.IModeSelectorController, ModeSelectorController())
+    _config(_interface.IEventSettingsController, EventSettingsController())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

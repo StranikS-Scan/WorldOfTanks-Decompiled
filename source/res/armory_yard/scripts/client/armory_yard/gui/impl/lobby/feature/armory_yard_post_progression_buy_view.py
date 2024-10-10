@@ -3,6 +3,7 @@
 from adisp import adisp_process
 from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_post_progression_buy_view_model import ArmoryYardPostProgressionBuyViewModel
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_wallet_not_available_tooltip_view import ArmoryYardWalletNotAvailableTooltipView
+from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_token_stepper_tooltip_view import ArmoryYardTokenStepperTooltipView
 from armory_yard.gui.shared.gui_items.items_actions import BUY_POST_PROGRESSION_TOKENS
 from armory_yard.gui.window_events import showBuyGoldForArmoryYard, showArmoryYardShopRewardWindow
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags, ViewModel
@@ -51,22 +52,25 @@ class ArmoryYardPostProgressionBuyView(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardWalletNotAvailableTooltipView():
             return ArmoryYardWalletNotAvailableTooltipView()
+        if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardTokenStepperTooltipView():
+            return ArmoryYardTokenStepperTooltipView()
         return ViewImpl(ViewSettings(R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView(), model=ViewModel())) if contentID == R.views.armory_yard.lobby.feature.tooltips.ShopCurrencyTooltipView() else super(ArmoryYardPostProgressionBuyView, self).createToolTipContent(event, contentID)
 
     @adisp_process
     def onBuy(self, args):
-        tokens = int(args.get('tokens'))
-        price = self.__armoryYardCtrl.getCurrencyTokenCost() * tokens
+        tokens = int(args.get(ArmoryYardPostProgressionBuyViewModel.ARG_TOKENS))
+        currency = args.get(ArmoryYardPostProgressionBuyViewModel.ARG_CURRENCY_TYPE)
+        price = self.__armoryYardCtrl.getCurrencyTokenCost(currency) * tokens
         shortage = self.__itemsCache.items.stats.money.getShortage(price)
-        if shortage:
+        if shortage and currency == Currency.GOLD:
             setCurrencies = shortage.getSetCurrencies()
-            if len(setCurrencies) == 1 and setCurrencies[0] == Currency.GOLD:
+            if len(setCurrencies) == 1:
                 showBuyGoldForArmoryYard(price)
         else:
-            action = factory.getAction(BUY_POST_PROGRESSION_TOKENS, tokens)
+            action = factory.getAction(BUY_POST_PROGRESSION_TOKENS, tokens, currency)
             result = yield factory.asyncDoAction(action)
             if result:
-                self.__armoryYardCtrl.onPayed(True, tokens, price)
+                self.__armoryYardCtrl.onPayed(True, tokens, price, currency)
                 showArmoryYardShopRewardWindow(backport.text(R.strings.armory_yard.currency.postProgression.titleCongrats()), backport.image(R.images.armory_yard.gui.maps.icons.shop.token.s360x270()), tokens, closeCallback=self.destroyWindow)
             else:
                 self.__armoryYardCtrl.onPayedError()
@@ -114,8 +118,10 @@ class ArmoryYardPostProgressionBuyView(ViewImpl):
             vm.setIsWalletAvailable(self.__wallet.isAvailable)
             vm.setTokensCount(self.__itemsCache.items.stats.dynamicCurrencies.get(ARMORY_YARD_COIN_NAME, 0))
             vm.setUserGold(self.__itemsCache.items.stats.gold)
+            vm.setUserCrystal(self.__itemsCache.items.stats.crystal)
             vm.setPayedTokensLimit(self.__armoryYardCtrl.payedTokensLeft())
-            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost(), checkBalanceAvailability=True)
+            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost(Currency.GOLD), checkBalanceAvailability=True)
+            BuyPriceModelBuilder.fillPriceModel(vm.crystalPrice, self.__armoryYardCtrl.getCurrencyTokenCost(Currency.CRYSTAL), checkBalanceAvailability=True)
 
 
 class ArmoryYardPostProgressionBuyWindow(LobbyWindow):

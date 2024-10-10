@@ -13,6 +13,7 @@ from visual_script.contexts.cgf_context import GameObjectWrapper
 from constants import ROCKET_ACCELERATION_STATE
 from visual_script.cgf_blocks import CGFMeta
 Vehicle, CGF, tankStructure, RAC = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component')
+GenericComponents = dependencyImporter('GenericComponents')
 _logger = logging.getLogger(__name__)
 
 class GetEntityGameObject(Block, CGFMeta):
@@ -193,6 +194,27 @@ class RocketAcceleratorSettings(Block, CGFMeta):
         return [ASPECT.CLIENT]
 
 
+class TransferOwnershipToWorld(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(TransferOwnershipToWorld, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._exec)
+        self._go = self._makeDataInputSlot('GO', SLOT_TYPE.GAME_OBJECT)
+        self._out = self._makeEventOutputSlot('out')
+
+    def _exec(self):
+        if self._go.hasValue():
+            go = self._go.getValue()
+            if go is not None:
+                go.transferOwnershipToWorld()
+        self._out.call()
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
 def _extractRACComponent(gameObjectLink):
     go = gameObjectLink.getValue()
     if not go.isValid:
@@ -200,3 +222,61 @@ def _extractRACComponent(gameObjectLink):
     else:
         provider = go.findComponentByType(RAC.RocketAccelerationController)
         return (None, None, 'No RocketAccelerationController can be found') if provider is None else (go, provider, None)
+
+
+class AttachDynamicModelComponent(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(AttachDynamicModelComponent, self).__init__(*args, **kwargs)
+        self._activate = self._makeEventInputSlot('in', self._execute)
+        self._gameObject = self._makeDataInputSlot('TargetGO', SLOT_TYPE.GAME_OBJECT)
+        self._out = self._makeEventOutputSlot('out')
+        self._gameObjectOut = self._makeDataOutputSlot('object', SLOT_TYPE.GAME_OBJECT, None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def _execute(self):
+        targetGameObject = self._gameObject.getValue()
+        vehicle = self.__getVehicle(targetGameObject)
+        if vehicle and vehicle.appearance:
+            targetGameObject.createComponent(GenericComponents.DynamicModelComponent, vehicle.appearance.compoundModel)
+        goWrapper = GameObjectWrapper(targetGameObject)
+        self._gameObjectOut.setValue(weakref.proxy(goWrapper))
+        self._out.call()
+
+    def __getVehicle(self, gameObject):
+        hierarchy = CGF.HierarchyManager(gameObject.spaceID)
+        parent = hierarchy.getTopMostParent(gameObject)
+        return parent.findComponentByType(Vehicle.Vehicle)
+
+
+class AttachRedirectorComponent(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(AttachRedirectorComponent, self).__init__(*args, **kwargs)
+        self._activate = self._makeEventInputSlot('in', self._execute)
+        self._gameObject = self._makeDataInputSlot('TargetGO', SLOT_TYPE.GAME_OBJECT)
+        self._out = self._makeEventOutputSlot('out')
+        self._gameObjectOut = self._makeDataOutputSlot('object', SLOT_TYPE.GAME_OBJECT, None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+    def _execute(self):
+        targetGameObject = self._gameObject.getValue()
+        vehicle = self.__getVehicle(targetGameObject)
+        if vehicle and vehicle.appearance:
+            targetGameObject.createComponent(GenericComponents.RedirectorComponent, vehicle.appearance.gameObject)
+        goWrapper = GameObjectWrapper(targetGameObject)
+        self._gameObjectOut.setValue(weakref.proxy(goWrapper))
+        self._out.call()
+
+    def __getVehicle(self, gameObject):
+        hierarchy = CGF.HierarchyManager(gameObject.spaceID)
+        parent = hierarchy.getTopMostParent(gameObject)
+        return parent.findComponentByType(Vehicle.Vehicle)

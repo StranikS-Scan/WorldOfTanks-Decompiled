@@ -3644,89 +3644,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_32-pounder_AT_Gun_OQF>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	_20pdr_AT_Gun_Type_B	  <cost>	45000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	5.6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-20 20	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB32_Tortoise/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000423 0.000195 2.25397	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.35 0.35	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000423 0.000195 2.25397	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000845 0.000389 2.98464	</rayStart>
-              <rayEnd>	-0.000845 0.000389 3.59664	</rayEnd>
-              <rayUp>	0.075 0 0	</rayUp>
-              <size>	0.612	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
-            <density>	129.94 130.515	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_32-pounder_AT_Gun_OQF>
         <_20pdr_AT_Gun_Type_B>	shared	  <maxAmmo>	70	</maxAmmo>
           <unlocks>
-            <gun>	_120mm_AT_Gun_L1A1	  <cost>	60000	</cost>
+            <gun>	_32-pounder_AT_Gun_OQF	  <cost>	36700	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3804,6 +3724,86 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_20pdr_AT_Gun_Type_B>
+        <_32-pounder_AT_Gun_OQF>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_120mm_AT_Gun_L1A1	  <cost>	60000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	101.6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	5.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-20 20	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB32_Tortoise/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_main_mb	</effects>
+          <reloadEffect>	reload85_107	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000423 0.000195 2.25397	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.35 0.35	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.000423 0.000195 2.25397	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.000845 0.000389 2.98464	</rayStart>
+              <rayEnd>	-0.000845 0.000389 3.59664	</rayEnd>
+              <rayUp>	0.075 0 0	</rayUp>
+              <size>	0.612	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	0.31 0.31 0.000000 0.000000	</tiling>
+            <density>	129.94 130.515	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_32-pounder_AT_Gun_OQF>
         <_120mm_AT_Gun_L1A1>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <vehicle>	GB92_FV217	  <cost>	235000	</cost>

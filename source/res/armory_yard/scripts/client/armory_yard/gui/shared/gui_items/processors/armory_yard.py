@@ -29,6 +29,18 @@ class BuyStepTokenCountValidator(SyncValidator):
         return makeError('result_token_count_more_than_max') if currencyTokenCount + self.__buyCount > maximumTokenCount else makeSuccess()
 
 
+class CurrencyValidator(SyncValidator):
+    __slots__ = ('__currency',)
+    __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
+
+    def __init__(self, currency, plugins=None):
+        super(CurrencyValidator, self).__init__(plugins)
+        self.__currency = currency
+
+    def _validate(self):
+        return makeError('invalid_currency: {}'.format(self.__currency)) if self.__currency not in self.__armoryYardCtrl.getTokenCurrencies() else makeSuccess()
+
+
 class CollectRewardsProcessor(Processor):
 
     def __init__(self, plugins=None):
@@ -41,18 +53,20 @@ class CollectRewardsProcessor(Processor):
 
 
 class BuyStepTokens(Processor):
-    __slots__ = ('__count',)
+    __slots__ = ('__count', '__currency')
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
 
-    def __init__(self, count, plugins=None):
+    def __init__(self, count, currency, plugins=None):
         super(BuyStepTokens, self).__init__(plugins)
         self.__count = count
-        price = self.__count * self.__armoryYardCtrl.getCurrencyTokenCost()
+        self.__currency = currency
+        price = self.__count * self.__armoryYardCtrl.getCurrencyTokenCost(self.__currency)
         self.addPlugins((ArmoryYardEventValidator(),
          BuyStepTokenCountValidator(self.__count),
+         CurrencyValidator(self.__currency),
          WalletValidator(),
          MoneyValidator(price)))
 
     def _request(self, callback):
-        BigWorld.player().AccountArmoryYardComponent.buyStepTokens(self.__armoryYardCtrl.getCurrencyTokenCost().getCurrency(), self.__count, lambda requestID, resultID, errorStr, ctx=None: self._response(resultID, callback, errorStr, ctx))
+        BigWorld.player().AccountArmoryYardComponent.buyStepTokens(self.__currency, self.__count, lambda requestID, resultID, errorStr, ctx=None: self._response(resultID, callback, errorStr, ctx))
         return

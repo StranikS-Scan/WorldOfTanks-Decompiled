@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/Scaleform/daapi/view/lobby/hangar/armory_yard_vehicle_preview.py
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants import ARMORY_YARD_VEHICLE_PREVIEW_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibilityState
-from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview, VEHICLE_PREVIEW_ALIASES
+from armory_yard.gui.window_events import showArmoryYardVehPostProgressionView
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview_constants import VEHICLE_PREVIEW_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.bonuses import getNonQuestBonuses, VehiclesBonus
-from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.event_dispatcher import showHangar
 from gui.shared.formatters import text_styles
 from helpers import dependency
@@ -29,6 +30,7 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
         currentHeroTankCD = self.__heroTanksControl.getCurrentTankCD()
         self.__needHeroTankHidden = ctx.get('isNeedHeroTankHidden', False) or not ctx.get('isHeroTank', False) and self._vehicleCD == currentHeroTankCD
         self.__backToHeroTank = ctx.get('isHeroTank', False)
+        self.__goToPostProgression = False
 
     def onPrbEntitySwitching(self):
         self.__armoryYardCtrl.unloadScene(isReload=False)
@@ -44,23 +46,23 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
         super(ArmoryYardVehiclePreview, self)._populate()
         if self.__needHeroTankHidden:
             self.__heroTanksControl.setHidden(True)
-        self.__updateVisibilityHangarHeaderMenu()
+        self.__armoryYardCtrl.updateVisibilityHangarHeaderMenu()
         self.startGlobalListening()
         self.__armoryYardCtrl.onUpdated += self.__checkExit
 
     def _dispose(self):
         if self.__needHeroTankHidden:
             self.__heroTanksControl.setHidden(False)
-        self.__updateVisibilityHangarHeaderMenu(isVisible=True)
         self.stopGlobalListening()
         super(ArmoryYardVehiclePreview, self)._dispose()
-        if self.__armoryYardCtrl.isVehiclePreview:
+        self.__armoryYardCtrl.updateVisibilityHangarHeaderMenu(isVisible=True)
+        if self.__armoryYardCtrl.isVehiclePreview and not self.__goToPostProgression:
             self.__armoryYardCtrl.unloadScene()
         self.__armoryYardCtrl.onUpdated -= self.__checkExit
 
     def __checkExit(self):
         if not self.__armoryYardCtrl.isActive():
-            self.__armoryYardCtrl.unloadScene(isReload=False)
+            self.__armoryYardCtrl.unloadScene()
             self.closeView()
             showHangar()
 
@@ -88,6 +90,9 @@ class ArmoryYardVehiclePreview(VehiclePreview, IGlobalListener):
     def closeView(self):
         self.destroy()
 
-    def __updateVisibilityHangarHeaderMenu(self, isVisible=False):
-        state = HeaderMenuVisibilityState.NOTHING if not isVisible else HeaderMenuVisibilityState.ALL
-        g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': state}), EVENT_BUS_SCOPE.LOBBY)
+    def onGoToPostProgressionClick(self):
+        self.__goToPostProgression = True
+        if self._backAlias == VIEW_ALIAS.ARMORY_YARD_VEH_POST_PROGRESSION and callable(self._previewBackCb):
+            self._previewBackCb()
+        else:
+            showArmoryYardVehPostProgressionView(self._vehicleCD, exitEvent=self._getExitEvent())

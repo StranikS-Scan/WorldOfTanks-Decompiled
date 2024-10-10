@@ -19,7 +19,6 @@ class RankedSelectableRewardTooltip(BlocksTooltipData):
         self._items = super(RankedSelectableRewardTooltip, self)._packBlocks(*args, **kwargs)
         self._items.append(self.__packImageBlock())
         self._items.append(self.__packRewardNamesBlock())
-        self._items.append(self.__packLimitBlock())
         return self._items
 
     @staticmethod
@@ -31,7 +30,3 @@ class RankedSelectableRewardTooltip(BlocksTooltipData):
         texts = R.strings.ranked_battles.selectableReward.tooltip.equipmentChoice
         blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(texts.title()))), formatters.packTextBlockData(text=text_styles.main(backport.text(texts.list())))]
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
-
-    @staticmethod
-    def __packLimitBlock():
-        return formatters.packTextBlockData(text=text_styles.standard(backport.text(R.strings.ranked_battles.selectableReward.tooltip.equipmentChoice.limit())))

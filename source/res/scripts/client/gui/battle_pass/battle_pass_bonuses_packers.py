@@ -33,9 +33,10 @@ if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import TokensBonus
 _logger = logging.getLogger(__name__)
 
-def getBattlePassBonusPacker():
+def getBattlePassBonusPackersMap():
     mapping = getDefaultBonusPackersMap()
     currencyBonusUIPacker = ExtendedCurrencyBonusUIPacker()
+    selectBonusPacker = SelectBonusPacker()
     mapping.update({'berths': BattlePassBerthsBonusPacker(),
      'blueprints': BattlePassBlueprintsBonusPacker(),
      'crewBooks': ExtendedCrewBookBonusUIPacker(),
@@ -49,15 +50,21 @@ def getBattlePassBonusPacker():
      'tmanToken': TmanTemplateBonusPacker(),
      'token': BattlePassTokenBonusPacker(),
      'vehicles': BattlePassVehiclesBonusUIPacker(),
+     'selectableBonus': selectBonusPacker,
      BATTLE_PASS_Q_CHAIN_BONUS_NAME: QuestChainBonusPacker(),
      BATTLE_PASS_RANDOM_QUEST_BONUS_NAME: RandomQuestBonusPacker(),
-     BATTLE_PASS_SELECT_BONUS_NAME: SelectBonusPacker(),
+     BATTLE_PASS_SELECT_BONUS_NAME: selectBonusPacker,
      BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME: BattlePassStyleProgressTokenBonusPacker(),
      Currency.BPCOIN: CoinBonusPacker(),
      Currency.CREDITS: currencyBonusUIPacker,
      Currency.CRYSTAL: currencyBonusUIPacker,
      Currency.GOLD: currencyBonusUIPacker,
      Currency.EQUIP_COIN: currencyBonusUIPacker})
+    return mapping
+
+
+def getBattlePassBonusPacker():
+    mapping = getBattlePassBonusPackersMap()
     return BonusUIPacker(mapping)
 
 

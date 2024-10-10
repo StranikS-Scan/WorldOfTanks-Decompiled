@@ -18,6 +18,7 @@ from gui.shared.tooltips.comp7_tooltips import getRoleEquipmentTooltipParts
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
+from items import vehicles
 _R_SIMPLE_TOOLTIPS = (R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipContent(), R.views.common.tooltip_window.simple_tooltip_content.SimpleTooltipHtmlContent())
 
 class PrebattleAmmunitionPanelView(ViewImpl):
@@ -90,6 +91,7 @@ class PrebattleAmmunitionPanelView(ViewImpl):
         self.viewModel.setState(state)
         self.setCurrentShellCD(currShellCD)
         self.setNextShellCD(nextShellCD)
+        self.__updateAbilitySlot()
 
     def _onLoaded(self, *args, **kwargs):
         super(PrebattleAmmunitionPanelView, self)._onLoaded(*args, **kwargs)
@@ -138,6 +140,16 @@ class PrebattleAmmunitionPanelView(ViewImpl):
     def __onSettingsApplied(self, diff):
         if CONTROLS.KEYBOARD in diff:
             self.__ammunitionPanel.updateSectionsWithKeySettings()
+
+    def __updateAbilitySlot(self):
+        ability = self.__getCurrentVehicleAbilityData()
+        with self.viewModel.transaction() as model:
+            model.abilitySlot.setAbility(ability.name if ability is not None else '')
+        return
+
+    def __getCurrentVehicleAbilityData(self):
+        abilityID = self.__vehicle.typeDescr.ability
+        return None if abilityID is None else vehicles.g_cache.equipments()[abilityID]
 
 
 class Comp7PrebattleAmmunitionPanelView(PrebattleAmmunitionPanelView):

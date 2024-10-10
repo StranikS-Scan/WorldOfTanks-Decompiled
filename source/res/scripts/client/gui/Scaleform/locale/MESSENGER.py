@@ -491,6 +491,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_QUOTEDTEXTTEMPLATE = '#messenger:serviceChannelMessages/quotedTextTemplate'
     SERVICECHANNELMESSAGES_OFFERTOKENBONUS_TITLE = '#messenger:serviceChannelMessages/offerTokenBonus/title'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_LBKEYSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/lbKeysAccrued'
+    SERVICECHANNELMESSAGES_EVENT_LOOTBOXES = '#messenger:serviceChannelMessages/event/lootboxes'
+    SERVICECHANNELMESSAGES_EVENT_TICKETS = '#messenger:serviceChannelMessages/event/tickets'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNTEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccountExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/item_price.py
+from typing import Tuple, Any, Union
 from goodies.GoodieResources import Gold, Credits
 DEFAULT_ZERO_BERTH = 0
 
@@ -40,13 +41,14 @@ def getNextSlotPrice(slots, slotsPrices):
 
 
 def getBerthPackCount(berthsInPack, selectedCount):
-    return selectedCount / berthsInPack
+    return int(round(float(selectedCount) / berthsInPack))
 
 
 def getNextBerthPackPrice(currentBerthsCount, berthsPrices, selectedCount=None):
     initialBerths, berthsInPack, packsCost = berthsPrices
-    packCost = packsCost[-1]
+    costCurrency, costValues = packsCost
+    costValue = costValues[-1]
     selectedCount = selectedCount if selectedCount is not None else berthsInPack
     countPacks = getBerthPackCount(berthsInPack, selectedCount)
     countFreePacks = max((initialBerths - currentBerthsCount) / berthsInPack, DEFAULT_ZERO_BERTH)
-    return max((countPacks - countFreePacks) * packCost, DEFAULT_ZERO_BERTH)
+    return (costCurrency, max((countPacks - countFreePacks) * costValue, DEFAULT_ZERO_BERTH))

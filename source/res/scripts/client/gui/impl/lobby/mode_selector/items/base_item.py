@@ -11,7 +11,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_types import ModeSelectorCardTypes
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_normal_card_model import ModeSelectorNormalCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_reward_model import ModeSelectorRewardModel
-from gui.impl.lobby.mode_selector.items.items_constants import COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID, DEFAULT_MODE_SETTING
+from gui.impl.lobby.mode_selector.items.items_constants import DEFAULT_COLUMN_SETTINGS, DEFAULT_PRIORITY, DEFAULT_COLUMN, ModeSelectorRewardID, DEFAULT_MODE_SETTING, COLUMN_SETTINGS
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from gui.shared.formatters import time_formatters
@@ -152,7 +152,7 @@ class ModeSelectorItem(object):
         return False
 
     def _getPositionByModeName(self):
-        return COLUMN_SETTINGS.get(self.modeName, (DEFAULT_COLUMN, DEFAULT_PRIORITY))
+        return COLUMN_SETTINGS.get(self.modeName, (DEFAULT_COLUMN, DEFAULT_PRIORITY)) if self.modeName in COLUMN_SETTINGS else DEFAULT_COLUMN_SETTINGS.get(self.modeName, (DEFAULT_COLUMN, DEFAULT_PRIORITY))
 
     def _urlProcessing(self, url):
         return url

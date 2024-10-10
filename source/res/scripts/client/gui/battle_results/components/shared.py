@@ -164,7 +164,7 @@ class AchievementsBlock(base.StatsBlock):
     __slots__ = ()
 
     def setRecord(self, record, reusable):
-        for achievement, isUnique in record:
+        for achievement, isUnique, _, _ in record:
             component = AchievementBlock()
             component.setUnique(isUnique)
             component.setRecord(achievement, reusable)

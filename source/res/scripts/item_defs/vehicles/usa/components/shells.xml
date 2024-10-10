@@ -5,6 +5,7 @@
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_fsds_premium>	ARMOR_PIERCING_FSDS_PREMIUM.png 0 0	</ap_fsds_premium>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <he_modern>	HIGH_EXPLOSIVE_MODERN.png 0 0	</he_modern>
@@ -13,6 +14,8 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <flame>	FLAME.png 0 0	</flame>
+    <flame_alternative>	FLAME_ALTERNATIVE.png 0 0	</flame_alternative>
   </icons>
   <_12.7mm_AP_M2>
     <id>	0	</id>
@@ -322,6 +325,130 @@
       </damage>
     </armorSpalls>
   </_2pdr_HE_Mk.2>
+  <_40mm_T13E3C2_flameshell_basic>
+    <id>	31028	</id>
+    <userString>	#usa_vehicles:_40mm_T13E3C2_flameshell_basic	</userString>
+    <icon>	flame	</icon>
+    <price>	57	</price>
+    <kind>	FLAME	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallFlame_Pneumatic_1	</effects>
+    <hasStun>	false	</hasStun>
+    <stunType>	FLAME	</stunType>
+    <stunInPoint>	true	</stunInPoint>
+    <stunDuration>	2	</stunDuration>
+    <damage>
+      <armor>	10	</armor>
+      <devices>	20	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damageAbsorption>	SPALLS	</damageAbsorption>
+      <damage>
+        <armor>	40	</armor>
+        <devices>	20	</devices>
+      </damage>
+    </armorSpalls>
+    <damageRandomization>	0.0	</damageRandomization>
+    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
+    <hitDeviceChanceMultiplier>	0.05	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.05	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_40mm_T13E3C2_flameshell_basic>
+  <_40mm_T13E3C2_flameshell_alternative>
+    <id>	31029	</id>
+    <userString>	#usa_vehicles:_40mm_T13E3C2_flameshell_alternative	</userString>
+    <icon>	flame_alternative	</icon>
+    <price>	57	</price>
+    <kind>	FLAME	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallFlame_Pneumatic_2	</effects>
+    <hasStun>	false	</hasStun>
+    <damage>
+      <armor>	15	</armor>
+      <devices>	20	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damageAbsorption>	SPALLS	</damageAbsorption>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	20	</devices>
+      </damage>
+    </armorSpalls>
+    <damageRandomization>	0.0	</damageRandomization>
+    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
+    <hitDeviceChanceMultiplier>	0.05	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.05	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_40mm_T13E3C2_flameshell_alternative>
+  <_40mm_M7_8_flameshell_basic>
+    <id>	31026	</id>
+    <userString>	#usa_vehicles:_40mm_M7_8_flameshell_basic	</userString>
+    <icon>	flame	</icon>
+    <price>	60	</price>
+    <kind>	FLAME	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallFlame_Pneumatic_1	</effects>
+    <hasStun>	false	</hasStun>
+    <stunType>	FLAME	</stunType>
+    <stunInPoint>	true	</stunInPoint>
+    <stunDuration>	2	</stunDuration>
+    <damage>
+      <armor>	15	</armor>
+      <devices>	20	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damageAbsorption>	SPALLS	</damageAbsorption>
+      <damage>
+        <armor>	60	</armor>
+        <devices>	20	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
+    <hitDeviceChanceMultiplier>	0.75	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.25	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_40mm_M7_8_flameshell_basic>
+  <_40mm_M7_8_flameshell_alternative>
+    <id>	31027	</id>
+    <userString>	#usa_vehicles:_40mm_M7_8_flameshell_alternative	</userString>
+    <icon>	flame_alternative	</icon>
+    <price>	70	</price>
+    <kind>	FLAME	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	40	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	smallFlame_Pneumatic_2	</effects>
+    <hasStun>	false	</hasStun>
+    <damage>
+      <armor>	25	</armor>
+      <devices>	20	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damageAbsorption>	SPALLS	</damageAbsorption>
+      <damage>
+        <armor>	80	</armor>
+        <devices>	20	</devices>
+      </damage>
+    </armorSpalls>
+    <deviceFaultTolerance>	ammoBay	</deviceFaultTolerance>
+    <hitDeviceChanceMultiplier>	0.75	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.25	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_40mm_M7_8_flameshell_alternative>
   <_6pdr_AP_MKs_4>
     <id>	12	</id>
     <userString>	#usa_vehicles:_6pdr_AP_MKs_4	</userString>
@@ -2234,6 +2361,7 @@
       <devices>	160	</devices>
     </damage>
     <maxDistanceInsideVehicle>	40	</maxDistanceInsideVehicle>
+    <damageRandomization>	0.0	</damageRandomization>
     <distanceDamage>
       <isEnabled>	true	</isEnabled>
       <damage>
@@ -2241,7 +2369,7 @@
         <max>	588	</max>
       </damage>
       <distance>
-        <min>	1.5	</min>
+        <min>	1.0	</min>
         <max>	6.0	</max>
       </distance>
       <ignoreModules>	true	</ignoreModules>
@@ -3098,6 +3226,60 @@
       </damage>
     </armorSpalls>
   </_155mm_HE_M101>
+  <_155mm_AP_M111_H3>
+    <id>	31021	</id>
+    <userString>	#usa_vehicles:_155mm_AP_M111_H3	</userString>
+    <icon>	ap	</icon>
+    <price>	1650	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeArmorPiercing	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	210	</devices>
+    </damage>
+  </_155mm_AP_M111_H3>
+  <_155mm_HEAT_T267_H3>
+    <id>	31022	</id>
+    <userString>	#usa_vehicles:_155mm_HEAT_T267_H3	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHollowCharge	</effects>
+    <damage>
+      <armor>	750	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_155mm_HEAT_T267_H3>
+  <_155mm_HE_M101_H3>
+    <id>	31023	</id>
+    <userString>	#usa_vehicles:_155mm_HE_M101_H3	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1120	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	155	</caliber>
+    <explosionRadius>	3.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	550	</armor>
+        <devices>	105	</devices>
+      </damage>
+    </armorSpalls>
+  </_155mm_HE_M101_H3>
   <_155mm_HE_M101A1>
     <id>	136	</id>
     <userString>	#usa_vehicles:_155mm_HE_M101A1	</userString>
@@ -3383,6 +3565,24 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
+  <_105mm_APCR_M68M2_WT>
+    <id>	1001	</id>
+    <userString>	#usa_vehicles:_105mm_APCR_M68M2_WT	</userString>
+    <description>	#usa_vehicles:_105mm_APCR_M68M2_WT_descr	</description>
+    <shortDescriptionSpecial>	#usa_vehicles:_105mm_APCR_M68M2_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:_105mm_APCR_M68M2_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1000	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_105mm_APCR_M68M2_WT>
   <_105mm_HEAT_M67_SH>
     <id>	327	</id>
     <userString>	#usa_vehicles:_105mm_HEAT_M67_SH	</userString>

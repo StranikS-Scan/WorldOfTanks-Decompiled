@@ -5,20 +5,20 @@ from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 class ArmoryYardVideoRewardViewModel(VehicleInfoModel):
     __slots__ = ('onClose', 'onError', 'onShowVehicle', 'onVideoStarted')
 
-    def __init__(self, properties=10, commands=4):
+    def __init__(self, properties=12, commands=4):
         super(ArmoryYardVideoRewardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsWindowAccessible(self):
-        return self._getBool(8)
+        return self._getBool(10)
 
     def setIsWindowAccessible(self, value):
-        self._setBool(8, value)
+        self._setBool(10, value)
 
     def getVideoName(self):
-        return self._getString(9)
+        return self._getString(11)
 
     def setVideoName(self, value):
-        self._setString(9, value)
+        self._setString(11, value)
 
     def _initialize(self):
         super(ArmoryYardVideoRewardViewModel, self)._initialize()

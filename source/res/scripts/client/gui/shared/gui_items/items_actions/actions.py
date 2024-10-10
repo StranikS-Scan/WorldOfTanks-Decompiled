@@ -19,13 +19,13 @@ from gui.Scaleform.daapi.view.bootcamp.lobby.unlock import BCUnlockItemConfirmat
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import BuyModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import MAX_ITEMS_FOR_OPERATION
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsForSlotMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsForSlotMeta, ExchangeCreditsForBerthsMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import RestoreExchangeCreditsMeta
-from gui.Scaleform.daapi.view.lobby.techtree import unlock
-from gui.Scaleform.daapi.view.lobby.techtree.settings import RequestState
-from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.techtree import unlock
+from gui.techtree.settings import RequestState
+from gui.techtree.settings import UnlockStats
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
@@ -59,7 +59,7 @@ from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout
 from gui.shared.money import ZERO_MONEY, Money, Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import RequestCriteria, REQ_CRITERIA
-from gui.shop import showBuyGoldForPersonalReserves, showBuyGoldForSlot
+from gui.shop import showBuyGoldForPersonalReserves, showBuyGoldForSlot, showBuyGoldForBerth
 from helpers import dependency
 from items import vehicles, ITEM_TYPE_NAMES, parseIntCompactDescr
 from shared_utils import first, allEqual
@@ -731,18 +731,38 @@ class BuyVehicleSlotAction(CachedItemAction):
         return (False, self.__NO_ENOUGH_CREDITS_FLOW) if self.__currency == Currency.CREDITS and availableMoney.credits < self.__price.credits and _needExchangeForBuy(self.__price) else (True, self.__DEFAULT_FLOW)
 
 
-class BuyBerthsAction(CachedItemAction):
+class BuyBerthsAction(CachedItemAction, AsyncGUIItemAction):
+    __itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, berthPrice, countPacksBerths, groupID=0, groupSize=1):
+    def __init__(self, berthPrice, countPacksBerths, berthsInPack, parentWindow=None, groupID=0, groupSize=1):
         super(BuyBerthsAction, self).__init__()
         self.__berthPrice = berthPrice
         self.__countPacksBerths = countPacksBerths
+        self.__berthCurrency = self.__berthPrice.getCurrency()
+        self.__berthsCount = berthsInPack * self.__countPacksBerths
+        self.__parentWindow = parentWindow
 
+    @adisp_async
     @decorators.adisp_process('buyBerths')
-    def doAction(self):
+    def doAction(self, callback):
+        if not self.__isEnoughMoney():
+            if self.__berthCurrency == Currency.GOLD:
+                showBuyGoldForBerth(self.__berthPrice.gold)
+                callback(False)
+                return
+            if self.__berthCurrency == Currency.CREDITS and _needExchangeForBuy(self.__berthPrice):
+                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsForBerthsMeta(name=backport.text(R.strings.dialogs.buyBerths.hangarBerths.header(), berthsCount=str(self.__berthsCount)), price=self.__berthPrice.credits), parent=self.__parentWindow)
+                if not isOk:
+                    callback(False)
+                    return
         result = yield TankmanBerthsBuyer(self.__berthPrice, self.__countPacksBerths).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        callback(result.success)
+
+    def __isEnoughMoney(self):
+        money = int(self.__itemsCache.items.stats.money.getSignValue(self.__berthCurrency))
+        return self.__berthPrice.get(self.__berthCurrency) <= money
 
 
 class TankmanRestoreAction(GroupedItemAction):

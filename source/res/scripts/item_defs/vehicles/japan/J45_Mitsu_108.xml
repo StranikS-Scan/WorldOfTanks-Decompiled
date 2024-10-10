@@ -11,7 +11,7 @@
   <supplySlots>	1 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	35	</forward>
-    <backward>	14	</backward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.037	</moving>
@@ -704,8 +704,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	170	</maxHealth>
@@ -1740,8 +1740,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	190	</maxHealth>
@@ -2790,13 +2790,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	11400	</weight>
       <maxHealth>	120	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	340	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3278,13 +3278,13 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13400	</weight>
       <maxHealth>	200	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	330	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
@@ -3401,7 +3401,7 @@
             <maxPitch>	0.00000 14.00 0.03333 10.00 0.04167 2.00 0.14167 5.00 0.14722 12.00 0.15000 14.00 0.36944 10.00 0.40556 8.00 0.59444 8.00 0.63056 10.00 0.85000 14.00 0.85278 12.00 0.85833 5.00 0.86111 2.00 0.95833 2.00 0.96667 10.00 1.00000 14.00	</maxPitch>
           </pitchLimits>
           <reloadTime>	11.25	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <shotDispersionFactors>

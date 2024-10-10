@@ -64,6 +64,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_outfit.outfit import Area
 from constants import NC_MESSAGE_PRIORITY
+from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
 _logger = logging.getLogger(__name__)
@@ -201,6 +202,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     appLoader = dependency.descriptor(IAppLoader)
     guiLoader = dependency.descriptor(IGuiLoader)
     settingsCore = dependency.descriptor(ISettingsCore)
+    __wtController = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, ctx=None):
         super(MainView, self).__init__()
@@ -829,7 +831,8 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroyHandler
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
-        if g_currentVehicle.isPresent():
+        isActive = self.__wtController.isEventPrbActive()
+        if g_currentVehicle.isPresent() and not isActive:
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.__ctx.season
             g_currentVehicle.refreshModel()
         self.__propertiesSheet = None

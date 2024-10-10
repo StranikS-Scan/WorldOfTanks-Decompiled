@@ -858,7 +858,9 @@ def _powerCurve(arg, argMin, argMid, argMax, valMin, valMid, valMax):
 
 
 def _clamp(minBound, arg, maxBound):
-    return max(minBound, min(maxBound, arg))
+    if arg < minBound:
+        return minBound
+    return maxBound if arg > maxBound else arg
 
 
 TRACK_SCROLL_LIMITS = (-15.0, 30.0)

@@ -303,6 +303,8 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
+        if respawnAvailable and self._hasBonusCap(ARENA_BONUS_TYPE_CAPS.WHITE_TIGER):
+            self.as_hideComponentsS()
         self._updateVehicleInfo()
 
     def __onRespawnBaseMoving(self):

@@ -10,6 +10,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.battle_control.arena_info import settings
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.shared.utils import toUpper, functions
+from gui.wt_event.wt_event_helpers import isBossTeam
 from helpers import i18n
 from gui.shared.system_factory import registerArenaDescrs, collectArenaDescrs
 
@@ -316,6 +317,22 @@ class Comp7BattlesDescription(ArenaWithBasesDescription):
         return not replayCtrl.isPlaying
 
 
+class EventBattleDescription(ArenaWithLabelDescription):
+
+    def getDescriptionString(self, isInBattle=True):
+        return backport.text(R.strings.event.loading.battleTypes.wt())
+
+    def getWinString(self, isInBattle=True):
+        return backport.text(R.strings.event.loading.winText.boss()) if isBossTeam(self._team) else backport.text(R.strings.event.loading.winText.hunters())
+
+    def getTeamName(self, team):
+        return backport.text(R.strings.event.stats.team.boss()) if isBossTeam(team) else backport.text(R.strings.event.stats.team.hunters())
+
+    def isInvitationEnabled(self):
+        replayCtrl = BattleReplay.g_replayCtrl
+        return not replayCtrl.isPlaying
+
+
 registerArenaDescrs(ARENA_GUI_TYPE.RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.TRAINING, ArenaWithBasesDescription)
@@ -333,6 +350,8 @@ def createDescription(arenaVisitor):
     arenaDescr = collectArenaDescrs(guiVisitor.guiType)
     if arenaDescr is not None:
         description = arenaDescr(arenaVisitor)
+    elif guiVisitor.isWhiteTigerBattle():
+        description = EventBattleDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

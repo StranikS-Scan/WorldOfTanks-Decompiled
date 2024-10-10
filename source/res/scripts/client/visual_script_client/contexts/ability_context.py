@@ -4,6 +4,7 @@ from visual_script_client.contexts.vehicle_context import VehicleContextClient
 from visual_script.context import vse_event_out, vse_set_property, vse_get_property
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
+from constants import EQUIPMENT_STAGES
 
 class AbilityContextClient(VehicleContextClient):
 
@@ -17,6 +18,10 @@ class AbilityContextClient(VehicleContextClient):
     @vse_get_property(SLOT_TYPE.STR, display_name='equipmentName', description='', aspects=[ASPECT.CLIENT])
     def getEquipmentName(self):
         return self.equipmentName
+
+    @vse_get_property(SLOT_TYPE.STR, display_name='abilityStage', description='', aspects=[ASPECT.CLIENT])
+    def getAbilityStage(self):
+        return EQUIPMENT_STAGES.toString(self._vehicle.dynamicComponents[self.equipmentName].equipmentStatePublic['stage'])
 
     @vse_set_property(SLOT_TYPE.BOOL, display_name='Set CanActivate', description='', aspects=[ASPECT.CLIENT])
     def setCanActivate(self, canActivate):

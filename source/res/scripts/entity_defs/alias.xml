@@ -1117,6 +1117,9 @@
       <gunPiercing>
         <Type>	FLOAT	</Type>
       </gunPiercing>
+      <gunCanShoot>
+        <Type>	BOOL	</Type>
+      </gunCanShoot>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <IS_OBSERVED_BY_ENEMY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1371,6 +1374,8 @@
   </FRONT_LINE_DATA>
   <LIST_OF_COMP_DESCRS>	ARRAY	  <of>	INT32	</of>
   </LIST_OF_COMP_DESCRS>
+  <LIST_OF_IDX>	ARRAY	  <of>	INT8	</of>
+  </LIST_OF_IDX>
   <AVATAR_AMMO_VIEWS>	FIXED_DICT	  <Properties>
       <vehTypeCompDescrs>
         <Type>	LIST_OF_COMP_DESCRS	</Type>
@@ -1381,6 +1386,17 @@
       </compDescrs>
     </Properties>
   </AVATAR_AMMO_VIEWS>
+  <AVATAR_AMMO_FOR_CELL>	FIXED_DICT	  <Properties>
+      <abilitiesIDs>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </abilitiesIDs>
+      <purchasedAbilities>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </purchasedAbilities>
+    </Properties>
+  </AVATAR_AMMO_FOR_CELL>
   <POST_PROGRESSION_SETUPS>	FIXED_DICT	  <Properties>
       <devicesSetups>
         <Type>	ARRAY	  <of>	ARRAY	  <of>	UINT32	</of>
@@ -2095,10 +2111,10 @@
         <Type>	UINT16	</Type>
       </quantity>
       <quantityInClip>
-        <Type>	UINT8	</Type>
+        <Type>	UINT16	</Type>
       </quantityInClip>
       <previousStage>
-        <Type>	UINT8	</Type>
+        <Type>	UINT16	</Type>
       </previousStage>
       <endTime>
         <Type>	FLOAT32	</Type>
@@ -2172,6 +2188,9 @@
       <shotDispMultiplierFactor>
         <Type>	FLOAT32	</Type>
       </shotDispMultiplierFactor>
+      <gunShotDispersionFactorsAfterShot>
+        <Type>	FLOAT32	</Type>
+      </gunShotDispersionFactorsAfterShot>
       <gunShotDispersionFactorsTurretRotation>
         <Type>	FLOAT32	</Type>
       </gunShotDispersionFactorsTurretRotation>
@@ -2181,6 +2200,9 @@
       <chassisShotDispersionFactorsRotation>
         <Type>	FLOAT32	</Type>
       </chassisShotDispersionFactorsRotation>
+      <gunShotDispersionFactorsAfterShot>
+        <Type>	FLOAT32	</Type>
+      </gunShotDispersionFactorsAfterShot>
       <aimingTime>
         <Type>	FLOAT32	</Type>
       </aimingTime>
@@ -2288,6 +2310,38 @@
   </DEBUFF_INFO>
   <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
   </DEBUFF_INFO_LIST>
+  <TIMER_INFO>	FIXED_DICT	  <Properties>
+      <factor>
+        <Type>	FLOAT32	</Type>
+      </factor>
+      <left>
+        <Type>	FLOAT32	</Type>
+      </left>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </TIMER_INFO>
+  <HEALTH_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <health>
+        <Type>	UINT16	</Type>
+      </health>
+    </Properties>
+  </HEALTH_INFO>
+  <HEALTH_INFO_LIST>	ARRAY	  <of>	HEALTH_INFO	</of>
+  </HEALTH_INFO_LIST>
+  <UDO_INFO>	FIXED_DICT	  <Properties>
+      <guid>
+        <Type>	STRING	</Type>
+      </guid>
+      <position>
+        <Type>	VECTOR2	</Type>
+      </position>
+    </Properties>
+  </UDO_INFO>
   <ROCKET_ACCELERATION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -2304,6 +2358,41 @@
       </reuseCount>
     </Properties>
   </ROCKET_ACCELERATION_STATE_STATUS>
+  <AUTO_SHOOT_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <stateActivationTime>
+        <Type>	FLOAT32	</Type>
+      </stateActivationTime>
+      <dispersionFactor>
+        <Type>	FLOAT32	</Type>
+      </dispersionFactor>
+      <updateTime>
+        <Type>	FLOAT32	</Type>
+      </updateTime>
+      <shotDispersionPerSec>
+        <Type>	FLOAT32	</Type>
+      </shotDispersionPerSec>
+      <maxShotDispersion>
+        <Type>	FLOAT32	</Type>
+      </maxShotDispersion>
+    </Properties>
+  </AUTO_SHOOT_GUN_STATE_STATUS>
+  <SPIN_GUN_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <stateActivationTime>
+        <Type>	FLOAT32	</Type>
+      </stateActivationTime>
+      <spinFactor>
+        <Type>	FLOAT32	</Type>
+      </spinFactor>
+    </Properties>
+  </SPIN_GUN_STATE_STATUS>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>
@@ -2409,12 +2498,18 @@
       <stage>
         <Type>	UINT8	</Type>
       </stage>
+      <locked>
+        <Type>	BOOL	</Type>
+      </locked>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_STATE>
   <VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>	FIXED_DICT	  <Properties>
       <stage>
         <Type>	UINT8	</Type>
       </stage>
+      <prevStage>
+        <Type>	UINT8	</Type>
+      </prevStage>
     </Properties>
   </VISUAL_SCRIPT_EQUIPMENT_PUBLIC_STATE>
   <SPAWN_AVAILABLE_VEHICLE>	FIXED_DICT	  <Properties>
@@ -2529,4 +2624,33 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
+  <RESPAWN_TIME_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <spawnTime>
+        <Type>	FLOAT32	</Type>
+      </spawnTime>
+      <delay>
+        <Type>	FLOAT32	</Type>
+      </delay>
+    </Properties>
+  </RESPAWN_TIME_INFO>
+  <CIRCUIT_OVERLOAD_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <prefabPath>
+        <Type>	STRING	</Type>
+      </prefabPath>
+    </Properties>
+  </CIRCUIT_OVERLOAD_INFO>
+  <IMPACT_AREA_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <timeBeforeDamage>
+        <Type>	FLOAT	</Type>
+      </timeBeforeDamage>
+      <isVisible>
+        <Type>	BOOL	</Type>
+      </isVisible>
+    </Properties>
+  </IMPACT_AREA_INFO>
 </alias.xml>

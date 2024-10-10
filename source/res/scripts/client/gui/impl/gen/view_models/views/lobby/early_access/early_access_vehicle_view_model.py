@@ -8,7 +8,7 @@ class EarlyAccessVehicleViewModel(ViewModel):
     __slots__ = ('onSelectVehicle', 'onCompare', 'onShowVehiclePreview', 'onShowInHangar', 'onBuyVehicle', 'onAboutEvent', 'onBackToHangar', 'onBackToPrevScreen', 'onBuyTokens', 'onGoToQuests', 'onMoveSpace', 'onStartMoving', 'onAnimationFinished')
     ARG_VEHICLE_CD = 'vehicleCD'
 
-    def __init__(self, properties=9, commands=13):
+    def __init__(self, properties=10, commands=13):
         super(EarlyAccessVehicleViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentDate(self):
@@ -69,6 +69,12 @@ class EarlyAccessVehicleViewModel(ViewModel):
     def setIsFromTechTree(self, value):
         self._setBool(8, value)
 
+    def getIsQuestWidgetEnabled(self):
+        return self._getBool(9)
+
+    def setIsQuestWidgetEnabled(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(EarlyAccessVehicleViewModel, self)._initialize()
         self._addNumberProperty('currentDate', 0)
@@ -80,6 +86,7 @@ class EarlyAccessVehicleViewModel(ViewModel):
         self._addNumberProperty('tokensBalance', 0)
         self._addArrayProperty('vehicles', Array())
         self._addBoolProperty('isFromTechTree', False)
+        self._addBoolProperty('isQuestWidgetEnabled', False)
         self.onSelectVehicle = self._addCommand('onSelectVehicle')
         self.onCompare = self._addCommand('onCompare')
         self.onShowVehiclePreview = self._addCommand('onShowVehiclePreview')

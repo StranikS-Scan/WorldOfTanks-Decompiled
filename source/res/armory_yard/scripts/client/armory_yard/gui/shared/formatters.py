@@ -2,7 +2,7 @@
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/shared/formatters.py
 import typing
 from copy import deepcopy
-from armory_yard.gui.shared.bonus_packers import packBonuses
+from armory_yard.gui.shared.bonus_packers import packBonuses, getArmoryYardBonusPacker
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.money import Currency
@@ -14,8 +14,8 @@ def formatSpentCurrencies(currencies):
     return '\n'.join(included)
 
 
-def formatPurchaseItems(items):
-    formattedItems = [ backport.text(R.strings.armory_shop.notifications.purchaseContent(), product=bonus.getLabel(), count=bonus.getValue() if bonus.getValue() else 1) for bonus in packBonuses(items) ]
+def formatPurchaseItems(items, packer=None):
+    formattedItems = [ backport.text(R.strings.armory_shop.notifications.purchaseContent(), product=bonus.getLabel(), count=bonus.getValue() if bonus.getValue() else 1) for bonus in packBonuses(items, packer) ]
     return '\n'.join(formattedItems)
 
 
@@ -23,7 +23,7 @@ def formatBundlePurchase(productId, items):
     items = deepcopy(items)
     _cutCompensation(items)
     vehicles = items.pop('vehicles')
-    return backport.text(R.strings.armory_shop.notifications.bundleContent(), vehicles=formatPurchaseItems({'vehicles': vehicles}), items=formatPurchaseItems(items))
+    return backport.text(R.strings.armory_shop.notifications.bundleContent(), vehicles=formatPurchaseItems({'vehicles': vehicles}), items=formatPurchaseItems(items, getArmoryYardBonusPacker()))
 
 
 def _cutCompensation(rewards):

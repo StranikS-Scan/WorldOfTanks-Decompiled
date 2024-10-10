@@ -4,26 +4,29 @@ import logging
 import typing
 from gui_lootboxes.gui.bonuses.bonuses_order_config import readConfig, BONUSES_CONFIG_PATH_LIST
 from gui_lootboxes.gui.storage_context.hangar_optimizer import HangarOptimizer
+from adisp import adisp_process
 import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_LOOT_BOXES, LOOT_BOXES_COUNT, LOOT_BOXES_LAST_ADDED_ID
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from constants import Configs
+from gui.impl.lobby.loot_box.loot_box_bonus_parsers.default_parser import parseLimitBoxInfoSection, parseAllOfBonusInfoSection
 from constants import LOOTBOX_TOKEN_PREFIX, LOOTBOX_KEY_PREFIX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.shared.event_dispatcher import showShop
-from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY
+from gui.shared.gui_items.loot_box import EVENT_LOOT_BOXES_CATEGORY, EventLootBoxes
+from gui.shared.gui_items.processors.loot_boxes import LootBoxGetInfoProcessor
 from helpers import dependency
 from helpers.server_settings import GUI_LOOT_BOXES_CONFIG
 from lootboxes_common import makeLBKeyTokenID
-from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController, ISteamCompletionController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID, getKeyByID, hasInfiniteLootBoxes
+from shared_utils import nextTick, findFirst
 if typing.TYPE_CHECKING:
     from typing import Any
 _logger = logging.getLogger(__name__)
@@ -62,6 +65,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.__bonusesConfig = None
         self.__boxesCount = 0
         self.__boxKeysCount = 0
+        self.__boxInfo = {}
         self.__isLootBoxesAvailable = False
         self.__isActive = False
         self.__settings = _SettingsMgr()
@@ -83,6 +87,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.__limitedUIController.startObserve(LuiRules.GUI_LOOTBOXES_ENTRY_POINT, self.__onStatusChange)
         self.__boxesCount = self.__getBoxesCount()
         self.__boxKeysCount = self.__getBoxKeysCount()
+        self.__updateBoxInfo()
         self.__isLootBoxesAvailable = self.isLootBoxesAvailable()
         self.__hadLootBoxesTokens()
         self.__isActive = self.isEnabled()
@@ -151,6 +156,11 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     def getBoxKeysCount(self):
         return self.__boxKeysCount
 
+    def getBoxesInfo(self):
+        if not self.__boxInfo:
+            self.__updateBoxInfo()
+        return self.__boxInfo
+
     def getKeyByID(self, keyID):
         return getKeyByID(keyID)
 
@@ -190,6 +200,7 @@ class GuiLootBoxesController(IGuiLootBoxesController):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
         self.__boxesCount = 0
         self.__boxKeysCount = 0
+        self.__boxInfo.clear()
         self.__limitedUIController.stopObserve(LuiRules.GUI_LOOTBOXES_ENTRY_POINT, self.__onStatusChange)
 
     def __onServerSettingsChange(self, settings):
@@ -247,8 +258,61 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     def __onStatusChange(self, *_):
         self.onStatusChange()
 
-    def __hadLootBoxesTokens(self):
+    def __updateBoxCountToGuaranteedBonus(self):
+        opened = 0
+        guaranteedBonusLimit = self.__boxInfo.get(EventLootBoxes.PREMIUM, {}).get('limit', 0)
+        boxHistoryData = self.__boxInfo.get(EventLootBoxes.PREMIUM, {}).get('history')
+        if boxHistoryData:
+            _, bonusData, _ = boxHistoryData
+            if bonusData is not None:
+                _, opened, _ = bonusData.get('guaranteedBonusLimit', (0, 0, 0))
+        self.__boxCountToGuaranteedBonus = guaranteedBonusLimit - opened
+        return
+
+    @nextTick
+    @adisp_process
+    def __updateBoxInfo(self):
+        boxes = [ lb for lb in self.__itemsCache.items.tokens.getLootBoxes().values() if lb.getCategory() == EVENT_LOOT_BOXES_CATEGORY ]
+        boxInfoData = {}
+        result = None
+        if boxes:
+            result = yield LootBoxGetInfoProcessor(boxes).request()
+        if result and result.success and result.auxData:
+            for lootBoxID, lootBoxData in result.auxData.iteritems():
+                if lootBoxID in self.getBoxesIDs():
+                    boxData = dict()
+                    data = lootBoxData.get('bonus', {})
+                    lbType = lootBoxData['type']
+                    boxData['id'] = lootBoxID
+                    boxData['limit'] = parseLimitBoxInfoSection(lootBoxData.get('config', {}))
+                    boxData['slots'] = parseAllOfBonusInfoSection(data.get('allof', {}))
+                    boxData['history'] = lootBoxData.get('history', (0, None, 0))
+                    boxInfoData[lbType] = boxData
+
+        self.__boxInfo = boxInfoData
+        self.onBoxInfoUpdated()
+        self.__updateBoxCountToGuaranteedBonus()
+        return
+
+    def __hadLootBoxesTokens(self, hasTokens=False):
         uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
         isEntryPointEnabled = uiStorage.get(UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT)
-        if not isEntryPointEnabled and self.__boxesCount > 0:
-            self.__settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT: True})
+        if not isEntryPointEnabled:
+            needToUpdateSettings = False
+            tokens = self.__itemsCache.items.tokens.getTokens()
+            for token in tokens:
+                if token.startswith(LOOTBOX_TOKEN_PREFIX):
+                    lootBox = self.__itemsCache.items.tokens.getLootBoxes().get(token, None)
+                    if lootBox and lootBox.isVisible():
+                        needToUpdateSettings = True
+
+            if hasTokens or needToUpdateSettings:
+                self.__settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT: True})
+        return
+
+    def hasVisibleLootBoxes(self):
+        for lb in self.__itemsCache.items.tokens.getLootBoxes().values():
+            if lb.isVisible() and lb.getInventoryCount() > 0:
+                return True
+
+        return False

@@ -97,7 +97,8 @@ class Window(PyObjectEntity):
     __slots__ = ('onStatusChanged', '__windowStatus', 'onShowingStatusChanged', 'onFocusChanged', '__showingStatus', '__isShown', '__isFocused', '__isReady', '__weakref__')
 
     def __init__(self, settings):
-        settings.name = self.getName()
+        if not settings.name:
+            settings.name = self.getName()
         super(Window, self).__init__(PyObjectWindow(settings.proxy))
         self.onStatusChanged = Event.Event()
         self.__windowStatus = WindowStatus.UNDEFINED if self.proxy is None else self.proxy.windowStatus

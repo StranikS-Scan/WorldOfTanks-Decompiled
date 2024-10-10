@@ -95,23 +95,25 @@ class RankedResultsInfoHelper(RankedInfoHelper):
         rankState = self.getRankChangeStatus()
         rankInfo = self._reusable.personal.getRankInfo()
         shieldState = rankInfo.shieldState
-        resultLabel = backport.text(self._STATUS_LABEL_MAP[rankState])
+        resultR = self._STATUS_LABEL_MAP.get(rankState, None)
+        resultLabel = backport.text(resultR) if resultR is not None else ''
         resultSubLabel = ''
         if rankState in (_RCS.LEAGUE_EARNED,
          _RCS.DIVISION_EARNED,
          _RCS.QUAL_EARNED,
          _RCS.QUAL_UNBURN_EARNED):
             return ''
-        if rankState == _RCS.NOTHING_CHANGED and isWin:
-            resultLabel = backport.text(R.strings.ranked_battles.battleresult.status.stageNotEarned())
-        if shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE:
-            resultLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldLose())
-            resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldWarning())
-        if shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE_STEP:
-            resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldCount(), count=text_styles.highTitle(rankInfo.shieldHP))
-        if shieldState in RANKEDBATTLES_ALIASES.SHIELD_RENEW_STATES:
-            resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldRenew())
-        return text_styles.concatStylesToMultiLine(text_styles.heroTitle(resultLabel), text_styles.promoSubTitle(resultSubLabel))
+        else:
+            if rankState == _RCS.NOTHING_CHANGED and isWin:
+                resultLabel = backport.text(R.strings.ranked_battles.battleresult.status.stageNotEarned())
+            if shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE:
+                resultLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldLose())
+                resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldWarning())
+            if shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE_STEP:
+                resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldCount(), count=text_styles.highTitle(rankInfo.shieldHP))
+            if shieldState in RANKEDBATTLES_ALIASES.SHIELD_RENEW_STATES:
+                resultSubLabel = backport.text(R.strings.ranked_battles.battleresult.status.shieldRenew())
+            return text_styles.concatStylesToMultiLine(text_styles.heroTitle(resultLabel), text_styles.promoSubTitle(resultSubLabel))
 
     def getListsData(self, isLoser):
         rankChanges = self.rankedController.getRanksChanges(isLoser=isLoser)

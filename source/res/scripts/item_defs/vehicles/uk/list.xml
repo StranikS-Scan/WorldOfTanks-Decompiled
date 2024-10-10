@@ -665,7 +665,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD testTank secret mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <tags>	mediumTank role_MT_sniper HD testTank secret mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit	</tags>
     <level>	8	</level>
   </GB114_Vickers_MBT_Mk3>
   <GB113_Matilda_LVT>
@@ -693,6 +693,19 @@
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB112_Caliban>
+  <GB112_Caliban_02>
+    <id>	240	</id>
+    <userString>	#gb_vehicles:GB112_Caliban_02	</userString>
+    <description>	#gb_vehicles:GB112_Caliban_02_descr	</description>
+    <shortUserString>	#gb_vehicles:GB112_Caliban_02_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB112_Caliban_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB112_Caliban_02_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user lockOutfit	</tags>
+    <level>	8	</level>
+  </GB112_Caliban_02>
   <GB110_FV4201_Chieftain_Prototype>
     <id>	202	</id>
     <userString>	#gb_vehicles:GB110_FV4201_Chieftain_Prototype	</userString>
@@ -757,6 +770,8 @@
     <userString>	#gb_vehicles:GB92_FV217_7x7	</userString>
     <description>	#gb_vehicles:GB92_FV217_descr	</description>
     <shortUserString>	#gb_vehicles:GB92_FV217_7x7_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB92_FV217_7x7_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB92_FV217_7x7_long_special	</longDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1152,11 +1167,25 @@
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </GB121_GSOR_1010_FB>
+  <GB118_Taurus_CA>
+    <id>	82	</id>
+    <userString>	#gb_vehicles:GB118_Taurus_CA	</userString>
+    <description>	#gb_vehicles:GB118_Taurus_CA_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB118_Taurus_CA_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB118_Taurus_CA_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault AT-SPG1 HD siegeMode autoSiege tankRammer_class2_user improvedVentilation_class2_user extraHealthReserve_class1_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	8	</level>
+  </GB118_Taurus_CA>
   <GB86_Centurion_Action_X_7x7>
     <id>	81	</id>
     <userString>	#gb_vehicles:GB86_Centurion_Action_X_7x7	</userString>
     <description>	#gb_vehicles:GB86_Centurion_Action_X_descr	</description>
     <shortUserString>	#gb_vehicles:GB86_Centurion_Action_X_7x7_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_7x7_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB86_Centurion_Action_X_7x7_long_special	</longDescriptionSpecial>
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
@@ -1190,4 +1219,17 @@
     <tags>	heavyTank HD role_HT_universal improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals lockOutfit	</tags>
     <level>	9	</level>
   </GB110_FV4201_Chieftain_Prototype_B>
+  <GB128_Nemesis>
+    <id>	31001	</id>
+    <userString>	#gb_vehicles:GB128_Nemesis	</userString>
+    <description>	#gb_vehicles:GB128_Nemesis_descr	</description>
+    <shortUserString>	#gb_vehicles:GB128_Nemesis_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB128_Nemesis_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special secret testTank	</tags>
+    <level>	10	</level>
+  </GB128_Nemesis>
 </list.xml>

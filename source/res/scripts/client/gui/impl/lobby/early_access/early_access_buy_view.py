@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/lobby/early_access/early_access_buy_view.py
 from adisp import adisp_process
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer, ViewModel
-from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
-from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.impl.lobby.early_access.early_access_view_impl import EarlyAccessViewImpl
+from gui.impl.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.lobby.early_access.tooltips.early_access_compensation_tooltip import EarlyAccessCompensationTooltip
 from gui.impl.lobby.early_access.early_access_vehicle_view import EarlyAccessVehicleView
@@ -24,16 +25,17 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.gui_items.items_actions import factory
 from gui.impl.lobby.early_access.shared.actions import BUY_EARLY_ACCESS_TOKENS
 
-class EarlyAccessBuyView(ViewImpl):
-    __slots__ = ('__backCallback',)
+class EarlyAccessBuyView(EarlyAccessViewImpl):
+    __slots__ = ('__backCallback', '__desiredVehCD')
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
 
-    def __init__(self, layoutID, backCallback=None):
+    def __init__(self, layoutID, desiredVehCD=None, backCallback=None):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_SUB_VIEW
         settings.model = EarlyAccessBuyViewModel()
+        self.__desiredVehCD = desiredVehCD
         super(EarlyAccessBuyView, self).__init__(settings)
         self.__backCallback = backCallback
 
@@ -99,21 +101,36 @@ class EarlyAccessBuyView(ViewImpl):
         return
 
     def __fillVehicles(self, model):
-        vehicles = (self.__itemsCache.items.getItemByCD(cd) for cd in self.__earlyAccessCtrl.getAffectedVehicles())
-        vehicles = sorted(vehicles, key=lambda vehicle: vehicle.level)
+        vehicles = self.__earlyAccessCtrl.getAffectedVehiclesOrderedList()
+        model.setInitialTokensCount(self.__getPriceToUnlock(vehicles, self.__desiredVehCD))
         vehicleModelArray = model.getVehicles()
         vehicleModelArray.clear()
-        for veh in vehicles:
+        for veh, price in vehicles:
             vModel = EarlyAccessVehicleModel()
             fillVehicleModel(vModel, veh)
             isNext2Unlock, _ = g_techTreeDP.isNext2Unlock(veh.compactDescr, unlocked=self.__itemsCache.items.stats.unlocks, xps=self.__itemsCache.items.stats.vehiclesXPs)
             state = EarlyAccessVehicleView.getVehicleState(veh, isNext2Unlock)
             vModel.setState(state)
-            vModel.setPrice(self.__earlyAccessCtrl.getVehiclePrice(veh.compactDescr))
+            vModel.setPrice(price)
             vModel.setIsPostProgression(veh.compactDescr in self.__earlyAccessCtrl.getPostProgressionVehicles())
             vehicleModelArray.addViewModel(vModel)
 
         vehicleModelArray.invalidate()
+
+    def __getPriceToUnlock(self, vehicles, vehCD):
+        if vehCD is None:
+            return 0
+        else:
+            totalPrice = 0
+            for vehicle, price in vehicles:
+                currVehCD = vehicle.compactDescr
+                totalPrice += price
+                if currVehCD != vehCD:
+                    continue
+                tokensCount = self.__earlyAccessCtrl.getReceivedTokensCount()
+                return max(totalPrice - tokensCount, 0)
+
+            return totalPrice
 
     @adisp_process
     def __onBuyTokens(self, event):
@@ -144,5 +161,5 @@ class EarlyAccessBuyView(ViewImpl):
 class EarlyAccessBuyViewWindow(LobbyWindow):
     __slots__ = ()
 
-    def __init__(self, parent=None, backCallback=None):
-        super(EarlyAccessBuyViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, content=EarlyAccessBuyView(R.views.lobby.early_access.EarlyAccessBuyView(), backCallback=backCallback), parent=parent)
+    def __init__(self, parent=None, desiredVehCD=None, backCallback=None):
+        super(EarlyAccessBuyViewWindow, self).__init__(wndFlags=WindowFlags.WINDOW, layer=WindowLayer.TOP_SUB_VIEW, content=EarlyAccessBuyView(R.views.lobby.early_access.EarlyAccessBuyView(), desiredVehCD, backCallback=backCallback), parent=parent)

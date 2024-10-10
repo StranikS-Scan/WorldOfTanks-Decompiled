@@ -4,8 +4,9 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.tooltips import contexts, TOOLTIP_COMPONENT
 from gui.shared.tooltips import module
+from gui.shared.tooltips import ability
 from gui.shared.tooltips import shell, advanced
-from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, AdvancedComplexBuilder
+from gui.shared.tooltips.builders import DataBuilder, AdvancedDataBuilder, AdvancedComplexBuilder, AdvancedTooltipWindowBuilder
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 __all__ = ('getTooltipBuilders',)
 
@@ -115,4 +116,5 @@ def getTooltipBuilders():
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.NATION_CHANGE_HANGAR_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.NationChangeHangarContext()), advanced.HangarShellAdvanced(contexts.NationChangeHangarContext()), condition=_nationChangeShellAdvancedBlockCondition(contexts.NationChangeHangarContext())),
      AdvancedShellBuilder(TOOLTIPS_CONSTANTS.COMPARE_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.VehCmpConfigurationContext()), advanced.HangarShellAdvanced(contexts.VehCmpConfigurationContext()), condition=_shellAdvancedBlockCondition(contexts.VehCmpConfigurationContext())),
      AdvancedShellBuilder(TOOLTIPS_CONSTANTS.INVENTORY_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.InventoryContext()), advanced.HangarShellAdvanced(contexts.TechMainContext()), condition=_shellAdvancedBlockCondition(contexts.TechMainContext())),
-     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.TechMainContext()), advanced.HangarShellAdvanced(contexts.TechMainContext()), condition=_shellAdvancedBlockCondition(contexts.TechMainContext())))
+     AdvancedShellBuilder(TOOLTIPS_CONSTANTS.TECH_MAIN_SHELL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, shell.ShellBlockToolTipData(contexts.TechMainContext()), advanced.HangarShellAdvanced(contexts.TechMainContext()), condition=_shellAdvancedBlockCondition(contexts.TechMainContext())),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.ABILITY_LOBBY_TOOLTIP, None, ability.AbilitySkillTooltipData(contexts.ToolTipContext(None)), ability.AbilitySkillTooltipDataAdditional(contexts.ToolTipContext(None))))

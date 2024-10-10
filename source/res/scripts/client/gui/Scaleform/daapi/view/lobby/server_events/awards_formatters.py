@@ -176,6 +176,14 @@ class BattlePassPointsFormatter(OldStyleBonusFormatter):
             self._result.append(formatters.packSimpleBonusesBlock(formattedList))
 
 
+class RankedBonusBattlesFormatter(OldStyleBonusFormatter):
+
+    def accumulateBonuses(self, bonus):
+        formattedList = bonus.formattedList()
+        if formattedList:
+            self._result.append(formatters.packTypedBonusesBlock(formattedList, typedTooltip=TOOLTIPS_CONSTANTS.RANKED_BATTLES_BONUS))
+
+
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -279,7 +287,8 @@ def _getFormattersMap(event):
      'blueprints': BlueprintsFormatter(),
      'crewSkins': CrewSkinFormatter(),
      'battlePassPoints': BattlePassPointsFormatter(),
-     'battleToken': BattleTokenFormatter()}
+     'battleToken': BattleTokenFormatter(),
+     'rankedBonusBattles': RankedBonusBattlesFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

@@ -58,10 +58,10 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, REQUEST_TYPE
 from gui.server_events import recruit_helper, settings as quest_settings
 from gui.server_events.events_helpers import isDailyQuest
-from gui.shared import event_dispatcher as shared_events, events, g_eventBus
+from gui.shared import events, g_eventBus, event_dispatcher as shared_events
 from gui.clans.clan_cache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showActiveTestConfirmDialog, showModeSelectorWindow, showShop, showStorage, showSubscriptionsPage, showWotPlusIntroView, showBarracks
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showActiveTestConfirmDialog, showModeSelectorWindow, showShop, showStorage, showSubscriptionsPage, showWotPlusIntroView, showBarracks, showVehicleTechTreeView
 from gui.shared.events import FullscreenModeSelectorEvent, PlatoonDropdownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
@@ -70,6 +70,7 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from gui.shop import showIngameShop, Origin
+from gui.techtree.go_back_helper import WulfPreviewAlias
 from gui.tournament.tournament_helpers import showTournaments, isTournamentEnabled
 from helpers import dependency, i18n, isPlayerAccount, time_utils
 from predefined_hosts import PING_STATUSES, g_preDefinedHosts
@@ -78,7 +79,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -91,9 +92,11 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.techtree_events import ITechTreeEventsListener
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 from skeletons.tutorial import ITutorialLoader
 from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
 from uilogging.wot_plus.loggers import WotPlusHeaderLogger
+from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -241,7 +244,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         STORE = VIEW_ALIAS.LOBBY_STORE
         STORAGE = VIEW_ALIAS.LOBBY_STORAGE
         PROFILE = VIEW_ALIAS.LOBBY_PROFILE
-        TECHTREE = VIEW_ALIAS.LOBBY_TECHTREE
+        TECHTREE = WulfPreviewAlias.WULF_TECHTREE
         BARRACKS = VIEW_ALIAS.LOBBY_BARRACKS
         BROWSER = VIEW_ALIAS.BROWSER
         RESEARCH = VIEW_ALIAS.LOBBY_RESEARCH
@@ -253,7 +256,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     ACCOUNT_SETTINGS_COUNTERS = (TABS.STORE,)
     DESELECT_TAB_ALIASES = (VIEW_ALIAS.WIKI_VIEW, R.views.lobby.maps_training.MapsTrainingPage())
-    _WULF_TO_TAB = {R.views.lobby.crew.BarracksView(): TABS.BARRACKS}
+    _WULF_TO_TAB = {R.views.lobby.crew.BarracksView(): TABS.BARRACKS,
+     R.views.lobby.techtree.VehicleTechTree(): TABS.TECHTREE}
     _TAB_ALIAS_TO_RULE_ID = {TABS.STORE: LuiRules.LOBBY_HEADER_COUNTERS_STORE,
      TABS.MISSIONS: LuiRules.LOBBY_HEADER_COUNTERS_MISSIONS,
      TABS.PROFILE: LuiRules.LOBBY_HEADER_COUNTERS_PROFILE,
@@ -284,7 +288,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     offersNovelty = dependency.descriptor(IOffersNovelty)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __mapsTrainingController = dependency.descriptor(IMapsTrainingController)
-    __eventBattlesController = dependency.descriptor(IEventBattlesController)
+    __wtController = dependency.descriptor(IWhiteTigerController)
     __funRandomCtrl = dependency.descriptor(IFunRandomController)
     platoonCtrl = dependency.descriptor(IPlatoonController)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -299,6 +303,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
+    prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
     __SELECTOR_TOOLTIP_TYPE = TOOLTIPS.HEADER_BATTLETYPE
 
     def __init__(self):
@@ -565,6 +570,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
+        self.prebattleVehicle.onChanged += self.__onVehicleChanged
         self.hangarSpace.onSpaceCreate += self.__onHangarSpaceCreated
         self.hangarSpace.onSpaceDestroy += self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
@@ -593,6 +599,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__comp7Controller.onQualificationStateUpdated += self.__updateComp7
         self.__achievements20Controller.onUpdate += self.__onProfileVisited
         self.__earlyAccessController.onUpdated += self.__updateEarlyAccess
+        self.__wtController.onUpdated += self.__updateWhiteTiger
         g_playerEvents.onEnqueued += self._updatePrebattleControls
         g_playerEvents.onDequeued += self._updatePrebattleControls
         g_playerEvents.onArenaCreated += self._updatePrebattleControls
@@ -672,6 +679,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        self.prebattleVehicle.onChanged -= self.__onVehicleChanged
         self.hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreated
         self.hangarSpace.onSpaceDestroy -= self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
@@ -697,6 +705,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__comp7Controller.onQualificationStateUpdated -= self.__updateComp7
         self.__achievements20Controller.onUpdate -= self.__onProfileVisited
         self.__earlyAccessController.onUpdated -= self.__updateEarlyAccess
+        self.__wtController.onUpdated -= self.__updateWhiteTiger
         self.clanNotificationCtrl.onClanNotificationUpdated -= self.__updateStrongholdCounter
         self.__funRandomCtrl.subscription.removeSubModesWatcher(self._updatePrebattleControls, True)
         g_playerEvents.onEnqueued -= self._updatePrebattleControls
@@ -779,6 +788,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
 
     def __updateComp7(self):
+        self._updatePrebattleControls()
+
+    def __updateWhiteTiger(self):
         self._updatePrebattleControls()
 
     def __onComp7MetaOpened(self, *_):
@@ -1036,6 +1048,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             showIngameShop(getShopRootUrl(), Origin.HANGAR_TOP_MENU)
         elif alias == self.TABS.BARRACKS:
             showBarracks()
+        elif alias == self.TABS.TECHTREE:
+            showVehicleTechTreeView()
         else:
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(alias))
             if event is not None:
@@ -1127,7 +1141,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         _, isBrCycle = self.__battleRoyaleController.getCurrentCycleInfo()
         brAvailable = isBrCycle and self.__battleRoyaleController.isEnabled()
         isEpicBattleAvailabe = self.epicController.isEnabled() and self.epicController.isCurrentCycleActive()
-        isEventBattlesAvailable = self.__eventBattlesController.isEnabled()
+        isEventBattlesAvailable = self.__wtController.isEnabled()
         from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
         isCosmicEvtAvailable = dependency.instance(ICosmicEventBattleController).isEnabled
         mapboxAvailable = self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
@@ -1164,6 +1178,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isRandom = state.isInPreQueue(constants.QUEUE_TYPE.RANDOMS)
             isLegacyTraining = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
             isComp7 = state.isInPreQueue(constants.QUEUE_TYPE.COMP7) or state.isInUnit(constants.PREBATTLE_TYPE.COMP7)
+            isWhiteTiger = state.isInPreQueue(constants.QUEUE_TYPE.WHITE_TIGER) or state.isInUnit(constants.PREBATTLE_TYPE.WHITE_TIGER)
             isVersusAI = state.isInPreQueue(constants.QUEUE_TYPE.VERSUS_AI) or state.isInUnit(constants.PREBATTLE_TYPE.VERSUS_AI)
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
                 extendedSquadInfoVo = self.platoonCtrl.buildExtendedSquadInfoVo()
@@ -1189,6 +1204,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7SQUAD
                     elif isVersusAI:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_VERSUSAISQUAD
+                    elif isWhiteTiger:
+                        tooltip = makeTooltip(backport.text(R.strings.platoon.headerButton.tooltips.whiteTigerSquad.header()), backport.text(R.strings.platoon.headerButton.tooltips.whiteTigerSquad.body()))
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 else:
@@ -1209,7 +1226,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tooltipData, isSpecial = '', False
             if self.__isFightBtnDisabled and not state.hasLockedState:
                 if isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                    tooltipData = getEventTooltipData()
+                    tooltipData = getEventTooltipData(result)
                 elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                     tooltipData = getEpicBattlesOnlyVehicleTooltipData(result)
                 elif g_currentVehicle.isOnlyForComp7Battles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
@@ -1234,6 +1251,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltipData = getComp7FightBtnTooltipData(result)
                 elif isVersusAI:
                     tooltipData = getVersusAIFightBtnTooltipData(result)
+                elif isWhiteTiger:
+                    tooltipData = getEventTooltipData(result)
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
                 tooltipData = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED
                 isSpecial = True
@@ -1398,7 +1417,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         highlightImage = ''
         if self.__earlyAccessController.isQuestActive() and not AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN):
             highlightImage = backport.image(R.images.gui.maps.icons.lobby.header.highlight_early_access())
-        self.as_setButtonHighlightS(VIEW_ALIAS.LOBBY_TECHTREE, highlightImage)
+        self.as_setButtonHighlightS(self.TABS.TECHTREE, highlightImage)
 
     def _updateStrongholdsSelector(self):
         strongholdEnabled = isStrongholdsEnabled()
@@ -1489,7 +1508,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         isEarlyAccess = self.__earlyAccessController.isQuestActive() and not AccountSettings.getEarlyAccess(EarlyAccess.INTRO_SEEN)
         if isEarlyAccess:
             highlightImage = backport.image(R.images.gui.maps.icons.lobby.header.highlight_early_access())
-        self.as_setButtonHighlightS(VIEW_ALIAS.LOBBY_TECHTREE, highlightImage)
+        self.as_setButtonHighlightS(self.TABS.TECHTREE, highlightImage)
 
     def _rebootBattleSelector(self):
         battle_selector_items.clear()
@@ -1546,6 +1565,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          bootcampStateChanged,
          'ranked_config' in diff,
          'epic_config' in diff,
+         'event_battles_config' in diff,
          battleRoyaleStateChanged,
          mapsTrainingStateChanged,
          eventBattlesStateChanged,

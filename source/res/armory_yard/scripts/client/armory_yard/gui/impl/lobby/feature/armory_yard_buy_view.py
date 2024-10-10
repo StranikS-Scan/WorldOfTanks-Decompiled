@@ -85,22 +85,25 @@ class ArmoryYardBuyView(ViewImpl):
 
     @adisp_process
     def onBuySteps(self, args):
+        currency = args.get('currency')
+        if currency not in self.__armoryYardCtrl.getTokenCurrencies():
+            return
         stepCount = int(args.get('steps'))
-        price = self.__armoryYardCtrl.getCurrencyTokenCost() * stepCount
+        price = self.__armoryYardCtrl.getCurrencyTokenCost(currency) * stepCount
         playerMoney = self.__itemsCache.items.stats.money
         shortage = playerMoney.getShortage(price)
         if shortage:
             setCurrencies = shortage.getSetCurrencies()
             if len(setCurrencies) == 1 and setCurrencies[0] == Currency.GOLD:
                 showBuyGoldForArmoryYard(price)
+            return
+        action = factory.getAction(BUY_STEP_TOKENS, stepCount, currency)
+        result = yield factory.asyncDoAction(action)
+        if result:
+            self.__armoryYardCtrl.onPayed(False, stepCount, price, currency)
+            self.destroyWindow()
         else:
-            action = factory.getAction(BUY_STEP_TOKENS, stepCount)
-            result = yield factory.asyncDoAction(action)
-            if result:
-                self.__armoryYardCtrl.onPayed(False, stepCount, price)
-                self.destroyWindow()
-            else:
-                self.__armoryYardCtrl.onPayedError()
+            self.__armoryYardCtrl.onPayedError()
 
     def onBack(self):
         self.destroyWindow()
@@ -154,6 +157,16 @@ class ArmoryYardBuyView(ViewImpl):
     def _getCallbacks(self):
         return (('stats', self.__onStatsUpdated),)
 
+    def __fillPrices(self, model):
+        pricesModel = model.getPrices()
+        pricesModel.clear()
+        for currency in self.__armoryYardCtrl.getTokenCurrencies():
+            price = model.getPricesType()()
+            BuyPriceModelBuilder.fillPriceModel(price, self.__armoryYardCtrl.getCurrencyTokenCost(currency) * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+            pricesModel.addViewModel(price)
+
+        pricesModel.invalidate()
+
     def __setMainData(self, model):
         model.setIsWalletAvailable(self.__wallet.isAvailable)
         model.setStepSelected(self.__selectedStep)
@@ -166,7 +179,7 @@ class ArmoryYardBuyView(ViewImpl):
         else:
             parentViewKey = None
         model.setParentAlias(_VIEW_KEY_TO_PARENT_ALIASES.get(parentViewKey, ParentAlias.MAINVIEW))
-        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+        self.__fillPrices(model)
         return
 
     def __fillSteps(self, model):
@@ -228,8 +241,7 @@ class ArmoryYardBuyView(ViewImpl):
     def __setSelectedStep(self, selectedStep, model):
         self.__selectedStep = selectedStep
         model.setStepSelected(self.__selectedStep)
-        self.__clearPrice(model)
-        BuyPriceModelBuilder.fillPriceModel(model.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+        self.__fillPrices(model)
         self.__fillRewards(model)
 
     def __fillRewards(self, model):
@@ -266,19 +278,12 @@ class ArmoryYardBuyView(ViewImpl):
 
     def __onStatsUpdated(self, _):
         with self.viewModel.transaction() as vm:
-            self.__clearPrice(vm)
-            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
+            self.__fillPrices(vm)
 
     def __onWalletStatusChanged(self, *_):
         with self.viewModel.transaction() as vm:
             vm.setIsWalletAvailable(self.__wallet.isAvailable)
-            self.__clearPrice(vm)
-            BuyPriceModelBuilder.fillPriceModel(vm.price, self.__armoryYardCtrl.getCurrencyTokenCost() * (self.__selectedStep - self.__getPassedSteps()), checkBalanceAvailability=True)
-
-    def __clearPrice(self, model):
-        model.price.getDiscount().clear()
-        model.price.getDefPrice().clear()
-        model.price.getPrice().clear()
+            self.__fillPrices(vm)
 
 
 class ArmoryYardBuyWindow(LobbyWindow):

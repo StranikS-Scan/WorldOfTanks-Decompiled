@@ -38,6 +38,7 @@ from skeletons.gui.game_control import IBattlePassController, ICollectionsSystem
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
+from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -324,6 +325,7 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
+    __gameEventCtrl = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
@@ -348,7 +350,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
     def _getIsLocked(self):
         isLocked = True
         vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and not self.__gameEventCtrl.isEventPrbActive() and vehicle is not None and vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
         return isLocked
 

@@ -22,14 +22,16 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_WINDOW_MODAL, ExchangeWindow, 'exchangeWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW, ExchangeXPWindow, 'exchangeXPWindow.swf', WindowLayer.WINDOW, 'exchangeXPWindow', None, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL, ExchangeXPWindowDialog, 'exchangeXPWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeXPWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True))
+     GroupedViewSettings(VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL, ExchangeXPWindowDialog, 'exchangeXPWindow.swf', WindowLayer.TOP_WINDOW, 'exchangeXPWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True),
+     GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_BERTHS_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.FULLSCREEN_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():
     return (_ExchangeDialogBusinessHandler(),
      _ExchangeViewsBusinessHandler(),
      _ExchangeDialogModalBusinessHandler(),
-     _DetailedExchangeXPDialogBusinessHandler())
+     _DetailedExchangeXPDialogBusinessHandler(),
+     _ExchangeBerthsDialogBusinessHandler())
 
 
 class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
@@ -72,3 +74,20 @@ class _DetailedExchangeXPDialogBusinessHandler(_ExchangeDialogBusinessHandler):
     _ALIAS = VIEW_ALIAS.EXCHANGE_XP_WINDOW_DIALOG_MODAL
     _EVENT = ShowDialogEvent.SHOW_DETAILED_EXCHANGE_XP_DIALOG
     _LAYER = WindowLayer.TOP_WINDOW
+
+
+class _ExchangeBerthsDialogBusinessHandler(_ExchangeDialogBusinessHandler):
+    _ALIAS = VIEW_ALIAS.CONFIRM_EXCHANGE_BERTHS_DIALOG
+    _EVENT = ShowDialogEvent.SHOW_EXCHANGE_BERTHS_DIALOG
+    _LAYER = WindowLayer.FULLSCREEN_WINDOW
+
+    def _exchangeDialogHandler(self, event):
+        name = 'exchange' + event.meta.getType()
+        window = self.findViewByName(self._LAYER, name)
+        parent = event.parent if event.parent else None
+        if window is not None:
+            window.updateDialog(event.meta, event.handler)
+            self.bringViewToFront(name)
+        else:
+            self.loadViewWithDefName(self._ALIAS, name, parent, event.meta, event.handler)
+        return

@@ -127,7 +127,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         fundsShortage = max(gold - playerGold, 0)
         fundsToken = max(tokens - playerTokens, 0)
         if fundsToken > 0 or fundsShortage > 0:
-            showBuyGoldForArmoryYard(gold + tokens * goldConversion)
+            showBuyGoldForArmoryYard(gold + fundsToken * goldConversion)
             return False
         productCost = self.__getProductData()['price'] * goldConversion * count
         playerCost = tokens * goldConversion + gold

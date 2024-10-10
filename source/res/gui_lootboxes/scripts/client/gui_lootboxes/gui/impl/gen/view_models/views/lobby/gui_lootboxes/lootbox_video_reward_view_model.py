@@ -6,26 +6,26 @@ from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
 class LootboxVideoRewardViewModel(VehicleInfoModel):
     __slots__ = ('onClose', 'onVideoStarted')
 
-    def __init__(self, properties=11, commands=2):
+    def __init__(self, properties=13, commands=2):
         super(LootboxVideoRewardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getIsWindowAccessible(self):
-        return self._getBool(8)
-
-    def setIsWindowAccessible(self, value):
-        self._setBool(8, value)
-
-    def getVideoRes(self):
-        return self._getResource(9)
-
-    def setVideoRes(self, value):
-        self._setResource(9, value)
-
-    def getIsGuaranteedReward(self):
         return self._getBool(10)
 
-    def setIsGuaranteedReward(self, value):
+    def setIsWindowAccessible(self, value):
         self._setBool(10, value)
+
+    def getVideoRes(self):
+        return self._getResource(11)
+
+    def setVideoRes(self, value):
+        self._setResource(11, value)
+
+    def getIsGuaranteedReward(self):
+        return self._getBool(12)
+
+    def setIsGuaranteedReward(self, value):
+        self._setBool(12, value)
 
     def _initialize(self):
         super(LootboxVideoRewardViewModel, self)._initialize()

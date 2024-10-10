@@ -669,7 +669,7 @@ class EconomicsSet(ActionModifier):
 
     def handlerBerthsPrices(self, ctx):
         default, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(self.itemsCache.items.stats.tankmenBerthsCount)
-        return self._calculateDiscount('berthsPrices', ctx.getValue(), default.gold, _DT.PERCENT)
+        return self._calculateDiscount('berthsPrices', ctx.getValue(), default.get(default.getCurrency(), 0), _DT.PERCENT)
 
     def handlerCreditsTankmanCost(self, ctx):
         tankmanCost = self.itemsCache.items.shop.defaults.tankmanCost

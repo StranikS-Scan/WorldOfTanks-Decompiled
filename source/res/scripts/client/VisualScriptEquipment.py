@@ -59,7 +59,8 @@ class VisualScriptEquipment(DynamicScriptComponent):
             return
         else:
             state = getVisualScriptEquipmentState(self.equipmentState)
-            getattr(self._context, STAGES.toString(state.stage))()
+            if state.stage != state.prevStage:
+                getattr(self._context, STAGES.toString(state.stage))()
             self.__update(state)
             return
 
@@ -68,5 +69,12 @@ class VisualScriptEquipment(DynamicScriptComponent):
         self.__update(state)
 
     def __update(self, state):
+        eqCtrl = self.entity.guiSessionProvider.shared.equipments
+        eq = eqCtrl.getEquipment(self.compactDescr)
+        if eq:
+            wasLocked = eq.isLocked()
+            if wasLocked != state.locked:
+                eq.setLocked(state.locked)
+                eqCtrl.onEquipmentUpdated(self.compactDescr, eq)
         timeRemaining = max(state.endTime - BigWorld.serverTime(), 0.0) if state.endTime > 0 else state.endTime
         BigWorld.player().updateVehicleAmmo(self.entity.id, self.compactDescr, state.quantity, state.stage, state.prevStage, timeRemaining, state.totalTime)

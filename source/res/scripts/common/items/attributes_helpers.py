@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     import ResMgr
 STATIC_ATTR_PREFIX = 'miscAttrs/'
 DYNAMIC_ATTR_PREFIX = 'dynAttrs/'
+AUTOSHOOT_ATTR_PREFIX = 'autoShootAttrs/'
 ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'ammoBayHealthFactor',
  'ammoBayReduceFineFactor',
@@ -59,9 +60,13 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'turretRotationSpeed',
  'turretRotatorHealthFactor',
  'vehicleByChassisDamageFactor',
+ 'discreteDamageFactor',
  'moduleDamageFactor',
  'engineAndFuelTanksDamageFactor'}
 ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
+ 'armorSpallsDamageFactor',
+ 'deviceDamageFactor',
+ 'spallsDeviceDamageFactor',
  'chassis/shotDispersionFactors/movement',
  'chassis/shotDispersionFactors/rotation',
  'circularVisionRadius',
@@ -76,11 +81,16 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'gun/aimingTime',
  'gun/changeShell/reloadFactor',
  'gun/piercing',
+ 'gun/maxDistanceFactor',
+ 'gun/shotRateFactor',
+ 'gun/shellSpeedFactor',
  'gun/reloadTime',
  'gun/rotationSpeed',
+ 'gun/shotDispersionFactors/afterShot',
  'gun/shotDispersionFactors/turretRotation',
  'healthBurnPerSecLossFraction',
  'healthFactor',
+ 'multShotDispersionFactor',
  'radio/distance',
  'ramming',
  'repairSpeed',
@@ -96,8 +106,10 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'vehicle/fwMaxSpeedBonus',
  'moduleDamageFactor',
  'engineAndFuelTanksDamageFactor'}
+AUTOSHOOT_DYNAMIC_ATTRS = {'rate/multiplier', 'shotDispersionPerSecFactor', 'maxShotDispersionFactor'}
 ALLOWED_ATTRS = {STATIC_ATTR_PREFIX: ALLOWED_STATIC_ATTRS,
- DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS}
+ DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS,
+ AUTOSHOOT_ATTR_PREFIX: AUTOSHOOT_DYNAMIC_ATTRS}
 ALLOWED_ATTR_PREFIXES = set(ALLOWED_ATTRS.keys())
 
 class MODIFIER_TYPE:

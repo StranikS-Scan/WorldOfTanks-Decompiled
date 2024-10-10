@@ -8,7 +8,7 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.daapi.view.lobby.exchange.detailed_exchange_xp_dialog import ExchangeDetailedXPDialogMeta
-from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats
+from gui.techtree.settings import UnlockStats
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.genConsts.CONFIRM_EXCHANGE_DIALOG_TYPES import CONFIRM_EXCHANGE_DIALOG_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -419,10 +419,53 @@ class _SlotInfoItem(InfoItemBase):
         pass
 
 
+class _BerthsInfoItem(InfoItemBase):
+
+    def __init__(self, name):
+        self.__name = name
+
+    @property
+    def itemTypeName(self):
+        pass
+
+    @property
+    def itemTypeID(self):
+        return None
+
+    @property
+    def userName(self):
+        return self.__name
+
+    def getExtraIconInfo(self):
+        return None
+
+    def getGUIEmblemID(self):
+        pass
+
+
 class _SlotExchangeItem(_ExchangeItem):
 
     def __init__(self, price, count, infoItem):
         super(_SlotExchangeItem, self).__init__(None, count)
+        self.__infoItem = infoItem
+        self.__price = price
+        return
+
+    @property
+    def price(self):
+        return self.__price
+
+    def _getInfoItem(self):
+        return self.__infoItem
+
+    def doAction(self, action, resultType):
+        pass
+
+
+class _BerthsExchangeItem(_ExchangeItem):
+
+    def __init__(self, price, infoItem):
+        super(_BerthsExchangeItem, self).__init__(None)
         self.__infoItem = infoItem
         self.__price = price
         return
@@ -574,6 +617,19 @@ class ExchangeCreditsForSlotMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber
 
     def _getSubmitterType(self):
         return _ExchangeCreditsForSlotSubmitter
+
+
+class ExchangeCreditsForBerthsMeta(_ExchangeDialogMeta, _ExchangeCreditsSubscriber):
+
+    def __init__(self, name, price, key='confirmExchangeDialog/exchangeCredits'):
+        infoItem = _BerthsInfoItem(name)
+        super(ExchangeCreditsForBerthsMeta, self).__init__(_BerthsExchangeItem(price, infoItem), key)
+
+    def _getSubmitterType(self):
+        return _ExchangeCreditsForSlotSubmitter
+
+    def getEventType(self):
+        return events.ShowDialogEvent.SHOW_EXCHANGE_BERTHS_DIALOG
 
 
 class _WebProductCreditsExchangeSubmitter(_ExchangeCreditsSubmitter):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: versus_ai/scripts/client/versus_ai/gui/Scaleform/daapi/view/lobby/hangar/carousel/carousel_data_provider.py
+from constants import ARENA_BONUS_TYPE
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_provider import BattlePassCarouselDataProvider
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
@@ -21,3 +22,6 @@ class VersusAICarouselDataProvider(BattlePassCarouselDataProvider):
 
     def _getVehicleStats(self, _):
         return {}
+
+    def _isBattlePassHidden(self, vehicle):
+        return super(VersusAICarouselDataProvider, self)._isBattlePassHidden(vehicle) or not self.battlePassController.isGameModeEnabled(ARENA_BONUS_TYPE.VERSUS_AI)

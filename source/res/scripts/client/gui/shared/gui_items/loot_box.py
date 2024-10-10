@@ -39,12 +39,6 @@ class EventCategories(CONST_CONTAINER):
     EVENT = 'Event'
 
 
-class WTLootBoxes(CONST_CONTAINER):
-    WT_HUNTER = 'wt_hunter'
-    WT_BOSS = 'wt_boss'
-    WT_SPECIAL = 'wt_special'
-
-
 class LunarNYLootBoxTypes(Enum):
     BASE = 'lunar_base'
     SIMPLE = 'lunar_simple'

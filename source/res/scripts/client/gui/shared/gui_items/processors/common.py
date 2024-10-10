@@ -9,6 +9,7 @@ from gui import SystemMessages
 from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.formatters import getStyle
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from skeletons.gui.shared import IItemsCache
@@ -20,6 +21,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins, GroupedRequestProcessor
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
 from gui.shared.money import Money, Currency
 from helpers import dependency
 from items.customizations import isEditedStyle
@@ -31,15 +33,24 @@ class TankmanBerthsBuyer(Processor):
 
     def __init__(self, berthsPrice, countPacksBerths):
         super(TankmanBerthsBuyer, self).__init__()
-        self.addPlugins([plugins.MoneyValidator(berthsPrice)])
+        self.currency = berthsPrice.getCurrency()
         self.berthsPrice = berthsPrice
         self.countPacksBerths = countPacksBerths
+        self.__addPlugins()
+
+    def __addPlugins(self):
+        library = R.images.gui.maps.icons.library
+        img = backport.image(library.GoldIcon_2()) if self.currency == Currency.GOLD else backport.image(library.CreditsIcon_2())
+        style = getStyle(self.currency) if self.currency in Currency.ALL else text_styles.credits
+        ctx = {'berthsPrice': text_styles.concatStylesWithSpace(style(backport.getIntegralFormat(abs(self.berthsPrice.get(self.currency)))), icons.makeImageTag(img))}
+        self.addPlugins([plugins.MoneyValidator(self.berthsPrice), plugins.MessageInformator('/'.join(['buyBerthsNotEnough', self.currency]), activeHandler=lambda : not plugins.MoneyValidator(self.berthsPrice).validate().success), plugins.MessageConfirmator('buyBerthsConfirmation', ctx=ctx)])
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format(errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
+        return makeI18nError(sysMsgKey='buy_tankmen_berths/{}'.format('buy_error' if GUI_ITEM_ECONOMY_CODE.hasValue(errStr) else errStr), defaultSysMsgKey='buy_tankmen_berths/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/success', money=formatPrice(self.berthsPrice, useStyle=True, justValue=True), type=SM_TYPE.FinancialTransactionWithGold)
+        msgType = SM_TYPE.FinancialTransactionWithGold if self.berthsPrice.getCurrency() == Currency.GOLD else SM_TYPE.FinancialTransactionWithCredits
+        return makeI18nSuccess(sysMsgKey='buy_tankmen_berths/{}/success'.format(self.currency), money=formatPrice(self.berthsPrice, useStyle=True, justValue=True), type=msgType)
 
     def _request(self, callback):
         _logger.debug('Make server request to buy tankman berths')

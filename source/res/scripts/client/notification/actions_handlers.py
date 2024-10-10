@@ -40,7 +40,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController, IEarlyAccessController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -55,6 +55,8 @@ from uilogging.wot_plus.logging_constants import NotificationAdditionalData
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from wg_async import wg_async, wg_await
+import logging
+_logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -1212,6 +1214,20 @@ class _OpenAchievementsScreen(NavigationDisabledActionHandler):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        _logger.error('NEEDS IMPLEMENT DO ACTION!!')
+
+
 class _OpenReferralProgramMainViewHandler(NavigationDisabledActionHandler):
     __referralProgramController = dependency.descriptor(IReferralProgramController)
 
@@ -1394,7 +1410,6 @@ class _OpenComp7ShopHandler(NavigationDisabledActionHandler):
 
 
 class _OpenEarlyAccessVehicleHandler(NavigationDisabledActionHandler):
-    __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
 
     @classmethod
     def getNotType(cls):
@@ -1405,8 +1420,7 @@ class _OpenEarlyAccessVehicleHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        if not self.__earlyAccessCtrl.hangarFeatureState.isInVehicleState():
-            showEarlyAccessVehicleView()
+        showEarlyAccessVehicleView()
 
 
 class _OpenEarlyAccessQuestsHandler(NavigationDisabledActionHandler):
@@ -1502,6 +1516,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenReferralProgramMainViewHandler,
+ _OpenEventLootBoxesShopHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenArmoryYardMain,

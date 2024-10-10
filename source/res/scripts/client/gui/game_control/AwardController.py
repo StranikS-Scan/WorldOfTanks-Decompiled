@@ -1101,7 +1101,7 @@ class RankedQuestsHandler(ServiceChannelHandler):
         if awardType is not None:
             if any((token.startswith(YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX) for token in data.get('tokens', {}).keys())):
                 AccountSettings.setSettings(RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, False)
-                showRankedSelectableReward(data)
+                showRankedSelectableReward()
             else:
                 showRankedYearAwardWindow(data, self.__rankedController.getYearRewardPoints(), True)
         return

@@ -19,7 +19,7 @@ class BasicItem(legacy_stuff.LegacyStuff):
         return
 
     def __repr__(self):
-        return '{}(id={}, name={})'.format(self.__class__.__name__, self.id, self.name)
+        return '{}(id={}, name="{}")'.format(self.__class__.__name__, self.id, self.name)
 
     @property
     def itemTypeName(self):

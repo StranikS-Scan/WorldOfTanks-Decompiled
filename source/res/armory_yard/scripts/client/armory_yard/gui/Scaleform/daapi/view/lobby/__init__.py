@@ -3,9 +3,7 @@
 from armory_yard.gui.impl.lobby.feature.armory_yard_hangar_widget_view import isArmoryYardEntryPointAvailable
 from frameworks.wulf import WindowLayer
 from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.armory_yard_vehicle_preview import ArmoryYardVehiclePreview
-from helpers import dependency
 from gui.app_loader import settings as app_settings
-from skeletons.gui.game_control import IArmoryYardController
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.Scaleform.framework import ScopeTemplates, ComponentSettings, ViewSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -21,7 +19,11 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.armory_yard_entry_point import ArmoryYardEntryPoint, ArmoryYardEntryPointWidget
-    return (ComponentSettings(HANGAR_ALIASES.ARMORY_YARD_ENTRY_POINT, ArmoryYardEntryPoint, ScopeTemplates.DEFAULT_SCOPE), ComponentSettings(HANGAR_ALIASES.ARMORY_YARD_WIDGET_ENTRY_POINT, ArmoryYardEntryPointWidget, ScopeTemplates.DEFAULT_SCOPE), ViewSettings(HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, ArmoryYardVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE))
+    from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.armory_yard_veh_post_progression_cfg_view import ArmoryYardVehiclePostProgressionCfgView
+    return (ComponentSettings(HANGAR_ALIASES.ARMORY_YARD_ENTRY_POINT, ArmoryYardEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.ARMORY_YARD_WIDGET_ENTRY_POINT, ArmoryYardEntryPointWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, ArmoryYardVehiclePreview, 'vehiclePreview.swf', WindowLayer.SUB_VIEW, HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(HANGAR_ALIASES.ARMORY_YARD_VEH_POST_PROGRESSION, ArmoryYardVehiclePostProgressionCfgView, 'vehPostProgressionView.swf', WindowLayer.SUB_VIEW, HANGAR_ALIASES.ARMORY_YARD_VEH_POST_PROGRESSION, ScopeTemplates.LOBBY_SUB_SCOPE))
 
 
 def getBusinessHandlers():
@@ -32,7 +34,7 @@ class _ArmoryYardBusinessHandler(PackageBusinessHandler):
     __slots__ = ()
 
     def __init__(self):
-        listeners = ((HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, self.__handleVehConfiguratorEvent),)
+        listeners = ((HANGAR_ALIASES.ARMORY_YARD_VEHICLE_PREVIEW, self.__handleVehConfiguratorEvent), (HANGAR_ALIASES.ARMORY_YARD_VEH_POST_PROGRESSION, self.loadViewByCtxEvent))
         super(_ArmoryYardBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def __handleVehConfiguratorEvent(self, event):

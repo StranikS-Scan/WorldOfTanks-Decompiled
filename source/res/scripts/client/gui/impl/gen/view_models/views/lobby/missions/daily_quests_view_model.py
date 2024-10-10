@@ -5,11 +5,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.missions.daily_quests_model import DailyQuestsModel
 from gui.impl.gen.view_models.views.lobby.missions.epic_quest_model import EpicQuestModel
 from gui.impl.gen.view_models.views.lobby.missions.premium_missions_model import PremiumMissionsModel
-from gui.impl.gen.view_models.views.lobby.missions.winback_progression_model import WinbackProgressionModel
 
 class DailyTypes(Enum):
     DEFAULT = 'default'
-    WINBACK = 'winback'
 
 
 class OffersState(Enum):
@@ -21,7 +19,7 @@ class OffersState(Enum):
 class DailyQuestsViewModel(ViewModel):
     __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
 
-    def __init__(self, properties=13, commands=7):
+    def __init__(self, properties=12, commands=7):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -48,74 +46,65 @@ class DailyQuestsViewModel(ViewModel):
     def getEpicQuestType():
         return EpicQuestModel
 
-    @property
-    def winbackProgression(self):
-        return self._getViewModel(3)
-
-    @staticmethod
-    def getWinbackProgressionType():
-        return WinbackProgressionModel
-
     def getDailyType(self):
-        return DailyTypes(self._getString(4))
+        return DailyTypes(self._getString(3))
 
     def setDailyType(self, value):
-        self._setString(4, value.value)
+        self._setString(3, value.value)
 
     def getGetRewardsTimeLeft(self):
-        return self._getNumber(5)
+        return self._getNumber(4)
 
     def setGetRewardsTimeLeft(self, value):
-        self._setNumber(5, value)
+        self._setNumber(4, value)
 
     def getOffersState(self):
-        return OffersState(self._getString(6))
+        return OffersState(self._getString(5))
 
     def setOffersState(self, value):
-        self._setString(6, value.value)
+        self._setString(5, value.value)
 
     def getCurrentTabIdx(self):
-        return self._getNumber(7)
+        return self._getNumber(6)
 
     def setCurrentTabIdx(self, value):
-        self._setNumber(7, value)
+        self._setNumber(6, value)
 
     def getCountDown(self):
-        return self._getNumber(8)
+        return self._getNumber(7)
 
     def setCountDown(self, value):
-        self._setNumber(8, value)
+        self._setNumber(7, value)
 
     def getInfoVisible(self):
-        return self._getBool(9)
+        return self._getBool(8)
 
     def setInfoVisible(self, value):
-        self._setBool(9, value)
+        self._setBool(8, value)
 
     def getPremMissionsTabDiscovered(self):
-        return self._getBool(10)
+        return self._getBool(9)
 
     def setPremMissionsTabDiscovered(self, value):
-        self._setBool(10, value)
+        self._setBool(9, value)
 
     def getIsBattlePassActive(self):
-        return self._getBool(11)
+        return self._getBool(10)
 
     def setIsBattlePassActive(self, value):
-        self._setBool(11, value)
+        self._setBool(10, value)
 
     def getIsComp7Active(self):
-        return self._getBool(12)
+        return self._getBool(11)
 
     def setIsComp7Active(self, value):
-        self._setBool(12, value)
+        self._setBool(11, value)
 
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
         self._addViewModelProperty('dailyQuests', DailyQuestsModel())
         self._addViewModelProperty('premiumMissions', PremiumMissionsModel())
         self._addViewModelProperty('epicQuest', EpicQuestModel())
-        self._addViewModelProperty('winbackProgression', WinbackProgressionModel())
         self._addStringProperty('dailyType')
         self._addNumberProperty('getRewardsTimeLeft', 0)
         self._addStringProperty('offersState')

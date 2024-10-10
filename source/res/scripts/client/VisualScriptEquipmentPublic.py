@@ -16,5 +16,6 @@ class VisualScriptEquipmentPublic(VisualScriptEquipment):
         else:
             if not self.entity.isMyVehicle:
                 state = getVisualScriptEquipmentPublicState(self.equipmentStatePublic)
-                getattr(self._context, STAGES.toString(state.stage))()
+                if state.stage != state.prevStage:
+                    getattr(self._context, STAGES.toString(state.stage))()
             return

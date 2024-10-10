@@ -2565,4 +2565,107 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A165_XM57	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31233	</id>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/A165_XM57_3Dst.png	</texture>
+      <userString>	#vehicle_customization:main_style/A165_XM57_3Dst/name	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/A165_XM57_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	A165_XM57_3Dst	</modelsSet>
+      <tags>	progression_required styleSerialNumber	</tags>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	675	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31037	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31038	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	41	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31037	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31039	</id>
+              <slotId>	48000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	31103	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31037	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31039	</id>
+              <slotId>	48000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </usa.xml>

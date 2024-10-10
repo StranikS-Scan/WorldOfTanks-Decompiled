@@ -3,6 +3,7 @@
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.ClientHangarSpace import g_clientHangarSpaceOverride
+ARMORY_YARD_SPACE_PATH = 'h00_armory_yard'
 
 class SceneLoadingManager(object):
 
@@ -27,7 +28,7 @@ class SceneLoadingManager(object):
             self.__defaultSpacePath = hangarSpace.spacePath
             hangarSpace.setSelectionEnabled(True)
             hangarSpace.onSpaceCreate += self.sceneLoaded
-            g_clientHangarSpaceOverride.setPath('h00_armory_yard_ep3', visibilityMask=None, isPremium=None, isReload=True)
+            g_clientHangarSpaceOverride.setPath(ARMORY_YARD_SPACE_PATH, visibilityMask=None, isPremium=None, isReload=True)
             self.__isLoading = True
         return
 

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/shared.py
 import functools
 import operator
+from collections import namedtuple
 from account_shared import getFairPlayViolationName
 from constants import DEATH_REASON_ALIVE
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -13,6 +14,41 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.dossier import getAchievementFactory
 from items import vehicles as vehicles_core
 from shared_utils import findFirst
+from gui.battle_results.br_constants import MAX_TEAM_RANK
+from soft_exception import SoftException
+AchievementSimpleData = namedtuple('AchievementSimpleData', ('achievement',
+ 'isUnique',
+ 'achievementID',
+ 'isPersonal'))
+
+def _findAchievementInDossier(achievementID, dossierPopUps):
+    achievementData = findFirst(lambda e: e[0] == achievementID, dossierPopUps)
+    return achievementData[1]
+
+
+def makeAchievement(achievementID, results=None):
+    popUps = results.get('dossierPopUps', []) if results is not None else []
+    record = DB_ID_TO_RECORD[achievementID]
+    if record in layouts.IGNORED_BY_BATTLE_RESULTS or not layouts.isAchievementRegistered(record):
+        return
+    else:
+        factory = getAchievementFactory(record)
+        if factory is None:
+            return
+        popUpsValue = _findAchievementInDossier(achievementID, popUps) if popUps else 0
+        achievement = factory.create(value=popUpsValue)
+        if record == achievements.MARK_ON_GUN_RECORD:
+            if 'typeCompDescr' in results:
+                try:
+                    nationID = vehicles_core.parseIntCompactDescr(results['typeCompDescr'])[1]
+                    achievement.setVehicleNationID(nationID)
+                except SoftException:
+                    LOG_CURRENT_EXCEPTION()
+
+            if 'damageRating' in results:
+                achievement.setDamageRating(results['damageRating'])
+        return achievement
+
 
 def makeAchievementFromPersonal(results):
     popUps = results.get('dossierPopUps', [])
@@ -34,11 +70,26 @@ def makeAchievementFromPersonal(results):
                 if 'damageRating' in results:
                     achievement.setDamageRating(results['damageRating'])
             if achievement.getName() in achievements.BATTLE_ACHIEVES_RIGHT:
-                yield (1, achievement)
+                yield (1, achievement, achievementID)
             else:
-                yield (-1, achievement)
+                yield (-1, achievement, achievementID)
 
     return
+
+
+def getPlayerPlaceInTeam(reusableInfo, result, paramName, playerValue):
+    if playerValue == 0:
+        return MAX_TEAM_RANK
+    allies, _ = reusableInfo.getBiDirectionTeamsIterator(result['vehicles'])
+    winners = set()
+    for ally in allies:
+        allyValue = getattr(ally, paramName)
+        if allyValue > playerValue:
+            winners.add(allyValue)
+        if len(winners) >= MAX_TEAM_RANK:
+            return MAX_TEAM_RANK
+
+    return len(winners)
 
 
 def makeMarkOfMasteryFromPersonal(results):
@@ -1036,7 +1087,7 @@ class VehicleSummarizeInfo(_VehicleInfo):
             if factory is not None and layouts.isAchievementRegistered(record):
                 achievement = factory.create(value=0)
                 if not achievement.isApproachable():
-                    result.append((achievement, True))
+                    result.append(AchievementSimpleData(achievement, True, achievementID, False))
 
         return sorted(result, key=sort_keys.AchievementSortKey)
 

@@ -54,7 +54,7 @@ class BattlePassBuyViewStates(object):
 g_BPBuyViewStates = BattlePassBuyViewStates()
 
 class BattlePassBuyView(ViewImpl):
-    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID')
+    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID', '__destroyAfterCallback')
     __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -69,6 +69,7 @@ class BattlePassBuyView(ViewImpl):
         self.__tooltipItems = {}
         self.__tooltipWindow = None
         self.__packageID = None
+        self.__destroyAfterCallback = False if ctx is None else ctx.get('destroyAfterCallback', False)
         super(BattlePassBuyView, self).__init__(settings)
         return
 
@@ -143,6 +144,8 @@ class BattlePassBuyView(ViewImpl):
             self.__showBuy()
         elif self.__backCallback is not None:
             self.__backCallback()
+            if self.__destroyAfterCallback is True:
+                self.destroyWindow()
         else:
             self.destroyWindow()
         return

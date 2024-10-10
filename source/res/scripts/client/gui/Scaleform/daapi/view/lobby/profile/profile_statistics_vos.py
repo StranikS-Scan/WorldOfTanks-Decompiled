@@ -319,15 +319,7 @@ class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         targetData = data[0]
-        stepsEfficiency = targetData.getStepsEfficiency()
-        avgPointsPercent = PUtils.formatFloatPercent(stepsEfficiency) if stepsEfficiency > 0 else PUtils.UNAVAILABLE_SYMBOL
-        stepsCount = targetData.getStepsCount()
-        stepsCount = backport.getIntegralFormat(stepsCount) if stepsCount >= 0 else PUtils.UNAVAILABLE_SYMBOL
-        avgPointsTooltipData = (stepsCount, backport.getIntegralFormat(targetData.getBattlesCount()))
-        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
-         PUtils.packLditItemData(avgPointsPercent, PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS, 'rankStageFactor40x32.png', PUtils.createToolTipData(avgPointsTooltipData)),
-         _packAvgDmgLditItemData(self._avgDmg),
-         _packAvgXPLditItemData(self._avgXP))
+        return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT), _packAvgDmgLditItemData(self._avgDmg), _packAvgXPLditItemData(self._avgXP))
 
     def _getDetailedData(self, data):
         targetData = data[0]

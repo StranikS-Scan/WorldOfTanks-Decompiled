@@ -97,6 +97,9 @@ class UnitClientAPI(object):
     def createComp7Squad(self, squadSize):
         return self._doCreate(PREBATTLE_TYPE.COMP7, modeExtrasStr=cPickle.dumps({'squadSize': squadSize}, -1))
 
+    def createWhiteTigerSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.WHITE_TIGER)
+
     def createSquadByPrbType(self, prbType):
         return self._doCreate(prbType)
 

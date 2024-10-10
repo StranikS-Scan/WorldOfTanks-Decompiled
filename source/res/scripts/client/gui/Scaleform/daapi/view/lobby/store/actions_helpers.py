@@ -931,9 +931,10 @@ def getEconomicalStatsDict():
     shop = itemsCache.items.shop
     slotPrices = shop.slotsPrices[1]
     slotPricesValue = slotPrices[0][1]
+    berthsPrices = shop.berthsPrices[2][1][0]
     return {'exchangeRate': shop.exchangeRate,
      'slotsPrices': slotPricesValue,
-     'berthsPrices': shop.berthsPrices[2][0],
+     'berthsPrices': berthsPrices,
      'premiumPacket1Cost': shop.getPremiumPacketCost(1),
      'premiumPacket3Cost': shop.getPremiumPacketCost(3),
      'premiumPacket7Cost': shop.getPremiumPacketCost(7),

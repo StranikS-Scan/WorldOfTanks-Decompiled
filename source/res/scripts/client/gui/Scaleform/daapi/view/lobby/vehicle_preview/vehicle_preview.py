@@ -36,17 +36,19 @@ from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_bus_handlers, event_dispatcher, events, g_eventBus
-from gui.shared.event_dispatcher import showShop, showVehPostProgressionView
+from gui.shared.event_dispatcher import showShop, showVehPostProgressionView, getTechTreeLoadEvent
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import getRoleTextWithIcon, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from gui.techtree.go_back_helper import WulfPreviewAlias
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket
+from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket, IWhiteTigerController
+from skeletons.prebattle_vehicle import IPrebattleVehicle
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
@@ -54,21 +56,11 @@ from tutorial.control.context import GLOBAL_FLAG
 from uilogging.shop.loggers import getPreviewUILoggers
 from uilogging.shop.logging_constants import ShopCloseItemStates
 from web.web_client_api.common import ItemPackEntry, ItemPackType, ItemPackTypeGroup
-VEHICLE_PREVIEW_ALIASES = [VIEW_ALIAS.VEHICLE_PREVIEW,
- VIEW_ALIAS.HERO_VEHICLE_PREVIEW,
- VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW,
- VIEW_ALIAS.TRADE_IN_VEHICLE_PREVIEW,
- VIEW_ALIAS.MARATHON_VEHICLE_PREVIEW,
- VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
- VIEW_ALIAS.RENTAL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_VEHICLE_PREVIEW,
- VIEW_ALIAS.RESOURCE_WELL_HERO_VEHICLE_PREVIEW,
- VIEW_ALIAS.EARLY_ACCESS_VEHICLE_PREVIEW]
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_STORAGE: 'storage',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
- VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
+ WulfPreviewAlias.WULF_TECHTREE: 'researchTree',
  VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
  VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW: 'referralProgram',
  VIEW_ALIAS.EPIC_BATTLE_PAGE: 'frontline',
@@ -132,6 +124,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
+    __gameEventCtrl = dependency.descriptor(IWhiteTigerController)
+    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
@@ -139,7 +133,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._itemsPack = ctx.get('itemsPack')
         if self._backAlias == VIEW_ALIAS.LOBBY_STORE or self._itemsPack is not None:
             self._COMMON_SOUND_SPACE = SHOP_PREVIEW_SOUND_SPACE
-        elif self._backAlias in (VIEW_ALIAS.LOBBY_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
+        elif self._backAlias in (WulfPreviewAlias.WULF_TECHTREE, VIEW_ALIAS.LOBBY_RESEARCH):
             self._COMMON_SOUND_SPACE = RESEARCH_PREVIEW_SOUND_SPACE
         elif self._backAlias in (VIEW_ALIAS.RANKED_BATTLE_PAGE, VIEW_ALIAS.VEH_POST_PROGRESSION):
             self._COMMON_SOUND_SPACE = VEHICLE_PREVIEW_SOUND_SPACE
@@ -185,6 +179,11 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__hangarSpace.removeVehicle()
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
         self.__uiMetricsLogger, self.__uiFlowLogger = getPreviewUILoggers(bool(self._itemsPack), str(self._vehicleCD), self.__buyParams)
+        self.__previewCloseCb = None
+        if self.__gameEventCtrl.isEventPrbActive():
+            if self.__prebattleVehicle.item is not None:
+                self.__prebattleVehicle.selectNone()
+            self.__previewCloseCb = self.__prebattleVehicle.selectPreviousVehicle
         return
 
     def setTopPanel(self):
@@ -195,6 +194,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _populate(self):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
+        g_eventBus.addListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarSimpleEvent.PORTAL_MANAGER_ACTIVATED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         self.setTopPanel()
         self.setBottomPanel()
         if g_currentPreviewVehicle.intCD == self._vehicleCD:
@@ -230,12 +232,17 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
         _updateCollectorHintParameters()
         _updatePostProgressionParameters()
+        g_eventBus.handleEvent(events.HangarSimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_LOADED), scope=EVENT_BUS_SCOPE.LOBBY)
         for event, callback in self.__subscriptions:
             event += callback
 
         return
 
     def _dispose(self):
+        g_eventBus.handleEvent(events.HangarSimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_UNLOADED), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarSimpleEvent.PORTAL_MANAGER_ACTIVATED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.exitEvent:
             SoundGroups.g_instance.playSound2D(specialData.exitEvent)
@@ -262,6 +269,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._previewBackCb = None
         self.__unmodifiedItemsPack = None
         super(VehiclePreview, self)._dispose()
+        if self.__previewCloseCb is not None:
+            self.__previewCloseCb()
+            self.__previewCloseCb = None
         if not self._heroInteractive:
             self.__heroTanksControl.setInteractive(True)
         if self.__vehAppearanceChanged and not isMapsTrainingViewOpened:
@@ -471,12 +481,15 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             if tab['linkage'] == VEHPREVIEW_CONSTANTS.CREW_LINKAGE:
                 tab['label'] = _ms(VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME, crewCount=crewCount)
 
-    def __onCompareBasketChanged(self, changedData):
+    def __onCompareBasketChanged(self, changedData, _=None):
         if changedData.isFullChanged:
             self.__updateHeaderData()
 
     def __updateHeaderData(self):
         self.as_setDataS(self._getData())
+
+    def __onCloseView(self, _):
+        self.closeView()
 
     @staticmethod
     def __getInfoPanelListDescription(vehicle):
@@ -528,7 +541,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if self._previewBackCb:
             self._previewBackCb()
         elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH and g_currentPreviewVehicle.isPresent():
-            event_dispatcher.showResearchView(self._vehicleCD, exitEvent=events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_TECHTREE), ctx={'nation': g_currentPreviewVehicle.item.nationName}))
+            event_dispatcher.showResearchView(self._vehicleCD, exitEvent=getTechTreeLoadEvent(g_currentPreviewVehicle.item.nationName))
         elif self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             entity = ctx.get('entity', None) if ctx else None
             if entity:
@@ -541,6 +554,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 event_dispatcher.showHangar()
         elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
             showShop()
+        elif self._backAlias == WulfPreviewAlias.WULF_TECHTREE:
+            event_dispatcher.showVehicleTechTreeView()
         else:
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self._backAlias), {'isBackEvent': True})
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)

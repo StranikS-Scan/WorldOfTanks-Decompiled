@@ -37,6 +37,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_NO_AMMO = '#ingame_gui:player_errors/cant_shoot/no_ammo'
     PLAYER_ERRORS_CANT_SHOOT_NO_FLAME_AMMO = '#ingame_gui:player_errors/cant_shoot/no_flame_ammo'
     PLAYER_ERRORS_CANT_SHOOT_GUN_DAMAGED = '#ingame_gui:player_errors/cant_shoot/gun_damaged'
+    PLAYER_ERRORS_CANT_SHOOT_GUN_OVERHEATED = '#ingame_gui:player_errors/cant_shoot/gun_overheated'
     PLAYER_ERRORS_CANT_SHOOT_GUN_RELOAD = '#ingame_gui:player_errors/cant_shoot/gun_reload'
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
@@ -51,6 +52,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_EXTINGUISHER_DOESNOTACTIVATED = '#ingame_gui:player_errors/equipment/extinguisher/doesNotActivated'
     PLAYER_ERRORS_EQUIPMENT_ORDER_NOTREADY = '#ingame_gui:player_errors/equipment/order/notReady'
     PLAYER_ERRORS_EQUIPMENT_POI_UNAVAILABLE = '#ingame_gui:player_errors/equipment/poi/unavailable'
+    PLAYER_MESSAGES_EQUIPMENT_WTEVENT_HEALTHATFULLHP = '#ingame_gui:player_messages/equipment/wtEvent/healthAtFullHP'
     PLAYER_MESSAGES_DEVICE_CRITICAL_AT_SHOT = '#ingame_gui:player_messages/DEVICE_CRITICAL_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_DESTROYED_AT_SHOT = '#ingame_gui:player_messages/DEVICE_DESTROYED_AT_SHOT'
     PLAYER_MESSAGES_DEVICE_STARTED_FIRE_AT_SHOT = '#ingame_gui:player_messages/DEVICE_STARTED_FIRE_AT_SHOT'
@@ -239,6 +241,8 @@ class INGAME_GUI(object):
     SHELLS_KINDS_ARMOR_PIERCING_FSDS = '#ingame_gui:shells_kinds/ARMOR_PIERCING_FSDS'
     SHELLS_KINDS_FLAME = '#ingame_gui:shells_kinds/FLAME'
     SHELLS_KINDS_PARAMS_DAMAGE = '#ingame_gui:shells_kinds/params/damage'
+    SHELLS_KINDS_PARAMS_DAMAGERANGE = '#ingame_gui:shells_kinds/params/damageRange'
+    SHELLS_KINDS_PARAMS_DAMAGEPERSECOND = '#ingame_gui:shells_kinds/params/damagePerSecond'
     SHELLS_KINDS_PARAMS_PIERCINGPOWER = '#ingame_gui:shells_kinds/params/piercingPower'
     SHELLS_KINDS_PARAMS_SHOTSPEED = '#ingame_gui:shells_kinds/params/shotSpeed'
     SHELLS_KINDS_PARAMS_EXPLOSIONRADIUS = '#ingame_gui:shells_kinds/params/explosionRadius'
@@ -631,6 +635,8 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_CANNONDMG = '#ingame_gui:efficiencyRibbons/CannonDmg'
     EFFICIENCYRIBBONS_AIRSTRIKEDMG = '#ingame_gui:efficiencyRibbons/AirstrikeDmg'
     EFFICIENCYRIBBONS_ARTILLERYDMG = '#ingame_gui:efficiencyRibbons/ArtilleryDmg'
+    EFFICIENCYRIBBONS_HEALTHADDED = '#ingame_gui:efficiencyRibbons/healthAdded'
+    EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD = '#ingame_gui:efficiencyRibbons/wtReceivedCircuitOverload'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_FLAME = '#ingame_gui:damageLog/shellType/FLAME'
@@ -1020,6 +1026,9 @@ class INGAME_GUI(object):
     DEVMAPS_HINT_DESCRIPTION = '#ingame_gui:devMaps/hint/description'
     DEVMAPS_MAPINFO_TEXT = '#ingame_gui:devMaps/mapInfo/text'
     DEVMAPS_MAPINFO_INFO = '#ingame_gui:devMaps/mapInfo/info'
+    PLAYER_ERRORS_EQUIPMENT_ABILITY_EXHAUSTED = '#ingame_gui:player_errors/equipment/ability/exhausted'
+    PLAYER_ERRORS_EQUIPMENT_ABILITY_COOLDOWN = '#ingame_gui:player_errors/equipment/ability/cooldown'
+    PLAYER_ERRORS_EQUIPMENT_ABILITY_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/ability/alreadyActivated'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,
@@ -1139,6 +1148,8 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_CANNONDMG,
      EFFICIENCYRIBBONS_AIRSTRIKEDMG,
      EFFICIENCYRIBBONS_ARTILLERYDMG,
+     EFFICIENCYRIBBONS_HEALTHADDED,
+     EFFICIENCYRIBBONS_WTRECEIVEDCIRCUITOVERLOAD,
      EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
      EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,

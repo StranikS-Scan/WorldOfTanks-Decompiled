@@ -26,17 +26,18 @@ class CollectRewardsAction(AsyncGUIItemAction):
 
 
 class BuyStepTokensAction(AsyncGUIItemAction):
-    __slots__ = ('__count',)
+    __slots__ = ('__count', '__currency')
 
-    def __init__(self, count):
+    def __init__(self, count, currency):
         super(BuyStepTokensAction, self).__init__()
         self.skipConfirm = True
         self.__count = count
+        self.__currency = currency
 
     @adisp_async
     @decorators.adisp_process('buyItem')
     def _action(self, callback):
-        result = yield BuyStepTokens(self.__count).request()
+        result = yield BuyStepTokens(self.__count, self.__currency).request()
         callback(result)
 
     def _showResult(self, result):

@@ -66,13 +66,6 @@
       <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</exploded>
-      <sets>
-        <Pl21_CS_63_3Dst_BV>
-          <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Hull.model	</undamaged>
-          <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</destroyed>
-          <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Hull.model	</exploded>
-        </Pl21_CS_63_3Dst_BV>
-      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -96,9 +89,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.512193 0.419436 2.43855	</rayStart>
-        <rayEnd>	-0.512193 0.229291 2.37654	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
+        <rayStart>	-0.611075 0.34582 2.664283	</rayStart>
+        <rayEnd>	-0.611075 0.155675 2.602273	</rayEnd>
+        <rayUp>	0 0.310049 -0.950721	</rayUp>
         <size>	0.32	</size>
       </slot>
       <slot>
@@ -1172,13 +1165,6 @@
         <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</exploded>
-        <sets>
-          <Pl21_CS_63_3Dst_BV>
-            <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Chassis.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</destroyed>
-            <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Chassis.model	</exploded>
-          </Pl21_CS_63_3Dst_BV>
-        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2135,13 +2121,6 @@
             <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <Pl21_CS_63_3Dst_BV>
-                <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Gun_01.model	</exploded>
-              </Pl21_CS_63_3Dst_BV>
-            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Gun_01.model	</collisionModelServer>
@@ -2208,13 +2187,6 @@
         <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</exploded>
-        <sets>
-          <Pl21_CS_63_3Dst_BV>
-            <undamaged>	vehicles/poland/Pl34_CS_63_02/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl34_CS_63_02/crash/lod0/Turret_01.model	</exploded>
-          </Pl21_CS_63_3Dst_BV>
-        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/poland/Pl34_CS_63_02/collision/Turret_01.model	</collisionModelServer>

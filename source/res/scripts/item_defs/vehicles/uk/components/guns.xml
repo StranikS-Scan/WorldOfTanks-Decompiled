@@ -102,7 +102,11 @@
     <_120mm_Gun_LV>	110	</_120mm_Gun_LV>
     <_120mm_Gun_L11PA>	111	</_120mm_Gun_L11PA>
     <_105mm_Gun_L7_HEAT_7x7>	31001	</_105mm_Gun_L7_HEAT_7x7>
+    <_105mm_AT_Gun_L7_HVKE_T>	31002	</_105mm_AT_Gun_L7_HVKE_T>
     <_105mm_AT_Gun_L7_Alligator>	31004	</_105mm_AT_Gun_L7_Alligator>
+    <_150mm_QF_5_9inch_02_B>	31005	</_150mm_QF_5_9inch_02_B>
+    <_110mm_MV_N_Gun>	31006	</_110mm_MV_N_Gun>
+    <_32_pounder_AT_Gun_OQF_GB40_Gun_Carrier_Churchill>	31007	</_32_pounder_AT_Gun_OQF_GB40_Gun_Carrier_Churchill>
     <_120mm_Gun_L1A1_FL>	501	</_120mm_Gun_L1A1_FL>
     <_150mm_QF_5_9inch>	112	</_150mm_QF_5_9inch>
     <_75mm_AT_Gun_M3_L37_usa>	113	</_75mm_AT_Gun_M3_L37_usa>
@@ -4431,6 +4435,63 @@
     <_32-pounder_AT_Gun_OQF>
       <userString>	#gb_vehicles:_32-pounder_AT_Gun_OQF	</userString>
       <tags></tags>
+      <level>	9	</level>
+      <price>	190000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	6.85714285714286	</reloadTime>
+      <maxAmmo>	44	</maxAmmo>
+      <aimingTime>	1.71428571428571	</aimingTime>
+      <weight>	2972	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.354285714285714	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_32pdr_AP_MkI>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 224	</piercingPower>
+        </_32pdr_AP_MkI>
+        <_32pdr_APCR_MkII>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1098	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	274 260	</piercingPower>
+        </_32pdr_APCR_MkII>
+        <_32pdr_HE_MkI>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	878	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	47 47	</piercingPower>
+        </_32pdr_HE_MkI>
+      </shots>
+    </_32-pounder_AT_Gun_OQF>
+    <_32_pounder_AT_Gun_OQF_GB40_Gun_Carrier_Churchill>
+      <userString>	#gb_vehicles:_32-pounder_AT_Gun_OQF	</userString>
+      <tags></tags>
       <level>	8	</level>
       <price>	105000	</price>
       <impulse>	0.48	</impulse>
@@ -4484,7 +4545,7 @@
           <piercingPower>	47 47	</piercingPower>
         </_32pdr_HE_MkI>
       </shots>
-    </_32-pounder_AT_Gun_OQF>
+    </_32_pounder_AT_Gun_OQF_GB40_Gun_Carrier_Churchill>
     <_32_pounder_AT_Gun_OQF_Mk_II>
       <userString>	#gb_vehicles:_32_pounder_AT_Gun_OQF_Mk_II	</userString>
       <tags></tags>
@@ -5016,6 +5077,64 @@
         </_105mm_HE_L7_AL>
       </shots>
     </_105mm_AT_Gun_L7_Alligator>
+    <_105mm_AT_Gun_L7_HVKE_T>
+      <userString>	#gb_vehicles:_105mm_AT_Gun_L7	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APCR_L7_HVKE_T>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1478	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	252 242	</piercingPower>
+        </_105mm_APCR_L7_HVKE_T>
+        <_105mm_HEAT_L7_HVKE_T>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	300 300	</piercingPower>
+        </_105mm_HEAT_L7_HVKE_T>
+        <_105mm_HE_L7_HVKE_T>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HE_L7_HVKE_T>
+      </shots>
+    </_105mm_AT_Gun_L7_HVKE_T>
     <_105mm_AT_Gun_L7A1>
       <userString>	#gb_vehicles:_105mm_AT_Gun_L7A1	</userString>
       <tags></tags>
@@ -5465,6 +5584,64 @@
         </_4.5inch_HE_Mk_13>
       </shots>
     </_4.5inch_SPG_Howitzer>
+    <_110mm_MV_N_Gun>
+      <userString>	#gb_vehicles:_110mm_MV_N_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	225000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
+        <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	8.57142857142857	</reloadTime>
+      <maxAmmo>	57	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1500	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_110mm_MV_N_HE>
+          <defaultPortion>	0.75	</defaultPortion>
+          <speed>	1120	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 230	</piercingPower>
+        </_110mm_MV_N_HE>
+        <_110mm_MV_N_HEAT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1230	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_110mm_MV_N_HEAT>
+        <_110mm_MV_N_AP>
+          <defaultPortion>	0.25	</defaultPortion>
+          <speed>	1420	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	240 230	</piercingPower>
+        </_110mm_MV_N_AP>
+      </shots>
+    </_110mm_MV_N_Gun>
     <_110mm_MV_Gun>
       <userString>	#gb_vehicles:_110mm_MV_Gun	</userString>
       <tags></tags>
@@ -6503,6 +6680,57 @@
         </_150mm_AP_Mk_1>
       </shots>
     </_150mm_QF_5_9inch>
+    <_150mm_QF_5_9inch_02_B>
+      <userString>	#gb_vehicles:_150mm_QF_5_9inch	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	130000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	22.75	</rotationSpeed>
+      <reloadTime>	15.88571428571430	</reloadTime>
+      <maxAmmo>	112	</maxAmmo>
+      <aimingTime>	5.14285714285714	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.46	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.44	</turretRotation>
+        <afterShot>	6.4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_150mm_HESH_L15_02_B>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	354	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	180 180	</piercingPower>
+        </_150mm_HESH_L15_02_B>
+        <_150mm_AP_Mk_1_02_B>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	500	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	292 270	</piercingPower>
+        </_150mm_AP_Mk_1_02_B>
+      </shots>
+    </_150mm_QF_5_9inch_02_B>
     <_7.2inch_SPG_Howitzer>
       <userString>	#gb_vehicles:_7.2inch_SPG_Howitzer	</userString>
       <tags></tags>

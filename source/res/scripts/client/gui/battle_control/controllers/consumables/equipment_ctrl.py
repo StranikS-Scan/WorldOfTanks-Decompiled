@@ -92,6 +92,33 @@ class Comp7RoleSkillCooldown(_ActivationError):
         super(Comp7RoleSkillCooldown, self).__init__('comp7RoleSkillCooldown', {'name': name})
 
 
+class AbilityExhausted(_ActivationError):
+
+    def __new__(cls, name):
+        return super(AbilityExhausted, cls).__new__(cls, 'abilityExhausted', {'name': name})
+
+    def __init__(self, name):
+        super(AbilityExhausted, self).__init__('abilityExhausted', {'name': name})
+
+
+class AbilityAlreadyActivated(_ActivationError):
+
+    def __new__(cls, name):
+        return super(AbilityAlreadyActivated, cls).__new__(cls, 'abilityAlreadyActivated', {'name': name})
+
+    def __init__(self, name):
+        super(AbilityAlreadyActivated, self).__init__('abilityAlreadyActivated', {'name': name})
+
+
+class AbilityCooldown(_ActivationError):
+
+    def __new__(cls, name):
+        return super(AbilityCooldown, cls).__new__(cls, 'abilityCooldown', {'name': name})
+
+    def __init__(self, name):
+        super(AbilityCooldown, self).__init__('abilityCooldown', {'name': name})
+
+
 class NeedEntitySelection(_ActivationError):
     pass
 
@@ -150,6 +177,9 @@ class _EquipmentItem(object):
 
     def getAnimationType(self):
         return self._animationType
+
+    def setAnimationType(self, animationType):
+        self._animationType = animationType
 
     def setServerPrevStage(self, prevStage):
         self._serverPrevStage = prevStage
@@ -246,6 +276,14 @@ class _EquipmentItem(object):
          EQUIPMENT_STAGES.NOT_RUNNING)
 
     @property
+    def becomeActive(self):
+        return self._stage == EQUIPMENT_STAGES.ACTIVE and self._serverPrevStage == EQUIPMENT_STAGES.READY
+
+    @property
+    def becomeDeactivated(self):
+        return self._serverPrevStage == EQUIPMENT_STAGES.ACTIVE and self._stage != EQUIPMENT_STAGES.ACTIVE
+
+    @property
     def becomeAvailable(self):
         return self.getPrevQuantity() <= 0 and self.getQuantity() > 0
 
@@ -301,6 +339,12 @@ class _EquipmentItem(object):
 
     def canDeactivate(self):
         return True
+
+    def setLocked(self, isLocked):
+        pass
+
+    def isLocked(self):
+        return False
 
 
 class _RefillEquipmentItem(object):
@@ -798,9 +842,12 @@ class _AfterburningItem(_TriggerItem):
         self.__cleanAlmostReadySound()
 
     def _playChargedSound(self):
-        EquipmentSound.playReady(self)
+        self._playReady()
         self.__fullyChargedSoundCbId = None
         return
+
+    def _playReady(self):
+        EquipmentSound.playReady(self)
 
     def _playAlmostChargedSound(self):
         if self.__almostChargedSound is None:
@@ -1007,6 +1054,64 @@ class _RoleSkillVSItem(_VisualScriptItem):
         return (False, self._getErrorMsg()) if self._stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.ACTIVE, EQUIPMENT_STAGES.UNAVAILABLE) else super(_RoleSkillVSItem, self).canActivate(entityName, avatar)
 
 
+class _AbilitySkillVSItem(_VisualScriptItem):
+    _PRE_REFILL_TIME = 3
+
+    def __init__(self, *args):
+        super(_AbilitySkillVSItem, self).__init__(*args)
+        self._preRefillCallback = None
+        return
+
+    def canActivate(self, entityName=None, avatar=None):
+        return (False, self._getErrorMsg()) if self._stage in (EQUIPMENT_STAGES.COOLDOWN,
+         EQUIPMENT_STAGES.ACTIVE,
+         EQUIPMENT_STAGES.EXHAUSTED,
+         EQUIPMENT_STAGES.UNAVAILABLE) else super(_AbilitySkillVSItem, self).canActivate(entityName, avatar)
+
+    def clear(self):
+        super(_AbilitySkillVSItem, self).clear()
+        if self._preRefillCallback is not None:
+            self._cancelCallback()
+        return
+
+    def _getErrorMsg(self):
+        if self._stage == EQUIPMENT_STAGES.ACTIVE:
+            return AbilityAlreadyActivated(self._descriptor.userString)
+        if self._stage == EQUIPMENT_STAGES.COOLDOWN:
+            return AbilityCooldown(self._descriptor.userString)
+        return AbilityExhausted(self._descriptor.userString) if self._stage in (EQUIPMENT_STAGES.EXHAUSTED, EQUIPMENT_STAGES.UNAVAILABLE) else super(_AbilitySkillVSItem, self)._getErrorMsg()
+
+    def _playSound(self, soundTypeName):
+        equipment = vehicles.g_cache.equipments()[self.getEquipmentID()]
+        soundName = getattr(equipment, soundTypeName, None)
+        if soundName is not None:
+            SoundGroups.g_instance.playSound2D(soundName)
+        return
+
+    def _soundUpdate(self, prevQuantity, quantity):
+        super(_AbilitySkillVSItem, self)._soundUpdate(prevQuantity, quantity)
+        if self.becomeActive:
+            self._playSound('activationSound')
+        if self.becomeDeactivated:
+            self._playSound('deactivationSound')
+        timeRemaining = self.getTimeRemaining()
+        if timeRemaining > self._PRE_REFILL_TIME and self._stage in (EQUIPMENT_STAGES.COOLDOWN, EQUIPMENT_STAGES.SHARED_COOLDOWN):
+            if self._preRefillCallback is not None:
+                self._cancelCallback()
+            self._preRefillCallback = BigWorld.callback(timeRemaining - self._PRE_REFILL_TIME, self._preRefill)
+        return
+
+    def _preRefill(self):
+        self._preRefillCallback = None
+        self._playSound('refillSound')
+        return
+
+    def _cancelCallback(self):
+        BigWorld.cancelCallback(self._preRefillCallback)
+        self._preRefillCallback = None
+        return
+
+
 class _DeferredRoleSkillVSItem(_RoleSkillVSItem):
     _ACTIVATION_COOLDOWN = 0.2
     _lastActivationTime = 0
@@ -1148,6 +1253,7 @@ _EQUIPMENT_TAG_TO_ITEM = {('fuel',): _AutoItem,
  ('regenerationKit',): _RegenerationKitItem,
  ('medkit', 'repairkit'): _RepairCrewAndModules,
  (ROLE_EQUIPMENT_TAG,): _comp7ItemFactory,
+ ('abilityEquipment',): _AbilitySkillVSItem,
  (POI_EQUIPMENT_TAG,): _poiItemFactory}
 
 class _DAMAGE_PANEL_EQUIPMENT(CONST_CONTAINER):
@@ -1178,6 +1284,8 @@ class EquipmentsController(MethodsRules, IBattleController):
         super(EquipmentsController, self).__init__()
         self._eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self._eManager)
+        self.onSlotWaited = Event.Event(self._eManager)
+        self.onSlotBlocked = Event.Event(self._eManager)
         self.onEquipmentUpdated = Event.Event(self._eManager)
         self.onEquipmentReset = Event.Event(self._eManager)
         self.onEquipmentsCleared = Event.Event(self._eManager)
@@ -1291,6 +1399,8 @@ class EquipmentsController(MethodsRules, IBattleController):
             self.onEquipmentUpdated(intCD, item)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
+            if 'hidden' in descriptor.tags:
+                return
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
                 item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
                 self._equipments[intCD] = item
@@ -1736,6 +1846,26 @@ class _ReplayRoleSkillVSItem(_ReplayItem, _RoleSkillVSItem):
         return _RoleSkillVSItem._getErrorMsg(self)
 
 
+class _ReplayAbilitySkillVSItem(_ReplayItem, _AbilitySkillVSItem):
+
+    def _soundUpdate(self, prevQuantity, quantity):
+        _ReplayItem._soundUpdate(self, prevQuantity, quantity)
+        _AbilitySkillVSItem._soundUpdate(self, prevQuantity, quantity)
+
+    def getAnimationType(self):
+        return _AbilitySkillVSItem.getAnimationType(self)
+
+    def update(self, quantity, stage, timeRemaining, totalTime):
+        _ReplayItem.update(self, quantity, stage, timeRemaining, totalTime)
+        _AbilitySkillVSItem.update(self, quantity, stage, timeRemaining, totalTime)
+
+    def canActivate(self, entityName=None, avatar=None):
+        return _AbilitySkillVSItem.canActivate(self, entityName, avatar)
+
+    def _getErrorMsg(self):
+        return _AbilitySkillVSItem._getErrorMsg(self)
+
+
 class _ReplayRoleSkillArtyVSItem(_ReplayRoleSkillVSItem):
 
     def getMarker(self):
@@ -1801,6 +1931,7 @@ _REPLAY_EQUIPMENT_TAG_TO_ITEM = {('fuel',): _ReplayItem,
  ('regenerationKit',): _replayTriggerItemFactory,
  ('medkit', 'repairkit'): _replayTriggerItemFactory,
  (ROLE_EQUIPMENT_TAG,): _replayComp7ItemFactory,
+ ('abilityEquipment',): _ReplayAbilitySkillVSItem,
  (POI_EQUIPMENT_TAG,): _replayPoiItemFactory}
 
 class EquipmentsReplayPlayer(EquipmentsController):

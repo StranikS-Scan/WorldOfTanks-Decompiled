@@ -24,7 +24,6 @@ from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
 from gui.shared.event_dispatcher import showPersonalCase, showHangar
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.game_control import ISpecialSoundCtrl
@@ -57,8 +56,9 @@ class BarracksView(BaseTankmanListView):
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.crew.tooltips.BunksConfirmDiscountTooltip():
-            money = int(self.itemsCache.items.stats.money.getSignValue(Currency.GOLD))
-            return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.gold, newCost=self.__berthPrice.gold, isEnough=self.__berthPrice.gold <= money)
+            currency = self.__berthPrice.getCurrency()
+            money = int(self.itemsCache.items.stats.money.getSignValue(currency))
+            return BunksConfirmDiscountTooltip(bunksCount=self.__berthsInPack, oldCost=self.__defaultBerthPrice.get(currency, 0), newCost=self.__berthPrice.get(currency, 0), isEnough=self.__berthPrice.get(currency, 0) <= money)
         return super(BarracksView, self).createToolTipContent(event, contentID)
 
     @property

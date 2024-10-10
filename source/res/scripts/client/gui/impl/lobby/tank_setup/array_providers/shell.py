@@ -13,7 +13,12 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
     from gui.impl.lobby.tank_setup.array_providers.base import BaseVehSectionContext
-_SHELLS_INFO_PARAMS = ('avgDamage', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'flameMaxDistance', 'stunMaxDuration')
+_SHELLS_INFO_PARAMS = (('distanceDamage', 'avgDamage'),
+ ('avgPiercingPower',),
+ ('shotSpeed',),
+ ('explosionRadius',),
+ ('flameMaxDistance',),
+ ('stunMaxDuration',))
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ('_interactor',)
@@ -78,11 +83,21 @@ class ShellProvider(VehicleBaseArrayProvider):
         specifications = model.getSpecifications()
         specifications.clear()
         shellParam = params_helper.getParameters(item, self._getVehicle().descriptor)
-        for paramName in _SHELLS_INFO_PARAMS:
-            specificationModel = ShellSpecificationModel()
-            specificationModel.setParamName(paramName)
-            specificationModel.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
-            specificationModel.setValue(formatParameter(paramName, shellParam.get(paramName)) or '')
-            specifications.addViewModel(specificationModel)
+        for rowParams in _SHELLS_INFO_PARAMS:
+            for paramName in rowParams:
+                formattedParam = formatParameter(paramName, shellParam.get(paramName))
+                if formattedParam is None:
+                    continue
+                model = self._getSpecificationsModel(paramName, formattedParam)
+                specifications.addViewModel(model)
+                break
 
         specifications.invalidate()
+        return
+
+    def _getSpecificationsModel(self, paramName, formattedParam):
+        model = ShellSpecificationModel()
+        model.setParamName(paramName)
+        model.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
+        model.setValue(formattedParam)
+        return model

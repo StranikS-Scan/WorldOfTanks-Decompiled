@@ -388,7 +388,14 @@ class _ParamsCache(object):
             for vDescr in vehiclesCache.generator(nationIdx):
                 for vChs in vDescr.type.chassis:
                     chassisCD = vChs.compactDescr
-                    cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[isHydraulicChassis(vDescr), vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode, isTrackWithinTrackChassis(vChs), vDescr.isWheeledOnSpotRotation, isMultiTrackChassis(vChs)]
+                    chassisDescription = (isHydraulicChassis(vDescr),
+                     vDescr.isWheeledVehicle,
+                     vDescr.hasAutoSiegeMode,
+                     isTrackWithinTrackChassis(vChs),
+                     vDescr.isWheeledOnSpotRotation,
+                     isMultiTrackChassis(vChs))
+                    precachedChassisType = _PrecachedChassisTypes.MAP.get(chassisDescription)
+                    cachedChassisByNation[chassisCD] = precachedChassisType
                     processedItems.add(chassisCD)
                     if vDescr.isWheeledVehicle:
                         chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]

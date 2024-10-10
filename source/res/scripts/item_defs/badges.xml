@@ -13,6 +13,9 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
       </value>
     </badge>
     <badge>
@@ -27,6 +30,9 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
         </item>
       </value>
     </badge>
@@ -43,6 +49,9 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
       </value>
     </badge>
     <badge>
@@ -57,6 +66,9 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
         </item>
       </value>
     </badge>
@@ -223,6 +235,9 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
       </value>
     </badge>
     <badge>
@@ -237,6 +252,9 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
         </item>
       </value>
     </badge>
@@ -253,6 +271,9 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
       </value>
     </badge>
     <badge>
@@ -267,6 +288,9 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
         </item>
       </value>
     </badge>
@@ -673,7 +697,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -1531,7 +1555,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -1826,7 +1850,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -1850,7 +1874,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -1874,7 +1898,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2492,7 +2516,7 @@
         <item>	0	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2519,7 +2543,7 @@
         <item>	0	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2546,7 +2570,7 @@
         <item>	0	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2700,7 +2724,7 @@
         <item>	red	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2724,7 +2748,7 @@
         <item>	red	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2748,7 +2772,7 @@
         <item>	red	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -2784,7 +2808,7 @@
         <item>	21	  <name>	group	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
         <item>
@@ -3065,7 +3089,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3410,7 +3434,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3696,7 +3720,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3720,7 +3744,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -3744,7 +3768,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4008,7 +4032,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4226,7 +4250,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4265,7 +4289,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -4382,7 +4406,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>

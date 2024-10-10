@@ -1,21 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/research_page.py
-import typing
 from logging import getLogger
+import typing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.go_back_helper import BackButtonContextKeys, getBackBtnDescription
-from gui.Scaleform.daapi.view.lobby.techtree import dumpers
-from gui.Scaleform.daapi.view.lobby.techtree.data.research_items_data import ResearchItemsData
-from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation, NODE_STATE
+from gui.techtree.go_back_helper import BackButtonContextKeys, getBackBtnDescription
+from gui.techtree import dumpers
+from gui.techtree.research_items_data import ResearchItemsData
+from gui.techtree.settings import NODE_STATE
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_entry_point import VehPostProgressionEntryPoint
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.ResearchMeta import ResearchMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
+from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
@@ -23,6 +23,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.buy_vehicle_view import VehicleBuyActionTypes
+from gui.techtree.selected_nation import SelectedNation
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
@@ -32,8 +33,10 @@ from gui.shared.formatters import text_styles, icons, getRoleTextWithIcon
 from gui.shared.formatters.time_formatters import getDueDateOrTimeStr, RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath, Vehicle, getShopVehicleIconPath
+from gui.shared.gui_items.artefacts import getAbilityVO
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.functions import makeTooltip
 from gui.shop import canBuyGoldForVehicleThroughWeb
 from helpers import int2roman, dependency
@@ -43,11 +46,10 @@ from items import getTypeOfCompactDescr
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from skeletons.gui.game_control import IBootcampController, ITradeInController
 from skeletons.gui.shared import IItemsCache
-from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
     from typing import List, Tuple, Any
-    from gui.Scaleform.daapi.view.lobby.techtree.nodes import ExposedNode
+    from gui.techtree.nodes import ExposedNode
 _logger = getLogger(__name__)
 _BENEFIT_ITEMS_LIMIT = 4
 
@@ -403,7 +405,8 @@ class Research(ResearchMeta):
                           'typeIconPath': getTypeBigIconPath(root.type, root.isElite),
                           'isElite': root.isElite,
                           'statusStr': self.__getRootStatusStr(root),
-                          'roleText': getRoleTextWithIcon(root.role, root.roleLabel)},
+                          'roleText': getRoleTextWithIcon(root.role, root.roleLabel),
+                          'ability': getAbilityVO(self.vehicle)},
          'vehicleButton': {'shopIconPath': getShopVehicleIconPath(STORE_CONSTANTS.ICON_SIZE_MEDIUM, root.name.split(':')[1]),
                            'compareBtnVisible': not self.__bootcamp.isInBootcamp(),
                            'compareBtnEnabled': comparisonState,

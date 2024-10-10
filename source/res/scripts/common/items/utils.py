@@ -124,8 +124,16 @@ def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):
     return firstShellReload * factor if ignoreRespawn else firstShellReload * factor * respawnReloadFactor
 
 
+def getReloadTimeFactor(factors, vehMiscAttrs, gunTags, isReloadFlag):
+    if gunTags is None:
+        return 1.0
+    else:
+        return max(factors['gun/reloadTime'], 0.0) * vehMiscAttrs['gunReloadTimeFactor'] if ('lockedReloadTime' in gunTags) ^ isReloadFlag else 1.0
+
+
 def getReloadTime(vehicleDescr, factors):
-    return vehicleDescr.gun.reloadTime * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+    gun = vehicleDescr.gun
+    return gun.reloadTime * getReloadTimeFactor(factors, vehicleDescr.miscAttrs, gun.tags, True)
 
 
 def getClipReloadTime(vehicleDescr, factors):
@@ -133,6 +141,8 @@ def getClipReloadTime(vehicleDescr, factors):
         factor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
         if 'autoreload' in vehicleDescr.gun.tags:
             return tuple((reloadTime * factor for reloadTime in vehicleDescr.gun.autoreload.reloadTime))
+        elif 'autoShoot' in vehicleDescr.gun.tags:
+            return (0.0,)
         else:
             return (vehicleDescr.gun.reloadTime * factor,)
     else:
@@ -164,7 +174,7 @@ def getGunAimingTime(vehicleDescr, factors):
 
 
 def getClipTimeBetweenShots(vehicleDescr, factors):
-    return vehicleDescr.gun.clip[1] * max(factors['gun/clipTimeBetweenShots'], 0.0)
+    return vehicleDescr.gun.clip[1] * max(factors['gun/clipTimeBetweenShots'], 0.0) if 'autoShoot' not in vehicleDescr.gun.tags else 0.0
 
 
 def getChassisRotationSpeed(vehicleDescr, factors):

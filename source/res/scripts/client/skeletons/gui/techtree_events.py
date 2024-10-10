@@ -5,6 +5,7 @@ from Event import Event
 class ITechTreeEventsListener(object):
     onEventsUpdated = None
     onSettingsChanged = None
+    onEntryPointUpdated = None
 
     def init(self):
         raise NotImplementedError

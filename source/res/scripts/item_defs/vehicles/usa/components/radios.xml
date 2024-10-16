@@ -69,6 +69,7 @@
     <SCR_506_StoryMode__0>	64009	</SCR_506_StoryMode__0>
     <SCR_506_StoryModeHard>	64010	</SCR_506_StoryModeHard>
     <SCR_528_StoryMode>	64011	</SCR_528_StoryMode>
+    <SCR_528_HW>	5508	</SCR_528_HW>
   </ids>
   <shared>
     <SCR_200>
@@ -895,5 +896,17 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_StoryMode>
+    <SCR_528_HW>
+      <userString>	#usa_vehicles:SCR_528	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_HW>
   </shared>
 </radios.xml>

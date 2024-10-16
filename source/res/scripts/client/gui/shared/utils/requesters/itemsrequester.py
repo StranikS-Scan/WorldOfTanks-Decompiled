@@ -33,6 +33,7 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.shared.system_factory import collectGuiItemsCacheInvalidators, GuiItemsCacheInvalidatorParams
 if TYPE_CHECKING:
     from typing import Optional, Dict
     import skeletons.gui.shared.utils.requesters as requesters
@@ -704,22 +705,25 @@ class ItemsRequester(IItemsRequester):
 
             self.inventory.initC11nItemsNoveltyData()
         else:
-            for statName, data in diff.get('stats', {}).iteritems():
-                if statName in ('unlocks', ('unlocks', '_r'), ('unlocks', '_d')):
-                    self._invalidateUnlocks(data, invalidate)
-                if statName == 'eliteVehicles':
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
-                if statName in ('vehTypeXP', 'vehTypeLocks'):
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
-                if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
-                    getter = vehicles.getVehicleTypeCompactDescr
-                    vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
-                    inventoryVehiclesCDs = []
-                    if vehiclesDict:
-                        inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
-                if statName in ('oldVehInvIDs',):
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+            for invalidator in collectGuiItemsCacheInvalidators():
+                invalidator(GuiItemsCacheInvalidatorParams(self.__inventory, invalidate, diff))
+
+        for statName, data in diff.get('stats', {}).iteritems():
+            if statName in ('unlocks', ('unlocks', '_r'), ('unlocks', '_d')):
+                self._invalidateUnlocks(data, invalidate)
+            if statName == 'eliteVehicles':
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+            if statName in ('vehTypeXP', 'vehTypeLocks'):
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
+            if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
+                getter = vehicles.getVehicleTypeCompactDescr
+                vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                inventoryVehiclesCDs = []
+                if vehiclesDict:
+                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+            if statName in ('oldVehInvIDs',):
+                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':

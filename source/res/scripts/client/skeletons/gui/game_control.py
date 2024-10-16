@@ -552,7 +552,7 @@ class IPlatoonController(IGameController):
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         raise NotImplementedError
 
-    def togglePlayerReadyAction(self, callback):
+    def togglePlayerReadyAction(self, skipAmmocheck=False, callback=None):
         raise NotImplementedError
 
     def getChannelController(self):

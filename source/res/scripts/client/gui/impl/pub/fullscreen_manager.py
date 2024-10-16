@@ -6,7 +6,7 @@ import typing
 from frameworks.state_machine import SingleStateObserver
 from frameworks.wulf import WindowLayer, WindowStatus
 from gui.impl.gen import R
-from gui.impl.pub import WindowImpl
+from gui.shared.system_factory import collectLowPriorityWindows, registerLowPriorityWulfWindows
 from helpers import dependency
 from skeletons.gameplay import GameplayStateID, IGameplayLogic
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
@@ -19,7 +19,7 @@ _LOW_PRIORITY_WINDOWS = (VIEW_ALIAS.AWARD_WINDOW,
  VIEW_ALIAS.AWARD_WINDOW_MODAL,
  VIEW_ALIAS.ADVENT_CALENDAR,
  VIEW_ALIAS.MISSION_AWARD_WINDOW)
-_LOW_PRIORITY_WULF_WINDOWS = (R.views.lobby.offers.OfferBannerWindow(),)
+registerLowPriorityWulfWindows([R.views.lobby.offers.OfferBannerWindow()])
 
 class FullscreenManager(IFullscreenManager):
     __slots__ = ('__gui', '__notificationMgr', '__isEnabled', '__weakref__', '__observer', '__gameplay')
@@ -89,8 +89,8 @@ class FullscreenManager(IFullscreenManager):
                 if alias.startswith(priority):
                     return False
 
-        elif isinstance(window, WindowImpl):
-            return window.content.layoutID not in _LOW_PRIORITY_WULF_WINDOWS
+        elif window.content is not None:
+            return window.content.layoutID not in collectLowPriorityWindows()
         return True
 
 

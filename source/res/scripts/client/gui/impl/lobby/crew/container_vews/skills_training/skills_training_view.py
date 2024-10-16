@@ -15,12 +15,15 @@ from gui.impl.lobby.crew.widget.crew_widget import CrewWidget, SkillsTrainingCre
 from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsView
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.shared.view_helpers.blur_manager import CachedBlur
+from helpers import dependency
+from skeletons.gui.game_control import IPlatoonController
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.components import ComponentBase
 
 class SkillsTrainingView(ContainerBase, ViewImpl):
     __slots__ = ('_crewWidget', '_paramsView')
+    platoonCtrl = dependency.descriptor(IPlatoonController)
 
     def __init__(self, **kwargs):
         self._crewWidget = None
@@ -52,7 +55,10 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
         return SkillsTrainingInteractionController
 
     def _getEvents(self):
-        return ((self._crewWidget.onSlotClick, self._onWidgetSlotClick), (self.viewModel.onClose, self.__onClose), (g_playerEvents.onDisconnected, self.__onDisconnected))
+        return ((self._crewWidget.onSlotClick, self._onWidgetSlotClick),
+         (self.viewModel.onClose, self.__onClose),
+         (g_playerEvents.onDisconnected, self.__onDisconnected),
+         (self.platoonCtrl.onMembersUpdate, self.__onMembersUpdate))
 
     def _onLoading(self, *args, **kwargs):
         self._crewWidget = SkillsTrainingCrewWidget(tankmanID=self.context.tankmanID, currentViewID=R.views.lobby.crew.SkillsTrainingView(), previousViewID=R.views.lobby.crew.TankmanContainerView(), isButtonBarVisible=False)
@@ -93,6 +99,9 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
     def __onDisconnected(self):
         self.destroyWindow()
 
+    def __onMembersUpdate(self):
+        self.destroyWindow()
+
 
 class SkillsTrainingWindow(WindowImpl):
     __slots__ = ('_blur', '_callback')
@@ -108,9 +117,16 @@ class SkillsTrainingWindow(WindowImpl):
         self._blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
     def _finalize(self):
-        self._callback(self.content.context.tankmanID)
-        self._callback = None
         self._blur.fini()
         self._blur = None
-        super(SkillsTrainingWindow, self)._finalize()
+        try:
+            try:
+                self._callback(self.content.context.tankmanID)
+                self._callback = None
+            except AttributeError:
+                pass
+
+        finally:
+            super(SkillsTrainingWindow, self)._finalize()
+
         return

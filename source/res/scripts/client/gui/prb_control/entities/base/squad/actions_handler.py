@@ -104,14 +104,19 @@ class SquadActionsHandler(AbstractActionsHandler):
                 result = yield wg_await(showPlatoonWarningDialog(R.strings.dialogs.squadHaveNotReadyPlayer))
             if not result:
                 raise AsyncReturn(result)
-            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            result = yield wg_await(self._checkVehicleAmmo(g_currentVehicle.item))
             if not result:
                 raise AsyncReturn(result)
         elif not fullData.playerInfo.isReady:
-            result = yield await_callback(checkVehicleAmmoFull)(g_currentVehicle.item)
+            result = yield wg_await(self._checkVehicleAmmo(g_currentVehicle.item))
             if not result:
                 raise AsyncReturn(result)
         raise AsyncReturn(True)
+
+    @wg_async
+    def _checkVehicleAmmo(self, vehicle):
+        result = yield await_callback(checkVehicleAmmoFull)(vehicle)
+        raise AsyncReturn(result)
 
     def exitFromQueue(self):
         self._sendBattleQueueRequest(action=0)

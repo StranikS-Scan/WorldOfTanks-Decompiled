@@ -4550,4 +4550,72 @@
     <ricochetAngle>	70	</ricochetAngle>
     <notInShop>	True	</notInShop>
   </_17pdr_AP_Mk3T_NewOnBoarding>
+  <_105mm_APCR_L7_HW>
+    <id>	5006	</id>
+    <userString>	#gb_vehicles:_105mm_APCR_L7	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1200	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_APCR_L7_HW>
+  <_105mm_HESH_L7_HW>
+    <id>	5007	</id>
+    <userString>	#gb_vehicles:_105mm_HESH_L7	</userString>
+    <icon>	he_modern_premium	</icon>
+    <price>	5200	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HESH_L7_HW>
+  <_105mm_HE_L7_HW>
+    <id>	5008	</id>
+    <userString>	#gb_vehicles:_105mm_HE_L7	</userString>
+    <icon>	he_modern	</icon>
+    <price>	950	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_L7_HW>
 </shells.xml>

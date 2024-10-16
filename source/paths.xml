@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.26.1.0 Common Test</Path>
-    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.26.1.0 Common Test</Path>
+    <Path cacheSubdirs="true">./res_mods/1.26.1.0</Path>
+    <Path mask="*.wotmod" mode="recursive" root="res">./mods/1.26.1.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part3.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
@@ -90,6 +90,10 @@
       <Package type="hd">./res/packages/250_br_battle_city2-1_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/251_br_battle_city3.pkg</Package>
       <Package type="hd">./res/packages/251_br_battle_city3_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/251_br_battle_city3_hw24_classic.pkg</Package>
+      <Package type="hd">./res/packages/251_br_battle_city3_hw24_classic_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/251_br_battle_city3_hw24_defense.pkg</Package>
+      <Package type="hd">./res/packages/251_br_battle_city3_hw24_defense_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/252_br_battle_city4.pkg</Package>
       <Package type="hd">./res/packages/252_br_battle_city4_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
@@ -137,6 +141,8 @@
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_comp7.pkg</Package>
       <Package type="hd">./res/packages/h33_comp7_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h34_halloween.pkg</Package>
+      <Package type="hd">./res/packages/h34_halloween_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part3.pkg</Package>
@@ -154,6 +160,8 @@
       <Package type="sandbox,sd,hd">./res/packages/gui-part3.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui-part1.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/halloween.pkg</Package>
+      <Package type="hd">./res/packages/halloween_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>

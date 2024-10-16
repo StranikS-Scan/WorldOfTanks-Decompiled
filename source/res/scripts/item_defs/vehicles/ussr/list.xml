@@ -1028,10 +1028,10 @@
     <shortUserString>	#ussr_vehicles:R194_ST_62_var_2_short	</shortUserString>
     <shortDescriptionSpecial>	#ussr_vehicles:R194_ST_62_var_2_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#ussr_vehicles:R194_ST_62_var_2_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	22500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank special	</tags>
+    <tags>	mediumTank role_MT_assault HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special	</tags>
     <level>	10	</level>
   </R194_ST_62_var_2>
   <R205_Tank_Rozanova>
@@ -2244,4 +2244,14 @@
     <level>	5	</level>
     <notInShop>	True	</notInShop>
   </R1004_T-34_StoryMode>
+  <R20_T-44_HW>
+    <id>	5223	</id>
+    <userString>	#ussr_vehicles:T-44	</userString>
+    <description>	#ussr_vehicles:T-44_descr	</description>
+    <price>	2390000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user event_battles secret private mode_hidden cannot_be_sold lockOutfit lockCrew lockCrewSkills	</tags>
+    <level>	8	</level>
+  </R20_T-44_HW>
 </list.xml>

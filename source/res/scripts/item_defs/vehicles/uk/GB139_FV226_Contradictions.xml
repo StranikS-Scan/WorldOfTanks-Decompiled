@@ -2,8 +2,8 @@
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	radioman	</commander>
-    <driver></driver>
     <gunner></gunner>
+    <driver></driver>
     <loader></loader>
     <loader></loader>
   </crew>
@@ -16,7 +16,7 @@
   </speedLimits>
   <invisibility>
     <moving>	0.031	</moving>
-    <still>	0.61	</still>
+    <still>	0.061	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <firePenalty>	0.092	</firePenalty>
   </invisibility>
@@ -1911,7 +1911,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105_mm_L7S_DB>	shared	  <maxAmmo>	80	</maxAmmo>
+        <Twin_105_mm_Gun_L7S>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	250	</armor_1>
             <armor_2>	265	</armor_2>
@@ -1951,18 +1951,18 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	11	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
-            <twinGunReloadTime>	22	</twinGunReloadTime>
+            <twinGunReloadTime>	24	</twinGunReloadTime>
           </twinGun>
           <prefabs>
             <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_105_mm_L7S_DB.prefab	</main>
@@ -2358,7 +2358,7 @@
             <density>	108.368217 108.601967	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
           </camouflage>
-        </_105_mm_L7S_DB>
+        </Twin_105_mm_Gun_L7S>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB139_FV226_Contradictions/normal/lod0/Turret_01.model	</undamaged>

@@ -25,6 +25,11 @@
       <Editable>	True	</Editable>
       <Default>	STATIC_DEATH_ZONE_PROXIMITY	</Default>
     </proximityMarkerStyle>
+    <reactOnTeamIDs>
+      <Type>	ARRAY	  <of>	INT8	</of>
+      </Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </reactOnTeamIDs>
   </Properties>
   <ClientMethods>
     <onDeathZoneDamage>

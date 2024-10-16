@@ -443,6 +443,14 @@ class AbstractBattleMode(object):
         return []
 
     @property
+    def _client_guiItemsCacheInvalidators(self):
+        return []
+
+    @property
+    def _client_lowPriorityWulfWindows(self):
+        return []
+
+    @property
     def _server_canCreateUnitMgr(self):
         return lambda *args, **kwargs: (UNIT_ERROR.OK, '')
 
@@ -774,3 +782,11 @@ class AbstractBattleMode(object):
     def registerControlModes(self):
         from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
         OVERWRITE_CTRLS_DESC_MAP[self._ARENA_BONUS_TYPE] = self._client_controlModes
+
+    def registerGuiItemsCacheInvalidators(self):
+        from gui.shared.system_factory import registerGuiItemsCacheInvalidators
+        registerGuiItemsCacheInvalidators(self._client_guiItemsCacheInvalidators)
+
+    def registerLowPriorityWulfWindows(self):
+        from gui.shared.system_factory import registerLowPriorityWulfWindows
+        registerLowPriorityWulfWindows(self._client_lowPriorityWulfWindows)

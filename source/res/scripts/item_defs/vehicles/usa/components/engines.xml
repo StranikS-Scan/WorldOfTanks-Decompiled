@@ -159,6 +159,7 @@
     <Ford_GAA_StoryModeHard>	64010	</Ford_GAA_StoryModeHard>
     <Ford_GAA_StoryMode_3_4>	64011	</Ford_GAA_StoryMode_3_4>
     <Wright_Continental_R-975C4L_StoryMode>	64012	</Wright_Continental_R-975C4L_StoryMode>
+    <Continental_AV-1790-3_HW>	5513	</Continental_AV-1790-3_HW>
   </ids>
   <shared>
     <Ford_GAC>
@@ -2900,5 +2901,23 @@
       <notInShop>	True	</notInShop>
       <rpm_max>	2801	</rpm_max>
     </Wright_Continental_R-975C4L_StoryMode>
+    <Continental_AV-1790-3_HW>
+      <userString>	#usa_vehicles:Continental_AV-1790-3	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV-1790-3_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	59000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	569	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Continental_AV-1790-3_HW>
   </shared>
 </engines.xml>

@@ -3987,4 +3987,64 @@
     <ricochetAngle>	70	</ricochetAngle>
     <notInShop>	True	</notInShop>
   </_75mm_M61_StoryMode>
+  <_105mm_AP_T32_HW>
+    <id>	5509	</id>
+    <userString>	#usa_vehicles:_105mm_AP_T32	</userString>
+    <icon>	ap	</icon>
+    <price>	1000	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_AP_T32_HW>
+  <_105mm_APCR_T29E3_HW>
+    <id>	5510	</id>
+    <userString>	#usa_vehicles:_105mm_APCR_T29E3	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_105mm_APCR_T29E3_HW>
+  <_105mm_HE_M11_HW>
+    <id>	5511	</id>
+    <userString>	#usa_vehicles:_105mm_HE_M11	</userString>
+    <icon>	he_modern	</icon>
+    <price>	680	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_HE_M11_HW>
 </shells.xml>

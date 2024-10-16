@@ -2003,4 +2003,43 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB145_Crusher_ASE_4	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	981	</id>
+      <texture>	gui/maps/vehicles/styles/uk.png	</texture>
+      <modelsSet>	GB145_Crusher_ASE_4	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB145_Crusher_ASE_4	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB145_Crusher_ASE_4_desc/long	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	129	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

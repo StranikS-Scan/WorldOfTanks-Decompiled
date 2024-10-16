@@ -95,8 +95,14 @@ class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
         return
 
     def _finalize(self):
-        self.__clearAnimationData()
-        super(PersonalFileView, self)._finalize()
+        try:
+            try:
+                self.__clearAnimationData()
+            except AttributeError:
+                pass
+
+        finally:
+            super(PersonalFileView, self)._finalize()
 
     def __clearAnimationData(self, skipped=False):
         if not skipped:

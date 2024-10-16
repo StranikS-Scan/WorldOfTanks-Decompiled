@@ -73,6 +73,7 @@
     <_9RM_MapsTraining_Player_MT_2>	38	</_9RM_MapsTraining_Player_MT_2>
     <_10RK_MapsTraining_Dummy_HT_2>	39	</_10RK_MapsTraining_Dummy_HT_2>
     <_9RM_StoryMode>	64001	</_9RM_StoryMode>
+    <R113_HW>	5006	</R113_HW>
   </ids>
   <shared>
     <_71-TK-1>
@@ -948,5 +949,17 @@
       <repairCost>	1.5	</repairCost>
       <notInShop>	True	</notInShop>
     </_9RM_StoryMode>
+    <R113_HW>
+      <userString>	#ussr_vehicles:R113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113_HW>
   </shared>
 </radios.xml>

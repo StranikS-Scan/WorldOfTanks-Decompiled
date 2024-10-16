@@ -52,11 +52,12 @@ class TankSetupCloseConfirmatorsHelper(CloseConfirmatorsHelper):
 class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
     _VIEW_FLAG = ViewFlags.VIEW
+    _VIEW_MODEL = AmmunitionSetupViewModel
     __slots__ = ('__blur', '_isClosed', '__closeConfirmatorHelper', 'onClose', 'onAnimationEnd', '__moneyCache', '_previousSectionName')
 
     def __init__(self, layoutID=R.views.lobby.tanksetup.HangarAmmunitionSetup(), **kwargs):
         settings = ViewSettings(layoutID)
-        settings.model = AmmunitionSetupViewModel()
+        settings.model = self._VIEW_MODEL()
         settings.flags = self._VIEW_FLAG
         settings.kwargs = kwargs
         super(BaseHangarAmmunitionSetupView, self).__init__(settings)

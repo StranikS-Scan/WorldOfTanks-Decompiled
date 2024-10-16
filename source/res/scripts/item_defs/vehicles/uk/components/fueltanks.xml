@@ -8,6 +8,7 @@
     <Large_SH>	206	</Large_SH>
     <Average_MapsTraining_Dummy_MT_2>	1	</Average_MapsTraining_Dummy_MT_2>
     <Average_NewOnBoarding>	207	</Average_NewOnBoarding>
+    <Average_HW>	5002	</Average_HW>
   </ids>
   <shared>
     <Small>
@@ -78,5 +79,14 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </Average_NewOnBoarding>
+    <Average_HW>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Average_HW>
   </shared>
 </fuelTanks.xml>

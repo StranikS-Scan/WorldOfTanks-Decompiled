@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/system_factory.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 BATTLE_REPO = 1
 EQUIPMENT_ITEMS = 2
 SCALEFORM_COMMON_PACKAGES = 3
@@ -60,6 +60,8 @@ QUEST_FLAGS = 56
 BATTLE_RESULTS_STATS_SORTING = 57
 LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
 EQUIPMENT_TRIGGERS = 59
+GUI_ITEMS_CACHE_INVALIDATOR = 60
+LOW_PRIORITY_WULF_WINDOWS = 61
 
 class _CollectEventsManager(object):
 
@@ -899,3 +901,29 @@ def registerBattleResultsStatsSorting(bonusType, sortingKey):
 
 def collectBattleResultsStatsSorting():
     return __collectEM.handleEvent(BATTLE_RESULTS_STATS_SORTING, {'sortingKey': {}})['sortingKey']
+
+
+GuiItemsCacheInvalidatorParams = namedtuple('GuiItemsCacheInvalidatorParams', ('inventory', 'invalidate', 'diff'))
+
+def registerGuiItemsCacheInvalidators(invalidatorsList):
+
+    def onCollect(ctx):
+        ctx.extend(invalidatorsList)
+
+    __collectEM.addListener(GUI_ITEMS_CACHE_INVALIDATOR, onCollect)
+
+
+def collectGuiItemsCacheInvalidators():
+    return __collectEM.handleEvent(GUI_ITEMS_CACHE_INVALIDATOR, ctx=[])
+
+
+def registerLowPriorityWulfWindows(layoutsID):
+
+    def onCollect(ctx):
+        ctx.extend(layoutsID)
+
+    __collectEM.addListener(LOW_PRIORITY_WULF_WINDOWS, onCollect)
+
+
+def collectLowPriorityWindows():
+    return __collectEM.handleEvent(LOW_PRIORITY_WULF_WINDOWS, ctx=[])

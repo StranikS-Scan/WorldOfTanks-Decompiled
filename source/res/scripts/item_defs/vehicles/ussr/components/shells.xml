@@ -5390,4 +5390,64 @@
     <ricochetAngle>	70	</ricochetAngle>
     <notInShop>	True	</notInShop>
   </_76mm_UBR-354MA_StoryMode>
+  <_100mm_UBR-412_HW>
+    <id>	5004	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412	</userString>
+    <icon>	ap	</icon>
+    <price>	252	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_100mm_UBR-412_HW>
+  <_100mm_UBR-412P_HW>
+    <id>	5005	</id>
+    <userString>	#ussr_vehicles:_100mm_UBR-412P	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	250	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_100mm_UBR-412P_HW>
+  <_100mm_UOF-412_HW>
+    <id>	5006	</id>
+    <userString>	#ussr_vehicles:_100mm_UOF-412	</userString>
+    <icon>	he_modern	</icon>
+    <price>	252	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	165	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_UOF-412_HW>
 </shells.xml>

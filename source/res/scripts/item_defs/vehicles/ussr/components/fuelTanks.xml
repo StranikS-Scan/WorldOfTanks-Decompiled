@@ -12,6 +12,7 @@
     <Average_MapsTraining_Player_MT_2>	5	</Average_MapsTraining_Player_MT_2>
     <Average_MapsTraining_Dummy_HT_2>	6	</Average_MapsTraining_Dummy_HT_2>
     <Average_StoryMode>	0	</Average_StoryMode>
+    <Heavy_HW>	5003	</Heavy_HW>
   </ids>
   <shared>
     <Small>
@@ -119,5 +120,14 @@
       <repairCost>	1.0	</repairCost>
       <notInShop>	True	</notInShop>
     </Average_StoryMode>
+    <Heavy_HW>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy_HW>
   </shared>
 </fuelTanks.xml>

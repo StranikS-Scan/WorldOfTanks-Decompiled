@@ -77,6 +77,13 @@
       <undamaged>	vehicles/german/G142_M48RPz/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G142_M48RPz/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/german/G142_M48RPz/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <G142_M48RPz_ASE_4_3Dst>
+          <undamaged>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Hull.model	</exploded>
+        </G142_M48RPz_ASE_4_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -493,6 +500,61 @@
         <clipAngle>	0.391386	</clipAngle>
         <anchorShift>	1.253837	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15033	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+        <position>	-1.41097 1.47528 2.7704	</position>
+        <rotation>	-0 0 3.13998	</rotation>
+        <scale>	0.762976 0.184768 0.762985	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.987698	</clipAngle>
+        <anchorShift>	0.133951	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15034	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+        <position>	-1.856522 1.180182 0.552794	</position>
+        <rotation>	1.54223 -0.22748 -1.798366	</rotation>
+        <scale>	0.555285 0.134471 0.555291	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.987698	</clipAngle>
+        <anchorShift>	0.06	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15035	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+        <position>	1.857 1.18018 0.552794	</position>
+        <rotation>	1.542174 0.227416 1.798384	</rotation>
+        <scale>	0.555285 0.134472 0.555292	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.987698	</clipAngle>
+        <anchorShift>	0.06	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15036	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+        <position>	-0.446315 1.861777 -2.750064	</position>
+        <rotation>	3.13985 -0.000003 -0.00001	</rotation>
+        <scale>	0.486096 0.074658 0.486102	</scale>
+        <showOn>	16	</showOn>
+        <verticalMirror>	true	</verticalMirror>
+        <anchorShift>	0.06	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <attachNode>	V	</attachNode>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -535,6 +597,13 @@
         <undamaged>	vehicles/german/G142_M48RPz/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/german/G142_M48RPz/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/german/G142_M48RPz/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <G142_M48RPz_ASE_4_3Dst>
+            <undamaged>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G142_M48RPz_ASE_4_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -905,6 +974,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <G142_M48RPz_ASE_4_3Dst>
+              <segmentModelLeft>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_1.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_1.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_2.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_2.model	</segment2ModelRight>
+            </G142_M48RPz_ASE_4_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -936,8 +1013,13 @@
             <model>	vehicles/german/G142_M48RPz/track/segment_02.model	</model>
             <length>	0.082417	</length>
           </secSegment>
+          <modelSets>
+            <G142_M48RPz_ASE_4_3Dst>
+              <mainSegmentModel>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_2.model	</secSegmentModel>
+            </G142_M48RPz_ASE_4_3Dst>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.19816	</xStart>
@@ -1181,8 +1263,13 @@
             <model>	vehicles/german/G142_M48RPz/track/segment_02.model	</model>
             <length>	0.080809	</length>
           </secSegment>
+          <modelSets>
+            <G142_M48RPz_ASE_4_3Dst>
+              <mainSegmentModel>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_1.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/track/segment_2.model	</secSegmentModel>
+            </G142_M48RPz_ASE_4_3Dst>
+          </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.19426	</xStart>
@@ -1496,6 +1583,13 @@
             <undamaged>	vehicles/german/G142_M48RPz/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G142_M48RPz/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/german/G142_M48RPz/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <G142_M48RPz_ASE_4_3Dst>
+                <undamaged>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G142_M48RPz_ASE_4_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/german/G142_M48RPz/collision/Gun_01.model	</collisionModelServer>
@@ -1572,6 +1666,13 @@
         <undamaged>	vehicles/german/G142_M48RPz/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/german/G142_M48RPz/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/german/G142_M48RPz/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <G142_M48RPz_ASE_4_3Dst>
+            <undamaged>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G142_M48RPz/_skins/G142_M48RPz_ASE_4_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G142_M48RPz_ASE_4_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/german/G142_M48RPz/collision/Turret_01.model	</collisionModelServer>
@@ -2014,6 +2115,41 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.003967	</clipAngle>
           <anchorShift>	0.081498	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+          <position>	-0.699957 2.373344 0.973124	</position>
+          <rotation>	0.56964 -0.900627 -3.111961	</rotation>
+          <scale>	0.459136 0.195803 0.459138	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.07496	</clipAngle>
+          <anchorShift>	0.06	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35035	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+          <position>	0.649292 2.31103 1.217475	</position>
+          <rotation>	0.811662 0.750772 3.137948	</rotation>
+          <scale>	0.459136 0.195803 0.459138	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.07496	</clipAngle>
+          <anchorShift>	0.06	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	G142_M48RPz_ASE_4_3Dst	</compatibleModels>
+          <position>	-0.006131 2.629212 0.673943	</position>
+          <rotation>	0.1486 -0.001851 -3.115577	</rotation>
+          <scale>	0.408094 0.174035 0.408096	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.07496	</clipAngle>
         </slot>
       </customizationSlots>
       <customization>

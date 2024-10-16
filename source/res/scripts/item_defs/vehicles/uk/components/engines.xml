@@ -118,6 +118,7 @@
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
     <Nuffield_liberty_MKIV_NewOnBoarding>	64001	</Nuffield_liberty_MKIV_NewOnBoarding>
     <Wright_Continental_R-975C4_NewOnBoarding>	64002	</Wright_Continental_R-975C4_NewOnBoarding>
+    <Rolls_Royse_Meteor_MkIV_HW>	5003	</Rolls_Royse_Meteor_MkIV_HW>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -2076,5 +2077,22 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </Wright_Continental_R-975C4_NewOnBoarding>
+    <Rolls_Royse_Meteor_MkIV_HW>
+      <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	16000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	744	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Rolls_Royse_Meteor_MkIV_HW>
   </shared>
 </engines.xml>

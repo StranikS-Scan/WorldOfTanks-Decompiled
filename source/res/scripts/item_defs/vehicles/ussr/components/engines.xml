@@ -197,6 +197,7 @@
     <V-54K_MapsTraining_Player_MT_2>	32	</V-54K_MapsTraining_Player_MT_2>
     <V-5F_MapsTraining_Dummy_HT_2>	33	</V-5F_MapsTraining_Dummy_HT_2>
     <V-2-34_StoryMode>	64001	</V-2-34_StoryMode>
+    <V-54-6_HW>	5004	</V-54-6_HW>
   </ids>
   <shared>
     <V-2>
@@ -3485,5 +3486,22 @@
       <rpm_max>	2040	</rpm_max>
       <notInShop>	True	</notInShop>
     </V-2-34_StoryMode>
+    <V-54-6_HW>
+      <userString>	#ussr_vehicles:V-54-6	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	760	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	317	</rpm_min>
+      <rpm_max>	2248	</rpm_max>
+    </V-54-6_HW>
   </shared>
 </engines.xml>

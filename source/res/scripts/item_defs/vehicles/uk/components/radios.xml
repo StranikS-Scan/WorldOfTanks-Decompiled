@@ -46,6 +46,7 @@
     <N19Mk3_MapsTraining_Dummy_MT_2>	3	</N19Mk3_MapsTraining_Dummy_MT_2>
     <N9_NewOnBoarding>	64001	</N9_NewOnBoarding>
     <N19Mk3_NewOnBoarding>	64002	</N19Mk3_NewOnBoarding>
+    <N22_HW>	5003	</N22_HW>
   </ids>
   <shared>
     <N14>
@@ -596,5 +597,17 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </N19Mk3_NewOnBoarding>
+    <N22_HW>
+      <userString>	#gb_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22_HW>
   </shared>
 </radios.xml>

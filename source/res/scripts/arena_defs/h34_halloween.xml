@@ -1,0 +1,58 @@
+<h34_halloween.xml>
+  <wwmusic>	ev_hw_silence_10sec_loop	</wwmusic>
+  <wwambientSound>	ev_hw_hangar_amb_main	</wwambientSound>
+  <wwDefaultReverb>
+    <auxBus>	AUX_reverb_hangar_Forest_env	</auxBus>
+    <controlValue>	1.0	</controlValue>
+  </wwDefaultReverb>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	hangar_premium_2018.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Forest.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_halloween_hangar.bnk	</name>
+        <extension>	halloween	</extension>
+      </bank>
+      <bank>
+        <name>	ev_halloween_hangar.pck	</name>
+        <extension>	halloween	</extension>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>
+        <name>	ev_halloween_gameplay.bnk	</name>
+        <extension>	halloween	</extension>
+      </bank>
+      <bank>
+        <name>	ev_halloween_gameplay.pck	</name>
+        <extension>	halloween	</extension>
+      </bank>
+      <bank>
+        <name>	ev_halloween_gameplay_amb.pck	</name>
+        <extension>	halloween	</extension>
+      </bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ev_hw_mirny13_reward_screen_icon	</name>
+        <mod>	ev_hw_reward_screen_icon	</mod>
+      </event>
+      <event>
+        <name>	ambient_tree_without_foliage_bush_big_02	</name>
+        <mod></mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	200.000000 200.000000	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</h34_halloween.xml>

@@ -632,6 +632,16 @@
         </class-condition>
       </condition>
     </hint>
+    <hint>	HalloweenLeaderboardBtnHint	  <item-id>	HalloweenLeaderboardBtn	</item-id>
+      <text>	_(#halloween.halloween_lobby:hint/leaderboardBtn)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	VehiclePreviewPostProgressionButtonHint	  <item-id>	VehiclePreviewPostProgressionButton	</item-id>
       <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
       <arrow>

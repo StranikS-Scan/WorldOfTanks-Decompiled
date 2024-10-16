@@ -121,6 +121,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         self.delayedReload = None
         self.__delayedNextShellID = None
         self.__isViewActive = False
+        self.ammosLastActualValues = {}
         return
 
     @property
@@ -694,7 +695,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
         if self.__reloadTicker:
             self.__reloadTicker.startAnimation(shellIndex, state.getActualValue(), state.getBaseValue())
         else:
-            self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), state.getBaseValue(), state.getTimePassed())
+            actualValue = state.getActualValue()
+            if actualValue != self.ammosLastActualValues.get(shellIndex):
+                self.ammosLastActualValues[shellIndex] = actualValue
+                self.as_setCoolDownTimeS(shellIndex, state.getActualValue(), actualValue, state.getTimePassed())
 
     def __onOptionalDeviceAdded(self, optDeviceInBattle):
         if optDeviceInBattle.getIntCD() not in self._cds:

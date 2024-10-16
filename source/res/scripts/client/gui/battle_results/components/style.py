@@ -28,8 +28,8 @@ def getUnknownPlayerName(isEnemy=False):
 I18nDeathReason = namedtuple('I18nDeathReason', 'i18nString prefix suffix')
 
 def makeI18nDeathReason(deathReason):
-    i18nString = i18n.makeString(BATTLE_RESULTS.getVehicleDeadState(intType=deathReason))
-    return I18nDeathReason(i18nString, _VEHICLE_STATE_PREFIX.format(i18nString), _VEHICLE_STATE_SUFFIX)
+    state = backport.text(R.strings.battle_results.common.vehicleState.dyn('dead{}'.format(deathReason), R.invalid)())
+    return I18nDeathReason(state, _VEHICLE_STATE_PREFIX.format(state), _VEHICLE_STATE_SUFFIX)
 
 
 def markValueAsError(value):

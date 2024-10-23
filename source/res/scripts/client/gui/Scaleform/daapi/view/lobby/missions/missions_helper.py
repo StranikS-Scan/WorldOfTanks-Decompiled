@@ -1351,7 +1351,7 @@ class _DetailedWTMissionInfo(_DetailedMissionInfo):
             extraConditions.append(xpMultCond)
         criteria |= ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
         criteria |= ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING
-        return (criteria, extraConditions)
+        return (criteria, extraConditions, False)
 
     def _getCompletedDateLabel(self):
         dateLabel = text_styles.concatStylesWithSpace(_getClockIconTag(), text_styles.error(backport.text(R.strings.quests.missionDetails.status.notAvailable())), self.__getLabelBody())

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 def fillVehicleModel(model, vehicle):
     model.setType(vehicle.type)
     model.setLevel(vehicle.level)
-    model.setName(vehicle.shortUserName)
+    model.setName(vehicle.userName)
     model.setSpecName(getNationLessName(vehicle.name))
     model.setNation(vehicle.nationName)
     model.setIsElite(vehicle.isElite)

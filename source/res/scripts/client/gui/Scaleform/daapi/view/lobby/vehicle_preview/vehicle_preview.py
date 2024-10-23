@@ -196,7 +196,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         g_eventBus.addListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.HangarSimpleEvent.PORTAL_MANAGER_ACTIVATED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarSimpleEvent.VEHICLE_PREVIEW_CLOSE, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         self.setTopPanel()
         self.setBottomPanel()
         if g_currentPreviewVehicle.intCD == self._vehicleCD:
@@ -242,7 +242,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         g_eventBus.handleEvent(events.HangarSimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_UNLOADED), scope=EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.HangarSimpleEvent.PORTAL_MANAGER_ACTIVATED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarSimpleEvent.VEHICLE_PREVIEW_CLOSE, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.exitEvent:
             SoundGroups.g_instance.playSound2D(specialData.exitEvent)

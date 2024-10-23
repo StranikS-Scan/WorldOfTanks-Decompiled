@@ -23,7 +23,7 @@
       </cooldownSeconds>
       <reuseCount>	2	  <exports>	tooltip	</exports>
       </reuseCount>
-      <duration>	20	  <exports>	vse tooltip	</exports>
+      <duration>	25	  <exports>	vse tooltip	</exports>
       </duration>
       <stabMovement>	0.3	  <exports>	vse tooltip	</exports>
       </stabMovement>
@@ -158,13 +158,13 @@
       </reuseCount>
       <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
-      <stabMovement>	1.25	  <exports>	vse tooltip	</exports>
+      <stabMovement>	1.3	  <exports>	vse tooltip	</exports>
       </stabMovement>
-      <stabTurns>	1.25	  <exports>	vse tooltip	</exports>
+      <stabTurns>	1.3	  <exports>	vse tooltip	</exports>
       </stabTurns>
-      <stabTurret>	1.25	  <exports>	vse tooltip	</exports>
+      <stabTurret>	1.3	  <exports>	vse tooltip	</exports>
       </stabTurret>
-      <stabShot>	1.25	  <exports>	vse tooltip	</exports>
+      <stabShot>	1.3	  <exports>	vse tooltip	</exports>
       </stabShot>
       <addSecToTimeBtmClips>	1.25	  <exports>	vse tooltip	</exports>
       </addSecToTimeBtmClips>
@@ -174,19 +174,19 @@
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersionChassisMovement	</name>
-        <value>	25	</value>
+        <value>	30	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionChassisRotation	</name>
-        <value>	25	</value>
+        <value>	30	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionTurretRotation	</name>
-        <value>	25	</value>
+        <value>	30	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	25	</value>
+        <value>	30	</value>
       </mul>
       <add>
         <name>	vehicleGunAndGunClipCooldown	</name>

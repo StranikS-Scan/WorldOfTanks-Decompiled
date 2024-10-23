@@ -23,10 +23,10 @@ class LootBoxType(Enum):
 
 
 class EventTankType(Enum):
-    PRIMARY = 'A33_MTLS_1G14'
-    SECONDARY = 'GB113_Matilda_LVT'
-    MAIN = 'G36_PzII_J'
-    BOSS = 'R33_Churchill_LL'
+    PRIMARY = 'G168_KJpz_T_III'
+    SECONDARY = 'R212_Object_265T'
+    MAIN = 'Pl26_Czolg_P_Wz_46'
+    BOSS = 'Pl26_Czolg_P_Wz_46_Verbesserter'
 
 
 class WtEventPortalModel(WtEventPortalsBase):

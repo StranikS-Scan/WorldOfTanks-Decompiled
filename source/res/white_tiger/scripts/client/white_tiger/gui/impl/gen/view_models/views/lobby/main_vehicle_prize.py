@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class MainVehiclePrize(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(MainVehiclePrize, self).__init__(properties=properties, commands=commands)
 
     def getPrice(self):
@@ -38,29 +38,35 @@ class MainVehiclePrize(ViewModel):
     def setTankName(self, value):
         self._setString(4, value)
 
+    def getShortTankName(self):
+        return self._getString(5)
+
+    def setShortTankName(self, value):
+        self._setString(5, value)
+
     def getTankLevel(self):
-        return self._getNumber(5)
+        return self._getNumber(6)
 
     def setTankLevel(self, value):
-        self._setNumber(5, value)
+        self._setNumber(6, value)
 
     def getTankNation(self):
-        return self._getString(6)
+        return self._getString(7)
 
     def setTankNation(self, value):
-        self._setString(6, value)
+        self._setString(7, value)
 
     def getIsTankPremium(self):
-        return self._getBool(7)
+        return self._getBool(8)
 
     def setIsTankPremium(self, value):
-        self._setBool(7, value)
+        self._setBool(8, value)
 
     def getTankType(self):
-        return self._getString(8)
+        return self._getString(9)
 
     def setTankType(self, value):
-        self._setString(8, value)
+        self._setString(9, value)
 
     def _initialize(self):
         super(MainVehiclePrize, self)._initialize()
@@ -69,6 +75,7 @@ class MainVehiclePrize(ViewModel):
         self._addNumberProperty('discountTokenCount', 0)
         self._addNumberProperty('maxDiscountTokenCount', 0)
         self._addStringProperty('tankName', '')
+        self._addStringProperty('shortTankName', '')
         self._addNumberProperty('tankLevel', 0)
         self._addStringProperty('tankNation', '')
         self._addBoolProperty('isTankPremium', False)

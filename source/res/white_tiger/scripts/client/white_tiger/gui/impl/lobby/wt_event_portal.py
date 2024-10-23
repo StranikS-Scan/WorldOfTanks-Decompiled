@@ -23,6 +23,7 @@ from white_tiger.gui.impl.lobby.packers.wt_event_simple_bonus_packers import get
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
+from gui.shared.event_dispatcher import showVehiclePreview, showEventStorageWindow
 _logger = logging.getLogger(__name__)
 _DEFAULT_RUN_PORTAL_TIMES = 1
 _UNCLAIMED_RUN_DELAY = 1
@@ -112,6 +113,7 @@ class WTEventPortalView(WtEventBasePortalsView, CallbackDelayer):
         mainVehiclePrizeCD = self._eventCtrl.getConfig().mainVehiclePrize
         vehicle = self._itemsCache.items.getItemByCD(mainVehiclePrizeCD)
         model.setTankName(vehicle.longUserName)
+        model.setShortTankName(vehicle.userName)
         model.setTankLevel(vehicle.level)
         model.setTankNation(vehicle.name.split(':')[0])
         model.setIsTankPremium(vehicle.isPremium)
@@ -123,6 +125,7 @@ class WTEventPortalView(WtEventBasePortalsView, CallbackDelayer):
         self.viewModel.onBackButtonClick += self.__onBackClick
         self.viewModel.onRunPortalClick += self.__onRunPortal
         self.viewModel.onAnimationSettingChange += self.__switchAnimationSetting
+        self.viewModel.onPreviewTankClick += self.__onPreviewTankClick
         g_eventBus.addListener(events.WtEventPortalsEvent.ON_PORTAL_AWARD_VIEW_CLOSED, self._onPortalAwardsViewClose, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.addListener(events.WtEventPortalsEvent.ON_BACK_TO_PORTAL, self.__onPortalAwardsViewClosed, EVENT_BUS_SCOPE.LOBBY)
 
@@ -131,6 +134,7 @@ class WTEventPortalView(WtEventBasePortalsView, CallbackDelayer):
         self.viewModel.onBackButtonClick -= self.__onBackClick
         self.viewModel.onRunPortalClick -= self.__onRunPortal
         self.viewModel.onAnimationSettingChange -= self.__switchAnimationSetting
+        self.viewModel.onPreviewTankClick -= self.__onPreviewTankClick
         g_eventBus.removeListener(events.WtEventPortalsEvent.ON_PORTAL_AWARD_VIEW_CLOSED, self._onPortalAwardsViewClose, EVENT_BUS_SCOPE.LOBBY)
         g_eventBus.removeListener(events.WtEventPortalsEvent.ON_BACK_TO_PORTAL, self.__onPortalAwardsViewClosed, EVENT_BUS_SCOPE.LOBBY)
         super(WTEventPortalView, self)._removeListeners()
@@ -175,6 +179,15 @@ class WTEventPortalView(WtEventBasePortalsView, CallbackDelayer):
     def __openPortal(self):
         lootBoxType = self.__getLootBoxType()
         self._lootBoxesCtrl.onPortalOpened(lootBoxType, parentWindow=self.getParentWindow(), callbackFailure=self.__handleRequestFailure)
+
+    def __onPreviewTankClick(self):
+        vehicleCD = self._eventCtrl.getConfig().mainVehiclePrize
+        args = {'backBtnLabel': backport.text(R.strings.event.vehiclePortal.backToPortalButton())}
+        showVehiclePreview(vehicleCD, previewBackCb=self.__previewBackCb, **args)
+
+    def __previewBackCb(self):
+        g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_CLOSE), scope=EVENT_BUS_SCOPE.LOBBY)
+        showEventStorageWindow()
 
     def __handleRequestFailure(self):
         Waiting.hide('updating')

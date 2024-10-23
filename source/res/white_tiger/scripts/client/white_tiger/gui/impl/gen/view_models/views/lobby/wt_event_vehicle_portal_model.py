@@ -5,15 +5,15 @@ from white_tiger.gui.impl.gen.view_models.views.lobby.wt_event_portal_awards_bas
 
 class EventTankType(Enum):
     PRIMARY = 'G168_KJpz_T_III'
-    SECONDARY = 'R191_Object_283'
+    SECONDARY = 'R212_Object_265T'
     MAIN = 'Pl26_Czolg_P_Wz_46'
-    BOSS = 'R33_Churchill_LL'
+    BOSS = 'Pl26_Czolg_P_Wz_46_Verbesserter'
 
 
 class WtEventVehiclePortalModel(WtEventPortalAwardsBaseModel):
-    __slots__ = ()
+    __slots__ = ('onVideoStarted', 'onPortalRewardsStarted')
 
-    def __init__(self, properties=9, commands=5):
+    def __init__(self, properties=10, commands=7):
         super(WtEventVehiclePortalModel, self).__init__(properties=properties, commands=commands)
 
     def getEventTank(self):
@@ -22,6 +22,15 @@ class WtEventVehiclePortalModel(WtEventPortalAwardsBaseModel):
     def setEventTank(self, value):
         self._setString(8, value.value)
 
+    def getIsWindowAccessible(self):
+        return self._getBool(9)
+
+    def setIsWindowAccessible(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(WtEventVehiclePortalModel, self)._initialize()
         self._addStringProperty('eventTank')
+        self._addBoolProperty('isWindowAccessible', True)
+        self.onVideoStarted = self._addCommand('onVideoStarted')
+        self.onPortalRewardsStarted = self._addCommand('onPortalRewardsStarted')

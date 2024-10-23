@@ -166,7 +166,7 @@ def showSpecialVehicleReceivedVideo(specialVehicle, onVideoClose=None, canManage
     tankTypeToVideo = {EventTankType.PRIMARY: 'primary_tank_portal_show',
      EventTankType.SECONDARY: 'secondary_tank_portal_show'}
     specialVehicleName = specialVehicle.name.split(':')[1]
-    tankType = EventTankType.PRIMARY if specialVehicleName == EventTankType.PRIMARY else EventTankType.SECONDARY
+    tankType = EventTankType.PRIMARY if specialVehicleName == EventTankType.PRIMARY.value else EventTankType.SECONDARY
     videoName = tankTypeToVideo[tankType]
 
     def onVideoCloseWrapper(*args, **kwargs):

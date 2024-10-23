@@ -871,5 +871,5 @@ class HangarSimpleEvent(HasCtxEvent):
     SHOW_CONFIRM_DIALOG = 'HangarSimpleEvent/showConfirmDialog'
     CLOSE_CONFIRM_DIALOG = 'HangarSimpleEvent/closeConfirmDialog'
     DISPATCHER_ENTITY_WAS_UPDATED = 'HangarSimpleEvent/DispatcherEntityWasUpdated'
-    PORTAL_MANAGER_ACTIVATED = 'HangarSimpleEvent/PortalManagerActivated'
+    VEHICLE_PREVIEW_CLOSE = 'HangarSimpleEvent/VehiclePreviewClose'
     UPDATE_CAROUSEL_VEHICLE_STATES = 'HangarSimpleEvent/UpdateCarouselVehicleStates'

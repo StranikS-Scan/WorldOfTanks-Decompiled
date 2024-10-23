@@ -50,7 +50,7 @@ class _WTEventLootboxPortalAwards(CONST_CONTAINER):
 
 
 class _WTEventPortalVideos(CONST_CONTAINER):
-    GROUP = ''
+    GROUP = 'STATE_video_overlay'
     PLAY = 'STATE_video_overlay_on'
     STOP = 'STATE_video_overlay_off'
     VIDEO_1 = 'ev_white_tiger_hangar_lootbox_launch_video_01'
@@ -297,6 +297,8 @@ class WhiteTigerVehicleAwardViewSounds(CONST_CONTAINER):
     VIDEO_PAUSE = 'ev_white_tiger_portal_video_pause'
     VIDEO_RESUME = 'ev_white_tiger_portal_video_resume'
     VIDEO_STOP = 'ev_white_tiger_portal_video_stop'
+    REWARDS_LOOP_START = 'ev_white_tiger_portal_reward_loop_start'
+    REWARDS_LOOP_STOP = 'ev_white_tiger_portal_reward_loop_stop'
 
 
 class WhiteTigerVehicleAwardViewSoundControl(IVideoSoundManager):
@@ -309,12 +311,14 @@ class WhiteTigerVehicleAwardViewSoundControl(IVideoSoundManager):
     def start(self):
         if not self.__state:
             sound = WhiteTigerVehicleAwardViewSounds.VIDEO_START
+            WWISE.WW_setState(_WTEventPortalVideos.GROUP, _WTEventPortalVideos.PLAY)
             WWISE.WW_eventGlobal(sound)
             self.__state = SoundManagerStates.PLAYING
 
     def stop(self):
         if self.__state != SoundManagerStates.STOPPED:
             sound = WhiteTigerVehicleAwardViewSounds.VIDEO_STOP
+            WWISE.WW_setState(_WTEventPortalVideos.GROUP, _WTEventPortalVideos.STOP)
             WWISE.WW_eventGlobal(sound)
             self.__state = SoundManagerStates.STOPPED
 
@@ -379,5 +383,11 @@ def playBossWidgetAppears():
     sound_helpers.play2d(_WTEventSounds.BOSS_WIDGET_APPEARS)
 
 
-def playVehicleAwardReceivedFromPortal():
-    sound_helpers.play2d(_WTEventLootboxPortalAwards.LOOTBOX_ITEM_VEHICLE)
+def playLootboxVehicleRewardsLoopStarted():
+    sound_helpers.play2d(WhiteTigerVehicleAwardViewSounds.REWARDS_LOOP_START)
+    WWISE.WW_setState(_WTEventPortalVideos.GROUP, _WTEventPortalVideos.STOP)
+
+
+def playLootboxVehicleRewardsLoopStopped():
+    sound_helpers.play2d(WhiteTigerVehicleAwardViewSounds.REWARDS_LOOP_STOP)
+    WWISE.WW_setState(_WTEventPortalVideos.GROUP, _WTEventPortalVideos.STOP)

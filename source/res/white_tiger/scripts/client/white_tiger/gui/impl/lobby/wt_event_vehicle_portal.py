@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: white_tiger/scripts/client/white_tiger/gui/impl/lobby/wt_event_vehicle_portal.py
+import Windowing
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from white_tiger.gui.impl.gen.view_models.views.lobby.wt_event_vehicle_portal_model import WtEventVehiclePortalModel, EventTankType
-from white_tiger.gui.impl.lobby.wt_event_sound import playVehicleAwardReceivedFromPortal, playLootBoxPortalExit
+from white_tiger.gui.impl.lobby.wt_event_sound import playLootBoxPortalExit
 from white_tiger.gui.impl.lobby.wt_event_base_portal_awards_view import WtEventBasePortalAwards
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.shared.event_dispatcher import closeEventPortalAwardsWindow
@@ -13,6 +14,7 @@ from white_tiger.gui.wt_event_models_helper import setLootBoxesCount, fillVehicl
 from white_tiger.gui.impl.lobby.packers.wt_event_bonuses_packers import LootBoxAwardsManager
 from gui.shared import events, EVENT_BUS_SCOPE, g_eventBus
 from shared_utils import CONST_CONTAINER
+from white_tiger.gui.impl.lobby.wt_event_sound import WhiteTigerVehicleAwardViewSoundControl, playLootboxVehicleRewardsLoopStopped, playLootboxVehicleRewardsLoopStarted
 
 class WtEventVehiclePortal(WtEventBasePortalAwards):
 
@@ -20,15 +22,37 @@ class WtEventVehiclePortal(WtEventBasePortalAwards):
         settings = ViewSettings(layoutID=R.views.white_tiger.lobby.PortalVehicleAwardView(), model=WtEventVehiclePortalModel())
         super(WtEventVehiclePortal, self).__init__(settings, awards)
         self.__boxType = boxType
+        self.__soundController = WhiteTigerVehicleAwardViewSoundControl()
 
     @property
     def viewModel(self):
         return super(WtEventVehiclePortal, self).getViewModel()
 
+    def _onLoading(self, *args, **kwargs):
+        super(WtEventVehiclePortal, self)._onLoading(*args, **kwargs)
+        self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
+        Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
+
     def _onLoaded(self, *args, **kwargs):
         super(WtEventVehiclePortal, self)._onLoaded(*args, **kwargs)
-        playVehicleAwardReceivedFromPortal()
         Waiting.hide('updating')
+
+    def _finalize(self):
+        self.__onPortalRewardsStopped()
+        Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
+        super(WtEventVehiclePortal, self)._finalize()
+
+    def _getEvents(self):
+        return ((self.viewModel.onVideoStarted, self.__onVideoStarted), (self.viewModel.onPortalRewardsStarted, self.__onPortalRewardsStarted))
+
+    def __onVideoStarted(self):
+        self.__soundController.start()
+
+    def __onPortalRewardsStarted(self):
+        playLootboxVehicleRewardsLoopStarted()
+
+    def __onPortalRewardsStopped(self):
+        playLootboxVehicleRewardsLoopStopped()
 
     def _updateModel(self):
         super(WtEventVehiclePortal, self)._updateModel()
@@ -49,7 +73,7 @@ class WtEventVehiclePortal(WtEventBasePortalAwards):
             else:
                 specialVehicle = self._boxesCtrl.getSpecialVehicleName(self._awards)
                 specialVehicleName = specialVehicle.name.split(':')[1]
-                isPrimaryTank = specialVehicleName == EventTankType.PRIMARY
+                isPrimaryTank = specialVehicleName == EventTankType.PRIMARY.value
                 model.setEventTank(EventTankType.PRIMARY if isPrimaryTank else EventTankType.SECONDARY)
                 fillVehicleModel(model.vehicle, specialVehicle)
             if self._awards is not None:
@@ -84,6 +108,13 @@ class WtEventVehiclePortal(WtEventBasePortalAwards):
         closeEventPortalAwardsWindow()
         g_eventBus.handleEvent(events.WtEventPortalsEvent(events.WtEventPortalsEvent.ON_BACK_TO_PORTAL), scope=EVENT_BUS_SCOPE.LOBBY)
         super(WtEventVehiclePortal, self)._onClose()
+
+    def __onWindowAccessibilityChanged(self, isWindowAccessible):
+        if isWindowAccessible:
+            self.__soundController.unpause()
+        else:
+            self.__soundController.pause()
+        self.viewModel.setIsWindowAccessible(isWindowAccessible)
 
 
 class WtEventVehiclePortalWindow(LobbyWindow):

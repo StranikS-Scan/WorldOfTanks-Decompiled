@@ -2429,7 +2429,7 @@
     <id>	31014	</id>
     <userString>	#china_vehicles:_180mm_HEAT_F-572CH_70	</userString>
     <icon>	ap_fsds_premium	</icon>
-    <price>	5040	</price>
+    <price>	7200	</price>
     <kind>	ARMOR_PIERCING_FSDS	</kind>
     <caliber>	180	</caliber>
     <improved>	true	</improved>
@@ -2444,8 +2444,8 @@
     <distanceDamage>
       <isEnabled>	true	</isEnabled>
       <damage>
-        <min>	630	</min>
-        <max>	1470	</max>
+        <min>	367	</min>
+        <max>	1733	</max>
       </damage>
       <distance>
         <min>	1.0	</min>
@@ -2453,6 +2453,8 @@
       </distance>
       <ignoreModules>	true	</ignoreModules>
     </distanceDamage>
+    <hitDeviceChanceMultiplier>	0.5	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.5	</hitCrewChanceMultiplier>
   </_180mm_HEAT_F-572CH_70>
   <_180mm_HE_VO28CH_70>
     <id>	31015	</id>

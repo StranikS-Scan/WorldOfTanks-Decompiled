@@ -124,7 +124,7 @@ class WtEventPortalAwards(WtEventBasePortalAwards, CallbackDelayer):
             self.__rerollCost = reRollPrice.get(priceType)
             model.setRerollCount(self._boxesCtrl.getReRollAttemptsLeft(boxType))
             model.setIsRerollAffordable(self._boxesCtrl.hasAccountEnoughMoneyForReRoll(boxType))
-            tooltipType = currencyTooltipTypes.GOLD if isBossLootBox else currencyTooltipTypes.CREDITS
+            tooltipType = currencyTooltipTypes.CREDITS
             model.setCurrencyTooltipType(tooltipType)
             model.setRerollPrice(self.__rerollCost)
         else:

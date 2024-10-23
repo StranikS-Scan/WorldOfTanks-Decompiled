@@ -371,7 +371,7 @@ class WtVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         vehicleIcon = R.images.gui.maps.shop.vehicles.c_180x135.dyn(normalizeVehicleName)()
         specialArgs = {'iconBefore': backport.image(vehicleIcon),
          'labelBefore': '',
-         'iconAfter': backport.image(R.images.gui.maps.icons.quests.bonuses.big.gold()),
+         'iconAfter': backport.image(R.images.gui.maps.icons.quests.bonuses.big.dyn(bonusComp.getName())()),
          'labelAfter': bonusComp.getIconLabel(),
          'bonusName': bonusComp.getName(),
          'vehicleName': vehicle.shortUserName,

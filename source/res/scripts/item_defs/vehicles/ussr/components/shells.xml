@@ -4242,7 +4242,7 @@
     <id>	31052	</id>
     <userString>	#ussr_vehicles:_130mm_ZBK60M	</userString>
     <icon>	ap_fsds_premium	</icon>
-    <price>	3640	</price>
+    <price>	4800	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_FSDS	</kind>
     <caliber>	130	</caliber>
@@ -4257,8 +4257,8 @@
     <distanceDamage>
       <isEnabled>	true	</isEnabled>
       <damage>
-        <min>	336	</min>
-        <max>	784	</max>
+        <min>	196	</min>
+        <max>	924	</max>
       </damage>
       <distance>
         <min>	1.0	</min>
@@ -4266,6 +4266,8 @@
       </distance>
       <ignoreModules>	true	</ignoreModules>
     </distanceDamage>
+    <hitDeviceChanceMultiplier>	0.5	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.5	</hitCrewChanceMultiplier>
   </_130mm_3VBK_279>
   <_130mm_53_VOF_482V_279>
     <id>	31053	</id>

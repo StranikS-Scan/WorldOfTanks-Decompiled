@@ -121,7 +121,7 @@ def packBossMainVehicleBonus(model, bonuses, tooltipItems):
             if bonusEntry.getName() == 'vehicles':
                 vehicle, _ = bonusEntry.getVehicles()[0]
                 model.setTankName(vehicle.name.split(':')[1])
-                model.setIsCollected(vehicle.isInInventory or vehicle.isRestorePossible())
+                model.setIsCollected((vehicle.isInInventory or vehicle.isRestorePossible()) and not vehicle.rentInfo.isRented)
                 tooltipID = len(tooltipItems)
                 tooltipData = WtEventVehiclesBonusUIPacker().getToolTip(bonusEntry)
                 if tooltipData:

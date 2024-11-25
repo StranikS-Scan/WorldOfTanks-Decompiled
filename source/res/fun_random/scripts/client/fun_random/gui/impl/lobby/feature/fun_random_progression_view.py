@@ -84,7 +84,7 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMix
         self.showCommonInfoPage()
 
     def _showTierList(self, *_):
-        showFunRandomTierList()
+        showFunRandomTierList(parent=self.getParentWindow())
 
     def _getEvents(self):
         return ((self.viewModel.onClose, self.showHangar), (self.viewModel.onShowInfo, self.showInfoPage), (self.viewModel.onOpenTierList, self._showTierList))

@@ -16,7 +16,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, TIMER_VIEW_STATE, COUNTDOWN_STATE
 from helpers.CallbackDelayer import CallbackDelayer
 from constants import LootAction
-from gui.shared.events import AirDropEvent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.battle_control.view_components import IViewComponentsCtrlListener
 from gui.shared.gui_items import GUI_ITEM_TYPE, isItemVehicleHull
@@ -28,6 +27,7 @@ from gui.battle_control.battle_constants import PERSONAL_EFFICIENCY_TYPE
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from Math import Matrix
 from battle_royale.gui.constants import BattleRoyaleEquipments, BattleRoyaleComponents
+from battle_royale.gui.shared.events import AirDropEvent
 from battle_royale.gui.battle_control.controllers.progression_ctrl import IProgressionListener
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
 from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener

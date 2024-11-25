@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: fun_random/scripts/client/fun_random/gui/Scaleform/daapi/view/common/filter_popover.py
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin
-from gui.Scaleform.daapi.view.common.filter_popover import FILTER_SECTION, BattlePassCarouselFilterPopover
+from gui.Scaleform.daapi.view.common.common_constants import FILTER_POPOVER_SECTION
+from gui.Scaleform.daapi.view.common.filter_popover import BattlePassCarouselFilterPopover
 from gui.impl import backport
 from gui.shared.utils.functions import makeTooltip
 
@@ -20,9 +21,9 @@ class FunRandomCarouselFilterPopover(BattlePassCarouselFilterPopover):
         return False
 
     @classmethod
-    def _generateMapping(cls, hasRented, hasEvent, hasRoles, **kwargs):
-        mapping = super(FunRandomCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
-        mapping[FILTER_SECTION.SPECIALS].append('funRandom')
+    def _generateMapping(cls, hasRented, hasEvent, hasRoles, hasCustomization, **kwargs):
+        mapping = super(FunRandomCarouselFilterPopover, cls)._generateMapping(hasRented, hasEvent, hasRoles, hasCustomization, **kwargs)
+        mapping[FILTER_POPOVER_SECTION.SPECIALS].append('funRandom')
         return mapping
 
     def _packSpecial(self, entry, ctx, selected, tooltipRes, enabled):

@@ -709,12 +709,13 @@ class OpenCustomizationHandler(ActionHandler):
         def toCustomizationCallback():
             ctx = self.service.getCtx()
             if savedData.get('toStyle'):
-                ctx.changeMode(CustomizationModes.STYLED, source=CustomizationModeSource.NOTIFICATION)
+                if ctx.modeId not in CustomizationModes.BASE_STYLES:
+                    ctx.changeMode(CustomizationModes.STYLE_2D, source=CustomizationModeSource.NOTIFICATION)
             elif savedData.get('toProjectionDecals'):
                 itemCD = savedData.get('itemIntCD', 0)
                 goToEditableStyle = ctx.canEditStyle(itemCD)
                 style = None
-                if ctx.modeId is CustomizationModes.STYLED:
+                if ctx.modeId in CustomizationModes.BASE_STYLES:
                     style = ctx.mode.modifiedStyle
                 if goToEditableStyle and style is not None:
                     ctx.editStyle(style.intCD, source=CustomizationModeSource.NOTIFICATION)
@@ -755,7 +756,7 @@ class ProlongStyleRent(ActionHandler):
 
         def prolongRentCallback():
             ctx = self.service.getCtx()
-            ctx.changeMode(CustomizationModes.STYLED)
+            ctx.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D)
             ctx.mode.prolongRent(style)
 
         if vehicle.invID != -1:
@@ -1183,7 +1184,7 @@ class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
         styleID = notificationData.get('styleID')
         if styleID:
             style = self.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
-            self.__customizationService.showCustomization(modeId=CustomizationModes.STYLED, tabId=CustomizationTabs.STYLES, itemCD=style.intCD)
+            self.__customizationService.showCustomization(modeId=CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D, tabId=CustomizationTabs.STYLES_3D if style.is3D else CustomizationTabs.STYLES_2D, itemCD=style.intCD)
 
 
 class _OpenBondEquipmentSelection(NavigationDisabledActionHandler):

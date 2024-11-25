@@ -314,6 +314,9 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             criteria |= ~REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.NATIONAL_EMBLEM])
             installedCustomizations = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria=criteria, nationID=vehicle.nationID).itervalues()
             installedCustomizations = sorted(installedCustomizations, key=lambda item: TYPES_ORDER.index(item.itemTypeID))
+        else:
+            attachments = self.__itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE.ATTACHMENT, criteria=REQ_CRITERIA.CUSTOMIZATION.IS_INSTALLED_ON_VEHICLE(vehicle), nationID=vehicle.nationID).values()
+            installedCustomizations.extend(attachments)
         customizationOnVehicle = []
         for customization in installedCustomizations:
             count = getCustomizationItemSellCountForVehicle(customization, vehicle.intCD)

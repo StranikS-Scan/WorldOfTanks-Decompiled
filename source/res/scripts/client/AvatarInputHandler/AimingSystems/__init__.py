@@ -124,11 +124,7 @@ def getGunMatrixProvider(vehicleTypeDescriptor, turretMatrixProvider, gunPitchMa
 
 
 def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity=False):
-    turretOffs = vehTypeDescr.hull.turretPositions[0] + vehTypeDescr.chassis.hullPosition
-    gunOffs = vehTypeDescr.activeGunShotPosition
-    speed = vehTypeDescr.shot.speed
-    gravity = vehTypeDescr.shot.gravity if not compensateGravity else 0.0
-    return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
+    return BigWorld.getAimingAngles(targetPos, vehicleMatrix, vehTypeDescr.chassis.hullPosition + vehTypeDescr.hull.turretPositions[0], vehTypeDescr.activeGunShotPosition, vehTypeDescr.shot.speed, vehTypeDescr.shot.gravity if not compensateGravity else 0.0)
 
 
 def _getDesiredShotPointUncached(start, direction, onlyOnGround, isStrategicMode, terrainOnlyCheck, shotDistance):

@@ -49,7 +49,6 @@ class DynSquadArenaController(object):
         if invitesManager is not None:
             invitesManager.onReceivedInviteListModified += self.__onReceivedInviteModified
             invitesManager.onSentInviteListModified += self.__onSentInviteListModified
-        self._isBattleLoadingVisible = False
         self.__sentOwnJoinMessage = False
         self.__sentOwnCreateMessage = False
         self.__sentEnemyCreatePlatoons = []
@@ -83,8 +82,6 @@ class DynSquadArenaController(object):
                 for squadIdx, squadSize in squadSizes[otherTeam].iteritems():
                     self.__sentEnemyCreatePlatoons.append(squadIdx)
                     self.__squadMembersEnemy[squadIdx] = squadSize
-
-        self._isBattleLoadingVisible = event.ctx['isShown']
 
     def process(self, playerVehVO, arenaDP):
         voSquadIndex = playerVehVO.squadIndex
@@ -273,16 +270,13 @@ class _DynSquadSoundsController(DynSquadArenaController):
         self.__playSound(_DYN_SQUAD_PLAYER_JOINED_PLATOON)
 
     def __playSound(self, sound):
-        if self._isBattleLoadingVisible:
-            return
-        else:
-            app = self.app
-            if app is not None and app.soundManager is not None:
-                app.soundManager.playEffectSound(SoundEffectsId.DYN_SQUAD_STARTING_DYNAMIC_PLATOON)
-            notifications = avatar_getter.getSoundNotifications()
-            if notifications is not None and hasattr(notifications, 'play'):
-                notifications.play(sound)
-            return
+        app = self.app
+        if app is not None and app.soundManager is not None:
+            app.soundManager.playEffectSound(SoundEffectsId.DYN_SQUAD_STARTING_DYNAMIC_PLATOON)
+        notifications = avatar_getter.getSoundNotifications()
+        if notifications is not None and hasattr(notifications, 'play'):
+            notifications.play(sound)
+        return
 
 
 class DynSquadFunctional(IArenaVehiclesController):

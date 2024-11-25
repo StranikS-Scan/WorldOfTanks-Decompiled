@@ -5,7 +5,7 @@ import BigWorld
 import ResMgr
 import i18n
 import constants
-from aih_constants import CTRL_MODE_NAME
+from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
 from abc import abstractmethod
@@ -165,6 +165,15 @@ def isShowingKillCam():
     from gui.shared.events import DeathCamEvent
     inputHandler = BigWorld.player().inputHandler
     return inputHandler.ctrlModeName == CTRL_MODE_NAME.KILL_CAM and inputHandler.ctrl.killCamState in DeathCamEvent.SIMULATION_INCL_FADES if inputHandler else False
+
+
+def getVisibilityControllerMask(controlModes):
+    visibilityMask = 0
+    for index, mode in enumerate(CTRL_MODES):
+        if controlModes.get(mode, True):
+            visibilityMask += 1 << index
+
+    return visibilityMask
 
 
 class ReferralButtonHandler(object):

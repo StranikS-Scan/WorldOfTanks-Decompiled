@@ -632,16 +632,6 @@
         </class-condition>
       </condition>
     </hint>
-    <hint>	HalloweenLeaderboardBtnHint	  <item-id>	HalloweenLeaderboardBtn	</item-id>
-      <text>	_(#halloween.halloween_lobby:hint/leaderboardBtn)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
     <hint>	VehiclePreviewPostProgressionButtonHint	  <item-id>	VehiclePreviewPostProgressionButton	</item-id>
       <text>	_(#veh_post_progression:hint/vehiclePreview)	</text>
       <arrow>
@@ -869,6 +859,82 @@
       </arrow>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	NewC11nSectionHint	  <item-id>	TuningBtn	</item-id>
+      <text>	_(#vehicle_customization:customization/hint/newCustomizationSection)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <condition-and>
+          <class-condition>	NewC11nSectionHintChecker	  <path>	gui.customization.shared	</path>
+            <arguments>	NewC11nSectionHint	</arguments>
+          </class-condition>
+          <global-active>	_Unlocked3DCustomization	</global-active>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	C11nVehicleListHint	  <item-id>	C11nVehicleListSidebarBtn	</item-id>
+      <text>	_(#vehicle_customization:customization/hint/suitableVehicleList)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <condition-and>
+          <condition-hint-showed>
+            <hint-id>	NewC11nSectionHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+          <class-condition>	C11nVehicleListHintChecker	  <path>	gui.customization.shared	</path>
+            <arguments>	C11nVehicleListHint	</arguments>
+          </class-condition>
+        </condition-and>
+      </condition>
+    </hint>
+    <hint>	VehicleC11nFilterHint	  <item-id>	VehicleCarouselFilterPopoverBtn	</item-id>
+      <text>	_(#vehicle_customization:customization/hint/vehicleCustomizationFilter)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <condition-and>
+          <class-condition>	VehicleC11nFilterHintChecker	  <path>	gui.customization.shared	</path>
+            <arguments>	VehicleC11nFilterHint	</arguments>
+          </class-condition>
+          <condition-hint-showed>
+            <hint-id>	NewC11nSectionHint	</hint-id>
+            <value>	True	</value>
+          </condition-hint-showed>
+        </condition-and>
+      </condition>
     </hint>
   </hints>
 </once-only-hints.xml>

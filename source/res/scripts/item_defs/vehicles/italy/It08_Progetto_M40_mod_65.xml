@@ -965,6 +965,33 @@
         <scale>	0.528045 0.528045 0.528044	</scale>
         <showOn>	16	</showOn>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.588 0.162 -0.797362	</position>
+        <rotation>	0 0 1.577778	</rotation>
+        <scale>	0.999975 0.999975 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.586 0.162 -0.797362	</position>
+        <rotation>	3.141593 -0 -1.563815	</rotation>
+        <scale>	0.999975 0.999975 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.015992 0.193456 -3.499	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999976 0.999972 0.999978	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2691,6 +2718,24 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.690772	</clipAngle>
           <anchorShift>	0.710092	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.0775 0.75444 0.313501	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.471339 0.691153 -1.626674	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

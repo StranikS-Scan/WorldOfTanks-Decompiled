@@ -13,9 +13,13 @@
     </NetworkFilter>
     <Sensor></Sensor>
   </Simulation>
-  <PostHierarchy>
-    <postHierarchyUpdate></postHierarchyUpdate>
-    <postHierarchyUpdateFinish></postHierarchyUpdateFinish>
-  </PostHierarchy>
-  <Finalize></Finalize>
+  <PostTick>
+    <postTickUpdate></postTickUpdate>
+    <postTickUpdateFinish></postTickUpdateFinish>
+  </PostTick>
+  <Finalize>
+    <preFinalize>
+      <before>	true	</before>
+    </preFinalize>
+  </Finalize>
 </ticking_graph.xml>

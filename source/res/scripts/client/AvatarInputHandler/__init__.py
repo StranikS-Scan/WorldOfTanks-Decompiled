@@ -225,6 +225,8 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         self.onPostmortemKillerVisionEnter = Event()
         self.onPostmortemKillerVisionExit = Event()
         self.onReceivedKillerID = Event()
+        self.OnVehicleCollided = Event()
+        self.OnVehicleShaked = Event()
         self.__isArenaStarted = False
         self.__isStarted = False
         self.__targeting = _Targeting()
@@ -703,6 +705,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
         return self.__curCtrl.onMinimapClicked(worldPos)
 
     def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0):
+        self.OnVehicleShaked(vehicle.id, shakeReason)
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
             shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
@@ -747,6 +750,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
             return
 
     def onVehicleCollision(self, vehicle, impactVelocity):
+        self.OnVehicleCollided(vehicle.id, impactVelocity)
         if impactVelocity < self.__dynamicCameraSettings.settings['minCollisionSpeed']:
             return
         else:

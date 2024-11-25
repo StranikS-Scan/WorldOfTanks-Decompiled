@@ -16,7 +16,6 @@ import CommandMapping
 from gui.shared.utils.key_mapping import getVirtualKey
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from ClientArena import CollisionResult
 from Math import Vector3
 from AvatarInputHandler.VideoCamera import VideoCamera, _InertiaScalar, KeySensor, _AlignerToLand
 from AvatarInputHandler.DynamicCameras import CameraWithSettings
@@ -221,6 +220,7 @@ class FreeVideoCamera(VideoCamera, CameraWithSettings):
         self._rotationSensor.currentVelocity = Math.Vector3()
 
     def _checkSpaceBounds(self, startPos, endPos):
+        from ClientArena import CollisionResult
         if not isPlayerAvatar():
             return endPos
         moveDir = endPos - startPos

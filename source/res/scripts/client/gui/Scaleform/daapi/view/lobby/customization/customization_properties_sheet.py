@@ -33,6 +33,8 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_outfit.outfit import Area
+from uilogging.customization_3d_objects.logger import CustomizationPropertySheetLogger
+from uilogging.customization_3d_objects.logging_constants import CustomizationChamomileButtons, CustomizationViewKeys
 _logger = logging.getLogger(__name__)
 CustomizationCamoSwatchVO = namedtuple('CustomizationCamoSwatchVO', 'paletteIcon selected')
 _MAX_PALETTES = 3
@@ -75,6 +77,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._isNarrowSlot = False
         self.__inscriptionController = None
         self.__displayedProgressionLevel = 0
+        self.__uiLogger = CustomizationPropertySheetLogger(CustomizationViewKeys.CUSTOMIZATION_HANGAR_3D_SCENE)
         self.__changes = [False] * 3
         return
 
@@ -134,6 +137,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._attachedAnchor = C11nId()
         self.__ctx = None
         self.__inscriptionController = None
+        self.__uiLogger = None
         super(CustomizationPropertiesSheet, self)._dispose()
         return
 
@@ -163,7 +167,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def handleBuyWindow(self):
         if self.__inscriptionController is not None:
-            purchaseItems = self.__ctx.mode.getPurchaseItems()
+            purchaseItems = self.__ctx.getPurchaseItems()
             showProhibitedHint = False
             if len(purchaseItems) == 1:
                 item = purchaseItems[0].item
@@ -210,6 +214,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS:
             self.__applyToOtherSeasons()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_ONE:
+            self.__uiLogger.onChamomileClick(CustomizationChamomileButtons.REMOVE, self._attachedAnchor)
             self.__removeElement()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_RENT_CHECKBOX_CHANGE:
             self.__ctx.mode.changeAutoRent(CLIENT_COMMAND_SOURCES.RENTED_STYLE_RADIAL_MENU)
@@ -217,17 +222,26 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_REMOVE_FROM_ALL_PARTS:
             self.__removeFromAllAreas()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE:
+            self.__uiLogger.onScaleClick(actionData, self._attachedAnchor)
             if self._attachedAnchor.slotType == GUI_ITEM_TYPE.CAMOUFLAGE:
                 self.__ctx.mode.changeCamouflageScale(self._attachedAnchor, actionData)
             elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                 actionData += 1
                 self.__ctx.mode.changeProjectionDecalScale(self._attachedAnchor, actionData)
+            elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.ATTACHMENT:
+                actionData += 1
+                self.__ctx.mode.changeAttachmentScale(self._attachedAnchor, actionData)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_COLOR_CHANGE:
             self.__ctx.mode.changeCamouflageColor(self._attachedAnchor, actionData)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_CLOSE:
+            self.__uiLogger.onChamomileClick(CustomizationChamomileButtons.CLOSE, self._attachedAnchor)
             self.__ctx.mode.unselectSlot()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_HORIZONZONTAL_MIRROR:
-            self.__ctx.mode.mirrorDecal(self._attachedAnchor, Options.MIRRORED_HORIZONTALLY)
+            self.__uiLogger.onChamomileClick(CustomizationChamomileButtons.ROTATE, self._attachedAnchor)
+            if self._attachedAnchor.slotType == GUI_ITEM_TYPE.ATTACHMENT:
+                self.__ctx.mode.rotateAttachment(self._attachedAnchor)
+            elif self._attachedAnchor.slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
+                self.__ctx.mode.mirrorDecal(self._attachedAnchor, Options.MIRRORED_HORIZONTALLY)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_VERTICAL_MIRROR:
             self.__ctx.mode.mirrorDecal(self._attachedAnchor, Options.MIRRORED_VERTICALLY)
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_EDIT:
@@ -236,6 +250,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_INFO:
             self.__ctx.events.onShowStyleInfo()
         elif actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_GET_BACK:
+            self.__uiLogger.onChamomileClick(CustomizationChamomileButtons.MOVE, self._attachedAnchor)
             item = self._currentItem
             progressionLevel = item.getUsedProgressionLevel(self._currentComponent)
             self.__removeElement()
@@ -466,6 +481,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             renderers = self.__makeModificationsRenderersVOs()
         elif slotType == GUI_ITEM_TYPE.STYLE:
             renderers = self.__makeStyleRenderersVOs()
+        elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+            renderers = self.__makeAttachmentRenderersVOs()
         else:
             _logger.error('Cannot get customization properties sheet renderers for slotType: %s', slotType)
             renderers = []
@@ -520,6 +537,13 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             renderers.append(self.__makeRentSelectorRendererVO())
         if isEditable:
             renderers.append(self.__makeEditStyleRendererVO())
+        return renderers
+
+    def __makeAttachmentRenderersVOs(self):
+        renderers = []
+        renderers.append(self.__makeAttachmentRotateRendererVO())
+        renderers.append(self.__makeAttachmentScaleRendererVO())
+        renderers.append(self.__makeGetBackRendererVO())
         return renderers
 
     def __makeSetOnOtherTankPartsRendererVO(self):
@@ -605,12 +629,26 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
 
     def __makeGetBackRendererVO(self):
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_GETBACK
+        enabled = True
+        disableTooltip = ''
+        slotId = self._attachedAnchor
+        if slotId.slotType == GUI_ITEM_TYPE.ATTACHMENT:
+            disableTooltip = backport.text(R.strings.vehicle_customization.customization.propertySheet.disabled.attachment.move())
+            enabled = False
+            multiSlot = self.__ctx.commonOutfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
+            for regionIdx, anchor in g_currentVehicle.item.getAnchors(slotId.slotType, slotId.areaId):
+                if not multiSlot.getItemCD(regionIdx) and anchor.applyType == self._currentItem.applyType:
+                    enabled = True
+                    break
+
         return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_MOVE_NORMAL,
          'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_MOVE_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_MOVE_DISABLED,
          'actionBtnLabel': actionBtnLabel,
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_GET_BACK,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
-         'enabled': True}
+         'enabled': enabled,
+         'disableTooltip': disableTooltip}
 
     def __makeRemoveRendererVO(self):
         slotType = self._attachedAnchor.slotType
@@ -629,6 +667,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_PAINT
         elif slotType == GUI_ITEM_TYPE.CAMOUFLAGE and isEditableStyle:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_CAMOUFLAGE
+        elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+            actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_ATTACHMENT
         else:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.getSheetBtnRemoveText(getCustomizationTankPartName(self._attachedAnchor.areaId, self._attachedAnchor.regionIdx))
         disableIcon = backport.image(R.images.gui.maps.icons.customization.property_sheet.disable.icon_remove_disable())
@@ -866,6 +906,41 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'animatedTransition': True,
          'enabled': True}
 
+    def __makeAttachmentRotateRendererVO(self):
+        rotation = [{'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_02_NORMAL,
+          'hoverIcon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_02_HOVER}, {'icon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_01_NORMAL,
+          'hoverIcon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_MIRROR_01_HOVER}]
+        currentRotationState = self._currentComponent.isRotated
+        return {'iconSrc': rotation[currentRotationState]['icon'],
+         'iconHoverSrc': rotation[currentRotationState]['hoverIcon'],
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_MIRROR_01_DISABLED,
+         'actionBtnLabel': VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_ROTATE_ATTACHMENT,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_HORIZONZONTAL_MIRROR,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_ATTACHMENT_ROTATE,
+         'enabled': self._currentItem.rotatable}
+
+    def __makeAttachmentScaleRendererVO(self):
+        btnsBlockVO = []
+        if self._currentItem.scalable:
+            selectedIdx = self._currentComponent.scaleFactorId - 1
+            slotScaleFactorId = g_currentVehicle.item.getAnchorBySlotId(self._attachedAnchor.slotType, self._attachedAnchor.areaId, self._attachedAnchor.regionIdx).scaleFactorId
+            for idx, scaleSizeLabel in enumerate(SCALE_SIZE):
+                btnsBlockVO.append({'paletteIcon': '',
+                 'label': scaleSizeLabel,
+                 'selected': selectedIdx == idx,
+                 'value': idx,
+                 'enable': idx < slotScaleFactorId})
+
+        return {'iconSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SCALE,
+         'iconHoverSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_IDLE_ICON_SCALE_HOVER,
+         'iconDisableSrc': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_PROPERTY_SHEET_DISABLE_ICON_SCALE_DISABLE,
+         'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_SCALE_CHANGE,
+         'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_SCALE_COLOR_RENDERER_UI,
+         'btnsBlockVO': btnsBlockVO,
+         'disableTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_PROPERTYSHEET_DISABLED_ATTACHMENT_SCALE,
+         'enabled': sum((btn['enable'] for btn in btnsBlockVO)) > 1}
+
     def __isCustomMode(self):
         return self.__ctx.modeId == CustomizationModes.CUSTOM
 
@@ -920,7 +995,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__update()
 
     def __isEditableStyle(self):
-        return self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE
+        return self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE
 
     def __isAncestorAppliedForOutfit(self, season, ancestors):
         outfit = self.__ctx.mode.getModifiedOutfit(season)

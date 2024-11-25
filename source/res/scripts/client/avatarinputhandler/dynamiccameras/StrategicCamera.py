@@ -14,7 +14,6 @@ from BigWorld import StrategicAimingSystem, StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
-from ClientArena import Plane
 from account_helpers.settings_core import settings_constants
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
@@ -189,6 +188,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.update(0.0, 0.0, 0.0)
 
     def calcVisibleAreaRatio(self):
+        from ClientArena import Plane
         points = [Math.Vector2(1, 1),
          Math.Vector2(1, -1),
          Math.Vector2(-1, -1),

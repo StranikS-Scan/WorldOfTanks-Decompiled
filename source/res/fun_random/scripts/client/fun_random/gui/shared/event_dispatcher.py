@@ -51,11 +51,11 @@ def showFunRandomProgressionWindow(uiLoader=None):
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)
-def showFunRandomTierList(uiLoader=None):
+def showFunRandomTierList(parent=None, uiLoader=None):
     contentResId = R.views.fun_random.lobby.feature.FunRandomTierListView()
     if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
         from fun_random.gui.impl.lobby.feature.fun_random_tier_list_view import FunRandomTierListView
-        params = GuiImplViewLoadParams(contentResId, FunRandomTierListView, ScopeTemplates.LOBBY_SUB_SCOPE)
+        params = GuiImplViewLoadParams(contentResId, FunRandomTierListView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=parent)
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(params), scope=EVENT_BUS_SCOPE.LOBBY)
     return
 

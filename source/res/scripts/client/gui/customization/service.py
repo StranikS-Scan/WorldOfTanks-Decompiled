@@ -9,6 +9,7 @@ import CGF
 import Windowing
 import Event
 import adisp
+import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -19,12 +20,13 @@ from helpers import dependency, time_utils
 from customization_quests_common import CustQuestsCache, deserializeToken
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
+from gui.Scaleform.daapi.view.lobby.customization.shared import vehicleHasSlot
 from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, C11nId
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
 from gui.shared.gui_items.customization.c11n_items import Customization
 from items import vehicles
-from items.customizations import createNationalEmblemComponents
+from items.customizations import createNationalEmblemComponents, parseOutfitDescr
 from serializable_types.customizations import CustomizationOutfit
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -39,7 +41,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
-from items.components.c11n_constants import SeasonType, ApplyArea, CUSTOM_STYLE_POOL_ID, OUTFIT_POOL_EMPTY_STUB
+from items.components.c11n_constants import SeasonType, ApplyArea, CustomizationType
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.camouflages import getStyleProgressionOutfit
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -48,6 +50,7 @@ if typing.TYPE_CHECKING:
     from gui.customization.constants import CustomizationModeSource
     from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationModes, CustomizationTabs
     from gui.shared.gui_items.customization.c11n_items import Style
+    from items.components.c11n_components import StyleItem
 _logger = logging.getLogger(__name__)
 CUSTOMIZATION_CAMERA_NAME = 'Customization'
 
@@ -96,51 +99,55 @@ class _ServiceHelpersMixin(object):
         self.hangarSpace.updateVehicleOutfit(outfit)
 
     def getCurrentOutfit(self, season):
-        return g_currentVehicle.item.getOutfit(season)
+        outfitComponent = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.intCD, season))
+        if season != SeasonType.ALL:
+            outfitComponent.removeComponents(CustomizationType.COMMON_TYPES)
+        return self.itemsFactory.createOutfit(component=outfitComponent, vehicleCD=self._getVehicleCD())
 
-    def getStyledOutfit(self, season):
-        if self.isStyleInstalled():
-            return self.getCurrentOutfit(season)
-        outfitsPool = self.itemsCache.items.inventory.getC11nOutfitsFromPool(g_currentVehicle.item.intCD)
-        for styleId, outfitDiffs in outfitsPool:
-            if styleId == CUSTOM_STYLE_POOL_ID:
-                continue
-            if (styleId, outfitDiffs) == OUTFIT_POOL_EMPTY_STUB:
-                break
-            style = self.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
-            outfit = style.getOutfit(season, vehicleCD=self._getVehicleCD(), diff=outfitDiffs.get(season))
-            return outfit
-
-        return self.getEmptyOutfit()
+    def getCurrentStyle(self):
+        commonOutfitComponent = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.intCD, SeasonType.ALL))
+        return self.getItemByID(GUI_ITEM_TYPE.STYLE, commonOutfitComponent.styleId) if commonOutfitComponent.styleId else None
 
     def getCustomOutfit(self, season):
-        outfitsPool = self.itemsCache.items.inventory.getC11nOutfitsFromPool(g_currentVehicle.item.intCD)
-        if not outfitsPool:
-            return self.getEmptyOutfit()
-        styleId, outfits = outfitsPool[0]
-        if styleId != CUSTOM_STYLE_POOL_ID:
-            return self.getEmptyOutfit()
-        outfit = self.itemsFactory.createOutfit(strCompactDescr=outfits.get(season, ''), vehicleCD=self._getVehicleCD())
-        return outfit
+        return self.getCurrentOutfit(season) if not self.isStyleInstalled() else self.getEmptyOutfitWithNationalEmblems(self._getVehicleCD())
 
-    def getStyleComponentDiffs(self, style):
-        outfitsPool = self.itemsCache.items.inventory.getC11nOutfitsFromPool(g_currentVehicle.item.intCD)
-        for styleId, outfitDiffs in outfitsPool:
-            if styleId == style.id:
-                return outfitDiffs.copy()
+    def getCommonOutfit(self):
+        commonOutfitComponent = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.intCD, SeasonType.ALL))
+        commonOutfit = self.itemsFactory.createOutfit(component=commonOutfitComponent, vehicleCD=self._getVehicleCD())
+        commonOutfit.removeStyle()
+        return commonOutfit
 
-        return {}
+    def isNationalOutfitInstalled(self):
+        vehDesc = VehicleDescr(self._getVehicleCD())
+        nationalOutfit = CustomizationOutfit(decals=createNationalEmblemComponents(vehDesc))
+        for season in SeasonType.SEASONS:
+            outfitComponent = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.intCD, season))
+            outfitComponent.removeComponents(CustomizationType.COMMON_TYPES)
+            if outfitComponent and outfitComponent != nationalOutfit:
+                return False
 
-    def getStoredStyleDiffs(self):
-        outfitsPool = self.itemsCache.items.inventory.getC11nOutfitsFromPool(g_currentVehicle.item.intCD)
-        if outfitsPool and outfitsPool[0][0] == CUSTOM_STYLE_POOL_ID:
-            outfitsPool.pop(0)
-        if outfitsPool and not outfitsPool[0][1]:
-            outfitsPool.pop(0)
-        return outfitsPool[:]
+        return True
 
     def isStyleInstalled(self):
-        return g_currentVehicle.item.isStyleInstalled
+        commonOutfitComponent = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(g_currentVehicle.item.intCD, SeasonType.ALL))
+        return bool(commonOutfitComponent.styleId)
+
+    def getVehiclesWithAttachmentSlot(self):
+        result = []
+        for nationID in nations.INDICES.itervalues():
+            for descr in vehicles.g_list.getList(nationID).itervalues():
+                vehicle = self.itemsCache.items.getItemByCD(descr.compactDescr)
+                if vehicleHasSlot(GUI_ITEM_TYPE.ATTACHMENT, vehicle):
+                    result.append(vehicle)
+
+        return result
+
+    def getAppliedAttachments(self, vehicleIntCD):
+        commonOutfit = parseOutfitDescr(self.itemsCache.items.inventory.getOutfitData(vehicleIntCD, SeasonType.ALL))
+        if not commonOutfit or not commonOutfit.attachments:
+            return []
+        uniqueIDs = set([ attachment.id for attachment in commonOutfit.attachments ])
+        return [ self.getItemByID(GUI_ITEM_TYPE.ATTACHMENT, uniqueId) for uniqueId in uniqueIDs ]
 
     @adisp_process('buyItem')
     def buyItems(self, item, count, vehicle=None):
@@ -193,7 +200,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
         self._notHandleHighlighterEvent = False
-        self.__showCustomizationCallbackId = None
         self._selectedRegion = ApplyArea.NONE
         self._isHighlighterActive = False
         self.__showCustomizationKwargs = {}
@@ -230,9 +236,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.__showCustomizationKwargs = None
         self.__progressionQuestCache = None
         self.__progressionQuestIDs = None
-        if self.__showCustomizationCallbackId is not None:
-            BigWorld.cancelCallback(self.__showCustomizationCallbackId)
-            self.__showCustomizationCallbackId = None
         return
 
     @adisp.adisp_process
@@ -240,10 +243,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self.__customizationCtx is None:
             lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
             if not lobbyHeaderNavigationPossible:
-                return
-        elif self.__customizationCtx.isOutfitsModified() and g_currentVehicle.invID != vehInvID:
-            result = yield self.__confirmClose()
-            if not result:
                 return
         self.__showCustomizationKwargs = {'vehInvID': vehInvID,
          'callback': callback,
@@ -303,14 +302,13 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         itemCD = self.__showCustomizationKwargs.get('itemCD', None)
         callback = self.__showCustomizationKwargs.get('callback', None)
         loadCallback = lambda : self.__loadCustomization(vehInvID, callback, season, modeId, tabId, itemCD)
-        if self.__showCustomizationCallbackId is None:
-            cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
-            if cameraManager:
-                cameraManager.switchByCameraName(CUSTOMIZATION_CAMERA_NAME)
-            ClientSelectableCameraObject.deselectAll()
-            self.hangarSpace.space.getVehicleEntity().onSelect()
-            self.__moveHangarVehicleToCustomizationRoom()
-            self.__showCustomizationCallbackId = BigWorld.callback(0.0, lambda : self.__showCustomization(loadCallback))
+        cameraManager = CGF.getManager(self.hangarSpace.spaceID, HangarCameraManager)
+        if cameraManager:
+            cameraManager.switchByCameraName(CUSTOMIZATION_CAMERA_NAME)
+        ClientSelectableCameraObject.deselectAll()
+        self.hangarSpace.space.getVehicleEntity().onSelect()
+        self.__moveHangarVehicleToCustomizationRoom()
+        self.__showCustomization(loadCallback)
         self.onVisibilityChanged(True)
         return
 
@@ -332,13 +330,13 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self.__customizationCtx is None:
             self.__customizationCtx = CustomizationContext()
             self.__customizationCtx.init(season, modeId, tabId, itemCD)
-            return
         else:
+            self.__customizationCtx.updateOutfits()
             if season is not None:
                 self.__customizationCtx.changeSeason(season)
             if modeId is not None:
                 self.__customizationCtx.changeMode(modeId, tabId, source)
-            return
+        return
 
     def __destroyCtx(self):
         if self.__customizationCtx is not None:
@@ -518,7 +516,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
 
     def __showCustomization(self, callback=None):
-        self.__showCustomizationCallbackId = None
         ctx = {}
         if callback is not None:
             ctx['callback'] = callback
@@ -618,6 +615,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self.__progressionQuestIDs is None:
             self.__updateProgressionQuests()
         return eventID in self.__progressionQuestIDs
+
+    def getStyleItemByQuestID(self, eventID):
+        itemCD = self.getItemCDByQuestID(eventID)
+        return None if itemCD is None else vehicles.g_cache.customization20().itemToQuestProgressionStyle.get(itemCD)
 
     def __updateProgressionQuests(self):
         cache = vehicles.g_cache.customization20()

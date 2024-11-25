@@ -2,22 +2,24 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/filter_popover.py
 import logging
 from collections import OrderedDict
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.daapi.view.meta.CustomizationFiltersPopoverMeta import CustomizationFiltersPopoverMeta
-from gui.customization.constants import CustomizationModes
 from gui.customization.shared import PROJECTION_DECAL_TEXT_FORM_TAG
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
-from items.components.c11n_constants import ProjectionDecalFormTags
+from items.components.c11n_constants import ProjectionDecalFormTags, Rarity
 from skeletons.gui.customization import ICustomizationService
+from uilogging.customization_3d_objects.logger import CustomizationFilterLogger
+from uilogging.customization_3d_objects.logging_constants import CustomizationFilterButtons, CustomizationViewKeys
 _logger = logging.getLogger(__name__)
 
 class FiltersPopoverVO(object):
-    __slots__ = ('lblTitle', 'lblGroups', 'lblShowOnlyFilters', 'lblAdditional', 'additionalCheckBoxData', 'btnDefault', 'basicFilterType', 'groupType', 'btnDefaultTooltip', 'groupTypeSelectedIndex', 'filterBtns', 'additionalEnabled', 'formsBtns', 'formsBtnsLbl')
+    __slots__ = ('lblTitle', 'lblGroups', 'lblShowOnlyFilters', 'lblAdditional', 'additionalCheckBoxData', 'btnDefault', 'basicFilterType', 'groupType', 'btnDefaultTooltip', 'groupTypeSelectedIndex', 'filterBtns', 'additionalEnabled', 'formsBtns', 'formsBtnsLbl', 'raritiesBtns', 'raritiesBtnsLbl')
 
-    def __init__(self, lblTitle, lblGroups, lblShowOnlyFilters, lblAdditional, additionalCheckBoxData, btnDefault, groupType, btnDefaultTooltip, groupTypeSelectedIndex, filterBtns, additionalEnabled, formsBtns=None, formsBtnsLbl=''):
+    def __init__(self, lblTitle, lblGroups, lblShowOnlyFilters, lblAdditional, additionalCheckBoxData, btnDefault, groupType, btnDefaultTooltip, groupTypeSelectedIndex, filterBtns, additionalEnabled, formsBtns=None, formsBtnsLbl='', raritiesBtns=None, raritiesBtnsLbl=''):
         self.lblTitle = lblTitle
         self.lblGroups = lblGroups
         self.lblShowOnlyFilters = lblShowOnlyFilters
@@ -31,6 +33,8 @@ class FiltersPopoverVO(object):
         self.additionalEnabled = additionalEnabled
         self.formsBtns = formsBtns
         self.formsBtnsLbl = formsBtnsLbl
+        self.raritiesBtns = raritiesBtns
+        self.raritiesBtnsLbl = raritiesBtnsLbl
 
     def asDict(self):
         return {'lblTitle': self.lblTitle,
@@ -45,7 +49,9 @@ class FiltersPopoverVO(object):
          'filterBtns': self.filterBtns,
          'additionalEnabled': self.additionalEnabled,
          'formsBtns': self.formsBtns,
-         'formsBtnsLbl': self.formsBtnsLbl}
+         'formsBtnsLbl': self.formsBtnsLbl,
+         'raritiesBtns': self.raritiesBtns,
+         'raritiesBtnsLbl': self.raritiesBtnsLbl}
 
 
 class FilterPopover(CustomizationFiltersPopoverMeta):
@@ -78,10 +84,15 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
             if i <= len(ProjectionDecalFormTags.ALL):
                 self._formfactorTypes[ProjectionDecalFormTags.ALL[i]] = val
 
+        self._raritiesGroup = OrderedDict()
+        for index, val in enumerate(data.raritiesGroup):
+            self._raritiesGroup[Rarity.FILTERABLE[index]] = val
+
         if hasattr(data, 'isInit'):
             self._isInit = data.isInit
         else:
             self._isInit = False
+        self.__uiLogger = CustomizationFilterLogger(CustomizationViewKeys.CUSTOMIZATION_FILTER_POPOVER)
         return
 
     def onFilterChange(self, index, value):
@@ -102,22 +113,42 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.__ctx.events.onCarouselFiltered(formfactorGroups=self._formfactorTypes)
         self.updateDefaultButton()
 
+    def onRarityChange(self, index, value):
+        if not self._raritiesGroup:
+            return
+        if index >= len(Rarity.FILTERABLE):
+            _logger.warning('"index" = %(index)s is not valid', {'index': index})
+            return
+        rarity = Rarity.FILTERABLE[index]
+        if rarity not in self._raritiesGroup:
+            _logger.warning('"index" = %(index)s is not valid  (self._raritiesGroup = %(raritiesGroup)s)', {'index': index,
+             'raritiesGroup': self._raritiesGroup})
+            return
+        self.__uiLogger.onRarityFilterClick(rarity)
+        self._raritiesGroup[rarity] = value
+        self.__ctx.events.onCarouselFiltered(raritiesGroup=self._raritiesGroup)
+        self.updateDefaultButton()
+
     def setShowOnlyHistoric(self, value):
+        self.__uiLogger.onPrimaryFilterClick(CustomizationFilterButtons.HISTORIC)
         self._historicToggleEnabled = value
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(historic=value)
 
     def setShowOnlyNonHistoric(self, value):
+        self.__uiLogger.onPrimaryFilterClick(CustomizationFilterButtons.NON_HISTORIC)
         self._nonHistoricToggleEnabled = value
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(nonHistoric=value)
 
     def setShowOnlyFantastical(self, value):
+        self.__uiLogger.onPrimaryFilterClick(CustomizationFilterButtons.FANTASTICAL)
         self._fantasticalToggleEnabled = value
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(fantastical=value)
 
     def setShowOnlyAcquired(self, value):
+        self.__uiLogger.onPrimaryFilterClick(CustomizationFilterButtons.IN_DEPOT)
         self._purchasedToggleEnabled = value
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(inventory=value)
@@ -143,6 +174,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.__ctx.events.onCarouselFiltered(onlyNonEditableStyles=value)
 
     def setShowOnlyApplied(self, value):
+        self.__uiLogger.onPrimaryFilterClick(CustomizationFilterButtons.APPLIED)
         self._appliedToggleEnabled = value
         self.updateDefaultButton()
         self.__ctx.events.onCarouselFiltered(applied=value)
@@ -161,10 +193,11 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         else:
             defaultGroup = True
         defaultFormfactorGroups = any(self._formfactorTypes.values())
-        notDefault = not defaultGroup or defaultFormfactorGroups or self._historicToggleEnabled or self._nonHistoricToggleEnabled or self._fantasticalToggleEnabled or self._purchasedToggleEnabled or self._hideOnAnotherVehEnabled or self._showOnlyProgressionDecalsEnabled or self._showOnlyEditableStylesEnabled or self._showOnlyNonEditableStylesEnabled or self._appliedToggleEnabled
+        notDefault = not defaultGroup or defaultFormfactorGroups or self._historicToggleEnabled or self._nonHistoricToggleEnabled or self._fantasticalToggleEnabled or self._purchasedToggleEnabled or self._hideOnAnotherVehEnabled or self._showOnlyProgressionDecalsEnabled or self._showOnlyEditableStylesEnabled or self._showOnlyNonEditableStylesEnabled or self._appliedToggleEnabled or any(self._raritiesGroup.values())
         self.as_enableDefBtnS(notDefault)
 
     def setDefaultFilter(self):
+        self.__uiLogger.onFilterClick(CustomizationFilterButtons.RESET_FILTER)
         self._historicToggleEnabled = False
         self._nonHistoricToggleEnabled = False
         self._fantasticalToggleEnabled = False
@@ -174,12 +207,16 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self._showOnlyProgressionDecalsEnabled = False
         self._showOnlyEditableStylesEnabled = False
         self._showOnlyNonEditableStylesEnabled = False
+        oldGroup = self._selectedGroup
         self._selectedGroup = self._groupCount - 1
+        if self._selectedGroup != oldGroup:
+            self._isInit = True
         self._formfactorTypes = OrderedDict.fromkeys(self._formfactorTypes, False)
+        self._raritiesGroup = OrderedDict.fromkeys(self._raritiesGroup, False)
         self.__updateVO = self.__createUpdateVO()
         self.as_setDataS(self.__updateVO.asDict())
         self.updateDefaultButton()
-        self.__ctx.events.onCarouselFiltered(historic=self._historicToggleEnabled, nonHistoric=self._nonHistoricToggleEnabled, fantastical=self._fantasticalToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup, formfactorGroups=self._formfactorTypes, onAnotherVeh=self._hideOnAnotherVehEnabled, onlyProgressionDecals=self._showOnlyProgressionDecalsEnabled, onlyEditableStyles=self._showOnlyEditableStylesEnabled, onlyNonEditableStyles=self._showOnlyNonEditableStylesEnabled)
+        self.__ctx.events.onCarouselFiltered(historic=self._historicToggleEnabled, nonHistoric=self._nonHistoricToggleEnabled, fantastical=self._fantasticalToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup, formfactorGroups=self._formfactorTypes, onAnotherVeh=self._hideOnAnotherVehEnabled, onlyProgressionDecals=self._showOnlyProgressionDecalsEnabled, onlyEditableStyles=self._showOnlyEditableStylesEnabled, onlyNonEditableStyles=self._showOnlyNonEditableStylesEnabled, raritiesGroup=self._raritiesGroup, isReset=True)
 
     def _populate(self):
         super(FilterPopover, self)._populate()
@@ -187,12 +224,15 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.updateDefaultButton()
         self.__updateVO = self.__createUpdateVO()
         self.as_setDataS(self.__updateVO.asDict())
+        self.__uiLogger.onViewOpen(CustomizationViewKeys.CUSTOMIZATION_FILTER_POPOVER, CustomizationViewKeys.CUSTOMIZATION_BOTTOM_PANEL)
 
     def _dispose(self):
+        self.__uiLogger.onViewClose(CustomizationViewKeys.CUSTOMIZATION_FILTER_POPOVER, CustomizationViewKeys.CUSTOMIZATION_BOTTOM_PANEL)
         if self.__ctx.events is not None:
             self.__ctx.events.onFilterPopoverClosed()
         self.__ctx = None
         self.__filterChangeHandlers = None
+        self.__uiLogger = None
         super(FilterPopover, self)._dispose()
         return
 
@@ -223,7 +263,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
              'tooltip': progressionDecalsBtnTooltip,
              'selected': self._showOnlyProgressionDecalsEnabled})
             self.__filterChangeHandlers.append(self.setShowOnlyProgressionDecals)
-        if self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx.mode.tabId in (CustomizationTabs.STYLES_3D, CustomizationTabs.STYLES_2D):
             editableStylesBtnTooltip = makeTooltip(backport.text(R.strings.vehicle_customization.customization.filterPopover.editableStylesBtn.header()), backport.text(R.strings.vehicle_customization.customization.filterPopover.editableStylesBtn.body()))
             _filterBtns.append({'value': backport.image(R.images.gui.maps.icons.buttons.editable_small()),
              'tooltip': editableStylesBtnTooltip,
@@ -240,8 +280,14 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         formsBtnsLbl = ''
         if self._formfactorTypes:
             formsBtnsLbl = text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.formfilters.title()))
+        _raritiesBtns = [ {'value': backport.image(R.images.gui.maps.icons.customization.rarity.sign.s20x20.dyn(rarity)()),
+         'selected': selected,
+         'tooltip': makeTooltip(backport.text(R.strings.vehicle_customization.customization.filterPopover.rarity.header(), rarity=backport.text(R.strings.vehicle_customization.customization.rarity.dyn(rarity)())), backport.text(R.strings.vehicle_customization.customization.filterPopover.rarity.body(), rarity=backport.text(R.strings.vehicle_customization.customization.rarity.dyn(rarity)()).lower()))} for rarity, selected in self._raritiesGroup.iteritems() ]
+        raritiesBtnsLbl = ''
+        if self._raritiesGroup:
+            raritiesBtnsLbl = text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.rarity.title()))
         additionalCheckBoxLabel = backport.text(R.strings.vehicle_customization.filter.popover.showonlyfilters.onAnotherVeh())
         additionalCheckBoxTooltip = makeTooltip(backport.text(R.strings.vehicle_customization.customization.filterPopover.additionalCheckBox.header()), backport.text(R.strings.vehicle_customization.customization.filterPopover.additionalCheckBox.body()))
         return FiltersPopoverVO(lblTitle=text_styles.highTitle(backport.text(R.strings.vehicle_customization.filter.popover.title())), lblGroups=text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.groups.title())), lblShowOnlyFilters=text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.showonlyfilters.title())), lblAdditional=text_styles.standard(backport.text(R.strings.vehicle_customization.filter.popover.showonlyfilters.additional())), additionalCheckBoxData={'label': additionalCheckBoxLabel,
          'tooltip': additionalCheckBoxTooltip,
-         'selected': self._hideOnAnotherVehEnabled}, btnDefault=backport.text(R.strings.vehicle_customization.filter.popover.getDefaultSettings()), groupType=self._groups if self._groupCount > 1 else None, btnDefaultTooltip=makeTooltip(backport.text(R.strings.vehicle_customization.customization.filterPopover.refresh.header()), backport.text(R.strings.vehicle_customization.customization.filterPopover.refresh.body())), groupTypeSelectedIndex=self._selectedGroup, filterBtns=_filterBtns, additionalEnabled=self.__ctx.isItemsOnAnotherVeh, formsBtnsLbl=formsBtnsLbl, formsBtns=_formsBtns)
+         'selected': self._hideOnAnotherVehEnabled}, btnDefault=backport.text(R.strings.vehicle_customization.filter.popover.getDefaultSettings()), groupType=self._groups if self._groupCount > 1 else None, btnDefaultTooltip=makeTooltip(backport.text(R.strings.vehicle_customization.customization.filterPopover.refresh.header()), backport.text(R.strings.vehicle_customization.customization.filterPopover.refresh.body())), groupTypeSelectedIndex=self._selectedGroup, filterBtns=_filterBtns, additionalEnabled=self.__ctx.isItemsOnAnotherVeh, formsBtnsLbl=formsBtnsLbl, formsBtns=_formsBtns, raritiesBtnsLbl=raritiesBtnsLbl, raritiesBtns=_raritiesBtns)

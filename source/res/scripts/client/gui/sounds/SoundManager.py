@@ -25,9 +25,9 @@ class SoundManager(SoundManagerMeta):
         self.playControlSound(state, eventType, eventID)
 
     def playControlSound(self, state, eventType, eventID):
-        sound = self.sounds.getControlSound(eventType, state, eventID)
+        sound, soundBankName = self.sounds.getControlSound(eventType, state, eventID)
         if sound is not None:
-            SoundGroups.g_instance.playSound2D(sound)
+            SoundGroups.g_instance.playSound2D(sound, soundBankName)
         return
 
     def playEffectSound(self, effectName):

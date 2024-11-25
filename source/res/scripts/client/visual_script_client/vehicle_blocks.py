@@ -224,7 +224,8 @@ class GunTypeInfo(GunTypeInfoBase):
 class VehicleForwardSpeed(VehicleForwardSpeedBase):
 
     def _execute(self):
-        self._outSlot.setValue(0.0)
+        vehicle = self._vehicle.getValue()
+        self._outSlot.setValue(vehicle.getSpeed())
 
     @classmethod
     def blockAspects(cls):
@@ -421,3 +422,73 @@ class OnAnyVehicleRespawned(TunableEventBlock, VehicleMeta):
     @TunableEventBlock.eventProcessor
     def _vehicleRespawnHandler(self, vehicle):
         self._vehicle.setValue(weakref.proxy(vehicle))
+
+
+class VehicleMaxSpeed(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(VehicleMaxSpeed, self).__init__(*args, **kwargs)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._speed = self._makeDataOutputSlot('speed', SLOT_TYPE.FLOAT, self._execute)
+
+    def _execute(self):
+        vehicle = self._vehicle.getValue()
+        self._speed.setValue(vehicle.typeDescriptor.physics['speedLimits'][0])
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class OnVehicleCollided(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnVehicleCollided, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._vehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, None)
+        self._velocity = self._makeDataOutputSlot('velocity', SLOT_TYPE.FLOAT, None)
+        return
+
+    def onStartScript(self):
+        if BigWorld.player():
+            BigWorld.player().inputHandler.OnVehicleCollided += self._onVehicleCollided
+
+    def onFinishScript(self):
+        if BigWorld.player():
+            BigWorld.player().inputHandler.OnVehicleCollided -= self._onVehicleCollided
+
+    def _onVehicleCollided(self, vehicleId, velocity):
+        self._vehicle.setValue(weakref.proxy(BigWorld.entity(vehicleId)))
+        self._velocity.setValue(velocity)
+        self._out.call()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class OnVehicleShaked(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnVehicleShaked, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._vehicle = self._makeDataOutputSlot('vehicle', SLOT_TYPE.VEHICLE, None)
+        self._shakeReason = self._makeDataOutputSlot('shakeReason', SLOT_TYPE.INT, None)
+        return
+
+    def onStartScript(self):
+        if BigWorld.player():
+            BigWorld.player().inputHandler.OnVehicleShaked += self._onVehicleShaked
+
+    def onFinishScript(self):
+        if BigWorld.player():
+            BigWorld.player().inputHandler.OnVehicleShaked -= self._onVehicleShaked
+
+    def _onVehicleShaked(self, vehicleId, shakeReason):
+        self._vehicle.setValue(weakref.proxy(BigWorld.entity(vehicleId)))
+        self._shakeReason.setValue(shakeReason)
+        self._out.call()
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]

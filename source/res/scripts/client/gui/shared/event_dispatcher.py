@@ -947,6 +947,19 @@ def showExchangeXPDialogWindow(needXP=None, parent=None):
     return
 
 
+@wg_async
+def showVehiclesSidebarDialogWindow(parentScreen, parentWindow=None):
+    from gui.impl.lobby.customization.vehicles_sidebar.vehicles_sidebar_window import VehiclesSidebarView
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+    from gui.impl.dialogs import dialogs
+    layoutID = R.views.lobby.customization.vehicles_sidebar.VehiclesSidebar()
+    guiLoader = dependency.instance(IGuiLoader)
+    if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
+        wrapper = FullScreenDialogWindowWrapper(VehiclesSidebarView(layoutID=layoutID, parentScreen=parentScreen), parent=parentWindow, layer=WindowLayer.FULLSCREEN_WINDOW, doBlur=False)
+        yield wg_await(dialogs.show(wrapper))
+    return
+
+
 def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -976,7 +989,7 @@ def showTankPremiumAboutPage():
 
 
 @adisp.adisp_process
-def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None, parent=None):
+def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=None, callbackOnLoad=None, webHandlers=None, forcedSkipEscape=False, browserParams=None, hiddenLayers=None, parent=None, callbackOnClose=None):
     if url:
         if browserParams is None:
             browserParams = {}
@@ -987,7 +1000,8 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
          'webHandlers': webHandlers,
          'forcedSkipEscape': forcedSkipEscape,
          'browserParams': browserParams,
-         'hiddenLayers': hiddenLayers or ()}), EVENT_BUS_SCOPE.LOBBY)
+         'hiddenLayers': hiddenLayers or (),
+         'callbackOnClose': callbackOnClose}), EVENT_BUS_SCOPE.LOBBY)
     return
 
 
@@ -1191,66 +1205,6 @@ def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent
     builder.setFormattedMessage(formattedMessage)
     result = yield wg_await(dialogs.showSimple(builder.build(parent)))
     raise AsyncReturn(result)
-
-
-@wg_async
-def tryToShowReplaceExistingStyleDialog(parent=None):
-    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
-    from gui.impl.dialogs import dialogs
-    from gui.impl.dialogs.builders import WarningDialogBuilder
-    from gui.impl.wrappers.user_format_string_arg_model import UserFormatStringArgModel
-    from gui.impl.pub.dialog_window import DialogButtons
-    from gui.shared.gui_items import GUI_ITEM_TYPE
-    from skeletons.account_helpers.settings_core import ISettingsCore
-    from skeletons.gui.customization import ICustomizationService
-    from items.components.c11n_constants import EDITABLE_STYLE_STORAGE_DEPTH
-    from CurrentVehicle import g_currentVehicle
-    from items.customizations import isEditedStyle
-    from items.components.c11n_constants import SeasonType
-    from gui.Scaleform.daapi.view.lobby.customization.shared import fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiffComponent
-    service = dependency.instance(ICustomizationService)
-    settingsCore = dependency.instance(ISettingsCore)
-    serverSettings = settingsCore.serverSettings
-    if serverSettings.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING):
-        raise AsyncReturn(True)
-    context = service.getCtx()
-    currentStyle = context.mode.currentOutfit.style
-    if currentStyle is None:
-        raise AsyncReturn(True)
-    if not currentStyle.isEditable:
-        raise AsyncReturn(True)
-    vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-    baseStyle = service.getItemByID(GUI_ITEM_TYPE.STYLE, currentStyle.id)
-    availableRegionsMap = getCurrentVehicleAvailableRegionsMap()
-    for season in SeasonType.COMMON_SEASONS:
-        outfit = context.mode.getModifiedOutfit(season)
-        baseOutfit = baseStyle.getOutfit(season, vehicleCD=vehicleCD)
-        fitOutfit(baseOutfit, availableRegionsMap)
-        diff = getEditableStyleOutfitDiffComponent(outfit, baseOutfit)
-        if isEditedStyle(diff):
-            break
-    else:
-        raise AsyncReturn(True)
-
-    storedStyleDiffs = service.getStoredStyleDiffs()
-    for diff in storedStyleDiffs:
-        if currentStyle.id == diff[0]:
-            raise AsyncReturn(True)
-
-    if len(storedStyleDiffs) < EDITABLE_STYLE_STORAGE_DEPTH:
-        raise AsyncReturn(True)
-    newStyleName = currentStyle.userString
-    styleToReplaceName = service.getItemByID(GUI_ITEM_TYPE.STYLE, storedStyleDiffs[-1][0]).userName
-    context.mode.unselectSlot()
-    builder = WarningDialogBuilder()
-    builder.setTitleArgs([newStyleName])
-    builder.setMessageArgs(fmtArgs=[UserFormatStringArgModel(backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessageStyle()), 'style', R.styles.AlertBigTextStyle()), UserFormatStringArgModel(styleToReplaceName, 'formatted_message', None), UserFormatStringArgModel(backport.text(R.strings.dialogs.editableStyles.confirmReset.formattedPartOfMessage()), 'reset', R.styles.AlertBigTextStyle())])
-    builder.setMessagesAndButtons(R.strings.dialogs.editableStyles.confirmReset, focused=DialogButtons.CANCEL)
-    result, dontShowAgain = yield wg_await(dialogs.showSimpleWithResultData(builder.build(parent=parent)))
-    if result and dontShowAgain:
-        serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: True})
-    raise AsyncReturn(result)
-    return
 
 
 @wg_async
@@ -2358,3 +2312,9 @@ def showExchangeFreeXPWindow(ctx=None, doBlur=True):
     if guiLoader.windowsManager.getViewByLayoutID(layoutID) is None:
         yield dialogs.showSimple(FullScreenDialogWindowWrapper(ExchangeFreeXPView(layoutID=layoutID, ctx=ctx), doBlur=False, layer=WindowLayer.FULLSCREEN_WINDOW))
     return
+
+
+def showCustomizationRarityAwardScreen(element, isFirstEntry):
+    from gui.impl.lobby.customization.customization_rarity_reward_screen.customization_rarity_reward_screen import CustomizationRarityRewardWindow
+    window = CustomizationRarityRewardWindow(element, isFirstEntry)
+    window.load()

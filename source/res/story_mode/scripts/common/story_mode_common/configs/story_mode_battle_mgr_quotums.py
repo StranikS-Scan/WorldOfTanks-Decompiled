@@ -38,6 +38,6 @@ def validatePriorityies(model):
         raise exceptions.ValidationError('Priority duplicates: {}'.format(duplicates))
 
 
-quotumSchema = schemas.Schema[QuotumModel](fields={'priority': fields.Enum(PRIORITY, required=True, deserializedValidators=validate.Range(minValue=0)),
+quotumSchema = schemas.Schema[QuotumModel](fields={'priority': fields.IntEnum(PRIORITY, required=True, deserializedValidators=validate.Range(minValue=0)),
  'quotum': fields.Integer(required=True, deserializedValidators=validate.Range(minValue=0))}, modelClass=QuotumModel, checkUnknown=True)
 quotumsSchema = GameParamsSchema(gameParamsKey='story_mode_battle_mgr_quotums', fields={'quotums': fields.UniCapList(fieldOrSchema=quotumSchema, required=True, deserializedValidators=validate.Length(minValue=3))}, modelClass=QuotumsModel, checkUnknown=True, deserializedValidators=[validatePriorityies])

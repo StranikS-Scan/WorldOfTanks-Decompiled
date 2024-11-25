@@ -8,8 +8,8 @@ from helpers.CallbackDelayer import CallbackDelayer
 from items import vehicles
 import GenericComponents
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import AirDropEvent
 from script_component.DynamicScriptComponent import DynamicScriptComponent
+from battle_royale.gui.shared.events import AirDropEvent
 from skeletons.gui.battle_session import IBattleSessionProvider
 from debug_utils import LOG_DEBUG_DEV
 

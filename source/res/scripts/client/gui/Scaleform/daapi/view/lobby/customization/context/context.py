@@ -10,10 +10,11 @@ from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import Cus
 from gui.Scaleform.daapi.view.lobby.customization.context.editable_style_mode import EditableStyleMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_diffs_cache import StyleDiffsCache
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, resetC11nItemsNovelty, getCommonPurchaseItems, vehicleHasSlot
 from gui.Scaleform.daapi.view.lobby.customization.vehicle_anchors_updater import VehicleAnchorsUpdater
 from gui.customization.constants import CustomizationModes
 from gui.hangar_cameras.c11n_hangar_camera_manager import C11nHangarCameraManager
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.decorators import adisp_process
 from functools import partial
 from helpers import dependency
@@ -78,16 +79,21 @@ class CustomizationContext(object):
         self._vehicle = None
         self.__season = None
         self.__modeId = None
-        self.__startModeId = None
+        self.__styleModeId = None
         self.__modes = {CustomizationModes.CUSTOM: CustomMode(self),
-         CustomizationModes.STYLED: StyledMode(self),
-         CustomizationModes.EDITABLE_STYLE: EditableStyleMode(self)}
+         CustomizationModes.STYLE_2D: StyledMode(self, is3DMode=False),
+         CustomizationModes.STYLE_3D: StyledMode(self, is3DMode=True),
+         CustomizationModes.STYLE_2D_EDITABLE: EditableStyleMode(self)}
         self.__events = None
         self.__isItemsOnAnotherVeh = False
         self.__isProgressiveItemsExist = False
+        self.__isModeChangeInProgress = False
         self.__vehicleAnchorsUpdater = VehicleAnchorsUpdater(self)
         self.__c11nCameraManager = C11nHangarCameraManager()
         self.__stylesDiffsCache = StyleDiffsCache()
+        self.__commonOriginalOutfit = None
+        self.__commonModifiedOutfit = None
+        self.updateCommonOutfits()
         self.__carouselItems = None
         self.__initialItemCD = None
         return
@@ -127,20 +133,12 @@ class CustomizationContext(object):
         return self.__modeId
 
     @property
-    def startModeId(self):
-        return self.__startModeId
-
-    @property
     def mode(self):
         return self.__modes[self.modeId]
 
     @property
-    def startMode(self):
-        return self.__modes[self.startModeId]
-
-    @property
-    def isModeChanged(self):
-        return self.modeId != self.startModeId
+    def styleMode(self):
+        return self.__modes[self.__styleModeId]
 
     @property
     def vehicleAnchorsUpdater(self):
@@ -154,6 +152,18 @@ class CustomizationContext(object):
     def stylesDiffsCache(self):
         return self.__stylesDiffsCache
 
+    @property
+    def commonOriginalOutfit(self):
+        return self._service.getEmptyOutfit(self._vehicle.descriptor.makeCompactDescr()) if self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D else self.__commonOriginalOutfit
+
+    @property
+    def commonOutfit(self):
+        return self._service.getEmptyOutfit(self._vehicle.descriptor.makeCompactDescr()) if self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D else self.__commonModifiedOutfit
+
+    @property
+    def isModeChangeInProgress(self):
+        return self.__isModeChangeInProgress
+
     def setIsItemsOnAnotherVeh(self, value):
         self.__isItemsOnAnotherVeh = value
 
@@ -166,8 +176,9 @@ class CustomizationContext(object):
         g_currentVehicle.onChangeStarted += self.__onVehicleChangeStarted
         g_currentVehicle.onChanged += self.__onVehicleChanged
         self.__season = season or self.__getStartSeason()
-        self.__modeId = modeId or self.__getStartMode()
-        self.__startModeId = self.modeId
+        self.__modeId = self.__getStartMode(modeId, tabId)
+        if self.__modeId in CustomizationModes.BASE_STYLES:
+            self.__styleModeId = self.__modeId
         self.mode.start(tabId)
         self.__events = _CustomizationEvents()
         self.__vehicleAnchorsUpdater.startUpdater()
@@ -188,6 +199,8 @@ class CustomizationContext(object):
         self.__c11nCameraManager = None
         self.__vehicleAnchorsUpdater.stopUpdater()
         self.__vehicleAnchorsUpdater = None
+        self.__commonOriginalOutfit = None
+        self.__commonModifiedOutfit = None
         self.__events.fini()
         self.__events = None
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
@@ -205,19 +218,28 @@ class CustomizationContext(object):
         if modeId not in CustomizationModes.ALL:
             _logger.warning('Wrong customization mode: %s', modeId)
             return
-        if self.__modeId == modeId:
+        elif self.__modeId == modeId:
             return
-        prevMode = self.mode
-        prevMode.unselectItem()
-        prevMode.unselectSlot()
-        prevMode.stop()
-        newMode = self.__modes[modeId]
-        newMode.start(tabId=tabId, source=source)
-        self.__modeId = modeId
-        self.refreshOutfit()
-        self.events.onBeforeModeChange()
-        self.events.onModeChanged(modeId, prevMode.modeId)
-        self.events.onTabChanged(self.mode.tabId)
+        else:
+            self.__isModeChangeInProgress = True
+            prevMode = self.mode
+            prevModeId = self.__modeId
+            prevMode.unselectItem()
+            prevMode.unselectSlot()
+            prevMode.stop()
+            self.__modeId = modeId
+            if self.__modeId not in CustomizationModes.STYLES:
+                self.__styleModeId = None
+            elif self.__modeId in CustomizationModes.BASE_STYLES:
+                self.__styleModeId = self.__modeId
+            newMode = self.__modes[modeId]
+            newMode.start(tabId=tabId, source=source)
+            self.refreshOutfit()
+            self.events.onBeforeModeChange()
+            self.events.onModeChanged(modeId, prevModeId)
+            self.__isModeChangeInProgress = False
+            self.events.onTabChanged(self.mode.tabId)
+            return
 
     def editStyle(self, intCD, source=None):
         style = self._service.getItemByCD(intCD)
@@ -228,16 +250,16 @@ class CustomizationContext(object):
             _logger.error('Failed to start Editable Style Mode: style is not editable: %s', style)
             return
         else:
-            self.changeMode(CustomizationModes.STYLED, source=source)
+            self.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D, source=source)
             currentStyleItem = self.mode.currentOutfit.style
             currentStyleIntCD = currentStyleItem.compactDescr if currentStyleItem else None
             if currentStyleIntCD != intCD:
                 self.mode.installItem(intCD, StyledMode.STYLE_SLOT)
-            self.changeMode(CustomizationModes.EDITABLE_STYLE, source=source)
+            self.changeMode(CustomizationModes.STYLE_2D_EDITABLE, source=source)
             return
 
     def canEditStyle(self, itemCD):
-        if self.__modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
+        if self.__modeId in CustomizationModes.STYLES:
             outfit = self.mode.getModifiedOutfit()
             if outfit is not None and outfit.style is not None:
                 currentStyle = self._itemsCache.items.getItemByCD(outfit.style.compactDescr)
@@ -250,7 +272,7 @@ class CustomizationContext(object):
 
     def changeModeWithProgressionDecal(self, itemCD, scrollToItem=False):
         goToEditableStyle = self.canEditStyle(itemCD)
-        self.changeMode(CustomizationModes.EDITABLE_STYLE if goToEditableStyle else CustomizationModes.CUSTOM)
+        self.changeMode(CustomizationModes.STYLE_2D_EDITABLE if goToEditableStyle else CustomizationModes.CUSTOM)
         self.mode.changeTab(CustomizationTabs.PROJECTION_DECALS, itemCD=itemCD if scrollToItem else None)
         return
 
@@ -270,23 +292,60 @@ class CustomizationContext(object):
     def unselectSlot(self):
         self.mode.unselectSlot()
 
-    def selectItem(self, intCD):
-        self.mode.selectItem(intCD)
+    def selectItem(self, intCD, progressionLevel=-1):
+        self.mode.selectItem(intCD, progressionLevel)
 
     def unselectItem(self):
         self.mode.unselectItem()
+
+    def cancelChanges(self):
+        if not (self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D):
+            self.__commonModifiedOutfit = self.__commonOriginalOutfit.copy()
+        self.mode.cancelChanges()
 
     def removeOldSeasonPreview(self, season):
         outfit = self.mode.getModifiedOutfit(season)
         outfit.removePreview()
 
+    def getPurchaseItems(self):
+        return self.mode.getPurchaseItems() + getCommonPurchaseItems(self.commonOutfit)
+
+    def getCommonOutfit(self):
+        if not self.__commonOriginalOutfit:
+            self.updateCommonOutfits()
+        return self.__commonOriginalOutfit.copy()
+
+    def getCommonModifiedOutfit(self):
+        if not self.__commonModifiedOutfit:
+            self.updateCommonOutfits()
+        return self.__commonModifiedOutfit.copy()
+
+    def getNotModifedCommonItems(self):
+        commonOutfit = self.getCommonOutfit()
+        commonModifiedOutfit = self.getCommonModifiedOutfit()
+        df = commonModifiedOutfit.diff(commonOutfit)
+        notModifiedItems = df.diff(commonOutfit)
+        return notModifiedItems
+
+    def updateCommonOutfits(self):
+        outfit = self._service.getCommonOutfit()
+        self.__commonOriginalOutfit = outfit.copy()
+        self.__commonModifiedOutfit = outfit.copy()
+
+    def updateOutfits(self):
+        self.updateCommonOutfits()
+        for mode in self.__modes.itervalues():
+            if mode.isInited:
+                mode.updateOutfits()
+
     def refreshOutfit(self, season=None):
+        season = self.season if season == SeasonType.ALL or season is None else season
         outfit = self.mode.getModifiedOutfit(season)
         if season is not None and season != self.season:
             outfit.invalidateItemsCounter()
         else:
             outfit.invalidate()
-            self._service.tryOnOutfit(outfit)
+            self._service.tryOnOutfit(outfit.adjust(self.commonOutfit))
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self.season
         return
 
@@ -294,39 +353,52 @@ class CustomizationContext(object):
     @adisp_process('customizationApply')
     def applyItems(self, purchaseItems, callback):
         self._itemsCache.onSyncCompleted -= self.__onCacheResync
-        yield self.mode.applyItems(purchaseItems, self.isModeChanged)
+        yield self.mode.applyItems(purchaseItems)
         self.__onCacheResync(-1, {})
         self._itemsCache.onSyncCompleted += self.__onCacheResync
         callback(None)
         return
 
+    def isCommonOutfitModified(self):
+        modifiedOutfit = self.__commonModifiedOutfit
+        originalOutfit = self.__commonOriginalOutfit
+        for _, component, _, _, _ in originalOutfit.diff(modifiedOutfit).itemsFull():
+            if component.isFilled():
+                return True
+
+        for _, component, _, _, _ in modifiedOutfit.diff(originalOutfit).itemsFull():
+            if component.isFilled():
+                return True
+
+        return False
+
     def isOutfitsModified(self):
-        if self.isModeChanged:
-            startMode = self.startMode
-            startModeNotChanged = not startMode.isOutfitsModified()
-            if startModeNotChanged and startMode.isOutfitsEmpty() and self.mode.isOutfitsEmpty():
-                return False
-            if startMode.modeId == CustomizationModes.STYLED and self.modeId == CustomizationModes.EDITABLE_STYLE:
-                if startModeNotChanged and not self.mode.isOutfitsModified():
-                    return startMode.originalStyle != self.mode.style
-            if startMode.modeId == CustomizationModes.CUSTOM and self.modeId == CustomizationModes.STYLED:
-                if self.mode.getStyleProgressionLevel() > 0:
-                    return self.mode.isOutfitsModified()
+        if self.mode.isOutfitsModified():
             return True
-        return self.mode.isOutfitsModified()
+        return True if not (self.__styleModeId and self.__styleModeId == CustomizationModes.STYLE_3D) and self.isCommonOutfitModified() else False
 
     @staticmethod
     def resetItemsNovelty(items):
         items = [ (g_currentVehicle.item.intCD, intCD) for intCD in items ]
         resetC11nItemsNovelty(items=items)
 
-    def __onCacheResync(self, reason, items):
-        if g_currentVehicle.isPresent():
-            for mode in self.__modes.itervalues():
-                if mode.isInited:
-                    mode.updateOutfits(preserve=True)
+    def returnToStyleMode(self, source=None):
+        if self.__styleModeId is None:
+            _logger.error('There is no previously open style mode to return to, source: %s', source)
+            return
+        else:
+            self.changeMode(self.__styleModeId, source=source)
+            return
 
-            self.refreshOutfit()
+    def has3DAttachments(self):
+        for intCD in self.getCommonModifiedOutfit().items():
+            item = self._service.getItemByCD(intCD)
+            if not item.isHiddenInUI() and item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+                return True
+
+        return False
+
+    def __onCacheResync(self, reason, items):
         self.events.onCacheResync(reason, items)
 
     def __onVehicleChanged(self):
@@ -334,12 +406,9 @@ class CustomizationContext(object):
             _logger.error('There is no vehicle in hangar for customization.')
             return
         else:
-            preserve = self._vehicle.intCD == g_currentVehicle.item.intCD
             self._vehicle = g_currentVehicle.item
-            for mode in self.__modes.itervalues():
-                if mode.isInited:
-                    mode.updateOutfits(preserve=preserve)
-
+            self.stylesDiffsCache.clearDiffs()
+            self.updateOutfits()
             self.refreshOutfit()
             return
 
@@ -368,5 +437,27 @@ class CustomizationContext(object):
     def __getStartSeason(self):
         return g_tankActiveCamouflage[g_currentVehicle.item.intCD] if g_currentVehicle.item.intCD in g_tankActiveCamouflage else first(SeasonType.COMMON_SEASONS)
 
-    def __getStartMode(self):
-        return CustomizationModes.STYLED if self._service.isStyleInstalled() else CustomizationModes.CUSTOM
+    def __getStartMode(self, modeId=None, tabId=None):
+        if modeId is not None:
+            if modeId == CustomizationModes.STYLE_2D_EDITABLE:
+                _logger.error('Cannot enter editable style mode without entering a base style mode first.')
+                return self.__getDefaultStartMode()
+            if modeId in CustomizationModes.BASE_STYLES and not vehicleHasSlot(GUI_ITEM_TYPE.STYLE):
+                _logger.warning("Tried entering {} customization mode but the vehicle doesn't have a slot for a style.").format(modeId)
+                return CustomizationModes.CUSTOM
+            return modeId
+        elif tabId is not None:
+            modeId = self.__getDefaultStartMode()
+            if tabId not in CustomizationTabs.MODES[modeId]:
+                modeId = CustomizationTabs.TAB_TO_MODE[tabId]
+            if modeId in CustomizationModes.BASE_STYLES and not vehicleHasSlot(GUI_ITEM_TYPE.STYLE):
+                return CustomizationModes.CUSTOM
+            return modeId
+        else:
+            return self.__getDefaultStartMode()
+
+    def __getDefaultStartMode(self):
+        style = self._service.getCurrentStyle()
+        if style and style.is3D:
+            return CustomizationModes.STYLE_3D
+        return CustomizationModes.STYLE_2D if style and not style.is3D or self._service.isNationalOutfitInstalled() else CustomizationModes.CUSTOM

@@ -14,6 +14,7 @@ except ImportError:
 
 SCALEFORM_SWF_PATH_V3 = 'gui/flash'
 VEHICLE_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/tanks/'
+CUSTOMIZATION_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/customization/'
 NATION_FILTER_ICONS_DIR_PATH = '../maps/icons/filters/nations/'
 BUTTON_FILTER_ICONS_DIR_PARH = '../maps/icons/library/'
 LEVEL_FILTER_ICONS_DIR_PARH = '../maps/icons/filters/levels/'
@@ -21,6 +22,10 @@ DEFAULT_VIDEO_BUFFERING_TIME = 2.0
 
 def getVehicleTypeAssetPath(vehicleType, extension='.png'):
     return ''.join([VEHICLE_TYPES_ICONS_DIR_PATH, vehicleType, extension])
+
+
+def getCustomizationTypeAssetPath(type, extension='.png'):
+    return ''.join([CUSTOMIZATION_TYPES_ICONS_DIR_PATH, type, extension])
 
 
 def getButtonsAssetPath(button, extension='.png'):

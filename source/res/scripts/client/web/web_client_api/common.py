@@ -68,6 +68,7 @@ class ShopItemType(CONST_CONTAINER):
     EMBLEM = 'emblem'
     INSCRIPTION = 'inscription'
     PROJECTION_DECAL = 'projectionDecal'
+    ATTACHMENT = 'attachment'
     ENHANCEMENT = 'enhancements'
     CREW_BOOKS = 'crew_books'
 
@@ -130,6 +131,7 @@ class ItemPackType(CONST_CONTAINER):
     PERSONAL_NUMBER = 'personal_number/all'
     MODIFICATION = 'modification/all'
     STYLE = 'style/all'
+    ATTACHMENT = 'attachment'
     ACHIEVEMENT = 'achievement'
     BADGE = 'badge'
     REFERRAL_BADGE = 'referralBadge'
@@ -187,10 +189,11 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.PAINT_WINTER)
     STYLE = (ItemPackType.STYLE,)
     MODIFICATION = (ItemPackType.MODIFICATION,)
+    ATTACHMENT = (ItemPackType.ATTACHMENT,)
     DECAL = (ItemPackType.DECAL_1, ItemPackType.DECAL_2)
     PROJECTION_DECAL = (ItemPackType.PROJECTION_DECAL,)
     PERSONAL_NUMBER = (ItemPackType.PERSONAL_NUMBER,)
-    CUSTOMIZATION = tuple(itertools.chain(STYLE, CAMOUFLAGE, PAINT, DECAL, PROJECTION_DECAL, PERSONAL_NUMBER, MODIFICATION))
+    CUSTOMIZATION = tuple(itertools.chain(STYLE, CAMOUFLAGE, PAINT, DECAL, PROJECTION_DECAL, PERSONAL_NUMBER, MODIFICATION, ATTACHMENT))
     CUSTOM = (ItemPackType.CUSTOM_PREMIUM,
      ItemPackType.CUSTOM_PREMIUM_PLUS,
      ItemPackType.CUSTOM_CRYSTAL,

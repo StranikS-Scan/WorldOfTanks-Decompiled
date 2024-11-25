@@ -136,8 +136,9 @@ class VsePlan(object):
         self._isPlanStarted = False
         self._isAutoStart = False
         self._owner = None
-        self._context.destroy()
-        self._context = None
+        if self.hasContext:
+            self._context.destroy()
+            self._context = None
         self._contextCreator = None
         self._clearCallBack()
         return

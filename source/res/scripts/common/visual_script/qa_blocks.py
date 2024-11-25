@@ -86,7 +86,6 @@ class AddTestResult(Block, QAMeta):
         runnerID = arena.ai.gameMode.arenaInfo.runnerID
         return 'runnerID_%d' % runnerID
 
-    @wg_async
     def _execute(self):
         if not (IS_DEVELOPMENT and IS_CELLAPP):
             return
@@ -97,7 +96,7 @@ class AddTestResult(Block, QAMeta):
         arenaInfo = arena.ai.gameMode.arenaInfo
         stats = ArenaTestResultStats.get(arena.ai.aiArena)
         stats.setTestResult(arenaInfo.aiScenario, ', '.join(arenaInfo.vsePlanNames), self._success.getValue(), self._msg.getValue())
-        yield stats.publishToInsights()
+        stats.publishToInsights()
         stats.reset()
         self._out.call()
 

@@ -4,7 +4,7 @@ import logging
 from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.CarouselBannerInjectMeta import CarouselBannerInjectMeta
+from gui.Scaleform.daapi.view.meta.EventTournamentBannerInjectMeta import EventTournamentBannerInjectMeta
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_grand_tournament_widget_model import Comp7GrandTournamentWidgetModel, Comp7GrandTournamentState
 from gui.impl.pub import ViewImpl
@@ -17,7 +17,7 @@ WIDGET_TO_TOURNAMENT_STATE = {'countdown': Comp7GrandTournamentState.COUNTDOWN,
  'dayIsOver': Comp7GrandTournamentState.DAYISOVER,
  'finished': Comp7GrandTournamentState.FINISHED}
 
-class Comp7GrandTournamentsWidgetComponent(CarouselBannerInjectMeta):
+class Comp7GrandTournamentsWidgetComponent(EventTournamentBannerInjectMeta):
     __slots__ = ('__view',)
 
     def __init__(self):
@@ -84,16 +84,18 @@ class Comp7GrandTournamentWidget(ViewImpl):
             return
 
     def __updateBanner(self):
-        with self.viewModel.transaction() as tx:
-            widgetData = self.__comp7Controller.getGrandTournamentBannerData()
-            self.__state = widgetData['state']
-            if not widgetData:
-                logging.warning('No widget data to show')
-                return
-            tournamentState = WIDGET_TO_TOURNAMENT_STATE.get(self.__state)
-            if not tournamentState:
-                logging.warning('Incorrect widget state=%s', self.__state)
-                return
-            tx.setState(tournamentState)
-            timeLeft = widgetData['timeLeft']
-            tx.setTimeLeft(timeLeft)
+        widgetData = self.__comp7Controller.getGrandTournamentBannerData()
+        if widgetData is None:
+            logging.warning('No widget data to show')
+            return
+        else:
+            with self.viewModel.transaction() as tx:
+                self.__state = widgetData['state']
+                tournamentState = WIDGET_TO_TOURNAMENT_STATE.get(self.__state)
+                if not tournamentState:
+                    logging.warning('Incorrect widget state=%s', self.__state)
+                    return
+                tx.setState(tournamentState)
+                timeLeft = widgetData['timeLeft']
+                tx.setTimeLeft(timeLeft)
+            return

@@ -182,6 +182,8 @@
       <module>	client.vehicle_systems.components.shot_damage_components	</module>
       <module>	client.vehicle_systems.components.debris_crashed_track_manager	</module>
       <module>	client.vehicle_systems.components.vehicle_pickup_manager	</module>
+      <module>	client.vehicle_systems.components.attachment_slot_manager	</module>
+      <module>	client.vehicle_systems.components.vehicle_assembly_manager	</module>
       <module>	client.cgf_components.rocket_acceleration_component	</module>
       <module>	client.cgf_components.zone_components	</module>
       <module>	client.cgf_components.on_shot_components	</module>
@@ -200,8 +202,7 @@
       <module>	common.cgf_components_common.material_component	</module>
       <module>	common.cgf_components_common.managers.state_managers	</module>
       <module>	common.cgf_components_common.bunkers	</module>
-      <module>	cell.ai.cgf_ai.navmesh_patching	</module>
-      <module>	cell.ai.cgf_ai.zones_patching	</module>
+      <module>	cell.ai.cgf_ai.dynamic_event	</module>
       <module>	cell.cgf_cell.damage.shot_damage	</module>
       <module>	cell.cgf_cell.shooting_obstacle	</module>
       <module>	cell.cgf_cell.cgf_vehicle	</module>

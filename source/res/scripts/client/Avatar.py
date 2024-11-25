@@ -103,7 +103,7 @@ from TwinGunController import getVehicleTwinGunController
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
-from helpers_common import unpackHullAimingPitch
+from helpers_common import unpackHullAimingPitch, unpackChunkObstacles
 import VOIP
 _logger = logging.getLogger(__name__)
 
@@ -475,9 +475,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             replayCtrl.stop()
-        if self.__tryShootCallbackId:
-            BigWorld.cancelCallback(self.__tryShootCallbackId)
-            self.__tryShootCallbackId = None
+        self.cancelShootingCB()
         if self.__tryChargeCallbackID is not None:
             BigWorld.cancelCallback(self.__tryChargeCallbackID)
         self.__cancelWaitingForCharge()
@@ -576,6 +574,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__consistentMatrices.notifyEnterWorld(self)
             AvatarObserver.onEnterWorld(self)
             return
+
+    def cancelShootingCB(self):
+        if self.__tryShootCallbackId:
+            BigWorld.cancelCallback(self.__tryShootCallbackId)
+            self.__tryShootCallbackId = None
+        return
 
     def onLeaveWorld(self):
         _logger.info('[INIT_STEPS] Avatar.onLeaveWorld')
@@ -1687,9 +1691,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             startPoint = refStartPoint
             shooter = BigWorld.entity(shooterID)
             if not isRicochet and shooter is not None and shooter.isStarted and effectsDescr.get('artilleryID') is None:
-                multiGun = shooter.typeDescriptor.turret.multiGun
-                if shooter.typeDescriptor.isDualgunVehicle and multiGun is not None:
-                    gunFireHP = multiGun[gunIndex].gunFire
+                typeDescr = shooter.typeDescriptor
+                if typeDescr.turret.multiGun is not None and (typeDescr.isDualgunVehicle or typeDescr.isTwinGunVehicle):
+                    gunFireHP = typeDescr.turret.multiGun[gunIndex].gunFire
                     node = shooter.appearance.compoundModel.node(gunFireHP)
                 else:
                     node = shooter.appearance.compoundModel.node('HP_gunFire')
@@ -1724,7 +1728,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__projectileMover.explode(shotID, effectsDescr, effectMaterial, endPoint, velocityDir)
             physParams = effectsDescr['physicsParams']
             if damagedDestructibles:
-                damagedDestructibles = [ (int(code >> 16), int(code >> 8 & 255), int(code & 255)) for code in damagedDestructibles ]
+                damagedDestructibles = unpackChunkObstacles(damagedDestructibles)
                 velocityDir.normalise()
                 explInfo = (endPoint,
                  velocityDir,

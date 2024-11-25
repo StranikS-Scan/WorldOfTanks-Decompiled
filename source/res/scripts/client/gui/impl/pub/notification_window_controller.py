@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/pub/notification_window_controller.py
 import logging
-import types
 import typing
 import BigWorld
 import Event
@@ -20,7 +19,7 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class NotificationWindowController(INotificationWindowController, IGlobalListener):
-    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isLobbyLoaded', '__locks', '__isExecuting', '__predicate')
+    __slots__ = ('__accountID', '__activeQueue', '__postponedQueue', '__currentWindow', '__callbackID', '__isWaitingShown', '__processAfterWaiting', '__isLobbyLoaded', '__locks', '__isExecuting')
     __gui = dependency.descriptor(IGuiLoader)
     __gameplay = dependency.descriptor(IGameplayLogic)
 
@@ -30,7 +29,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         self.__postponedQueue = []
         self.__locks = set()
         self.__currentWindow = None
-        self.__predicate = None
         self.__callbackID = None
         self.__isWaitingShown = False
         self.__processAfterWaiting = False
@@ -117,17 +115,13 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
         del self.__activeQueue[:]
         del self.__postponedQueue[:]
         self.__locks.clear()
-        self.__predicate = None
-        return
 
     def append(self, command):
-        if self.__predicate is None or self.__predicate(command):
-            _logger.debug('Append %r', command)
-            command.init()
-            self.__removeSameInstance(command)
-            self.__activeQueue.append(command)
-            self.__tryProcess()
-        return
+        _logger.debug('Append %r', command)
+        command.init()
+        self.__removeSameInstance(command)
+        self.__activeQueue.append(command)
+        self.__tryProcess()
 
     def releasePostponed(self, fireReleased=True):
         _logger.debug('Releasing the postponed queue.')
@@ -139,7 +133,7 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
                 self.__processNext()
             self.__notifyWithPostponedQueueCount()
         else:
-            _logger.error('Queue is currently disabled.')
+            _logger.info('Notifications queue is currently disabled.')
 
     def postponeActive(self):
         _logger.debug('Postpone the active queue.')
@@ -171,12 +165,6 @@ class NotificationWindowController(INotificationWindowController, IGlobalListene
 
     def hasLock(self, key):
         return key in self.__locks
-
-    def setFilterPredicate(self, predicate):
-        self.__predicate = predicate
-
-    def getFilterPredicate(self):
-        return self.__predicate
 
     @staticmethod
     def __discardNonPersistentCommands(queue):

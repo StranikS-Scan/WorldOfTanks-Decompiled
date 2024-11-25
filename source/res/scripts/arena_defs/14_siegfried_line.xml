@@ -9,6 +9,28 @@
     <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/14_siegfried_line/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/14_siegfried_line/mmap_city_bombing_01_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/14_siegfried_line/mmap_city_bombing_01_destroyed.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer3	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/14_siegfried_line/mmap_plane_crash_01_zone.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer4	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/14_siegfried_line/mmap_plane_crash_01_destroyed.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <wwmusicSetup>
@@ -26,6 +48,12 @@
     <loadBanks>
       <bank>
         <name>	env_Forest.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
       </bank>
     </loadBanks>
   </soundRemapping>

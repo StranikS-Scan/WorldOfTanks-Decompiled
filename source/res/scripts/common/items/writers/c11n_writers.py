@@ -296,7 +296,8 @@ ITEMS_FILTER_VALUE_DESCRIPTION = (Description('id', 'ids', IntegerFilterConverto
  Description('historical', 'edCustomizationDisplayTypes', IntegerFilterConvertor(), '0'))
 FILTER_ID_NAME = {CustomizationType.PROJECTION_DECAL: 'projection_decal',
  CustomizationType.PERSONAL_NUMBER: 'personal_number',
- CustomizationType.DECAL: 'decal'}
+ CustomizationType.DECAL: 'decal',
+ CustomizationType.ATTACHMENT: 'attachment'}
 ALTERNATE_TO_NAME = {CustomizationType.DECAL: 'decal',
  CustomizationType.PROJECTION_DECAL: 'projection_decal',
  CustomizationType.PAINT: 'paint',
@@ -870,11 +871,14 @@ class AttachmentXmlWriter(BaseCustomizationItemXmlWriter):
         changed = self.writeBase(item, section)
         if group:
             changed |= rewriteString(section, 'name', item, 'name', '')
-            changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', -1)
+            changed |= rewriteInt(section, 'sequenceId', item, 'sequenceId', 0)
             changed |= rewriteString(section, 'modelName', item, 'modelName', '')
             changed |= rewriteString(section, 'hangarModelName', item, 'hangarModelName', '')
+            changed |= rewriteString(section, 'crashModelName', item, 'crashModelName', '')
             changed |= rewriteString(section, 'attachmentLogic', item, 'attachmentLogic', '')
-            changed |= rewriteBool(section, 'initialVisibility', item, 'initialVisibility', False)
+            changed |= rewriteString(section, 'applyType', item, 'applyType', '')
+            changed |= rewriteString(section, 'size', item, 'size', '')
+            changed |= rewriteString(section, 'rarity', item, 'rarity', '')
         changed |= self.writeBaseGroup(item, section)
         return changed
 

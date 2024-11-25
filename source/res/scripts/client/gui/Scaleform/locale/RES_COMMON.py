@@ -18,6 +18,7 @@ class RES_COMMON(object):
     MAPS_ICONS_COLLECTIONS_INTRO_BG = '../maps/icons/collections/intro/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_CUSTOMIZATION_PROGRESSION_STYLES_STAGE_SWITCHER_BG = '../maps/icons/customization/progression_styles/stage_switcher/bg.png'
+    MAPS_ICONS_CUSTOMIZATION_VEHICLES_SIDEBAR_BG = '../maps/icons/customization/vehicles_sidebar/bg.png'
     MAPS_ICONS_DEDICATION_BG = '../maps/icons/dedication/bg.png'
     MAPS_ICONS_DEMOUNTKIT_BG = '../maps/icons/demountKit/bg.png'
     MAPS_ICONS_EPICBATTLES_ARROW_BG = '../maps/icons/epicBattles/arrow/bg.png'

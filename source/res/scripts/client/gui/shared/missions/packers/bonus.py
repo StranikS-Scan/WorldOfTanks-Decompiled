@@ -997,7 +997,7 @@ class AsyncBonusUIPacker(BonusUIPacker):
                 resultList = yield packer.asyncPack(bonus)
                 callback(resultList)
             else:
-                callback(self.pack(bonus))
+                callback(packer.pack(bonus))
         else:
             callback([])
 

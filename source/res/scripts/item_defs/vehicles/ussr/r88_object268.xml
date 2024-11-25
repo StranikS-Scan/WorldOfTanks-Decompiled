@@ -1472,6 +1472,42 @@
         <rotation>	0 0 0	</rotation>
         <attachNode>	V	</attachNode>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.792 0.137 -1.634	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999983 0.999983 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.773 0.137 -1.634	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999996 0.999996 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.00037 0.541 -3.406	</position>
+        <rotation>	-0 -1.570796 1.43117	</rotation>
+        <scale>	0.999912 0.999944 0.999932	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	-0.712 1.666 0.314	</position>
+        <rotation>	-0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2477,6 +2513,15 @@
               <showOn>	4112	</showOn>
               <clipAngle>	0.833075	</clipAngle>
               <anchorShift>	0.840526	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000007 0.522 0.358	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>

@@ -29,23 +29,26 @@ class BRProgressionSystemMessageFormatter(ServiceChannelFormatter):
 
     def _format(self, message, *_):
         messageData = message.data or {}
-        results = messageData.get('stages', set())
+        stages = messageData.get('stages', set())
         messageDataList = []
-        for result in sorted(results, key=lambda result: result.get('stage', {})):
-            messageDataList.append(self._formatSingleStageCompletion(message, result))
+        for stage in sorted(stages, key=lambda result: result.get('stage', {})):
+            messageData = self._formatSingleStageCompletion(message, stage)
+            if messageData:
+                messageDataList.append(messageData)
 
         return messageDataList
 
     def _formatSingleStageCompletion(self, message, stageInfo):
-        decorator = BRProgressionLockButtonDecorator
-        messageHeader = backport.text(R.strings.battle_royale_progression.serviceChannelMessages.header())
-        stage = stageInfo.get('stage')
-        progressionName = backport.text(R.strings.battle_royale_progression.serviceChannelMessages.progressionName())
-        messageBody = backport.text(R.strings.battle_royale_progression.serviceChannelMessages.body(), stage=str(stage), progressionName=progressionName)
         rewardsData = stageInfo.get('detailedRewards', {})
         if not rewardsData:
             return None
         else:
+            serviceMsg = R.strings.battle_royale_progression.serviceChannelMessages
+            decorator = BRProgressionLockButtonDecorator
+            messageHeader = backport.text(serviceMsg.header())
+            stage = stageInfo.get('stage')
+            progressionName = backport.text(serviceMsg.progressionName())
+            messageBody = backport.text(serviceMsg.body(), stage=str(stage), progressionName=progressionName)
             formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False)
             return MessageData(g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'header': messageHeader,
              'body': messageBody,

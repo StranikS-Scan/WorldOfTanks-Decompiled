@@ -27,6 +27,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from uilogging.crew.loggers import CrewMetricsLoggerWithParent
 from uilogging.crew.logging_constants import CrewViewKeys, LAYOUT_ID_TO_ITEM, CrewNavigationButtons, TABS_LOGGING_KEYS
+from CurrentVehicle import g_currentVehicle
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 
@@ -119,9 +120,9 @@ class TankmanContainerView(BaseCrewView):
             tabs.addViewModel(tabModel)
 
         tabs.invalidate()
-        if tankman.isInTank:
-            vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
-            fillVehicleInfo(vm.vehicleInfo, vehicle, separateIGRTag=True)
+        currentVehicle = g_currentVehicle.item
+        if currentVehicle:
+            fillVehicleInfo(vm.vehicleInfo, currentVehicle, separateIGRTag=True)
 
     def _setBackButtonLabel(self, vm):
         vm.setBackButtonLabel(R.strings.crew.common.navigation.toBarracks() if not self._isHangar else R.invalid())

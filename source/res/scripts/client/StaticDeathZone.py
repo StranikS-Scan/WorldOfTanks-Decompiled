@@ -5,7 +5,6 @@ import random
 import BigWorld
 import Math
 import Event
-from LimitedVisibilityEntity import LimitedVisibilityEntity
 from items import vehicles
 from helpers import dependency
 from PlayerEvents import g_playerEvents
@@ -15,7 +14,7 @@ from shared_utils import nextTick
 from constants import DEATH_ZONE_MASK_PATTERN
 _TIME_TO_STOP_FIRE_ON_LEAVE_ZONE = 5.0
 
-class StaticDeathZone(LimitedVisibilityEntity):
+class StaticDeathZone(BigWorld.Entity):
     onVehicleEntered = Event.Event()
     onVehicleLeft = Event.Event()
     onDamage = Event.Event()

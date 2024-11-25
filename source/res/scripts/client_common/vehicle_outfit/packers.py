@@ -305,7 +305,7 @@ class SequencePacker(CustomizationPacker):
     def pack(slot, component):
         for _, intCD, subcomp in slot.items():
             item = getItemByCompactDescr(intCD)
-            component.sequences.append(SequenceComponent(id=item.id, slotId=subcomp.slotId, position=subcomp.position, rotation=subcomp.rotation))
+            component.sequences.append(SequenceComponent(id=item.id, slotId=subcomp.slotId))
 
     @classmethod
     def unpack(cls, slot, component):
@@ -330,19 +330,23 @@ class AttachmentPacker(CustomizationPacker):
     def pack(slot, component):
         for _, intCD, subcomp in slot.items():
             item = getItemByCompactDescr(intCD)
-            component.attachments.append(AttachmentComponent(id=item.id, slotId=subcomp.slotId, position=subcomp.position, rotation=subcomp.rotation))
+            component.attachments.append(AttachmentComponent(id=item.id, slotId=subcomp.slotId, scaleFactorId=subcomp.scaleFactorId, rotated=subcomp.rotated))
 
     @classmethod
     def unpack(cls, slot, component):
-        for _, subcomp in enumerate(component.attachments):
-            intCD = cls.create(subcomp, CustomizationType.ATTACHMENT)
-            slot.append(intCD, component=subcomp)
+        regions = slot.getRegions()
+        for region, subcomp in product(regions, component.attachments):
+            if subcomp.slotId == region:
+                slotIdx = regions.index(region)
+                intCD = cls.create(subcomp, CustomizationType.ATTACHMENT)
+                slot.set(intCD, slotIdx, component=subcomp)
 
     @classmethod
     def invalidate(cls, slot):
-        for _, intCD, comp in slot.items():
+        for region, intCD, comp in slot.items():
             item = getItemByCompactDescr(intCD)
             comp.id = item.id
+            comp.slotId = region
 
     @staticmethod
     def getRawComponent():

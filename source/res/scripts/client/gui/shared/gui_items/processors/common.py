@@ -9,16 +9,14 @@ from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from exchange.personal_discounts_helper import getDiscountsRequiredForExchange
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.customization.shared import removePartsFromOutfit
 from gui.game_control.exchange_rates_with_discounts import getCurrentTime
 from gui.impl.lobby.exchange.exchange_rates_helper import createSystemExchangeNotification
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.notifications import NotificationPriorityLevel
-from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
+from items.components.c11n_components import getVehicleAttachmentSlotParams
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.customization import ICustomizationService
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -28,7 +26,6 @@ from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, ico
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins, GroupedRequestProcessor
 from gui.shared.money import Money, Currency
 from helpers import dependency
-from items.customizations import isEditedStyle
 from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController, IExchangeRatesWithDiscountsProvider
 from wg_async import wg_async, wg_await, await_callback
 from shared_utils import first
@@ -179,31 +176,14 @@ class OutfitApplier(Processor):
     def _request(self, callback):
         _logger.debug('Make server request to put on outfit on vehicle %s, outfitData %s', self.vehicle.invID, self.outfitData)
         requestData = []
-        c11nService = dependency.instance(ICustomizationService)
         for outfit, season in self.outfitData:
-            component = None
-            if outfit.style:
-                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
-                style = self.itemsCache.items.getItemByCD(intCD)
-                outfit = removePartsFromOutfit(season, outfit)
-                if style and style.isProgressive:
-                    outfit = c11nService.removeAdditionalProgressionData(outfit=outfit, style=style, vehCD=self.vehicle.descriptor.makeCompactDescr(), season=season)
-                    component = outfit.pack()
-            if component is None:
-                component = outfit.pack()
-            if component.styleId and isEditedStyle(component):
-                intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
-                style = self.itemsCache.items.getItemByCD(intCD)
-                baseOutfit = removePartsFromOutfit(season, style.getOutfit(season, self.vehicle.descriptor.makeCompactDescr()))
-                baseComponent = baseOutfit.pack()
-                component = component.getDiff(baseComponent)
-            self.__validateOutfitComponent(component)
+            component = outfit.pack()
+            self.__validateOutfitComponent(self.vehicle.descriptor, component)
             requestData.append((component.makeCompDescr(), season))
 
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, requestData, lambda code: self._response(code, callback))
-        return
 
-    def __validateOutfitComponent(self, outfitComponent):
+    def __validateOutfitComponent(self, vehicleDescr, outfitComponent):
         for itemType in CustomizationType.STYLE_ONLY_RANGE:
             typeName = lower(CustomizationTypeNames[itemType])
             componentsAttrName = '{}s'.format(typeName)
@@ -220,6 +200,15 @@ class OutfitApplier(Processor):
             _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
 
         outfitComponent.camouflages = camouflages
+        attachments = []
+        for attachment in outfitComponent.attachments:
+            slotId = attachment.slotId
+            slotParams = getVehicleAttachmentSlotParams(vehicleDescr, slotId)
+            if not slotParams.hiddenForUser:
+                attachments.append(attachment)
+            _logger.error('Hidden Attachment cannot be installed manually. %s removed.', attachment)
+
+        outfitComponent.attachments = attachments
         return
 
 

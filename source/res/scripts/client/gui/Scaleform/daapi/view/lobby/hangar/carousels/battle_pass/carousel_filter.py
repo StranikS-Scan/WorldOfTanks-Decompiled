@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/battle_pass/carousel_filter.py
-from account_helpers.AccountSettings import CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, BATTLEPASS_CAROUSEL_FILTER_1
+from account_helpers.AccountSettings import CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, BATTLEPASS_CAROUSEL_FILTER_1, CAROUSEL_FILTER_3
 from account_helpers.AccountSettings import CAROUSEL_FILTER_CLIENT_1, BATTLEPASS_CAROUSEL_FILTER_CLIENT_1
-from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, RoleCriteriesGroup, EventCriteriesGroup
+from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter, CustomizationCriteriesGroup, EventCriteriesGroup
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -13,7 +13,10 @@ class BattlePassCarouselFilter(CarouselFilter):
 
     def __init__(self):
         super(BattlePassCarouselFilter, self).__init__()
-        self._serverSections = (CAROUSEL_FILTER_1, CAROUSEL_FILTER_2, BATTLEPASS_CAROUSEL_FILTER_1)
+        self._serverSections = (CAROUSEL_FILTER_1,
+         CAROUSEL_FILTER_2,
+         BATTLEPASS_CAROUSEL_FILTER_1,
+         CAROUSEL_FILTER_3)
         self._clientSections = (CAROUSEL_FILTER_CLIENT_1, BATTLEPASS_CAROUSEL_FILTER_CLIENT_1)
         self._criteriesGroups = (EventCriteriesGroup(), BattlePassCriteriesGroup())
         self.currentSeasonID = 0
@@ -34,7 +37,7 @@ class BattlePassCarouselFilter(CarouselFilter):
         self.currentSeasonID = currentSeason
 
 
-class BattlePassCriteriesGroup(RoleCriteriesGroup):
+class BattlePassCriteriesGroup(CustomizationCriteriesGroup):
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def update(self, filters):

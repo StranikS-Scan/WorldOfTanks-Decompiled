@@ -38,6 +38,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
 
     def _addListeners(self):
         g_replayEvents.onPause += self.__onReplayPaused
+        g_replayEvents.onTimeWarpFinish += self.__onTimeWarpFinish
         crosshairCtrl = self._sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
@@ -52,6 +53,7 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
 
     def _removeListeners(self):
         g_replayEvents.onPause -= self.__onReplayPaused
+        g_replayEvents.onTimeWarpFinish -= self.__onTimeWarpFinish
         crosshairCtrl = self._sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
@@ -111,6 +113,9 @@ class StatusNotificationTimerPanel(StatusNotificationsPanelMeta, MethodsRules):
             verticalOffset = self._calcVerticalOffset(vehicle=vehicle)
             self.__setVerticalOffset(verticalOffset)
             return
+
+    def __onTimeWarpFinish(self):
+        self.as_setSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)
 
     def __onReplayPaused(self, isPaused):
         self.as_setSpeedS(BattleReplay.g_replayCtrl.playbackSpeed)

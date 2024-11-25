@@ -100,8 +100,11 @@
     <Astazou_XVI>	116	</Astazou_XVI>
     <SOFAM_8Gxb_C>	118	</SOFAM_8Gxb_C>
     <Maybach_Mb_IV_Zeppelin_x2>	119	</Maybach_Mb_IV_Zeppelin_x2>
+    <Moteur_EPC_version_S5>	120	</Moteur_EPC_version_S5>
+    <Hispano_ERAC>	122	</Hispano_ERAC>
     <Maybach_HL_230P45_BPXIV>	125	</Maybach_HL_230P45_BPXIV>
     <Moteur_moderne_3M_27_oie>	126	</Moteur_moderne_3M_27_oie>
+    <Citroen_105>	127	</Citroen_105>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
@@ -185,6 +188,23 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Panhard_12H_6000_54>
+    <Hispano_ERAC>
+      <userString>	#france_vehicles:Hispano_ERAC	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	75000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	240	</power>
+      <weight>	380	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </Hispano_ERAC>
     <Somua_S-40Bis>
       <userString>	#france_vehicles:Somua_S-40Bis	</userString>
       <tags>	gasoline	</tags>
@@ -498,6 +518,23 @@
       <rpm_min>	338	</rpm_min>
       <rpm_max>	2184	</rpm_max>
     </SOFAM_12GSds_B>
+    <Moteur_EPC_version_S5>
+      <userString>	#france_vehicles:Moteur_EPC_version_S5	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	86050	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Moteur_EPC_version_S5>
     <SOFAM_12_58>
       <userString>	#france_vehicles:SOFAM_12_58	</userString>
       <tags>	gasoline	</tags>
@@ -807,6 +844,22 @@
       <rpm_min>	353	</rpm_min>
       <rpm_max>	1993	</rpm_max>
     </Berliet_Ricardo>
+    <Citroen_105>
+      <userString>	#france_vehicles:Citroen_105	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	720	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	95	</power>
+      <weight>	200	</weight>
+      <maxHealth>	44	</maxHealth>
+      <maxRegenHealth>	22	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	380	</rpm_min>
+      <rpm_max>	2381	</rpm_max>
+    </Citroen_105>
     <Maybach_HL_230P45>
       <userString>	#france_vehicles:Maybach_HL_230P45	</userString>
       <shortUserString>	#france_vehicles:Maybach_HL_230P45_short	</shortUserString>

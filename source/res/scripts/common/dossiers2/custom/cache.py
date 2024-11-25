@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/cache.py
 import nations
-from items import vehicles, parseIntCompactDescr
+from items import vehicles
 from collector_vehicle import CollectorVehicleConsts
 PRESTIGE_ALLOWED_TAGS = {'role_ATSPG_sniper',
  'role_ATSPG_universal',

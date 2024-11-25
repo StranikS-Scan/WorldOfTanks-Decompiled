@@ -159,7 +159,7 @@ class FiltrableInventoryCategoryByTypeTabView(ItemsWithTypeFilterTabViewMeta):
         hasNoFilterResults = not hasNoItems and self._currentCount == 0
         filterWarningVO = None
         if hasNoFilterResults:
-            filterWarningVO = self._makeFilterWarningVO(backport.text(R.strings.storage.filter.warningMessage()), backport.text(R.strings.storage.filter.noResultsBtn.label()), backport.text(R.strings.tooltips.storage.filter.noResultsBtn()))
+            filterWarningVO = self._makeFilterWarningVO(backport.text(R.strings.storage.filter.warningMessage()), backport.text(R.strings.storage.filter.noResultsBtn.label()), None)
         self.as_showDummyScreenS(hasNoItems)
         self.as_showFilterWarningS(filterWarningVO)
         return

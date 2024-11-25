@@ -75,6 +75,15 @@ def fromIso(dateString):
     return datetime.datetime.strptime(dateString[:19], '%Y-%m-%dT%H:%M:%S')
 
 
+def castToNumber(numType, value, exceptionClass=SoftException):
+    try:
+        return numType(value)
+    except (TypeError, ValueError):
+        raise exceptionClass('Not a valid number.')
+    except OverflowError:
+        raise exceptionClass('Number too large.')
+
+
 def _mergeDicts(destination, source, deep=True):
     _copy = copy.deepcopy if deep else copy.copy
     for key in source:

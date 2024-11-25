@@ -4,7 +4,7 @@ from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT
 from items.components import component_constants, c11n_constants
 from items.components import path_builder
-from items.components.c11n_constants import ApplyArea
+from items.components.c11n_constants import ApplyArea, AttachmentSize
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
 if IS_CLIENT:
@@ -59,6 +59,26 @@ class ProjectionDecalSlotDescription(object):
         self.options = options
         self.anchorShift = anchorShift
         self.modificationOrder = modificationOrder
+
+
+class AttachmentSlotDescription(object):
+    __metaclass__ = ReflectionMetaclass
+    __slots__ = ('type', 'slotId', 'position', 'rotation', 'scale', 'attachNode', 'hiddenForUser', 'applyType', 'size')
+
+    def __init__(self, slotType='', slotId=0, position=None, rotation=None, scale=None, attachNode=None, hiddenForUser=False, applyType='', size=''):
+        self.type = slotType
+        self.slotId = slotId
+        self.position = position
+        self.rotation = rotation
+        self.scale = scale
+        self.attachNode = attachNode
+        self.hiddenForUser = hiddenForUser
+        self.applyType = applyType
+        self.size = size
+
+    @property
+    def scaleFactorId(self):
+        return AttachmentSize.ALL.index(self.size)
 
 
 MiscSlot = reflectedNamedTuple('MiscSlot', ('type', 'slotId', 'position', 'rotation', 'attachNode'))
@@ -176,13 +196,14 @@ class I18nComponent(object):
 
 
 class I18nExposedComponent(I18nComponent):
-    __slots__ = ('__userKey', '__descriptionKey', '__longDescriptionSpecialKey')
+    __slots__ = ('__userKey', '__descriptionKey', '__longDescriptionSpecialKey', '__name')
 
-    def __init__(self, userStringKey, descriptionKey, longDescriptionSpecialKey=''):
+    def __init__(self, userStringKey, descriptionKey, longDescriptionSpecialKey='', name=''):
         super(I18nExposedComponent, self).__init__(userStringKey, descriptionKey, longDescriptionSpecialKey=longDescriptionSpecialKey)
         self.__userKey = userStringKey
         self.__descriptionKey = descriptionKey
         self.__longDescriptionSpecialKey = longDescriptionSpecialKey
+        self.__name = name
 
     @property
     def userKey(self):
@@ -195,6 +216,10 @@ class I18nExposedComponent(I18nComponent):
     @property
     def longDescriptionSpecialKey(self):
         return self.__longDescriptionSpecialKey
+
+    @property
+    def name(self):
+        return self.__name
 
 
 class DeviceHealth(object):

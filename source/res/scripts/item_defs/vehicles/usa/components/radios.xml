@@ -36,6 +36,7 @@
     <T23radio>	1000	</T23radio>
     <SCR_528_M>	76	</SCR_528_M>
     <AN_VRC_12>	77	</AN_VRC_12>
+    <SCR_210A2>	78	</SCR_210A2>
     <AN_GRC_7B>	79	</AN_GRC_7B>
     <AN_GRC_7A>	80	</AN_GRC_7A>
     <AN-GRC-3RMT>	81	</AN-GRC-3RMT>
@@ -45,6 +46,7 @@
     <N19Mk1_Crab>	86	</N19Mk1_Crab>
     <AN_VRC_3_XM>	88	</AN_VRC_3_XM>
     <AN_VRC-3_Rush_Ep1>	89	</AN_VRC-3_Rush_Ep1>
+    <SCR_508B>	90	</SCR_508B>
     <AN-ARC-27M>	91	</AN-ARC-27M>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
@@ -69,7 +71,6 @@
     <SCR_506_StoryMode__0>	64009	</SCR_506_StoryMode__0>
     <SCR_506_StoryModeHard>	64010	</SCR_506_StoryModeHard>
     <SCR_528_StoryMode>	64011	</SCR_528_StoryMode>
-    <SCR_528_HW>	5508	</SCR_528_HW>
   </ids>
   <shared>
     <SCR_200>
@@ -107,6 +108,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_508_1>
+    <SCR_508B>
+      <userString>	#usa_vehicles:SCR_508B	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <weight>	100	</weight>
+      <distance>	395	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_508B>
     <SCR_508_M24>
       <userString>	#usa_vehicles:SCR_508_M24	</userString>
       <tags></tags>
@@ -142,6 +155,18 @@
       <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </SCR_210A>
+    <SCR_210A2>
+      <userString>	#usa_vehicles:SCR_210	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	4	</level>
+      <price>	1980	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_210A2>
     <SCR_506>
       <userString>	#usa_vehicles:SCR_506	</userString>
       <tags></tags>
@@ -896,17 +921,5 @@
       <repairCost>	3	</repairCost>
       <notInShop>	True	</notInShop>
     </SCR_528_StoryMode>
-    <SCR_528_HW>
-      <userString>	#usa_vehicles:SCR_528	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_528_HW>
   </shared>
 </radios.xml>

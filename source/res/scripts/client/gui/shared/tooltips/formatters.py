@@ -596,6 +596,22 @@ def packCustomizationImageBlockData(img=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_L
     return packBlockDataItem(linkage, data, padding)
 
 
+def packCustomizationRarityHeaderBlockData(img, rarity, rarityBackground, rarityIcon, title, subTitle, imgOffset=65, videoSource='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGE_BLOCK_RARITY_HEADER_LINKAGE, width=-1, height=-1, padding=None):
+    data = {'rarity': rarity,
+     'imgOffset': imgOffset,
+     'imagePath': img,
+     'rarityIcon': rarityIcon,
+     'rarityBackground': rarityBackground,
+     'title': title,
+     'subTitle': subTitle,
+     'videoSource': videoSource}
+    if width != -1:
+        data['width'] = width
+    if height != -1:
+        data['height'] = height
+    return packBlockDataItem(linkage, data, padding)
+
+
 def packCustomizationCharacteristicBlockData(icon, text, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_CUSTOMIZATION_ITEM_PROPERTY_BLOCK_LINKAGE, padding=None, isTextIcon=False, isWideOffset=False):
     data = {'icon': icon,
      'name': text,

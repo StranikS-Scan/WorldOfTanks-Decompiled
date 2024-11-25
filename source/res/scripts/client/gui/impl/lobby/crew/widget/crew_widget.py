@@ -34,9 +34,9 @@ from gui.impl.lobby.crew.crew_helpers.skill_formatters import SkillLvlFormatter
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, checkForTags
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED, getTankmanSkill, Tankman
-from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyCrew, NO_VEHICLE_ID
+from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyCrew, NO_VEHICLE_ID, VEHICLE_TAGS
 from gui.shared.gui_items.processors.vehicle import VehicleTmenXPAccelerator
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils import decorators
@@ -424,7 +424,10 @@ class CrewWidget(ViewImpl):
         return getLessMasteredIDX(tankmenDescrs)
 
     def __fillVehicleInfo(self, vm):
-        vm.setVehicleName(self.__currentVehicle.shortUserName)
+        if checkForTags(self.__currentVehicle.tags, VEHICLE_TAGS.PREMIUM_IGR):
+            vm.setVehicleName(self.__currentVehicle.descriptor.type.userString)
+        else:
+            vm.setVehicleName(self.__currentVehicle.shortUserName)
         vm.setVehicleType(self.__currentVehicle.type)
         vm.setIsCrewLocked(self.__currentVehicle.isCrewLocked)
         vm.setNation(self.__currentVehicle.nationName)

@@ -23,4 +23,3 @@ class HANGAR_CONSTS(object):
     BATTLE_ROYALE_TOURNAMENT_BANNER = 'battleRoyaleTournamentBanner'
     HEADER_WIDGET = 'headerWidget'
     HEADER_QUEST_FLAGS = 'headerQuestFlags'
-    TECH_TREE_TRADE_IN_BANNER = 'techTreeTradeInBanner'

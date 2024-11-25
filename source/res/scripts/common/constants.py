@@ -2015,9 +2015,6 @@ class REQUEST_COOLDOWN:
     CMD_FREE_XP_CONV = 1.0
     RESET_ALL_TANKMEN_SKILLS = 60.0
     FILL_ALL_TANKMEN_SKILLS = 60.0
-    CMD_TRADE_IN_TREES = 5
-    CMD_TRADE_IN_TREES_DRY_RUN = 5
-    CMD_TRADE_IN_TREES_PRICE = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -2379,7 +2376,13 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.SENIORITY_AWARDS: 'seniority awards settings',
  USER_SERVER_SETTINGS.REFERRAL_PROGRAM: 'referral program settings',
  USER_SERVER_SETTINGS.ADVANCED_ACHIEVEMENTS_STORAGE: 'advanced achievements storage',
- 116: 'Once only hints'}
+ 116: 'Once only hints',
+ 118: 'Ranked carousel filter 3',
+ 119: 'Frontline carousel filter 3',
+ 120: 'Mapbox carousel filter 3',
+ 121: 'Competitive7x7 carousel filter 3',
+ 122: 'Fun Random carousel filter 3',
+ 123: 'Carousel filter 3'}
 
 class WG_GAMES:
     TANKS = 'wot'
@@ -3454,7 +3457,7 @@ class SkillProcessorArgs(object):
         self.hasActiveTankmanForBooster = hasActiveTankmanForBooster
 
     def isSkillActive(self):
-        return self.isActive and not self.isFire
+        return self.isActive and not self.isFire and self.level
 
     def isBoosterApplicable(self):
         return (self.isActive or self.hasActiveTankmanForBooster) and not self.isFire

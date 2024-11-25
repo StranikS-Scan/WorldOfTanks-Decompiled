@@ -157,15 +157,7 @@ class Number(Field):
         return self._convert(incoming)
 
     def _convert(self, incoming):
-        try:
-            return self._formatNumber(incoming)
-        except (TypeError, ValueError):
-            raise ValidationError('Not a valid number.')
-        except OverflowError:
-            raise ValidationError('Number too large.')
-
-    def _formatNumber(self, value):
-        return self.numberType(value)
+        return utils.castToNumber(self.numberType, incoming, exceptionClass=ValidationError)
 
     @staticmethod
     def _toString(value):
@@ -228,11 +220,11 @@ class NonEmptyString(String):
         self._deserializedValidators = validator + self._deserializedValidators
 
 
-class Enum(Field):
+class StrictEnum(Field):
     __slots__ = ('_enumClass',)
 
     def __init__(self, enumClass, required=True, default=None, public=True, serializedValidators=None, deserializedValidators=None):
-        super(Enum, self).__init__(required=required, default=default, public=public, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
+        super(StrictEnum, self).__init__(required=required, default=default, public=public, serializedValidators=serializedValidators, deserializedValidators=deserializedValidators)
         self._enumClass = enumClass
 
     def _serialize(self, incoming, **kwargs):
@@ -242,10 +234,27 @@ class Enum(Field):
 
     def _deserialize(self, incoming, **kwargs):
         try:
-            return self._enumClass(incoming)
+            return self._enumClass(self._convert(incoming))
         except ValueError:
             enumValues = [ obj.value for obj in self._enumClass.__members__.values() ]
             raise ValidationError('Value: {} must be one of: {}.'.format(incoming, enumValues))
+
+    def _convert(self, incoming):
+        return incoming
+
+
+class IntEnum(StrictEnum):
+    __slots__ = ()
+
+    def _convert(self, incoming):
+        return utils.castToNumber(int, incoming, exceptionClass=ValidationError)
+
+
+class StrEnum(StrictEnum):
+    __slots__ = ()
+
+    def _convert(self, incoming):
+        return str(incoming)
 
 
 class Nested(Field):

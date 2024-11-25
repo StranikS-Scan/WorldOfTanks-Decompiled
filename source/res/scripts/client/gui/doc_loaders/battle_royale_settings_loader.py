@@ -16,7 +16,7 @@ _logger = logging.getLogger(__name__)
 ModuleData = namedtuple('ModuleData', ('titleText', 'icon', 'deltaParams', 'priorityParams', 'params', 'constParams'))
 VehicleProperties = namedtuple('VehicleProperties', ('difficulty', 'survivability', 'mobility', 'damage', 'spotting'))
 _PriorityParameter = namedtuple('PriorityParameter', ('name', 'type'))
-_BRSettings = namedtuple('_BRSettings', ('radar', 'spottedLoot', 'spawn', 'techTree', 'vehicleProperties', 'upgradeAttentionTime', 'observerBotMarkersVisibilityDistance', 'sounds'))
+_BRSettings = namedtuple('_BRSettings', ('radar', 'detector', 'spawn', 'techTree', 'vehicleProperties', 'upgradeAttentionTime', 'observerBotMarkersVisibilityDistance', 'sounds'))
 _SpawnSettings = namedtuple('_SpawnSettings', ('selectEndingSoonTime',))
 _SoundsSettings = namedtuple('_SoundsSettings', ('finalEnemiesCount', 'middleAverageLevel'))
 _TechTreeSettings = namedtuple('_TechTreeSettings', ('modules', 'vehicleParams'))
@@ -35,7 +35,7 @@ def _getModuleText(txtPath):
 
 def _readBattleRoyaleSettings():
     _, section = resource_helper.getRoot(_BATTLE_ROYALE_CONFIG_XML_PATH)
-    result = _BRSettings(_readRadarSettings(section['radar']), _readRadarSettings(section['spottedLoot']), _readSpawnSettings(section['spawn']), _readTechTreeSettings(section['techTree']), _readVehicleProperties(section['vehicleProperties']), section['upgradeAttentionTime'].asFloat, section['observerBotMarkersVisibilityDistance'].asInt, _readSoundSettings(section['sounds']))
+    result = _BRSettings(_readRadarSettings(section['radar']), _readRadarSettings(section['detector']), _readSpawnSettings(section['spawn']), _readTechTreeSettings(section['techTree']), _readVehicleProperties(section['vehicleProperties']), section['upgradeAttentionTime'].asFloat, section['observerBotMarkersVisibilityDistance'].asInt, _readSoundSettings(section['sounds']))
     resource_helper.purgeResource(_BATTLE_ROYALE_CONFIG_XML_PATH)
     return result
 

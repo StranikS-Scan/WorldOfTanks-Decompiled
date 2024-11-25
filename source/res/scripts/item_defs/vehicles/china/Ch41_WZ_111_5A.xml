@@ -925,6 +925,33 @@
         <clipAngle>	0.653334	</clipAngle>
         <anchorShift>	0.331168	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.707 0.218 0.116	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999987 0.999987 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.708 0.222 0.116	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999986 0.999986 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-0.000007 0.002 -3.623	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999949 0.999953 0.999948	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2656,6 +2683,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.12876	</clipAngle>
           <anchorShift>	0.19589	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.277036 0.88459 -0.906326	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.729 0.835 -1.19	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

@@ -29,7 +29,7 @@ _PROJECTION_DECAL_FORM_TO_IMAGE_SCALE = {ProjectionDecalFormTags.SQUARE: 0.725,
  ProjectionDecalFormTags.RECT1X6: 1}
 _DEFAULT_IMAGE_SCALE = 1
 
-def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False, isChained=False, isUnsuitable=False, isInProgress=False):
+def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=False, isUsedUp=False, autoRentEnabled=False, vehicle=None, progressionLevel=None, icon=None, showDetailItems=True, plainView=False, showEditableHint=False, showEditBtnHint=False, isChained=False, isUnsuitable=False, isInProgress=False, rarity=''):
     if plainView:
         hasBonus = False
         locked = False
@@ -102,13 +102,19 @@ def buildCustomizationItemDataVO(item, count=None, isApplied=False, isDarked=Fal
         visitedSet = AccountSettings.getSettings(CUSTOMIZATION_STYLE_ITEMS_VISITED)
         isNew = item.intCD not in visitedSet
     isWithSerialNumber = item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isWithSerialNumber
-    return CustomizationCarouselRendererVO(item=item, icon=icon, hasBonus=hasBonus, locked=locked, buyPrice=buyPrice, quantity=count, showDetailItems=showDetailItems, isSpecial=isSpecial, isDarked=isDarked, isAlreadyUsed=isUsedUp, showAlert=showAlert, extraNames=extraNames, isEquipped=isApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, noveltyCounter=noveltyCounter, editNoveltyCounter=editNoveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, formFactor=formFactor, progressionLevel=progressionLevel, editableIcon=editableIcon, editBtnEnabled=editBtnEnabled, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, imageScale=scale, tooltip=tooltip, isChained=isChained, isUnsuitable=isUnsuitable, isProgressionRewindEnabled=isProgressionRewindEnabled, isWithSerialNumber=isWithSerialNumber, isInProgress=isInProgress, isLinked=isLinked, isNew=isNew).asDict()
+    isRare = bool(rarity)
+    rarityIconSource = ''
+    rarityBackgroundIconSource = ''
+    if isRare:
+        rarityIconSource = backport.image(R.images.gui.maps.icons.customization.rarity.sign.s26x26.dyn(rarity)())
+        rarityBackgroundIconSource = backport.image(R.images.gui.maps.icons.customization.rarity.glow.s104x104.dyn(rarity)())
+    return CustomizationCarouselRendererVO(item=item, icon=icon, hasBonus=hasBonus, locked=locked, buyPrice=buyPrice, quantity=count, showDetailItems=showDetailItems, isSpecial=isSpecial, isDarked=isDarked, isAlreadyUsed=isUsedUp, showAlert=showAlert, extraNames=extraNames, isEquipped=isApplied, rentalInfoText=rentalInfoText, imageCached=imageCached, autoRentEnabled=autoRentEnabled, noveltyCounter=noveltyCounter, editNoveltyCounter=editNoveltyCounter, formIconSource=formIconSource, defaultIconAlpha=iconAlpha, lockText=lockText, formFactor=formFactor, progressionLevel=progressionLevel, editableIcon=editableIcon, editBtnEnabled=editBtnEnabled, showEditableHint=showEditableHint, showEditBtnHint=showEditBtnHint, imageScale=scale, tooltip=tooltip, isChained=isChained, isUnsuitable=isUnsuitable, isProgressionRewindEnabled=isProgressionRewindEnabled, isWithSerialNumber=isWithSerialNumber, isInProgress=isInProgress, isLinked=isLinked, isNew=isNew, isRare=isRare, rarityIconSource=rarityIconSource, rarityBackgroundIconSource=rarityBackgroundIconSource).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'customizationDisplayType', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'editNoveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip', 'isChained', 'isUnsuitable', 'isProgressionRewindEnabled', 'isWithSerialNumber', 'isInProgress', 'isLinked', 'isNew')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'autoRentEnabled', 'showDetailItems', 'customizationDisplayType', 'isSpecial', 'isDarked', 'isAlreadyUsed', 'showAlert', 'buyOperationAllowed', 'extraNames', 'showRareIcon', 'isEquipped', 'rentalInfoText', 'imageCached', 'isAllSeasons', 'noveltyCounter', 'editNoveltyCounter', 'formIconSource', 'defaultIconAlpha', 'lockText', 'isDim', 'formFactor', 'progressionLevel', 'editableIcon', 'editBtnEnabled', 'showEditableHint', 'showEditBtnHint', 'imageScale', 'tooltip', 'isChained', 'isUnsuitable', 'isProgressionRewindEnabled', 'isWithSerialNumber', 'isInProgress', 'isLinked', 'isNew', 'isRare', 'rarityIconSource', 'rarityBackgroundIconSource')
 
-    def __init__(self, item, icon, hasBonus, locked, buyPrice, quantity=None, showDetailItems=True, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, editNoveltyCounter=0, autoRentEnabled=False, formIconSource='', defaultIconAlpha=1, lockText='', formFactor=-1, progressionLevel=-1, imageScale=1, editableIcon='', editBtnEnabled=False, showEditableHint=False, showEditBtnHint=False, tooltip='', isChained=False, isUnsuitable=False, isProgressionRewindEnabled=False, isWithSerialNumber=False, isInProgress=False, isLinked=False, isNew=False):
+    def __init__(self, item, icon, hasBonus, locked, buyPrice, quantity=None, showDetailItems=True, isSpecial=False, isDarked=False, isAlreadyUsed=False, showAlert=False, buyOperationAllowed=True, extraNames=None, isEquipped=False, rentalInfoText='', imageCached=True, noveltyCounter=0, editNoveltyCounter=0, autoRentEnabled=False, formIconSource='', defaultIconAlpha=1, lockText='', formFactor=-1, progressionLevel=-1, imageScale=1, editableIcon='', editBtnEnabled=False, showEditableHint=False, showEditBtnHint=False, tooltip='', isChained=False, isUnsuitable=False, isProgressionRewindEnabled=False, isWithSerialNumber=False, isInProgress=False, isLinked=False, isNew=False, isRare=False, rarityIconSource='', rarityBackgroundIconSource=''):
         self.intCD = item.intCD
         self.typeId = item.itemTypeID
         self.isWide = item.isWide()
@@ -153,6 +159,9 @@ class CustomizationCarouselRendererVO(object):
         self.isInProgress = isInProgress
         self.isLinked = isLinked
         self.isNew = isNew
+        self.isRare = isRare
+        self.rarityIconSource = rarityIconSource
+        self.rarityBackgroundIconSource = rarityBackgroundIconSource
 
     def asDict(self):
         ret = {'intCD': self.intCD,
@@ -195,7 +204,10 @@ class CustomizationCarouselRendererVO(object):
          'isWithSerialNumber': self.isWithSerialNumber,
          'isInProgress': self.isInProgress,
          'isLinked': self.isLinked,
-         'isNew': self.isNew}
+         'isNew': self.isNew,
+         'isRare': self.isRare,
+         'rarityIconSource': self.rarityIconSource,
+         'rarityBackgroundIconSource': self.rarityBackgroundIconSource}
         if self.extraNames is not None:
             ret.update(styleName=self.extraNames[0], styleNameSmall=self.extraNames[1])
         if self.quantity:

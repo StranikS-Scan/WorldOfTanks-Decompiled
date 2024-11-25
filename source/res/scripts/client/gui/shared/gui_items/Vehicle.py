@@ -4,7 +4,6 @@ import logging
 import math
 import random
 from collections import namedtuple, defaultdict
-from copy import deepcopy
 from itertools import izip
 from operator import itemgetter
 import BigWorld
@@ -28,7 +27,7 @@ from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRest
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
 from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME, NO_TANKMAN
-from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot
+from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot, AttachmentSlot
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
@@ -38,9 +37,8 @@ from gui.shared.utils import makeSearchableString
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, time_utils, dependency
 from items import customizations, filterIntCDsByItemType, getTypeInfoByName, getTypeOfCompactDescr, tankmen, vehicles
-from items.components.c11n_constants import CUSTOM_STYLE_POOL_ID, HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, CustomizationType, ItemTags, SeasonType
-from items.customizations import createNationalEmblemComponents
-from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL
+from items.components.c11n_constants import HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, ItemTags, SeasonType
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, TankmanDescr
 from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
@@ -57,7 +55,6 @@ from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLO
 from constants import NEW_PERK_SYSTEM as NPS
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsRequester
-    from items.components.c11n_components import StyleItem
     from items.customizations import CustomizationOutfit
     from vehicle_outfit.outfit import Outfit
     from gui.veh_post_progression.models.progression import PostProgressionItem, AvailabilityCheckResult
@@ -184,7 +181,7 @@ EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typ
 NO_VEHICLE_ID = -1
 
 class Vehicle(FittingItem):
-    __slots__ = ('__customState', '__weakref__', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_isStyleInstalled', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
+    __slots__ = ('__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_tradeInAvailable', '_tradeOffAvailable', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_slotsIds', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
 
     class VEHICLE_STATE(object):
         DAMAGED = 'damaged'
@@ -287,7 +284,6 @@ class Vehicle(FittingItem):
         self._postProgression = None
         self._hasNationGroup = hasNationGroup(vehDescr.type.compactDescr)
         self._outfitComponents = {}
-        self._isStyleInstalled = False
         if self.isPremiumIGR:
             self._searchableUserName = makeSearchableString(self.shortUserName)
         else:
@@ -405,14 +401,16 @@ class Vehicle(FittingItem):
                 if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL,
                  GUI_ITEM_TYPE.MODIFICATION,
                  GUI_ITEM_TYPE.STYLE,
-                 GUI_ITEM_TYPE.SEQUENCE,
-                 GUI_ITEM_TYPE.ATTACHMENT):
+                 GUI_ITEM_TYPE.SEQUENCE):
                     areaId = Area.MISC
                 else:
                     areaId = slotHelper.tankAreaId
                 if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
                     regionIdx = len(slotsAnchors[slotType][areaId])
                     customizationSlot = ProjectionDecalSlot(anchor, slotHelper.tankAreaId, regionIdx)
+                elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+                    regionIdx = len(slotsAnchors[slotType][areaId])
+                    customizationSlot = AttachmentSlot(anchor, slotHelper.tankAreaId, regionIdx)
                 else:
                     if anchor.applyTo is not None:
                         regions = REGIONS_BY_SLOT_TYPE[areaId][slotType]
@@ -554,33 +552,21 @@ class Vehicle(FittingItem):
         return (GUI_ITEM_TYPE.VEHICLE, nId, innID)
 
     def createAppliedOutfits(self, proxy):
-        styleOutfitData = proxy.inventory.getOutfitData(self.intCD, SeasonType.ALL)
-        styleProgressionLevel = 0
-        styleSerialNumber = ''
-        if styleOutfitData is not None:
-            self._isStyleInstalled = True
-            styledOutfitComponent = customizations.parseC11sComponentDescr(styleOutfitData)
-            styleProgressionLevel = styledOutfitComponent.styleProgressionLevel
-            styleSerialNumber = styledOutfitComponent.serial_number
-            styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styledOutfitComponent.styleId)
-            style = vehicles.getItemByCompactDescr(styleIntCD)
-        else:
-            style = None
-            outfitsPool = proxy.inventory.getC11nOutfitsFromPool(self.intCD)
-            isCustomOutfitStored = outfitsPool and outfitsPool[0][0] == CUSTOM_STYLE_POOL_ID
-            if not isCustomOutfitStored:
-                self._isStyleInstalled = False
-            else:
-                isCustomOutfitInstalled = any((proxy.inventory.getOutfitData(self.intCD, s) for s in SeasonType.SEASONS))
-                self._isStyleInstalled = not isCustomOutfitInstalled
-        self._outfitComponents = {season:self._getOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season) for season in SeasonType.SEASONS}
+        from vehicle_systems import camouflages
+        commonOutfitData = proxy.inventory.getOutfitData(self.intCD, SeasonType.ALL)
+        commonOutfitComponent = customizations.parseC11sComponentDescr(commonOutfitData) if commonOutfitData else None
+        for season in SeasonType.SEASONS:
+            outfitComponent = self.__getCustomOutfitComponent(proxy, season)
+            if commonOutfitComponent:
+                outfitComponent = outfitComponent.applyDiff(commonOutfitComponent)
+            outfitData = customizations.makeCompDescr(outfitComponent)
+            self._outfitComponents[season] = camouflages.getOutfitComponent(outfitData or commonOutfitData, self.descriptor, season)
+
         return
 
-    def _getOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        if style is not None:
-            return self.__getStyledOutfitComponent(proxy, style, styleProgressionLevel, styleSerialNumber, season)
-        else:
-            return self.__getEmptyOutfitComponent() if self._isStyleInstalled else self.__getCustomOutfitComponent(proxy, season)
+    def __getCustomOutfitComponent(self, proxy, season):
+        customOutfitData = proxy.inventory.getOutfitData(self.intCD, season)
+        return customizations.parseC11sComponentDescr(customOutfitData) if customOutfitData is not None else self.__getEmptyOutfitComponent()
 
     @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
@@ -1104,10 +1090,13 @@ class Vehicle(FittingItem):
             item = proxy.getItemByCD(itemCD)
             if not item.mayInstall(self):
                 continue
+            if itemTypes is not None and item.itemTypeID not in itemTypes:
+                continue
+            if season is not None and not item.season & season:
+                continue
             if itemFilter is not None and not itemFilter(item):
                 continue
-            if (itemTypes is None or item.itemTypeID in itemTypes) and (season is None or item.season & season):
-                count += qtyItems
+            count += qtyItems
 
         return count
 
@@ -1435,10 +1424,6 @@ class Vehicle(FittingItem):
         return self.isTelecom and self.rentExpiryState
 
     @property
-    def isStyleInstalled(self):
-        return self._isStyleInstalled
-
-    @property
     def isEquipmentLocked(self):
         return checkForTags(self.tags, VEHICLE_TAGS.EQUIPMENT_LOCKED)
 
@@ -1721,16 +1706,19 @@ class Vehicle(FittingItem):
         levelsByIndexes = {}
         skillsEfficiencyByIndexes = {}
         nativeVehsByIdxs = {}
+        freeXPs = {}
         for tankmanIdx, vehTankman in self.crew:
             if vehTankman:
                 levelsByIndexes[tankmanIdx] = tankmen.MAX_SKILL_LEVEL
+                freeXPs[tankmanIdx] = vehTankman.descriptor.freeXP
                 skillsEfficiencyByIndexes[tankmanIdx] = vehTankman.skillsEfficiencyXP
                 nativeVehsByIdxs[tankmanIdx] = self.itemsCache.items.getItemByCD(vehTankman.vehicleNativeDescr.type.compactDescr)
             levelsByIndexes[tankmanIdx] = None
+            freeXPs[tankmanIdx] = 0
             skillsEfficiencyByIndexes[tankmanIdx] = None
             nativeVehsByIdxs[tankmanIdx] = None
 
-        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes, skillsEfficiencyByIdxs=skillsEfficiencyByIndexes, nativeVehsByIdxs=nativeVehsByIdxs, rolesBonusSkills=rolesBonusSkills, bonusSkillsLevels=bonusSkillsLevels)
+        return self.getCrewBySkillLevels(100, skillsByIdxs=skills, skillLevelsByIdxs=skillLevels, activateBrotherhood=True, levelByIdxs=levelsByIndexes, skillsEfficiencyByIdxs=skillsEfficiencyByIndexes, nativeVehsByIdxs=nativeVehsByIdxs, rolesBonusSkills=rolesBonusSkills, bonusSkillsLevels=bonusSkillsLevels, freeXPs=freeXPs)
 
     def getPerfectCrew(self):
         skills, skillLevels, bonusSkills, bonusSkillsLevels = self.__getCrewSkills()
@@ -1781,7 +1769,7 @@ class Vehicle(FittingItem):
                     newTman = tman
                 else:
                     bonusSkillsLevels = [tmanDescr.bonusSkillsLevels, skillNamesMaxLvl]
-                    newTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=bonusSkillsLevels)
+                    newTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills, initialXP=tmanDescr.freeXP), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=bonusSkillsLevels)
                 crewItems.append((slotIdx, newTman))
 
             crewRoles = self.descriptor.type.crewRoles
@@ -1810,7 +1798,12 @@ class Vehicle(FittingItem):
 
             if skillName in skills:
                 skills.remove(skillName)
-            unskilledTman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills), vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
+            tempUnskilledTmanCD = tankmen.generateCompactDescr(tmanDescr.getPassport(), tmanDescr.vehicleTypeID, tmanDescr.role, tmanDescr.roleLevel, skills, lastSkillLevel, skillsEfficiencyXP=tmanDescr.skillsEfficiencyXP, rolesBonusSkills=rolesBonusSkills)
+            unskilledTmanDescr = TankmanDescr(compactDescr=tempUnskilledTmanCD)
+            additionalXP = tmanDescr.totalXP() - unskilledTmanDescr.totalXP()
+            unskilledTmanDescr.freeXP = tmanDescr.freeXP + additionalXP
+            unskilledTmanCD = unskilledTmanDescr.makeCompactDescr()
+            unskilledTman = self.itemsFactory.createTankman(unskilledTmanCD, vehicle=self, vehicleSlotIdx=tman.vehicleSlotIdx, bonusSkillsLevels=[bonusSkillsLevels])
             crewItems.append((slotIdx, unskilledTman))
 
         return sortCrew(crewItems, crewRoles)
@@ -1827,7 +1820,7 @@ class Vehicle(FittingItem):
 
         return sortCrew(crewItems, crewRoles)
 
-    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None, skillsEfficiencyByIdxs=None, rolesBonusSkills=None, bonusSkillsLevels=None):
+    def getCrewBySkillLevels(self, defRoleLevel, skillsByIdxs=None, levelByIdxs=None, nativeVehsByIdxs=None, activateBrotherhood=False, skillLevelsByIdxs=None, skillsEfficiencyByIdxs=None, rolesBonusSkills=None, bonusSkillsLevels=None, freeXPs=None):
         skillsByIdxs = skillsByIdxs or {}
         skillLevelsByIdxs = skillLevelsByIdxs or {}
         levelByIdxs = levelByIdxs or {}
@@ -1835,6 +1828,7 @@ class Vehicle(FittingItem):
         skillsEfficiencyByIdxs = skillsEfficiencyByIdxs or {}
         rolesBonusSkills = rolesBonusSkills or {}
         bonusSkillsLevels = bonusSkillsLevels or {}
+        freeXPs = freeXPs or {}
         crewItems = list()
         crewRoles = self.descriptor.type.crewRoles
         brotherhoodActive = skillsByIdxs and any((BROTHERHOOD_SKILL_NAME in skills for skills in skillsByIdxs.values()))
@@ -1847,7 +1841,12 @@ class Vehicle(FittingItem):
                     nationID, vehicleTypeID = nativeVehicle.descriptor.type.id
                 else:
                     nationID, vehicleTypeID = self.descriptor.type.id
-                tankman = self.itemsFactory.createTankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL), skillsEfficiencyXP=skillsEfficiencyByIdxs.get(idx, MAX_SKILLS_EFFICIENCY_XP), rolesBonusSkills=rolesBonusSkills.get(idx, {})), vehicle=self, vehicleSlotIdx=idx, bonusSkillsLevels=[bonusSkillsLevels.get(idx, [tankmen.MAX_SKILL_LEVEL] * NPS.MAX_BONUS_SKILLS_PER_ROLE)])
+                tankmanCD = tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, role, defRoleLevel, skillsByIdxs.get(idx, []), lastSkillLevel=skillLevelsByIdxs.get(idx, tankmen.MAX_SKILL_LEVEL), skillsEfficiencyXP=skillsEfficiencyByIdxs.get(idx, MAX_SKILLS_EFFICIENCY_XP), rolesBonusSkills=rolesBonusSkills.get(idx, {}))
+                if freeXPs:
+                    tmanDescrWithFreeXP = TankmanDescr(compactDescr=tankmanCD)
+                    tmanDescrWithFreeXP.freeXP = freeXPs.get(idx, 0)
+                    tankmanCD = tmanDescrWithFreeXP.makeCompactDescr()
+                tankman = self.itemsFactory.createTankman(tankmanCD, vehicle=self, vehicleSlotIdx=idx, bonusSkillsLevels=[bonusSkillsLevels.get(idx, [tankmen.MAX_SKILL_LEVEL] * NPS.MAX_BONUS_SKILLS_PER_ROLE)])
                 if brotherhoodActive and activateBrotherhood:
                     tankman.setBrotherhoodActivity(True)
                     tankman.rebuildSkills()
@@ -2017,42 +2016,6 @@ class Vehicle(FittingItem):
             return (maxDuration, minDuration)
         else:
             return (0, 0)
-
-    def __getCustomOutfitComponent(self, proxy, season):
-        customOutfitData = proxy.inventory.getOutfitData(self.intCD, season)
-        return customizations.parseC11sComponentDescr(customOutfitData) if customOutfitData is not None else self.__getEmptyOutfitComponent()
-
-    def __getStyledOutfitComponent(self, proxy, style, styleProgressionLevel, styleSerialNumber, season):
-        component = deepcopy(style.outfits.get(season))
-        if style.progression:
-            if not style.isProgressionRewindEnabled:
-                componentProgression = 0
-                progressionData = self.itemsCache.items.inventory.getC11nProgressionDataForItem(style.compactDescr)
-                if progressionData is not None:
-                    vehCD = self.intCD if style.progression.autobound else 0
-                    vehProgressionData = progressionData.get(vehCD, None)
-                    if vehProgressionData is not None:
-                        componentProgression = vehProgressionData.currentLevel
-                    component.styleProgressionLevel = componentProgression
-            else:
-                component.styleProgressionLevel = styleProgressionLevel
-        if style.isWithSerialNumber:
-            component.serial_number = styleSerialNumber
-        if ItemTags.ADD_NATIONAL_EMBLEM in style.tags:
-            emblems = createNationalEmblemComponents(self._descriptor)
-            component.decals.extend(emblems)
-        diff = proxy.inventory.getOutfitData(self.intCD, season)
-        if diff is None:
-            component = style.addPartsToOutfit(season, component, self._descriptor.makeCompactDescr())
-            return component.copy()
-        else:
-            diffComponent = customizations.parseC11sComponentDescr(diff)
-            if component.styleId != diffComponent.styleId:
-                _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)
-                return component.copy()
-            component = component.applyDiff(diffComponent)
-            component = style.addPartsToOutfit(season, component, self._descriptor.makeCompactDescr())
-            return component.copy()
 
     def __getEmptyOutfitComponent(self):
         if self.descriptor.type.hasCustomDefaultCamouflage:

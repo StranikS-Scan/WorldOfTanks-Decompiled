@@ -91,11 +91,11 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     @option(_sqGen.next(), TankSetupCMLabel.UNLOAD)
     def unload(self):
-        self._unloadAction()
+        self.__unloadAction()
 
     @option(_sqGen.next(), TankSetupCMLabel.TAKE_OFF)
     def takeOffFromSlot(self):
-        self._unloadAction()
+        self.__unloadAction()
 
     def _initFlashValues(self, ctx):
         super(HangarConsumableSlotContextMenu, self)._initFlashValues(ctx)
@@ -118,7 +118,7 @@ class HangarConsumableSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         return self._getVehicle().consumables
 
     @adisp_process
-    def _unloadAction(self):
+    def __unloadAction(self):
         copyVehicle = self._getCopyVehicle()
         copyVehicle.consumables.setLayout(*copyVehicle.consumables.installed)
         copyVehicle.consumables.layout[self._installedSlotId] = None

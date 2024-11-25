@@ -167,7 +167,7 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__flybyCallback = None
             return
 
-    @onAddedQuery(CGF.GameObject, CameraComponent, TransformComponent, tickGroup='postHierarchyUpdate')
+    @onAddedQuery(CGF.GameObject, CameraComponent, TransformComponent, tickGroup='postTickUpdate')
     def onCameraAdded(self, go, cameraComponent, transformComponent):
         if not self.__isActive:
             return

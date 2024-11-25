@@ -15,6 +15,7 @@ def goToC11nStyledMode():
 
     def styleCallback():
         ctx = c11nService.getCtx()
-        ctx.changeMode(CustomizationModes.STYLED)
+        if ctx.modeId not in CustomizationModes.BASE_STYLES:
+            ctx.changeMode(CustomizationModes.STYLE_2D)
 
     c11nService.showCustomization(g_currentVehicle.item.invID, callback=styleCallback)

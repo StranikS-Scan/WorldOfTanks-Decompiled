@@ -19,14 +19,14 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen, updateBuyAnimationFlag, getSingleVehicleForCustomization
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getAllFinalRewards, getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getIntroVideoURL, getRewardSourceByType, getSingleVehicleForCustomization, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, isSeasonWithSpecialTankmenScreen, updateBuyAnimationFlag
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import BattlePassProgressionsViewModel, ActionTypes, ChapterStates, ChapterType
+from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_progressions_view_model import ActionTypes, BattlePassProgressionsViewModel, ChapterStates, ChapterType
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import RewardLevelModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.pub import ViewImpl
@@ -117,13 +117,10 @@ class BattlePassProgressionsView(ViewImpl):
         self.__startCommonSound()
 
     def setChapter(self, chapterID):
-        chapterChanged = chapterID != self.__chapterID
-        self.__chapterID = chapterID or self.__getDefaultChapterID()
-        with self.viewModel.transaction() as model:
-            self.__updateProgressData(model=model)
-        self.__updateActionType()
-        if chapterChanged:
-            self.__setShowBuyAnimations()
+        if chapterID != self.__chapterID:
+            self.deactivate()
+            self.__chapterID = chapterID or self.__getDefaultChapterID()
+            self.activate()
 
     def _getEvents(self):
         return ((self.viewModel.onActionClick, self.__onActionClick),

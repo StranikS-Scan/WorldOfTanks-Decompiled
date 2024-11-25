@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/time_tracking.py
-from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR
+from constants import SERVER_TICK_LENGTH, IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR
 from debug_utils import LOG_WARNING
 import sys
 from time import time
 from functools import wraps
-if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR:
+if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR:
     from insights.measurements import incrTickOverspends
 DEFAULT_TIME_LIMIT = 0.02
 DEFAULT_TICK_LENGTH = SERVER_TICK_LENGTH
@@ -36,7 +36,7 @@ class TimeTracker(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         spentTime = time() - self.startTime
         if spentTime > self.timeLimit:
-            if not IS_CLIENT and not IS_BOT:
+            if not IS_CLIENT and not IS_BOT and not IS_UE_EDITOR:
                 incrTickOverspends()
             context = self.context
             if context is None:
@@ -70,7 +70,7 @@ def timetracked(func=None, context=None, timeLimit=DEFAULT_TIME_LIMIT, tickLengt
                 spentTime = time() - startTime
                 if spentTime > timeLimit:
                     LOG_TIME_WARNING(spentTime, context if context is not None else f.__name__, tickLength)
-                    if not IS_CLIENT and not IS_BOT:
+                    if not IS_CLIENT and not IS_BOT and not IS_UE_EDITOR:
                         incrTickOverspends()
 
             return

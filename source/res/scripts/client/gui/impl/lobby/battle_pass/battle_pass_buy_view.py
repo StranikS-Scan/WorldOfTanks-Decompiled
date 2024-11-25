@@ -3,13 +3,13 @@
 import logging
 import SoundGroups
 from PlayerEvents import g_playerEvents
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, ViewStatus, Array
+from frameworks.wulf import Array, ViewFlags, ViewSettings, ViewStatus, WindowFlags
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground, chaptersWithLogoBg
+from gui.battle_pass.battle_pass_helpers import chaptersWithLogoBg, fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground
 from gui.battle_pass.battle_pass_package import generatePackages
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
@@ -20,7 +20,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showHangar, showBuyBattlePassOverlay
+from gui.shared.event_dispatcher import showBuyBattlePassOverlay, showHangar
 from gui.shared.events import BattlePassEvent
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency

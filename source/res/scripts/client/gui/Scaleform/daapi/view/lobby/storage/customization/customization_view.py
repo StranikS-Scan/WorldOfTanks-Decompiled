@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/storage/customization/customization_view.py
 import math
-from typing import Optional
+import typing
 import nations
 from adisp import adisp_process
 from gui import DialogsInterface
@@ -24,6 +24,9 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.functions import makeTooltip
 from skeletons.gui.customization import ICustomizationService
 from shared_utils import CONST_CONTAINER
+if typing.TYPE_CHECKING:
+    from typing import Optional
+    from gui.shared.gui_items.customization.c11n_items import Customization
 
 class _CustomizationFilterBit(CONST_CONTAINER):
     STYLE = 1
@@ -33,6 +36,7 @@ class _CustomizationFilterBit(CONST_CONTAINER):
     EMBLEM = 16
     PERSONAL_NUMBER = 32
     MODIFICATION = 64
+    ATTACHMENT = 128
 
 
 _TYPE_BIT_TO_CUSTOMIZATION_TYPE_MAP = {_CustomizationFilterBit.STYLE: (GUI_ITEM_TYPE.STYLE,),
@@ -41,8 +45,10 @@ _TYPE_BIT_TO_CUSTOMIZATION_TYPE_MAP = {_CustomizationFilterBit.STYLE: (GUI_ITEM_
  _CustomizationFilterBit.PROJECTION_DECAL: (GUI_ITEM_TYPE.PROJECTION_DECAL,),
  _CustomizationFilterBit.EMBLEM: (GUI_ITEM_TYPE.EMBLEM,),
  _CustomizationFilterBit.PERSONAL_NUMBER: (GUI_ITEM_TYPE.PERSONAL_NUMBER, GUI_ITEM_TYPE.INSCRIPTION),
- _CustomizationFilterBit.MODIFICATION: (GUI_ITEM_TYPE.MODIFICATION,)}
+ _CustomizationFilterBit.MODIFICATION: (GUI_ITEM_TYPE.MODIFICATION,),
+ _CustomizationFilterBit.ATTACHMENT: (GUI_ITEM_TYPE.ATTACHMENT,)}
 _CUSTOMIZATION_ITEM_TYPES = (GUI_ITEM_TYPE.STYLE,
+ GUI_ITEM_TYPE.ATTACHMENT,
  GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
@@ -54,6 +60,10 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _CustomizationFilterBit.STYLE,
   'selected': False,
   'tooltip': makeTooltip(body=backport.text(R.strings.tooltips.customization.storage.filters.style.title())),
   'icon': backport.image(R.images.gui.maps.icons.storage.filters.style())},
+ {'filterValue': _CustomizationFilterBit.ATTACHMENT,
+  'selected': False,
+  'tooltip': makeTooltip(body=backport.text(R.strings.tooltips.customization.storage.filters.attachments.title())),
+  'icon': backport.image(R.images.gui.maps.icons.storage.filters.attachments())},
  {'filterValue': _CustomizationFilterBit.PAINT,
   'selected': False,
   'tooltip': makeTooltip(body=backport.text(R.strings.tooltips.customization.storage.filters.paints.title())),
@@ -78,7 +88,14 @@ _TYPE_FILTER_ITEMS = [{'filterValue': _CustomizationFilterBit.STYLE,
   'selected': False,
   'tooltip': makeTooltip(body=backport.text(R.strings.tooltips.customization.storage.filters.effects.title())),
   'icon': backport.image(R.images.gui.maps.icons.storage.filters.effects())}]
-_TABS_SORT_ORDER = dict(((n, idx) for idx, n in enumerate(_CUSTOMIZATION_ITEM_TYPES)))
+_TABS_SORT_ORDER = {GUI_ITEM_TYPE.ATTACHMENT: 1,
+ GUI_ITEM_TYPE.PAINT: 3,
+ GUI_ITEM_TYPE.CAMOUFLAGE: 4,
+ GUI_ITEM_TYPE.PROJECTION_DECAL: 5,
+ GUI_ITEM_TYPE.EMBLEM: 6,
+ GUI_ITEM_TYPE.PERSONAL_NUMBER: 7,
+ GUI_ITEM_TYPE.INSCRIPTION: 8,
+ GUI_ITEM_TYPE.MODIFICATION: 9}
 
 class _VehiclesFilter(object):
     __slots__ = ('vehicles',)
@@ -230,17 +247,11 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
             formfactor = ''
         icon = item.icon
         levelIcon = ''
-        customizationSuitableText = backport.text(R.strings.storage.customizationSuitable.label())
         if vehicleCD is None:
-            if not item.descriptor.filter or not item.descriptor.filter.include:
-                customizationSuitableText = backport.text(R.strings.storage.customizationSuitableForAll.label())
-            else:
-                customizationSuitableText += getSuitableText(item)
             count = item.inventoryCount
             vehicle = None
         else:
             vehicle = self._itemsCache.items.getItemByCD(vehicleCD)
-            customizationSuitableText += vehicle.shortUserName
             count = item.boundInventoryCount(vehicleCD)
         if item.isProgressive:
             if item.isProgressionRewindEnabled:
@@ -262,19 +273,50 @@ class StorageCategoryCustomizationView(StorageCategoryCustomizationViewMeta):
                         icon = item.iconUrlByProgressionLevel(level)
         isAvailableForSell = isCustomizationAvailableForSell(item, vehicleCD)
         isPreviewAvailable = item.itemTypeID == GUI_ITEM_TYPE.STYLE
-        vo = createStorageDefVO(itemID=item.intCD, title=title, description=customizationSuitableText, count=count, price=priceVO if isAvailableForSell else None, image=icon, imageAlt='altimage', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_CUSTOMZIZATION_ITEM, enabled=isAvailableForSell)
+        rarity = item.rarity
+        hasRarity = bool(rarity)
+        rarityIcon = ''
+        rarityBackground = ''
+        if hasRarity:
+            rarityIcon = backport.image(R.images.gui.maps.icons.customization.rarity.sign.s52x52.dyn(rarity)())
+            rarityBackground = backport.image(R.images.gui.maps.icons.customization.rarity.glow.s360x270.dyn(rarity)())
+        vo = createStorageDefVO(itemID=item.intCD, title=title, description=self._getSuitableText(item, vehicleCD), count=count, price=priceVO if isAvailableForSell else None, image=icon, imageAlt='altimage', contextMenuId=CONTEXT_MENU_HANDLER_TYPE.STORAGE_CUSTOMZIZATION_ITEM, enabled=isAvailableForSell)
         vo.update({'previewAvailable': isPreviewAvailable,
          'previewTooltip': backport.text(R.strings.storage.stylePreview.tooltip()),
          'progressiveLevelIcon': levelIcon,
          'formfactor': formfactor,
          'vehicleCD': vehicleCD,
          'isWideImage': item.isWide(),
-         'isRentable': item.isRentable})
+         'isRentable': item.isRentable,
+         'rarityIcon': rarityIcon,
+         'rarityBackground': rarityBackground,
+         'hasRarity': hasRarity})
         return vo
+
+    def _getComparisonKey(self, item):
+        if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
+            if item.is3D:
+                return 0
+            return 2
+        return _TABS_SORT_ORDER[item.itemTypeID]
 
     def _getComparator(self):
 
         def _comparator(a, b):
-            return cmp(_TABS_SORT_ORDER[a.itemTypeID], _TABS_SORT_ORDER[b.itemTypeID]) or cmp(a.userName, b.userName)
+            return cmp(self._getComparisonKey(a), self._getComparisonKey(b)) or cmp(a.userName, b.userName)
 
         return _comparator
+
+    def _getSuitableText(self, item, vehicleCD):
+        if item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            return backport.text(R.strings.storage.card.attachment.hover.partOfBundle.label(), bundleName=item.groupUserName)
+        else:
+            text = backport.text(R.strings.storage.customizationSuitable.label())
+            if vehicleCD is None:
+                if not item.descriptor.filter or not item.descriptor.filter.include:
+                    text = backport.text(R.strings.storage.customizationSuitableForAll.label())
+                else:
+                    text += getSuitableText(item)
+            else:
+                text += self._itemsCache.items.getItemByCD(vehicleCD).shortUserName
+            return text

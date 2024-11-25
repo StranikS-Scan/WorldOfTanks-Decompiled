@@ -41,6 +41,7 @@ class StageSwitcherView(ViewImpl):
         self.__ctx.events.onItemsRemoved += self.__onItemsRemoved
         self.__ctx.events.onItemInstalled += self.__onItemInstalled
         self.__ctx.events.onChangesCanceled += self.__onChangesCanceled
+        self.__ctx.events.onModeChanged += self.__onModeChanged
 
     def _onLoading(self, *args, **kwargs):
         super(StageSwitcherView, self)._onLoading(*args, **kwargs)
@@ -61,22 +62,23 @@ class StageSwitcherView(ViewImpl):
         self.__ctx.events.onItemInstalled -= self.__onItemInstalled
         self.__ctx.events.onItemsRemoved -= self.__onItemsRemoved
         self.__ctx.events.onChangesCanceled -= self.__onChangesCanceled
+        self.__ctx.events.onModeChanged -= self.__onModeChanged
         self.__ctx = None
         return
 
     def __onItemsRemoved(self, *_, **__):
-        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES:
             with self.viewModel.transaction() as tx:
                 tx.setSelectedLevel(self.__ctx.mode.getStyleProgressionLevel())
         return
 
     def __onItemInstalled(self, item, *_):
-        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED and item is not None:
+        if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES and item is not None:
             self.__updateModel()
         return
 
     def __onChangesCanceled(self):
-        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES:
             self.__updateModel()
         return
 
@@ -93,8 +95,12 @@ class StageSwitcherView(ViewImpl):
             selectedLevel = int(args[0]['selectedLevel'])
             with self.viewModel.transaction() as tx:
                 tx.setSelectedLevel(selectedLevel)
-            if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
+            if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES:
                 self.__ctx.mode.changeStyleProgressionLevel(selectedLevel)
             else:
                 self.__customizationService.changeStyleProgressionLevelPreview(selectedLevel)
         return
+
+    def __onModeChanged(self, modeId, _):
+        if modeId in CustomizationModes.BASE_STYLES:
+            self.__updateModel()

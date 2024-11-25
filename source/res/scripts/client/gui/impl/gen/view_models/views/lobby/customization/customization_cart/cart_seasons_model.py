@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.customization.customization_cart.cart_
 class CartSeasonsModel(ViewModel):
     __slots__ = ('onSelectItem',)
 
-    def __init__(self, properties=3, commands=1):
+    def __init__(self, properties=4, commands=1):
         super(CartSeasonsModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -33,9 +33,18 @@ class CartSeasonsModel(ViewModel):
     def getDesertType():
         return CartSeasonModel
 
+    @property
+    def all(self):
+        return self._getViewModel(3)
+
+    @staticmethod
+    def getAllType():
+        return CartSeasonModel
+
     def _initialize(self):
         super(CartSeasonsModel, self)._initialize()
         self._addViewModelProperty('winter', CartSeasonModel())
         self._addViewModelProperty('summer', CartSeasonModel())
         self._addViewModelProperty('desert', CartSeasonModel())
+        self._addViewModelProperty('all', CartSeasonModel())
         self.onSelectItem = self._addCommand('onSelectItem')

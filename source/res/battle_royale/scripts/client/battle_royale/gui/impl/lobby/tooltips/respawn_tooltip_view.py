@@ -23,7 +23,7 @@ class RespawnTooltipView(ViewImpl):
             return
         else:
             with self.viewModel.transaction() as tx:
-                tx.setPlatoonTimeToRessurect(self._respawnPeriods.platoonTimeToRessurect)
+                tx.setPlatoonTimeToResurrect(self._respawnPeriods.platoonTimeToResurrect)
                 tx.setPlatoonRespawnPeriod(self._respawnPeriods.platoonRespawnPeriod)
                 tx.setSoloRespawnPeriod(self._respawnPeriods.soloRespawnPeriod)
             return

@@ -199,7 +199,7 @@ class VehicleGunRotator(object):
             if not self.__clientMode or forceValueRefresh:
                 self.__lastShotPoint = mPos
                 self._avatar.inputHandler.updateClientGunMarker(mPos, mDir, mSize, mSizeOffset, SERVER_TICK_LENGTH, collData)
-                self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), mPos, adjust=True, overrideGunPosition=self.__gunPosition)
+                self.__turretYaw, self.__gunPitch = getShotAngles(self._avatar.getVehicleDescriptor(), self._avatar.getOwnVehicleStabilisedMatrix(), mPos, overrideGunPosition=self.__gunPosition)
                 turretYawLimits = self.__getTurretYawLimits()
                 closestLimit = self.__isOutOfLimits(self.__turretYaw, turretYawLimits)
                 if closestLimit is not None:
@@ -221,7 +221,7 @@ class VehicleGunRotator(object):
 
     def getShotParams(self, targetPoint, ignoreYawLimits=False, overrideShotIdx=None):
         descr = self._avatar.getVehicleAttached().typeDescriptor
-        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), (self.__turretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotIdx=overrideShotIdx)
+        shotTurretYaw, shotGunPitch = getShotAngles(descr, self._avatar.getOwnVehicleStabilisedMatrix(), targetPoint, overrideGunPosition=self.__gunPosition, overrideShotIdx=overrideShotIdx)
         gunPitchLimits = calcPitchLimitsFromDesc(shotTurretYaw, self.__getGunPitchLimits(), descr.hull.turretPitches[0], descr.turret.gunJointPitch)
         closestLimit = self.__isOutOfLimits(shotGunPitch, gunPitchLimits)
         if closestLimit is not None:
@@ -408,7 +408,7 @@ class VehicleGunRotator(object):
             maxTurretRotationSpeed = self.__maxTurretRotationSpeed
             prevTurretYaw = self.__turretYaw
             vehicleMatrix = self.getAvatarOwnVehicleStabilisedMatrix()
-            shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, (prevTurretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition)
+            shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, targetPoint, overrideGunPosition=self.__gunPosition)
             estimatedTurretYaw = self.getNextTurretYaw(prevTurretYaw, shotTurretYaw, maxTurretRotationSpeed * timeDiff, turretYawLimits)
             if not replayCtrl.isPlaying:
                 self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)

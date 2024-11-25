@@ -15,6 +15,7 @@ from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency, server_settings
 from skeletons.gui.game_control import IRestoreController
@@ -35,6 +36,9 @@ class TankCarousel(TankCarouselMeta):
         self._carouselDPCls = HangarCarouselDataProvider
 
     def hasRoles(self):
+        return True
+
+    def hasCustomization(self):
         return True
 
     def getCarouselAlias(self):
@@ -88,6 +92,8 @@ class TankCarousel(TankCarouselMeta):
          'stats.vehicleSellsLeft': self.__onFittingUpdate,
          'stats.slots': self.__onFittingUpdate,
          'goodies': self.__onFittingUpdate})
+        if self.hasCustomization():
+            g_clientUpdateManager.addCallback('inventory', self.__onInventoryUpdate)
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.CAROUSEL_TYPE)
         self.as_rowCountS(setting.getRowCount())
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
@@ -154,3 +160,8 @@ class TankCarousel(TankCarouselMeta):
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == VIEW_ALIAS.HANGAR_TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)
+
+    def __onInventoryUpdate(self, invDiff):
+        if GUI_ITEM_TYPE.CUSTOMIZATION in invDiff:
+            self.filter.update(params={}, save=False)
+            self.applyFilter()

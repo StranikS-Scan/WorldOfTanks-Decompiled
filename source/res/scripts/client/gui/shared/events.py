@@ -643,14 +643,6 @@ class Comp7Event(SharedEvent):
     OPEN_META = 'openMeta'
 
 
-class AirDropEvent(HasCtxEvent):
-    AIR_DROP_SPAWNED = 'onAirDropSpawned'
-    AIR_DROP_LANDED = 'onAirDropLanded'
-    AIR_DROP_LOOP_ENTERED = 'onAirDropLootEntered'
-    AIR_DROP_LOOP_LEFT = 'onAirDropLootLeft'
-    AIR_DROP_NXT_SPAWNED = 'onAirDropNxtSpawned'
-
-
 class ProfilePageEvent(HasCtxEvent):
     SELECT_PROFILE_ALIAS = 'onProfileSelectAlias'
 
@@ -700,6 +692,7 @@ class RallyWindowEvent(HasCtxEvent):
 
 class CustomizationEvent(HasCtxEvent):
     SHOW = 'customizationEvent/show'
+    ON_RARITY_REWARD_SCREEN_CLOSED = 'customizationEvent/onRarityRewardScreenClosed'
 
 
 class PrbInvitesEvent(HasCtxEvent):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/minimap/plugins.py
 import logging
 import math
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from functools import partial
 from enum import Enum
 import BattleReplay
@@ -11,7 +11,6 @@ import Keys
 import Math
 import aih_constants
 from AvatarInputHandler import AvatarInputHandler
-from Event import EventsSubscriber
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
@@ -31,12 +30,9 @@ from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
 from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController, IArenaVehiclesController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
-from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer
 from ids_generators import SequenceIDGenerator
-from shared_utils import findFirst
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 _logger = logging.getLogger(__name__)
@@ -1413,134 +1409,6 @@ class _ReplayRegistrator(object):
 
     def __getVehicleIntervals(self, vehicleID):
         return self.__lastAppearances.setdefault(vehicleID, [])
-
-
-RadarEntryParams = namedtuple('RadarEntryParams', 'symbol container')
-RadarPluginParams = namedtuple('RadarPluginParams', 'fadeIn fadeOut lifetime vehicleEntryParams lootEntryParams')
-
-class _RadarEntryData(object):
-
-    def __init__(self, entryId, destroyMeCallback, params, entityId=None, typeId=None):
-        super(_RadarEntryData, self).__init__()
-        self.__entryId = entryId
-        self.__destroyMeCallback = destroyMeCallback
-        self.__typeId = typeId
-        self.__entityId = entityId
-        self._lifeTime = params.lifetime
-        self._callbackDelayer = CallbackDelayer()
-
-    @property
-    def entryId(self):
-        return self.__entryId
-
-    def getTypeId(self):
-        return self.__typeId
-
-    def getEntityId(self):
-        return self.__entityId
-
-    def destroy(self):
-        self.stopTimer()
-        self.__destroyMeCallback = None
-        self._callbackDelayer = None
-        return
-
-    def upTimer(self):
-        self.stopTimer()
-        self._callbackDelayer.delayCallback(self._lifeTime, partial(self.__destroyMeCallback, self.__entryId))
-
-    def stopTimer(self):
-        self._callbackDelayer.destroy()
-
-
-class RadarPlugin(common.SimplePlugin, IRadarListener):
-
-    def __init__(self, parent):
-        super(RadarPlugin, self).__init__(parent)
-        self._vehicleEntries = {}
-        self._lootEntries = []
-        self._es = EventsSubscriber()
-        self._params = RadarPluginParams(fadeIn=0.0, fadeOut=0.0, lifetime=0.0, vehicleEntryParams=RadarEntryParams(container='', symbol=''), lootEntryParams=RadarEntryParams(container='', symbol=''))
-
-    def init(self, arenaVisitor, arenaDP):
-        super(RadarPlugin, self).init(arenaVisitor, arenaDP)
-        radarCtrl = self.sessionProvider.dynamic.radar
-        if radarCtrl:
-            radarCtrl.addRuntimeView(self)
-            self._es.addCallbackOnUnsubscribe(lambda : radarCtrl.removeRuntimeView(self))
-
-    def fini(self):
-        self._es.unsubscribeFromAllEvents()
-        for lootData in self._lootEntries:
-            lootData.destroy()
-
-        for _, vehicleData in self._vehicleEntries.iteritems():
-            vehicleData.destroy()
-
-        super(RadarPlugin, self).fini()
-
-    def radarInfoReceived(self, data):
-        for vehicleId, vehicleXZPos in data[1]:
-            self._addVehicleEntry(vehicleId, vehicleXZPos)
-
-        for lootId, lootInfo in data[2]:
-            self._addLootEntry(lootId, lootInfo)
-
-    def _createEntryData(self, entryId, destroyMeCallback, params, entityId=None, typeId=None):
-        return _RadarEntryData(entryId, destroyMeCallback, params, entityId, typeId)
-
-    def _addVehicleEntry(self, vehicleId, xzPosition):
-        if self._arenaDP.getPlayerVehicleID() == vehicleId:
-            return
-        else:
-            vEntry = self._vehicleEntries.get(vehicleId)
-            if vEntry is not None:
-                matrix = self.__getMatrixByXZ(xzPosition)
-                self._parentObj.setMatrix(vEntry.entryId, matrix)
-            else:
-                entryId = self._addEntry(self._params.vehicleEntryParams.symbol, self._params.vehicleEntryParams.container, matrix=self.__getMatrixByXZ(xzPosition), active=True)
-                vEntry = self._createEntryData(entryId, self.__destroyVehicleEntryByEntryID, self._params)
-                self._vehicleEntries[vehicleId] = vEntry
-            vEntry.upTimer()
-            return vEntry.entryId
-
-    def _addLootEntry(self, lootId, lootInfo):
-        typeId, xzPosition = lootInfo
-        entryId = self._addEntry(self._params.lootEntryParams.symbol, self._params.lootEntryParams.container, matrix=self.__getMatrixByXZ(xzPosition), active=True)
-        lEntry = self._createEntryData(entryId, self.__destroyLootEntry, self._params, entityId=lootId, typeId=typeId)
-        lEntry.upTimer()
-        self._lootEntries.append(lEntry)
-        return lEntry
-
-    def _destroyVehicleEntry(self, entryId, destroyedVehId):
-        self._delEntry(entryId)
-        if destroyedVehId is not None:
-            entry = self._vehicleEntries.pop(destroyedVehId)
-            entry.destroy()
-        return
-
-    def _clearLootEntries(self):
-        while self._lootEntries:
-            entry = self._lootEntries.pop()
-            entry.stopTimer()
-            self._delEntry(entry.entryId)
-
-    def __destroyLootEntry(self, entryId):
-        self._delEntry(entryId)
-        destroyedObj = findFirst(lambda entry: entry.entryId == entryId, self._lootEntries)
-        if destroyedObj is not None:
-            self._lootEntries.remove(destroyedObj)
-        return
-
-    def __destroyVehicleEntryByEntryID(self, entryId):
-        destroyedObjId = findFirst(lambda vId: self._vehicleEntries[vId].entryId == entryId, self._vehicleEntries)
-        self._destroyVehicleEntry(entryId, destroyedObjId)
-
-    @staticmethod
-    def __getMatrixByXZ(xzPosition):
-        matrix = Math.Matrix()
-        matrix.translation = Math.Vector3(xzPosition[0], 0, xzPosition[1])
-        return matrix
 
 
 class AreaMarkerEntriesPlugin(common.BaseAreaMarkerEntriesPlugin):

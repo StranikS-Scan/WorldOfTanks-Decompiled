@@ -24,8 +24,8 @@ class RespawnAbility(object):
         return int(cls._getParams(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, 'respawnPeriod'))
 
     @classmethod
-    def getPlatoonTimeToRessurect(cls):
-        return cls._getParams(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, 'timeToRessurect')
+    def getPlatoonTimeToResurrect(cls):
+        return cls._getParams(ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD, 'timeToResurrect')
 
     @classmethod
     def _getParams(cls, battleType, key):

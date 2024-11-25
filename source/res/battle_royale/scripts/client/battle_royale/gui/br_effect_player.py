@@ -36,7 +36,6 @@ class BRUpgradeEffectPlayer(IProgressionListener, IViewComponentsCtrlListener):
     def setVehicleVisualChangingFinished(self, vehicleID):
         if vehicleID in self.__upgradeStarted:
             if time_utils.getServerUTCTime() - self.__upgradeStarted.pop(vehicleID) > self.__UPGRADE_INVALIDATION_TIME:
-                _logger.warning('Upgrade finish invalidated for vehicle %s: too much time passed since start', vehicleID)
                 return
             self.__playEffect(vehicleID)
 

@@ -64,6 +64,9 @@ class ICarouselEnvironment(object):
     def updateHotFilters(self):
         pass
 
+    def hasCustomization(self):
+        return False
+
 
 class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
     rentals = dependency.descriptor(IRentalsController)

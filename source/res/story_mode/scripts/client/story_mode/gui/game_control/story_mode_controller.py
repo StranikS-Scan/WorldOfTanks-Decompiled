@@ -305,11 +305,16 @@ class StoryModeController(IStoryModeController, IGlobalListener):
         return awardData
 
     def startMusic(self):
-        selectedMission = self.missions.getMission(self.selectedMissionId)
-        self.__soundController.startMusicAndAmbience(selectedMission.sounds if selectedMission else None)
-        return
+        if not self.isInPrb():
+            return
+        else:
+            selectedMission = self.missions.getMission(self.selectedMissionId)
+            self.__soundController.startMusicAndAmbience(selectedMission.sounds if selectedMission else None)
+            return
 
     def stopMusic(self):
+        if not self.isInPrb():
+            return
         self.__soundController.stopMusicAndAmbience()
 
     @adisp_process

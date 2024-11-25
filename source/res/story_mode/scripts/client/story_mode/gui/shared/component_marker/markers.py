@@ -10,13 +10,19 @@ CONTAINER = 'container'
 DEATH_ZONES_CONTAINER = 'stretchableDeathZone'
 
 class StoryModeAreaMarker(AreaMarker):
+    fullScreenVariations = {}
 
     def __init__(self, config, entity=None, targetID=INVALID_TARGET_ID):
         if FLAG.FULLSCREEN_MAP_MARKER not in config and FLAG.MINIMAP_MARKER in config:
             config[FLAG.FULLSCREEN_MAP_MARKER] = newConfig = copy.deepcopy(config[FLAG.MINIMAP_MARKER])
             for componentConfig in newConfig:
                 oldClazz = componentConfig[CLASS]
-                componentConfig[CLASS] = type(oldClazz.__name__ + 'FullScreenVariation', (oldClazz,), {'maskType': FLAG.FULLSCREEN_MAP_MARKER})
+                newClassName = oldClazz.__name__ + 'FullScreenVariation'
+                if newClassName in StoryModeAreaMarker.fullScreenVariations:
+                    componentConfig[CLASS] = StoryModeAreaMarker.fullScreenVariations.get(newClassName)
+                else:
+                    newClass = type(newClassName, (oldClazz,), {'maskType': FLAG.FULLSCREEN_MAP_MARKER})
+                    componentConfig[CLASS] = StoryModeAreaMarker.fullScreenVariations[newClassName] = newClass
                 componentConfig[CONTAINER] = DEATH_ZONES_CONTAINER
 
             if BITMASK in config:

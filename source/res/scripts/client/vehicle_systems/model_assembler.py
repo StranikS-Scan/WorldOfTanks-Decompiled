@@ -13,11 +13,11 @@ import material_kinds
 import CGF
 import GenericComponents
 from constants import IS_DEVELOPMENT, IS_EDITOR, IS_UE_EDITOR
-from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 import math_utils
-from helpers import DecalMap, dependency
+from helpers import DecalMap
 from items.components import shared_components, component_constants
+from items.components.c11n_constants import AttachmentLogic
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames, TankSoundObjectsIndexes
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
@@ -161,33 +161,9 @@ def attachModels(assembler, vehicleDesc, modelsSetParams, isTurretDetached, rend
         assembler.addPart(gun, TankNodeNames.GUN_JOINT, partNames.GUN)
         if modelsSetParams.state == 'undamaged':
             for attachment in modelsSetParams.attachments:
-                if attachment.attachmentLogic == 'prefab':
+                if attachment.attachmentLogic not in AttachmentLogic.FLAGS or not attachment.attachNode:
                     continue
-                assembler.addPart(attachment.modelName, attachment.attachNode, attachment.partNodeAlias, attachment.transform)
-
-
-def createGunAnimator(gameObject, vehicleDesc, basisMatrix=None, lodLink=None):
-    recoilDescr = vehicleDesc.gun.recoil
-    gunAnimator = gameObject.createComponent(Vehicular.RecoilAnimator, recoilDescr.backoffTime, recoilDescr.returnTime, recoilDescr.amplitude, recoilDescr.lodDist)
-    if basisMatrix is not None:
-        gunAnimator.basisMatrix = basisMatrix
-    gunAnimator.lodLink = lodLink
-    return gunAnimator
-
-
-def createSwingingAnimator(gameObject, vehicleDesc, basisMatrix, worldMProv=None, lodLink=None):
-    swingingAnimator = gameObject.createComponent(Vehicular.SwingingAnimator)
-    swingingAnimator.basisMatrix = basisMatrix
-    swingingCfg = vehicleDesc.hull.swinging
-    pp = tuple((p * m for p, m in zip(swingingCfg.pitchParams, (0.9, 1.88, 0.3, 4.0, 1.0, 1.0))))
-    swingingAnimator.setupPitchSwinging(*pp)
-    swingingAnimator.setupRollSwinging(*swingingCfg.rollParams)
-    swingingAnimator.setupShotSwinging(swingingCfg.sensitivityToImpulse)
-    swingingAnimator.maxMovementSpeed = vehicleDesc.physics['speedLimits'][0]
-    swingingAnimator.lodSetting = swingingCfg.lodDist
-    swingingAnimator.worldMatrix = worldMProv if worldMProv is not None else math_utils.createIdentityMatrix()
-    swingingAnimator.lodLink = lodLink
-    return swingingAnimator
+                assembler.addPart(attachment.modelName, attachment.attachNode, attachment.partNodeAlias)
 
 
 def createSuspension(appearance, vehicleDescriptor, lodStateLink):
@@ -384,48 +360,6 @@ def assembleVehicleTraces(appearance, f, lodStateLink=None):
     return
 
 
-def createGunRecoil(appearance, lodLink):
-    gunAnimatorNode = appearance.compoundModel.node(TankNodeNames.GUN_RECOIL)
-    localGunMatrix = gunAnimatorNode.localMatrix
-    gunRecoil = createGunAnimator(appearance, appearance.typeDescriptor, localGunMatrix, lodLink)
-    gunRecoilMProv = gunRecoil.animatedMProv
-    appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
-    return gunRecoil
-
-
-def assembleRecoil(appearance, lodLink):
-    recoil = appearance.typeDescriptor.gun.recoil
-    appearance.gunRecoil = createGunRecoil(appearance, lodLink) if recoil is not None else None
-    return
-
-
-def createMultiGunRecoils(appearance, lodLink, gunNodes):
-    animators = []
-    for gunInstance in gunNodes:
-        gunNodeName = gunInstance.node
-        gunAnimatorNode = appearance.compoundModel.node(gunNodeName)
-        if gunAnimatorNode is not None:
-            gameObject = CGF.GameObject(appearance.spaceID, 'Multigun recoil ' + gunNodeName)
-            gameObject.createComponent(GenericComponents.HierarchyComponent, appearance.gameObject)
-            localGunMatrix = gunAnimatorNode.localMatrix
-            gunRecoil = createGunAnimator(gameObject, appearance.typeDescriptor, localGunMatrix, lodLink)
-            animators.append(gameObject)
-            gunRecoilMProv = gunRecoil.animatedMProv
-            appearance.compoundModel.node(gunNodeName, gunRecoilMProv)
-
-    return None if not animators else animators
-
-
-def assembleMultiGunRecoil(appearance, lodLink):
-    recoil = appearance.typeDescriptor.gun.recoil
-    multiGun = appearance.typeDescriptor.turret.multiGun
-    if multiGun is not None and recoil is not None:
-        appearance.gunAnimators = createMultiGunRecoils(appearance, lodLink, multiGun)
-    else:
-        appearance.gunAnimators = None
-    return
-
-
 def assembleGunLinkedNodesAnimator(appearance):
     skin = appearance.modelsSetParams.skin
     drivingJoints = appearance.typeDescriptor.gun.drivenJoints or {}
@@ -533,18 +467,6 @@ def assembleVehicleAudition(isPlayer, appearance):
     vehicleAudition.setUpdatePeriod(PLAYER_UPDATE_PERIOD if isPlayer else NPC_UPDATE_PERIOD)
     appearance.engineAudition = vehicleAudition
     return
-
-
-def setupTurretRotations(appearance):
-    compoundModel = appearance.compoundModel
-    compoundModel.node(TankPartNames.TURRET, appearance.turretMatrix)
-    if not appearance.damageState.isCurrentModelDamaged:
-        compoundModel.node(TankNodeNames.GUN_INCLINATION, appearance.gunMatrix)
-    else:
-        compoundModel.node(TankPartNames.GUN, appearance.gunMatrix)
-    if appearance.renderMode == TankRenderMode.OVERLAY_COLLISION:
-        compoundModel.node(TankCollisionPartNames.TURRET, appearance.turretMatrix)
-        compoundModel.node(TankCollisionPartNames.GUN, appearance.gunMatrix)
 
 
 def createVehicleFilter(typeDescriptor):
@@ -860,13 +782,13 @@ def assembleBurnoutProcessor(appearance):
     if burnoutAnimation is None:
         return
     else:
-        burnoutProcessor = appearance.createComponent(Vehicular.BurnoutProcessor, appearance.compoundModel, appearance.swingingAnimator, lambda : appearance.burnoutLevel, burnoutAnimation.accumImpulseMag, burnoutAnimation.dischargeImpulseMag, burnoutAnimation.timeToAccumImpulse)
+        burnoutProcessor = appearance.createComponent(Vehicular.BurnoutProcessor, appearance.compoundModel, lambda : appearance.burnoutLevel, burnoutAnimation.accumImpulseMag, burnoutAnimation.dischargeImpulseMag, burnoutAnimation.timeToAccumImpulse)
         appearance.burnoutProcessor = burnoutProcessor
         return
 
 
 def assembleCustomLogicComponents(appearance, typeDescriptor, attachments, modelAnimators):
-    assemblers = [('flagAnimation', __assembleAnimationFlagComponent), ('prefab', __assemblePrefabComponent)]
+    assemblers = [(AttachmentLogic.FLAG_ANIMATION, __assembleAnimationFlagComponent), (AttachmentLogic.PREFAB, __assemblePrefabComponent)]
     for assemblerName, assembler in assemblers:
         for attachment in attachments:
             if attachment.attachmentLogic == assemblerName:
@@ -893,7 +815,7 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
     if mainAnimator is None:
         return False
     else:
-        flagParts = tuple((a.partNodeAlias for a in attachments if a.attachmentLogic == 'flagPart'))
+        flagParts = tuple((a.partNodeAlias for a in attachments if a.attachmentLogic == AttachmentLogic.FLAG_PART))
         appearance.flagComponent = appearance.createComponent(Vehicular.FlagComponent, mainAnimator.animator, mainAnimator.node, TankPartNames.TURRET, (attachment.partNodeAlias,) + flagParts)
         if appearance.filter is not None:
             appearance.flagComponent.vehicleSpeedLink = DataLinks.createFloatLink(appearance.filter, 'averageSpeed')
@@ -904,7 +826,7 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
 def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
 
     def _onLoaded(gameObject):
-        appearance.undamagedStateChildren.append(gameObject)
+        appearance.customizationGameObjects.append(gameObject)
         if IS_UE_EDITOR:
             gameObject.removeComponentByType(GenericComponents.DynamicModelComponent)
         gameObject.createComponent(GenericComponents.RedirectorComponent, appearance.gameObject)
@@ -919,9 +841,5 @@ def loadAppearancePrefab(prefab, appearance, posloadCallback=None):
 
 
 def __assemblePrefabComponent(appearance, attachment, _, __):
-    if not IS_UE_EDITOR:
-        hangar = dependency.instance(IHangarSpace)
-        modelName = attachment.hangarModelName if attachment.hangarModelName and hangar.inited else attachment.modelName
-        loadAppearancePrefab(modelName, appearance)
-    else:
+    if attachment.hiddenForUser:
         loadAppearancePrefab(attachment.modelName, appearance)

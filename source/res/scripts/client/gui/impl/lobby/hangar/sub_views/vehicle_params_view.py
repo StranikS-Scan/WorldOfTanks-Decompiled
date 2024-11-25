@@ -267,6 +267,8 @@ class VehicleParamsView(ViewImpl):
         return self.expandedGroups is None or self.expandedGroups.get(groupName, False)
 
     def __fillViewModel(self):
+        if not self._getVehicle():
+            return
         with self.viewModel.transaction() as model:
             groups = model.getGroups()
             groups.clear()

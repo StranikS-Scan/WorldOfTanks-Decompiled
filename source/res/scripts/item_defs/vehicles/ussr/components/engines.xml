@@ -172,7 +172,10 @@
     <M-17B-IT>	253	</M-17B-IT>
     <UTD_50M1>	255	</UTD_50M1>
     <V-12V>	256	</V-12V>
+    <_6TD_K>	257	</_6TD_K>
     <V_2_34_43>	258	</V_2_34_43>
+    <D-12-5>	260	</D-12-5>
+    <GMC_6046I>	261	</GMC_6046I>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -197,7 +200,6 @@
     <V-54K_MapsTraining_Player_MT_2>	32	</V-54K_MapsTraining_Player_MT_2>
     <V-5F_MapsTraining_Dummy_HT_2>	33	</V-5F_MapsTraining_Dummy_HT_2>
     <V-2-34_StoryMode>	64001	</V-2-34_StoryMode>
-    <V-54-6_HW>	5004	</V-54-6_HW>
   </ids>
   <shared>
     <V-2>
@@ -630,6 +632,23 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </_6TD>
+    <_6TD_K>
+      <userString>	#ussr_vehicles:_6TD_K	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	1180	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	338	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
+    </_6TD_K>
     <V_46_5>
       <userString>	#ussr_vehicles:V_46_5	</userString>
       <tags>	diesel	</tags>
@@ -1320,6 +1339,23 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </V-12A>
+    <D-12-5>
+      <userString>	#ussr_vehicles:D-12-5	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	750	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </D-12-5>
     <V-12_M>
       <userString>	#ussr_vehicles:V-12_M	</userString>
       <tags>	diesel	</tags>
@@ -2756,6 +2792,23 @@
       <rpm_min>	357	</rpm_min>
       <rpm_max>	2128	</rpm_max>
     </_4TDF>
+    <GMC_6046I>
+      <userString>	#ussr_vehicles:GMC_6046I	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	470	</power>
+      <weight>	550	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	394	</rpm_min>
+      <rpm_max>	2016	</rpm_max>
+    </GMC_6046I>
     <_2xV-16>
       <userString>	#ussr_vehicles:_2xV-16	</userString>
       <tags>	diesel	</tags>
@@ -3486,22 +3539,5 @@
       <rpm_max>	2040	</rpm_max>
       <notInShop>	True	</notInShop>
     </V-2-34_StoryMode>
-    <V-54-6_HW>
-      <userString>	#ussr_vehicles:V-54-6	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	82300	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	760	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	317	</rpm_min>
-      <rpm_max>	2248	</rpm_max>
-    </V-54-6_HW>
   </shared>
 </engines.xml>

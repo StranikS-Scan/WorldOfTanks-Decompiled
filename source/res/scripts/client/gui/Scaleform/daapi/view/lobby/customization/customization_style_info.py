@@ -152,7 +152,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
         if self.__ctx.isOutfitsModified():
             stylePrice = style.getBuyPrice().price
             moneyState = getPurchaseMoneyState(stylePrice)
-            purchaseItem = first(self.__ctx.mode.getPurchaseItems())
+            purchaseItem = first(self.__ctx.getPurchaseItems())
             tooltip = backport.text(R.strings.vehicle_customization.customization.buyDisabled.body())
             if purchaseItem is not None and purchaseItem.isFromInventory:
                 label = backport.text(R.strings.vehicle_customization.commit.apply())

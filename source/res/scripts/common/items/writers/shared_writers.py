@@ -32,6 +32,15 @@ def writeProjectionSlots(slotDS, slot):
         slotDS.write('options', slot.options)
 
 
+def writeAttachmentSlots(slotDS, slot):
+    slotDS.writeVector3('position', slot.position)
+    slotDS.writeVector3('rotation', slot.rotation)
+    slotDS.writeVector3('scale', slot.scale)
+    _xml.rewriteBool(slotDS, 'hiddenForUser', slot.hiddenForUser, False)
+    _xml.rewriteString(slotDS, 'applyType', slot.applyType, '')
+    _xml.rewriteString(slotDS, 'size', slot.size, '')
+
+
 def writeAnchorSlots(slotDS, slot):
     slotDS.deleteSection('tags')
     if slot.anchorPosition is not None:
@@ -83,6 +92,8 @@ def writeCustomizationSlots(slots, section, subsectionName):
             writeEmblemSlots(slotDS, slot)
         if slot.type in component_constants.ALLOWED_MISC_SLOTS:
             writeMiscSlots(slotDS, slot)
+        if slot.type in component_constants.ALLOWED_ATTACHMENT_SLOTS:
+            writeAttachmentSlots(slotDS, slot)
         LOG_ERROR('unexpected slot type: {}'.format(slot.type))
 
 

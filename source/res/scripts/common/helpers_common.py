@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/helpers_common.py
 import math
-from typing import TYPE_CHECKING, Sequence, Optional, Tuple
+from typing import TYPE_CHECKING, Sequence, Optional, Tuple, List
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
 if TYPE_CHECKING:
@@ -138,3 +138,11 @@ def parseDuration(timeStr):
     if negative:
         duration = -duration
     return duration
+
+
+def packChunkObstacles(obstacles):
+    return [ chunkID << 16 | itemIndex << 8 | matKind for chunkID, itemIndex, matKind in obstacles ]
+
+
+def unpackChunkObstacles(obstacles):
+    return [ (int(code >> 16), int(code >> 8 & 255), int(code & 255)) for code in obstacles ]

@@ -27,11 +27,13 @@ class EffectsController(CallbackDelayer):
     def __init__(self):
         super(EffectsController, self).__init__()
         self.gameObjects = []
+        self.__isActive = False
         dynObjectsCache = dependency.instance(IBattleDynamicObjectsCache)
         self.__effectsPathsConfig = dynObjectsCache.getFeaturesConfig(_KillCamEffectDynObjects.CONFIG_NAME)
 
     def destroy(self):
         _logger.info('[EffectsController] Destroy Kill Cam Effects')
+        self.__isActive = False
         self.hideEdges()
         self.delayCallback(0.0, self.__removeGameObjects)
 
@@ -40,6 +42,7 @@ class EffectsController(CallbackDelayer):
 
     def displayKillCamEffects(self, vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint, isRicochet):
         _logger.info('displayKillCamEffects (params): %s %s %s %s %s %s %s %s %s %s %s', vehicleAppearance, maxComponentIndex, hasProjectilePierced, hasNonPiercedDamage, isSPG, isSpotted, isShellHE, explosionRadius, trajectoryPoints, segments, impactPoint)
+        self.__isActive = True
         if trajectoryPoints[-1] != impactPoint:
             self.__spawnSpacedArmorLine(trajectoryPoints[-1], impactPoint)
             self.__spawnSpacedArmorImpactPoint(trajectoryPoints[-1])
@@ -72,6 +75,25 @@ class EffectsController(CallbackDelayer):
 
         self.gameObjects = []
 
+    def __tryAddGameObject(self, go):
+        if go is None or not go.isValid():
+            return False
+        elif not self.__isActive:
+            CGF.removeGameObject(go)
+            return False
+        else:
+            self.gameObjects.append(go)
+            return True
+
+    def __getLoadCallback(self, callback):
+
+        def callbackWrapper(go):
+            if not self.__tryAddGameObject(go):
+                return
+            callback(go)
+
+        return callbackWrapper
+
     def __spawnHitCone(self, hitPosition, originPosition):
 
         def cbHitCone(go):
@@ -81,9 +103,8 @@ class EffectsController(CallbackDelayer):
             pitch = math_utils.clamp(-maximumPitch, 0, rotation.y)
             rotation = Math.Vector3(rotation.x, pitch, rotation.z)
             self.__setTransformToGameObject(go, (1, 1, 1), rotation, originPosition)
-            self.gameObjects.append(go)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.cone, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbHitCone)
+        CGF.loadGameObject(self.__effectsPathsConfig.cone, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbHitCone))
 
     def __spawnShellTrajectory(self, points, isSpgShot=False, isRicochet=False):
 
@@ -91,7 +112,6 @@ class EffectsController(CallbackDelayer):
 
             def cbTrajectoryModel(scale, rotation, position, go):
                 self.__setTransformToGameObject(go, scale, rotation, position)
-                self.gameObjects.append(go)
 
             if not isSpgShot and not isRicochet:
                 lastPoint = points[-1]
@@ -105,27 +125,23 @@ class EffectsController(CallbackDelayer):
                 scale = (LINE_WIDTH, LINE_WIDTH, direction.length / _LENGTH_FACTOR)
                 rotation = Math.Vector3(direction.yaw, direction.pitch, 0)
                 modelPath = self.__effectsPathsConfig.trajectoryGradient if ptsLen - 2 == i else self.__effectsPathsConfig.trajectoryRed
-                CGF.loadGameObjectIntoHierarchy(modelPath, go, Math.Vector3(0, 0, 0), partial(cbTrajectoryModel, scale, rotation, translation))
+                CGF.loadGameObjectIntoHierarchy(modelPath, go, Math.Vector3(0, 0, 0), self.__getLoadCallback(partial(cbTrajectoryModel, scale, rotation, translation)))
 
-            self.gameObjects.append(go)
-
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbEmptyTrajectory)
+        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbEmptyTrajectory))
 
     def __spawnImpactPoint(self, hitPosition):
 
         def cbImpactPoint(go):
             self.__setTransformToGameObject(go, (1, 1, 1), (0, 0, 0), hitPosition)
-            self.gameObjects.append(go)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.impactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbImpactPoint)
+        CGF.loadGameObject(self.__effectsPathsConfig.impactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactPoint))
 
     def __spawnSpacedArmorImpactPoint(self, hitPosition):
 
         def cbSpacedArmorImpactPoint(go):
             self.__setTransformToGameObject(go, (1, 1, 1), (0, 0, 0), hitPosition)
-            self.gameObjects.append(go)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.spacedArmorImpactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbSpacedArmorImpactPoint)
+        CGF.loadGameObject(self.__effectsPathsConfig.spacedArmorImpactPoint, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorImpactPoint))
 
     def __spawnSpacedArmorLine(self, originPosition, hitPosition):
 
@@ -139,11 +155,9 @@ class EffectsController(CallbackDelayer):
 
             for dotIndex in range(int(numberOfDots)):
                 finalPosition = originPosition + spacingVector * (dotIndex + 1)
-                CGF.loadGameObjectIntoHierarchy(self.__effectsPathsConfig.spacedArmorLinePoint, go, finalPosition, cbSpacedArmorPoint)
+                CGF.loadGameObjectIntoHierarchy(self.__effectsPathsConfig.spacedArmorLinePoint, go, finalPosition, self.__getLoadCallback(cbSpacedArmorPoint))
 
-            self.gameObjects.append(go)
-
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbSpacedArmorLine)
+        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbSpacedArmorLine))
 
     def __spawnExplosionSphere(self, position, radius):
 
@@ -151,17 +165,15 @@ class EffectsController(CallbackDelayer):
             BigWorld.setEdgeDrawerImpenetratableZoneOverlay(0)
             BigWorld.setEdgeDrawerPenetratableZoneOverlay(0)
             self.__setTransformToGameObject(go, (radius, radius, radius), (0, 0, 0), position)
-            self.gameObjects.append(go)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.explosionSphere, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbExplosionSphere)
+        CGF.loadGameObject(self.__effectsPathsConfig.explosionSphere, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbExplosionSphere))
 
     def __spawnImpactZone(self, segments, vehicleAppearance, maxComponentIndex):
 
         def cbImpactZone(go):
             go.createComponent(ImpactZoneComponent, segments, vehicleAppearance, maxComponentIndex)
-            self.gameObjects.append(go)
 
-        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), cbImpactZone)
+        CGF.loadGameObject(self.__effectsPathsConfig.emptyGO, BigWorld.player().spaceID, Math.Vector3(0, 0, 0), self.__getLoadCallback(cbImpactZone))
 
     @staticmethod
     def __setTransformToGameObject(go, scale, rotationYPR, position):

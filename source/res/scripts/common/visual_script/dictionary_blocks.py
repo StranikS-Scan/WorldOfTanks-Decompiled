@@ -76,7 +76,7 @@ class EmptyDictionary(Block, DictionaryMeta):
         self._res = self._makeDataOutputSlot('res', SLOT_TYPE.DICTIONARY, self._get)
 
     def _get(self):
-        return Dictionary()
+        self._res.setValue(Dictionary())
 
     @classmethod
     def blockAspects(cls):

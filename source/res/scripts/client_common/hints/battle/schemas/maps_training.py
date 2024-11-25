@@ -67,7 +67,7 @@ class MTClientHintPropsSchema(CommonHintPropsSchema[MTClientHintPropsModel]):
 
     def __init__(self):
         super(MTClientHintPropsSchema, self).__init__(modelClass=MTClientHintPropsModel)
-        self._fields['hintType'] = fields.Enum(enumClass=HintType, required=True)
+        self._fields['hintType'] = fields.StrEnum(enumClass=HintType, required=True)
 
 
 class MTClientHintTextSchema(ClientHintTextSchema[MTClientHintTextModel]):

@@ -8,6 +8,7 @@ from battle_royale_progression.skeletons.game_controller import IBRProgressionOn
 from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
+from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.server_events.events_helpers import EventInfoModel
 from gui.shared import event_dispatcher
 from helpers import dependency
@@ -73,9 +74,13 @@ class ProgressionView(SubModelPresenter):
         if not self.brProgression.isEnabled:
             return
         data = self.brProgression.getProgressionData()
+        battleQuests = data['battleQuests']
+        isNeedToUpdate = needToUpdateQuestsInModel(battleQuests.values(), self.viewModel.battleQuests.getTasksBattle())
+        if not isNeedToUpdate:
+            return
         with self.viewModel.transaction() as model:
             self.__updateBattleQuestsCards(model.battleQuests, data)
-            self.__updateMissionVisitedArray(model.battleQuests.getMissionsCompletedVisited(), data['battleQuests'].keys())
+            self.__updateMissionVisitedArray(model.battleQuests.getMissionsCompletedVisited(), battleQuests.keys())
             self.__markAsVisited(data)
 
     def __updateProgressionPoints(self):

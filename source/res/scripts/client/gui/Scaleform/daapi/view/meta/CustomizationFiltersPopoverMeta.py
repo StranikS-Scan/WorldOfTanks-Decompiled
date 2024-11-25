@@ -31,6 +31,9 @@ class CustomizationFiltersPopoverMeta(SmartPopOverView):
     def onFormChange(self, index, value):
         self._printOverrideError('onFormChange')
 
+    def onRarityChange(self, index, value):
+        self._printOverrideError('onRarityChange')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 

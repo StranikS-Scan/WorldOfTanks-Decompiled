@@ -4317,7 +4317,10 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         chapterID = ctx.get(u'chapter')
         chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         priorityLevel = NotificationPriorityLevel.LOW
-        if not self.__battlePass.isCompleted():
+        if self.__battlePass.isExtraChapter(chapterID) and self.__battlePass.isFinalLevel(chapterID, newLevel):
+            description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
+            template = self.__PROGRESSION_BUTTON_TEMPLATE
+        elif not self.__battlePass.isCompleted():
             if not self.__battlePass.isFinalLevel(chapterID, newLevel):
                 if self.__battlePass.isHoliday():
                     description = backport.text(self.__MESSAGES.battlePassHReward.battle.newLevel.text(), newLevel=text_styles.credits(newLevel))
@@ -4350,7 +4353,9 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         chapter = text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()))
         header = backport.text(self.__MESSAGES.battlePassReward.header.buyProgress())
         levelCount = currentLevel - prevLevel
-        if self.__battlePass.isFinalLevel(chapterID, currentLevel):
+        if self.__battlePass.isExtraChapter(chapterID) and self.__battlePass.isFinalLevel(chapterID, currentLevel):
+            description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=chapter)
+        elif self.__battlePass.isFinalLevel(chapterID, currentLevel):
             if self.__battlePass.isRegularProgressionCompleted():
                 if self.__battlePass.isHoliday():
                     description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=chapter)
@@ -4376,12 +4381,13 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         chapterID = ctx.get(u'chapter')
         priceID = ctx.get(u'priceID')
         header = backport.text(self.__MESSAGES.battlePassReward.header.buyBP())
+        chapterName = text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()))
         if self.__battlePass.isHoliday():
             description = backport.text(self.__MESSAGES.battlePassHReward.buyWithRewards.text())
             additionalText = u''
         else:
             description = backport.text(self.__MESSAGES.battlePassReward.buyWithRewards.text())
-            additionalText = u'{}<br/>'.format(backport.text(self.__MESSAGES.battlePassReward.buyWithRewards.additionalText(), chapter=text_styles.credits(backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)()))))
+            additionalText = u'{}<br/>'.format(backport.text(self.__MESSAGES.battlePassReward.buyWithRewards.additionalText(), chapter=chapterName))
         additionalText = u''.join((additionalText, self.__makePriceString(chapterID, priceID)))
         priorityLevel = NotificationPriorityLevel.LOW
         return (header,
@@ -4409,9 +4415,9 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
         additionalText = u''
         template = self.__REWARD_TEMPLATE
         savedData = None
+        chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
         if self.__battlePass.isCompleted():
             if self.__battlePass.isHoliday():
-                chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
                 description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
                 template = self.__PROGRESSION_BUTTON_TEMPLATE
                 additionalText = u''
@@ -4420,7 +4426,6 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 template = self.__SHOP_BUTTON_TEMPLATE
                 additionalText = backport.text(self.__MESSAGES.battlePassReward.battle.final.additionalText())
         elif self.__battlePass.isFinalLevel(chapterID, newLevel):
-            chapterName = backport.text(R.strings.battle_pass.chapter.fullName.num(chapterID)())
             description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
             template = self.__PROGRESSION_BUTTON_TEMPLATE
             savedData = {u'chapterID': chapterID}

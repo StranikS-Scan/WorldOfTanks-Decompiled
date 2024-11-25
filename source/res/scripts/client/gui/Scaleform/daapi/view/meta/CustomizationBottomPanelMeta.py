@@ -34,6 +34,12 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def onItemIsNewAnimationShown(self, intCD):
         self._printOverrideError('onItemIsNewAnimationShown')
 
+    def showVideo(self):
+        self._printOverrideError('showVideo')
+
+    def showVehiclesSideBar(self):
+        self._printOverrideError('showVehiclesSideBar')
+
     def as_showBillS(self):
         return self.flashObject.as_showBill() if self._isDAAPIInited() else None
 
@@ -43,14 +49,8 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setBottomPanelInitDataS(self, data):
         return self.flashObject.as_setBottomPanelInitData(data) if self._isDAAPIInited() else None
 
-    def as_setSwitchersDataS(self, data):
-        return self.flashObject.as_setSwitchersData(data) if self._isDAAPIInited() else None
-
     def as_setBottomPanelTabsDataS(self, data):
         return self.flashObject.as_setBottomPanelTabsData(data) if self._isDAAPIInited() else None
-
-    def as_setBottomPanelTabsPlusesS(self, pluses):
-        return self.flashObject.as_setBottomPanelTabsPluses(pluses) if self._isDAAPIInited() else None
 
     def as_setCarouselDataS(self, data):
         return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
@@ -70,8 +70,8 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_setProjectionDecalHintVisibilityS(self, value):
         return self.flashObject.as_setProjectionDecalHintVisibility(value) if self._isDAAPIInited() else None
 
-    def as_showPopoverBtnIconS(self, src, tooltip):
-        return self.flashObject.as_showPopoverBtnIcon(src, tooltip) if self._isDAAPIInited() else None
+    def as_showPopoverBtnS(self, alias, src, tooltip):
+        return self.flashObject.as_showPopoverBtn(alias, src, tooltip) if self._isDAAPIInited() else None
 
     def as_getDataProviderS(self):
         return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
@@ -88,8 +88,14 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def as_playFilterBlinkS(self):
         return self.flashObject.as_playFilterBlink() if self._isDAAPIInited() else None
 
-    def as_carouselFilterMessageS(self, value):
-        return self.flashObject.as_carouselFilterMessage(value) if self._isDAAPIInited() else None
+    def as_updateEscHelpMessageS(self, visibility):
+        return self.flashObject.as_updateEscHelpMessage(visibility) if self._isDAAPIInited() else None
+
+    def as_setFilterFallbackDataS(self, data):
+        return self.flashObject.as_setFilterFallbackData(data) if self._isDAAPIInited() else None
 
     def as_setStageSwitcherVisibilityS(self, value):
         return self.flashObject.as_setStageSwitcherVisibility(value) if self._isDAAPIInited() else None
+
+    def as_setVehiclesSidebarBtnVisibilityS(self, value):
+        return self.flashObject.as_setVehiclesSidebarBtnVisibility(value) if self._isDAAPIInited() else None

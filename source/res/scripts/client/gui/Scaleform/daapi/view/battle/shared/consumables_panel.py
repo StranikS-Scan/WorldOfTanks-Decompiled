@@ -14,8 +14,7 @@ from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelM
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, CROSSHAIR_VIEW_ID
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
+from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, CROSSHAIR_VIEW_ID, VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED, FEEDBACK_EVENT_ID
 from gui.battle_control.controllers.consumables.ammo_ctrl import IAmmoListener
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection
@@ -435,6 +434,12 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
     def _getEquipmentIconPath(self, *_):
         return self._R_ARTEFACT_ICON
 
+    def __onVehicleFeedbackReceived(self, eventID, _, value):
+        if eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED:
+            for idx, payload in enumerate(self.sessionProvider.shared.ammo.getOrderedShellsLayout()):
+                intCD, descriptor, _, _, gunSettings = payload[:5]
+                self.as_updateTooltipS(idx=idx, tooltipStr=self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD)))
+
     def _addListeners(self):
         vehicleCtrl = self.sessionProvider.shared.vehicleState
         if vehicleCtrl is not None:
@@ -476,6 +481,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
         CommandMapping.g_instance.onMappingChanged += self._onMappingChanged
         g_eventBus.addListener(GameEvent.CHOICE_CONSUMABLE, self.__handleConsumableChoice, scope=EVENT_BUS_SCOPE.BATTLE)
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            feedbackCtrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
         return
 
     def _onSlotWaited(self, index, quantity):
@@ -519,6 +527,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, CallbackDelayer):
             optDevicesCtrl.onOptionalDeviceAdded -= self.__onOptionalDeviceAdded
             optDevicesCtrl.onOptionalDeviceUpdated -= self.__onOptionalDeviceUpdated
             optDevicesCtrl.onOptionalDevicesCleared -= self.__onOptionalDevicesCleared
+        feedbackCtrl = self.sessionProvider.shared.feedback
+        if feedbackCtrl is not None:
+            feedbackCtrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
         return
 
     def __genNextIdx(self, full, start):

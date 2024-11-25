@@ -8,10 +8,10 @@ class RespawnTooltipViewModel(ViewModel):
     def __init__(self, properties=3, commands=0):
         super(RespawnTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
-    def getPlatoonTimeToRessurect(self):
+    def getPlatoonTimeToResurrect(self):
         return self._getNumber(0)
 
-    def setPlatoonTimeToRessurect(self, value):
+    def setPlatoonTimeToResurrect(self, value):
         self._setNumber(0, value)
 
     def getPlatoonRespawnPeriod(self):
@@ -28,6 +28,6 @@ class RespawnTooltipViewModel(ViewModel):
 
     def _initialize(self):
         super(RespawnTooltipViewModel, self)._initialize()
-        self._addNumberProperty('platoonTimeToRessurect', 0)
+        self._addNumberProperty('platoonTimeToResurrect', 0)
         self._addNumberProperty('platoonRespawnPeriod', 0)
         self._addNumberProperty('soloRespawnPeriod', 0)

@@ -102,7 +102,7 @@ class VehicleAnchorsUpdater(object):
                 if anchorParams is None:
                     _logger.error('Failed to get anchor params for slotId: %s', slotId)
                     continue
-                if modeId == CustomizationModes.EDITABLE_STYLE and slotId.slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
+                if modeId == CustomizationModes.STYLE_2D_EDITABLE and slotId.slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
                     location = styleAnchorParams.location
                 else:
                     location = anchorParams.location
@@ -190,6 +190,8 @@ class VehicleAnchorsUpdater(object):
             self.__updateDecalAnchorsVisability()
         elif self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
             self.__updateProjectionDecalAnchorsVisability()
+        elif self.__ctx.mode.tabId == CustomizationTabs.ATTACHMENTS:
+            self.__updateAttachmentAnchorsVisability()
 
     def __updateRegionsAnchorsVisability(self):
         outfit = self.__ctx.mode.currentOutfit
@@ -231,6 +233,14 @@ class VehicleAnchorsUpdater(object):
         self.__spreadAnchorsApart(visibleAnchors)
         return
 
+    def __updateAttachmentAnchorsVisability(self):
+        for slotId in self.__processedAnchors:
+            isDisplayed = True
+            if self.__ctx.mode.selectedItem:
+                anchor = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
+                isDisplayed = anchor.applyType == self.__ctx.mode.selectedItem.applyType
+            self.changeAnchorParams(slotId, isDisplayed=isDisplayed, isAutoScalable=True, isCollidable=False)
+
     def __spreadAnchorsApart(self, visibleAnchors):
         for slotIds in visibleAnchors.itervalues():
             anchorsCount = len(slotIds)
@@ -265,11 +275,11 @@ class VehicleAnchorsUpdater(object):
         self.__updateAnchorsVisability()
 
     def __onCarouselItemSelected(self, *_, **__):
-        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        if self.__ctx.mode.tabId in (CustomizationTabs.PROJECTION_DECALS, CustomizationTabs.ATTACHMENTS):
             self.__updateAnchorsVisability()
 
     def __onCarouselItemUnselected(self, *_, **__):
-        if self.__ctx.mode.tabId == CustomizationTabs.PROJECTION_DECALS:
+        if self.__ctx.mode.tabId in (CustomizationTabs.PROJECTION_DECALS, CustomizationTabs.ATTACHMENTS):
             for anchor in self.__processedAnchors.itervalues():
                 anchor.state.onItemUnselected()
 

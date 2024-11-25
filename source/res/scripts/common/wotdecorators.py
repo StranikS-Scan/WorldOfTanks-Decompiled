@@ -3,13 +3,13 @@
 import inspect
 from functools import update_wrapper
 from typing import TypeVar, Type, Generic
-from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR
+from constants import IS_CLIENT, IS_BOT, IS_CGF_DUMP, IS_VS_EDITOR, IS_UE_EDITOR
 from debug_utils import LOG_CURRENT_EXCEPTION, CRITICAL_ERROR, LOG_ERROR
 from time_tracking import LOG_TIME_WARNING
 import time
 import time_tracking
 CLASS = TypeVar('CLASS')
-if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR:
+if not IS_CLIENT and not IS_BOT and not IS_CGF_DUMP and not IS_VS_EDITOR and not IS_UE_EDITOR:
     from insights.measurements import incrTickOverspends
 
 def _argsToLogID(args):

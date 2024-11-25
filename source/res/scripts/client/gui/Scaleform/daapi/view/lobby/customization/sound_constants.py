@@ -32,6 +32,7 @@ class SOUNDS(CONST_CONTAINER):
     PICK = 'cust_color_take'
     RELEASE = 'cust_color_release'
     APPLY = 'cust_color_apply'
+    APPLY_ATTACHMENT = 'elements_cust_apply'
     CUST_TICK_ON = 'cust_tick_on'
     CUST_TICK_ON_ALL = 'cust_tick_on_all'
     CUST_TICK_OFF = 'cust_tick_off'

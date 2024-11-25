@@ -5,9 +5,12 @@ if typing.TYPE_CHECKING:
     from ResMgr import DataSection
     TReaders = typing.Dict[str, typing.Callable[[DataSection], dict]]
 
-def _parseDataSection(dataSection, readers=None):
-    if not len(dataSection.values()):
-        return _normalizeValue(dataSection.asString)
+def _parseDataSection(dataSection, readers=None, normalizeValues=False):
+    if not len(dataSection):
+        if normalizeValues:
+            return _normalizeValue(dataSection.asString)
+        else:
+            return dataSection.asString
     result = {}
     for section in dataSection.values():
         if section.isAttribute:
@@ -16,7 +19,7 @@ def _parseDataSection(dataSection, readers=None):
         if readers and key in readers:
             value = readers[key](section)
         else:
-            value = _parseDataSection(section, readers)
+            value = _parseDataSection(section, readers, normalizeValues)
         if key in result:
             if isinstance(result[key], list):
                 result[key].append(value)
@@ -39,5 +42,5 @@ def _normalizeValue(value):
     return value
 
 
-def parse(data, readers=None):
-    return {} if not len(data.values()) else _parseDataSection(data, readers)
+def parse(data, readers=None, normalizeValues=False):
+    return {} if not len(data) else _parseDataSection(data, readers, normalizeValues)

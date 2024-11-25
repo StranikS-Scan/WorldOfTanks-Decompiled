@@ -42,4 +42,11 @@ class EpicQuestProgressView(EpicQuestProgressInfoMeta):
         awards = quest.get('awards', [])
         if not awards:
             return []
-        return [ item for award in awards for item in award.get('items', []) ]
+        rewards = []
+        for award in awards:
+            if 'items' in award:
+                rewards.extend(award['items'])
+            if 'list' in award:
+                rewards.extend((item.get('description', '') for item in award['list']))
+
+        return rewards

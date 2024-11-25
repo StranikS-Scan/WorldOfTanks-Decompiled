@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -699,6 +698,19 @@
     <clone_tags>	cloned	</clone_tags>
     <notInShop>	True	</notInShop>
   </A71_T21_MapsTraining_Dummy_LT_2>
+  <A154_Convertible_Medium_Tank_T3E2>
+    <id>	126	</id>
+    <userString>	#usa_vehicles:A154_Convertible_Medium_Tank_T3E2	</userString>
+    <description>	#usa_vehicles:A154_Convertible_Medium_Tank_T3E2_descr	</description>
+    <shortUserString>	#usa_vehicles:A154_Convertible_Medium_Tank_T3E2_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A154_Convertible_Medium_Tank_T3E2_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A154_Convertible_Medium_Tank_T3E2_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret testTank	</tags>
+    <level>	3	</level>
+  </A154_Convertible_Medium_Tank_T3E2>
   <A153_XM66F>
     <id>	127	</id>
     <userString>	#usa_vehicles:A153_XM66F	</userString>
@@ -1131,7 +1143,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1631,6 +1642,19 @@
     <tags>	heavyTank private HD epic_battles improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A12_T32_FL>
+  <A76_M3_A3>
+    <id>	257	</id>
+    <userString>	#usa_vehicles:A76_M3_A3	</userString>
+    <description>	#usa_vehicles:A76_M3_A3_descr	</description>
+    <shortUserString>	#usa_vehicles:A76_M3_A3_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A76_M3_A3_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A76_M3_A3_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user secret testTank	</tags>
+    <level>	3	</level>
+  </A76_M3_A3>
   <A97_M41_Bulldog_FL>
     <id>	250	</id>
     <userString>	#usa_vehicles:M41_Bulldog_FL	</userString>
@@ -1758,14 +1782,4 @@
     <level>	5	</level>
     <notInShop>	True	</notInShop>
   </A1034_M24_Chaffee_StoryMode>
-  <A12_T32_HW>
-    <id>	5515	</id>
-    <userString>	#usa_vehicles:T32	</userString>
-    <description>	#usa_vehicles:T32_descr	</description>
-    <price>	2610000	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user event_battles secret private mode_hidden cannot_be_sold lockOutfit lockCrew lockCrewSkills	</tags>
-    <level>	8	</level>
-  </A12_T32_HW>
 </list.xml>

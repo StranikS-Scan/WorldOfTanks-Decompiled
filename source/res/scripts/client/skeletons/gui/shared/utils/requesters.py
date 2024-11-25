@@ -48,9 +48,6 @@ class IInventoryRequester(IRequester):
     def getC11nItemAppliedOnVehicleCount(self, itemCD, vehicleCD):
         raise NotImplementedError
 
-    def getC11nOutfitsFromPool(self, vehicleIntCD):
-        raise NotImplementedError
-
     def initC11nItemsNoveltyData(self):
         raise NotImplementedError
 

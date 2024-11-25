@@ -6,11 +6,11 @@ import BigWorld
 from gui.Scaleform.daapi.view.meta.BattleRoyaleTimersPanelMeta import BattleRoyaleTimersPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import AirDropEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.timers_common import TimerComponent, PythonTimer
+from battle_royale.gui.shared.events import AirDropEvent
 
 def _setRespawnTime(panel, timeLeft):
     panel.as_setRespawnTimeS(timeLeft)

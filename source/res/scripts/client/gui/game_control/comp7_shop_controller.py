@@ -20,7 +20,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_purchase_controller import WotShopPrice
 from wg_async import wg_await, wg_async
 if typing.TYPE_CHECKING:
-    from typing import List, Dict, Optional
+    from typing import List, Dict, Optional, Set
     from gui.platform.products_fetcher.wot_shop.descriptors.product_descriptor import ProductDescriptor
     from gui.platform.products_fetcher.wot_shop.descriptors.account_limits_descriptor import AccountLimitsDescriptor
     from gui.platform.products_fetcher.wot_shop.descriptors.categories_descriptor import CategoriesDescriptor
@@ -67,7 +67,7 @@ class Comp7ShopController(IComp7ShopController):
         self.__ranksDiscounts = {}
         self.__categoriesToRanks = {}
         self.__ranksToCategories = {}
-        self.__notifiedRanks = []
+        self.__notifiedRanks = set()
         self.__status = ShopControllerStatus.IDLE
         self.__isShopEnabled = False
 
@@ -84,11 +84,11 @@ class Comp7ShopController(IComp7ShopController):
         return
 
     def onConnected(self):
-        self.__comp7Controller.onHighestRankAchieved += self.__onHighestRankAchieved
+        self.__comp7Controller.onNewMaxRank += self.__onNewMaxRank
         self.__comp7Controller.onComp7ConfigChanged += self.__onConfigChanged
 
     def onDisconnected(self):
-        self.__comp7Controller.onHighestRankAchieved -= self.__onHighestRankAchieved
+        self.__comp7Controller.onNewMaxRank -= self.__onNewMaxRank
         self.__comp7Controller.onComp7ConfigChanged -= self.__onConfigChanged
         self.__status = None
         self.__products.clear()
@@ -96,13 +96,13 @@ class Comp7ShopController(IComp7ShopController):
         self.__categoriesToRanks.clear()
         self.__categoriesDiscounts.clear()
         self.__ranksDiscounts.clear()
-        self.__notifiedRanks = []
+        self.__notifiedRanks.clear()
         self.__isShopEnabled = None
         return
 
     @wg_async
     def __requestProducts(self, force=False):
-        if not self.isShopEnabled:
+        if not self.__isShopEnabled:
             return
         if self.__status in (ShopControllerStatus.PENDING, ShopControllerStatus.DATA_READY) and not force:
             return
@@ -166,19 +166,19 @@ class Comp7ShopController(IComp7ShopController):
         return prevRankDiscounts != currentRankDiscounts
 
     @wg_async
-    def __onHighestRankAchieved(self, *_, **__):
-        if not self.isShopEnabled:
+    def __onNewMaxRank(self, newMaxRank):
+        if not self.__isShopEnabled or newMaxRank in self.__notifiedRanks:
             return
-        rank = comp7_shared.getRankEnumValue(comp7_shared.getPlayerDivision())
-        if rank in self.__notifiedRanks:
-            return
-        self.__notifiedRanks.append(rank)
-        _logger.info('Request new products due to onHighestRankAchieved event')
+        self.__notifiedRanks.add(newMaxRank)
+        _logger.info('Request products due to onNewMaxRank event')
         yield self.__requestProducts(force=True)
-        if self.hasNewProducts(rank):
-            self.__sendNewProductsForRankMessage()
-        if self.hasNewDiscounts(rank):
-            self.__sendNewDiscountsForRankMessage()
+        if self.__status == ShopControllerStatus.DATA_READY:
+            if self.hasNewProducts(newMaxRank):
+                self.__sendNewProductsForRankMessage()
+            if self.hasNewDiscounts(newMaxRank):
+                self.__sendNewDiscountsForRankMessage()
+        else:
+            self.__notifiedRanks.remove(newMaxRank)
 
     def __onConfigChanged(self):
         config = self.__comp7Controller.getModeSettings()

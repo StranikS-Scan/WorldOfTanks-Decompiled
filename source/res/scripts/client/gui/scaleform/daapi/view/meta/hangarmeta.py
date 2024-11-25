@@ -31,8 +31,8 @@ class HangarMeta(View):
     def as_setComp7ModifiersVisibleS(self, value):
         return self.flashObject.as_setComp7ModifiersVisible(value) if self._isDAAPIInited() else None
 
-    def as_setCarouselBannerVisibleS(self, alias, isVisible):
-        return self.flashObject.as_setCarouselBannerVisible(alias, isVisible) if self._isDAAPIInited() else None
+    def as_setEventTournamentBannerVisibleS(self, alias, isVisible):
+        return self.flashObject.as_setEventTournamentBannerVisible(alias, isVisible) if self._isDAAPIInited() else None
 
     def as_setPrestigeWidgetVisibleS(self, value):
         return self.flashObject.as_setPrestigeWidgetVisible(value) if self._isDAAPIInited() else None

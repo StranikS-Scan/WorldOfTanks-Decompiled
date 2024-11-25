@@ -21,11 +21,8 @@ DEFAULT_DECAL_CLIP_ANGLE = 0.0
 DEFAULT_DECAL_TINT_COLOR = (255, 255, 255, 255)
 DEFAULT_DECAL_ANCHOR_SHIFT = 0.0
 RENT_IS_ALMOST_OVER_VALUE = 3
-EDITABLE_STYLE_STORAGE_DEPTH = 5
 EMPTY_ITEM_ID = 22222
-CUSTOM_STYLE_POOL_ID = 0
 SLOT_DEFAULT_ALLOWED_MODEL = 'default'
-OUTFIT_POOL_EMPTY_STUB = (None, None)
 DEFAULT_POSITION = (0, 0, 0)
 DEFAULT_ROTATION = (0, 0, 0)
 DEFAULT_SCALE = (1, 1, 1)
@@ -53,8 +50,9 @@ class CustomizationType(object):
      ITEM_GROUP,
      PROJECTION_DECAL,
      PERSONAL_NUMBER,
-     FONT}
-    STYLE_ONLY_RANGE = {ATTACHMENT, SEQUENCE}
+     FONT,
+     ATTACHMENT}
+    STYLE_ONLY_RANGE = {SEQUENCE}
     FULL_RANGE = RANGE | STYLE_ONLY_RANGE
     APPLIED_TO_TYPES = (PAINT,
      CAMOUFLAGE,
@@ -71,12 +69,14 @@ class CustomizationType(object):
      DECAL,
      PERSONAL_NUMBER,
      MODIFICATION,
-     PROJECTION_DECAL)
+     PROJECTION_DECAL,
+     ATTACHMENT)
     TYPES_FOR_EDITABLE_STYLE = (PAINT,
      DECAL,
      PERSONAL_NUMBER,
      MODIFICATION,
      PROJECTION_DECAL)
+    COMMON_TYPES = (ATTACHMENT,)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if isinstance(getattr(CustomizationType, k), int)}
@@ -108,6 +108,8 @@ class ItemTags(object):
     HIDE_IF_INCOMPATIBLE = 'hideIfIncompatible'
     STYLE_SERIAL_NUMBER = 'styleSerialNumber'
     LOCKED_ON_VEHICLE = 'lockedOnVehicle'
+    IS_3D = 'c11n3D'
+    BATTLE_EFFECT = 'battleEffect'
 
 
 class ProjectionDecalType(object):
@@ -164,6 +166,12 @@ class ProjectionDecalMatchingTags(object):
     COVER = 'cover'
     SAFE = 'safe'
     ALL = (MIMIC, COVER, SAFE)
+
+
+class AttachmentTags(object):
+    ROTATABLE = 'rotatable'
+    SCALABLE = 'scalable'
+    ALL = (ROTATABLE, SCALABLE)
 
 
 class ApplyArea(object):
@@ -403,3 +411,47 @@ class EDITING_STYLE_REASONS(object):
     NOT_HAVE_ANY_PROGRESSIVE_DECALS = 'notHaveAnyProgressiveDecals'
     ENABLED = (IS_EDITABLE,)
     DISABLED = (NOT_EDITABLE, NOT_REACHED_LEVEL, NOT_HAVE_ANY_PROGRESSIVE_DECALS)
+
+
+class Rarity(object):
+    UNKNOWN = ''
+    RARE = 'rare'
+    EPIC = 'epic'
+    LEGENDARY = 'legendary'
+    FILTERABLE = (LEGENDARY, EPIC, RARE)
+    UI_EFFECT = (EPIC, LEGENDARY)
+    ALL = FILTERABLE + (UNKNOWN,)
+
+
+class AttachmentLogic(object):
+    UNKNOWN = ''
+    FLAG_PART = 'flagPart'
+    FLAG_ANIMATION = 'flagAnimation'
+    PREFAB = 'prefab'
+    FLAGS = (FLAG_PART, FLAG_ANIMATION)
+    ALL = (UNKNOWN,
+     FLAG_PART,
+     FLAG_ANIMATION,
+     PREFAB)
+
+
+class AttachmentType(object):
+    UNKNOWN = ''
+    UNIVERSAL = 'universal'
+    TURRET = 'turret'
+    GUN = 'gunMantlet'
+    ALL = (UNKNOWN,
+     UNIVERSAL,
+     TURRET,
+     GUN)
+
+
+class AttachmentSize(object):
+    UNKNOWN = ''
+    SMALL = 'small'
+    MEDIUM = 'medium'
+    LARGE = 'large'
+    ALL = (UNKNOWN,
+     SMALL,
+     MEDIUM,
+     LARGE)

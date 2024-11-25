@@ -635,7 +635,7 @@ class VehicleDescrCrew(object):
      'loader_perfectCharge': None,
      'loader_melee': None,
      'loader_ammunitionImprove': None,
-     'radioman_finder': None,
+     'radioman_finder': _process_radioman_finder,
      'radioman_expert': None,
      'radioman_sideBySide': None,
      'fireFighting': None,

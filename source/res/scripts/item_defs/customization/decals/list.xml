@@ -7589,6 +7589,20 @@
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <decal>
+      <id>	1081	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_840.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_840	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Well Deserve Reward 2024	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	8 9 10	</levels>
@@ -7609,6 +7623,26 @@
       <mirror>	true	</mirror>
     </decal>
     <name>	Clans Event 2024	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1106	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_843.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_843	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	true	</mirror>
+    </decal>
+    <name>	Tournaments 2024	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
@@ -12921,7 +12955,6 @@
     <decal>
       <id>	837	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_571.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_571	</userString>
       <mirror>	false	</mirror>
     </decal>
@@ -13345,7 +13378,6 @@
     <decal>
       <id>	934	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_642.dds	</texture>
-      <maxNumber>	6	</maxNumber>
       <userString>	#vehicle_customization:inscription/special/special_642	</userString>
       <mirror>	false	</mirror>
     </decal>
@@ -13847,14 +13879,12 @@
       <id>	16008	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_710.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_710	</userString>
-      <maxNumber>	6	</maxNumber>
       <mirror>	false	</mirror>
     </decal>
     <decal>
       <id>	16009	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_711.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_711	</userString>
-      <maxNumber>	6	</maxNumber>
       <mirror>	false	</mirror>
     </decal>
     <name>	NY2023-2024	</name>
@@ -14312,6 +14342,59 @@
       <userString>	#vehicle_customization:inscription/special/special_759	</userString>
       <mirror>	false	</mirror>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <decal>
+      <id>	1096	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_760.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_760	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1097	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_761.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_761	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1098	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_762.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_762	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Vikings	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1104	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_768.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_768	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1105	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_769.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_769	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Tornaments 2024	</name>
+    <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/IGR	</userString>

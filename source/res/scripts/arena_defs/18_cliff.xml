@@ -2,13 +2,25 @@
   <name>	#arenas:18_cliff/name	</name>
   <description>	#arenas:18_cliff/description	</description>
   <geometry>	spaces/18_cliff	</geometry>
-  <estimatedLoad>	0.3	</estimatedLoad>
+  <estimatedLoad>	0.55	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
     <bottomLeft>	-500.0 -500.0	</bottomLeft>
     <upperRight>	500.0 500.0	</upperRight>
   </boundingBox>
   <minimap>	spaces/18_cliff/mmap.dds	</minimap>
+  <minimapLayers>
+    <layer>
+      <layerId>	layer1	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/18_cliff/mmap_lighthouse_crash_01.dds	</path>
+    </layer>
+    <layer>
+      <layerId>	layer2	</layerId>
+      <layerType>	base	</layerType>
+      <path>	spaces/18_cliff/mmap_lighthouse_plane_crash_01.dds	</path>
+    </layer>
+  </minimapLayers>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -23,6 +35,16 @@
     <wwmusicResultDefeat>	music_cliff_result_defeat	</wwmusicResultDefeat>
   </wwmusicSetup>
   <wwambientSound>	amb_map_18_cliff_wind_summer	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	destructible_objects.bnk	</name>
+      </bank>
+      <bank>
+        <name>	destructible_objects.pck	</name>
+      </bank>
+    </loadBanks>
+  </soundRemapping>
   <wwDefaultReverb>
     <auxBus>	AUX_env_Mountain	</auxBus>
     <controlValue>	1.0	</controlValue>
@@ -114,50 +136,5 @@
     </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
-  <mapActivities>
-    <scenario>
-      <startTime>	30.000000 60.000000	</startTime>
-      <possibility>	1.000000	</possibility>
-      <interval>	150.000000	</interval>
-      <arenaPeriod>	3	</arenaPeriod>
-      <name>	cliff_bomber	</name>
-      <trajectories>
-        <warplane>
-          <preset>	cliff_bomber_clin_1	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	cliff_bomber_clin_2	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	cliff_bomber_clin_3	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	cliff_bomber_clin_4	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	cliff_bomber_clin_5	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
-        </warplane>
-      </trajectories>
-    </scenario>
-  </mapActivities>
+  <mapActivities></mapActivities>
 </18_cliff.xml>

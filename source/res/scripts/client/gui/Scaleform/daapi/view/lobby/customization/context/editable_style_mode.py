@@ -9,20 +9,18 @@ from gui.shared.gui_items.processors.common import OutfitApplier, Customizations
 from gui.Scaleform.daapi.view.lobby.customization.context.custom_mode import CustomMode
 from gui.Scaleform.daapi.view.lobby.customization.context.styled_mode import StyledMode
 from gui.Scaleform.daapi.view.lobby.customization import shared
-from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, removeUnselectedItemsFromEditableStyle, getUnsuitableDependentData, changePartsOutfit
-from gui.customization.constants import CustomizationModes
+from gui.Scaleform.daapi.view.lobby.customization.shared import customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, correctSlot, getCurrentVehicleAvailableRegionsMap, fitOutfit, removeItemFromEditableStyle, getEditableStyleOutfitDiff, getItemInventoryCount, getOutfitWithoutItemsNoDiff, getOutfitWithoutItems, ITEM_TYPE_TO_SLOT_TYPE, getUnsuitableDependentData, changePartsOutfit
 from gui.customization.shared import PurchaseItem, getAvailableRegions, EDITABLE_STYLE_IRREMOVABLE_TYPES, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, C11nId
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.decorators import adisp_process as wrapperdProcess
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import SeasonType, MAX_USERS_PROJECTION_DECALS, CustomizationType
 from vehicle_outfit.containers import SlotData
-from vehicle_outfit.outfit import Area, Outfit
+from vehicle_outfit.outfit import Area
 from helpers import dependency
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial.hints_manager import HINT_SHOWN_STATUS
-from items.customizations import CustomizationOutfit
 if typing.TYPE_CHECKING:
     from items.customizations import SerializableComponent
     from gui.hangar_vehicle_appearance import AnchorParams
@@ -31,8 +29,6 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class EditableStyleMode(CustomMode):
-    modeId = CustomizationModes.EDITABLE_STYLE
-    _tabs = CustomizationTabs.MODES[modeId]
     _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):
@@ -51,7 +47,7 @@ class EditableStyleMode(CustomMode):
         return self.__baseOutfits
 
     def getPurchaseItems(self):
-        purchaseItems = getStylePurchaseItems(self.__style, self.getModifiedOutfits(), progressionLevel=self.getStyleProgressionLevel())
+        purchaseItems = getStylePurchaseItems(self.__style, self._modifiedOutfits, progressionLevel=self.getStyleProgressionLevel())
         return purchaseItems
 
     def getDependenciesData(self):
@@ -91,7 +87,7 @@ class EditableStyleMode(CustomMode):
     def getItemFromSlot(self, slotId, season=None):
         season = season or self.season
         slotId = correctSlot(slotId)
-        outfit = self._modifiedOutfits[season]
+        outfit = self.outfits[season]
         return shared.getItemFromSlot(outfit, slotId)
 
     def getComponentFromSlot(self, slotId, season=None):
@@ -193,19 +189,14 @@ class EditableStyleMode(CustomMode):
         return self._modifiedOutfits[self.season].progressionLevel if self.__style and self.__style.isProgressive else -1
 
     def _onStart(self):
-        if self._ctx.modeId != CustomizationModes.STYLED:
-            _logger.error('Failed to start Style Edit Mode. Style Edit Mode could be started only from Styled mode.')
-            self._ctx.changeMode(CustomizationModes.STYLED)
-            return
-        outfit = self._ctx.mode.currentOutfit
-        if not outfit.id:
+        if not self._ctx.styleMode.currentOutfit.id:
             _logger.error('Failed to start Style Edit Mode. No applied style.')
-            self._ctx.changeMode(CustomizationModes.STYLED)
+            self._ctx.returnToStyleMode()
             return
-        style = self._service.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id)
+        style = self._service.getItemByID(GUI_ITEM_TYPE.STYLE, self._ctx.styleMode.currentOutfit.id)
         if not style.isEditable:
             _logger.error('Failed to start Style Edit Mode. Applied style is not editable.')
-            self._ctx.changeMode(CustomizationModes.STYLED)
+            self._ctx.returnToStyleMode()
             return
         self._isInited = False
         self.__style = style
@@ -234,13 +225,7 @@ class EditableStyleMode(CustomMode):
 
     def _onStop(self):
         if not self.__isCanceled:
-            diffs = {}
-            for season in SeasonType.COMMON_SEASONS:
-                outfit = self._modifiedOutfits[season]
-                baseOutfit = self.__baseOutfits[season]
-                diffs[season] = getEditableStyleOutfitDiff(outfit, baseOutfit)
-
-            self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)
+            self.__saveDiffs()
         super(EditableStyleMode, self)._onStop()
 
     def _cancelChanges(self):
@@ -249,41 +234,14 @@ class EditableStyleMode(CustomMode):
 
     @adisp_async
     @adisp_process
-    def _applyItems(self, purchaseItems, isModeChanged, callback):
-        results = []
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        modifiedOutfits = {season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()}
-        originalOutfits = self._ctx.startMode.getOriginalOutfits()
-        removeUnselectedItemsFromEditableStyle(modifiedOutfits, self.__baseOutfits, purchaseItems)
-        requestData = []
-        for season in SeasonType.COMMON_SEASONS:
-            outfit = modifiedOutfits[season]
-            baseOutfit = self.__baseOutfits[season]
-            if outfit.vehicleCD != baseOutfit.vehicleCD or not outfit.isEqual(baseOutfit):
-                diff = getEditableStyleOutfitDiff(outfit, baseOutfit)
-                outfit = self.__style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
-                requestData.append((outfit, season))
-
-        if not requestData:
-            emptyComponent = CustomizationOutfit()
-            outfit = self._modifiedOutfits[self.season]
-            emptyComponent.styleId = outfit.id
-            if outfit.style is not None and outfit.style.isProgressionRewindEnabled:
-                emptyComponent.styleProgressionLevel = outfit.progressionLevel
-            if outfit.style is not None and outfit.style.isWithSerialNumber:
-                emptyComponent.serial_number = outfit.serialNumber
-            outfit = Outfit(component=emptyComponent)
-            requestData.append((outfit, SeasonType.ALL))
-        result = yield OutfitApplier(g_currentVehicle.item, requestData).request()
-        results.append(result)
-        if self.isInited:
-            self._events.onItemsBought(originalOutfits, purchaseItems, results)
+    def _applyItems(self, purchaseItems, callback):
+        self.__saveDiffs()
+        yield self._ctx.styleMode.applyItems(purchaseItems)
         callback(self)
-        return
 
     def _fillOutfits(self):
-        originalOutfits = self._ctx.mode.getOriginalOutfits()
-        modifiedOutfits = self._ctx.mode.getModifiedOutfits()
+        originalOutfits = self._ctx.styleMode.getOriginalOutfits()
+        modifiedOutfits = self._ctx.styleMode.getModifiedOutfits()
         self._originalOutfits = originalOutfits
         self._modifiedOutfits = modifiedOutfits
 
@@ -357,6 +315,7 @@ class EditableStyleMode(CustomMode):
         outfit = self._modifiedOutfits[season]
         baseOutfit = self.__baseOutfits[season]
         self._modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
+        return True
 
     def _getAnchorVOs(self):
         if self.slotType in EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES:
@@ -381,7 +340,7 @@ class EditableStyleMode(CustomMode):
             return errors
 
     def _onVehicleChangeStarted(self):
-        self._ctx.changeMode(CustomizationModes.STYLED)
+        self._ctx.returnToStyleMode()
 
     def __installItemToAllAreas(self, item, season=None):
         season = season or self.season
@@ -431,3 +390,12 @@ class EditableStyleMode(CustomMode):
         else:
             suitableItemIntCD = makeIntCompactDescrByID('customizationItem', posUnsuitType, dependentByType[0])
         return suitableItemIntCD
+
+    def __saveDiffs(self):
+        diffs = {}
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = self._modifiedOutfits[season]
+            baseOutfit = self.__baseOutfits[season]
+            diffs[season] = getEditableStyleOutfitDiff(outfit, baseOutfit)
+
+        self._ctx.stylesDiffsCache.saveDiffs(self.__style, diffs)

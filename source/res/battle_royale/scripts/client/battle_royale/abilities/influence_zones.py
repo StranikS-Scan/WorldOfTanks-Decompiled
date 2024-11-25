@@ -180,7 +180,7 @@ class InfluenceZoneVisualizationManager(CGF.ComponentManager):
             return
         go.createComponent(ZonePrefabLoader, influenceZone, go)
 
-    @onAddedQuery(GenericComponents.TransformComponent, InfluenceZoneEquipmentComponent, InfluenceZoneTerrainArea, tickGroup='postHierarchyUpdate')
+    @onAddedQuery(GenericComponents.TransformComponent, InfluenceZoneEquipmentComponent, InfluenceZoneTerrainArea, tickGroup='postTickUpdate')
     def terrainAreaInit(self, transform, influenceZoneEquipment, terrainArea):
         fullRadius = influenceZoneEquipment.radius + influenceZoneEquipment.zoneRadius
         terrainArea.fullZoneArea = CombatSelectedArea.CombatSelectedArea()

@@ -7,7 +7,6 @@ import TriggersManager
 import helpers
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
-import items
 from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
@@ -188,15 +187,6 @@ class ProjectileMover(object):
             if proj['showExplosion'] and explode and not helpers.isShowingKillCam():
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
-
-    def projectileStoppedByGO(self, shot, effectMaterial):
-        if shot['shotID'] in self.__projectiles:
-            proj = self.__projectiles[shot['shotID']].copy()
-        else:
-            proj = {'effectsDescr': items.vehicles.g_cache.shotEffects[shot['effectIndex']],
-             'attackerID': 0}
-        proj['effectMaterial'] = effectMaterial
-        self.__addExplosionEffect(shot['position'], proj, shot['normal'])
 
     def __deleteProjectile(self, shotID):
         proj = self.__projectiles.get(shotID)

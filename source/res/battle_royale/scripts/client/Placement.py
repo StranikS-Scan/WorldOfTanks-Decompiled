@@ -4,9 +4,9 @@ import BigWorld
 from constants import AirdropType
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import AirDropEvent
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from battle_royale.gui.shared.events import AirDropEvent
 
 class IPlacementHandler(object):
 

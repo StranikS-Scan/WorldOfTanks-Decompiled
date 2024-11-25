@@ -1719,9 +1719,6 @@ class ServerSettings(object):
         if 'exchange_rates_config' in serverSettingsDiff:
             self.__updateExchangeRates(serverSettingsDiff)
             self.__serverSettings['exchange_rates_config'] = serverSettingsDiff['exchange_rates_config']
-        if 'advent_calendar_config' in serverSettingsDiff:
-            self.__updateAdventCalendar(serverSettingsDiff)
-            self.__serverSettings['advent_calendar_config'] = serverSettingsDiff['advent_calendar_config']
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
             self.__serverSettings['epic_config'] = serverSettingsDiff['epic_config']

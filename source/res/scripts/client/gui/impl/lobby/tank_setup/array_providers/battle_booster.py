@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.battle_booster_sl
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
-from web.web_client_api.shop.formatters import formatValueToColorTag, COLOR_TAG_CLOSE, COLOR_TAG_OPEN
+from web.web_client_api.shop.formatters import formatValueToColorTag
 
 class BaseBattleBoosterProvider(VehicleBaseArrayProvider):
     __slots__ = ()
@@ -86,5 +86,4 @@ class CrewBattleBoosterProvider(BaseBattleBoosterProvider):
 
     def _fillDescription(self, model, item):
         skillLearnt = item.isAffectedSkillLearnt(self._getVehicle())
-        model.setDescription(item.getCrewBoosterDescription(not skillLearnt, {'colorTagOpen': COLOR_TAG_OPEN,
-         'colorTagClose': COLOR_TAG_CLOSE}))
+        model.setDescription(item.getCrewBoosterDescription(not skillLearnt))

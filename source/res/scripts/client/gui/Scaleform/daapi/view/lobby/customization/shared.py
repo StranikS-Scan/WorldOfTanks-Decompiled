@@ -15,7 +15,7 @@ from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes
-from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES, appliedToFromSlotsIds, C11nId, PurchaseItem, AdditionalPurchaseGroups, getAvailableRegions, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, EDITABLE_STYLE_IRREMOVABLE_TYPES
+from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES, appliedToFromSlotsIds, C11nId, PurchaseItem, AdditionalPurchaseGroups, getAvailableRegions, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, EDITABLE_STYLE_IRREMOVABLE_TYPES, C11N_ITEM_TYPE_MAP
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
@@ -30,8 +30,9 @@ from helpers.func_utils import CallParams, cooldownCallerDecorator
 from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
-from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags
+from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType
 from items.vehicles import VEHICLE_CLASS_TAGS
+from serializable_types.customizations.projection_decal import ProjectionDecalComponent
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
@@ -51,45 +52,76 @@ class CustomizationTabs(object):
     EMBLEMS = 4
     INSCRIPTIONS = 5
     MODIFICATIONS = 6
-    STYLES = 7
-    ALL = (PAINTS,
+    STYLES_2D = 7
+    STYLES_3D = 8
+    ATTACHMENTS = 9
+    ALL = (STYLES_3D,
+     STYLES_2D,
+     ATTACHMENTS,
+     PAINTS,
      CAMOUFLAGES,
      PROJECTION_DECALS,
      EMBLEMS,
      INSCRIPTIONS,
-     MODIFICATIONS,
-     STYLES)
+     MODIFICATIONS)
     REGIONS = (PAINTS,
      CAMOUFLAGES,
      MODIFICATIONS,
-     STYLES)
+     STYLES_2D,
+     STYLES_3D)
+    ALWAYS_ENABLED = (PROJECTION_DECALS, ATTACHMENTS)
     MODES = {CustomizationModes.CUSTOM: (PAINTS,
                                  CAMOUFLAGES,
                                  PROJECTION_DECALS,
                                  EMBLEMS,
                                  INSCRIPTIONS,
-                                 MODIFICATIONS),
-     CustomizationModes.STYLED: (STYLES,),
-     CustomizationModes.EDITABLE_STYLE: (PAINTS,
-                                         CAMOUFLAGES,
-                                         PROJECTION_DECALS,
-                                         EMBLEMS,
-                                         INSCRIPTIONS,
-                                         MODIFICATIONS)}
+                                 MODIFICATIONS,
+                                 ATTACHMENTS),
+     CustomizationModes.STYLE_2D: (STYLES_2D, ATTACHMENTS),
+     CustomizationModes.STYLE_3D: (STYLES_3D,),
+     CustomizationModes.STYLE_2D_EDITABLE: (PAINTS,
+                                            CAMOUFLAGES,
+                                            PROJECTION_DECALS,
+                                            EMBLEMS,
+                                            INSCRIPTIONS,
+                                            MODIFICATIONS)}
+    TAB_TO_MODE = {PAINTS: CustomizationModes.CUSTOM,
+     CAMOUFLAGES: CustomizationModes.CUSTOM,
+     PROJECTION_DECALS: CustomizationModes.CUSTOM,
+     EMBLEMS: CustomizationModes.CUSTOM,
+     INSCRIPTIONS: CustomizationModes.CUSTOM,
+     MODIFICATIONS: CustomizationModes.CUSTOM,
+     STYLES_2D: CustomizationModes.STYLE_2D,
+     STYLES_3D: CustomizationModes.STYLE_3D,
+     ATTACHMENTS: CustomizationModes.STYLE_2D}
+    TAB_NAMES = {PAINTS: 'paint',
+     CAMOUFLAGES: 'camouflage',
+     PROJECTION_DECALS: 'projectionDecal',
+     EMBLEMS: 'emblem',
+     INSCRIPTIONS: 'inscription',
+     MODIFICATIONS: 'modification',
+     STYLES_2D: 'customStyle',
+     STYLES_3D: 'uncustomStyle',
+     ATTACHMENTS: 'attachment'}
     SLOT_TYPES = {PAINTS: GUI_ITEM_TYPE.PAINT,
      CAMOUFLAGES: GUI_ITEM_TYPE.CAMOUFLAGE,
      PROJECTION_DECALS: GUI_ITEM_TYPE.PROJECTION_DECAL,
      EMBLEMS: GUI_ITEM_TYPE.EMBLEM,
      INSCRIPTIONS: GUI_ITEM_TYPE.INSCRIPTION,
      MODIFICATIONS: GUI_ITEM_TYPE.MODIFICATION,
-     STYLES: GUI_ITEM_TYPE.STYLE}
+     STYLES_2D: GUI_ITEM_TYPE.STYLE,
+     STYLES_3D: GUI_ITEM_TYPE.STYLE,
+     ATTACHMENTS: GUI_ITEM_TYPE.ATTACHMENT}
     ITEM_TYPES = {PAINTS: (GUI_ITEM_TYPE.PAINT,),
      CAMOUFLAGES: (GUI_ITEM_TYPE.CAMOUFLAGE,),
      PROJECTION_DECALS: (GUI_ITEM_TYPE.PROJECTION_DECAL,),
      EMBLEMS: (GUI_ITEM_TYPE.EMBLEM,),
      INSCRIPTIONS: (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.PERSONAL_NUMBER),
      MODIFICATIONS: (GUI_ITEM_TYPE.MODIFICATION,),
-     STYLES: (GUI_ITEM_TYPE.STYLE,)}
+     STYLES_2D: (GUI_ITEM_TYPE.STYLE,),
+     STYLES_3D: (GUI_ITEM_TYPE.STYLE,),
+     ATTACHMENTS: (GUI_ITEM_TYPE.ATTACHMENT,)}
+    TABS_WITH_RARITY = (ATTACHMENTS,)
 
 
 ITEM_TYPE_TO_TAB = {value:key for key, values in CustomizationTabs.ITEM_TYPES.iteritems() for value in values}
@@ -101,14 +133,15 @@ APPLIED_TO_TYPES = (GUI_ITEM_TYPE.EMBLEM,
  GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE)
 SCALE_SIZE = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_SMALL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_NORMAL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_SCALE_LARGE)
-TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
+TYPES_ORDER = (GUI_ITEM_TYPE.STYLE,
+ GUI_ITEM_TYPE.ATTACHMENT,
+ GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
  GUI_ITEM_TYPE.PROJECTION_DECAL,
  GUI_ITEM_TYPE.EMBLEM,
  GUI_ITEM_TYPE.PERSONAL_NUMBER,
  GUI_ITEM_TYPE.INSCRIPTION,
- GUI_ITEM_TYPE.MODIFICATION,
- GUI_ITEM_TYPE.STYLE)
+ GUI_ITEM_TYPE.MODIFICATION)
 SEASON_TYPE_TO_INFOTYPE_MAP = {SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER,
  SeasonType.DESERT: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER}
@@ -121,6 +154,24 @@ class BillPopoverButtons(object):
 
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 CustomizationSlotUpdateVO = namedtuple('CustomizationSlotUpdateVO', ('slotId', 'itemIntCD', 'uid'))
+
+@dependency.replace_none_kwargs(c11nService=ICustomizationService)
+def getCommonPurchaseItems(commonOutfit, c11nService=None):
+    purchaseItems = []
+    vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+    inventoryCounts = __getInventoryCounts({SeasonType.ALL: commonOutfit}, vehicleCD)
+    for intCD, component, idx, container, _ in commonOutfit.itemsFull():
+        item = c11nService.getItemByCD(intCD)
+        isFromInventory = inventoryCounts[intCD] > 0
+        slotType = ITEM_TYPE_TO_SLOT_TYPE.get(item.itemTypeID)
+        if slotType is None or C11N_ITEM_TYPE_MAP[slotType] not in CustomizationType.COMMON_TYPES:
+            _logger.error('Invalid slotType for purchaseItem: [%s]', item)
+            continue
+        purchaseItems.append(PurchaseItem(item, item.getBuyPrice(), areaID=container.getAreaID(), slotType=slotType, regionIdx=idx, selected=True, group=SeasonType.ALL, isFromInventory=isFromInventory, component=component, isEdited=True))
+        inventoryCounts[intCD] -= 1
+
+    return purchaseItems
+
 
 @dependency.replace_none_kwargs(c11nService=ICustomizationService)
 def getCustomPurchaseItems(season, modifiedOutfits, c11nService=None):
@@ -147,7 +198,8 @@ def getStylePurchaseItems(style, modifiedOutfits, c11nService=None, prolongRent=
     purchaseItems = []
     vehicle = g_currentVehicle.item
     vehicleCD = vehicle.descriptor.makeCompactDescr()
-    isStyleInstalled = c11nService.getCurrentOutfit(SeasonType.SUMMER).id == style.id
+    currentStyle = c11nService.getCurrentStyle()
+    isStyleInstalled = currentStyle and currentStyle.id == style.id
     inventoryCounts = __getInventoryCounts(modifiedOutfits, vehicleCD)
     styleCount = style.fullInventoryCount(vehicle.intCD)
     isFromInventory = not prolongRent and (styleCount > 0 or isStyleInstalled)
@@ -418,13 +470,15 @@ def getPurchaseLimit(item, outfits=None):
 def isItemsQuantityLimitReached(outfit, itemType, service=None):
     if itemType not in QUANTITY_LIMITED_CUSTOMIZATION_TYPES:
         return False
-    qty = 0
-    for intCD, component, _, _, _ in outfit.itemsFull():
-        item = service.getItemByCD(intCD)
-        if item.itemTypeID == itemType and component.isFilled():
-            qty += 1
+    else:
+        qty = 0
+        for intCD, component, _, _, _ in outfit.itemsFull():
+            item = service.getItemByCD(intCD)
+            isMatchingProjection = component.customType == ProjectionDecalComponent.customType and component.matchingTag is not None
+            if item.itemTypeID == itemType and (component.isFilled() or isMatchingProjection):
+                qty += 1
 
-    return qty >= QUANTITY_LIMITED_CUSTOMIZATION_TYPES[itemType]
+        return qty >= QUANTITY_LIMITED_CUSTOMIZATION_TYPES[itemType]
 
 
 def getEmptyRegions(outfit, slotType):
@@ -491,9 +545,9 @@ def isItemUsedUp(item, service=None):
         _logger.warning('Customization helper function "isItemUsedUp" is used out of customization context')
         return False
     if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
-        isApplied = ctx.modeId == CustomizationModes.STYLED and ctx.mode.modifiedStyle == item
+        isApplied = ctx.modeId in (CustomizationModes.STYLE_2D, CustomizationModes.STYLE_3D) and ctx.mode.modifiedStyle == item
     else:
-        isApplied = any((ctx.mode.getModifiedOutfit(s).has(item) for s in SeasonType.COMMON_SEASONS))
+        isApplied = any((ctx.mode.outfits[s].has(item) for s in SeasonType.REGULAR))
     if isApplied:
         return False
     elif ctx.mode.getItemInventoryCount(item) > 0:
@@ -536,8 +590,9 @@ def vehicleHasSlot(slotType, vehicle=None):
         return False
     else:
         for areaId in Area.ALL:
-            if any(vehicle.getAnchors(slotType, areaId)):
-                return True
+            for _, anchor in vehicle.getAnchors(slotType, areaId):
+                if not anchor.hiddenForUser:
+                    return True
 
         return False
 
@@ -629,10 +684,11 @@ def removeUnselectedItemsFromEditableStyle(modifiedOutfits, baseOutfits, purchas
         if pItem.selected:
             continue
         season = pItem.group
-        slotId = C11nId(pItem.areaID, pItem.slotType, pItem.regionIdx)
-        outfit = modifiedOutfits[season]
-        baseOutfit = baseOutfits[season]
-        modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
+        if season in modifiedOutfits:
+            slotId = C11nId(pItem.areaID, pItem.slotType, pItem.regionIdx)
+            outfit = modifiedOutfits[season]
+            baseOutfit = baseOutfits[season]
+            modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
 
 
 @dependency.replace_none_kwargs(service=ICustomizationService)
@@ -742,11 +798,10 @@ def __getInventoryCounts(modifiedOutfits, vehicleCD, itemsCache=None, c11nServic
             item = itemsCache.items.getItemByCD(intCD)
             inventoryCounts[intCD] = item.fullInventoryCount(g_currentVehicle.intCD)
 
-    outfit = c11nService.getCurrentOutfit(SeasonType.SUMMER)
-    style = c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id) if outfit.id else None
-    for season in SeasonType.COMMON_SEASONS:
+    style = c11nService.getCurrentStyle()
+    for season in SeasonType.REGULAR:
         removed = c11nService.getCurrentOutfit(season)
-        if style is not None:
+        if style is not None and season in SeasonType.COMMON_SEASONS:
             baseOutfit = style.getOutfit(season, vehicleCD)
             removed = baseOutfit.diff(removed)
         removedCounts += removed.itemsCounter

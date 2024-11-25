@@ -23,7 +23,7 @@ from story_mode.gui.impl.gen.view_models.views.lobby.battle_result_view_model im
 from story_mode.gui.impl.gen.view_models.views.lobby.progress_level_model import ProgressLevelModel
 from story_mode.gui.impl.lobby.battle_result_stat_tooltip import BattleResultStatTooltip
 from story_mode.gui.impl.mixins import DestroyWindowOnDisconnectMixin
-from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgName
+from story_mode.gui.shared.bonuses_formatters import StoryModeBonusesAwardsComposer, getImgPath
 from story_mode.gui.shared.event_dispatcher import showCongratulationsWindow
 from story_mode.gui.shared.packers.bonus import getSMFormattersMap
 from story_mode.gui.shared.utils import getTasksCount
@@ -88,7 +88,7 @@ class BattleResultView(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             bonus = self.__bonusCache.get(tooltipId)
             if bonus:
-                window = BackportTooltipWindow(createTooltipData(tooltip=bonus.tooltip, isSpecial=bonus.isSpecial, specialAlias=bonus.specialAlias, specialArgs=bonus.specialArgs), self.getParentWindow())
+                window = BackportTooltipWindow(createTooltipData(tooltip=bonus.tooltip, isSpecial=bonus.isSpecial, specialAlias=bonus.specialAlias, specialArgs=bonus.specialArgs, isWulfTooltip=bonus.isWulfTooltip), self.getParentWindow(), event)
                 window.load()
                 return window
         return super(BattleResultView, self).createToolTip(event)
@@ -171,10 +171,12 @@ class BattleResultView(ViewImpl):
                 rewardItem = RewardModel()
                 rewardItem.setName(bonus.bonusName)
                 rewardItem.setValue(str(bonus.label if bonus.label is not None else ''))
-                rewardItem.setIcon(getImgName(bonus.getImage(AWARDS_SIZES.BIG)))
                 rewardItem.setTooltipId(tooltipId)
                 if isinstance(bonus.tooltip, int):
                     rewardItem.setTooltipContentId(str(bonus.tooltip))
+                iconModel = rewardItem.icon
+                iconModel.setSmall(getImgPath(bonus.images.get('small')))
+                iconModel.setBig(getImgPath(bonus.images.get('big')))
                 model.addViewModel(rewardItem)
 
         return

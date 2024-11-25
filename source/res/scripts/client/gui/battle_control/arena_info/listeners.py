@@ -432,9 +432,12 @@ class ArenaSpaceLoadListener(_Listener):
             self.__progress = progress
             self.__onSpaceLoadUpdated(progress)
         if progress < _MAX_PROGRESS_VALUE or not BigWorld.virtualTextureRenderComplete():
+            if progress >= _MAX_PROGRESS_VALUE:
+                BigWorld.worldDrawEnabled(True)
             self.__spaceLoadCB = BigWorld.callback(_SPACE_INVALIDATION_PERIOD, self.__loadSpaceCallback)
             BigWorld.SetDrawInflux(False)
         else:
+            BigWorld.worldDrawEnabled(False)
             self.__spaceLoadCB = BigWorld.callback(_ADDITIONAL_LOAD_WAIT, self.__loadCompleteDelayed)
 
     def __loadInfluxCallback(self):

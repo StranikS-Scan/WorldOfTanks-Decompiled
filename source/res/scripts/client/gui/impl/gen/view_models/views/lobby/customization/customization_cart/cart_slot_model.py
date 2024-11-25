@@ -6,7 +6,7 @@ from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
 class CartSlotModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=19, commands=0):
+    def __init__(self, properties=20, commands=0):
         super(CartSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -125,6 +125,12 @@ class CartSlotModel(ViewModel):
     def setIsStyle(self, value):
         self._setBool(18, value)
 
+    def getRarity(self):
+        return self._getString(19)
+
+    def setRarity(self, value):
+        self._setString(19, value)
+
     def _initialize(self):
         super(CartSlotModel, self)._initialize()
         self._addViewModelProperty('price', UserCompoundPriceModel())
@@ -146,3 +152,4 @@ class CartSlotModel(ViewModel):
         self._addBoolProperty('isProgressionRewindEnabled', False)
         self._addBoolProperty('isEdited', False)
         self._addBoolProperty('isStyle', False)
+        self._addStringProperty('rarity', '')

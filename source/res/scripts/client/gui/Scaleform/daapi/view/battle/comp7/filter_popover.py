@@ -3,7 +3,8 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_PREBATTLE_CAROUSEL_ROW_VALUE
 from gui.Scaleform.daapi.view.battle.comp7.common import getSavedRowCountValue, rowValueToRowCount, rowCountToRowValue
-from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, FILTER_SECTION
+from gui.Scaleform.daapi.view.common.common_constants import FILTER_POPOVER_SECTION
+from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
@@ -48,14 +49,14 @@ class Comp7TankCarouselFilterPopover(TankCarouselFilterPopover):
             dataVO['tankTierSectionVisible'] = False
         return dataVO
 
-    def _generateMapping(self, hasRented, hasEvent, hasRoles, **kwargs):
-        mapping = super(Comp7TankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, **kwargs)
-        mapping[FILTER_SECTION.SPECIALS] = ['rented', 'favorite']
+    def _generateMapping(self, hasRented, hasEvent, hasRoles, hasCustomization, **kwargs):
+        mapping = super(Comp7TankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent, hasRoles, hasCustomization, **kwargs)
+        mapping[FILTER_POPOVER_SECTION.SPECIALS] = ['rented', 'favorite']
         vehicleLevels = kwargs.get('vehicleLevelsFilter', list())
         if len(vehicleLevels) > 1:
-            mapping[FILTER_SECTION.LEVELS] = [ 'level_{}'.format(lvl) for lvl in vehicleLevels ]
+            mapping[FILTER_POPOVER_SECTION.LEVELS] = [ 'level_{}'.format(lvl) for lvl in vehicleLevels ]
         else:
-            mapping[FILTER_SECTION.LEVELS] = []
+            mapping[FILTER_POPOVER_SECTION.LEVELS] = []
         return mapping
 
     def __saveRowCountValue(self):

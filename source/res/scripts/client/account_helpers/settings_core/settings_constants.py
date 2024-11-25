@@ -393,7 +393,9 @@ class OnceOnlyHints(CONST_CONTAINER):
     ACHIEVEMENTS_HANGAR_HINT = 'AchievementsHangarHint'
     ACHIEVEMENTS_PROFILE_HINT = 'AchievementsProfileHint'
     ACHIEVEMENTS_PROFILE_HINT_SMALL = 'AchievementsProfileHintSmallSize'
-    HALLOWEEN_LEADERBOARD_BTN_HINT = 'HalloweenLeaderboardBtnHint'
+    NEW_C11N_SECTION_HINT = 'NewC11nSectionHint'
+    C11N_VEHICLE_LIST_HINT = 'C11nVehicleListHint'
+    VEHICLE_C11N_FILTER_HINT = 'VehicleC11nFilterHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

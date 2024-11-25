@@ -24,7 +24,6 @@ from gui.shared.money import Currency
 from helpers import dependency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
-from skeletons.gui.game_control import IBattlePassController, ISpecialSoundCtrl
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import BattlePassQuestChainTokensBonus, BattlePassRandomQuestTokensBonus, SimpleBonus, TmanTemplateTokensBonus, CustomizationsBonus, PlusPremiumDaysBonus, DossierBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, VehicleBlueprintBonus, GoodiesBonus
@@ -117,8 +116,6 @@ class _BattlePassFinalBonusPacker(BaseBonusUIPacker):
 
 
 class TmanTemplateBonusPacker(_BattlePassFinalBonusPacker):
-    __battlePass = dependency.descriptor(IBattlePassController)
-    __specialSounds = dependency.descriptor(ISpecialSoundCtrl)
 
     @classmethod
     def _pack(cls, bonus):

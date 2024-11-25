@@ -3,6 +3,7 @@
 import math
 import random
 import logging
+import typing
 import BigWorld
 import CGF
 import GenericComponents
@@ -20,7 +21,7 @@ from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGa
 from cgf_obsolete_script.auto_properties import AutoProperty
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from items.vehicle_items import CHASSIS_ITEM_TYPE
-from vehicle_systems import model_assembler
+from vehicle_systems import model_assembler, vehicle_composition
 from vehicle_systems import camouflages
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import VehiclePartsTuple, ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes, TankNodeNames, TankRenderMode, CgfTankNodes, TankSoundObjectsIndexes
@@ -28,6 +29,7 @@ from vehicle_systems.components.CrashedTracks import CrashedTrackController
 from vehicle_systems.components.vehicleDecal import VehicleDecal
 from vehicle_systems.components.siegeEffectsController import SiegeEffectsController
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
+from vehicle_systems.components.vehicle_appearance_component import VehicleAppearanceComponent
 from helpers import bound_effects, gEffectsDisabled
 from vehicle_outfit.outfit import Outfit
 from items.battle_royale import isSpawnedBot
@@ -50,11 +52,28 @@ class PartProperties(object):
     HIGHLIGHTBYVISUAL = 2
 
 
-class VehicleAppearanceComponent(object):
-    appearance = property(lambda self: self.__appearance)
+class GunAnimators(object):
 
-    def __init__(self, appearance):
-        self.__appearance = appearance
+    def __init__(self):
+        self._animatorsLinks = []
+
+    def setup(self, count):
+        self._animatorsLinks = [ CGF.ComponentLink(Vehicular.GunRecoilComponent) for _ in xrange(count) ]
+
+    def get(self, index):
+        if len(self._animatorsLinks) > index:
+            return self._animatorsLinks[index]()
+        else:
+            _logger.error('Trying to get gun animator by index %i, but there are only %i gun animators', index, len(self._animatorsLinks))
+            return None
+
+    def set(self, index, gameObject):
+        if len(self._animatorsLinks) > index:
+            self._animatorsLinks[index].set(gameObject)
+            return None
+        else:
+            _logger.error('Trying to set gun animator by index %i, but there are only %i gun animators', index, len(self._animatorsLinks))
+            return None
 
 
 class CommonTankAppearance(ScriptGameObject):
@@ -93,6 +112,7 @@ class CommonTankAppearance(ScriptGameObject):
     waterHeight = property(lambda self: self.waterSensor.waterHeight)
     damageState = property(lambda self: self.__currentDamageState)
     modelsSetParams = property(lambda self: ModelsSetParams(self.outfit.modelsSet, self.damageState.modelState, self.__attachments))
+    attachments = property(lambda self: self.__attachments)
     splineTracks = property(lambda self: self._splineTracks)
     isFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isFlying)
     isLeftSideFlying = property(lambda self: self.flyingInfoProvider is not None and self.flyingInfoProvider.isLeftSideFlying)
@@ -126,7 +146,8 @@ class CommonTankAppearance(ScriptGameObject):
     frictionAudition = ComponentDescriptor()
     gearbox = ComponentDescriptor()
     gunLinkedNodesAnimator = ComponentDescriptor()
-    gunRecoil = ComponentDescriptor()
+    gunRecoil = property(lambda self: self._gunRecoilLink())
+    gunAnimators = property(lambda self: self._gunAnimators)
     gunRotatorAudition = ComponentDescriptor()
     hullAimingController = ComponentDescriptor()
     leveredSuspension = ComponentDescriptor()
@@ -136,7 +157,7 @@ class CommonTankAppearance(ScriptGameObject):
     siegeState = ComponentDescriptor()
     suspension = ComponentDescriptor()
     suspensionSound = ComponentDescriptor()
-    swingingAnimator = ComponentDescriptor()
+    swingingAnimator = property(lambda self: self._swingingAnimator())
     terrainMatKindSensor = ComponentDescriptor()
     tessellationCollisionSensor = ComponentDescriptor()
     trackNodesAnimator = ComponentDescriptor()
@@ -188,11 +209,14 @@ class CommonTankAppearance(ScriptGameObject):
         self.__renderMode = None
         self.__frameTimestamp = 0
         self.__periodicTimerID = None
-        self.undamagedStateChildren = []
+        self.customizationGameObjects = []
         self.createComponent(VehicleAppearanceComponent, self)
         self._loadingQueue = []
         self.__customEffectsEnabled = True
         self.__useEngStartControlIdle = False
+        self._swingingAnimator = CGF.ComponentLink(Vehicular.SwingingAnimator)
+        self._gunRecoilLink = CGF.ComponentLink(Vehicular.GunRecoilComponent)
+        self._gunAnimators = GunAnimators()
         return
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD, renderMode=None):
@@ -202,8 +226,7 @@ class CommonTankAppearance(ScriptGameObject):
         self._isTurretDetached = isTurretDetached
         self.__updateModelStatus()
         self.__outfit = self._prepareOutfit(outfitCD)
-        if self.damageState.isCurrentModelUndamaged:
-            self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor)
+        self._updateAttachments()
         self.__renderMode = renderMode
         prereqs = self.typeDescriptor.prerequisites(True)
         prereqs.extend(camouflages.getCamoPrereqs(self.outfit, self.typeDescriptor))
@@ -259,7 +282,7 @@ class CommonTankAppearance(ScriptGameObject):
         else:
             self.__trackScrollCtl = None
         self._chassisDecal.create()
-        if self.modelsSetParams.state == 'undamaged':
+        if not isCurrentModelDamaged:
             self.__modelAnimators = camouflages.getModelAnimators(self.outfit, self.typeDescriptor, self.spaceID, resourceRefs, self.compoundModel)
             self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.spaceID, resourceRefs, self.compoundModel))
         self.transform = self.createComponent(GenericComponents.TransformComponent, Math.Vector3(0, 0, 0))
@@ -317,15 +340,16 @@ class CommonTankAppearance(ScriptGameObject):
                     self.fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
                     self.fashions[fashionIdx].addTrackMaterialHandler(dirtHandlers[fashionIdx])
 
-        model_assembler.setupTurretRotations(self)
         self.waterSensor = model_assembler.assembleWaterSensor(self.typeDescriptor, self, lodStateLink, self.spaceID)
         if self.engineAudition is not None:
             self.engineAudition.setIsUnderwaterInfo(DataLinks.createBoolLink(self.waterSensor, 'isUnderWater'))
             self.engineAudition.setIsInWaterInfo(DataLinks.createBoolLink(self.waterSensor, 'isInWater'))
         self.__postSetupFilter()
         compoundModel.setPartBoundingBoxAttachNode(TankPartIndexes.GUN, TankNodeNames.GUN_INCLINATION)
+        vehicle_composition.createVehicleComposition(self.gameObject)
         camouflages.updateFashions(self)
-        model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
+        if self.damageState.isCurrentModelUndamaged:
+            model_assembler.assembleCustomLogicComponents(self, self.typeDescriptor, self.__attachments, self.__modelAnimators)
         self._createStickers()
         while self._loadingQueue:
             prefab, go, vector, callback = self._loadingQueue.pop()
@@ -382,9 +406,6 @@ class CommonTankAppearance(ScriptGameObject):
             modelAnimator.animator.setEnabled(True)
             modelAnimator.animator.start()
 
-        if hasattr(self.filter, 'placingCompensationMatrix') and self.swingingAnimator is not None:
-            self.swingingAnimator.placingCompensationMatrix = self.filter.placingCompensationMatrix
-            self.swingingAnimator.worldMatrix = self.compoundModel.matrix
         if self.isObserver:
             self.compoundModel.visible = False
         self._connectCollider()
@@ -405,6 +426,12 @@ class CommonTankAppearance(ScriptGameObject):
         self._chassisDecal.detach()
         self._detachStickers()
 
+    def setSwingingAnimator(self, gameObject):
+        self._swingingAnimator.set(gameObject)
+
+    def setGunRecoil(self, gameObject):
+        self._gunRecoilLink.set(gameObject)
+
     def setVehicleInfo(self, vehInfo):
         self._vehicleInfo = vehInfo
 
@@ -414,7 +441,8 @@ class CommonTankAppearance(ScriptGameObject):
 
     def receiveShotImpulse(self, direction, impulse):
         if not VehicleDamageState.isDamagedModel(self.damageState.modelState):
-            self.swingingAnimator.receiveShotImpulse(direction, impulse)
+            if self.swingingAnimator is not None:
+                self.swingingAnimator.receiveShotImpulse(direction, impulse)
             if self.crashedTracksController is not None:
                 self.crashedTracksController.receiveShotImpulse(direction, impulse)
         return
@@ -427,15 +455,11 @@ class CommonTankAppearance(ScriptGameObject):
     def multiGunRecoil(self, indexes):
         if self.isDestroyed:
             return
-        else:
-            gunAnimators = self.gunAnimators
-            for index in indexes:
-                typeDescr = self.typeDescriptor
-                gunNodeName = typeDescr.turret.multiGun[index].node
-                gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
-                self._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimators[index].findComponentByType(Vehicular.RecoilAnimator) if gunAnimators else None)
-
-            return
+        for index in indexes:
+            typeDescr = self.typeDescriptor
+            gunNodeName = typeDescr.turret.multiGun[index].node
+            gunFireNodeName = typeDescr.turret.multiGun[index].gunFire
+            self._initiateRecoil(gunNodeName, gunFireNodeName, self.gunAnimators.get(index))
 
     def computeFullVehicleLength(self):
         vehicleLength = 0.0
@@ -447,13 +471,13 @@ class CommonTankAppearance(ScriptGameObject):
     def setUseEngStartControlIdle(self, useIdle=False):
         self.__useEngStartControlIdle = useIdle
 
-    def _initiateRecoil(self, gunNodeName, gunFireNodeName, gunAnimator):
+    def _initiateRecoil(self, gunNodeName, gunFireNodeName, gunRecoil):
         gunNode = self.compoundModel.node(gunNodeName)
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
         impulseValue = self.typeDescriptor.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        if gunAnimator is not None:
-            gunAnimator.recoil()
+        if gunRecoil is not None:
+            gunRecoil.recoil()
         return impulseDir
 
     def _connectCollider(self):
@@ -615,10 +639,10 @@ class CommonTankAppearance(ScriptGameObject):
             self.__periodicTimerID = None
         self.__modelAnimators = []
         self.filter.enableLagDetection(False)
-        for go in self.undamagedStateChildren:
+        for go in self.customizationGameObjects:
             CGF.removeGameObject(go)
 
-        self.undamagedStateChildren = []
+        self.customizationGameObjects = []
         return
 
     def _onRequestModelsRefresh(self):
@@ -640,9 +664,9 @@ class CommonTankAppearance(ScriptGameObject):
         return
 
     def __assembleNonDamagedOnly(self, resourceRefs, isPlayer, lodLink, lodStateLink):
+        multiGun = self.typeDescriptor.turret.multiGun
+        self._gunAnimators.setup(len(multiGun) if multiGun is not None else 0)
         model_assembler.assembleTerrainMatKindSensor(self, lodStateLink, self.spaceID)
-        model_assembler.assembleRecoil(self, lodLink)
-        model_assembler.assembleMultiGunRecoil(self, lodLink)
         model_assembler.assembleGunLinkedNodesAnimator(self)
         model_assembler.assembleCollisionObstaclesCollector(self, lodStateLink, self.typeDescriptor)
         model_assembler.assembleTessellationCollisionSensor(self, lodStateLink)
@@ -678,7 +702,6 @@ class CommonTankAppearance(ScriptGameObject):
             suspensionLodLink = wheeledLodCalculator.lodStateLink
         model_assembler.assembleSuspensionIfNeed(self, suspensionLodLink)
         model_assembler.assembleLeveredSuspensionIfNeed(self, suspensionLodLink)
-        self.__assembleSwinging(lodLink)
         model_assembler.assembleBurnoutProcessor(self)
         model_assembler.assembleSuspensionSound(self, lodLink, isPlayer)
         model_assembler.assembleHullAimingController(self)
@@ -686,18 +709,6 @@ class CommonTankAppearance(ScriptGameObject):
         model_assembler.assembleTracks(resourceRefs, self.typeDescriptor, self, self.splineTracks, False, lodStateLink)
         model_assembler.assembleVehicleTraces(self, self.filter, lodStateLink)
         return
-
-    def __assembleSwinging(self, lodLink):
-        hullNode = self.compoundModel.node(TankPartNames.HULL)
-        if hullNode is None:
-            _logger.error('Could not create SwingingAnimator: failed to find hull node')
-            return
-        else:
-            self.swingingAnimator = model_assembler.createSwingingAnimator(self, self.typeDescriptor, hullNode.localMatrix, self.compoundModel.matrix, lodLink)
-            self.compoundModel.node(TankPartNames.HULL, self.swingingAnimator.animatedMProv)
-            if hasattr(self.filter, 'placingCompensationMatrix'):
-                self.swingingAnimator.placingCompensationMatrix = self.filter.placingCompensationMatrix
-            return
 
     def __postSetupFilter(self):
         suspensionWorking = self.suspension is not None and self.suspension.hasGroundNodes
@@ -932,3 +943,6 @@ class CommonTankAppearance(ScriptGameObject):
                 self.crashedTracksController.delCrashedTrack(isLeft, idx)
 
         return
+
+    def _updateAttachments(self):
+        self.__attachments = camouflages.getAttachments(self.outfit, self.typeDescriptor, self.damageState.isCurrentModelDamaged)

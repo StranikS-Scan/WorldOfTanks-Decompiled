@@ -238,8 +238,8 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
         arenaInfo = BigWorld.player().arena.arenaInfo
         respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
-        timeToRessurect = arenaInfo.arenaInfoBRComponent.timeToRessurect if arenaInfo else 0
-        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=respawnPeriod / ONE_MINUTE, timeToResurrect=timeToRessurect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=respawnPeriod / ONE_MINUTE)
+        timeToResurrect = arenaInfo.arenaInfoBRComponent.timeToResurrect if arenaInfo else 0
+        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=respawnPeriod / ONE_MINUTE, timeToResurrect=timeToResurrect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=respawnPeriod / ONE_MINUTE)
 
     def _onRespawnBaseMoving(self):
         super(BattleRoyaleConsumablesPanel, self)._onRespawnBaseMoving()

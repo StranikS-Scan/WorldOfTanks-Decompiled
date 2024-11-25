@@ -52,7 +52,6 @@ class HANGAR_ALIASES(object):
     COMP7_TOURNAMENT_BANNER = 'comp7TournamentBanner'
     COMP7_GRAND_TOURNAMENT_BANNER = 'comp7GrandTournamentBanner'
     LIVE_OPS_WEB_EVENTS_ENTRY_POINT = 'liveOpsWebEventsEntryPoint'
-    TECH_TREE_TRADE_IN_BANNER = 'techTreeTradeInBanner'
     AMMUNITION_SETUP_VIEW_VEHICLE_PARAMS = 'ammunitionSetupViewVehicleParams'
     AMMUNITION_PANEL_INJECT = 'ammunitionPanelInject'
     AMMUNITION_SETUP_VIEW_INJECT = 'ammunitionSetupViewInject'

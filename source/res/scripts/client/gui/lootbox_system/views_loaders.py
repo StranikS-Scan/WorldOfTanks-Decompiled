@@ -97,7 +97,7 @@ def showCustomizationHangar(style, previewBackCb=None, backBtnLabel=None, itemsC
             installedOn = style.getInstalledVehicles()
             if vehicle.intCD not in installedOn:
                 ctx = customization.getCtx()
-                ctx.changeMode(CustomizationModes.STYLED)
+                ctx.changeMode(CustomizationModes.STYLE_2D)
                 ctx.mode.installItem(style.intCD, StyledMode.STYLE_SLOT)
         return
 

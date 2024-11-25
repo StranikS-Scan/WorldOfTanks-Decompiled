@@ -11,6 +11,7 @@ from helpers.i18n import makeString
 from items.tankmen import TankmanDescr, makeTmanDescrByTmanData
 from shared_utils import first
 from web.web_client_api.common import ItemPackType
+from items.tankmen import MAX_SKILL_LEVEL
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 GIRL_EMPTY = 'girl-empty'
@@ -59,12 +60,13 @@ class PreviewTankman(Tankman):
 
     @property
     def backportSkillList(self):
-        result = [ (skill.bigIconPath, skill.userName) for skill in self.skills ]
+        result = [ (skill.bigIconPath, skill.userName, skill.level) for skill in self.skills ]
         if self.descriptor.freeXP > 0:
-            newSkills, _ = self.newSkillsCount
+            newSkills, lastNewSkillLevel = self.newSkillsCount
             if newSkills:
                 img = backport.image(R.images.gui.maps.icons.tankmen.skills.big.preview_new_skill_trained())
-                result.extend([(img, TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER)] * newSkills)
+                result.extend([(img, TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER, MAX_SKILL_LEVEL)] * (newSkills - 1))
+                result.extend([(img, TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER, lastNewSkillLevel)])
         return result
 
     @property

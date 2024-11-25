@@ -53,13 +53,16 @@ def isEditedStyle(outfit):
     styleId = outfit.styleId
     styleProgressLvl = outfit.styleProgressionLevel
     styleSerialNumber = outfit.serial_number
+    attachments = outfit.attachments
     outfit.styleId = 0
     outfit.styleProgressionLevel = 0
     outfit.serial_number = ''
+    outfit.attachments = []
     isEmpty = not outfit
     outfit.styleId = styleId
     outfit.styleProgressionLevel = styleProgressLvl
     outfit.serial_number = styleSerialNumber
+    outfit.attachments = attachments
     return not isEmpty
 
 
@@ -84,11 +87,9 @@ def getOutfitType(arenaKind, bonusType):
 
 def getBattleOutfit(getter, vehType, arenaKind, bonusType):
     season = getOutfitType(arenaKind, bonusType)
-    seasonOutfitDescr = getter(vehType, season)
-    if seasonOutfitDescr:
-        return parseOutfitDescr(seasonOutfitDescr)
-    styleOutfitDescr = getter(vehType, SeasonType.ALL)
-    return parseOutfitDescr(styleOutfitDescr)
+    seasonOutfitDescr = parseOutfitDescr(getter(vehType, season))
+    commonOutfit = parseOutfitDescr(getter(vehType, SeasonType.ALL))
+    return seasonOutfitDescr.applyDiff(commonOutfit)
 
 
 def parseBattleOutfit(outfit, cache, arenaKind):

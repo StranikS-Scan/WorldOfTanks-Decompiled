@@ -3,7 +3,6 @@
 import typing
 from itertools import imap
 from collections import namedtuple, defaultdict
-from copy import deepcopy
 import BigWorld
 from adisp import adisp_async
 from constants import CustomizationInvData, SkinInvData, VEHICLE_NO_INV_ID
@@ -177,11 +176,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             return itemData.get(0)
         else:
             return
-
-    def getC11nOutfitsFromPool(self, vehicleIntCD):
-        path = (GUI_ITEM_TYPE.CUSTOMIZATION, CustomizationInvData.OUTFITS_POOL, vehicleIntCD)
-        poolData = self.getCacheValueByPath(path, defaultValue=[])
-        return deepcopy(poolData)
 
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})

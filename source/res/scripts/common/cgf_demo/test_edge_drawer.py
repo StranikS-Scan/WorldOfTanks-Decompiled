@@ -5,7 +5,7 @@ import Triggers
 from cgf_demo.demo_category import DEMO_CATEGORY
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister, onProcessQuery
-from EdgeDrawer import HighlightComponent
+from EdgeDrawer import EdgeHighlightComponent
 
 class _Stage(object):
     Empty = 0
@@ -43,18 +43,18 @@ class TestEdgeDrawerComponentManager(CGF.ComponentManager):
             return
         else:
             stage = _Stage.Empty
-            highlighter = gameObject.findComponentByType(HighlightComponent)
+            highlighter = gameObject.findComponentByType(EdgeHighlightComponent)
             if highlighter is not None:
                 if highlighter.colorIndex == self._ALLY_COLOR:
                     stage = _Stage.Ally
                 elif highlighter.colorIndex == self._ENEMY_COLOR:
                     stage = _Stage.Enemy
-                gameObject.removeComponentByType(HighlightComponent)
+                gameObject.removeComponentByType(EdgeHighlightComponent)
             self.__switchStage(stage, gameObject)
             return
 
     def __switchStage(self, prevStage, gameObject):
         if prevStage == _Stage.Empty:
-            gameObject.createComponent(HighlightComponent, self._ALLY_COLOR, False, 0, False, False)
+            gameObject.createComponent(EdgeHighlightComponent, self._ALLY_COLOR, False, 0, False)
         elif prevStage == _Stage.Ally:
-            gameObject.createComponent(HighlightComponent, self._ENEMY_COLOR, False, 0, False, False)
+            gameObject.createComponent(EdgeHighlightComponent, self._ENEMY_COLOR, False, 0, False)

@@ -80,6 +80,7 @@ class QUESTS(object):
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
+    BONUSNAME_WDRCOIN = '#quests:bonusName/wdrcoin'
     BONUSES_GOLDPERSONALRATE = '#quests:bonuses/goldPersonalRate'
     BONUSES_FREEXPPERSONALRATE = '#quests:bonuses/freeXpPersonalRate'
     QUESTS_TITLE = '#quests:quests/title'
@@ -1227,6 +1228,7 @@ class QUESTS(object):
     BONUSNAME_PAINT = '#quests:bonusName/paint'
     BONUSNAME_STYLE = '#quests:bonusName/style'
     BONUSNAME_MODIFICATION = '#quests:bonusName/modification'
+    BONUSNAME_ATTACHMENT = '#quests:bonusName/attachment'
     BONUSNAME_FREETOKENS = '#quests:bonusName/freeTokens'
     BONUSNAME_COMPLETIONTOKENS = '#quests:bonusName/completionTokens'
     BONUSNAME_COMPLETIONTOKENS_1_1 = '#quests:bonusName/completionTokens_1_1'
@@ -1761,6 +1763,7 @@ class QUESTS(object):
      BONUSNAME_BLUEPRINTS_NATION,
      BONUSNAME_BLUEPRINTS_NATION_ANY,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,
+     BONUSNAME_WDRCOIN,
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
@@ -1788,6 +1791,7 @@ class QUESTS(object):
      BONUSNAME_PAINT,
      BONUSNAME_STYLE,
      BONUSNAME_MODIFICATION,
+     BONUSNAME_ATTACHMENT,
      BONUSNAME_FREETOKENS,
      BONUSNAME_COMPLETIONTOKENS,
      BONUSNAME_COMPLETIONTOKENS_1_1,

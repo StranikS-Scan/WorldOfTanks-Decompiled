@@ -75,6 +75,8 @@ class BaseCustomizationItemXmlReader(object):
             target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
             if target.maxNumber <= 0:
                 ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
+        if section.has_key('rarity'):
+            target.rarity = ix.readStringOrEmpty(xmlCtx, section, 'rarity')
         if IS_CLIENT or IS_EDITOR or IS_WEB or IS_LOAD_GLOSSARY:
             self._readClientOnlyFromXml(target, xmlCtx, section, cache)
 
@@ -82,7 +84,7 @@ class BaseCustomizationItemXmlReader(object):
         if IS_EDITOR:
             target.i18n = I18nExposedComponentMeta(section.readString('name'), section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
         else:
-            target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'))
+            target.i18n = shared_components.I18nExposedComponent(section.readString('userString'), section.readString('description'), section.readString('longDescriptionSpecial'), section.readString('name'))
 
     @staticmethod
     def readVehicleFilterFromXml(xmlCtx, section):
@@ -228,15 +230,16 @@ class AttachmentXmlReader(BaseCustomizationItemXmlReader):
 
     def _readFromXml(self, target, xmlCtx, section, cache=None):
         super(AttachmentXmlReader, self)._readFromXml(target, xmlCtx, section)
-        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
+        target.applyType = ix.readStringOrEmpty(xmlCtx, section, 'applyType')
+        target.size = ix.readStringOrEmpty(xmlCtx, section, 'size')
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section, cache=None):
         super(AttachmentXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
-        target.modelName = ix.readStringOrNone(xmlCtx, section, 'modelName')
-        target.hangarModelName = ix.readStringOrNone(xmlCtx, section, 'hangarModelName')
-        target.sequenceId = ix.readIntOrNone(xmlCtx, section, 'sequenceId')
-        target.attachmentLogic = ix.readStringOrNone(xmlCtx, section, 'attachmentLogic')
-        target.initialVisibility = ix.readBool(xmlCtx, section, 'initialVisibility', True)
+        target.modelName = ix.readStringOrEmpty(xmlCtx, section, 'modelName')
+        target.hangarModelName = ix.readStringOrEmpty(xmlCtx, section, 'hangarModelName')
+        target.crashModelName = ix.readStringOrEmpty(xmlCtx, section, 'crashModelName')
+        target.sequenceId = ix.readNonNegativeInt(xmlCtx, section, 'sequenceId', 0)
+        target.attachmentLogic = ix.readStringOrEmpty(xmlCtx, section, 'attachmentLogic')
         if IS_EDITOR:
             target.name = ix.readStringOrNone(xmlCtx, section, 'name')
 

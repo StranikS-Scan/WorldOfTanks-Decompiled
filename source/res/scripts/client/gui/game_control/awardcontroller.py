@@ -4,13 +4,15 @@ import logging
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
-from collections import OrderedDict
+from collections import OrderedDict, deque
 from copy import deepcopy
 from functools import partial
 from itertools import chain, ifilter
 import BigWorld
 import typing
 from adisp import adisp_process
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from items.components.c11n_constants import Rarity
 from shared_utils import first, findFirst
 import ArenaType
 import gui.awards.event_dispatcher as award_events
@@ -18,7 +20,7 @@ import personal_missions
 import wg_async
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED, RANKED_YEAR_POSITION, SPEAKERS_DEVICE
-from account_helpers.settings_core.settings_constants import SOUND
+from account_helpers.settings_core.settings_constants import SOUND, OnceOnlyHints
 from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
 from blueprints.BlueprintTypes import BlueprintTypes
@@ -50,7 +52,7 @@ from gui.impl import backport
 from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, BlueprintBonusTypes
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
-from gui.impl.lobby.awards.items_collection_provider import MultipleAwardRewardsMainPacker
+from gui.impl.lobby.awards.items_collection_provider import MultipleProductAwardRewardsMainPacker
 from gui.impl.lobby.clan_supply.bonus_packers import extractBonuses
 from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyRewardWindow
 from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getComp7QuestType, parseComp7RanksQuestID, getRequiredTokensCountToComplete
@@ -70,8 +72,8 @@ from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.account_settings_helper import AccountSettingsHelper
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showComp7YearlyRewardsScreen
-from gui.shared.events import PersonalMissionsEvent
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showSteamEmailConfirmRewardsView, showSeniorityRewardVehiclesWindow, showComp7YearlyRewardsScreen, showCustomizationRarityAwardScreen
+from gui.shared.events import CustomizationEvent, PersonalMissionsEvent
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -89,6 +91,7 @@ from nations import NAMES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IAwardController, IBattlePassController, ILimitedUIController, IMapboxController, IRankedBattlesController, IWotPlusController, ISeniorityAwardsController, IWinbackController, IComp7Controller
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
@@ -784,6 +787,65 @@ class CrewBooksQuestHandler(MultiTypeServiceChannelHandler):
             showProgressiveRewardAwardWindow(bonuses, LootCongratsTypes.INIT_CONGRAT_TYPE_CREW_BOOKS, 0)
         else:
             _logger.error("Can't show empty or invalid reward!")
+
+
+class CustomizationRewardHandler(MultiTypeServiceChannelHandler):
+    __service = dependency.descriptor(ICustomizationService)
+    __settingsCore = dependency.descriptor(ISettingsCore)
+
+    def __init__(self, awardCtrl):
+        super(CustomizationRewardHandler, self).__init__((SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()), awardCtrl)
+        self._delayedElements = deque()
+        self._rewardScreenInProgress = False
+
+    def init(self):
+        super(CustomizationRewardHandler, self).init()
+        g_eventBus.addListener(CustomizationEvent.ON_RARITY_REWARD_SCREEN_CLOSED, self._onRewardScreenClosed, EVENT_BUS_SCOPE.LOBBY)
+
+    def fini(self):
+        super(CustomizationRewardHandler, self).fini()
+        g_eventBus.removeListener(CustomizationEvent.ON_RARITY_REWARD_SCREEN_CLOSED, self._onRewardScreenClosed, EVENT_BUS_SCOPE.LOBBY)
+        self._delayedElements = None
+        self._rewardScreenInProgress = False
+        return
+
+    def _showAward(self, ctx):
+        self._delayedElements.extend(sorted(self._getRareAttachments(ctx), key=lambda element: Rarity.UI_EFFECT.index(element.rarity), reverse=True))
+        self._showRewardScreen()
+
+    def _needToShowAward(self, ctx):
+        if not super(CustomizationRewardHandler, self)._needToShowAward(ctx):
+            return False
+        rareAttachments = self._getRareAttachments(ctx)
+        return len(rareAttachments) > 0
+
+    def _getAttachments(self, ctx):
+        message = ctx[1].data
+        items = message.get('customizations') or message.get('data', {}).get('customizations', {})
+        res = []
+        for item in items:
+            if item.get('custType', '') == 'attachment' and item.get('value', 0) > 0:
+                attachment = self.__service.getItemByID(GUI_ITEM_TYPE.ATTACHMENT, item.get('id'))
+                for _ in range(item['value']):
+                    res.append(attachment)
+
+        return res
+
+    def _getRareAttachments(self, ctx):
+        return [ element for element in self._getAttachments(ctx) if element.rarity in Rarity.UI_EFFECT ]
+
+    def _showRewardScreen(self):
+        if self._rewardScreenInProgress or not self._delayedElements:
+            return
+        element = self._delayedElements.popleft()
+        newC11nSectionHintClicked = self.__settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.NEW_C11N_SECTION_HINT)
+        showCustomizationRarityAwardScreen(element, not newC11nSectionHintClicked)
+        self._rewardScreenInProgress = True
+
+    def _onRewardScreenClosed(self, _):
+        self._rewardScreenInProgress = False
+        if self._delayedElements:
+            self._showRewardScreen()
 
 
 class RecruitHandler(ServiceChannelHandler):
@@ -1617,7 +1679,7 @@ class PurchaseHandler(ServiceChannelHandler):
             if productCode:
                 pD = yield self.__purchaseCache.requestPurchaseByID(productCode)
                 if pD.getDisplayWays().showAwardScreen:
-                    rewards, tTips = yield MultipleAwardRewardsMainPacker().getWholeBonusesData(invoiceData, productCode)
+                    rewards, tTips = yield MultipleProductAwardRewardsMainPacker().getWholeBonusesData(invoiceData, productCode)
                     if rewards:
                         showMultiAwardWindow(rewards, tTips, productCode)
                     else:
@@ -2079,4 +2141,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  WinbackQuestHandler,
  PrestigeAwardWindowHandler,
  EmailConfirmationQuestHandler,
- ClanSupplyPurchaseHandler))
+ ClanSupplyPurchaseHandler,
+ CustomizationRewardHandler))

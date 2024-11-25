@@ -61,9 +61,10 @@ if typing.TYPE_CHECKING:
 def _onCustomizationLoadedCallback(styleCD, service=None, hangarSpace=None):
     if not styleCD:
         return
+    style = service.getItemByCD(styleCD)
     ctx = service.getCtx()
-    ctx.changeMode(CustomizationModes.STYLED)
-    ctx.mode.changeTab(tabId=CustomizationTabs.STYLES, itemCD=styleCD)
+    ctx.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D)
+    ctx.mode.changeTab(tabId=CustomizationTabs.STYLES_3D if style.is3D else CustomizationTabs.STYLES_2D)
     entity = hangarSpace.getVehicleEntity()
     isVehicleLoaded = entity and entity.appearance and entity.appearance.isLoaded()
     if isVehicleLoaded:

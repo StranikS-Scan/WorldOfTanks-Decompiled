@@ -30,6 +30,8 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IShopRequester
 from uilogging.crew.loggers import CrewMemberChangeLogger
 from uilogging.crew.logging_constants import CrewMemberAdditionalInfo, CrewMemberChangeKeys, CrewViewKeys, LAYOUT_ID_TO_ITEM
+from PlayerEvents import g_playerEvents
+from AccountCommands import LOCK_REASON
 
 class MemberChangeView(BaseCrewView, BaseTankmanListView):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -112,7 +114,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
          (self.__filterState.onStateChanged, self._onFilterStateUpdated),
          (self.__dataProviders.onDataChanged, self._onDataChanged),
          (self.itemsCache.onSyncCompleted, self._onItemsCacheSyncCompleted),
-         (self.__filterPanelWidget.onPopoverTooltipCreated, self._onPopoverTooltipCreated))
+         (self.__filterPanelWidget.onPopoverTooltipCreated, self._onPopoverTooltipCreated),
+         (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged))
 
     def _getCallbacks(self):
         return (('inventory.1.crew', self._onCrewChanged),
@@ -206,6 +209,10 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
     def _onItemsCacheSyncCompleted(self, reason, _):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
             self.__updatedRoleChangeCost()
+
+    def _onVehicleLockChanged(self, _, lockReason):
+        if lockReason[0] == LOCK_REASON.NONE:
+            self._onFilterStateUpdated()
 
     def _onEmptySlotClick(self, tankmanID, slotIdx):
         self.selectSlot(slotIdx)

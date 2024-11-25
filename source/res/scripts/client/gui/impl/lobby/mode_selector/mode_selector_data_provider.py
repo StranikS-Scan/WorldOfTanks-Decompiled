@@ -42,10 +42,11 @@ class ModeSelectorDataProvider(IGlobalListener):
 
     def __init__(self):
         super(ModeSelectorDataProvider, self).__init__()
+        selected = self._getSelectedItem()
         self.onListChanged = SafeEvent()
         self._items = OrderedDict()
         self._initializeModeSelectorItems()
-        self._updateItems()
+        self._updateItems(selected)
         self.startGlobalListening()
 
     @property
@@ -109,21 +110,31 @@ class ModeSelectorDataProvider(IGlobalListener):
     def _getModeSelectorLegacyItem(modeName, selectorItem):
         return None if selectorItem is not None and not selectorItem.isVisible() else (collectModeSelectorItem(modeName) or ModeSelectorLegacyItem)(selectorItem)
 
-    def _updateItems(self):
+    def _getSelectedItem(self):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if not prbDispatcher:
+            return None
+        else:
+            state = prbDispatcher.getFunctionalState()
+            return battle_selector_items.getItems().update(state)
+
+    def _updateItems(self, selected=None):
         self._updateItemsPosition()
-        self._updateSelection()
+        self._updateSelection(selected)
         self.onListChanged()
 
-    def _updateSelection(self):
-        prbDispatcher = g_prbLoader.getDispatcher()
-        if prbDispatcher:
-            state = prbDispatcher.getFunctionalState()
-            selected = battle_selector_items.getItems().update(state)
+    def _updateSelection(self, selected=None):
+        selected = selected or self._getSelectedItem()
+        if selected is None:
+            return
+        else:
             for idx, item in enumerate(self.itemList):
                 item.viewModel.setIndex(idx)
                 if item.isSelectable:
                     isSelected = item.modeName == selected.getData() or getattr(item, 'isSelected', lambda : False)()
                     item.viewModel.setIsSelected(isSelected)
+
+            return
 
     def _updateItemsPosition(self):
         self._items = OrderedDict(sorted(self._items.iteritems(), key=lambda x: x[1].priority, reverse=True))

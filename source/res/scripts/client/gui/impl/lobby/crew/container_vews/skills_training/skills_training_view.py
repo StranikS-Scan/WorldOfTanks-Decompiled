@@ -17,6 +17,7 @@ from gui.impl.pub import ViewImpl, WindowImpl
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
 from skeletons.gui.game_control import IPlatoonController
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.components import ComponentBase
@@ -24,6 +25,7 @@ if typing.TYPE_CHECKING:
 class SkillsTrainingView(ContainerBase, ViewImpl):
     __slots__ = ('_crewWidget', '_paramsView')
     platoonCtrl = dependency.descriptor(IPlatoonController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, **kwargs):
         self._crewWidget = None
@@ -80,8 +82,12 @@ class SkillsTrainingView(ContainerBase, ViewImpl):
         vm.setAreAllSkillsLearned(self.context.areAllSkillsLearned)
         vm.setSkillsEfficiency(self.context.tankman.currentVehicleSkillsEfficiency)
         vm.setIsAnySkillSelected(self.context.isAnySkillSelected)
-        if self.context.tankmanCurrentVehicle:
-            fillVehicleInfo(vm.vehicleInfo, self.context.tankmanCurrentVehicle, separateIGRTag=True)
+        if self.context.tankman.vehicleDescr:
+            vehicle = self.itemsCache.items.getVehicle(self.context.tankman.vehicleInvID)
+            fillVehicleInfo(vm.vehicleInfo, vehicle, separateIGRTag=True)
+            vm.setIsTankmanInVehicle(True)
+        else:
+            vm.setIsTankmanInVehicle(False)
 
     def _finalize(self):
         super(SkillsTrainingView, self)._finalize()

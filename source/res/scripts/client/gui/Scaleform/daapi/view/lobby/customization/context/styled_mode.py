@@ -6,8 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import adisp_async, adisp_process
 from constants import CLIENT_COMMAND_SOURCES
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, CustomizationTabs, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle
-from gui.customization.constants import CustomizationModes
+from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle, removePartsFromOutfit
 from gui.customization.shared import C11nId, PurchaseItem
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import CustomizationsSeller, OutfitApplier
@@ -29,18 +28,17 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 
 class StyledMode(CustomizationMode):
-    modeId = CustomizationModes.STYLED
-    _tabs = CustomizationTabs.MODES[modeId]
     STYLE_SLOT = C11nId(areaId=Area.MISC, slotType=GUI_ITEM_TYPE.STYLE, regionIdx=0)
     _settingsCore = dependency.descriptor(ISettingsCore)
 
-    def __init__(self, ctx):
+    def __init__(self, ctx, is3DMode):
         super(StyledMode, self).__init__(ctx)
         self.__originalStyle = None
         self.__modifiedStyle = None
         self.__prolongRent = False
         self.__autoRentEnabled = False
         self.__autoRentChangeSource = CLIENT_COMMAND_SOURCES.UNDEFINED
+        self.__is3DMode = is3DMode
         return
 
     @property
@@ -50,13 +48,6 @@ class StyledMode(CustomizationMode):
     @property
     def modifiedStyle(self):
         return self.__modifiedStyle
-
-    def changeTab(self, tabId, itemCD=None):
-        if tabId != CustomizationTabs.STYLES:
-            _logger.warning('There is no tabs in styled customization mode')
-        elif itemCD is not None:
-            self._events.onTabChanged(tabId, itemCD)
-        return
 
     def isAutoRentEnabled(self):
         return self.__autoRentEnabled
@@ -71,7 +62,7 @@ class StyledMode(CustomizationMode):
         return OutfitInfo(self.__originalStyle, self.__modifiedStyle)
 
     def getPurchaseItems(self):
-        return getStylePurchaseItems(self.__modifiedStyle, self.getModifiedOutfits(), prolongRent=self.__prolongRent, progressionLevel=self.getStyleProgressionLevel()) if self.__modifiedStyle is not None else []
+        return getStylePurchaseItems(self.__modifiedStyle, self._modifiedOutfits, prolongRent=self.__prolongRent, progressionLevel=self.getStyleProgressionLevel()) if self.__modifiedStyle is not None else []
 
     def getDependenciesData(self):
         return self.__modifiedStyle.getDependenciesIntCDs() if self.__modifiedStyle else {}
@@ -107,7 +98,7 @@ class StyledMode(CustomizationMode):
         return
 
     def getStyleProgressionLevel(self):
-        return self._modifiedOutfits[self.season].progressionLevel if self.__modifiedStyle and self.__modifiedStyle.isProgressive else -1
+        return self._modifiedOutfits[self.season].progressionLevel if self.__modifiedStyle and self.__modifiedStyle.isProgressive else 0
 
     def clearStyle(self):
         style = self.__modifiedStyle
@@ -136,12 +127,9 @@ class StyledMode(CustomizationMode):
         return
 
     def _fillOutfits(self):
-        styleId = self._service.getStyledOutfit(self.season).id
-        style = self._service.getItemByID(GUI_ITEM_TYPE.STYLE, styleId) if styleId else None
-        isInstalled = self._service.isStyleInstalled()
-        if not isInstalled:
-            if style is not None and style.isHidden and style.fullInventoryCount(g_currentVehicle.item.intCD) == 0:
-                style = None
+        style = self._service.getCurrentStyle()
+        if style and style.is3D != self.__is3DMode:
+            style = None
         self.__originalStyle = style
         self.__modifiedStyle = style
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
@@ -153,13 +141,9 @@ class StyledMode(CustomizationMode):
             styleProgressionLevel = styledOutfitComponent.styleProgressionLevel
         for season in SeasonType.COMMON_SEASONS:
             if style is None:
-                outfit = self._service.getEmptyOutfit()
+                outfit = self._service.getEmptyOutfitWithNationalEmblems(vehicleCD)
             else:
                 diff = diffs.get(season)
-                if not isInstalled and diff is not None:
-                    diffOutfit = Outfit(strCompactDescr=diff, vehicleCD=vehicleCD)
-                    self._removeHiddenFromOutfit(diffOutfit, g_currentVehicle.item.intCD)
-                    diff = diffOutfit.pack().makeCompDescr()
                 outfit = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
                 if self.__modifiedStyle and self.__modifiedStyle.isProgressionRewindEnabled:
                     outfit = getStyleProgressionOutfit(outfit, styleProgressionLevel, season)
@@ -168,18 +152,14 @@ class StyledMode(CustomizationMode):
 
         return
 
-    def _restoreState(self):
-        super(StyledMode, self)._restoreState()
-        styleId = self._modifiedOutfits[SeasonType.SUMMER].id
-        self.__modifiedStyle = self._service.getItemByID(GUI_ITEM_TYPE.STYLE, styleId) if styleId else None
-        return
-
-    def _selectItem(self, intCD, *_):
-        self.selectSlot(self.STYLE_SLOT)
-        currentItem = self.getItemFromSlot(self._selectedSlot)
-        if currentItem is not None and currentItem.intCD == intCD:
-            return False
+    def _selectItem(self, intCD, progressionLevel=0):
+        if super(StyledMode, self)._selectItem(intCD, progressionLevel):
+            return True
         else:
+            self.selectSlot(self.STYLE_SLOT)
+            currentItem = self.getItemFromSlot(self._selectedSlot)
+            if currentItem is not None and currentItem.intCD == intCD:
+                return False
             self.installItem(intCD, self._selectedSlot)
             item = self._service.getItemByCD(intCD)
             serverSettings = self._settingsCore.serverSettings
@@ -192,26 +172,11 @@ class StyledMode(CustomizationMode):
                 wasVisited = bool(serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT))
                 if not wasVisited and item.canBeEditedForVehicle(g_currentVehicle.item.intCD):
                     serverSettings.setOnceOnlyHintsSettings({OnceOnlyHints.C11N_EDITABLE_STYLE_SLOT_HINT: HINT_SHOWN_STATUS})
-            return False
-
-    def _unselectItem(self):
-        return False
-
-    def _selectSlot(self, slotId):
-        if slotId != self.STYLE_SLOT:
-            _logger.warning('Wrong slot selected for customization styled mode: %s', slotId)
-            return False
-        self._selectedSlot = slotId
-        return True
-
-    def _unselectSlot(self):
-        if self._selectedSlot is not None:
-            self._selectedSlot = None
             return True
-        else:
-            return False
 
     def _installItem(self, intCD, slotId, season=None, component=None):
+        if super(StyledMode, self)._installItem(intCD, slotId):
+            return True
         item = self._service.getItemByCD(intCD)
         if item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             _logger.warning('Wrong itemType: %s. Only styles could be installed in styled customization mode.', item.itemTypeID)
@@ -228,35 +193,34 @@ class StyledMode(CustomizationMode):
 
     def _removeItem(self, slotId, season=None):
         if self.__modifiedStyle is None:
-            return
-        elif slotId == self.STYLE_SLOT:
-            self.__modifiedStyle = None
-            self._modifiedOutfits = {s:self._service.getEmptyOutfit() for s in SeasonType.COMMON_SEASONS}
-            return
-        elif not self.__modifiedStyle.isEditable:
-            return _logger.error('Failed to remove item from slotId: %s for style: %s. Style is not Editable', slotId, self.__modifiedStyle)
+            return False
         else:
+            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
+            if slotId == self.STYLE_SLOT:
+                self.__modifiedStyle = None
+                self._modifiedOutfits = {s:self._service.getEmptyOutfitWithNationalEmblems(vehicleCD) for s in SeasonType.COMMON_SEASONS}
+                return True
+            if not self.__modifiedStyle.isEditable:
+                _logger.error('Failed to remove item from slotId: %s for style: %s. Style is not Editable', slotId, self.__modifiedStyle)
+                return False
             season = season or self.season
             outfit = self._modifiedOutfits[season]
-            vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
             baseOutfit = self.__modifiedStyle.getOutfit(season, vehicleCD=vehicleCD)
             fitOutfit(baseOutfit, getCurrentVehicleAvailableRegionsMap())
             self._modifiedOutfits[season] = removeItemFromEditableStyle(outfit, baseOutfit, slotId, season)
             diff = getEditableStyleOutfitDiff(outfit, baseOutfit)
             self._ctx.stylesDiffsCache.saveDiff(self.__modifiedStyle, season, diff)
-            return
+            return True
 
     def _cancelChanges(self):
         super(StyledMode, self)._cancelChanges()
+        self._ctx.stylesDiffsCache.clearModeDiffs(self.__is3DMode)
         self.__modifiedStyle = self.__originalStyle
 
-    @adisp_async
-    @adisp_process
-    def _applyItems(self, purchaseItems, isModeChanged, callback):
-        results = []
+    def _getRequestData(self, purchaseItems):
+        requestData = super(StyledMode, self)._getRequestData(purchaseItems)
         style = self.__modifiedStyle
         vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        originalOutfits = self._ctx.startMode.getOriginalOutfits()
         if style is not None:
             baseStyleOutfits = {}
             modifiedStyleOutfits = {}
@@ -266,12 +230,35 @@ class StyledMode(CustomizationMode):
                 modifiedStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
 
             removeUnselectedItemsFromEditableStyle(modifiedStyleOutfits, baseStyleOutfits, purchaseItems)
-            result = yield OutfitApplier(g_currentVehicle.item, [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]).request()
+            for season in SeasonType.COMMON_SEASONS:
+                if style.isProgressive:
+                    modifiedStyleOutfits[season] = self._service.removeAdditionalProgressionData(outfit=modifiedStyleOutfits[season], style=style, vehCD=vehicleCD, season=season)
+                modifiedStyleOutfits[season] = removePartsFromOutfit(season, baseStyleOutfits[season]).diff(removePartsFromOutfit(season, modifiedStyleOutfits[season]))
+
+            styleOutfitComponent = CustomizationOutfit(styleId=style.id, styleProgressionLevel=self.getStyleProgressionLevel(), serial_number=style.serialNumber)
+            styleOutfit = Outfit(vehicleCD=vehicleCD, component=styleOutfitComponent)
+            for season in SeasonType.REGULAR:
+                outfit = modifiedStyleOutfits.get(season, Outfit(vehicleCD=vehicleCD))
+                modifiedStyleOutfits[season] = styleOutfit.adjust(outfit)
+
+            for outfit, seasonType in requestData:
+                if seasonType == SeasonType.ALL:
+                    modifiedStyleOutfits[seasonType] = modifiedStyleOutfits[seasonType].adjust(outfit)
+
+            requestData = [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]
+        return requestData
+
+    @adisp_async
+    @adisp_process
+    def _applyItems(self, purchaseItems, callback):
+        originalOutfits = self.getOriginalOutfits()
+        originalOutfits[SeasonType.ALL] = self._ctx.commonOriginalOutfit.copy()
+        results = []
+        requestData = self._getRequestData(purchaseItems)
+        if requestData:
+            result = yield OutfitApplier(g_currentVehicle.item, requestData).request()
             results.append(result)
-        else:
-            outfit = self._modifiedOutfits[self.season]
-            result = yield OutfitApplier(g_currentVehicle.item, ((outfit, SeasonType.ALL),)).request()
-            results.append(result)
+        style = self.__modifiedStyle
         if style is not None and style.isRentable and self.__prolongRent:
             self._service.buyItems(style, count=1, vehicle=g_currentVehicle.item)
             self.__prolongRent = False
@@ -296,7 +283,7 @@ class StyledMode(CustomizationMode):
         callback(result)
 
     def _getAppliedItems(self, isOriginal=True):
-        appliedItems = set()
+        appliedItems = super(StyledMode, self)._getAppliedItems(isOriginal)
         style = self.__originalStyle if isOriginal else self.__modifiedStyle
         if style is not None:
             appliedItems.add(style.intCD)
@@ -306,8 +293,6 @@ class StyledMode(CustomizationMode):
         return self.__modifiedStyle is None
 
     def _isOutfitsModified(self):
-        isStyleChanged = any((not self._originalOutfits[season].isEqual(self._modifiedOutfits[season]) for season in SeasonType.COMMON_SEASONS))
-        isAutoRentChanged = self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
         if self.__modifiedStyle and self.__modifiedStyle.isProgressive:
             modifiedOutfit = self._modifiedOutfits[self.season]
             originalOutfit = self._originalOutfits[self.season]
@@ -323,14 +308,19 @@ class StyledMode(CustomizationMode):
                 return False
             if not isInstalled:
                 return True
+        isStyleChanged = any((not self._originalOutfits[season].isEqual(self._modifiedOutfits[season]) for season in SeasonType.COMMON_SEASONS))
+        isAutoRentChanged = self.__autoRentEnabled != g_currentVehicle.item.isAutoRentStyle
         return isStyleChanged or isAutoRentChanged
 
     def _getAnchorVOs(self):
-        slotId = C11nId(self.STYLE_SLOT.areaId, self.STYLE_SLOT.slotType, self.STYLE_SLOT.regionIdx)
-        uid = customizationSlotIdToUid(slotId)
-        intCD = self.modifiedStyle.intCD if self.modifiedStyle is not None else 0
-        anchorVO = CustomizationSlotUpdateVO(slotId=slotId._asdict(), itemIntCD=intCD, uid=uid)
-        return [anchorVO._asdict()]
+        if self.slotType != self.STYLE_SLOT.slotType:
+            return super(StyledMode, self)._getAnchorVOs()
+        else:
+            slotId = C11nId(self.STYLE_SLOT.areaId, self.STYLE_SLOT.slotType, self.STYLE_SLOT.regionIdx)
+            uid = customizationSlotIdToUid(slotId)
+            intCD = self.modifiedStyle.intCD if self.modifiedStyle is not None else 0
+            anchorVO = CustomizationSlotUpdateVO(slotId=slotId._asdict(), itemIntCD=intCD, uid=uid)
+            return [anchorVO._asdict()]
 
     def _onVehicleChangeStarted(self):
         self.__prolongRent = False

@@ -175,6 +175,15 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
         self.__respawnAvailable = False
         return
 
+    @staticmethod
+    def _swapVisibleStates(visibleUI, hiddenUI, value, fromVisibleUI=False):
+        if fromVisibleUI and value in visibleUI:
+            visibleUI.remove(value)
+            hiddenUI.add(value)
+        elif value in hiddenUI:
+            hiddenUI.remove(value)
+            visibleUI.add(value)
+
     def _invalidateState(self):
         if self.__topState != PageStates.NONE:
             targetState = self.__topState
@@ -194,45 +203,33 @@ class EpicBattlePage(EpicBattlePageMeta, BattleGUIKeyHandler):
                 self.app.enterGuiControlMode(alias, cursorVisible=p1, enableAiming=p2)
             visibleUI = _STATE_TO_UI[targetState].copy()
             currVis = set(self.as_getComponentsVisibilityS())
-            hiddenUI = currVis.difference(visibleUI).difference(_NEVER_HIDE)
+            hiddenUI = currVis.difference(visibleUI)
+            if targetState != PageStates.LOADING:
+                hiddenUI.difference_update(_NEVER_HIDE)
+                visibleUI.update(_NEVER_HIDE)
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
-                if not (vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack):
-                    if BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in visibleUI:
-                        visibleUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
-                        hiddenUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
-                elif BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR in hiddenUI:
-                    visibleUI.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
-                    hiddenUI.remove(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
-                if not vehicle.typeDescriptor.isDualgunVehicle:
-                    if BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL in visibleUI:
-                        visibleUI.remove(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
-                        hiddenUI.add(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
-                elif BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL in hiddenUI:
-                    visibleUI.add(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
-                    hiddenUI.remove(BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
-                if not vehicle.typeDescriptor.hasRocketAcceleration:
-                    if BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR in visibleUI:
-                        visibleUI.remove(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
-                        hiddenUI.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
-                elif BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR in hiddenUI:
-                    visibleUI.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
-                    hiddenUI.remove(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+                if vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
+                else:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR, True)
+                if vehicle.typeDescriptor.isDualgunVehicle:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL)
+                else:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.DUAL_GUN_PANEL, True)
+                if vehicle.typeDescriptor.hasRocketAcceleration:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+                else:
+                    self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, True)
             ctrl = self.sessionProvider.dynamic.maps
-            if ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI:
-                ctrl.setOverviewMapScreenVisibility(True)
-            elif ctrl and BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in hiddenUI:
-                ctrl.setOverviewMapScreenVisibility(False)
+            if ctrl:
+                ctrl.setOverviewMapScreenVisibility(BATTLE_VIEW_ALIASES.EPIC_OVERVIEW_MAP_SCREEN in visibleUI)
             ctrl = self.sessionProvider.shared.prebattleSetups
             if self.__activeState == PageStates.COUNTDOWN and ctrl and ctrl.isSelectionStarted():
-                if BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL in visibleUI:
-                    visibleUI.remove(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
-                    hiddenUI.add(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL)
+                self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, True)
             if self.__respawnAvailable and self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL):
-                if BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL in visibleUI:
-                    visibleUI.remove(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
-                    hiddenUI.add(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL)
+                self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, True)
             self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)
             return
 

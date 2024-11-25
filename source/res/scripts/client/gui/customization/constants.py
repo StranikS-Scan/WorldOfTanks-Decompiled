@@ -3,11 +3,17 @@
 
 
 class CustomizationModes(object):
-    NONE = -1
     CUSTOM = 1
-    STYLED = 2
-    EDITABLE_STYLE = 3
-    ALL = (CUSTOM, STYLED, EDITABLE_STYLE)
+    STYLE_2D = 2
+    STYLE_3D = 3
+    STYLE_2D_EDITABLE = 4
+    ALL = (CUSTOM,
+     STYLE_2D,
+     STYLE_3D,
+     STYLE_2D_EDITABLE)
+    BASE = (CUSTOM, STYLE_2D, STYLE_3D)
+    BASE_STYLES = (STYLE_2D, STYLE_3D)
+    STYLES = BASE_STYLES + (STYLE_2D_EDITABLE,)
 
 
 class CustomizationModeSource(object):

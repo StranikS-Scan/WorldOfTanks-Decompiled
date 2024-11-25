@@ -3,11 +3,14 @@
   <ClientMethods>
     <receiveShot>
       <Args>
-        <position>	VECTOR3	</position>
+        <hitPoint>	VECTOR3	</hitPoint>
+        <hitDir>	VECTOR3	</hitDir>
         <normal>	VECTOR3	</normal>
         <shotID>	INT64	</shotID>
         <effectIndex>	INT64	</effectIndex>
         <matKind>	INT64	</matKind>
+        <damagedDestructibles>	ARRAY	  <of>	UINT32	</of>
+        </damagedDestructibles>
       </Args>
     </receiveShot>
   </ClientMethods>

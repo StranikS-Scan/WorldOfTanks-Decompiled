@@ -22,6 +22,7 @@ class STORAGE(object):
     CARD_VEHICLE_HOVER_MAXADDITIONALPRICELABEL = '#storage:card/vehicle/hover/maxAdditionalPriceLabel'
     CARD_VEHICLE_HOVER_RESTOREAVAILABLELABEL = '#storage:card/vehicle/hover/restoreAvailableLabel'
     CARD_VEHICLE_TRADEOFFPRICELABEL = '#storage:card/vehicle/tradeOffPriceLabel'
+    CARD_ATTACHMENT_HOVER_PARTOFBUNDLE_LABEL = '#storage:card/attachment/hover/partOfBundle/label'
     MARKEVERYTHING = '#storage:markEverything'
     CUSTOMIZATION_SECTIONTITLE = '#storage:customization/sectionTitle'
     CUSTOMIZATION_NOITEMS_TITLE = '#storage:customization/noItems/title'

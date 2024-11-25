@@ -30,7 +30,7 @@ from gui.shared.utils.graphics import isRendererPipelineDeferred
 from shared_utils import first
 from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
-from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags, CustomizationDisplayType
+from items.components.c11n_constants import ProjectionDecalFormTags, SeasonType, ItemTags, CustomizationDisplayType, Rarity
 from items.vehicles import CamouflageBonus
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
@@ -155,6 +155,8 @@ class ElementTooltip(BlocksTooltipData):
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG = 226
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_INSCRIPTION = 278
     CUSTOMIZATION_TOOLTIP_ICON_WIDTH_PERSONAL_NUMBER = 390
+    CUSTOMIZATION_TOOLTIP_ICON_WIDTH_ATTACHMENT = 232
+    CUSTOMIZATION_TOOLTIP_ICON_HEIGHT_ATTACHMENT = 174
     ALL_SEASON_MAP_ICON = 'all_season'
     HISTORICAL_ICON = 'historical'
     NON_HISTORICAL_ICON = 'non_historical'
@@ -168,6 +170,7 @@ class ElementTooltip(BlocksTooltipData):
     SERIAL_NUMBER_ICON = 'serial_number'
     QUEST_PROGRESSION_ICON = 'questProgression'
     OPENED_ICON = 'opened'
+    SPECIAL_EFFECT_ICON = 'special_effect'
 
     def __init__(self, context, tooltipType=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM):
         super(ElementTooltip, self).__init__(context, tooltipType)
@@ -206,7 +209,11 @@ class ElementTooltip(BlocksTooltipData):
     def _packItemBlocks(self, statsConfig):
         vehIntCD = self.__vehicle.intCD if self.__vehicle is not None else 0
         self.bonusDescription = VEHICLE_CUSTOMIZATION.BONUS_CONDITION_SEASON
-        topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isDim())]
+        topBlocks = []
+        if self._item.isRare and self._item.rarity != Rarity.UNKNOWN:
+            topBlocks = [self._packRarityHeaderBlock()]
+        else:
+            topBlocks = [self._packTitleBlock(), self._packIconBlock(self._item.isDim())]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         self.boundVehs = self._item.getBoundVehicles()
         self.installedVehs = self._item.getInstalledVehicles()
@@ -262,10 +269,9 @@ class ElementTooltip(BlocksTooltipData):
             camo = camo or self._item
             bonusBlock = self._packBonusBlock(bonus, camo, bonusEnabled)
             items.append(bonusBlock)
-        if self._item.customizationDisplayType() != CustomizationDisplayType.HISTORICAL or self._item.fullDescription:
-            block = self._packDescriptionBlock()
-            if block:
-                items.append(block)
+        block = self._packDescriptionBlock()
+        if block:
+            items.append(block)
         if self._item.isQuestsProgression and self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
             block = self._packQuestsBlock()
             if block:
@@ -447,6 +453,8 @@ class ElementTooltip(BlocksTooltipData):
         if self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL:
             tag = self._item.formfactor
             isWideOffset = tag == ProjectionDecalFormTags.RECT1X4 or tag == ProjectionDecalFormTags.RECT1X6
+        if self._item.hasBattleEffect:
+            blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.neutral(backport.text(rCharacteristics.specialEffect())), padding=formatters.packPadding(top=-2), icon=self.SPECIAL_EFFECT_ICON, isWideOffset=isWideOffset))
         if mapType:
             blocks.append(formatters.packCustomizationCharacteristicBlockData(text=text_styles.main(mapType), padding=formatters.packPadding(top=-2), icon=mapIcon, isWideOffset=isWideOffset))
         if self._item.customizationDisplayType() == CustomizationDisplayType.HISTORICAL:
@@ -513,6 +521,8 @@ class ElementTooltip(BlocksTooltipData):
             mayHave = self._item.itemTypeID in GUI_ITEM_TYPE.CUSTOMIZATIONS and self._item.itemTypeID not in customizationTypes
             if mustNotHave and (isItemHidden or isItemInStyle) or mayHave and isItemHidden and isItemInStyle and not self._item.isQuestsProgression:
                 return None
+            if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+                return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_ATTACHMENTEARN), padding=formatters.packPadding(top=-2))
             if self._item.isProgressive and self._item.isProgressionAutoBound or ItemTags.NATIONAL_EMBLEM in self._item.tags:
                 return formatters.packTitleDescBlock(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_SUITABLE_TITLE), desc=text_styles.main(self.__vehicle.shortUserName), padding=formatters.packPadding(top=-2))
             boundAndInstalledVehs = self.boundVehs | self.installedVehs
@@ -527,7 +537,7 @@ class ElementTooltip(BlocksTooltipData):
             return formatters.packBuildUpBlockData(blocks=blocks, padding=formatters.packPadding(top=-8, bottom=-18))
 
     def _packAppliedBlock(self):
-        if self.__ctx is not None and self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx is not None and self.__ctx.modeId in CustomizationModes.BASE_STYLES:
             if self._item.itemTypeID != GUI_ITEM_TYPE.STYLE:
                 return
         if self._item.isStyleOnly:
@@ -572,6 +582,28 @@ class ElementTooltip(BlocksTooltipData):
 
             blocks.insert(0, formatters.packImageTextBlockData(title=text_styles.statusAttention(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_LIMITED_SPECIAL_RULES_TITLE), img=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STAR, imgPadding=formatters.packPadding(left=-3, top=2)))
             return formatters.packBuildUpBlockData(blocks, gap=3, padding=formatters.packPadding(bottom=-5))
+
+    def _packRarityHeaderBlock(self):
+        width = self._countImageWidth()
+        height = self._countImageHeight()
+        if self._item.isProgressive:
+            if self._progressionLevel > 0:
+                progressionLevel = self._progressionLevel
+            else:
+                progressionLevel = self._item.getLatestOpenedProgressionLevel(self.__vehicle)
+                if progressionLevel <= 0:
+                    return
+            img = self._item.iconByProgressionLevel(progressionLevel)
+        else:
+            img = self._item.getIconApplied(None)
+        rarity = self._item.rarity
+        videoSource = ''
+        if rarity in Rarity.UI_EFFECT:
+            videoSource = 'videos/rarity/{0}.usm'.format(rarity)
+        imageOffset = 100
+        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            imageOffset = 65
+        return formatters.packCustomizationRarityHeaderBlockData(img=img, imgOffset=imageOffset, rarity=rarity, width=width, height=height, videoSource=videoSource, padding=formatters.packPadding(top=-4, bottom=-70, left=2), rarityIcon=backport.image(R.images.gui.maps.icons.customization.rarity.sign.s40x40.dyn(rarity)()), rarityBackground=backport.image(R.images.gui.maps.icons.customization.rarity.glow.s360x270.dyn(rarity)()), title=self._item.userName, subTitle='{0} {1}'.format(backport.text(R.strings.vehicle_customization.customization.rarity.dyn(rarity)()), backport.text(self._item.userTypeID)))
 
     def _packTitleBlock(self):
         title = self._item.userName
@@ -654,7 +686,9 @@ class ElementTooltip(BlocksTooltipData):
 
     def _countImageWidth(self):
         iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH
-        if self._item.isWide():
+        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_ATTACHMENT
+        elif self._item.isWide():
             if self._item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION:
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_WIDE
             elif self._item.itemTypeID == GUI_ITEM_TYPE.PERSONAL_NUMBER:
@@ -662,6 +696,12 @@ class ElementTooltip(BlocksTooltipData):
             elif self._item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE, GUI_ITEM_TYPE.PROJECTION_DECAL):
                 iconWidth = self.CUSTOMIZATION_TOOLTIP_ICON_WIDTH_OTHER_BIG
         return iconWidth
+
+    def _countImageHeight(self):
+        iconHeight = self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT
+        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            iconHeight = self.CUSTOMIZATION_TOOLTIP_ICON_HEIGHT_ATTACHMENT
+        return iconHeight
 
     def _packIconBlock(self, isDim=False):
         width = self._countImageWidth()
@@ -697,18 +737,21 @@ class ElementTooltip(BlocksTooltipData):
         event = VEHICLE_CUSTOMIZATION.CAMOUFLAGE_EVENT_NAME
         eventName = text_styles.stats(event)
         desc = _ms(self._item.fullDescription, event=eventName)
-        if not desc:
-            return None
-        else:
-            blocks = [formatters.packTextBlockData(text=text_styles.main(desc))]
-            return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5))
+        blocks = []
+        if self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+            if desc and self._item.rarity == Rarity.LEGENDARY:
+                blocks.append(formatters.packTextBlockData(text=text_styles.neutral(desc), padding=formatters.packPadding(bottom=15)))
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_GETATTACHMENT)))
+        elif desc:
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(desc)))
+        return formatters.packBuildUpBlockData(blocks, gap=-6, padding=formatters.packPadding(bottom=-5)) if blocks else None
 
     def _packUnsupportedBlock(self):
         if isRendererPipelineDeferred():
             return None
         else:
             hasGMTexture = self._item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL and self._item.descriptor.glossTexture
-            if self._item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION or hasGMTexture:
+            if self._item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION or self._item.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT or hasGMTexture:
                 desc = backport.text(R.strings.vehicle_customization.customization.tooltip.warning.title())
                 return formatters.packImageTextBlockData(img=backport.image(R.images.gui.maps.icons.library.alertIcon()), imgPadding=formatters.packPadding(top=3, right=3), desc=text_styles.alert(desc))
             return None

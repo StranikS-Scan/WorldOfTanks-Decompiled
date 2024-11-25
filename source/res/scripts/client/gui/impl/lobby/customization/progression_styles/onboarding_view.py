@@ -18,8 +18,10 @@ from skeletons.gui.customization import ICustomizationService
 def _onCustomizationLoadedCallback(styleCD, service=None):
     if not styleCD:
         return
+    style = service.getItemByCD(styleCD)
     ctx = service.getCtx()
-    ctx.changeMode(CustomizationModes.STYLED, CustomizationTabs.STYLES)
+    ctx.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D)
+    ctx.mode.changeTab(tabId=CustomizationTabs.STYLES_3D if style.is3D else CustomizationTabs.STYLES_2D)
     ctx.selectItem(styleCD)
 
 

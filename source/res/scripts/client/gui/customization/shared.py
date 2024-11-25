@@ -4,6 +4,8 @@ from collections import namedtuple, Counter, defaultdict
 import logging
 import typing
 import Math
+from frameworks.wulf.gui_constants import WindowLayer
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
 from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -11,6 +13,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
 from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID
 from shared_utils import CONST_CONTAINER, isEmpty
+from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -113,7 +116,8 @@ SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
  SEASONS_CONSTANTS.DESERT_INDEX: SeasonType.DESERT}
 SEASON_TYPE_TO_NAME = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER,
  SeasonType.WINTER: SEASONS_CONSTANTS.WINTER,
- SeasonType.DESERT: SEASONS_CONSTANTS.DESERT}
+ SeasonType.DESERT: SEASONS_CONSTANTS.DESERT,
+ SeasonType.ALL: SEASONS_CONSTANTS.ALL}
 SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
  SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
  SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
@@ -144,7 +148,7 @@ class CustomizationTankPartNames(TankPartNames):
 
 
 def chooseMode(itemTypeID, modeId, vehicle):
-    if modeId == CustomizationModes.EDITABLE_STYLE:
+    if modeId == CustomizationModes.STYLE_2D_EDITABLE:
         return HighlightingMode.WHOLE_VEHICLE
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         if not __isTurretCustomizable(vehicle.descriptor):
@@ -170,12 +174,14 @@ def getAvailableRegions(areaId, slotType, vehicleDescr=None):
             if areaId == Area.MISC:
                 return (0,)
             return ()
-        if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.ATTACHMENT, GUI_ITEM_TYPE.SEQUENCE):
+        if slotType in (GUI_ITEM_TYPE.PROJECTION_DECAL, GUI_ITEM_TYPE.SEQUENCE):
             return tuple(range(len(slot.getRegions())))
         if slotType in (GUI_ITEM_TYPE.INSCRIPTION, GUI_ITEM_TYPE.EMBLEM):
             return __getAvailableDecalRegions(areaId, slotType, vehicleDescr)
         if slotType in (GUI_ITEM_TYPE.PAINT, GUI_ITEM_TYPE.CAMOUFLAGE):
             return __getAppliedToRegions(areaId, slotType, vehicleDescr)
+        if slotType in (GUI_ITEM_TYPE.ATTACHMENT,):
+            return __getAvailableAttachmentRegions(areaId, slot, slotType, vehicleDescr)
         _logger.error('Wrong customization slotType: %s', slotType)
         return ()
 
@@ -427,6 +433,18 @@ def __getAvailableDecalRegions(areaId, slotType, vehicleDescr):
     return tuple(range(len(anchors)))
 
 
+def __getAvailableAttachmentRegions(areaId, slot, slotType, vehicleDescr):
+    regions = []
+    slotTypeName = SLOT_TYPE_TO_ANCHOR_TYPE_MAP[slotType]
+    partName = TankPartIndexes.getName(areaId)
+    if partName:
+        for vehicleSlot in getattr(vehicleDescr, partName).slotsAnchors:
+            if vehicleSlot.type == slotTypeName and not vehicleSlot.hiddenForUser:
+                regions.append(slot.getRegions().index(vehicleSlot.slotId))
+
+    return tuple(regions)
+
+
 def __getAppliedToRegions(areaId, slotType, vehicleDescr):
     if areaId not in Area.TANK_PARTS:
         return ()
@@ -467,3 +485,25 @@ class _ClassicGroupWrapper(object):
 
 def getGroupHelper(item):
     return _QuestGroupWrapper(item) if not item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isQuestsProgression else _ClassicGroupWrapper(item)
+
+
+class VehicleC11nFilterHintChecker(object):
+    __appLoader = dependency.descriptor(IAppLoader)
+
+    def check(self, _):
+        container = self.__appLoader.getApp().containerManager.getContainer(WindowLayer.SUB_VIEW)
+        view = container.getView()
+        return view.carouselComponent.hasCustomization() if view.alias == VIEW_ALIAS.LOBBY_HANGAR else False
+
+
+class NewC11nSectionHintChecker(object):
+
+    def check(self, _):
+        return not g_currentVehicle.item.isProgressionDecalsOnly
+
+
+class C11nVehicleListHintChecker(object):
+
+    def check(self, _):
+        from gui.Scaleform.daapi.view.lobby.customization.shared import vehicleHasSlot
+        return not vehicleHasSlot(GUI_ITEM_TYPE.ATTACHMENT)

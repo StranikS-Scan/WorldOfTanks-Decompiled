@@ -31,19 +31,25 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     MARKERS = 'MARKERS'
     CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
+    CAROUSEL_FILTER_3 = 'CAROUSEL_FILTER_3'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
+    RANKED_CAROUSEL_FILTER_3 = 'RANKED_CAROUSEL_FILTER_3'
     ROYALE_CAROUSEL_FILTER_1 = 'ROYALE_CAROUSEL_FILTER_1'
     ROYALE_CAROUSEL_FILTER_2 = 'ROYALE_CAROUSEL_FILTER_2'
     EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
     EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
+    EPICBATTLE_CAROUSEL_FILTER_3 = 'EPICBATTLE_CAROUSEL_FILTER_3'
     BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
     MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
+    MAPBOX_CAROUSEL_FILTER_3 = 'MAPBOX_CAROUSEL_FILTER_3'
     FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
     FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
+    FUN_RANDOM_CAROUSEL_FILTER_3 = 'FUN_RANDOM_CAROUSEL_FILTER_3'
     COMP7_CAROUSEL_FILTER_1 = 'COMP7_CAROUSEL_FILTER_1'
     COMP7_CAROUSEL_FILTER_2 = 'COMP7_CAROUSEL_FILTER_2'
+    COMP7_CAROUSEL_FILTER_3 = 'COMP7_CAROUSEL_FILTER_3'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -77,6 +83,13 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     REFERRAL_PROGRAM = 'REFERRAL_PROGRAM'
     ADVANCED_ACHIEVEMENTS_STORAGE = 'ADVANCED_ACHIEVEMENTS_STORAGE'
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
+    CAROUSEL_FILTER_3_GROUP = (CAROUSEL_FILTER_3,
+     RANKED_CAROUSEL_FILTER_3,
+     EPICBATTLE_CAROUSEL_FILTER_3,
+     MAPBOX_CAROUSEL_FILTER_3,
+     COMP7_CAROUSEL_FILTER_3,
+     FUN_RANDOM_CAROUSEL_FILTER_3)
+    UI_STORAGE_GROUP = (UI_STORAGE, UI_STORAGE_2)
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -85,7 +98,6 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     FIELD_POST_HINT_IS_SHOWN = 'field_post_hint'
     REFERRAL_BUTTON_CIRCLES_SHOWN = 'referral_button_circles_shown'
     DUAL_GUN_HIGHLIGHTS_COUNTER = 'dual_gun_highlights_count'
-    DISABLE_EDITABLE_STYLE_REWRITE_WARNING = 'disable_editable_style_rewrite_warning'
     OPTIONAL_DEVICE_SETUP_INTRO_SHOWN = 'optional_device_setup_intro_shown'
     TURBOSHAFT_HIGHLIGHTS_COUNTER = 'turboshaft_highlights_count'
     ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER = 'rocket_acceleration_highlights_count'
@@ -101,7 +113,14 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     AUTO_SHOOT_HIGHLIGHTS_COUNTER = 'auto_shoot_highlights_count'
     AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN = 'auto_shot_npd_shells_mark_is_shown'
     TWIN_GUN_HIGHLIGHTS_COUNTER = 'twin_gun_highlights_count'
+    NEW_C11N_SECTION_HINT_ACTION_TAKEN = 'new_c11n_section_hint_action_taken'
+    C11N_VEHICLE_LIST_HINT_ACTION_TAKEN = 'c11n_vehicle_list_hint_action_taken'
+    VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN = 'vehicle_c11n_filter_hint_action_taken'
 
+
+HINT_STORAGE_KEY_MAPPING = {OnceOnlyHints.NEW_C11N_SECTION_HINT: UI_STORAGE_KEYS.NEW_C11N_SECTION_HINT_ACTION_TAKEN,
+ OnceOnlyHints.C11N_VEHICLE_LIST_HINT: UI_STORAGE_KEYS.C11N_VEHICLE_LIST_HINT_ACTION_TAKEN,
+ OnceOnlyHints.VEHICLE_C11N_FILTER_HINT: UI_STORAGE_KEYS.VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN}
 
 class ADVANCED_ACHIEVEMENTS_STORAGE_KEYS(CONST_CONTAINER):
     EARNING_TIMESTAMP = 'ACHIEVEMENTS_EARNING_TIMESTAMP'
@@ -316,6 +335,8 @@ class ServerSettingsManager(object):
                                            'role_LT_universal': 23,
                                            'role_LT_wheeled': 24,
                                            'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                           'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                   'germany': 1,
                                                   'usa': 2,
@@ -367,6 +388,8 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                                  'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
                                                       'usa': 2,
@@ -417,6 +440,8 @@ class ServerSettingsManager(object):
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
                                                       'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                                      'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.BATTLEPASS_CAROUSEL_FILTER_1: Section(masks={'isCommonProgression': 0}, offsets={}),
      SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                  'germany': 1,
@@ -469,6 +494,8 @@ class ServerSettingsManager(object):
                                                  'role_LT_universal': 23,
                                                  'role_LT_wheeled': 24,
                                                  'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                                 'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={GuiSettingsBehavior.FREE_XP_INFO_DIALOG_SHOWED: 0,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_SHOWED: 1,
                                             GuiSettingsBehavior.RANKED_WELCOME_VIEW_STARTED: 2,
@@ -559,7 +586,9 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3: Section(masks={OnceOnlyHints.ACHIEVEMENTS_HANGAR_HINT: 0,
                                            OnceOnlyHints.ACHIEVEMENTS_PROFILE_HINT_SMALL: 1,
                                            OnceOnlyHints.CREW_BOOKS_POST_PROGRESSION_HINT: 2,
-                                           OnceOnlyHints.HALLOWEEN_LEADERBOARD_BTN_HINT: 3}, offsets={}),
+                                           OnceOnlyHints.NEW_C11N_SECTION_HINT: 3,
+                                           OnceOnlyHints.C11N_VEHICLE_LIST_HINT: 4,
+                                           OnceOnlyHints.VEHICLE_C11N_FILTER_HINT: 5}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -604,7 +633,6 @@ class ServerSettingsManager(object):
                                     PM_TUTOR_FIELDS.PM2_ONE_FAL_SHOWN: 15,
                                     PM_TUTOR_FIELDS.PM2_MULTIPLE_FAL_SHOWN: 16,
                                     UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: 17,
-                                    UI_STORAGE_KEYS.DISABLE_EDITABLE_STYLE_REWRITE_WARNING: 22,
                                     UI_STORAGE_KEYS.OPTIONAL_DEVICE_SETUP_INTRO_SHOWN: 27,
                                     UI_STORAGE_KEYS.EPIC_BATTLE_ABILITIES_INTRO_SHOWN: 28,
                                     UI_STORAGE_KEYS.POST_PROGRESSION_INTRO_SHOWN: 29,
@@ -617,7 +645,10 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.ACHIEVEMENT_EDIT_VIEW_VISITED: 4,
                                       UI_STORAGE_KEYS.STEAM_ADD_EMAIL_OVERLAY_SHOWN: 9,
                                       UI_STORAGE_KEYS.IS_CONFIRM_EMAIL_OVERLAY_ALLOWED: 10,
-                                      UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN: 14}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
+                                      UI_STORAGE_KEYS.AUTO_SHOT_NPD_SHELLS_MARK_IS_SHOWN: 14,
+                                      UI_STORAGE_KEYS.NEW_C11N_SECTION_HINT_ACTION_TAKEN: 18,
+                                      UI_STORAGE_KEYS.C11N_VEHICLE_LIST_HINT_ACTION_TAKEN: 19,
+                                      UI_STORAGE_KEYS.VEHICLE_C11N_FILTER_HINT_ACTION_TAKEN: 20}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(5, 224),
                                       UI_STORAGE_KEYS.AUTO_SHOOT_HIGHLIGHTS_COUNTER: Offset(11, 14336),
                                       UI_STORAGE_KEYS.TWIN_GUN_HIGHLIGHTS_COUNTER: Offset(15, 229376)}),
@@ -751,6 +782,8 @@ class ServerSettingsManager(object):
                                                   'role_LT_universal': 23,
                                                   'role_LT_wheeled': 24,
                                                   'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                                  'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.UNIT_FILTER: Section(masks={}, offsets={GAME.UNIT_FILTER: Offset(0, 2047)}),
      SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
                                                       'germany': 1,
@@ -803,6 +836,8 @@ class ServerSettingsManager(object):
                                                       'role_LT_universal': 23,
                                                       'role_LT_wheeled': 24,
                                                       'role_SPG': 25}, offsets={}),
+     SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_3: Section(masks={'own3DStyle': 0,
+                                                      'canInstallAttachments': 1}, offsets={}),
      SETTINGS_SECTIONS.LIMITED_UI_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_2: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_1: Section(masks={}, offsets={LIMITED_UI_KEY: Offset(0, 4294967295L)}),
@@ -1026,6 +1061,43 @@ class ServerSettingsManager(object):
     def setAdvancedAchievementsEarningTimestamp(self, timestamp):
         self.setSectionSettings(SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE, {ADVANCED_ACHIEVEMENTS_STORAGE_KEYS.EARNING_TIMESTAMP: timestamp})
 
+    def updateIsHintTutorial(self, hint):
+        if not self.getOnceOnlyHintsSetting(hint, False):
+            return False
+        else:
+            storageKey = HINT_STORAGE_KEY_MAPPING.get(hint)
+            if storageKey is None:
+                LOG_ERROR('Trying to update hint tutorial state for an unsupported hint')
+                return False
+            for section in SETTINGS_SECTIONS.UI_STORAGE_GROUP:
+                sectionSettings = self.getSection(section, {})
+                if storageKey in sectionSettings:
+                    if not sectionSettings[storageKey]:
+                        self.setSectionSettings(section, {storageKey: True})
+                        return True
+                    return False
+
+            LOG_ERROR('[UPDATE] Hint tutorial storage key not found in storage')
+            return False
+
+    def setHintTutorialState(self, hint, hintSeen, tutorialSeen):
+        storageKey = HINT_STORAGE_KEY_MAPPING.get(hint)
+        if storageKey is None:
+            LOG_ERROR('Trying to set hint tutorial state for an unsupported hint')
+            return
+        else:
+            if self.getOnceOnlyHintsSetting(hint, not hintSeen) != hintSeen:
+                self.setOnceOnlyHintsSettings({hint: hintSeen})
+            for section in SETTINGS_SECTIONS.UI_STORAGE_GROUP:
+                sectionSettings = self.getSection(section, {})
+                if storageKey in sectionSettings:
+                    if sectionSettings[storageKey] != tutorialSeen:
+                        self.setSectionSettings(section, {storageKey: tutorialSeen})
+                    return
+
+            LOG_ERROR('[SET] Hint tutorial storage key not found in storage')
+            return
+
     def _buildAimSettings(self, settings):
         settingToServer = {}
         for section, options in settings.iteritems():
@@ -1179,6 +1251,9 @@ class ServerSettingsManager(object):
 
     def _mapValues(self, settings, storingValue, masks, offsets):
         for key, value in settings.iteritems():
+            if storingValue & 4294967296L:
+                storingValue &= 2147483647
+                storingValue |= 2147483648L
             if key in masks:
                 storingValue &= ~(1 << masks[key])
                 itemValue = int(value) << masks[key]
@@ -1241,7 +1316,13 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.LIMITED_UI_PERMANENT_2: {},
          SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: {},
          SETTINGS_SECTIONS.BATTLE_BORDER_MAP: {},
-         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {}}
+         SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE: {},
+         SETTINGS_SECTIONS.CAROUSEL_FILTER_3: {},
+         SETTINGS_SECTIONS.RANKED_CAROUSEL_FILTER_3: {},
+         SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_3: {},
+         SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_3: {},
+         SETTINGS_SECTIONS.COMP7_CAROUSEL_FILTER_3: {},
+         SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_3: {}}
         yield migrateToVersion(currentVersion, self._core, data)
         self._setSettingsSections(data)
         callback(self)
@@ -1370,10 +1451,10 @@ class ServerSettingsManager(object):
         clearGuiStartBehavior = clear.get(GUI_START_BEHAVIOR, 0)
         if guiStartBehavior or clearGuiStartBehavior:
             settings[SETTINGS_SECTIONS.GUI_START_BEHAVIOR] = self._buildSectionSettings(SETTINGS_SECTIONS.GUI_START_BEHAVIOR, guiStartBehavior) ^ clearGuiStartBehavior
-        BPStorage = data.get('battlePassStorage', {})
+        bpStorage = data.get('battlePassStorage', {})
         clearBPStorage = clear.get('battlePassStorage', 0)
-        if BPStorage or clearBPStorage:
-            settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        if bpStorage or clearBPStorage:
+            settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, bpStorage) ^ clearBPStorage
         spgAimData = data.get('spgAim', {})
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:
@@ -1408,6 +1489,12 @@ class ServerSettingsManager(object):
         clearAchievementStorag = clear.get(SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE, 0)
         if achievementStorage or clearAchievementStorag:
             settings[SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.ADVANCED_ACHIEVEMENTS_STORAGE, achievementStorage) ^ clearAchievementStorag
+        for carouselFilter3Key in SETTINGS_SECTIONS.CAROUSEL_FILTER_3_GROUP:
+            carouselFilter3 = data.get(carouselFilter3Key, {})
+            clearCarouselFilter3 = clear.get(carouselFilter3Key, 0)
+            if carouselFilter3 or clearCarouselFilter3:
+                settings[carouselFilter3Key] = self._buildSectionSettings(carouselFilter3Key, carouselFilter3) ^ clearCarouselFilter3
+
         version = data.get(VERSION)
         if version is not None:
             settings[VERSION] = version

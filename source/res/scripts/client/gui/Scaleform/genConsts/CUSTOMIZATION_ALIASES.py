@@ -30,8 +30,8 @@ class CUSTOMIZATION_ALIASES(object):
     COLOR_BTNS_GROUP = 'colorsGroup'
     SCALE_BTNS_GROUP = 'scaleGroup'
     ANCHOR_TYPE_REGION = 0
-    ANCHOR_TYPE_DECAL = 1
-    ANCHOR_TYPE_PROJECTION_DECAL = 2
+    ANCHOR_TYPE_NORMAL = 1
+    ANCHOR_TYPE_SPECIFIC = 2
     SOUND_CUST_NEGATIVE = 'cust_negative'
     SOUND_RADIAL_BIG = 'radial_big'
     SOUND_RADIAL_SMALL = 'radial_small'

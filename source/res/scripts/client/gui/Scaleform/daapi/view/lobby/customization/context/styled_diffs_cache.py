@@ -14,12 +14,14 @@ class StyleDiffsCache(object):
         self.__diffs = {}
 
     def fini(self):
-        self.__diffs.clear()
+        self.clearDiffs()
 
     def saveDiffs(self, style, diffs):
         storage = self.__diffs.setdefault(style.intCD, {})
         for season, diff in diffs.iteritems():
             storage[season] = diff
+
+        storage['is3D'] = style.is3D
 
     def saveDiff(self, style, season, diff):
         self.__diffs.setdefault(style.intCD, {})[season] = diff
@@ -30,6 +32,15 @@ class StyleDiffsCache(object):
 
     def getDiff(self, style, season):
         if style.intCD not in self.__diffs or season not in self.__diffs[style.intCD]:
-            diffs = self.__service.getStyleComponentDiffs(style.descriptor)
-            return diffs.get(season)
-        return self.__diffs[style.intCD][season]
+            currentOutfit = self.__service.getCurrentOutfit(season)
+            if currentOutfit.id == style.id:
+                return currentOutfit.pack().makeCompDescr()
+            return None
+        else:
+            return self.__diffs[style.intCD][season]
+
+    def clearDiffs(self):
+        self.__diffs.clear()
+
+    def clearModeDiffs(self, is3D):
+        self.__diffs = {style:storage for style, storage in self.__diffs.items() if storage['is3D'] != is3D}

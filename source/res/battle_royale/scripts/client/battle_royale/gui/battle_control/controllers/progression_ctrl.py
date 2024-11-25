@@ -586,7 +586,6 @@ class ProgressionController(IProgressionController, ViewComponentsController):
         avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleControlling += self.__onVehicleControlling
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         self.__modulesStorage = _SelectedModulesStorage()
         self.__moduleChangeReq = _ModuleChangeRequester()
@@ -617,7 +616,6 @@ class ProgressionController(IProgressionController, ViewComponentsController):
             avatar.inputHandler.onCameraChanged -= self.__onCameraChanged
         ctrl = self.__sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleControlling -= self.__onVehicleControlling
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self.clearViewComponents()
         self.onVehicleUpgradeStarted.clear()
@@ -797,10 +795,6 @@ class ProgressionController(IProgressionController, ViewComponentsController):
     def __notifyVehicleChanged(self, newModuleIntCD=None, vehicleRecreated=False):
         for view in self._viewComponents:
             view.setVehicleChanged(self.getCurrentVehicle(), newModuleIntCD, vehicleRecreated)
-
-    def __onVehicleControlling(self, vehicle):
-        if vehicle and vehicle.battleXP.battleXP >= 0:
-            self.updateXP(vehicle.battleXP.battleXP, vehicle.id)
 
     def __onRespawnBaseMoving(self):
         avatar = BigWorld.player()

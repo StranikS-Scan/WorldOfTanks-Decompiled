@@ -73,7 +73,7 @@ class _MergeExtensionFile(object):
             return rmgr.openSection(xmlPath)
         if rmgr.isFile(xmlPath):
             xmlPaths = [xmlPath] + xmlPaths
-        elif len(xmlPaths) > 1 and mergeType != READ_METHOD.INCLUDE:
+        elif len(xmlPaths) > 1 and mergeType not in (READ_METHOD.INCLUDE, READ_METHOD.INCLUDE_BY_PATH):
             raise SoftException('The operation of merging files for files which are not present in the core is prohibited for the merge type: {t}. File: {f} may be present in different extensions!'.format(t=mergeType, f=xmlPath))
         if len(xmlPaths) == 1:
             return rmgr.openSection(xmlPaths[0])
@@ -138,7 +138,7 @@ class ResMgr(object):
         mergeRequired, mergeType, _ = isExtXML(ftPath)
         if len(xmlPaths) > 1 and not mergeRequired:
             raise SoftException('Multiple standalone resources for one relative path found: %s', ftPath)
-        if len(xmlPaths) > 1 and not corePath and mergeType != READ_METHOD.INCLUDE:
+        if len(xmlPaths) > 1 and not corePath and mergeType not in (READ_METHOD.INCLUDE, READ_METHOD.INCLUDE_BY_PATH):
             raise SoftException('The operation of merging files for files which are not present in the core is prohibited for the merge type: {t}. File: {f} may be present in different extensions!'.format(t=mergeType, f=ftPath))
         cachedPath = next(iter(xmlPaths))
         return rmgr.addToCache(cachedPath, xml)

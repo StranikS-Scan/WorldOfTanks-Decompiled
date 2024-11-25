@@ -102,6 +102,8 @@
     <Vauxhall_Bedford_Twin_Six_BPXIV>	125	</Vauxhall_Bedford_Twin_Six_BPXIV>
     <Rolls_Royse_Meteor_MkIX>	126	</Rolls_Royse_Meteor_MkIX>
     <Rolls_Royce_Meteor_M120A>	131	</Rolls_Royce_Meteor_M120A>
+    <Rolls_Royce_Meteor_GD>	132	</Rolls_Royce_Meteor_GD>
+    <Rolls_Royce_Meteor_Mk_IVA>	137	</Rolls_Royce_Meteor_Mk_IVA>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -118,7 +120,6 @@
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>	3	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_2>
     <Nuffield_liberty_MKIV_NewOnBoarding>	64001	</Nuffield_liberty_MKIV_NewOnBoarding>
     <Wright_Continental_R-975C4_NewOnBoarding>	64002	</Wright_Continental_R-975C4_NewOnBoarding>
-    <Rolls_Royse_Meteor_MkIV_HW>	5003	</Rolls_Royse_Meteor_MkIV_HW>
   </ids>
   <shared>
     <Vickers-Armstrong>
@@ -315,6 +316,23 @@
       <rpm_min>	700	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Rolls_Royse_Meteor_A>
+    <Rolls_Royce_Meteor_Mk_IVA>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_Mk_IVA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	14000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	744	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	632	</rpm_min>
+      <rpm_max>	2354	</rpm_max>
+    </Rolls_Royce_Meteor_Mk_IVA>
     <Rolls_Royse_Meteor_MkIV>
       <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
       <tags>	gasoline	</tags>
@@ -348,6 +366,23 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Rolls_Royse_Meteor_MkIV_N>
+    <Rolls_Royce_Meteor_GD>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_GD	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	14000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	750	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	268	</rpm_min>
+      <rpm_max>	2941	</rpm_max>
+    </Rolls_Royce_Meteor_GD>
     <Rolls_Royce_Meteor_Mark_IVB_900>
       <userString>	#gb_vehicles:Rolls_Royce_Meteor_Mark_IVB_900	</userString>
       <tags>	gasoline	</tags>
@@ -2077,22 +2112,5 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </Wright_Continental_R-975C4_NewOnBoarding>
-    <Rolls_Royse_Meteor_MkIV_HW>
-      <userString>	#gb_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	16000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	744	</weight>
-      <maxHealth>	247	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	632	</rpm_min>
-      <rpm_max>	2354	</rpm_max>
-    </Rolls_Royse_Meteor_MkIV_HW>
   </shared>
 </engines.xml>

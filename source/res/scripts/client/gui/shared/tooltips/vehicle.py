@@ -332,14 +332,16 @@ class VehiclePreviewCrewMemberTooltipData(DefaultCrewMemberTooltipData):
             blocks.extend(defaultBlocks)
         if skillsItems:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.VEHICLEPREVIEW_TANKMAN_SKILLSTITLE), padding=formatters.packPadding(top=10, bottom=10)))
-            newSkillCount = sum((1 for skillItem in skillsItems if skillItem[1] == TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER))
-            if newSkillCount:
-                titleText = makeHtmlString('html_templates:lobby/textStyle', 'mainText', {'message': i18n.makeString(skillsItems[0][1], quantity=newSkillCount)})
-                blocks.append(formatters.packImageTextBlockData(img=skillsItems[0][0], title=titleText, txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
-            for skillItem in skillsItems:
-                if skillItem[1] != TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER:
-                    blocks.append(formatters.packImageTextBlockData(img=skillItem[0], title=text_styles.main(skillItem[1]), txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
+            emptySkills = 0
+            for img, title, level in skillsItems:
+                if title != TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER:
+                    blocks.append(formatters.packImageTextBlockData(img=img, title=text_styles.main(title), txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
+                if level > 0:
+                    emptySkills += 1
 
+            if emptySkills:
+                titleText = makeHtmlString('html_templates:lobby/textStyle', 'mainText', {'message': i18n.makeString(TOOLTIPS.VEHICLEPREVIEW_TANKMAN_NEWPERK_HEADER, quantity=emptySkills)})
+                blocks.append(formatters.packImageTextBlockData(img=skillsItems[-1][0], title=titleText, txtPadding=formatters.packPadding(left=10), titleAtMiddle=True))
         return [formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=10))]
 
 

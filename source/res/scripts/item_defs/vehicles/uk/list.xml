@@ -1252,17 +1252,32 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	8	</level>
   </GB131_Crusher>
-  <GB80_Charioteer_HW>
-    <id>	5004	</id>
-    <userString>	#gb_vehicles:GB80_Charioteer	</userString>
-    <description>	#gb_vehicles:GB80_Charioteer_descr	</description>
-    <shortUserString>	#gb_vehicles:GB80_Charioteer_short	</shortUserString>
-    <price>	2470000	</price>
+  <GB146_Gabler_s_Destroyer>
+    <id>	82	</id>
+    <userString>	#gb_vehicles:GB146_Gabler_s_Destroyer	</userString>
+    <description>	#gb_vehicles:GB146_Gabler_s_Destroyer_descr	</description>
+    <shortUserString>	#gb_vehicles:GB146_Gabler_s_Destroyer_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB146_Gabler_s_Destroyer_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB146_Gabler_s_Destroyer_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
     <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user event_battles secret private mode_hidden cannot_be_sold lockOutfit lockCrew lockCrewSkills	</tags>
-    <level>	8	</level>
-  </GB80_Charioteer_HW>
+    <tags>	lightTank HD special scout improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user secret testTank	</tags>
+    <level>	5	</level>
+  </GB146_Gabler_s_Destroyer>
+  <GB149_Centurion_MkI_A>
+    <id>	88	</id>
+    <userString>	#gb_vehicles:GB149_Centurion_MkI_A	</userString>
+    <description>	#gb_vehicles:GB149_Centurion_MkI_A_descr	</description>
+    <shortUserString>	#gb_vehicles:GB149_Centurion_MkI_A_short	</shortUserString>
+    <shortDescriptionSpecial>	#gb_vehicles:GB149_Centurion_MkI_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB149_Centurion_MkI_A_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	7	</level>
+  </GB149_Centurion_MkI_A>
   <GB145_Crusher_ASE_4>
     <id>	250	</id>
     <userString>	#gb_vehicles:GB145_Crusher_ASE_4	</userString>

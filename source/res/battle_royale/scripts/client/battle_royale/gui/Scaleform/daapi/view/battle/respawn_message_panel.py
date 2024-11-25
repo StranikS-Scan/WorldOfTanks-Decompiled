@@ -81,7 +81,7 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
             message = formatStayInCoverMessage(teammateTimeLeft, RESPAWNING_TIMER_DELAY)
             self.__addMessage(message)
 
-    def updateBlockToRessurecTime(self, blockTime):
+    def updateBlockToResurrectTime(self, blockTime):
         if blockTime > 0:
             _logger.debug('formatAllyInBattleMessage %s', blockTime)
             message = formatAllyInBattleMessage(blockTime, self.RESPAWN_DELAY_BEFORE_SHOW)

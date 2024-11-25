@@ -57,6 +57,8 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
              stage)
             self.onSlotBlocked(index)
         else:
+            if stage == STAGES.PREPARING:
+                BigWorld.player().cancelShootingCB()
             super(EpicEquipmentsController, self).setEquipment(intCD, quantity, stage, timeRemaining, totalTime, index + 1)
 
     @MethodsRules.delayable('notifyPlayerVehicleSet')

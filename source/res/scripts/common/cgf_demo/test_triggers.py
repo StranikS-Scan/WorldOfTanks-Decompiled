@@ -89,7 +89,7 @@ class TestComponentCreationManager(CGF.ComponentManager):
                 vehicleGo = h.getTopMostParent(who)
                 vehicle = vehicleGo.findComponentByType(Vehicle.Vehicle)
                 appearance = vehicle.appearance
-                appearance.undamagedStateChildren.append(gameObject)
+                appearance.customizationGameObjects.append(gameObject)
                 gameObject.createComponent(GenericComponents.RedirectorComponent, who)
                 gameObject.createComponent(GenericComponents.DynamicModelComponent, vehicle.model)
 

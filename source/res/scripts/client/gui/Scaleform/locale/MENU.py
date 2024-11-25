@@ -226,6 +226,8 @@ class MENU(object):
     CAROUSEL_TANK_FILTER_AT_SPG = '#menu:carousel_tank_filter/AT-SPG'
     CAROUSEL_TANK_FILTER_SPG = '#menu:carousel_tank_filter/SPG'
     CAROUSEL_TANK_FILTER_READY = '#menu:carousel_tank_filter/ready'
+    CAROUSEL_TANK_FILTER_OWN3DSTYLE = '#menu:carousel_tank_filter/own3DStyle'
+    CAROUSEL_TANK_FILTER_CANINSTALLATTACHMENTS = '#menu:carousel_tank_filter/canInstallAttachments'
     TANKCAROUSEL_VEHICLESTATES_BATTLE = '#menu:tankCarousel/vehicleStates/battle'
     TANKCAROUSEL_VEHICLESTATES_LOCKED = '#menu:tankCarousel/vehicleStates/locked'
     TANKCAROUSEL_VEHICLESTATES_CLANLOCKED = '#menu:tankCarousel/vehicleStates/clanLocked'

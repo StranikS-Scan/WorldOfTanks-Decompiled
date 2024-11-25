@@ -10,10 +10,13 @@ from gui.server_events.awards_formatters import AWARDS_SIZES, PreformattedBonus
 from story_mode.gui.story_mode_gui_constants import BONUS_ORDER
 if typing.TYPE_CHECKING:
     from gui.server_events.awards_formatters import _PreformattedBonus
-_IMAGE_FORMAT = '.png'
+_IMG_PATH_PREFIX = 'img://gui'
 
-def getImgName(path):
-    return '' if path is None else path.split('/')[-1].replace(_IMAGE_FORMAT, '').replace('-', '_')
+def getImgPath(path):
+    if path is None:
+        return ''
+    else:
+        return path if path.startswith('img:') else _IMG_PATH_PREFIX + path[2:]
 
 
 class StoryModeBonusesAwardsComposer(CurtailingAwardsComposer):

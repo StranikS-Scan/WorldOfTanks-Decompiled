@@ -29,7 +29,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsMultiItemsMeta
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from gui.shared.event_dispatcher import tryToShowReplaceExistingStyleDialog
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from shared_utils import first
 from vehicle_outfit.outfit import Area
@@ -109,7 +108,7 @@ class CustomizationCartView(ViewImpl):
         self.__purchaseItems = []
         self.__mode = ItemsType.DEFAULT
         self.__items = {}
-        self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
+        self.__counters = {season:[0, 0] for season in SeasonType.REGULAR}
         self.__moneyState = MoneyForPurchase.NOT_ENOUGH
         self.__blur = CachedBlur()
         if ctx is not None:
@@ -147,7 +146,7 @@ class CustomizationCartView(ViewImpl):
     def _onLoading(self):
         super(CustomizationCartView, self)._onLoading()
         self.__ctx = self.__service.getCtx()
-        purchaseItems = self.__ctx.mode.getPurchaseItems()
+        purchaseItems = self.__ctx.getPurchaseItems()
         processorSelector = ProcessorSelector(_getProcessorsMap())
         result = processorSelector.process(purchaseItems)
         if result is None:
@@ -199,8 +198,8 @@ class CustomizationCartView(ViewImpl):
             if self.__isProlongStyleRent:
                 self.__c11nView.onCloseWindow(force=True)
             else:
-                if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE and g_currentVehicle.item is not None:
-                    self.__ctx.changeMode(CustomizationModes.STYLED)
+                if self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE and g_currentVehicle.item is not None:
+                    self.__ctx.returnToStyleMode()
                 self.__c11nView.changeVisible(True)
             self.__c11nView = None
         self.__blur.fini()
@@ -304,8 +303,8 @@ class CustomizationCartView(ViewImpl):
 
     def __setItemsNCounters(self, itemDescriptors):
         self.__items = {}
-        self.__counters = {season:[0, 0] for season in SeasonType.COMMON_SEASONS}
-        for season in SeasonType.COMMON_SEASONS:
+        self.__counters = {season:[0, 0] for season in SeasonType.REGULAR}
+        for season in SeasonType.REGULAR:
             for idx, item in enumerate(itemDescriptors[season]):
                 self.__items[item.identificator] = _SelectItemData(season, item.quantity, item.purchaseIndices, idx, item.intCD, item.dependents, item.dependentOn)
                 if self.__mode == ItemsType.DEFAULT:
@@ -313,7 +312,7 @@ class CustomizationCartView(ViewImpl):
 
     def __setItemsData(self, model, itemDescriptors):
         seasons = model.seasons
-        for seasonType in SEASONS_ORDER:
+        for seasonType in (SeasonType.ALL,) + SEASONS_ORDER:
             seasonModel = _getSeasonModel(seasonType, seasons)
             if seasonModel is not None:
                 seasonModel.setName(SEASON_TYPE_TO_NAME[seasonType])
@@ -322,7 +321,10 @@ class CustomizationCartView(ViewImpl):
                     purchase, inventory = self.__counters[seasonType]
                     count = purchase + inventory
                     seasonModel.setCount(count)
-                self.__fillItemsListModel(seasonModel.items, itemDescriptors[seasonType])
+                if not (seasonType == SeasonType.ALL and itemDescriptors[seasonType][0].intCD == -1):
+                    self.__fillItemsListModel(seasonModel.items, itemDescriptors[seasonType])
+                else:
+                    self.__fillItemsListModel(seasonModel.items, [])
 
         self.__setBonuses(seasons)
         self.__setTotalData(model)
@@ -330,9 +332,6 @@ class CustomizationCartView(ViewImpl):
 
     @wg_async
     def __onBuy(self):
-        positive = yield wg_await(tryToShowReplaceExistingStyleDialog(self))
-        if not positive:
-            return
         isWalletAvailable = self.__wallet.isAvailable
         if isWalletAvailable and self.__moneyState is MoneyForPurchase.NOT_ENOUGH:
             cart = getTotalPurchaseInfo(self.__purchaseItems)
@@ -465,6 +464,7 @@ class _ItemUIDataPacker(_BaseUIDataPacker):
             model.setIcon(item.iconUrl)
         else:
             model.setIcon(item.iconUrl)
+        model.setRarity(item.rarity)
         canShow = item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION or item.itemTypeID == GUI_ITEM_TYPE.PROJECTION_DECAL and item.isProgressive
         model.setShowUnsupportedAlert(canShow and not isRendererPipelineDeferred())
         isSpecial = item.isVehicleBound and (item.buyCount > 0 or item.inventoryCount > 0) and not item.isProgressionAutoBound or item.isLimited and item.buyCount > 0

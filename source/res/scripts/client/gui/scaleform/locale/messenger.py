@@ -1263,6 +1263,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_EXTERNALVEHICLERENT_EXPIRED_REASON = '#messenger:serviceChannelMessages/externalVehicleRent/expired/reason'
     SERVICECHANNELMESSAGES_EXTERNALVEHICLERENT_EXPIRED_REASON_DEFAULT = '#messenger:serviceChannelMessages/externalVehicleRent/expired/reason_default'
     SERVICECHANNELMESSAGES_EXTERNALVEHICLERENT_EXPIRED_REASON_BOOSTEROID = '#messenger:serviceChannelMessages/externalVehicleRent/expired/reason_boosteroid'
+    SERVICECHANNELMESSAGES_ADVENTCALENDAR_REWARD_HEADER = '#messenger:serviceChannelMessages/adventCalendar/reward/header'
+    SERVICECHANNELMESSAGES_ADVENTCALENDAR_REWARD_DESCRIPTION = '#messenger:serviceChannelMessages/adventCalendar/reward/description'
+    SERVICECHANNELMESSAGES_ADVENTCALENDAR_REWARD_BUTTON = '#messenger:serviceChannelMessages/adventCalendar/reward/button'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

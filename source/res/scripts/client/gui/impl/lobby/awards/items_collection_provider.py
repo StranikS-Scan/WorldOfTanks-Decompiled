@@ -5,7 +5,7 @@ from copy import deepcopy
 import typing
 from adisp import adisp_async, adisp_process
 from gui.battle_pass.battle_pass_award import awardsFactory
-from gui.impl.lobby.awards.packers import getMultipleAwardsBonusPacker
+from gui.impl.lobby.awards.packers import getMultipleProductAwardsBonusPacker
 from gui.impl.lobby.awards.prefetch import PREFETCHERS
 from gui.server_events.bonuses import mergeBonuses
 from helpers import dependency
@@ -120,12 +120,12 @@ class _OrderHelper(object):
 
 @adisp_async
 @adisp_process
-def packBonusModelAndTooltipData(bonuses, productCode, callback=None):
+def packProductBonusModelAndTooltipData(bonuses, productCode, callback=None):
     bonusIndexTotal = 0
     tooltipData = {}
     bonusModelsList = []
     yield lambda callback: callback(True)
-    packer = getMultipleAwardsBonusPacker(productCode)
+    packer = getMultipleProductAwardsBonusPacker(productCode)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = yield packer.requestData(bonus)
@@ -153,7 +153,7 @@ def packBonusModelAndTooltipData(bonuses, productCode, callback=None):
     return
 
 
-class MultipleAwardRewardsMainPacker(object):
+class MultipleProductAwardRewardsMainPacker(object):
     __purchaseCache = dependency.descriptor(IPurchaseCache)
 
     @adisp_async
@@ -179,7 +179,7 @@ class MultipleAwardRewardsMainPacker(object):
 
             bonuses = mergeBonuses(bonuses)
             if self.__prefetchEssentialData(bonuses, productCode):
-                viewRewards, tooltipItems = yield packBonusModelAndTooltipData(bonuses, productCode)
+                viewRewards, tooltipItems = yield packProductBonusModelAndTooltipData(bonuses, productCode)
                 if viewRewards:
                     callback((viewRewards, tooltipItems))
                     return

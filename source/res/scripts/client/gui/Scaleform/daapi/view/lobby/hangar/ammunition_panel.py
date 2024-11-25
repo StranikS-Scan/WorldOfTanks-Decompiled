@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
 from adisp import adisp_process
+from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import ROLE_TYPE
 from CurrentVehicle import g_currentVehicle
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
@@ -10,6 +11,7 @@ from gui.impl.gen import R
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemTypesAvailableForVehicle
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
+from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.impl.lobby.tank_setup.dialogs.need_repair import NeedRepair
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
@@ -19,22 +21,27 @@ from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
 from helpers import dependency, int2roman
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.tank_setup.dialogs.main_content.main_contents import NeedRepairMainContent
+from uilogging.customization_3d_objects.logger import CustomizationAmmunitionPanelLogger
+from uilogging.customization_3d_objects.logging_constants import CustomizationButtons, CustomizationViewKeys
 
 class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
-    __slots__ = ('__hangarMessage',)
+    __slots__ = ('__hangarMessage', '__uiLogger')
     __itemsCache = dependency.descriptor(IItemsCache)
     __service = dependency.descriptor(ICustomizationService)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(AmmunitionPanel, self).__init__()
         self.__hangarMessage = None
+        self.__uiCustomizationLogger = CustomizationAmmunitionPanelLogger(CustomizationViewKeys.HANGAR)
         return
 
     def update(self):
@@ -47,7 +54,10 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             yield VehicleRepairAction(vehicle, NeedRepair, NeedRepairMainContent).doAction()
 
     def showCustomization(self):
-        self.__service.showCustomization()
+        isCustomizationTutorial = self.__settingsCore.serverSettings.updateIsHintTutorial(OnceOnlyHints.NEW_C11N_SECTION_HINT)
+        self.__uiCustomizationLogger.onHintButtonClick(CustomizationButtons.EXTERIOR, isCustomizationTutorial)
+        self.__service.showCustomization(tabId=CustomizationTabs.ATTACHMENTS if isCustomizationTutorial else None)
+        return
 
     def toRentContinue(self):
         if g_currentVehicle.isPresent():
@@ -77,6 +87,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.__hangarMessage = None
+        self.__uiCustomizationLogger = None
         super(AmmunitionPanel, self)._dispose()
         return
 

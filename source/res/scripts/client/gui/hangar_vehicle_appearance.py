@@ -31,6 +31,8 @@ from vehicle_systems import camouflages, vehicle_composition
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
 from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes, TankPartIndexes
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames
+from vehicle_systems.components import attachment_slot_manager
+from vehicle_systems.components.vehicle_appearance_component import VehicleAppearanceComponent
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
@@ -120,12 +122,14 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     fashion = property(lambda self: self.__fashions[0])
     fashions = property(lambda self: self.__fashions)
+    attachments = property(lambda self: self.__attachments)
+    typeDescriptor = property(lambda self: self.__vDesc)
 
     @property
     def filter(self):
         return None
 
-    isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
+    isDestroyed = property(lambda self: self.__isVehicleDestroyed)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -163,7 +167,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
         g_currentVehicle.onChanged += self.__onVehicleChanged
-        self.undamagedStateChildren = []
+        self.customizationGameObjects = []
         return
 
     def recreate(self, vDesc, vState=None, callback=None, outfit=None):
@@ -171,7 +175,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__reload(vDesc, vState or self.__vState, outfit or self._getActiveOutfit(vDesc))
 
     def remove(self):
-        self.__clearModelAnimators()
+        self.__clearCustomLogicComponents()
         self.__loadState.unload()
         if self.shadowManager is not None:
             self.shadowManager.updatePlayerTarget(None)
@@ -203,7 +207,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.tracks.reset()
         if self.shadowManager is not None and self.__vEntity.model is not None:
             self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
-        self.__clearModelAnimators()
+        self.__clearCustomLogicComponents()
         self.__vehicleStickers = None
         ScriptGameObject.deactivate(self)
         ScriptGameObject.destroy(self)
@@ -217,7 +221,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__onLoadedCallback = None
         self.__onLoadedAfterRefreshCallback = None
         self.turretRotator = None
-        self.undamagedStateChildren = []
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
@@ -237,14 +240,13 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def recreateRequired(self, newOutfit):
         shouldUpdateModelsSet = self.__outfit.modelsSet != newOutfit.modelsSet
-        shouldUpdateAttachments = not self.__outfit.attachments.isEqual(newOutfit.attachments)
         shouldUpdateProgressiveOutfit = False
         if newOutfit.style and newOutfit.style.isProgression:
             if self.__outfit.style and self.__outfit.style.isProgression is False:
                 shouldUpdateProgressiveOutfit = True
             elif newOutfit.progressionLevel != self.__outfit.progressionLevel:
                 shouldUpdateProgressiveOutfit = True
-        return shouldUpdateModelsSet or shouldUpdateAttachments or shouldUpdateProgressiveOutfit
+        return shouldUpdateModelsSet or shouldUpdateProgressiveOutfit
 
     def computeVehicleHeight(self):
         gunLength = 0.0
@@ -279,7 +281,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         return self.turretAndGunAngles.getGunPitch()
 
     def __reload(self, vDesc, vState, outfit):
-        self.__clearModelAnimators()
+        self.__clearCustomLogicComponents()
         self.__loadState.unload()
         vehicle_composition.removeComposition(self.gameObject)
         if self.fashion is not None:
@@ -289,13 +291,12 @@ class HangarVehicleAppearance(ScriptGameObject):
         if self.__vEntity.model is not None and self.__vEntity.model is not None:
             self.shadowManager.unregisterCompoundModel(self.__vEntity.model)
         self.shadowManager = None
-        self.undamagedStateChildren = []
         self.reset()
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
         if outfit.style and outfit.style.isProgression:
             outfit = self.__getStyleProgressionOutfitData(outfit)
-        self.__outfit = outfit
+        self.__outfit = outfit.copy()
         self.__startBuild(vDesc, vState)
         return
 
@@ -313,8 +314,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.__isVehicleDestroyed = True
         self.__vDesc = vDesc
         resources = camouflages.getCamoPrereqs(self.__outfit, vDesc)
-        if not self.__isVehicleDestroyed:
-            self.__attachments = camouflages.getAttachments(self.__outfit, vDesc)
+        self.__attachments = camouflages.getAttachments(self.__outfit, vDesc, self.__isVehicleDestroyed, True)
         modelsSet = self.__outfit.modelsSet
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
@@ -384,10 +384,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
-        for prevGo in self.undamagedStateChildren:
-            CGF.removeGameObject(prevGo)
-
-        self.undamagedStateChildren = []
         self.removeComponentByType(GenericComponents.HierarchyComponent)
         self.removeComponentByType(GenericComponents.TransformComponent)
         self.createComponent(GenericComponents.HierarchyComponent, self.__vEntity.entityGameObject)
@@ -441,14 +437,12 @@ class HangarVehicleAppearance(ScriptGameObject):
             return
         if buildInd != self.__curBuildInd:
             return
-        self.__clearModelAnimators()
         self.__modelAnimators = camouflages.getModelAnimators(outfit, self.__vDesc, self.__spaceId, resourceRefs, self.compoundModel)
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.setEnabled(True)
             modelAnimator.animator.start()
 
-        if not self.__isVehicleDestroyed:
-            self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.__spaceId, resourceRefs, self.compoundModel))
+        self.__modelAnimators.extend(camouflages.getAttachmentsAnimators(self.__attachments, self.__spaceId, resourceRefs, self.compoundModel))
         from vehicle_systems import model_assembler
         model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
         for modelAnimator in self.__modelAnimators:
@@ -485,6 +479,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         from vehicle_systems import model_assembler
         resources = self.__resources
         self.__vEntity.model = resources[self.__vDesc.name]
+        self.createComponent(VehicleAppearanceComponent, self)
         if not self.__isVehicleDestroyed:
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             model_assembler.setupTracksFashion(self.__vDesc, self.__fashions.chassis)
@@ -520,7 +515,6 @@ class HangarVehicleAppearance(ScriptGameObject):
             if self.__outfit.style and self.__outfit.style.isProgression:
                 self.__updateStyleProgression(self.__outfit)
             self.__updateDecals(self.__outfit)
-            self.__updateSequences(self.__outfit)
         else:
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             self.__vEntity.model.setupFashions(self.__fashions)
@@ -528,6 +522,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.trackNodesAnimator = None
             self.dirtComponent = None
             self.flagComponent = None
+        self.__updateCustomLogicComponents(self.__outfit)
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
         if not ('AT-SPG' in self.__vDesc.type.tags or 'SPG' in self.__vDesc.type.tags):
@@ -661,8 +656,7 @@ class HangarVehicleAppearance(ScriptGameObject):
                 if partId == partHandleNotFoundErrorCode:
                     _logger.error('Part handle is not found, see node "%s"', attachment.partNodeAlias)
                     continue
-                if not attachment.initialVisibility:
-                    self.compoundModel.setPartVisible(partId, False)
+                self.compoundModel.setPartVisible(partId, False)
 
             return True
 
@@ -715,7 +709,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updatePaint(outfit)
         self.__updateDecals(outfit)
         self.__updateProjectionDecals(outfit)
-        self.__updateSequences(outfit)
+        self.__updateCustomLogicComponents(outfit)
         if callback is not None:
             callback()
         return
@@ -820,30 +814,32 @@ class HangarVehicleAppearance(ScriptGameObject):
         decals = camouflages.getGenericProjectionDecals(outfit, self.__vDesc)
         self.c11nComponent.setDecals(decals)
 
-    def __updateSequences(self, outfit):
-        resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
-        resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        if not resources:
-            self.__clearModelAnimators()
-            if not self.__isVehicleDestroyed:
+    def __updateCustomLogicComponents(self, outfit):
+        self.__clearCustomLogicComponents()
+        self.__attachments = camouflages.getAttachments(outfit, self.__vDesc, self.__isVehicleDestroyed, True)
+        animatorResources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
+        animatorResources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
+        attachment_slot_manager.updateAttachments(self)
+        if not self.__isVehicleDestroyed:
+            if animatorResources:
+                BigWorld.loadResourceListBG(tuple(animatorResources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
+            else:
                 from vehicle_systems import model_assembler
                 model_assembler.assembleCustomLogicComponents(self, self.__vEntity.typeDescriptor, self.__attachments, self.__modelAnimators)
-            return
-        BigWorld.loadResourceListBG(tuple(resources), makeCallbackWeak(self.__onAnimatorsLoaded, self.__curBuildInd, outfit))
 
     def __updateStyleProgression(self, outfit):
         camouflages.changeStyleProgression(outfit.style, self, outfit.progressionLevel)
 
-    def __clearModelAnimators(self):
+    def __clearCustomLogicComponents(self):
         self.flagComponent = None
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.stop()
 
         self.__modelAnimators = []
-        for go in self.undamagedStateChildren:
+        for go in self.customizationGameObjects:
             CGF.removeGameObject(go)
 
-        self.undamagedStateChildren = []
+        self.customizationGameObjects = []
         return
 
     def __onVehicleChanged(self):
@@ -906,14 +902,24 @@ class HangarVehicleAppearance(ScriptGameObject):
         slotType = ANCHOR_TYPE_TO_SLOT_TYPE_MAP[anchor.descriptor.type]
         if slotType == GUI_ITEM_TYPE.PROJECTION_DECAL:
             partIdx = TankPartIndexes.CHASSIS
-            ypr = anchor.rotation
+            pyr = anchor.rotation
             rotationMatrix = Math.Matrix()
-            rotationMatrix.setRotateYPR((ypr.y, ypr.x, ypr.z))
+            rotationMatrix.setRotateYPR((pyr.y, pyr.x, pyr.z))
             normal = rotationMatrix.applyVector((0, -1, 0))
             normal.normalise()
             up = rotationMatrix.applyVector((0, 0, -1))
             up.normalise()
             position = Math.Vector3(anchor.position) + anchor.descriptor.anchorShift * normal
+        elif slotType == GUI_ITEM_TYPE.ATTACHMENT:
+            partIdx = anchor.areaId
+            pyr = anchor.rotation
+            rotationMatrix = Math.Matrix()
+            rotationMatrix.setRotateYPR((pyr.y, pyr.x, pyr.z))
+            normal = rotationMatrix.applyVector((0, 1, 0))
+            normal.normalise()
+            up = rotationMatrix.applyVector((0, 0, 1))
+            up.normalise()
+            position = Math.Vector3(anchor.position)
         else:
             if slotType in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
                 partIdx = TankPartIndexes.HULL

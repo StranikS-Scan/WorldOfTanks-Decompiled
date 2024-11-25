@@ -520,13 +520,13 @@ class SoundGroups(object):
             traceback.print_stack()
         return self.WWgetSound(event, None, None)
 
-    def playSound2D(self, event):
+    def playSound2D(self, event, checkSoundBankName=''):
         if DEBUG_TRACE_SOUND is True:
-            LOG_DEBUG('SOUND: playSound2D', event)
+            LOG_DEBUG('SOUND: playSound2D', event, checkSoundBankName)
         if DEBUG_TRACE_STACK is True:
             import traceback
             traceback.print_stack()
-        return WWISE.WW_eventGlobal(event)
+        return WWISE.WW_eventGlobal(event, checkSoundBankName)
 
     def playSafeSound2D(self, event):
         if event:

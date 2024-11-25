@@ -33,15 +33,15 @@ from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.shared.system_factory import collectGuiItemsCacheInvalidators, GuiItemsCacheInvalidatorParams
 if TYPE_CHECKING:
-    from typing import Optional, Dict
+    from typing import Optional, Dict, List
     import skeletons.gui.shared.utils.requesters as requesters
     from gui.shared.gui_items.badge import Badge
     from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from gui.shared.gui_items.customization.c11n_items import Customization
 _logger = logging.getLogger(__name__)
 DO_LOG_BROKEN_SYNC = False
 
@@ -229,6 +229,18 @@ class VehsMultiNationSuitableCriteria(VehsSuitableCriteria):
                 self._selectAllSuitableItemsByVehicleDescr(self.itemsCache.items.getItemByCD(targetVehCD).descriptor, itemTypeID, outSuitableCompDescrs)
 
 
+class VehicleCanInstallC11nCriteria(RequestCriteria):
+    _itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, itemTypeID, criteria):
+        items = self._itemsCache.items.getItems(itemTypeID, criteria).values()
+        super(VehicleCanInstallC11nCriteria, self).__init__(PredicateCondition(lambda vehicle: self.hasSuitableC11n(vehicle, items)))
+
+    @staticmethod
+    def hasSuitableC11n(vehicle, items):
+        return False if vehicle.isOutfitLocked else any((item.mayInstall(vehicle) for item in items))
+
+
 class REQ_CRITERIA(object):
     EMPTY = RequestCriteria()
     ALL = RequestCriteria(PredicateCondition(lambda i: True))
@@ -314,6 +326,7 @@ class REQ_CRITERIA(object):
         FOR_ITEM = staticmethod(lambda style: RequestCriteria(PredicateCondition(style.mayInstall)))
         HAS_ROLE = staticmethod(lambda roleName: RequestCriteria(PredicateCondition(lambda item: roleName in {roles[0] for roles in item.descriptor.type.crewRoles})))
         HAS_ROLES = staticmethod(lambda tankmanRoles: RequestCriteria(PredicateCondition(lambda item: any((roles[0] in tankmanRoles for roles in item.descriptor.type.crewRoles)))))
+        CAN_INSTALL_C11N = staticmethod(lambda itemTypeID, criteria=RequestCriteria(): VehicleCanInstallC11nCriteria(itemTypeID, criteria))
 
     class TANKMAN(object):
         IN_TANK = RequestCriteria(PredicateCondition(lambda item: item.isInTank))
@@ -705,25 +718,22 @@ class ItemsRequester(IItemsRequester):
 
             self.inventory.initC11nItemsNoveltyData()
         else:
-            for invalidator in collectGuiItemsCacheInvalidators():
-                invalidator(GuiItemsCacheInvalidatorParams(self.__inventory, invalidate, diff))
-
-        for statName, data in diff.get('stats', {}).iteritems():
-            if statName in ('unlocks', ('unlocks', '_r'), ('unlocks', '_d')):
-                self._invalidateUnlocks(data, invalidate)
-            if statName == 'eliteVehicles':
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
-            if statName in ('vehTypeXP', 'vehTypeLocks'):
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
-            if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
-                getter = vehicles.getVehicleTypeCompactDescr
-                vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
-                inventoryVehiclesCDs = []
-                if vehiclesDict:
-                    inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
-            if statName in ('oldVehInvIDs',):
-                invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+            for statName, data in diff.get('stats', {}).iteritems():
+                if statName in ('unlocks', ('unlocks', '_r')):
+                    self._invalidateUnlocks(data, invalidate)
+                if statName == 'eliteVehicles':
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
+                if statName in ('vehTypeXP', 'vehTypeLocks'):
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(iterVehiclesWithNationGroupInOrder(data.keys()))
+                if statName in (('multipliedXPVehs', '_r'), ('multipliedRankedBattlesVehs', '_r')):
+                    getter = vehicles.getVehicleTypeCompactDescr
+                    vehiclesDict = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                    inventoryVehiclesCDs = []
+                    if vehiclesDict:
+                        inventoryVehiclesCDs = [ getter(v['compDescr']) for v in vehiclesDict.itervalues() ]
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(inventoryVehiclesCDs)
+                if statName in ('oldVehInvIDs',):
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
 
         for cacheType, data in diff.get('cache', {}).iteritems():
             if cacheType == 'vehsLock':
@@ -814,9 +824,6 @@ class ItemsRequester(IItemsRequester):
                         for idx in items.iterkeys():
                             intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, getDiffID(idx))
                             invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
-
-                for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS_POOL, {}).iteritems():
-                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 

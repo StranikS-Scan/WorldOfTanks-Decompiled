@@ -78,7 +78,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         yield DialogsInterface.showDialog(ConfirmC11nSellMeta(self._intCD, inventoryCount, self.__ctx.mode.sellItem, vehicle=g_currentVehicle.item))
 
     def removeItemFromTank(self):
-        if self.__ctx.modeId == CustomizationModes.STYLED:
+        if self.__ctx.modeId in CustomizationModes.BASE_STYLES:
             self.__ctx.mode.removeStyle(self._intCD)
         else:
             self.__ctx.mode.removeItems(True, self._intCD)
@@ -90,7 +90,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         self.__ctx.editStyle(self._intCD, source=CustomizationModeSource.CONTEXT_MENU)
 
     def clearStyle(self):
-        if self.__ctx.modeId in (CustomizationModes.STYLED, CustomizationModes.EDITABLE_STYLE):
+        if self.__ctx.modeId in CustomizationModes.STYLES:
             self.__ctx.mode.clearStyle()
         else:
             _logger.error('Failed to install EditableStyle base outfit. Style/EditableStyle mode must be selected.')
@@ -199,7 +199,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
             isInstalled = outfit.has(item)
             seasonName = SEASON_TYPE_TO_NAME.get(self.__ctx.season)
             textKey = '/'.join((CustomizationOptions.REMOVE_FROM_TANK, seasonName))
-        if self.__ctx.modeId == CustomizationModes.EDITABLE_STYLE and itemType in EDITABLE_STYLE_IRREMOVABLE_TYPES:
+        if self.__ctx.modeId == CustomizationModes.STYLE_2D_EDITABLE and itemType in EDITABLE_STYLE_IRREMOVABLE_TYPES:
             if self.__ctx.mode.getDependenciesData() and itemType != GUI_ITEM_TYPE.CAMOUFLAGE:
                 enabled = False
             else:

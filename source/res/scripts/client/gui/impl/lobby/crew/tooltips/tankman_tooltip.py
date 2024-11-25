@@ -21,17 +21,15 @@ from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.shared import IItemsCache
 
 class TankmanTooltip(ViewImpl):
-    __slots__ = ('tankmanID', 'isCalledFromCrewWidget', '__parentLayoutID')
+    __slots__ = ('tankmanID', 'isCalledFromCrewWidget')
     itemsCache = dependency.descriptor(IItemsCache)
     _specialSounds = dependency.descriptor(ISpecialSoundCtrl)
-    _partialInfoViews = (R.views.lobby.crew.BarracksView(), R.views.lobby.crew.MemberChangeView(), R.views.lobby.crew.ConversionConfirmView())
 
     def __init__(self, tankmanID, isCalledFromCrewWidget=False, *args, **kwargs):
         self.tankmanID = tankmanID
         self.isCalledFromCrewWidget = isCalledFromCrewWidget
         settings = ViewSettings(R.views.lobby.crew.tooltips.TankmanTooltip(), args=args, kwargs=kwargs)
         settings.model = TankmanTooltipModel()
-        self.__parentLayoutID = kwargs['layoutID']
         super(TankmanTooltip, self).__init__(settings)
 
     @property
@@ -53,7 +51,7 @@ class TankmanTooltip(ViewImpl):
             vm.setIsFemale(tankman.isFemale)
             vm.setRankIcon(tankman.extensionLessIconRank)
             vm.setSkillsEfficiency(tankman.currentVehicleSkillsEfficiency)
-            vm.setIsInfoAdvanced(self.__parentLayoutID not in self._partialInfoViews or self.isCalledFromCrewWidget)
+            vm.setIsInfoAdvanced(self.isCalledFromCrewWidget)
             self._setVoiceoverReason(vm, tankman, vehicle)
             fillVehicleInfo(vm.nativeVehicle, nativeVehicle, True, nativeVehicle.tags)
             if tankman.isInTank:
@@ -73,7 +71,7 @@ class TankmanTooltip(ViewImpl):
             if not vehicle:
                 vm.setVoiceoverReason(TooltipConstants.UNIQUE_VOICEOVER_WITCHES)
                 return
-            isAllCrewMembersWitch = all((isWitchesCrew(tman.descriptor) for _, tman in vehicle.crew))
+            isAllCrewMembersWitch = all((tman and isWitchesCrew(tman.descriptor) for _, tman in vehicle.crew))
             witchesCrew = getTankmenWithTag(tankman.descriptor.nationID, tankman.descriptor.isPremium, SPECIAL_CREW_TAG.WITCHES_CREW)
             if len(witchesCrew) != len(vehicle.crew) or not isAllCrewMembersWitch:
                 vm.setVoiceoverReason(TooltipConstants.UNIQUE_VOICEOVER_WITCHES)

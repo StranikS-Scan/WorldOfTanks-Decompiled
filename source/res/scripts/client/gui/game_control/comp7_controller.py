@@ -17,6 +17,7 @@ from gui.comp7.entitlements_cache import EntitlementsCache, CacheStatus
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
 from gui.impl.lobby.comp7.comp7_gui_helpers import isSeasonStasticsShouldBeShown
 from gui.impl.lobby.comp7.comp7_lobby_sounds import LobbySounds, playSound
+from gui.impl.lobby.comp7.comp7_shared import getRankById
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.items import ValidationResult
@@ -81,7 +82,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.onQualificationStateUpdated = Event.Event(em)
         self.onSeasonPointsUpdated = Event.Event(em)
         self.onComp7RewardsConfigChanged = Event.Event(em)
-        self.onHighestRankAchieved = Event.Event(em)
+        self.onNewMaxRank = Event.Event(em)
         self.onEntitlementsUpdated = Event.Event(em)
         self.onEntitlementsUpdateFailed = Event.Event(em)
         self.onTournamentBannerStateChanged = Event.Event(em)
@@ -560,8 +561,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__tryToShowSeasonStatistics()
             self.onSeasonPointsUpdated()
         seasonNumber = self.getActualSeasonNumber()
-        if seasonNumber and maxRankEntNameBySeasonNumber(seasonNumber) in entitlements:
-            self.onHighestRankAchieved()
+        if seasonNumber:
+            maxRankEntitlementName = maxRankEntNameBySeasonNumber(seasonNumber)
+            if maxRankEntitlementName in entitlements:
+                self.onNewMaxRank(getRankById(entitlements[maxRankEntitlementName]))
 
     def __updateRank(self):
         actualSeasonNumber = self.getActualSeasonNumber()

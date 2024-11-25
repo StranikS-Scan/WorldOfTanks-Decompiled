@@ -64,6 +64,12 @@ class BattleHintsOverlapController(IBattleHintsOverlapController):
         self._hiddenViews = set()
         _logger.debug('Destroyed.')
 
+    def hintShown(self, battleHint):
+        self._onHintShown(battleHint)
+
+    def hintHidden(self):
+        self._onEmptyHintsQueue()
+
     def _onHintShown(self, battleHint):
         scope = battleHint.model.props.scope
         page = self._getBattlePageView()

@@ -1195,13 +1195,9 @@ class BattlePassListener(_NotificationListener):
 
     def __pushFinished(self):
         if self.__battlePass.isHoliday():
-            text = backport.text(R.strings.system_messages.battlePassH.switch_disable.body())
             header = backport.text(R.strings.system_messages.battlePassH.switch_disable.title(), seasonName=backport.text(R.strings.battle_pass.season.fullName.num(self.__battlePass.getSeasonNum())()))
-        else:
-            text = backport.text(R.strings.system_messages.battlePass.switch_disable.body())
-            header = backport.text(R.strings.system_messages.battlePass.switch_disable.title(), seasonNum=self.__battlePass.getSeasonNum())
-        SystemMessages.pushMessage(text=text, priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassDefault, messageData={'header': header,
-         'additionalText': ''})
+            SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.battlePassH.switch_disable.body()), priority=NotificationPriorityLevel.HIGH, type=SystemMessages.SM_TYPE.BattlePassDefault, messageData={'header': header,
+             'additionalText': ''})
 
     def __pushStarted(self):
         if self.__battlePass.isHoliday():

@@ -1,35 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/minimap/plugins.py
 import logging
-from collections import namedtuple
+import heapq
+import time
 import BigWorld
 import Math
 import typing
+from Event import EventsSubscriber
 from battle_royale.gui.Scaleform.daapi.view.battle.minimap.loot_detector import LootDetector
+from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListener
 from death_zones_helpers import ZONES_SIZE, idxFrom
-import ArenaInfo
-import Placement
 import math_utils
 from Avatar import PlayerAvatar
 from account_helpers.settings_core import settings_constants
 from battle_royale.gui.Scaleform.daapi.view.battle.minimap.settings import DeathZonesAs3Descr, ViewRangeSectorAs3Descr, BattleRoyaleEntries, MarkersAs3Descr
-from battle_royale.gui.shared.events import DeathZoneEvent
+from battle_royale.gui.shared.events import DeathZoneEvent, AirDropEvent, LootEvent
 from battleground.location_point_manager import g_locationPointManager
 from chat_commands_consts import LocationMarkerSubType
 from constants import LOOT_TYPE, ARENA_BONUS_TYPE
 from gui.Scaleform.daapi.view.battle.epic.minimap import CenteredPersonalEntriesPlugin, MINIMAP_SCALE_TYPES, makeMousePositionToEpicWorldPosition
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
 from gui.Scaleform.daapi.view.battle.shared.minimap.common import SimplePlugin, EntriesPlugin, IntervalPlugin
-from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import RadarPlugin, RadarEntryParams, RadarPluginParams, ArenaVehiclesPlugin, _RadarEntryData, MinimapPingPlugin, _LOCATION_PING_RANGE
+from gui.Scaleform.daapi.view.battle.shared.minimap.entries import MinimapEntry
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugins import ArenaVehiclesPlugin, MinimapPingPlugin, _LOCATION_PING_RANGE
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getCircularVisionAngle
 from gui.battle_control import matrix_factory, minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.doc_loaders.battle_royale_settings_loader import getBattleRoyaleSettings
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
-from gui.shared.events import AirDropEvent
 from helpers import dependency
+from helpers.CallbackDelayer import CallbackDelayer
 from items.battle_royale import isSpawnedBot
-from shared_utils import findFirst
 from skeletons.gui.battle_session import IBattleSessionProvider
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
@@ -41,7 +42,12 @@ _MINIMAP_MAX_SCALE_INDEX = 5
 _MINIMAP_LOCATION_MARKER_MIN_SCALE = 1.0
 _MINIMAP_LOCATION_MARKER_MAX_SCALE = 2.33
 RADAR_PLUGIN = 'radar'
+DETECTOR_PLUGIN = 'detector'
 VEHICLES_PLUGIN = 'vehicles'
+AIRDROP_PLUGIN = 'airdrop'
+PERSONAL_PLUGIN = 'personal'
+PINGING_PLUGIN = 'pinging'
+DEATH_ZONES_PLUGIN = 'deathZones'
 _logger = logging.getLogger(__name__)
 
 class BattleRoyalePersonalEntriesPlugin(CenteredPersonalEntriesPlugin):
@@ -249,104 +255,239 @@ class DeathZonesPlugin(SimplePlugin):
         targetList.extend([x, ZONES_SIZE - 1 - y, state])
 
 
-_TimeParamsForAs = namedtuple('_TimeParamsForAs', 'fadeIn fadeOut lifetime')
+class BattleRoyaleMinimapEntry(MinimapEntry):
+    SHOW = 0
+    HIDE = 1
+    DESTROY = 2
 
-class _BattleRoyaleRadarEntryData(_RadarEntryData):
-
-    def __init__(self, entryId, showMeCallback, hideMeCallback, destroyMeCallback, params, entityId=None, typeId=None, isDying=True):
-        super(_BattleRoyaleRadarEntryData, self).__init__(entryId, destroyMeCallback, params, entityId, typeId)
-        self.isDying = isDying
-        self.xzPosition = None
-        self.__hideTime = params.lifetime - params.fadeOut - params.fadeIn
-        self.__hideMeCallback = hideMeCallback
-        self.__showMeCallback = showMeCallback
-        self.__isHidden = False
-        return
-
-    def destroy(self):
-        super(_BattleRoyaleRadarEntryData, self).destroy()
-        self.__hideMeCallback = None
-        self.__showMeCallback = None
-        return
-
-    def upTimer(self):
-        super(_BattleRoyaleRadarEntryData, self).upTimer()
-        self._callbackDelayer.delayCallback(self.__hideTime, self.__hideEntry)
-
-    def invalidateEntry(self):
-        if self.__isHidden:
-            self.__isHidden = False
-            self.__showMeCallback(self.entryId, self.getTypeId())
-        self.stopTimer()
-        if self.isDying:
-            self.upTimer()
-
-    def setParams(self, params):
-        self._lifeTime = params.lifetime
-        self.__hideTime = params.lifetime - params.fadeOut - params.fadeIn
-
-    def __hideEntry(self):
-        self.__isHidden = True
-        self.__hideMeCallback(self.entryId)
+    def __init__(self, entryID, active, matrix):
+        super(BattleRoyaleMinimapEntry, self).__init__(entryID, active, matrix)
+        self.name = ''
+        self.marker = ''
+        self.markerBig = ''
+        self.lifeTime = 0
+        self.fadeIn = 0
+        self.fadeOut = 0
+        self.targetState = self.SHOW
 
 
-class BattleRoyaleRadarPlugin(RadarPlugin):
+class BaseBattleRoyaleEntriesPlugin(EntriesPlugin):
+    TICK_INTERVAL = 0.1
 
-    def __init__(self, parent):
-        super(BattleRoyaleRadarPlugin, self).__init__(parent)
-        radarSettings = getBattleRoyaleSettings().radar.marker
-        sectorDetectedSettings = getBattleRoyaleSettings().spottedLoot.marker
-        self._params = RadarPluginParams(fadeIn=radarSettings.fadeIn, fadeOut=radarSettings.fadeOut, lifetime=radarSettings.lifeTime, vehicleEntryParams=RadarEntryParams(container=_C_NAME.ALIVE_VEHICLES, symbol=_S_NAME.DISCOVERED_ITEM_MARKER), lootEntryParams=RadarEntryParams(container=_C_NAME.EQUIPMENTS, symbol=_S_NAME.DISCOVERED_ITEM_MARKER))
-        self.__timeParamsForAS = _TimeParamsForAs(fadeIn=self.__sToMs(self._params.fadeIn), fadeOut=self.__sToMs(self._params.fadeOut), lifetime=self.__sToMs(self._params.lifetime - self._params.fadeIn - self._params.fadeOut))
-        self.__detectedLootsParams = _TimeParamsForAs(fadeIn=sectorDetectedSettings.fadeIn, fadeOut=sectorDetectedSettings.fadeOut, lifetime=sectorDetectedSettings.lifeTime)
-        self.__radarRadius = 0
-        self.__radarAnimationEntry = None
-        self.__isColorBlind = False
-        self.__isMinimapSmall = None
-        self.__visibilitySystemSpottedVehicles = set()
-        self.__lootDetector = LootDetector()
-        return
+    def __init__(self, parent, clazz=BattleRoyaleMinimapEntry):
+        super(BaseBattleRoyaleEntriesPlugin, self).__init__(parent, clazz=clazz)
+        self._watchedEntities = []
+        self._es = EventsSubscriber()
+        self._isMinimapSmall = False
+        self._callbackDelayer = CallbackDelayer()
 
     def init(self, arenaVisitor, arenaDP):
-        super(BattleRoyaleRadarPlugin, self).init(arenaVisitor, arenaDP)
-        self._es.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
-        self.__lootDetector.init(arenaVisitor)
-        self.__lootDetector.onLootsDetected += self.__onLootsDetected
-        self.__lootDetector.onLootsLost += self.__onLootsLost
-
-    def fini(self):
-        self.__lootDetector.onLootsLost -= self.__onLootsLost
-        self.__lootDetector.onLootsDetected -= self.__onLootsDetected
-        self.__lootDetector.fini()
-        super(BattleRoyaleRadarPlugin, self).fini()
+        super(BaseBattleRoyaleEntriesPlugin, self).init(arenaVisitor, arenaDP)
+        g_eventBus.addListener(LootEvent.LOOT_PICKED_UP, self._onLootPickedUp, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def start(self):
-        super(BattleRoyaleRadarPlugin, self).start()
-        self.__radarAnimationEntry = self._addEntry(_S_NAME.RADAR_ANIM, _C_NAME.PERSONAL, matrix=matrix_factory.makeAttachedVehicleMatrix(), active=True)
+        super(BaseBattleRoyaleEntriesPlugin, self).start()
+        self._callbackDelayer.delayCallback(self.TICK_INTERVAL, self._tick)
+
+    def stop(self):
+        super(BaseBattleRoyaleEntriesPlugin, self).stop()
+        self._callbackDelayer.clearCallbacks()
+
+    def fini(self):
+        g_eventBus.removeListener(LootEvent.LOOT_PICKED_UP, self._onLootPickedUp, scope=EVENT_BUS_SCOPE.BATTLE)
+        self._es.unsubscribeFromAllEvents()
+        self._clearEntries()
+        self._watchedEntities = None
+        self._callbackDelayer.destroy()
+        self._callbackDelayer = None
+        super(BaseBattleRoyaleEntriesPlugin, self).fini()
+        return
+
+    def applyNewSize(self, sizeIndex):
+        super(BaseBattleRoyaleEntriesPlugin, self).applyNewSize(sizeIndex)
+        newValue = sizeIndex < _MARKER_SIZE_INDEX_BREAKPOINT
+        if self._isMinimapSmall is None or newValue != self._isMinimapSmall:
+            self._isMinimapSmall = newValue
+            for uniqueID in self._entries:
+                self._updateEntry(uniqueID)
+
+        return
+
+    def watch(self, expiresIn, uniqueID):
+        heapq.heappush(self._watchedEntities, (time.time() + expiresIn, uniqueID))
+
+    def expired(self, uniqueID):
+        entry = self._entries.get(uniqueID)
+        if entry is not None:
+            if entry.targetState == BattleRoyaleMinimapEntry.HIDE:
+                self._hideEntry(uniqueID)
+                entry.targetState = BattleRoyaleMinimapEntry.DESTROY
+                self.watch(entry.fadeOut, uniqueID)
+            elif entry.targetState == BattleRoyaleMinimapEntry.DESTROY:
+                self._destroyEntry(uniqueID)
+        return
+
+    @staticmethod
+    def sToMs(seconds):
+        return seconds * 1000
+
+    def _tick(self):
+        currentTime = time.time()
+        while self._watchedEntities and self._watchedEntities[0][0] <= currentTime:
+            _, uniqueID = heapq.heappop(self._watchedEntities)
+            self.expired(uniqueID)
+
+        return self.TICK_INTERVAL
+
+    def _createEntry(self, uniqueID, entryPosition, symbol, container):
+        entry = self._addEntryEx(uniqueID, symbol, container, active=True)
+        if entry is not None:
+            entry.setMatrix(math_utils.createTranslationMatrix(entryPosition))
+            self._setMatrixEx(uniqueID, entry.getMatrix())
+            self._parentObj.setEntryParameters(entry.getID(), doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
+        else:
+            _logger.error('Could not create minimap entry, unqiueId: %s', str(uniqueID))
+        return entry
+
+    def _updateEntry(self, uniqueID):
+        entry = self._entries.get(uniqueID)
+        if entry is not None:
+            self._invokeEx(uniqueID, MarkersAs3Descr.AS_UPDATE_MARKER, entry.marker if self._isMinimapSmall else entry.markerBig)
+        return
+
+    def _showEntry(self, uniqueID):
+        entry = self._entries.get(uniqueID)
+        if entry is not None:
+            self._invokeEx(uniqueID, MarkersAs3Descr.AS_ADD_MARKER, entry.marker if self._isMinimapSmall else entry.markerBig, self.sToMs(entry.fadeIn))
+        return
+
+    def _hideEntry(self, uniqueID):
+        entry = self._entries.get(uniqueID)
+        if entry is not None:
+            self._invokeEx(uniqueID, MarkersAs3Descr.AS_REMOVE_MARKER, self.sToMs(entry.fadeOut))
+        return
+
+    def _destroyEntry(self, uniqueID):
+        self._delEntryEx(uniqueID)
+
+    def _clearEntries(self):
+        for uniqueID in self._entries.copy():
+            self._destroyEntry(uniqueID)
+
+        self._watchedEntities = []
+
+    def _onLootPickedUp(self, event):
+        entry = self._entries.get(event.ctx['id'])
+        if entry is not None:
+            self._destroyEntry(event.ctx['id'])
+        return
+
+
+class DetectorPlugin(BaseBattleRoyaleEntriesPlugin):
+
+    def __init__(self, parent):
+        super(DetectorPlugin, self).__init__(parent)
+        self.__detectorSettings = getBattleRoyaleSettings().detector.marker
+        self.__lootDetector = LootDetector()
+
+    def init(self, arenaVisitor, arenaDP):
+        super(DetectorPlugin, self).init(arenaVisitor, arenaDP)
+        self._es.subscribeToEvent(avatar_getter.getInputHandler().onCameraChanged, self.__onCameraChanged)
+        self.__lootDetector.init(arenaVisitor)
+        self._es.subscribeToEvent(self.__lootDetector.onLootsDetected, self.__onLootsDetected)
+        self._es.subscribeToEvent(self.__lootDetector.onLootsLost, self.__onLootsLost)
+
+    def fini(self):
+        super(DetectorPlugin, self).fini()
+        self.__lootDetector.fini()
+
+    def start(self):
+        super(DetectorPlugin, self).start()
         self.__lootDetector.start()
 
     def stop(self):
         self.__lootDetector.stop()
-        super(BattleRoyaleRadarPlugin, self).stop()
+        super(DetectorPlugin, self).stop()
+
+    def __addLootEntry(self, loot):
+        marker, markerBig = self.__getMarkers(loot.typeID)
+        if not (marker and markerBig):
+            _logger.warning('Could not find marker for loot with typeId: %s', str(loot.typeID))
+            return
+        else:
+            entry = self._createEntry(loot.id, loot.position, _S_NAME.DISCOVERED_ITEM_MARKER, _C_NAME.EQUIPMENTS)
+            if entry is not None:
+                entry.marker = marker
+                entry.markerBig = markerBig
+                entry.fadeIn = self.__detectorSettings.fadeIn
+                entry.fadeOut = self.__detectorSettings.fadeOut
+                entry.lifeTime = self.__detectorSettings.lifeTime - entry.fadeIn - entry.fadeOut
+            return entry
+
+    def __onLootsDetected(self, loots):
+        if not BigWorld.player().isObserver() or BigWorld.player().isObserverFPV:
+            for loot in loots:
+                entry = self.__addLootEntry(loot)
+                if entry is not None:
+                    entry.targetState = BattleRoyaleMinimapEntry.SHOW
+                    self._showEntry(loot.id)
+
+        return
+
+    def __onLootsLost(self, loots):
+        for loot in loots:
+            entry = self._entries.get(loot.id)
+            if entry is not None:
+                entry.targetState = BattleRoyaleMinimapEntry.HIDE
+                self.watch(entry.lifeTime, loot.id)
+
+        return
+
+    def __onCameraChanged(self, *_):
+        if BigWorld.player().isObserver() and not BigWorld.player().isObserverFPV:
+            if self.__lootDetector.active:
+                self.__lootDetector.stop()
+                self._clearEntries()
+        elif not self.__lootDetector.active:
+            self.__lootDetector.start()
+
+    @staticmethod
+    def __getMarkers(typeID):
+        return (MarkersAs3Descr.AS_ADD_MARKER_LOOT_BY_TYPE_ID.get(typeID), MarkersAs3Descr.AS_ADD_MARKER_LOOT_BIG_BY_TYPE_ID.get(typeID))
+
+
+class RadarPlugin(BaseBattleRoyaleEntriesPlugin, IRadarListener):
+
+    def __init__(self, parent):
+        super(RadarPlugin, self).__init__(parent, clazz=BattleRoyaleMinimapEntry)
+        self.__radarSettings = getBattleRoyaleSettings().radar.marker
+        self.__radarRadius = 0
+        self.__radarAnimationEntry = None
+        self.__isColorBlind = False
+        self.__visibilitySystemSpottedVehicles = set()
+        return
+
+    def init(self, arenaVisitor, arenaDP):
+        super(RadarPlugin, self).init(arenaVisitor, arenaDP)
+        radarCtrl = self.sessionProvider.dynamic.radar
+        if radarCtrl:
+            radarCtrl.addRuntimeView(self)
+            self._es.addCallbackOnUnsubscribe(lambda : radarCtrl.removeRuntimeView(self))
+
+    def start(self):
+        super(RadarPlugin, self).start()
+        self.__radarAnimationEntry = self._addEntry(_S_NAME.RADAR_ANIM, _C_NAME.PERSONAL, matrix=matrix_factory.makeAttachedVehicleMatrix(), active=True)
 
     def setSettings(self):
-        super(BattleRoyaleRadarPlugin, self).setSettings()
+        super(RadarPlugin, self).setSettings()
         self.__isColorBlind = self.settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND)
 
     def updateSettings(self, diff):
-        super(BattleRoyaleRadarPlugin, self).updateSettings(diff)
+        super(RadarPlugin, self).updateSettings(diff)
         if settings_constants.GRAPHICS.COLOR_BLIND in diff:
             self.__isColorBlind = diff[settings_constants.GRAPHICS.COLOR_BLIND]
-            self.__updateVehicleEntries()
-
-    def applyNewSize(self, sizeIndex):
-        super(BattleRoyaleRadarPlugin, self).applyNewSize(sizeIndex)
-        newValue = sizeIndex < _MARKER_SIZE_INDEX_BREAKPOINT
-        if self.__isMinimapSmall is None or newValue != self.__isMinimapSmall:
-            self.__isMinimapSmall = newValue
-            self.__updateVehicleEntries()
-            self.__updateLootEntries()
-        return
+            for uniqueID in self._entries:
+                self._updateEntry(uniqueID)
 
     def radarActivated(self, radarRadius):
         if self.__radarAnimationEntry is not None:
@@ -356,122 +497,86 @@ class BattleRoyaleRadarPlugin(RadarPlugin):
             self._invoke(self.__radarAnimationEntry, MarkersAs3Descr.AS_PLAY_RADAR_ANIMATION)
         return
 
-    def addVisibilitySysSpottedVeh(self, vehId):
-        self.__visibilitySystemSpottedVehicles.add(vehId)
-        self.__destroyVehicleEntryByVehId(vehId)
+    def addVisibilitySysSpottedVeh(self, vehicleID):
+        self.__visibilitySystemSpottedVehicles.add(vehicleID)
+        entry = self._entries.get(vehicleID)
+        if entry is not None:
+            self._destroyEntry(vehicleID)
+        return
 
-    def removeVisibilitySysSpottedVeh(self, vehId):
-        self.__visibilitySystemSpottedVehicles.remove(vehId)
+    def removeVisibilitySysSpottedVeh(self, vehicleID):
+        self.__visibilitySystemSpottedVehicles.remove(vehicleID)
 
-    def _createEntryData(self, entryId, destroyMeCallback, params, entityId=None, typeId=None):
-        return _BattleRoyaleRadarEntryData(entryId, self.__showEntryByEntryID, self.__hideEntryByEntryID, destroyMeCallback, params, entityId, typeId)
+    def radarInfoReceived(self, data):
+        self.__processEntries(data[1], self.__addVehicleEntry)
+        self.__processEntries(data[2], self.__addLootEntry)
 
-    def _addVehicleEntry(self, vehicleId, xzPosition):
-        if vehicleId in self.__visibilitySystemSpottedVehicles:
+    def _showEntry(self, uniqueID):
+        entry = self._entries.get(uniqueID)
+        if entry is not None:
+            if entry.name:
+                self._invokeEx(uniqueID, MarkersAs3Descr.AS_ADD_MARKER, entry.marker if self._isMinimapSmall else entry.markerBig, self.sToMs(entry.fadeIn), entry.name)
+            else:
+                super(RadarPlugin, self)._showEntry(uniqueID)
+        return
+
+    def __processEntries(self, entires, addEntryFunction):
+        for entryID, entryData in entires:
+            entry = addEntryFunction(entryID, entryData)
+            if entry is not None:
+                entry.fadeIn = self.__radarSettings.fadeIn
+                entry.fadeOut = self.__radarSettings.fadeOut
+                entry.lifeTime = self.__radarSettings.lifeTime - entry.fadeIn - entry.fadeOut
+                self._showEntry(entryID)
+                entry.targetState = BattleRoyaleMinimapEntry.HIDE
+                self.watch(entry.lifeTime, entryID)
+
+        return
+
+    def __addVehicleEntry(self, vehicleID, vehicleData):
+        if self._arenaDP.getPlayerVehicleID() == vehicleID:
+            return
+        elif vehicleID in self.__visibilitySystemSpottedVehicles:
             _logger.debug('Vehicle marker spotted by radar is not displayeddue to vehicle marker spotted by visibility system is still visible!')
             return
         else:
-            vEntryId = super(BattleRoyaleRadarPlugin, self)._addVehicleEntry(vehicleId, xzPosition)
-            if vEntryId is not None:
-                entryName = 'enemy'
-                vInfo = self._arenaDP.getVehicleInfo(vehicleId)
-                isBot = vInfo.team == 21
-                if avatar_getter.isVehiclesColorized():
-                    entryName = 'team{}'.format(vInfo.team)
-                elif isBot:
-                    entryName = 'br_enemy_bot'
-                self._parentObj.setEntryParameters(vEntryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-                self._invoke(vEntryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getVehicleMarker(vInfo), self.__timeParamsForAS.fadeIn, entryName)
-            return vEntryId
+            position = vehicleData[0]
+            marker, markerBig = self.__getVehicleMarkers(vehicleID)
+            entry = self._createEntry(vehicleID, Math.Vector3(position[0], 0.0, position[1]), _S_NAME.DISCOVERED_ITEM_MARKER, _C_NAME.ALIVE_VEHICLES)
+            if entry is not None:
+                entry.name = self.__getVehicleEntryName(entry)
+                entry.marker = marker
+                entry.markerBig = markerBig
+            return entry
 
-    def _addLootEntry(self, lootId, lootInfo):
-        typeId, _ = lootInfo
-        if typeId == LOOT_TYPE.AIRDROP:
+    def __addLootEntry(self, lootID, lootData):
+        position, typeID = lootData
+        marker, markerBig = self.__getLootMarkers(typeID)
+        if not (marker and markerBig):
+            _logger.warning('Cannot find marker for loot with typeId = %s', str(typeID))
             return
         else:
-            lEntry = self.__getLootEntryOnMinimap(lootId)
-            if lEntry is not None:
-                self.__updateLootEntryTimer(lEntry)
-                return lEntry
-            lEntry = super(BattleRoyaleRadarPlugin, self)._addLootEntry(lootId, lootInfo)
-            if lEntry.entryId is not None:
-                self.__showEntryByEntryID(lEntry.entryId, typeId)
-            return lEntry
-
-    def __hideEntryByEntryID(self, entryId):
-        self._parentObj.setEntryParameters(entryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-        self._invoke(entryId, MarkersAs3Descr.AS_REMOVE_MARKER, self.__timeParamsForAS.fadeOut)
-
-    def __showEntryByEntryID(self, entryId, typeId):
-        lootTypeParam = self.__getLootMarkerByTypeId(typeId)
-        if lootTypeParam is None:
-            _logger.warning('Error in loot entry creation, typeId = %s', str(typeId))
-        else:
-            self._parentObj.setEntryParameters(entryId, doClip=False, scaleType=MINIMAP_SCALE_TYPES.NO_SCALE)
-            self._invoke(entryId, MarkersAs3Descr.AS_ADD_MARKER, lootTypeParam, self.__timeParamsForAS.fadeIn)
-        return
-
-    def __destroyVehicleEntryByVehId(self, vehId):
-        if vehId in self._vehicleEntries:
-            self._destroyVehicleEntry(self._vehicleEntries[vehId].entryId, vehId)
-
-    def __updateVehicleEntries(self):
-        for vehicleId, entry in self._vehicleEntries.iteritems():
-            vInfo = self._arenaDP.getVehicleInfo(vehicleId)
-            markerType = self.__getVehicleMarker(vInfo)
-            self._invoke(entry.entryId, MarkersAs3Descr.AS_UPDATE_MARKER, markerType)
-
-    def __updateLootEntries(self):
-        for entry in self._lootEntries:
-            markerType = self.__getLootMarkerByTypeId(entry.getTypeId())
-            self._invoke(entry.entryId, MarkersAs3Descr.AS_UPDATE_MARKER, markerType)
-
-    def __getVehicleMarker(self, vInfo=None):
-        if vInfo and isSpawnedBot(vInfo.vehicleType.tags):
-            return MarkersAs3Descr.AS_ADD_MARKER_BOT_VEHICLE
-        if vInfo and vInfo.team == 21:
-            if self.__isMinimapSmall:
-                return MarkersAs3Descr.AS_ADD_MARKER_ENEMY_BOT_VEHICLE
-            return MarkersAs3Descr.AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG
-        return MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE if self.__isMinimapSmall else MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE_BIG
-
-    def __getLootMarkerByTypeId(self, typeId):
-        return MarkersAs3Descr.AS_ADD_MARKER_LOOT_BY_TYPE_ID.get(typeId) if self.__isMinimapSmall else MarkersAs3Descr.AS_ADD_MARKER_LOOT_BIG_BY_TYPE_ID.get(typeId)
+            entry = self._createEntry(lootID, Math.Vector3(position[0], 0.0, position[1]), _S_NAME.DISCOVERED_ITEM_MARKER, _C_NAME.EQUIPMENTS)
+            if entry is not None:
+                entry.marker = marker
+                entry.markerBig = markerBig
+            return entry
 
     @staticmethod
-    def __sToMs(seconds):
-        return seconds * 1000
+    def __getLootMarkers(typeID):
+        return (MarkersAs3Descr.AS_ADD_MARKER_LOOT_BY_TYPE_ID.get(typeID), MarkersAs3Descr.AS_ADD_MARKER_LOOT_BIG_BY_TYPE_ID.get(typeID))
 
-    def __getLootEntryOnMinimap(self, lootEntityId):
-        return findFirst(lambda entry: entry.getEntityId() == lootEntityId, self._lootEntries)
+    def __getVehicleMarkers(self, vehicleID):
+        vInfo = self._arenaDP.getVehicleInfo(vehicleID)
+        if vInfo and isSpawnedBot(vInfo.vehicleType.tags):
+            return (MarkersAs3Descr.AS_ADD_MARKER_BOT_VEHICLE, MarkersAs3Descr.AS_ADD_MARKER_BOT_VEHICLE)
+        return (MarkersAs3Descr.AS_ADD_MARKER_ENEMY_BOT_VEHICLE, MarkersAs3Descr.AS_ADD_MARKER_ENEMY_BOT_VEHICLE_BIG) if vInfo and vInfo.team == 21 else (MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE, MarkersAs3Descr.AS_ADD_MARKER_ENEMY_VEHICLE_BIG)
 
-    def __onLootsDetected(self, loots):
-        for loot in loots:
-            if not BigWorld.player().isObserver() or BigWorld.player().isObserverFPV:
-                lEntry = self._addLootEntry(loot.id, (loot.typeID, (loot.position[0], loot.position[2])))
-                if lEntry and lEntry.entryId:
-                    self.__updateLootEntryTimer(lEntry, detected=True, isDying=False)
-
-    def __onLootsLost(self, loots):
-        for loot in loots:
-            lEntry = self.__getLootEntryOnMinimap(loot.id)
-            if lEntry:
-                self.__updateLootEntryTimer(lEntry, detected=True)
-
-    def __updateLootEntryTimer(self, lootEntry, detected=False, isDying=True):
-        if detected:
-            lootEntry.setParams(self.__detectedLootsParams)
-            lootEntry.isDying = isDying
-        elif lootEntry.isDying:
-            lootEntry.setParams(self._params)
-        lootEntry.invalidateEntry()
-
-    def __onCameraChanged(self, *_):
-        if BigWorld.player().isObserver() and not BigWorld.player().isObserverFPV:
-            if self.__lootDetector.active:
-                self.__lootDetector.stop()
-        elif not self.__lootDetector.active:
-            self.__lootDetector.start()
+    def __getVehicleEntryName(self, vehicleID):
+        vInfo = self._arenaDP.getVehicleInfo(vehicleID)
+        if avatar_getter.isVehiclesColorized():
+            return 'team{}'.format(vInfo.team)
+        return 'br_enemy_bot' if vInfo.team == 21 else 'enemy'
 
 
 class AirDropPlugin(EntriesPlugin):
@@ -494,23 +599,23 @@ class AirDropPlugin(EntriesPlugin):
         self.__initMarkers()
         g_eventBus.addListener(AirDropEvent.AIR_DROP_SPAWNED, self.__onAirDropSpawned, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.addListener(AirDropEvent.AIR_DROP_LANDED, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.addListener(AirDropEvent.AIR_DROP_LOOP_ENTERED, self.__onAirDropLootEntered, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.addListener(AirDropEvent.AIR_DROP_LOOP_LEFT, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(AirDropEvent.AIR_DROP_ENTERED, self.__onAirDropLootEntered, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.addListener(AirDropEvent.AIR_DROP_LEFT, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def fini(self):
         super(AirDropPlugin, self).fini()
         g_eventBus.removeListener(AirDropEvent.AIR_DROP_SPAWNED, self.__onAirDropSpawned, scope=EVENT_BUS_SCOPE.BATTLE)
         g_eventBus.removeListener(AirDropEvent.AIR_DROP_LANDED, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.removeListener(AirDropEvent.AIR_DROP_LOOP_ENTERED, self.__onAirDropLootEntered, scope=EVENT_BUS_SCOPE.BATTLE)
-        g_eventBus.removeListener(AirDropEvent.AIR_DROP_LOOP_LEFT, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.removeListener(AirDropEvent.AIR_DROP_ENTERED, self.__onAirDropLootEntered, scope=EVENT_BUS_SCOPE.BATTLE)
+        g_eventBus.removeListener(AirDropEvent.AIR_DROP_LEFT, self.__removeMarker, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def __initMarkers(self):
-        for v in BigWorld.entities.values():
-            if isinstance(v, Placement.Placement):
-                self.__showMarker(v.id, v.position)
-            if isinstance(v, ArenaInfo.ArenaInfo):
-                for item in v.lootArenaInfo.lootPositions:
-                    self.__showMarker(item.id, item.position)
+        for placement in BigWorld.entities.valuesOfType('Placement'):
+            self.__showMarker(placement.id, placement.position)
+
+        for arenaInfo in BigWorld.entities.valuesOfType('ArenaInfo'):
+            for lootPosition in arenaInfo.lootArenaInfo.lootPositions:
+                self.__showMarker(lootPosition.id, lootPosition.position)
 
     def __onAirDropSpawned(self, event):
         self.__showMarker(event.ctx['id'], event.ctx['position'])

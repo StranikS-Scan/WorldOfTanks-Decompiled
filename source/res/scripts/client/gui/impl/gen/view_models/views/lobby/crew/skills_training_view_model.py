@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.skills_list_model import SkillsLi
 class SkillsTrainingViewModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=11, commands=1):
+    def __init__(self, properties=12, commands=1):
         super(SkillsTrainingViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -80,6 +80,12 @@ class SkillsTrainingViewModel(ViewModel):
     def setIsAnySkillSelected(self, value):
         self._setBool(10, value)
 
+    def getIsTankmanInVehicle(self):
+        return self._getBool(11)
+
+    def setIsTankmanInVehicle(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(SkillsTrainingViewModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -93,4 +99,5 @@ class SkillsTrainingViewModel(ViewModel):
         self._addBoolProperty('areAllSkillsLearned', False)
         self._addRealProperty('skillsEfficiency', 0.0)
         self._addBoolProperty('isAnySkillSelected', False)
+        self._addBoolProperty('isTankmanInVehicle', False)
         self.onClose = self._addCommand('onClose')

@@ -50,6 +50,7 @@ _PERSONAL_NUM_ICON_TEMPLATE = 'img://personal_num,{width},{height},"{texture}","
 _PERSONAL_NUM_ICON_URL = 'pnum://{texture}?{params}'
 _PN_SWATCH_WIDTH = 228
 _PN_SWATCH_HEIGHT = 104
+_TEXTURES_PATH = 'gui/maps/vehicles/'
 _PREVIEW_ICON_TEMPLATE = 'img://preview_icon,{width},{height},{innerWidth},{innerHeight},"{texture}"'
 _PREVIEW_ICON_URL = 'preview://{texture}?{params}'
 _PREVIEW_ICON_SIZE = (226, 102)
@@ -90,6 +91,10 @@ def getGroupFullNameResourceID(groupID):
          backport.msgid(_groupIDs.unique_styles()): _groupNames.unique(),
          backport.msgid(_groupIDs.historical_styles()): _groupNames.historical()})
     return _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP[groupID] if groupID in _STYLE_GROUP_ID_TO_FULL_GROUP_NAME_MAP else R.invalid()
+
+
+def getTexturePath(itemTypeName, size, name, extension):
+    return _TEXTURES_PATH + itemTypeName + 's/' + size + '/' + name + '.' + extension
 
 
 class SpecialEvents(object):
@@ -314,6 +319,10 @@ class Customization(FittingItem):
         return self.descriptor.priceGroup
 
     @property
+    def rarity(self):
+        return self.descriptor.rarity
+
+    @property
     def priceGroupTags(self):
         return self.descriptor.priceGroupTags
 
@@ -327,7 +336,7 @@ class Customization(FittingItem):
 
     @property
     def icon(self):
-        return self.descriptor.texture.replace('gui/', '../', 1)
+        return self.texture.replace('gui/', '../', 1)
 
     @property
     def iconUrl(self):
@@ -344,6 +353,10 @@ class Customization(FittingItem):
     @property
     def isStyleOnly(self):
         return self.descriptor.isStyleOnly
+
+    @property
+    def hasBattleEffect(self):
+        return ItemTags.BATTLE_EFFECT in self.tags
 
     @property
     def inventoryCount(self):
@@ -960,12 +973,27 @@ class Attachment(Customization):
         self.itemTypeID = GUI_ITEM_TYPE.ATTACHMENT
 
     @property
+    def texture(self):
+        return getTexturePath(self.itemTypeName, 's104x104', self.descriptor.name, 'png')
+
+    @property
+    def previewTexture(self):
+        return getTexturePath(self.itemTypeName, 's232x174', self.descriptor.name, 'png')
+
+    def getIconApplied(self, component):
+        return self.previewTexture.replace('gui/', '../', 1)
+
+    @property
     def modelName(self):
         return self.descriptor.modelName
 
     @property
     def hangarModelName(self):
         return self.descriptor.hangarModelName
+
+    @property
+    def crashModelName(self):
+        return self.descriptor.crashModelName
 
     @property
     def sequenceId(self):
@@ -976,8 +1004,35 @@ class Attachment(Customization):
         return self.descriptor.attachmentLogic
 
     @property
-    def initialVisibility(self):
-        return self.descriptor.initialVisibility
+    def applyType(self):
+        return self.descriptor.applyType
+
+    @property
+    def size(self):
+        return self.descriptor.size
+
+    @property
+    def rotatable(self):
+        return self.descriptor.rotatable
+
+    @property
+    def scalable(self):
+        return self.descriptor.scalable
+
+    @property
+    def scaleFactorId(self):
+        return self.descriptor.scaleFactorId
+
+    def hasSlot(self, vehicle):
+        for areaId in Area.ALL:
+            for _, anchor in vehicle.getAnchors(self.itemTypeID, areaId):
+                if not anchor.hiddenForUser:
+                    return True
+
+        return False
+
+    def mayInstall(self, vehicle, _=None):
+        return super(Attachment, self).mayInstall(vehicle) and self.hasSlot(vehicle)
 
 
 class Style(Customization):
@@ -1025,7 +1080,7 @@ class Style(Customization):
 
     @property
     def is3D(self):
-        return bool(self.modelsSet)
+        return self.descriptor.is3D
 
     @property
     def rentCount(self):
@@ -1107,12 +1162,11 @@ class Style(Customization):
         return RentalInfoProvider(battles=battlesLeft)
 
     def getOutfit(self, season, vehicleCD='', diff=None):
-        if diff is not None:
+        if diff:
             return self.__createOutfit(season, vehicleCD, diff)
-        else:
-            if season not in self.__outfits or self.__outfits[season].vehicleCD != vehicleCD:
-                self.__outfits[season] = self.__createOutfit(season, vehicleCD)
-            return self.__outfits[season].copy()
+        if season not in self.__outfits or self.__outfits[season].vehicleCD != vehicleCD:
+            self.__outfits[season] = self.__createOutfit(season, vehicleCD)
+        return self.__outfits[season].copy()
 
     def getDependenciesIntCDs(self):
         if self.__dependenciesByIntCD is None:
@@ -1174,13 +1228,7 @@ class Style(Customization):
         if c11nCtx is not None and vehicleIntCD == g_currentVehicle.item.intCD:
             diffs = c11nCtx.stylesDiffsCache.getDiffs(self)
             for diff in diffs.itervalues():
-                if diff is not None and isEditedStyle(parseCompDescr(diff)):
-                    return True
-
-        else:
-            outfitsPool = self._itemsCache.items.inventory.getC11nOutfitsFromPool(vehicleIntCD)
-            for styleId, _ in outfitsPool:
-                if styleId == self.id:
+                if diff and isEditedStyle(parseCompDescr(diff)):
                     return True
 
         return False
@@ -1217,9 +1265,6 @@ class Style(Customization):
             component.serial_number = self.serialNumber
         if diff is not None:
             diffComponent = parseCompDescr(diff)
-            if component.styleId != diffComponent.styleId:
-                _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)
-            else:
-                component = component.applyDiff(diffComponent)
+            component = component.applyDiff(diffComponent)
         component = self.descriptor.addPartsToOutfit(season, component, vehicleCD)
         return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)

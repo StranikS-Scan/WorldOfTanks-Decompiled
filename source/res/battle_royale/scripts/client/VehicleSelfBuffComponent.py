@@ -22,3 +22,6 @@ class VehicleSelfBuffComponent(VehicleAbilityBaseComponent):
         data['isSourceVehicle'] = True
         super(VehicleSelfBuffComponent, self)._updateTimer(data)
         return
+
+    def _getDuration(self):
+        return self._getEquipment(self.EQUIPMENT_NAME).duration

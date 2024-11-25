@@ -2187,9 +2187,6 @@ class VehicleType(object):
     def getVehicleClass(self):
         return getVehicleClassFromVehicleType(self)
 
-    def getAllDevices(self):
-        return {d.compactDescr for d in self.chassis + self.engines + self.radios + self.fuelTanks + self.turrets[0] + tuple(self.getGuns())}
-
     def __getRoleFromTags(self):
         roles = g_cache.roles()
         suitableRoles = [ tag for tag in roles if ROLE_TYPE_TO_LABEL[tag] in self.tags ]

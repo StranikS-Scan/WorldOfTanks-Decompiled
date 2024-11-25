@@ -3,14 +3,15 @@
 import itertools
 import logging
 import typing
-from collections import defaultdict
 from copy import deepcopy
 import ResMgr
+import Math
 from constants import IS_CLIENT, IS_BOT, ITEM_DEFS_PATH, IS_EDITOR, DeviceRepairMode
 from items import _xml, getTypeInfoByName
 from items.components import component_constants
 from items.components import shared_components
 from items.components import c11n_constants
+from items.customization_slot_tags_validator import customizationSlotTagsValidator
 _ALLOWED_EMBLEM_SLOTS = component_constants.ALLOWED_EMBLEM_SLOTS
 _ALLOWED_SLOTS_ANCHORS = component_constants.ALLOWED_SLOTS_ANCHORS
 _ALLOWED_MISC_SLOTS = component_constants.ALLOWED_MISC_SLOTS
@@ -30,9 +31,10 @@ def _readMiscSlot(ctx, subsection, slotType):
     return descr
 
 
-def _customizationSlotTagsValidator(tag):
-    availableTags = c11n_constants.ProjectionDecalDirectionTags.ALL + c11n_constants.ProjectionDecalFormTags.ALL + c11n_constants.ProjectionDecalPreferredTags.ALL + c11n_constants.ProjectionDecalMatchingTags.ALL
-    return tag in availableTags
+def _readAttachmentSlot(ctx, subsection, slotType):
+    descr = shared_components.AttachmentSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), attachNode=_xml.readStringOrNone(ctx, subsection, 'attachNode'), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), applyType=_xml.readStringOrEmpty(ctx, subsection, 'applyType'), size=_xml.readStringOrEmpty(ctx, subsection, 'size'))
+    _verifySlotId(ctx, slotType, descr.slotId)
+    return descr
 
 
 def _readCustomizationSlot(ctx, subsection, slotType):
@@ -43,7 +45,7 @@ def _readCustomizationSlot(ctx, subsection, slotType):
 
 
 def _readProjectionDecalSlot(ctx, subsection, slotType):
-    descr = shared_components.ProjectionDecalSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=_xml.readIntOrNone(ctx, subsection, 'showOn'), tags=readOrderedTagsOrEmpty(ctx, subsection, _customizationSlotTagsValidator), clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE), anchorShift=_xml.readFloat(ctx, subsection, 'anchorShift', c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT))
+    descr = shared_components.ProjectionDecalSlotDescription(slotType=slotType, slotId=_xml.readInt(ctx, subsection, 'slotId'), position=_xml.readVector3OrNone(ctx, subsection, 'position'), rotation=_xml.readVector3OrNone(ctx, subsection, 'rotation'), scale=_xml.readVector3OrNone(ctx, subsection, 'scale'), scaleFactors=_xml.readVector3(ctx, subsection, 'scaleFactors', c11n_constants.DEFAULT_DECAL_SCALE_FACTORS), doubleSided=_xml.readBool(ctx, subsection, 'doubleSided', False), hiddenForUser=_xml.readBool(ctx, subsection, 'hiddenForUser', False), canBeMirroredVertically=_xml.readBool(ctx, subsection, 'verticalMirror', False), showOn=_xml.readIntOrNone(ctx, subsection, 'showOn'), tags=readOrderedTagsOrEmpty(ctx, subsection, customizationSlotTagsValidator), clipAngle=_xml.readFloat(ctx, subsection, 'clipAngle', c11n_constants.DEFAULT_DECAL_CLIP_ANGLE), anchorShift=_xml.readFloat(ctx, subsection, 'anchorShift', c11n_constants.DEFAULT_DECAL_ANCHOR_SHIFT))
     _verifySlotId(ctx, slotType, descr.slotId)
     _verifyMatchingSlotSettings(ctx, descr)
     if descr.showOn is not None:
@@ -67,35 +69,67 @@ def _readCompatibleModels(subsection, ctx):
     return compatibleModels
 
 
-__customizationSlotIdRanges = None
+__customizationConstants = None
 
 def __getInitedSlotIdRanges():
-    global __customizationSlotIdRanges
-    if __customizationSlotIdRanges is None:
-        __customizationSlotIdRanges = defaultdict(dict)
-        _readCustomizationSlotIdRanges()
-    return __customizationSlotIdRanges
+    global __customizationConstants
+    _initCustomizationConstants()
+    return __customizationConstants['slot_id_ranges']
+
+
+def getAttachmentSlotSizes():
+    _initCustomizationConstants()
+    return __customizationConstants['attachment_slot_sizes']
+
+
+def getAttachmentSlotScale(applyType, baseSize, selectedSize):
+    if not applyType or not baseSize or not selectedSize:
+        return Math.Vector3(*c11n_constants.DEFAULT_SCALE)
+    slotSizes = getAttachmentSlotSizes()[applyType]
+    baseScale = slotSizes[baseSize]['size']
+    selectedScale = slotSizes[selectedSize]['size']
+    return Math.Vector3(selectedScale.x / baseScale.x, selectedScale.y / baseScale.y, selectedScale.z / baseScale.z)
 
 
 def getCustomizationSlotIdRanges():
     return __getInitedSlotIdRanges() if IS_EDITOR else None
 
 
-def _readCustomizationSlotIdRanges():
-    filePath = _CUSTOMIZATION_CONSTANTS_PATH
-    section = ResMgr.openSection(filePath)
-    if section is None:
-        _xml.raiseWrongXml(None, filePath, 'can not open or read')
-    xmlCtx = (None, filePath)
-    slots = _xml.getSubsection(xmlCtx, section, 'slot_id_ranges')
-    for partName, part in _xml.getChildren(xmlCtx, section, 'slot_id_ranges'):
-        partIds = __customizationSlotIdRanges[partName]
-        for itemName, item in _xml.getChildren(xmlCtx, slots, partName):
-            range_min = _xml.readInt(xmlCtx, item, 'range_min')
-            range_max = _xml.readInt(xmlCtx, item, 'range_max')
-            partIds[itemName] = (range_min, range_max)
+def _initCustomizationConstants():
+    global __customizationConstants
+    if __customizationConstants is not None:
+        return
+    else:
+        __customizationConstants = dict()
+        filePath = _CUSTOMIZATION_CONSTANTS_PATH
+        section = ResMgr.openSection(filePath)
+        if section is None:
+            _xml.raiseWrongXml(None, filePath, 'can not open or read')
+        xmlCtx = (None, filePath)
+        __customizationConstants['slot_id_ranges'] = dict()
+        slots = _xml.getSubsection(xmlCtx, section, 'slot_id_ranges')
+        for partName, _ in _xml.getChildren(xmlCtx, section, 'slot_id_ranges'):
+            __customizationConstants['slot_id_ranges'][partName] = dict()
+            for itemName, item in _xml.getChildren(xmlCtx, slots, partName):
+                range_min = _xml.readInt(xmlCtx, item, 'range_min')
+                range_max = _xml.readInt(xmlCtx, item, 'range_max')
+                __customizationConstants['slot_id_ranges'][partName][itemName] = (range_min, range_max)
 
-    return
+        __customizationConstants['attachment_slot_sizes'] = dict()
+        attachmentSlotTypes = _xml.getSubsection(xmlCtx, section, 'attachment_slot_sizes')
+        for typeName, type in _xml.getChildren(xmlCtx, section, 'attachment_slot_sizes'):
+            __customizationConstants['attachment_slot_sizes'][typeName] = dict()
+            for sizeName, item in _xml.getChildren(xmlCtx, attachmentSlotTypes, typeName):
+                size = _xml.readVector3(xmlCtx, item, 'size')
+                premountSize = _xml.readVector3(xmlCtx, item, 'premount_size')
+                mountSize = _xml.readVector3(xmlCtx, item, 'mount_size')
+                shift = _xml.readVector2(xmlCtx, item, 'shift')
+                __customizationConstants['attachment_slot_sizes'][typeName][sizeName] = {'size': size,
+                 'premountSize': premountSize,
+                 'mountSize': mountSize,
+                 'shift': shift}
+
+        return
 
 
 def _verifySlotId(ctx, slotType, slotId):
@@ -160,19 +194,6 @@ def readAllowedTags(xmlCtx, section, subsectionName, itemTypeName):
     return readTags(xmlCtx, section, allowedTagNames, subsectionName)
 
 
-def readTagsOrEmpty(xmlCtx, section, allowedTagNames, subsectionName='tags'):
-    tags = _xml.readStringOrNone(xmlCtx, section, subsectionName)
-    res = set()
-    if tags is not None:
-        tagNames = tags.split()
-        for tagName in tagNames:
-            if tagName not in allowedTagNames:
-                _xml.raiseWrongXml(xmlCtx, subsectionName, "unknown tag '%s'" % tagName)
-            res.add(intern(tagName))
-
-    return frozenset(res)
-
-
 def readOrderedTagsOrEmpty(xmlCtx, section, allowedTagValidator, subsectionName='tags'):
     tags = _xml.readStringOrNone(xmlCtx, section, subsectionName)
     res = []
@@ -205,6 +226,9 @@ def readCustomizationSlots(xmlCtx, section, subsectionName):
             anchors.append(descr)
         elif slotType in component_constants.ALLOWED_SLOTS_ANCHORS:
             descr = _readCustomizationSlot(ctx, subsection, slotType)
+            anchors.append(descr)
+        elif slotType in component_constants.ALLOWED_ATTACHMENT_SLOTS:
+            descr = _readAttachmentSlot(ctx, subsection, slotType)
             anchors.append(descr)
         elif slotType in component_constants.ALLOWED_MISC_SLOTS:
             descr = _readMiscSlot(ctx, subsection, slotType)

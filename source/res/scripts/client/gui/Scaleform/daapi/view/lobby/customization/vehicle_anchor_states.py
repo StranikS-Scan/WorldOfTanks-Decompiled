@@ -85,7 +85,7 @@ class Anchor(StateContext):
         self.__ctx.vehicleAnchorsUpdater.onAnchorStateChanged(self.uid, self.stateID)
 
     def updateState(self):
-        outfit = self.__ctx.mode.getModifiedOutfit(self.__ctx.season)
+        outfit = self.__ctx.mode.currentOutfit
         lock = isItemsQuantityLimitReached(outfit, self.slotId.slotType)
         if isSlotFilled(outfit, self.slotId):
             newState = UnselectedFilledState(self)

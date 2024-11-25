@@ -820,6 +820,33 @@
         <rotation>	0 0 0	</rotation>
         <attachNode>	hull	</attachNode>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.68 0.187105 -0.6004	</position>
+        <rotation>	-0 0 1.188046	</rotation>
+        <scale>	0.999993 0.999992 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.68 0.187105 -0.6004	</position>
+        <rotation>	-0 3.141593 1.188046	</rotation>
+        <scale>	0.999883 0.999942 0.999823	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.000013 0.462 -3.877	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999947 0.999948 0.999947	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2384,6 +2411,24 @@
               <showOn>	4096	</showOn>
               <clipAngle>	0.921991	</clipAngle>
               <anchorShift>	0.026421	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000009 0.435 -2.462	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	turret	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48002	</slotId>
+              <position>	-0.778999 0.820888 -0.579	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>

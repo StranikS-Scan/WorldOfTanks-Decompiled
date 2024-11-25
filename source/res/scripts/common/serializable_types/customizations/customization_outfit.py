@@ -42,7 +42,7 @@ def __ignoreItem(itemId, cache, ignoreEmpty, ignoreStyleOnly):
     return False
 
 
-def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True, ignoreEmpty=True, ignoreStyleOnly=True, skipStyle=False):
+def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True, ignoreEmpty=True, ignoreStyleOnly=True, skipCommonElements=False):
     result = defaultdict(int)
     for i in outfit.modifications:
         if __ignoreItem(i, cc.modifications, ignoreEmpty, ignoreStyleOnly):
@@ -88,8 +88,15 @@ def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True, ignoreEmpty=T
             continue
         result[cn.CamouflageItem.makeIntDescr(camouflageId)] += ApplyArea.getAppliedCount(ce.appliedTo)
 
-    if outfit.styleId and not skipStyle:
+    if outfit.styleId and not skipCommonElements:
         result[cn.StyleItem.makeIntDescr(outfit.styleId)] = 1
+    if outfit.attachments and not skipCommonElements:
+        for attachment in outfit.attachments:
+            attachmentId = attachment.id
+            if __ignoreItem(attachmentId, cc.attachments, ignoreEmpty, ignoreStyleOnly):
+                continue
+            result[cn.AttachmentItem.makeIntDescr(attachmentId)] += 1
+
     return dict(result)
 
 
@@ -193,10 +200,12 @@ class CustomizationOutfit(SerializableComponent):
 
         return res
 
-    def applyDiff(self, outfit):
+    def applyDiff(self, outfit, ignoreStyleDiff=False):
         resultOutfit = self.copy()
-        resultOutfit.styleProgressionLevel = outfit.styleProgressionLevel
-        resultOutfit.serial_number = outfit.serial_number
+        if not ignoreStyleDiff:
+            resultOutfit.styleProgressionLevel = outfit.styleProgressionLevel
+            resultOutfit.serial_number = outfit.serial_number
+            resultOutfit.styleId = outfit.styleId
         for itemType in CustomizationType.RANGE:
             typeName = lower(CustomizationTypeNames[itemType])
             componentsAttrName = '{}s'.format(typeName)
@@ -242,13 +251,17 @@ class CustomizationOutfit(SerializableComponent):
         return resultOutfit
 
     def getDiff(self, outfit):
-        resultOutfit = self.copy()
+        resultOutfit = CustomizationOutfit()
+        resultOutfit.styleProgressionLevel = self.styleProgressionLevel
+        resultOutfit.serial_number = self.serial_number
+        resultOutfit.styleId = self.styleId
+        resultOutfit.attachments = self.attachments
         for itemType in CustomizationType.FULL_RANGE:
             typeName = lower(CustomizationTypeNames[itemType])
             componentsAttrName = '{}s'.format(typeName)
             if componentsAttrName not in self.__slots__:
                 continue
-            modifiedComponents = getattr(resultOutfit, componentsAttrName, None)
+            modifiedComponents = getattr(self, componentsAttrName, None)
             baseComponents = getattr(outfit, componentsAttrName, None)
             components = []
             if itemType == CustomizationType.MODIFICATION:
@@ -315,6 +328,11 @@ class CustomizationOutfit(SerializableComponent):
                     toMove[(CustomizationType.MODIFICATION, modification)] += 1
 
                 self.modifications = []
+            if c11nType == CustomizationType.ATTACHMENT:
+                for attachment in self.attachments:
+                    toMove[(CustomizationType.ATTACHMENT, attachment.id)] += 1
+
+                self.attachments = []
 
         return dict(toMove)
 
@@ -369,6 +387,8 @@ class CustomizationOutfit(SerializableComponent):
                 result += len([ component for component in self.personal_numbers if componentId == component.id ])
             elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
                 result += 1
+            elif typeId == CustomizationType.ATTACHMENT and componentId in self.attachments:
+                result += 1
         return result
 
     def removeComponent(self, componentId, typeId, count):
@@ -409,7 +429,16 @@ class CustomizationOutfit(SerializableComponent):
                 elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
                     self.modifications.remove(componentId)
                     count -= 1
+                elif typeId == CustomizationType.ATTACHMENT:
+                    self.attachments.remove(componentId)
+                    count -= 1
         return countBefore - count
+
+    def removeComponents(self, typeIds):
+        for typeId in typeIds:
+            if typeId in CustomizationType.DISMOUNT_TYPE:
+                attr = '{}s'.format(lower(CustomizationTypeNames[typeId]))
+                setattr(self, attr, [])
 
     def wipe(self, gameParams, cache, getGroupedComponentPrice, vehType=None):
         outfitItems = getAllItemsFromOutfit(cache, self)

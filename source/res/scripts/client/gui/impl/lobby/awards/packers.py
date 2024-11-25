@@ -5,7 +5,6 @@ import typing
 from adisp import adisp_async, adisp_process
 from constants import RentType, OFFER_TOKEN_PREFIX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
 from gui.impl import backport
 from gui.impl.backport import createTooltipData, TooltipData
 from gui.impl.gen import R
@@ -13,17 +12,21 @@ from gui.impl.gen.view_models.views.lobby.awards.reward_model import RewardModel
 from gui.impl.lobby.awards import SupportedTokenTypes
 from gui.impl.lobby.awards.prefetch import TokenDataPrefetcher
 from gui.impl.lobby.awards.tooltip import VEH_FOR_CHOOSE_ID
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
 from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker, CustomizationBonusUIPacker, BonusUIPacker
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
+from items import tankmen
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import VehiclesBonus, TokensBonus
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
+    from gui.server_events.bonuses import VehiclesBonus, TokensBonus, TmanTemplateTokensBonus
+    from gui.server_events.recruit_helper import _BaseRecruitInfo
     from gui.shared.gui_items.Vehicle import Vehicle
+    from typing import Optional, Callable
 VEH_COMP_R_ID = R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent()
 _GAMEPLAY_TO_UI_RENT_MAPPING = {RentType.NO_RENT: RentTypeEnum.NONE,
  RentType.TIME_RENT: RentTypeEnum.DAYS,
@@ -72,13 +75,13 @@ def getVehicleUIData(vehicle):
      'vehicleLvlNum': vehicle.level}
 
 
-class _MultiAwardTokenBonusUIPacker(BaseBonusUIPacker):
+class _MultiProductAwardTokenBonusUIPacker(BaseBonusUIPacker):
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     __purchaseCache = dependency.descriptor(IPurchaseCache)
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, productID):
-        super(_MultiAwardTokenBonusUIPacker, self).__init__()
+        super(_MultiProductAwardTokenBonusUIPacker, self).__init__()
         self.__productID = productID
 
     def isAsync(self):
@@ -156,7 +159,7 @@ class _MultiAwardTokenBonusUIPacker(BaseBonusUIPacker):
                 if hasRent:
                     result.append(VEH_FOR_CHOOSE_ID)
                     continue
-            result.append(super(_MultiAwardTokenBonusUIPacker, cls)._getContentId(bonus))
+            result.append(super(_MultiProductAwardTokenBonusUIPacker, cls)._getContentId(bonus))
 
         return result
 
@@ -235,11 +238,95 @@ class MultiAwardVehiclesBonusUIPacker(VehiclesBonusUIPacker):
         return createTooltipData(tooltip=tooltipData.tooltip, specialAlias=VEH_COMP_R_ID, specialArgs=specialArgs)
 
 
-def getMultipleAwardsBonusPacker(productCode):
-    tokenBonus = _MultiAwardTokenBonusUIPacker(productCode)
+class _TmanTemplateProductBonusPacker(BaseBonusUIPacker):
+    __isBigImageUsed = False
+
+    def __init__(self, productID):
+        super(_TmanTemplateProductBonusPacker, self).__init__()
+        self.__productID = productID
+
+    def isAsync(self):
+        return True
+
+    @adisp_async
+    @adisp_process
+    def asyncPack(self, bonus, callback=None):
+        yield lambda callback: callback(True)
+        result = []
+        tankmenTokens = bonus.getTokens().iterkeys()
+        for tokenID in tankmenTokens:
+            if tokenID.startswith(tankmen.RECRUIT_TMAN_TOKEN_PREFIX):
+                packed = yield self._packTmanTemplateToken(tokenID, bonus)
+                if packed is None:
+                    _logger.error('Received wrong tman_template token from server: %s', tokenID)
+                else:
+                    result.append(packed)
+
+        callback(result)
+        return
+
+    @adisp_async
+    @adisp_process
+    def asyncGetToolTip(self, bonus, callback=None):
+        yield lambda callback: callback(True)
+        tooltipData = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(tankmen.RECRUIT_TMAN_TOKEN_PREFIX):
+                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
+
+        callback(tooltipData)
+        return
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        count = len([ tID for tID in bonus.getTokens() if tID.startswith(tankmen.RECRUIT_TMAN_TOKEN_PREFIX) ])
+        return [BACKPORT_TOOLTIP_CONTENT_ID] * count
+
+    @adisp_async
+    @adisp_process
+    def _packTmanTemplateToken(self, tokenID, bonus, callback=None):
+        prefetcher = TokenDataPrefetcher(self.__productID)
+        iconSmallPath, iconBigPath = yield prefetcher.getImageData(self._getProductToken(tokenID))
+        if not iconSmallPath or not iconBigPath:
+            iconPath = self._packTmanLocalTemplateToken(tokenID)
+            if not iconSmallPath:
+                _logger.warning("Couldn't obtain big image for %s!", tokenID)
+                iconSmallPath = iconPath
+            elif not iconBigPath:
+                _logger.warning("Couldn't obtain small image for %s!", tokenID)
+                iconBigPath = iconPath
+        model = RewardModel()
+        self._packCommon(bonus, model)
+        model.setIconSmall(iconSmallPath)
+        model.setIconBig(iconBigPath)
+        callback(model)
+
+    @classmethod
+    def _packTmanLocalTemplateToken(cls, tokenID):
+        recruitInfo = getRecruitInfo(tokenID)
+        if recruitInfo is None:
+            return ''
+        else:
+            groupName = recruitInfo.getGroupName()
+            bonusImageName = '_'.join([cls.__getBonusImageName(recruitInfo), groupName])
+            return bonusImageName
+
+    @classmethod
+    def _getProductToken(cls, tokenName):
+        tokenData = tankmen.getRecruitInfoFromToken(tokenName)
+        return '{}_{}'.format(tankmen.RECRUIT_TMAN_TOKEN_PREFIX, tokenData['sourceID'])
+
+    @classmethod
+    def __getBonusImageName(cls, recruitInfo):
+        baseName = 'tank{}man'.format('wo' if recruitInfo.isFemale() else '')
+        return baseName
+
+
+def getMultipleProductAwardsBonusPacker(productCode):
+    tokenBonus = _MultiProductAwardTokenBonusUIPacker(productCode)
     mapping = getDefaultBonusPackersMap()
     mapping.update({'vehicles': MultiAwardVehiclesBonusUIPacker(),
-     'tmanToken': TmanTemplateBonusPacker(),
+     'tmanToken': _TmanTemplateProductBonusPacker(productCode),
      'customizations': Customization3Dand2DbonusUIPacker(),
      SupportedTokenTypes.BATTLE_TOKEN: tokenBonus,
      SupportedTokenTypes.TOKENS: tokenBonus,

@@ -23,7 +23,6 @@ from skeletons.gui.shared.utils import IHangarSpace
 _logger = logging.getLogger(__name__)
 
 class BaseAmmunitionPanelView(ViewImpl):
-    _VIEW_MODEL = AmmunitionPanelViewModel
     _itemsCache = dependency.descriptor(IItemsCache)
     _hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('_ammunitionPanel', '_wasVehicleOnLoading', 'onPanelSectionResized', 'onVehicleChanged')
@@ -31,7 +30,7 @@ class BaseAmmunitionPanelView(ViewImpl):
     def __init__(self, flags=ViewFlags.VIEW):
         settings = ViewSettings(R.views.lobby.tanksetup.AmmunitionPanel())
         settings.flags = flags
-        settings.model = self._VIEW_MODEL()
+        settings.model = AmmunitionPanelViewModel()
         super(BaseAmmunitionPanelView, self).__init__(settings)
         self._ammunitionPanel = None
         self._wasVehicleOnLoading = False

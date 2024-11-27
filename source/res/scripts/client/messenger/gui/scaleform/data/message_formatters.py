@@ -8,6 +8,8 @@ from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE
 class _WARNING_FONT_COLOR(object):
     GENERAL = '#FFC364'
     TEAM_SIDE_BASED = '#999999'
+    VOIP_DISABLE = '#FEAB34'
+    VOIP_ENABLE = '#71BB33'
 
 
 _DYN_SQUAD_IMAGE = 'squad_silver_{0}'
@@ -16,6 +18,10 @@ def getMessageFormatter(actionMessage):
     if actionMessage.getType() == ACTION_MESSAGE_TYPE.ERROR:
         return ErrorMessageFormatter(actionMessage)
     return WarningMessageFormatter(actionMessage) if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING else BaseMessageFormatter(actionMessage)
+
+
+def getComp7VOIPNotificationFormatter(actionMessage):
+    return DisableVOIPMessageFormatter(actionMessage) if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING else EnableVOIPMessageFormatter(actionMessage)
 
 
 class BaseMessageFormatter(object):
@@ -59,3 +65,29 @@ class ErrorMessageFormatter(BaseMessageFormatter):
     def getFormattedMessage(self):
         formatted = g_settings.htmlTemplates.format('battleErrorMessage', ctx={'error': self._actionMessage.getMessage()})
         return formatted
+
+
+class DisableVOIPMessageFormatter(BaseMessageFormatter):
+
+    def __init__(self, actionMessage):
+        BaseMessageFormatter.__init__(self, actionMessage)
+
+    @classmethod
+    def getFontColor(cls):
+        return _WARNING_FONT_COLOR.VOIP_DISABLE
+
+    @classmethod
+    def getFillColor(cls):
+        return FILL_COLORS.BLACK
+
+    def getFormattedMessage(self):
+        formatted = g_settings.htmlTemplates.format('battleWarningMessage', ctx={'fontColor': self.getFontColor(),
+         'message': self._actionMessage.getMessage()})
+        return formatted
+
+
+class EnableVOIPMessageFormatter(DisableVOIPMessageFormatter):
+
+    @classmethod
+    def getFontColor(cls):
+        return _WARNING_FONT_COLOR.VOIP_ENABLE

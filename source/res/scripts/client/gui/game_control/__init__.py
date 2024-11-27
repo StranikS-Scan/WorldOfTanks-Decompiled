@@ -90,9 +90,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.extension_stubs.gui_lootboxes_controller import GuiLootBoxesControllerStub
     from gui.game_control.early_access_controller import EarlyAccessController
     from gui.impl.lobby.mode_selector.mode_selector_controller import ModeSelectorController
-    from event_settings.event_settings_controller import EventSettingsController
-    from white_tiger.gui.wt_event_notifications import WTEventNotifications
-    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -104,7 +101,11 @@ def getGameControllersConfig(manager):
         method(interface, controller, finalizer='fini')
 
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
-    _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
+    festivityFactory = manager.getService(IFestivityFactory)
+    festivityController = festivityFactory.getController()
+    _config(_interface.IFestivityController, festivityController)
+    if festivityFactory.getChildControllerInterface() is not None:
+        manager.addInstance(festivityFactory.getChildControllerInterface(), festivityController)
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
     _config(_interface.IGameSessionController, _GameSessions())
@@ -179,6 +180,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IShopSalesEventController, _ShopSalesController())
     _config(_interface.IEarlyAccessController, EarlyAccessController())
     _config(_interface.IModeSelectorController, ModeSelectorController())
-    _config(_interface.IEventSettingsController, EventSettingsController())
-    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)
+    return

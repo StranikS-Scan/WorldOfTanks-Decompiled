@@ -105,7 +105,7 @@
       <height>	5.0	</height>
       <depth>	5.0	</depth>
       <expireByDamageReceived>	false	</expireByDamageReceived>
-      <healPerTick>	0.05	</healPerTick>
+      <healPerTick>	0.025	</healPerTick>
       <healGroup>	1	</healGroup>
       <tickInterval>	1	</tickInterval>
     </script>
@@ -306,7 +306,7 @@
         <timer>	10.0	</timer>
         <influenceType>	1	</influenceType>
         <hotParams>
-          <healPerTick>	0.035	</healPerTick>
+          <healPerTick>	0.0175	</healPerTick>
           <healCrew>	True	</healCrew>
           <healDevices>	True	</healDevices>
           <healGroup>	1	</healGroup>

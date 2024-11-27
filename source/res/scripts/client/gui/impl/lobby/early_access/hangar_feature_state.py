@@ -58,6 +58,8 @@ class EarlyAccessHangarFeatureState(object):
             cgfCameraManager.switchToTank(instantly=False)
             if not self.__isInVehicleState:
                 g_currentPreviewVehicle.selectNoVehicle()
+        elif not cgfCameraManager:
+            g_currentPreviewVehicle.selectNoVehicle()
 
     def __updateVehicleState(self):
         self.__isInVehicleState = _VEHICLE_STATE_VIEW_ID in self.__activeLayoutIDs

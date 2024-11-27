@@ -4,6 +4,7 @@ from enum import Enum
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.missions.daily_quests_model import DailyQuestsModel
 from gui.impl.gen.view_models.views.lobby.missions.epic_quest_model import EpicQuestModel
+from gui.impl.gen.view_models.views.lobby.missions.lootboxes_intro_model import LootboxesIntroModel
 from gui.impl.gen.view_models.views.lobby.missions.premium_missions_model import PremiumMissionsModel
 
 class DailyTypes(Enum):
@@ -17,9 +18,9 @@ class OffersState(Enum):
 
 
 class DailyQuestsViewModel(ViewModel):
-    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards')
+    __slots__ = ('onClose', 'onReroll', 'onTabClick', 'onInfoToggle', 'onBuyPremiumBtnClick', 'onRerollEnabled', 'onClaimRewards', 'onLootboxesIntroClosed')
 
-    def __init__(self, properties=12, commands=7):
+    def __init__(self, properties=16, commands=8):
         super(DailyQuestsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -46,74 +47,104 @@ class DailyQuestsViewModel(ViewModel):
     def getEpicQuestType():
         return EpicQuestModel
 
+    @property
+    def lootboxesIntro(self):
+        return self._getViewModel(3)
+
+    @staticmethod
+    def getLootboxesIntroType():
+        return LootboxesIntroModel
+
     def getDailyType(self):
-        return DailyTypes(self._getString(3))
+        return DailyTypes(self._getString(4))
 
     def setDailyType(self, value):
-        self._setString(3, value.value)
+        self._setString(4, value.value)
 
     def getGetRewardsTimeLeft(self):
-        return self._getNumber(4)
+        return self._getNumber(5)
 
     def setGetRewardsTimeLeft(self, value):
-        self._setNumber(4, value)
+        self._setNumber(5, value)
 
     def getOffersState(self):
-        return OffersState(self._getString(5))
+        return OffersState(self._getString(6))
 
     def setOffersState(self, value):
-        self._setString(5, value.value)
+        self._setString(6, value.value)
 
     def getCurrentTabIdx(self):
-        return self._getNumber(6)
-
-    def setCurrentTabIdx(self, value):
-        self._setNumber(6, value)
-
-    def getCountDown(self):
         return self._getNumber(7)
 
-    def setCountDown(self, value):
+    def setCurrentTabIdx(self, value):
         self._setNumber(7, value)
 
+    def getCountDown(self):
+        return self._getNumber(8)
+
+    def setCountDown(self, value):
+        self._setNumber(8, value)
+
     def getInfoVisible(self):
-        return self._getBool(8)
-
-    def setInfoVisible(self, value):
-        self._setBool(8, value)
-
-    def getPremMissionsTabDiscovered(self):
         return self._getBool(9)
 
-    def setPremMissionsTabDiscovered(self, value):
+    def setInfoVisible(self, value):
         self._setBool(9, value)
 
-    def getIsBattlePassActive(self):
+    def getIsLootboxesIntroVisible(self):
         return self._getBool(10)
 
-    def setIsBattlePassActive(self, value):
+    def setIsLootboxesIntroVisible(self, value):
         self._setBool(10, value)
 
-    def getIsComp7Active(self):
+    def getPremMissionsTabDiscovered(self):
         return self._getBool(11)
 
-    def setIsComp7Active(self, value):
+    def setPremMissionsTabDiscovered(self, value):
         self._setBool(11, value)
+
+    def getIsBattlePassActive(self):
+        return self._getBool(12)
+
+    def setIsBattlePassActive(self, value):
+        self._setBool(12, value)
+
+    def getIsComp7Active(self):
+        return self._getBool(13)
+
+    def setIsComp7Active(self, value):
+        self._setBool(13, value)
+
+    def getIsGiftSystemDisabled(self):
+        return self._getBool(14)
+
+    def setIsGiftSystemDisabled(self, value):
+        self._setBool(14, value)
+
+    def getIsNewYearAvailable(self):
+        return self._getBool(15)
+
+    def setIsNewYearAvailable(self, value):
+        self._setBool(15, value)
 
     def _initialize(self):
         super(DailyQuestsViewModel, self)._initialize()
         self._addViewModelProperty('dailyQuests', DailyQuestsModel())
         self._addViewModelProperty('premiumMissions', PremiumMissionsModel())
         self._addViewModelProperty('epicQuest', EpicQuestModel())
+        self._addViewModelProperty('lootboxesIntro', LootboxesIntroModel())
         self._addStringProperty('dailyType')
         self._addNumberProperty('getRewardsTimeLeft', 0)
         self._addStringProperty('offersState')
         self._addNumberProperty('currentTabIdx', 0)
         self._addNumberProperty('countDown', 0)
         self._addBoolProperty('infoVisible', False)
+        self._addBoolProperty('isLootboxesIntroVisible', False)
         self._addBoolProperty('premMissionsTabDiscovered', False)
         self._addBoolProperty('isBattlePassActive', False)
         self._addBoolProperty('isComp7Active', False)
+        self._addBoolProperty('isGiftSystemDisabled', False)
+        self._addBoolProperty('isNewYearAvailable', False)
         self.onClose = self._addCommand('onClose')
         self.onReroll = self._addCommand('onReroll')
         self.onTabClick = self._addCommand('onTabClick')
@@ -121,3 +152,4 @@ class DailyQuestsViewModel(ViewModel):
         self.onBuyPremiumBtnClick = self._addCommand('onBuyPremiumBtnClick')
         self.onRerollEnabled = self._addCommand('onRerollEnabled')
         self.onClaimRewards = self._addCommand('onClaimRewards')
+        self.onLootboxesIntroClosed = self._addCommand('onLootboxesIntroClosed')

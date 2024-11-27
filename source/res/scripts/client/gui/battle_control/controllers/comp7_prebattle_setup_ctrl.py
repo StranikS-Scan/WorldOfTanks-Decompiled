@@ -7,7 +7,7 @@ import GenericComponents
 import Math
 import constants
 from Event import Event, EventManager
-from constants import ARENA_PERIOD, ARENA_GUI_TYPE
+from constants import ARENA_PERIOD
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IComp7PrebattleSetupController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
@@ -19,11 +19,15 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
 
 class _SceneController(object):
+    __slots__ = ('__spawnPoints', '__config', '__pendingSpawnPoints')
     __dynObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
-    def __init__(self):
+    def __init__(self, arenaGuiType):
         self.__spawnPoints = {}
-        self.__config = self.__dynObjectsCache.getConfig(ARENA_GUI_TYPE.COMP7).getSpawnPointsConfig()
+        self.__config = {}
+        dynObject = self.__dynObjectsCache.getConfig(arenaGuiType)
+        if dynObject:
+            self.__config = dynObject.getSpawnPointsConfig()
         self.__pendingSpawnPoints = {}
 
     def createSpawnPoint(self, vehicleID, positionNumber, status):
@@ -87,7 +91,7 @@ class Comp7PrebattleSetupController(IComp7PrebattleSetupController):
         self.onSelectionConfirmed = Event(self.__em)
         self.onTeammateSelectionStatuses = Event(self.__em)
         self.onBattleStarted = Event(self.__em)
-        self.__sceneCtrl = _SceneController()
+        self.__sceneCtrl = _SceneController(self.__sessionProvider.arenaVisitor.getArenaGuiType())
         return
 
     def startControl(self, battleCtx, arenaVisitor):
@@ -121,6 +125,14 @@ class Comp7PrebattleSetupController(IComp7PrebattleSetupController):
 
     def setAvailableVehicles(self, vehiclesList):
         self.onVehiclesListUpdated(vehiclesList)
+
+    def setViewComponents(self, *components):
+        if self.isSelectionConfirmed():
+            return
+        self._viewComponents = components
+        if self.__started:
+            for component in components:
+                component.showView(self.__guiVehicle, True)
 
     @staticmethod
     def getVehiclesList():

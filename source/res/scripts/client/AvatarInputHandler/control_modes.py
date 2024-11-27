@@ -547,6 +547,8 @@ class ArcadeControlMode(_GunControlMode):
                     self.__lockKeyUpTime = time.time()
             if self._aih.dualGunControl and self._aih.dualGunControl.handleKeyEvent(isDown, key, mods, event):
                 return True
+            elif self._aih.autoShootGunCtrl and self._aih.autoShootGunCtrl.handleKeyEvent(isDown, key, mods, event):
+                return True
             isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
             isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key)
             if isFiredFreeCamera:
@@ -1366,6 +1368,8 @@ class SniperControlMode(_GunControlMode):
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         cmdMap = CommandMapping.g_instance
+        if self._aih.autoShootGunCtrl and self._aih.autoShootGunCtrl.handleKeyEvent(isDown, key, mods, event):
+            return True
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
         if isFiredFreeCamera or isFiredLockTarget:

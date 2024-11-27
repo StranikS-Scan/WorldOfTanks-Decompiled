@@ -323,8 +323,9 @@ class CrewWidget(ViewImpl):
             eqs = diff.get('eqs', {})
             compDescr = diff.get('compDescr', {})
             boosters = diff.get('boosters', {})
+            layoutIndexes = diff.get('layoutIndexes', {})
             changedVehicles = [ (vehInvID if isinstance(vehInvID, int) else vehInvID[0]) for vehInvID in crews.iterkeys() ]
-            changedVehicles.extend((vehInvID for vehInvID in chain(settings.iterkeys(), eqs.iterkeys(), compDescr.iterkeys(), boosters.iterkeys())))
+            changedVehicles.extend((vehInvID for vehInvID in chain(settings.iterkeys(), eqs.iterkeys(), compDescr.iterkeys(), boosters.iterkeys(), layoutIndexes.iterkeys())))
             if self.__currentVehicle.invID in changedVehicles:
                 self.__currentVehicle = self.itemsCache.items.getVehicle(self.__currentVehicle.invID)
                 self.__updateWidgetModel()

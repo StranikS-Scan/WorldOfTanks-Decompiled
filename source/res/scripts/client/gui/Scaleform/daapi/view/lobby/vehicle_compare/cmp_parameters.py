@@ -12,10 +12,10 @@ from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData, PARAMS_NORMALIZATION_MAP
-from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, shotDispersionAnglePreprocessor
+from gui.shared.items_parameters.formatters import FORMAT_SETTINGS, shotDispersionAnglePreprocessor, chassisRepairTimePreprocessor
 from gui.shared.items_parameters.params import VehicleParams
 from gui.shared.items_parameters.params_helper import VehParamsBaseGenerator, isValidEmptyValue
-from gui.shared.utils import SHOT_DISPERSION_ANGLE
+from gui.shared.utils import SHOT_DISPERSION_ANGLE, CHASSIS_REPAIR_TIME
 from helpers import dependency
 from post_progression_common import VehicleState
 from skeletons.gui.game_control import IVehicleComparisonBasket
@@ -31,7 +31,10 @@ def _generateFormatSettings():
     settings = copy(FORMAT_SETTINGS)
     settings.update({SHOT_DISPERSION_ANGLE: {'preprocessor': shotDispersionAnglePreprocessor,
                              'rounder': backport.getNiceNumberFormat,
-                             'skipNone': True}})
+                             'skipNone': True},
+     CHASSIS_REPAIR_TIME: {'preprocessor': chassisRepairTimePreprocessor,
+                           'rounder': backport.getNiceNumberFormat,
+                           'skipNone': True}})
     return settings
 
 
@@ -71,6 +74,8 @@ def _hasNormalizeParameters(cache):
         if vehicle is None:
             continue
         if vehicle.descriptor.hasDualAccuracy:
+            return True
+        if vehicle.descriptor.isMultiTrack:
             return True
 
     return False
@@ -396,7 +401,7 @@ class VehCompareBasketParamsCache(object):
         else:
             self.__view.buildList([])
 
-    def __onVehCountChanged(self, changedData, _=None):
+    def __onVehCountChanged(self, changedData):
         if self._isDisposed:
             return
         if changedData.removedIDXs:

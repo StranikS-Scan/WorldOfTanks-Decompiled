@@ -2,9 +2,10 @@
 # Embedded file name: scripts/common/constants_utils.py
 import types
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, UNIT_MGR_FLAGS_TO_QUEUE_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
-from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS
+from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, IS_CLIENT, IS_BASEAPP, EVENT_TYPE, ALL_EVENT_TYPES_FOR_BONUSES, EXTENSIONS_BONUSES
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from debug_utils import LOG_DEBUG
+from optional_bonuses import BONUS_MERGERS, ITEM_INVENTORY_CHECKERS, UNIQUE_BONUSES_EXISTANCE_CHECKERS, UNIQUE_BONUSES_CACHE_UPDATERS
 from soft_exception import SoftException
 
 class ConstInjectorMeta(type):
@@ -190,6 +191,173 @@ def addVehicleTags(unitMgrFlag, requiredTags, forbiddenTags, newTags, personalit
     VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS.update({unitMgrFlag: (requiredTags, forbiddenTags)})
     msg = 'unitMgrFlag:{unitMgrFlag} was added to VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS. Personality: {p}'.format(unitMgrFlag=unitMgrFlag, p=personality)
     LOG_DEBUG(msg)
+
+
+def addVignetteSettings(viewName, value, personality):
+    from gui.shared.vignette_settings_switcher import _VIEWS_TO_VIGNETTE_CHANGE
+    if viewName in _VIEWS_TO_VIGNETTE_CHANGE:
+        raise SoftException('_VIEWS_TO_VIGNETTE_CHANGE already has {value}. Personality: {p}'.format(value=viewName, p=personality))
+    _VIEWS_TO_VIGNETTE_CHANGE[viewName] = value
+    LOG_DEBUG('_VIEWS_TO_VIGNETTE_CHANGE:{viewName} was added. Personality: {p}'.format(viewName=viewName, p=personality))
+
+
+def addBonusReaderFromExtension(bonusName, reader, personality):
+    from bonus_readers import __BONUS_READERS, SUPPORTED_BONUSES, SUPPORTED_BONUSES_IDS, SUPPORTED_BONUSES_NAMES
+    if bonusName in __BONUS_READERS:
+        raise SoftException('__BONUS_READERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    if bonusName in SUPPORTED_BONUSES:
+        raise SoftException('SUPPORTED_BONUSES already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    if bonusName in SUPPORTED_BONUSES_IDS:
+        raise SoftException('SUPPORTED_BONUSES_IDS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    if len(SUPPORTED_BONUSES_NAMES) in SUPPORTED_BONUSES_NAMES:
+        raise SoftException('SUPPORTED_BONUSES_NAMES already has {value}. Personality: {p}'.format(value=len(SUPPORTED_BONUSES_NAMES), p=personality))
+    __BONUS_READERS.update({bonusName: reader})
+    SUPPORTED_BONUSES.add(bonusName)
+    SUPPORTED_BONUSES_IDS.update({bonusName: len(SUPPORTED_BONUSES_IDS)})
+    SUPPORTED_BONUSES_NAMES.update({len(SUPPORTED_BONUSES_NAMES): bonusName})
+    LOG_DEBUG('BONUS_READERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def addBonusMergerFromExtension(bonusName, merger, personality):
+    if IS_BASEAPP:
+        from quest_bonus import BONUS_MERGERS_APPLIERS
+    if bonusName in BONUS_MERGERS:
+        raise SoftException('BONUS_MERGERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    BONUS_MERGERS.update({bonusName: merger})
+    LOG_DEBUG('BONUS_MERGERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def addItemInventoryCheckerFromExtension(bonusName, checker, personality):
+    if bonusName in ITEM_INVENTORY_CHECKERS:
+        raise SoftException('ITEM_INVENTORY_CHECKERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    ITEM_INVENTORY_CHECKERS.update({bonusName: checker})
+    LOG_DEBUG('ITEM_INVENTORY_CHECKERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def addUniqueBonusesExistanceCheckerFromExtension(bonusName, checker, personality):
+    if bonusName in UNIQUE_BONUSES_EXISTANCE_CHECKERS:
+        raise SoftException('UNIQUE_BONUSES_EXISTANCE_CHECKERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    UNIQUE_BONUSES_EXISTANCE_CHECKERS.update({bonusName: checker})
+    LOG_DEBUG('UNIQUE_BONUSES_EXISTANCE_CHECKERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def addUniqueBonusesCacheUpdatersFromExtension(bonusName, updater, personality):
+    if bonusName in UNIQUE_BONUSES_CACHE_UPDATERS:
+        raise SoftException('UNIQUE_BONUSES_CACHE_UPDATERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    UNIQUE_BONUSES_CACHE_UPDATERS.update({bonusName: updater})
+    LOG_DEBUG('UNIQUE_BONUSES_CACHE_UPDATERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def addBonusApplierFromExtension(bonusName, applier, personality):
+    from quest_bonus import BONUS_APPLIERS
+    if bonusName in BONUS_APPLIERS:
+        raise SoftException('BONUS_APPLIERS already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    BONUS_APPLIERS.update({bonusName: applier})
+    LOG_DEBUG('BONUS_APPLIERS:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+def invalidateBonusMergersAppliers(personality):
+    from quest_bonus import BONUS_APPLIERS, BONUS_MERGERS_APPLIERS
+    BONUS_MERGERS_APPLIERS.update({bonus:(BONUS_MERGERS[bonus], BONUS_APPLIERS[bonus]) for bonus in set(BONUS_MERGERS) | set(BONUS_APPLIERS)})
+    LOG_DEBUG('BONUS_MERGERS_APPLIERS:invalidated. Personality: {p}'.format(p=personality))
+
+
+def addClientBonusFromExtension(bonusName, clazz, personality):
+    from gui.server_events.bonuses import _BONUSES
+    if bonusName in _BONUSES:
+        raise SoftException('gui.server_events.bonuses._BONUSES already has {value}. Personality: {p}'.format(value=bonusName, p=personality))
+    _BONUSES.update({bonusName: clazz})
+    LOG_DEBUG('gui.server_events.bonuses._BONUSES:{bonusName} was added. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+
+class AbstractExtensionBonuses(object):
+
+    def __init__(self, personality):
+        self._personality = personality
+
+    def _getSupportedQuests(self):
+        return {}
+
+    def __registerBonusesInQuests(self):
+        for eventName, bonuses in self._getSupportedQuests().iteritems():
+            eventType = EVENT_TYPE.NAME_TO_TYPE[eventName] if eventName != ALL_EVENT_TYPES_FOR_BONUSES else eventName
+            EXTENSIONS_BONUSES.setdefault(eventType, set()).update(bonuses)
+
+    def _getReaders(self):
+        return {}
+
+    def __registerReaders(self):
+        for bonusName, reader in self._getReaders().iteritems():
+            addBonusReaderFromExtension(bonusName, reader, self._personality)
+
+    def _getMergers(self):
+        return {}
+
+    def __registerMergers(self):
+        for bonusName, merger in self._getMergers().iteritems():
+            addBonusMergerFromExtension(bonusName, merger, self._personality)
+
+    def _getAppliers(self):
+        return {}
+
+    def __registerAppliers(self):
+        for bonusName, applier in self._getAppliers().iteritems():
+            addBonusApplierFromExtension(bonusName, applier, self._personality)
+
+    def _getItemInventoryCheckers(self):
+        return {}
+
+    def __registerItemInventoryCheckers(self):
+        for bonusName, checker in self._getItemInventoryCheckers().iteritems():
+            addItemInventoryCheckerFromExtension(bonusName, checker, self._personality)
+
+    def _getUniqueBonusCheckers(self):
+        return {}
+
+    def __registerUniqueBonusCheckers(self):
+        for bonusName, checker in self._getUniqueBonusCheckers().iteritems():
+            addUniqueBonusesExistanceCheckerFromExtension(bonusName, checker, self._personality)
+
+    def _getUniqueBonusCacheUpdater(self):
+        return {}
+
+    def __registerUniqueBonusCacheUpdater(self):
+        for bonusName, updater in self._getUniqueBonusCacheUpdater().iteritems():
+            addUniqueBonusesCacheUpdatersFromExtension(bonusName, updater, self._personality)
+
+    def _getClientBonuses(self):
+        return {}
+
+    def _getClientMergers(self):
+        return []
+
+    def __registerClientBonuses(self):
+        from gui.shared.system_factory import registerClientBonusMergers
+        for bonusName, clazz in self._getClientBonuses().iteritems():
+            addClientBonusFromExtension(bonusName, clazz, self._personality)
+
+        for predicate, func in self._getClientMergers():
+            registerClientBonusMergers(predicate, func)
+
+    def __registerCommon(self):
+        self.__registerReaders()
+        self.__registerMergers()
+        self.__registerItemInventoryCheckers()
+        self.__registerBonusesInQuests()
+        self.__registerUniqueBonusCheckers()
+        self.__registerUniqueBonusCacheUpdater()
+
+    def registerBonus(self):
+        self.__registerCommon()
+
+    def registerBonusBase(self):
+        self.__registerCommon()
+        self.__registerAppliers()
+        invalidateBonusMergersAppliers(self._personality)
+
+    def registerBonusClient(self):
+        self.__registerCommon()
+        self.__registerClientBonuses()
 
 
 def initCommonTypes(extConstants, personality):
@@ -498,7 +666,7 @@ class AbstractBattleMode(object):
         from gui.shared.system_factory import registerSharedControllerRepo
         registerSharedControllerRepo(self._ARENA_GUI_TYPE, self._client_sharedControllersRepository)
 
-    def registerBattleResultsConfig(self, arenaRange=None):
+    def registerBattleResultsConfig(self):
         config = self._BATTLE_RESULTS_CONFIG
         if config is None:
             LOG_DEBUG('initBattleResultsConfigFromExtension: config is None')
@@ -506,12 +674,7 @@ class AbstractBattleMode(object):
         else:
             from battle_results import battle_results_constants
             module = config.__name__
-            if arenaRange is None:
-                battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
-            else:
-                for arena in arenaRange:
-                    battle_results_constants.PATH_TO_CONFIG.update({arena: module})
-
+            battle_results_constants.PATH_TO_CONFIG.update({self._ARENA_BONUS_TYPE: module})
             return
 
     def registerClientBattleResultsComposer(self):
@@ -557,7 +720,7 @@ class AbstractBattleMode(object):
         from chat_shared import SYS_MESSAGE_TYPE
         SYS_MESSAGE_TYPE.inject(self._SM_TYPES)
 
-    def registerBattleResultSysMsgType(self, arenaRanges=None):
+    def registerBattleResultSysMsgType(self):
         from battle_results import ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE
         from chat_shared import SYS_MESSAGE_TYPE
         if self._ARENA_BONUS_TYPE in ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE:
@@ -567,12 +730,7 @@ class AbstractBattleMode(object):
         except AttributeError:
             raise SoftException('No index for {attr} found. Use registerSystemMessagesTypes before')
 
-        if arenaRanges:
-            for arenaBonusType in arenaRanges:
-                ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({arenaBonusType: msgTypeIndex})
-
-        else:
-            ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({self._ARENA_BONUS_TYPE: msgTypeIndex})
+        ARENA_BONUS_TYPE_TO_SYS_MESSAGE_TYPE.update({self._ARENA_BONUS_TYPE: msgTypeIndex})
         msg = 'ARENA_BONUS_TYPE:{type}->{sysMsg} was added to UNIT_MGR_FLAGS_TO_QUEUE_TYPE. Personality: {p}'.format(type=self._ARENA_BONUS_TYPE, sysMsg=self._SM_TYPE_BATTLE_RESULT, p=self._personality)
         LOG_DEBUG(msg)
 

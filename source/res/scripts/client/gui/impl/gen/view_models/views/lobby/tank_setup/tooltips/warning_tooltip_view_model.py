@@ -7,12 +7,13 @@ class WarningDescription(Enum):
     SIMILARDEVICEALREADYINSTALLED = 'similar_device_already_installed'
     TOOHEAVY = 'too_heavy'
     USELESSBATTLEBOOSTER = 'useless_battle_booster'
+    NOTWITHINSTALLEDEQUIPMENT = 'not_with_installed_equipment'
 
 
 class WarningTooltipViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(WarningTooltipViewModel, self).__init__(properties=properties, commands=commands)
 
     def getReason(self):
@@ -27,7 +28,14 @@ class WarningTooltipViewModel(ViewModel):
     def setIsCritical(self, value):
         self._setBool(1, value)
 
+    def getLockedByDevice(self):
+        return self._getString(2)
+
+    def setLockedByDevice(self, value):
+        self._setString(2, value)
+
     def _initialize(self):
         super(WarningTooltipViewModel, self)._initialize()
         self._addStringProperty('reason')
         self._addBoolProperty('isCritical', False)
+        self._addStringProperty('lockedByDevice', '')

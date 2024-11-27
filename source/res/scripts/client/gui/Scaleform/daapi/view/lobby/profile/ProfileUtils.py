@@ -188,19 +188,19 @@ class _AvgHealthRepairField(_AbstractField):
 class _AvgEnemiesSpottedField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted()))
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgEnemiesSpotted()))
 
 
 class _AvgPoiCapturedField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgPoiCaptured()))
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgPoiCaptured()))
 
 
 class _AvgRoleSkillUsedField(_AbstractField):
 
     def _buildData(self, targetData, isCurrentUser):
-        return backport.getIntegralFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgRoleSkillUsed()))
+        return backport.getNiceNumberFormat(ProfileUtils.getValueOrUnavailable(targetData.getAvgRoleSkillUsed()))
 
 
 class _StunFieldMixin(object):

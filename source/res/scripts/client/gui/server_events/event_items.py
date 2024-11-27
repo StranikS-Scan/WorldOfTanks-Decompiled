@@ -4,6 +4,7 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple
+import logging
 import typing
 import constants
 import nations
@@ -18,8 +19,7 @@ from gui.ranked_battles.ranked_helpers import getQualificationBattlesCountFromID
 from gui.server_events import events_helpers, finders
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, BATTLE_MATTERS_INTERMEDIATE_QUEST_ID, BATTLE_MATTERS_COMPENSATION_QUEST_ID
 from gui.server_events.bonuses import compareBonuses, getBonuses
-from gui.server_events.events_constants import WT_BOSS_GROUP_ID, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON
-from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID, isWtQuest
+from gui.server_events.events_helpers import isDailyQuest, isPremium, getIdxFromQuestID
 from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import compareModifiers, getModifierObj
 from gui.server_events.parsers import AccountRequirements, BonusConditions, PostBattleConditions, PreBattleConditions, TokenQuestAccountRequirements, VehicleRequirements
@@ -28,13 +28,13 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.system_factory import registerQuestBuilders
 from gui.shared.utils import ValidationResult
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
-from helpers import dependency, getLocalizedData, i18n, time_utils
-from personal_missions import PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST, PM_FLAG, PM_STATE as _PMS
+from helpers import dependency
+from helpers import getLocalizedData, i18n, time_utils
+from personal_missions import PM_STATE as _PMS, PM_FLAG, PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST
 from personal_missions_config import getQuestConfig
 from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import findFirst, first
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -43,6 +43,7 @@ if typing.TYPE_CHECKING:
     from typing import Dict, Callable, List, Optional, Tuple, Union
     from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EventPostBattleInfo
     import potapov_quests
+_logger = logging.getLogger()
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -324,23 +325,6 @@ class Quest(ServerEventAbstract):
     @classmethod
     def showMissionAction(cls):
         return None
-
-    def getArenaTypes(self):
-        arenaTypes = None
-        battleCond = self.preBattleCond.getConditions()
-        if battleCond:
-            bonusTypes = battleCond.find('bonusTypes')
-            if bonusTypes:
-                arenaTypes = bonusTypes.getValue()
-        return arenaTypes
-
-    def isEventBattlesQuest(self):
-        arenaTypes = self.getArenaTypes()
-        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.WT_BATTLES_RANGE) if arenaTypes else False
-
-    def isQuestForBattleRoyale(self):
-        arenaTypes = self.getArenaTypes()
-        return set(arenaTypes) == set(constants.ARENA_BONUS_TYPE.BATTLE_ROYALE_REGULAR_RANGE) if arenaTypes else False
 
     def isCompensationPossible(self):
         return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
@@ -725,7 +709,7 @@ class Action(ServerEventAbstract):
 
             return result
 
-    def getModifiers(self):
+    def getModifiersDict(self):
         result = {}
         for stepData in self._data.get('steps'):
             mName = stepData.get('name')
@@ -736,7 +720,10 @@ class Action(ServerEventAbstract):
                 result[mName].update(m)
             result[mName] = m
 
-        return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
+        return result
+
+    def getModifiers(self):
+        return sorted(self.getModifiersDict().itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
 
 class PMCampaign(object):
@@ -1329,20 +1316,6 @@ class MotiveQuest(Quest):
         return getLocalizedData(self._data, 'requirements')
 
 
-class WtQuest(Quest):
-    gameEventController = dependency.descriptor(IWhiteTigerController)
-
-    @property
-    def isBossQuest(self):
-        return self.getGroupID().startswith(WT_BOSS_GROUP_ID)
-
-    def isAvailable(self):
-        return ValidationResult(False, WT_QUEST_UNAVAILABLE_NOT_ENOUGH_TICKETS_REASON) if self.isBossQuest and not self.gameEventController.hasEnoughTickets() and not self.gameEventController.hasSpecialBoss() else super(WtQuest, self).isAvailable()
-
-    def isHidden(self):
-        return super(WtQuest, self).isHidden() or not self._checkConditions()
-
-
 def _getTileIconPath(tileIconID, prefix, state):
     return '../maps/icons/quests/tiles/%s_%s_%s.png' % (tileIconID, prefix, state)
 
@@ -1484,17 +1457,6 @@ class DailyQuestBuilder(IQuestBuilder):
         return DailyQuest(qID, data, progress)
 
 
-class WtQuestBuilder(IQuestBuilder):
-
-    @classmethod
-    def isSuitableQuest(cls, questType, qID):
-        return isWtQuest(qID)
-
-    @classmethod
-    def buildQuest(cls, questType, qID, data, progress=None, expiryTime=None):
-        return WtQuest(qID, data, progress)
-
-
 registerQuestBuilders((PersonalQuestBuilder,
  GroupQuestBuilder,
  MotiveQuestBuilder,
@@ -1504,8 +1466,7 @@ registerQuestBuilders((PersonalQuestBuilder,
  TokenQuestBuilder,
  BattleMattersQuestBuilder,
  PremiumQuestBuilder,
- DailyQuestBuilder,
- WtQuestBuilder))
+ DailyQuestBuilder))
 
 def createQuest(builders, questType, qID, data, progress=None, expiryTime=None):
     for builder in builders:

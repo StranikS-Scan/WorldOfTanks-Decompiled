@@ -52,5 +52,9 @@
       <pattern>	.*/server_xml/personal_reserves_config\.xml$	</pattern>
       <type>	merge	</type>
     </rule>
+    <rule>
+      <pattern>	.*/arena_defs/_list_\.xml$	</pattern>
+      <type>	merge	</type>
+    </rule>
   </xml_whitelist>
 </extension_rules.xml>

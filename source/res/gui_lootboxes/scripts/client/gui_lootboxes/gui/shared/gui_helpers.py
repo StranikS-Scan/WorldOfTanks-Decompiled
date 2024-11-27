@@ -34,6 +34,7 @@ def getLootBoxViewModel(lootBox, attemptsAfterGuaranteedReward):
     if lootBox.getGuaranteedFrequency() > 0:
         fillIntsArray(lootBox.getGuaranteedVehicleLevelsRange(), lbModel.guaranteedReward.getLevelsRange())
         lbModel.guaranteedReward.setBoxesUntilGuaranteedReward(lootBox.getGuaranteedFrequency() - attemptsAfterGuaranteedReward)
+        lbModel.guaranteedReward.setVehiclesOnly(lootBox.isVehicleGuaranteedOnly())
     return lbModel
 
 

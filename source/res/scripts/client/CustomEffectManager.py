@@ -45,6 +45,7 @@ class CustomEffectManager(Component):
         args['hull']['model'] = appearance.compoundModel
         args['engineTags'] = typeDesc.engine.tags
         args['vehicleTags'] = typeDesc.type.tags
+        args['appearance'] = appearance
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
         self.__hullSelectors = []
         self.__chassisSelectors = []

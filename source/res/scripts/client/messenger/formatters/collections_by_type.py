@@ -19,9 +19,13 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.WtEventProgressionQuestFormatter(),
  token_quest_subformatters.CrewPerksFormatter()))
-_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
+_HANGAR_QUESTS_SUB_FORMATTERS = [token_quest_subformatters.BattleMattersAwardsFormatter()]
+
+def registerHangarQuestSubFormatters(formatters):
+    _HANGAR_QUESTS_SUB_FORMATTERS.extend(formatters)
+
+
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),

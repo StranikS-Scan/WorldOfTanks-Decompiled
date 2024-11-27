@@ -148,6 +148,10 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
             model.setIsDisabled(True)
             model.setIsLocked(True)
             model.setLockReason(reason.replace(' ', '_'))
+            lockDevice = item.getConflictedEquipments(self._getVehicle())
+            lockDevice += item.getConflictedLayoutEquimpents(self._getVehicle())
+            if lockDevice:
+                model.setLockedByDevice(lockDevice[0].userName)
 
     def _fillBuyPrice(self, model, item):
         if not item.isHidden:

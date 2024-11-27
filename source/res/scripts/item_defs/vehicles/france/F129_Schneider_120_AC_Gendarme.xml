@@ -11,7 +11,7 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	55	</forward>
+    <forward>	50	</forward>
     <backward>	16	</backward>
   </speedLimits>
   <invisibility>
@@ -526,10 +526,10 @@
       <terrainResistance>	1.4 1.6 2.4	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	300	</maxHealth>
@@ -1704,13 +1704,12 @@
         <armor_11>	30	</armor_11>
         <armor_12>	30	</armor_12>
         <armor_13>	40	</armor_13>
-        <armor_14>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-        </armor_14>
+        <armor_14>	30	</armor_14>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
       <maxHealth>	400	</maxHealth>
-      <rotationSpeed>	30	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1739,23 +1738,18 @@
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_15>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_15>
-            <armor_17>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_17>
+            <armor_2>	30	</armor_2>
+            <armor_3>	20	</armor_3>
+            <armor_4>	20	</armor_4>
+            <armor_15>	30	</armor_15>
+            <armor_17>	30	</armor_17>
             <gun>	55	</gun>
           </armor>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <reloadTime>	70	</reloadTime>
           <aimingTime>	1.6	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.20	</turretRotation>
+            <turretRotation>	0.22	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2596,7 +2590,7 @@
       <engines>
         <Moteur_moderne_4M_26_1>
           <smplEnginePower>	620	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Moteur_moderne_4M_26_1>
       </engines>
       <chassis>

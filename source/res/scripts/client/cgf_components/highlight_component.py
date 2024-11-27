@@ -21,6 +21,10 @@ class HighlightComponent(object):
                      'useAlpha': True}})
     groupName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Group name')
 
+    def __init__(self):
+        super(HighlightComponent, self).__init__()
+        self.isActive = True
+
 
 class HighlightManager(CGF.ComponentManager):
 
@@ -34,9 +38,10 @@ class HighlightManager(CGF.ComponentManager):
 
     @onAddedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
     def onDynamicModelHighlightAdded(self, _, highlightComponent, dynamicModelComponent):
-        BigWorld.wgSetEdgeDetectEdgeColor(3, highlightComponent.color)
-        BigWorld.wgAddEdgeDetectDynamicModel(dynamicModelComponent)
-        self.__enableGroupDraw(True, highlightComponent.groupName)
+        if highlightComponent.isActive:
+            BigWorld.wgSetEdgeDetectEdgeColor(3, highlightComponent.color)
+            BigWorld.wgAddEdgeDetectDynamicModel(dynamicModelComponent)
+            self.__enableGroupDraw(True, highlightComponent.groupName)
 
     @onRemovedQuery(IsHighlighted, HighlightComponent, DynamicModelComponent)
     def onDynamicModelHighlightRemoved(self, _, highlightComponent, dynamicModelComponent):
@@ -51,7 +56,7 @@ class HighlightManager(CGF.ComponentManager):
         highlightQuery = CGF.Query(self.spaceID, (HighlightComponent, DynamicModelComponent))
         for highlightComponent, dynamicModelComponent in highlightQuery:
             if highlightComponent.groupName and highlightComponent.groupName == groupName:
-                if enable:
+                if enable and highlightComponent.isActive:
                     BigWorld.wgAddEdgeDetectDynamicModel(dynamicModelComponent)
                 else:
                     BigWorld.wgDelEdgeDetectDynamicModel(dynamicModelComponent)

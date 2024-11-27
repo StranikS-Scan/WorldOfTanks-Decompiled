@@ -10,9 +10,7 @@ class AutoShootGunControl(InputHandlerCommand):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        if not (CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown):
-            return False
-        else:
+        if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
             vehicle = BigWorld.player().getVehicleAttached()
             if vehicle is None or not vehicle.isPlayerVehicle or not vehicle.isAlive():
                 return False
@@ -21,3 +19,5 @@ class AutoShootGunControl(InputHandlerCommand):
                 return False
             autoShootGunCtrl.burstController.processShootCmd()
             return True
+        else:
+            return

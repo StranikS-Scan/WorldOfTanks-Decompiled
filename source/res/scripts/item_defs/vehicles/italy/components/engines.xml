@@ -43,6 +43,7 @@
     <ID36S_6V_CA_LE>	41	</ID36S_6V_CA_LE>
     <SPA_Tipo_343>	42	</SPA_Tipo_343>
     <MB_837_Ea_P6>	31001	</MB_837_Ea_P6>
+    <Continental_AVDS_1790>	31002	</Continental_AVDS_1790>
     <Development_Engine>	65000	</Development_Engine>
   </ids>
   <shared>
@@ -646,6 +647,23 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </AVDS_1790>
+    <Continental_AVDS_1790>
+      <userString>	#italy_vehicles:Continental_AVDS_1790	</userString>
+      <shortUserString>	#italy_vehicles:Continental_AVDS_1790_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Continental_AVDS_1790>
     <MB_838>
       <userString>	#italy_vehicles:MB_838	</userString>
       <tags>	diesel	</tags>
@@ -753,16 +771,16 @@
       <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	1	</price>
-      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
     </Development_Engine>
   </shared>
 </engines.xml>

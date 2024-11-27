@@ -6,7 +6,6 @@ import CGF
 import Vehicular
 from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
-from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import tankStructure
 import math_utils
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
@@ -97,33 +96,38 @@ class DebrisCrashedTracksManager(CGF.ComponentManager):
             return amountOfBrokenTracks
         else:
             animator = debris.wheelsGameObject.findComponentByType(Vehicular.GeneralWheelsAnimator)
-            chassisType = debris.vehicleDescriptor.chassis.chassisType
-            isYohMechanics = chassisType == CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK and debris.pairIndex != MAIN_TRACK_PAIR_IDX
-            if animator is not None and isYohMechanics:
+            chassis = debris.vehicleDescriptor.chassis
+            isYohMechanics = chassis.isTrackWithinTrack and debris.pairIndex != MAIN_TRACK_PAIR_IDX
+            if animator is not None and (isYohMechanics or chassis.isMultiTrack):
                 for wheelIdx in track.connectedWheels:
                     if isVisible:
                         animator.relinkTrack(wheelIdx, track.trackThickness)
                     animator.unlinkFromTrack(wheelIdx, track.trackThickness)
 
-            vehicleTracks = debris.wheelsGameObject.findComponentByType(Vehicular.VehicleTracks)
-            amountOfBrokenTracks = 0
-            if vehicleTracks is not None:
-                for otherTrackIdx in xrange(vehicleTracks.getPairsCount()):
-                    otherTrackGo = vehicleTracks.getTrackGameObject(track.isLeft, otherTrackIdx)
-                    otherTrack = otherTrackGo.findComponentByType(Vehicular.CompositeTrack)
-                    thicknessAdjustment = 0 if isVisible else -track.trackThickness
-                    otherTrack.adjustTrackThickness(thicknessAdjustment)
-                    otherTrack.forceSendLeadingWheelScrollLinks(animator)
-                    if otherTrackGo.findComponentByType(TrackCrashWithDebrisComponent) is not None:
-                        amountOfBrokenTracks += 1
-                    otherTrackGo = vehicleTracks.getTrackGameObject(not track.isLeft, otherTrackIdx)
-                    if otherTrackGo.findComponentByType(TrackCrashWithDebrisComponent) is not None:
-                        amountOfBrokenTracks += 1
-
+            if debris.vehicleDescriptor.isTrackWithinTrack:
+                amountOfBrokenTracks = self.__updateInnerTracks(track, debris, animator, isVisible)
             suspension = debris.wheelsGameObject.findComponentByType(Vehicular.Suspension)
             if suspension is not None:
                 suspension.forceCorrectionRecalculation()
             return amountOfBrokenTracks
+
+    def __updateInnerTracks(self, track, debris, animator, isVisible):
+        vehicleTracks = debris.wheelsGameObject.findComponentByType(Vehicular.VehicleTracks)
+        amountOfBrokenTracks = 0
+        thicknessAdjustment = 0 if isVisible else -track.trackThickness
+        if vehicleTracks is not None:
+            for otherTrackIdx in xrange(vehicleTracks.getPairsCount()):
+                otherTrackGo = vehicleTracks.getTrackGameObject(track.isLeft, otherTrackIdx)
+                otherTrack = otherTrackGo.findComponentByType(Vehicular.CompositeTrack)
+                otherTrack.adjustTrackThickness(thicknessAdjustment)
+                otherTrack.forceSendLeadingWheelScrollLinks(animator)
+                if otherTrackGo.findComponentByType(TrackCrashWithDebrisComponent) is not None:
+                    amountOfBrokenTracks += 1
+                otherTrackGo = vehicleTracks.getTrackGameObject(not track.isLeft, otherTrackIdx)
+                if otherTrackGo.findComponentByType(TrackCrashWithDebrisComponent) is not None:
+                    amountOfBrokenTracks += 1
+
+        return amountOfBrokenTracks
 
     def __generateDestructionEffect(self, debris):
         if debris.trackPairDesc.tracksDebris is None:

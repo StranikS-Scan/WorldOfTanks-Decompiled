@@ -9686,6 +9686,26 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	NY_Bloggers_Decal_2024	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <projection_decal>
+      <id>	31191	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/NY_Bloggers_Decal_2024.dds	</texture>
+      <scaleFactorId>	1	</scaleFactorId>
+      <userString>	#vehicle_customization:NY_Bloggers_Decal_2024/name	</userString>
+      <description>	#vehicle_customization:NY_Bloggers_Decal_2024/description	</description>
+    </projection_decal>
+    <tags>	styleOnly hiddenInUI direction_right_to_left formfactor_rect1x2 disableVerticalMirror	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <name>	RAM_Decal_2024	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -9711,6 +9731,191 @@
       <tags>	styleOnly direction_left_to_right hiddenInUI formfactor_square	</tags>
       <userString>	#vehicle_customization:RAM_Decal_02_2024/name	</userString>
       <description>	#vehicle_customization:RAM_Decal_02_2024/description	</description>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_Decal_Style_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <tags>	hiddenInUI formfactor_rect1x2 styleOnly disableVerticalMirror direction_left_to_right	</tags>
+    <projection_decal>
+      <id>	31222	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_06_Decal_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_06_Decal_01_2025/name	</userString>
+      <description>	#vehicle_customization:NY_06_Decal_01_2025/description	</description>
+      <scaleFactorId>	2	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31223	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_06_Decal_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_06_Decal_02_2025/name	</userString>
+      <description>	#vehicle_customization:NY_06_Decal_02_2025/description	</description>
+      <scaleFactorId>	2	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31224	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_06_Decal_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_06_Decal_03_2025/name	</userString>
+      <description>	#vehicle_customization:NY_06_Decal_03_2025/description	</description>
+      <scaleFactorId>	2	</scaleFactorId>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_Decal_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/animals	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31225	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/animals/NY_Decal_Hare_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_Decal_Hare_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_Hare_2025/description	</description>
+      <scaleFactorId>	2	</scaleFactorId>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_Decal_Special_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31228	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_Decal_Raccoon_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_Decal_Raccoon_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_Raccoon_2025/description	</description>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31226	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_Decal_Drawing_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_Decal_Drawing_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_Drawing_2025/description	</description>
+      <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31229	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_Decal_Robot_2025.dds	</texture>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <userString>	#vehicle_customization:NY_Decal_Robot_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_Robot_2025/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31227	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/NY_Decal_DMoroz_2025.dds	</texture>
+      <userString>	#vehicle_customization:NY_Decal_DMoroz_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_DMoroz_2025/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	NY_Decal_cool_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <projection_decal>
+      <id>	31230	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/NY_Blogger_2025.dds	</texture>
+      <tags>	formfactor_rect1x2 direction_right_to_left left	</tags>
+      <userString>	#vehicle_customization:NY_Decal_Blogger_2025/name	</userString>
+      <description>	#vehicle_customization:NY_Decal_Blogger_2025/description	</description>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/cool/NY_Blogger_2025_GMM.dds	</glossTexture>
+      <scaleFactorId>	1	</scaleFactorId>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <tags>	hiddenInUI styleOnly safe	</tags>
+  </itemGroup>
+  <itemGroup>
+    <name>	Prostokvashino_NY_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31251	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_Decal_2_2025.dds	</texture>
+      <tags>	hiddenInUI left direction_left_to_right styleOnly disableVerticalMirror formfactor_square safe	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_02/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_02/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31252	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_Decal_3_2025.dds	</texture>
+      <tags>	hiddenInUI right formfactor_rect1x2 direction_left_to_right styleOnly disableVerticalMirror safe	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_03/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_03/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31253	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_projection_decal_01.dds	</texture>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_04/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_04/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31254	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_projection_decal_02.dds	</texture>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_05/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_05/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31255	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_projection_decal_03.dds	</texture>
+      <tags>	direction_left_to_right disableVerticalMirror formfactor_square	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_06/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_06/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31256	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_projection_decal_04.dds	</texture>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_07/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_07/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31257	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_projection_decal_05.dds	</texture>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_08/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Projection_Decal_08/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31258	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Prostokvashino_Cover_Decal_2025.dds	</texture>
+      <tags>	hiddenInUI formfactor_rect1x2 direction_left_to_right styleOnly cover	</tags>
+      <userString>	#vehicle_customization:Prostokvashino_2025_Cover_Decal_01/name	</userString>
+      <description>	#vehicle_customization:Prostokvashino_2025_Cover_Decal_01/description	</description>
     </projection_decal>
   </itemGroup>
 </projection_decals.xml>

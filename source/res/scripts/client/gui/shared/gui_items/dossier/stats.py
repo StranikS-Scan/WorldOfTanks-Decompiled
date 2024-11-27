@@ -2199,11 +2199,11 @@ class Comp7StatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock):
 
     def getAvgPoiCaptured(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getPoiCaptured)
-        return round(avgValue) if avgValue is not None else None
+        return avgValue if avgValue is not None else None
 
     def getAvgRoleSkillUsed(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getRoleSkillUsed)
-        return round(avgValue) if avgValue is not None else None
+        return avgValue if avgValue is not None else None
 
     def getAvgHealthRepair(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getHealthRepair)

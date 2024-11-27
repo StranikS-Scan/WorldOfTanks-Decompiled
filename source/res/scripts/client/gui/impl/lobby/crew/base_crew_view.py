@@ -211,13 +211,7 @@ class BaseCrewView(BaseCrewSoundView, IGlobalListener):
     def _onBack(self, logClick=True):
         if logClick:
             self._uiLogger.logNavigationButtonClick(self._backButtonLogingKey)
-        slotIDX, _, tankman = self._crewWidget.getWidgetData()
-        if tankman:
-            tankmanID = tankman.invID
-        else:
-            tankmanID, _ = self._findWidgetSlotNextIdx(NO_TANKMAN, slotIDX)
         self.destroyWindow()
-        showPersonalCase(tankmanID, previousViewID=self._currentViewID)
 
     def _onHangar(self):
         self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.TO_GARAGE)

@@ -168,6 +168,9 @@ class EffectNode(object):
     def nodeName(self):
         return self.__nodeName
 
+    def _getEffect(self, effectID):
+        return self.__effects.get(effectID, None)
+
     def __init__(self, model, nodeName, waterY, drawOrder, effects):
         node = model.node(nodeName)
         model.node(nodeName, Math.Matrix(node.localMatrix))
@@ -227,6 +230,27 @@ class EffectNode(object):
                 else:
                     effect.detach()
             return
+
+
+class TrackEffectNode(EffectNode):
+    __slots__ = ('__appearance', '__side', '__index')
+    _SPLITTER = '_'
+
+    def __init__(self, model, nodeName, waterY, drawOrder, effects, appearance, metadata):
+        super(TrackEffectNode, self).__init__(model, nodeName, waterY, drawOrder, effects)
+        self.__appearance = weakref.proxy(appearance)
+        _, self.__side, self.__index = metadata.split(self._SPLITTER)
+        self.__index = int(self.__index)
+
+    def enable(self, effectID, enable):
+        effect = self._getEffect(effectID)
+        if enable and self.__isTrackBroken():
+            effect.detach()
+            return False
+        return super(TrackEffectNode, self).enable(effectID, enable)
+
+    def __isTrackBroken(self):
+        return self.__appearance and self.__appearance.crashedTracksController.isTrackBroken(self.__side, self.__index)
 
 
 class PixieCache(object):

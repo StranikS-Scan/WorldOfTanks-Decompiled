@@ -3316,4 +3316,82 @@
     <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
     <maxNumber>	1	</maxNumber>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <maxNumber>	1	</maxNumber>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R87_T62A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31234	</id>
+      <modelsSet>	R87_T62A_3dst	</modelsSet>
+      <texture>	gui/maps/vehicles/styles/R87_T62A_3dst_LG_MT_SPb.png	</texture>
+      <userString>	#vehicle_customization:special_style/3D_Style_R87_MT/name	</userString>
+      <description>	#vehicle_customization:special_style/3D_Style_R87_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/3D_Style_R87_MT/longDescription	</longDescriptionSpecial>
+      <tags></tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <insignias>
+            <item>
+              <id>	31014	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <id>	31043	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <season>	ALL	</season>
+    <maxNumber>	1	</maxNumber>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R155_Object_277	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31256	</id>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R155_Object_277_3Dst_02_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/R155_Object_277_3Dst_02	</userString>
+      <modelsSet>	R155_Object_277_3Dst_02	</modelsSet>
+      <texture>	gui/maps/vehicles/styles/R155_Object_277_3Dst_02.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </ussr.xml>

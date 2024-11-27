@@ -1313,6 +1313,22 @@ def _migrateTo125(core, data, initialized):
      'role_SPG': False}
 
 
+def _migrateTo126(core, data, initialized):
+    onceOnlyHintsData = data['onceOnlyHints3']
+    onceOnlyHintsData[OnceOnlyHints.LOOT_PROBABILITY_HINT] = False
+
+
+def _migrateTo127(core, data, initialized):
+    nyStorageData = data['nyStorage']
+    nyStorageData[NewYearStorageKeys.NY_FIRST_ENTRANCE] = True
+
+
+def _migrateTo128(core, data, initialized):
+    nyStorageData = data['nyStorage']
+    nyStorageData[NewYearStorageKeys.NY_WELCOME_NOTIFICATION] = False
+    nyStorageData[NewYearStorageKeys.NY_PET_TOYS_REMOVED] = False
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1807,6 +1823,14 @@ _versions = ((1,
   False),
  (125,
   _migrateTo125,
+  False,
+  False),
+ (126,
+  _migrateTo126,
+  False,
+  False),
+ (127,
+  _migrateTo127,
   False,
   False))
 

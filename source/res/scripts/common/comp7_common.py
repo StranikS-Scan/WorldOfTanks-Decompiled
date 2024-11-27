@@ -2,17 +2,17 @@
 # Embedded file name: scripts/common/comp7_common.py
 import enum
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
-COMP7_QUEST_PREFIX = 'comp7_4_1'
-COMP7_TOKEN_PREFIX = 'comp7_4_1'
+COMP7_CURRENT_SEASON = 2
+COMP7_MASKOT_ID = '4'
+SEASONS_IN_YEAR = 4
+COMP7_QUEST_PREFIX = 'comp7_{maskot}_{season}'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
+COMP7_TOKEN_PREFIX = 'comp7_{maskot}_{season}'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_QUEST_DELIMITER = '_'
-COMP7_TOKEN_WEEKLY_REWARD_ID = 'comp7_4_1_weekly_rewards_token'
+COMP7_TOKEN_WEEKLY_REWARD_ID = 'comp7_{maskot}_{season}_weekly_rewards_token'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_TOKEN_WEEKLY_REWARD_NAME = 'comp7TokenWeeklyReward'
 COMP7_TOKEN_COUPON_REWARD_ID = 'comp7:coupon'
 COMP7_TOKEN_COUPON_REWARD_NAME = 'comp7TokenCouponReward'
-COMP7_QUALIFICATION_QUEST_ID = 'comp7_4_1_ranks_65'
-COMP7_CURRENT_SEASON = 1
-COMP7_MASKOT_ID = '4'
-SEASONS_IN_YEAR = 4
+COMP7_QUALIFICATION_QUEST_ID = 'comp7_{maskot}_{season}_ranks_65'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_SEASON_POINTS_ENTITLEMENT_TMPL = 'comp7_season_points'
 
 def seasonPointsCodeBySeasonNumber(seasonNumber):

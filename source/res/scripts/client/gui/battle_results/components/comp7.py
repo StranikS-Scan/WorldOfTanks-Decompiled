@@ -201,13 +201,14 @@ class Comp7TeamStatsBlock(TeamStatsBlock):
 
 
 class Comp7VehicleStatValuesBlock(RegularVehicleStatValuesBlock):
-    __slots__ = ('damageDealtBySkills', 'healed', 'capturedPointsOfInterest', 'roleSkillUsed')
+    __slots__ = ('damageDealtBySkills', 'healed', 'healedAlly', 'capturedPointsOfInterest', 'roleSkillUsed')
 
     def setRecord(self, result, reusable):
         super(Comp7VehicleStatValuesBlock, self).setRecord(result, reusable)
         poiCaptured = result.entityCaptured
         self.damageDealtBySkills = style.getIntegralFormatIfNoEmpty(result.equipmentDamageDealt)
-        self.healed = (result.healthRepair, result.alliedHealthRepair)
+        self.healed = style.getIntegralFormatIfNoEmpty(result.healthRepair)
+        self.healedAlly = style.getIntegralFormatIfNoEmpty(result.alliedHealthRepair)
         self.capturedPointsOfInterest = style.getIntegralFormatIfNoEmpty(poiCaptured.get(EntityCaptured.POI_CAPTURABLE, 0))
         self.roleSkillUsed = style.getIntegralFormatIfNoEmpty(result.roleSkillUsed)
 

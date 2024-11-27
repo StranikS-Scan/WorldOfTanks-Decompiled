@@ -10,17 +10,18 @@ if typing.TYPE_CHECKING:
 
 class WarningTooltipView(ViewImpl):
 
-    def __init__(self, reason, isCritical):
+    def __init__(self, reason, isCritical, lockedByDevice):
         settings = ViewSettings(R.views.lobby.tanksetup.tooltips.WarningTooltipView())
         settings.model = WarningTooltipViewModel()
-        settings.args = (reason, isCritical)
+        settings.args = (reason, isCritical, lockedByDevice or '')
         super(WarningTooltipView, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(WarningTooltipView, self).getViewModel()
 
-    def _onLoading(self, reason, isCritical, *args, **kwargs):
+    def _onLoading(self, reason, isCritical, lockedByDevice, *args, **kwargs):
         super(WarningTooltipView, self)._onLoading(*args, **kwargs)
         self.viewModel.setReason(reason)
         self.viewModel.setIsCritical(isCritical)
+        self.viewModel.setLockedByDevice(lockedByDevice)

@@ -10,6 +10,7 @@ import ResMgr
 import WebBrowser
 import constants
 import AnimationSequence
+from ExtensionsManager import g_extensionsManager
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.hangar_config import HangarConfig
@@ -85,7 +86,13 @@ def secondaryHangarCFG():
 
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
-    paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
+    paths = [ '{}/{}'.format(_DEFAULT_SPACES_PATH, path) for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
+    for extension in g_extensionsManager.activeExtensions:
+        folderPath = extension.path + _DEFAULT_SPACES_PATH
+        section = ResMgr.openSection(folderPath)
+        if section is not None:
+            paths += [ '{}/{}'.format(folderPath, path) for path, _ in section.items() ]
+
     defaultSpace = 'h01_victory_day_2024'
     if hangarsXml.has_key('hangar_scene_spaces'):
         switchItems = hangarsXml['hangar_scene_spaces']
@@ -95,8 +102,7 @@ def _readHangarSettings():
                 break
 
     configset = {constants.DEFAULT_HANGAR_SCENE: '{}/{}'.format(_DEFAULT_SPACES_PATH, defaultSpace)}
-    for folderName in paths:
-        spacePath = '{prefix}/{node}'.format(prefix=_DEFAULT_SPACES_PATH, node=folderName)
+    for spacePath in paths:
         spaceKey = _getHangarKey(spacePath)
         settingsXmlPath = '{path}/{file}/{sec}'.format(path=spacePath, file='space.settings', sec='hangarSettings')
         ResMgr.purge(settingsXmlPath, True)
@@ -358,7 +364,7 @@ class _ClientHangarSpacePathOverride(object):
         self.hangarSpace.onPremiumChanged(isPremium, 0, 0)
 
     def setPath(self, path, visibilityMask=None, isPremium=None, isReload=True, event=None):
-        if path is not None and not path.startswith('spaces/'):
+        if path is not None and path.find('spaces/') == -1:
             path = 'spaces/' + path
         if isPremium is None:
             isPremium = self.hangarSpace.isPremium

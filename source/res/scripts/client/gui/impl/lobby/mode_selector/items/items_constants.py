@@ -11,6 +11,7 @@ DEFAULT_MODE_SETTING = 'default'
 DEFAULT_COLUMN_SETTINGS = {PREBATTLE_ACTION_NAME.RANDOM: (ModeSelectorColumns.COLUMN_0, -1),
  PREBATTLE_ACTION_NAME.EPIC: (ModeSelectorColumns.COLUMN_2, 20),
  PREBATTLE_ACTION_NAME.COMP7: (ModeSelectorColumns.COLUMN_1, 10),
+ PREBATTLE_ACTION_NAME.EVENT_BATTLE: (ModeSelectorColumns.COLUMN_1, 20),
  PREBATTLE_ACTION_NAME.BATTLE_ROYALE: (ModeSelectorColumns.COLUMN_2, 10),
  PREBATTLE_ACTION_NAME.MAPBOX: (ModeSelectorColumns.COLUMN_2, 20),
  PREBATTLE_ACTION_NAME.RANKED: (ModeSelectorColumns.COLUMN_1, 10),
@@ -45,5 +46,3 @@ class ModeSelectorRewardID(Enum):
     VEHICLE = 'vehicle'
     STYLE_2D = 'style2D'
     PRIZE = 'prize'
-    WT_2024_CREW = 'wt2024crew'
-    WT_2024_OTHER = 'wt2024other'

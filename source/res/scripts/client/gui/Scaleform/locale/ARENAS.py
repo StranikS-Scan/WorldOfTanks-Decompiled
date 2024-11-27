@@ -180,9 +180,6 @@ class ARENAS(object):
     C_502_KAMCHATKA_DESCRIPTION = '#arenas:502_kamchatka/description'
     TYPE_MAPS_TRAINING_NAME = '#arenas:type/maps_training/name'
     TYPE_MAPS_TRAINING_DESCRIPTION = '#arenas:type/maps_training/description'
-    C_510_TEAPLANT_MB_NAME = '#arenas:510_teaplant_mb/name'
-    C_511_SNOWCITY_MB_NAME = '#arenas:511_snowcity_mb/name'
-    C_512_WINKELBURG_MB_NAME = '#arenas:512_winkelburg_mb/name'
     C_1003_CGF_TEST_NAME = '#arenas:1003_cgf_test/name'
     C_1003_CGF_TEST_DESCRIPTION = '#arenas:1003_cgf_test/description'
     C_1005_AI_TEST_AUTOMATION_NAME = '#arenas:1005_ai_test_automation/name'
@@ -193,10 +190,8 @@ class ARENAS(object):
     C_1007_NEXTGEN_TEST_DESCRIPTION = '#arenas:1007_nextgen_test/description'
     H00_ARMORY_YARD_EP3_XML_NAME = '#arenas:h00_armory_yard_ep3.xml/name'
     H00_ARMORY_YARD_EP3_XML_DESCRIPTION = '#arenas:h00_armory_yard_ep3.xml/description'
-    C_34_REDSHIRE_WT_NAME = '#arenas:34_redshire_wt/name'
-    C_35_STEPPES_WT_NAME = '#arenas:35_steppes_wt/name'
-    C_11_MUROVANKA_WT_NAME = '#arenas:11_murovanka_wt/name'
-    C_14_SIEGFRIED_LINE_WT_NAME = '#arenas:14_siegfried_line_wt/name'
+    QA_CONTENT_01_NAME = '#arenas:qa_content_01/name'
+    QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -374,9 +369,6 @@ class ARENAS(object):
      C_502_KAMCHATKA_DESCRIPTION,
      TYPE_MAPS_TRAINING_NAME,
      TYPE_MAPS_TRAINING_DESCRIPTION,
-     C_510_TEAPLANT_MB_NAME,
-     C_511_SNOWCITY_MB_NAME,
-     C_512_WINKELBURG_MB_NAME,
      C_1003_CGF_TEST_NAME,
      C_1003_CGF_TEST_DESCRIPTION,
      C_1005_AI_TEST_AUTOMATION_NAME,
@@ -387,10 +379,8 @@ class ARENAS(object):
      C_1007_NEXTGEN_TEST_DESCRIPTION,
      H00_ARMORY_YARD_EP3_XML_NAME,
      H00_ARMORY_YARD_EP3_XML_DESCRIPTION,
-     C_34_REDSHIRE_WT_NAME,
-     C_35_STEPPES_WT_NAME,
-     C_11_MUROVANKA_WT_NAME,
-     C_14_SIEGFRIED_LINE_WT_NAME)
+     QA_CONTENT_01_NAME,
+     QA_CONTENT_01_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

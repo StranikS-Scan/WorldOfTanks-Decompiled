@@ -60,7 +60,6 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'turretRotationSpeed',
  'turretRotatorHealthFactor',
  'vehicleByChassisDamageFactor',
- 'discreteDamageFactor',
  'moduleDamageFactor',
  'engineAndFuelTanksDamageFactor'}
 ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',

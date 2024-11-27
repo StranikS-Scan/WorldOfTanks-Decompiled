@@ -58,14 +58,19 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
  KPI.Name.DAMAGED_MODULES_DETECTION_TIME])
 PARAMS_WITH_BATTLE_MODIFIERS = {'maxHealth': {'vehicleHealth'}}
-NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
-PARAMS_WITH_IGNORED_EMPTY_VALUES = {SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS}
+NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime', CHASSIS_REPAIR_TIME]
+PARAMS_WITH_IGNORED_EMPTY_VALUES = {SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME}
 
 def normalizeShotDispersionValue(value):
     return [None] + value if len(value) == 1 else value
 
 
-PARAMS_NORMALIZATION_MAP = {SHOT_DISPERSION_ANGLE: normalizeShotDispersionValue}
+def normalizeChassisRepairTime(value):
+    return [None] + value if len(value) == 1 else sorted(value, key=lambda x: (x is None, x), reverse=True)
+
+
+PARAMS_NORMALIZATION_MAP = {SHOT_DISPERSION_ANGLE: normalizeShotDispersionValue,
+ CHASSIS_REPAIR_TIME: normalizeChassisRepairTime}
 _CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
  BURST_FIRE_RATE: (True, False, False),

@@ -276,8 +276,6 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
     ENEMIES_STUN = 'battleEventsEnemyStun'
-    CREW_PERKS = 'battleEventsCrewPerks'
-    HEALTH_ADDED = 'battleEventsHealthAdded'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
@@ -393,6 +391,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     REFERRAL_RECRUIT_ENTRY_POINT_HINT = 'ReferralRecruitEntryPointHint'
     REFERRAL_ENTRY_POINT_HINT = 'ReferralEntryPointHint'
     BATTLE_SELECTOR_BAR_AI_HINT = 'BattleSelectorBarAIHint'
+    LOOT_PROBABILITY_HINT = 'LootProbabilityHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -509,15 +508,9 @@ COLOR_GRADING_TECHNIQUE_DEFAULT = 0
 
 class NewYearStorageKeys(CONST_CONTAINER):
     HAS_TOYS_HINT_SHOWN = 'hasToysHintShown'
-    GLADE_INTRO_VISITED = 'gladeIntroVisited'
+    NY_FIRST_ENTRANCE = 'NYFirstEntrance'
+    NY_WELCOME_NOTIFICATION = 'NYWelcomeNotification'
+    NY_PET_TOYS_REMOVED = 'NyPetToysRemoved'
     DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
     DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
-    BOOL_FLAGS = (HAS_TOYS_HINT_SHOWN,
-     GLADE_INTRO_VISITED,
-     DECORATIONS_POPOVER_VIEWED,
-     DECORATIONS_POPOVER_BROKEN)
-
-
-class WTLootBoxesViewedKeys(CONST_CONTAINER):
-    HUNTER_LAST_VIEWED = 'hunterLastViewed'
-    BOSS_LAST_VIEWED = 'bossLastViewed'
+    BOOL_FLAGS = (HAS_TOYS_HINT_SHOWN, DECORATIONS_POPOVER_VIEWED, DECORATIONS_POPOVER_BROKEN)

@@ -7,18 +7,18 @@ from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import BaseU
 from helpers import dependency
 from frameworks.wulf import WindowFlags, WindowLayer
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.lootbox_video_reward_view_model import LootboxVideoRewardViewModel
+from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.pub.lobby_window import LobbyWindow
 from skeletons.gui.shared import IItemsCache
-from items.vehicles import getVehicleClassFromVehicleType
 
-class LootboxVehicleVideoRewardView(BaseUniqueRewardsView):
-    __slots__ = ('_vehicle', '_soundControl', '__isWindowAccessibleHandlerInit', '_videoRes', '_isGuaranteedReward')
+class LootboxVideoRewardView(BaseUniqueRewardsView):
+    __slots__ = ('_bonus', '_soundControl', '__isWindowAccessibleHandlerInit', '_videoRes', '_isGuaranteedReward')
     __itemsCache = dependency.descriptor(IItemsCache)
     _COMMON_SOUND_SPACE = LOOT_BOXES_REWARD_VIDEO_SOUND_SPACE
 
-    def __init__(self, layoutID, vehicle, videoRes, rewards, isGuaranteedReward=False, soundControl=DummySoundManager()):
-        super(LootboxVehicleVideoRewardView, self).__init__(layoutID, rewards, LootboxVideoRewardViewModel())
-        self._vehicle = vehicle
+    def __init__(self, layoutID, bonus, videoRes, rewards, isGuaranteedReward=False, soundControl=DummySoundManager()):
+        super(LootboxVideoRewardView, self).__init__(layoutID, rewards, LootboxVideoRewardViewModel())
+        self._bonus = bonus
         self._soundControl = soundControl
         self._videoRes = videoRes
         self._isGuaranteedReward = isGuaranteedReward
@@ -29,14 +29,14 @@ class LootboxVehicleVideoRewardView(BaseUniqueRewardsView):
             Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
             self.__isWindowAccessibleHandlerInit = False
         self._soundControl.stop()
-        super(LootboxVehicleVideoRewardView, self)._finalize()
+        super(LootboxVideoRewardView, self)._finalize()
 
     @property
     def viewModel(self):
-        return super(LootboxVehicleVideoRewardView, self).getViewModel()
+        return super(LootboxVideoRewardView, self).getViewModel()
 
     def _onLoading(self, *args, **kwargs):
-        super(LootboxVehicleVideoRewardView, self)._onLoading(*args, **kwargs)
+        super(LootboxVideoRewardView, self)._onLoading(*args, **kwargs)
         self._update()
         Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
         self.__isWindowAccessibleHandlerInit = True
@@ -46,13 +46,17 @@ class LootboxVehicleVideoRewardView(BaseUniqueRewardsView):
 
     def _update(self):
         with self.viewModel.transaction() as vm:
-            vm.setVehicleName(self._vehicle.userName)
-            vm.setVehicleLvl(self._vehicle.level)
-            vm.setVehicleType(getVehicleClassFromVehicleType(self._vehicle.descriptor.type))
-            vm.setIsElite(self._vehicle.isElite)
             vm.setIsWindowAccessible(Windowing.isWindowAccessible())
+            if self._bonus.getName() == 'vehicles':
+                vehicle = self._bonus.getVehicles()[0][0]
+                vm.setIsElite(vehicle.isElite)
+                vm.setVehicleType(vehicle.type)
+                vm.setVehicleLvl(vehicle.level)
             vm.setVideoRes(self._videoRes)
             vm.setIsGuaranteedReward(self._isGuaranteedReward)
+            vm.reward.clearItems()
+            packBonusModelAndTooltipData([self._bonus], vm.reward)
+            vm.reward.invalidate()
 
     def _onClose(self):
         self.destroyWindow()

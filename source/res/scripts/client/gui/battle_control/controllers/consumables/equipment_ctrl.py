@@ -178,9 +178,6 @@ class _EquipmentItem(object):
     def getAnimationType(self):
         return self._animationType
 
-    def setAnimationType(self, animationType):
-        self._animationType = animationType
-
     def setServerPrevStage(self, prevStage):
         self._serverPrevStage = prevStage
 
@@ -339,12 +336,6 @@ class _EquipmentItem(object):
 
     def canDeactivate(self):
         return True
-
-    def setLocked(self, isLocked):
-        pass
-
-    def isLocked(self):
-        return False
 
 
 class _RefillEquipmentItem(object):
@@ -842,12 +833,9 @@ class _AfterburningItem(_TriggerItem):
         self.__cleanAlmostReadySound()
 
     def _playChargedSound(self):
-        self._playReady()
+        EquipmentSound.playReady(self)
         self.__fullyChargedSoundCbId = None
         return
-
-    def _playReady(self):
-        EquipmentSound.playReady(self)
 
     def _playAlmostChargedSound(self):
         if self.__almostChargedSound is None:
@@ -1284,8 +1272,6 @@ class EquipmentsController(MethodsRules, IBattleController):
         super(EquipmentsController, self).__init__()
         self._eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self._eManager)
-        self.onSlotWaited = Event.Event(self._eManager)
-        self.onSlotBlocked = Event.Event(self._eManager)
         self.onEquipmentUpdated = Event.Event(self._eManager)
         self.onEquipmentReset = Event.Event(self._eManager)
         self.onEquipmentsCleared = Event.Event(self._eManager)
@@ -1399,8 +1385,6 @@ class EquipmentsController(MethodsRules, IBattleController):
             self.onEquipmentUpdated(intCD, item)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
-            if 'hidden' in descriptor.tags:
-                return
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
                 item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
                 self._equipments[intCD] = item

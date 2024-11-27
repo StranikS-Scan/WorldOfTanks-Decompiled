@@ -503,7 +503,7 @@ class GuiAmbientsCtrl(object):
             if self._filters[fID] <= 0:
                 f = snd_filters.get(fID)
                 f.stop()
-                if view is not None:
+                if view is not None and not view.isDisposed():
                     f.stopView(view)
                 SOUND_DEBUG('Filter has been stopped', f)
 
@@ -522,8 +522,8 @@ class GuiAmbientsCtrl(object):
             customViews = []
             for layer in (WindowLayer.TOP_WINDOW, WindowLayer.WINDOW, WindowLayer.SUB_VIEW):
                 container = self.app.containerManager.getContainer(layer)
-                for viewAlias in self._customEnvs[layer].iterkeys():
-                    view = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+                for viewUniqName in self._customEnvs[layer].iterkeys():
+                    view = container.getView(criteria={POP_UP_CRITERIA.UNIQUE_NAME: viewUniqName})
                     if view is not None:
                         customViews.append(view)
 

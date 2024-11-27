@@ -1514,7 +1514,7 @@
           <name>	WD_L7	</name>
           <radius>	0.23	</radius>
           <isLeading>	true	</isLeading>
-          <syncAngle>	31.5	</syncAngle>
+          <syncAngle>	40	</syncAngle>
           <geometry>
             <radius>	0.23	</radius>
           </geometry>
@@ -1535,7 +1535,7 @@
           <name>	WD_R7	</name>
           <radius>	0.23	</radius>
           <isLeading>	true	</isLeading>
-          <syncAngle>	31.5	</syncAngle>
+          <syncAngle>	40	</syncAngle>
           <geometry>
             <radius>	0.23	</radius>
           </geometry>
@@ -1824,7 +1824,7 @@
           <left>	vehicles/american/A172_ASTRON_FL/track/left_pair_0.track	</left>
           <right>	vehicles/american/A172_ASTRON_FL/track/right_pair_0.track	</right>
           <segmentLength>	0.21	</segmentLength>
-          <segmentOffset>	0.045	</segmentOffset>
+          <segmentOffset>	0.16	</segmentOffset>
           <segment2Offset>	0.11	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -1840,7 +1840,7 @@
           <left>	vehicles/american/A172_ASTRON_FL/track/left_pair_1.track	</left>
           <right>	vehicles/american/A172_ASTRON_FL/track/right_pair_1.track	</right>
           <segmentLength>	0.21	</segmentLength>
-          <segmentOffset>	0.045	</segmentOffset>
+          <segmentOffset>	0.07	</segmentOffset>
           <segment2Offset>	0.11	</segment2Offset>
           <atlas>
             <UTiles>	1	</UTiles>
@@ -1854,7 +1854,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	80	</segmentsCount>
           <segmentsOuterThickness>	0.02	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsInnerThickness>	0.02	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.473	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A172_ASTRON_FL/track/segment.model	</model>
@@ -2079,7 +2079,7 @@
           <trackPairIdx>	1	</trackPairIdx>
           <segmentsCount>	78	</segmentsCount>
           <segmentsOuterThickness>	0.02	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsInnerThickness>	0.02	</segmentsInnerThickness>
           <segmentsPlaneOffset>	-1.473	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A172_ASTRON_FL/track/segment.model	</model>
@@ -2303,8 +2303,8 @@
         <right>
           <trackPairIdx>	0	</trackPairIdx>
           <segmentsCount>	80	</segmentsCount>
-          <segmentsOuterThickness>	0.04	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.02	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.02	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.473	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A172_ASTRON_FL/track/segment.model	</model>
@@ -2528,8 +2528,8 @@
         <right>
           <trackPairIdx>	1	</trackPairIdx>
           <segmentsCount>	78	</segmentsCount>
-          <segmentsOuterThickness>	0.04	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.01	</segmentsInnerThickness>
+          <segmentsOuterThickness>	0.02	</segmentsOuterThickness>
+          <segmentsInnerThickness>	0.02	</segmentsInnerThickness>
           <segmentsPlaneOffset>	1.473	</segmentsPlaneOffset>
           <mainSegment>
             <model>	vehicles/american/A172_ASTRON_FL/track/segment.model	</model>
@@ -2836,9 +2836,9 @@
           <temperatureMechanics>
             <heatingPerShot>	2	</heatingPerShot>
             <heatingPerSec>	20	</heatingPerSec>
-            <coolingDelay>	1.0	</coolingDelay>
+            <coolingDelay>	2.0	</coolingDelay>
             <coolingPerSec>	10	</coolingPerSec>
-            <coolingOverheatPerSec>	12	</coolingOverheatPerSec>
+            <coolingOverheatPerSec>	14	</coolingOverheatPerSec>
             <thermalStateHysteresis>	1	</thermalStateHysteresis>
             <temperatureSegmentSize>	5	</temperatureSegmentSize>
             <thermalStates>

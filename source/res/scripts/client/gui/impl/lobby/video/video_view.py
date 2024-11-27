@@ -74,7 +74,7 @@ _LAYERS = [WindowLayer.OVERLAY,
  WindowLayer.SERVICE_LAYOUT]
 
 class VideoView(ViewImpl):
-    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__previouslyVisibleLayers', '__app', '__canManageWorldDraw')
+    __slots__ = ('__onVideoStartedHandle', '__onVideoStoppedHandle', '__onVideoClosedHandle', '__isAutoClose', '__soundControl', '__previouslyVisibleLayers', '__app')
     __appFactory = dependency.descriptor(IAppLoader)
 
     def __init__(self, *args, **kwargs):
@@ -90,7 +90,6 @@ class VideoView(ViewImpl):
         self.__soundControl = kwargs.get('soundControl') or DummySoundManager()
         self.__previouslyVisibleLayers = []
         self.__app = self.__appFactory.getApp()
-        self.__canManageWorldDraw = kwargs.get('canManageWorldDraw', True)
 
     @property
     def viewModel(self):
@@ -105,6 +104,9 @@ class VideoView(ViewImpl):
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
+            self.viewModel.setCanEscape(kwargs.get('canEscape', True))
+            self.viewModel.setIsUIVisible(kwargs.get('isUIVisible', False))
+            self.viewModel.setUiShowDelay(kwargs.get('uiShowDelay', -1))
             g_playerEvents.onAccountBecomeNonPlayer += self.__removeClosedHandle
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)
@@ -174,8 +176,7 @@ class VideoView(ViewImpl):
         self.viewModel.setIsWindowAccessible(isWindowAccessible)
 
     def __hideBack(self):
-        if self.__canManageWorldDraw:
-            BigWorld.worldDrawEnabled(False)
+        BigWorld.worldDrawEnabled(False)
         if self.__app is not None:
             containerManager = self.__app.containerManager
             self.__previouslyVisibleLayers = containerManager.getVisibleLayers()
@@ -183,8 +184,7 @@ class VideoView(ViewImpl):
         return
 
     def __showBack(self):
-        if self.__canManageWorldDraw:
-            BigWorld.worldDrawEnabled(True)
+        BigWorld.worldDrawEnabled(True)
         if self.__app is not None:
             self.__app.containerManager.setVisibleLayers(self.__previouslyVisibleLayers)
         return

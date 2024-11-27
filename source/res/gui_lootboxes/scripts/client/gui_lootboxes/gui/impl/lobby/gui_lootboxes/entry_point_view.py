@@ -10,7 +10,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.entry_poin
 from gui.impl.pub import ViewImpl
 from gui.limited_ui.lui_rules_storage import LuiRules
 from helpers import dependency
-from skeletons.gui.game_control import IGuiLootBoxesController, ILimitedUIController
+from skeletons.gui.game_control import IGuiLootBoxesController, ILimitedUIController, IFestivityController
 from skeletons.gui.hangar import ICarouselEventEntry
 _ENABLED_PRE_QUEUES = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.VERSUS_AI)
 
@@ -30,7 +30,9 @@ class LootBoxesEntryPointWidget(ViewImpl, ICarouselEventEntry):
         guiLootBoxes = dependency.instance(IGuiLootBoxesController)
         isEnabled = guiLootBoxes is not None and guiLootBoxes.isEnabled()
         isRuleCompleted = limitedUIController.isRuleCompleted(LuiRules.GUI_LOOTBOXES_ENTRY_POINT)
-        return isEnabled and isRuleCompleted and (any((state.isInPreQueue(preQueue) for preQueue in _ENABLED_PRE_QUEUES)) or state.isInUnit(PREBATTLE_TYPE.SQUAD))
+        nyController = dependency.instance(IFestivityController)
+        isNYEnabled = nyController is not None and nyController.isEnabled()
+        return isEnabled and isRuleCompleted and not isNYEnabled and (any((state.isInPreQueue(preQueue) for preQueue in _ENABLED_PRE_QUEUES)) or state.isInUnit(PREBATTLE_TYPE.SQUAD))
 
     def _onLoading(self, *args, **kwargs):
         super(LootBoxesEntryPointWidget, self)._onLoading(*args, **kwargs)

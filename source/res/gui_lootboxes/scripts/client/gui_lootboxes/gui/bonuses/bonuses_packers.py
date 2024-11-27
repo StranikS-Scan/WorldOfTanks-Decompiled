@@ -62,7 +62,7 @@ def getRewardsScreenDefaultBonusPackerMap():
     mapping = getDefaultBonusPackersMap()
     mapping.update({'tmanToken': TmanTemplateBonusPacker(),
      'vehicles': LootBoxVehiclesBonusUIPacker(),
-     'customizations': LootBoxCustomizationBonusUIPacker(),
+     'customizations': LootBoxCustomizationRewardingBonusUIPacker(),
      'tankmen': LootBoxTankmenBonusUIPacker(),
      'collectionItem': LootBoxCollectionItemBonusUIPacker(),
      'battleToken': LootBoxTokensBonusUIPacker(),
@@ -195,12 +195,9 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         for item in bonus.getCustomizations():
             if item is None:
                 continue
-            compensation = item.get('customCompensation', None)
-            if compensation:
-                compBonus = cls.__getCompBonus(compensation)
-                if compBonus:
-                    packer = LootBoxCompensationBonusUIPacker()
-                    result.extend(packer.pack(compBonus))
+            packedBonus = cls._packCompensationBonus(item)
+            if packedBonus:
+                result.extend(packedBonus)
             result.append(cls._packSingleBonus(bonus, item, cls._getLabel(bonus.getC11nItem(item))))
 
         return result
@@ -227,11 +224,9 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         for item in bonus.getCustomizations():
             if item is None:
                 continue
-            compensation = item.get('customCompensation', None)
-            if compensation:
-                compBonus = cls.__getCompBonus(compensation)
-                if compBonus:
-                    tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[compBonus, bonus]))
+            tooltipComp = cls._getCompensationTooltip(item, bonus)
+            if tooltipComp:
+                tooltipData.append(tooltipComp)
             itemCustomization = bonus.getC11nItem(item)
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
@@ -242,13 +237,10 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         result = []
         for b in bonus.getCustomizations():
             if b is not None:
-                compensation = b.get('customCompensation', None)
-                if compensation:
-                    compBonus = cls.__getCompBonus(compensation)
-                    if compBonus:
-                        result.append(R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.CompensationTooltip())
-                else:
-                    result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+                compContent = cls._getCompensationContentID(b)
+                if compContent:
+                    result.append(compContent)
+                result.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return result
 
@@ -272,8 +264,85 @@ class LootBoxCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         elementBonusR = R.strings.vehicle_customization.elementBonus.desc.dyn(c11nItem.itemFullTypeName, R.invalid)
         return backport.text(elementBonusR(), value=userName) if elementBonusR else userName
 
+    @classmethod
+    def _packCompensationBonus(cls, item):
+        compensation = item.get('customCompensation', None)
+        if compensation:
+            compBonus = cls.__getCompBonus(compensation)
+            if compBonus:
+                packer = LootBoxCompensationBonusUIPacker()
+                return packer.pack(compBonus)
+        return
 
-class LootBoxUniqueCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker):
+    @classmethod
+    def _getCompensationTooltip(cls, item, bonus):
+        compensation = item.get('customCompensation', None)
+        if compensation:
+            compBonus = cls.__getCompBonus(compensation)
+            if compBonus:
+                return TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[compBonus, bonus])
+        return
+
+    @classmethod
+    def _getCompensationContentID(cls, item):
+        compensation = item.get('customCompensation', None)
+        if compensation:
+            compBonus = cls.__getCompBonus(compensation)
+            if compBonus:
+                return R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.CompensationTooltip()
+        return
+
+
+class LootBoxCustomizationRewardingBonusUIPacker(LootBoxCustomizationBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for item in bonus.getCustomizations():
+            if item is None:
+                continue
+            compensation = item.get('customCompensation', None)
+            if compensation:
+                packedBonus = cls._packCompensationBonus(item)
+                if packedBonus:
+                    result.extend(packedBonus)
+            result.append(cls._packSingleBonus(bonus, item, cls._getLabel(bonus.getC11nItem(item))))
+
+        return result
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for item in bonus.getCustomizations():
+            if item is None:
+                continue
+            compensation = item.get('customCompensation', None)
+            if compensation:
+                tooltipComp = cls._getCompensationTooltip(item, bonus)
+                if tooltipComp:
+                    tooltipData.append(tooltipComp)
+            itemCustomization = bonus.getC11nItem(item)
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        for b in bonus.getCustomizations():
+            if b is not None:
+                compensation = b.get('customCompensation', None)
+                if compensation:
+                    contentID = cls._getCompensationContentID(b)
+                    if contentID:
+                        result.append(R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.CompensationTooltip())
+                else:
+                    result.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        return result
+
+
+class LootBoxUniqueCustomizationBonusUIPacker(LootBoxCustomizationRewardingBonusUIPacker):
 
     @classmethod
     def _getIcon(cls, bonus, c11Item):
@@ -284,7 +353,7 @@ class LootBoxUniqueCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker)
         return itemTypeName + '_3d' if c11Item.itemTypeID == GUI_ITEM_TYPE.STYLE and c11Item.is3D else itemTypeName
 
 
-class AdditionalRewardsCustomizationBonusUIPacker(LootBoxCustomizationBonusUIPacker):
+class AdditionalRewardsCustomizationBonusUIPacker(LootBoxCustomizationRewardingBonusUIPacker):
 
     @classmethod
     def _getLabel(cls, c11nItem):

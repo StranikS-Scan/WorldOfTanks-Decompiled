@@ -7,7 +7,6 @@ from gui.impl.gen.view_models.views.lobby.mapbox.reward_item_model import Reward
 from gui.impl.gen.view_models.views.lobby.mapbox.crew_book_reward_option_model import CrewBookRewardOptionModel
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.server_events.bonuses import PlusPremiumDaysBonus
-from gui.shared.money import Currency
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, SimpleBonusUIPacker, BonusUIPacker, GoodiesBonusUIPacker, CustomizationBonusUIPacker, getLocalizedBonusName, BaseBonusUIPacker, CrewBookBonusUIPacker, ItemBonusUIPacker
 
 def getMapboxBonusPacker():
@@ -18,15 +17,12 @@ def getMapboxBonusPacker():
      'items': MapboxItemPacker(),
      'selectableCrewbook': MapboxSelectablePacker(),
      'crewBooks': MapboxCrewBookPacker(),
-     'randomCrewbook': MapboxRandomCrewbookPacker(),
-     Currency.CREDITS: MapboxCreditsPacker(),
-     Currency.CRYSTAL: MapboxCrystalPacker(),
-     Currency.FREE_XP: MapboxFreeExpPacker()})
+     'randomCrewbook': MapboxRandomCrewbookPacker()})
     return BonusUIPacker(mapping)
 
 
 class MapboxPremiumDaysPacker(SimpleBonusUIPacker):
-    _ICONS_AVAILABLE = (1, 2, 3)
+    _ICONS_AVAILABLE = (1,)
 
     @classmethod
     def _packSingleBonus(cls, bonus, label=''):
@@ -111,9 +107,8 @@ class MapboxCrewBookPacker(CrewBookBonusUIPacker):
         cls._packCommon(bonus, model)
         model.setIcon(book.getBonusIconName())
         model.setValue(str(count))
-        nation = R.strings.nations.dyn(book.getNation()) if book.getNation() else None
-        model.setLabel(text(nation()) if nation else '')
-        description = text(R.strings.mapbox.rewardDescription.dyn(book.itemTypeName)(), exp=book.getXP(), nation=text(nation.genetiveCase()) if nation else '')
+        model.setLabel(text(R.strings.nations.dyn(book.getNation())()))
+        description = text(R.strings.mapbox.rewardDescription.dyn(book.itemTypeName)(), exp=book.getXP(), nation=text(R.strings.nations.dyn(book.getNation()).genetiveCase()))
         model.setDescription(description)
         model.setItemID(book.intCD)
         return model
@@ -136,30 +131,3 @@ class MapboxRandomCrewbookPacker(BaseBonusUIPacker):
     @classmethod
     def _getToolTip(cls, bonus):
         return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK_MAPBOX, specialArgs=[item]) for item in sorted(bonus.getItems()) ]
-
-
-class MapboxCreditsPacker(SimpleBonusUIPacker):
-
-    @classmethod
-    def _getBonusModel(cls):
-        model = RewardItemModel()
-        model.setIcon('credits')
-        return model
-
-
-class MapboxCrystalPacker(SimpleBonusUIPacker):
-
-    @classmethod
-    def _getBonusModel(cls):
-        model = RewardItemModel()
-        model.setIcon('crystal')
-        return model
-
-
-class MapboxFreeExpPacker(SimpleBonusUIPacker):
-
-    @classmethod
-    def _getBonusModel(cls):
-        model = RewardItemModel()
-        model.setIcon('freeExp')
-        return model

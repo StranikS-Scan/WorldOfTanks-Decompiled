@@ -5,7 +5,7 @@ import BattleReplay
 import VOIP
 import CommandMapping
 from VOIP.voip_constants import VOIP_SUPPORTED_API
-from constants import ARENA_BONUS_TYPE_IDS
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_BONUS_TYPE
 from debug_utils import LOG_WARNING
 from adisp import adisp_async, adisp_process
 from gui import GUI_SETTINGS
@@ -180,8 +180,11 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.enableCurrentChannel(isEnabled)
         self.__showMessage(isEnabled, event.ctx.get('arenaBonusType'))
 
-    @staticmethod
-    def __showMessage(enable, arenaBonusType):
+    @classmethod
+    def __showMessage(cls, enable, arenaBonusType):
+        if arenaBonusType == ARENA_BONUS_TYPE.COMP7:
+            cls.__showComp7Message(enable)
+            return
         if enable:
             msg = backport.text(R.strings.messenger.client.dynSquad.enableVOIP())
         else:
@@ -192,3 +195,11 @@ class VOIPChatController(IVOIPChatController):
                 messageRId = R.strings.messenger.client.dynSquad.disableVOIP()
             msg = backport.text(messageRId, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
         g_messengerEvents.onWarningReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))
+
+    @staticmethod
+    def __showComp7Message(enable):
+        if enable:
+            msg = backport.text(R.strings.messenger.client.dynSquad.enableVOIP())
+        else:
+            msg = backport.text(R.strings.messenger.client.COMP7.disableVOIP(), keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
+        g_messengerEvents.onComp7VOIPNotificationReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.PLAYER if enable else ACTION_MESSAGE_TYPE.WARNING))

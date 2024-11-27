@@ -156,3 +156,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setButtonHighlightS(self, btnAlias, highlightImage):
         return self.flashObject.as_setButtonHighlight(btnAlias, highlightImage) if self._isDAAPIInited() else None
+
+    def as_updateNYVisibilityS(self, isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible):
+        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible) if self._isDAAPIInited() else None

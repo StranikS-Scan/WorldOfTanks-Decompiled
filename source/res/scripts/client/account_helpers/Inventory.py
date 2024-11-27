@@ -198,13 +198,13 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_EQUIP, vehInvID, turretCompDescr, gunCompDescr, proxy)
             return
 
-    def equipOptionalDevice(self, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit, isInstall):
+    def equipOptionalDevice(self, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, 0, [])
             return
         else:
-            self.__account.shop.waitForSync(partial(self.__equipOptionDeviceOnShopSynced, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit, isInstall))
+            self.__account.shop.waitForSync(partial(self.__equipOptionDeviceOnShopSynced, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit))
             return
 
     def equipShells(self, vehInvID, shells, callback):
@@ -780,7 +780,7 @@ class Inventory(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_SET_AND_FILL_LAYOUTS, arr, proxy)
             return
 
-    def __equipOptionDeviceOnShopSynced(self, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit, isInstall, resultID, shopRev):
+    def __equipOptionDeviceOnShopSynced(self, vehInvID, deviceCompDescr, slotIdx, isAllSetups, isPaidRemoval, callback, useDemountKit, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
                 callback(resultID)
@@ -796,8 +796,7 @@ class Inventory(object):
              slotIdx,
              int(isAllSetups),
              int(isPaidRemoval),
-             int(useDemountKit),
-             int(isInstall)]
+             int(useDemountKit)]
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_OPTDEV, arr, proxy)
             return
 

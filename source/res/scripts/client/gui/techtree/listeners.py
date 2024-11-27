@@ -3,8 +3,11 @@
 from logging import getLogger
 import typing
 import weakref
+import Keys
+from constants import IS_DEVELOPMENT
 from collector_vehicle import CollectorVehicleConsts
 from PlayerEvents import g_playerEvents
+from gui import InputHandler
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -242,7 +245,7 @@ class _ItemsCacheListener(_Listener):
     def __center_onIsLongDisconnected(self, _):
         self._page.redraw()
 
-    def __onVehCompareBasketChanged(self, changedData, *args, **kwargs):
+    def __onVehCompareBasketChanged(self, changedData):
         if changedData.isFullChanged:
             self._page.invalidateVehCompare()
 
@@ -362,6 +365,21 @@ class _TechTreeActionEventsListener(_Listener):
         self._page.invalidateParagonsAnouncement()
 
 
+class _TechTreeDevRealmListener(_Listener):
+
+    def startListen(self, page):
+        super(_TechTreeDevRealmListener, self).startListen(page)
+        InputHandler.g_instance.onKeyUp += self.__handleReloadData
+
+    def stopListen(self):
+        InputHandler.g_instance.onKeyUp -= self.__handleReloadData
+        super(_TechTreeDevRealmListener, self).stopListen()
+
+    def __handleReloadData(self, event):
+        if event.key is Keys.KEY_R:
+            self._page.redraw()
+
+
 class TTListenerDecorator(_Listener):
     __slots__ = ('_stats', '_items', '_wallet', '_prbListener', '_rent', '_restore', '_blueprints', '_earlyAccess', '_actions')
 
@@ -376,6 +394,7 @@ class TTListenerDecorator(_Listener):
         self._blueprints = _BlueprintsListener()
         self._earlyAccess = _EarlyAccessListener()
         self._actions = _TechTreeActionEventsListener()
+        self._devRealms = _TechTreeDevRealmListener()
 
     def startListen(self, page):
         proxy = weakref.proxy(page)
@@ -388,6 +407,8 @@ class TTListenerDecorator(_Listener):
         self._blueprints.startListen(proxy)
         self._earlyAccess.startListen(proxy)
         self._actions.startListen(proxy)
+        if IS_DEVELOPMENT:
+            self._devRealms.startListen(proxy)
 
     def stopListen(self):
         self._stats.stopListen()
@@ -399,3 +420,5 @@ class TTListenerDecorator(_Listener):
         self._blueprints.stopListen()
         self._earlyAccess.stopListen()
         self._actions.stopListen()
+        if IS_DEVELOPMENT:
+            self._devRealms.stopListen()

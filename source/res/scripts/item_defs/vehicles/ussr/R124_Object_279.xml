@@ -844,17 +844,17 @@
         <tracesParams>
           <trackPairIdx>	0	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	ussr_02	</textureSet>
-          <size>	0.5 0.75	</size>
-          <offset>	0 1.2	</offset>
+          <textureSet>	ussr_01	</textureSet>
+          <size>	1 0.75	</size>
+          <offset>	0 0.1	</offset>
           <centerOffsetFactor>	1 1	</centerOffsetFactor>
         </tracesParams>
         <tracesParams>
           <trackPairIdx>	1	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	ussr_02	</textureSet>
-          <size>	0.5 0.75	</size>
-          <offset>	0 1.2	</offset>
+          <textureSet>	ussr_01	</textureSet>
+          <size>	1 0.75	</size>
+          <offset>	0 0.1	</offset>
           <centerOffsetFactor>	2.65 1	</centerOffsetFactor>
         </tracesParams>
       </traces>
@@ -3203,7 +3203,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.01 0.011 1.038 0 0.853 -0.107 0.67 0.413 0.5 0.5 0.298 0.5 0 0 0.196	</physicsShape>
+      <physicsShape>	1.01 0.011 1.038 0 0.949 -0.058 0.67 0.413 0.5 0.5 0.298 0.5 0 0 0.293	</physicsShape>
       <camouflage>
         <density>	134.645935 133.689331	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
@@ -3295,6 +3295,7 @@
     <tankmen></tankmen>
   </deviceExtras>
   <ability>	juggernaut	</ability>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
   <effects>
     <collision></collision>
     <damagedStateGroup>	large	</damagedStateGroup>

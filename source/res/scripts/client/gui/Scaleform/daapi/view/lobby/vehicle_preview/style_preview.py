@@ -19,10 +19,8 @@ from gui.shared.gui_items.customization.c11n_items import getGroupFullNameResour
 from helpers import dependency
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.gui.game_control import IHeroTankController
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 from skeletons.gui.shared.utils import IHangarSpace
 from uilogging.shop.loggers import ShopVehicleStylePreviewMetricsLogger, ShopVehicleStylePreviewFlowLogger
-from skeletons.gui.game_control import IWhiteTigerController
 _SHOW_CLOSE_BTN = False
 _SHOW_BACK_BTN = True
 _logger = logging.getLogger(__name__)
@@ -32,8 +30,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     __metaclass__ = event_bus_handlers.EventBusListener
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __heroTanksControl = dependency.descriptor(IHeroTankController)
-    __wtController = dependency.descriptor(IWhiteTigerController)
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
@@ -52,12 +48,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.selectHeroTank(ctx.get('isHeroTank', False))
         self.__uiMetricsLogger = ShopVehicleStylePreviewMetricsLogger(self._style.intCD)
         self.__uiFlowLogger = ShopVehicleStylePreviewFlowLogger()
-        self.__previewCloseCb = None
-        isActive = self.__wtController.isEventPrbActive()
-        if isActive:
-            if self.__prebattleVehicle.item is not None:
-                self.__prebattleVehicle.selectNone()
-            self.__previewCloseCb = self.__prebattleVehicle.selectPreviousVehicle
         return
 
     def closeView(self):
@@ -102,9 +92,6 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         g_currentPreviewVehicle.resetAppearance()
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.VEHICLE_PREVIEW_HIDDEN), scope=EVENT_BUS_SCOPE.LOBBY)
         super(VehicleStylePreview, self)._dispose()
-        if self.__previewCloseCb is not None:
-            self.__previewCloseCb()
-            self.__previewCloseCb = None
         return
 
     def _onRegisterFlashComponent(self, viewPy, alias):

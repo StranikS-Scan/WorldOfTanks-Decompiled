@@ -189,10 +189,14 @@ class FormattedSimpleDialogBuilder(SimpleDialogBuilder):
 class ResSimpleDialogBuilder(SimpleDialogBuilder):
 
     def setMessagesAndButtons(self, message, buttons=R.strings.dialogs.common, focused=DialogButtons.SUBMIT, btnDownSounds=None):
-        self.setMessage(message.dyn('message')())
+        messageSection = self._getMessageSectionName()
+        self.setMessage(message.dyn(messageSection)())
         self.setTitle(message.dyn('title')())
         self.setCheckboxLabel(message.dyn('checkboxLabel'))
         _setupButtonsBasedOnRes(self, message, buttons, focused, btnDownSounds)
+
+    def _getMessageSectionName(self):
+        pass
 
 
 class ResPureDialogBuilder(PureDialogBuilder):

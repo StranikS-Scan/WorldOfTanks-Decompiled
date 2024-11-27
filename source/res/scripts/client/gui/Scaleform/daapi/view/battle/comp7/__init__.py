@@ -37,10 +37,10 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.comp7 import stats_exchange
     from gui.Scaleform.daapi.view.battle.comp7.prebattle_timer import Comp7PrebattleTimer
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
-    from gui.Scaleform.daapi.view.battle.comp7 import battle_carousel
     from gui.Scaleform.daapi.view.battle.comp7 import hint_panel
     from gui.Scaleform.daapi.view.battle.shared.points_of_interest import poi_notification_panel
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject
+    from gui.impl.battle.battle_page.carousel import prebattle_carousel_inject
     from gui.Scaleform.daapi.view.battle.comp7.filter_popover import Comp7TankCarouselFilterPopover
     return (ViewSettings(VIEW_ALIAS.COMP7_BATTLE_PAGE, Comp7BattlePage, 'comp7BattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.Comp7BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
@@ -64,7 +64,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.POINT_OF_INTEREST_NOTIFICATIONS_PANEL, poi_notification_panel.PointsOfInterestPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, prebattle_ammunition_panel_inject.Comp7PrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, Comp7PrebattleTimer, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL, battle_carousel.PrebattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_CAROUSEL_VIEW, prebattle_carousel_inject.PrebattleCarouselInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, Comp7TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE))
 

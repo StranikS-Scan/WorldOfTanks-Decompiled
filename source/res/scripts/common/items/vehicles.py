@@ -208,10 +208,7 @@ VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES = ('fuelTankHealthFactor',
  'chassisHealthAfterHysteresisFactor',
  'centerRotationFwdSpeedFactor',
  'moduleDamageFactor',
- 'engineAndFuelTanksDamageFactor',
- 'receivedDamageFactor',
- 'discreteDamageFactor',
- 'proofHealth')
+ 'engineAndFuelTanksDamageFactor')
 VEHICLE_MISC_ATTRIBUTE_FACTOR_INDICES = dict(((value, index) for index, value in enumerate(VEHICLE_MISC_ATTRIBUTE_FACTOR_NAMES)))
 
 class EnhancementItem(object):
@@ -283,7 +280,6 @@ def vehicleAttributeFactors():
      'repeatedStunDurationFactor': 1.0,
      'healthFactor': 1.0,
      'damageFactor': 1.0,
-     'receivedDamageFactor': 1.0,
      'enginePowerFactor': 1.0,
      'deathZones/sensitivityFactor': 1.0,
      'xRayFactor': 1.0,
@@ -302,9 +298,7 @@ def vehicleAttributeFactors():
      'moduleDamageFactor': 1.0,
      'engineAndFuelTanksDamageFactor': 1.0,
      'armorSpallsDamageFactor': 1.0,
-     'deviceDamageFactor': 1.0,
-     'discreteDamageFactor': 1.0,
-     'proofHealth': 0}
+     'deviceDamageFactor': 1.0}
     for ten in TANKMAN_EXTRA_NAMES:
         factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
 
@@ -891,17 +885,11 @@ class VehicleDescriptor(object):
         else:
             return ((prevDevice.compactDescr,), component_constants.EMPTY_TUPLE) if prevDevice.removable else (component_constants.EMPTY_TUPLE, (prevDevice.compactDescr,))
 
-    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True, itemCompDescr=0):
-        device = getItemByCompactDescr(itemCompDescr) if itemCompDescr != 0 else self.optionalDevices[slotIdx]
+    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True):
+        device = self.optionalDevices[slotIdx]
         if device is None:
             return (component_constants.EMPTY_TUPLE, component_constants.EMPTY_TUPLE)
         else:
-            if itemCompDescr != 0:
-                if device not in self.optionalDevices:
-                    if device.removable:
-                        return ((device.compactDescr,), component_constants.EMPTY_TUPLE)
-                    return (component_constants.EMPTY_TUPLE, (device.compactDescr,))
-                slotIdx = self.optionalDevices.index(device)
             self.optionalDevices[slotIdx] = None
             self._optDevSlotsMap.pop(device.compactDescr)
             if rebuildAttrs:
@@ -1488,7 +1476,6 @@ class VehicleDescriptor(object):
          'radioDistanceFactor': 0.0,
          'healthFactor': 1.0,
          'damageFactor': 1.0,
-         'receivedDamageFactor': 1.0,
          'enginePowerFactor': 1.0,
          'armorSpallsDamageDevicesFactor': 1.0,
          'increaseEnemySpottingTime': 0.0,
@@ -1534,9 +1521,7 @@ class VehicleDescriptor(object):
          'gun/shotRateFactor': 1.0,
          'gun/shellSpeedFactor': 1.0,
          'spallsDeviceDamageFactor': 1.0,
-         'deviceDamageFactor': 1.0,
-         'discreteDamageFactor': 1.0,
-         'proofHealth': 0}
+         'deviceDamageFactor': 1.0}
         if IS_CELLAPP or IS_CLIENT or IS_UE_EDITOR or IS_WEB or IS_BOT or onAnyApp:
             trackCenterOffset = chassis.topRightCarryingPoint[0]
             self.physics = {'weight': weight,
@@ -1671,9 +1656,9 @@ class CompositeVehicleDescriptor(object):
         self.__siegeDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
         return self.__vehicleDescr.installTurret(turretCompactDescr, gunCompactDescr, positionIndex)
 
-    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True, itemCompDescr=0):
+    def removeOptionalDevice(self, slotIdx, rebuildAttrs=True):
         self.__siegeDescr.removeOptionalDevice(slotIdx, rebuildAttrs)
-        return self.__vehicleDescr.removeOptionalDevice(slotIdx, rebuildAttrs, itemCompDescr=itemCompDescr)
+        return self.__vehicleDescr.removeOptionalDevice(slotIdx, rebuildAttrs)
 
     def rebuildAttrs(self):
         self.__siegeDescr.rebuildAttrs()
@@ -1980,7 +1965,6 @@ class VehicleType(object):
             self.extrasDict = copyMethod(commonConfig['extrasDict'])
             self.devices = copyMethod(commonConfig['_devices'])
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
-            self.armorMaxHealth = _xml.readIntOrNone(xmlCtx, section, 'armorMaxHealth')
         if IS_CLIENT or IS_WEB or IS_BOT:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT or IS_UE_EDITOR:
@@ -2968,16 +2952,6 @@ def isVehicleTypeCompactDescr(vehDescr):
     return True if cdType is int or cdType is long else False
 
 
-def getEquipmentByName(name):
-    eqID = g_cache.equipmentIDs()[name]
-    return g_cache.equipments()[eqID]
-
-
-def getOptionalDeviceByName(name):
-    optDevID = g_cache.optionalDeviceIDs()[name]
-    return g_cache.optionalDevices()[optDevID]
-
-
 def getVehicleType(compactDescr):
     if isVehicleTypeCompactDescr(compactDescr):
         nationID = compactDescr >> 4 & 15
@@ -3156,12 +3130,8 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
 
 
 def getBuiltinEqsForVehicle(vehType):
-    result = []
-    for eqName in vehType.builtins:
-        eq = getEquipmentByName(eqName)
-        result.append(eq.compactDescr)
-
-    return sorted(result)
+    builtins = vehType.builtins
+    return [ e.compactDescr for e in g_cache.equipments().itervalues() if e.name in builtins ][:vehType.supplySlots.getAmountForType(ITEM_TYPES.equipment, items.EQUIPMENT_TYPES.regular)]
 
 
 def getUnlocksSources():
@@ -5239,9 +5209,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
     shell.isTracer = section.readBool('isTracer', False)
     if shell.isTracer:
         shell.isForceTracer = section.readBool('isForceTracer', False)
-    shell.skipSelfDamage = section.readBool('skipSelfDamage', False)
     if IS_CLIENT or IS_WEB:
-        shell.i18n = shared_components.I18nComponent(userStringKey=section.readString('userString'), descriptionKey=section.readString('description'), shortDescriptionSpecialKey=section.readString('shortDescriptionSpecial'), longDescriptionSpecialKey=section.readString('longDescriptionSpecial'))
+        shell.i18n = shared_components.I18nComponent(section.readString('userString'), section.readString('description'))
         v = _xml.readNonEmptyString(xmlCtx, section, 'icon')
         if icons.get(v) is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
@@ -5293,7 +5262,7 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
             shellType.explosionRadius = cachedFloat(section.readFloat('explosionRadius'))
             if shellType.explosionRadius <= 0.0:
                 shellType.explosionRadius = cachedFloat(shell.caliber * shell.caliber / 5555.0)
-            explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'explosionDisableDamageFalloff')
+            explosionSettings = ('explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor')
             for f in explosionSettings:
                 factor = section.readFloat(f)
                 if factor <= 0:
@@ -6279,7 +6248,6 @@ def _readCommonConfig(xmlCtx, section):
      'explosionDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageFactor'),
      'explosionDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDamageAbsorptionFactor'),
      'explosionEdgeDamageFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionEdgeDamageFactor'),
-     'explosionDisableDamageFalloff': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/explosionDisableDamageFalloff'),
      'shellFragmentsDamageAbsorptionFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/shellFragmentsDamageAbsorptionFactor'),
      'allowMortarShooting': _xml.readBool(xmlCtx, section, 'miscParams/allowMortarShooting'),
      'radarDefaults': {'radarRadius': _xml.readNonNegativeFloat(xmlCtx, section, 'miscParams/radarDefaults/radarRadius'),

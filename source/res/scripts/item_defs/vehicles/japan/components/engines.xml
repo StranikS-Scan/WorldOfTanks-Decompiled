@@ -57,6 +57,7 @@
     <Mitsubishi_MT_1100>	54	</Mitsubishi_MT_1100>
     <Mitsubishi_MT_1100_test>	31004	</Mitsubishi_MT_1100_test>
     <Kawasaki_Ha_60_LB_test>	31005	</Kawasaki_Ha_60_LB_test>
+    <V12_Kawasaki_Type_97_7x7>	31006	</V12_Kawasaki_Type_97_7x7>
     <_Mitsubishi_12HM20WT_IGR>	60001	</_Mitsubishi_12HM20WT_IGR>
     <_Type98_V12_IGR>	60002	</_Type98_V12_IGR>
     <_Mitsubishi_10ZF21WT_IGR>	60003	</_Mitsubishi_10ZF21WT_IGR>
@@ -751,6 +752,23 @@
       <rpm_min>	460	</rpm_min>
       <rpm_max>	2125	</rpm_max>
     </V12_Kawasaki_Type_97>
+    <V12_Kawasaki_Type_97_7x7>
+      <userString>	#japan_vehicles:V12_Kawasaki_Type_97	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1250	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </V12_Kawasaki_Type_97_7x7>
     <_Mitsubishi_Al_Type_4A>
       <userString>	#japan_vehicles:_Mitsubishi_Al_Type_4A	</userString>
       <tags>	diesel	</tags>
@@ -1052,16 +1070,16 @@
       <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	1	</price>
-      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
     </Development_Engine>
   </shared>
 </engines.xml>

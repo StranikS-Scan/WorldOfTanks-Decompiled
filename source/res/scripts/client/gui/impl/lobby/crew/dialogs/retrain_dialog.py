@@ -146,7 +146,6 @@ class RetrainDialog(BaseCrewDialogTemplateView):
             event_dispatcher.showExchangeCurrencyWindowModal(currencyValue=purchaseGold)
             return False
         else:
-            moveToBarracksTankman = None
             doActions = []
             for tankmanInvID in self._selectedTankmenIds:
                 tankman = self._itemsCache.items.getTankman(tankmanInvID)
@@ -164,16 +163,12 @@ class RetrainDialog(BaseCrewDialogTemplateView):
                      tankmanInvID,
                      self._vehicle.invID,
                      vehicleSlotIdx))
-                if tankman.isInTank and tankman.vehicleNativeDescr.type.compactDescr != self._vehicle.intCD:
-                    moveToBarracksTankman = tankman
 
             groupSize = len(doActions)
             groupID = int(BigWorld.serverTime())
             while doActions:
                 factory.doAction(*(doActions.pop(0) + (groupID, groupSize)))
 
-            if moveToBarracksTankman:
-                factory.doAction(factory.UNLOAD_TANKMAN, moveToBarracksTankman.vehicleInvID, moveToBarracksTankman.vehicleSlotIdx)
             return True
 
     @staticmethod

@@ -19,7 +19,7 @@ class VehicleCompareEventHandler(C2WHandler):
         super(VehicleCompareEventHandler, self).fini()
 
     @c2w(name='comparison_basket_update')
-    def __onComparisonBasketChange(self, *args, **kwargs):
+    def __onComparisonBasketChange(self, *_):
         return {'basketContents': self.__comparisonBasket.getVehiclesCDs(),
          'basketMaxCount': self.__comparisonBasket.maxVehiclesToCompare}
 

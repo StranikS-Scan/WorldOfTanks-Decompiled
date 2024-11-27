@@ -94,5 +94,67 @@
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamBasePositions>
+        <team1>
+          <position1>	-117.916603 355.496674	</position1>
+          <position2>	289.604340 -11.818459	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	234.837097 426.120605	</position>
+        </team1>
+        <team2>
+          <position>	-414.303802 -185.828674	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	43.771542 256.325623	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	26.562487 -252.346054	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-29.276970 6.134888	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	471.741791 -352.986328	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-473.341278 41.238453	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	439.494568 151.003967	</position>
+          <type>	3	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </comp7>
   </gameplayTypes>
 </14_siegfried_line.xml>

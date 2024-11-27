@@ -19,8 +19,6 @@ from gui.battle_results.reusable.personal import PersonalInfo, SquadBonusInfo
 from gui.battle_results.reusable.players import PlayersInfo, PlayerInfo
 from gui.battle_results.reusable.shared import TeamBasesInfo, VehicleDetailedInfo, VehicleSummarizeInfo, FairplayViolationsInfo
 from gui.battle_results.reusable.vehicles import VehiclesInfo
-from gui.battle_results.reusable.economics import EconomicsInfo
-from gui.battle_results.reusable.progress import ProgressInfo
 if typing.TYPE_CHECKING:
     from typing import Dict, Iterator, Optional, Tuple
 
@@ -61,8 +59,6 @@ def createReusableInfo(results):
             return
         personalInfoCls = ReusableInfoFactory.personalInfoForBonusType(bonusType)
         personalInfo = _checkInfo(personalInfoCls(bonusType, record), _RECORD.PERSONAL)
-        economicsInfo = _checkInfo(EconomicsInfo(record), _RECORD.PERSONAL)
-        progressInfo = _checkInfo(ProgressInfo(record), _RECORD.PERSONAL)
         record = _fetchRecord(results, _RECORD.PLAYERS)
         if record is None:
             return
@@ -79,18 +75,18 @@ def createReusableInfo(results):
         avatarsInfoCls = ReusableInfoFactory.avatarsInfoForBonusType(bonusType)
         avatarsInfo = _checkInfo(avatarsInfoCls(bonusType, record), _RECORD.AVATARS)
         if not unpackedRecords:
-            return ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo, economicsInfo, progressInfo)
+            return _ReusableInfo(arenaUniqueID, commonInfo, personalInfo, playersInfo, vehiclesInfo, avatarsInfo)
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of battle_results.g_config are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
 
 
-class ReusableInfo(object):
-    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress', '__economics', '__progress')
+class _ReusableInfo(object):
+    __slots__ = ('__arenaUniqueID', '__clientIndex', '__premiumState', '__common', '__personal', '__players', '__vehicles', '__avatars', '__squadFinder', '__premiumPlusState', '__isAddXPBonusApplied', '__battlePassProgress')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars, economics=None, progress=None):
-        super(ReusableInfo, self).__init__()
+    def __init__(self, arenaUniqueID, common, personal, players, vehicles, avatars):
+        super(_ReusableInfo, self).__init__()
         self.__arenaUniqueID = arenaUniqueID
         self.__clientIndex = 0
         self.__premiumState = PREMIUM_STATE.NONE
@@ -104,8 +100,6 @@ class ReusableInfo(object):
         self.__squadFinder = squad_finder.createSquadFinder(self.__common.arenaVisitor)
         self.__findSquads()
         self.__battlePassProgress = BattlePassProgress(self.__common.arenaBonusType, **self.__personal.avatar.extensionInfo)
-        self.__economics = economics
-        self.__progress = progress
 
     @property
     def arenaUniqueID(self):
@@ -210,14 +204,6 @@ class ReusableInfo(object):
     @property
     def bonusType(self):
         return self.__common.arenaBonusType
-
-    @property
-    def economics(self):
-        return self.__economics
-
-    @property
-    def progress(self):
-        return self.__progress
 
     def getAvatarInfo(self, dbID=0):
         if not dbID:

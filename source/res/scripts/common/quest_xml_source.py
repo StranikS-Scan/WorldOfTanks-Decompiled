@@ -8,7 +8,7 @@ from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 from bonus_readers import readBonusSection, readUTC, timeDataToUTC, checkLogExtInfoLen
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME, ROLE_LABEL_TO_TYPE, ACCOUNT_ATTR, QUESTS_SUPPORTED_EXCLUDE_TAGS, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, ALL_EVENT_TYPES_FOR_BONUSES, EXTENSIONS_BONUSES
 from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -483,12 +483,7 @@ class Source(object):
              'unregularAmmo': self.__readCondition_true,
              'isNotLeaver': self.__readCondition_true,
              'isFirstBlood': self.__readConditionComplex_true,
-             'winAloneAgainstVehicleCount': self.__readCondition_int,
-             'maxWtPlasmaBonus': self.__readCondition_int,
-             'wtBossVulnerableDamage': self.__readCondition_int,
-             'wtGeneratorsCaptured': self.__readCondition_int,
-             'wtTotalGeneratorsCaptured': self.__readCondition_int,
-             'wtDeathCount': self.__readCondition_int})
+             'winAloneAgainstVehicleCount': self.__readCondition_int})
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             condition_readers.update({'red': self.__readListOfInts,
              'silver': self.__readListOfInts,
@@ -541,13 +536,14 @@ class Source(object):
          'freePremiumCrew',
          'entitlementList',
          'dailyQuestReroll',
-         'noviceReset'}
+         'noviceReset'} | EXTENSIONS_BONUSES.get(ALL_EVENT_TYPES_FOR_BONUSES, set())
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
             bonusTypes.update(('vehicleXP', 'vehicleXPFactor'))
         if eventType in (EVENT_TYPE.RANKED_QUEST,):
             bonusTypes.update(('optionalDevice',))
+        bonusTypes |= EXTENSIONS_BONUSES.get(eventType, set())
         return bonusTypes
 
     def __readCondition_groupBy(self, _, section, node):

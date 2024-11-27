@@ -27,7 +27,9 @@ class CloseConfirmatorsHelper(object):
          events.PrbActionEvent.LEAVE,
          events.TrainingEvent.RETURN_TO_TRAINING_ROOM,
          events.TrainingEvent.SHOW_TRAINING_LIST,
-         events.CustomizationEvent.SHOW]
+         events.CustomizationEvent.SHOW,
+         events.LobbySimpleEvent.SWITCH_NEW_YEAR_VIEW,
+         events.LobbySimpleEvent.SHOW_LOOT_BOX_VIEW]
 
     def getRestrictedSfViews(self):
         return [VIEW_ALIAS.VEHICLE_COMPARE,

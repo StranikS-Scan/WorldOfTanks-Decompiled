@@ -283,7 +283,7 @@ def createWheelsAnimator(appearance, colliderType, typeDescriptor, wheelsState, 
 
 def createGeneralWheelsAnimator(appearance, colliderType, typeDescriptor, wheelsState, wheelsScroll, wheelsSteering, lodStateLink=None):
     config = typeDescriptor.chassis.generalWheelsAnimatorConfig
-    generalWheelsAnimator = appearance.createComponent(Vehicular.GeneralWheelsAnimator, config, appearance.compoundModel, colliderType, wheelsState, wheelsScroll, wheelsSteering, appearance.id)
+    generalWheelsAnimator = appearance.createComponent(Vehicular.GeneralWheelsAnimator, config, appearance.compoundModel, colliderType, typeDescriptor.chassis.isMultiTrack, wheelsState, wheelsScroll, wheelsSteering, appearance.id)
     generalWheelsAnimator.setLodLink(lodStateLink)
     generalWheelsAnimator.setLodSettings(shared_components.LodSettings(typeDescriptor.chassis.chassisLodDistance, DEFAULT_MAX_LOD_PRIORITY))
     generalWheelsAnimator.connectVehicleFashion(appearance.fashion)

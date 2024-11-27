@@ -22,9 +22,6 @@ class HangarMeta(View):
     def as_setCarouselEnabledS(self, value):
         return self.flashObject.as_setCarouselEnabled(value) if self._isDAAPIInited() else None
 
-    def as_setCarouselVisibleS(self, value):
-        return self.flashObject.as_setCarouselVisible(value) if self._isDAAPIInited() else None
-
     def as_setupAmmunitionPanelS(self, data):
         return self.flashObject.as_setupAmmunitionPanel(data) if self._isDAAPIInited() else None
 
@@ -78,12 +75,6 @@ class HangarMeta(View):
 
     def as_updateCarouselEventEntryStateS(self, isVisible):
         return self.flashObject.as_updateCarouselEventEntryState(isVisible) if self._isDAAPIInited() else None
-
-    def as_toggleEventModeS(self, isEventMode):
-        return self.flashObject.as_toggleEventMode(isEventMode) if self._isDAAPIInited() else None
-
-    def as_setLootboxesVisibleS(self, value):
-        return self.flashObject.as_setLootboxesVisible(value) if self._isDAAPIInited() else None
 
     def as_updateHangarComponentsS(self, showComponents=None, hideComponents=None):
         return self.flashObject.as_updateHangarComponents(showComponents, hideComponents) if self._isDAAPIInited() else None

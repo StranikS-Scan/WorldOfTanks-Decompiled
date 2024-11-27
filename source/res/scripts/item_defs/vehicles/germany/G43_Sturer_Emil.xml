@@ -8,10 +8,10 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <speedLimits>
-    <forward>	25	</forward>
-    <backward>	12	</backward>
+    <forward>	30	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.119	</moving>
@@ -3236,7 +3236,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_105mm_K18_L52_R>
-        <_128mm_SF_L61>	shared	  <maxAmmo>	15	</maxAmmo>
+        <_128mm_SF_L61>	shared	  <maxAmmo>	20	</maxAmmo>
           <unlocks>
             <vehicle>	G99_RhB_Waffentrager	  <cost>	71000	</cost>
             </vehicle>
@@ -3252,7 +3252,7 @@
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	13.8	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
             <maxPitch>	0 15 1 15	</maxPitch>
@@ -3435,11 +3435,11 @@
       <engines>
         <Maybach_HL_116>
           <smplEnginePower>	317.1843	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Maybach_HL_116>
         <Maybach_HL_116_S>
-          <smplEnginePower>	327.7571	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+          <smplEnginePower>	360	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Maybach_HL_116_S>
       </engines>
       <chassis>

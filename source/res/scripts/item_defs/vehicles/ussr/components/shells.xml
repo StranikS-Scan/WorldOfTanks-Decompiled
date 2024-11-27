@@ -4,7 +4,6 @@
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
-    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
     <ap_fsds_premium>	ARMOR_PIERCING_FSDS_PREMIUM.png 0 0	</ap_fsds_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
@@ -2596,6 +2595,59 @@
       </damage>
     </armorSpalls>
   </_107mm_UOF-420M>
+  <_107mm_BR_420LP>
+    <id>	31072	</id>
+    <userString>	#ussr_vehicles:_107mm_BR_420LP	</userString>
+    <icon>	ap	</icon>
+    <price>	1010	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_BR_420LP>
+  <_107mm_UBR_420LP>
+    <id>	31073	</id>
+    <userString>	#ussr_vehicles:_107mm_UBR_420LP	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	107	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	320	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_107mm_UBR_420LP>
+  <_107mm_UOF_420LP>
+    <id>	31074	</id>
+    <userString>	#ussr_vehicles:_107mm_UOF_420LP	</userString>
+    <icon>	he_modern	</icon>
+    <price>	650	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	107	</caliber>
+    <explosionRadius>	1.98	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.98	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	210	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_107mm_UOF_420LP>
   <_107mm_UBR-420M1>
     <id>	308	</id>
     <userString>	#ussr_vehicles:_107mm_UBR-420M1	</userString>
@@ -3815,6 +3867,20 @@
       </damage>
     </armorSpalls>
   </_122mm_OF420S-DG>
+  <_122mm_BB421-DG>
+    <id>	31075	</id>
+    <userString>	#ussr_vehicles:_122mm_BB421-DG	</userString>
+    <icon>	ap	</icon>
+    <price>	385	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	370	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BB421-DG>
   <_122mm_3BM11_Ob_265T>
     <id>	31057	</id>
     <userString>	#ussr_vehicles:_122mm_3BM11_Ob_265T	</userString>
@@ -5433,39 +5499,6 @@
       <devices>	17	</devices>
     </damage>
   </Development_Shell>
-  <_100mm_UBR-412PB_WT>
-    <id>	1001	</id>
-    <userString>	#ussr_vehicles:_100mm_UBR-412PB_WT	</userString>
-    <description>	#ussr_vehicles:_100mm_UBR-412PB_WT_descr	</description>
-    <shortDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#ussr_vehicles:_100mm_UBR-412PB_WT_long_special	</longDescriptionSpecial>
-    <icon>	ap_wt	</icon>
-    <price>	1100	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	100	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	300	</armor>
-      <devices>	130	</devices>
-    </damage>
-  </_100mm_UBR-412PB_WT>
-  <_100mm_UBR-412PB_charged_shot_WT>
-    <id>	1002	</id>
-    <userString>	#ussr_vehicles:_100mm_UBR-412PB_charged_shot_WT	</userString>
-    <icon>	ap_wt	</icon>
-    <price>	1100	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	100	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainAPCR	</effects>
-    <damage>
-      <armor>	650	</armor>
-      <devices>	450	</devices>
-    </damage>
-  </_100mm_UBR-412PB_charged_shot_WT>
   <_122mm_BP450SO_SH>
     <id>	277	</id>
     <userString>	#ussr_vehicles:_122mm_BP450SO_SH	</userString>

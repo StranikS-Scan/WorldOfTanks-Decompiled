@@ -1243,7 +1243,6 @@ class ATTACK_REASON(object):
     STATIC_DEATH_ZONE = 'static_deathzone'
     CGF_WORLD = 'cgf_world'
     AUTOSHOOT = 'autoshoot'
-    CIRCUIT_OVERLOAD = 'circuitOverload'
     NONE = 'none'
 
     @classmethod
@@ -1281,7 +1280,6 @@ ATTACK_REASONS = (ATTACK_REASON.SHOT,
  ATTACK_REASON.FORT_ARTILLERY_EQ,
  ATTACK_REASON.STATIC_DEATH_ZONE,
  ATTACK_REASON.AUTOSHOOT,
- ATTACK_REASON.CIRCUIT_OVERLOAD,
  ATTACK_REASON.CGF_WORLD)
 ATTACK_REASON_INDICES = dict(((value, index) for index, value in enumerate(ATTACK_REASONS)))
 BOT_RAM_REASONS = (ATTACK_REASON.BRANDER_RAM, ATTACK_REASON.CLING_BRANDER_RAM)
@@ -1787,8 +1785,6 @@ class REQUEST_COOLDOWN:
     RUN_QUEST = 1.0
     PAWN_FREE_AWARD_LIST = 1.0
     LOOTBOX = 1.0
-    LOOTBOX_REROLL = 1.0
-    LOOTBOX_RECORDS = 1.0
     BADGES = 2.0
     CREW_SKINS = 0.3
     BPF_COMMAND = 1.0
@@ -1807,6 +1803,19 @@ class REQUEST_COOLDOWN:
     ANONYMIZER = 1.0
     UPDATE_IN_BATTLE_PLAYER_RELATIONS = 1.0
     FLUSH_RELATIONS = 1.0
+    NEW_YEAR_SLOT_FILL = 0.4
+    NEW_YEAR_CRAFT = 0.5
+    NEW_YEAR_CRAFT_OLD_TOYS = 0.5
+    NEW_YEAR_BREAK_TOYS = 1.0
+    NEW_YEAR_SEE_INVENTORY_TOYS = 0.5
+    NEW_YEAR_SEE_COLLECTION_TOYS = 0.5
+    NEW_YEAR_SELECT_DISCOUNT = 1.0
+    NEW_YEAR_VIEW_ALBUM = 0.5
+    NEW_YEAR_CONVERT_FILLERS = 1.0
+    NEW_YEAR_FILL_OLD_COLLECTION = 0.5
+    NEW_YEAR_BUY_MACHINE_COINS = 1.0
+    NEW_YEAR_UPGRADE_OBJECT_LEVEL = 1.0
+    NEW_YEAR_BUY_TOY = 1.0
     EQUIP_ENHANCEMENT = 1.0
     DISMOUNT_ENHANCEMENT = 1.0
     BUY_BATTLE_PASS = 1.0
@@ -2195,6 +2204,10 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  USER_SERVER_SETTINGS.BATTLE_MATTERS_QUESTS: 'battle matters quests show reward info',
  USER_SERVER_SETTINGS.QUESTS_PROGRESS: 'feedback quests progress',
  91: 'Loot box last viewed count',
+ 92: 'Oriental loot box last viewed count',
+ 93: 'New year loot box last viewed count',
+ 94: 'Fairytale loot box last viewed count',
+ 95: 'Christmas loot box last viewed count',
  USER_SERVER_SETTINGS.SESSION_STATS: 'sessiong statistics settings',
  97: 'BattlePass carouse filter 1',
  98: 'Battle Pass Storage',
@@ -2205,6 +2218,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  103: 'Mapbox carousel filter 1',
  104: 'Mapbox carousel filter 2',
  USER_SERVER_SETTINGS.NEW_YEAR: 'New Year settings storage',
+ 106: 'Common loot box last viewed count',
  USER_SERVER_SETTINGS.CONTOUR: 'Contour settings',
  107: 'Fun Random carousel filter 1',
  108: 'Fun Random carousel filter 2',
@@ -2632,9 +2646,8 @@ class VISIBILITY:
     MIN_RADIUS = 50.0
 
 
-VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing', 'gun/canShoot'])
-VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing',
- 'gun/canShoot': 'gunCanShoot'}
+VEHICLE_ATTRS_TO_SYNC = frozenset(['circularVisionRadius', 'gun/piercing'])
+VEHICLE_ATTRS_TO_SYNC_ALIASES = {'gun/piercing': 'gunPiercing'}
 
 class OBSTACLE_KIND:
     CHUNK_DESTRUCTIBLE = 1
@@ -2905,12 +2918,10 @@ class BotNamingType(object):
     CREW_MEMBER = 1
     VEHICLE_MODEL = 2
     CUSTOM = 3
-    LABEL = 4
     DEFAULT = CREW_MEMBER
     _parseDict = {'crew': CREW_MEMBER,
      'vehicle': VEHICLE_MODEL,
      'custom': CUSTOM,
-     'label': LABEL,
      'default': DEFAULT}
 
     @classmethod
@@ -3321,13 +3332,11 @@ class DamageAbsorptionTypes(object):
     FRAGMENTS = 0
     BLAST = 1
     SPALLS = 2
-    NONE = 3
 
 
 DamageAbsorptionLabelToType = {'FRAGMENTS': DamageAbsorptionTypes.FRAGMENTS,
  'BLAST': DamageAbsorptionTypes.BLAST,
- 'SPALLS': DamageAbsorptionTypes.SPALLS,
- 'NONE': DamageAbsorptionTypes.NONE}
+ 'SPALLS': DamageAbsorptionTypes.SPALLS}
 DamageAbsorptionTypeToLabel = dict(((type, label) for label, type in DamageAbsorptionLabelToType.items()))
 EQUIPMENT_COOLDOWN_MOD_SUFFIX = 'CooldownMod'
 CHANCE_TO_HIT_SUFFIX_FACTOR = 'ChanceToHitDeviceMod'
@@ -3426,8 +3435,7 @@ BATTLE_MODE_VEHICLE_TAGS = {'event_battles',
  'battle_royale',
  'clanWarsBattles',
  'fun_random',
- 'comp7',
- 'random_only'}
+ 'comp7'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EVENT = BATTLE_MODE_VEHICLE_TAGS - {'event_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC = BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}
 BATTLE_MODE_VEH_TAGS_EXCEPT_CLAN = BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}
@@ -3552,7 +3560,6 @@ class BuffDisplayedState(enum.IntEnum):
 
 class EntityCaptured(object):
     POI_CAPTURABLE = 'poiCapturable'
-    WT_GENERATOR = 'captureGenerator'
 
 
 class VehicleSelectionPlayerStatus(object):
@@ -3620,8 +3627,6 @@ class MarkerItem(object):
     POLYGONAL_ZONE = 2
     STATIC_DEATH_ZONE = 3
     STATIC_DEATH_ZONE_PROXIMITY = 4
-    GEN_ON = 5
-    GEN_OFF = 6
 
 
 class DROP_SKILL_OPTIONS(object):
@@ -3685,33 +3690,5 @@ class VEHICLE_MOVEMENT_STATES(object):
     STOP = 'stop'
 
 
-class WT_COMPONENT_NAMES(object):
-    SHIELD_DEBUFF_ARENA_TIMER = 'wtShieldDebuffDuration'
-    ACTIVATION_ARENA_TIMER = 'activationTimer'
-    GENERATORS_COUNTER = 'wtCapturesTillEndgame'
-    HYPERION_COUNTER = 'wtHyperionCharge'
-
-
-class WT_BATTLE_STAGE(object):
-    INVINCIBLE = 0
-    DEBUFF = 1
-    END_GAME = 2
-
-    @staticmethod
-    def getCurrent(arenaInfo):
-        if WT_COMPONENT_NAMES.SHIELD_DEBUFF_ARENA_TIMER in arenaInfo.dynamicComponents:
-            return WT_BATTLE_STAGE.DEBUFF
-        else:
-            generatorsCounterComponent = arenaInfo.dynamicComponents.get(WT_COMPONENT_NAMES.GENERATORS_COUNTER)
-            return WT_BATTLE_STAGE.END_GAME if generatorsCounterComponent is not None and generatorsCounterComponent.counter == 0 else WT_BATTLE_STAGE.INVINCIBLE
-
-
-class WT_TEAMS(object):
-    BOSS_TEAM = 1
-    HUNTERS_TEAM = 2
-
-
-class WT_TAGS(object):
-    BOSS = 'event_boss'
-    HUNTER = 'event_hunter'
-    PRIORITY_BOSS = 'special_event_boss'
+ALL_EVENT_TYPES_FOR_BONUSES = 'all'
+EXTENSIONS_BONUSES = {}

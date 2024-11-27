@@ -187,10 +187,6 @@ def previewUrl(texture, width, height, innerWidth, innerHeight):
     return _PREVIEW_ICON_URL.format(texture=texture, params=urllib.urlencode(params))
 
 
-def isStyle3D(customizationItem):
-    return customizationItem.itemTypeName == 'style' and customizationItem.modelsSet
-
-
 class ConcealmentBonus(object):
     __slots__ = ('_camouflageId', '_season')
 
@@ -1215,7 +1211,7 @@ class Style(Customization):
                     component.styleProgressionLevel = outfitLvl if outfitLvl else 1
         if self.isWithSerialNumber and self.serialNumber is not None:
             component.serial_number = self.serialNumber
-        if diff is not None:
+        if diff:
             diffComponent = parseCompDescr(diff)
             if component.styleId != diffComponent.styleId:
                 _logger.error('Merging outfits of different styles is not allowed. ID1: %s ID2: %s', component.styleId, diffComponent.styleId)

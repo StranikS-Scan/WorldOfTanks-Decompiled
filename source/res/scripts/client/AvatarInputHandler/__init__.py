@@ -81,7 +81,6 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_EPIC: (MapCaseMode.EpicMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_ARCADE_EPIC_MINEFIELD: (MapCaseMode.AracdeMinefieldControleMode, 'arcadeEpicMinefieldMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.MAP_CASE_HYPERION: (MapCaseMode.HyperionMapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.RESPAWN_DEATH: (RespawnDeathMode.RespawnDeathMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEATH_FREE_CAM: (epic_battle_death_mode.DeathFreeCamMode, 'epicVideoMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DUAL_GUN: (control_modes.DualGunControlMode, 'dualGunMode', _CTRL_TYPE.USUAL),
@@ -212,6 +211,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
 
     siegeModeControl = ComponentDescriptor()
     dualGunControl = ComponentDescriptor()
+    autoShootGunCtrl = ComponentDescriptor()
     siegeModeSoundNotifications = ComponentDescriptor()
     steadyVehicleMatrixCalculator = ComponentDescriptor()
     rocketAccelerationControl = ComponentDescriptor()
@@ -300,8 +300,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 self.dualGunControl = DualGunController(typeDescr)
             elif not typeDescr.isDualgunVehicle:
                 self.dualGunControl = None
-            if typeDescr.isAutoShootGunVehicle:
-                self.__commands.append(AutoShootGunControl())
+            if typeDescr.isAutoShootGunVehicle and not self.autoShootGunCtrl:
+                self.autoShootGunCtrl = AutoShootGunControl()
+            elif not typeDescr.isAutoShootGunVehicle:
+                self.autoShootGunCtrl = None
             if self.bootcampCtrl.isInBootcamp() and constants.HAS_DEV_RESOURCES:
                 self.__commands.append(BootcampModeControl())
             if ARENA_BONUS_TYPE_CAPS.checkAny(player.arena.bonusType, ARENA_BONUS_TYPE_CAPS.RADAR):

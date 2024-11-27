@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/missions/daily_quests_view.py
 import logging
 import typing
+from account_helpers.AccountSettings import AccountSettings, SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN, NY_DAILY_QUESTS_VISITED, NY_BONUS_DAILY_QUEST_VISITED
 from constants import PREMIUM_TYPE, PremiumConfigs, DAILY_QUESTS_CONFIG, DailyQuestsLevels
 from frameworks.wulf import Array, ViewFlags, ViewSettings
 from gui import SystemMessages
@@ -26,9 +27,8 @@ from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
-from account_helpers.AccountSettings import AccountSettings, SUBSCRIPTION_DAILY_QUESTS_SHINE_SHOWN
 from shared_utils import first
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IComp7Controller, IWotPlusController
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IComp7Controller, IFestivityController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -64,6 +64,7 @@ class DailyQuestsView(ViewImpl):
     subscriptionController = dependency.descriptor(IWotPlusController)
     battlePassController = dependency.descriptor(IBattlePassController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __festivityController = dependency.descriptor(IFestivityController)
     __slots__ = ('__tooltipData', '__proxyMissionsPage')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -151,6 +152,8 @@ class DailyQuestsView(ViewImpl):
         _logger.info('DailyQuestsView::_onLoading')
         super(DailyQuestsView, self)._onLoading()
         with self.viewModel.transaction() as tx:
+            if self.__festivityController.isEnabled() and not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED) and not self.__festivityController.isPostEvent():
+                tx.setIsLootboxesIntroVisible(True)
             self._updateQuestsTitles(tx)
             self._updateModel(tx)
             self._updateCountDowns(tx)
@@ -163,6 +166,7 @@ class DailyQuestsView(ViewImpl):
         return
 
     def _updateModel(self, model):
+        model.setIsNewYearAvailable(self.__festivityController.isEnabled())
         self._updatePremiumMissionsModel(model)
         self._updateDailyQuestModel(model)
         self._updateEpicQuestModel(model)
@@ -184,6 +188,14 @@ class DailyQuestsView(ViewImpl):
             self.__updateQuestsInModel(tx.getQuests(), quests)
             self.__updateMissionVisitedArray(tx.getMissionsCompletedVisited(), quests)
             tx.setBonusMissionVisited(not newBonusQuest)
+            if self.__festivityController.isEnabled():
+                if not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED):
+                    tx.setPlayNYQuestLootboxAnimation(True)
+                    AccountSettings.setNewYear(NY_DAILY_QUESTS_VISITED, True)
+                if not AccountSettings.getNewYear(NY_BONUS_DAILY_QUEST_VISITED) and tx.getBonusMissionVisited():
+                    tx.setPlayNYBonusQuestLootboxAnimation(True)
+                    AccountSettings.setNewYear(NY_DAILY_QUESTS_VISITED, True)
+                    AccountSettings.setNewYear(NY_BONUS_DAILY_QUEST_VISITED, True)
             self._updateDailyQuestSubscriptionModel(tx)
 
     def _updateDailyQuestSubscriptionModel(self, model):
@@ -352,6 +364,7 @@ class DailyQuestsView(ViewImpl):
          (self.viewModel.onClose, self.__onCloseView),
          (self.viewModel.onReroll, self.__onReRoll),
          (self.viewModel.onRerollEnabled, self.__onRerollEnabled),
+         (self.viewModel.onLootboxesIntroClosed, self.__onLootboxesIntroClosed),
          (self.eventsCache.onSyncCompleted, self._onSyncCompleted),
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged),
@@ -487,3 +500,6 @@ class DailyQuestsView(ViewImpl):
 
     def __updateComp7Data(self, *_):
         self.viewModel.setIsComp7Active(self.__comp7Controller.isEnabled())
+
+    def __onLootboxesIntroClosed(self):
+        self.viewModel.setIsLootboxesIntroVisible(False)

@@ -254,6 +254,7 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS = '#battle_results:team/stats/labels_damageDealtBySkills'
     TEAM_STATS_LABELS_HEALED = '#battle_results:team/stats/labels_healed'
+    TEAM_STATS_LABELS_HEALEDALLY = '#battle_results:team/stats/labels_healedAlly'
     TEAM_STATS_LABELS_CAPTUREDPOINTSOFINTEREST = '#battle_results:team/stats/labels_capturedPointsOfInterest'
     TEAM_STATS_LABELS_ROLESKILLUSED = '#battle_results:team/stats/labels_roleSkillUsed'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
@@ -290,6 +291,8 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_BASE = '#battle_results:details/calculations/base'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
     DETAILS_CALCULATIONS_SQUADBONUS = '#battle_results:details/calculations/squadBonus'
+    DETAILS_CALCULATIONS_NEWYEAR = '#battle_results:details/calculations/newYear'
+    DETAILS_CALCULATIONS_VEHICLEBRANCH = '#battle_results:details/calculations/vehicleBranch'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
     DETAILS_CALCULATIONS_SUBSTEAMBONUS = '#battle_results:details/calculations/subsTeamBonus'
@@ -375,6 +378,8 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_BASE,
      DETAILS_CALCULATIONS_XPRECORD,
      DETAILS_CALCULATIONS_SQUADBONUS,
+     DETAILS_CALCULATIONS_NEWYEAR,
+     DETAILS_CALCULATIONS_VEHICLEBRANCH,
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
      DETAILS_CALCULATIONS_SUBSTEAMBONUS,
@@ -450,6 +455,7 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_DEATHS,
      TEAM_STATS_LABELS_DAMAGEDEALTBYSKILLS,
      TEAM_STATS_LABELS_HEALED,
+     TEAM_STATS_LABELS_HEALEDALLY,
      TEAM_STATS_LABELS_CAPTUREDPOINTSOFINTEREST,
      TEAM_STATS_LABELS_ROLESKILLUSED,
      TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,

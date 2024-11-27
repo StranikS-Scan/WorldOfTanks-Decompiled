@@ -131,6 +131,7 @@ class GLOBAL_FLAG(object):
     PERSONAL_RESERVES_AVAILABLE = '_Personal_reserves_available'
     IS_NEED_TO_SHOW_SPECIALIZATION_SLOT = 'isNeedToShowSpecializationSlot'
     IS_CHANGE_AI_MODE = 'isChangeAIMode'
+    NY_NAVIGATION_DISABLED = '_NY_navigation_disabled'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
@@ -138,7 +139,8 @@ class GLOBAL_FLAG(object):
      COLLECTIBLE_VEHICLE_PREVIEW_ENABLED,
      DOGTAGS_ENABLED,
      PERSONAL_RESERVES_AVAILABLE,
-     IS_CHANGE_AI_MODE)
+     IS_CHANGE_AI_MODE,
+     NY_NAVIGATION_DISABLED)
 
 
 class GlobalStorage(object):

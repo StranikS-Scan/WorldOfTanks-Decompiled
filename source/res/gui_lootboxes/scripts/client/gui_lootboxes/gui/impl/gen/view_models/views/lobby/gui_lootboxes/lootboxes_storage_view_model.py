@@ -22,6 +22,12 @@ class ReturnPlace(IntEnum):
     TO_NY_CUSTOMIZATION = 2
     TO_SHARDS = 3
     TO_REFERRAL = 4
+    TO_FIR = 5
+    TO_LIGHTS = 6
+    TO_INSTALLATIONS = 7
+    TO_FAIR = 8
+    TO_SKATING = 9
+    TO_ATTRACTION = 10
 
 
 class LootboxesStorageViewModel(ViewModel):

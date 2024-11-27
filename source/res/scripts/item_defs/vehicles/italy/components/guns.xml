@@ -44,6 +44,7 @@
     <Cannone_da_90_50_T119E1_LE>	45	</Cannone_da_90_50_T119E1_LE>
     <_47_mm_Cannone_Da_47_40_bis>	46	</_47_mm_Cannone_Da_47_40_bis>
     <Cannone_da_90_Rh_P6>	31001	</Cannone_da_90_Rh_P6>
+    <_120mm_Cannone_Da_120_55_Orso>	31002	</_120mm_Cannone_Da_120_55_Orso>
   </ids>
   <shared>
     <Mitragliera_Breda_cal_20_mod_35>
@@ -2386,6 +2387,63 @@
         </_120mm_a_e_T15HE>
       </shots>
     </_120mm_Cannone_da_120_67_T53>
+    <_120mm_Cannone_Da_120_55_Orso>
+      <userString>	#italy_vehicles:_120mm_Cannone_Da_120_55_Orso	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_GP_Mod_58>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1143	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	267 244	</piercingPower>
+        </_120mm_GP_Mod_58>
+        <_120mm_GEP_Mod_69>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1067	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	340 340	</piercingPower>
+        </_120mm_GEP_Mod_69>
+        <_120mm_GEF_Mod_56>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	952	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_GEF_Mod_56>
+      </shots>
+    </_120mm_Cannone_Da_120_55_Orso>
     <_127mm_OTO_Melara>
       <userString>	#italy_vehicles:_127mm_OTO_Melara	</userString>
       <tags></tags>

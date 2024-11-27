@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraDistanceModes
-from ClientSelectableCameraObject import ClientSelectableCameraObject
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
 from helpers import dependency
+from skeletons.gui.impl import INewYearNavigation
 from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
-from skeletons.gui.game_control import IWhiteTigerController
 
 class HangarVehicle(ClientSelectableCameraVehicle):
     hangarSpace = dependency.descriptor(IHangarSpace)
-    __wtController = dependency.descriptor(IWhiteTigerController)
+    __newYearNavigation = dependency.descriptor(INewYearNavigation)
 
     def __init__(self):
         self.selectionId = ''
@@ -36,16 +35,14 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
 
-    def onMouseClick(self):
-        if self.__wtController.isAvailable() and self.__wtController.isEventPrbActive():
-            self.__wtController.doLeaveEventPrb()
-        return super(HangarVehicle, self).onMouseClick()
+    def onSelect(self):
+        if self.__newYearNavigation.getCurrentObject() is not None:
+            self.__newYearNavigation.closeMainView(True)
+        else:
+            super(HangarVehicle, self).onSelect()
+        return
 
     def __onSpaceCreated(self):
-        for cameraObject in ClientSelectableCameraObject.allCameraObjects:
-            if cameraObject.state != CameraMovementStates.FROM_OBJECT:
-                return
-
         self.setEnable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
 

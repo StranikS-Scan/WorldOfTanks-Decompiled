@@ -169,7 +169,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.AWARD_WINDOW_MODAL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.EVENT_BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
@@ -212,6 +211,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLE_RESTORE_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_SELL_DIALOG, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_INFO_WINDOW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.ADVENT_CALENDAR, self.showAdventCalendarWindow),
          (VIEW_ALIAS.MISSION_AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),
@@ -228,6 +228,13 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
         window = self.findViewByName(WindowLayer.WINDOW, name)
         if window is not None:
             self.bringViewToFront(name)
+        else:
+            self.loadViewByCtxEvent(event)
+        return
+
+    def showAdventCalendarWindow(self, event):
+        if self.findViewByName(WindowLayer.WINDOW, event.name) is not None:
+            self.bringViewToFront(event.name)
         else:
             self.loadViewByCtxEvent(event)
         return

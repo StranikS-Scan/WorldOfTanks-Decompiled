@@ -802,6 +802,81 @@
       </value>
     </badge>
     <badge>
+      <name>	comp7_4_2_master	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31038	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.255	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_4_2_elite	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31039	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.256	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_4_2_elite_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31040	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	11.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
       <name>	ranked_beta_gold	</name>
       <type>	dict	</type>
       <value>
@@ -4244,7 +4319,7 @@
         <item>	141	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	4.00	  <name>	weight	</name>
+        <item>	4.002	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
@@ -4400,7 +4475,169 @@
         <item>	148	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	4.00	  <name>	weight	</name>
+        <item>	4.002	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	False	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_6	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31041	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.10	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_5	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31042	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.11	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_4	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31043	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.12	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_3	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31044	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.13	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31045	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.14	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	sprints_clan_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31046	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	6.15	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	raccoon_ny_25	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31047	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.001	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>

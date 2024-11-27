@@ -1,0 +1,22 @@
+<extension.xml>
+  <FeatureName>	new_year	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	new_year_personality	</Personality>
+  <EditorPersonality></EditorPersonality>
+  <Components>
+    <StaticComponents>
+      <AccountNewYearComponent></AccountNewYearComponent>
+    </StaticComponents>
+    <DynamicComponents></DynamicComponents>
+  </Components>
+  <Entities></Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.new_year.cgf.lobby_customization_components	</module>
+      <module>	client.new_year.cgf.ny_rules	</module>
+      <module>	client.new_year.cgf.new_year_components	</module>
+      <module>	client.new_year.cgf.ny_animations	</module>
+    </script>
+  </cgf>
+</extension.xml>

@@ -31,7 +31,7 @@ from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController, IComp7Controller
+from skeletons.gui.game_control import IQuestsController, IRankedBattlesController, IBattleRoyaleController, IComp7Controller, IFestivityController
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips.battle_royale_tooltip_quest_helper import getQuestsDescriptionForHangarFlag, getQuestTooltipBlock
 if typing.TYPE_CHECKING:
     from typing import Dict
@@ -63,6 +63,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    _festivityController = dependency.descriptor(IFestivityController)
 
     def __init__(self, context):
         super(QuestsPreviewTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
@@ -118,8 +119,6 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
         for bonus in quest.getBonuses():
             if bonus.getName() == 'battleToken':
                 bonusNames.extend(StringTokenBonusFormatter().format(bonus))
-            if bonus.getName() == 'ticket':
-                bonusNames.extend(StringTokenBonusFormatter().format(bonus))
             bonusFormat = bonus.format()
             if bonusFormat:
                 if isinstance(bonus, CustomizationsBonus):
@@ -147,7 +146,8 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
             questHeader = backport.text(R.strings.tooltips.hangar.header.quests.header(), count=count)
             img = backport.image(R.images.gui.maps.icons.quests.questTooltipHeader())
             desc = text_styles.main(backport.text(description, vehicle=vehicleName))
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(questHeader), img=img, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=desc)
+        isNYEventEnabled = self._festivityController.isEnabled()
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(questHeader), img=backport.image(R.images.gui.maps.icons.quests.nyQuestTooltipHeader()) if isNYEventEnabled else img, txtPadding=formatters.packPadding(top=20), txtOffset=20, desc=desc)
 
     def _getBottom(self, value):
         if value > 0:

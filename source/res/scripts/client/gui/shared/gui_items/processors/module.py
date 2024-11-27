@@ -232,9 +232,10 @@ class OptDeviceInstaller(ModuleInstallProcessor):
             from gui.Scaleform.Waiting import Waiting
             Waiting.show('applyModule')
         useDemountKit = self.requestCtx.get('useDemountKit', False)
+        itemCD = self.item.intCD if self.install else 0
         if not self.install and useDemountKit:
             g_eventBus.handleEvent(ItemRemovalByDemountKitEvent(ItemRemovalByDemountKitEvent.DECLARED, self.slotIdx), EVENT_BUS_SCOPE.LOBBY)
-        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, self.item.intCD, self.slotIdx, self.allSetups, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit, self.install)
+        BigWorld.player().inventory.equipOptionalDevice(self.vehicle.invID, itemCD, self.slotIdx, self.allSetups, self.financeOperation, lambda code, ext=None: self._response(code, callback, ctx=ext), useDemountKit)
         return
 
     def _response(self, code, callback, errStr='', ctx=None):

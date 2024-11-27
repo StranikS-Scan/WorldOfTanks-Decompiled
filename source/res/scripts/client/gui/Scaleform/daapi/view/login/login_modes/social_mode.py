@@ -11,7 +11,7 @@ from helpers.i18n import makeString as _ms
 from skeletons.connection_mgr import IConnectionManager
 SOCIAL_NETWORK_TO_DOMAIN_MAPPING = {SOCIAL_NETWORKS.FACEBOOK: 'https://fb.com',
  SOCIAL_NETWORKS.GOOGLE: 'https://plus.google.com',
- SOCIAL_NETWORKS.WGNI: 'https://wargaming.net',
+ SOCIAL_NETWORKS.WGNI: 'https://lesta.ru',
  SOCIAL_NETWORKS.VKONTAKTE: 'https://vk.com',
  SOCIAL_NETWORKS.YAHOO: 'https://yahoo.com',
  SOCIAL_NETWORKS.NAVER: 'http://naver.com',
@@ -108,7 +108,7 @@ class SocialMode(BaseMode):
                                'socialNetworkOfficialName': _ms('#tooltips:login/social/' + socialNetworkName)})}
         if socialNetworkName != SOCIAL_NETWORKS.WGNI:
             localizationString += '_BOTH'
-            formatter['wargamingNetLink'] = makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': SOCIAL_NETWORKS.WGNI,
+            formatter['lestaGamesLink'] = makeHtmlString('html_templates:socialNetworkLogin', 'socialNetworkLink', {'socialNetworkName': SOCIAL_NETWORKS.WGNI,
              'socialNetworkOfficialName': _ms('#tooltips:login/social/' + SOCIAL_NETWORKS.WGNI)})
         return makeHtmlString('html_templates:socialNetworkLogin', 'logoutWarning', {'warningMessage': _ms(localizationString) % formatter})
 

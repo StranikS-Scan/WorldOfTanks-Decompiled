@@ -53,6 +53,7 @@
     <SFA_B42_SH>	1000	</SFA_B42_SH>
     <AVS_1195_SH>	1001	</AVS_1195_SH>
     <Meteor_Mark_IV_Mod_271_SH>	1002	</Meteor_Mark_IV_Mod_271_SH>
+    <Continental_AV_1790_5B>	31001	</Continental_AV_1790_5B>
   </ids>
   <shared>
     <Daimler_Benz_m_1910>
@@ -541,6 +542,24 @@
       <rpm_min>	605	</rpm_min>
       <rpm_max>	2416	</rpm_max>
     </AVS_1195A>
+    <Continental_AV_1790_5B>
+      <userString>	#sweden_vehicles:Continental_AV_1790_5B	</userString>
+      <shortUserString>	#sweden_vehicles:Continental_AV_1790_5B_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	1160	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
+    </Continental_AV_1790_5B>
     <Saab_Scania_DS14>
       <userString>	#sweden_vehicles:Saab_Scania_DS14	</userString>
       <tags>	diesel	</tags>
@@ -862,16 +881,16 @@
       <level>	5	</level>
       <notInShop>	true	</notInShop>
       <price>	1	</price>
-      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
       <power>	540	</power>
       <weight>	750	</weight>
       <maxHealth>	105	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	4	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	700	</rpm_min>
-      <rpm_max>	3000	</rpm_max>
+      <rpm_min>	376	</rpm_min>
+      <rpm_max>	2072	</rpm_max>
     </Development_Engine>
     <SFA_B42_SH>
       <userString>	#sweden_vehicles:SFA_B42_SH	</userString>

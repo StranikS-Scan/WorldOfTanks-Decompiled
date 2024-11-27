@@ -95,7 +95,8 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker,
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.TEAM_CREDITS_BONUS: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker}
+     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker,
+     'lootBoxToken': tokenBonusPacker}
 
 
 def getLocalizedBonusName(name):
@@ -495,7 +496,7 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for booster in sorted(bonus.getBoosters().iterkeys(), key=lambda b: b.boosterID):
-            cls._getBoostersToolTip(tooltipData, booster)
+            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, specialArgs=[booster.boosterID]))
 
         for demountkit in sorted(bonus.getDemountKits().iterkeys()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_DEMOUNT_KIT, specialArgs=[demountkit.intCD]))
@@ -518,11 +519,6 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData
-
-    @classmethod
-    def _getBoostersToolTip(cls, tooltipData, booster):
-        tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SHOP_BOOSTER, specialArgs=[booster.boosterID]))
-        return
 
 
 class BlueprintBonusUIPacker(BaseBonusUIPacker):
@@ -830,7 +826,7 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle, bonus)
             if compensation:
-                packer = cls._getCompensationPacker()
+                packer = SimpleBonusUIPacker()
                 for bonusComp in compensation:
                     packedVehicles.extend(packer.pack(bonusComp))
 
@@ -867,10 +863,6 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packTooltip(cls, bonus, vehicle, vehInfo):
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=cls._getTooltipAlias(), specialArgs=cls._getTooltipArgs(bonus, vehicle, vehInfo))
-
-    @classmethod
-    def _getTooltipArgs(cls, bonus, vehicle, vehInfo):
         tmanRoleLevel = bonus.getTmanRoleLevel(vehInfo)
         rentDays = bonus.getRentDays(vehInfo)
         rentBattles = bonus.getRentBattles(vehInfo)
@@ -878,19 +870,13 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
         rentSeason = bonus.getRentSeason(vehInfo)
         rentCycle = bonus.getRentCycle(vehInfo)
         rentExpiryTime = cls._getRentExpiryTime(rentDays)
-        hasMultipleConditions = 'hasMultipleConditions' if 'rent' in vehInfo and 'hasMultipleConditions' in vehInfo['rent'] else ''
-        return [vehicle.intCD,
+        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
          tmanRoleLevel,
          rentExpiryTime,
          rentBattles,
          rentWins,
          rentSeason,
-         rentCycle,
-         hasMultipleConditions]
-
-    @classmethod
-    def _getTooltipAlias(cls):
-        return TOOLTIPS_CONSTANTS.AWARD_VEHICLE
+         rentCycle])
 
     @staticmethod
     def _getRentExpiryTime(rentDays):
@@ -916,10 +902,6 @@ class VehiclesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _createUIName(cls, bonus, isRent):
         return bonus.getName() + VEHICLE_RENT_ICON_POSTFIX if isRent else bonus.getName()
-
-    @classmethod
-    def _getCompensationPacker(cls):
-        return SimpleBonusUIPacker()
 
     @classmethod
     def _getLabel(cls, vehicle):
@@ -1103,8 +1085,8 @@ def getDefaultBonusPacker():
     return BonusUIPacker(getDefaultBonusPackersMap())
 
 
-def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None, iterator=0):
-    bonusIndexTotal = iterator
+def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=None, sort=None):
+    bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
     bonusTooltipList = []
@@ -1124,9 +1106,11 @@ def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=Non
                     bonusTooltipList = list(bonusTooltipList)
                 else:
                     bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
+            bonusContentIdList = packer.getContentId(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
                 tooltipIdx = str(bonusIndexTotal)
+                item.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
                 if hasattr(item, 'setTooltipId'):
                     item.setTooltipId(tooltipIdx)
                 model.addViewModel(item)
@@ -1134,4 +1118,4 @@ def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=Non
                     tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
                 bonusIndexTotal += 1
 
-    return bonusIndexTotal
+    return

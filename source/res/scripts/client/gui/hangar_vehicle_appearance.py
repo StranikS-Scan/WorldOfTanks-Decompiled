@@ -126,7 +126,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
-    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -457,8 +456,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
 
-        self._onOutfitReady()
-
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
             self.__showMarksOnGun = not diff['showMarksOnGun']
@@ -466,8 +463,7 @@ class HangarVehicleAppearance(ScriptGameObject):
 
     def _getActiveOutfit(self, vDesc):
         if g_currentPreviewVehicle.isPresent() and not g_currentPreviewVehicle.isHeroTank:
-            vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
-            return self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+            return self.__getVehicleOutfit(g_currentPreviewVehicle.item)
         elif not g_currentVehicle.isPresent():
             if vDesc is not None:
                 vehicleCD = vDesc.makeCompactDescr()
@@ -477,14 +473,7 @@ class HangarVehicleAppearance(ScriptGameObject):
                 outfit = self.itemsFactory.createOutfit()
             return outfit
         else:
-            vehicle = g_currentVehicle.item
-            season = g_tankActiveCamouflage.get(vehicle.intCD, vehicle.getAnyOutfitSeason())
-            g_tankActiveCamouflage[vehicle.intCD] = season
-            outfit = vehicle.getOutfit(season)
-            if not outfit:
-                vehicleCD = vehicle.descriptor.makeCompactDescr()
-                outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-            return outfit
+            return self.__getVehicleOutfit(g_currentVehicle.item)
 
     def __assembleModel(self):
         from vehicle_systems import model_assembler
@@ -827,7 +816,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __updateSequences(self, outfit):
         resources = camouflages.getModelAnimatorsPrereqs(outfit, self.__spaceId)
         resources.extend(camouflages.getAttachmentsAnimatorsPrereqs(self.__attachments, self.__spaceId))
-        if not resources and not self.__attachments:
+        if not resources:
             self.__clearModelAnimators()
             if not self.__isVehicleDestroyed:
                 from vehicle_systems import model_assembler
@@ -1048,5 +1037,11 @@ class HangarVehicleAppearance(ScriptGameObject):
                 return progressionOutfit
         return outfit
 
-    def _onOutfitReady(self):
-        pass
+    def __getVehicleOutfit(self, vehicle):
+        season = g_tankActiveCamouflage.get(vehicle.intCD, vehicle.getAnyOutfitSeason())
+        g_tankActiveCamouflage[vehicle.intCD] = season
+        outfit = vehicle.getOutfit(season)
+        if not outfit:
+            vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
+            outfit = self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
+        return outfit

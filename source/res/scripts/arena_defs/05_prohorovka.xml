@@ -34,10 +34,10 @@
       <artilleryPreparationChance>	0.7	</artilleryPreparationChance>
       <teamBasePositions>
         <team1>
-          <position1>	-125.100021 448.300110	</position1>
+          <position1>	-125.100235 448.299774	</position1>
         </team1>
         <team2>
-          <position1>	51.599991 -447.000000	</position1>
+          <position1>	51.599747 -447.000000	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -45,39 +45,97 @@
       <artilleryPreparationChance>	0.5	</artilleryPreparationChance>
       <teamSpawnPoints>
         <team1>
-          <position>	-133 427	</position>
-          <position>	39 427	</position>
+          <position>	-123.780487 446.538147	</position>
+          <position>	27.166479 450.829651	</position>
         </team1>
         <team2>
-          <position>	-149 -425	</position>
-          <position>	185 -414	</position>
+          <position>	-139.920990 -436.843872	</position>
+          <position>	194.176819 -423.173431	</position>
         </team2>
       </teamSpawnPoints>
-      <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
-      </teamBasePositions>
-      <controlPoint>	171.058380 16.351452	</controlPoint>
+      <controlPoint>	171.058044 16.351353	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-122.312 425.031	</position>
+          <position>	-122.311996 425.031006	</position>
         </team1>
         <team2>
-          <position>	48.913 -435.870	</position>
+          <position>	48.912998 -435.869995	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-163.605850 256.277740	</position1>
-          <position2>	156.715866 151.554276	</position2>
+          <position1>	-163.605865 256.277771	</position1>
+          <position2>	156.715881 151.554291	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamBasePositions>
+        <team1>
+          <position1>	-163.605865 256.277771	</position1>
+          <position2>	156.715881 151.554291	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-121.092537 445.202148	</position>
+        </team1>
+        <team2>
+          <position>	50.219673 -456.551178	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-295.816864 -6.731567	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-485.166290 -252.841583	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-486.045624 234.489029	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	457.536957 -131.208710	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	380.302277 310.115112	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	168.433029 14.668998	</position>
+          <type>	3	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </comp7>
     <bootcamp>
       <wwmusicSetup>
         <wwmusicLoading>	bc_music_loadingscreen	</wwmusicLoading>
@@ -95,10 +153,10 @@
       </boundingBox>
       <teamBasePositions>
         <team1>
-          <position1>	-127.46 -332.09	</position1>
+          <position1>	-129.228485 -331.571106	</position1>
         </team1>
         <team2>
-          <position1>	-150.20 345.33	</position1>
+          <position1>	-151.967773 345.846069	</position1>
         </team2>
       </teamBasePositions>
       <maxPlayersInTeam>	1	</maxPlayersInTeam>
@@ -116,10 +174,10 @@
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	-125.100021 448.300110	</position1>
+          <position1>	-125.100235 448.299774	</position1>
         </team1>
         <team2>
-          <position1>	51.599991 -447.000000	</position1>
+          <position1>	51.599747 -447.000000	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>

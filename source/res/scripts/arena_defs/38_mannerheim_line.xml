@@ -38,10 +38,10 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	398.135193 293.874756	</position1>
+          <position1>	398.135162 293.874695	</position1>
         </team1>
         <team2>
-          <position1>	-338.180603 -306.263550	</position1>
+          <position1>	-338.197968 -306.268188	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -50,27 +50,89 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-307.362 -300.617	</position>
+          <position>	-307.362000 -300.617004	</position>
         </team1>
         <team2>
-          <position>	427.453 264.620	</position>
+          <position>	427.453003 264.619995	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-129.228363 141.742111	</position1>
-          <position2>	129.995377 -256.597534	</position2>
+          <position1>	-129.228378 141.742126	</position1>
+          <position2>	129.995392 -256.597565	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <teamBasePositions>
+        <team1>
+          <position1>	-129.228378 141.742126	</position1>
+          <position2>	129.995392 -256.597565	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-314.324799 -303.491577	</position>
+        </team1>
+        <team2>
+          <position>	432.159821 269.288757	</position>
+        </team2>
+      </teamSpawnPoints>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-139.574326 -86.602592	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	203.895859 204.739197	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-72.917763 390.808746	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	23.398663 -396.180664	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	336.114716 -198.996338	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	-459.135010 234.581680	</position>
+          <type>	4	</type>
+        </point>
+      </pointsOfInterestUDO>
+    </comp7>
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	398.135193 293.874756	</position1>
+          <position1>	398.135162 293.874695	</position1>
         </team1>
         <team2>
-          <position1>	-338.180603 -306.263550	</position1>
+          <position1>	-338.197968 -306.268188	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>

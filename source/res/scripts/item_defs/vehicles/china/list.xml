@@ -489,7 +489,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special testTank secret secretExtended lockOutfit	</tags>
+    <tags>	heavyTank role_HT_assault HD cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special testTank secret secretExtended lockOutfit	</tags>
     <level>	11	</level>
   </Ch57_BZT_70>
   <Ch46_113_140>
@@ -897,4 +897,30 @@
     <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special lockOutfit secret testTank cannot_be_sold	</tags>
     <level>	11	</level>
   </Ch22_113_T>
+  <Ch74_WZ_57_I>
+    <id>	31002	</id>
+    <userString>	#china_vehicles:Ch74_WZ_57_I	</userString>
+    <shortUserString>	#china_vehicles:Ch74_WZ_57_I_short	</shortUserString>
+    <description>	#china_vehicles:Ch74_WZ_57_I_descr	</description>
+    <shortDescriptionSpecial>	#china_vehicles:Ch74_WZ_57_I_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#china_vehicles:Ch74_WZ_57_I_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </Ch74_WZ_57_I>
+  <Ch61_DZT_159>
+    <id>	31004	</id>
+    <userString>	#china_vehicles:Ch61_DZT_159	</userString>
+    <shortUserString>	#china_vehicles:Ch61_DZT_159_short	</shortUserString>
+    <description>	#china_vehicles:Ch61_DZT_159_descr	</description>
+    <shortDescriptionSpecial>	#china_vehicles:Ch61_DZT_159_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#china_vehicles:Ch61_DZT_159_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals rocketAcceleration special secret testTank	</tags>
+    <level>	10	</level>
+  </Ch61_DZT_159>
 </list.xml>

@@ -37,6 +37,7 @@ class RES_COMMON(object):
     MAPS_ICONS_PM_ANNOUNCE_TOOLTIPS_OLD_BG = '../maps/icons/pm_announce/tooltips/old/bg.png'
     MAPS_ICONS_RANKEDBATTLES_AWARDS_BG = '../maps/icons/rankedBattles/awards/bg.png'
     MAPS_ICONS_RESOURCEWELL_INTRO_BG = '../maps/icons/resourceWell/intro/bg.png'
+    MAPS_ICONS_SENIORITYAWARDS_NOTIFICATION_BG = '../maps/icons/seniorityAwards/notification/bg.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_USSR_DOG_1 = '../maps/icons/tankmen/icons/small/ussr-dog-1.png'
     MAPS_ICONS_TANKMEN_ROLES_BIG_DOG = '../maps/icons/tankmen/roles/big/dog.png'
     MAPS_ICONS_TANKMEN_SKILLS_BIG_NEW_SKILL = '../maps/icons/tankmen/skills/big/new_skill.png'

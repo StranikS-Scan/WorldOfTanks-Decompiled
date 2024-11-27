@@ -82,6 +82,11 @@
           <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Hull.model	</exploded>
         </G56_E-100_3Dst>
+        <G56_E-100_3Dst_02>
+          <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Hull.model	</exploded>
+        </G56_E-100_3Dst_02>
         <G56_E-100_BP8_3DSt>
           <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/normal/lod0/Hull.model	</undamaged>
           <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/crash/lod0/Hull.model	</destroyed>
@@ -857,6 +862,12 @@
         <clipAngle>	0.269948	</clipAngle>
         <anchorShift>	-0.274124	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -904,6 +915,11 @@
             <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Chassis.model	</exploded>
           </G56_E-100_3Dst>
+          <G56_E-100_3Dst_02>
+            <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Chassis.model	</exploded>
+          </G56_E-100_3Dst_02>
           <G56_E-100_BP8_3DSt>
             <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/normal/lod0/Chassis.model	</undamaged>
             <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/crash/lod0/Chassis.model	</destroyed>
@@ -997,6 +1013,39 @@
                   <row3>	-2.202370 1.174931 0.242521	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G56_E-100_3Dst_02	</modelsSet>
+                <boxCollider>
+                  <row0>	2.065000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.426000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.594320	</row2>
+                  <row3>	0.000000 1.181270 0.156030	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.492230 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.644786 -0.010264	</row1>
+                  <row2>	0.000001 0.120825 7.590210	</row2>
+                  <row3>	0.000000 1.603880 -0.175829	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.512340 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.523127 -0.377084	</row1>
+                  <row2>	0.000000 0.680962 0.944698	</row2>
+                  <row3>	0.000000 1.601670 -3.349430	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.492230 -0.000001 -0.000002	</row0>
+                  <row1>	0.000000 0.548907 0.338460	</row1>
+                  <row2>	0.000001 -0.527700 0.855812	</row2>
+                  <row3>	0.000000 1.544535 3.963699	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.274583 -0.120848 0.000000	</row0>
+                  <row1>	0.177391 0.403056 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.665330	</row2>
+                  <row3>	-2.202370 1.174930 0.242521	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1070,6 +1119,39 @@
                   <row1>	-0.177391 0.403056 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.665325	</row2>
                   <row3>	2.202370 1.174931 0.242521	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G56_E-100_3Dst_02	</modelsSet>
+                <boxCollider>
+                  <row0>	2.065000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.426000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.594320	</row2>
+                  <row3>	0.000000 1.181270 0.156030	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.492230 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.644786 -0.010264	</row1>
+                  <row2>	0.000001 0.120825 7.590210	</row2>
+                  <row3>	0.000000 1.603880 -0.175829	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.512340 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.523127 -0.377084	</row1>
+                  <row2>	0.000000 0.680962 0.944698	</row2>
+                  <row3>	0.000000 1.601670 -3.349430	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.492230 -0.000001 -0.000002	</row0>
+                  <row1>	0.000000 0.548907 0.338460	</row1>
+                  <row2>	0.000001 -0.527700 0.855812	</row2>
+                  <row3>	0.000000 1.544530 3.963700	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.274583 -0.120848 0.000000	</row0>
+                  <row1>	0.177391 0.403056 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.665330	</row2>
+                  <row3>	2.202000 1.174930 0.242521	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1958,6 +2040,11 @@
                 <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Gun_04.model	</destroyed>
                 <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Gun_04.model	</exploded>
               </G56_E-100_3Dst>
+              <G56_E-100_3Dst_02>
+                <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Gun_01.model	</exploded>
+              </G56_E-100_3Dst_02>
               <G56_E-100_BP8_3DSt>
                 <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/normal/lod0/Gun_04.model	</undamaged>
                 <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/crash/lod0/Gun_04.model	</destroyed>
@@ -2076,6 +2163,11 @@
                 <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Gun_06.model	</destroyed>
                 <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Gun_06.model	</exploded>
               </G56_E-100_3Dst>
+              <G56_E-100_3Dst_02>
+                <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Gun_02.model	</exploded>
+              </G56_E-100_3Dst_02>
               <G56_E-100_BP8_3DSt>
                 <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/normal/lod0/Gun_06.model	</undamaged>
                 <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/crash/lod0/Gun_06.model	</destroyed>
@@ -2165,6 +2257,11 @@
             <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Turret_02.model	</destroyed>
             <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst/crash/lod0/Turret_02.model	</exploded>
           </G56_E-100_3Dst>
+          <G56_E-100_3Dst_02>
+            <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G56_E-100/_skins/G56_E-100_3Dst_02/crash/lod0/Turret_01.model	</exploded>
+          </G56_E-100_3Dst_02>
           <G56_E-100_BP8_3DSt>
             <undamaged>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/normal/lod0/Turret_02.model	</undamaged>
             <destroyed>	vehicles/german/G56_E-100/_skins/G56_E-100_BP8_3DSt/crash/lod0/Turret_02.model	</destroyed>

@@ -541,8 +541,7 @@ class TankmanDescr(object):
     def freeXP(self, xp):
         self._totalMajorSkills = None
         if xp != self.__freeXP:
-            needXpForVeteran = max(self.needXpForVeteran, 0)
-            residualXP = xp - (self.__freeXP + needXpForVeteran)
+            residualXP = xp - (self.__freeXP + self.needXpForVeteran)
             self.__freeXP = xp - residualXP if residualXP > 0 else xp
         return
 

@@ -121,7 +121,7 @@
     <_105mm_AT_Gun_L7_N>	130	</_105mm_AT_Gun_L7_N>
     <_75mm_Gun_Mk_V_BPXIV>	131	</_75mm_Gun_Mk_V_BPXIV>
     <OQF_55_pdr_CG>	132	</OQF_55_pdr_CG>
-    <Twin_105_mm_Gun_L7S>	137	</Twin_105_mm_Gun_L7S>
+    <Twin_105_mm_Gun_L7_MBC>	137	</Twin_105_mm_Gun_L7_MBC>
     <QF_6_pounder_Mk_V_B>	138	</QF_6_pounder_Mk_V_B>
     <OQF_17pdr_Gun_Mk_VII_B>	144	</OQF_17pdr_Gun_Mk_VII_B>
     <_123mm_OQF_Mk_1_7x7>	502	</_123mm_OQF_Mk_1_7x7>
@@ -5090,8 +5090,8 @@
         </_105mm_HE_L7>
       </shots>
     </_105mm_Gun_L7>
-    <Twin_105_mm_Gun_L7S>
-      <userString>	#gb_vehicles:Twin_105_mm_Gun_L7S	</userString>
+    <Twin_105_mm_Gun_L7_MBC>
+      <userString>	#gb_vehicles:Twin_105_mm_Gun_L7_MBC	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	178500	</price>
@@ -5104,7 +5104,7 @@
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	20	</rotationSpeed>
-      <reloadTime>	12	</reloadTime>
+      <reloadTime>	11	</reloadTime>
       <maxAmmo>	80	</maxAmmo>
       <aimingTime>	2.2	</aimingTime>
       <weight>	1825	</weight>
@@ -5119,29 +5119,29 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
-        <_105mm_AP_L7S>
+        <_105mm_AP_L7_MBC>
           <defaultPortion>	0.9	</defaultPortion>
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	218 198	</piercingPower>
-        </_105mm_AP_L7S>
-        <_105mm_APCR_L7S>
+          <piercingPower>	225 204	</piercingPower>
+        </_105mm_AP_L7_MBC>
+        <_105mm_APCR_L7_MBC>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1250	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	255 230	</piercingPower>
-        </_105mm_APCR_L7S>
-        <_105mm_HE_L7S>
+        </_105mm_APCR_L7_MBC>
+        <_105mm_HE_L7_MBC>
           <defaultPortion>	0.1	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
           <piercingPower>	53 53	</piercingPower>
-        </_105mm_HE_L7S>
+        </_105mm_HE_L7_MBC>
       </shots>
-    </Twin_105_mm_Gun_L7S>
+    </Twin_105_mm_Gun_L7_MBC>
     <_105mm_L7_SFC>
       <userString>	#gb_vehicles:_105mm_L7_SFC	</userString>
       <tags></tags>

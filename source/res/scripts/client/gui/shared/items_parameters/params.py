@@ -523,10 +523,16 @@ class VehicleParams(_ParameterBase):
     @property
     def circularVisionRadius(self):
         baseCircularVisionRadius = items_utils.getCircularVisionRadius(self._itemDescr, self.__factors)
+        skillName = 'radioman_finder'
+        argName = 'vehicleCircularVisionRadius'
+        factor = self.__getFactorValueFromSkill(skillName, argName)
+        baseCircularVisionRadius *= factor
+        if _DO_TTC_LOG:
+            LOG_DEBUG('TTC of circularVisionRadius: round(baseCircularVisionRadius:%f * radioman_finderFactor:%f)' % (baseCircularVisionRadius, factor))
         result = round(baseCircularVisionRadius)
         if self.__hasUnsupportedSwitchMode():
             visRadiusSiegeVal = items_utils.getCircularVisionRadius(self._itemDescr.siegeVehicleDescr, self.__factors)
-            return (result, round(visRadiusSiegeVal))
+            return (result, round(visRadiusSiegeVal * factor))
         return (result,)
 
     @property

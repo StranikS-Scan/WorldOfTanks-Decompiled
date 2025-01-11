@@ -20,6 +20,7 @@ def getLootBoxViewModel(lootBox, attemptsAfterGuaranteedReward):
     lbModel.setVideoRes(lootBox.getVideoRes())
     lbModel.setCategory(lootBox.getCategory())
     lbModel.setIsInfinite(lootBox.isHiddenCount())
+    lbModel.setManualMaxOpenCount(lootBox.getManualMaxOpenCount())
     fillIntsArray(lootBox.getUnlockKeyIDs(), lbModel.getUnlockKeyIDs())
     rotationStage = lootBox.getRotationStage()
     if lootBox.hasLootLists():

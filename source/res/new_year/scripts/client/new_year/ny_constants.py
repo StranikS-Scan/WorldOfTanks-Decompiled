@@ -35,14 +35,19 @@ class NewYearLootBoxes(CONST_CONTAINER):
 
 
 class NewYearLootBoxRewards(object):
-    MAIN_TANK = 'R219_Waffentrager_E100_Gold'
+    MAIN_TANK = 'A163_H_3_2'
     NY_25_TANKS = 'ny_2025_tanks'
-    LEGENDARY_TANKS = ('G36_PzII_J', 'R50_SU76I', 'F69_AMX13_57_100G48_E')
+    LEGENDARY_TANKS = ('Cz14_Skoda_T_56', 'F116_Bat_Chatillon_Bourrasque', 'F106_Panhard_EBR_75_Mle1954', 'It13_Progetto_M35_mod_46', 'F97_ELC_EVEN_90', 'GB99_Turtle_Mk1')
+    STYLES = {'G56_E-100': '3dstyle_G56_E_100',
+     'GB48_FV215b_183': '3dstyle_GB48_FV215b_183',
+     'It08_Progetto_M40_mod_65': '3dstyle_It08_Progetto_M40_mod_65',
+     'R155_Object_277': '3dstyle_R155_Object_277',
+     'Ch41_WZ_111_5A': '3dstyle_Ch41_WZ_111_5A'}
     REWARDS = {MAIN_TANK: 'tank_main',
-     NY_25_TANKS: 'lootbox_legendary'}
+     NY_25_TANKS: 'legendary'}
     LEGENDARY_REWARDS = {vehicleName:'tank_legendary' for vehicleName in LEGENDARY_TANKS}
     ALL = {}
-    for rewards in (REWARDS, LEGENDARY_REWARDS):
+    for rewards in (REWARDS, LEGENDARY_REWARDS, STYLES):
         ALL.update(rewards)
 
 

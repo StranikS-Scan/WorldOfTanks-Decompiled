@@ -57,7 +57,7 @@ class TankChangeView(BaseCrewView):
     def vehicle(self):
         if self.__vehicle is None:
             if self.tankman:
-                self.__vehicle = self.itemsCache.items.getItemByCD(self.tankman.vehicleNativeDescr.type.compactDescr)
+                self.__vehicle = self.itemsCache.items.getItemByCD(self.tankman.vehicleDescr.type.compactDescr)
         return self.__vehicle
 
     @property
@@ -95,8 +95,7 @@ class TankChangeView(BaseCrewView):
         self.__filterState = None
         self.__dataProvider.clear()
         self.__dataProvider = None
-        if not self.vehicle or not self.vehicle.hasCrew:
-            self._destroySubViews()
+        self._destroySubViews()
         self._clear()
         return
 

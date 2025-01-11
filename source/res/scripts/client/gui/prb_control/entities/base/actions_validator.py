@@ -7,6 +7,7 @@ from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from gui.impl.gen import R
 from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.tutorial import ITutorialLoader
 from skeletons.gui.game_control import IEarlyAccessController
@@ -80,10 +81,12 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
 
 class EarlyAccessActionsValidator(BaseActionsValidator):
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
+    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def _validate(self):
         if self.__earlyAccessCtrl.isEnabled():
-            if self.__earlyAccessCtrl.hangarFeatureState.isLayoutIdActive(R.views.lobby.early_access.EarlyAccessQuestsView()):
+            isQuestsViewActive = self.__guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.early_access.EarlyAccessQuestsView())
+            if isQuestsViewActive:
                 return ValidationResult(False, PREBATTLE_RESTRICTION.EARLY_ACCESS_SPACE)
         return super(EarlyAccessActionsValidator, self)._validate()
 

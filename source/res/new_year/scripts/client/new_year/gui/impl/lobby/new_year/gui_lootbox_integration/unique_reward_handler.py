@@ -11,7 +11,7 @@ from gui.shared.gui_items.Vehicle import getNationLessName
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.lootbox_video_reward_view import LootboxVideoRewardView, LootboxVideoRewardWindow
 from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import BaseUniqueRewardHandler
 from helpers import dependency
-from new_year.ny_constants import NewYearCategories, NewYearLootBoxRewards
+from new_year.ny_constants import NewYearCategories
 from new_year.ny_constants import NewYearLootBoxes
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
@@ -106,7 +106,7 @@ class NewYearVideoReward(LootboxVideoRewardView):
         self.__dataIter = [ vD for vD in rewards['nyRewardsData'] ]
         self.__removeDuplicateVideoLootboxes()
         bonus, videoRes, isGuaranteed = next(self.__dataIter)
-        super(NewYearVideoReward, self).__init__(layoutID, bonus, videoRes, rewards, isGuaranteed, VideoRewardsSoundControl(NewYearLootBoxRewards.ALL.get(videoRes, 'tank_default')))
+        super(NewYearVideoReward, self).__init__(layoutID, bonus, videoRes, rewards, isGuaranteed, VideoRewardsSoundControl(videoRes))
 
     def __removeDuplicateVideoLootboxes(self):
         isLootboxVideoAdded = False

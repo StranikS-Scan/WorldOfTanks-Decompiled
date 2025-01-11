@@ -37,8 +37,12 @@ class NyCurrencyPanelComponent(SubModelPresenter):
         if ctID == R.views.new_year.lobby.new_year.tooltips.NyCurrencyTooltip():
             currency = NyCurrencyType(event.getArgument('currency'))
             isCurrencyAvailable = event.getArgument('isCurrencyAvailable')
-            return NyCurrencyTooltip(NyCurrencyType(currency), isCurrencyAvailable, allowClick=currency in self.__CURRENCY_CLICK_HANDLERS)
-        return super(NyCurrencyPanelComponent, self).createToolTipContent(event, ctID)
+            allowClick = event.getArgument('allowClick')
+            if allowClick is None:
+                allowClick = currency in self.__CURRENCY_CLICK_HANDLERS
+            return NyCurrencyTooltip(NyCurrencyType(currency), isCurrencyAvailable, allowClick)
+        else:
+            return super(NyCurrencyPanelComponent, self).createToolTipContent(event, ctID)
 
     def initialize(self, *args, **kwargs):
         super(NyCurrencyPanelComponent, self).initialize(*args, **kwargs)

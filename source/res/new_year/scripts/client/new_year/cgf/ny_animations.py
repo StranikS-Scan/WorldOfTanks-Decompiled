@@ -126,7 +126,7 @@ class NewYearAnimatorManager(CGF.ComponentManager):
         timeTrigger = gameObject.findComponentByType(TimeTriggerComponent)
         fireworks.muteAnimation()
         animator.startLayerByName(fireworks.startAnimationLayer)
-        timeTrigger.reset(animator.getDuration() + self._UNMUTE_ANIMATION_DELAY, 1)
+        timeTrigger.reset(animator.getDurationByName(fireworks.startAnimationLayer) + self._UNMUTE_ANIMATION_DELAY, 1)
 
     def startZoneAnimator(self, objectName, fireworks=False):
         animatorLink = self.__animatorCache.get((objectName, fireworks), None)

@@ -12,17 +12,28 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from new_year.skeletons.new_year import INewYearController, INewYearRaccoonController
 from cache import cached_property
+from new_year_common.items.components.ny_constants import ToyTypes
 
 @registerComponent
 class UniqueAnimationOwner(object):
     editorTitle = 'Unique Animation Owner'
     category = 'New Year'
 
+    def __init__(self, *args, **kwargs):
+        super(UniqueAnimationOwner, self).__init__(*args, **kwargs)
+        self.slotID = None
+        return
+
 
 @registerComponent
 class NeedHidden(object):
     editorTitle = 'Need Hidden'
     category = 'New Year'
+
+    def __init__(self, *args, **kwargs):
+        super(NeedHidden, self).__init__(*args, **kwargs)
+        self.slotID = None
+        return
 
 
 @registerComponent
@@ -38,11 +49,9 @@ class RaccoonManager(CGF.ComponentManager):
     def __init__(self):
         super(RaccoonManager, self).__init__()
         self.__uniqueAnimationEnabled = False
-        self.__hideGOCache = {}
         self.__callbackDelayer = CallbackDelayer()
-        self.__currentAnimation = None
         self.__raccoon = None
-        self.__currentAnimatorCount = 0
+        self.__activeAnimationSlotID = None
         return
 
     @cached_property
@@ -57,28 +66,48 @@ class RaccoonManager(CGF.ComponentManager):
         self._nyController.onSetHangToyEffectEnabled -= self.setUniqueAnimationEnabled
         self.__raccoonCtrl.onViewExit -= self.onViewExit
         self.__callbackDelayer.clearCallbacks()
+        self.__raccoon = None
+        self.__activeAnimationSlotID = None
+        return
+
+    @onAddedQuery(CGF.GameObject, NySlotComponent)
+    def onSlotAdded(self, go, slotComponent):
+        if slotComponent.type in ToyTypes.PET:
+            for child in self.__hierarchyManager.getChildrenRecursively(go):
+                if child.isValid():
+                    uniqOwner = child.findComponentByType(UniqueAnimationOwner)
+                    if uniqOwner:
+                        uniqOwner.slotID = slotComponent.id
+                    needHidden = child.findComponentByType(NeedHidden)
+                    if needHidden:
+                        needHidden.slotID = slotComponent.id
 
     if not IS_EDITOR:
 
         @onAddedQuery(CGF.GameObject, UniqueAnimationOwner, tickGroup='PostHierarchy')
-        def onToyUniqueAnimationAdded(self, go, _):
+        def onToyUniqueAnimationAdded(self, go, animatorOwner):
+            slotGO = self.__findSlotGO(go)
+            if slotGO:
+                animatorOwner.slotID = slotGO.findComponentByType(NySlotComponent).id
             if self.__uniqueAnimationEnabled:
-                currentAnimation = self.__hierarchyManager.getChildren(go)
-                slotGO = self.__findSlotGO(go)
-                if not currentAnimation or not slotGO:
+                if not slotGO:
                     return
-                if self.__currentAnimation:
-                    self.__fade(partial(self.__restartAnimation, slotGO, currentAnimation))
+                slotID = slotGO.findComponentByType(NySlotComponent).id
+                if self.__activeAnimationSlotID is not None:
+                    self.__fade(partial(self.__restartRaccoonAnimation, slotID))
                 else:
-                    self.__prepareHiddenCacheToRestart(slotGO)
-                    self.__currentAnimation = currentAnimation
-                    self.__fade(self.__startAnimation)
+                    self.__fade(partial(self.__startRaccoonAnimation, slotID))
+            return
 
     @onAddedQuery(CGF.GameObject, NeedHidden)
-    def onNeedHiddenAdded(self, go, _):
+    def onNeedHiddenAdded(self, go, needHidden):
         if not self.__uniqueAnimationEnabled:
             for child in self.__hierarchyManager.getChildrenIncludingInactive(go):
                 child.activate()
+
+        slotGO = self.__findSlotGO(go)
+        if slotGO:
+            needHidden.slotID = slotGO.findComponentByType(NySlotComponent).id
 
     @onAddedQuery(CGF.GameObject, RaccoonNeedHidden)
     def onRaccoonNeedHiddenAdded(self, go, _):
@@ -89,81 +118,124 @@ class RaccoonManager(CGF.ComponentManager):
 
     def onViewExit(self):
         self.__callbackDelayer.stopCallback(self.__fade)
-        self.__callbackDelayer.stopCallback(self.__showGO)
+        self.__callbackDelayer.stopCallback(self.__stopRaccoonAnimation)
         self.__callbackDelayer.delayCallback(0.75, self.__finalizeAnimation)
 
     def __callbackFinishAnimator(self, go):
         if go.isValid():
-            go.findComponentByType(GenericComponents.AnimatorComponent).stop()
-        self.__currentAnimatorCount -= 1
-        if self.__currentAnimatorCount == 0:
-            self.__currentAnimation = None
-        return
-
-    def __finalizeAnimation(self):
-        self.__callbackDelayer.stopCallback(self.__fade)
-        self.__callbackDelayer.stopCallback(self.__showGO)
-        self.__showGO()
-        if not self.__currentAnimation:
-            return
-        else:
-            for child in self.__currentAnimation:
-                if not child.isValid():
-                    continue
-                animator = child.findComponentByType(GenericComponents.AnimatorComponent)
+            animator = go.findComponentByType(GenericComponents.AnimatorComponent)
+            if animator and animator.isValid():
                 animator.stop()
 
-            self.__currentAnimation = None
-            return
+    def __finalizeAnimation(self, updateState=True):
+        self.__callbackDelayer.stopCallback(self.__fade)
+        self.__callbackDelayer.stopCallback(self.__stopRaccoonAnimation)
+        self.__activeAnimationSlotID = None
+        if updateState:
+            self.__updateAnimationState()
+        return
 
-    def __restartAnimation(self, slotGO, currentAnimation):
-        self.__finalizeAnimation()
-        self.__prepareHiddenCacheToRestart(slotGO)
-        self.__currentAnimation = currentAnimation
-        self.__startAnimation()
+    def __restartRaccoonAnimation(self, slotID):
+        self.__finalizeAnimation(updateState=False)
+        self.__startRaccoonAnimation(slotID)
 
-    def __startAnimation(self):
+    def __startRaccoonAnimation(self, slotID):
+        self.__activeAnimationSlotID = slotID
         maxAnimatorDuration = 0
-        animatorCount = 0
-        for child in self.__currentAnimation:
-            animator = child.findComponentByType(GenericComponents.AnimatorComponent)
+        queryAnimationOwner = CGF.Query(self.spaceID, (CGF.GameObject, UniqueAnimationOwner))
+        for animationOwnerGO, animationOwner in queryAnimationOwner:
+            if animationOwnerGO.isValid() and animationOwner.slotID == slotID:
+                for child in self.__hierarchyManager.getChildren(animationOwnerGO):
+                    animator = child.findComponentByType(GenericComponents.AnimatorComponent)
+                    maxAnimatorDuration = max(maxAnimatorDuration, animator.getDuration())
+
+        self.__updateAnimationState()
+        self.__callbackDelayer.delayCallback(maxAnimatorDuration, self.__stopRaccoonAnimation)
+        self.__callbackDelayer.delayCallback(maxAnimatorDuration - 0.2, self.__fade)
+
+    def __stopRaccoonAnimation(self):
+        self.__activeAnimationSlotID = None
+        self.__updateAnimationState()
+        return
+
+    def __fade(self, callback=None):
+        if self.__raccoonCtrl.isFade():
+            self.__raccoonCtrl.replaceCallback(callback)
+        else:
+            self.__raccoonCtrl.showFade(callback)
+
+    def __findSlotGO(self, go):
+        return go if go.isValid() and go.findComponentByType(NySlotComponent) else self.__findSlotGO(self.__hierarchyManager.getParent(go))
+
+    def __updateAnimationState(self):
+        queryNeedHidden = CGF.Query(self.spaceID, (CGF.GameObject, NeedHidden))
+        queryAnimationOwner = CGF.Query(self.spaceID, (CGF.GameObject, UniqueAnimationOwner))
+        for hiddenGO, needHidden in queryNeedHidden:
+            if hiddenGO.isValid() and needHidden.slotID is not None:
+                self.__updateNeedHiddenGoState(hiddenGO, needHidden)
+
+        self.__updateRaccoonNeedHiddenState()
+        for animationOwnerGO, animationOwner in queryAnimationOwner:
+            if animationOwnerGO.isValid() and animationOwner.slotID is not None:
+                self.__updateAnimationOwnerState(animationOwnerGO, animationOwner)
+
+        return
+
+    def __updateNeedHiddenGoState(self, go, needHidden):
+        if self.__activeAnimationSlotID is not None and needHidden.slotID == self.__activeAnimationSlotID:
+            for child in self.__hierarchyManager.getChildrenIncludingInactive(go):
+                if child.isValid():
+                    child.deactivate()
+
+        else:
+            for child in self.__hierarchyManager.getChildrenIncludingInactive(go):
+                if child.isValid():
+                    child.activate()
+
+        return
+
+    def __updateRaccoonNeedHiddenState(self):
+        if self.__raccoon is not None and self.__raccoon.isValid():
+            for child in self.__hierarchyManager.getChildrenIncludingInactive(self.__raccoon):
+                if self.__activeAnimationSlotID is not None:
+                    if child.isValid():
+                        child.deactivate()
+                if child.isValid():
+                    child.activate()
+
+        return
+
+    def __updateAnimationOwnerState(self, go, animationOwner):
+        if self.__activeAnimationSlotID is not None and animationOwner.slotID == self.__activeAnimationSlotID:
+            for child in self.__hierarchyManager.getChildren(go):
+                self.__startChildAnimation(child)
+
+        else:
+            for child in self.__hierarchyManager.getChildren(go):
+                self.__stopChildAnimation(child)
+
+        return
+
+    def __startChildAnimation(self, go):
+        if not go.isValid():
+            return
+        animator = go.findComponentByType(GenericComponents.AnimatorComponent)
+        if animator and animator.isValid():
             animator.start()
             duration = animator.getDuration()
-            maxAnimatorDuration = max(maxAnimatorDuration, duration)
-            animatorCount += 1
-            timer = child.findComponentByType(TimeTriggerComponent)
+            timer = go.findComponentByType(TimeTriggerComponent)
             if not timer:
-                timer = child.createComponent(TimeTriggerComponent, duration, 1)
+                timer = go.createComponent(TimeTriggerComponent, duration, 1)
             else:
                 timer.reset(duration, 1)
             timer.addFireReaction(self.__callbackFinishAnimator)
 
-        self.__currentAnimatorCount = animatorCount
-        self.__hideGO()
-        self.__callbackDelayer.delayCallback(maxAnimatorDuration, self.__showGO)
-        self.__callbackDelayer.delayCallback(maxAnimatorDuration - 0.2, self.__fade)
-
-    def __fade(self, callback=None):
-        self.__raccoonCtrl.showFade(callback)
-
-    def __prepareHiddenCacheToRestart(self, slotGO):
-        self.__hideGOCache = {go.id:go for go, _ in self.__hierarchyManager.findComponentsInHierarchy(slotGO, NeedHidden)}
-        self.__hideGOCache[self.__raccoon.id] = self.__raccoon
-
-    def __hideGO(self):
-        for goId, hiddenGO in self.__hideGOCache.items():
-            if hiddenGO.isValid():
-                hiddenGO.deactivate()
-            self.__hideGOCache.pop(goId)
-
-    def __showGO(self):
-        for goId, hiddenGO in self.__hideGOCache.items():
-            if hiddenGO.isValid():
-                hiddenGO.activate()
-                for child in self.__hierarchyManager.getChildrenIncludingInactive(hiddenGO):
-                    child.activate()
-
-            self.__hideGOCache.pop(goId)
-
-    def __findSlotGO(self, go):
-        return go if go.findComponentByType(NySlotComponent) else self.__findSlotGO(self.__hierarchyManager.getParent(go))
+    def __stopChildAnimation(self, go):
+        if not go.isValid():
+            return
+        animator = go.findComponentByType(GenericComponents.AnimatorComponent)
+        if animator and animator.isValid():
+            animator.stop()
+            timer = go.findComponentByType(TimeTriggerComponent)
+            if timer:
+                timer.reset(0.0, 0)

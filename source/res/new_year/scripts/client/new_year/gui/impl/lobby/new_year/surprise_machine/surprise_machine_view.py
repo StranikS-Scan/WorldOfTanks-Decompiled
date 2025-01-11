@@ -16,12 +16,16 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 from gui.shared.event_dispatcher import selectVehicleInHangar
 from gui.shared.gui_items.processors.loot_boxes import LootBoxOpenProcessor
+from gui.impl.lobby.loot_box.loot_box_helper import getLootBoxIDFromToken
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator
 from helpers import dependency
 from helpers import time_utils
 from helpers.func_utils import waitEventAndCall
 from lootboxes_common import makeLootboxID
-from messenger.formatters.service_channel import QuestAchievesFormatter
+from tutorial.control.game_vars import getVehicleByIntCD
+from messenger.formatters.service_channel import LootBoxAchievesFormatter
 from new_year.gui.impl.gen.view_models.views.lobby.new_year.views.surprise_machine.ny_surprise_machine_model import PurchaseFormState, MachineViews
 from new_year.gui.impl.gen.view_models.views.lobby.new_year.views.surprise_machine.robot_tv_screen_view_model import RobotTvScreenState
 from new_year.gui.impl.new_year.sounds import NewYearSoundEvents, NewYearSoundsManager, NewYearSoundStates, NewYearSoundVars
@@ -101,6 +105,33 @@ class NySurpriseMachineView(HistorySubModelPresenter):
         super(NySurpriseMachineView, self).finalize()
         return
 
+    def createToolTipContent(self, event, ctID):
+        from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.lootbox_tooltip import LootboxTooltip
+        if R.views.dyn('gui_lootboxes').isValid() and ctID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.LootboxTooltip():
+            lootBoxType = event.getArgument('lootBoxType')
+            if lootBoxType is not None:
+                return LootboxTooltip(self.__getLootBoxByType(lootBoxType))
+        return super(NySurpriseMachineView, self).createToolTipContent(event, ctID)
+
+    @createBackportTooltipDecorator()
+    def createToolTip(self, event):
+        return super(NySurpriseMachineView, self).createToolTip(event)
+
+    def getTooltipData(self, event):
+        vehicleName = event.getArgument('vehicleName')
+        return backport.createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[self.__getVehicleCdByName(vehicleName)]) if vehicleName is not None else None
+
+    def __getLootBoxByType(self, lootBoxType):
+        boxes = self.__itemsCache.items.tokens.getLootBoxes()
+        for tokenName, tokenData in boxes.iteritems():
+            if tokenData.getType() == lootBoxType:
+                return self.__itemsCache.items.tokens.getLootBoxByID(int(getLootBoxIDFromToken(tokenName)))
+
+    def __getVehicleCdByName(self, vehicleName):
+        for intCD in self.__itemsCache.items.getVehicles():
+            if getVehicleByIntCD(intCD).name.split(':')[1] == vehicleName:
+                return intCD
+
     def setInternalViewState(self, state, skipFlight=None):
         super(NySurpriseMachineView, self).setInternalViewState(state, skipFlight)
         viewState = _INTERNAL_STATE_TO_MACHINE_VIEW.get(state, MachineViews.SPEND_TOKENS)
@@ -158,7 +189,6 @@ class NySurpriseMachineView(HistorySubModelPresenter):
                     rewardsList = result.auxData.get('bonus')
                     if rewardsList:
                         rewards = rewardsList[0]
-                        self.__sendRewardNotification(rewards)
                     else:
                         self.__nyController.unlockUIControls(id(self))
                         return
@@ -169,7 +199,7 @@ class NySurpriseMachineView(HistorySubModelPresenter):
             return
 
     def __sendRewardNotification(self, rewards):
-        SystemMessages.pushMessage(text=backport.text(R.strings.ny.notification.machine.run.text(), time=time_utils.getDateTimeInLocal(time_utils.getCurrentTimestamp()).strftime('%d.%m.%y %H:%M:%S')), type=SM_TYPE.NYSurpriseMachineSingleReward, priority=NotificationPriorityLevel.MEDIUM, messageData={'rewards': QuestAchievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processTokens=False)})
+        SystemMessages.pushMessage(text=backport.text(R.strings.ny.notification.machine.run.text(), time=time_utils.getDateTimeInLocal(time_utils.getCurrentTimestamp()).strftime('%d.%m.%y %H:%M:%S')), type=SM_TYPE.NYSurpriseMachineSingleReward, priority=NotificationPriorityLevel.MEDIUM, messageData={'rewards': LootBoxAchievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processTokens=True)})
 
     def __coinApplied(self, success, rewards):
         if success and rewards:
@@ -181,6 +211,7 @@ class NySurpriseMachineView(HistorySubModelPresenter):
                 self.__nyMachineController.setState(RobotTvScreenState.REWARDING)
                 self.__changeState()
             self.__displayView.fillReward(copy.deepcopy(rewards))
+            self.__sendRewardNotification(rewards)
         else:
             self.__nyMachineController.setState(RobotTvScreenState.ERROR)
             self.__changeState()

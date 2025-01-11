@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: new_year/scripts/client/new_year/gui/impl/lobby/new_year/popovers/ny_decorations_popover.py
+from itertools import chain
 from account_helpers.settings_core.settings_constants import NewYearStorageKeys
 from adisp import adisp_process
 from frameworks.wulf import ViewSettings
@@ -41,7 +42,7 @@ _ANIMATION_DELAY = 0.5
 _MIN_COUNT_IN_LIST = 0
 
 class NyDecorationsPopover(PopOverViewImpl):
-    __slots__ = ('__slotID', '__decorationType', '__breakDecorationsProcess', '__selectedDecoration')
+    __slots__ = ('__slotID', '__decorationType', '__breakDecorationsProcess', '__selectedDecoration', '__newToys')
     _nyController = dependency.descriptor(INewYearController)
     _itemsCache = dependency.descriptor(IItemsCache)
     __craftCtrl = dependency.descriptor(INewYearCraftMachineController)
@@ -56,6 +57,7 @@ class NyDecorationsPopover(PopOverViewImpl):
         toyID = self.__getNewYearRequester().getSlots()[self.__slotID]
         self.__selectedDecoration = self.__getNewYearRequester().getToys().get(toyID)
         self.__breakDecorationsProcess = False
+        self.__newToys = {}
 
     @property
     def viewModel(self):
@@ -94,6 +96,8 @@ class NyDecorationsPopover(PopOverViewImpl):
         self.viewModel.onBreakBtnClick -= self.__onBreakBtnClick
         self._nyController.onDataUpdated -= self.__onDataUpdated
         self.viewModel.onBreakAnimationComplete -= self.__onBreakAnimationComplete
+        if self.__newToys:
+            self.__sendSeenToy()
         super(NyDecorationsPopover, self)._finalize()
 
     def __updateHeader(self, model):
@@ -237,19 +241,20 @@ class NyDecorationsPopover(PopOverViewImpl):
         changedIndex = int(args.get('index'))
         slot = self.viewModel.getSlots().getValue(changedIndex)
         if slot.getIsNew() is False:
-            self.__sendSeenToy(slot.getToyID())
+            self.__updateNewToys(slot.getToyID())
         slot.setIsNew(False)
 
-    def __sendSeenToy(self, toyId):
-        serverFormatted = []
+    def __updateNewToys(self, toyID):
         inventoryToys = self.__getNewYearRequester().getToys()
-        if inventoryToys.get(toyId) is not None:
-            toyInfo = inventoryToys[toyId]
+        if inventoryToys.get(toyID) is not None:
+            toyInfo = inventoryToys[toyID]
             if toyInfo.getToyType() == self.__decorationType and toyInfo.getCount() > 0:
-                serverFormatted.append(toyId)
-                serverFormatted.append(toyInfo.getUnseenCount())
-            self._nyController.sendSeenToys(serverFormatted)
+                self.__newToys[toyID] = toyInfo.getUnseenCount()
         return
+
+    def __sendSeenToy(self):
+        self._nyController.sendSeenToys([ toy for toy in chain(*self.__newToys.iteritems()) ])
+        self.__newToys = {}
 
     def __onDataUpdated(self, keys):
         fragmentsChanged = SyncDataKeys.TOY_FRAGMENTS in keys

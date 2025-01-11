@@ -5,6 +5,7 @@ import Event
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from adisp import adisp_process
+from constants import DEFAULT_HANGAR_SCENE
 from gui.Scaleform.managers.fade_manager import FadeState
 from gui.app_loader import sf_lobby
 from new_year.gui.impl.new_year.sounds import NewYearSoundsManager, NewYearSoundEvents
@@ -14,6 +15,7 @@ from new_year.helpers.server_settings import getNewYearGeneralConfig
 from new_year_common.items.components.ny_constants import CustomizationObjects, NewYearObjects
 from new_year.ny_constants import ANCHOR_TO_OBJECT, NyWidgetTopMenu, Collections, ViewAliases, ANCHOR_TO_VIEW_ALIAS
 from skeletons.gui.impl import INewYearNavigation
+from skeletons.gui.game_control import IHangarSpaceSwitchController
 from skeletons.gui.shared.utils import IHangarSpace
 from new_year.skeletons.new_year import INewYearController
 _logger = logging.getLogger(__name__)
@@ -137,6 +139,8 @@ class NewYearNavigation(INewYearNavigation):
     _navigationState = _NavigationState()
     _hangarSpace = dependency.descriptor(IHangarSpace)
     __nyController = dependency.descriptor(INewYearController)
+    __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
+    __needDelayedViewSwitch = False
     onObjectStateChanged = Event.Event()
     onUpdateCurrentView = Event.Event()
     onChangeView = Event.Event()
@@ -152,6 +156,7 @@ class NewYearNavigation(INewYearNavigation):
             g_currentPreviewVehicle.selectNoVehicle()
             g_currentPreviewVehicle.resetAppearance()
             cls.onObjectStateChanged()
+            cls.__nyController.switchFromNewYearPrebattle()
             showHangar()
         return
 
@@ -200,8 +205,20 @@ class NewYearNavigation(INewYearNavigation):
         cls.switchTo(objectName, instantly=True, viewAlias=viewAlias, withFade=True)
 
     @classmethod
-    def switchToQuests(cls, *args, **kwargs):
-        cls.switchToView(ViewAliases.QUESTS_VIEW)
+    @adisp_process
+    def switchToQuests(cls):
+        if not cls.__nyController.ifNewYearBattleMode() and cls.__spaceSwitchController.currentSceneName != DEFAULT_HANGAR_SCENE:
+            result = yield cls.__nyController.switchToNewYearPrebattle()
+            if result:
+                cls.__needDelayedViewSwitch = True
+        else:
+            cls.showNavigationView(ViewAliases.QUESTS_VIEW)
+
+    @classmethod
+    def onHeroTankReady(cls):
+        if cls.__needDelayedViewSwitch:
+            cls.__needDelayedViewSwitch = False
+            cls.switchToQuests()
 
     @classmethod
     def getCurrentObject(cls):
@@ -269,6 +286,7 @@ class NewYearNavigation(INewYearNavigation):
             cls.switchTo(None, instantly=True)
         cls._navigationState.clear()
         cls.onChangeView(None)
+        cls.__needDelayedViewSwitch = False
         return
 
     @sf_lobby

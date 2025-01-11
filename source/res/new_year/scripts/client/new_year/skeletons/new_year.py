@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: new_year/scripts/client/new_year/skeletons/new_year.py
 import typing
-from adisp import adisp_async
+from adisp import adisp_async, adisp_process
 from new_year_common.items.components.ny_constants import RANDOM_VALUE, FillerState
 from skeletons.gui.game_control import IFestivityController, IGameController, IFestivityTutorialController
 if typing.TYPE_CHECKING:
@@ -157,6 +157,22 @@ class INewYearController(IFestivityController):
     def isUIControlsLocked(self):
         raise NotImplementedError
 
+    @adisp_async
+    @adisp_process
+    def switchToNewYearPrebattle(self, callback):
+        raise NotImplementedError
+
+    @adisp_process
+    def switchFromNewYearPrebattle(self):
+        raise NotImplementedError
+
+    def ifNewYearBattleMode(self):
+        raise NotImplementedError
+
+    @property
+    def prbNewYearActionName(self):
+        raise NotImplementedError
+
 
 class INewYearCraftMachineController(IGameController):
     selectedToyTypeIdx = RANDOM_VALUE
@@ -239,6 +255,12 @@ class INewYearSurpriseMachine(IGameController):
 
 class INewYearRaccoonController(IGameController):
     onViewExit = None
+
+    def isFade(self):
+        raise NotImplementedError
+
+    def replaceCallback(self, callback):
+        raise NotImplementedError
 
     def showFade(self, callback=None):
         raise NotImplementedError

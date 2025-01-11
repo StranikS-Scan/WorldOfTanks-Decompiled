@@ -42,7 +42,7 @@ class NewYearLevelUpRewardFormatter(AsyncTokenQuestsSubFormatter):
                 formatted = g_settings.msgTemplates.format('InformationHeaderSysMessage', ctx={'header': header,
                  'text': text})
                 messages.append(MessageData(formatted, levelSettings))
-                fmt = BattlePassQuestAchievesFormatter.formatQuestAchieves(data.get('detailedRewards', {}).get(questsMap[level], {}), asBattleFormatter=False, processTokens=False, isBulletsNeed=False)
+                fmt = BattlePassQuestAchievesFormatter.formatQuestAchieves(data.get('detailedRewards', {}).get(questsMap[level], {}), asBattleFormatter=False, processTokens=True, isBulletsNeed=False)
                 if fmt is not None:
                     formatted = g_settings.msgTemplates.format(self._getTemplateName(), ctx={'text': fmt})
                     messages.append(MessageData(formatted, rewardsSettings))

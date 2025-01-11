@@ -4121,11 +4121,11 @@
       </mul>
       <mul>
         <name>	miscAttrs/onStillRotationSpeedFactor	</name>
-        <value>	1.12	</value>
+        <value>	1.15	</value>
       </mul>
       <mul>
         <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
-        <value>	1.12	</value>
+        <value>	1.15	</value>
       </mul>
       <mul>
         <name>	miscAttrs/gunAimingTimeFactor	</name>
@@ -4139,7 +4139,7 @@
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	1.12	</value>
+        <value>	1.15	</value>
       </mul>
       <mul>
         <name>	vehicleGunAimSpeed	</name>
@@ -4161,11 +4161,11 @@
       </mul>
       <mul>
         <name>	miscAttrs/onStillRotationSpeedFactor	</name>
-        <value>	0.88	</value>
+        <value>	0.85	</value>
       </mul>
       <mul>
         <name>	miscAttrs/onMoveRotationSpeedFactor	</name>
-        <value>	0.88	</value>
+        <value>	0.85	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -4179,7 +4179,7 @@
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	0.88	</value>
+        <value>	0.85	</value>
       </mul>
     </kpi>
   </role_XI_pair_2_2>
@@ -4261,7 +4261,7 @@
       </mul>
       <mul>
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
-        <value>	0.92	</value>
+        <value>	0.9	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -4275,7 +4275,7 @@
       </mul>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	0.92	</value>
+        <value>	0.9	</value>
       </mul>
     </kpi>
   </role_XI_279_pair_4_1>
@@ -4285,7 +4285,7 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
-        <value>	1.08	</value>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	miscAttrs/antifragmentationLiningFactor	</name>
@@ -4299,7 +4299,7 @@
     <kpi>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	1.08	</value>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	vehicleRamOrExplosionDamageResistance	</name>
@@ -4429,7 +4429,7 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/enginePowerFactor	</name>
-        <value>	1.15	</value>
+        <value>	1.18	</value>
       </mul>
       <mul>
         <name>	miscAttrs/multShotDispersionFactor	</name>
@@ -4439,7 +4439,7 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	1.15	</value>
+        <value>	1.18	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotFullDispersion	</name>
@@ -4457,7 +4457,7 @@
       </mul>
       <mul>
         <name>	miscAttrs/enginePowerFactor	</name>
-        <value>	0.85	</value>
+        <value>	0.82	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -4467,7 +4467,7 @@
       </mul>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	0.85	</value>
+        <value>	0.82	</value>
       </mul>
     </kpi>
   </role_XI_BZT_70_pair_5_2>
@@ -4481,7 +4481,7 @@
       </add>
       <mul>
         <name>	miscAttrs/multShotDispersionFactor	</name>
-        <value>	1.08	</value>
+        <value>	1.07	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -4491,7 +4491,7 @@
       </add>
       <mul>
         <name>	vehicleGunShotFullDispersion	</name>
-        <value>	1.08	</value>
+        <value>	1.07	</value>
       </mul>
     </kpi>
   </role_XI_MBT_B_pair_4_1>
@@ -4501,7 +4501,7 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/multShotDispersionFactor	</name>
-        <value>	0.92	</value>
+        <value>	0.93	</value>
       </mul>
       <add>
         <name>	miscAttrs/forwardMaxSpeedKMHTerm	</name>
@@ -4511,7 +4511,7 @@
     <kpi>
       <mul>
         <name>	vehicleGunShotFullDispersion	</name>
-        <value>	0.92	</value>
+        <value>	0.93	</value>
       </mul>
       <add>
         <name>	vehicleForwardMaxSpeed	</name>
@@ -4525,21 +4525,21 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
-        <value>	1.08	</value>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	miscAttrs/gun/shotDispersionFactors/afterShot	</name>
-        <value>	1.20	</value>
+        <value>	1.18	</value>
       </mul>
     </modifiers>
     <kpi>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	1.08	</value>
+        <value>	1.1	</value>
       </mul>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	1.20	</value>
+        <value>	1.18	</value>
       </mul>
     </kpi>
   </role_XI_MBT_B_pair_5_1>
@@ -4549,21 +4549,21 @@
     <modifiers>
       <mul>
         <name>	miscAttrs/gun/shotDispersionFactors/afterShot	</name>
-        <value>	0.8	</value>
+        <value>	0.82	</value>
       </mul>
       <mul>
         <name>	miscAttrs/circularVisionRadiusBaseFactor	</name>
-        <value>	0.92	</value>
+        <value>	0.9	</value>
       </mul>
     </modifiers>
     <kpi>
       <mul>
         <name>	vehicleGunShotDispersionAfterShot	</name>
-        <value>	0.8	</value>
+        <value>	0.82	</value>
       </mul>
       <mul>
         <name>	vehicleCircularVisionRadius	</name>
-        <value>	0.92	</value>
+        <value>	0.9	</value>
       </mul>
     </kpi>
   </role_XI_MBT_B_pair_5_2>

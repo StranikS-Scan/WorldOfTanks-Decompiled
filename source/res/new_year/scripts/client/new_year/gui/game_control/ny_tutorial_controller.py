@@ -156,18 +156,23 @@ class NewYearTutorialController(INewYearTutorialController, EventsHandler):
 
     def __showNYFirstVideo(self):
         self.__setIntroSceneViewed()
-        self.__showHangarVideo(R.videos.new_year.ng_startup())
+        self.__showHangarVideo(R.videos.new_year.ng_startup(), self.__onHangarVideoStarted)
 
     def __showNYGreetingsVideo(self):
         self.__setINYGreetingsViewed()
-        self.__showHangarVideo(R.videos.new_year.ng_greetings())
+        self.__showHangarVideo(R.videos.new_year.ng_greetings(), self.__onCelebSpeechVideoStarted)
 
-    def __showHangarVideo(self, videoResID):
-        showVideoView(videoResID, onVideoStarted=self.__onHangarVideoStarted, onVideoClosed=self.__onHangarVideoDone, isAutoClose=True, soundControl=PausedSoundManager(), canEscape=False, isUIVisible=True, uiShowDelay=1)
+    def __showHangarVideo(self, videoResID, onVideoStarted):
+        showVideoView(videoResID, onVideoStarted=onVideoStarted, onVideoClosed=self.__onHangarVideoDone, isAutoClose=True, soundControl=PausedSoundManager(), canEscape=False, isUIVisible=True, uiShowDelay=1)
 
     @adisp_process
     def __onHangarVideoStarted(self):
         self.__videoStartStopHandler.onVideoStart(LootBoxVideos.START)
+        yield self.__fadeManager.startFade()
+
+    @adisp_process
+    def __onCelebSpeechVideoStarted(self):
+        self.__videoStartStopHandler.onVideoStart(LootBoxVideos.CELEB_SPEECH)
         yield self.__fadeManager.startFade()
 
     @adisp_process

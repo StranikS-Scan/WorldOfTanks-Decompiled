@@ -8,7 +8,7 @@ class ArenaBonusTypeLabel(object):
      ARENA_BONUS_TYPE.TRAINING: 'training',
      ARENA_BONUS_TYPE.BOOTCAMP: 'bootcamp',
      ARENA_BONUS_TYPE.RANKED: 'ranked',
-     ARENA_BONUS_TYPE.EPIC_RANDOM: 'epicQueue',
+     ARENA_BONUS_TYPE.EPIC_RANDOM: 'epicRandom',
      ARENA_BONUS_TYPE.EPIC_BATTLE: 'epicQueue',
      ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: 'battleRoyaleQueue',
      ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: 'battleRoyaleQueue',

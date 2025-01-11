@@ -17,6 +17,7 @@ from helpers.server_settings import GUI_LOOT_BOXES_CONFIG
 from new_year.helpers.server_settings import getNewYearBonusConfig
 from new_year.gui.shared.ny_bonuses import BonusHelper
 from new_year.ny_constants import NyTabBarAlbumsView, NyTabBarRewardsView, NewYearLootBoxes
+from new_year.helpers.server_settings import getNewYearGeneralConfig
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IGuiLootBoxesController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -27,7 +28,7 @@ _giftsOrder = (NewYearInfoViewModel.LEVELS,
  NewYearInfoViewModel.BIGBOXES)
 
 class NyInfoView(HistorySubModelPresenter):
-    __slots__ = ('__slideLogger', '__smallBoxesCount')
+    __slots__ = ('__slideLogger', '__smallBoxesCount', '__config')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLootBoxes = dependency.descriptor(IGuiLootBoxesController)
@@ -35,6 +36,7 @@ class NyInfoView(HistorySubModelPresenter):
 
     def __init__(self, viewModel, parentView, *args, **kwargs):
         super(NyInfoView, self).__init__(viewModel, parentView)
+        self.__config = getNewYearGeneralConfig()
         self.__slideLogger = None
         self.__smallBoxesCount = 0
         return
@@ -57,6 +59,8 @@ class NyInfoView(HistorySubModelPresenter):
             model.setMinMultiplier(min(multipliersList))
             model.setMaxMultiplier(max(multipliersList))
             model.setStartTab(startTab)
+            model.setStartDate(self.__config.getNewYearStartDate())
+            model.setEndDate(self.__config.getNewYearEndDate())
             self.__updateStatus(model=model)
             self.__updateBoxesExistance(model=model)
 

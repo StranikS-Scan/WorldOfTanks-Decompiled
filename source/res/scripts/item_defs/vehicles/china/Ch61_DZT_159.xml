@@ -1967,7 +1967,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	410	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1986,7 +1986,7 @@
             </armor_8>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2604,8 +2604,8 @@
   </physics>
   <rocketAcceleration>
     <deployTime>	5	</deployTime>
-    <reloadTime>	5	</reloadTime>
-    <reuseCount>	10	</reuseCount>
+    <reloadTime>	8	</reloadTime>
+    <reuseCount>	8	</reuseCount>
     <duration>	7	</duration>
     <impulse>
       <magnitude>	40	</magnitude>
@@ -2615,7 +2615,7 @@
     <modifiers>
       <mul>
         <name>	dynAttrs/engine/power	</name>
-        <value>	2.5	</value>
+        <value>	2.0	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
@@ -2641,7 +2641,7 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	2.5	</value>
+        <value>	2.0	</value>
       </mul>
       <mul>
         <name>	vehicleForwardMaxSpeed	</name>

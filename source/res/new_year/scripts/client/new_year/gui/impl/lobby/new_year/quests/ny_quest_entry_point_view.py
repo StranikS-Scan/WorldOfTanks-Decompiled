@@ -8,7 +8,6 @@ from new_year.gui.impl.gen.view_models.views.lobby.new_year.views.quests.ny_ques
 from new_year.gui.impl.lobby.new_year.tooltips.ny_quest_entrypoint_tooltip import NyQuestEntryPointTooltip
 from new_year.helpers.server_settings import getNewYearGeneralConfig
 from new_year.gui.impl.new_year.navigation import NewYearNavigation
-from new_year.ny_constants import ViewAliases
 from new_year.skeletons.new_year import INewYearController
 from skeletons.gui.server_events import IEventsCache
 
@@ -43,4 +42,4 @@ class NYQuestEntryPointView(ViewImpl):
             ts.setQuestsInProgress(activeQuestCount)
 
     def __goToNYQuests(self):
-        NewYearNavigation.switchToView(ViewAliases.QUESTS_VIEW)
+        NewYearNavigation.switchToQuests()

@@ -44,6 +44,7 @@ class LootBoxVideos(CONST_CONTAINER):
     OPEN_BOX = 3
     START = 4
     ONBOARDING = 5
+    CELEB_SPEECH = 6
 
 
 class LootBoxVideosSpecialRewardType(CONST_CONTAINER):
@@ -120,7 +121,8 @@ class LootBoxVideoEvents(CONST_CONTAINER):
      LootBoxVideos.STYLE: 'gui_lootbox_video_3dstyle_{}',
      LootBoxVideos.OPEN_BOX: 'gui_lootbox_video_open_lootbox_{}',
      LootBoxVideos.START: 'ny2024_video_intro',
-     LootBoxVideos.ONBOARDING: 'ny_video_onboarding'}
+     LootBoxVideos.ONBOARDING: 'ny_video_onboarding',
+     LootBoxVideos.CELEB_SPEECH: 'ny_video_celeb_wishes_speech'}
     VIDEO_DONE = 'gui_lootbox_video_stop'
     VIDEO_PAUSE = 'gui_lootbox_video_pause'
     VIDEO_RESUME = 'gui_lootbox_video_resume'

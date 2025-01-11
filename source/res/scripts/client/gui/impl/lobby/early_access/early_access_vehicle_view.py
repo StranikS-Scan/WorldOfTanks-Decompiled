@@ -80,15 +80,19 @@ class EarlyAccessVehicleView(EarlyAccessViewImpl):
         return State.INPROGRESS if isNext2Unlock else State.LOCKED
 
     def _initialize(self, *args, **kwargs):
-        g_currentPreviewVehicle.onSelectedNoVehicle += self.__onSelectNoVehicle
-        super(EarlyAccessVehicleView, self)._initialize(*args, **kwargs)
+        super(EarlyAccessVehicleView, self)._initialize()
         app = self.__appLoader.getApp()
         app.setBackgroundAlpha(0)
 
     def _finalize(self):
         self.soundManager.playSound('comp_7_progressbar_stop')
-        g_currentPreviewVehicle.onSelectedNoVehicle -= self.__onSelectNoVehicle
         super(EarlyAccessVehicleView, self)._finalize()
+
+    def _onShown(self):
+        super(EarlyAccessVehicleView, self)._onShown()
+        if g_currentPreviewVehicle.intCD is None and self.__currentVehicleCD is not None:
+            g_currentPreviewVehicle.selectVehicle(self.__currentVehicleCD)
+        return
 
     def _onLoading(self, *args, **kwargs):
         super(EarlyAccessVehicleView, self)._onLoading(*args, **kwargs)
@@ -248,11 +252,6 @@ class EarlyAccessVehicleView(EarlyAccessViewImpl):
         if self.__hasDelayedBalanceUpdates:
             self.__updateModel(shouldUpdateSelectedVehicle=False, showCarouselSliderAnimation=True)
             self.__hasDelayedBalanceUpdates = False
-
-    def __onSelectNoVehicle(self):
-        if self.__currentVehicleCD is not None and g_currentPreviewVehicle != self.__currentVehicleCD:
-            g_currentPreviewVehicle.selectVehicle(self.__currentVehicleCD)
-        return
 
     def __onStartMoving(self):
         g_eventBus.handleEvent(LobbySimpleEvent(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': True}), EVENT_BUS_SCOPE.GLOBAL)

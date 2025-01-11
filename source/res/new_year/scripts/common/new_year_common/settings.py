@@ -21,11 +21,12 @@ class NYGeneralConsts(object):
     ATMOSPHERE_POINTS_PER_RANK = 'atmospherePointsPerUsedToyRank'
     DAILY_PREFIX = 'dailyPrefix'
     WEEKLY_PREFIX = 'weeklyPrefix'
-    QUESTS_START_DAY = 'questsStartDay'
     SMALL_LOOTBOX_ID = 'smallLootBoxId'
     FIRST_ENTRANCE_TOKEN = 'firstEntranceToken'
     PET_VISIBLE = 'petVisible'
     NEW_YEAR_GREETINGS_DATE = 'newYearGreetingsDate'
+    NEW_YEAR_START_DATE = 'newYearStartDate'
+    NEW_YEAR_END_DATE = 'newYearEndDate'
 
 
 class MachineConsts(object):

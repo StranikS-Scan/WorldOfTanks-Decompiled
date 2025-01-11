@@ -51,6 +51,7 @@ class LootboxRotationTooltip(ViewImpl):
         model.setVehicleName(vehicle.shortUserName)
         model.setInInventory(vehicle.isInInventory)
         model.setWasSold(vehicle.restoreInfo is not None)
+        model.setIsRent(vehicle.isRented)
         return
 
     def __parseVehicleRotationLootbox(self):

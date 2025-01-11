@@ -172,7 +172,7 @@ class VehicleSelectionView(ViewImpl):
             currentTab = tx.getCategories()[self.__selectedTab]
             if vehicleModel.getIsSelected():
                 vehicleModel.setIsSelected(False)
-                self.__selectVehicles = [ t for t in self.__selectVehicles if vehicleModel.getIntCD() not in t ]
+                self.__selectVehicles = [ t for t in self.__selectVehicles if _getVariadicID(vehicleModel.getVehicleLvl()) not in t ]
                 currentTab.setSelectedVehicle('')
                 currentTab.setSelectedRewardIndex(SelectableRewardCategoryModel.UNDEFIEND_REVARD_INDEX)
             else:
@@ -180,7 +180,7 @@ class VehicleSelectionView(ViewImpl):
                 if curentIndexReward != SelectableRewardCategoryModel.UNDEFIEND_REVARD_INDEX:
                     prevSelectVehicle = tx.getSelectableRewards()[curentIndexReward]
                     prevSelectVehicle.setIsSelected(False)
-                    self.__selectVehicles = [ t for t in self.__selectVehicles if prevSelectVehicle.getIntCD() not in t ]
+                    self.__selectVehicles = [ t for t in self.__selectVehicles if _getVariadicID(vehicleModel.getVehicleLvl()) not in t ]
                 vehicleModel.setIsSelected(True)
                 self.__selectVehicles.append((vehicleModel.getIntCD(), _getVariadicID(vehicleModel.getVehicleLvl())))
                 currentTab.setSelectedVehicle(vehicleModel.getVehicleName())

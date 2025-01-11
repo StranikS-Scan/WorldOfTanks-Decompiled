@@ -34,7 +34,7 @@ class NewYearBonusesClient(NewYearBonuses):
         value = merged.getValue()
         if merged.getName() == CurrentNYConstants.TOYS:
             merged.setValue(mergeDicts(value, rhv.getValue()))
-            merged.setNewToys(merged.getNewToys().union(rhv.getNewToys()))
+            merged.setNewToys(set(merged.getNewToys()).union(set(rhv.getNewToys())))
         else:
             merged.setValue(value.extend(rhv.getValue()))
         return (merged, True)

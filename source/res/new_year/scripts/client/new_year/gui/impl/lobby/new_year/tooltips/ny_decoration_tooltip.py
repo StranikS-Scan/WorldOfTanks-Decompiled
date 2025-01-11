@@ -33,13 +33,12 @@ class NyDecorationTooltip(ViewImpl):
     def _initialize(self, *args, **kwargs):
         toy = self.__nyController.getToyByID(self.__toyID)
         decorationTypeIcon = R.images.new_year.gui.maps.icons.newYear.decoration_types.craft.dyn(toy.getToyType())()
-        currentObject = self.__newYearNavigation.getCurrentObject()
         with self.viewModel.transaction() as model:
             model.setName(toy.getName())
             model.setDescription(toy.getDesc())
             model.setDecorationTypeIcon(decorationTypeIcon)
             model.setIsPremium(toy.isPremium())
-            model.customizationZone.setValue(CustomizationZone(currentObject))
+            model.customizationZone.setValue(CustomizationZone(toy.getToyObject()))
             model.setUnlockLevel(toy.getRank())
-            model.setIsLocked(toy.getCount() == 0)
+            model.setIsLocked(toy.getCount() + toy.getUsedCount() == 0)
             model.setIcon(toy.getIcon(size=EPIC_AWARD_SIZE) if self.__isToyIconEnabled else R.invalid())

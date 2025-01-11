@@ -49,7 +49,7 @@ def aggregateSimilarBonuses(bonuses):
 def isAllVehiclesObtainedInSlot(slot, itemsCache=None):
     if not any((bonus.getName() == 'vehicles' for bonus in slot['bonuses'])):
         return False
-    inventoryVehicles = itemsCache.items.inventory.getIventoryVehiclesCDs()
+    inventoryVehicles = [ intCD for intCD in itemsCache.items.inventory.getIventoryVehiclesCDs() if not itemsCache.items.getItemByCD(intCD).isRented ]
     restoreVehicles = itemsCache.items.recycleBin.getVehiclesIntCDs()
     existVehicles = inventoryVehicles + restoreVehicles
     for bonus in slot['bonuses']:

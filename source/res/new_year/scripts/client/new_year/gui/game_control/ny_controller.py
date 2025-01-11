@@ -14,6 +14,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NY_OLD_REWARDS_BY_YEAR_VISITED
 from account_helpers.settings_core.settings_constants import NewYearStorageKeys
 from adisp import adisp_async, adisp_process
+from debug_utils import LOG_ERROR
 from gui import SystemMessages, GUI_SETTINGS
 from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
@@ -22,6 +23,9 @@ from gui.impl.gen import R
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.impl.gen.view_models.constants.loot_box_bonus_group import LootBoxBonusGroup
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_dispatcher import showShop
 from helpers import dependency, server_settings
@@ -56,6 +60,9 @@ _NY_STATE_TRANSITION_SYS_MESSAGES = {(NY_STATE.IN_PROGRESS, NY_STATE.SUSPENDED):
 _NY_STATE_SYS_MESSAGES = {NY_STATE.IN_PROGRESS: _NewYearSysMessages(R.strings.ny.notification.start(), NotificationPriorityLevel.MEDIUM, SM_TYPE.NewYearInfo),
  NY_STATE.SUSPENDED: _NewYearSysMessages(R.strings.ny.notification.suspend(), NotificationPriorityLevel.MEDIUM, SM_TYPE.ErrorHeader),
  NY_STATE.FINISHED: _NewYearSysMessages(R.strings.ny.notification.finish(), NotificationPriorityLevel.MEDIUM, SM_TYPE.ErrorHeader)}
+NY_QUEUE_TYPES_TO_PREBATTLE_ACTION_NAME = {constants.QUEUE_TYPE.VERSUS_AI: 'versusAI',
+ constants.QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.RANDOM,
+ constants.QUEUE_TYPE.COMP7: PREBATTLE_ACTION_NAME.COMP7}
 _logger = logging.getLogger(__name__)
 
 def _getState(state):
@@ -99,6 +106,7 @@ class NewYearController(INewYearController, IGlobalListener):
         self.__navigationHelper = NewYearNavigationHelper()
         self.__tutorialController = NewYearTutorialController()
         self.__lockedUIControls = set()
+        self.__customReturnActionName = None
         return
 
     def init(self):
@@ -491,6 +499,46 @@ class NewYearController(INewYearController, IGlobalListener):
             self.__isBattleRoyaleMode = isBattleRoyaleMode
             self.onStateChanged()
 
+    @adisp_async
+    @adisp_process
+    def switchToNewYearPrebattle(self, callback):
+        clb = False
+        if g_prbLoader and g_prbLoader.getDispatcher():
+            entity = g_prbLoader.getDispatcher().getEntity()
+            if entity:
+                queueType = entity.getQueueType()
+                result = yield self.prbDispatcher.doSelectAction(PrbAction(self.prbNewYearActionName))
+                if result:
+                    self.__customReturnActionName = NY_QUEUE_TYPES_TO_PREBATTLE_ACTION_NAME.get(queueType, None)
+                clb = result
+        if not clb:
+            LOG_ERROR('New Year Hangar cannot be loaded.')
+        callback(clb)
+        return
+
+    @adisp_process
+    def switchFromNewYearPrebattle(self):
+        if not self.__customReturnActionName:
+            return
+        else:
+            result = yield self.prbDispatcher.doSelectAction(PrbAction(self.__customReturnActionName))
+            if result:
+                self.__customReturnActionName = None
+            else:
+                LOG_ERROR('Cannot switch from New Year Hangar.')
+            return
+
+    def ifNewYearBattleMode(self):
+        if self.prbDispatcher is None:
+            return False
+        else:
+            state = self.prbDispatcher.getFunctionalState()
+            return self.__isCorrectPrb(state)
+
+    @property
+    def prbNewYearActionName(self):
+        return PREBATTLE_ACTION_NAME.RANDOM
+
     def getSlotDescrs(self):
         return tuple(new_year.g_cache.slots)
 
@@ -581,6 +629,7 @@ class NewYearController(INewYearController, IGlobalListener):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.__levelsInfo = None
         self.__spaceUpdated = False
+        self.__customReturnActionName = None
         self.__lockedUIControls.clear()
         self.__navigationHelper.clear()
         self.stopGlobalListening()

@@ -7,8 +7,8 @@ from skeletons.gui.game_control import IEarlyAccessController
 class EarlyAccessViewImpl(ViewImpl):
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
 
-    def _onShown(self):
-        super(EarlyAccessViewImpl, self)._onShown()
+    def _initialize(self):
+        super(EarlyAccessViewImpl, self)._initialize()
         self.__earlyAccessCtrl.hangarFeatureState.enter(self.layoutID)
 
     def _finalize(self):

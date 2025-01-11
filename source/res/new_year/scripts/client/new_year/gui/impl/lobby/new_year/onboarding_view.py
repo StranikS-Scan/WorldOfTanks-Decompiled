@@ -268,7 +268,6 @@ class OnboardingView(ViewImpl, IViewCameraSync):
         if currencyCount < firstLevelPrice:
             return
         self.__settingsCore.serverSettings.saveInNewYearStorage({NewYearStorageKeys.NY_FIRST_ENTRANCE: False})
-        self.viewModel.setCurrentState(OnboardingState.PANORAMA)
         animatorMgr = CGF.getManager(self.__hangarSpace.space.getSpaceID(), NewYearAnimatorManager)
         duration = animatorMgr.startZoneAnimator(CustomizationObjects.FIR)
         self.__callback = BigWorld.callback(duration if duration else 0, self.__showVideo)
@@ -276,6 +275,7 @@ class OnboardingView(ViewImpl, IViewCameraSync):
     @adisp_process
     def __showVideo(self):
         self.__callback = None
+        self.viewModel.setCurrentState(OnboardingState.PANORAMA)
         yield self.__fadeManager.startFade()
         showVideoView(R.videos.new_year.onboarding_complete(), onVideoClosed=self.__onVideoClosed, onVideoStarted=self.__onVideoStarted, isAutoClose=True, soundControl=PausedSoundManager(), canEscape=False, isUIVisible=True, uiShowDelay=3)
         return

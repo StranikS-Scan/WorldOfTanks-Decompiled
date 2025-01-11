@@ -184,6 +184,9 @@ class GuiLootBoxesController(IGuiLootBoxesController):
     def getInfoPageURL(self, lootboxType):
         return GUI_SETTINGS.lootBoxInfoPagesURL.get(lootboxType, '')
 
+    def getShopURL(self, lootboxType):
+        return GUI_SETTINGS.lootBoxShopURL.get(lootboxType, '')
+
     def __getConfig(self):
         return self.__lobbyContext.getServerSettings().getGuiLootBoxesConfig()
 

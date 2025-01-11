@@ -275,7 +275,7 @@ def mergeTokens(total, key, value, isLeaf=False, count=1, *args):
 
 def _vehiclesInventoryChecker(account, key):
     invId = account._inventory.getVehicleInvID(key)
-    return not account._rent.isVehicleRented(invId) if invId != 0 else account._recycleBin.canRestoreVehicle(key, int(time.time()))
+    return not account._rent.isVehicleRented(invId) or account._recycleBin.availableRestoreVehicle(key) if invId != 0 else account._recycleBin.availableRestoreVehicle(key)
 
 
 ITEM_INVENTORY_CHECKERS = {'vehicles': _vehiclesInventoryChecker,

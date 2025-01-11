@@ -539,9 +539,13 @@ class HangarCameraManager(CGF.ComponentManager):
                 distParams.maxValue = idleComponent.distLimits[1]
                 distParams.period = idleComponent.distPeriod
                 self.__cameraIdle.initialize(idleComponent.easingInTime, pitchParams, distParams, idleComponent.yawPeriod)
+            else:
+                self.__cameraIdle.finalize()
             parallaxComponent = gameObject.findComponentByType(ParallaxComponent)
             if parallaxComponent:
                 self.__cameraParallax.initialize(parallaxComponent.distanceDelta, parallaxComponent.angelsDelta, parallaxComponent.smoothing)
+            else:
+                self.__cameraParallax.finalize()
             if self.__minDist is not None:
                 self.setMinDist(self.__minDist)
                 self.__minDist = None

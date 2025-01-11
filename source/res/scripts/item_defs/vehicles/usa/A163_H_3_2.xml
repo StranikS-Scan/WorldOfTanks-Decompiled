@@ -38,8 +38,7 @@
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask></exclusionMask>
+    <density>	1.113536 1.113536	</density>
   </camouflage>
   <hull>
     <armor>
@@ -103,6 +102,15 @@
     <hangarShadowTexture>	vehicles/american/A163_H_3_2/H_3_HangarShadowMap.dds	</hangarShadowTexture>
     <customizationSlots>
       <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10000	</slotId>
+        <rayStart>	0.466607 0.372228 3.705841	</rayStart>
+        <rayEnd>	0.466607 -0.127772 3.705841	</rayEnd>
+        <rayUp>	0 0 -1	</rayUp>
+        <size>	0.32	</size>
+        <isUVProportional>	false	</isUVProportional>
+      </slot>
+      <slot>
         <slotType>	paint	</slotType>
         <slotId>	11000	</slotId>
         <anchorPosition>	0 0 0	</anchorPosition>
@@ -121,6 +129,10 @@
         <camouflage>	HULL	</camouflage>
       </customizableVehicleAreas>
     </customization>
+    <camouflage>
+      <density>	98.044708 98.2295	</density>
+      <aoTextureSize>	512 512	</aoTextureSize>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_A163_H_3_2>
@@ -139,8 +151,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	24	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1161,6 +1173,10 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <camouflage>
+        <density>	98.044708 98.2295	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
       <repairTime>	6.85714293	</repairTime>
     </Chassis_A163_H_3_2>
   </chassis>
@@ -1201,8 +1217,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	15000	</weight>
-      <maxHealth>	400	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <maxHealth>	550	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -1249,14 +1265,14 @@
             <armor_30>	325	</armor_30>
             <gun>	55	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	30	</reloadTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	36	</reloadTime>
           <clip>
             <count>	2	</count>
-            <rate>	15	</rate>
+            <rate>	12	</rate>
           </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1288,6 +1304,14 @@
               <anchorDirection>	0 1 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	0 0.124 3.96	</rayStart>
+              <rayEnd>	0 0.124 4.56	</rayEnd>
+              <rayUp>	0.14 0 0	</rayUp>
+              <size>	0.6	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1308,6 +1332,10 @@
           <reloadEffect>	reload_automat_reloading_155_170	</reloadEffect>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <shotOffset>	-0 0.120243 0	</shotOffset>
+          <camouflage>
+            <density>	61.452248 124.054733	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
         </_155mm_Gun_T7>
       </guns>
       <models>
@@ -1342,6 +1370,10 @@
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.571 -0.597 0.959 -0.067 0.793 -0.178 0.771 0.779 0.43 0.5 0.01 0.5 0.199 0.1 0	</physicsShape>
+      <camouflage>
+        <density>	98.044708 98.2295	</density>
+        <aoTextureSize>	512 512	</aoTextureSize>
+      </camouflage>
     </Turret_1_A163_H_3_2>
   </turrets0>
   <engines>

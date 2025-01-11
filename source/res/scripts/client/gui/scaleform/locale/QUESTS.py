@@ -79,8 +79,10 @@ class QUESTS(object):
     BONUSES_ITEM_ADDITIONBONUS = '#quests:bonuses/item/additionBonus'
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
+    BONUSES_ITEM_NY23RANDOMRESOURCES = '#quests:bonuses/item/ny23RandomResources'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
     BONUSNAME_WDRCOIN = '#quests:bonusName/wdrcoin'
+    BONUSNAME_NY_GP = '#quests:bonusName/ny_gp'
     BONUSES_GOLDPERSONALRATE = '#quests:bonuses/goldPersonalRate'
     BONUSES_FREEXPPERSONALRATE = '#quests:bonuses/freeXpPersonalRate'
     QUESTS_TITLE = '#quests:quests/title'
@@ -1680,6 +1682,7 @@ class QUESTS(object):
     INFOPAGE_INFOBUTTONTOOLTIP_HEADER_WINBACK = '#quests:infoPage/infoButtonTooltip/header/winback'
     INFOPAGE_DAILYMISSIONTITLE = '#quests:infoPage/dailyMissionTitle'
     INFOPAGE_PREMIUMMISSIONSTITLE = '#quests:infoPage/premiumMissionsTitle'
+    INFOPAGE_DAILYMISSIONS_NYDAILYDAILYMISSIONS = '#quests:infoPage/dailyMissions/nyDailyDailyMissions'
     INFOPAGE_DAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/default'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/battlePassDailyMissions/default'
     INFOPAGE_DAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/winback'
@@ -1727,6 +1730,8 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_BATTLE_SINGULAR = '#quests:dailyQuests/condition/battle_singular'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
     DETAILS_CONDITIONS_CUMULATIVE_COMP7PRESTIGEPOINTS = '#quests:details/conditions/cumulative/comp7PrestigePoints'
+    LOCKEDFORREROLLTOOLTIP_HEADER = '#quests:lockedForRerollTooltip/header'
+    LOCKEDFORREROLLTOOLTIP_BODY = '#quests:lockedForRerollTooltip/body'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1764,6 +1769,7 @@ class QUESTS(object):
      BONUSNAME_BLUEPRINTS_NATION_ANY,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,
      BONUSNAME_WDRCOIN,
+     BONUSNAME_NY_GP,
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,

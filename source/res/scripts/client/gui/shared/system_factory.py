@@ -60,6 +60,7 @@ QUEST_FLAGS = 56
 BATTLE_RESULTS_STATS_SORTING = 57
 LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
 EQUIPMENT_TRIGGERS = 59
+GAMEFACE_NOTIFICATIONS = 60
 
 class _CollectEventsManager(object):
 
@@ -899,3 +900,15 @@ def registerBattleResultsStatsSorting(bonusType, sortingKey):
 
 def collectBattleResultsStatsSorting():
     return __collectEM.handleEvent(BATTLE_RESULTS_STATS_SORTING, {'sortingKey': {}})['sortingKey']
+
+
+def registerGamefaceNotifications(gamefaceNotifications):
+
+    def onCollect(ctx):
+        ctx['gamefaceNotifications'].update(gamefaceNotifications)
+
+    __collectEM.addListener(GAMEFACE_NOTIFICATIONS, onCollect)
+
+
+def collectGamefaceNotifications():
+    return __collectEM.handleEvent(GAMEFACE_NOTIFICATIONS, ctx={'gamefaceNotifications': {}})['gamefaceNotifications']

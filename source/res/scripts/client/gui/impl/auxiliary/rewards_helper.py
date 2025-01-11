@@ -1,15 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/rewards_helper.py
+import itertools
 import logging
 import types
 import typing
-import itertools
 from collections import namedtuple
+from gui.impl.gen.view_models.views.loot_box_view.loot_attachment_renderer_model import LootAttachmentRendererModel
+from gui.impl.gen.view_models.views.loot_box_view.loot_attachment_special_renderer_model import LootAttachmentSpecialRendererModel
+from gui.impl.new_year.new_year_helper import formatRomanNumber
+from shared_utils import first
 from blueprints.BlueprintTypes import BlueprintTypes
+from constants import PREMIUM_ENTITLEMENTS, LOOTBOX_TOKEN_PREFIX
 from frameworks.wulf import ViewFlags
 from battle_royale.gui.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from frameworks.wulf import ViewSettings
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import BonusNameQuestsBonusComposer
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import LootBoxBonusComposer
@@ -17,25 +25,30 @@ from gui.impl import backport
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CompensationTooltipContent
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CrewSkinsCompensationTooltipContent
 from gui.impl.auxiliary.tooltips.compensation_tooltip import VehicleCompensationTooltipContent
+from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.impl.gen.view_models.views.lobby.progressive_reward.progressive_reward_step_model import ProgressiveRewardStepModel
 from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_model import LootBoxCompensationTooltipModel
 from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_types import LootBoxCompensationTooltipTypes
 from gui.impl.gen.view_models.views.loot_box_vehicle_compensation_tooltip_model import LootBoxVehicleCompensationTooltipModel
 from gui.impl.gen.view_models.views.loot_box_view.blueprint_final_fragment_renderer_model import BlueprintFinalFragmentRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.blueprint_fragment_renderer_model import BlueprintFragmentRendererModel
-from gui.impl.gen.view_models.views.loot_box_view.crew_book_renderer_model import CrewBookRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.congrats_view_model import CongratsViewModel
+from gui.impl.gen.view_models.views.loot_box_view.crew_book_renderer_model import CrewBookRendererModel
+from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model import LootAnimatedRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_compensation_renderer_model import LootCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
-from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import LootDefRendererModel
-from gui.impl.gen.view_models.views.loot_box_view.loot_animated_renderer_model import LootAnimatedRendererModel
-from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_renderer_model import LootVehicleCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model import LootConversionRendererModel
+from gui.impl.gen.view_models.views.loot_box_view.loot_def_renderer_model import LootDefRendererModel
+from gui.impl.gen.view_models.views.loot_box_view.loot_new_year_toy_renderer_model import LootNewYearToyRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
+from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_compensation_renderer_model import LootVehicleCompensationRendererModel
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
 from gui.impl.lobby.seniority_awards.seniority_awards_bonuses_packers import getSeniorityAwardsBonusPacker
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
+from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_video_renderer_model import LootVehicleVideoRendererModel
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getRoyaleAwardsPacker, AWARDS_SIZES
+from gui.server_events.awards_formatters import getPostBattleAwardsPacker
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -47,10 +60,13 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
 from helpers import dependency, int2roman
-from shared_utils import first
+from new_year.ny_toy_info import NewYearCurrentToyInfo
+from new_year.ny_constants import GuestsQuestsTokens
+from optional_bonuses import BONUS_MERGERS
 from skeletons.gui.shared import IItemsCache
-STYLES_TAGS = []
-VIDEO_TAGS = []
+from skeletons.new_year import INewYearController
+STYLES_TAGS = ['NY_style']
+VIDEO_TAGS = ['NY_video']
 _logger = logging.getLogger(__name__)
 _DEFAULT_ALIGN = 'center'
 _DEFAULT_DISPLAYED_AWARDS_COUNT = 6
@@ -71,7 +87,8 @@ class CrewBonusTypes(object):
 
 NEW_STYLE_FORMATTED_BONUSES = tuple(itertools.chain((TMAN_TOKENS,)))
 _BONUSES_ORDER = (Currency.CREDITS,
- 'premium',
+ PREMIUM_ENTITLEMENTS.BASIC,
+ PREMIUM_ENTITLEMENTS.PLUS,
  Currency.GOLD,
  Currency.CRYSTAL,
  'vehicles',
@@ -102,6 +119,14 @@ _MAX_PROBABILITY = 15
 _MIN_VEHICLE_LVL_BLUEPRINT_AWARD = 8
 SeniorityAwards = namedtuple('SeniorityAwards', 'bonuses currencies')
 
+def getVehByStyleCD(styleIntCD):
+    itemsCache = dependency.instance(IItemsCache)
+    items = itemsCache.items
+    style = items.getItemByCD(styleIntCD)
+    vehicles = items.getVehicles(REQ_CRITERIA.CUSTOM(style.mayInstall))
+    return first(vehicles.itervalues()) if vehicles else None
+
+
 class LootRewardDefModelPresenter(object):
     __slots__ = ('_reward',)
 
@@ -131,6 +156,7 @@ class LootRewardDefModelPresenter(object):
 
     def _formatModel(self, model, ttId, showCongrats):
         with model.transaction() as m:
+            m.setBonusName(self._reward.get('bonusName') or '')
             m.setIcon(self._reward.get('imgSource') or '')
             m.setLabelStr(self._reward.get('label') or '')
             m.setTooltipId(ttId)
@@ -202,7 +228,6 @@ class CompensationModelPresenter(LootRewardAnimatedModelPresenter):
         with model.transaction() as tx:
             tx.setIconFrom(compensationReason.get('imgSource', ''))
             tx.setLabelBeforeStr(compensationReason.get('label', ''))
-            tx.setBonusName(self._reward.get('bonusName', ''))
             tx.setLabelBefore(compensationReason.get('label', ''))
             tx.setIconBefore(compensationReason.get('imgSource', ''))
             tx.setLabelAfter(self._reward.get('label', ''))
@@ -211,7 +236,7 @@ class CompensationModelPresenter(LootRewardAnimatedModelPresenter):
             tx.setLabelAlignAfter(self._reward.get('align', _DEFAULT_ALIGN) or _DEFAULT_ALIGN)
             specialArgs = compensationReason.get('specialArgs', None)
             if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
-                if len(specialArgs) > 1:
+                if len(specialArgs) > 1 and specialArgs[1]:
                     tx.setCountBefore(specialArgs[1])
         return
 
@@ -226,6 +251,9 @@ class CrewSkinsCompensationModelPresenter(CompensationModelPresenter):
 class VehicleCompensationModelPresenter(CompensationModelPresenter):
     __slots__ = ()
     itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, soundId=R.sounds.gui_lootbox_reward_circles()):
+        super(VehicleCompensationModelPresenter, self).__init__(soundId)
 
     def _createModel(self):
         return LootVehicleCompensationRendererModel()
@@ -243,11 +271,10 @@ class VehicleCompensationModelPresenter(CompensationModelPresenter):
             if vehicle is not None:
                 shortName = vehicle.shortUserName
                 vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
-                vehicleLevel = int2roman(vehicle.level)
+                vehicleLevel = formatRomanNumber(vehicle.level)
                 with model.transaction() as tx:
                     tx.setIconFrom(compensationReason.get('imgSource', ''))
                     tx.setLabelBeforeStr(compensationReason.get('label', ''))
-                    tx.setBonusName(self._reward.get('bonusName', ''))
                     tx.setLabelBefore('')
                     tx.setIconBefore(vehicle.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL))
                     tx.setLabelAfter(self._reward.get('label', ''))
@@ -257,6 +284,45 @@ class VehicleCompensationModelPresenter(CompensationModelPresenter):
                     tx.setVehicleName(shortName)
                     tx.setIsElite(vehicle.isElite)
         return
+
+
+class VehicleCompensationWithoutAnimationPresenter(VehicleCompensationModelPresenter):
+
+    def _getRendererType(self):
+        return LootRendererTypes.VEHICLE_COMPENSATION_WITHOUT_ANIMATION
+
+
+class LootNewYearToyPresenter(LootRewardDefModelPresenter):
+    __slots__ = ('__toyID',)
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __nyController = dependency.descriptor(INewYearController)
+
+    def __init__(self):
+        super(LootNewYearToyPresenter, self).__init__()
+        self.__toyID = 0
+
+    def _createModel(self):
+        return LootNewYearToyRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.NEW_YEAR_TOY
+
+    def _setReward(self, reward):
+        super(LootNewYearToyPresenter, self)._setReward(reward=reward)
+        specialArgs = self._reward.get('specialArgs')
+        if specialArgs:
+            self.__toyID = specialArgs[0]
+
+    def _formatModel(self, model, ttId, showCongrats):
+        with model.transaction() as tx:
+            toyInfo = NewYearCurrentToyInfo(self.__toyID)
+            tx.setBonusName(self._reward.get('bonusName') or '')
+            tx.setLabelStr(self._reward.get('label') or '')
+            tx.setToyID(toyInfo.getID())
+            tx.setDecorationImage(toyInfo.getIcon())
+            tx.setRankImage(toyInfo.getRankIcon())
+            tx.setIcon(self._reward.get('imgSource') or '')
+            tx.setRank(toyInfo.getRank())
 
 
 class BlueprintFinalFragmentModelPresenter(LootRewardAnimatedModelPresenter):
@@ -365,17 +431,17 @@ class BlueprintFragmentRewardPresenter(LootRewardDefModelPresenter):
         return False if not vehicle else vehicle is not None and vehicle.level >= _MIN_VEHICLE_LVL_BLUEPRINT_AWARD
 
 
-class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
+class VehicleRewardPresenter(LootRewardDefModelPresenter):
     __itemsCache = dependency.descriptor(IItemsCache)
     __slots__ = ('_vehicle',)
 
     def __init__(self):
-        super(LootVehicleRewardPresenter, self).__init__()
+        super(VehicleRewardPresenter, self).__init__()
         self._vehicle = None
         return
 
     def _setReward(self, reward):
-        super(LootVehicleRewardPresenter, self)._setReward(reward=reward)
+        super(VehicleRewardPresenter, self)._setReward(reward=reward)
         self._vehicle = None
         specialArgs = self._reward.get('specialArgs', None)
         if specialArgs and isinstance(specialArgs, (types.ListType, types.TupleType)):
@@ -386,53 +452,59 @@ class LootVehicleRewardPresenter(LootRewardDefModelPresenter):
         return
 
     def _getRendererType(self):
-        return LootRendererTypes.VEHICLE if self._vehicle is not None else super(LootVehicleRewardPresenter, self)._getRendererType()
+        return LootRendererTypes.VEHICLE if self._vehicle is not None else super(VehicleRewardPresenter, self)._getRendererType()
 
     def _createModel(self):
-        return LootVehicleRendererModel() if self._vehicle is not None else super(LootVehicleRewardPresenter, self)._createModel()
+        return LootVehicleRendererModel() if self._vehicle is not None else super(VehicleRewardPresenter, self)._createModel()
 
     def _formatModel(self, model, ttId, showCongrats):
-        super(LootVehicleRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        super(VehicleRewardPresenter, self)._formatModel(model, ttId, showCongrats)
         if self._vehicle is not None:
             self._formatVehicle(self._vehicle, model, showCongrats)
         return
 
     def _formatVehicle(self, vehicle, model, showCongrats):
         with model.congratsViewModel.transaction() as tx:
-            vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
-            image = vehicle.getShopIcon()
-            tx.setVehicleIsElite(vehicle.isElite)
-            tx.setVehicleType(vehicleType)
-            tx.setVehicleLvl(int2roman(vehicle.level))
-            tx.setVehicleName(vehicle.userName)
-            tx.setVehicleImage(image)
-            tx.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_VEHICLE)
-            tx.setCongratsSourceId(str(vehicle.intCD))
-            tx.setShowCongrats(showCongrats)
+            self._formatVehicleModel(showCongrats, tx, vehicle)
+
+    def _formatVehicleModel(self, showCongrats, tx, vehicle):
+        vehicleType = formatEliteVehicle(vehicle.isElite, vehicle.type)
+        tx.setVehicleIsElite(vehicle.isElite)
+        tx.setVehicleType(vehicleType)
+        tx.setVehicleLvl(formatRomanNumber(vehicle.level))
+        tx.setVehicleName(vehicle.userName)
+        tx.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_VEHICLE)
+        tx.setCongratsSourceId(str(vehicle.intCD))
+        tx.setShowCongrats(showCongrats)
 
 
-def getVehicleStrID(vehicleName):
-    return vehicleName.split(':')[1]
+class LootVehicleRewardPresenter(VehicleRewardPresenter):
+
+    def _formatVehicle(self, vehicle, model, showCongrats):
+        with model.congratsViewModel.transaction() as tx:
+            self._formatVehicleModel(showCongrats, tx, vehicle)
+            tx.setVehicleImage(vehicle.getSnapshotIcon() or '')
 
 
-def preparationRewardsCurrency(rewards):
-    money = _getCompensationMoney(rewards)
-    for currency in Currency.ALL:
-        if currency in rewards:
-            rewards[currency] -= money.get(currency, 0)
-            if rewards[currency] <= 0:
-                del rewards[currency]
+class RankedLootVehicleRewardPresenter(LootVehicleRewardPresenter):
+
+    def _formatVehicle(self, vehicle, model, showCongrats):
+        super(RankedLootVehicleRewardPresenter, self)._formatVehicle(vehicle, model, showCongrats)
+        model.congratsViewModel.setVehicleImage(vehicle.getShopIcon())
 
 
-def checkAndFillVehicles(bonus, alwaysVisibleBonuses, bonuses):
+DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
+ CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
+
+def checkAndFillVehicles(bonus, alwaysVisibleBonuses, bonuses, onlyVideoVehicle=True):
     hasVehicle = False
     for vehBonus in bonus:
         for vehicle, _ in vehBonus.getVehicles():
-            if _isVideoVehicle(vehicle):
+            if isVideoVehicle(vehicle):
                 hasVehicle = True
                 break
 
-        if hasVehicle:
+        if hasVehicle and onlyVideoVehicle:
             alwaysVisibleBonuses.append(vehBonus)
         bonuses.append(vehBonus)
 
@@ -446,7 +518,7 @@ def checkAndFillCustomizations(bonus, alwaysVisibleBonuses, bonuses):
             bonusType = bonusData.get('custType')
             bonusValue = bonusData.get('value')
             item = customBonus.getC11nItem(bonusData)
-            if bonusType and bonusValue and bonusType == 'style' and _isSpecialStyle(item.intCD):
+            if bonusType and bonusValue and bonusType == 'style' and isSpecialStyle(item.intCD):
                 hasStyle = True
                 break
 
@@ -458,19 +530,24 @@ def checkAndFillCustomizations(bonus, alwaysVisibleBonuses, bonuses):
 
 
 def checkAndFillTokens(bonus, alwaysVisibleBonuses, bonuses):
-    hasTman = False
+    specialRewardType = ''
     for tokenBonus in bonus:
         allTokens = tokenBonus.getTokens()
-        for tID, _ in allTokens.iteritems():
+        if _isInvisibleTokens(allTokens):
+            continue
+        for tID in allTokens:
             if getRecruitInfo(tID):
-                hasTman = True
+                specialRewardType = LootCongratsTypes.CONGRAT_TYPE_TANKMAN
+                break
+            if tID == GuestsQuestsTokens.TOKEN_CAT:
+                specialRewardType = LootCongratsTypes.CONGRAT_TYPE_GUEST_C
                 break
 
-        if hasTman:
+        if specialRewardType == LootCongratsTypes.CONGRAT_TYPE_TANKMAN:
             alwaysVisibleBonuses.append(tokenBonus)
         bonuses.append(tokenBonus)
 
-    return hasTman
+    return specialRewardType
 
 
 def formatEliteVehicle(isElite, typeName):
@@ -499,20 +576,211 @@ def splitPremiumDays(days):
     return result
 
 
+class LootTankmanCongratsRewardPresenter(LootRewardDefModelPresenter):
+    __slots__ = ('__recruitInfo', '__sourceID')
+
+    def __init__(self):
+        super(LootTankmanCongratsRewardPresenter, self).__init__()
+        self.__recruitInfo = None
+        self.__sourceID = ''
+        return
+
+    def _createModel(self):
+        return LootVehicleVideoRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.VEHICLE if self.__recruitInfo is not None else LootRendererTypes.DEF
+
+    def _setReward(self, reward):
+        super(LootTankmanCongratsRewardPresenter, self)._setReward(reward=reward)
+        specialArgs = self._reward.get('specialArgs')
+        if specialArgs:
+            tmanTokenName = specialArgs[0]
+            self.__recruitInfo = getRecruitInfo(tmanTokenName)
+            self.__sourceID = tmanTokenName
+        else:
+            _logger.error('SpecialArgs for tankman is not specified!')
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootTankmanCongratsRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        with model.transaction() as m:
+            m.congratsViewModel.setVehicleIsElite(False)
+            m.congratsViewModel.setVehicleType('')
+            m.congratsViewModel.setVehicleLvl('')
+            m.congratsViewModel.setVehicleName(self.__recruitInfo.getFullUserName())
+            m.congratsViewModel.setVehicleImage(self.__recruitInfo.getSnapshotIcon() or '')
+            m.congratsViewModel.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_TANKMAN)
+            m.congratsViewModel.setCongratsSourceId(self.__sourceID)
+            m.congratsViewModel.setShowCongrats(True)
+            m.congratsViewModel.setShineSwfAlias('')
+            m.congratsViewModel.setAdvancedShineName('')
+            m.setVideoSrc('')
+
+
+class LootStyleCongratsRewardPresenter(LootRewardDefModelPresenter):
+    __slots__ = ('__vehicle', '__resourceName', '__sourceID')
+
+    def __init__(self):
+        super(LootStyleCongratsRewardPresenter, self).__init__()
+        self.__vehicle = None
+        self.__resourceName = ''
+        self.__sourceID = ''
+        return
+
+    def _createModel(self):
+        return LootVehicleVideoRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.VEHICLE_VIDEO if self.__vehicle is not None and self.__resourceName else LootRendererTypes.DEF
+
+    def _setReward(self, reward):
+        super(LootStyleCongratsRewardPresenter, self)._setReward(reward=reward)
+        specialArgs = self._reward.get('specialArgs')
+        if specialArgs:
+            styleIntCD = specialArgs[0]
+            if isSpecialStyle(styleIntCD):
+                self.__vehicle = getVehByStyleCD(styleIntCD)
+                self.__resourceName = Vehicle.getIconResourceName(Vehicle.getNationLessName(self.__vehicle.name))
+                self.__sourceID = str(styleIntCD)
+            else:
+                self.__vehicle = None
+        else:
+            _logger.error('SpecialArgs for style is not specified!')
+        return
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootStyleCongratsRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        if self.__vehicle is not None:
+            with model.transaction() as m:
+                m.congratsViewModel.setVehicleIsElite(self.__vehicle.isElite)
+                m.congratsViewModel.setVehicleType(formatEliteVehicle(self.__vehicle.isElite, self.__vehicle.type))
+                m.congratsViewModel.setVehicleLvl(formatRomanNumber(self.__vehicle.level))
+                m.congratsViewModel.setVehicleName(self.__vehicle.userName)
+                m.congratsViewModel.setVehicleImage(self.__getStyleSnapshotImage() or '')
+                m.congratsViewModel.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_STYLE)
+                m.congratsViewModel.setCongratsSourceId(self.__sourceID)
+                m.congratsViewModel.setShowCongrats(True)
+                m.congratsViewModel.setShineSwfAlias('')
+                m.congratsViewModel.setAdvancedShineName('')
+                m.setVideoSrc(self.__resourceName)
+        return
+
+    def __getStyleSnapshotImage(self):
+        name = 'style_{}'.format(self.__resourceName)
+        return RES_ICONS.getSnapshotIcon(name)
+
+
+class LootAttachmentRewardPresenter(LootRewardDefModelPresenter):
+    __slots__ = ('_attachment', '__resourceName', '__sourceID', '_itemID')
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self):
+        super(LootAttachmentRewardPresenter, self).__init__()
+        self._attachment = None
+        self._itemID = None
+        return
+
+    def _setReward(self, reward):
+        super(LootAttachmentRewardPresenter, self)._setReward(reward=reward)
+        specialArgs = self._reward.get('specialArgs')
+        if specialArgs:
+            attachment = self.__itemsCache.items.getItemByCD(specialArgs[0])
+            if attachment.itemTypeID == GUI_ITEM_TYPE.ATTACHMENT:
+                self._attachment = attachment
+                self._itemID = attachment.id
+            else:
+                self._attachment = None
+        else:
+            _logger.error('SpecialArgs for style is not specified!')
+        return
+
+    def _createModel(self):
+        return LootAttachmentRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.ATTACHMENT
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootAttachmentRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        if self._attachment is not None:
+            with model.transaction() as m:
+                m.setAttachName(self._attachment.name)
+                m.setRarity(self._attachment.rarity)
+                m.setGroupName(self._attachment.groupUserName)
+        return
+
+
+class LootAttachmentSpecialCongratsRewardPresenter(LootAttachmentRewardPresenter):
+
+    def _createModel(self):
+        return LootAttachmentSpecialRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.ATTACHMENT_SPECIAL
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootAttachmentSpecialCongratsRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        if self._attachment is not None:
+            with model.transaction() as m:
+                m.congratsViewModel.setShowCongrats(True)
+                m.congratsViewModel.setCongratsType(LootCongratsTypes.CONGRAT_TYPE_ATTACHMENT)
+                m.congratsViewModel.setIntCD(self._itemID)
+                m.congratsViewModel.setAttachName(self._attachment.name)
+                m.congratsViewModel.setAttachUserName(self._attachment.userName)
+                m.congratsViewModel.setRarity(self._attachment.rarity)
+                m.congratsViewModel.setGroupAttachName(self._attachment.groupUserName)
+        return
+
+
+class LootVehicleVideoRewardPresenter(LootVehicleRewardPresenter):
+    __slots__ = ('__resourceName',)
+
+    def __init__(self):
+        super(LootVehicleVideoRewardPresenter, self).__init__()
+        self.__resourceName = None
+        return
+
+    def _setReward(self, reward):
+        super(LootVehicleVideoRewardPresenter, self)._setReward(reward)
+        self.__resourceName = None
+        if self._vehicle is not None and isVideoVehicle(self._vehicle):
+            self.__resourceName = Vehicle.getIconResourceName(Vehicle.getNationLessName(self._vehicle.name))
+        return
+
+    def _createModel(self):
+        return LootVehicleVideoRendererModel() if self.__isVideoVehicle() else LootDefRendererModel()
+
+    def _getRendererType(self):
+        return LootRendererTypes.VEHICLE_VIDEO if self.__isVideoVehicle() else LootRendererTypes.DEF
+
+    def _formatVehicle(self, vehicle, model, showCongrats):
+        if self.__isVideoVehicle():
+            super(LootVehicleVideoRewardPresenter, self)._formatVehicle(vehicle, model, showCongrats)
+            model.setVideoSrc(self.__resourceName or '')
+
+    def _formatModel(self, model, ttId, showCongrats):
+        super(LootVehicleVideoRewardPresenter, self)._formatModel(model, ttId, showCongrats)
+        if self.__isVideoVehicle():
+            with model.congratsViewModel.transaction() as m:
+                m.setShineSwfAlias('')
+                m.setAdvancedShineName('')
+
+    def __isVideoVehicle(self):
+        return self.__resourceName is not None
+
+
 _DEF_CONGRATS_VALIDATORS = {BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFinalFragmentModelPresenter.validate,
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter.validate,
  CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter.validate}
 _DEF_MODEL_PRESENTER = LootRewardDefModelPresenter()
-DEF_COMPENSATION_PRESENTERS = {'vehicles': VehicleCompensationModelPresenter(),
- CrewBonusTypes.CREW_SKIN_BONUSES: CrewSkinsCompensationModelPresenter()}
 DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter(),
  BlueprintsBonusSubtypes.FINAL_FRAGMENT: BlueprintFinalFragmentModelPresenter(),
  BlueprintsBonusSubtypes.UNIVERSAL_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.NATION_FRAGMENT: LootRewardConversionModelPresenter(R.images.gui.maps.icons.blueprints.fragment.big.vehicle(), R.sounds.gui_blueprint_fragment_convert()),
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
-RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
+RANKED_MODEL_PRESENTERS = {'vehicles': RankedLootVehicleRewardPresenter()}
 
-def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
+def getRewardsBonuses(rewards, size=AWARDS_SIZES.BIG, awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
     bonuses = []
     if rewards:
@@ -570,22 +838,33 @@ def getRewardTooltipContent(event, storedTooltipData=None, itemsCache=None):
             tooltipType = LootBoxCompensationTooltipTypes.CREW_SKINS
         elif event.contentID == R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent():
             tooltipType = LootBoxCompensationTooltipTypes.VEHICLE
-            tooltipData.update({'iconBefore': event.getArgument('iconBefore', ''),
-             'labelBefore': event.getArgument('labelBefore', ''),
-             'iconAfter': event.getArgument('iconAfter', ''),
-             'labelAfter': event.getArgument('labelAfter', ''),
-             'vehicleName': event.getArgument('vehicleName', ''),
-             'vehicleType': event.getArgument('vehicleType', ''),
-             'isElite': event.getArgument('isElite', True),
-             'vehicleLvl': event.getArgument('vehicleLvl', ''),
-             'viewModelClazz': LootBoxVehicleCompensationTooltipModel,
+            specialArgs = storedTooltipData.specialArgs
+            if specialArgs and isinstance(specialArgs, types.DictType):
+                tooltipData.update(specialArgs)
+            else:
+                labelAfter = event.getArgument('labelAfter', '')
+                if labelAfter.isdigit():
+                    labelAfter = text_styles.gold(labelAfter)
+                tooltipData.update({'iconBefore': event.getArgument('iconBefore', ''),
+                 'labelBefore': event.getArgument('labelBefore', ''),
+                 'iconAfter': event.getArgument('iconAfter', ''),
+                 'labelAfter': labelAfter,
+                 'vehicleName': event.getArgument('vehicleName', ''),
+                 'vehicleType': event.getArgument('vehicleType', ''),
+                 'isElite': event.getArgument('isElite', True),
+                 'vehicleLvl': event.getArgument('vehicleLvl', '')})
+            tooltipData.update({'viewModelClazz': LootBoxVehicleCompensationTooltipModel,
              'layoutID': R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxVehicleCompensationTooltipContent()})
         else:
             tooltipType = LootBoxCompensationTooltipTypes.BASE
             layoutID = R.views.common.tooltip_window.loot_box_compensation_tooltip.LootBoxCompensationTooltipContent()
             tooltipData.update({'layoutID': layoutID})
         tooltipData['tooltipType'] = tooltipType
-        return _COMPENSATION_TOOLTIP_CONTENT_CLASSES[tooltipType](**tooltipData)
+        settings = ViewSettings(tooltipData.get('layoutID', R.invalid()))
+        settings.flags = tooltipData.get('wsFlags')
+        settings.model = tooltipData.get('viewModelClazz')()
+        settings.kwargs = tooltipData
+        return _COMPENSATION_TOOLTIP_CONTENT_CLASSES[tooltipType](settings)
 
 
 def getSeniorityAwardsVehicles(vehiclesRewards, sortKey=None):
@@ -620,7 +899,7 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
     if packBlueprints:
         _packBlueprints(rewards)
     specialRewardType = ''
-    formatter = LootBoxBonusComposer(maxAwardCount, getLootboxesAwardsPacker())
+    formatter = LootBoxBonusComposer(maxAwardCount, getPostBattleAwardsPacker())
     bonuses = []
     alwaysVisibleBonuses = []
     if rewards:
@@ -640,12 +919,12 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
                 alwaysVisibleBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
             if bonusType == 'items':
                 bonus = getNonQuestBonuses(bonusType, bonusValue)
-                _checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
+                checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
             bonus = getNonQuestBonuses(bonusType, bonusValue, ctx)
             bonuses.extend(bonus)
 
-        bonuses.sort(key=_keySortOrder)
-        alwaysVisibleBonuses.sort(key=_keySortOrder)
+        bonuses.sort(key=bonusSortOrder)
+        alwaysVisibleBonuses.sort(key=bonusSortOrder)
     formattedBonuses = formatter.getVisibleFormattedBonuses(bonuses, alwaysVisibleBonuses, size)
     return (formattedBonuses, specialRewardType)
 
@@ -741,7 +1020,16 @@ def _getProgressiveStepsVO(currentStep, probability, maxSteps, hasCompleted=Fals
     return [ _getStepVO(state, rewardType) for state, rewardType in steps ]
 
 
-def _isVideoVehicle(vehicle):
+def preparationRewardsCurrency(rewards):
+    money = _getCompensationMoney(rewards)
+    for currency in Currency.ALL:
+        if currency in rewards:
+            rewards[currency] -= money.get(currency, 0)
+            if rewards[currency] <= 0:
+                del rewards[currency]
+
+
+def isVideoVehicle(vehicle):
     return True if _hasSpecialTag(vehicle, VIDEO_TAGS) else False
 
 
@@ -773,7 +1061,7 @@ def _hasSpecialTag(entity, tags):
     return False
 
 
-def _isSpecialStyle(styleIntCD):
+def isSpecialStyle(styleIntCD):
     itemsCache = dependency.instance(IItemsCache)
     style = itemsCache.items.getItemByCD(styleIntCD)
     if _hasSpecialTag(style, STYLES_TAGS):
@@ -783,6 +1071,21 @@ def _isSpecialStyle(styleIntCD):
                 return True
 
     return False
+
+
+def getMergedLootBoxBonuses(bonusesList):
+    result = {}
+    for bonuses in bonusesList:
+        for bonusName, bonusValue in bonuses.iteritems():
+            if bonusName in BONUS_MERGERS:
+                BONUS_MERGERS[bonusName](result, bonusName, bonusValue, False, 1, None)
+            _logger.warning('BONUS_MERGERS has not bonus %s', bonusName)
+
+    return result
+
+
+def bonusSortOrder(bonus):
+    return _BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in _BONUSES_ORDER else len(_BONUSES_ORDER)
 
 
 def _checkAndFillBlueprints(blueprintsList, alwaysVisibleBonuses, bonuses):
@@ -797,12 +1100,46 @@ def _checkAndFillBlueprints(blueprintsList, alwaysVisibleBonuses, bonuses):
     return congratsType
 
 
-def _checkAndFillItems(itemsList, alwaysVisibleBonuses, bonuses):
+def checkAndFillItems(itemsList, alwaysVisibleBonuses, bonuses):
+    congratsType = ''
     for itemsBonus in itemsList:
         itemName = itemsBonus.getName()
         if itemName == CrewBonusTypes.CREW_BOOK_BONUSES:
             alwaysVisibleBonuses.append(itemsBonus)
         bonuses.append(itemsBonus)
+        if any([ item.isModernized for item in itemsBonus.getItems().keys() if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE ]):
+            congratsType = LootCongratsTypes.CONGRAT_TYPE_MODERNIZED_EQUIPMENT
+
+    return congratsType
+
+
+def validateVehicleCD(value):
+    try:
+        vehicleCD = int(value)
+    except ValueError:
+        _logger.warning('Wrong vehicle compact descriptor: %s!', value)
+        return None
+
+    return vehicleCD
+    return None
+
+
+def getBackportTooltipData(event, localDataStorage):
+    tooltipId = event.getArgument('tooltipId')
+    if tooltipId is None:
+        return
+    elif tooltipId in localDataStorage:
+        return localDataStorage[tooltipId]
+    else:
+        if tooltipId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT:
+            vehicleCD = validateVehicleCD(event.getArgument('vehicleCD'))
+            if vehicleCD is not None:
+                return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_INFO, specialArgs=(vehicleCD, True))
+        elif tooltipId == BlueprintScreenTooltips.TOOLTIP_BLUEPRINT_CONVERT_COUNT:
+            vehicleCD = validateVehicleCD(event.getArgument('vehicleCD'))
+            if vehicleCD is not None:
+                return createTooltipData(isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_CONVERT_INFO, specialArgs=[vehicleCD])
+        return
 
 
 def _getCompensationMoney(bonuses):
@@ -875,3 +1212,7 @@ def _packBlueprints(rewards):
     if universalFragments > 0:
         fragments[BlueprintTypes.INTELLIGENCE_DATA] = universalFragments
     rewards['blueprints'] = fragments
+
+
+def _isInvisibleTokens(tokens):
+    return all((tID.startswith(LOOTBOX_TOKEN_PREFIX) and rec.count <= 0 for tID, rec in tokens.iteritems()))

@@ -9,7 +9,7 @@ from gui.impl.gen.view_models.views.lobby.missions.missions_completed_visited_mo
 class DailyQuestsModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=9, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(DailyQuestsModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -74,6 +74,12 @@ class DailyQuestsModel(ViewModel):
     def setSyncInitiator(self, value):
         self._setNumber(8, value)
 
+    def getPlayNYQuestLootboxAnimation(self):
+        return self._getBool(9)
+
+    def setPlayNYQuestLootboxAnimation(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(DailyQuestsModel, self)._initialize()
         self._addResourceProperty('title', R.invalid())
@@ -85,3 +91,4 @@ class DailyQuestsModel(ViewModel):
         self._addBoolProperty('bonusMissionVisited', False)
         self._addArrayProperty('missionsCompletedVisited', Array())
         self._addNumberProperty('syncInitiator', 0)
+        self._addBoolProperty('playNYQuestLootboxAnimation', False)

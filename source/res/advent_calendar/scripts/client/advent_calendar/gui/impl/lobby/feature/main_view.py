@@ -12,18 +12,21 @@ from advent_calendar.gui.impl.gen.view_models.views.lobby.door_view_model import
 from advent_calendar.gui.impl.gen.view_models.views.lobby.main_view_model import StatePhase, MainViewModel
 from advent_calendar.gui.impl.gen.view_models.views.lobby.progression_reward_item_view_model import ProgressionState
 from advent_calendar.gui.impl.lobby.feature.advent_calendar_optimization import AdventWindowOptimizationManager, AdventWindowOptimizationSettings, AdventWindowOptimizationProcessorSettings
-from advent_calendar.gui.impl.lobby.feature.advent_helper import getQuestNeededTokensCount, getAccountTokensAmount, isAdventAnimationEnabled, getAdventCalendarSetting, getDoorState, pushOpenDoorFailedError, getFirstClosedDayID, setAdventCalendarSetting, getHolidayOpsStartTime
+from advent_calendar.gui.impl.lobby.feature.advent_helper import getQuestNeededTokensCount, getAccountTokensAmount, isAdventAnimationEnabled, getAdventCalendarSetting, getDoorState, pushOpenDoorFailedError, getFirstClosedDayID, setAdventCalendarSetting, getHolidayOpsStartTime, getMaxResource
 from advent_calendar.gui.impl.lobby.feature.container_view import AdventCalendarContainerView
+from advent_calendar.gui.impl.lobby.feature.ny_components.ny_resources_balance_view import NYResourceBalance
 from advent_calendar.gui.impl.lobby.feature.progression_reward_packers import getProgressionBonusPacker
 from advent_calendar.gui.impl.lobby.feature.sound_helper import ADVENT_CALENDAR_MAIN_WINDOW_SOUND
 from advent_calendar.gui.impl.lobby.feature.tooltips.advent_calendar_all_rewards_tooltip import AdventCalendarAllRewardsTooltip
 from advent_calendar.gui.impl.lobby.feature.tooltips.advent_calendar_big_lootbox_tooltip import AdventCalendarBigLootBoxTooltip
-from advent_calendar.gui.shared.event_dispatcher import showAdventCalendarIntroWindow, showRewardWindow
+from advent_calendar.gui.impl.lobby.feature.tooltips.advent_calendar_simple_tooltip_view import AdventCalendarSimpleTooltip
+from advent_calendar.gui.shared.event_dispatcher import showAdventCalendarIntroWindow, showRewardWindow, showPurchaseDialogWindow
 from advent_calendar.gui.shared.events import AdventCalendarEvent
 from advent_calendar.skeletons.game_controller import IAdventCalendarController
 from advent_calendar_common.advent_calendar_constants import DoorMarkType
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.game_control.links import URLMacros
+from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gui_decorators import args2params
@@ -41,7 +44,7 @@ CONFIG_TO_MODEL_MARK_MAP = {DoorMarkType.NY_START: Mark.NY,
 QUEST_COMPLETED_TIMEOUT = 20
 
 def predictionFunction(window):
-    return not isinstance(window.content, AdventCalendarMainView)
+    return not isinstance(window.content, AdventCalendarMainView) and window.layer not in (WindowLayer.SUB_VIEW, WindowLayer.TOP_SUB_VIEW)
 
 
 ADVENT_CALENDAR_OPTIMIZATION_SETTINGS = AdventWindowOptimizationSettings(disableWindowsVisibility=True, windowOptimizationProcessorSettings=AdventWindowOptimizationProcessorSettings(windowsVisibilityPredicateFunction=predictionFunction))
@@ -60,6 +63,7 @@ class AdventCalendarMainView(AdventCalendarContainerView):
         self.__selectedDayId = 0
         self.__lastHighlightDoorAnimTime = 0
         self.__lasOpenDoorTime = 0
+        self.__selectedCurrency = ''
         self.__waitSuccessfulOpenDoor = False
         self._optimizationManager = AdventWindowOptimizationManager(settings=ADVENT_CALENDAR_OPTIMIZATION_SETTINGS)
         self.__scope = AsyncScope()
@@ -75,7 +79,15 @@ class AdventCalendarMainView(AdventCalendarContainerView):
             if self.__adventController.isAvailableAndActivePhase():
                 return AdventCalendarAllRewardsTooltip()
         elif contentID == R.views.advent_calendar.lobby.feature.tooltips.AdventCalendarBigLootBoxTooltip():
-            return AdventCalendarBigLootBoxTooltip()
+            tooltipData = self.getTooltipData(event)
+            if tooltipData is None:
+                return
+            lootBoxInfo = self.__adventController.getLootBoxInfo()
+            if not lootBoxInfo:
+                payload = {'header': backport.text(R.strings.advent_calendar.progressionRewards.tooltip.lootbox.simple.header()),
+                 'body': backport.text(R.strings.advent_calendar.progressionRewards.tooltip.lootbox.simple.body())}
+                return AdventCalendarSimpleTooltip(json.dumps(payload))
+            return AdventCalendarBigLootBoxTooltip(*tooltipData.specialArgs)
         return super(AdventCalendarMainView, self).createToolTipContent(event, contentID)
 
     @createBackportTooltipDecorator()
@@ -119,7 +131,7 @@ class AdventCalendarMainView(AdventCalendarContainerView):
         super(AdventCalendarMainView, self)._finalize()
 
     def _registerSubModels(self):
-        return []
+        return [NYResourceBalance(self.viewModel.balance, self, self.__onClose, self.__updateModel, self.__isConvertPopoverAvailable)]
 
     def __updateModel(self):
         with self.viewModel.transaction() as tx:
@@ -143,24 +155,27 @@ class AdventCalendarMainView(AdventCalendarContainerView):
 
     def __fillDoors(self, model):
         isHighlightDoorAnimationAvailable = not self.__lastHighlightDoorAnimTime or time.time() - self.__lastHighlightDoorAnimTime > self.__UPDATE_DOOR_ANIMATION_DELTA_TIME
+        maxNYResourceCount = getMaxResource().resourceValue
         firstClosedDayID = getFirstClosedDayID()
         doors = model.getDoors()
         doors.clear()
         for dayId in range(1, self.__adventController.config.doorsCount + 1):
-            doors.addViewModel(self.__createDoorModel(dayId, firstClosedDayID, isHighlightDoorAnimationAvailable))
+            doors.addViewModel(self.__createDoorModel(dayId, firstClosedDayID, isHighlightDoorAnimationAvailable, maxNYResourceCount))
 
         doors.invalidate()
 
-    def __createDoorModel(self, dayID, firstClosedDayID, isHighlightDoorAnimationAvailable):
+    def __createDoorModel(self, dayID, firstClosedDayID, isHighlightDoorAnimationAvailable, maxNYResourceCount):
         doorsConfig = self.__adventController.config.doors
         state = getDoorState(dayID, firstClosedDayID=firstClosedDayID)
+        doorIdx = dayID - 1
+        price = doorsConfig[doorIdx].get('cost', 0)
         doorModel = DoorViewModel()
         doorModel.setDayId(dayID)
         doorModel.setDoorState(state)
         doorModel.setOpenTimeStamp(self.__adventController.getDoorOpenTimeUI(dayID))
-        doorModel.setMark(CONFIG_TO_MODEL_MARK_MAP.get(doorsConfig[dayID - 1].get('mark', DoorMarkType.NONE), Mark.NONE))
-        doorModel.setIsEnoughResources(True)
-        doorModel.setPrice(0)
+        doorModel.setMark(CONFIG_TO_MODEL_MARK_MAP.get(doorsConfig[doorIdx].get('mark', DoorMarkType.NONE), Mark.NONE))
+        doorModel.setIsEnoughResources(maxNYResourceCount >= price)
+        doorModel.setPrice(price)
         lastHighlightedDoorID = getAdventCalendarSetting(AdventCalendar.LAST_HIGHLIGHTED_DOOR)
         if isHighlightDoorAnimationAvailable and state == DoorState.READY_TO_OPEN:
             if dayID > lastHighlightedDoorID or self.__adventController.isInPostActivePhase() and lastHighlightedDoorID != dayID:
@@ -240,9 +255,35 @@ class AdventCalendarMainView(AdventCalendarContainerView):
         self.__selectedDayId = dayId
         self.__showRewardScreen(dayId)
 
-    @staticmethod
-    def __onShowPurchaseDialogWindow(*_):
-        _logger.error('Not implemented')
+    @args2params(int)
+    def __onShowPurchaseDialogWindow(self, dayId):
+        if not self.__adventController.isAvailableAndPostActivePhase():
+            _logger.error('Wrong advent calendar phase to open purchase dialog window')
+            return
+        doorIdx = dayId - 1
+        doorsConfig = self.__adventController.config.doors
+        if not 0 <= doorIdx < len(doorsConfig):
+            _logger.error('Could not find an element with idx=%s', doorIdx)
+            return
+        self.__blockAdventWindowUpdates()
+        doorCost = doorsConfig[doorIdx].get('cost', 0)
+        if doorCost <= 0:
+            self.__openAdventDoor(dayId)
+        else:
+            self.__showPurchaseDialogWindow(dayId, doorCost)
+
+    @wg_async
+    def __showPurchaseDialogWindow(self, dayId, price):
+        _logger.debug('Opening the purchase dialog door window, dayId=%d, with price=%d', dayId, price)
+        self.viewModel.setShowBlur(True)
+        result = yield wg_await(showPurchaseDialogWindow(dayId, price, parent=self.getParentWindow()))
+        self.viewModel.setShowBlur(False)
+        _logger.debug('Purchase dialog door window is closed with result=%s', result)
+        if result:
+            self.__selectedCurrency = result.resourceStr
+            self.__openAdventDoor(result.dayId)
+        else:
+            self.__releaseAdventWindowUpdates()
 
     @wg_async
     def __showRewardScreen(self, dayId):
@@ -261,7 +302,8 @@ class AdventCalendarMainView(AdventCalendarContainerView):
             self.__waitSuccessfulOpenDoor = False
             return
         else:
-            showRewardWindow(dayId=dayId, isProgressionReward=False, data=quest.getBonuses(), parent=self.getParentWindow())
+            showRewardWindow(dayId=dayId, isProgressionReward=False, data=quest.getBonuses(), currency=self.__selectedCurrency, parent=self.getParentWindow())
+            self.__selectedCurrency = ''
             return
 
     def __showProgressionRewardWindow(self):
@@ -391,6 +433,9 @@ class AdventCalendarMainView(AdventCalendarContainerView):
 
     def __onClose(self, *_, **__):
         self.destroyWindow()
+
+    def __isConvertPopoverAvailable(self):
+        return not self.viewModel.getDoorOpenBlocked()
 
 
 class AdventCalendarMainWindow(LobbyWindow):

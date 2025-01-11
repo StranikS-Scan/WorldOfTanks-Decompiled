@@ -1298,6 +1298,14 @@ def _migrateTo131(core, data, initialized):
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_NPS_WELCOME_SHOWN] = False
 
 
+def _migrateTo132(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, 0)
+    if storedValue:
+        clear = data['clear']
+        clear[SETTINGS_SECTIONS.NEW_YEAR] = clear.get(SETTINGS_SECTIONS.NEW_YEAR, 0) | storedValue
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1816,6 +1824,10 @@ _versions = ((1,
   False),
  (131,
   _migrateTo131,
+  False,
+  False),
+ (132,
+  _migrateTo132,
   False,
   False))
 

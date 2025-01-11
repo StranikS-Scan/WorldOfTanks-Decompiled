@@ -6,6 +6,7 @@ import time
 import typing
 from itertools import izip
 from account_shared import getCustomizationItem
+from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_COLLECTIONS, YEARS_INFO
 from battle_pass_common import NON_VEH_CD
 from constants import LOOTBOX_TOKEN_PREFIX
 from dog_tags_common.components_config import componentConfigAdapter
@@ -228,6 +229,14 @@ def __mergeDailyQuestReroll(total, key, value, isLeaf, count, *args):
     total.setdefault(key, set()).update(value)
 
 
+def __mergeNYToys(total, key, value, isLeaf=False, count=1, *args):
+    result = total.setdefault(key, {})
+    for slotID, toysData in value.iteritems():
+        slotData = result.setdefault(slotID, {})
+        for toyID, toyCount in toysData.iteritems():
+            slotData[toyID] = slotData.get(toyID, 0) + count * toyCount
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -269,10 +278,13 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'freePremiumCrew': __mergeFreePremiumCrew,
  'meta': __mergeMeta,
  'dailyQuestReroll': __mergeDailyQuestReroll,
- 'noviceReset': __mergeNoviceReset}
+ 'noviceReset': __mergeNoviceReset,
+ CurrentNYConstants.TOYS: __mergeNYToys}
+BONUS_MERGERS.update({k:__mergeNYToys for k in PREV_NY_TOYS_COLLECTIONS})
 ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._inventory.getVehicleInvID(key) != 0 and not account._rent.isVehicleRented(account._inventory.getVehicleInvID(key)),
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
- 'tokens': lambda account, key: account._quests.hasToken(key)}
+ 'tokens': lambda account, key: account._quests.hasToken(key),
+ CurrentNYConstants.TOYS: lambda account, key: account._newYear.isToyPresentInCollection(key, YEARS_INFO.CURRENT_YEAR_STR)}
 RENT_ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._rent.isVehicleRented(account._inventory.getVehicleInvID(key))}
 SKIP_INVENTORY_CHANGE_CHECKERS = {'tokens': lambda key: key.startswith(LOOTBOX_TOKEN_PREFIX)}
 
@@ -339,7 +351,7 @@ DEEP_CHECKERS = {'groups': lambda nodeAcceptor, bonusNode, checkInventory, depth
 
 class BonusNodeAcceptor(object):
 
-    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True):
+    def __init__(self, account, bonusConfig=None, counters=None, bonusCache=None, probabilityStage=0, logTracker=None, shouldResetUsedLimits=True, dropInGroupHistory=None):
         self.__account = account
         self.__limitsConfig = bonusConfig.get('limits', None) if bonusConfig else None
         self.__maxStage = bonusConfig.get('probabilityStageCount', 1) - 1 if bonusConfig else 0
@@ -358,6 +370,8 @@ class BonusNodeAcceptor(object):
         self.__usedLimits = set()
         self.__shouldResetUsedLimits = shouldResetUsedLimits
         self.__initCounters(counters or {})
+        self.__dropInGroupsBonuses = dropInGroupHistory or {}
+        self.__dropInGroupsBonusesLimit = bonusConfig.get('dropInGroupItemsCount', 0) if bonusConfig else 0
         return
 
     def __initCounters(self, counters):
@@ -390,7 +404,10 @@ class BonusNodeAcceptor(object):
     def isAcceptable(self, bonusNode, checkInventory=True, depthLevel=None):
         if self.isLimitReached(bonusNode):
             return False
-        return False if checkInventory and self.isBonusExists(bonusNode) else self.depthCheck(bonusNode, checkInventory, depthLevel)
+        dropInGroup = bonusNode.get('properties', {}).get('dropInGroup', False)
+        if self.isBonusesInSameGroupAlreadyPicked(bonusNode):
+            return False
+        return False if checkInventory and not dropInGroup and self.isBonusExists(bonusNode) else self.depthCheck(bonusNode, checkInventory, depthLevel)
 
     def getNodesForVisit(self, ids):
         return self.__shouldVisitNodes.intersection(ids) if ids and self.__shouldVisitNodes else None
@@ -421,6 +438,11 @@ class BonusNodeAcceptor(object):
                 c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
                 cache.onItemAccepted('customizations', c11nItem.compactDescr)
 
+        if CurrentNYConstants.TOYS in bonusNode:
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    cache.onItemAccepted(CurrentNYConstants.TOYS, toyID)
+
         return
 
     def isBonusExists(self, bonusNode):
@@ -441,7 +463,69 @@ class BonusNodeAcceptor(object):
                 if cache.isItemExists('customizations', c11nItem.compactDescr):
                     return True
 
+        if CurrentNYConstants.TOYS in bonusNode:
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    if cache.isItemExists(CurrentNYConstants.TOYS, toyID):
+                        return True
+
         return False
+
+    def isBonusesInSameGroupAlreadyPicked(self, bonusNode):
+        if not bonusNode.get('properties', {}).get('dropInGroup', False):
+            return False
+        if 'vehicles' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('vehicles', set())
+            for itemID, _ in bonusNode['vehicles'].iteritems():
+                if itemID in cache:
+                    return True
+
+        if 'tokens' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('tokens', set())
+            for itemID, itemData in bonusNode['tokens'].iteritems():
+                if itemID in cache:
+                    return True
+
+        if 'customizations' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('customizations', set())
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                if c11nItem.compactDescr in cache:
+                    return True
+
+        if CurrentNYConstants.TOYS in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault(CurrentNYConstants.TOYS, set())
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    if toyID in cache:
+                        return True
+
+        return False
+
+    def updateBonusesInSameGroup(self, bonusNode):
+        if not bonusNode.get('properties', {}).get('dropInGroup', False):
+            return
+        if 'vehicles' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('vehicles', set())
+            for itemID, _ in bonusNode['vehicles'].iteritems():
+                cache.add(itemID)
+
+        if 'tokens' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('tokens', set())
+            for itemID, itemData in bonusNode['tokens'].iteritems():
+                cache.add(itemID)
+
+        if 'customizations' in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault('customizations', set())
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                cache.add(c11nItem.compactDescr)
+
+        if CurrentNYConstants.TOYS in bonusNode:
+            cache = self.__dropInGroupsBonuses.setdefault(CurrentNYConstants.TOYS, set())
+            for slotInfo in bonusNode[CurrentNYConstants.TOYS].itervalues():
+                for toyID in slotInfo.iterkeys():
+                    cache.add(toyID)
 
     def depthCheck(self, bonusNode, checkInventory, depthLevel=None):
         currentDepthLevel = bonusNode.get('properties', {}).get('depthLevel', 0) if depthLevel is None else depthLevel
@@ -464,6 +548,18 @@ class BonusNodeAcceptor(object):
         if not self.__isMaxStageReached or self.__shouldUseBonusProbability:
             self.__isMaxStageReached = self.__probabilitiesStage[1] >= self.__maxStage
             self.__shouldUseBonusProbability = False
+
+    def getDropInGroupInfo(self):
+        for k, v in self.__dropInGroupsBonuses.items():
+            if len(v) == 0:
+                self.__dropInGroupsBonuses.pop(k)
+
+        return self.__dropInGroupsBonuses
+
+    def __updateDropInGroupLimits(self):
+        if self.__dropInGroupsBonusesLimit <= sum((len(v) for v in self.__dropInGroupsBonuses.itervalues())):
+            for v in self.__dropInGroupsBonuses.itervalues():
+                v.clear()
 
     def getUseBonusProbability(self):
         return self.__shouldUseBonusProbability
@@ -499,11 +595,13 @@ class BonusNodeAcceptor(object):
             if limitID in self.__bonusProbabilityUses and not self.__isMaxStageReached:
                 self.__bonusProbabilityUses[limitID] = 0
         self.updateBonusCache(bonusNode)
+        self.updateBonusesInSameGroup(bonusNode)
         return
 
     def reuse(self):
         self.__updateProbabilityStages()
         self.__resetFlags()
+        self.__updateDropInGroupLimits()
         if not self.__limitsConfig:
             return
         else:

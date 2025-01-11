@@ -504,3 +504,17 @@ class SetEnvironment(Block, ArenaMeta):
     def _execute(self):
         BigWorld.spaces[BigWorld.player().spaceID].setEnvironment(self._name.getValue())
         self._out.call()
+
+
+class GetPlayerTeam(Block, ArenaMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(GetPlayerTeam, self).__init__(*args, **kwargs)
+        self._outSlot = self._makeDataOutputSlot('res', SLOT_TYPE.INT, self._execute)
+
+    def _execute(self):
+        self._outSlot.setValue(BigWorld.player().team)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]

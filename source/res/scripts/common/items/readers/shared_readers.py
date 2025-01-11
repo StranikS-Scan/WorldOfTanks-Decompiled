@@ -91,6 +91,15 @@ def getAttachmentSlotScale(applyType, baseSize, selectedSize):
     return Math.Vector3(selectedScale.x / baseScale.x, selectedScale.y / baseScale.y, selectedScale.z / baseScale.z)
 
 
+def getAttachmentHangingEffects():
+    _initCustomizationConstants()
+    return __customizationConstants['attachment_hanging_effects']
+
+
+def getAttachmentHangingEffect(applyType, rarity):
+    return getAttachmentHangingEffects().get(applyType, {}).get(rarity, '')
+
+
 def getCustomizationSlotIdRanges():
     return __getInitedSlotIdRanges() if IS_EDITOR else None
 
@@ -128,6 +137,13 @@ def _initCustomizationConstants():
                  'premountSize': premountSize,
                  'mountSize': mountSize,
                  'shift': shift}
+
+        __customizationConstants['attachment_hanging_effects'] = dict()
+        attachmentSlotTypes = _xml.getSubsection(xmlCtx, section, 'attachment_hanging_effects')
+        for typeName, type in _xml.getChildren(xmlCtx, section, 'attachment_hanging_effects'):
+            __customizationConstants['attachment_hanging_effects'][typeName] = dict()
+            for rareName, value in _xml.getChildren(xmlCtx, attachmentSlotTypes, typeName):
+                __customizationConstants['attachment_hanging_effects'][typeName][rareName] = value.asString
 
         return
 

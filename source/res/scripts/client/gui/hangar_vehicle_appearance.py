@@ -544,7 +544,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__setGunMatrix(gunPitchMatrix)
         if self.gameObject.findComponentByType(GenericComponents.DynamicModelComponent) is None:
             self.gameObject.createComponent(GenericComponents.DynamicModelComponent, self.compoundModel)
-        vehicle_composition.createVehicleComposition(self.gameObject, followNodes=False)
+        vehicle_composition.createVehicleComposition(self.gameObject, followNodes=True)
         return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):

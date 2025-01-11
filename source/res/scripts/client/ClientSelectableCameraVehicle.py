@@ -140,6 +140,7 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         m = Math.Matrix()
         m.setRotateYPR(rotateYPR)
         m.translation = Math.Vector3(targetPos)
+        self.model.setWorldTransform(m)
         self.model.matrix = m
         self.teleport(targetPos, rotateYPR)
         self.__setFakeShadowModelTransform(targetPos, rotateYPR[0], shadowModelYOffset)

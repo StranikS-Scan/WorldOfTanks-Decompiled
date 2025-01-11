@@ -73,6 +73,13 @@
       <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/american/A88_M53_55/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <A88_M53_55_NY25_3Dst>
+          <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Hull.model	</exploded>
+        </A88_M53_55_NY25_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -96,9 +103,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.56135 0.361463 3.51933	</rayStart>
-        <rayEnd>	-0.56135 0.361463 3.41933	</rayEnd>
-        <rayUp>	0 1 0	</rayUp>
+        <rayStart>	-0.777064 0.638129 3.232805	</rayStart>
+        <rayEnd>	-0.77385 0.538658 3.223045	</rayEnd>
+        <rayUp>	0.025818 0.098448 -0.994807	</rayUp>
         <size>	0.32	</size>
       </slot>
       <slot>
@@ -801,6 +808,39 @@
         <clipAngle>	0.602313	</clipAngle>
         <anchorShift>	-0.016123	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15060	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+        <position>	0.775532 1.887131 3.192882	</position>
+        <rotation>	0.059916 -0.000002 3.14158	</rotation>
+        <scale>	0.596959 0.2 0.596964	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.49051	</clipAngle>
+        <anchorShift>	0.00664	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15061	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+        <position>	-0.663843 1.20853 3.83189	</position>
+        <rotation>	1.42254 3.14151 0.000089	</rotation>
+        <scale>	0.816947 0.400405 0.816954	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.49051	</clipAngle>
+        <anchorShift>	0.00664	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -845,6 +885,13 @@
         <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A88_M53_55_NY25_3Dst>
+            <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A88_M53_55_NY25_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -916,6 +963,33 @@
                   <row3>	0.000000 1.552973 0.381708	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A88_M53_55_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.133462 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.550328 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.018593	</row2>
+                  <row3>	0.000000 1.227635 -0.522786	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519119 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299913 -0.007219	</row1>
+                  <row2>	0.000002 0.156059 6.483349	</row2>
+                  <row3>	0.000000 1.552973 0.381708	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.445542 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.058112 0.294318	</row1>
+                  <row2>	0.000000 -1.019912 -0.201379	</row2>
+                  <row3>	0.000001 1.222985 3.808628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519120 0.000000 -0.000005	</row0>
+                  <row1>	0.000000 0.539835 -0.282852	</row1>
+                  <row2>	0.000001 0.552067 1.053646	</row2>
+                  <row3>	-0.000001 0.903223 -3.113369	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -968,6 +1042,33 @@
                   <row1>	0.000000 0.299913 -0.007225	</row1>
                   <row2>	0.000000 0.156185 6.483346	</row2>
                   <row3>	0.000000 1.552970 0.381708	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A88_M53_55_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.133462 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.550328 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.018593	</row2>
+                  <row3>	0.000000 1.227635 -0.522786	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519119 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.299913 -0.007219	</row1>
+                  <row2>	-0.000002 0.156059 6.483349	</row2>
+                  <row3>	0.000000 1.552973 0.381708	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.445542 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 -0.058112 0.294318	</row1>
+                  <row2>	0.000000 -1.019912 -0.201379	</row2>
+                  <row3>	-0.000001 1.222985 3.808628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519120 0.000000 0.000005	</row0>
+                  <row1>	0.000000 0.539835 -0.282852	</row1>
+                  <row2>	-0.000001 0.552067 1.053646	</row2>
+                  <row3>	0.000001 0.903223 -3.113369	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1160,6 +1261,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <segmentModelLeft>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_R.model	</segment2ModelRight>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1191,6 +1300,12 @@
             <model>	vehicles/american/A88_M53_55/track/segment2.model	</model>
             <length>	0.082263	</length>
           </secSegment>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <mainSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_L.model	</secSegmentModel>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1383,6 +1498,12 @@
             <model>	vehicles/american/A88_M53_55/track/segment2.model	</model>
             <length>	0.080242	</length>
           </secSegment>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <mainSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_R.model	</secSegmentModel>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -1598,6 +1719,13 @@
         <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/american/A88_M53_55/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <A88_M53_55_NY25_3Dst>
+            <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Chassis.model	</exploded>
+          </A88_M53_55_NY25_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1669,6 +1797,33 @@
                   <row3>	0.000000 1.552973 0.381708	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	A88_M53_55_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.133462 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.550328 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.018593	</row2>
+                  <row3>	0.000000 1.227635 -0.522786	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519119 0.000001 -0.000001	</row0>
+                  <row1>	0.000000 0.299913 -0.007219	</row1>
+                  <row2>	0.000002 0.156059 6.483349	</row2>
+                  <row3>	0.000000 1.552973 0.381708	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.445542 0.000000 0.000000	</row0>
+                  <row1>	0.000000 -0.058112 0.294318	</row1>
+                  <row2>	0.000000 -1.019912 -0.201379	</row2>
+                  <row3>	0.000001 1.222985 3.808628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519120 0.000000 -0.000005	</row0>
+                  <row1>	0.000000 0.539835 -0.282852	</row1>
+                  <row2>	0.000001 0.552067 1.053646	</row2>
+                  <row3>	-0.000001 0.903223 -3.113369	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1721,6 +1876,33 @@
                   <row1>	0.000000 0.299913 -0.007225	</row1>
                   <row2>	0.000000 0.156185 6.483346	</row2>
                   <row3>	0.000000 1.552970 0.381708	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	A88_M53_55_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.133462 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.550328 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.018593	</row2>
+                  <row3>	0.000000 1.227635 -0.522786	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519119 -0.000001 0.000001	</row0>
+                  <row1>	0.000000 0.299913 -0.007219	</row1>
+                  <row2>	-0.000002 0.156059 6.483349	</row2>
+                  <row3>	0.000000 1.552973 0.381708	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.445542 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 -0.058112 0.294318	</row1>
+                  <row2>	0.000000 -1.019912 -0.201379	</row2>
+                  <row3>	-0.000001 1.222985 3.808628	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.519120 0.000000 0.000005	</row0>
+                  <row1>	0.000000 0.539835 -0.282852	</row1>
+                  <row2>	-0.000001 0.552067 1.053646	</row2>
+                  <row3>	0.000001 0.903223 -3.113369	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1890,6 +2072,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <segmentModelLeft>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_L.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_R.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_L.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_R.model	</segment2ModelRight>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1921,6 +2111,12 @@
             <model>	vehicles/american/A88_M53_55/track/segment2.model	</model>
             <length>	0.083132	</length>
           </secSegment>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <mainSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_L.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_L.model	</secSegmentModel>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -2114,6 +2310,12 @@
             <model>	vehicles/american/A88_M53_55/track/segment2.model	</model>
             <length>	0.082219	</length>
           </secSegment>
+          <modelSets>
+            <A88_M53_55_NY25_3Dst>
+              <mainSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_01_R.model	</mainSegmentModel>
+              <secSegmentModel>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/track/segment_02_R.model	</secSegmentModel>
+            </A88_M53_55_NY25_3Dst>
+          </modelSets>
           <collisionHull>
             <bottom></bottom>
             <top>
@@ -2386,6 +2588,13 @@
             <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/american/A88_M53_55/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <A88_M53_55_NY25_3Dst>
+                <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </A88_M53_55_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A88_M53_55/collision/Gun_01.model	</collisionModelServer>
@@ -2551,6 +2760,13 @@
             <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/american/A88_M53_55/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <A88_M53_55_NY25_3Dst>
+                <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </A88_M53_55_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/american/A88_M53_55/collision/Gun_02.model	</collisionModelServer>
@@ -2695,6 +2911,13 @@
         <undamaged>	vehicles/american/A88_M53_55/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/american/A88_M53_55/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/american/A88_M53_55/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <A88_M53_55_NY25_3Dst>
+            <undamaged>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/american/A88_M53_55/_skins/A88_M53_55_NY25_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </A88_M53_55_NY25_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/american/A88_M53_55/collision/Turret_01.model	</collisionModelServer>
@@ -3382,6 +3605,83 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.960859	</clipAngle>
           <anchorShift>	0.136643	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35057	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	1.22153 2.96114 -2.62348	</position>
+          <rotation>	2.6397 -1.56991 -0.000002	</rotation>
+          <scale>	0.661598 0.195155 0.661607	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.55702	</clipAngle>
+          <anchorShift>	0.116645	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35058	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	-1.29162 2.9227 -2.56955	</position>
+          <rotation>	2.63972 1.56992 -0.000003	</rotation>
+          <scale>	0.661598 0.195155 0.661607	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.55702	</clipAngle>
+          <anchorShift>	0.116645	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35059	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	-0.918747 2.54628 -0.250869	</position>
+          <rotation>	1.24463 0.000026 3.14154	</rotation>
+          <scale>	0.706478 0.525473 0.706477	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.764379	</clipAngle>
+          <anchorShift>	0.103845	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35060	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	0.918781 2.54627 -0.25087	</position>
+          <rotation>	1.24463 0.000026 3.14154	</rotation>
+          <scale>	0.706477 0.525473 0.706476	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.764379	</clipAngle>
+          <anchorShift>	0.103845	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35061	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	0.000002 3.13328 -1.48073	</position>
+          <rotation>	0.017236 0.000004 3.14158	</rotation>
+          <scale>	1.08523 0.416219 1.08524	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.09317	</clipAngle>
+          <anchorShift>	0.113833	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35062	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+          <position>	0.523486 2.54641 -3.11942	</position>
+          <rotation>	1.56812 0.00289064 0.00287764	</rotation>
+          <scale>	0.653826 0.250763 0.653832	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.694751	</clipAngle>
+          <anchorShift>	0.068016	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

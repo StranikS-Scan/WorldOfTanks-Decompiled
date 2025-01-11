@@ -78,6 +78,13 @@
       <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB32_Tortoise_NY25_3DSt>
+          <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Hull.model	</exploded>
+        </GB32_Tortoise_NY25_3DSt>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1644,6 +1651,91 @@
         <clipAngle>	0.620892	</clipAngle>
         <anchorShift>	0.35147	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15133	</slotId>
+        <position>	0.000198687 1.14799 2.74413	</position>
+        <rotation>	0.391813 -0.000002 3.14008	</rotation>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <tags>	formfactor_square	</tags>
+        <scale>	0.576624 0.242823 0.576624	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.000000	</clipAngle>
+        <anchorShift>	0.047565	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15134	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <position>	2.00888 0.705816 1.35761	</position>
+        <rotation>	1.5687 -1.56918 0.000113517	</rotation>
+        <scale>	0.533211 0.409935 0.533212	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.573128	</clipAngle>
+        <anchorShift>	-0.00919	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15135	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <position>	-2.00888 0.705841 1.35761	</position>
+        <rotation>	1.56867 1.56917 0.000066	</rotation>
+        <scale>	0.533211 0.409935 0.533213	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.573128	</clipAngle>
+        <anchorShift>	-0.00919	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15136	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <position>	-0.0444663 2.65925 0.652443	</position>
+        <rotation>	0.204077 0.000722824 3.14017	</rotation>
+        <scale>	0.75656 0.581648 0.756564	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.573128	</clipAngle>
+        <anchorShift>	-0.149189	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15137	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <position>	-1.95459 1.55261 -1.78905	</position>
+        <rotation>	1.64379 1.56932 -0.000007	</rotation>
+        <scale>	0.4034 0.310135 0.4034	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.940383	</clipAngle>
+        <anchorShift>	-0.06729	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15138	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <position>	1.94457 1.70258 -1.12619	</position>
+        <rotation>	1.64378 -1.5694 -0.000007	</rotation>
+        <scale>	0.420043 0.32293 0.420043	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.573128	</clipAngle>
+        <anchorShift>	-0.06729	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	GB32_Tortoise_NY25_3DSt	</compatibleModels>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1688,6 +1780,13 @@
         <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB32_Tortoise_NY25_3DSt>
+            <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Chassis.model	</exploded>
+          </GB32_Tortoise_NY25_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1781,6 +1880,33 @@
                   <row3>	-2.049878 0.928054 -0.131989	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.729133 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025539	</row2>
+                  <row3>	0.000000 0.867403 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.855158 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.515404 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 1.523178 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.890058 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.647877	</row2>
+                  <row3>	-2.123484 0.846407 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.144417 0.000000 0.316244	</row0>
+                  <row1>	0.000000 0.426928 0.000000	</row1>
+                  <row2>	-0.128799 0.000000 0.466095	</row2>
+                  <row3>	-1.432725 0.509344 3.886892	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1860,6 +1986,33 @@
                   <row1>	0.000000 1.000000 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.244561	</row2>
                   <row3>	2.050000 0.928054 -0.131989	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.729130 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 0.867403 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.855160 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.515404 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 1.523180 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.890058 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.647880	</row2>
+                  <row3>	2.133861 0.846405 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.147728 0.000000 -0.304020	</row0>
+                  <row1>	0.000000 0.395180 0.000000	</row1>
+                  <row2>	0.123820 0.000000 0.467442	</row2>
+                  <row3>	1.436178 0.540524 3.903657	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -2210,12 +2363,12 @@
             <sync>
               <name>	WD_L7	</name>
               <startAngle>	-119.303001	</startAngle>
-              <teethCount>	10	</teethCount>
+              <teethCount>	19	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-122.239998	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	-120.602249	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -2496,12 +2649,12 @@
             <sync>
               <name>	WD_R7	</name>
               <startAngle>	-119.304001	</startAngle>
-              <teethCount>	10	</teethCount>
+              <teethCount>	19	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-122.239998	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	-120.602249	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -2669,6 +2822,13 @@
         <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB32_Tortoise_NY25_3DSt>
+            <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Chassis.model	</exploded>
+          </GB32_Tortoise_NY25_3DSt>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2762,6 +2922,33 @@
                   <row3>	-2.049878 0.928054 -0.131989	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.729130 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 0.867403 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.855160 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.515404 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 1.523180 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.890058 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.647880	</row2>
+                  <row3>	-2.123480 0.846407 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.144420 0.000000 0.316244	</row0>
+                  <row1>	0.000000 0.426928 0.000000	</row1>
+                  <row2>	-0.128799 0.000000 0.466095	</row2>
+                  <row3>	-1.432720 0.509344 3.886890	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -2841,6 +3028,33 @@
                   <row1>	0.000000 1.000000 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.244561	</row2>
                   <row3>	2.050000 0.928054 -0.131989	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
+                <boxCollider>
+                  <row0>	1.729130 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 0.867403 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.855160 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.515404 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.025540	</row2>
+                  <row3>	0.000000 1.523180 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.890058 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.647880	</row2>
+                  <row3>	2.133860 0.846405 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	1.147730 0.000000 -0.304020	</row0>
+                  <row1>	0.000000 0.395180 0.000000	</row1>
+                  <row2>	0.123820 0.000000 0.467442	</row2>
+                  <row3>	1.436180 0.540524 3.903660	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -3191,12 +3405,12 @@
             <sync>
               <name>	WD_L7	</name>
               <startAngle>	-119.303001	</startAngle>
-              <teethCount>	10	</teethCount>
+              <teethCount>	19	</teethCount>
             </sync>
             <sync>
               <name>	WD_L0	</name>
-              <startAngle>	-122.239998	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	-120.602249	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -3477,12 +3691,12 @@
             <sync>
               <name>	WD_R7	</name>
               <startAngle>	-119.304001	</startAngle>
-              <teethCount>	10	</teethCount>
+              <teethCount>	19	</teethCount>
             </sync>
             <sync>
               <name>	WD_R0	</name>
-              <startAngle>	-122.239998	</startAngle>
-              <teethCount>	10	</teethCount>
+              <startAngle>	-120.602249	</startAngle>
+              <teethCount>	19	</teethCount>
             </sync>
           </teethSyncs>
           <sourceCollisionHullPoints>
@@ -3679,6 +3893,13 @@
             <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <GB32_Tortoise_NY25_3DSt>
+                <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_01.model	</exploded>
+              </GB32_Tortoise_NY25_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Gun_01.model	</collisionModelServer>
@@ -3759,6 +3980,13 @@
             <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <GB32_Tortoise_NY25_3DSt>
+                <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_02.model	</exploded>
+              </GB32_Tortoise_NY25_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Gun_02.model	</collisionModelServer>
@@ -3839,6 +4067,13 @@
             <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <GB32_Tortoise_NY25_3DSt>
+                <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Gun_03.model	</exploded>
+              </GB32_Tortoise_NY25_3DSt>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Gun_03.model	</collisionModelServer>
@@ -3894,6 +4129,13 @@
         <undamaged>	vehicles/british/GB32_Tortoise/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB32_Tortoise/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB32_Tortoise/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB32_Tortoise_NY25_3DSt>
+            <undamaged>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB32_Tortoise/_skins/GB32_Tortoise_NY25_3DSt/crash/lod0/Turret_01.model	</exploded>
+          </GB32_Tortoise_NY25_3DSt>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB32_Tortoise/collision/Turret_01.model	</collisionModelServer>

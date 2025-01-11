@@ -4,7 +4,7 @@ import types
 import arena_bonus_type_caps
 import constants
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS
-from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, DAMAGE_INFO_CODES_PER_ATTACK_REASON
+from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES, BATTLE_FEEDBACK_REASONS_AFTER_DEATH, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, DAMAGE_INFO_CODES_PER_ATTACK_REASON
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from debug_utils import LOG_DEBUG
 from soft_exception import SoftException
@@ -120,12 +120,14 @@ def addClientUnitCmd(extClientUnitCmd, personality):
     CMD_NAMES.update({value:attr for attr, value in extraAttrs.iteritems()})
 
 
-def addAttackReasonTypesFromExtension(extAttackReasonType, personality):
+def addAttackReasonTypesFromExtension(extAttackReasonType, personality, afterDeathBattleFeedbackReasons=None):
     extraAttrs = extAttackReasonType.getExtraAttrs()
     extraValues = sorted(extraAttrs.itervalues())
     extAttackReasonType.inject(personality)
     ATTACK_REASONS.extend(extraValues)
     ATTACK_REASON_INDICES.update(dict(((value, index) for index, value in enumerate(ATTACK_REASONS))))
+    if afterDeathBattleFeedbackReasons:
+        BATTLE_FEEDBACK_REASONS_AFTER_DEATH.update(afterDeathBattleFeedbackReasons)
 
 
 def addDamageResistanceReasonsFromExtension(extDmgResistReasonType, personality):
@@ -774,3 +776,7 @@ class AbstractBattleMode(object):
     def registerControlModes(self):
         from AvatarInputHandler import OVERWRITE_CTRLS_DESC_MAP
         OVERWRITE_CTRLS_DESC_MAP[self._ARENA_BONUS_TYPE] = self._client_controlModes
+
+    def registerDamageHitIndicator(self, hitDirectionType, hitDirectionPlayerType):
+        from gui.shared.system_factory import registerHitDirectionController
+        registerHitDirectionController(self._ARENA_GUI_TYPE, hitDirectionType, hitDirectionPlayerType)

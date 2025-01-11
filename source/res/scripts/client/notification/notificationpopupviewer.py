@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
 from typing import TYPE_CHECKING
+import logging
 from PlayerEvents import g_playerEvents
+from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
 from gui.game_loading.resources.consts import Milestones
 from gui.shared.notifications import NotificationGroup, NotificationPriorityLevel
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+from gui.impl.lobby.gf_notifications import GFNotificationInject
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
@@ -16,6 +20,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.shared.utils import IHangarSpace
 if TYPE_CHECKING:
     from typing import Dict, Optional, Set
+_logger = logging.getLogger(__name__)
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
     __connectionMgr = dependency.descriptor(IConnectionManager)
@@ -30,9 +35,20 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         self.__noDisplayingPopups = True
         self.__lockedNotificationUseQueue = True
         self.__lockedNotificationPriority = {}
+        self.__locks = set()
         self.__pendingMessagesQueue = []
         super(NotificationPopUpViewer, self).__init__()
         self.setModel(mvc.getModel())
+
+    def registerGFNotification(self, component, alias, gfViewName, isPopUp, linkageData):
+        from gui.Scaleform.framework import g_entitiesFactories
+        idx = WindowLayer.UNDEFINED
+        componentPy = g_entitiesFactories.initialize(GFNotificationInject(gfViewName, isPopUp, linkageData), component, idx)
+        self.components[alias] = componentPy
+        componentPy.setEnvironment(self.app)
+        componentPy.create()
+        g_eventBus.handleEvent(events.ComponentEvent(events.ComponentEvent.COMPONENT_REGISTERED, self, componentPy, alias), EVENT_BUS_SCOPE.GLOBAL)
+        self._onRegisterFlashComponent(componentPy, alias)
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
@@ -47,7 +63,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def setListClear(self):
         self.__noDisplayingPopups = True
         if self._model is not None and self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if self.__pendingMessagesQueue:
+            if self.__pendingMessagesQueue and self.__pendingMessagesQueue[0].isAlert():
                 self.__showAlertMessage(self.__pendingMessagesQueue.pop(0))
         return
 
@@ -80,8 +96,10 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
 
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if notification.isNotify() and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
+            if notification.isNotify() and self._model.hasNotification(notification.getType(), notification.getID()) and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
                 self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
+            if notification.onlyNCList():
+                return
             if NotificationMVC.g_instance.getAlertController().isAlertShowing():
                 self.__pendingMessagesQueue.append(notification)
             elif self.__pendingMessagesQueue or self.__isLocked(notification):
@@ -151,21 +169,40 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
 
     def __isLocked(self, notification):
         priorities = {priority for val in self.__lockedNotificationPriority.values() for priority in val}
-        return notification.getPriorityLevel() in priorities
+        return notification.getPriorityLevel() in priorities or notification.getPriorityLevel() in self.__locks
 
-    def __onLockPopUpMessages(self, key, lockHigh=False, useQueue=True):
+    def __onLockPopUpMessages(self, key, lockHigh=False, useQueue=True, clear=False):
         priorities = self.__lockedNotificationPriority.setdefault(key, {NotificationPriorityLevel.MEDIUM})
         if lockHigh:
             priorities.add(NotificationPriorityLevel.HIGH)
+            locks = {NotificationPriorityLevel.MEDIUM, NotificationPriorityLevel.HIGH}
+        else:
+            locks = {NotificationPriorityLevel.MEDIUM}
         self.__lockedNotificationUseQueue = useQueue
+        self.__lockedNotificationPriority[key] = locks
+        self.__updateLocks()
+        if clear:
+            self.as_removeAllMessagesS()
 
     def __onUnlockPopUpMessages(self, key):
+        _logger.debug('NotificationPopUpViewer has been unlocked. key=%s', key)
+        if key not in self.__lockedNotificationPriority:
+            _logger.error('Failed to lock NotificationPopUpViewer. Missing key=%s.', key)
+        if self.__lockedNotificationPriority.get(key):
+            del self.__lockedNotificationPriority[key]
+        self.__updateLocks()
+        if not self.__locks:
+            self.__showMessagesFromQueue()
         self.__lockedNotificationUseQueue = True
         if key in self.__lockedNotificationPriority:
             del self.__lockedNotificationPriority[key]
         if self.__pendingMessagesQueue and any((self.__isLocked(n) for n in self.__pendingMessagesQueue)):
             return
         self.__showMessagesFromQueue()
+
+    def __updateLocks(self):
+        locks = self.__lockedNotificationPriority.values()
+        self.__locks = set.union(*locks) if locks else set()
 
     def __startNotifications(self):
         if self.__hangarSpace.spaceInited:

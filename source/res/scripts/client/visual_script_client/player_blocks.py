@@ -14,6 +14,7 @@ from visual_script.type import VScriptEnum
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
 import items.vehicles as vehicles
+from constants import EQUIPMENT_STAGES
 if typing.TYPE_CHECKING:
     from Vehicle import StunInfo
 helpers, TriggersManager, gun_marker_ctrl, equipment_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'gui.battle_control.controllers.consumables.equipment_ctrl', 'Avatar')
@@ -712,6 +713,7 @@ class GetPlayerEquipmentState(Block, PlayerMeta):
         self._equipped = self._makeDataOutputSlot('isEquipped', SLOT_TYPE.BOOL, self._isEquipped)
         self._availableToUse = self._makeDataOutputSlot('isAvailableToUse', SLOT_TYPE.BOOL, self._isAvailableToUse)
         self._canActivate = self._makeDataOutputSlot('canBeActivated', SLOT_TYPE.BOOL, self._canBeActivated)
+        self._isReady = self._makeDataOutputSlot('isReady', SLOT_TYPE.BOOL, self._getIsReady)
         self._stage = self._makeDataOutputSlot('stage', Stage.slotType(), self._getStage)
 
     @property
@@ -749,6 +751,14 @@ class GetPlayerEquipmentState(Block, PlayerMeta):
         item = self._equipment
         if item is not None:
             self._stage.setValue(item.getStage())
+        return
+
+    def _getIsReady(self):
+        item = self._equipment
+        if item is not None:
+            currentStage = item.getStage()
+            ready = currentStage == EQUIPMENT_STAGES.READY
+            self._isReady.setValue(ready)
         return
 
 

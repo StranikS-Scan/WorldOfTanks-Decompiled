@@ -1,0 +1,247 @@
+<equipments.xml>
+  <builtinGrinchRepairkit>
+    <id>	22001	</id>
+    <userString>	#grinch.artefacts.extend:grinchRepairkit/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchRepairkit/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchRepairkit_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchVisualScriptEquipment	  <healAmount>	300	</healAmount>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_repairkit_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_repairkit_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchRepairkit>
+  <builtinGrinchHeal>
+    <id>	22002	</id>
+    <userString>	#grinch.artefacts.extend:grinchHeal/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchHeal/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchHeal_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchVisualScriptEquipment	  <radius>	40	</radius>
+      <duration>	30	</duration>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_heal_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_heal_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchHeal>
+  <builtinGrinchTurret>
+    <id>	22003	</id>
+    <userString>	#grinch.artefacts.extend:grinchTurret/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchTurret/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin stackable	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchTurret_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchAimingVisualScriptEquipment	  <clientSelector>	grinch.avatar_input_handler.grinch_map_case_mode.GrinchTurretStrikeSelector	</clientSelector>
+      <minApplyRadius>	5	</minApplyRadius>
+      <maxApplyRadius>	20	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	3	</areaLength>
+      <areaWidth>	3	</areaWidth>
+      <areaRadius>	3	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/aim02_grinch.visual	</areaVisual>
+      <areaColor>	0xFF403294	</areaColor>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_turret_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_turret_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchTurret>
+  <builtinGrinchStealth>
+    <id>	22004	</id>
+    <userString>	#grinch.artefacts.extend:grinchStealth/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchStealth/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchStealth_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchVisualScriptEquipment	  <duration>	9	</duration>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_stealth_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_stealth_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchStealth>
+  <builtinGrinchFlare>
+    <id>	22005	</id>
+    <userString>	#grinch.artefacts.extend:grinchFlare/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchFlare/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchFlare_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchAimingVisualScriptEquipment	  <duration>	15	</duration>
+      <radius>	60	</radius>
+      <clientSelector>	grinch.avatar_input_handler.grinch_map_case_mode.GrinchStrikeSelector	</clientSelector>
+      <minApplyRadius>	20	</minApplyRadius>
+      <maxApplyRadius>	100	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	20	</areaLength>
+      <areaWidth>	20	</areaWidth>
+      <areaRadius>	60	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaColor>	0xFF403294	</areaColor>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_flare_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_flare_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchFlare>
+  <builtinGrinchBlizzard>
+    <id>	22006	</id>
+    <userString>	#grinch.artefacts.extend:grinchBlizzard/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchBlizzard/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchBlizzard_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchVisualScriptEquipment	  <duration>	5	</duration>
+      <debuffDuration>	5	</debuffDuration>
+      <radius>	30	</radius>
+      <damage>	100	</damage>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_blizzard_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_blizzard_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchBlizzard>
+  <builtinGrinchRage>
+    <id>	22007	</id>
+    <userString>	#grinch.artefacts.extend:grinchRage/name	</userString>
+    <description>	#grinch.artefacts.extend:grinchRage/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle builtin	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinGrinchRage_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchVisualScriptEquipment	  <duration>	15	</duration>
+      <damage>	50	</damage>
+      <visualScript>
+        <client>
+          <plan>	abilities/grinch_rage_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/grinch_rage_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinGrinchRage>
+  <presentDrop>
+    <id>	22008	</id>
+    <userString>	#grinch.artefacts.extend:presentDrop/name	</userString>
+    <description>	#grinch.artefacts.extend:presentDrop/descr	</description>
+    <icon>	notFound 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale stopOutsideBattle	</tags>
+    <type>	regular	</type>
+    <script>	grinch_common.items.artefacts.GrinchAimingVisualScriptEquipment	  <clientSelector>	grinch.avatar_input_handler.grinch_map_case_mode.GrinchStrikeSelector	</clientSelector>
+      <minApplyRadius>	5	</minApplyRadius>
+      <maxApplyRadius>	10	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <areaLength>	5	</areaLength>
+      <areaWidth>	5	</areaWidth>
+      <areaRadius>	5	</areaRadius>
+      <areaVisual>	content/Interface/TargetPoint/circle_dot_cross.visual	</areaVisual>
+      <areaColor>	4292613180	</areaColor>
+      <visualScript>
+        <client>
+          <plan>	abilities/present_drop_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/present_drop_server	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </presentDrop>
+</equipments.xml>

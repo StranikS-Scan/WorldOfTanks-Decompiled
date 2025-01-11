@@ -1073,7 +1073,7 @@ class _SoundEffectDesc(_EffectDesc):
 
 
 class _DecalEffectDesc(_EffectDesc):
-    __slots__ = ('_texName', '_bumpTexName', '_smTexName', '_groupName', '_size', '_randomYaw', '_variation')
+    __slots__ = ('_texName', '_bumpTexName', '_smTexName', '_groupName', '_size', '_randomYaw', '_variation', '_ignoreAlbedo')
     TYPE = '_DecalEffectDesc'
 
     def __init__(self, dataSection):
@@ -1085,6 +1085,7 @@ class _DecalEffectDesc(_EffectDesc):
         self._size = dataSection.readVector2('size')
         self._randomYaw = dataSection.readBool('randomYaw')
         self._variation = dataSection.readFloat('variation', 0.0)
+        self._ignoreAlbedo = dataSection.readBool('ignoreAlbedo', False)
 
     def create(self, model, effects, args):
         if not args.get('showDecal', True) or not BigWorld.isDynamicDecalEnabled():
@@ -1103,7 +1104,7 @@ class _DecalEffectDesc(_EffectDesc):
         extent = rayEnd - rayStart
         extent.normalise()
         extent *= size.length * 0.707
-        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(texName), DecalMap.g_instance.getIndex(bumpTexName), DecalMap.g_instance.getIndex(smTexName))
+        BigWorld.wg_addDecal(self._groupName, center - extent, center + extent, size, args['yaw'] if not self._randomYaw else random.uniform(0.0, 3.14), DecalMap.g_instance.getIndex(texName), DecalMap.g_instance.getIndex(bumpTexName), DecalMap.g_instance.getIndex(smTexName), self._ignoreAlbedo)
 
     def delete(self, elem, reason):
         return True

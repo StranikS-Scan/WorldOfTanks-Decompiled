@@ -598,6 +598,12 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def setGunReloadTime(self, timeLeft, baseTime, skipAutoLoader=False, shotsAmount=-1, clipTime=None):
         if not self.__gunSettings.hasAutoReload():
             self.__shellChangeTime = baseTime * self.__gunSettings.getShellChangeFactor()
+        if self.__gunSettings.isTwinGun() and self.__currShellCD == self.__nextShellCD:
+            isLastCurrShells = self.getShellsQuantityLeft() <= self.__gunSettings.getLastAmmoCount(shotsAmount)
+            _, quantityNextLeft = self.__getPredictedLoadShells(self.__isBattlePeriod(), isLastCurrShells, shotsAmount)
+            nextShellIsOne = quantityNextLeft == 1
+            if shotsAmount == 1 and not isLastCurrShells or isLastCurrShells and nextShellIsOne:
+                self.__shellChangeTime *= self.__gunSettings.twinGunFactor
         self.triggerReloadEffect(timeLeft, baseTime, shotsAmount=shotsAmount)
         interval = clipTime or self.__gunSettings.getClipInterval()
         if interval > 0 and self.__currShellCD in self.__ammo and baseTime > 0.0:

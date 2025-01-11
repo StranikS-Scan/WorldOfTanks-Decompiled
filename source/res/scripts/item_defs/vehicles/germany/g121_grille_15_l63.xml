@@ -78,6 +78,11 @@
           <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Hull.model	</exploded>
         </NYst>
+        <G121_Grille_15_L63_NY2025_3Dst>
+          <undamaged>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Hull.model	</exploded>
+        </G121_Grille_15_L63_NY2025_3Dst>
       </sets>
     </models>
     <swinging>
@@ -102,10 +107,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.794741 0.398203 2.34366	</rayStart>
-        <rayEnd>	-0.794741 0.217069 2.25887	</rayEnd>
-        <rayUp>	0 0 -1	</rayUp>
-        <size>	0.3	</size>
+        <rayStart>	1.042 0.363567 2.343661	</rayStart>
+        <rayEnd>	1.042 0.182433 2.258871	</rayEnd>
+        <rayUp>	0 0.423957 -0.905682	</rayUp>
+        <size>	0.300002	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -860,6 +865,13 @@
         <clipAngle>	0.292599	</clipAngle>
         <anchorShift>	-0.006467	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -908,6 +920,11 @@
             <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Chassis.model	</exploded>
           </NYst>
+          <G121_Grille_15_L63_NY2025_3Dst>
+            <undamaged>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Chassis.model	</exploded>
+          </G121_Grille_15_L63_NY2025_3Dst>
         </sets>
       </models>
       <traces>
@@ -990,6 +1007,39 @@
                   <row3>	0.000000 1.451573 3.050674	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	G121_Grille_15_L63_NY2025_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.718616 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.280241 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.386106	</row2>
+                  <row3>	0.000000 1.666710 -0.016960	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218839 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.424543 -0.015416	</row1>
+                  <row2>	0.000000 0.198445 5.464835	</row2>
+                  <row3>	0.000000 1.469140 0.102347	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218840 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.361907 -0.222480	</row1>
+                  <row2>	0.000000 0.286066 0.465343	</row2>
+                  <row3>	0.000000 1.344205 -2.719022	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218840 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.273666 0.324933	</row1>
+                  <row2>	0.000000 -0.657651 0.553889	</row2>
+                  <row3>	0.000000 1.451573 3.050674	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.163893	</row2>
+                  <row3>	-1.698052 0.985923 0.175370	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1057,6 +1107,39 @@
                   <row1>	0.000000 0.273666 0.324933	</row1>
                   <row2>	0.000000 -0.657651 0.553889	</row2>
                   <row3>	0.000000 1.451573 3.050674	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	G121_Grille_15_L63_NY2025_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.718616 0.000000 0.000000	</row0>
+                  <row1>	0.000000 2.280241 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.386106	</row2>
+                  <row3>	0.000000 1.666710 -0.016960	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218839 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.424543 -0.015416	</row1>
+                  <row2>	0.000000 0.198445 5.464835	</row2>
+                  <row3>	0.000000 1.469140 0.102347	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218840 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.361907 -0.222480	</row1>
+                  <row2>	0.000000 0.286066 0.465343	</row2>
+                  <row3>	0.000000 1.344205 -2.719022	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.218840 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.273666 0.324933	</row1>
+                  <row2>	0.000000 -0.657651 0.553889	</row2>
+                  <row3>	0.000000 1.451573 3.050674	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.163893	</row2>
+                  <row3>	1.698052 0.985923 0.175370	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1151,9 +1234,9 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.2	</maxAmplitude>
-        <maxOffset>	0.2	</maxOffset>
-        <gravity>	-9.8	</gravity>
+        <maxAmplitude>	0.03	</maxAmplitude>
+        <maxOffset>	0.03	</maxOffset>
+        <gravity>	-11	</gravity>
         <elasticity>	1200	</elasticity>
         <damping>	2	</damping>
         <node>
@@ -1846,6 +1929,11 @@
                 <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Gun_01.model	</exploded>
               </NYst>
+              <G121_Grille_15_L63_NY2025_3Dst>
+                <undamaged>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </G121_Grille_15_L63_NY2025_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -1884,6 +1972,15 @@
               <rayUp>	0.112 0 0	</rayUp>
               <size>	0.5	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	0.000003 0.007372 8.9	</rayStart>
+              <rayEnd>	0.000003 0.007372 9.4	</rayEnd>
+              <rayUp>	0.112 0 0	</rayUp>
+              <compatibleModels>	G121_Grille_15_L63_NY2025_3Dst	</compatibleModels>
+              <size>	0.5	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1909,6 +2006,11 @@
             <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/german/G121_Grille_15_L63/_skins/NYst/crash/lod0/Turret_01.model	</exploded>
           </NYst>
+          <G121_Grille_15_L63_NY2025_3Dst>
+            <undamaged>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/german/G121_Grille_15_L63/_skins/G121_Grille_15_L63_NY2025_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </G121_Grille_15_L63_NY2025_3Dst>
         </sets>
       </models>
       <hitTester>

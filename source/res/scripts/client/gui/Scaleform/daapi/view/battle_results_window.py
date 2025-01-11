@@ -22,6 +22,7 @@ from gui.prestige.prestige_helpers import showPrestigeVehicleStats
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
+from gui.server_events.events_helpers import isCelebrityQuest
 from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop, showDailyExpPageView
@@ -33,6 +34,7 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
@@ -84,6 +86,11 @@ class BattleResultsWindow(BattleResultsMeta, IGlobalListener):
             else:
                 lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
                 if not lobbyHeaderNavigationPossible:
+                    return
+            if isCelebrityQuest(eID):
+                _nyController = dependency.instance(INewYearController)
+                if not _nyController.isEnabled():
+                    _nyController.showStateMessage()
                     return
             quests_events.showMission(eID, eventType)
             self.destroy()

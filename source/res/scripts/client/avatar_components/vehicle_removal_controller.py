@@ -19,6 +19,7 @@ class VehicleRemovalController(object):
 
     @uniprof.regionDecorator(label='VehicleRemovalController.removeVehicle', scope='wrap')
     def removeVehicle(self, vehID):
+        self.sessionProvider.shared.feedback.onVehicleMarkerRemoved(vehID)
         vehicle = BigWorld.entity(vehID)
         if vehicle is None:
             return

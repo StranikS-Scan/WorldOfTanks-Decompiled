@@ -20,6 +20,16 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
   <itemGroup>
     <name>	attachments	</name>
     <userString>	#vehicle_customization:attachment/general/	</userString>
@@ -449,6 +459,27 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	123	</id>
+      <name>	GB32_Tortoise_NY25_3DSt	</name>
+      <modelName>	particles/Tank/customization/GB32_Tortoise_NY25_3DSt/GB32_Tortoise_NY25_3DSt.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/GB32_Tortoise_NY25_3DSt/GB32_Tortoise_NY25_3DSt.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	124	</id>
+      <name>	A88_M53_55_NY25_3Dst	</name>
+      <modelName>	particles/Tank/customization/A88_M53_55_NY25_3Dst/A88_M53_55_NY25_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/A88_M53_55_NY25_3Dst/A88_M53_55_NY25_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	127	</id>
+      <name>	G121_Grille_15_L63_NY2025_3Dst	</name>
+      <modelName>	particles/Tank/customization/G121_Grille_15_L63_NY2025_3Dst/G121_Grille_15_L63_NY2025_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/G121_Grille_15_L63_NY2025_3Dst/G121_Grille_15_L63_NY2025_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	129	</id>
       <name>	GB145_Crusher_ASE_4	</name>
       <modelName>	particles/Tank/customization/GB145_Crusher_ASE_4/GB145_Crusher_ASE_4.prefab	</modelName>
@@ -462,11 +493,457 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	131	</id>
+      <name>	GB86_Centurion_Action_X_NY2025_3Dst	</name>
+      <modelName>	particles/Tank/customization/GB86_Centurion_Action_X_NY2025_3Dst/GB86_Centurion_Action_X_NY2025_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/GB86_Centurion_Action_X_NY2025_3Dst/GB86_Centurion_Action_X_NY2025_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	132	</id>
       <name>	G142_M48RPz_ASE_4_3Dst	</name>
       <modelName>	particles/Tank/customization/G142_M48RPz_ASE_4_3Dst/G142_M48RPz_ASE_4_3Dst.prefab	</modelName>
       <hangarModelName>	particles/Tank/customization/G142_M48RPz_ASE_4_3Dst/G142_M48RPz_ASE_4_3Dst.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	128	</id>
+      <name>	Cz02_TVP_T50_NY25_3Dst	</name>
+      <modelName>	particles/Tank/customization/Cz02_TVP_T50_NY25_3Dst/Cz02_TVP_T50_NY25_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/Cz02_TVP_T50_NY25_3Dst/Cz02_TVP_T50_NY25_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Dragon Vanguard	</name>
+    <userString>	#vehicle_customization:attachment/dragon_vanguard	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1005	</id>
+      <name>	Cus_12_Asia_Dragon_Head	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_12_Asia_Dragon_Head/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_12_Asia_Dragon_Head/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2150g notInShop	</priceGroup>
+      <description>	#vehicle_customization:attachment/dragon_vanguard/Cus_12_Asia_Dragon_Head/description	</description>
+      <userString>	#vehicle_customization:attachment/dragon_vanguard/Cus_12_Asia_Dragon_Head	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1008	</id>
+      <name>	Cus_14_Asia_Dragon_Weapon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_14_Asia_Dragon_Weapon/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_14_Asia_Dragon_Weapon/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 950g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/dragon_vanguard/Cus_14_Asia_Dragon_Weapon	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1024	</id>
+      <name>	Cus_16_Asia_Battering_Ram	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_16_Asia_Battering_Ram/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_16_Asia_Battering_Ram/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/dragon_vanguard/Cus_16_Asia_Battering_Ram	</userString>
+    </attachment>
+    <attachment>
+      <id>	1025	</id>
+      <name>	Cus_15_Asia_Arrow_Thrower	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_15_Asia_Arrow_Thrower/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_15_Asia_Arrow_Thrower/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 400g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/dragon_vanguard/Cus_15_Asia_Arrow_Thrower	</userString>
+    </attachment>
+    <attachment>
+      <id>	1029	</id>
+      <name>	Cus_13_Asia_Shield_With_Weapon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_13_Asia_Shield_With_Weapon/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_13_Asia_Shield_With_Weapon/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/dragon_vanguard/Cus_13_Asia_Shield_With_Weapon	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Iron Fury	</name>
+    <userString>	#vehicle_customization:attachment/iron_fury	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1000	</id>
+      <name>	Cus_04_Brutal_Machine_Gun	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_04_Brutal_Machine_Gun/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_04_Brutal_Machine_Gun/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 1750g notInShop	</priceGroup>
+      <description>	#vehicle_customization:attachment/iron_fury/Cus_04_Brutal_Machine_Gun/description	</description>
+      <userString>	#vehicle_customization:attachment/iron_fury/Cus_04_Brutal_Machine_Gun	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1017	</id>
+      <name>	Cus_03_Brutal_Night_vision_device	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_03_Brutal_Night_vision_device/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_03_Brutal_Night_vision_device/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 800g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/iron_fury/Cus_03_Brutal_Night_vision_device	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1012	</id>
+      <name>	Cus_01_Brutal_Flamethrower	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_01_Brutal_Flamethrower/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_01_Brutal_Flamethrower/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/iron_fury/Cus_01_Brutal_Flamethrower	</userString>
+    </attachment>
+    <attachment>
+      <id>	1011	</id>
+      <name>	Cus_02_Brutal_Ammunition_boxes	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_02_Brutal_Ammunition_boxes/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_02_Brutal_Ammunition_boxes/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/iron_fury/Cus_02_Brutal_Ammunition_boxes	</userString>
+    </attachment>
+    <attachment>
+      <id>	1015	</id>
+      <name>	Cus_25_Brutal_Recoilless_Rifle	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_25_Brutal_Recoilless_Rifle/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_25_Brutal_Recoilless_Rifle/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/iron_fury/Cus_25_Brutal_Recoilless_Rifle	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Lionheart Recon	</name>
+    <userString>	#vehicle_customization:attachment/lionheart_recon	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <attachment>
+      <id>	1001	</id>
+      <description>	#vehicle_customization:attachment/Cus_05_Scout_Radar_Display/description	</description>
+      <name>	Cus_05_Scout_Radar_Display	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_05_Scout_Radar_Display/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_05_Scout_Radar_Display/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/lionheart_recon/Cus_05_Scout_Radar_Display	</userString>
+    </attachment>
+    <attachment>
+      <id>	1002	</id>
+      <name>	Cus_06_Scout_Radar	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_06_Scout_Radar/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_06_Scout_Radar/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 400g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/lionheart_recon/Cus_06_Scout_Radar	</userString>
+    </attachment>
+    <attachment>
+      <id>	1003	</id>
+      <name>	Cus_08_Scout_Manual_Rocket	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_08_Scout_Manual_Rocket/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_08_Scout_Manual_Rocket/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/lionheart_recon/Cus_08_Scout_Manual_Rocket	</userString>
+    </attachment>
+    <attachment>
+      <id>	1013	</id>
+      <name>	Cus_09_Scout_Rocket_System	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_09_Scout_Rocket_System/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_09_Scout_Rocket_System/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/lionheart_recon/Cus_09_Scout_Rocket_System	</userString>
+    </attachment>
+    <attachment>
+      <id>	1016	</id>
+      <name>	Cus_07_Scout_Motobike	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_07_Scout_Motobike/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_07_Scout_Motobike/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 900g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/lionheart_recon/Cus_07_Scout_Motobike	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Oceanic Sentinel	</name>
+    <userString>	#vehicle_customization:attachment/oceanic_sentinel	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <attachment>
+      <id>	1004	</id>
+      <name>	Cus_10_Marine_Harpoon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_10_Marine_Harpoon/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_10_Marine_Harpoon/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 700g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/oceanic_sentinel/Cus_10_Marine_Harpoon	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1006	</id>
+      <name>	Cus_17_Marine_Mine	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_17_Marine_Mine/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_17_Marine_Mine/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/oceanic_sentinel/Cus_17_Marine_Mine	</userString>
+    </attachment>
+    <attachment>
+      <id>	1007	</id>
+      <name>	Cus_18_Marine_Periscope	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_18_Marine_Periscope/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_18_Marine_Periscope/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 400g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/oceanic_sentinel/Cus_18_Marine_Periscope	</userString>
+    </attachment>
+    <attachment>
+      <id>	1009	</id>
+      <name>	Cus_11_Marine_Shark	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_11_Marine_Shark/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_11_Marine_Shark/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 2790g notInShop	</priceGroup>
+      <description>	#vehicle_customization:attachment/oceanic_sentinel/Cus_11_Marine_Shark/description	</description>
+      <userString>	#vehicle_customization:attachment/oceanic_sentinel/Cus_11_Marine_Shark	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1010	</id>
+      <name>	Cus_19_Marine_Anchor	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_19_Marine_Anchor/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_19_Marine_Anchor/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/oceanic_sentinel/Cus_19_Marine_Anchor	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Thunderstrike	</name>
+    <userString>	#vehicle_customization:attachment/thunderstrike	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1018	</id>
+      <name>	Cus_20_Rock_Guitar	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_20_Rock_Guitar/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_20_Rock_Guitar/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	legendary	</rarity>
+      <priceGroup>	attachments 1750g notInShop	</priceGroup>
+      <description>	#vehicle_customization:attachment/thunderstrike/Cus_20_Rock_Guitar/description	</description>
+      <userString>	#vehicle_customization:attachment/thunderstrike/Cus_20_Rock_Guitar	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1020	</id>
+      <name>	Cus_21_Rock_Stage_Fire_Generator	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_21_Rock_Stage_Fire_Generator/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_21_Rock_Stage_Fire_Generator/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 850g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/thunderstrike/Cus_21_Rock_Stage_Fire_Generator	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1022	</id>
+      <name>	Cus_24_Rock_Speakers	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_24_Rock_Speakers/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_24_Rock_Speakers/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/thunderstrike/Cus_24_Rock_Speakers	</userString>
+    </attachment>
+    <attachment>
+      <id>	1023	</id>
+      <name>	Cus_22_Rock_Soffits	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_22_Rock_Soffits/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_22_Rock_Soffits/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 400g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/thunderstrike/Cus_22_Rock_Soffits	</userString>
+    </attachment>
+    <attachment>
+      <id>	1026	</id>
+      <name>	Cus_23_Rock_Drums	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_23_Rock_Drums/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_23_Rock_Drums/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/thunderstrike/Cus_23_Rock_Drums	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Antique Oddities	</name>
+    <userString>	#vehicle_customization:attachment/antique_oddities	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1014	</id>
+      <name>	Cus_30_Mystic_Telescope	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_30_Mystic_Telescope/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_30_Mystic_Telescope/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/antique_oddities/Cus_30_Mystic_Telescope	</userString>
+    </attachment>
+    <attachment>
+      <id>	1019	</id>
+      <name>	Cus_29_Mystic_Suitcases	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_29_Mystic_Suitcases/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_29_Mystic_Suitcases/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/antique_oddities/Cus_29_Mystic_Suitcases	</userString>
+    </attachment>
+    <attachment>
+      <id>	1021	</id>
+      <name>	Cus_26_Mystic_Mirror	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_26_Mystic_Mirror/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_26_Mystic_Mirror/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 900g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/antique_oddities/Cus_26_Mystic_Mirror	</userString>
+    </attachment>
+    <attachment>
+      <id>	1027	</id>
+      <name>	Cus_28_Mystic_Monkey	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_28_Mystic_Monkey/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_28_Mystic_Monkey/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 400g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/antique_oddities/Cus_28_Mystic_Monkey	</userString>
+    </attachment>
+    <attachment>
+      <id>	1028	</id>
+      <name>	Cus_27_Mystic_Mystical_Things	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_27_Mystic_Mystical_Things/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_27_Mystic_Mystical_Things/attachment.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/antique_oddities/Cus_27_Mystic_Mystical_Things	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

@@ -1,0 +1,25 @@
+<shells.xml>
+  <_152mm_AP_T_grinch>
+    <id>	50001	</id>
+    <userString>	#grinch.china_vehicles.extend:_152mm_AP_T_grinch	</userString>
+    <description>	#grinch.china_vehicles.extend:_152mm_AP_T_grinch_descr	</description>
+    <icon>	he	</icon>
+    <price>	1	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	152	</caliber>
+    <isTracer>	true	</isTracer>
+    <explosionRadius>	14	</explosionRadius>
+    <hasStun>	false	</hasStun>
+    <stunDuration>	10	</stunDuration>
+    <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+    <damageDurationCoeff>	0.45	</damageDurationCoeff>
+    <effects>	grinch_large	</effects>
+    <damage>
+      <armor>	700	</armor>
+      <devices>	80	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </_152mm_AP_T_grinch>
+</shells.xml>

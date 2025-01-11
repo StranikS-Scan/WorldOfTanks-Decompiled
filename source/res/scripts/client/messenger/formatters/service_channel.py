@@ -10,7 +10,6 @@ from collections import OrderedDict, defaultdict, deque
 from copy import copy, deepcopy
 from itertools import chain, islice
 import typing
-from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 import ArenaType
 import BigWorld
 import constants
@@ -20,10 +19,11 @@ from achievements20.cache import ALLOWED_ACHIEVEMENT_TYPES
 from adisp import adisp_async, adisp_process
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from battle_pass_common import BATTLE_PASS_CHOICE_REWARD_OFFER_GIFT_TOKENS, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, FinalReward
+from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from cache import cached_property
-from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage
+from chat_shared import MapRemovedFromBLReason, SYS_MESSAGE_TYPE, decompressSysMessage, NY_ERROR_TYPE
 from comp7_common import Comp7QuestType, isComp7YearlyAchievement
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, AUTO_MAINTENANCE_RESULT, AUTO_MAINTENANCE_TYPE, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, FINISH_REASON, INVOICE_ASSET, KICK_REASON, KICK_REASON_NAMES, NC_MESSAGE_PRIORITY, NC_MESSAGE_TYPE, OFFER_TOKEN_PREFIX, PREBATTLE_TYPE, PREMIUM_ENTITLEMENTS, PREMIUM_TYPE, RESTRICTION_TYPE, SCENARIO_RESULT, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, SYS_MESSAGE_FORT_EVENT_NAMES, SwitchState
 from debug_utils import LOG_ERROR
@@ -33,11 +33,11 @@ from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from epic_constants import EPIC_BATTLE_LEVEL_IMAGE_INDEX
-from fairplay_violation_types import FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES, FairplayViolations, getFairplayViolationLocale, getPenaltyTypeAndViolationName
 from exchange.personal_discounts_constants import EXCHANGE_RATE_FREE_XP_NAME, EXCHANGE_RATE_GOLD_NAME
 from exchange.personal_discounts_parser import convertTokensToExchangeDiscounts
+from fairplay_violation_types import getPenaltyTypeAndViolationName, getFairplayViolationLocale, FAIRPLAY_EXCLUDED_ARENA_BONUS_TYPES, FairplayViolations
 from goodies.goodie_constants import GOODIE_VARIETY
-from gui import GUI_NATIONS, GUI_SETTINGS
+from gui import GUI_NATIONS, GUI_SETTINGS, makeHtmlString
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.SystemMessages import SM_TYPE
@@ -60,6 +60,7 @@ from gui.ranked_battles.ranked_models import PostBattleRankInfo, RankChangeState
 from gui.resource_well.resource_well_constants import ResourceType
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN, CompletionTokensBonusFormatter
 from gui.server_events.bonuses import EntitlementBonus, MetaBonus, SelectableBonus, getMergedBonusesFromDicts
+from gui.server_events.events_constants import CELEBRITY_QUESTS_PREFIX, CELEBRITY_MARATHON_PREFIX
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared import formatters as shared_fmts
@@ -79,10 +80,11 @@ from gui.shared.utils.requesters.ShopRequester import _NamedGoodieData
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getUniqueBlueprints
 from gui.shared.utils.transport import z_loads
 from helpers import dependency, getLocalizedData, html, i18n, int2roman, time_utils
-from items import ITEM_TYPES as I_T, ITEM_TYPE_NAMES, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core
+from items import ITEM_TYPES as I_T, getTypeInfoByIndex, getTypeInfoByName, tankmen, vehicles as vehicles_core, ITEM_TYPE_NAMES, collectibles
 from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, UNBOUND_VEH_KEY
 from items.components.crew_books_constants import CREW_BOOK_RARITY
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
+from items.components.ny_constants import TOKEN_VARIADIC_DISCOUNT_PREFIX, NyCurrency
 from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from items.vehicles import getVehicleType
 from maps_training_common.maps_training_constants import SCENARIO_INDEXES
@@ -91,7 +93,13 @@ from messenger.ext import passCensor
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel_helpers import EOL, MessageData, extractLockedStyle, getCustomizationItem, getCustomizationItemData, getRewardsForQuests, mergeRewards, parseTokenBonusCount, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
+from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from nations import NAMES
+from new_year.celebrity.celebrity_quests_helpers import GuestsQuestsConfigHelper, getRewardCelebrityQuests
+from new_year.gift_machine_helper import getCoinToken
+from new_year.ny_bonuses import EconomicBonusHelper, toPrettySingleBonusValue
+from new_year.ny_constants import TOY_COLLECTIONS, GuestsQuestsTokens, GuestQuestTokenActionType
+from new_year.variadic_discount import VariadicDiscount
 from shared_utils import BoundMethodWeakref, first
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, ICollectionsSystemController, IComp7Controller, IEpicBattleMetaGameController, IFunRandomController, IMapboxController, IRankedBattlesController, IResourceWellController, IWinbackController
@@ -101,6 +109,7 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import ICelebritySceneController
 if typing.TYPE_CHECKING:
     from typing import Any, Dict, List, Tuple, Callable, Optional, Union
     from account_helpers.offers.events_data import OfferEventData, OfferGift
@@ -121,6 +130,10 @@ _PREMIUM_MESSAGES = {PREMIUM_TYPE.BASIC: {str(SYS_MESSAGE_TYPE.premiumBought): R
 _PREMIUM_TEMPLATES = {PREMIUM_ENTITLEMENTS.BASIC: u'battleQuestsPremium',
  PREMIUM_ENTITLEMENTS.PLUS: u'battleQuestsPremiumPlus'}
 EPIC_LEVELUP_TOKEN_TEMPLATE = u'epicmetagame:levelup:'
+_RESOURCES_ORDER = (u'ny_crystal',
+ u'ny_emerald',
+ u'ny_amber',
+ u'ny_iron')
 
 def _getTimeStamp(message):
     if message.createdAt is not None:
@@ -293,6 +306,10 @@ def _getRaresAchievementsStrings(battleResults):
                     rares.append(value)
 
     return _processRareAchievements(rares) if rares else None
+
+
+def _getNewYearToys(data):
+    return {k:data.get(k, {}) for k in TOY_COLLECTIONS}
 
 
 def _getCrewBookUserString(itemDescr):
@@ -642,6 +659,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
     __battleRoyaleProgressionCtrl = dependency.descriptor(IBRProgressionOnTokensController)
     __eventsCache = dependency.descriptor(IEventsCache)
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __celebritySceneController = dependency.descriptor(ICelebritySceneController)
     _battleResultKeys = {-1: u'battleDefeatResult',
      0: u'battleDrawGameResult',
      1: u'battleVictoryResult'}
@@ -664,6 +682,36 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
 
     def isNotify(self):
         return True
+
+    def getCelebrityRewardsMessages(self, message):
+        templateName = u'nyCelebrityReward'
+        messages = []
+        completedQuestIDs = message.data.get(u'completedQuestIDs', set())
+        allQuests = self.__eventsCache.getAllQuests(includePersonalMissions=False)
+        allCelebrityQuests = getRewardCelebrityQuests()
+        rawBonuses = []
+        if completedQuestIDs is not None:
+            for qID in completedQuestIDs:
+                if qID.startswith(CELEBRITY_MARATHON_PREFIX) and qID in allQuests:
+                    rawBonuses.append(message.data.get(u'detailedRewards', {}).get(qID, {}))
+                if qID.startswith(CELEBRITY_QUESTS_PREFIX) and qID in allCelebrityQuests:
+                    rawBonuses.append(message.data.get(u'detailedRewards', {}).get(qID, {}))
+
+            mergedBonuses = getMergedBonusesFromDicts(rawBonuses)
+            rewards = [NewYearChallengeAchievesFormatter.formatQuestAchieves(mergedBonuses, asBattleFormatter=False)]
+            result = u'<br/>'.join(rewards) if any(rewards) else u''
+            totalQuests = self.__celebritySceneController.allQuestsCount
+            completedQuestsCount = self.__celebritySceneController.completedQuestsCount
+            resShortCut = R.strings.system_messages.newYear.celebrityChallenge.questReward
+            if totalQuests == completedQuestsCount:
+                title = backport.text(resShortCut.final.title())
+            else:
+                title = backport.text(resShortCut.title(), count=completedQuestsCount, total=totalQuests)
+            formatted = g_settings.msgTemplates.format(templateName, ctx={u'title': title,
+             u'rewards': result})
+            settings = self._getGuiSettings(message, templateName, NotificationPriorityLevel.LOW)
+            messages.append(MessageData(formatted, settings))
+        return messages
 
     @adisp_async
     @adisp_process
@@ -697,6 +745,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 comp7QuestsFormatter = Comp7BattleQuestsFormatter()
                 for reward in comp7QuestsFormatter.format(message):
                     messages.append(MessageData(reward, settings))
+
+                for quest in battleResults.get(u'detailedRewards', {}).keys():
+                    if quest.startswith(CELEBRITY_QUESTS_PREFIX) or quest.startswith(CELEBRITY_MARATHON_PREFIX):
+                        messages.extend(self.getCelebrityRewardsMessages(message))
+                        break
 
                 messages.append(MessageData(formatted, settings))
                 text, data = self.__getFairplayData(message)
@@ -763,15 +816,18 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         ctx = {}
         vehicleNames = {intCD:self._itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get(u'playerVehicles', {}).keys()}
         ctx[u'vehicleNames'] = u', '.join(map(operator.attrgetter(u'userName'), sorted(vehicleNames.values())))
+        detailedRewards = battleResults.get(u'detailedRewards', {})
         xp = battleResults.get(u'xp')
         bonusType = battleResults.get(u'bonusType', 0)
         bonusCapsOverrides = battleResults.get(u'bonusCapsOverrides')
+        xp += self.__getAdditionalNYBonusValue(detailedRewards, u'xp')
         if xp or BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.XP, specificOverrides=bonusCapsOverrides):
             ctx[u'xp'] = u'<br/>' + backport.text(R.strings.messenger.serviceChannelMessages.battleResults.experience(), text_styles.expText(backport.getIntegralFormat(xp)))
         battleResKey = battleResults.get(u'isWinner', 0)
         ctx[u'xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get(u'xpPenalty', 0), battleResults)
         ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
         accCredits = battleResults.get(Currency.CREDITS) - battleResults.get(u'creditsToDraw', 0)
+        accCredits += self.__getAdditionalNYBonusValue(detailedRewards, Currency.CREDITS)
         if accCredits or BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.CREDITS, specificOverrides=bonusCapsOverrides):
             ctx[Currency.CREDITS] = u'<br/>' + backport.text(R.strings.messenger.serviceChannelMessages.battleResults.credits(), text_styles.credits(self.__makeCurrencyString(Currency.CREDITS, accCredits)))
         ctx[u'piggyBank'] = self.__makePiggyBankString(battleResults.get(u'piggyBank'))
@@ -846,6 +902,9 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         from frontline.gui.frontline_helpers import FLBattleTypeDescription
         ctx[u'modifierName'] = backport.text(R.strings.fl_common.battleType.title.wrapper(), name=FLBattleTypeDescription.getTitle(battleResults.get(u'reservesModifier')))
         return ctx
+
+    def __getAdditionalNYBonusValue(self, detailedRewards, bonusName):
+        return detailedRewards.get(u'ny_battle', {}).get(bonusName, 0)
 
     def __makeMapsTrainingMsgCtx(self, battleResults, ctx):
         vehTypeCompDescr = next(battleResults[u'playerVehicles'].iterkeys())
@@ -1505,6 +1564,21 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         return u'<br/>'.join(result) if any(result) else u''
 
     @classmethod
+    def getGoldVehiclesCompensationTotal(cls, vehicles):
+        total = 0
+        for vehicleDict in vehicles:
+            for vehCompDescr, vehData in vehicleDict.iteritems():
+                vehicleName = cls.__getVehicleName(vehCompDescr)
+                if vehicleName is None:
+                    continue
+                if u'customCompensation' in vehData:
+                    val = Money.makeFromMoneyTuple(vehData[u'customCompensation'])
+                    if val.gold:
+                        total += val.gold
+
+        return total
+
+    @classmethod
     def getCustomizationCompensationString(cls, customizationItem, htmlTplPostfix=u'InvoiceReceived'):
         result = u''
         if u'customCompensation' not in customizationItem:
@@ -1740,6 +1814,10 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             platformCurrenciesStr = self.__getPlatformCurrenciesString(dataEx.get(u'currencies', {}))
             if platformCurrenciesStr:
                 operations.append(platformCurrenciesStr)
+            newYearToys = _getNewYearToys(dataEx)
+            toysStr = self.getNYToysString(newYearToys)
+            if toysStr:
+                operations.append(toysStr)
             return operations
 
     def _formatData(self, assetType, data):
@@ -1848,6 +1926,36 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             result = htmlTemplates.format(u'compensationFor' + htmlTplPostfix, ctx={u'items': u', '.join(strItemNames),
              u'compensation': u', '.join(values)})
         return result
+
+    @classmethod
+    def getNYToysString(cls, data):
+        accrued = {}
+        debited = {}
+        result = []
+        for year, slots in data.iteritems():
+            toyCollection = collectibles.g_cache[year[:4]].toys
+            for slotData in slots.values():
+                for toyID, toyCount in slotData.iteritems():
+                    toyDescr = toyCollection.get(toyID)
+                    if toyDescr:
+                        toyType = toyDescr.type
+                        operation = accrued if toyCount > 0 else debited
+                        toyTypeCount = operation.setdefault(toyType, 0)
+                        operation[toyType] = toyTypeCount + toyCount
+
+        if accrued:
+            result.append(cls.__packNYToys(accrued, u'nyToysAccruedInvoiceReceived'))
+        if debited:
+            result.append(cls.__packNYToys(debited, u'nyToysDebitedInvoiceReceived'))
+        return EOL.join(result)
+
+    @classmethod
+    def getNyFillersString(cls, fillers):
+        if fillers > 0:
+            template = u'nyFillersAccruedInvoiceReceived'
+        else:
+            template = u'nyFillersDebitedInvoiceReceived'
+        return g_settings.htmlTemplates.format(template, {u'amount': backport.getIntegralFormat(abs(fillers))})
 
     @classmethod
     def _processCompensations(cls, data):
@@ -2237,6 +2345,17 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         else:
             _logger.error(u'Could not find meta section in purchase invoice!')
         return None
+
+    @staticmethod
+    def __packNYToys(data, template):
+        typesStrings = []
+        for toyType, toyCount in data.iteritems():
+            typeName = backport.text(R.strings.ny.decorationTypes.dyn(toyType)())
+            if abs(toyCount) == 1:
+                typesStrings.append(backport.text(R.strings.menu.quote(), string=typeName))
+            typesStrings.append(backport.text(R.strings.messenger.serviceChannelMessages.invoiceReceived.toyTypeWrapper(), name=typeName, count=abs(toyCount)))
+
+        return g_settings.htmlTemplates.format(template, {u'toysList': u', '.join(typesStrings)})
 
 
 class AdminMessageFormatter(ServiceChannelFormatter):
@@ -2765,16 +2884,20 @@ class QuestAchievesFormatter(object):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     @classmethod
-    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
-        result = cls.getFormattedAchieves(data, asBattleFormatter, processCustomizations, processTokens)
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True, processCompensations=True):
+        result = cls.getFormattedAchieves(data, asBattleFormatter, processCustomizations, processTokens, processCompensations)
         return cls._SEPARATOR.join(result) if result else None
 
     @classmethod
-    def getFormattedAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
+    def getFormattedAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True, processCompensations=True):
         result = []
-        tokenResult = cls._processTokens(data)
-        if tokenResult and processTokens:
-            result.append(tokenResult)
+        if processTokens:
+            tokenResult = cls._processTokens(data)
+            if tokenResult:
+                result.append(tokenResult)
+        newYearTokenResult, newYearTokenLowPriorityResult = cls._processNewYearTokens(data.get(u'tokens', {}))
+        if newYearTokenResult:
+            result.extend(newYearTokenResult)
         if not asBattleFormatter:
             crystal = data.get(Currency.CRYSTAL, 0)
             if crystal:
@@ -2788,7 +2911,15 @@ class QuestAchievesFormatter(object):
             if equipCoin:
                 fomatter = getBWFormatter(Currency.EQUIP_COIN)
                 result.append(cls.__makeQuestsAchieve(u'battleQuestsEquipCoin', equipCoin=fomatter(equipCoin)))
+            vehiclesList = data.get(u'vehicles', [])
+            totalGoldCompensation = 0
+            if vehiclesList:
+                totalGoldCompensation = InvoiceReceivedFormatter.getGoldVehiclesCompensationTotal(vehiclesList)
             gold = data.get(Currency.GOLD, 0)
+            if totalGoldCompensation <= gold:
+                gold -= totalGoldCompensation
+            else:
+                _logger.error(u"Incorrect value while calculate gold, 'gold': %r, 'totalGoldVehicleCompensation':%r", gold, totalGoldCompensation)
             if gold:
                 fomatter = getBWFormatter(Currency.GOLD)
                 result.append(cls.__makeQuestsAchieve(u'battleQuestsGold', gold=fomatter(gold)))
@@ -2813,9 +2944,10 @@ class QuestAchievesFormatter(object):
         msg = InvoiceReceivedFormatter.getVehiclesString(vehiclesList, htmlTplPostfix=u'QuestsReceived')
         if msg:
             result.append(msg)
-        comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesList, htmlTplPostfix=u'QuestsReceived')
-        if comptnStr:
-            result.append(cls._SEPARATOR + comptnStr if result else comptnStr)
+        if processCompensations:
+            comptnStr = InvoiceReceivedFormatter.getVehiclesCompensationString(vehiclesList, htmlTplPostfix=u'QuestsReceived')
+            if comptnStr:
+                result.append(cls._SEPARATOR + comptnStr if result else comptnStr)
         if not asBattleFormatter:
             creditsVal = data.get(Currency.CREDITS, 0)
             if creditsVal:
@@ -2909,6 +3041,10 @@ class QuestAchievesFormatter(object):
                 strBlueprints = InvoiceReceivedFormatter.getBlueprintString(blueprints)
                 if strBlueprints:
                     result.append(strBlueprints)
+        newYearToys = _getNewYearToys(data)
+        toysStr = InvoiceReceivedFormatter.getNYToysString(newYearToys)
+        if toysStr:
+            result.append(toysStr)
         if not asBattleFormatter:
             achievementsNames = cls._extractAchievements(data)
             if achievementsNames:
@@ -2926,6 +3062,8 @@ class QuestAchievesFormatter(object):
             strDogTags = cls._processDogTags(data.get(u'dogTagComponents', {}))
             if strDogTags:
                 result.append(strDogTags)
+        if newYearTokenLowPriorityResult:
+            result.extend(newYearTokenLowPriorityResult)
         if personalExchangeDiscountsInfo:
             for rate in personalExchangeDiscountsInfo:
                 exchangeDiscountStr = g_settings.htmlTemplates.format(u'personalExchangeRateReceived', {u'rate': rate})
@@ -2949,6 +3087,28 @@ class QuestAchievesFormatter(object):
             result.append(backport.text(R.strings.messenger.serviceChannelMessages.dogTags.bonus.dyn(component.viewType.value)(), name=dogTagComposer.getComponentTitle(componentID)))
 
         return cls._SEPARATOR.join(result)
+
+    @classmethod
+    def _processNewYearTokens(cls, tokens):
+        result = []
+        lowPriorityResult = []
+        for tokenID in sorted((tokenID for tokenID in tokens.iterkeys())):
+            value = tokens[tokenID]
+            if tokenID.startswith(GuestsQuestsTokens.TOKEN_DOG):
+                result.append(backport.text(R.strings.ny.systemMessage.questsFormatter.dogUnlock()))
+            elif tokenID.startswith(GuestsQuestsTokens.TOKEN_CAT):
+                result.append(backport.text(R.strings.ny.systemMessage.questsFormatter.catUnlock()))
+            if tokenID.startswith(TOKEN_VARIADIC_DISCOUNT_PREFIX):
+                discount = VariadicDiscount(tokenID)
+                result.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.variadicDiscount(), discount=discount.getDiscountValue(), level=discount.getTankLevel()))
+            if tokenID == getCoinToken():
+                count = value[u'count']
+                if count > 1:
+                    result.append(backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.nyCoins(), count=count))
+                elif count == 1:
+                    result.append(backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.nyCoin()))
+
+        return (result, lowPriorityResult)
 
     @classmethod
     def _extractAchievements(cls, data):
@@ -3437,6 +3597,119 @@ class SeniorityAwardsQuestAchievesFormatter(QuestAchievesFormatter):
         return result
 
 
+class NewYearAchievesFormatter(BattlePassQuestAchievesFormatter):
+    _BULLET = u''
+    _SEPARATOR = u'<br/>' + _BULLET
+
+
+class NewYearChallengeAchievesFormatter(QuestAchievesFormatter):
+    _SEPARATOR = u'<br/>'
+    _CUSTOMIZATION_ORDER = [u'style', u'projection_decal', u'decalinscription']
+
+    @classmethod
+    def getFormattedAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True, processCompensations=True):
+        result = []
+        tankmanTokens = cls._processNewYearTankmanTokens(data.get(u'tokens', {}))
+        if tankmanTokens:
+            result.extend(tankmanTokens)
+        items = data.get(u'items', {})
+        itemsNames = []
+        optDevices = []
+        for intCD, count in items.iteritems():
+            itemTypeID, _, _ = vehicles_core.parseIntCompactDescr(intCD)
+            if itemTypeID == I_T.optionalDevice:
+                optDevices.append((vehicles_core.getItemByCompactDescr(intCD), count))
+
+        for itemDescr, count in sorted(optDevices, key=lambda descrPair: descrPair[0].level):
+            name = itemDescr.i18n.userString
+            itemsNames.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.items.name(), name=name, count=backport.getIntegralFormat(count)))
+
+        if itemsNames:
+            result.append(cls.__makeQuestsAchieve(u'celebrityChallengeOptDevices', names=u', '.join(itemsNames)))
+        customization = data.get(u'customizations', [])
+        customization.sort(key=cls.__getCustomizationOrder)
+        _extendCustomizationData(data, result, htmlTplPostfix=u'QuestsReceived')
+        variodicDisscounts = cls._processNewYearVariodicDisscount(data.get(u'tokens', {}))
+        if variodicDisscounts:
+            result.extend(variodicDisscounts)
+        achievementsNames = cls._extractAchievements(data)
+        if achievementsNames:
+            result.append(cls.__makeQuestsAchieve(u'celebrityChallengeAchievements', achievements=u', '.join(achievementsNames)))
+        crystal = data.get(Currency.CRYSTAL, 0)
+        if crystal:
+            fomatter = getBWFormatter(Currency.CRYSTAL)
+            result.append(cls.__makeQuestsAchieve(u'battleQuestsCrystal', crystal=fomatter(crystal)))
+        if not asBattleFormatter:
+            freeXP = data.get(u'freeXP', 0)
+            if freeXP:
+                result.append(cls.__makeQuestsAchieve(u'battleQuestsFreeXP', freeXP=backport.getIntegralFormat(freeXP)))
+        creditsVal = data.get(Currency.CREDITS, 0)
+        if creditsVal:
+            fomatter = getBWFormatter(Currency.CREDITS)
+            result.append(cls.__makeQuestsAchieve(u'battleQuestsCredits', credits=fomatter(creditsVal)))
+        equipCoin = data.get(Currency.EQUIP_COIN, 0)
+        if equipCoin:
+            fomatter = getBWFormatter(Currency.EQUIP_COIN)
+            result.append(cls.__makeQuestsAchieve(u'battleQuestsEquipCoin', equipCoin=fomatter(equipCoin)))
+        coins = cls._processNewYearCoinTokens(data.get(u'tokens', {}))
+        if coins:
+            result.extend(coins)
+        return result
+
+    @classmethod
+    def _processNewYearVariodicDisscount(cls, tokens):
+        result = []
+        for tokenID in sorted(tokens.keys(), reverse=True):
+            if tokenID.startswith(TOKEN_VARIADIC_DISCOUNT_PREFIX):
+                discount = VariadicDiscount(tokenID)
+                result.append(backport.text(R.strings.messenger.serviceChannelMessages.battleResults.quests.variadicDiscount(), discount=discount.getDiscountValue(), level=discount.getTankLevel()))
+
+        return result
+
+    @classmethod
+    def _processNewYearCoinTokens(cls, tokens):
+        result = []
+        if getCoinToken() not in tokens.keys():
+            return []
+        count = tokens[getCoinToken()][u'count']
+        if count > 1:
+            result.append(backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.nyCoins(), count=count))
+        elif count == 1:
+            result.append(backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.nyCoin()))
+        return result
+
+    @classmethod
+    def _processNewYearTankmanTokens(cls, tokens):
+        result = []
+        for tokenName in tokens.keys():
+            tankmanTokenResult = cls._processTankmanToken(tokenName)
+            if tankmanTokenResult:
+                result.append(tankmanTokenResult)
+
+        return result
+
+    @classmethod
+    def __makeQuestsAchieve(cls, key, **kwargs):
+        return g_settings.htmlTemplates.format(key, kwargs)
+
+    @classmethod
+    def _extractAchievements(cls, data):
+        return _getAchievementsFromQuestData(data)
+
+    @classmethod
+    def _processTankmanToken(cls, tokenName):
+        if tokenName.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+            tankmanInfo = getRecruitInfo(tokenName)
+            if tankmanInfo is not None:
+                text = backport.text(R.strings.system_messages.newYear.celebrityChallenge.questReward.tmanBonus.title(), name=tankmanInfo.getFullUserName())
+                return g_settings.htmlTemplates.format(u'battlePassTMan', {u'text': text})
+        return
+
+    @classmethod
+    def __getCustomizationOrder(cls, info):
+        return cls._CUSTOMIZATION_ORDER.index(info[u'custType']) if info[u'custType'] in cls._CUSTOMIZATION_ORDER else len(cls._CUSTOMIZATION_ORDER)
+
+
 class BattleMattersQuestAchievesFormatter(QuestAchievesFormatter):
     __battleMattersController = dependency.descriptor(IBattleMattersController)
 
@@ -3526,8 +3799,10 @@ class _GoodyFormatter(WaitItemsSyncFormatter):
         obtainedValue = message.data.get(u'obtainedValues', {})
         resourceRows = []
         for bonusTypeName, value in obtainedValue.iteritems():
-            resourceRows.append(g_settings.htmlTemplates.format(u'boosterExpiredRow', ctx={u'resourceName': html.escape(backport.text(R.strings.messenger.serviceChannelMessages.boosterExpiredResourceName.dyn(bonusTypeName)())),
-             u'value': html.escape(str(value))}))
+            resId = R.strings.messenger.serviceChannelMessages.boosterExpiredResourceName.dyn(bonusTypeName)
+            if resId:
+                resourceRows.append(g_settings.htmlTemplates.format(u'boosterExpiredRow', ctx={u'resourceName': html.escape(backport.text(resId())),
+                 u'value': html.escape(str(value))}))
 
         if resourceRows:
             resourceRows.append(g_settings.htmlTemplates.format(u'boosterExpiredAdditionalRow'))
@@ -4831,6 +5106,169 @@ class BlueprintsConvertSaleFormatter(ServiceChannelFormatter):
             return [MessageData(None, None)]
 
 
+class NYResourcesConvertedFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'NyResourcesConvertedMessage'
+
+    def format(self, message, auxData):
+        exchangeType = auxData.get(u'exchangeType', u'increase')
+        ctx = {u'header': backport.text(R.strings.system_messages.newYear.convertingResources.dyn(exchangeType).title()),
+         u'text': backport.text(R.strings.system_messages.newYear.convertingResources.dyn(exchangeType).message(), value=auxData.get(u'value'))}
+        data = {u'icon': auxData.get(u'resourceType')}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx, data=data)
+        settings = self._getGuiSettings(message, self.__TEMPLATE)
+        return [MessageData(formatted, settings)]
+
+
+class NYCurrencyFinancialOperationFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'NyCurrencyFinancialOperationMessage'
+
+    def format(self, message, auxData):
+        ctx = {u'itemBought': auxData.get(u'itemBought', u''),
+         u'spent': backport.text(R.strings.system_messages.newYear.financialOperation.spent(), count=auxData.get(u'price', 0))}
+        data = {u'icon': auxData.get(u'resourceType', NyCurrency.CRYSTAL)}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx=ctx, data=data)
+        settings = self._getGuiSettings(message, self.__TEMPLATE)
+        return [MessageData(formatted, settings)]
+
+
+class NYCollectionRewardFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'InformationHeaderSysMessage'
+
+    def format(self, message, auxData):
+        rows = []
+        rewards = QuestAchievesFormatter.formatQuestAchieves(auxData, asBattleFormatter=False, processCustomizations=True, processTokens=False)
+        rows.append(rewards)
+        ctx = {u'header': backport.text(R.strings.system_messages.newYear.marketplace.rewards.header()),
+         u'text': u'<br/>'.join(rows)}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx=ctx)
+        settings = self._getGuiSettings(message, self.__TEMPLATE, priorityLevel=NotificationPriorityLevel.MEDIUM)
+        return [MessageData(formatted, settings)]
+
+
+class NYCelebrityGuestQuestRewardFormatter(ServiceChannelFormatter):
+    _TEMPLATE_NAME = u'InformationHeaderSysMessage'
+
+    def format(self, message, *auxData):
+        if auxData and auxData[0]:
+            templateName = self._TEMPLATE_NAME
+            data = auxData[0]
+            ctx = NewYearGuestQuestCompletedFormatter.formatRewards(data)
+            formatted = g_settings.msgTemplates.format(templateName, ctx=ctx)
+            settings = self._getGuiSettings(message, templateName, priorityLevel=NotificationPriorityLevel.LOW)
+            return [MessageData(formatted, settings)]
+        else:
+            return [MessageData(None, None)]
+
+    def __getPriorityLevel(self, data):
+        guestName = data.get(u'guestName', None)
+        if guestName is not None:
+            questIndex = data.get(u'questIndex', 0)
+            questsHolder = GuestsQuestsConfigHelper.getNYQuestsByGuest(guestName)
+            quest = questsHolder.getQuestByQuestIndex(questIndex)
+            if GuestsQuestsConfigHelper.getQuestActionToken(quest, GuestQuestTokenActionType.STORY):
+                return NotificationPriorityLevel.LOW
+        return NotificationPriorityLevel.MEDIUM
+
+
+class NYCollectingFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'NyResourceCollectingMessage'
+
+    def format(self, message, auxData):
+        resources = auxData.get(u'resources', {})
+        resourcesStr = []
+        for resource in _RESOURCES_ORDER:
+            resourcesStr.append(backport.text(R.strings.system_messages.newYear.resources.dyn(resource)(), count=resources[resource]))
+
+        ctx = {u'header': backport.text(R.strings.system_messages.newYear.collectingResources.header()),
+         u'text': u'\n'.join(resourcesStr)}
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx)
+        settings = self._getGuiSettings(message, self.__TEMPLATE)
+        return [MessageData(formatted, settings)]
+
+
+class NyErrorNotificationFormatter(ServiceChannelFormatter):
+    __TEMPLATE = u'ErrorSimpleSysMessage'
+
+    def format(self, message, *args):
+        if not message:
+            return [MessageData(None, None)]
+        else:
+            rBase = R.strings.system_messages.newYear.errorTypes
+            errorTypeStr = NY_ERROR_TYPE[message.data]
+            if errorTypeStr is not None:
+                errorTypeStr = errorTypeStr.name()
+            messageStr = rBase.dyn(errorTypeStr)
+            ctx = {u'text': backport.text(messageStr()) if messageStr else errorTypeStr}
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx)
+            return [MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE))]
+
+
+class NYSackBoughtFormatter(ServiceChannelFormatter):
+    __TEMPLATE_CREDITS = u'NYSackBoughtCreditMessage'
+    __TEMPLATE_GOLD = u'NYSackBoughtGoldMessage'
+
+    def format(self, message, auxData):
+        from new_year.celebrity.celebrity_quests_helpers import getDogLevel
+        setName = backport.text(R.strings.system_messages.newYear.sack.bought.dyn(u'level{}'.format(getDogLevel() + 1))())
+        if Currency.CREDITS in message:
+            count = message.get(Currency.CREDITS, 0)
+            currency = Currency.CREDITS
+            template = self.__TEMPLATE_CREDITS
+        else:
+            count = message.get(Currency.GOLD, 0)
+            currency = Currency.GOLD
+            template = self.__TEMPLATE_GOLD
+        ctx = {u'body': backport.text(R.strings.system_messages.newYear.sack.bought.body(), setName=setName),
+         u'currency': backport.text(R.strings.system_messages.newYear.sack.bought.dyn(currency)(), count=count)}
+        formatted = g_settings.msgTemplates.format(template, ctx)
+        settings = self._getGuiSettings(message, template)
+        return [MessageData(formatted, settings)]
+
+
+class NYBreedBoughtFormatter(ServiceChannelFormatter):
+    __TEMPLATE_GOLD = u'NYBreedBoughtGoldMessage'
+
+    def format(self, message, *args):
+        value = message.get(Currency.GOLD, 0)
+        currency = Currency.GOLD
+        template = self.__TEMPLATE_GOLD
+        ctx = {u'body': backport.text(R.strings.system_messages.newYear.breed.bought.body()),
+         u'currency': backport.text(R.strings.system_messages.newYear.breed.bought.dyn(currency)(), value=value)}
+        formatted = g_settings.msgTemplates.format(template, ctx)
+        settings = self._getGuiSettings(message, template)
+        return [MessageData(formatted, settings)]
+
+
+class NewNYEventFormatter(ClientSysMessageFormatter):
+
+    def _getGuiSettings(self, data, key=None, priorityLevel=None, groupID=None):
+        if isinstance(data, types.TupleType) and data:
+            auxData = data[0][:]
+            if len(data[0]) > 1 and priorityLevel is None:
+                priorityLevel = data[0][1]
+        else:
+            auxData = []
+        if priorityLevel is None:
+            priorityLevel = g_settings.msgTemplates.priority(key)
+        if groupID is None:
+            groupID = g_settings.msgTemplates.groupID(key)
+        return NotificationGuiSettings(self.isNotify(), priorityLevel=priorityLevel, auxData=auxData, groupID=groupID, messageSubtype=SCH_CLIENT_MSG_TYPE.NY_EVENT_BUTTON_MESSAGE)
+
+
+class NyGFSMFormatter(ClientSysMessageFormatter):
+
+    def format(self, message, *args):
+        data = message.get(u'data')
+        template = message.get(u'template')
+        notificationGuiSettings = message.get(u'notificationGuiSettings', {})
+        formatted = g_settings.msgTemplates.format(template, data={u'linkageData': data})
+        guiSettings = self._getGuiSettings(message, template, priorityLevel=data.get(u'priority'))
+        for key, value in notificationGuiSettings.items():
+            setattr(guiSettings, key, value)
+
+        return [MessageData(formatted, guiSettings)]
+
+
 class CustomizationProgressFormatter(WaitItemsSyncFormatter):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -5721,6 +6159,68 @@ class PrestigeFormatter(ServiceChannelFormatter):
                           u'grade': grade,
                           u'lvl': lvl}})
         return MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.type))
+
+
+class NewYearCollectionFormatter(object):
+
+    @classmethod
+    def formatAchieves(cls, data):
+        customizations = data.get(u'customizations', [])
+        rewards = defaultdict(lambda : defaultdict(int))
+        for customizationItem in customizations:
+            custType = customizationItem[u'custType']
+            guiItemType, itemName = getCustomizationItemData(customizationItem[u'id'], custType)
+            itemCount = customizationItem[u'value']
+            rewards[guiItemType][itemName] += itemCount
+
+        result = []
+        for guiItemType, items in rewards.iteritems():
+            for itemName, itemCount in items.iteritems():
+                msg = backport.text(R.strings.system_messages.customization.added.dyn(guiItemType)(), itemName)
+                if itemCount > 1:
+                    count = backport.text(R.strings.ny.notification.collectionComplete.bonusCount(), count=itemCount)
+                    msg = u' '.join((msg, count))
+                result.append(msg)
+
+        return EOL.join(result)
+
+
+class NewYearGuestQuestCompletedFormatter(object):
+
+    @classmethod
+    def formatRewards(cls, data):
+        from gui.impl.new_year.new_year_bonus_packer import getNYCelebrityGuestRewardBonuses
+        guestName = data.get(u'guestName', None)
+        questIndex = data.get(u'questIndex', 0)
+        if guestName is None:
+            return {}
+        else:
+            guest = backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.guest.dyn(guestName)())
+            header = backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.title(), guest=guest)
+            questsHolder = GuestsQuestsConfigHelper.getNYQuestsByGuest(guestName)
+            quest = questsHolder.getQuestByQuestIndex(questIndex)
+            bonuses = quest.getQuestRewards()
+            GuestsQuestsConfigHelper.getQuestActionToken(quest, GuestQuestTokenActionType.STORY)
+            rows = []
+            rewards = QuestAchievesFormatter.formatQuestAchieves(bonuses, False, processCustomizations=True, processTokens=False)
+            if rewards:
+                rows.append(rewards)
+            excludeTokensChecker = lambda tID: tID not in GuestsQuestsTokens.ECONOMIC_GUESTS_TOKENS
+            onlyTokens = {u'tokens': bonuses.get(u'tokens', {})}
+            economicRewards = getNYCelebrityGuestRewardBonuses(onlyTokens, excludeTokensChecker=excludeTokensChecker)
+            multiplier = sum((int(bonus.getValue()) for bonus, _ in economicRewards))
+            if multiplier:
+                dependencies = GuestsQuestsTokens.getGuestCompletedTokenName(guestName)
+                bonuses = EconomicBonusHelper.getBonusesDataByToken(dependencies, questIndex)
+                bonusRow = R.strings.ny.systemMessage.challenge.guestQuestsCompleted.bonus
+                for bonusID, value in bonuses.iteritems():
+                    bonusName = backport.text(R.strings.ny.systemMessage.challenge.guestQuestsCompleted.bonus.dyn(bonusID)())
+                    bonusLabel = backport.text(bonusRow(), bonusName=bonusName, value=toPrettySingleBonusValue(value))
+                    rows.append(bonusLabel)
+
+            message = makeHtmlString(u'html_templates:newYear/system_messages/guestQuestRewards', u'rewards', ctx={u'message': u'<br/>'.join(rows)})
+            return {u'text': message,
+             u'header': header}
 
 
 class ConsumableReplacedItemsFormatter(ServiceChannelFormatter):

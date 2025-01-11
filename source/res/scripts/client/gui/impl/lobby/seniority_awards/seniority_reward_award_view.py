@@ -92,7 +92,7 @@ class SeniorityRewardAwardView(ViewImpl):
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipData = self.__getBackportTooltipData(event)
-            window = BackportTooltipWindow(tooltipData, self.getParentWindow()) if tooltipData is not None else None
+            window = BackportTooltipWindow(tooltipData, self.getParentWindow(), event) if tooltipData is not None else None
             if window is not None:
                 window.load()
             return window

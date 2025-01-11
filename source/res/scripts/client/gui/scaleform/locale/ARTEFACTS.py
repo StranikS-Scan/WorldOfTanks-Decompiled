@@ -855,6 +855,15 @@ class ARTEFACTS(object):
     MODERNIZEDEXTRAHEALTHRESERVEANTIFRAGMENTATIONLINING3_NAME = '#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/name'
     MODERNIZEDEXTRAHEALTHRESERVEANTIFRAGMENTATIONLINING3_SHORT_SPECIAL = '#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/short_special'
     MODERNIZEDEXTRAHEALTHRESERVEANTIFRAGMENTATIONLINING3_LONG_SPECIAL = '#artefacts:modernizedExtraHealthReserveAntifragmentationLining3/long_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES1_NAME = '#artefacts:modernizedImprovedSightsEnhancedAimDrives1/name'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES1_SHORT_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives1/short_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES1_LONG_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives1/long_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES2_NAME = '#artefacts:modernizedImprovedSightsEnhancedAimDrives2/name'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES2_SHORT_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives2/short_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES2_LONG_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives2/long_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES3_NAME = '#artefacts:modernizedImprovedSightsEnhancedAimDrives3/name'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES3_SHORT_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives3/short_special'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES3_LONG_SPECIAL = '#artefacts:modernizedImprovedSightsEnhancedAimDrives3/long_special'
     ENHANCEDEXTRAHEALTHRESERVE_ADDITIONAL_DESCR = '#artefacts:enhancedExtraHealthReserve/additional_descr'
     ENHANCEDEXTRAHEALTHRESERVE_EFFECT_CHASSISRESTORATION = '#artefacts:enhancedExtraHealthReserve/effect/chassisRestoration'
     ARCHETYPE_TEMPLATE = '#artefacts:archetype/template'
@@ -878,6 +887,7 @@ class ARTEFACTS(object):
     ARCHETYPE_MODERNIZEDAIMDRIVESAIMINGSTABILIZER_NAME_NOTEMPLATE = '#artefacts:archetype/modernizedAimDrivesAimingStabilizer/name/noTemplate'
     ARCHETYPE_MODERNIZEDTURBOCHARGERROTATIONMECHANISM_NAME_NOTEMPLATE = '#artefacts:archetype/modernizedTurbochargerRotationMechanism/name/noTemplate'
     ARCHETYPE_MODERNIZEDEXTRAHEALTHRESERVEANTIFRAGMENTATIONLINING_NAME_NOTEMPLATE = '#artefacts:archetype/modernizedExtraHealthReserveAntifragmentationLining/name/noTemplate'
+    ARCHETYPE_MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES_NAME_NOTEMPLATE = '#artefacts:archetype/modernizedImprovedSightsEnhancedAimDrives/name/noTemplate'
     ALL_GAIN_ENUM = (IMPROVEDCONFIGURATIONBATTLEBOOSTER_GAIN_SIMPLE,
      IMPROVEDCONFIGURATIONBATTLEBOOSTER_GAIN_DELUXE,
      IMPROVEDVENTILATIONBATTLEBOOSTER_GAIN_SIMPLE,

@@ -1,0 +1,55 @@
+<radios.xml>
+  <ids>
+    <SEM25_1_grinch>	50001	</SEM25_1_grinch>
+    <SEM25_1_npc_grinch>	50002	</SEM25_1_npc_grinch>
+    <G00_Pillbox_Radio_grinch>	50003	</G00_Pillbox_Radio_grinch>
+  </ids>
+  <shared>
+    <SEM25_1_grinch>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	1500	</distance>
+      <maxHealth>	100000	</maxHealth>
+      <maxRegenHealth>	90000	</maxRegenHealth>
+      <hysteresisHealth>	18	</hysteresisHealth>
+      <repairCost>	3.5	</repairCost>
+      <healthRegenPerSec>	20000	</healthRegenPerSec>
+      <healthBurnPerSec>	9	</healthBurnPerSec>
+      <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+      <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+    </SEM25_1_grinch>
+    <SEM25_1_npc_grinch>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	1500	</distance>
+      <maxHealth>	100000	</maxHealth>
+      <maxRegenHealth>	90000	</maxRegenHealth>
+      <hysteresisHealth>	18	</hysteresisHealth>
+      <repairCost>	3.5	</repairCost>
+      <healthRegenPerSec>	20000	</healthRegenPerSec>
+      <healthBurnPerSec>	9	</healthBurnPerSec>
+      <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+      <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+    </SEM25_1_npc_grinch>
+    <G00_Pillbox_Radio_grinch>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	1500	</distance>
+      <maxHealth>	10000	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <hysteresisHealth>	10	</hysteresisHealth>
+      <repairCost>	0.5	</repairCost>
+      <healthRegenPerSec>	2.625	</healthRegenPerSec>
+      <healthBurnPerSec>	6	</healthBurnPerSec>
+    </G00_Pillbox_Radio_grinch>
+  </shared>
+</radios.xml>

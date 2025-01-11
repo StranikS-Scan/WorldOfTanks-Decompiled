@@ -14,11 +14,11 @@ def getContextMenuHandlers():
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.exchange.ConfirmExchangeDialog import ConfirmExchangeDialog
-    return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE), GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True))
+    return (GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE), GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_TOP_WINDOW, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE), GroupedViewSettings(VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_MODAL, ConfirmExchangeDialog, 'confirmExchangeDialog.swf', WindowLayer.TOP_WINDOW, 'confirmExchangeDialog', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True))
 
 
 def getBusinessHandlers():
-    return (_ExchangeDialogBusinessHandler(), _ExchangeDialogModalBusinessHandler())
+    return (_ExchangeDialogBusinessHandler(), _ExchangeDialogTopWIndowBusinessHandler(), _ExchangeDialogModalBusinessHandler())
 
 
 class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
@@ -42,6 +42,12 @@ class _ExchangeDialogBusinessHandler(PackageBusinessHandler):
         else:
             self.loadViewWithDefName(alias, name, None, meta, handler)
         return
+
+
+class _ExchangeDialogTopWIndowBusinessHandler(_ExchangeDialogBusinessHandler):
+    _ALIAS = VIEW_ALIAS.CONFIRM_EXCHANGE_DIALOG_TOP_WINDOW
+    _EVENT = ShowDialogEvent.SHOW_EXCHANGE_DIALOG_TOP_WINDOW
+    _LAYER = WindowLayer.TOP_WINDOW
 
 
 class _ExchangeDialogModalBusinessHandler(_ExchangeDialogBusinessHandler):

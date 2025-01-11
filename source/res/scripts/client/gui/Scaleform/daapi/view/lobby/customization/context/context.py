@@ -65,6 +65,7 @@ class _CustomizationEvents(object):
         self.onEditModeEnabled = Event.Event(self._eventsManager)
         self.onPersonalNumberCleared = Event.Event(self._eventsManager)
         self.onProlongStyleRent = Event.Event(self._eventsManager)
+        self.onCloseWindow = Event.Event(self._eventsManager)
 
     def fini(self):
         self._eventsManager.clear()
@@ -96,6 +97,7 @@ class CustomizationContext(object):
         self.updateCommonOutfits()
         self.__carouselItems = None
         self.__initialItemCD = None
+        self.__exitCallback = None
         return
 
     @property
@@ -257,6 +259,14 @@ class CustomizationContext(object):
                 self.mode.installItem(intCD, StyledMode.STYLE_SLOT)
             self.changeMode(CustomizationModes.STYLE_2D_EDITABLE, source=source)
             return
+
+    def getExitCallback(self):
+        return self.__exitCallback
+
+    def previewStyle(self, style, exitCallback=None, source=None):
+        self.__exitCallback = exitCallback
+        self.changeMode(CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D, source=source)
+        self.events.onShowStyleInfo(style)
 
     def canEditStyle(self, itemCD):
         if self.__modeId in CustomizationModes.STYLES:

@@ -22,7 +22,8 @@ from gui.customization.constants import CustomizationModes, CustomizationModeSou
 from gui.customization.shared import getTotalPurchaseInfo, C11nId
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.shared.event_dispatcher import showBrowserOverlayView, showVehiclesSidebarDialogWindow
+from gui.impl.new_year.navigation import ViewAliases
+from gui.shared.event_dispatcher import showBrowserOverlayView, showVehiclesSidebarDialogWindow, showLootBoxBuyWindow
 from gui.shared.formatters import text_styles, icons, getItemPricesVO, getMoneyVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
@@ -32,13 +33,17 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.customizations import ProjectionDecalComponent
+from new_year.ny_constants import NYObjects
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
+from grinch.skeletons.battle_controller import IGrinchController
 from vehicle_outfit.outfit import Area
 from uilogging.customization_3d_objects.logger import CustomizationBottomPanelLogger
 from uilogging.customization_3d_objects.logging_constants import CustomizationButtons, CustomizationViewKeys
+from new_year.ny_navigation_helper import switchNewYearView
 CustomizationCarouselDataVO = namedtuple('CustomizationCarouselDataVO', ('displayString', 'isZeroCount', 'shouldShow', 'itemLayoutSize', 'bookmarks', 'arrows', 'showSeparators'))
 
 class CustomizationBottomPanel(CustomizationBottomPanelMeta):
@@ -46,6 +51,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     service = dependency.descriptor(ICustomizationService)
     settingsCore = dependency.descriptor(ISettingsCore)
+    __nyController = dependency.descriptor(INewYearController)
+    __grinchCtrl = dependency.instance(IGrinchController)
 
     def __init__(self):
         super(CustomizationBottomPanel, self).__init__()
@@ -108,6 +115,7 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         self.__ctx.events.onSlotUnselected -= self.__onSlotUnselected
         self.__ctx.events.onFilterPopoverClosed -= self.__onFilterPopoverClosed
         self.__ctx.events.onGetItemBackToHand -= self.__onGetItemBackToHand
+        self.__grinchCtrl.onSeasonStatusUpdated -= self.__nyOnGrinchAvailabilityUpdate
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         self._carouselDP._dispose()
         self._carouselDP = None
@@ -152,6 +160,17 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         isTutorial = self.__serverSettings.updateIsHintTutorial(OnceOnlyHints.C11N_VEHICLE_LIST_HINT)
         self.__uiLogger.onHintButtonClick(CustomizationButtons.VEHICLES_LIST, isTutorial)
         showVehiclesSidebarDialogWindow(self.__ctx.mode.tabId)
+
+    def nyGoToLootboxes(self):
+        if self.__nyController.isEnabled():
+            showLootBoxBuyWindow()
+
+    def nyGoToChallenge(self):
+        if self.__nyController.isEnabled():
+            switchNewYearView(NYObjects.CHALLENGE, ViewAliases.CELEBRITY_VIEW, instantly=True)
+
+    def nyGoToBoardGame(self):
+        self.__grinchCtrl.selectMode()
 
     def onSelectItem(self, index, intCD, progressionLevel):
         if intCD != -1:
@@ -298,11 +317,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __getUnsupportAttachementMessage(self):
         return {'message': '{}{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.highlightText(backport.text(R.strings.vehicle_customization.carousel.message.attachment.unsapport.header(), name=g_currentVehicle.item.shortUserName))),
          'hasVideo': True,
-         'popoverBtnVisible': True}
+         'actionButtonVisible': True}
 
     def __getNoAttachementMessage(self):
+        self.__grinchCtrl.onSeasonStatusUpdated += self.__nyOnGrinchAvailabilityUpdate
         return {'message': '{}\n{}'.format(text_styles.middleTitle(backport.text(R.strings.vehicle_customization.carousel.message.attachment.default.header())), text_styles.main(backport.text(R.strings.vehicle_customization.carousel.message.attachment.default.description()))),
-         'hasVideo': True}
+         'hasVideo': True,
+         'nySpecial': self.__nyController.isEnabled(),
+         'grinchEnable': self.__grinchCtrl.isAvailable(),
+         'actionButtonVisible': True}
 
     def __getNoDecalMessage(self):
         return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(backport.text(R.strings.vehicle_customization.carousel.message.default.header())), text_styles.main(backport.text(R.strings.vehicle_customization.carousel.message.noProgressionDecals())))}
@@ -310,7 +333,11 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
     def __getDecalSlotMessage(self):
         return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(backport.text(R.strings.vehicle_customization.carousel.message.default.header())), text_styles.main(backport.text(R.strings.vehicle_customization.carousel.message.propertysheet())))}
 
+    def __nyOnGrinchAvailabilityUpdate(self, _):
+        self.__updatefilterFallbackData()
+
     def __getFallbackMessage(self):
+        self.__grinchCtrl.onSeasonStatusUpdated -= self.__nyOnGrinchAvailabilityUpdate
         selectedSlot = self.__ctx.mode.selectedSlot
         isEmptyTab = not self._carouselDP.collection
         if selectedSlot is not None:

@@ -698,6 +698,42 @@
         <anchorShift>	0.11745	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.841 0.244 0.106833	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	0.999995 0.999995 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.865 0.244 0.106833	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999997 0.999997 0.999997	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.709708 1.187 -1.864802	</position>
+        <rotation>	-0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	-0.002426 0.683 -2.814306	</position>
+        <rotation>	-0 -1.570796 0.516443	</rotation>
+        <scale>	0.999995 0.999998 0.999993	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2009,6 +2045,15 @@
           <anchorShift>	0.932773	</anchorShift>
           <hiddenForUser>	true	</hiddenForUser>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.000005 1.021824 -0.124	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2069,4 +2114,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.86	</alpha>
   </emblems>
+  <baseColorID>	5	</baseColorID>
 </A168_XM_57.xml>

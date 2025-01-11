@@ -71,6 +71,13 @@
       <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Cz02_TVP_T50_NY25_3Dst>
+          <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Hull.model	</exploded>
+        </Cz02_TVP_T50_NY25_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -94,10 +101,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	0.896395 0.661843 2.49407	</rayStart>
-        <rayEnd>	0.870135 0.487521 2.39961	</rayEnd>
-        <rayUp>	-0.242651 0.020245 -0.969902	</rayUp>
-        <size>	0.24	</size>
+        <rayStart>	0.879592 0.716222 2.424601	</rayStart>
+        <rayEnd>	0.853384 0.541778 2.330353	</rayEnd>
+        <rayUp>	-0.221423 0.48908 -0.843666	</rayUp>
+        <size>	0.239998	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -1097,6 +1104,39 @@
         <clipAngle>	0.524467	</clipAngle>
         <anchorShift>	0.826303	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <position>	0.418504 1.67572 2.62449	</position>
+        <rotation>	0.484097 0.120292 3.07222	</rotation>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+        <scale>	0.426592 0.118618 0.426588	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.32733	</clipAngle>
+        <anchorShift>	0.0863	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15088	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+        <position>	1.03818 1.78841 -2.50132	</position>
+        <rotation>	3.13985 -0.000003 -0.000063	</rotation>
+        <scale>	0.697195 0.193862 0.69719	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.32733	</clipAngle>
+        <anchorShift>	0.098683	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1142,6 +1182,13 @@
         <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz02_TVP_T50_NY25_3Dst>
+            <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Cz02_TVP_T50_NY25_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -1225,6 +1272,27 @@
                   <row3>	0.000000 1.215330 -3.608689	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz02_TVP_T50_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.832000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.499560 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.042000	</row2>
+                  <row3>	0.000000 1.169648 -0.157000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.632763 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.574795 -0.015347	</row1>
+                  <row2>	0.000000 0.171433 6.420712	</row2>
+                  <row3>	0.000000 1.612000 -0.255000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.375000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.427770 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.230939	</row2>
+                  <row3>	-1.770304 1.247000 -0.446000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1294,6 +1362,27 @@
                   <row1>	0.000000 0.215837 -0.208361	</row1>
                   <row2>	0.000000 0.347268 0.359728	</row2>
                   <row3>	0.000000 1.215330 -3.608689	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz02_TVP_T50_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.832000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.499560 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.042000	</row2>
+                  <row3>	0.000000 1.169650 -0.157000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.632763 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.574795 -0.015347	</row1>
+                  <row2>	0.000000 0.171433 6.420712	</row2>
+                  <row3>	0.000000 1.612000 -0.255000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.375000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.667000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.853001	</row2>
+                  <row3>	1.770001 1.134000 -0.770000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1599,7 +1688,6 @@
             <length>	0.124529	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.38534	</xStart>
@@ -1659,7 +1747,7 @@
             <segmentSyncPivotOffset>	-1.269	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-89.609001	</startAngle>
+              <startAngle>	-0.085521	</startAngle>
               <teethCount>	18	</teethCount>
             </sync>
             <sync>
@@ -1809,7 +1897,6 @@
             <length>	0.124083	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.39627	</xStart>
@@ -1869,7 +1956,7 @@
             <segmentSyncPivotOffset>	1.269	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-95.852097	</startAngle>
+              <startAngle>	-0.085521	</startAngle>
               <teethCount>	18	</teethCount>
             </sync>
             <sync>
@@ -2046,6 +2133,13 @@
         <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Cz02_TVP_T50_NY25_3Dst>
+            <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Cz02_TVP_T50_NY25_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -2129,6 +2223,27 @@
                   <row3>	0.000000 1.215330 -3.608689	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz02_TVP_T50_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.832000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.499560 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.042000	</row2>
+                  <row3>	0.000000 1.169648 -0.157000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.632763 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.574795 -0.015347	</row1>
+                  <row2>	0.000000 0.171433 6.420712	</row2>
+                  <row3>	0.000000 1.612000 -0.255000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.375000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.427770 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.230939	</row2>
+                  <row3>	-1.770304 1.247000 -0.446000	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -2198,6 +2313,27 @@
                   <row1>	0.000000 0.215837 -0.208361	</row1>
                   <row2>	0.000000 0.347268 0.359728	</row2>
                   <row3>	0.000000 1.215330 -3.608689	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	Cz02_TVP_T50_NY25_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.832000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.499560 0.000000	</row1>
+                  <row2>	0.000000 0.000000 9.042000	</row2>
+                  <row3>	0.000000 1.169650 -0.157000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.632763 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.574795 -0.015347	</row1>
+                  <row2>	0.000000 0.171433 6.420712	</row2>
+                  <row3>	0.000000 1.612000 -0.255000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.375000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.667000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 3.853001	</row2>
+                  <row3>	1.770001 1.134000 -0.770000	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -2437,6 +2573,31 @@
           <offset>	-0.055	</offset>
         </node>
       </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.15749 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/czech/Cz02_TVP_T50/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.26892 2.1855	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.471290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.350000 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.622860	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <trackThickness>	0.000000	</trackThickness>
       <splineDesc>
         <trackPair>
           <trackPairIdx>	0	</trackPairIdx>
@@ -2478,7 +2639,6 @@
             <length>	0.124529	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.38534	</xStart>
@@ -2538,7 +2698,7 @@
             <segmentSyncPivotOffset>	-1.269	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_L4	</name>
-              <startAngle>	-89.609001	</startAngle>
+              <startAngle>	-0.085521	</startAngle>
               <teethCount>	18	</teethCount>
             </sync>
             <sync>
@@ -2688,7 +2848,6 @@
             <length>	0.124083	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.39627	</xStart>
@@ -2748,7 +2907,7 @@
             <segmentSyncPivotOffset>	1.269	</segmentSyncPivotOffset>
             <sync>
               <name>	WD_R4	</name>
-              <startAngle>	-95.852097	</startAngle>
+              <startAngle>	-0.085521	</startAngle>
               <teethCount>	18	</teethCount>
             </sync>
             <sync>
@@ -2876,31 +3035,6 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	largeTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.15749 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/czech/Cz02_TVP_T50/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.26892 2.1855	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.471290 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.350000 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.622860	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	0.000000	</trackThickness>
       <customizationSlots>
         <slot>
           <slotType>	paint	</slotType>
@@ -2911,8 +3045,8 @@
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	-0.001619 2.69139 0.683937	</anchorPosition>
-          <anchorDirection>	0 1 -0	</anchorDirection>
+          <anchorPosition>	-0.000267 2.69139 0.683951	</anchorPosition>
+          <anchorDirection>	-0 1 0	</anchorDirection>
         </slot>
       </customizationSlots>
       <customization>
@@ -3000,6 +3134,13 @@
             <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <Cz02_TVP_T50_NY25_3Dst>
+                <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </Cz02_TVP_T50_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_01.model	</collisionModelServer>
@@ -3096,6 +3237,13 @@
             <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <Cz02_TVP_T50_NY25_3Dst>
+                <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_02.model	</exploded>
+              </Cz02_TVP_T50_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_02.model	</collisionModelServer>
@@ -3162,6 +3310,13 @@
         <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Cz02_TVP_T50_NY25_3Dst>
+            <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Cz02_TVP_T50_NY25_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Turret_01.model	</collisionModelServer>
@@ -3702,6 +3857,45 @@
           <clipAngle>	0.32733	</clipAngle>
           <anchorShift>	-0.033176	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35043	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	-0.822332 2.32934 1.56534	</position>
+          <rotation>	0.75199 -0.743955 -2.98701	</rotation>
+          <scale>	0.451575 0.4 0.451568	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.006165	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35044	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	0.822378 2.32932 1.56534	</position>
+          <rotation>	0.752007 0.74385 2.98694	</rotation>
+          <scale>	0.451575 0.4 0.451568	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.006165	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35045	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	-0.000005 3.01266 1.04499	</position>
+          <rotation>	0.000000 -0.000000 3.13983	</rotation>
+          <scale>	0.437206 0.387272 0.4372	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.006165	</anchorShift>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -3788,6 +3982,13 @@
             <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_04.model	</destroyed>
             <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_04.model	</exploded>
+            <sets>
+              <Cz02_TVP_T50_NY25_3Dst>
+                <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Gun_04.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_04.model	</destroyed>
+                <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_04.model	</exploded>
+              </Cz02_TVP_T50_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_04.model	</collisionModelServer>
@@ -3884,6 +4085,13 @@
             <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_05.model	</destroyed>
             <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_05.model	</exploded>
+            <sets>
+              <Cz02_TVP_T50_NY25_3Dst>
+                <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Gun_05.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_05.model	</destroyed>
+                <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_05.model	</exploded>
+              </Cz02_TVP_T50_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_05.model	</collisionModelServer>
@@ -3988,6 +4196,13 @@
             <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_06.model	</destroyed>
             <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Gun_06.model	</exploded>
+            <sets>
+              <Cz02_TVP_T50_NY25_3Dst>
+                <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Gun_06.model	</undamaged>
+                <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_06.model	</destroyed>
+                <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Gun_06.model	</exploded>
+              </Cz02_TVP_T50_NY25_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Gun_06.model	</collisionModelServer>
@@ -4054,6 +4269,13 @@
         <undamaged>	vehicles/czech/Cz02_TVP_T50/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Turret_02.model	</destroyed>
         <exploded>	vehicles/czech/Cz02_TVP_T50/crash/lod0/Turret_02.model	</exploded>
+        <sets>
+          <Cz02_TVP_T50_NY25_3Dst>
+            <undamaged>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/normal/lod0/Turret_02.model	</undamaged>
+            <destroyed>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Turret_02.model	</destroyed>
+            <exploded>	vehicles/czech/Cz02_TVP_T50/_skins/Cz02_TVP_T50_NY25_3Dst/crash/lod0/Turret_02.model	</exploded>
+          </Cz02_TVP_T50_NY25_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/czech/Cz02_TVP_T50/collision/Turret_02.model	</collisionModelServer>
@@ -4550,6 +4772,42 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.188102	</clipAngle>
           <anchorShift>	0.388995	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35039	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	-0.841084 2.280546 1.502976	</position>
+          <rotation>	1.020285 -0.748372 3.129424	</rotation>
+          <scale>	0.332816 0.294805 0.332811	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.006165	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35040	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	0.843432 2.28271 1.505525	</position>
+          <rotation>	1.020319 0.748397 3.129375	</rotation>
+          <scale>	0.332816 0.294804 0.332811	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.006165	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35041	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	Cz02_TVP_T50_NY25_3Dst	</compatibleModels>
+          <position>	-0.39397 2.745924 0.898824	</position>
+          <rotation>	0.076661 0.009401 -3.019449	</rotation>
+          <scale>	0.60103 0.532385 0.601022	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.32733	</clipAngle>
+          <anchorShift>	-0.09	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

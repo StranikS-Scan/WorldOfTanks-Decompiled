@@ -305,7 +305,7 @@ class CumulativeAchievement(_BaseGuiAchievement):
         order = self._getOrder()
         requiredAchievementIDs = list(self._staticData.conditions.get('requiredAchievementIDs', set()))
         if order:
-            requiredAchievementIDs.sort(key=lambda id: order.index(id) if id in order else sys.maxint)
+            requiredAchievementIDs.sort(key=lambda idx: order.index(idx) if idx in order else sys.maxint)
         else:
             requiredAchievementIDs.sort()
         return requiredAchievementIDs

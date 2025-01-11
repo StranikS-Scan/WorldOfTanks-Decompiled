@@ -7,7 +7,7 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE
+from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from wg_async import wg_async, wg_await
@@ -467,6 +467,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                         newEventsCount = len(settings.getNewCommonEvents(availableDailyQuests))
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
+                    if not AccountSettings.getUIFlag(NY_DAILY_QUESTS_VISITED):
+                        newEventsCount += 1
                 elif alias == QUESTS_ALIASES.LIVE_OPS_WEB_EVENTS_VIEW_PY_ALIAS:
                     newEventsCount = self.__liveOpsWebEventsController.getEventTabVisited()
                 elif self.currentTab is not None and self.__currentTabAlias == alias:

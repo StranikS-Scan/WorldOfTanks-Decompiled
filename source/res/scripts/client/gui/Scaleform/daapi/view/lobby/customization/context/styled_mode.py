@@ -246,6 +246,11 @@ class StyledMode(CustomizationMode):
                     modifiedStyleOutfits[seasonType] = modifiedStyleOutfits[seasonType].adjust(outfit)
 
             requestData = [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]
+        else:
+            for season in SeasonType.COMMON_SEASONS:
+                outfit = self._service.getEmptyOutfitWithNationalEmblems(vehicleCD)
+                requestData.append((outfit, season))
+
         return requestData
 
     @adisp_async

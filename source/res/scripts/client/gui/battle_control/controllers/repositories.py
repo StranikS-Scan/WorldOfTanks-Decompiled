@@ -24,6 +24,7 @@ from gui.battle_control.controllers.spam_protection import battle_spam_ctrl
 from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
 from gui.battle_control.controllers.vse_hud_settings_ctrl import vse_hud_settings_ctrl
 from gui.shared.system_factory import registerBattleControllerRepo
+from gui.battle_control.controllers.sound_ctrls.new_year_battle_sounds import NewYearSoundController
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 _logger = logging.getLogger(__name__)
 
@@ -490,7 +491,12 @@ class ClassicControllersRepository(ControllersRepositoryByBonuses):
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
         repository.addController(ShotsResultSoundController())
+        repository.addController(cls._getSoundController(setup))
         return repository
+
+    @staticmethod
+    def _getSoundController(setup):
+        return NewYearSoundController()
 
     @staticmethod
     def _getAppearanceCacheController(setup):
@@ -535,11 +541,9 @@ class MapsTrainingControllerRepository(ControllersRepositoryByBonuses):
 class StrongholdControllerRepository(ClassicControllersRepository):
     __slots__ = ()
 
-    @classmethod
-    def create(cls, setup):
-        repository = super(StrongholdControllerRepository, cls).create(setup)
-        repository.addController(StrongholdBattleSoundController())
-        return repository
+    @staticmethod
+    def _getSoundController(setup):
+        return StrongholdBattleSoundController()
 
 
 class Comp7ControllerRepository(ClassicControllersRepository):
@@ -550,8 +554,11 @@ class Comp7ControllerRepository(ClassicControllersRepository):
         repository = super(Comp7ControllerRepository, cls).create(setup)
         repository.addArenaViewController(Comp7PrebattleSetupController(setup), setup)
         repository.addArenaController(Comp7VOIPController(), setup)
-        repository.addController(Comp7BattleSoundController())
         return repository
+
+    @staticmethod
+    def _getSoundController(setup):
+        return Comp7BattleSoundController()
 
     @staticmethod
     def _getAppearanceCacheController(setup):

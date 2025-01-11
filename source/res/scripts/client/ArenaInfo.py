@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/ArenaInfo.py
 import BigWorld
-from cgf_script.entity_dyn_components import BWEntitiyComponentTracker
+from cgf_script.entity_dyn_components import BWEntityComponentTracker
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 ARENA_INFO_COMPONENTS = {}
 
-class ArenaInfo(BigWorld.Entity, BWEntitiyComponentTracker):
+class ArenaInfo(BigWorld.Entity, BWEntityComponentTracker):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):

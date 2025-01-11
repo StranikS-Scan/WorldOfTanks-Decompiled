@@ -11,6 +11,7 @@ _NAME_FORMAT_CREW = ':{0} {1}:'
 _DEV_PREFIX_FORMAT_CREW = '{0}_{1}_{2} '
 _DEV_PREFIX_FORMAT_VEHICLE = '[{0}] '
 _DEV_PREFIX_FORMAT_CUSTOM = '[{0}] '
+_BOT_MASTER_NAME_FORMAT = ' ({0})'
 _WINBACK_ENGLISH_CREW_CODES = ('ru', 'be', 'uk', 'kk')
 
 def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
@@ -38,6 +39,13 @@ def preprocessBotName(name, arenaBonusType=ARENA_BONUS_TYPE.REGULAR):
     elif namingType == BotNamingType.CUSTOM:
         uniqueIndex, stringKey = args
         name = i18n.makeString(stringKey)
+        if IS_DEVELOPMENT:
+            name = _DEV_PREFIX_FORMAT_CUSTOM.format(uniqueIndex) + name
+    elif namingType == BotNamingType.MASTER:
+        uniqueIndex, stringKey, masterName = args
+        name = i18n.makeString(stringKey)
+        if masterName:
+            name += _BOT_MASTER_NAME_FORMAT.format(masterName)
         if IS_DEVELOPMENT:
             name = _DEV_PREFIX_FORMAT_CUSTOM.format(uniqueIndex) + name
     return name

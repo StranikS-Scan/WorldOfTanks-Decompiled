@@ -82,6 +82,11 @@
           <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Hull.model	</exploded>
         </GB86_Centurion_Action_X_3DSt_HW23>
+        <GB86_Centurion_Action_X_NY2025_3Dst>
+          <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB86_Centurion_Action_X_NY2025_3Dst>
       </sets>
     </models>
     <swinging>
@@ -1119,11 +1124,47 @@
         <anchorShift>	0.120597	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15086	</slotId>
+        <position>	0.552066 1.29123 3.13164	</position>
+        <rotation>	0.564168 -0.000015 3.14157	</rotation>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+        <scale>	0.639441 0.639441 0.639441	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.09116	</clipAngle>
+        <anchorShift>	0.146321	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15087	</slotId>
+        <position>	-0.000258584 1.89957 -2.79848	</position>
+        <rotation>	3.14159 0.000000 -0.000008	</rotation>
+        <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+        <attachNode>	V	</attachNode>
+        <tags>	formfactor_square	</tags>
+        <scale>	0.47777 0.115658 0.477768	</scale>
+        <doubleSided>	false	</doubleSided>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.10842	</clipAngle>
+        <anchorShift>	0.039249	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	sequence	</slotType>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
         <attachNode>	V	</attachNode>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+        <hiddenForUser>	true	</hiddenForUser>
       </slot>
     </customizationSlots>
     <customization>
@@ -1178,6 +1219,11 @@
             <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Chassis.model	</exploded>
           </GB86_Centurion_Action_X_3DSt_HW23>
+          <GB86_Centurion_Action_X_NY2025_3Dst>
+            <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB86_Centurion_Action_X_NY2025_3Dst>
         </sets>
       </models>
       <traces>
@@ -1266,6 +1312,39 @@
                   <row3>	-1.828000 1.063000 0.192235	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB86_Centurion_Action_X_NY2025_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.933015 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.286203 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.354797	</row2>
+                  <row3>	0.000000 1.126065 0.156003	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.449202 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.477707	</row2>
+                  <row3>	0.000000 1.543924 0.099316	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.277294	</row2>
+                  <row3>	-1.828000 1.063000 0.192235	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.415060 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652329 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.300000	</row2>
+                  <row3>	-0.024056 0.822602 4.130489	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.415060 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652329 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.300000	</row2>
+                  <row3>	-0.024056 1.520801 -3.162091	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1339,6 +1418,39 @@
                   <row1>	0.000000 1.000000 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.277290	</row2>
                   <row3>	1.828000 1.063000 0.192235	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB86_Centurion_Action_X_NY2025_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	1.933015 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.286203 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.354797	</row2>
+                  <row3>	0.000000 1.126065 0.156003	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.449202 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.477707	</row2>
+                  <row3>	0.000000 1.543924 0.099316	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.277294	</row2>
+                  <row3>	1.828000 1.063000 0.192235	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.415060 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652329 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.300000	</row2>
+                  <row3>	0.024056 0.822602 4.130489	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.415060 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652329 0.000000	</row1>
+                  <row2>	0.000000 0.000000 0.300000	</row2>
+                  <row3>	0.024056 1.520801 -3.162091	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1497,6 +1609,10 @@
               <segmentModelLeft>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/track/segment_01.model	</segmentModelLeft>
               <segmentModelRight>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/track/segment_02.model	</segmentModelRight>
             </GB86_Centurion_Action_X_3DSt_BVI>
+            <GB86_Centurion_Action_X_NY2025_3Dst>
+              <segmentModelLeft>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/track/segment.model	</segmentModelRight>
+            </GB86_Centurion_Action_X_NY2025_3Dst>
           </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
@@ -1529,6 +1645,9 @@
             <GB86_Centurion_Action_X_3DSt_BVI>
               <mainSegmentModel>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/track/segment_01.model	</mainSegmentModel>
             </GB86_Centurion_Action_X_3DSt_BVI>
+            <GB86_Centurion_Action_X_NY2025_3Dst>
+              <mainSegmentModel>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/track/segment.model	</mainSegmentModel>
+            </GB86_Centurion_Action_X_NY2025_3Dst>
           </modelSets>
           <collisionHull>
             <bottom>
@@ -1872,6 +1991,9 @@
             <GB86_Centurion_Action_X_3DSt_BVI>
               <mainSegmentModel>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_BVI/track/segment_02.model	</mainSegmentModel>
             </GB86_Centurion_Action_X_3DSt_BVI>
+            <GB86_Centurion_Action_X_NY2025_3Dst>
+              <mainSegmentModel>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/track/segment.model	</mainSegmentModel>
+            </GB86_Centurion_Action_X_NY2025_3Dst>
           </modelSets>
           <collisionHull>
             <bottom>
@@ -2284,6 +2406,11 @@
                 <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Gun_01.model	</exploded>
               </GB86_Centurion_Action_X_3DSt_HW23>
+              <GB86_Centurion_Action_X_NY2025_3Dst>
+                <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </GB86_Centurion_Action_X_NY2025_3Dst>
             </sets>
           </models>
           <hitTester>
@@ -2345,6 +2472,11 @@
             <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_3DSt_HW23/crash/lod0/Turret_01.model	</exploded>
           </GB86_Centurion_Action_X_3DSt_HW23>
+          <GB86_Centurion_Action_X_NY2025_3Dst>
+            <undamaged>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB86_Centurion_Action_X/_skins/GB86_Centurion_Action_X_NY2025_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB86_Centurion_Action_X_NY2025_3Dst>
         </sets>
       </models>
       <hitTester>
@@ -2758,7 +2890,6 @@
           <position>	-1.11915 2.42813 -0.116165	</position>
           <rotation>	1.56887 0.643575 -0.752377	</rotation>
           <scale>	0.286993 0.15839 0.286993	</scale>
-          <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.908818	</clipAngle>
           <anchorShift>	0.009205	</anchorShift>
@@ -2771,10 +2902,48 @@
           <position>	1.08493 2.41556 -0.192808	</position>
           <rotation>	1.56878 -0.651407 0.820072	</rotation>
           <scale>	0.286993 0.158391 0.286993	</scale>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.908818	</clipAngle>
+          <anchorShift>	0.009205	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35035	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+          <position>	-1.26144 1.96324 0.693328	</position>
+          <rotation>	1.56881 0.643489 -0.752371	</rotation>
+          <scale>	0.434464 0.239778 0.434464	</scale>
           <doubleSided>	false	</doubleSided>
           <showOn>	256	</showOn>
           <clipAngle>	0.908818	</clipAngle>
           <anchorShift>	0.009205	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35036	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+          <position>	1.26147 1.96322 0.693328	</position>
+          <rotation>	1.56875 -0.651037 0.744615	</rotation>
+          <scale>	0.434464 0.239778 0.434464	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	0.908818	</clipAngle>
+          <anchorShift>	0.009205	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35037	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	GB86_Centurion_Action_X_NY2025_3Dst	</compatibleModels>
+          <position>	0.275297 2.35025 1.3915	</position>
+          <rotation>	0.447988 0.00011 3.14156	</rotation>
+          <scale>	0.583854 0.4 0.583854	</scale>
+          <doubleSided>	false	</doubleSided>
+          <showOn>	256	</showOn>
+          <clipAngle>	1.03785	</clipAngle>
+          <anchorShift>	0.120597	</anchorShift>
         </slot>
       </customizationSlots>
       <customization>

@@ -362,11 +362,11 @@ class HangarSpace(IHangarSpace):
                 self.onMouseUp()
 
     @g_execute_after_hangar_space_inited
-    def updatePreviewVehicle(self, vehicle, outfit=None):
+    def updatePreviewVehicle(self, vehicle, outfit=None, showWaitingBg=True):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', isSingle=True)
+            Waiting.show('loadHangarSpaceVehicle', isSingle=True, showBg=showWaitingBg)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, outfit=outfit)
             self.__lastUpdatedVehicle = vehicle
 

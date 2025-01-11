@@ -135,6 +135,8 @@ class ClientArena(object):
         self.onRadarInfoReceived = Event.Event(em)
         self.onTeamInfoRegistered = Event.Event(em)
         self.onTeamInfoUnregistered = Event.Event(em)
+        self.onDynamicComponentCreatedOnVehicle = Event.Event(em)
+        self.onDynamicComponentDestroyedOnVehicle = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self._vsePlans = makeMultiPlanProvider(ASPECT.CLIENT, CallableProviderType.ARENA, arenaBonusType)
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)

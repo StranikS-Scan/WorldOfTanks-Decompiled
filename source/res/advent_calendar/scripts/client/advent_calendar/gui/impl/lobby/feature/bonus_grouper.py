@@ -6,7 +6,9 @@ from gui.goodies.goodie_items import Booster, DemountKit, RecertificationForm
 from gui.server_events.bonuses import splitBonuses
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
+from items.components.ny_constants import NyCurrency
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.shared import IItemsCache
 
 class QuestRewardsGroups(Enum):
     CURRENCIES_AND_PREMIUM = 'currenciesAndPremium'
@@ -102,6 +104,10 @@ class AdventCalendarQuestsBonusGrouper(object):
 
 class RewardsBonusGroups(Enum):
     WDR_COIN = 'wdrcoin'
+    NY_COIN = 'nyCoin'
+    NY_CURRENCY = 'ny_currency'
+    NY_TOY = 'ny_toy'
+    NY_GP_TOKEN = 'ny_gp'
     CREW_MEMBER = 'crewMember'
     LOOTBOX = 'lootbox'
     PREMIUM = 'premium_plus'
@@ -121,6 +127,7 @@ class RewardsBonusGroups(Enum):
 
 class RewardBonusGrouper(object):
     __goodiesCache = dependency.descriptor(IGoodiesCache)
+    _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, groupAndValueExtractorMapping=None):
         self._groupAndValueExtractors = {'goodies': self._extractGoodies,
@@ -133,7 +140,9 @@ class RewardBonusGrouper(object):
          'equipCoin': self._extractCurrency,
          'currencies': self._extractCurrencies,
          'items': self._extractItems,
-         'lootBox': self._extractLootBoxes}
+         'lootBox': self._extractLootBoxes,
+         'battleToken': self._extractBattleTokens,
+         'ny25Toys': self._extractToy}
         if groupAndValueExtractorMapping is not None:
             self._groupAndValueExtractors.update(groupAndValueExtractorMapping)
         return
@@ -146,11 +155,24 @@ class RewardBonusGrouper(object):
             return
 
     @staticmethod
-    def _extractLootBoxes(_):
+    def _extractToy(_):
+        return RewardsBonusGroups.NY_TOY
+
+    @classmethod
+    def _extractLootBoxes(cls, bonus):
         return RewardsBonusGroups.LOOTBOX
+
+    @classmethod
+    def _extractBattleTokens(cls, bonus):
+        if 'ny_gp' in bonus.getValue():
+            return RewardsBonusGroups.NY_GP_TOKEN
+        lootbox = cls._itemsCache.items.tokens.getLootBoxByTokenID(bonus.getTokens().keys()[0])
+        return RewardsBonusGroups.NY_COIN if 'nyCoin' in lootbox.getType() else None
 
     @staticmethod
     def _extractCurrencies(bonus):
+        if bonus.getCode() in NyCurrency.ALL:
+            return RewardsBonusGroups.NY_CURRENCY
         try:
             return RewardsBonusGroups(bonus.getCode())
         except ValueError:

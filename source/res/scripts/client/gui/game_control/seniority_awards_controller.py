@@ -27,7 +27,7 @@ CLAIM_REWARD_TIMEOUT = 20
 SELECT_REWARD_TIMEOUT = 20
 NEWBIE_REWARD_BATTLES_COUNT = 15
 NEWBIE_BULLET_BATTLES_COUNT = 4
-SENIORITY_AWARDS_PREFIX = 'wdr23:'
+SENIORITY_AWARDS_PREFIX = 'wdr24:'
 
 class VehicleSelectionState(Enum):
     RECIEVED = 0
@@ -137,9 +137,7 @@ class SeniorityAwardsController(ISeniorityAwardsController):
 
     @property
     def showRewardHangarNotification(self):
-        afterLogin = self.__hangarLoadingController.isHangarLoadedAfterLogin()
-        battlesCount = self.__itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-        return self._config.showRewardNotification and (afterLogin or battlesCount == NEWBIE_REWARD_BATTLES_COUNT)
+        return False
 
     @property
     def showRewardNotification(self):

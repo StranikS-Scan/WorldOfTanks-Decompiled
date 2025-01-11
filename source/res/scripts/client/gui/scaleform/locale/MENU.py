@@ -1830,6 +1830,7 @@ class MENU(object):
     DATETIME_MONTHS_SHORTSMALL_11 = '#menu:dateTime/months/shortSmall/11'
     DATETIME_MONTHS_SHORTSMALL_12 = '#menu:dateTime/months/shortSmall/12'
     DATETIME_SHORTDATEFORMATWITHOUTYEAR = '#menu:dateTime/shortDateFormatWithoutYear'
+    DATETIME_DATEMONTH = '#menu:dateTime/dateMonth'
     VALIDATION_PUBLICINFO_ABBREV_INVALID = '#menu:validation/publicInfo/abbrev/invalid'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_CN = '#menu:validation/publicInfo/abbrev/invalid/CN'
     VALIDATION_PUBLICINFO_ABBREV_INVALID_KR = '#menu:validation/publicInfo/abbrev/invalid/KR'

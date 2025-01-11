@@ -31,7 +31,7 @@ from skeletons.gui.shared import IItemsCache
 from uilogging.seniority_awards.loggers import VehicleSelectionErrorNotificationsLogger
 from wg_async import wg_async, wg_await
 _logger = logging.getLogger(__name__)
-_SENIORITY_VEHICLES_ORDER = ('germany:G170_PzKpfwIV_Ausf_F2', 'ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
+_SENIORITY_VEHICLES_ORDER = ('uk:GB146_Gabler_s_Destroyer', 'germany:G170_PzKpfwIV_Ausf_F2', 'ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _vehiclesSortOrder(vehicleCD, itemsCache=None):

@@ -161,6 +161,7 @@ class BaseHitPull(object):
 
 
 class HitDamagePull(BaseHitPull):
+    _MAX_INDICATORS = HIT_INDICATOR_MAX_ON_SCREEN
     settingsCore = dependency.descriptor(ISettingsCore)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -215,7 +216,7 @@ class HitDamagePull(BaseHitPull):
             self.__damageIndicatorAllies = bool(diff[DAMAGE_INDICATOR.PRESET_ALLIES])
 
     def _createPull(self):
-        return [ HitDirection(idx_) for idx_ in xrange(HIT_INDICATOR_MAX_ON_SCREEN) ]
+        return [ HitDirection(idx_) for idx_ in xrange(self._MAX_INDICATORS) ]
 
 
 class ArtyHitPredictionPull(BaseHitPull):

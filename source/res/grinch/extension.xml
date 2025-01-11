@@ -1,0 +1,61 @@
+<extension.xml>
+  <FeatureName>	grinch	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	GrinchPersonality	</Personality>
+  <EditorPersonality>	EditorGrinchPersonality	</EditorPersonality>
+  <Entities>
+    <ServerOnlyEntities>
+      <GrinchMgr></GrinchMgr>
+      <GrinchUnitMgr></GrinchUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <GrinchArenaComponent></GrinchArenaComponent>
+      <GrinchAccountComponent></GrinchAccountComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <GrinchDevelopmentHelper></GrinchDevelopmentHelper>
+      <GrinchScoreComponent></GrinchScoreComponent>
+      <GrinchVisualScriptEquipment></GrinchVisualScriptEquipment>
+      <GrinchVisualScriptStackableEquipment></GrinchVisualScriptStackableEquipment>
+      <GrinchBotOwnershipController></GrinchBotOwnershipController>
+      <GrinchVehicleStatsCollector></GrinchVehicleStatsCollector>
+      <GrinchEquipmentLocker></GrinchEquipmentLocker>
+      <GrinchAbilityDamageTracker></GrinchAbilityDamageTracker>
+      <GrinchAbilityKillTracker></GrinchAbilityKillTracker>
+      <GrinchBuffer></GrinchBuffer>
+      <GrinchDamageAmp></GrinchDamageAmp>
+      <GrinchHighlighter></GrinchHighlighter>
+      <GrinchExpirable></GrinchExpirable>
+      <GrinchFreezer></GrinchFreezer>
+      <GrinchStealther></GrinchStealther>
+      <GrinchDeploy></GrinchDeploy>
+      <GrinchTag></GrinchTag>
+      <GrinchBaseHealComponent></GrinchBaseHealComponent>
+      <GrinchRage></GrinchRage>
+      <GrinchRefCounterComponent></GrinchRefCounterComponent>
+      <GrinchGhoster></GrinchGhoster>
+    </DynamicComponents>
+  </Components>
+  <cgf>
+    <script>
+      <module>	client.grinch.cgf.ui	</module>
+      <module>	client.grinch.cgf.presents	</module>
+      <module>	client.grinch.cgf.snowstorm_hint	</module>
+      <module>	client.grinch.cgf.base_healing	</module>
+      <module>	client.grinch.cgf.grinch_sounds_manager	</module>
+      <module>	client.grinch.cgf.sound_components_manager	</module>
+      <module>	client.grinch.cgf.sound_components	</module>
+      <module>	common.grinch_common.cgf.snowstorm	</module>
+      <module>	common.grinch_common.cgf.presents	</module>
+      <module>	common.grinch_common.cgf.flare	</module>
+      <module>	common.grinch_common.cgf.freezing	</module>
+      <module>	common.grinch_common.cgf.heal_ability	</module>
+      <module>	cell.grinch_cell.cgf.presents	</module>
+      <module>	cell.grinch_cell.cgf.flare	</module>
+      <module>	cell.grinch_cell.cgf.freezing	</module>
+      <module>	cell.grinch_cell.cgf.heal_ability	</module>
+    </script>
+  </cgf>
+</extension.xml>

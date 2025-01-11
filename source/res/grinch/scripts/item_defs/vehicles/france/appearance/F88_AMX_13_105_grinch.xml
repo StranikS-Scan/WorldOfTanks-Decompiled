@@ -1,0 +1,394 @@
+<F88_AMX_13_105_grinch.xml>
+  <hull>
+    <prefabs>
+      <custom>	content/CGFPrefabs/grinch/vehicles/present_carrier.prefab	</custom>
+      <custom>	content/CGFPrefabs/grinch/vehicles/heal.prefab	</custom>
+    </prefabs>
+    <models>
+      <undamaged>	grinch/vehicles/french/F88_AMX_13_105_grinch/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Hull.model	</destroyed>
+      <exploded>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.28 34 0.42 1 0.03 0.3	</pitchParams>
+      <rollParams>	1 0.28 34 0.42 1 0.03 0.3	</rollParams>
+      <sensitivityToImpulse>	0.59	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	null	</pixie>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000040 0.327225 -0.44042	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F88_AMX_13_105/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <hangarShadowTexture>	vehicles/french/F88_AMX_13_105/AMX_13_105_HangarShadowMap.dds	</hangarShadowTexture>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0 0.260246 1.44283	</anchorPosition>
+        <anchorDirection>	0 0.177508 0.984119	</anchorDirection>
+      </slot>
+      <slot>
+        <slotType>	camouflage	</slotType>
+        <slotId>	12000	</slotId>
+        <anchorPosition>	0 0.260246 1.44283	</anchorPosition>
+        <anchorDirection>	0 0.177508 0.984119	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage>	HULL	</camouflage>
+      </customizableVehicleAreas>
+    </customization>
+  </hull>
+  <chassis>
+    <Chassis_F88_AMX_13_105_grinch>
+      <models>
+        <undamaged>	grinch/vehicles/french/F88_AMX_13_105_grinch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <size>	0.34 0.36	</size>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	grinch	</textureSet>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.1	</textureScale>
+        </trackPair>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.33627	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.12	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.290396	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.335973	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.336013	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.12	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.290417	</radius>
+          <syncAngle>	21.1765	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.335206	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.921952 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F88_AMX_13_105/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.08161 1.44437	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.518480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.151030 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.148280	</row2>
+            <row3>	0.000000 0.000000 0.000001	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0146	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+      </trackNodes>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	21000	</slotId>
+          <anchorPosition>	-1.25677 0.544197 0.00448	</anchorPosition>
+          <anchorDirection>	-0.917658 0.397357 0.003271	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	style	</slotType>
+          <slotId>	29000	</slotId>
+          <anchorPosition>	0 1.99923 -0.878973	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	CHASSIS	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Chassis_F88_AMX_13_105_grinch>
+  </chassis>
+  <turrets0>
+    <Turret_1_F88_AMX_13_105_grinch>
+      <guns>
+        <_105mm_D1504_grinch>	shared	  <models>
+            <undamaged>	grinch/vehicles/french/F88_AMX_13_105_grinch/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F88_AMX_13_105/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	grinch_shot_medium	</effects>
+          <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.000022 0.000109 2.51361	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000301 0.219623 -0.074499	</anchorPosition>
+              <anchorDirection>	0.000203 1 -0	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.000022 0.000109 2.51361	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+        </_105mm_D1504_grinch>
+      </guns>
+      <models>
+        <undamaged>	grinch/vehicles/french/F88_AMX_13_105_grinch/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	grinch/vehicles/french/F88_AMX_13_105_grinch/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F88_AMX_13_105/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F88_AMX_13_105/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.000040 0.504824 0.03252	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	true	</showEmblemsOnGun>
+      <physicsShape>	1.431 -0.31 1.02 0 0.808 0.537 0.047 0 0.557 0.5 0.22 0.447 0.375 0 0	</physicsShape>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0.279211 0.093954	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+        <slot>
+          <slotType>	camouflage	</slotType>
+          <slotId>	32000	</slotId>
+          <anchorPosition>	0 0.279211 0.093954	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage>	TURRET	</camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Turret_1_F88_AMX_13_105_grinch>
+  </turrets0>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	grinchSmall	</damagedStateGroup>
+    <fullDestruction>	grinchSmallDestruction	</fullDestruction>
+    <explosionCandle1>	grinchSmallDestruction	</explosionCandle1>
+    <explosionCandle2>	grinchSmallDestruction	</explosionCandle2>
+    <explosionCandle3>	grinchSmallDestruction	</explosionCandle3>
+    <explosionCandle4>	grinchSmallDestruction	</explosionCandle4>
+  </effects>
+  <emblems>
+    <default>	15504	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.86	</alpha>
+  </emblems>
+</F88_AMX_13_105_grinch.xml>

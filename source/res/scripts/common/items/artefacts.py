@@ -1328,6 +1328,20 @@ class ArcadeEquipmentConfigReader(object):
             self.cameraPivotPosMax = _xml.readVector3OrNone(xmlCtx, section, 'cameraPivotPosMax')
 
 
+class AbilityTooltipConfigReader(object):
+    _TOOLTIP_CONFIG_SLOTS = ('radius', 'duration', 'debuffDuration')
+
+    def initTooltipsInformation(self):
+        self.radius = component_constants.ZERO_INT
+        self.duration = component_constants.ZERO_INT
+        self.debuffDuration = component_constants.ZERO_INT
+
+    def readTooltipsConfig(self, xmlCtx, section):
+        self.radius = _xml.readIntOrNone(xmlCtx, section, 'radius')
+        self.duration = _xml.readIntOrNone(xmlCtx, section, 'duration')
+        self.debuffDuration = _xml.readIntOrNone(xmlCtx, section, 'debuffDuration')
+
+
 class DynamicEquipment(Equipment):
     __slots__ = ('_config',)
 

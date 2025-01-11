@@ -2554,4 +2554,51 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G121_Grille_15_L63	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1006	</id>
+      <texture>	gui/maps/vehicles/styles/G121_Grille_15_L63_NY2025_3Dst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G121_Grille_15_L63_NY2025_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	G121_Grille_15_L63_NY2025_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/G121_Grille_15_L63_NY2025_3Dst	</userString>
+      <tags>	NY_style c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	127	</id>
+              <slotId>	18000	</slotId>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+          <insignias>
+            <item>
+              <id>	76	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </germany.xml>

@@ -21,8 +21,13 @@ _logger = logging.getLogger(__name__)
 _HERO_VEHICLES = 'hero_vehicles'
 _ADD_HERO_STEP_NAME = 'add_HeroVehicle'
 _CALENDAR_ACTION_CHANGED = events.AdventCalendarEvent.HERO_ADVENT_ACTION_STATE_CHANGED
-_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'shopUrl'))
-_HeroTankInfo.__new__.__defaults__ = ('', None, None, '', '')
+_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID', 'crew', 'name', 'shopUrl', 'fromBoxes'))
+_HeroTankInfo.__new__.__defaults__ = ('',
+ None,
+ None,
+ '',
+ '',
+ False)
 
 class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -107,6 +112,9 @@ class HeroTankController(IHeroTankController):
     def getCurrentVehicleName(self):
         return self.__data[self.__currentTankCD].name if self.isEnabled() and self.__currentTankCD in self.__data else ''
 
+    def getCurrentFromBoxes(self):
+        return self.__data[self.__currentTankCD].fromBoxes if self.isEnabled() and self.__currentTankCD in self.__data else False
+
     def setInteractive(self, interactive):
         self.onInteractive(interactive)
 
@@ -156,7 +164,7 @@ class HeroTankController(IHeroTankController):
             for vCompDescr, vData in heroVehicles.iteritems():
                 if vCompDescr in self.__invVehiclesIntCD:
                     continue
-                self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), shopUrl=vData.get('shopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr))
+                self.__data[vCompDescr] = _HeroTankInfo(name=vData.get('name'), url=vData.get('url'), shopUrl=vData.get('shopUrl'), styleID=vData.get('styleID'), crew=self.__createCrew(vData.get('crew'), vCompDescr), fromBoxes=vData.get('fromBoxes'))
 
         self.__applyActions()
         self.onUpdated()
@@ -187,7 +195,7 @@ class HeroTankController(IHeroTankController):
         else:
             styleStr = params.get('styleID')
             styleId = int(styleStr) if styleStr else None
-            self.__data[vCompDescr] = _HeroTankInfo(name=vName, url=params.get('url'), shopUrl=params.get('shopUrl'), styleID=styleId, crew=self.__createCrew(params.get('crew'), vCompDescr))
+            self.__data[vCompDescr] = _HeroTankInfo(name=vName, url=params.get('url'), shopUrl=params.get('shopUrl'), styleID=styleId, crew=self.__createCrew(params.get('crew'), vCompDescr), fromBoxes=params.get('fromBoxes'))
             return
 
     def __createCrew(self, crewXml, vCompDescr):

@@ -466,7 +466,16 @@ class IHeroTankController(IGameController):
     def getCurrentVehicleName(self):
         raise NotImplementedError
 
+    def getCurrentFromBoxes(self):
+        raise NotImplementedError
+
     def getCurrentShopUrl(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def setEnabled(self, isEnabled):
         raise NotImplementedError
 
 
@@ -1574,6 +1583,9 @@ class ICraftmachineController(IGameController):
 
 
 class ICalendarController(IGameController):
+
+    def mustShow(self):
+        raise NotImplementedError
 
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
@@ -3155,6 +3167,10 @@ class IHangarSpaceSwitchController(IGameController):
     def lockHangarOverride(self, sceneName):
         raise NotImplementedError
 
+    @property
+    def currentSceneName(self):
+        raise NotImplementedError
+
 
 class ICollectionsSystemController(IGameController):
     onServerSettingsChanged = None
@@ -3678,6 +3694,13 @@ class IAchievementsController(IGameController):
         raise NotImplementedError
 
     def setShowHint(self, value):
+        raise NotImplementedError
+
+
+class IGFNotificationsController(IGameController):
+    onBattleQueueStateUpdated = None
+
+    def selectRandomBattle(self, callback):
         raise NotImplementedError
 
 

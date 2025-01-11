@@ -82,14 +82,16 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
+        <global-active>	_HaveNewBadge	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagProfileHint	</hint-id>
             <value>	False	</value>
           </condition-hint-showed>
-          <global-active>	_HaveNewBadge	</global-active>
         </condition-and>
       </condition>
+      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	HangarHaveNewSuffixBadgeHint	  <item-id>	AccountButton	</item-id>
       <text>	_(#menu:header/account/popover/tutorial/newSuffixBadge)	</text>
@@ -105,7 +107,9 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagProfileHint	</hint-id>
@@ -319,7 +323,9 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <hide-immediately>	True	</hide-immediately>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagProfileHint	</hint-id>
@@ -340,6 +346,7 @@
       </arrow>
       <ignore-outside-click>	True	</ignore-outside-click>
       <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	DogTagHangarHint	</hint-id>
@@ -354,6 +361,7 @@
         </simple-state>
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	LobbyMenuManualHint	  <item-id>	LobbyMenuManualItem	</item-id>
       <text></text>
@@ -408,6 +416,7 @@
         </simple-state>
       </checked-ui-state>
       <condition>
+        <global-active>	_MessengerBarVisible	</global-active>
         <condition-and>
           <condition-hint-showed>
             <hint-id>	SessionStatsSettingsBtnHint	</hint-id>
@@ -419,6 +428,7 @@
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	SessionStatsSettingsBtnHint	  <item-id>	SessionStatsSettingsBtn	</item-id>
@@ -451,6 +461,10 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_NY_navigation_disabled	</global-active>
+      </condition>
+      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	CustomizationCarouselHint	  <item-id>	CustomizationCarousel	</item-id>
       <text>	_(#tutorial:customization/decal)	</text>
@@ -806,6 +820,25 @@
       <update-runtime>	True	</update-runtime>
       <hide-immediately>	True	</hide-immediately>
       <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	GrinchProgressionFightButtonHint	  <item-id>	FightButton	</item-id>
+      <text>	_(#tutorial:grinch/fight)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_GrinchFightButtonHintActive	</global-active>
+      </condition>
     </hint>
     <hint>	FrontlineScenariosHint	  <item-id>	FrontlineScenariosInfoBtn	</item-id>
       <text>	_(#epic_battle:ammunitionSetup/btn/info/hint)	</text>

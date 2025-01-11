@@ -978,6 +978,9 @@ class ITokensRequester(IRequester):
     def getLootBoxByTokenID(self, tokenID):
         raise NotImplementedError
 
+    def getNyCoins(self):
+        raise NotImplementedError
+
     def getLootBoxByID(self, boxID):
         raise NotImplementedError
 

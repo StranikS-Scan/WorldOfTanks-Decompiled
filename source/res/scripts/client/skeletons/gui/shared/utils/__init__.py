@@ -6,8 +6,11 @@ if TYPE_CHECKING:
     from gui.shared.gui_items import ItemsCollection
     from gui.shared.gui_items.Tankman import Tankman
     from gui.shared.gui_items.Vehicle import Vehicle
+    from Event import Event
+    from gui.shared.utils.requesters import battle_pass_requester
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from new_year import ny_requester
     from gui.shared.gui_items.badge import Badge
     from gui.shared.gui_items.dossier import AccountDossier
     from gui.shared.utils.tankmen_stats_cache import TankmenStatsCache
@@ -96,6 +99,10 @@ class IItemsRequester(requesters.IRequester):
 
     @property
     def tankmenStatsCache(self):
+        raise NotImplementedError
+
+    @property
+    def festivity(self):
         raise NotImplementedError
 
     def requestUserDossier(self, databaseID, callback):
@@ -269,6 +276,10 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     @property
+    def isSelectionEnabled(self):
+        raise NotImplementedError
+
+    @property
     def spacePath(self):
         raise NotImplementedError
 
@@ -297,7 +308,7 @@ class IHangarSpace(object):
     def updateVehicleDescriptor(self, descr):
         raise NotImplementedError
 
-    def updatePreviewVehicle(self, vehicle, outfit=None):
+    def updatePreviewVehicle(self, vehicle, outfit=None, showWaitingBg=True):
         raise NotImplementedError
 
     def removeVehicle(self):
@@ -325,6 +336,12 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def updateAnchorsParams(self, *args):
+        raise NotImplementedError
+
+    def resetLastUpdatedVehicle(self):
+        raise NotImplementedError
+
+    def setSelectionEnabled(self, enabled):
         raise NotImplementedError
 
 

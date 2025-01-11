@@ -8177,6 +8177,21 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
+    <name>	Boosteroid	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 150g notInShop	</priceGroup>
+    <decal>
+      <id>	16022	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_859.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_859	</userString>
+      <mirror>	true	</mirror>
+      <tags>	hiddenInUI	</tags>
+    </decal>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -14394,6 +14409,61 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	Tornaments 2024	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1107	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_770.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_770	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1108	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_771.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_771	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1109	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_772.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_772	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1110	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_773.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_773	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1118	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_774.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_774	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1119	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_775.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_775	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1120	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_776.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_776	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	NY 2025	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>

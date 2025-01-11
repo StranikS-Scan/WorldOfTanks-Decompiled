@@ -3739,4 +3739,55 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1750g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31036	</id>
+      <texture>	gui/maps/vehicles/styles/Boosteroid_Style_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/Boosteroid_01	</userString>
+      <description>	#vehicle_customization:special_style/Boosteroid_01_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Boosteroid_01_desc/long	</longDescriptionSpecial>
+      <tags>	c11n2D progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	1033	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	16022	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	16022	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </unified_nonCN.xml>

@@ -15,6 +15,7 @@ from dossiers2.custom.dependencies import EPIC_BATTLE_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import STEAM_ACHIEVEMENT_DEPENDENCIES
 from dossiers2.custom.dependencies import VEHICLE_ACHIEVEMENTS_DEPENDENCIES, VEHICLE_ACHIEVEMENTS_POP_UPS
 from dossiers2.custom.dependencies import CUSTOMIZATION_ACHIEVEMENTS_DEPENDENCIES, CUSTOMIZATION_ACHIEVEMENTS_POP_UPS
+from dossiers2.custom.dependencies import PLAYER_BADGES_DEPENDENCIES
 from battle_statistics_layouts import *
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
@@ -926,7 +927,10 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'comp7_4_yearly_champion',
  'comp7_4_yearly_legend',
  'hw2024Medal',
- 'BattlePassCommonPr_15extra']
+ 'BattlePassCommonPr_15extra',
+ 'NY25_AtmsphrLevel',
+ 'NY25_CelebChallenge',
+ '14YearsOfService']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -1168,7 +1172,10 @@ _singleAchievementsPopUps = ['titleSniper',
  'comp7_4_yearly_champion',
  'comp7_4_yearly_legend',
  'hw2024Medal',
- 'BattlePassCommonPr_15extra']
+ 'BattlePassCommonPr_15extra',
+ 'NY25_AtmsphrLevel',
+ 'NY25_CelebChallenge',
+ '14YearsOfService']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, SINGLE_ACHIEVEMENTS_DEPENDENCIES, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',
@@ -1190,7 +1197,7 @@ RANKED_BADGES_BLOCK_LAYOUT = ['1',
  '7',
  '8',
  '9']
-_playerBadgesBlockBuilder = DictBlockBuilder('playerBadges', 'I', 'I', {})
+_playerBadgesBlockBuilder = DictBlockBuilder('playerBadges', 'I', 'I', PLAYER_BADGES_DEPENDENCIES)
 _rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BHHHH', {})
 _rareAchievementsBlockBuilder = ListBlockBuilder('rareAchievements', 'I', {})
 UNIQUE_ACHIEVEMENT_VALUES = ['histBattle1_battlefield',

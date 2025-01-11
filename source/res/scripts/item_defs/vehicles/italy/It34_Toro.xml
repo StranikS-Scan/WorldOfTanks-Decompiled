@@ -421,6 +421,33 @@
         <clipAngle>	1.14911	</clipAngle>
         <anchorShift>	0.02	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.623 0.310407 -0.918398	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999979 0.999979 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.623 0.310407 -0.918398	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999979 0.999979 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.297 0.189 -3.648	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999924 0.999924 0.999924	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2118,6 +2145,24 @@
           <clipAngle>	1.37808	</clipAngle>
           <anchorShift>	0.05	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.118 0.994 0.166	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-1.110996 0.744091 -0.553	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2178,4 +2223,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
+  <baseColorID>	1	</baseColorID>
 </It34_Toro.xml>

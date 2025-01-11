@@ -1,0 +1,223 @@
+<G00_Pillbox_grinch.xml>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	grinchTurret	</damagedStateGroup>
+    <fullDestruction>	grinchTurretDestruction	</fullDestruction>
+    <explosionCandle1>	grinchTurretDestruction	</explosionCandle1>
+    <explosionCandle2>	grinchTurretDestruction	</explosionCandle2>
+    <explosionCandle3>	grinchTurretDestruction	</explosionCandle3>
+    <explosionCandle4>	grinchTurretDestruction	</explosionCandle4>
+  </effects>
+  <emblems>
+    <default>	0	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <hull>
+    <prefabs>
+      <custom>	content/CGFPrefabs/grinch/vehicles/heal.prefab	</custom>
+    </prefabs>
+    <models>
+      <undamaged>	grinch/vehicles/german/G00_Pillbox_grinch/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Hull.model	</destroyed>
+      <exploded>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.0 0.36 1.0 0.05 0.34	</pitchParams>
+      <rollParams>	1.0 0.34 38.0 0.36 1.0 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.2	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	null	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 1.197455 0	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	grinch/vehicles/german/G00_Pillbox_grinch/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	grinch/vehicles/german/G00_Pillbox_grinch/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <customizationSlots>
+      <slot>
+        <slotType>	paint	</slotType>
+        <slotId>	11000	</slotId>
+        <anchorPosition>	0 0.743486 -2.79463	</anchorPosition>
+        <anchorDirection>	0 0.257098 -0.966385	</anchorDirection>
+      </slot>
+    </customizationSlots>
+    <customization>
+      <customizableVehicleAreas>
+        <paint>	HULL	</paint>
+        <camouflage></camouflage>
+      </customizableVehicleAreas>
+    </customization>
+  </hull>
+  <chassis>
+    <Chassis_G00_Pillbox_grinch>
+      <models>
+        <undamaged>	grinch/vehicles/german/G00_Pillbox_grinch/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	grinch	</textureSet>
+        <size>	0.5 0.3	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+          <textureScale>	-1.1	</textureScale>
+        </trackPair>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	1.200000 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 1.200000	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.0377594	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_L1	</name>
+          <radius>	0.0491905	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.0393124	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R1	</name>
+          <radius>	0.0513476	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <hullPosition>	0 0.013 0	</hullPosition>
+      <hitTester>
+        <trackPairIdx>	0	</trackPairIdx>
+        <collisionModelServer>	grinch/vehicles/german/G00_Pillbox_grinch/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	grinch/vehicles/german/G00_Pillbox_grinch/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.20484 0.541571	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <customization>
+        <customizableVehicleAreas>
+          <paint></paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+    </Chassis_G00_Pillbox_grinch>
+  </chassis>
+  <turrets0>
+    <Turret_1_G00_Pillbox_grinch>
+      <models>
+        <undamaged>	grinch/vehicles/german/G00_Pillbox_grinch/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	grinch/vehicles/german/G00_Pillbox_grinch/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	grinch/vehicles/german/G00_Pillbox_grinch/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.485950 0.39893841861	</gunPosition>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <customizationSlots>
+        <slot>
+          <slotType>	paint	</slotType>
+          <slotId>	31000	</slotId>
+          <anchorPosition>	0 0.924194 0	</anchorPosition>
+          <anchorDirection>	0 1 0	</anchorDirection>
+        </slot>
+      </customizationSlots>
+      <customization>
+        <customizableVehicleAreas>
+          <paint>	TURRET	</paint>
+          <camouflage></camouflage>
+        </customizableVehicleAreas>
+      </customization>
+      <guns>
+        <Gun_1_G00_Pillbox_grinch>	shared	  <models>
+            <undamaged>	grinch/vehicles/german/G00_Pillbox_grinch/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	grinch/vehicles/german/G00_Pillbox_grinch/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	grinch/vehicles/german/G00_Pillbox_grinch/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	grinch/vehicles/german/G00_Pillbox_grinch/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	grinch_shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000001 -0.002713 2.09237	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN	</paint>
+              <camouflage></camouflage>
+            </customizableVehicleAreas>
+          </customization>
+        </Gun_1_G00_Pillbox_grinch>
+      </guns>
+    </Turret_1_G00_Pillbox_grinch>
+  </turrets0>
+</G00_Pillbox_grinch.xml>

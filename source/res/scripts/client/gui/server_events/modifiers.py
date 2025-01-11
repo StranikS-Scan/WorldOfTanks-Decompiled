@@ -1222,6 +1222,15 @@ class CalendarModifier(ActionModifier):
         return int(strDuration) if strDuration else None
 
 
+class EventStateModifier(ActionModifier):
+
+    def __init__(self, name, params):
+        super(EventStateModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
+
+    def getState(self):
+        return self.getParams().get('state')
+
+
 class CalendarSplashModifier(ActionModifier):
 
     def __init__(self, name, params):
@@ -1298,6 +1307,7 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('ReferralProgramDisabled', ReferralModifier),
  ('AdventCalendarEnabled', CalendarModifier),
  ('AdventCalendarForced', CalendarSplashModifier),
+ ('EventState', EventStateModifier),
  ('HeroTankAdventCalendarRedirect', HeroTankAdventCalendarRedirectModifier),
  ('LobbyHeaderTabCounterModification', LobbyHeaderTabCounterModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)

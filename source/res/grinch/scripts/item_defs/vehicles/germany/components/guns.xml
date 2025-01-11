@@ -1,0 +1,143 @@
+<guns.xml>
+  <ids>
+    <_105mm_BK_L7A3_L51_grinch>	50001	</_105mm_BK_L7A3_L51_grinch>
+    <_105mm_BK_L7A3_L51_npc_grinch>	50002	</_105mm_BK_L7A3_L51_npc_grinch>
+    <Gun_1_G00_Pillbox_grinch>	50003	</Gun_1_G00_Pillbox_grinch>
+  </ids>
+  <shared>
+    <_105mm_BK_L7A3_L51_grinch>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	grinch_shot_small	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -22.0 1.0 -22.0	</minPitch>
+        <maxPitch>	0.0 12.0 1.0 12.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	90.0	</rotationSpeed>
+      <reloadTime>	8.0	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <weight>	1282	</weight>
+      <maxHealth>	10000	</maxHealth>
+      <maxRegenHealth>	9000	</maxRegenHealth>
+      <hysteresisHealth>	49	</hysteresisHealth>
+      <repairCost>	8	</repairCost>
+      <healthRegenPerSec>	10000	</healthRegenPerSec>
+      <healthBurnPerSec>	0	</healthBurnPerSec>
+      <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+      <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.24	</shotDispersionRadius>
+      <aimingTime>	1.3	</aimingTime>
+      <shotDispersionFactors>
+        <turretRotation>	0.01	</turretRotation>
+        <afterShot>	0.05	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_DM13_grinch>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	2100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	200 200	</piercingPower>
+        </_105mm_AP_DM13_grinch>
+      </shots>
+    </_105mm_BK_L7A3_L51_grinch>
+    <_105mm_BK_L7A3_L51_npc_grinch>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	grinch_shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	5.0	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <hysteresisHealth>	49	</hysteresisHealth>
+      <repairCost>	8	</repairCost>
+      <healthRegenPerSec>	7	</healthRegenPerSec>
+      <healthBurnPerSec>	0	</healthBurnPerSec>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_DM13_npc_grinch>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	278 269	</piercingPower>
+        </_105mm_AP_DM13_npc_grinch>
+      </shots>
+    </_105mm_BK_L7A3_L51_npc_grinch>
+    <Gun_1_G00_Pillbox_grinch>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.24	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.32	</amplitude>
+        <recoilEffect>	small	</recoilEffect>
+      </recoil>
+      <effects>	grinch_shot_small	</effects>
+      <reloadEffect>	reload20_45	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -50.0 1.0 -50.0	</minPitch>
+        <maxPitch>	0.0 50.0 1.0 50.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	180.0	</rotationSpeed>
+      <reloadTime>	7.0	</reloadTime>
+      <maxAmmo>	600	</maxAmmo>
+      <weight>	250	</weight>
+      <maxHealth>	10000	</maxHealth>
+      <maxRegenHealth>	9000	</maxRegenHealth>
+      <hysteresisHealth>	160	</hysteresisHealth>
+      <repairCost>	2	</repairCost>
+      <healthRegenPerSec>	1000	</healthRegenPerSec>
+      <healthBurnPerSec>	0	</healthBurnPerSec>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.7	</shotDispersionRadius>
+      <aimingTime>	0.1	</aimingTime>
+      <shotDispersionFactors>
+        <turretRotation>	0.01	</turretRotation>
+        <afterShot>	0.1	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <G00_Pillbox_AP_grinch>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	400	</speed>
+          <gravity>	5.0	</gravity>
+          <maxDistance>	500	</maxDistance>
+          <piercingPower>	280 60	</piercingPower>
+        </G00_Pillbox_AP_grinch>
+      </shots>
+    </Gun_1_G00_Pillbox_grinch>
+  </shared>
+</guns.xml>

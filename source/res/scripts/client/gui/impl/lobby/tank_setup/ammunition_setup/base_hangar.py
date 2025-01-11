@@ -319,6 +319,7 @@ class BaseHangarAmmunitionSetupView(BaseAmmunitionSetupView):
                 self._tankSetup.update(fullUpdate=True)
             if self._optionalDevicesAssistant:
                 self._optionalDevicesAssistant.updateVehicle(self._vehItem.getItem())
+            self._vehItem.getItem().setOutfits(g_currentVehicle.item)
             self._updateAmmunitionPanel()
             return
 

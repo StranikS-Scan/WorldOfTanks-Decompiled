@@ -4514,4 +4514,164 @@
     </kpi>
     <archetype>	modernizedExtraHealthReserveAntifragmentationLining	</archetype>
   </modernizedExtraHealthReserveAntifragmentationLining3>
+  <modernizedImprovedSightsEnhancedAimDrives1>
+    <id>	159	</id>
+    <userString>	#artefacts:modernizedImprovedSightsEnhancedAimDrives1/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives1/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives1/long_special	</longDescriptionSpecial>
+    <icon>	modernizedImprovedSightsEnhancedAimDrives	</icon>
+    <groupName>	improvedSights	</groupName>
+    <price>	100	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	improvedSights firepower modernized_1	</tags>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.95	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.971	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedImprovedSightsEnhancedAimDrives2	</upgradedDevice>
+        <price>	400	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.95	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.03	</value>
+      </mul>
+    </kpi>
+    <archetype>	modernizedImprovedSightsEnhancedAimDrives	</archetype>
+  </modernizedImprovedSightsEnhancedAimDrives1>
+  <modernizedImprovedSightsEnhancedAimDrives2>
+    <id>	160	</id>
+    <userString>	#artefacts:modernizedImprovedSightsEnhancedAimDrives2/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives2/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives2/long_special	</longDescriptionSpecial>
+    <icon>	modernizedImprovedSightsEnhancedAimDrives	</icon>
+    <groupName>	improvedSights	</groupName>
+    <price>	400	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	improvedSights firepower modernized_2	</tags>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	UpgradableStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.94	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.962	</valueByLevel>
+        </factor>
+      </factors>
+      <upgradeInfo>
+        <upgradedDevice>	modernizedImprovedSightsEnhancedAimDrives3	</upgradedDevice>
+        <price>	2000	  <equipCoin></equipCoin>
+        </price>
+      </upgradeInfo>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.94	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.04	</value>
+      </mul>
+    </kpi>
+    <archetype>	modernizedImprovedSightsEnhancedAimDrives	</archetype>
+  </modernizedImprovedSightsEnhancedAimDrives2>
+  <modernizedImprovedSightsEnhancedAimDrives3>
+    <id>	161	</id>
+    <userString>	#artefacts:modernizedImprovedSightsEnhancedAimDrives3/name	</userString>
+    <shortDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives3/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:modernizedImprovedSightsEnhancedAimDrives3/long_special	</longDescriptionSpecial>
+    <icon>	modernizedImprovedSightsEnhancedAimDrives	</icon>
+    <groupName>	improvedSights	</groupName>
+    <price>	1600	  <equipCoin></equipCoin>
+    </price>
+    <notInShop>	true	</notInShop>
+    <removable>	false	</removable>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	lightTank mediumTank heavyTank AT-SPG	</tags>
+          <minLevel>	5	</minLevel>
+          <maxLevel>	10	</maxLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <tags>	improvedSights firepower modernized_3	</tags>
+    <incompatibleTags>
+      <installed>	improvedSights	</installed>
+    </incompatibleTags>
+    <script>	UpgradedStaticDevice	  <weight>	100	</weight>
+      <factors>
+        <factor>
+          <attribute>	miscAttrs/multShotDispersionFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.93	</valueByLevel>
+        </factor>
+        <factor>
+          <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
+          <type>	mul	</type>
+          <valueByLevel>	0.952	</valueByLevel>
+        </factor>
+      </factors>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleGunShotFullDispersion	</name>
+        <value>	0.93	</value>
+      </mul>
+      <mul>
+        <name>	vehicleGunAimSpeed	</name>
+        <value>	1.05	</value>
+      </mul>
+    </kpi>
+    <archetype>	modernizedImprovedSightsEnhancedAimDrives	</archetype>
+  </modernizedImprovedSightsEnhancedAimDrives3>
 </optional_devices.xml>

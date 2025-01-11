@@ -246,6 +246,9 @@ class Window(PyObjectEntity):
     def isHidden(self):
         return self.proxy.isHidden()
 
+    def canBeClosed(self):
+        return self.content.canBeClosed() if self.content is not None else True
+
     def _getDecoratorViewModel(self):
         decorator = self.decorator
         return decorator.getViewModel() if decorator is not None else None
@@ -328,7 +331,6 @@ class Window(PyObjectEntity):
         self.onSizeChanged(self.uniqueID, width, height)
 
     def _cPositionChanged(self, x, y):
-        _logger.debug('Position changed to %d %d for %r', x, y, self)
         self.onPositionChanged(self.uniqueID, x, y)
 
     def __attachToDecorator(self):

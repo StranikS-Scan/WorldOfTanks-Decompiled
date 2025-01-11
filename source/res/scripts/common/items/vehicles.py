@@ -3125,7 +3125,8 @@ def _getAmmoForGun(gunDescr, defaultPortion=None):
 
 def getBuiltinEqsForVehicle(vehType):
     builtins = vehType.builtins
-    return [ e.compactDescr for e in g_cache.equipments().itervalues() if e.name in builtins ][:vehType.supplySlots.getAmountForType(ITEM_TYPES.equipment, items.EQUIPMENT_TYPES.regular)]
+    sortedEquipment = sorted([ e for e in g_cache.equipments().itervalues() if e.name in builtins ][:vehType.supplySlots.getAmountForType(ITEM_TYPES.equipment, items.EQUIPMENT_TYPES.regular)], key=lambda e: g_cache.equipmentIDs()[e.name])
+    return [ e.compactDescr for e in sortedEquipment ]
 
 
 def getUnlocksSources():
@@ -6075,19 +6076,17 @@ def _readAndRegisterDamageStickerTextureParams(xmlCtx, section, stickerName, rai
     if not section.has_key('texName'):
         if raiseError:
             _xml.raiseWrongXml(xmlCtx, section.name, 'texName for damage sticker is not specified')
-        return
+        return None
     else:
         texAM = _xml.readNonEmptyString(xmlCtx, section, 'texName')
         texNM = _xml.readNonEmptyString(xmlCtx, section, 'bumpTexName') if section.has_key('bumpTexName') else ''
         texGMM = _xml.readNonEmptyString(xmlCtx, section, 'smTexName') if section.has_key('smTexName') else ''
-        randomYaw = True
-        subsection = section['randomYaw']
-        if subsection is not None:
-            randomYaw = subsection.asBool
+        randomYaw = section.readBool('randomYaw', True)
+        ignoreAlbedo = section.readBool('ignoreAlbedo', False)
         variation = section.readFloat('variation', 0.0)
         v = _xml.readPositiveVector2(xmlCtx, section, 'modelSizes')
         modelSizes = v.tuple()
-        return BigWorld.wg_registerDamageSticker(stickerName, texAM, texNM, texGMM, modelSizes, variation, randomYaw)
+        return BigWorld.wg_registerDamageSticker(stickerName, texAM, texNM, texGMM, modelSizes, variation, randomYaw, ignoreAlbedo)
 
 
 def _readCommonConfig(xmlCtx, section):

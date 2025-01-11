@@ -4,6 +4,9 @@ import logging
 from copy import copy
 from functools import partial
 import typing
+import math_utils
+import Math
+import AnimationSequence
 from CurrentVehicle import g_currentVehicle
 from adisp import adisp_process, adisp_async
 from gui import SystemMessages
@@ -17,10 +20,12 @@ from gui.shared.utils.decorators import adisp_process as wrappedProcess
 from helpers import dependency
 from shared_utils import first
 from items.components.c11n_constants import CustomizationType, SLOT_DEFAULT_ALLOWED_MODEL
+from items.readers.shared_readers import getAttachmentHangingEffect
 from vehicle_outfit.outfit import Area
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IHangarSpace
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from vehicle_outfit.containers import emptyComponent
 if typing.TYPE_CHECKING:
@@ -39,6 +44,7 @@ class CustomizationMode(object):
     _itemsCache = dependency.descriptor(IItemsCache)
     _service = dependency.descriptor(ICustomizationService)
     _soundEventChecker = dependency.descriptor(ISoundEventChecker)
+    _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, ctx):
         self._ctx = ctx
@@ -50,6 +56,8 @@ class CustomizationMode(object):
         self._state = {}
         self._selectedSlot = None
         self._selectedItem = None
+        self._hangingEffect = None
+        self._hangarSpace.onSpaceDestroy += self._onSpaceDestroy
         return
 
     @property
@@ -115,11 +123,13 @@ class CustomizationMode(object):
         self._onStop()
 
     def fini(self):
+        self._hangarSpace.onSpaceDestroy -= self._onSpaceDestroy
         self._originalOutfits.clear()
         self._modifiedOutfits.clear()
         self._state.clear()
         self._isInited = False
         self._ctx = None
+        self._hangingEffect = None
         return
 
     def changeTab(self, tabId, itemCD=None):
@@ -355,6 +365,10 @@ class CustomizationMode(object):
                 self._events.onComponentChanged(slotId, False)
         return
 
+    def _onSpaceDestroy(self, *_):
+        self._hangingEffect = None
+        return
+
     def _getOutfitForSlot(self, slotId, season=None):
         if slotId.slotType in C11N_ITEM_TYPE_MAP and C11N_ITEM_TYPE_MAP[slotId.slotType] in CustomizationType.COMMON_TYPES:
             season = SeasonType.ALL
@@ -430,6 +444,7 @@ class CustomizationMode(object):
             multiSlot = outfit.getContainer(slotId.areaId).slotFor(slotId.slotType)
             multiSlot.set(item.intCD, idx=slotId.regionIdx, component=component or self._getCommonComponent(item, slotId))
             outfit.invalidate()
+            self._playInstallEffect(item, slotId)
             return True
         return False
 
@@ -538,3 +553,15 @@ class CustomizationMode(object):
     def _configureAttachmentComponent(self, component, item, slotId):
         slot = g_currentVehicle.item.getAnchorBySlotId(slotId.slotType, slotId.areaId, slotId.regionIdx)
         component.setScaleFactorId(item.scaleFactorId, slot.scaleFactorId)
+
+    def _playInstallEffect(self, item, slotId):
+        sequenceID = getAttachmentHangingEffect(item.applyType, item.rarity)
+        if sequenceID:
+            loader = AnimationSequence.Loader(sequenceID, self._hangarSpace.spaceID)
+            self._hangingEffect = loader.loadSync()
+            anchorParams = self.getAnchorParams(slotId)
+            rotationYPR = Math.Vector3(anchorParams.descriptor.rotation.y, anchorParams.descriptor.rotation.x, anchorParams.descriptor.rotation.z)
+            matrix = math_utils.createSRTMatrix(anchorParams.descriptor.scale, rotationYPR, anchorParams.location.position)
+            self._hangingEffect.bindToWorld(matrix)
+            self._hangingEffect.loopCount = 1
+            self._hangingEffect.start()

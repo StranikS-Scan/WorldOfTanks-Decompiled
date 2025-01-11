@@ -8,7 +8,7 @@ if typing.TYPE_CHECKING:
 
 class AdventCalendarAccountComponent(BaseAccountExtensionComponent):
 
-    def openAdventCalendarDoor(self, dayID, callback=None):
+    def openAdventCalendarDoor(self, dayID, currency, callback=None):
         proxy = (lambda requestID, resultID, errorStr: callback(resultID, errorStr)) if callback is not None else None
-        self.account._doCmdInt(advent_calendar_account_commands.CMD_OPEN_ADVENT_CALENDAR_DOOR, dayID, proxy)
+        self.account._doCmdIntStr(advent_calendar_account_commands.CMD_OPEN_ADVENT_CALENDAR_DOOR, dayID, currency, proxy)
         return

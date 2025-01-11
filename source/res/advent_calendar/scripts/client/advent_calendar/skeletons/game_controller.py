@@ -37,7 +37,7 @@ class IAdventCalendarController(IGameController):
     def isInPostActivePhase(self):
         raise NotImplementedError
 
-    def awaitDoorOpenQuestCompletion(self, dayID):
+    def awaitDoorOpenQuestCompletion(self, dayID, currency=''):
         raise NotImplementedError
 
     def progressionQuestMayBeCompleted(self, openedDoorsAmount=None):

@@ -226,8 +226,10 @@ def getCurrentLevelForRewindStyle(outfit):
     itemsCache = dependency.instance(IItemsCache)
     inventory = itemsCache.items.inventory
     intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, outfit.style.id)
-    vehDesc = g_currentVehicle.item.descriptor
-    progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
+    progressData = None
+    if g_currentVehicle.isPresent():
+        vehDesc = g_currentVehicle.item.descriptor
+        progressData = inventory.getC11nProgressionData(intCD, vehDesc.type.compactDescr)
     return progressData.currentLevel if progressData is not None else 1
 
 

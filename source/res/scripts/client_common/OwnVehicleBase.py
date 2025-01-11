@@ -69,6 +69,12 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         avatar.updateVehicleGunReloadTime(self.entity.id, timeLeft, timeBase)
 
     @noexcept
+    def update_inThermalSectorStatus(self, status):
+        avatar = self._avatar()
+        if avatar:
+            avatar.updateInThermalSectorStatus(status.startTime, status.duration)
+
+    @noexcept
     def update_vehicleClipReloadTime(self, prop):
         avatar = self._avatar()
         if not avatar:
@@ -385,6 +391,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
         self.set_burnoutUnavailable()
         self.set_isOtherVehicleDamagedDevicesVisible()
         self.set_overturnLevel()
+        self.set_inThermalSectorStatus()
         self.set_drownLevel()
         self.set_smokeInfo()
         self.set_targetVehicleID()

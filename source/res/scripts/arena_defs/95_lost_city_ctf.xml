@@ -148,5 +148,29 @@
         <team2></team2>
       </teamBasePositions>
     </comp7>
+    <bob>
+      <teamSpawnPoints>
+        <team1>
+          <position>	50.596069 326.755096	</position>
+        </team1>
+        <team2>
+          <position>	48.566532 -330.203918	</position>
+        </team2>
+      </teamSpawnPoints>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/95_lost_city_ctf/mmap_comp7.dds	</minimap>
+      <controlPoint>	0.000000 0.000000	</controlPoint>
+    </bob>
   </gameplayTypes>
 </95_lost_city_ctf.xml>

@@ -12,7 +12,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	13	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.059	</moving>
@@ -42,20 +42,20 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	150	</armor_1>
+      <armor_1>	160	</armor_1>
       <armor_2>	180	</armor_2>
       <armor_3>	140	</armor_3>
       <armor_4>	100	</armor_4>
-      <armor_5>	30	</armor_5>
-      <armor_6>	155	</armor_6>
-      <armor_7>	145	</armor_7>
+      <armor_5>	40	</armor_5>
+      <armor_6>	160	</armor_6>
+      <armor_7>	175	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	205	</armor_9>
-      <armor_10>	125	</armor_10>
-      <armor_11>	165	</armor_11>
-      <armor_12>	30	</armor_12>
-      <armor_13>	30	</armor_13>
-      <armor_14>	30	</armor_14>
+      <armor_9>	270	</armor_9>
+      <armor_10>	135	</armor_10>
+      <armor_11>	175	</armor_11>
+      <armor_12>	40	</armor_12>
+      <armor_13>	40	</armor_13>
+      <armor_14>	40	</armor_14>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	31500	</weight>
@@ -2019,7 +2019,7 @@
       <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
       <weight>	17200	</weight>
       <maxHealth>	500	</maxHealth>
-      <rotationSpeed>	16	</rotationSpeed>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -3144,13 +3144,13 @@
         <Chassis_R169_ST_II>
           <grounds>
             <soft>
-              <rollingFriction>	0.21735	</rollingFriction>
+              <rollingFriction>	0.14735	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1288	</rollingFriction>
+              <rollingFriction>	0.0888	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0566	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

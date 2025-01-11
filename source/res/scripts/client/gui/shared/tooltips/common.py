@@ -6,6 +6,7 @@ import math
 from collections import namedtuple, defaultdict
 from gui.impl.lobby.debut_boxes.tooltips.debut_boxes_badge_tooltip_view import DebutBoxesBadgeTooltipView
 from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
+from gui.impl.lobby.techtree.tooltips.paragons_locked_tooltip import ParagonsLockedTooltip
 from gui.impl.pub import ToolTipWindow
 from helpers.i18n import makeString
 import ArenaType
@@ -1599,3 +1600,12 @@ class PersonalReservesWidgetTooltipContent(BlocksTooltipData):
         content = PersonalReservesTooltipView()
         window = ToolTipWindow(None, content, content.getParentWindow())
         return window
+
+
+class ParagonsLockedTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ParagonsLockedTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.PARAGONS_VEH_BRANCH_LOCKED)
+
+    def getDisplayableData(self, vehicleCD, *args, **kwargs):
+        return DecoratedTooltipWindow(ParagonsLockedTooltip(vehicleCD), useDecorator=False)

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/common/vehicle_model_helpers.py
 import typing
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
-from gui.impl.lobby.platoon.platoon_helpers import removeNationFromTechName
+from gui.shared.gui_items.vehicle_helpers import removeNationFromTechName
 from gui.shared.gui_items import checkForTags
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import replaceHyphenToUnderscore

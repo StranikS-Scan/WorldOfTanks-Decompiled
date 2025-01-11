@@ -17,7 +17,7 @@ class State(IntEnum):
 class StrongholdEntryPointViewModel(ViewModel):
     __slots__ = ('onOpen',)
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=6, commands=1):
         super(StrongholdEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
@@ -44,10 +44,24 @@ class StrongholdEntryPointViewModel(ViewModel):
     def setEndTimestamp(self, value):
         self._setNumber(3, value)
 
+    def getSprintType(self):
+        return self._getString(4)
+
+    def setSprintType(self, value):
+        self._setString(4, value)
+
+    def getSprintStage(self):
+        return self._getString(5)
+
+    def setSprintStage(self, value):
+        self._setString(5, value)
+
     def _initialize(self):
         super(StrongholdEntryPointViewModel, self)._initialize()
         self._addNumberProperty('state')
         self._addBoolProperty('isSingle', True)
         self._addNumberProperty('startTimestamp', 0)
         self._addNumberProperty('endTimestamp', 0)
+        self._addStringProperty('sprintType', '')
+        self._addStringProperty('sprintStage', '')
         self.onOpen = self._addCommand('onOpen')

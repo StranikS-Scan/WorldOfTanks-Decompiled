@@ -44,10 +44,11 @@ class FragCorrelationBar(FragCorrelationBarMeta, IBattleFieldListener):
         pass
 
     def updateTeamHealth(self, alliesHP, enemiesHP, totalAlliesHP, totalEnemiesHP):
-        alliesHPPercentage = alliesHP / float(totalAlliesHP) * 100 if totalAlliesHP > 0 else 0
-        enemyHPPercentage = enemiesHP / float(totalEnemiesHP) * 100 if totalEnemiesHP > 0 else 0
-        differanceValue = ('+' if alliesHP - enemiesHP > 0 else '') + self.__formatValuesToUserPreferences(alliesHP - enemiesHP)
-        self.as_updateTeamHealthValuesS(allyTeamHealth=self.__formatValuesToUserPreferences(alliesHP), diffValue=differanceValue, allyTeamHealthPercentage=alliesHPPercentage, enemyTeamHealth=self.__formatValuesToUserPreferences(enemiesHP), enemyTeamHealthPercentage=enemyHPPercentage)
+        alliesHPProgress = alliesHP / float(totalAlliesHP) if totalAlliesHP > 0 else 0
+        enemyHPProgress = enemiesHP / float(totalEnemiesHP) if totalEnemiesHP > 0 else 0
+        differance = '+{}' if alliesHP - enemiesHP > 0 else '{}'
+        differance = differance.format(self.__formatValuesToUserPreferences(alliesHP - enemiesHP))
+        self.as_updateHPS(allyHP=self.__formatValuesToUserPreferences(alliesHP), diff=differance, allyHPProgress=alliesHPProgress, enemyHP=self.__formatValuesToUserPreferences(enemiesHP), enemyHPProgress=enemyHPProgress)
 
     def _populate(self):
         super(FragCorrelationBar, self)._populate()

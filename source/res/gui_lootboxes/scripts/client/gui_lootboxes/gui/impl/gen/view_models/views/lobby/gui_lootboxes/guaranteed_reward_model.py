@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class GuaranteedRewardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=2, commands=0):
         super(GuaranteedRewardModel, self).__init__(properties=properties, commands=commands)
 
     def getLevelsRange(self):
@@ -19,20 +19,13 @@ class GuaranteedRewardModel(ViewModel):
     def getLevelsRangeType():
         return int
 
-    def getVehiclesOnly(self):
-        return self._getBool(1)
-
-    def setVehiclesOnly(self, value):
-        self._setBool(1, value)
-
     def getBoxesUntilGuaranteedReward(self):
-        return self._getNumber(2)
+        return self._getNumber(1)
 
     def setBoxesUntilGuaranteedReward(self, value):
-        self._setNumber(2, value)
+        self._setNumber(1, value)
 
     def _initialize(self):
         super(GuaranteedRewardModel, self)._initialize()
         self._addArrayProperty('levelsRange', Array())
-        self._addBoolProperty('vehiclesOnly', True)
         self._addNumberProperty('boxesUntilGuaranteedReward', 0)

@@ -84,3 +84,11 @@ class SubModelPresenter(object):
             g_eventBus.removeListener(*eventBusArgs[:3])
 
         g_clientUpdateManager.removeObjectCallbacks(self)
+
+
+class PageSubModelPresenter(SubModelPresenter):
+    __slots__ = ()
+
+    @property
+    def pageId(self):
+        raise NotImplementedError

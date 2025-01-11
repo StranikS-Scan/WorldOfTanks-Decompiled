@@ -44,6 +44,8 @@
     <SCR_508_IGR>	60004	</SCR_508_IGR>
     <SCR_508_1_02_B>	31003	</SCR_508_1_02_B>
     <SCR_528_7x7>	31004	</SCR_528_7x7>
+    <ER_27_D>	31005	</ER_27_D>
+    <SCR_619_bob>	31006	</SCR_619_bob>
     <Development_Radio>	65000	</Development_Radio>
     <SCR_528_F_SH>	43	</SCR_528_F_SH>
     <TRVP_13_SH>	44	</TRVP_13_SH>
@@ -341,6 +343,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </SCR_619>
+    <SCR_619_bob>
+      <userString>	#france_vehicles:SCR_619	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	54000	</price>
+      <weight>	80	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_619_bob>
     <SCR_619_CL>
       <userString>	#france_vehicles:SCR_619	</userString>
       <tags></tags>
@@ -422,6 +436,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </ER_27>
+    <ER_27_D>
+      <userString>	#france_vehicles:ER_27_D	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	200	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </ER_27_D>
     <SCR_528_Fr>
       <userString>	#france_vehicles:SCR_528_Fr	</userString>
       <tags></tags>

@@ -437,6 +437,13 @@ def __readBonus_item(bonus, _name, section, eventType, checkLimit):
     bonus.setdefault('items', {})[compDescr] = count
 
 
+def __readBonus_paragonsUnlocks(bonus, name, section, eventType, checkLimit):
+    ids_section = section['ids']
+    data = ids_section.asString
+    ids_set = set((int(num) for num in data.strip().split()))
+    bonus[name] = {'ids': ids_set}
+
+
 def __readBonus_vehicle(bonus, _name, section, eventType, checkLimit):
     vehCompDescr = None
     if section.has_key('vehCompDescr'):
@@ -1076,6 +1083,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'freeXP': bonusReaderLimitDecorator(INVOICE_LIMITS.FREEXP_MAX, __readBonus_int),
  'slots': bonusReaderLimitDecorator(INVOICE_LIMITS.SLOTS_MAX, __readBonus_int),
  'berths': bonusReaderLimitDecorator(INVOICE_LIMITS.BERTHS_MAX, __readBonus_int),
+ 'paragonsUnlocks': __readBonus_paragonsUnlocks,
  'premium': __readBonus_int,
  'premium_plus': __readBonus_int,
  'premium_vip': __readBonus_int,
@@ -1127,7 +1135,7 @@ _RESERVED_NAMES = frozenset(['config',
  'probabilityStageDependence',
  'bonusProbability',
  'depthLevel'])
-SUPPORTED_BONUSES = set(__BONUS_READERS.iterkeys())
+SUPPORTED_BONUSES = frozenset(__BONUS_READERS.iterkeys())
 __SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
 SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))
 SUPPORTED_BONUSES_NAMES = {i:n for i, n in enumerate(__SORTED_BONUSES)}

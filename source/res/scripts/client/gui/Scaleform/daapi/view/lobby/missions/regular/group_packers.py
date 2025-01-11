@@ -22,11 +22,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.event_boards.settings import isGroupMinimized, expandGroup
 from gui.impl import backport
 from gui.impl.gen.resources import R
-from gui.server_events import settings, events_helpers
+from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
-from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, FUN_RANDOM_GROUP_ID
+from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
 from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, getFunRandomDailyGroup, isDebutBoxesGroup, isVersusAIQuest
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
@@ -285,8 +285,6 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
 
     def _createGroupedEventsBlock(self, group):
         groupID = group.getID()
-        if events_helpers.isMapsTraining(groupID):
-            return _MapsTrainingGroupedQuestsBlockInfo(group)
         return _VersusAIGroupedQuestsBlockInfo(group) if isVersusAIQuest(groupID) else _GroupedQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
@@ -490,8 +488,6 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
                 result = self.__battleRoyaleController.getQuests().values()
             else:
                 result = []
-        elif groupId == MAPS_TRAINING_GROUPS_ID:
-            result = [ event for event in self._group.getGroupContent(srvEvents) if event.shouldBeShown() ]
         else:
             result = self._group.getGroupContent(srvEvents)
         self._completedQuestsCount = 0
@@ -826,14 +822,6 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
                 _logger.error('Current time locale: %r', locale.getlocale(locale.LC_TIME))
                 _logger.error('Selected language: %r', getLanguageCode())
                 _logger.exception('Invalid formatting string %r to delta of time %r', timeFmt, parts)
-
-
-class _MapsTrainingGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
-
-    def _getDescrBlock(self):
-        descriptionBlockInfo = super(_MapsTrainingGroupedQuestsBlockInfo, self)._getDescrBlock()
-        descriptionBlockInfo['period'] = ''
-        return descriptionBlockInfo
 
 
 class _VersusAIGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):

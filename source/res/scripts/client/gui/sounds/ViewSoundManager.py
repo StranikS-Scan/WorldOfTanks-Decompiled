@@ -66,6 +66,10 @@ class _ViewSoundsManager(object):
     def setRTPC(name, value):
         WWISE.WW_setRTCPGlobal(name, value)
 
+    @staticmethod
+    def setSwitch(group, switch):
+        WWISE.WW_setSwitch(group, switch)
+
     def register(self, consumerID, soundSpaceSettings):
         autoStart = soundSpaceSettings.autoStart if soundSpaceSettings is not None else False
         self.__consumers[consumerID] = autoStart

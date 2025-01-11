@@ -1079,22 +1079,23 @@ class SiegeModePlugin(CrosshairPlugin):
     def __updateView(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vehicle = vStateCtrl.getControllingVehicle()
-        if vehicle is not None:
+        if vehicle is None:
+            return
+        else:
             vTypeDescr = vehicle.typeDescriptor
             if vTypeDescr.isWheeledVehicle or vTypeDescr.hasAutoSiegeMode or vTypeDescr.type.isDualgunVehicleType:
                 self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
                 return
-        else:
+            isNetSeparatorVisible = self.__siegeState == _SIEGE_STATE.DISABLED and not vTypeDescr.isTemperatureGun
+            self._parentObj.as_setNetSeparatorVisibleS(isNetSeparatorVisible)
+            if self.__siegeState == _SIEGE_STATE.ENABLED:
+                self._parentObj.as_setNetTypeS(self.__getEnabledNetType(vTypeDescr))
+            elif self.__siegeState == _SIEGE_STATE.DISABLED:
+                self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
+            visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
+            visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
+            self._parentObj.as_setNetVisibleS(visibleMask)
             return
-        self._parentObj.as_setNetSeparatorVisibleS(self.__siegeState == _SIEGE_STATE.DISABLED)
-        if self.__siegeState == _SIEGE_STATE.ENABLED:
-            self._parentObj.as_setNetTypeS(self.__getEnabledNetType(vTypeDescr))
-        elif self.__siegeState == _SIEGE_STATE.DISABLED:
-            self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_NET if self._isHideAmmo() else CROSSHAIR_CONSTANTS.VISIBLE_ALL
-        visibleMask = visibleMask if self.__siegeState not in _SIEGE_STATE.SWITCHING else CROSSHAIR_CONSTANTS.INVISIBLE
-        self._parentObj.as_setNetVisibleS(visibleMask)
-        return
 
     @staticmethod
     def __getEnabledNetType(vTypeDescr):
@@ -1643,11 +1644,14 @@ class DualAccuracyGunPlugin(CrosshairPlugin):
 
 
 class TemperatureGunPlugin(CrosshairPlugin):
-    __slots__ = ('__temperatureGunCtrl',)
+    __slots__ = ('__temperatureGunCtrl', '__isReplay')
+    _MAX_TEMPERATURE_PROGRESS = 1.0
+    _MIN_TEMPERATURE_PROGRESS = 0.0
 
     def __init__(self, parentObj):
         super(TemperatureGunPlugin, self).__init__(parentObj)
         self.__temperatureGunCtrl = None
+        self.__isReplay = False
         return
 
     def start(self):
@@ -1669,9 +1673,8 @@ class TemperatureGunPlugin(CrosshairPlugin):
         vTypeDesc = vehicle.typeDescriptor
         if vTypeDesc.isTemperatureGun:
             states = vTypeDesc.gun.temperature.states
-            if len(states) > 1:
-                lastStateTemperature = states[-1].temperature
-                self.parentObj.as_addOverheatS([ float(state.temperature) / lastStateTemperature for state in states[:-1] ])
+            lastStateTemperature = states[-1].temperature
+            self.parentObj.as_addOverheatS([ float(state.temperature) / lastStateTemperature for state in states[:-1] ])
             self.__subscribeTemperatureCtrl(vehicle.dynamicComponents.get('temperatureGunController'))
         else:
             self.__unsubscribeTemperatureCtrl()
@@ -1680,16 +1683,28 @@ class TemperatureGunPlugin(CrosshairPlugin):
     def __subscribeTemperatureCtrl(self, temperatureGunCtrl):
         if temperatureGunCtrl:
             self.__temperatureGunCtrl = temperatureGunCtrl
+            self.__isReplay = self.sessionProvider.isReplayPlaying
+            self.__temperatureGunCtrl.onSetOverheat += self.__onOverheat
             self.__temperatureGunCtrl.onTemperatureProgress += self.__onTemperatureProgress
-            self.__temperatureGunCtrl.onSetOverheat += self.__onTemperatureProgress
 
     def __unsubscribeTemperatureCtrl(self):
         if self.__temperatureGunCtrl:
             self.__temperatureGunCtrl.onTemperatureProgress -= self.__onTemperatureProgress
-            self.__temperatureGunCtrl.onSetOverheat -= self.__onTemperatureProgress
+            self.__temperatureGunCtrl.onSetOverheat -= self.__onOverheat
             self.__temperatureGunCtrl = None
+            self.__isReplay = False
         return
 
-    def __onTemperatureProgress(self, _):
+    def __update(self, temperatureProgress):
         if self.__temperatureGunCtrl:
-            self.parentObj.as_setOverheatProgressS(self.__temperatureGunCtrl.overheatPercent, self.__temperatureGunCtrl.isOverheated)
+            timeLeft = self.__temperatureGunCtrl.calculateCoolingTime()
+            self.parentObj.as_setOverheatProgressS(temperatureProgress, timeLeft, self.__isReplay)
+
+    def __onOverheat(self, isOverheat):
+        if isOverheat:
+            self.__update(self._MAX_TEMPERATURE_PROGRESS)
+        else:
+            self.__update(self._MIN_TEMPERATURE_PROGRESS)
+
+    def __onTemperatureProgress(self, temperatureProgress):
+        self.__update(temperatureProgress)

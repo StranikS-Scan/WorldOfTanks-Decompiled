@@ -91,23 +91,23 @@ class VehPostProgressionEntryPoint(EventSystemEntity):
         self._modulesToUnlock = eliteProgress.toUnlock
         return {'state': self.__getUnlockState(),
          'vehicleId': vehicle.intCD,
-         'moduleIds': eliteProgress.toUnlock,
+         'moduleIds': eliteProgress.toUnlock if not self._vehicle.isElite else [],
          'label': self.__getLabel(eliteProgress),
          'showCounter': needToShowCounter(vehicle)}
 
     def __getLabel(self, eliteProgress):
         isPurchased = self._vehicle.isPurchased
-        fullyUnlocked = not eliteProgress.toUnlock
+        isElite = self._vehicle.isElite or not eliteProgress.toUnlock
         label = R.strings.veh_post_progression.researchEntry.status
         labelResId = None
         if self._vehicle.postProgressionAvailability(unlockOnly=True):
             return ''
         else:
-            if not isPurchased and not fullyUnlocked:
+            if not isPurchased and not isElite:
                 labelResId = label.notResearchedNotPurchased
             elif not isPurchased:
                 labelResId = label.notPurchased
-            elif not fullyUnlocked:
+            elif not isElite:
                 labelResId = label.notResearched
             return labelResId and backport.text(labelResId())
 

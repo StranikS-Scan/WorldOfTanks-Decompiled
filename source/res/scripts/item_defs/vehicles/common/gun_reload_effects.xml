@@ -57,6 +57,12 @@
       <sound>	gun_rld_intuition_20_45mm	</sound>
     </intuition_overrides>
   </reload20_45_flamePneumatic>
+  <reload20_45_flameHeavyAutoshoot>
+    <type>	AutoShootChangeShellReload	</type>
+    <duration>	1270.0	</duration>
+    <sound>	heavy_flamer_spray_changed	</sound>
+    <startSound>	heavy_flamer_spray_change_start	</startSound>
+  </reload20_45_flameHeavyAutoshoot>
   <reload_automat_reloading_20_45>
     <type>	BarrelReload	</type>
     <duration>	4450	</duration>

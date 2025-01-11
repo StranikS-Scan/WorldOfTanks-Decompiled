@@ -27,10 +27,7 @@ class POP_UP_CRITERIA(object):
 class VIEW_SEARCH_CRITERIA(CONST_CONTAINER):
     VIEW_ALIAS = 1
     VIEW_UNIQUE_NAME = 2
-
-    @classmethod
-    def ALL(cls):
-        return (cls.VIEW_UNIQUE_NAME, cls.VIEW_ALIAS)
+    VIEW_IN_LAYER = 3
 
 
 class ExternalCriteria(object):
@@ -44,7 +41,8 @@ class ExternalCriteria(object):
 
 
 _VIEW_SEARCH_CRITERIA_HANDLERS = {VIEW_SEARCH_CRITERIA.VIEW_ALIAS: lambda view, value: view.alias == value,
- VIEW_SEARCH_CRITERIA.VIEW_UNIQUE_NAME: lambda view, value: view.uniqueName == value}
+ VIEW_SEARCH_CRITERIA.VIEW_UNIQUE_NAME: lambda view, value: view.uniqueName == value,
+ VIEW_SEARCH_CRITERIA.VIEW_IN_LAYER: lambda view, value: view.layer == value}
 
 class ViewContainer(object):
     __slots__ = ('__layer', '__child', '_views', '_loadingViews', '__containerManager', '__parentContainer')

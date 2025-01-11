@@ -41,7 +41,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	110	</armor_1>
+      <armor_1>	120	</armor_1>
       <armor_2>	100	</armor_2>
       <armor_3>	80	</armor_3>
       <armor_4>	30	</armor_4>
@@ -52,12 +52,12 @@
       <armor_10>	57	</armor_10>
       <armor_11>	57	</armor_11>
       <armor_12>	55	</armor_12>
-      <armor_13>	30	</armor_13>
+      <armor_13>	50	</armor_13>
       <armor_16>	57	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_12	</primaryArmor>
     <weight>	11620	</weight>
-    <maxHealth>	1520	</maxHealth>
+    <maxHealth>	1500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -1585,7 +1585,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_6 armor_4	</primaryArmor>
       <weight>	8200	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	550	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2408,7 +2408,7 @@
     <detailed>
       <engines>
         <TD-12>
-          <smplEnginePower>	613.2231	</smplEnginePower>
+          <smplEnginePower>	720	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </TD-12>
       </engines>
@@ -2416,15 +2416,16 @@
         <Chassis_Object_140>
           <grounds>
             <soft>
-              <rollingFriction>	0.12075	</rollingFriction>
+              <rollingFriction>	0.08075	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.052325	</rollingFriction>
+              <rollingFriction>	0.042325	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.044275	</rollingFriction>
+              <rollingFriction>	0.014275	</rollingFriction>
             </firm>
           </grounds>
+          <axleCount>	5	</axleCount>
         </Chassis_Object_140>
       </chassis>
     </detailed>

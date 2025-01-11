@@ -42,6 +42,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_CANT_SHOOT_GUN_LOCKED = '#ingame_gui:player_errors/cant_shoot/gun_locked'
     PLAYER_ERRORS_CANT_SWITCH_ENGINE_DESTROYED = '#ingame_gui:player_errors/cant_switch/engine_destroyed'
     PLAYER_ERRORS_CANT_SWITCH_ASSAULT_SPG_CAMERA_CAN_NOT_SPAWN = '#ingame_gui:player_errors/cant_switch/assault_spg/camera_can_not_spawn'
+    PLAYER_ERRORS_CANT_SWITCH_CHANGE_SHELL_GUN_OVERHEATED = '#ingame_gui:player_errors/cant_switch/change_shell/gun_overheated'
     PLAYER_ERRORS_EQUIPMENT_ALREADYACTIVATED = '#ingame_gui:player_errors/equipment/alreadyActivated'
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
@@ -102,6 +103,7 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_RELOADING_READY = '#ingame_gui:chat_shortcuts/reloading_ready'
     CHAT_SHORTCUTS_RELOADING_READY_CASSETTE = '#ingame_gui:chat_shortcuts/reloading_ready_cassette'
     CHAT_SHORTCUTS_RELOADING_UNAVAILABLE = '#ingame_gui:chat_shortcuts/reloading_unavailable'
+    CHAT_SHORTCUTS_OVERHEAT_CANT_SHOOT = '#ingame_gui:chat_shortcuts/overheat_cant_shoot'
     CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_gridInfo'
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading_gridInfo'
@@ -161,6 +163,7 @@ class INGAME_GUI(object):
     CHAT_EXAMPLE_TURN_BACK = '#ingame_gui:chat_example/turn_back'
     CHAT_EXAMPLE_RELOADING_READY_CASSETTE = '#ingame_gui:chat_example/reloading_ready_cassette'
     CHAT_EXAMPLE_RELOADING_UNAVAILABLE = '#ingame_gui:chat_example/reloading_unavailable'
+    CHAT_EXAMPLE_OVERHEAT_CANT_SHOOT = '#ingame_gui:chat_example/overheat_cant_shoot'
     CHAT_EXAMPLE_HELP_ME = '#ingame_gui:chat_example/help_me'
     CHAT_EXAMPLE_HELP_ME_EX = '#ingame_gui:chat_example/help_me_ex'
     CHAT_EXAMPLE_POSITIVE = '#ingame_gui:chat_example/positive'
@@ -246,6 +249,7 @@ class INGAME_GUI(object):
     SHELLS_KINDS_PARAMS_SHOTSPEED = '#ingame_gui:shells_kinds/params/shotSpeed'
     SHELLS_KINDS_PARAMS_EXPLOSIONRADIUS = '#ingame_gui:shells_kinds/params/explosionRadius'
     SHELLS_KINDS_PARAMS_STUNDURATION = '#ingame_gui:shells_kinds/params/stunDuration'
+    SHELLS_KINDS_PARAMS_FLAMEMAXDISTANCE = '#ingame_gui:shells_kinds/params/flameMaxDistance'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_NORMAL = '#ingame_gui:damage_panel/devices/turretRotator/normal'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_CRITICAL = '#ingame_gui:damage_panel/devices/turretRotator/critical'
     DAMAGE_PANEL_DEVICES_TURRETROTATOR_DESTROYED = '#ingame_gui:damage_panel/devices/turretRotator/destroyed'
@@ -1036,6 +1040,7 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_RELOADING_READY,
      CHAT_SHORTCUTS_RELOADING_READY_CASSETTE,
      CHAT_SHORTCUTS_RELOADING_UNAVAILABLE,
+     CHAT_SHORTCUTS_OVERHEAT_CANT_SHOOT,
      CHAT_SHORTCUTS_SPG_AIM_AREA_GRIDINFO,
      CHAT_SHORTCUTS_SPG_AIM_AREA,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING_GRIDINFO,
@@ -1094,6 +1099,7 @@ class INGAME_GUI(object):
      CHAT_EXAMPLE_TURN_BACK,
      CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
      CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
+     CHAT_EXAMPLE_OVERHEAT_CANT_SHOOT,
      CHAT_EXAMPLE_HELP_ME,
      CHAT_EXAMPLE_HELP_ME_EX,
      CHAT_EXAMPLE_POSITIVE,

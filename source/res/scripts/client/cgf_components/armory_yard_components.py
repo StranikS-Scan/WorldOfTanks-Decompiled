@@ -163,13 +163,15 @@ class AssemblyStageXrayComponent(object):
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
     editorTitle = 'Assembly stage xray'
     category = 'Armory Yard'
+    activeParts = ComponentProperty(type=CGFMetaTypes.STRING_LIST, editorName='Active Part Names')
 
 
 @registerComponent
-class ArmoryHullXrayAnimationComponent(object):
+class ArmoryPartXrayAnimationComponent(object):
     domain = CGF.DomainOption.DomainClient | CGF.DomainOption.DomainEditor
-    editorTitle = 'Armory hull xray animation'
+    editorTitle = 'Armory part xray animation'
     category = 'Armory Yard'
+    partName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Part name', value='')
     openName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Open anim layer name', value='')
     closeName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Close anim layer name', value='')
 
@@ -203,7 +205,7 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         self.__schemeStageRange = None
         self.__schemeGO = None
         self.__schemeProgressionStates = {}
-        self.__hullXrayGO = None
+        self.__partXrayGOs = {}
         return
 
     @onRemovedQuery(TankAssemblyRootComponent, CGF.GameObject)
@@ -226,7 +228,7 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         self.__schemeStageRange = None
         self.__schemeGO = None
         self.__schemeProgressionStates = {}
-        self.__hullXrayGO = None
+        self.__partXrayGOs = {}
         self.__eventManager.clear()
         return
 
@@ -279,12 +281,15 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
 
             return
 
-    @onAddedQuery(ArmoryHullXrayAnimationComponent, GenericComponents.DynamicModelComponent, GenericComponents.AnimatorComponent, CGF.GameObject)
-    def onAddedHullXrayAnimation(self, xrayComponent, dynModelComponent, animatorComponent, go):
+    @onAddedQuery(ArmoryPartXrayAnimationComponent, GenericComponents.DynamicModelComponent, GenericComponents.AnimatorComponent, CGF.GameObject)
+    def onAddedPartXrayAnimation(self, xrayComponent, dynModelComponent, animatorComponent, go):
         if xrayComponent.openName == '' or xrayComponent.closeName == '':
-            LOG_ERROR('GO {} : ArmoryHullXrayAnimationComponent has empty layer names!'.format(go.name))
+            LOG_ERROR('GO {} : ArmoryPartXrayAnimationComponent has empty layer names!'.format(go.name))
             return
-        self.__hullXrayGO = go
+        if xrayComponent.partName == '':
+            LOG_ERROR('GO {} : ArmoryPartXrayAnimationComponent has empty name!'.format(go.name))
+            return
+        self.__partXrayGOs[xrayComponent.partName] = go
 
     @onAddedQuery(ArmoryDynamicCameraColliderComponent, CGF.GameObject)
     def onAddedCollider(self, colliderComponent, go):
@@ -368,13 +373,18 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
                 self.__stageVideo[stageIndex] = videoNameComponent.videoName
             return
 
-    def __getXrayComponents(self):
-        xrayComponent = self.__hullXrayGO.findComponentByType(ArmoryHullXrayAnimationComponent)
-        animatorComponent = self.__hullXrayGO.findComponentByType(GenericComponents.AnimatorComponent)
-        return (xrayComponent, animatorComponent)
+    def __getXrayComponents(self, partName):
+        partXrayGO = self.__partXrayGOs.get(partName)
+        if not partXrayGO:
+            LOG_ERROR('AssemblyStageIndexManager : can not get Xray components for partName {}'.format(partName))
+            return (None, None)
+        else:
+            xrayComponent = partXrayGO.findComponentByType(ArmoryPartXrayAnimationComponent)
+            animatorComponent = partXrayGO.findComponentByType(GenericComponents.AnimatorComponent)
+            return (xrayComponent, animatorComponent)
 
-    def openXray(self):
-        xrayComponent, animatorComponent = self.__getXrayComponents()
+    def openXray(self, partName):
+        xrayComponent, animatorComponent = self.__getXrayComponents(partName)
         if xrayComponent is not None and animatorComponent is not None:
             animatorComponent.stop()
             animatorComponent.startLayerByName(xrayComponent.openName)
@@ -382,8 +392,8 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         else:
             return 0.0
 
-    def closeXray(self):
-        xrayComponent, animatorComponent = self.__getXrayComponents()
+    def closeXray(self, partName):
+        xrayComponent, animatorComponent = self.__getXrayComponents(partName)
         if xrayComponent is not None and animatorComponent is not None:
             animatorComponent.stop()
             animatorComponent.startLayerByName(xrayComponent.closeName)
@@ -391,18 +401,21 @@ class AssemblyStageIndexManager(CGF.ComponentManager):
         else:
             return 0.0
 
-    @property
-    def openXrayDuration(self):
-        xrayComponent, animatorComponent = self.__getXrayComponents()
+    def getOpenXrayDuration(self, partName):
+        xrayComponent, animatorComponent = self.__getXrayComponents(partName)
+        return animatorComponent.getDurationByName(xrayComponent.openName) if xrayComponent is not None and animatorComponent is not None else 0.0
+
+    def getCloseXrayDuration(self, partName):
+        xrayComponent, animatorComponent = self.__getXrayComponents(partName)
         return animatorComponent.getDurationByName(xrayComponent.closeName) if xrayComponent is not None and animatorComponent is not None else 0.0
 
-    def stageHasXray(self, stageIndex):
+    def getActiveXrayPartNames(self, stageIndex):
         if stageIndex in self.__stageIndexToStageGO:
             stageGO = self.__stageIndexToStageGO[stageIndex]
             xrayStageComponent = stageGO.findComponentByType(AssemblyStageXrayComponent)
-            return xrayStageComponent is not None
-        else:
-            return False
+            if xrayStageComponent:
+                return xrayStageComponent.activeParts
+        return []
 
     def __startSchemeStage(self, stageIndex):
         if self.__schemeGO is None:

@@ -86,11 +86,17 @@ class ArmoryYardVideoRewardView(ViewImpl):
         self.destroyWindow()
 
     def __onVideoStarted(self):
+        if self.__soundControl.isVideoStarted():
+            return
         self.__soundControl.start()
         if not Windowing.isWindowAccessible():
             self.__soundControl.pause()
 
     def __onWindowAccessibilityChanged(self, isWindowAccessible):
+        if not self.__soundControl.isVideoStarted():
+            self.__onVideoStarted()
+            self.viewModel.setIsWindowAccessible(isWindowAccessible)
+            return
         if isWindowAccessible:
             self.__soundControl.unpause()
         else:

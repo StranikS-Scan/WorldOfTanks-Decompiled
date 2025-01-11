@@ -26,6 +26,7 @@ _EQUIPMENT = items.ITEM_TYPE_INDICES['equipment']
 _SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', 'clanInfo', 'accOnline', 'accOffline', 'freeTMenLeft', 'freeVehiclesLeft', 'vehicleSellsLeft', 'captchaTriesLeft', 'hasFinPassword', 'finPswdAttemptsLeft', 'tkillIsSuspected', 'tutorialsCompleted', 'battlesTillCaptcha', 'dailyPlayHours', 'playLimits', 'applyAdditionalXPCount') + Currency.ALL
 _DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals', 'refSystem20', 'denunciations')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
+_SHRINKABLE_SET_STATS = ('unlocks',)
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
 _CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isSsrPlayEnabled', 'isEmergencyModeEnabled')
 _CACHE_DICT_STATS = ('SPA', 'entitlements', 'dynamicCurrencies', 'comp7')
@@ -101,6 +102,10 @@ class Stats(object):
                     cache[stat] = statsDiff[stat_r]
                 if stat in statsDiff:
                     cache.setdefault(stat, set()).update(statsDiff[stat])
+                if stat in _SHRINKABLE_SET_STATS:
+                    statDiscardKey = (stat, '_d')
+                    if statDiscardKey in statsDiff:
+                        cache[stat].difference_update(statsDiff[statDiscardKey])
 
         accountDiff = diff.get('account', None)
         if accountDiff is not None:
@@ -314,6 +319,67 @@ class Stats(object):
             self.__account._doCmdInt3(AccountCommands.CMD_UNLOCK_ALL, 0, 0, 0, proxy)
             return
 
+    def unlockUpToVehicle(self, vehTypeCDFrom, vehTypeCDTo, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            parseCD = vehicles.parseIntCompactDescr
+            itemTypeIdx, nationIdx, innationIdx = parseCD(vehTypeCDFrom)
+            if itemTypeIdx != _VEHICLE:
+                LOG_ERROR('Wrong vehicle type compact descriptor')
+                return
+            vehType = vehicles.g_cache.vehicle(nationIdx, innationIdx)
+            unlocksGraph = {elem[1]:(elem[2:], idx) for idx, elem in enumerate(vehType.unlocksDescrs)}
+            possibleVehsToUnlock = [ k for k in unlocksGraph.iterkeys() if parseCD(k)[0] == _VEHICLE ]
+            LOG_DEBUG_DEV('__cmdUnlockForVehicle: possibleVehsToUnlock', possibleVehsToUnlock)
+            if vehTypeCDTo not in possibleVehsToUnlock:
+                LOG_ERROR('Wrong vehicle for unlocking TO', vehTypeCDTo, possibleVehsToUnlock)
+                return
+
+            def _dfs(visited, graph, node):
+                if node not in graph:
+                    return
+                visited.append(node)
+                for neighbour in graph[node][0]:
+                    _dfs(visited, graph, neighbour)
+
+            account = self.__account
+
+            def _sendCmd(_indices):
+                if _indices:
+                    account._doCmdInt3(AccountCommands.CMD_UNLOCK, vehTypeCDFrom, _indices[0][0], 0, proxy)
+
+            def proxy(requestID, resultID, errorStr, ext=None):
+                LOG_DEBUG_DEV('__cmdUnlockForVehicle: response', requestID, resultID, errorStr, ext)
+                if resultID != AccountCommands.RES_SUCCESS:
+                    if 'is already unlocked' in ext.get('exception_message', ''):
+                        pass
+                    else:
+                        LOG_DEBUG_DEV('__cmdUnlockForVehicle: something went wrong, stopping')
+                        return
+                if unlockIndicesUniq:
+                    del unlockIndicesUniq[0]
+                LOG_DEBUG_DEV('__cmdUnlockForVehicle: remaining unlocks', unlockIndicesUniq)
+                _sendCmd(unlockIndicesUniq)
+
+            unlockOrder = []
+            _dfs(unlockOrder, unlocksGraph, vehTypeCDTo)
+            unlockIndices = []
+            for itemToUnlock in reversed(unlockOrder):
+                unlockIdx = unlocksGraph[itemToUnlock][1]
+                unlockIndices.append((unlockIdx, itemToUnlock))
+
+            LOG_DEBUG_DEV('__cmdUnlockForVehicle: unlockIndices for vehCD', vehTypeCDTo, unlockIndices)
+            if not unlockIndices:
+                return
+            _seen = set()
+            unlockIndicesUniq = [ i for i in unlockIndices if i not in _seen and not _seen.add(i) ]
+            LOG_DEBUG_DEV('__cmdUnlockForVehicle: unlockIndicesUniq for vehCD', vehTypeCDTo, unlockIndicesUniq)
+            _sendCmd(unlockIndicesUniq)
+            return
+
     def unlockVPPTree(self, vehTypeCDs, callback=None):
         if self.__ignore:
             if callback is not None:
@@ -341,7 +407,7 @@ class Stats(object):
             self.__account._doCmdStr(AccountCommands.CMD_SET_RANKED_INFO, data, proxy)
             return
 
-    def addFreeAwardLists(self, count, season=1, callback=None):
+    def addFreeAwardLists(self, count, branch=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -351,10 +417,10 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_ADD_FREE_AWARD_LISTS, [count, season], proxy)
+            self.__account._doCmdIntArr(AccountCommands.CMD_ADD_FREE_AWARD_LISTS, [count, branch], proxy)
             return
 
-    def drawFreeAwardLists(self, count, season=1, callback=None):
+    def drawFreeAwardLists(self, count, branch=0, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)
@@ -364,7 +430,7 @@ class Stats(object):
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
                 proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count, season], proxy)
+            self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count, branch], proxy)
             return
 
     def completePersonalMission(self, questID, withAdditional=False, callback=None):

@@ -308,14 +308,6 @@ def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
     pass
 
 
-PLAYER_BADGES_DEPENDENCIES = {}
-CURRENT_YEAR_BADGE_ID = 128
-PREVIOUS_YEARS_BADGE_IDS = (86, 100, 107)
-
-def _set_PLAYER_BADGES_DEPENDENCIES():
-    PLAYER_BADGES_DEPENDENCIES.update({CURRENT_YEAR_BADGE_ID: [_updateNYBadges]})
-
-
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
@@ -1089,13 +1081,6 @@ def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
     return None
 
 
-def _updateNYBadges(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    for badgeID in PREVIOUS_YEARS_BADGE_IDS:
-        dossierBlockDescr.pop(badgeID, None)
-
-    return
-
-
 def init():
     _set_A15X15_STATS_DEPENDENCIES()
     _set_A7X7_STATS_DEPENDENCIES()
@@ -1117,4 +1102,3 @@ def init():
     _set_RANKED_STATS_DEPENDENCIES()
     _set_EPIC_BATTLE_STATS_DEPENDENCIES()
     _set_STEAM_ACHIEVEMENT_DEPENDENCIES()
-    _set_PLAYER_BADGES_DEPENDENCIES()

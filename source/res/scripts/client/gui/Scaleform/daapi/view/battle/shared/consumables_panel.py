@@ -162,6 +162,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             self.as_handleAsReplayS()
         if BigWorld.player().isObserver():
             self.as_handleAsObserverS()
+        self.__addAbility()
         self.__addListeners()
 
     def _dispose(self):
@@ -225,7 +226,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self._cds[idx] = intCD
         keyCode, sfKeyCode = self._genKey(idx)
         self._extraKeys[idx] = self._keys[keyCode] = partial(self.__handleAmmoPressed, intCD)
-        tooltipText = self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD))
+        tooltipText = self.__makeShellTooltip(descriptor, int(round(gunSettings.getPiercingPower(intCD))), gunSettings.getShotSpeed(intCD), gunSettings.getMaxDistance(intCD))
         icon = descriptor.icon[0]
         iconName = icon.split('.png')[0]
         shellIconPath = backport.image(R_AMMO_ICON.dyn(iconName)())
@@ -237,9 +238,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
         self.as_updateTooltipS(idx=idx, tooltipStr=toolTip)
 
     def _buildEquipmentSlotTooltipText(self, item):
-        if self.__isAbilityEquipment(item):
-            return self.__buildAbilityEquipmentTooltip(item)
         descriptor = item.getDescriptor()
+        if self.__isAbilityEquipment(item):
+            return self.__buildAbilityEquipmentTooltip(descriptor)
         reloadingTime = item.getTotalTime()
         isSharedCooldownConfig = isinstance(descriptor, SharedCooldownConsumableConfigReader)
         body = descriptor.description
@@ -299,10 +300,10 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
     def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
         self._cds[idx] = optDeviceInBattle.getIntCD()
         descriptor = optDeviceInBattle.getDescriptor()
-        iconPath = self._getOptionalDeviceIcon(descriptor.icon[0])
+        iconPath = self._getArtefactIcon(descriptor.icon[0])
         self.as_addOptionalDeviceSlotS(idx, -1 if optDeviceInBattle.getStatus() else 0, iconPath, TOOLTIPS_CONSTANTS.BATTLE_OPT_DEVICE, True, optDeviceInBattle.getIntCD(), optDeviceInBattle.isUsed())
 
-    def _getOptionalDeviceIcon(self, icon):
+    def _getArtefactIcon(self, icon):
         return backport.image(self._R_ARTEFACT_ICON.dyn(icon)())
 
     def _getEquipmentIcon(self, idx, item, icon):
@@ -539,7 +540,7 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             sfKey = getScaleformKey(bwKey)
         return (bwKey, sfKey)
 
-    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed):
+    def __makeShellTooltip(self, descriptor, piercingPower, shotSpeed, maxDistance):
         kind = descriptor.kind
         projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
         header = backport.text(R.strings.ingame_gui.shells_kinds.dyn(kind)(), caliber=backport.getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
@@ -554,6 +555,9 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
             if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
                 stun = descriptor.stun
                 params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.stunDuration(), maxValue=backport.getNiceNumberFormat(stun.stunDuration)))
+            if maxDistance >= 0:
+                if kind == SHELL_TYPES.FLAME:
+                    params.append(backport.text(R.strings.ingame_gui.shells_kinds.params.flameMaxDistance(), value=backport.getNiceNumberFormat(maxDistance)))
             body = text_styles.concatStylesToMultiLine(*params)
             fmt = TOOLTIP_FORMAT
         else:
@@ -904,15 +908,26 @@ class ConsumablesPanel(IAmmoListener, ConsumablesPanelMeta, BattleGUIKeyHandler,
 
         return
 
-    @staticmethod
-    def __isAbilityEquipment(item):
-        return item is not None and 'abilityEquipment' in item.getTags()
+    def __addAbility(self):
+        vehicle = self.sessionProvider.shared.vehicleState.getControllingVehicle()
+        abilityId = vehicle.typeDescriptor.type.ability
+        if abilityId is None:
+            return
+        else:
+            ability = vehicles.g_cache.equipments()[abilityId]
+            idx = self._ABILITY_EQUIPMENT_IDX
+            bwKey, sfKey = self._genKey(idx)
+            self.as_addAbilityEquipmentSlotS(idx=idx, keyCode=bwKey, sfKeyCode=sfKey, quantity=ability.reuseCount, timeRemaining=0, reloadingTime=ability.cooldownSeconds, iconPath=self._getArtefactIcon(ability.icon[0]), tooltipText=self.__buildAbilityEquipmentTooltip(ability), animation=ANIMATION_TYPES.NONE)
+            return
 
     @staticmethod
-    def __buildAbilityEquipmentTooltip(item):
-        descriptor = item.getDescriptor()
-        description = descriptor.description
-        usageStr = backport.text(R.strings.artefacts.ability.descr.usage(), reuseCount=descriptor.reuseCount, duration=descriptor.duration, cooldown=descriptor.cooldownSeconds)
+    def __isAbilityEquipment(item):
+        return 'abilityEquipment' in item.getTags()
+
+    @staticmethod
+    def __buildAbilityEquipmentTooltip(ability):
+        description = ability.description
+        usageStr = backport.text(R.strings.artefacts.ability.descr.usage(), reuseCount=ability.reuseCount, duration=ability.duration, cooldown=ability.cooldownSeconds)
         description = '\n\n'.join((description, usageStr))
-        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, description)
+        toolTip = TOOLTIP_FORMAT.format(ability.userString, description)
         return toolTip

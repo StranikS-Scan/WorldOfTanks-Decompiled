@@ -2,7 +2,7 @@
   <quests>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	pm2_6_4_15_main	</id>
+      <id>	pm2_6_1_15_main	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -58,13 +58,13 @@
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	pm2_6_4_15_main_award_list	</id>
+      <id>	pm2_6_1_15_main_award_list	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <preBattle>
           <account>
             <token>
-              <id>	pm2_6_4_15_main_award_list	</id>
+              <id>	pm2_6_1_15_main_award_list	</id>
               <equal>	1	</equal>
             </token>
           </account>
@@ -110,7 +110,7 @@
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	pm2_6_4_15_add	</id>
+      <id>	pm2_6_1_15_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -148,7 +148,7 @@
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	pm2_6_4_15_add_award_list	</id>
+      <id>	pm2_6_1_15_add_award_list	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -171,7 +171,7 @@
         <preBattle>
           <account>
             <token>
-              <id>	pm2_6_4_15_main_award_list	</id>
+              <id>	pm2_6_1_15_main_award_list	</id>
               <greaterOrEqual>	1	</greaterOrEqual>
               <consume>	100	  <force></force>
               </consume>

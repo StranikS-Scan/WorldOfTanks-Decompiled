@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	23750	</weight>
-    <maxHealth>	1440	</maxHealth>
+    <maxHealth>	1600	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -2539,10 +2539,6 @@
       <tags></tags>
       <level>	8	</level>
       <price>	32000	</price>
-      <unlocks>
-        <turret>	Turret_2_R171_IS_3_II	  <cost>	26600	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	230	</armor_1>
         <armor_2>	220	</armor_2>
@@ -2569,7 +2565,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_11 armor_4	</primaryArmor>
       <weight>	11000	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -2585,7 +2581,7 @@
       <guns>
         <_100mm_S34_dualgun>	shared	  <maxAmmo>	74	</maxAmmo>
           <unlocks>
-            <gun>	_122mm_S34_II_dualgun	  <cost>	48400	</cost>
+            <gun>	_122mm_S34_II_dualgun	  <cost>	36300	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -2786,7 +2782,11 @@
             <tiling>	1.38 1.38 0.11 0.000000	</tiling>
           </camouflage>
         </_100mm_S34_dualgun>
-        <_122mm_S34_II_dualgun>	shared	  <maxAmmo>	74	</maxAmmo>
+        <_122mm_S34_II_dualgun>	shared	  <unlocks>
+            <turret>	Turret_2_R171_IS_3_II	  <cost>	26600	</cost>
+            </turret>
+          </unlocks>
+          <maxAmmo>	74	</maxAmmo>
           <armor>
             <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -2841,7 +2841,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.333333 8 0.397222 4 0.444444 3 0.555556 3 0.602778 4 0.66667 8 1 8	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	11.5	</reloadTime>
           <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
@@ -2850,7 +2850,7 @@
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	4.0	</reloadLockTime>
-            <reloadTimes>	13 13	</reloadTimes>
+            <reloadTimes>	11.5 11.5	</reloadTimes>
             <rateTime>	6	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
@@ -3563,7 +3563,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12700	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
@@ -3831,7 +3831,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.333333 8 0.397222 4 0.444444 3 0.555556 3 0.602778 4 0.66667 8 1 8	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	11	</reloadTime>
           <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>

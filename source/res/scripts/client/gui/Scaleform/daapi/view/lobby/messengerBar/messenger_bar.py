@@ -146,17 +146,17 @@ class MessengerBar(MessengerBarMeta, IGlobalListener):
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.startGlobalListening()
-        self.as_setInitDataS({'channelsHtmlIcon': _formatIcon('iconChannels'),
+        self.as_setInitDataS({'channelsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconChannels()),
          'isReferralEnabled': self.__isReferralProgramGUIEnabled(),
          'referralCounter': self._referralCtrl.getBubbleCount(),
          'isReferralScoresLimitIndication': self._referralCtrl.isScoresLimitReached(),
          'referralHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconReferral()),
          'referralTooltip': TOOLTIPS.LOBY_MESSENGER_REFERRAL_BUTTON,
-         'contactsHtmlIcon': _formatIcon('iconContacts', width=16),
-         'vehicleCompareHtmlIcon': _formatIcon('iconComparison'),
+         'contactsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconContacts()),
+         'vehicleCompareHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconComparison()),
          'contactsTooltip': TOOLTIPS.LOBY_MESSENGER_CONTACTS_BUTTON,
          'vehicleCompareTooltip': TOOLTIPS.LOBY_MESSENGER_VEHICLE_COMPARE_BUTTON,
-         'sessionStatsHtmlIcon': _formatIcon('iconSessionStats')})
+         'sessionStatsHtmlIcon': backport.image(R.images.gui.maps.icons.messenger.iconSessionStats())})
         sessionStatsSettings = SessionStatsSettingsController().getSettings()
         self.__sessionStatsBtnOnlyOnceHintShow = not sessionStatsSettings[SESSION_STATS.ONLY_ONCE_HINT_SHOWN_FIELD]
         self.__updateSessionStatsBtn()

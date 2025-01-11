@@ -226,10 +226,10 @@ class BattleResultsService(IBattleResultsService):
                         quest = questsCache.getAllQuests()[pqID]
                         personalMissions.setdefault(quest, {})[qID] = isCompleted
 
-            pm2Progress = reusableInfo.personal.getPM2Progress()
-            if pm2Progress:
+            pmProgress = reusableInfo.personal.getPMProgress()
+            if pmProgress:
                 quests = self.eventsCache.getPersonalMissions().getAllQuests()
-                for qID, data in pm2Progress.iteritems():
+                for qID, data in pmProgress.iteritems():
                     personalMissions.setdefault(quests[qID], {}).update(data)
 
             pmCompletedMain = 0

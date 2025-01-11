@@ -12,7 +12,7 @@ from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComp
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params import HIDDEN_PARAM_DEFAULTS
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, RELOAD_TIME_PER_SECOND, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AVG_DAMAGE_PER_SECOND, AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME, THERMAL_VISION_REUSE_AND_DURATION, THERMAL_VISION_DISTANCE
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -22,10 +22,12 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'avgPiercingPower',
  'stunMaxDuration',
  'flameMaxDistance',
+ RELOAD_TIME_PER_SECOND,
  'reloadTime',
  AUTO_RELOAD_PROP_NAME,
  'reloadTimeSecs',
  'clipFireRate',
+ AUTOSHOOT_FLAME_CHANGE_SHELL_TIME,
  BURST_FIRE_RATE,
  'turboshaftBurstFireRate',
  DUAL_GUN_CHARGE_TIME,
@@ -36,6 +38,9 @@ RELATIVE_POWER_PARAMS = ('avgDamage',
  'aimingTime',
  SHOT_DISPERSION_ANGLE,
  DUAL_ACCURACY_COOLING_DELAY,
+ AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME,
+ AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME,
+ AVG_DAMAGE_PER_SECOND,
  'avgDamagePerMinute')
 RELATIVE_ARMOR_PARAMS = ('maxHealth',
  'hullArmor',
@@ -60,7 +65,10 @@ RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor',
  'invisibilityMovingFactor',
  TURBOSHAFT_INVISIBILITY_STILL_FACTOR,
  TURBOSHAFT_INVISIBILITY_MOVING_FACTOR)
-RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
+RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius',
+ 'radioDistance',
+ THERMAL_VISION_DISTANCE,
+ THERMAL_VISION_REUSE_AND_DURATION)
 RELATIVE_ABILITY_PARAMS = ('reuseCount', 'duration', 'cooldown')
 PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeArmor': RELATIVE_ARMOR_PARAMS,
@@ -68,7 +76,13 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
  'relativeVisibility': RELATIVE_VISIBILITY_PARAMS,
  'relativeAbility': RELATIVE_ABILITY_PARAMS}
-EXTRA_POWER_PARAMS = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
+TEMPERATURE_EXTRA_PARAMS = (KPI.Name.TEMPERATURE_STATES_COUNT,
+ KPI.Name.TEMPERATURE_MAX_TEMPERATURE,
+ KPI.Name.TEMPERATURE_HEATING_PER_SEC,
+ KPI.Name.TEMPERATURE_COOLING_PER_SEC,
+ KPI.Name.TEMPERATURE_COOLING_DELAY,
+ KPI.Name.TEMPERATURE_DAMAGE_FACTOR)
+EXTRA_POWER_PARAMS = TEMPERATURE_EXTRA_PARAMS + (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION,
  KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
  KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_ROTATION,
  KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION,
@@ -122,8 +136,7 @@ EXTRA_ABILITY_PARAMS_BASE = (KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEME
  KPI.Name.VEHICLE_GUN_RELOAD_TIME_RECEIVE_SHOT,
  KPI.Name.VEHICLE_GUN_KILL_RELOAD_TIME,
  KPI.Name.VEHICLE_GUN_AND_GUN_CLIP_COOLDOWN,
- KPI.Name.SHOTS_LIMIT_FOR_GUN_BOOST,
- KPI.Name.MIN_TIME_BETWEEN_RELOAD_BOOST)
+ KPI.Name.LIMITS_FOR_GUN_BOOST)
 EXTRA_ABILITY_PARAMS = tuple((item + 'AbilityKpi' for item in EXTRA_ABILITY_PARAMS_BASE))
 EXTRA_PARAMS_GROUP = {'relativePower': EXTRA_POWER_PARAMS,
  'relativeArmor': EXTRA_ARMOR_PARAMS,
@@ -476,7 +489,7 @@ class VehParamsBaseGenerator(object):
     def _getExtraParams(self, comparator, groupName, diffParams):
         result = []
         if self._isExtraParamEnabled():
-            hasExtraParams = False
+            addLineSeparatorAfterParam = True
             for extraParamName in EXTRA_PARAMS_GROUP[groupName]:
                 param = comparator.getExtendedData(extraParamName)
                 if extraParamName in HIDDEN_PARAM_DEFAULTS and param.value == HIDDEN_PARAM_DEFAULTS[extraParamName]:
@@ -488,16 +501,19 @@ class VehParamsBaseGenerator(object):
                 highlight = diffParams.get(extraParamName, HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE)
                 formattedParam, nSlashCount = self._makeExtraParamVO(param, groupName, highlight)
                 if formattedParam:
-                    if not hasExtraParams:
+                    if addLineSeparatorAfterParam:
                         lineSeparator = self._makeLineSeparator(groupName)
                         if lineSeparator:
                             result.append(lineSeparator)
-                        hasExtraParams = True
+                        addLineSeparatorAfterParam = False
                     result.append(formattedParam)
                     for _ in xrange(nSlashCount):
                         block = self._makeExtraAdditionalBlock(extraParamName, groupName, formattedParam['tooltip'])
                         if block is not None:
                             result.append(block)
+
+                if groupName == 'relativePower' and extraParamName == TEMPERATURE_EXTRA_PARAMS[-1]:
+                    addLineSeparatorAfterParam = True
 
         return result
 

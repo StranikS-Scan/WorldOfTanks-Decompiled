@@ -4,6 +4,7 @@ import typing
 from gui.techtree.settings import DEFAULT_UNLOCK_PROPS
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import getItemPricesVO, getItemRestorePricesVO, getItemUnlockPricesVO
+from gui.impl.gen.view_models.views.lobby.techtree.extended_node_state_flags import ExtendedNodeStateFlags
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.money import MONEY_UNDEFINED
 from helpers.time_utils import getCurrentTimestamp
@@ -26,9 +27,9 @@ class BaseNode(object):
 
 
 class ExposedNode(object):
-    __slots__ = ('__nodeCD', '__earnedXP', '__state', '__unlockProps', '__bpfProps', '__guiPrice', '__displayInfo')
+    __slots__ = ('__nodeCD', '__earnedXP', '__state', '__unlockProps', '__bpfProps', '__guiPrice', '__displayInfo', '__extendedState')
 
-    def __init__(self, nodeCD, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None):
+    def __init__(self, nodeCD, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None, extendedState=None):
         super(ExposedNode, self).__init__()
         self.__nodeCD = nodeCD
         self.__earnedXP = earnedXP
@@ -37,6 +38,7 @@ class ExposedNode(object):
         self.__unlockProps = unlockProps or DEFAULT_UNLOCK_PROPS
         self.__bpfProps = bpfProps
         self.__guiPrice = price or MONEY_UNDEFINED
+        self.__extendedState = extendedState or ExtendedNodeStateFlags.DEFAULT
 
     @property
     def id(self):
@@ -45,6 +47,10 @@ class ExposedNode(object):
     @property
     def state(self):
         return self.getState()
+
+    @property
+    def extendedState(self):
+        return self.getExtendedState()
 
     @property
     def unlockProps(self):
@@ -71,6 +77,12 @@ class ExposedNode(object):
 
     def setState(self, state):
         self.__state = state
+
+    def getExtendedState(self):
+        return self.__extendedState
+
+    def setExtendedState(self, state):
+        self.__extendedState = state
 
     def addStateFlag(self, flag):
         self.__state |= flag
@@ -168,8 +180,8 @@ class RealNode(ExposedNode):
     __eventsCache = dependency.descriptor(IEventsCache)
     __tradeIn = dependency.descriptor(ITradeInController)
 
-    def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None):
-        super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+    def __init__(self, nodeCD, item, earnedXP, state, displayInfo, unlockProps=None, bpfProps=None, price=None, extendedState=None):
+        super(RealNode, self).__init__(nodeCD, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price, extendedState=extendedState)
         self.__item = item
 
     def clear(self):
@@ -280,7 +292,7 @@ class AnnouncementNode(ExposedNode):
     __slots__ = ('__announcementInfo',)
 
     def __init__(self, nodeCD, info, state, displayInfo):
-        super(AnnouncementNode, self).__init__(nodeCD, 0, state, displayInfo, unlockProps=None, bpfProps=None, price=None)
+        super(AnnouncementNode, self).__init__(nodeCD, 0, state, displayInfo, unlockProps=None, bpfProps=None, price=None, extendedState=None)
         self.__announcementInfo = info
         return
 

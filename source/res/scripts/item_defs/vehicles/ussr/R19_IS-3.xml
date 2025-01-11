@@ -41,15 +41,15 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	110	</armor_1>
-      <armor_2>	60	</armor_2>
+      <armor_1>	120	</armor_1>
+      <armor_2>	90	</armor_2>
       <armor_3>	90	</armor_3>
       <armor_4>	80	</armor_4>
       <armor_5>	20	</armor_5>
       <armor_6>	20	</armor_6>
       <armor_7>	60	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	130	</armor_9>
+      <armor_9>	140	</armor_9>
       <armor_10>	60	</armor_10>
       <armor_11>	110	</armor_11>
       <armor_12>	90	</armor_12>
@@ -999,8 +999,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	27	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.23	</vehicleMovement>
-        <vehicleRotation>	0.23	</vehicleRotation>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1873,8 +1873,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2773,359 +2773,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_122-mm_D-25T_with_a_piston_shutter>	shared	  <maxAmmo>	28	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_122-mm_D-25T_with_wedges_shutter	  <cost>	19000	</cost>
-            </gun>
-            <gun>	_100mm_D10T	  <cost>	16500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	14.7	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <R19_IS-3_3Dst>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_02.model	</exploded>
-              </R19_IS-3_3Dst>
-              <Defender_Day>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_02.model	</exploded>
-              </Defender_Day>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-23	</row>
-                <row>	-18	</row>
-                <row>	-14	</row>
-                <row>	-12	</row>
-                <row>	-10	</row>
-                <row>	-6	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Joint_01	</node>
-                  <table>
-                    <row>	-0.6	</row>
-                    <row>	2	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.3	</row>
-                    <row>	6.983	</row>
-                    <row>	8.796	</row>
-                  </table>
-                </slave>
-                <slave>
-                  <node>	Joint_02	</node>
-                  <table>
-                    <row>	-1.5	</row>
-                    <row>	1.5	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.903	</row>
-                    <row>	6.983	</row>
-                    <row>	6.5	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002601 -0.017927 2.22123	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.243492 0.243492	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002601 -0.017927 2.22123	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.011345 1.44413 1.60328	</position>
-              <rotation>	0.763886 -0.000019 3.14151	</rotation>
-              <scale>	3.14783 1.94697 3.14791	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.547663	</clipAngle>
-              <anchorShift>	0.924764	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011328 1.59468 1.82073	</position>
-              <rotation>	0.923089 -0.00004 3.14149	</rotation>
-              <scale>	2.7151 1.45 2.71517	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.104089	</clipAngle>
-              <anchorShift>	0.734765	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.011333 1.69615 1.53007	</position>
-              <rotation>	1.25289 -0.000142 3.1414	</rotation>
-              <scale>	2.63261 1.93924 2.63268	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.752353	</clipAngle>
-              <anchorShift>	0.992296	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000203 -0.035855 1.15315	</rayStart>
-              <rayEnd>	-0.000203 -0.035855 1.68915	</rayEnd>
-              <rayUp>	0.127028 0 0	</rayUp>
-              <size>	0.536	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
-            <density>	104.468 108.32	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122-mm_D-25T_with_a_piston_shutter>
-        <_100mm_D10T>	shared	  <maxAmmo>	50	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	8.8	</reloadTime>
-          <armor>
-            <armor_1>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <R19_IS-3_3Dst>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_01.model	</exploded>
-              </R19_IS-3_3Dst>
-              <Defender_Day>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_01.model	</exploded>
-              </Defender_Day>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-23	</row>
-                <row>	-18	</row>
-                <row>	-14	</row>
-                <row>	-12	</row>
-                <row>	-10	</row>
-                <row>	-6	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Joint_01	</node>
-                  <table>
-                    <row>	-0.6	</row>
-                    <row>	2	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.3	</row>
-                    <row>	6.983	</row>
-                    <row>	8.796	</row>
-                  </table>
-                </slave>
-                <slave>
-                  <node>	Joint_02	</node>
-                  <table>
-                    <row>	-1.5	</row>
-                    <row>	1.5	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.903	</row>
-                    <row>	6.983	</row>
-                    <row>	6.5	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000353 -0.031143 2.00376	</anchorPosition>
-              <anchorDirection>	-0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.243492 0.243492	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000353 -0.031143 2.00376	</anchorPosition>
-              <anchorDirection>	0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.011345 1.44413 1.60328	</position>
-              <rotation>	0.763886 -0.000019 3.14151	</rotation>
-              <scale>	3.23357 2 3.23366	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.525578	</clipAngle>
-              <anchorShift>	0.924765	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011328 1.59468 1.82073	</position>
-              <rotation>	0.923089 -0.00004 3.14149	</rotation>
-              <scale>	2.7151 1.45 2.71517	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.104089	</clipAngle>
-              <anchorShift>	0.734765	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.011333 1.69615 1.53007	</position>
-              <rotation>	1.25289 -0.000142 3.1414	</rotation>
-              <scale>	2.63261 1.93924 2.63268	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.752353	</clipAngle>
-              <anchorShift>	0.992296	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000707 -0.035915 1.3456	</rayStart>
-              <rayEnd>	-0.000707 -0.035915 1.8436	</rayEnd>
-              <rayUp>	0.097 0 0	</rayUp>
-              <size>	0.498	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
-            <density>	105.201 108.295	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_100mm_D10T>
-        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	28	</maxAmmo>
+        <_122_mm_D_25TM_IS_3>	shared	  <maxAmmo>	28	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
@@ -3133,8 +2781,6 @@
           <unlocks>
             <gun>	_122mm_BL-9	  <cost>	44000	</cost>
             </gun>
-            <vehicle>	R81_IS8	  <cost>	164700	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3157,10 +2803,15 @@
             </armor_9>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	12.3	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	13.3	</reloadTime>
+          <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_03.model	</destroyed>
@@ -3303,10 +2954,10 @@
             <density>	104.375 108.269	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter>
+        </_122_mm_D_25TM_IS_3>
         <_122mm_BL-9>	shared	  <maxAmmo>	28	</maxAmmo>
           <unlocks>
-            <vehicle>	R151_Object_257_2	  <cost>	142700	</cost>
+            <vehicle>	R151_Object_257_2	  <cost>	161700	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
@@ -3334,9 +2985,15 @@
             </armor_9>
             <gun>	50	</gun>
           </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	13.3	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_04.model	</destroyed>
@@ -4255,7 +3912,7 @@
         <armor_6>	150	</armor_6>
         <armor_7>	80	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	20	</armor_9>
+        <armor_9>	40	</armor_9>
         <armor_10>	100	</armor_10>
         <armor_11>	172	</armor_11>
         <armor_12>	156	</armor_12>
@@ -4281,7 +3938,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.97	</invisibilityFactor>
       <guns>
-        <_122-mm_D-25T_with_a_piston_shutter>	shared	  <maxAmmo>	28	</maxAmmo>
+        <_122_mm_D_25TM_IS_3>	shared	  <maxAmmo>	28	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
@@ -4297,338 +3954,15 @@
             </armor_5>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	14.7	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_06.model	</exploded>
-            <sets>
-              <R19_IS-3_3Dst>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_06.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_06.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_06.model	</exploded>
-              </R19_IS-3_3Dst>
-              <Defender_Day>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_06.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_06.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_06.model	</exploded>
-              </Defender_Day>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-23	</row>
-                <row>	-18	</row>
-                <row>	-14	</row>
-                <row>	-12	</row>
-                <row>	-10	</row>
-                <row>	-6	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Joint_01	</node>
-                  <table>
-                    <row>	-0.6	</row>
-                    <row>	2	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.3	</row>
-                    <row>	6.983	</row>
-                    <row>	8.796	</row>
-                  </table>
-                </slave>
-                <slave>
-                  <node>	Joint_02	</node>
-                  <table>
-                    <row>	-1.5	</row>
-                    <row>	1.5	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.903	</row>
-                    <row>	6.983	</row>
-                    <row>	6.5	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002221 -0.018031 1.90746	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.231898 0.231898	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002221 -0.018031 1.90746	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.011345 1.44413 1.60328	</position>
-              <rotation>	0.763886 -0.000019 3.14151	</rotation>
-              <scale>	3.23357 2 3.23366	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.525578	</clipAngle>
-              <anchorShift>	0.945316	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011328 1.54307 1.87887	</position>
-              <rotation>	0.759723 -0.000018 3.14151	</rotation>
-              <scale>	2.7151 1.45 2.71517	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.097652	</clipAngle>
-              <anchorShift>	0.707946	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.016575 1.69615 1.53007	</position>
-              <rotation>	1.25289 -0.000142 3.1414	</rotation>
-              <scale>	2.63261 1.93924 2.63268	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.726602	</clipAngle>
-              <anchorShift>	0.967191	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000442 -0.036062 1.04609	</rayStart>
-              <rayEnd>	-0.000442 -0.036062 1.59809	</rayEnd>
-              <rayUp>	0.120127 0 0	</rayUp>
-              <applyToFabric>	false	</applyToFabric>
-              <size>	0.552	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
-            <density>	104.468 108.32	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122-mm_D-25T_with_a_piston_shutter>
-        <_100mm_D10T>	shared	  <maxAmmo>	50	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	8.8	</reloadTime>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R19_IS-3/crash/lod0/Gun_05.model	</exploded>
-            <sets>
-              <R19_IS-3_3Dst>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/R19_IS-3_3Dst/crash/lod0/Gun_05.model	</exploded>
-              </R19_IS-3_3Dst>
-              <Defender_Day>
-                <undamaged>	vehicles/russian/R19_IS-3/_skins/Defender_Day/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/russian/R19_IS-3/_skins/Defender_Day/crash/lod0/Gun_05.model	</exploded>
-              </Defender_Day>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R19_IS-3/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R19_IS-3/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_mainext	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-23	</row>
-                <row>	-18	</row>
-                <row>	-14	</row>
-                <row>	-12	</row>
-                <row>	-10	</row>
-                <row>	-6	</row>
-                <row>	0	</row>
-                <row>	5	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Joint_01	</node>
-                  <table>
-                    <row>	-0.6	</row>
-                    <row>	2	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.3	</row>
-                    <row>	6.983	</row>
-                    <row>	8.796	</row>
-                  </table>
-                </slave>
-                <slave>
-                  <node>	Joint_02	</node>
-                  <table>
-                    <row>	-1.5	</row>
-                    <row>	1.5	</row>
-                    <row>	3	</row>
-                    <row>	3.6	</row>
-                    <row>	4	</row>
-                    <row>	5.903	</row>
-                    <row>	6.983	</row>
-                    <row>	6.5	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000029 -0.029408 1.92638	</anchorPosition>
-              <anchorDirection>	0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.231898 0.231898	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000029 -0.029408 1.92637	</anchorPosition>
-              <anchorDirection>	-0 0.000001 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square	</tags>
-              <position>	-0.011345 1.44413 1.60328	</position>
-              <rotation>	0.763886 -0.000019 3.14151	</rotation>
-              <scale>	3.23357 2 3.23366	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.525578	</clipAngle>
-              <anchorShift>	0.945315	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011328 1.54307 1.87887	</position>
-              <rotation>	0.759723 -0.000018 3.14151	</rotation>
-              <scale>	2.7151 1.45 2.71517	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.097652	</clipAngle>
-              <anchorShift>	0.707946	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.016583 1.69615 1.53007	</position>
-              <rotation>	1.25289 -0.000142 3.1414	</rotation>
-              <scale>	2.63261 1.93924 2.63268	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.726602	</clipAngle>
-              <anchorShift>	0.977182	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000026 -0.035739 1.04609	</rayStart>
-              <rayEnd>	0.000026 -0.035739 1.56009	</rayEnd>
-              <rayUp>	0.114127 0 0	</rayUp>
-              <applyToFabric>	false	</applyToFabric>
-              <size>	0.514	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
-            <density>	105.201 108.295	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_100mm_D10T>
-        <_122-mm_D-25T_with_wedges_shutter>	shared	  <maxAmmo>	28	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -23 1 -23	</minPitch>
-            <maxPitch>	0 5 0.380783 5 0.444444 1 0.555556 1 0.619218 5 1 5	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	12.3	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <aimingTime>	3.0	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_07.model	</destroyed>
@@ -4772,7 +4106,7 @@
             <density>	104.375 108.269	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_122-mm_D-25T_with_wedges_shutter>
+        </_122_mm_D_25TM_IS_3>
         <_122mm_BL-9>	shared	  <maxAmmo>	28	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
@@ -4789,9 +4123,15 @@
             </armor_5>
             <gun>	50	</gun>
           </armor>
-          <reloadTime>	13.3	</reloadTime>
-          <aimingTime>	3.4	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	12.3	</reloadTime>
+          <aimingTime>	3.0	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R19_IS-3/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/russian/R19_IS-3/crash/lod0/Gun_08.model	</destroyed>
@@ -5691,7 +5031,11 @@
         </engine>
       </unlocks>
     </V-11>
-    <V-2-54IS>	shared	</V-2-54IS>
+    <V-2-54IS>	shared	  <unlocks>
+        <vehicle>	R81_IS8	  <cost>	183700	</cost>
+        </vehicle>
+      </unlocks>
+    </V-2-54IS>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>

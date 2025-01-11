@@ -10,7 +10,7 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	55	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16795	</weight>
-    <maxHealth>	1040	</maxHealth>
+    <maxHealth>	1100	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -2889,14 +2889,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9200	</weight>
-      <maxHealth>	260	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -3002,7 +3002,7 @@
           </unlocks>
           <maxAmmo>	61	</maxAmmo>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <reloadTime>	7.7	</reloadTime>
+          <reloadTime>	6.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -3671,12 +3671,12 @@
     <detailed>
       <engines>
         <MB-837>
-          <smplEnginePower>	528.6406	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </MB-837>
         <MB-837A>
-          <smplEnginePower>	670	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplEnginePower>	790	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </MB-837A>
       </engines>
       <chassis>

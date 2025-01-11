@@ -101,6 +101,7 @@
     <Rolls_Royse_Meteor_MkIV_Alligator>	31003	</Rolls_Royse_Meteor_MkIV_Alligator>
     <Meteorite_Mk_202_02_B>	31004	</Meteorite_Mk_202_02_B>
     <MTU_870>	31005	</MTU_870>
+    <LandRover_Meteorite_V8_bob>	31006	</LandRover_Meteorite_V8_bob>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
@@ -1329,6 +1330,24 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </LandRover_Meteorite_V8>
+    <LandRover_Meteorite_V8_bob>
+      <userString>	#gb_vehicles:LandRover_Meteorite_V8	</userString>
+      <shortUserString>	#gb_vehicles:LandRover_Meteorite_V8_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	700	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </LandRover_Meteorite_V8_bob>
     <Rolls_Royce_K60>
       <userString>	#gb_vehicles:Rolls_Royce_K60	</userString>
       <tags>	diesel	</tags>

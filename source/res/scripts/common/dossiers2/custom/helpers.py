@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/helpers.py
 import typing
-from dossiers2.custom.records import RECORDS, RECORD_INDICES, RECORD_DB_IDS, DB_ID_TO_RECORD
 from dossiers2.custom.cache import getCache
+from dossiers2.custom.records import RECORDS, RECORD_INDICES, RECORD_DB_IDS, DB_ID_TO_RECORD
 from nations import ALL_NATIONS_INDEX
-from soft_exception import SoftException
+from paragons_common import getResetVehicles
 
 def getTankExpertRequirements(vehTypeFrags, nationID=ALL_NATIONS_INDEX):
     cache = getCache()
@@ -77,8 +77,8 @@ def updateTankExpert(dossierDescr, vehTypeFrags, nationID):
                 dossierDescr.addPopUp('achievements', record, True)
 
 
-def updateMechanicEngineer(dossierDescr, defaultUnlocks, unlocks, nationID):
-    res = getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID)
+def updateMechanicEngineer(dossierDescr, defaultUnlocks, unlocks, nationID=ALL_NATIONS_INDEX):
+    res = getMechanicEngineerRequirements(defaultUnlocks, unlocks, nationID=nationID)
     for record, value in res.iteritems():
         if len(value) == 0:
             if not dossierDescr['achievements'][record]:

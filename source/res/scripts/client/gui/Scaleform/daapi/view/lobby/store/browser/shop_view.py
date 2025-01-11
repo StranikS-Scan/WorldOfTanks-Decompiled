@@ -82,3 +82,10 @@ class ShopOverlay(_ShopOverlayBase):
     def onEscapePress(self):
         if not self._browserParams.get('isHidden'):
             self.destroy()
+
+
+class BobPageOverlay(WebView):
+
+    def webHandlers(self):
+        from gui.Scaleform.daapi.view.lobby.shared.web_handlers import createBobOverlayWebHandlers
+        return createBobOverlayWebHandlers()

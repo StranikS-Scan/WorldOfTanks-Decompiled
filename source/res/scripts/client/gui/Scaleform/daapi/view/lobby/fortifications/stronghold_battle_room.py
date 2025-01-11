@@ -111,12 +111,13 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         pInfo = self.prbEntity.getPlayerInfo(dbID=dbID)
         if pInfo.isInSlot:
             slotIdx = pInfo.slotIdx
-            frozenVehicles = self.prbEntity.getEventFrozenVehicles(dbID)
             if vInfos and not vInfos[0].isEmpty():
                 vInfo = vInfos[0]
+                frozenVehicles = self.prbEntity.getEventFrozenVehicles(dbID, vehLevel=vInfo.vehLevel)
                 vehicleVO = makeStrongholdVehicleVO(self.itemsCache.items.getItemByCD(vInfo.vehTypeCD), self.prbEntity.getRosterSettings().getLevelsRange(), isCurrentPlayer=pInfo.isCurrentPlayer(), frozenVehicles=frozenVehicles)
                 slotCost = vInfo.vehLevel
             else:
+                frozenVehicles = self.prbEntity.getEventFrozenVehicles(dbID)
                 slotState = self.prbEntity.getSlotState(slotIdx)
                 vehicleVO = None
                 if slotState.isClosed:

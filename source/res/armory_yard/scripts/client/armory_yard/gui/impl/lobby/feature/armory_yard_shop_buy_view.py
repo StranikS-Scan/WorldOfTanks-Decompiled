@@ -19,6 +19,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.server_events.bonuses import getNonQuestBonuses, splitBonuses, mergeBonuses
 from gui.impl import backport
+from gui.shared.event_dispatcher import showHangar
 from gui.shared.money import Currency
 from frameworks.wulf import WindowFlags, WindowLayer, ViewSettings, ViewFlags, ViewModel
 from gui.impl.gen import R
@@ -134,10 +135,11 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         return productCost == playerCost
 
     def __backCallback(self):
+        showHangar()
         showArmoryYardShopBuyWindow(productId=self.__productId)
 
     def __onShowVehiclePreview(self):
-        vehicleCD = self.__getVehicleCD()
+        vehicleCD = self.__getPreviewVehicleCD()
         if vehicleCD:
             vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
             self.onClose()
@@ -147,7 +149,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
                 self.__armoryYardCtrl.isVehiclePreview = True
                 showArmoryYardVehiclePreview(vehicle.intCD, backToHangar=False, showHeroTankText=False, previewBackCb=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadShopBuyView': True,
                  'productID': self.__productId}), backBtnLabel=backport.text(R.strings.armory_shop.shopBuyView.backGoto()))
-            self.__armoryYardCtrl.cameraManager.goToHangar()
+                self.__armoryYardCtrl.cameraManager.goToHangar()
 
     def __onPurchaseResponse(self, requestID, resultID, errorStr, data=None, isBundle=False, stages=0):
         Waiting.hide('buyItem')
@@ -227,9 +229,8 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             model.setGoldAmount(int(gold))
             model.setCurrencyAmount(tokens)
 
-    def __getVehicleCD(self):
-        vehicles = self.__getProductData()['bonus'].get('vehicles', {})
-        return vehicles.keys()[0] if vehicles else None
+    def __getPreviewVehicleCD(self):
+        return self.__getProductData()['exclusiveVehicle']
 
 
 class ArmoryYardShopBuyWindow(LobbyWindow):

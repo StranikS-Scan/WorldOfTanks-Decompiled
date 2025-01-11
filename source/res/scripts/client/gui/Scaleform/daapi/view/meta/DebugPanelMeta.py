@@ -4,17 +4,20 @@ from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPICompone
 
 class DebugPanelMeta(BaseDAAPIComponent):
 
-    def as_updatePingInfoS(self, pingValue):
-        return self.flashObject.as_updatePingInfo(pingValue) if self._isDAAPIInited() else None
+    def as_initReplayS(self):
+        return self.flashObject.as_initReplay() if self._isDAAPIInited() else None
 
-    def as_updateFPSInfoS(self, fpsValue):
-        return self.flashObject.as_updateFPSInfo(fpsValue) if self._isDAAPIInited() else None
+    def as_updatePingS(self, ping):
+        return self.flashObject.as_updatePing(ping) if self._isDAAPIInited() else None
 
-    def as_updateLagInfoS(self, isLagging):
-        return self.flashObject.as_updateLagInfo(isLagging) if self._isDAAPIInited() else None
+    def as_updateFpsS(self, fps):
+        return self.flashObject.as_updateFps(fps) if self._isDAAPIInited() else None
 
-    def as_updatePingFPSInfoS(self, pingValue, fpsValue):
-        return self.flashObject.as_updatePingFPSInfo(pingValue, fpsValue) if self._isDAAPIInited() else None
+    def as_updatePingFPSS(self, ping, fps):
+        return self.flashObject.as_updatePingFPS(ping, fps) if self._isDAAPIInited() else None
 
-    def as_updatePingFPSLagInfoS(self, pingValue, fpsValue, isLagging):
-        return self.flashObject.as_updatePingFPSLagInfo(pingValue, fpsValue, isLagging) if self._isDAAPIInited() else None
+    def as_updateAllS(self, ping, fps, isLagging):
+        return self.flashObject.as_updateAll(ping, fps, isLagging) if self._isDAAPIInited() else None
+
+    def as_updateReplayS(self, ping, fps, isLagging, replayFps):
+        return self.flashObject.as_updateReplay(ping, fps, isLagging, replayFps) if self._isDAAPIInited() else None

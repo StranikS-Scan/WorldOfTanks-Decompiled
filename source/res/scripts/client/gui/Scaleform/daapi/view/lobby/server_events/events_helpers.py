@@ -22,7 +22,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events import conditions, formatters, settings as quest_settings
 from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isDailyQuest, getDataByC11nQuest
-from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter
+from gui.server_events.personal_progress.formatters import PostBattleConditionsFormatter, PM3PostBattleConditionsFormatter
 from gui.shared.formatters import icons, text_styles
 from helpers import dependency, i18n, int2roman, time_utils
 from nations import ALLIANCE_TO_NATIONS
@@ -431,7 +431,7 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
 
     def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData):
         info = super(PersonalMissionPostBattleInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted, progressData)
-        condFormatter = PostBattleConditionsFormatter(self.event, progressData)
+        condFormatter = self._getConditionFormatterClass()(self.event, progressData)
         if isCompleted.isMainComplete or isCompleted.isAddComplete:
             failedDescr = ''
         else:
@@ -442,7 +442,7 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
          'linkBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
          'collapsedToggleBtnVisible': statusState == PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS,
          'descr': descr,
-         'personalInfo': [condFormatter.getConditionsData(isMain=True), condFormatter.getConditionsData(isMain=False)],
+         'personalInfo': self._getPersonalInfo(condFormatter),
          'questState': {'statusState': statusState,
                         'statusText': statusText},
          'awards': []})
@@ -454,13 +454,35 @@ class PersonalMissionPostBattleInfo(EventPostBattleInfo):
                 msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_FULLDONE)
                 return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_FULL_DONE, msg)
             if pmComplete.isMainComplete:
-                msg = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_MAINDONE)
+                textKey = QUESTS.PERSONALMISSION_STATUS_MAINDONE if self.event.getPMType().withAdd else QUESTS.PERSONALMISSION_STATUS_ALLDONE
+                msg = text_styles.bonusAppliedText(textKey)
                 return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_DONE, msg)
         if failed:
             msg = text_styles.error(QUESTS.PERSONALMISSION_STATUS_FAILED)
             return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_FAILED, msg)
         msg = text_styles.neutral(QUESTS.PERSONALMISSION_STATUS_INPROGRESS)
         return (PERSONAL_MISSIONS_ALIASES.POST_BATTLE_STATE_IN_PROGRESS, msg)
+
+    def _getConditionFormatterClass(self):
+        return PostBattleConditionsFormatter
+
+    def _getPersonalInfo(self, condFormatter):
+        return [condFormatter.getConditionsData(isMain=True), condFormatter.getConditionsData(isMain=False)]
+
+
+class PM3PersonalMissionPostBattleInfo(PersonalMissionPostBattleInfo):
+
+    def _getConditionFormatterClass(self):
+        return PM3PostBattleConditionsFormatter
+
+    def _getPersonalInfo(self, condFormatter):
+        personalInfo = condFormatter.getConditionsDataList(isMain=True)
+        if self.event.getPMType().withAdd:
+            personalInfo.extend(condFormatter.getConditionsDataList(isMain=False))
+        if len(personalInfo) > 2:
+            _logger.error('Postbattle PersonalMission3 formatting went wrong for quest: %s', self.event.getGeneralQuestID())
+            personalInfo = [personalInfo[0], personalInfo[-1]]
+        return personalInfo
 
 
 class _BattlePassRandomQuestPostBattleInfo(QuestPostBattleInfo):
@@ -572,6 +594,8 @@ def _getEventInfoData(event):
     if str(event.getID()).startswith(BATTLE_PASS_RANDOM_QUEST_ID_PREFIX):
         return _BattlePassRandomQuestPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
+        if event.getGeneralQuestID().startswith('pm3'):
+            return PM3PersonalMissionPostBattleInfo(event)
         return PersonalMissionPostBattleInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
         return MotiveQuestPostBattleInfo(event)

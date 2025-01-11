@@ -13,7 +13,7 @@ from gui.Scaleform.locale.TANK_CAROUSEL_FILTER import TANK_CAROUSEL_FILTER
 from gui.shared.event_dispatcher import showStorage, showTelecomRentalPage, showVehicleTechTreeView
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
-from skeletons.gui.game_control import IRestoreController, IEarlyAccessController
+from skeletons.gui.game_control import IRestoreController, IEarlyAccessController, IParagonsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -22,6 +22,7 @@ class TankCarousel(TankCarouselMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     restoreCtrl = dependency.descriptor(IRestoreController)
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
+    __paragonsCtrl = dependency.descriptor(IParagonsController)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -71,6 +72,8 @@ class TankCarousel(TankCarouselMeta):
         popupFilters = super(TankCarousel, self).getCustomParams()
         if self.__earlyAccessCtrl.isEnabled() and self.__earlyAccessCtrl.isPostProgressionQueueSelected() and not self.__earlyAccessCtrl.isFilterDisabledInQueue():
             popupFilters.update({'early_access': True})
+        if self.__paragonsCtrl.isEnabled:
+            popupFilters.update({'paragons': True})
         return popupFilters
 
     def hasRoles(self):

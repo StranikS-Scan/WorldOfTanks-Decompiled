@@ -10,7 +10,7 @@
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
+    <forward>	50	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -3239,18 +3239,18 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	8.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3360,15 +3360,15 @@
         </_90mm_Gun_M3A1>
         <_90mm_Rifled_Gun>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	8.2	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -4083,22 +4083,22 @@
       <guns>
         <_90mm_Gun_M3A1>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
@@ -4182,17 +4182,17 @@
         </_90mm_Gun_M3A1>
         <_90mm_Rifled_Gun>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	7.2	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.25	</afterShot>
@@ -4284,22 +4284,22 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	124	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	6.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -13 1 -13	</minPitch>
             <maxPitch>	0 10 0.361111 10 0.387053 5 0.403256 5 0.445117 0 0.555646 4.47035e-06 0.597222 5 0.604223 5 0.638889 10 1 10	</maxPitch>
@@ -5018,11 +5018,11 @@
       <engines>
         <_Mitsubishi_DL10T>
           <smplEnginePower>	528.6406	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_Mitsubishi_DL10T>
         <_Mitsubishi_12HM20WT>
           <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </_Mitsubishi_12HM20WT>
       </engines>
       <chassis>

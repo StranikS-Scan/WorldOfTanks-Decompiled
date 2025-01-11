@@ -6,20 +6,16 @@ from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_COUPON_REWA
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from gui.impl import backport
-from gui.impl.backport import TooltipData, createTooltipData
 from gui.impl.gen import R
+from gui.impl.backport import TooltipData, createTooltipData
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7BonusModel, DogTagType
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
 from gui.impl.lobby.comp7.comp7_bonus_helpers import BonusTypes, getBonusType
-from gui.impl.lobby.comp7.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
 from gui.server_events.bonuses import mergeBonuses, splitBonuses, C11nProgressTokenBonus
-from gui.shared.gui_items.customization import CustomizationTooltipContext
-from gui.shared.missions.packers.bonus import DossierBonusUIPacker, DogTagComponentsUIPacker, BonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, SimpleBonusUIPacker, CustomizationBonusUIPacker, VehiclesBonusUIPacker, TokenBonusUIPacker
+from gui.shared.missions.packers.bonus import DossierBonusUIPacker, DogTagComponentsUIPacker, BonusUIPacker, SimpleBonusUIPacker, CustomizationBonusUIPacker, VehiclesBonusUIPacker, TokenBonusUIPacker, StyleProgressBonusUIPacker
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.money import Currency
-from helpers import dependency
-from skeletons.gui.customization import ICustomizationService
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
 _logger = logging.getLogger(__name__)
@@ -103,55 +99,11 @@ class Comp7CrystalBonusPacker(SimpleBonusUIPacker):
         return Comp7BonusModel()
 
 
-class Comp7StyleProgressBonusUIPacker(BaseBonusUIPacker):
-    __c11nService = dependency.descriptor(ICustomizationService)
+class Comp7StyleProgressBonusUIPacker(StyleProgressBonusUIPacker):
 
     @classmethod
     def _getBonusModel(cls):
         return Comp7StyleBonusModel()
-
-    @classmethod
-    def _pack(cls, bonus):
-        return [cls._packSingleBonus(bonus)]
-
-    @classmethod
-    def _packSingleBonus(cls, bonus):
-        model = cls._getBonusModel()
-        cls._packCommon(bonus, model)
-        styleID = bonus.getStyleID()
-        branchID = bonus.getBranchID()
-        progressLevel = bonus.getProgressLevel()
-        camo = getComp7ProgressionStyleCamouflage(styleID, branchID, progressLevel)
-        if camo is not None:
-            icon = cls.__getIcon(styleID, progressLevel)
-            label = cls.__getLabel(camo)
-        else:
-            _logger.error('Missing camouflage for Comp7StyleProgressBonus: styleID=%s; level=%s', styleID, progressLevel)
-            icon = ''
-            label = ''
-        model.setIcon(icon)
-        model.setLabel(label)
-        model.setStyleID(styleID)
-        model.setBranchID(branchID)
-        model.setProgressLevel(progressLevel)
-        return model
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        styleID = bonus.getStyleID()
-        branchID = bonus.getBranchID()
-        progressLevel = bonus.getProgressLevel()
-        camo = getComp7ProgressionStyleCamouflage(styleID, branchID, progressLevel)
-        tooltipData = TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=camo.intCD))
-        return [tooltipData]
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [BACKPORT_TOOLTIP_CONTENT_ID]
-
-    @staticmethod
-    def __getIcon(styleID, progressLevel):
-        return 'style_progress_{styleID}_{progressLevel}'.format(styleID=styleID, progressLevel=progressLevel)
 
     @staticmethod
     def __getLabel(camo):

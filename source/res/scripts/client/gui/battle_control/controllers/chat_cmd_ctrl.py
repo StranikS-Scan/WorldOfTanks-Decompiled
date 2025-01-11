@@ -10,6 +10,7 @@ import Math
 import Vehicle
 from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.cameras import getWorldRayAndPoint
+from TemperatureGunController import getPlayerVehicleTemperatureGunController
 from account_helpers.settings_core.settings_constants import BattleCommStorageKeys
 from aih_constants import CTRL_MODE_NAME
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
@@ -342,12 +343,20 @@ class ChatCommandsController(IBattleController):
     def sendReloadingCommand(self):
         if not avatar_getter.isPlayerOnArena() or self.__isEnabled is False:
             return
-        state = self.__ammo.getGunReloadingState()
-        command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
-        if command:
-            self.__sendChatCommand(command)
         else:
-            _logger.error('Can not create reloading command')
+            tempCtrl = getPlayerVehicleTemperatureGunController()
+            if tempCtrl is not None and tempCtrl.isOverheated:
+                timeLeft = math.ceil(tempCtrl.calculateCoolingTime())
+                command = self.proto.battleCmd.createOverheatCantShootCommand(timeLeft)
+                self.__sendChatCommand(command)
+                return
+            state = self.__ammo.getGunReloadingState()
+            command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                _logger.error('Can not create reloading command')
+            return
 
     def __isProhibitedToSendIfDeadOrObserver(self, name):
         return not avatar_getter.isVehicleAlive() and name in PROHIBITED_IF_DEAD or self.sessionProvider.getCtx().isPlayerObserver() and name in PROHIBITED_IF_SPECTATOR

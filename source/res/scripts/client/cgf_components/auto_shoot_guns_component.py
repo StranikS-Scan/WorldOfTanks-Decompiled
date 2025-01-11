@@ -6,7 +6,7 @@ import GenericComponents
 import Vehicular
 from constants import IS_CLIENT
 from cgf_script.component_meta_class import registerComponent, ComponentProperty, CGFMetaTypes
-from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery, onProcessQuery
+from cgf_script.managers_registrator import autoregister, onAddedQuery, onRemovedQuery
 if IS_CLIENT:
     from AutoShootGunController import AutoShootGunController
 else:
@@ -86,10 +86,4 @@ class AutoShootingGunManager(CGF.ComponentManager):
         controller = root.findComponentByType(AutoShootGunController)
         if controller is not None:
             controller.shootingAnimator.removeRecoilAnimator(gunRecoilAnimator)
-        return
-
-    @onProcessQuery(AutoShootGunController)
-    def onTick(self, controller):
-        if controller is not None and controller.shootingAnimator is not None:
-            controller.shootingAnimator.receiveShotsImpulse(self.clock.gameDelta)
         return

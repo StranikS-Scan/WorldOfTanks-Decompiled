@@ -88,6 +88,3 @@ class GuiLootBoxesControllerStub(IGuiLootBoxesController):
 
     def getGuiLootBoxByTokenID(self, tokenID):
         return None
-
-    def getInfoPageURL(self, lootboxType):
-        pass

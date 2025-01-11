@@ -226,6 +226,11 @@ def __mergeDailyQuestReroll(total, key, value, isLeaf, count, *args):
     total.setdefault(key, set()).update(value)
 
 
+def __mergeParagonsUnlocks(total, key, value, isLeaf, count, *args):
+    total.setdefault(key, {})
+    total[key].setdefault('ids', set()).update(value.get('ids', set()))
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -267,11 +272,8 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'freePremiumCrew': __mergeFreePremiumCrew,
  'meta': __mergeMeta,
  'dailyQuestReroll': __mergeDailyQuestReroll,
- 'noviceReset': __mergeNoviceReset}
-
-def mergeTokens(total, key, value, isLeaf=False, count=1, *args):
-    __mergeTokens(total, key, value, isLeaf, count, *args)
-
+ 'noviceReset': __mergeNoviceReset,
+ 'paragonsUnlocks': __mergeParagonsUnlocks}
 
 def _vehiclesInventoryChecker(account, key):
     invId = account._inventory.getVehicleInvID(key)
@@ -282,57 +284,6 @@ ITEM_INVENTORY_CHECKERS = {'vehicles': _vehiclesInventoryChecker,
  'customizations': lambda account, key: account._customizations20.getItems((key,), 0)[key] > 0,
  'tokens': lambda account, key: account._quests.hasToken(key)}
 RENT_ITEM_INVENTORY_CHECKERS = {'vehicles': lambda account, key: account._rent.isVehicleRented(account._inventory.getVehicleInvID(key))}
-
-def __vehiclesExistanceChecker(bonusValue, cache):
-    for itemID, itemData in bonusValue.iteritems():
-        if cache.isItemExists('vehicles', itemID, bool(itemData.get('rent', None))):
-            return True
-
-    return False
-
-
-def __tokensExistanceChecker(bonusValue, cache):
-    for itemID in bonusValue.iterkeys():
-        if cache.isItemExists('tokens', itemID):
-            return True
-
-    return False
-
-
-def __customizationsExistanceChecker(bonusValue, cache):
-    for customization in bonusValue:
-        c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
-        if cache.isItemExists('customizations', c11nItem.compactDescr):
-            return True
-
-    return False
-
-
-UNIQUE_BONUSES_EXISTANCE_CHECKERS = {'vehicles': __vehiclesExistanceChecker,
- 'tokens': __tokensExistanceChecker,
- 'customizations': __customizationsExistanceChecker}
-
-def __vehiclesCacheUpdater(bonusValue, cache):
-    for itemID, itemData in bonusValue.iteritems():
-        cache.onItemAccepted('vehicles', itemID, bool(itemData.get('rent', None)))
-
-    return
-
-
-def __tokensCacheUpdater(bonusValue, cache):
-    for itemID in bonusValue.iterkeys():
-        cache.onItemAccepted('tokens', itemID)
-
-
-def __customizationsCacheUpdater(bonusValue, cache):
-    for customization in bonusValue:
-        c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
-        cache.onItemAccepted('customizations', c11nItem.compactDescr)
-
-
-UNIQUE_BONUSES_CACHE_UPDATERS = {'vehicles': __vehiclesCacheUpdater,
- 'tokens': __tokensCacheUpdater,
- 'customizations': __customizationsCacheUpdater}
 
 class BonusItemsCache(object):
 
@@ -463,15 +414,37 @@ class BonusNodeAcceptor(object):
 
     def updateBonusCache(self, bonusNode):
         cache = self.__bonusCache
-        for itemType, updater in UNIQUE_BONUSES_CACHE_UPDATERS.iteritems():
-            if itemType in bonusNode:
-                updater(bonusNode[itemType], cache)
+        if 'vehicles' in bonusNode:
+            for itemID, itemData in bonusNode['vehicles'].iteritems():
+                cache.onItemAccepted('vehicles', itemID, bool(itemData.get('rent', None)))
+
+        if 'tokens' in bonusNode:
+            for itemID in bonusNode['tokens'].iterkeys():
+                cache.onItemAccepted('tokens', itemID)
+
+        if 'customizations' in bonusNode:
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                cache.onItemAccepted('customizations', c11nItem.compactDescr)
+
+        return
 
     def isBonusExists(self, bonusNode):
         cache = self.__bonusCache
-        for itemType, checker in UNIQUE_BONUSES_EXISTANCE_CHECKERS.iteritems():
-            if itemType in bonusNode:
-                if checker(bonusNode[itemType], cache):
+        if 'vehicles' in bonusNode:
+            for itemID, itemData in bonusNode['vehicles'].iteritems():
+                if cache.isItemExists('vehicles', itemID, bool(itemData.get('rent', None))):
+                    return True
+
+        if 'tokens' in bonusNode:
+            for itemID, itemData in bonusNode['tokens'].iteritems():
+                if cache.isItemExists('tokens', itemID):
+                    return True
+
+        if 'customizations' in bonusNode:
+            for customization in bonusNode['customizations']:
+                c11nItem = getCustomizationItem(customization['custType'], customization['id'])[0]
+                if cache.isItemExists('customizations', c11nItem.compactDescr):
                     return True
 
         return False

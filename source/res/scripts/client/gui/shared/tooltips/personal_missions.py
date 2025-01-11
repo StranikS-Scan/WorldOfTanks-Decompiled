@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/personal_missions.py
 from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
-from frameworks.wulf import ViewSettings, ViewModel
 from gui import GUI_NATIONS
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HANGAR_HEADER_QUESTS_TO_PM_BRANCH
@@ -22,13 +21,14 @@ from gui.Scaleform.settings import BADGES_ICONS, BADGES_STRIPS_ICONS
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
-from gui.impl.pub import ViewImpl
+from gui.impl.lobby.personal_missions.tooltips.quest_card_tooltip import QuestCardTooltip
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter
 from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.server_events.personal_progress.formatters import PMTooltipConditionsFormatters
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.tooltips.battle_pass import BattlePassGiftTokenTooltipData
 from gui.shared.utils import getPlayerName
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -41,6 +41,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.impl.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_view import PersonalMissionsOldCampaignTooltipView
+from gui.impl.lobby.pm_announce.tooltips.personal_missions_new_campaign_tooltip_view import PersonalMissionsNewCampaignTooltipView
 
 class UniqueCamouflageTooltip(BlocksTooltipData):
 
@@ -587,7 +588,7 @@ class PMMissionAnnounceTooltipData(ToolTipBaseData):
         super(PMMissionAnnounceTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_ANNOUNCE)
 
     def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(ViewImpl(ViewSettings(R.views.lobby.pm_announce.tooltips.PersonalMissionsNewCampaignTooltipView(), model=ViewModel())), useDecorator=False)
+        return DecoratedTooltipWindow(PersonalMissionsNewCampaignTooltipView(R.views.lobby.pm_announce.tooltips.PersonalMissionsNewCampaignTooltipView()), useDecorator=False)
 
 
 class PMOldOperationsTooltipData(ToolTipBaseData):
@@ -597,3 +598,29 @@ class PMOldOperationsTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(PersonalMissionsOldCampaignTooltipView(R.views.lobby.pm_announce.tooltips.PersonalMissionsOldCampaignTooltipView()), useDecorator=False)
+
+
+class PM3QuestCardTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(PM3QuestCardTooltipData, self).__init__(context, TOOLTIPS_CONSTANTS.PM3_QUEST_CARD_TOOLTIP)
+
+    def getDisplayableData(self, *args, **kwargs):
+        questId = int(args[0])
+        return DecoratedTooltipWindow(QuestCardTooltip(questId=questId), useDecorator=False)
+
+
+class PM3GiftTokenTooltipData(BattlePassGiftTokenTooltipData):
+    _MAX_GIFTS_COUNT = 12
+
+    def __init__(self, context):
+        super(PM3GiftTokenTooltipData, self).__init__(context, TOOLTIP_TYPE.PM3_GIFT_TOKEN)
+        self._setContentMargin(top=20, left=20, bottom=20, right=20)
+        self._setMargins(10, 15)
+        self._setWidth(420)
+
+    @classmethod
+    def _getBlocks(cls, shortName):
+        rOffer = R.strings.personal_missions_3.selectBonus
+        blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(rOffer.dyn(shortName)())))]
+        return (rOffer, blocks)

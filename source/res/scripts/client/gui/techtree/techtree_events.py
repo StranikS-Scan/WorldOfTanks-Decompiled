@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/techtree/techtree_events.py
 import operator
-import json
-from itertools import chain
 import nations
 import logging
 from account_helpers import AccountSettings
@@ -16,14 +14,13 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from skeletons.gui.techtree_events import ITechTreeEventsListener
-from skeletons.gui.game_control import IEventsNotificationsController
+from skeletons.gui.game_control import IParagonsController, ILimitedUIController
 from gui.server_events.events_constants import TECH_TREE_ACTION_POSTFIX
 from gui.Scaleform.daapi.view.lobby.store.actions_helpers import getActionInfoData
+from gui.limited_ui.lui_rules_storage import LuiRules
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-from helpers.time_utils import getTimestampByStrDate, getServerUTCTime
 _GROUP_NAME_SEPARATOR = '!'
 _NOTIFY_THRESHOLD = ONE_DAY * 5
-_PARAGONS_ENTRY_POINT = 'paragonsEntryPoint'
 _logger = logging.getLogger(__name__)
 
 class _SettingsCache(object):
@@ -75,7 +72,8 @@ class TechTreeEventsListener(ITechTreeEventsListener):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
     __systemMessages = dependency.descriptor(ISystemMessages)
-    __eventsNotificationCtrl = dependency.descriptor(IEventsNotificationsController)
+    __paragonsController = dependency.descriptor(IParagonsController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
     actions = property(lambda self: self.__actions.keys())
 
     def __init__(self):
@@ -89,14 +87,12 @@ class TechTreeEventsListener(ITechTreeEventsListener):
 
     def init(self):
         self.__eventsCache.onSyncCompleted += self.__update
-        self.__eventsNotificationCtrl.onEventNotificationsChanged += self.__onEventsNotificationUpdated
         self.__update()
         g_playerEvents.onAccountShowGUI += self.__onAccountShowGUI
         g_clientUpdateManager.addCallbacks({'inventory': self.__onInventoryUpdated})
 
     def fini(self):
         self.__eventsCache.onSyncCompleted -= self.__update
-        self.__eventsNotificationCtrl.onEventNotificationsChanged -= self.__onEventsNotificationUpdated
         self.__em.clear()
         g_playerEvents.onAccountShowGUI -= self.__onAccountShowGUI
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -143,22 +139,8 @@ class TechTreeEventsListener(ITechTreeEventsListener):
         actionIDs = self.__getActions(vehicleCD, nationID)
         return self.__getActualEventID(actionIDs)
 
-    def isParagonsAnnounceActive(self):
-        for item in self.__eventsNotificationCtrl.getEventsNotifications():
-            if item.eventType != _PARAGONS_ENTRY_POINT:
-                continue
-            try:
-                entryData = json.loads(item.data)
-                startTimestamp = getTimestampByStrDate(entryData['startDate'])
-                endTimestamp = getTimestampByStrDate(entryData['endDate'])
-            except (TypeError, ValueError, KeyError):
-                _logger.error('JSON data in paragonsEntryPoint is invalid')
-                continue
-
-            if startTimestamp <= getServerUTCTime() <= endTimestamp:
-                return True
-
-        return False
+    def isParagonsEntryPointEnabled(self):
+        return self.__paragonsController.isEnabled and self.__limitedUIController.isRuleCompleted(LuiRules.PARAGONS_ENTRY_POINT)
 
     def __update(self):
         actions = self.__eventsCache.getActions(self.__eventFilter())
@@ -229,12 +211,6 @@ class TechTreeEventsListener(ITechTreeEventsListener):
                 return bool(vehicles) if nationID is not None else False
 
         return filter(_filterFunc, self.actions)
-
-    def __onEventsNotificationUpdated(self, added, removed):
-        for item in chain(added, removed):
-            if item.eventType == _PARAGONS_ENTRY_POINT:
-                self.onEntryPointUpdated()
-                break
 
     def __onInventoryUpdated(self, _):
         self.__update()

@@ -20,6 +20,7 @@ from gui_lootboxes.gui.shared.gui_helpers import getLootBoxViewModel, getLootBox
 from gui_lootboxes.gui.storage_context.context import LootBoxesContext, ViewEvents, ReturnPlaces
 from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED, LOOT_BOXES_LAST_ADDED_ID, KEY_LOOTBOX_TRIGGER_HINT_SHOWN
 from frameworks.wulf import ViewSettings, ViewStatus, WindowFlags, WindowLayer
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.impl.gen import R
 from gui.impl.lobby.loot_box.loot_box_helper import getKeyByID
@@ -165,14 +166,8 @@ class LootBoxesStorageView(ViewImpl):
         if self.__context.getCurrentState() != States.STORAGE_VIEWING or lootBoxID == self.__currentLootBoxId:
             return
         self.__currentLootBoxId = lootBoxID
-        self.__setInfoPageByLootboxType()
         model.setCurrentLootboxID(lootBoxID)
-        model.setIsShowInfoButton(bool(self.__infoPageUrl))
-        model.setIfHasUniqueURL(self.__ifHasUniqueURL(lootBoxID))
-
-    def __ifHasUniqueURL(self, lootBoxID):
-        lootBox = self.__itemsCache.items.tokens.getLootBoxByID(lootBoxID)
-        return bool(self.__guiLootBoxesCtr.getShopURL(lootBox.getType())) if lootBox else False
+        model.setIsShowInfoButton(self.__checkIfHasInfoPage())
 
     def __repeatopenLootBoxes(self, event):
         self.__openLootBoxes(event.ctx)
@@ -189,12 +184,11 @@ class LootBoxesStorageView(ViewImpl):
     def __openningFinished(self):
         self.__openingAnimEvent.set()
 
-    def __onBuyBox(self, args):
-        lootBoxID = args.get('lootBoxID')
+    def __onBuyBox(self):
         if self.__guiLootBoxesCtr.isBuyAvailable():
             self.__context.setReturnPlace(ReturnPlaces.TO_SHOP)
             self.destroyWindow()
-            self.__guiLootBoxesCtr.openShop(lootBoxID)
+            self.__guiLootBoxesCtr.openShop(self.__currentLootBoxId)
 
     def __onClose(self):
         self.__context.setReturnPlace(self.__returnPlace)
@@ -353,18 +347,18 @@ class LootBoxesStorageView(ViewImpl):
     def __hideTriggerHint(self):
         self.__guiLootBoxesCtr.setSetting(KEY_LOOTBOX_TRIGGER_HINT_SHOWN, True)
 
-    def __setInfoPageByLootboxType(self):
+    def __checkIfHasInfoPage(self):
         lootBox = self.__itemsCache.items.tokens.getLootBoxByID(self.__currentLootBoxId)
-        if lootBox is None:
-            self.__infoPageUrl = ''
-            return
-        else:
-            lootBoxType = lootBox.getType()
-            self.__infoPageUrl = self.__guiLootBoxesCtr.getInfoPageURL(lootBoxType)
-            return
+        lootBoxCategory = lootBox.getCategory()
+        self.__infoPageUrl = self.__getInfoPageURL(lootBoxCategory)
+        return bool(self.__infoPageUrl)
 
     def __showLootBoxInfoPage(self):
         showBrowserOverlayView(self.__infoPageUrl, VIEW_ALIAS.OVERLAY_WEB_STORE)
+
+    def __getInfoPageURL(self, lootBoxUrl):
+        infoPageURL = GUI_SETTINGS.lookup('lootBoxInfoPageURL')
+        return infoPageURL.get(lootBoxUrl) if infoPageURL else None
 
 
 class LootBoxesStorageWindow(LobbyWindow):

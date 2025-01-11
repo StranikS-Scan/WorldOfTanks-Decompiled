@@ -125,6 +125,10 @@ class PersonalMissionsCache(object):
 
         return result
 
+    def getAllFilteredQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+        return {qID:q for qID, q in self.getAllQuests().iteritems() if filterFunc(q)}
+
     def getQuestsForBranch(self, branch):
         questData = self.__questsData.get(branch)
         return questData.quests if questData else {}
@@ -132,6 +136,13 @@ class PersonalMissionsCache(object):
     def getAllOperations(self):
         result = {}
         for branch in PM_BRANCH.ACTIVE_BRANCHES:
+            result.update(self.getOperationsForBranch(branch))
+
+        return result
+
+    def getOldOperations(self):
+        result = {}
+        for branch in PM_BRANCH.OLD_BRANCHES:
             result.update(self.getOperationsForBranch(branch))
 
         return result

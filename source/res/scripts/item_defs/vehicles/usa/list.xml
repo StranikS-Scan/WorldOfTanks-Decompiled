@@ -757,10 +757,10 @@
     <shortUserString>	#usa_vehicles:A150_MBT_B_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A150_MBT_B_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A150_MBT_B_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
+    <price>	50000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD testTank cannot_be_sold improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret secretExtended lockOutfit	</tags>
+    <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
     <level>	11	</level>
   </A150_MBT_B>
   <A149_AMBT>
@@ -850,7 +850,7 @@
     <price>	8000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD scout special improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user secret testTank	</tags>
+    <tags>	lightTank role_LT_universal HD scout special improvedVentilation_class3_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </A161_ARMT>
   <A103_T71E1_IGR>
@@ -1695,16 +1695,33 @@
     <level>	10	</level>
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
   </A163_H_3>
+  <A169_TF_3>
+    <id>	31002	</id>
+    <userString>	#usa_vehicles:A169_TF_3	</userString>
+    <description>	#usa_vehicles:A169_TF_3_descr	</description>
+    <shortUserString>	#usa_vehicles:A169_TF_3_short	</shortUserString>
+    <price>	2680000	</price>
+    <level>	8	</level>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+  </A169_TF_3>
   <A172_ASTRON_FL>
     <id>	31003	</id>
     <userString>	#usa_vehicles:A172_ASTRON_FL	</userString>
     <description>	#usa_vehicles:A172_ASTRON_FL_descr	</description>
     <shortUserString>	#usa_vehicles:A172_ASTRON_FL_short	</shortUserString>
     <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support flamethrower HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret private	</tags>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </A172_ASTRON_FL>
+  <A170_M4A3FL>
+    <id>	31004	</id>
+    <userString>	#usa_vehicles:A170_M4A3FL	</userString>
+    <description>	#usa_vehicles:A170_M4A3FL_descr	</description>
+    <shortUserString>	#usa_vehicles:A170_M4A3FL_short	</shortUserString>
+    <price>	1430000	</price>
+    <level>	7	</level>
+    <tags>	heavyTank role_HT_support HD flamethrower improvedVentilation_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+  </A170_M4A3FL>
   <A173_TF_2_CLARK>
     <id>	31005	</id>
     <userString>	#usa_vehicles:A173_TF_2_CLARK	</userString>
@@ -1715,7 +1732,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support flamethrower HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special secret testTank	</tags>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special	</tags>
     <level>	9	</level>
   </A173_TF_2_CLARK>
   <A67_T57_58_T>
@@ -1741,7 +1758,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support flamethrower HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank	</tags>
     <level>	10	</level>
   </A172_ASTRON_FL_T>
   <A163_H_3_2>
@@ -1757,6 +1774,15 @@
     <level>	10	</level>
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special lockOutfit	</tags>
   </A163_H_3_2>
+  <A171_TF_4>
+    <id>	31009	</id>
+    <userString>	#usa_vehicles:A171_TF_4	</userString>
+    <shortUserString>	#usa_vehicles:A171_TF_4_short	</shortUserString>
+    <description>	#usa_vehicles:A171_TF_4_descr	</description>
+    <price>	3680000	</price>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </A171_TF_4>
   <A169_TF_3_T>
     <id>	31010	</id>
     <userString>	#usa_vehicles:A169_TF_3_T	</userString>
@@ -1767,7 +1793,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support flamethrower HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special secret testTank	</tags>
+    <tags>	heavyTank role_HT_support flamethrower new_hp_vfx HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special secret testTank	</tags>
     <level>	8	</level>
   </A169_TF_3_T>
 </list.xml>

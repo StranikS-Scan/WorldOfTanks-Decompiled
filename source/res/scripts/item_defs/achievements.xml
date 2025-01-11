@@ -435,9 +435,9 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
-        <item>	1408.0	  <name>	weight	</name>
+        <item>	1.26	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -450,9 +450,9 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
-        <item>	1408.2	  <name>	weight	</name>
+        <item>	1.25	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -660,9 +660,9 @@
       <value>
         <item>	class	  <name>	type	</name>
         </item>
-        <item>	class	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
-        <item>	1407.9	  <name>	weight	</name>
+        <item>	1.24	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	rated7x7	  <name>	mode	</name>
@@ -1170,7 +1170,7 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	memorial	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
         <item>	1009.0	  <name>	weight	</name>
           <type>	float	</type>
@@ -1277,7 +1277,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1.21	  <name>	weight	</name>
+        <item>	1.22	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -1292,7 +1292,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1.22	  <name>	weight	</name>
+        <item>	1.23	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -1307,7 +1307,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1.20	  <name>	weight	</name>
+        <item>	1.21	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -2445,9 +2445,9 @@
       <value>
         <item>	repeatable	  <name>	type	</name>
         </item>
-        <item>	special	  <name>	section	</name>
+        <item>	action	  <name>	section	</name>
         </item>
-        <item>	102.95	  <name>	weight	</name>
+        <item>	1.18	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	rated7x7	  <name>	mode	</name>
@@ -2552,7 +2552,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1.18	  <name>	weight	</name>
+        <item>	1.19	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -2582,7 +2582,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1.19	  <name>	weight	</name>
+        <item>	1.20	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	7x7	  <name>	mode	</name>
@@ -7053,6 +7053,51 @@
         <item>	action	  <name>	section	</name>
         </item>
         <item>	1443.91	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:personalMissionsThird	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1469.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:ParagonsFirstElevenVehicle	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	memorial	  <name>	section	</name>
+        </item>
+        <item>	1469.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:ParagonsFirstSeason	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1442.019	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>

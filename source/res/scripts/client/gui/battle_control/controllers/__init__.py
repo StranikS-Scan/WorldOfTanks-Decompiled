@@ -8,6 +8,7 @@ from gui.battle_control.controllers.repositories import DynamicControllersLocato
 from gui.battle_control.controllers.repositories import ClassicControllersRepository
 from gui.battle_control.controllers.repositories import SharedControllersRepository
 from gui.battle_control.controllers.repositories import _ControllersRepository
+from gui.battle_control.controllers.repositories import BobControllersRepository
 __all__ = ('createShared', 'createDynamic', 'BattleSessionSetup', 'SharedControllersLocator', 'DynamicControllersLocator', '_ControllersRepository')
 
 def createShared(setup):

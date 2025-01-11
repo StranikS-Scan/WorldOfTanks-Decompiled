@@ -64,6 +64,7 @@ class ResearchBaseDumper(_BaseDumper):
          'iconPath': node.getIcon(),
          'smallIconPath': node.getSmallIcon(),
          'state': node.getState(),
+         'extendedState': node.getExtendedState(),
          'displayInfo': node.getDisplayInfo(),
          'extraInfo': node.getExtraInfo(rootItem),
          'blueprintProgress': bpProgress}

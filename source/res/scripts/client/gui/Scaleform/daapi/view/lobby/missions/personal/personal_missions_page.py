@@ -21,12 +21,12 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.event_items import PersonalMission
-from gui.server_events.events_dispatcher import showPersonalMissionDetails, hidePersonalMissionDetails, showPersonalMissionAwards
+from gui.server_events.events_dispatcher import showPersonalMissionDetails, hidePersonalMissionDetails, showPersonalMissionAwards, showPersonalMissionsOperationsMap
 from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, PM_TUTOR_FIELDS as _PTF
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.events import PersonalMissionsEvent, LoadViewEvent
+from gui.shared.events import PersonalMissionsEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import getTypeShortUserName
 from gui.shared.gui_items.processors import quests
@@ -54,7 +54,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.__mapView = None
         self.__eventID = None
         self.__lastTutorState = None
-        self.__backAlias = None
         self.__callbackID = None
         self.__isPersonalMissionDetailsVisible = False
         self.__initialize(ctx)
@@ -96,8 +95,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
                 self.as_showAwardsPopoverForTutorS()
 
     def onBackBtnClick(self):
-        backAlias = self.__backAlias or PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS
-        self.fireEvent(LoadViewEvent(SFViewLoadParams(backAlias)), scope=EVENT_BUS_SCOPE.LOBBY)
+        showPersonalMissionsOperationsMap(self.getBranch())
 
     def _populate(self):
         super(PersonalMissionsPage, self)._populate()
@@ -108,10 +106,15 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.__tryOpenMissionDetails()
         self.as_initViewS(self.getBranch(), _UI_CHAINS_LEN[self.getBranch()])
         self.__updateComponents()
+        self.__checkPersistentSoundsPlaying()
         self.soundManager.setRTPC(SOUNDS.RTCP_MISSIONS_ZOOM, SOUNDS.MIN_MISSIONS_ZOOM)
         self.soundManager.setRTPC(SOUNDS.RTCP_DEBRIS_CONTROL, SOUNDS.MIN_MISSIONS_ZOOM)
         if not self.__eventID:
             self.__checkTutorState()
+
+    def __checkPersistentSoundsPlaying(self):
+        if not self.soundManager.isSoundPlaying(SOUNDS.MUSIC) and not self.soundManager.isSoundPlaying(SOUNDS.AMBIENT):
+            self._reloadSoundSpace()
 
     def _dispose(self):
         self.soundManager.stopSound(SOUNDS.ONE_AWARD_LIST_RECEIVED)
@@ -202,7 +205,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             branch = ctx.get('branch')
         if branch is not None:
             self.setBranch(branch)
-        self.__backAlias = ctx.get('previewAlias')
         self.__eventID = int(eventID) if eventID is not None else eventID
         if eventID:
             quest = self.__PMCache.getAllQuests().get(self.__eventID)
@@ -282,7 +284,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         else:
             status = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -2), text_styles.neutral(PERSONAL_MISSIONS.STATUSPANEL_STATUS_SELECTTASK))
         tankwomanQuests = []
-        for operation in pm.getAllOperations().itervalues():
+        for operation in pm.getOldOperations().itervalues():
             tankwomanQuests.extend(operation.getQuestsByFilter(PersonalMission.needToGetTankWoman).itervalues())
 
         counterText = ''

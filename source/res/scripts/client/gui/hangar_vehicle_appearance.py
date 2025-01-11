@@ -39,6 +39,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
 from gui.battle_control.vehicle_getter import hasTurretRotator
 from cgf_components.hangar_camera_manager import HangarCameraManager
+from cgf_components.customizable_model_component import CustomizableModelManager
 import GenericComponents
 import CGF
 if TYPE_CHECKING:
@@ -156,6 +157,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self._crashedModelCollisions = None
         self.shadowManager = None
         self.turretRotator = None
+        self.__customizablePrefabsManager = CGF.getManager(self.__spaceId, CustomizableModelManager)
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
         self.__showMarksOnGun = self.settingsCore.getSetting('showMarksOnGun')
@@ -281,6 +283,7 @@ class HangarVehicleAppearance(ScriptGameObject):
     def __reload(self, vDesc, vState, outfit):
         self.__clearModelAnimators()
         self.__loadState.unload()
+        self.__customizablePrefabsManager.clearTempOutfit(self.id)
         if self.fashion is not None:
             self.fashion.removePhysicalTracks()
         if self.tracks is not None:
@@ -707,6 +710,7 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__updateDecals(outfit)
         self.__updateProjectionDecals(outfit)
         self.__updateSequences(outfit)
+        self.__customizablePrefabsManager.updateOutfit(self.id, outfit)
         from prefab_attachment_utils import addPrefabAttachments
         addPrefabAttachments(self, self.__vEntity.typeDescriptor, True)
         if callback is not None:

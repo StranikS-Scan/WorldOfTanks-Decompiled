@@ -104,9 +104,6 @@ class VideoView(ViewImpl):
             language = getClientLanguage()
             self.viewModel.setSubtitleTrack(_LOCALE_TO_SUBTITLE_MAP.get(language, 0))
             self.viewModel.setIsWindowAccessible(Windowing.isWindowAccessible())
-            self.viewModel.setCanEscape(kwargs.get('canEscape', True))
-            self.viewModel.setIsUIVisible(kwargs.get('isUIVisible', False))
-            self.viewModel.setUiShowDelay(kwargs.get('uiShowDelay', -1))
             g_playerEvents.onAccountBecomeNonPlayer += self.__removeClosedHandle
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
             switchVideoOverlaySoundFilter(on=True)

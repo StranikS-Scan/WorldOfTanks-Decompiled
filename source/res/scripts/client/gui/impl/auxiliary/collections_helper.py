@@ -3,25 +3,22 @@
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.collection.collections_constants import COLLECTION_ITEM_BONUS_NAME
 from gui.collection.collections_helpers import getItemName, getItemResKey
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.reward_model import RewardModel
-from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, SimpleBonusUIPacker, BaseBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, CustomizationBonusUIPacker
+from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, SimpleBonusUIPacker, CustomizationBonusUIPacker, TmanTemplateBonusPacker
 from gui.shared.money import Currency
 from helpers.dependency import replace_none_kwargs
-from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from skeletons.gui.game_control import ICollectionsSystemController
 if typing.TYPE_CHECKING:
     from typing import Dict
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
     from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
     from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_view_model import CollectionEntryPointViewModel
-    from gui.server_events.bonuses import SimpleBonus, TmanTemplateTokensBonus, CollectionEntitlementBonus, BpcoinBonus, CustomizationsBonus
+    from gui.server_events.bonuses import SimpleBonus, CollectionEntitlementBonus, BpcoinBonus, CustomizationsBonus
 
 @replace_none_kwargs(collectionsSystem=ICollectionsSystemController)
 def fillCollectionModel(model, collectionId, collectionsSystem=None):
@@ -69,45 +66,6 @@ class BattlePassCoinBonusPacker(CurrencyBonusUIPacker):
         model = super(BattlePassCoinBonusPacker, cls)._packSingleBonus(bonus, label)
         model.setLabel(backport.text(R.strings.battle_pass.tooltips.battlePassCoins.title()))
         return model
-
-
-class TmanTemplateBonusPacker(BaseBonusUIPacker):
-
-    @classmethod
-    def _pack(cls, bonus):
-        result = []
-        for tokenID in bonus.getTokens().iterkeys():
-            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
-                packed = cls.__packTmanTemplateToken(tokenID, bonus)
-                if packed is not None:
-                    result.append(packed)
-
-        return result
-
-    @classmethod
-    def _getToolTip(cls, bonus):
-        tooltipData = []
-        for tokenID in bonus.getTokens().iterkeys():
-            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
-                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
-
-        return tooltipData
-
-    @classmethod
-    def _getContentId(cls, bonus):
-        return [ BACKPORT_TOOLTIP_CONTENT_ID for tokenID in bonus.getTokens().iterkeys() if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) ]
-
-    @classmethod
-    def __packTmanTemplateToken(cls, tokenID, bonus):
-        recruitInfo = getRecruitInfo(tokenID)
-        if recruitInfo is None:
-            return
-        else:
-            model = RewardModel()
-            cls._packCommon(bonus, model)
-            model.setIcon('tankwoman' if recruitInfo.isFemale() else 'tankman')
-            model.setLabel(recruitInfo.getFullUserName())
-            return model
 
 
 class CustomizationsBonusPacker(CustomizationBonusUIPacker):

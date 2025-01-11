@@ -34,4 +34,5 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'clanRented': FilterSetupContext(asset='clan_wars'),
      'ranked': FilterSetupContext(asset='ranked'),
      'debut_boxes': FilterSetupContext(asset='debut_boxes_small'),
+     'paragons': FilterSetupContext(asset='paragons_filter_btn'),
      'early_access': FilterSetupContext(asset='early_access')}

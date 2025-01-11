@@ -279,7 +279,7 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
                 notes.addViewModel(note)
         model.setTitle(title)
         model.setDescription(str(desc))
-        paramIcon = R.images.gui.maps.icons.vehParams.big.dyn(self._paramName)
+        paramIcon = self.__getIcon(self._paramName)
         if paramIcon.isValid():
             model.setIcon(paramIcon())
         if self._paramName == AUTORELOAD_TIME and self._hasExtendedInfo():
@@ -303,6 +303,10 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
         strRootPath = R.strings.menu.tank_params.dyn(titleParamName)
         strPath = strRootPath.extendedTitle if strRootPath.dyn('extendedTitle').exists() else strRootPath
         return backport.text(strPath())
+
+    @staticmethod
+    def __getIcon(parameter):
+        return R.images.gui.maps.icons.vehParams.big.dyn(parameter)
 
     def __getKpiTitle(self):
         customTitlePath = R.strings.tank_setup.kpi.title.dyn(self._paramName)

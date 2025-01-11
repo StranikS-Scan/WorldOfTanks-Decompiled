@@ -14,12 +14,13 @@ from skeletons.gui.server_events import IEventsCache
 
 class _PMNavigationInfo(object):
     _DEFAULT_OPERATIONS = {PM_BRANCH.REGULAR: 1,
-     PM_BRANCH.PERSONAL_MISSION_2: 5}
+     PM_BRANCH.PERSONAL_MISSION_2: 5,
+     PM_BRANCH.PERSONAL_MISSION_3: 8}
 
     def __init__(self):
         self.__operationIDs = self._DEFAULT_OPERATIONS.copy()
         self.__chainIDs = {q:1 for q in PM_BRANCH.ACTIVE_BRANCHES}
-        self.__branch = PM_BRANCH.REGULAR
+        self.__branch = PM_BRANCH.PERSONAL_MISSION_3
 
     def getOperationID(self, branchID=None):
         return self.__operationIDs[branchID or self.__branch]
@@ -101,3 +102,10 @@ class PersonalMissionsNavigation(EventSystemEntity):
 
     def __onProgressUpdated(self, _):
         self.__setWWISEGlobal()
+
+    def enableNavigationSoundEffect(self):
+        for branch in SOUNDS.RTCP_MISSION_BRANCH.values():
+            WWISE.WW_setRTCPGlobal(branch, SOUNDS.BRANCH_DEFAULT)
+
+        WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_MISSIONS_ZOOM, SOUNDS.MAX_MISSIONS_ZOOM)
+        WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_DEBRIS_CONTROL, SOUNDS.MAX_MISSIONS_ZOOM)

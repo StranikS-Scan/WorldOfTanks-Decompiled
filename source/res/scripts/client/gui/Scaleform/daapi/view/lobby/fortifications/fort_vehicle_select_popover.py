@@ -136,7 +136,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         isFrozen = False
         forbiddenVehicles = []
         if self.prbEntity is not None and self.prbEntity.getQueueType() == QUEUE_TYPE.STRONGHOLD_UNITS:
-            frozenVehicles = self.prbEntity.getEventFrozenVehicles()
+            frozenVehicles = self.prbEntity.getEventFrozenVehicles(vehLevel=vehicle.level)
             if self.prbEntity.isSortie():
                 forbiddenVehicles = self.prbEntity.getSortieBattleForbiddenVehicles()
             else:

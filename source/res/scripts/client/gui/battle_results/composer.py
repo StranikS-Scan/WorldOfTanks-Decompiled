@@ -39,6 +39,7 @@ class StatsComposer(IStatsComposer):
         self._block = base.StatsBlock(templates.TOTAL_VO_META)
         self._registerTabs(reusable)
         self._block.addNextComponent(text)
+        self._block.addNextComponent(templates.PARAGONS_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(self._getBattlePassBlock().clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())

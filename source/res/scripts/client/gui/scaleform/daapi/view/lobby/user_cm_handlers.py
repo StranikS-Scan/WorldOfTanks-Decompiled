@@ -33,7 +33,7 @@ from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -59,6 +59,7 @@ class USER(object):
     CREATE_SQUAD = 'createSquad'
     CREATE_EVENT_SQUAD = 'createEventSquad'
     CREATE_BATTLE_ROYALE_SQUAD = 'createBattleRoyaleSquad'
+    CREATE_BOB_SQUAD = 'createBobSquad'
     INVITE = 'invite'
     REQUEST_FRIENDSHIP = 'requestFriendship'
     VEHICLE_INFO = 'vehicleInfoEx'
@@ -81,6 +82,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
+    bobCtrl = dependency.descriptor(IBobController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -183,6 +185,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createComp7Squad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.COMP7_SQUAD, (self.databaseID,))
 
+    def createBobSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.BOB_SQUAD, (self.databaseID,))
+
     def invite(self):
         user = self.usersStorage.getUser(self.databaseID)
         if self.prbEntity.getPermissions().canSendInvite():
@@ -203,6 +208,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.REMOVE_FROM_IGNORED: 'unsetIgnored',
          USER.COPY_TO_CLIPBOARD: 'copyToClipboard',
          USER.CREATE_SQUAD: 'createSquad',
+         USER.CREATE_BOB_SQUAD: 'createBobSquad',
          USER.CREATE_EVENT_SQUAD: 'createEventSquad',
          USER.CREATE_BATTLE_ROYALE_SQUAD: 'createBattleRoyaleSquad',
          USER.INVITE: 'invite',
@@ -304,6 +310,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 primeTimeStatus, _, _ = self.__comp7Ctrl.getPrimeTimeStatus()
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and not self.__comp7Ctrl.isBanned and not self.__comp7Ctrl.isOffline and self.__comp7Ctrl.hasSuitableVehicles() and self.__comp7Ctrl.isQualificationSquadAllowed()
                 options.append(self._makeItem(USER.CREATE_COMP7_SQUAD, MENU.contextmenu(USER.CREATE_COMP7_SQUAD), optInitData={'enabled': canCreate and isEnabled,
+                 'textColor': 13347959}))
+            if self.bobCtrl.isModeActive():
+                options.append(self._makeItem(USER.CREATE_BOB_SQUAD, MENU.contextmenu(USER.CREATE_BOB_SQUAD), optInitData={'enabled': canCreate,
                  'textColor': 13347959}))
         return options
 
@@ -644,7 +653,6 @@ class UserContextMenuInfo(object):
         self.canAddToIgnore = True
         self.canDoDenunciations = True
         self.isFriend = False
-        self.isAnySub = False
         self.isIgnored = False
         self.isTemporaryIgnored = False
         self.isMuted = False
@@ -655,7 +663,6 @@ class UserContextMenuInfo(object):
         self.isCurrentPlayer = False
         if self.user is not None:
             self.isFriend = self.user.isFriend()
-            self.isAnySub = self.user.isAnySub()
             self.isIgnored = self.user.isIgnored()
             self.isTemporaryIgnored = self.user.isTemporaryIgnored()
             self.isMuted = self.user.isMuted()

@@ -4,11 +4,10 @@ import operator
 import time
 from abc import ABCMeta
 from collections import namedtuple
-import logging
 import typing
 import constants
 import nations
-from debug_utils import LOG_ERROR
+from debug_utils import LOG_ERROR, LOG_DEBUG
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -28,9 +27,8 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from gui.shared.system_factory import registerQuestBuilders
 from gui.shared.utils import ValidationResult
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
-from helpers import dependency
-from helpers import getLocalizedData, i18n, time_utils
-from personal_missions import PM_STATE as _PMS, PM_FLAG, PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST
+from helpers import dependency, getLocalizedData, i18n, time_utils
+from personal_missions import PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST, PM_FLAG, PM_STATE as _PMS
 from personal_missions_config import getQuestConfig
 from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import findFirst, first
@@ -43,7 +41,6 @@ if typing.TYPE_CHECKING:
     from typing import Dict, Callable, List, Optional, Tuple, Union
     from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import EventPostBattleInfo
     import potapov_quests
-_logger = logging.getLogger()
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'
@@ -102,6 +99,23 @@ class ServerEventAbstract(object):
         if 'activeTimeIntervals' in self._data:
             return [ (l[0] * 3600 + l[1] * 60, h[0] * 3600 + h[1] * 60) for l, h in self._data['activeTimeIntervals'] ]
         return []
+
+    def getCollapsedActiveTimeIntervals(self):
+        intervals = self.getActiveTimeIntervals()
+        if not intervals:
+            return []
+        collapsed = []
+        current = first(intervals)
+        for following in intervals[1:]:
+            collapsable = current[1] == following[0] or current[1] == 86400 and following[0] == 0
+            if collapsable:
+                current = (current[0], following[1])
+            collapsed.append(current)
+            current = following
+
+        if not collapsed or current != collapsed[-1]:
+            collapsed.append(current)
+        return collapsed
 
     def getID(self):
         return self._id
@@ -328,9 +342,6 @@ class Quest(ServerEventAbstract):
 
     def isCompensationPossible(self):
         return events_helpers.isMarathon(self.getGroupID()) and bool(self.getBonuses('tokens'))
-
-    def shouldBeShown(self):
-        return self.isAvailable().isValid and self.lobbyContext.getServerSettings().isMapsTrainingEnabled() if events_helpers.isMapsTraining(self.getGroupID()) else True
 
     def getGroupType(self):
         return getGroupTypeByID(self.getGroupID())
@@ -709,7 +720,7 @@ class Action(ServerEventAbstract):
 
             return result
 
-    def getModifiersDict(self):
+    def getModifiers(self):
         result = {}
         for stepData in self._data.get('steps'):
             mName = stepData.get('name')
@@ -720,10 +731,7 @@ class Action(ServerEventAbstract):
                 result[mName].update(m)
             result[mName] = m
 
-        return result
-
-    def getModifiers(self):
-        return sorted(self.getModifiersDict().itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
+        return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 
 
 class PMCampaign(object):
@@ -912,6 +920,9 @@ class PMOperation(object):
     def getFullCompletedQuests(self, isRewardReceived=None):
         return self.getQuestsByFilter(lambda quest: quest.isFullCompleted(isRewardReceived=isRewardReceived))
 
+    def getOnPausedQuests(self):
+        return self.getQuestsByFilter(lambda quest: quest.isOnPause)
+
     def getPawnedQuests(self):
         return self.getQuestsByFilter(operator.methodcaller('areTokensPawned'))
 
@@ -923,6 +934,9 @@ class PMOperation(object):
 
     def isFullCompleted(self, isRewardReceived=None):
         return len(self.getFullCompletedQuests(isRewardReceived)) == self.getQuestsCount()
+
+    def isOnPaused(self):
+        return len(self.getOnPausedQuests()) == self.getQuestsCount()
 
     def isAwardAchieved(self):
         return self.__isAwardAchieved
@@ -1010,15 +1024,16 @@ class PMOperation(object):
         hiddenQuests = eventsCache.getHiddenQuests()
         operationTokensFinder = finders.multipleTokenFinder(self.__info['tokens'])
         self.__tokens, self.__bonuses = {}, {}
-        quest = finders.getQuestByTokenAndBonus(hiddenQuests, operationTokensFinder, finders.operationCompletionBonusFinder(self))
+        quest = finders.getQuestByTokenAndBonus(hiddenQuests, operationTokensFinder)
         if quest is not None:
             for token in quest.accountReqs.getTokens():
                 if token.getID() in self.__info['tokens']:
                     self.__tokens[token.getID()] = (qp.getTokenCount(token.getID()), token.getNeededCount())
                     self.__bonuses.setdefault(token.getID(), []).extend(quest.getBonuses())
 
+            self.__isAwardAchieved = quest.isCompleted()
         else:
-            LOG_ERROR('Main token quest was not found for Personal missions operation!', self.getID())
+            LOG_DEBUG('Main token quest was not found for Personal missions operation!', self.getID())
         self.__hasRequiredVehicles = False
         self.__freeTokensCount = 0
         self.__freeTokensTotalCount = 0
@@ -1032,8 +1047,6 @@ class PMOperation(object):
                         if quest.isFullCompleted():
                             self.__freeTokensCount += bonusCount
 
-        tokenCount = qp.getTokenCount(finders.PERSONAL_MISSION_COMPLETE_TOKEN % (self.getCampaignID(), self.getID()))
-        self.__isAwardAchieved = tokenCount > 0
         return
 
     def addQuest(self, quest):
@@ -1096,10 +1109,10 @@ class PersonalMission(ServerEventAbstract):
         return self.__pmType
 
     def getMainQuestID(self):
-        return self.__pmType.mainQuestInfo['id']
+        return self.__pmType.mainQuestID
 
     def getAddQuestID(self):
-        return self.__pmType.addQuestInfo['id']
+        return self.__pmType.addQuestID
 
     def getInternalID(self):
         return self.__pmType.internalID
@@ -1190,6 +1203,8 @@ class PersonalMission(ServerEventAbstract):
         return self.__checkForStates(*states)
 
     def isFullCompleted(self, isRewardReceived=None):
+        if not self.__pmType.withAdd:
+            return self.isMainCompleted(isRewardReceived)
         if isRewardReceived is True:
             states = (_PMS.ALL_REWARDS_GOTTEN,)
         elif isRewardReceived is False:
@@ -1243,13 +1258,13 @@ class PersonalMission(ServerEventAbstract):
             self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=PM_FLAG.NONE, selected=(), unlocked=0, pawned=False)
 
     def getBonuses(self, bonusName=None, filterFunc=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
-        if isMain is None:
-            data = (self.__pmType.mainQuestInfo, self.__pmType.addQuestInfo)
-        elif isMain:
+        if isMain or isMain is None and not self.__pmType.withAdd:
             data = (self.__pmType.mainQuestInfo,)
+        elif isMain is None:
+            data = (self.__pmType.mainQuestInfo, self.__pmType.addQuestInfo)
         else:
             data = (self.__pmType.addQuestInfo,)
-        if returnAwardList:
+        if returnAwardList and self.__pmType.withPawn:
             data = (self.__pmType.addAwardListQuestInfo,)
         result = []
         for d in data:
@@ -1492,3 +1507,31 @@ def _isBattleMattersQuestAvailable(quest):
                 return item.getReceivedCount() >= item.getNeededCount()
 
         return None
+
+
+class PM3QuestLineTypes(object):
+    HIT = 'hit'
+    KILLS = 'kills'
+    ASSIST = 'assist'
+    BATTLE = 'battle'
+    MASTER = 'master'
+
+
+def getPM3QuestTypeByQuestID(questID):
+    if questID is None:
+        return PM3QuestLineTypes.MASTER
+    questsInSubBranch = 25
+    pm3Start = 480
+    questID = questID - pm3Start
+    indxInBranch = questID % questsInSubBranch or questsInSubBranch
+    divisionResult = indxInBranch // 5
+    if divisionResult == 0:
+        return PM3QuestLineTypes.HIT
+    elif divisionResult == 1:
+        return PM3QuestLineTypes.KILLS
+    elif divisionResult == 2:
+        return PM3QuestLineTypes.ASSIST
+    elif divisionResult == 3:
+        return PM3QuestLineTypes.BATTLE
+    else:
+        return PM3QuestLineTypes.MASTER if divisionResult in (4, 5) else None

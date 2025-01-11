@@ -5,10 +5,12 @@ from abstract import NationSpecificAchievement
 from abstract.mixins import HasVehiclesList
 from collector_vehicle import CollectorVehicleConsts
 from helpers import dependency
+from skeletons.gui.game_control import IParagonsController
 from skeletons.gui.shared import IItemsCache
 
 class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
     itemsCache = dependency.descriptor(IItemsCache)
+    paragonsCtrl = dependency.descriptor(IParagonsController)
     _MEDAL_NAME = 'mechanicEngineer'
     _LIST_NAME = 'vehiclesToResearch'
 
@@ -28,7 +30,12 @@ class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
 
     @classmethod
     def _parseVehiclesDescrsList(cls, name, nationID, dossier):
-        return getMechanicEngineerRequirements(set(), cls.itemsCache.items.stats.unlocks, nationID).get(name, []) if dossier is not None and dossier.isCurrentUser() else []
+        if dossier is not None and dossier.isCurrentUser():
+            unlocks = cls.itemsCache.items.stats.unlocks.copy()
+            unlocks.update(cls.paragonsCtrl.resetVehicles)
+            return getMechanicEngineerRequirements(set(), unlocks, nationID=nationID).get(name, [])
+        else:
+            return []
 
 
 class VehicleCollectorAchievement(HasVehiclesList, NationSpecificAchievement):

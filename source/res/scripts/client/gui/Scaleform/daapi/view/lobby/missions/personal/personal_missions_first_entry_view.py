@@ -6,6 +6,7 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryViewMeta import PersonalMissionFirstEntryViewMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
@@ -17,6 +18,7 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n, dependency
+from personal_missions import PM_BRANCH
 from skeletons.account_helpers.settings_core import ISettingsCore
 from web.web_client_api import webApiCollection, ui as ui_web_api, sound as sound_web_api
 
@@ -37,12 +39,12 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
             self.__showVideo()
 
     def backBtnClicked(self):
-        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx={'branch': PM_BRANCH.REGULAR}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onViewClose(self, isAcceptBtnClick=False):
         if isAcceptBtnClick:
             self.__settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: True})
-            self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.backBtnClicked()
         else:
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 

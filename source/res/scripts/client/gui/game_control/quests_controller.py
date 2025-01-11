@@ -182,9 +182,9 @@ class QuestsController(IQuestsController):
         if winbackController and winbackController.isEnabled() and winbackController.isProgressionEnabled() and winbackController.isVersusAIPrbActive():
             return list(winbackController.winbackProgression.questContainer.getAvailableQuests().values())
         if notCompleted:
-            quests = [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and q.shouldBeShown() and not q.isCompleted() ]
+            quests = [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and not q.isCompleted() ]
             return quests
-        return [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) and q.shouldBeShown() ]
+        return [ q for q in self.getQuestForVehicle(vehicle) if _isAvailableForMode(q) ]
 
     def __invalidateEventsData(self, *args):
         self.__quests.invalidate()

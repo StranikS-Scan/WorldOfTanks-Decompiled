@@ -59,6 +59,8 @@ class ARENAS(object):
     TYPE_COMP7_2_SHORT_DESCRIPTION = '#arenas:type/comp7_2/short_description'
     TYPE_COMP7_1_TIMER_MESSAGE = '#arenas:type/comp7_1/timer_message'
     TYPE_COMP7_2_TIMER_MESSAGE = '#arenas:type/comp7_2/timer_message'
+    TYPE_BOB_NAME = '#arenas:type/bob/name'
+    TYPE_BOB_DESCRIPTION = '#arenas:type/bob/description'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -188,10 +190,12 @@ class ARENAS(object):
     C_1006_3D_STYLES_TEST_DESCRIPTION = '#arenas:1006_3d_styles_test/description'
     C_1007_NEXTGEN_TEST_NAME = '#arenas:1007_nextgen_test/name'
     C_1007_NEXTGEN_TEST_DESCRIPTION = '#arenas:1007_nextgen_test/description'
-    H00_ARMORY_YARD_EP3_XML_NAME = '#arenas:h00_armory_yard_ep3.xml/name'
-    H00_ARMORY_YARD_EP3_XML_DESCRIPTION = '#arenas:h00_armory_yard_ep3.xml/description'
+    H00_ARMORY_YARD_NAME = '#arenas:h00_armory_yard/name'
+    H00_ARMORY_YARD_DESCRIPTION = '#arenas:h00_armory_yard/description'
     QA_CONTENT_01_NAME = '#arenas:qa_content_01/name'
     QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
+    C_503_KALININGRAD_NAME = '#arenas:503_kaliningrad/name'
+    C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -248,6 +252,8 @@ class ARENAS(object):
      TYPE_COMP7_2_SHORT_DESCRIPTION,
      TYPE_COMP7_1_TIMER_MESSAGE,
      TYPE_COMP7_2_TIMER_MESSAGE,
+     TYPE_BOB_NAME,
+     TYPE_BOB_DESCRIPTION,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,
@@ -377,10 +383,12 @@ class ARENAS(object):
      C_1006_3D_STYLES_TEST_DESCRIPTION,
      C_1007_NEXTGEN_TEST_NAME,
      C_1007_NEXTGEN_TEST_DESCRIPTION,
-     H00_ARMORY_YARD_EP3_XML_NAME,
-     H00_ARMORY_YARD_EP3_XML_DESCRIPTION,
+     H00_ARMORY_YARD_NAME,
+     H00_ARMORY_YARD_DESCRIPTION,
      QA_CONTENT_01_NAME,
-     QA_CONTENT_01_DESCRIPTION)
+     QA_CONTENT_01_DESCRIPTION,
+     C_503_KALININGRAD_NAME,
+     C_503_KALININGRAD_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

@@ -106,7 +106,7 @@ class TokenRequester(object):
             if timeout:
                 self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = _getAccountRepository()
-            if repository and self.canAllowRequest():
+            if repository:
                 repository.onTokenReceived += self._onTokenReceived
                 requester(self.__requestID, self.__tokenType)
             elif self.__callback:

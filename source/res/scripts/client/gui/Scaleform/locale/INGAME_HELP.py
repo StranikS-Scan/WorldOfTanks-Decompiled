@@ -166,3 +166,8 @@ class INGAME_HELP(object):
     DETAILSHELP_MULTITRACK_HEADERTITLE = '#ingame_help:detailsHelp/multiTrack/headerTitle'
     DETAILSHELP_MULTITRACK_TITLE = '#ingame_help:detailsHelp/multiTrack/title'
     DETAILSHELP_MULTITRACK_DESCRIPTION = '#ingame_help:detailsHelp/multiTrack/description'
+    DETAILSHELP_AUTOSHOOTFLAMETANK_HEADERTITLE = '#ingame_help:detailsHelp/autoShootFlameTank/headerTitle'
+    DETAILSHELP_AUTOSHOOTFLAMETANK_TITLE = '#ingame_help:detailsHelp/autoShootFlameTank/title'
+    DETAILSHELP_AUTOSHOOTFLAMETANK_DESCRIPTION = '#ingame_help:detailsHelp/autoShootFlameTank/description'
+    DETAILSHELP_AUTOSHOOTFLAMETANK_PROSCONS_TITLE = '#ingame_help:detailsHelp/autoShootFlameTank/prosCons/title'
+    DETAILSHELP_AUTOSHOOTFLAMETANK_PROSCONS = '#ingame_help:detailsHelp/autoShootFlameTank/prosCons'

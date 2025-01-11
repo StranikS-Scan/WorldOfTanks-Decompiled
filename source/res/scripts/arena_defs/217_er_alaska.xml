@@ -118,6 +118,34 @@
       </teamSpawnPoints>
       <controlPoint>	154.949326 -151.865265	</controlPoint>
     </comp7>
+    <bob>
+      <boundingBox>
+        <bottomLeft>	-300.000000 -700.000000	</bottomLeft>
+        <upperRight>	700.000000 300.000000	</upperRight>
+      </boundingBox>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-102.950340 -487.488068	</position>
+        </team1>
+        <team2>
+          <position>	469.135315 102.610283	</position>
+        </team2>
+      </teamSpawnPoints>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/217_er_alaska/mmap_comp7.dds	</minimap>
+      <controlPoint>	154.949005 -151.865005	</controlPoint>
+    </bob>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities></mapActivities>

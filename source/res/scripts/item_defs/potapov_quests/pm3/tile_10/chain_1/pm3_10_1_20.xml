@@ -1,0 +1,86 @@
+<pm3_10_1_20.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_1_20_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+pass
+         	</scripts>
+      <bonus>
+        <premium_plus>	2	</premium_plus>
+        <crystal>	200	</crystal>
+        <token>
+          <id>	token:pt:final:s3:t10:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	offer:pm3:expequipments:650	</id>
+          <expires>	01.02.2050 00:00	</expires>
+          <count>	2	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm3_10_1_20_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <scripts>	
+LOG = globals().get('LOG')
+""":type: typing.LOG_DEBUG_DEV"""
+
+QUEST_EVENT_TYPE = globals().get('QUEST_EVENT_TYPE')
+""":type: quest_definitions.QUEST_EVENT_TYPE"""
+
+quest_progress = globals().get('quest_progress')
+""":type: quest_progress"""
+
+MAIN_PROGRESS_ID = 'assist'
+MAIN_SERIES_ID = 'battlesSeries'
+
+ADD_PROGRESS_ID = 'assistAdv'
+ADD_SERIES_ID = 'battlesSeriesAdv'
+
+def onInit(eventType, eventData, quest, processor):
+    for event in events.iterkeys():
+        processor.subscribe(event, quest)
+    return True
+
+def onFinishBattle(eventType, eventData, quest, processor):
+    questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
+
+    result = eventData['avatarResults']
+    damageAssistedRadio = result['damageAssistedRadio']
+    damageAssistedTrack = result['damageAssistedTrack']
+
+    totalAssistedDamage = damageAssistedRadio + damageAssistedTrack
+
+    questProgress.increaseSumProgress(MAIN_PROGRESS_ID, MAIN_SERIES_ID, totalAssistedDamage)
+    questProgress.increaseSumProgress(ADD_PROGRESS_ID, ADD_SERIES_ID, totalAssistedDamage)
+
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID))
+    processor.setQuestProgress(quest.progressID, questProgress.save())
+
+events = {
+    QUEST_EVENT_TYPE.INIT: onInit,
+    QUEST_EVENT_TYPE.FINISH_BATTLE: onFinishBattle,
+}
+
+def quest(eventType, eventData, quest, processor):
+    LOG('QUEST EVENT:', eventType, quest.id)
+    return events.get(eventType, lambda *args: False)(eventType, eventData, quest, processor)
+         	</scripts>
+      <bonus>
+        <freeXP>	15000	</freeXP>
+        <token>
+          <id>	token:pt:final:s3:t10:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm3_10_1_20.xml>

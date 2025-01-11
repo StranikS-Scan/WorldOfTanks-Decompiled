@@ -134,26 +134,10 @@ def quest(eventType, eventData, quest, processor):
       <enabled>	true	</enabled>
       <id>	pm2_5_2_6_add_award_list	</id>
       <serverOnly>	true	</serverOnly>
-      <conditions>
-        <preBattle>
-          <account>
-            <token>
-              <id>	pm2_5_2_6_main_award_list	</id>
-              <greaterOrEqual>	1	</greaterOrEqual>
-              <consume>	100	  <force></force>
-              </consume>
-            </token>
-          </account>
-        </preBattle>
-        <postBattle>
-          <and>
-            <results>
-              <key>	addQuestCompleted	</key>
-              <greaterOrEqual>	1	</greaterOrEqual>
-            </results>
-          </and>
-        </postBattle>
-      </conditions>
+      <conditions></conditions>
+      <scripts>	
+pass
+         	</scripts>
       <bonus>
         <token>
           <id>	free_award_list_2	</id>

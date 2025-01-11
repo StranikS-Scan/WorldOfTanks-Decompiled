@@ -123,12 +123,13 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, titleWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
+def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, titleWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1, iconZIndex=-1):
     data = {'name': title,
      'value': value,
      'valueAtRight': valueAtRight,
      'iconAlpha': iconAlpha,
-     'gap': gap}
+     'gap': gap,
+     'iconZIndex': iconZIndex}
     if icon is not None:
         data['icon'] = icon
     if valueWidth != -1:
@@ -571,10 +572,11 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks, alternativeData=No
     return tooltipBlocks
 
 
-def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT):
+def packSeparatorBlockData(paddings=None, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, width=-1):
     if paddings is None:
         paddings = packPadding(top=-40)
-    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=align, padding=paddings)
+    height = 40 if width > 0 else -1
+    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=align, padding=paddings, width=width, height=height)
 
 
 def packItemPriceBlockData(price, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COMPOUND_PRICE_BLOCK_LINKAGE, padding=None):
@@ -618,3 +620,12 @@ def getImage(resource, width=16, height=16, vspace=0, hspace=0):
 
 def packMultipleText(separator=' ', *args, **kwargs):
     return packTextBlockData(separator.join(args), **kwargs)
+
+
+def packBobProgressionTableBlockData(team, progress, place, isHighlighted=False, isLikeHidden=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BOB_TEAM_PROGRESS_BLOCK, padding=None, blockWidth=0):
+    data = {'team': team,
+     'progress': progress,
+     'place': place,
+     'isHighlighted': isHighlighted,
+     'isLikeHidden': isLikeHidden}
+    return packBlockDataItem(linkage, data, padding, blockWidth)

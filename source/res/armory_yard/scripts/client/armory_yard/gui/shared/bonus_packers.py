@@ -102,6 +102,10 @@ class ArmoryYardTmanTemplateBonusPacker(TmanTemplateBonusPacker):
         tokenRecord = bonus.getTokens()[tokenID]
         if tokenRecord.count > 1:
             model.setValue(str(tokenRecord.count))
+            model.setIcon('tankman')
+            model.setBigIcon('tankman_men1')
+            model.setItem('tankman')
+            model.setName('items')
         return model
 
 

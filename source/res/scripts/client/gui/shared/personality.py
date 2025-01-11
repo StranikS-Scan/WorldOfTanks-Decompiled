@@ -429,7 +429,7 @@ def __validateInventoryTankmen(_, callback=None):
 
 @future_async.wg_async
 def __cacheVehicles(_, callback=None):
-    yield future_async.await_callback(ServicesLocator.itemsCache.items.getItemsAsync)(itemTypeID=GUI_ITEM_TYPE.VEHICLE)
+    yield future_async.await_callback(ServicesLocator.itemsCache.items.getItemsAsync)(itemTypeID=GUI_ITEM_TYPE.VEHICLE, minPerTick=10, maxPerTick=100)
     callback(True)
 
 

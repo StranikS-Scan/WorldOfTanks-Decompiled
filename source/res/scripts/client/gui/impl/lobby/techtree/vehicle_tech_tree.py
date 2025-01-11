@@ -10,11 +10,19 @@ from gui.Scaleform.framework.managers.optimization_manager import ExternalFullsc
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
 from gui.Scaleform.genConsts.SESSION_STATS_CONSTANTS import SESSION_STATS_CONSTANTS
 from gui.impl.gui_decorators import args2params
+from gui.impl.lobby.paragons.tooltips.reset_button_tooltip import ResetButtonTooltip
+from gui.techtree.techtree_dp import g_techTreeDP
 from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessVehicleView
+from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import deleteParagonsUnlockIDToShow, setParagonsResetBranchToShow, getParagonsResetBranchToShow
+from gui.impl.lobby.paragons.paragons_entry_point_view import ParagonsEntryPoint
 from gui.impl.lobby.techtree.tech_tree_custom_hints import TechTreeCustomHints
 from gui.impl.lobby.techtree.tech_tree_tooltips import nationTechTreeTooltipDecorator
+from gui.impl.lobby.techtree.tooltips.paragons_locked_tooltip import ParagonsLockedTooltip
+from gui.impl.lobby.paragons.tooltips.entry_point_tooltip import EntryPointTooltip
+from gui.impl.lobby.paragons.paragons_window_events import showParagonsResetBranchView
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPremiumVehiclesUrl
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
+from gui.impl.gen.view_models.views.lobby.techtree.tech_tree_buttons import ButtonType
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.techtree.nation_tree_data import NationTreeData
 from gui.techtree.dumpers import StubDumper
@@ -24,13 +32,13 @@ from gui.impl.backport import createContextMenuData, BackportContextMenuWindow, 
 from gui.techtree.go_back_helper import BackButtonContextKeys
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.gen import R
-from gui.impl.lobby.techtree.model_placeholders import fillVehicleTechTreeNodesModel, updateVehiclePrices, updateVehiclesInfo, updateVehiclesUnlocks, updateVehiclesCmpStatus, updateEarlyAccessNodes, fillNationTechTreeModel, formatBlueprintBalance, updateBlueprintsMode
+from gui.impl.lobby.techtree.model_placeholders import fillVehicleTechTreeNodesModel, updateVehiclePrices, updateVehiclesInfo, updateVehiclesUnlocks, updateVehiclesCmpStatus, updateEarlyAccessNodes, fillNationTechTreeModel, formatBlueprintBalance, updateBlueprintsMode, updateParagonsUnlockedBranches, addButtonIfDataExists, fillTechTreeButtonModelArray
 from gui.techtree.selected_nation import SelectedNation
 from gui.impl.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE, Sounds
 from gui.impl.gen.view_models.views.lobby.techtree.vehicle_tech_tree_model import VehicleTechTreeModel
 from gui.techtree.listeners import TTListenerDecorator, IPage
 from gui.impl.pub import ViewImpl
-from gui.shared.event_dispatcher import showCollectibleVehicles, showBlueprintView, showVehicleBuyDialog, showHangar, showShop, showResearchView, getTechTreeLoadEvent
+from gui.shared.event_dispatcher import showCollectibleVehicles, showBlueprintView, showVehicleBuyDialog, showHangar, showShop, showResearchView, getTechTreeLoadEvent, checkParagonsIntroCallback
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
@@ -41,7 +49,7 @@ from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IEarlyAccessController
+from skeletons.gui.game_control import IEarlyAccessController, IParagonsController
 from gui.shared.utils.requesters.blueprints_requester import getNationalFragmentCD
 from blueprints.BlueprintTypes import BlueprintTypes
 from skeletons.gui.techtree_events import ITechTreeEventsListener
@@ -51,7 +59,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import View, ViewEvent
 
 class VehicleTechTree(ViewImpl):
-    __slots__ = ('__treeData', '__listener', '__invalidator', '__customHints', '__ctx', '__graphicOptimization')
+    __slots__ = ('__treeData', '__listener', '__invalidator', '__customHints', '__ctx', '__graphicOptimization', '__paragonsEntryPoint')
     __sound_env__ = LobbySubViewEnv
     _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
     __lobbyContext = dependency.descriptor(ILobbyContext)
@@ -59,22 +67,28 @@ class VehicleTechTree(ViewImpl):
     __cmpBasket = dependency.descriptor(IVehicleComparisonBasket)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __techTreeEventsListener = dependency.descriptor(ITechTreeEventsListener)
+    __paragonsController = dependency.descriptor(IParagonsController)
 
     def __init__(self, layoutID, *args, **kwargs):
         settings = ViewSettings(layoutID)
         settings.flags = ViewFlags.LOBBY_SUB_VIEW
         settings.model = VehicleTechTreeModel()
+        super(VehicleTechTree, self).__init__(settings)
         self.__treeData = NationTreeData(StubDumper())
         self.__listener = TTListenerDecorator()
         self.__invalidator = VehicleTechTreeInvalidator(self, self.__treeData)
         self.__ctx = kwargs.get('ctx', {})
         self.__customHints = TechTreeCustomHints(self)
+        self.__paragonsEntryPoint = ParagonsEntryPoint(self)
         self.__graphicOptimization = ExternalFullscreenGraphicsOptimizationComponent()
-        super(VehicleTechTree, self).__init__(settings)
 
     @property
     def viewModel(self):
         return super(VehicleTechTree, self).getViewModel()
+
+    @property
+    def paragonsEntryPoint(self):
+        return self.__paragonsEntryPoint
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():
@@ -98,7 +112,11 @@ class VehicleTechTree(ViewImpl):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.early_access.tooltips.EarlyAccessEntryPointPausedTooltip():
             return ViewImpl(ViewSettings(contentID, model=ViewModel()))
-        return ViewImpl(ViewSettings(contentID, model=ViewModel())) if contentID == R.views.lobby.techtree.tooltips.ParagonsEntryPointTooltip() else super(VehicleTechTree, self).createToolTipContent(event, contentID)
+        if contentID == R.views.lobby.paragons.tooltips.EntryPointTooltip():
+            return EntryPointTooltip()
+        if contentID == R.views.lobby.techtree.tooltips.ParagonsLockedTooltip():
+            return ParagonsLockedTooltip(vehicleCD=event.getArgument('vehicleCD'))
+        return ResetButtonTooltip(branchID=event.getArgument('branchID'), layoutID=R.views.lobby.paragons.tooltips.ResetButtonTooltip()) if contentID == R.views.lobby.paragons.tooltips.ResetButtonTooltip() else super(VehicleTechTree, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
@@ -114,7 +132,7 @@ class VehicleTechTree(ViewImpl):
             return createTooltipData(isSpecial=True, specialArgs=(event.getArgument('nation'),), specialAlias=TOOLTIPS_CONSTANTS.VEHICLE_COLLECTOR_INFO)
         elif tooltipId == VehicleTechTreeModel.BLUEPRINT_FRAGMENT_INFO:
             specialArgs = BlueprintTypes.INTELLIGENCE_DATA if event.getArgument('isUniversal') else getNationalFragmentCD(SelectedNation.getIndex())
-            return createTooltipData(isSpecial=True, specialArgs=[specialArgs], specialAlias=VehicleTechTreeModel.BLUEPRINT_FRAGMENT_INFO)
+            return createTooltipData(isSpecial=True, specialArgs=(specialArgs,), specialAlias=VehicleTechTreeModel.BLUEPRINT_FRAGMENT_INFO)
         else:
             return None
 
@@ -122,6 +140,7 @@ class VehicleTechTree(ViewImpl):
         self.__stopTopOfTheTreeSounds()
         self.__playBlueprintPlusSound()
         with self.viewModel.transaction() as ts:
+            self.updateParagons()
             ts.setSelectedNation(SelectedNation.getName())
             fillNationTechTreeModel(ts, self.__techTreeEventsListener, self.__treeData.getAvailableNations())
             self.__treeData.load(SelectedNation.getIndex())
@@ -129,9 +148,10 @@ class VehicleTechTree(ViewImpl):
             self.__setVehicleCollectorState(SelectedNation.getIndex())
             ts.setIsCmpAvailable(self.__cmpBasket.isEnabled())
             formatBlueprintBalance(ts)
-            ts.setIsParagonsEnabled(self.__techTreeEventsListener.isParagonsAnnounceActive())
+            ts.setIsParagonsEnabled(self.__techTreeEventsListener.isParagonsEntryPointEnabled())
             updateBlueprintsMode(ts, self.__blueprintMode, self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable())
             self.updateEarlyAccessState()
+            self.updateTechTreeButtons()
 
     def updateEarlyAccessState(self):
         with self.viewModel.transaction() as ts:
@@ -141,6 +161,26 @@ class VehicleTechTree(ViewImpl):
             ts.setEarlyAccessNation(earlyAccessNation)
             updateEarlyAccessNodes(ts, self.__earlyAccessController)
             self.__updateEarlyAccessShown()
+
+    def updateParagons(self):
+        if self.__paragonsController.isEnabled:
+            with self.viewModel.transaction() as tx:
+                updateParagonsUnlockedBranches(tx)
+
+    def updateTechTreeButtons(self):
+        with self.viewModel.transaction() as ts:
+            eaCtrl = self.__earlyAccessController
+            paragonsCtrl = self.__paragonsController
+            rowToButton = {}
+            if eaCtrl.isEnabled() and SelectedNation.getIndex() == eaCtrl.getNationID():
+                addButtonIfDataExists(ButtonType.EARLYACCESS, rowToButton, ts.getTechTreeButtonsType()(), ts.getNodes())
+            if paragonsCtrl.isEnabled and paragonsCtrl.isLimitedUiRuleCompleted:
+                nationId = SelectedNation.getIndex()
+                branchIDs = self.__paragonsController.branches.resetBranchIdsByNationId(nationId)
+                for resetBranchID in branchIDs:
+                    addButtonIfDataExists(ButtonType.PARAGONS, rowToButton, ts.getTechTreeButtonsType()(), ts.getNodes(), resetBranchID=resetBranchID)
+
+            fillTechTreeButtonModelArray(rowToButton, ts.getTechTreeButtons())
 
     def _getEvents(self):
         return ((self.viewModel.onNationChange, self.__onNationChange),
@@ -154,7 +194,10 @@ class VehicleTechTree(ViewImpl):
          (self.viewModel.onClose, self.__onClose),
          (self.viewModel.goToPremiumShop, self.__goToPremiumShop),
          (self.viewModel.onBlueprintModeChanged, self.__onBlueprintModeChanged),
-         (self.viewModel.goToEarlyAccess, self.__goToEarlyAccess))
+         (self.viewModel.goToEarlyAccess, self.__goToEarlyAccess),
+         (self.viewModel.onParagonsUnlockedBranchShown, self.__onParagonsUnlockedBranchShown),
+         (self.viewModel.onResetBranchShown, self.__onResetBranchShown),
+         (self.viewModel.onTechTreeButtonPressed, self.__onTechTreeButtonPressed))
 
     def _getListeners(self):
         return ((MESSENGER_VIEW_ALIAS.CHANNEL_MANAGEMENT_WINDOW, self.__closePremiumPanel, EVENT_BUS_SCOPE.LOBBY),
@@ -170,11 +213,13 @@ class VehicleTechTree(ViewImpl):
         self.__setSettings()
         self.update()
         self.__customHints.init(SelectedNation.getIndex())
+        self.__paragonsEntryPoint.init()
         self.__graphicOptimization.init()
 
     def _finalize(self):
         self.__customHints.fini()
         self.__graphicOptimization.fini()
+        self.__paragonsEntryPoint.fini()
         super(VehicleTechTree, self)._finalize()
 
     def _subscribe(self):
@@ -215,6 +260,7 @@ class VehicleTechTree(ViewImpl):
             formatBlueprintBalance(ts)
             updateEarlyAccessNodes(ts, self.__earlyAccessController)
             self.__updateEarlyAccessShown()
+            self.updateTechTreeButtons()
             self.__customHints.setCurrentNation(nationID)
 
     @args2params(str)
@@ -240,9 +286,9 @@ class VehicleTechTree(ViewImpl):
     def __buyVehicle(self, vehicleCD):
         vehicle = self.__itemsCache.items.getItemByCD(vehicleCD)
         if canBuyGoldForVehicleThroughWeb(vehicle):
-            showVehicleBuyDialog(vehicle)
+            showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=checkParagonsIntroCallback)
         else:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, vehicleCD)
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, vehicleCD, previousAlias=VIEW_ALIAS.LOBBY_TECHTREE, returnCallback=checkParagonsIntroCallback)
 
     @args2params(int)
     def __addVehicleToCompare(self, vehicleCD):
@@ -284,6 +330,22 @@ class VehicleTechTree(ViewImpl):
             self.soundManager.playInstantSound(Sounds.BLUEPRINT_VIEW_OFF_SOUND_ID)
         updateBlueprintsMode(self.viewModel, isEnabled, self.__lobbyContext.getServerSettings().blueprintsConfig.isBlueprintsAvailable())
 
+    @args2params(int)
+    def __onParagonsUnlockedBranchShown(self, paragonsUnlockID):
+        deleteParagonsUnlockIDToShow(paragonsUnlockID)
+        self.__invalidator.invalidateParagonsUnlocks()
+
+    def __onResetBranchShown(self):
+        setParagonsResetBranchToShow(isShow=False)
+        self.__updateParagonsShown()
+
+    @args2params(ButtonType, int)
+    def __onTechTreeButtonPressed(self, buttonType, branchID=0):
+        if buttonType == ButtonType.EARLYACCESS:
+            showEarlyAccessVehicleView(isFromTechTree=True)
+        if buttonType == ButtonType.PARAGONS:
+            showParagonsResetBranchView(parent=self.getParentWindow(), branchID=branchID, closeCallback=self.__updateParagonsShown)
+
     def __goToEarlyAccess(self):
         showEarlyAccessVehicleView(isFromTechTree=True)
 
@@ -292,6 +354,10 @@ class VehicleTechTree(ViewImpl):
         self.viewModel.setIsEarlyAccessFirstTimeShown(hasEarlyAccess)
         if hasEarlyAccess and self.__earlyAccessController.getNationID() == SelectedNation.getIndex():
             AccountSettings.setEarlyAccess(EarlyAccess.TREE_SEEN, True)
+
+    def __updateParagonsShown(self):
+        isNeedToShowResetAnim = getParagonsResetBranchToShow()
+        self.viewModel.setIsParagonsResetBranchNeedToShow(isNeedToShowResetAnim)
 
     def __closePremiumPanel(self, _=None):
         self.viewModel.setClosePremiumPanelTrigger(time_utils.getCurrentTimestamp())
@@ -460,11 +526,22 @@ class VehicleTechTreeInvalidator(IPage):
     def invalidateEarlyAccess(self):
         self.__viewRef().updateEarlyAccessState()
 
+    def invalidateParagonsUnlocks(self):
+        self.redraw()
+
+    def invalidateParagonsUnlocksStateChange(self):
+        g_techTreeDP.load(isReload=True)
+        self.redraw()
+
     def invalidateEventsData(self):
         fillNationTechTreeModel(self.viewModel, self.__techTreeEventsListener, self.__dataProvider.getAvailableNations())
 
-    def invalidateParagonsAnouncement(self):
-        self.__viewRef().getViewModel().setIsParagonsEnabled(self.__techTreeEventsListener.isParagonsAnnounceActive())
+    def invalidateParagonsEntryPoint(self, isNeedUpdateLevels=True):
+        self.__viewRef().getViewModel().setIsParagonsEnabled(self.__techTreeEventsListener.isParagonsEntryPointEnabled())
+        self.__viewRef().paragonsEntryPoint.update(isNeedUpdateLevels)
+
+    def invalidateTechTreeButtons(self):
+        self.__viewRef().updateTechTreeButtons()
 
     def clearSelectedNation(self):
         SelectedNation.clear()

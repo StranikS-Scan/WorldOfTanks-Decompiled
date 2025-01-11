@@ -809,6 +809,10 @@ class TankmanSkill(GUIItem):
         return getSkillAltInfo(self.name)
 
     @property
+    def alertDescription(self):
+        return getSkillAlertDescription(self.name)
+
+    @property
     def icon(self):
         if self._name == SKILLS_CONSTANTS.TYPE_NEW_SKILL:
             iconName = '{}.png'.format(self.name)
@@ -853,6 +857,18 @@ class TankmanSkill(GUIItem):
         skillParams = self._packer(skillDescArgs, skillLvl if skillLvl is not None else self.level)
         keyArgs = skillParams.get('keyArgs', {})
         return self.currentLvlDescription % keyArgs
+
+    def getAlertDescription(self, skillLvl=None):
+        skillDescArgs = getSkillDescrArgs(self.name)
+        skillParams = self._packer(skillDescArgs, skillLvl if skillLvl is not None else self.level)
+        keyArgs = skillParams.get('keyArgs', {})
+        return self.alertDescription % keyArgs
+
+    def getMaxLvlAlertDescription(self):
+        skillDescArgs = getSkillDescrArgs(self.name)
+        skillParams = self._packer(skillDescArgs, tankmen.MAX_SKILL_LEVEL)
+        keyArgs = skillParams.get('keyArgs', {})
+        return self.alertDescription % keyArgs
 
 
 class SabatonTankmanSkill(TankmanSkill):
@@ -1069,6 +1085,10 @@ def getSkillAltDescription(skillName):
 
 def getSkillAltInfo(skillName):
     return tankmen.getSkillsConfig().getSkill(skillName).altInfo
+
+
+def getSkillAlertDescription(skillName):
+    return tankmen.getSkillsConfig().getSkill(skillName).alertDescription
 
 
 def getSkillDescrArgs(skillName):

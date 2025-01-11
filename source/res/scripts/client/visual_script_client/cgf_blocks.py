@@ -9,7 +9,7 @@ from visual_script.block import Block
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.dependency import dependencyImporter
-from visual_script.contexts.cgf_context import GameObjectWrapper
+from visual_script.contexts.cgf_context import GameObjectWrapper, CGFGameObjectContext
 from constants import ROCKET_ACCELERATION_STATE
 from visual_script.cgf_blocks import CGFMeta
 Vehicle, CGF, tankStructure, RAC = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component')
@@ -98,6 +98,41 @@ class GetHangarVehicleGameObject(Block, CGFMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.HANGAR]
+
+
+class PushVseTrigger(Block, CGFMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(PushVseTrigger, self).__init__(*args, **kwargs)
+        self._trigger = self._makeEventInputSlot('push_trigger', self._exec)
+        self._object = self._makeDataInputSlot('game_object', SLOT_TYPE.GAME_OBJECT)
+        self._triggerName = self._makeDataInputSlot('trigger_name', SLOT_TYPE.STR)
+
+    def validate(self):
+        if not self._object.hasValue():
+            return 'GameObject is required'
+        return 'Trigger Name is required' if not self._triggerName.hasValue() else super(PushVseTrigger, self).validate()
+
+    def _exec(self):
+        go = self._object.getValue()
+        if go is None or not go.isValid:
+            return
+        else:
+            vseComponent = go.findComponentByType(GenericComponents.VSEComponent)
+            if vseComponent is None:
+                _logger.error('GameObject does not contain VSEComponent')
+                return
+            context = vseComponent.context
+            if not isinstance(context, CGFGameObjectContext):
+                _logger.error('%s not supported', type(context))
+                return
+            triggerName = self._triggerName.getValue()
+            context.onTriggerEvent(triggerName)
+            return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
 
 
 class RocketAcceleratorEvents(Block, CGFMeta):

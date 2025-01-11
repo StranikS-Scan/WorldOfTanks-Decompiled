@@ -20,7 +20,7 @@ from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, AVG_DAMAGE_PER_SECOND, FLAME_MAX_DISTANCE, THERMAL_VISION_DISTANCE, THERMAL_VISION_RELOAD_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_REUSE_AND_DURATION
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -48,6 +48,7 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     AUTOLOADER_WITH_BOOST_GUN = 'autoReloadWithBoostGun'
     CLIP_GUN = 'clipGun'
     FLAME_GUN = 'flameGun'
+    AUTOSHOOT_FLAME_GUN = 'autoShootFlameGun'
     DUAL_GUN = 'dualGun'
     DUAL_ACCURACY_GUN = 'dualAccuracyGun'
     TURBOSHAFT_ENGINE = 'turboshaftEngine'
@@ -57,12 +58,14 @@ class _ModuleExtraStatuses(CONST_CONTAINER):
     HYDRO_WHEELED_CHASSIS = 'hydroWheeledChassis'
     TRACK_WITHIN_TRACK_CHASSIS = 'trackWithinTrackChassis'
     MULTI_TRACK_CHASSIS = 'multiTackChassis'
+    THERMAL_VISION_TURRETS = 'thermalVision'
 
 
 _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel, _IMG_EXTRA_PATH.autoLoaderGun),
  _ModuleExtraStatuses.AUTOLOADER_WITH_BOOST_GUN: (_STR_EXTRA_PATH.autoReloadGunLabel.boost, _IMG_EXTRA_PATH.autoLoaderGunBoost),
  _ModuleExtraStatuses.CLIP_GUN: (_STR_EXTRA_PATH.clipGunLabel, _IMG_EXTRA_PATH.magazineGunIcon),
  _ModuleExtraStatuses.FLAME_GUN: (_STR_EXTRA_PATH.flameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
+ _ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN: (_STR_EXTRA_PATH.autoShootFlameGunLabel, _IMG_EXTRA_PATH.flameGunIcon),
  _ModuleExtraStatuses.DUAL_GUN: (_STR_EXTRA_PATH.dualGunLabel, _IMG_EXTRA_PATH.dualGun),
  _ModuleExtraStatuses.DUAL_ACCURACY_GUN: (_STR_EXTRA_PATH.dualAccuracyGunLabel, _IMG_EXTRA_PATH.dualAccuracy),
  _ModuleExtraStatuses.TURBOSHAFT_ENGINE: (_STR_EXTRA_PATH.turboshaftEngine, _IMG_EXTRA_PATH.turbineEngineIcon),
@@ -71,7 +74,8 @@ _MODULE_EXTRA_STATUS_RESOURCES = {_ModuleExtraStatuses.AUTOLOADER_GUN: (_STR_EXT
  _ModuleExtraStatuses.HYDRO_AUTO_SIEGE_CHASSIS: (_STR_EXTRA_PATH.hydraulicAutoSiegeChassisLabel, _IMG_EXTRA_PATH.hydraulicChassisIcon),
  _ModuleExtraStatuses.HYDRO_WHEELED_CHASSIS: (_STR_EXTRA_PATH.hydraulicWheeledChassisLabel, _IMG_EXTRA_PATH.hydraulicWheeledChassisIcon),
  _ModuleExtraStatuses.TRACK_WITHIN_TRACK_CHASSIS: (_STR_EXTRA_PATH.trackWithinTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack),
- _ModuleExtraStatuses.MULTI_TRACK_CHASSIS: (_STR_EXTRA_PATH.multiTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack)}
+ _ModuleExtraStatuses.MULTI_TRACK_CHASSIS: (_STR_EXTRA_PATH.multiTrackChassisLabel, _IMG_EXTRA_PATH.trackWithinTrack),
+ _ModuleExtraStatuses.THERMAL_VISION_TURRETS: (_STR_EXTRA_PATH.thermalVisionTurret, _IMG_EXTRA_PATH.thermalVisionIcon)}
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -177,12 +181,14 @@ class ModuleTooltipBlockConstructor(object):
     WEIGHT_MODULE_PARAM = 'weight'
     TURBOSHAFT_ENGINE_MODULE_PARAM = 'turboshaftEngine'
     ROCKET_ACCELERATION_ENGINE_MODULE_PARAM = 'rocketAcceleration'
+    THERMAL_VISION_TURRET_MODULE_PARAM = 'thermalVision'
     COOLDOWN_SECONDS = 'cooldownSeconds'
     ACTIVE_SECONDS = 'activeSeconds'
     RELOAD_COOLDOWN_SECONDS = 'reloadCooldownSeconds'
     CALIBER = 'caliber'
     DUAL_ACCURACY_MODULE_PARAM = 'dualAccuracy'
     DEFAULT_PARAM = 'default'
+    AUTOSHOOT_FLAME_GUN_MODULE_PARAM = 'autoShootFlameGun'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime', 'vehicleGunShotStabilizationChassisMovement', 'vehicleGunShotStabilizationChassisRotation'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
      GUI_ITEM_TYPE.GUN: ('avgDamageList',
@@ -236,6 +242,13 @@ class ModuleTooltipBlockConstructor(object):
                              AIMING_TIME_PROP_NAME),
      TURBOSHAFT_ENGINE_MODULE_PARAM: ('enginePower', TURBOSHAFT_ENGINE_POWER, 'fireStartingChance'),
      ROCKET_ACCELERATION_ENGINE_MODULE_PARAM: ('enginePower', ROCKET_ACCELERATION_ENGINE_POWER, 'fireStartingChance'),
+     THERMAL_VISION_TURRET_MODULE_PARAM: ('armor',
+                                          'rotationSpeed',
+                                          'circularVisionRadius',
+                                          THERMAL_VISION_DISTANCE,
+                                          THERMAL_VISION_REUSE_AND_DURATION,
+                                          THERMAL_VISION_RELOAD_TIME,
+                                          THERMAL_VISION_OBSERVE_TIME),
      DUAL_ACCURACY_MODULE_PARAM: ('avgDamageList',
                                   'avgPiercingPower',
                                   RELOAD_TIME_SECS_PROP_NAME,
@@ -249,14 +262,30 @@ class ModuleTooltipBlockConstructor(object):
                                   DISPERSION_RADIUS,
                                   DUAL_ACCURACY_COOLING_DELAY,
                                   'maxShotDistance',
-                                  AIMING_TIME_PROP_NAME)}
+                                  AIMING_TIME_PROP_NAME),
+     AUTOSHOOT_FLAME_GUN_MODULE_PARAM: ('avgDamageList',
+                                        'avgPiercingPower',
+                                        AVG_DAMAGE_PER_SECOND,
+                                        'flameMaxDistance',
+                                        AUTOSHOOT_FLAME_CHANGE_SHELL_TIME,
+                                        AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME,
+                                        DISPERSION_RADIUS,
+                                        AIMING_TIME_PROP_NAME)}
     HIGHLIGHT_MODULE_PARAMS = {DEFAULT_PARAM: (AUTO_RELOAD_PROP_NAME,
                      RELOAD_TIME_SECS_PROP_NAME,
                      DUAL_GUN_CHARGE_TIME,
                      DUAL_GUN_RATE_TIME,
                      TURBOSHAFT_ENGINE_POWER,
                      ROCKET_ACCELERATION_ENGINE_POWER),
-     DUAL_ACCURACY_MODULE_PARAM: (DUAL_ACCURACY_COOLING_DELAY, DISPERSION_RADIUS)}
+     DUAL_ACCURACY_MODULE_PARAM: (DUAL_ACCURACY_COOLING_DELAY, DISPERSION_RADIUS),
+     AUTOSHOOT_FLAME_GUN_MODULE_PARAM: (AVG_DAMAGE_PER_SECOND,
+                                        FLAME_MAX_DISTANCE,
+                                        AUTOSHOOT_FLAME_CHANGE_SHELL_TIME,
+                                        AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME),
+     THERMAL_VISION_TURRET_MODULE_PARAM: (THERMAL_VISION_DISTANCE,
+                                          THERMAL_VISION_REUSE_AND_DURATION,
+                                          THERMAL_VISION_RELOAD_TIME,
+                                          THERMAL_VISION_OBSERVE_TIME)}
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=_DEFAULT_PADDING, rightPadding=_DEFAULT_PADDING):
@@ -613,6 +642,9 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 elif vehicle is not None and vehicle.descriptor.hasDualAccuracy:
                     highlightPossible = serverSettings.checkDualAccuracyHighlights(increase=True)
                     paramsKeyName = self.DUAL_ACCURACY_MODULE_PARAM
+                elif reloadingType == GUN_CAN_BE_AUTOSHOOT_FLAME or reloadingType == GUN_AUTOSHOOT_FLAME:
+                    highlightPossible = serverSettings.checkFlamethrowerHighlights(increase=True)
+                    paramsKeyName = self.AUTOSHOOT_FLAME_GUN_MODULE_PARAM
             elif paramsKeyName == GUI_ITEM_TYPE.ENGINE:
                 if vehicle is not None and vehicle.descriptor.hasTurboshaftEngine:
                     highlightPossible = serverSettings.checkTurboshaftHighlights(increase=True)
@@ -620,6 +652,10 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 if vehicle is not None and vehicle.descriptor.hasRocketAcceleration:
                     highlightPossible = serverSettings.checkRocketAccelerationHighlights(increase=True)
                     paramsKeyName = self.ROCKET_ACCELERATION_ENGINE_MODULE_PARAM
+            elif paramsKeyName == GUI_ITEM_TYPE.TURRET:
+                if vehicle is not None and vehicle.descriptor.hasThermalVision:
+                    highlightPossible = False
+                    paramsKeyName = self.THERMAL_VISION_TURRET_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             highlightParamsList = self.HIGHLIGHT_MODULE_PARAMS.get(paramsKeyName, []) if paramsKeyName in self.HIGHLIGHT_MODULE_PARAMS else self.HIGHLIGHT_MODULE_PARAMS[self.DEFAULT_PARAM]
             if vehicle is not None:
@@ -659,6 +695,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
             statuses = cls.__getChassisExtraStatusTitle(module)
         elif module.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             statuses = cls.__getEngineExtraStatus(module)
+        elif module.itemTypeID == GUI_ITEM_TYPE.TURRET:
+            statuses = cls.__getTurretExtraStatus(module)
         if statuses is None:
             return
         else:
@@ -676,6 +714,8 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         result = []
         if module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
+        elif module.isAutoShootFlameGun(vDescr):
+            result.append(_ModuleExtraStatuses.AUTOSHOOT_FLAME_GUN)
         elif module.isFlameGun():
             result.append(_ModuleExtraStatuses.FLAME_GUN)
         elif module.isAutoReloadable(vDescr):
@@ -698,6 +738,13 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
             result.append(_ModuleExtraStatuses.TURBOSHAFT_ENGINE)
         elif module.hasRocketAcceleration():
             result.append(_ModuleExtraStatuses.ROCKET_ACCELERATION_ENGINE)
+        return result
+
+    @classmethod
+    def __getTurretExtraStatus(cls, module):
+        result = []
+        if module.hasThermalVision():
+            result.append(_ModuleExtraStatuses.THERMAL_VISION_TURRETS)
         return result
 
     @classmethod

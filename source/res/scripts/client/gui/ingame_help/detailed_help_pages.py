@@ -40,6 +40,7 @@ class HelpPagePriority(object):
     FLAMETHROWER = 11
     ASSAULT_SPG = 11
     TANK_WITH_ABILITY = 11
+    AUTOSHOOT_FLAMETHROWER = 11
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -191,7 +192,7 @@ class FlameTankPagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['isFlamethrower'] = isFlamethrower = vehicle is not None and vehicle.typeDescriptor.isFlamethrower
+        ctx['isFlamethrower'] = isFlamethrower = vehicle is not None and vehicle.typeDescriptor.isFlamethrower and vehicle.typeDescriptor.role == ROLE_TYPE.SPG_FLAME
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isFlamethrower
         return
 
@@ -215,6 +216,27 @@ class TankWithAbilityPagesBuilder(DetailedHelpPagesBuilder):
         isTankWithAbility = vehicle.typeDescriptor.isTankWithAbility
         ctx['isTankWithAbility'] = isTankWithAbility
         ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isTankWithAbility
+
+
+class AutoshootFlameTankPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('isAutoShootFlamethrower',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.AUTOSHOOT_FLAMETHROWER
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.headerTitle()), backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.autoShootFlamethrowerHelp.autoshoot_flame_tank()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.headerTitle()), backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.prosCons.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.autoShootFlameTank.prosCons())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.autoShootFlamethrowerHelp.autoshoot_flame_tank_pros_cons()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['isAutoShootFlamethrower'] = isAutoShootFlamethrower = vehicle is not None and vehicle.typeDescriptor.isAutoShootFlamethrower
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or isAutoShootFlamethrower
+        return
 
 
 class AssaultTankPagesBuilder(DetailedHelpPagesBuilder):
@@ -523,4 +545,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  FlameTankPagesBuilder,
  AssaultTankPagesBuilder,
  MultiTrackPagesBuilder,
- TankWithAbilityPagesBuilder))
+ TankWithAbilityPagesBuilder,
+ AutoshootFlameTankPagesBuilder))

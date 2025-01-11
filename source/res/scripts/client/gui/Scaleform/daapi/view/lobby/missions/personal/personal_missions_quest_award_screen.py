@@ -23,6 +23,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
+from gui.server_events.pm3_constants import SOUNDS as NEW_SOUNDS
 _OPERATION_ID_TO_UI_BACKGROUND = {1: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_STUG4,
  2: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_HTC,
  3: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUESTAWARD_BG_T55A,
@@ -117,6 +118,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.soundManager.playSound(SOUNDS.WOMAN_AWARD_WINDOW)
         else:
             self.soundManager.playSound(SOUNDS.AWARD_WINDOW)
+        self.soundManager.setState(NEW_SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_GROUP, NEW_SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_ON)
 
     def _dispose(self):
         self.__fireOnClose()
@@ -124,6 +126,7 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         self._ctx = None
         self._proxyEvent = None
         self._operation = None
+        self.soundManager.setState(NEW_SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_GROUP, NEW_SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_OFF)
         super(PersonalMissionsQuestAwardScreen, self)._dispose()
         return
 

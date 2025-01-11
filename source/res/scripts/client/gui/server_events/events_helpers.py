@@ -23,7 +23,7 @@ from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardCon
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID, MAPS_TRAINING_QUEST_PREFIX, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX
+from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID, MARATHON_GROUP_PREFIX, PREMIUM_GROUP_PREFIX, DAILY_QUEST_ID_PREFIX, RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID, COSMIC_EVENT_PREFIX, VERSUS_AI_QUEST_GROUP_PREFIX
 from helpers.i18n import makeString as _ms
 if typing.TYPE_CHECKING:
     from gui.server_events.event_items import Quest
@@ -118,7 +118,7 @@ class EventInfoModel(object):
                 i18nKey = '#quests:details/header/tillDate'
                 args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
             weekDays = self.event.getWeekDays()
-            intervals = self.event.getActiveTimeIntervals()
+            intervals = self.event.getCollapsedActiveTimeIntervals()
             if weekDays or intervals:
                 if i18nKey is None:
                     i18nKey = '#quests:details/header/schedule'
@@ -270,10 +270,6 @@ def isMarathon(eventID):
     return eventID.startswith(MARATHON_GROUP_PREFIX)
 
 
-def isMapsTraining(groupID):
-    return groupID == MAPS_TRAINING_GROUPS_ID or groupID and groupID.startswith(MAPS_TRAINING_QUEST_PREFIX)
-
-
 def isBattleMattersQuestID(questID):
     return questID.startswith(BATTLE_MATTERS_QUEST_ID) if questID else False
 
@@ -354,7 +350,7 @@ def parseC11nProgressToken(token):
     if not validateToken(tokenID):
         return C11nStyleProgressData()
     styleID, branch = deserializeToken(tokenID)
-    return C11nStyleProgressData(styleID=styleID, branch=branch, level=token.limit)
+    return C11nStyleProgressData(styleID=styleID, branch=branch, level=token.limit or token.count)
 
 
 def getIdxFromQuest(quest):
@@ -381,7 +377,7 @@ def getLootboxesFromBonuses(bonuses, itemsCache=None):
             tokens = bonus.getTokens()
             boxes = itemsCache.items.tokens.getLootBoxes()
             for token in tokens.values():
-                if 'lootBox' in token.id and token.id in boxes:
+                if 'lootBox' in token.id:
                     lootboxType = boxes[token.id].getType()
                     if lootboxType not in lootboxes:
                         lootboxes[lootboxType] = {'count': token.count,

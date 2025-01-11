@@ -160,8 +160,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
     def __show(self, vehicleID, fetcher):
         vehicleType = self.sessionProvider.arenaVisitor.vehicles.getVehicleInfo(vehicleID).get('vehicleType')
         if vehicleType is not None:
-            if vehicleType.isTrackWithinTrack or vehicleType.isMultiTrack:
-                self.__hasMultiTrack = True
+            self.__hasMultiTrack = vehicleType.isTrackWithinTrack or vehicleType.isMultiTrack
         if not self.__isShown:
             self.__setDevicesStates(fetcher)
         else:

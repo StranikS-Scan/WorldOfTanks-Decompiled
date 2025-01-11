@@ -87,6 +87,7 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
     PREBATTLE_VEHICLEINVALID_NOTSUPPORTFOR11LVL = '#system_messages:prebattle/vehicleInvalid/notSupportFor11lvl'
     PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE = '#system_messages:prebattle/vehicleInvalid/willBeUnlockedInBattle'
+    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -843,6 +844,14 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD = '#system_messages:personalMissions/reward/tankwoman/server_error/NO_REWARD'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE = '#system_messages:personalMissions/reward/tankwoman/server_error/INVALID_STATE'
     PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/reward/tankwoman/server_error/DISABLED'
+    PERSONALMISSIONS_SWITCH_OPERATION_HEADER = '#system_messages:personalMissions/switch/operation/header'
+    PERSONALMISSIONS_SWITCH_OPERATION_ENABLED = '#system_messages:personalMissions/switch/operation/enabled'
+    PERSONALMISSIONS_SWITCH_OPERATION_DISABLED = '#system_messages:personalMissions/switch/operation/disabled'
+    PERSONALMISSIONS_SWITCH_CAMPAIGN_HEADER = '#system_messages:personalMissions/switch/campaign/header'
+    PERSONALMISSIONS_SWITCH_CAMPAIGN_ENABLED = '#system_messages:personalMissions/switch/campaign/enabled'
+    PERSONALMISSIONS_SWITCH_CAMPAIGN_DISABLED = '#system_messages:personalMissions/switch/campaign/disabled'
+    PERSONALMISSIONS_SWITCH_QUEST_HEADER = '#system_messages:personalMissions/switch/quest/header'
+    PERSONALMISSIONS_SWITCH_QUEST_DISABLED = '#system_messages:personalMissions/switch/quest/disabled'
     PERSONALMISSIONS_TANKMENGAIN = '#system_messages:personalMissions/tankmenGain'
     PERSONALMISSIONS_FREEAWARDLISTGAIN = '#system_messages:personalMissions/freeAwardListGain'
     PERSONALMISSIONS_FREEAWARDLISTRETURN = '#system_messages:personalMissions/freeAwardListReturn'
@@ -1355,6 +1364,26 @@ class SYSTEM_MESSAGES(object):
     DEBUTBOXES_DISABLED_HEADER = '#system_messages:debutBoxes/disabled/header'
     DEBUTBOXES_DISABLED_BODY = '#system_messages:debutBoxes/disabled/body'
     COMP7_OPEN_SHOP = '#system_messages:comp7/open_shop'
+    BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN = '#system_messages:bob/claimeReward/server_error/COOLDOWN'
+    BOB_CLAIMEREWARD_SERVER_ERROR = '#system_messages:bob/claimeReward/server_error'
+    PARAGONS_PROJECTAVAILABLE_TITLE = '#system_messages:paragons/projectAvailable/title'
+    PARAGONS_PROJECTAVAILABLE_TEXT = '#system_messages:paragons/projectAvailable/text'
+    PARAGONS_BRANCHRESETAVAILABLE_TITLE = '#system_messages:paragons/branchResetAvailable/title'
+    PARAGONS_BRANCHRESETAVAILABLE_TEXT = '#system_messages:paragons/branchResetAvailable/text'
+    PARAGONS_PROJECTCONTINUING_TITLE = '#system_messages:paragons/projectContinuing/title'
+    PARAGONS_PROJECTCONTINUING_TEXT = '#system_messages:paragons/projectContinuing/text'
+    PARAGONS_NEWSTAGEAVAILABLE_TITLE = '#system_messages:paragons/newStageAvailable/title'
+    PARAGONS_NEWSTAGEAVAILABLE_TEXT = '#system_messages:paragons/newStageAvailable/text'
+    PARAGONS_NEWVEHICLEAVAILABLE_TITLE = '#system_messages:paragons/newVehicleAvailable/title'
+    PARAGONS_NEWVEHICLEAVAILABLE_TEXT = '#system_messages:paragons/newVehicleAvailable/text'
+    PARAGONS_TO_PROJECT_BUTTON = '#system_messages:paragons/to/project/button'
+    PARAGONS_TO_RESEARCHMENTS_BUTTON = '#system_messages:paragons/to/researchments/button'
+    PARAGONS_TO_STAGES_BUTTON = '#system_messages:paragons/to/stages/button'
+    PARAGONS_TO_AWARDS_BUTTON = '#system_messages:paragons/to/awards/button'
+    PARAGONS_FIRSTMAINREWARDBADGEACHIEVED_TITLE = '#system_messages:paragons/firstMainRewardBadgeAchieved/title'
+    PARAGONS_FIRSTMAINREWARDBADGEACHIEVED_TEXT = '#system_messages:paragons/firstMainRewardBadgeAchieved/text'
+    PARAGONS_CHAPTERCOMPLETED_TITLE = '#system_messages:paragons/chapterCompleted/title'
+    PARAGONS_CHAPTERCOMPLETED_TEXT = '#system_messages:paragons/chapterCompleted/text'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1565,6 +1594,7 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_EPICONLY,
      PREBATTLE_VEHICLEINVALID_NOTSUPPORTFOR11LVL,
      PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE,
+     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -2321,6 +2351,14 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_NO_REWARD,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_INVALID_STATE,
      PERSONALMISSIONS_REWARD_TANKWOMAN_SERVER_ERROR_DISABLED,
+     PERSONALMISSIONS_SWITCH_OPERATION_HEADER,
+     PERSONALMISSIONS_SWITCH_OPERATION_ENABLED,
+     PERSONALMISSIONS_SWITCH_OPERATION_DISABLED,
+     PERSONALMISSIONS_SWITCH_CAMPAIGN_HEADER,
+     PERSONALMISSIONS_SWITCH_CAMPAIGN_ENABLED,
+     PERSONALMISSIONS_SWITCH_CAMPAIGN_DISABLED,
+     PERSONALMISSIONS_SWITCH_QUEST_HEADER,
+     PERSONALMISSIONS_SWITCH_QUEST_DISABLED,
      PERSONALMISSIONS_TANKMENGAIN,
      PERSONALMISSIONS_FREEAWARDLISTGAIN,
      PERSONALMISSIONS_FREEAWARDLISTRETURN,
@@ -2832,7 +2870,27 @@ class SYSTEM_MESSAGES(object):
      DEBUTBOXES_ENABLED_BODY,
      DEBUTBOXES_DISABLED_HEADER,
      DEBUTBOXES_DISABLED_BODY,
-     COMP7_OPEN_SHOP)
+     COMP7_OPEN_SHOP,
+     BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN,
+     BOB_CLAIMEREWARD_SERVER_ERROR,
+     PARAGONS_PROJECTAVAILABLE_TITLE,
+     PARAGONS_PROJECTAVAILABLE_TEXT,
+     PARAGONS_BRANCHRESETAVAILABLE_TITLE,
+     PARAGONS_BRANCHRESETAVAILABLE_TEXT,
+     PARAGONS_PROJECTCONTINUING_TITLE,
+     PARAGONS_PROJECTCONTINUING_TEXT,
+     PARAGONS_NEWSTAGEAVAILABLE_TITLE,
+     PARAGONS_NEWSTAGEAVAILABLE_TEXT,
+     PARAGONS_NEWVEHICLEAVAILABLE_TITLE,
+     PARAGONS_NEWVEHICLEAVAILABLE_TEXT,
+     PARAGONS_TO_PROJECT_BUTTON,
+     PARAGONS_TO_RESEARCHMENTS_BUTTON,
+     PARAGONS_TO_STAGES_BUTTON,
+     PARAGONS_TO_AWARDS_BUTTON,
+     PARAGONS_FIRSTMAINREWARDBADGEACHIEVED_TITLE,
+     PARAGONS_FIRSTMAINREWARDBADGEACHIEVED_TEXT,
+     PARAGONS_CHAPTERCOMPLETED_TITLE,
+     PARAGONS_CHAPTERCOMPLETED_TEXT)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

@@ -67,7 +67,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     BATTLE_ROYALE_SELECTOR_CALENDAR_INFO = 'battleRoyaleSelectorCalendarInfo'
     BATTLE_ROYALE_WIDGET_INFO = 'battleRoyaleWidgetInfo'
     SQUAD_BONUS = 'squadBonus'
-    NY_CREDIT_BONUS = 'nyTotalCreditBonus'
     SESSION_STATS = 'sessionStats'
     TRADE_IN_INFO = 'tradeInInfo'
     TRADE_IN_INFO_NOT_AVAILABLE = 'tradeInInfoNotAvailable'
@@ -87,6 +86,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     COMP7_SELECTOR_UNAVAILABLE_INFO = 'comp7SelectorUnavailableInfo'
     COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
+    PM3_GIFT_TOKEN = 'pm3GiftToken'
+    BOB_SELECTOR_INFO = 'bobSelectorInfo'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -123,6 +124,8 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     EPIC_BATTLE = 'epicBattle'
     RECERTIFICATION_FORM = 'recertificationForm'
     FULL_STATS = 'fullStats'
+    PERSONAL_MISSIONS = 'personalMissions'
+    BOB = 'bob'
 
 
 class ACTION_TOOLTIPS_TYPE(CONST_CONTAINER):

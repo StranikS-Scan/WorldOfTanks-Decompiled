@@ -24,6 +24,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
+from items import vehicles
 from personal_missions import PM_BRANCH
 from post_progression_common import FEATURE_BY_GROUP_ID, ROLESLOT_FEATURE
 from ranked_common import SwitchState
@@ -35,7 +36,7 @@ from telecom_rentals_common import TELECOM_RENTALS_CONFIG
 from trade_in_common.constants_types import CONFIG_NAME as TRADE_IN_CONFIG_NAME
 from achievements20.Achievements20GeneralConfig import Achievements20GeneralConfig
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, List, Sequence
+    from typing import Callable, Dict, List, Sequence, Optional, Iterable, Tuple
     from dict2model.types import ModelType
     from base_schema_manager import GameParamsSchema
 _logger = logging.getLogger(__name__)
@@ -139,6 +140,9 @@ class _FileServerSettings(object):
 
     def getCollectionsContentConfigUrl(self):
         return self.__getUrl('collections_content_config')
+
+    def getLobbyCdnContentBucketUrl(self):
+        return self.__getUrl('lobby_cdn_config')
 
     def __getUrl(self, urlKey, *args):
         try:
@@ -884,7 +888,7 @@ class GiftEventConfig(namedtuple('_GiftEventConfig', ('eventID',
         return self.giftEventState == GiftEventState.DISABLED
 
 
-class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID'))):
+class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events',))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
@@ -905,16 +909,7 @@ class GiftSystemConfig(namedtuple('_GiftSystemConfig', ('events', 'itemToEventID
 
     @classmethod
     def __packEventConfigs(cls, data):
-        events = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
-        data['events'], data['itemToEventID'] = events, cls.__getItemToEventMap(events)
-
-    @classmethod
-    def __getItemToEventMap(cls, events):
-        result = {}
-        for eventID, eventConfig in events.iteritems():
-            result.update({itemID:eventID for itemID in eventConfig.giftItemIDs})
-
-        return result
+        data['events'] = {eID:makeTupleByDict(GiftEventConfig, eData) for eID, eData in data['events'].iteritems()}
 
 
 class _WellRewardConfig(namedtuple('_WellRewardConfig', ('bonus',
@@ -1529,6 +1524,245 @@ class ModeSelectorConfig(namedtuple('ModeSelectorConfig', 'columnSettings')):
         return False if not all((isinstance(v, (tuple, list)) and len(v) == 2 and all((isinstance(i, int) for i in v)) for v in self.columnSettings.values())) else True
 
 
+class _BobConfig(namedtuple('_BobConfig', ('isEnabled',
+ 'isPaused',
+ 'registration',
+ 'url',
+ 'peripheryIDs',
+ 'primeTimes',
+ 'seasons',
+ 'cycleTimes',
+ 'levels',
+ 'teams',
+ 'forbiddenClassTags',
+ 'forbiddenVehTypes',
+ 'teamTokens',
+ 'leaderTokens',
+ 'leaderTokenFirstType',
+ 'pointsToken',
+ 'addPersonalRewardToken',
+ 'claimPersonalRewardToken',
+ 'personalRewardQuest',
+ 'teamRewardQuestPrefix',
+ 'teamLevelToken',
+ 'teamRewardTokenPrefix',
+ 'teamsChannel',
+ 'teamSkillsChannel',
+ 'createVivoxTeamChannels',
+ 'battleModifiersDescr'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, isPaused=False, registration={}, url='', peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), teams={}, forbiddenVehTypes=set(), forbiddenClassTags=set(), teamTokens=set(), leaderTokens=set(), leaderTokenFirstType='', pointsToken='', addPersonalRewardToken='', claimPersonalRewardToken='', personalRewardQuest='', teamRewardQuestPrefix='', teamLevelToken='', teamRewardTokenPrefix='', teamsChannel='', teamSkillsChannel='', createVivoxTeamChannels=False, battleModifiersDescr=())
+        defaults.update(kwargs)
+        return super(_BobConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _ParagonsDefaultResetVehicleConfig(namedtuple('_ParagonsDefaultResetVehicleConfig', ('level',
+ 'resetBonusBlueprintsCount',
+ 'progressPointsAmount',
+ 'progressPointsMultiplier'))):
+    pass
+
+
+class _ParagonsResetVehicleConfig(namedtuple('_ParagonsResetVehicleConfig', ('compactDescr',
+ 'resetBranchId',
+ 'resetBonusBlueprintsCount',
+ 'progressPointsAmount',
+ 'progressPointsMultiplier'))):
+    pass
+
+
+class _ParagonsResetBranchConfig(object):
+    __slots__ = ('__data', '__resetVehicles', '__id')
+
+    def __init__(self, branchId, data):
+        self.__id = branchId
+        self.__data = data
+        self.__resetVehicles = None
+        return
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def resetVehicles(self):
+        if self.__resetVehicles is None:
+            self.__resetVehicles = {vehicleCd:_ParagonsResetVehicleConfig(compactDescr=vehicleCd, resetBranchId=self.id, resetBonusBlueprintsCount=vehicleConfig[0], progressPointsAmount=vehicleConfig[1], progressPointsMultiplier=vehicleConfig[2]) for vehicleCd, vehicleConfig in self.__data.items()}
+        return self.__resetVehicles
+
+    def getVehicleToResetConfig(self, vehicleCd):
+        return self.resetVehicles.get(vehicleCd)
+
+
+class ParagonsConfig(object):
+    __slots__ = ('__data', '__resetBranches', '__resetVehicles', '__defaultResetVehicleConfigs', '__expandedResetBranchesConfig', '__defaultSelectedRewardOrder')
+
+    def __init__(self, data):
+        self.__data = data
+        self.__resetBranches = None
+        self.__resetVehicles = None
+        self.__defaultResetVehicleConfigs = None
+        self.__expandedResetBranchesConfig = None
+        self.__defaultSelectedRewardOrder = None
+        return
+
+    @property
+    def data(self):
+        return self.__data
+
+    @property
+    def isEnabled(self):
+        return self.__data['isEnabled']
+
+    @property
+    def isPaused(self):
+        return self.__data.get('isPaused', False)
+
+    @property
+    def accessCondition(self):
+        return self.__data['accessCondition']
+
+    @property
+    def restrictions(self):
+        return self.__data['restrictions']
+
+    @property
+    def minUnlockXLevelVehiclesCount(self):
+        return self.accessCondition.get('minUnlockXLevelVehiclesCount', 0)
+
+    @property
+    def maxResetBranchesCount(self):
+        return self.restrictions.get('maxResetBranchesCount', 0)
+
+    @property
+    def resetBranches(self):
+        if self.__resetBranches is None:
+            self.__expandResetBranchesConfig()
+            self.__resetBranches = {branchId:_ParagonsResetBranchConfig(branchId, branchConfig) for branchId, branchConfig in self.__expandedResetBranchesConfig.items()}
+        return self.__resetBranches
+
+    @property
+    def defaultResetVehicleConfigs(self):
+        if self.__defaultResetVehicleConfigs is None:
+            self.__defaultResetVehicleConfigs = {vehicleLevel:_ParagonsDefaultResetVehicleConfig(vehicleLevel, *defaultVehicleConfig) for vehicleLevel, defaultVehicleConfig in self.__data['paragonsResetBranches']['default'].iteritems()}
+        return self.__defaultResetVehicleConfigs
+
+    @property
+    def defaultSelectedRewardOrder(self):
+        if self.__defaultSelectedRewardOrder is None:
+            self.__defaultSelectedRewardOrder = {}
+            for chapterID in sorted(self.rewards.keys()):
+                for levelID in sorted(self.getChapterLevelIDs(chapterID)):
+                    for entCode in self.getRewardsByChapterAndLevel(chapterID, levelID).get('entitlements', {}).keys():
+                        self.__defaultSelectedRewardOrder.setdefault(entCode, []).append((chapterID, levelID))
+
+        return self.__defaultSelectedRewardOrder
+
+    @property
+    def resetVehicles(self):
+        if self.__resetVehicles is None:
+            self.__resetVehicles = {}
+            for resetBranch in self.resetBranches.values():
+                self.__resetVehicles.update(resetBranch.resetVehicles)
+
+        return self.__resetVehicles
+
+    @property
+    def rewards(self):
+        return self.__data['rewards']
+
+    @property
+    def paragonsUnlocks(self):
+        return self.__data['paragonsUnlocks']
+
+    def isParagonsUnlockEnabled(self, paragonsUnlockID):
+        return self.paragonsUnlocks.get(paragonsUnlockID, {}).get('enabled', False)
+
+    def getParagonsUnlockNationName(self, paragonsUnlockID):
+        return self.paragonsUnlocks.get(paragonsUnlockID).get('nationName')
+
+    def getParagonsUnlockVehicles(self, paragonsUnlockID):
+        return self.paragonsUnlocks.get(paragonsUnlockID).get('lockedItemsByItemTypeName', {}).get('vehicle', set())
+
+    def getRewardsByChapterAndLevel(self, chapterID, levelID):
+        return self.rewards.get(chapterID, {}).get('levels', {}).get(levelID, {}).get('bonus', {})
+
+    def getAnnouncementChapterIDs(self):
+        return {chapterID for chapterID in self.rewards.iterkeys() if self.rewards.get(chapterID).get('isAnnouncement')}
+
+    def getChapterIDs(self):
+        return set(self.rewards.keys())
+
+    def getChapterLevelIDs(self, chapterID):
+        return set(self.rewards.get(chapterID).get('levels').keys())
+
+    def getParagonsCoinsAmountForLevelUnlock(self, chapterID, levelID):
+        return self.rewards.get(chapterID).get('levels').get(levelID).get('paragonsCoin')
+
+    def getResetBranchConfig(self, branchId):
+        return self.resetBranches.get(branchId)
+
+    def getResetVehicleConfig(self, vehicleCd):
+        return self.resetVehicles.get(vehicleCd)
+
+    def replace(self, data):
+        self.__data = data
+        self.__resetBranches = None
+        self.__resetVehicles = None
+        self.__defaultResetVehicleConfigs = None
+        self.__expandedResetBranchesConfig = None
+        return self
+
+    @classmethod
+    def defaults(cls):
+        return cls({'isEnabled': False,
+         'accessCondition': {},
+         'restrictions': {},
+         'paragonsResetBranches': {},
+         'paragonsUnlocks': {},
+         'rewards': {}})
+
+    def __expandResetBranchesConfig(self):
+        paragonsResetBranches = self.__data['paragonsResetBranches']
+        vehiclesConfigValues = paragonsResetBranches.get('vehicles', {})
+        data = {}
+        cachedParagonBranchesCollection = vehicles.g_cache.paragonsBranchesToReset.branches
+        for branchID, branch in cachedParagonBranchesCollection.items():
+            resetVehiclesCDs = branch.resetVehicles
+            data[branchID] = self.__getResetVehiclesValues(resetVehiclesCDs, vehiclesConfigValues, paragonsResetBranches['default'])
+
+        self.__expandedResetBranchesConfig = data
+
+    def __getResetVehiclesValues(self, resetVehiclesCDs, vehiclesConfigValues, defaultConfigValues):
+        result = {}
+        for vehicleCD in resetVehiclesCDs:
+            vehicleLevel = vehicles.getItemByCompactDescr(vehicleCD).level
+            defaultValues = defaultConfigValues[vehicleLevel]
+            vehicleValues = vehiclesConfigValues.get(vehicleCD)
+            if vehicleValues is None:
+                result[vehicleCD] = defaultValues
+            result[vehicleCD] = self.__mergeConfigValues(vehicleValues, defaultValues)
+
+        return result
+
+    def __mergeConfigValues(self, vehicleValues, defaultValues):
+        return tuple(((defaultValue if vehicleValues[idx] is None else vehicleValues[idx]) for idx, defaultValue in enumerate(defaultValues)))
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -1587,6 +1821,7 @@ class ServerSettings(object):
         self.__armoryYardSettings = ArmoryYardConfig.defaults()
         self.__randomBattlesConfig = RandomBattlesConfig()
         self.__modeSelectorConfig = ModeSelectorConfig()
+        self.__paragonsConfig = ParagonsConfig.defaults()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -1762,7 +1997,17 @@ class ServerSettings(object):
             self.__modeSelectorConfig = makeTupleByDict(ModeSelectorConfig, self.__serverSettings[Configs.MODE_SELECTOR_CONFIG.value])
         else:
             self.__modeSelectorConfig = ModeSelectorConfig.defaults()
+        if 'bob_config' in self.__serverSettings:
+            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
+            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
+        else:
+            self.__bobSettings = _BobConfig.defaults()
         self.__schemaManager.set(self.__serverSettings)
+        if Configs.PARAGONS_CONFIG.value in self.__serverSettings:
+            LOG_DEBUG(Configs.PARAGONS_CONFIG.value, self.__serverSettings[Configs.PARAGONS_CONFIG.value])
+            self.__paragonsConfig = ParagonsConfig(self.__serverSettings[Configs.PARAGONS_CONFIG.value])
+        else:
+            self.__paragonsConfig = ParagonsConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -1802,6 +2047,8 @@ class ServerSettings(object):
             self.__updateComp7PrestigeRanks(serverSettingsDiff)
         if Configs.COMP7_REWARDS_CONFIG.value in serverSettingsDiff:
             self.__updateComp7Rewards(serverSettingsDiff)
+        if 'bob_config' in serverSettingsDiff:
+            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -1820,6 +2067,8 @@ class ServerSettings(object):
             self.__updateSeniorityAwards(serverSettingsDiff)
         if 'event_battles_config' in serverSettingsDiff:
             self.__updateEventBattles(serverSettingsDiff)
+        if Configs.PARAGONS_CONFIG.value in serverSettingsDiff:
+            self.__updateParagons(serverSettingsDiff)
         if BonusCapsConst.CONFIG_NAME in serverSettingsDiff:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = serverSettingsDiff[BonusCapsConst.CONFIG_NAME]
         if PremiumConfigs.PIGGYBANK in serverSettingsDiff:
@@ -1849,6 +2098,9 @@ class ServerSettings(object):
             self.__serverSettings[TRADE_IN_CONFIG_NAME] = serverSettingsDiff[TRADE_IN_CONFIG_NAME]
         if Configs.RESOURCE_WELL.value in serverSettingsDiff:
             self.__updateResourceWellConfig(serverSettingsDiff)
+        if Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value in serverSettingsDiff:
+            newUniverslaFlagSettings = serverSettingsDiff[Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value]
+            self.__serverSettings[Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value] = newUniverslaFlagSettings
         if Configs.PERIPHERY_ROUTING_CONFIG.value in serverSettingsDiff:
             self.__updatePeripheryRoutingConfig(serverSettingsDiff)
         if Configs.PLAY_LIMITS_CONFIG.value in serverSettingsDiff:
@@ -2005,12 +2257,20 @@ class ServerSettings(object):
         return self.__comp7RewardsConfig
 
     @property
+    def bobConfig(self):
+        return self.__bobSettings
+
+    @property
     def telecomConfig(self):
         return self.__telecomConfig
 
     @property
     def blueprintsConfig(self):
         return self.__blueprintsConfig
+
+    @property
+    def paragonsConfig(self):
+        return self.__paragonsConfig
 
     @property
     def squadPremiumBonus(self):
@@ -2043,6 +2303,10 @@ class ServerSettings(object):
     @property
     def collectiveGoalEntryPointConfig(self):
         return self.__collectiveGoalEntryPointConfig
+
+    @property
+    def universalFlagEntryPointConfig(self):
+        return self.__getGlobalSetting(Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value, {'isEnabled': False})
 
     @property
     def collectiveGoalMarathonsConfig(self):
@@ -2106,7 +2370,9 @@ class ServerSettings(object):
     def isPersonalMissionsEnabled(self, branch=None):
         if branch == PM_BRANCH.REGULAR:
             return self.__getGlobalSetting('isRegularQuestEnabled', True)
-        return self.__getGlobalSetting('isPM2QuestEnabled', True) if branch == PM_BRANCH.PERSONAL_MISSION_2 else self.__getGlobalSetting('isRegularQuestEnabled', True) or self.__getGlobalSetting('isPM2QuestEnabled', True)
+        if branch == PM_BRANCH.PERSONAL_MISSION_2:
+            return self.__getGlobalSetting('isPM2QuestEnabled', True)
+        return self.__getGlobalSetting('isPM3QuestEnabled', True) if branch == PM_BRANCH.PERSONAL_MISSION_3 else self.__getGlobalSetting('isRegularQuestEnabled', True) or self.__getGlobalSetting('isPM2QuestEnabled', True) or self.__getGlobalSetting('isPM3QuestEnabled', True)
 
     def isPMBattleProgressEnabled(self):
         return self.__getGlobalSetting('isPMBattleProgressEnabled', True)
@@ -2143,9 +2409,6 @@ class ServerSettings(object):
 
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
-
-    def isLootBoxEnabled(self, boxId):
-        return self.__getGlobalSetting('lootBoxes_config', {}).get(boxId, {}).get('enabled', False)
 
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
@@ -2460,9 +2723,6 @@ class ServerSettings(object):
     def getRPConfig(self):
         return self.__referralProgramConfig
 
-    def getNYConfig(self):
-        return self.__getGlobalSetting('ny_config', {})
-
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 
@@ -2510,6 +2770,12 @@ class ServerSettings(object):
     def __updateComp7Rewards(self, targetSettings):
         config = targetSettings[Configs.COMP7_REWARDS_CONFIG.value]
         self.__comp7RewardsConfig = self.__comp7RewardsConfig.replace(config)
+
+    def __updateBob(self, targetSettings):
+        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
+
+    def __updateParagons(self, targetSettings):
+        self.__paragonsConfig = self.__paragonsConfig.replace(targetSettings[Configs.PARAGONS_CONFIG.value])
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])

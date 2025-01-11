@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crystals_promo/crystals_promo_view.py
+import BigWorld
 from account_helpers.AccountSettings import AccountSettings, CRYSTALS_INFO_SHOWN
 from constants import ARENA_BONUS_TYPE, IS_CHINA
 from frameworks.wulf import ViewFlags, ViewSettings
@@ -75,8 +76,10 @@ class CrystalsPromoView(ViewImpl):
     def _onLoaded(self, *args, **kwargs):
         super(CrystalsPromoView, self)._onLoaded(*args, **kwargs)
         g_eventBus.handleEvent(events.LobbyHeaderMenuEvent(events.LobbyHeaderMenuEvent.TOGGLE_VISIBILITY, ctx={'state': HeaderMenuVisibilityState.NOTHING}), EVENT_BUS_SCOPE.LOBBY)
+        BigWorld.worldDrawEnabled(False)
 
     def _finalize(self):
+        BigWorld.worldDrawEnabled(True)
         switchHangarOverlaySoundFilter(on=False)
         self.__destroyViewObject.fini()
         self.viewModel.goToShop -= self.__goToShopHandler

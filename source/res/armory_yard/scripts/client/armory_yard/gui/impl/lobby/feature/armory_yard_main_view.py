@@ -24,6 +24,7 @@ from armory_yard.gui.Scaleform.daapi.view.lobby.hangar.sound_constants import AR
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_currency_tooltip_view import ArmoryYardCurrencyTooltipView
 from armory_yard.gui.impl.lobby.feature.tooltips.armory_yard_simple_tooltip_view import ArmoryYardSimpleTooltipView
+from armory_yard.gui.impl.lobby.feature.tooltips.task_condition_tooltip_view import TaskConditionTooltipView
 _logger = logging.getLogger(__name__)
 
 class ArmoryYardMainView(ViewImpl, IGlobalListener):
@@ -123,7 +124,9 @@ class ArmoryYardMainView(ViewImpl, IGlobalListener):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardCurrencyTooltipView():
             return ArmoryYardCurrencyTooltipView()
-        return ArmoryYardSimpleTooltipView(event.getArgument('state'), event.getArgument('id')) if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardSimpleTooltipView() else super(ArmoryYardMainView, self).createToolTipContent(event, contentID)
+        if contentID == R.views.armory_yard.lobby.feature.tooltips.ArmoryYardSimpleTooltipView():
+            return ArmoryYardSimpleTooltipView(event.getArgument('state'), event.getArgument('id'))
+        return TaskConditionTooltipView(event.getArgument('vehicleLevels'), event.getArgument('vehicleTypes'), event.getArgument('battleTypes')) if contentID == R.views.armory_yard.lobby.feature.tooltips.TaskConditionTooltipView() else super(ArmoryYardMainView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

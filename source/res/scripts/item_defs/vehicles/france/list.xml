@@ -577,10 +577,10 @@
     <description>	#france_vehicles:F119_Projet_Murat_descr	</description>
     <shortDescriptionSpecial>	#france_vehicles:F119_Projet_Murat_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#france_vehicles:F119_Projet_Murat_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special secret testTank	</tags>
+    <tags>	new_hp_vfx mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special	</tags>
     <level>	10	</level>
   </F119_Projet_Murat>
   <F36_AMX_AC_Mle1948_IGR>
@@ -1123,4 +1123,28 @@
     <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
     <level>	10	</level>
   </F18_Bat_Chatillon25t_7x7>
+  <F130_AMX_Tracteur_D>
+    <id>	31003	</id>
+    <userString>	#france_vehicles:F130_AMX_Tracteur_D	</userString>
+    <shortUserString>	#france_vehicles:F130_AMX_Tracteur_D_short	</shortUserString>
+    <description>	#france_vehicles:F130_AMX_Tracteur_D_descr	</description>
+    <shortDescriptionSpecial>	#france_vehicles:F130_AMX_Tracteur_D_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#france_vehicles:F130_AMX_Tracteur_D_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </F130_AMX_Tracteur_D>
+  <F10_AMX_50B_bob>
+    <id>	31004	</id>
+    <userString>	#france_vehicles:AMX_50_68t_bob	</userString>
+    <shortUserString>	#france_vehicles:AMX_50_68t_bob_short	</shortUserString>
+    <description>	#france_vehicles:AMX_50_68t_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_support private HD secret bob cannot_be_sold heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </F10_AMX_50B_bob>
 </list.xml>

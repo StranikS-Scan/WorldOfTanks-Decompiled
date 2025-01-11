@@ -74,6 +74,9 @@ class IBattleCommandFactory(object):
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         return None
 
+    def createOverheatCantShootCommand(self, timeLeft):
+        return None
+
     def createReplyByName(self, replyID, replyType, replierID):
         return None
 

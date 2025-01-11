@@ -43,7 +43,8 @@ class EntitlementsController(IEntitlementsController):
         self.__lastFailedEntitlements.clear()
         if self.__webController.getStateID() == WebControllerStates.STATE_NOT_DEFINED:
             self.__webController.invalidate()
-        self.__sendRequest(ENTITLEMENTS, self.__onResponse)
+        if ENTITLEMENTS:
+            self.__sendRequest(ENTITLEMENTS, self.__onResponse)
 
     def fini(self):
         self.onCacheUpdated.clear()

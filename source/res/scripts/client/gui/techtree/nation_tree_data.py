@@ -11,15 +11,19 @@ from gui.techtree.research_items_data import ResearchItemsData
 from gui.techtree.settings import NODE_STATE
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
+from gui.impl.gen.view_models.views.lobby.techtree.extended_node_state_flags import ExtendedNodeStateFlags
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.shared.economics import getGUIPrice
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from helpers import dependency
 from items import getTypeOfCompactDescr as getTypeOfCD
+from skeletons.gui.game_control import IParagonsController
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from gui.techtree.techtree_dp import DisplaySettingsModel
 
 class NationTreeData(_ItemsData):
+    __paragonsCtrl = dependency.descriptor(IParagonsController)
 
     def __init__(self, dumper):
         super(NationTreeData, self).__init__(dumper)
@@ -48,7 +52,7 @@ class NationTreeData(_ItemsData):
             if node.isAnnouncement:
                 self._addNode(nodeCD, self._makeAnnouncementNode(node, displayInfo))
             item = getItem(nodeCD)
-            if item.isHidden:
+            if item.isHidden or item.intCD in self.__paragonsCtrl.getHiddenUIItems():
                 continue
             index = self._addNode(nodeCD, self._makeRealExposedNode(node, item, unlockStats, displayInfo))
             if nodeCD == selectedID:
@@ -75,6 +79,12 @@ class NationTreeData(_ItemsData):
             unlocked = [ (item, self._change2UnlockedByCD(item)) for item in filtered ]
             parents = map(g_techTreeDP.getTopLevel, filtered)
             prevUnlocked = [ (item, self._changePreviouslyUnlockedByCD(item)) for item in chain(*parents) if not self.__isInInventory(item) ]
+            availableToUnlockNextLevels = set()
+            for vehCD in filtered:
+                availableToUnlockNextLevels.update(self._nextAvailableToUnlock(vehCD))
+
+            if availableToUnlockNextLevels:
+                next2Unlock.extend([ (vehCD, self._changeNext2Unlock(vehCD, self._nodes[self._nodesIdx[vehCD]].getUnlockProps(), unlockStats)) for vehCD in availableToUnlockNextLevels ])
         return (next2Unlock, unlocked, prevUnlocked)
 
     def invalidateXpCosts(self):
@@ -141,6 +151,7 @@ class NationTreeData(_ItemsData):
         nodeCD = node.nodeCD
         earnedXP = unlockStats.getVehXP(nodeCD)
         state = NodeStateFlags.LOCKED
+        extendedState = ExtendedNodeStateFlags.DEFAULT
         available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, level=guiItem.level, **unlockStats._asdict())
         if guiItem.isUnlocked:
             state = NodeStateFlags.UNLOCKED
@@ -183,8 +194,9 @@ class NationTreeData(_ItemsData):
         state = self._checkTradeInState(state, guiItem)
         state = self._checkTechTreeEvents(state, guiItem, unlockProps)
         state = self._checkEarlyAccessState(state, guiItem)
+        extendedState = self._checkParagonsState(extendedState, guiItem)
         price = getGUIPrice(guiItem, self._stats.money, self._items.shop.exchangeRate)
-        return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+        return nodes.RealNode(node.nodeCD, guiItem, earnedXP, state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price, extendedState=extendedState)
 
     @staticmethod
     def _makeAnnouncementNode(node, displayInfo):

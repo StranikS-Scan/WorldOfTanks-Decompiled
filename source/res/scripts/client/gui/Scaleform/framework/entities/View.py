@@ -52,8 +52,7 @@ class View(AbstractViewMeta, ViewInterface):
         self.__settings = ViewSettings()
         self.__uid = _view_id_generator.next()
         self.__key = ViewKey(None, None)
-        self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
-        self.__soundExtension.initSoundManager()
+        self._setSoundExtension()
         from gui.Scaleform.framework import ScopeTemplates
         self.__scope = ScopeTemplates.DEFAULT_SCOPE
         return
@@ -95,6 +94,10 @@ class View(AbstractViewMeta, ViewInterface):
     @property
     def soundManager(self):
         return self.__soundExtension.soundManager
+
+    def _setSoundExtension(self):
+        self.__soundExtension = ViewSoundExtension(self._COMMON_SOUND_SPACE)
+        self.__soundExtension.initSoundManager()
 
     def isViewModal(self):
         return self.__settings.isModal
@@ -162,6 +165,16 @@ class View(AbstractViewMeta, ViewInterface):
 
     def canBeClosed(self):
         return True
+
+    def _switchCommonSoundSpace(self, newCommonSoundSpace):
+        if self._COMMON_SOUND_SPACE != newCommonSoundSpace:
+            self._COMMON_SOUND_SPACE = newCommonSoundSpace
+            self._reloadSoundSpace()
+
+    def _reloadSoundSpace(self):
+        self.__soundExtension.destroySoundManager()
+        self._setSoundExtension()
+        self.__soundExtension.startSoundSpace()
 
     def _populate(self):
         super(View, self)._populate()

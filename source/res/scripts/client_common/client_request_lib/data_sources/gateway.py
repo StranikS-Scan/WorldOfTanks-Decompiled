@@ -657,25 +657,28 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             url = '{}?{}'.format(url, urlencoded_string)
         return self._request_data(callback, url, method='GET')
 
-    def get_storefront_products(self, callback, storefront):
+    def get_storefront_products(self, callback, storefront, user_country):
         url = '/shop/storefront/{}/products/'.format(storefront)
-        headers = {}
-        country = BigWorld.player().spaFlags.getFlag(SPA_ATTRS.USER_COUNTRY)
-        if country:
-            headers['X-User-Country'] = country.upper()
+        headers = {'X-User-Country': user_country}
         return self._request_data(callback, url, method='GET', headers=headers)
 
-    def buy_storefront_products(self, callback, storefront, productCode, requestData):
+    def buy_storefront_products(self, callback, storefront, productCode, requestData, user_country):
         url = 'shop/storefront/{}/buy/product/{}/'.format(storefront, productCode)
-        headers = {}
-        country = BigWorld.player().spaFlags.getFlag(SPA_ATTRS.USER_COUNTRY)
-        if country:
-            headers['X-User-Country'] = country.upper()
+        headers = {'X-User-Country': user_country}
         return self._request_data(callback, url, method='POST', headers=headers, post_data=requestData)
 
     def get_inventory_entitlements_v5(self, callback, entitlementsFilter):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'
         return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
+
+    def get_teams(self, callback):
+        url = '/wgbob/get_teams/'
+        return self._request_data(callback, url, method='GET')
+
+    def get_team_skills(self, callback, timestamp):
+        url = '/wgbob/get_team_skills/'
+        get_data = {'timestamp': timestamp}
+        return self._request_data(callback, url, get_data=get_data, method='GET')
 
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

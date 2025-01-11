@@ -168,6 +168,7 @@
     <MB517P_7x7>	31002	</MB517P_7x7>
     <Maybach_HL_174_C>	31001	</Maybach_HL_174_C>
     <Engine_VK4502P_G>	31003	</Engine_VK4502P_G>
+    <G04>	31005	</G04>
     <Maybach_HL_210P30_Ausf_A_IGR>	60001	</Maybach_HL_210P30_Ausf_A_IGR>
     <Maybach_HL_230_TRM_P30_IGR>	60002	</Maybach_HL_230_TRM_P30_IGR>
     <Maybach_HL_230_TRM_P45_IGR>	60003	</Maybach_HL_230_TRM_P45_IGR>
@@ -1066,6 +1067,23 @@
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2972	</rpm_max>
     </Maybach_HL_234>
+    <G04>
+      <userString>	#germany_vehicles:G04	</userString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1750	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	460	</rpm_min>
+      <rpm_max>	2125	</rpm_max>
+    </G04>
     <Maybach_HL_234P50>
       <userString>	#germany_vehicles:Maybach_HL_234P50	</userString>
       <shortUserString>	#germany_vehicles:Maybach_HL_234P50_short	</shortUserString>
@@ -1713,7 +1731,7 @@
       <price>	65800	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	670	</power>
+      <power>	790	</power>
       <weight>	1500	</weight>
       <maxHealth>	320	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1763,7 +1781,7 @@
       <price>	41000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	500	</power>
+      <power>	750	</power>
       <weight>	1500	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>

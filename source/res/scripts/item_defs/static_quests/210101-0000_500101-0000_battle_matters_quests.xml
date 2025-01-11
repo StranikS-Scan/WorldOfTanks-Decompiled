@@ -986,7 +986,7 @@
         </common>
       </conditions>
       <bonus>
-        <credits>	25000	</credits>
+        <credits>	175000	</credits>
         <item>	251	  <count>	3	</count>
         </item>
         <item>	763	  <count>	3	</count>
@@ -1039,7 +1039,7 @@
         </common>
       </conditions>
       <bonus>
-        <credits>	25000	</credits>
+        <credits>	325000	</credits>
         <goodie>
           <id>	121000	</id>
           <count>	3	</count>
@@ -1231,7 +1231,7 @@
       </conditions>
       <bonus>
         <credits>	200000	</credits>
-        <freeXP>	6000	</freeXP>
+        <freeXP>	7500	</freeXP>
         <slots>	1	</slots>
         <premium_plus>	1	</premium_plus>
         <goodie>
@@ -1309,6 +1309,10 @@
                 </token>
                 <token>
                   <id>	has_completed_pm2	</id>
+                  <greaterOrEqual>	1	</greaterOrEqual>
+                </token>
+                <token>
+                  <id>	has_completed_pm3	</id>
                   <greaterOrEqual>	1	</greaterOrEqual>
                 </token>
               </or>

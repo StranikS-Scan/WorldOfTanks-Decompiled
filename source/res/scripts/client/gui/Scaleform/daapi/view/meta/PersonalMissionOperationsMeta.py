@@ -7,14 +7,8 @@ class PersonalMissionOperationsMeta(View):
     def closeView(self):
         self._printOverrideError('closeView')
 
-    def onOperationClick(self, pmType, operationID):
-        self._printOverrideError('onOperationClick')
+    def onTabSelected(self, tabIdx):
+        self._printOverrideError('onTabSelected')
 
-    def showInfo(self):
-        self._printOverrideError('showInfo')
-
-    def as_setOperationsS(self, operations):
-        return self.flashObject.as_setOperations(operations) if self._isDAAPIInited() else None
-
-    def as_setTitleS(self, titleVO):
-        return self.flashObject.as_setTitle(titleVO) if self._isDAAPIInited() else None
+    def as_setSelectedTabS(self, tabIdx):
+        return self.flashObject.as_setSelectedTab(tabIdx) if self._isDAAPIInited() else None

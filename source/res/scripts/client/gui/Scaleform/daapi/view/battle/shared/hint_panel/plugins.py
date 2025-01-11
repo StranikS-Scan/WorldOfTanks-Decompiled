@@ -648,7 +648,7 @@ class PreBattleHintPlugin(HintPanelPlugin):
         return False
 
     def __checkHintConditions(self, typeDescriptor):
-        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or typeDescriptor.isMultiTrack or typeDescriptor.isTankWithAbility or self.__checkFlameThrowerConditions(typeDescriptor)
+        return typeDescriptor.isWheeledVehicle and not typeDescriptor.isWheeledVehicleWithoutFeatures or typeDescriptor.type.isDualgunVehicleType or typeDescriptor.hasTurboshaftEngine or typeDescriptor.isTrackWithinTrack or typeDescriptor.hasRocketAcceleration or typeDescriptor.hasDualAccuracy or typeDescriptor.isAssaultSPG or typeDescriptor.isMultiTrack or typeDescriptor.isTankWithAbility or typeDescriptor.isFlamethrower
 
     def __onVehicleControlling(self, vehicle):
         if not self.isActive():
@@ -704,10 +704,6 @@ class PreBattleHintPlugin(HintPanelPlugin):
 
     def __canDisplayVehicleHelpHint(self, typeDescriptor):
         return self.__checkHintConditions(typeDescriptor) and self.__isInDisplayPeriod and self._haveHintsLeft(self.__helpHintSettings[self.__vehicleId])
-
-    def __checkFlameThrowerConditions(self, typeDescriptor):
-        guiType = self.sessionProvider.arenaVisitor.getArenaGuiType()
-        return typeDescriptor.isFlamethrower and guiType in ARENA_GUI_TYPE.RANDOM_RANGE
 
     def __canDisplayBattleCommunicationHint(self):
         settingsCore = dependency.instance(ISettingsCore)

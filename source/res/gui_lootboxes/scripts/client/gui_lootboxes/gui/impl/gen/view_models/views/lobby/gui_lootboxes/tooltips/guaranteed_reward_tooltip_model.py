@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class GuaranteedRewardTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(GuaranteedRewardTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getLevelsRange(self):
@@ -35,22 +35,8 @@ class GuaranteedRewardTooltipModel(ViewModel):
     def getGuaranteedBoxNameKeysType():
         return unicode
 
-    def getVehiclesOnly(self):
-        return self._getBool(3)
-
-    def setVehiclesOnly(self, value):
-        self._setBool(3, value)
-
-    def getMultipleStages(self):
-        return self._getBool(4)
-
-    def setMultipleStages(self, value):
-        self._setBool(4, value)
-
     def _initialize(self):
         super(GuaranteedRewardTooltipModel, self)._initialize()
         self._addArrayProperty('levelsRange', Array())
         self._addNumberProperty('guaranteedFrequency', 0)
         self._addArrayProperty('guaranteedBoxNameKeys', Array())
-        self._addBoolProperty('vehiclesOnly', True)
-        self._addBoolProperty('multipleStages', False)

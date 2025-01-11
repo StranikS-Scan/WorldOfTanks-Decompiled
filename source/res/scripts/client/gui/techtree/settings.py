@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/techtree/settings.py
 from collections import namedtuple, defaultdict
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
+from gui.impl.gen.view_models.views.lobby.techtree.extended_node_state_flags import ExtendedNodeStateFlags
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
@@ -50,128 +51,132 @@ class NODE_STATE(object):
 
     @classmethod
     def isNext2Unlock(cls, state):
-        return state & NODE_STATE_FLAGS.NEXT_2_UNLOCK > 0
+        return state & NodeStateFlags.NEXT_2_UNLOCK > 0
 
     @classmethod
     def isAvailable2Unlock(cls, state):
-        return not state & NODE_STATE_FLAGS.UNLOCKED and state & NODE_STATE_FLAGS.NEXT_2_UNLOCK and state & NODE_STATE_FLAGS.ENOUGH_XP
+        return not state & NodeStateFlags.UNLOCKED and state & NodeStateFlags.NEXT_2_UNLOCK and state & NodeStateFlags.ENOUGH_XP
 
     @classmethod
     def isUnlocked(cls, state):
-        return state & NODE_STATE_FLAGS.UNLOCKED > 0
+        return state & NodeStateFlags.UNLOCKED > 0
 
     @classmethod
     def inInventory(cls, state):
-        return state & NODE_STATE_FLAGS.IN_INVENTORY > 0
+        return state & NodeStateFlags.IN_INVENTORY > 0
 
     @classmethod
     def isVehicleCanBeChanged(cls, state):
-        return state & NODE_STATE_FLAGS.VEHICLE_CAN_BE_CHANGED > 0
+        return state & NodeStateFlags.VEHICLE_CAN_BE_CHANGED > 0
 
     @classmethod
     def isInstalled(cls, state):
-        return state & NODE_STATE_FLAGS.INSTALLED > 0
+        return state & NodeStateFlags.INSTALLED > 0
 
     @classmethod
     def isAvailable2Buy(cls, state):
-        return (not state & NODE_STATE_FLAGS.IN_INVENTORY or state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) and state & NODE_STATE_FLAGS.UNLOCKED and state & NODE_STATE_FLAGS.ENOUGH_MONEY
+        return (not state & NodeStateFlags.IN_INVENTORY or state & NodeStateFlags.VEHICLE_IN_RENT) and state & NodeStateFlags.UNLOCKED and state & NodeStateFlags.ENOUGH_MONEY
 
     @classmethod
     def isAvailable2Sell(cls, state):
-        return state & NODE_STATE_FLAGS.CAN_SELL > 0
+        return state & NodeStateFlags.CAN_SELL > 0
 
     @classmethod
     def isWasInBattle(cls, state):
-        return state & NODE_STATE_FLAGS.WAS_IN_BATTLE > 0
+        return state & NodeStateFlags.WAS_IN_BATTLE > 0
 
     @classmethod
     def isPremium(cls, state):
-        return state & NODE_STATE_FLAGS.PREMIUM > 0
+        return state & NodeStateFlags.PREMIUM > 0
 
     @classmethod
     def isCollectible(cls, state):
-        return state & NODE_STATE_FLAGS.COLLECTIBLE > 0
+        return state & NodeStateFlags.COLLECTIBLE > 0
 
     @classmethod
     def isActionVehicle(cls, state):
-        return state & NODE_STATE_FLAGS.ACTION > 0
+        return state & NodeStateFlags.ACTION > 0
 
     @classmethod
     def isCollectibleActionVehicle(cls, state):
-        return state & NODE_STATE_FLAGS.COLLECTIBLE_ACTION > 0
+        return state & NodeStateFlags.COLLECTIBLE_ACTION > 0
 
     @classmethod
     def isBuyForCredits(cls, state):
-        return state & NODE_STATE_FLAGS.UNLOCKED and not state & NODE_STATE_FLAGS.IN_INVENTORY and not state & NODE_STATE_FLAGS.PREMIUM or state & NODE_STATE_FLAGS.RESTORE_AVAILABLE
+        return state & NodeStateFlags.UNLOCKED and not state & NodeStateFlags.IN_INVENTORY and not state & NodeStateFlags.PREMIUM or state & NodeStateFlags.RESTORE_AVAILABLE
 
     @classmethod
     def isBuyForGold(cls, state):
-        return state & NODE_STATE_FLAGS.UNLOCKED and (not state & NODE_STATE_FLAGS.IN_INVENTORY or state & NODE_STATE_FLAGS.VEHICLE_IN_RENT) and state & NODE_STATE_FLAGS.PREMIUM
+        return state & NodeStateFlags.UNLOCKED and (not state & NodeStateFlags.IN_INVENTORY or state & NodeStateFlags.VEHICLE_IN_RENT) and state & NodeStateFlags.PREMIUM
 
     @classmethod
     def setNext2Unlock(cls, state):
-        state &= ~NODE_STATE_FLAGS.LOCKED
-        if state & NODE_STATE_FLAGS.UNLOCKED == 0:
-            state |= NODE_STATE_FLAGS.NEXT_2_UNLOCK
+        state &= ~NodeStateFlags.LOCKED
+        if state & NodeStateFlags.UNLOCKED == 0:
+            state |= NodeStateFlags.NEXT_2_UNLOCK
         return state
 
     @classmethod
     def change2Unlocked(cls, state):
-        if state & NODE_STATE_FLAGS.UNLOCKED > 0:
+        if state & NodeStateFlags.UNLOCKED > 0:
             return -1
-        if state & NODE_STATE_FLAGS.LOCKED > 0:
-            state ^= NODE_STATE_FLAGS.LOCKED
-        if state & NODE_STATE_FLAGS.NEXT_2_UNLOCK > 0:
-            state ^= NODE_STATE_FLAGS.NEXT_2_UNLOCK
-            if state & NODE_STATE_FLAGS.ENOUGH_XP > 0:
-                state ^= NODE_STATE_FLAGS.ENOUGH_XP
-        state |= NODE_STATE_FLAGS.UNLOCKED
+        if state & NodeStateFlags.LOCKED > 0:
+            state ^= NodeStateFlags.LOCKED
+        if state & NodeStateFlags.NEXT_2_UNLOCK > 0:
+            state ^= NodeStateFlags.NEXT_2_UNLOCK
+            if state & NodeStateFlags.ENOUGH_XP > 0:
+                state ^= NodeStateFlags.ENOUGH_XP
+        state |= NodeStateFlags.UNLOCKED
         return state
 
     @classmethod
     def changeLast2Buy(cls, state, isLast2Buy):
         if isLast2Buy:
-            state = cls.addIfNot(state, NODE_STATE_FLAGS.LAST_2_BUY)
+            state = cls.addIfNot(state, NodeStateFlags.LAST_2_BUY)
         else:
-            state = cls.removeIfHas(state, NODE_STATE_FLAGS.LAST_2_BUY)
+            state = cls.removeIfHas(state, NodeStateFlags.LAST_2_BUY)
         return state
 
     @classmethod
     def isRentalOver(cls, state):
-        return state & NODE_STATE_FLAGS.VEHICLE_RENTAL_IS_OVER
+        return state & NodeStateFlags.VEHICLE_RENTAL_IS_OVER
 
     @classmethod
     def isRestoreAvailable(cls, state):
-        return state & NODE_STATE_FLAGS.RESTORE_AVAILABLE
+        return state & NodeStateFlags.RESTORE_AVAILABLE
 
     @classmethod
     def isRentAvailable(cls, state):
-        return state & NODE_STATE_FLAGS.RENT_AVAILABLE
+        return state & NodeStateFlags.RENT_AVAILABLE
 
     @classmethod
     def canTradeIn(cls, state):
-        return state & NODE_STATE_FLAGS.CAN_TRADE_IN
+        return state & NodeStateFlags.CAN_TRADE_IN
 
     @classmethod
     def canTradeOff(cls, state):
-        return state & NODE_STATE_FLAGS.CAN_TRADE_OFF
+        return state & NodeStateFlags.CAN_TRADE_OFF
 
     @classmethod
     def isAnnouncement(cls, state):
-        return state & NODE_STATE_FLAGS.ANNOUNCEMENT
+        return state & NodeStateFlags.ANNOUNCEMENT
 
     @classmethod
     def hasBlueprints(cls, state):
-        return state & NODE_STATE_FLAGS.BLUEPRINT
+        return state & NodeStateFlags.BLUEPRINT
 
     @classmethod
     def isEarlyAccess(cls, state):
-        return state & NODE_STATE_FLAGS.EARLY_ACCESS
+        return state & NodeStateFlags.EARLY_ACCESS
+
+    @classmethod
+    def isLockedByParagons(cls, state):
+        return state & ExtendedNodeStateFlags.LOCKED_BY_PARAGONS
 
     @classmethod
     def printStates(cls, state):
         states = []
-        for k, v in NODE_STATE_FLAGS.__dict__.iteritems():
+        for k, v in NodeStateFlags.__dict__.iteritems():
             if not k.startswith('_') and state & v:
                 states.append(k)
 

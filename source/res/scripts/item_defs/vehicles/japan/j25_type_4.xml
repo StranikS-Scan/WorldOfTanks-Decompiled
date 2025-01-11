@@ -13,7 +13,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	25	</forward>
-    <backward>	10	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.001	</moving>
@@ -3049,7 +3049,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	16.3	</reloadTime>
+          <reloadTime>	13.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.0	</afterShot>
@@ -3125,7 +3125,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_127mm_50_3rd_Year_Type>
-        <_150mm_45_41st_Year_Type>	shared	  <maxAmmo>	40	</maxAmmo>
+        <_150mm_45_41st_Year_Type>	shared	  <maxAmmo>	50	</maxAmmo>
           <unlocks>
             <gun>	_140mm_50_3rd_Year_Type	  <cost>	64600	</cost>
             </gun>
@@ -3137,17 +3137,17 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 6.5 0.138889 6.5 0.166667 10 0.333333 10 0.444444 1 0.555556 1 0.666667 10 0.833333 10 0.861111 6.5 1 6.5	</maxPitch>
+            <maxPitch>	0 8 0.138889 8 0.166667 10 0.333333 10 0.444444 1 0.555556 1 0.666667 10 0.833333 10 0.861111 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.49	</shotDispersionRadius>
-          <reloadTime>	22	</reloadTime>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	20	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.24	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	3.0	</aimingTime>
           <models>
             <undamaged>	vehicles/japan/J25_Type_4/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/japan/J25_Type_4/crash/lod0/Gun_03.model	</destroyed>

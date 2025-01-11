@@ -2,54 +2,16 @@
 # Embedded file name: scripts/client/gui/impl/lobby/pm_announce/tooltips/personal_missions_old_campaign_tooltip_view.py
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.gen.view_models.views.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_view_model import PersonalMissionsOldCampaignTooltipViewModel, MissionStatus
-from gui.impl.gen.view_models.views.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_rewards_model import PersonalMissionsOldCampaignTooltipRewardsModel, RewardStatus
+from gui.impl.gen.view_models.views.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_rewards_model import PersonalMissionsOldCampaignTooltipRewardsModel
 from gui.impl.gen.view_models.views.lobby.pm_announce.tooltips.personal_missions_old_campaign_tooltip_operations_model import PersonalMissionsOldCampaignTooltipOperationsModel
+from gui.impl.lobby.pm_announce.tooltips import getRewardStatusForOperation
 from gui.impl.pub import ViewImpl
-operations = [{'name': 'Stug|V',
-  'completed': 35,
-  'all': 75},
- {'name': 'T28Concept',
-  'completed': 25,
-  'all': 25},
- {'name': 'T55A',
-  'completed': 15,
-  'all': 35},
- {'name': 'Object 260',
-  'completed': 0,
-  'all': 25},
- {'name': 'Excalibur',
-  'completed': 25,
-  'all': 25},
- {'name': 'Chimera',
-  'completed': 15,
-  'all': 35},
- {'name': 'Object 279(e)',
-  'completed': 0,
-  'all': 25}]
-rewards = [{'name': 'Stug|V',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.germany_G104_Stug_IV',
-  'status': RewardStatus.COMPLETED},
- {'name': 'T28Concept',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.usa_A102_T28_concept',
-  'status': RewardStatus.AVAILABLE},
- {'name': 'T55A',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.germany_G105_T_55_NVA_DDR',
-  'status': RewardStatus.LOCKED},
- {'name': 'Object 260',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.ussr_R110_Object_260',
-  'status': RewardStatus.LOCKED},
- {'name': 'Excalibur',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.uk_GB96_Excalibur',
-  'status': RewardStatus.LOCKED},
- {'name': 'Chimera',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.uk_GB97_Chimera',
-  'status': RewardStatus.LOCKED},
- {'name': 'Object 279(e)',
-  'icon': 'R.images.gui.maps.icons.quests.bonuses.big.ussr_R157_Object_279R',
-  'status': RewardStatus.LOCKED}]
+from helpers import dependency
+from skeletons.gui.server_events import IEventsCache
 
 class PersonalMissionsOldCampaignTooltipView(ViewImpl):
     __slots__ = ()
+    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, layoutID):
         settings = ViewSettings(layoutID)
@@ -67,22 +29,33 @@ class PersonalMissionsOldCampaignTooltipView(ViewImpl):
             self.__updateModel(model)
 
     def __updateModel(self, model):
-        model.setMissionStatus(MissionStatus.ACTIVE)
+        operations = self.__eventsCache.getPersonalMissions().getOldOperations()
         array = model.getOperations()
-        for item in operations:
+        rewardsArray = model.getRewards()
+        isFullCompleted = all((operation.isFullCompleted() for operation in operations.itervalues()))
+        isCompleted = all((operation.isCompleted() for operation in operations.itervalues()))
+        for operation in operations.itervalues():
+            questCount = len(operation.getQuestsByFilter(lambda q: q.isFinal())) if isCompleted else operation.getQuestsCount()
+            completedQuestsCount = len(operation.getQuestsByFilter(lambda q: q.isFinal() and q.isFullCompleted()) if isCompleted else operation.getCompletedQuests())
             nextModel = PersonalMissionsOldCampaignTooltipOperationsModel()
-            nextModel.setName(item['name'])
-            nextModel.setCompleted(item['completed'])
-            nextModel.setAll(item['all'])
+            nextModel.setName(operation.getShortUserName())
+            nextModel.setCompleted(completedQuestsCount)
+            nextModel.setAll(questCount)
             array.addViewModel(nextModel)
+            vehicle = operation.getVehicleBonus()
+            rewardModel = PersonalMissionsOldCampaignTooltipRewardsModel()
+            rewardModel.setName(vehicle.userName)
+            rewardModel.setIcon(vehicle.iconBonus)
+            rewardModel.setStatus(getRewardStatusForOperation(operation))
+            rewardsArray.addViewModel(rewardModel)
 
         array.invalidate()
-        array = model.getRewards()
-        for item in rewards:
-            nextModel = PersonalMissionsOldCampaignTooltipRewardsModel()
-            nextModel.setName(item['name'])
-            nextModel.setIcon(item['icon'])
-            nextModel.setStatus(item['status'])
-            array.addViewModel(nextModel)
-
-        array.invalidate()
+        if isCompleted and isFullCompleted:
+            model.setMissionStatus(MissionStatus.COMPLETEDPERFECT)
+            rewardsArray.clear()
+        elif isCompleted:
+            model.setMissionStatus(MissionStatus.COMPLETED)
+            rewardsArray.clear()
+        else:
+            model.setMissionStatus(MissionStatus.ACTIVE)
+            rewardsArray.invalidate()

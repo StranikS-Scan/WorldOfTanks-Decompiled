@@ -124,16 +124,9 @@ def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):
     return firstShellReload * factor if ignoreRespawn else firstShellReload * factor * respawnReloadFactor
 
 
-def getReloadTimeFactor(factors, vehMiscAttrs, gunTags, isReloadFlag):
-    if gunTags is None:
-        return 1.0
-    else:
-        return max(factors['gun/reloadTime'], 0.0) * vehMiscAttrs['gunReloadTimeFactor'] if ('lockedReloadTime' in gunTags) ^ isReloadFlag else 1.0
-
-
 def getReloadTime(vehicleDescr, factors):
-    gun = vehicleDescr.gun
-    return gun.reloadTime * getReloadTimeFactor(factors, vehicleDescr.miscAttrs, gun.tags, True)
+    reloadTimeFactor = vehicleDescr.miscAttrs['gunReloadTimeFactor'] * factors['gun/reloadTime']
+    return vehicleDescr.gun.reloadTime * max(reloadTimeFactor, 0.0)
 
 
 def ceilByMod(number, mod):
@@ -152,6 +145,20 @@ def getClipReloadTime(vehicleDescr, factors):
             return (vehicleDescr.gun.reloadTime * factor,)
     else:
         return (0.0,)
+
+
+def getClientAutoShootFlameOverheatCoolingTime(gunDescr):
+    temperature = gunDescr.temperature
+    coolingTime = 0.0
+    prevMaxTemperature = 0
+    for state in temperature.states:
+        if state.isOverheated:
+            coolingTime += float(state.temperature - prevMaxTemperature) / state.coolingOverheatPerSec
+        else:
+            coolingTime = 0.0
+        prevMaxTemperature = state.temperature
+
+    return coolingTime
 
 
 def getDualGunReloadTime(vehicleDescr, factors):

@@ -8,7 +8,6 @@ from GenericComponents import VSEComponent
 from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
 from cgf_script.component_meta_class import registerComponent
 from constants import IS_CLIENT, CollisionFlags
-from shared_utils import first
 from vehicle_systems.tankStructure import ColliderTypes
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
@@ -31,24 +30,8 @@ class IsHoveredComponent(object):
     domain = CGF.DomainOption.DomainClient
 
 
-@registerComponent
-class IsExternalHoveredComponent(object):
-    domain = CGF.DomainOption.DomainClient
-
-
 class HoverManager(CGF.ComponentManager):
     _hangarSpace = dependency.descriptor(IHangarSpace)
-
-    def __init__(self, *args):
-        super(HoverManager, self).__init__(*args)
-        self.__externalHovered = set()
-        self.__currentExternalHoverId = None
-        return
-
-    def deactivate(self):
-        self.__externalHovered.clear()
-        self.__currentExternalHoverId = None
-        return
 
     @onAddedQuery(VSEComponent, IsHoveredComponent)
     def onIsHoveredAdded(self, vseComponent, *args):
@@ -63,30 +46,11 @@ class HoverManager(CGF.ComponentManager):
         if gameObject.findComponentByType(IsHoveredComponent):
             gameObject.removeComponentByType(IsHoveredComponent)
 
-    @onAddedQuery(CGF.GameObject, IsExternalHoveredComponent)
-    def onIsExternalHoveredAdded(self, go, *args):
-        self.__externalHovered.add(go.id)
-        if self.__currentExternalHoverId is None:
-            self.__currentExternalHoverId = go.id
-        return
-
-    @onRemovedQuery(CGF.GameObject, IsExternalHoveredComponent)
-    def onIsExternalHoveredRemoved(self, go, *args):
-        self.__externalHovered.discard(go.id)
-        if self.__currentExternalHoverId == go.id:
-            self.__currentExternalHoverId = None
-        if self.__externalHovered and self.__currentExternalHoverId is None:
-            self.__currentExternalHoverId = first(self.__externalHovered)
-        return
-
     @tickGroup(groupName='Simulation')
     def tick(self):
         gameObjectID = None
-        if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled:
-            if self.__currentExternalHoverId is not None:
-                gameObjectID = self.__currentExternalHoverId
-            elif self._hangarSpace.isCursorOver3DScene:
-                gameObjectID = self.__getGameObjectUnderCursor()
+        if GUI.mcursor().inWindow and GUI.mcursor().inFocus and self._hangarSpace.isSelectionEnabled and self._hangarSpace.isCursorOver3DScene:
+            gameObjectID = self.__getGameObjectUnderCursor()
         hoveredGameObject = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent))
         for gameObject, _ in hoveredGameObject:
             if gameObject.id != gameObjectID:

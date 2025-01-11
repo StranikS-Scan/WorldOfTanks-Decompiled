@@ -22,6 +22,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
 MULTI_TRACK_CHASSIS = 'vehicleMultiTrackChassis'
+AUTO_SHOOT_FLAME_GUN = 'vehicleAutoShootFlameGun'
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -163,6 +164,9 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
         if itemId == FITTING_TYPES.VEHICLE_CHASSIS and item.isMultiTrack():
             movieKey = MULTI_TRACK_CHASSIS
             descrKey = MULTI_TRACK_CHASSIS
+        if itemId == FITTING_TYPES.VEHICLE_GUN and item.isAutoShootFlameGun():
+            movieKey = AUTO_SHOOT_FLAME_GUN
+            descrKey = AUTO_SHOOT_FLAME_GUN
         if movieKey not in MODULE_MOVIES:
             movieModule = None
         else:
@@ -269,6 +273,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'rammer': 'equipmentMediumCaliberTankGunRammer',
  'vehicleGun': 'moduleGun',
  'vehicleDualGun': 'moduleDualGun',
+ AUTO_SHOOT_FLAME_GUN: 'moduleGun',
  'vehicleRadio': 'moduleRadio',
  'vehicleEngine': 'moduleEngine',
  'vehicleChassis': 'moduleSuspension',

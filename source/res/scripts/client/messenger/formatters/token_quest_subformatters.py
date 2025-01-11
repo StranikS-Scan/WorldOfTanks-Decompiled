@@ -5,6 +5,7 @@ import re
 from itertools import chain
 import typing
 from adisp import adisp_async, adisp_process
+from personal_missions_constants import PM3_PREFIX_NAME
 from shared_utils import findFirst, first
 import constants
 import personal_missions
@@ -21,6 +22,7 @@ from gui.impl.lobby.comp7 import comp7_quest_helpers, comp7_shared, comp7_i18n_h
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
+from gui.paragons.paragons_constants import ParagonsSystemMessages
 from gui.server_events.bonuses import getMergedBonusesFromDicts, getBonuses
 from gui.server_events.events_helpers import getIdxFromQuestID
 from gui.server_events.recruit_helper import getSourceIdFromQuest
@@ -33,8 +35,9 @@ from messenger.formatters import TimeFormatter
 from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
+from paragons_common import isParagonsQuestID
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController
+from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -394,8 +397,14 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
 
                 if campaigns:
                     templateName = self.__PERSONAL_MISSIONS_CUSTOM_TEMPLATE
-                    campaignNameKey = 'both' if len(campaigns) == 2 else 'c_{}'.format(first(campaigns))
-                    templateParams['text'] = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.personalMissions.dyn(campaignNameKey)())
+                    messengerRes = R.strings.messenger
+                    if len(campaigns) > 1:
+                        campaignTitlesFmt = ', '.join([ backport.text(R.strings.personal_missions.campaignTitle.dyn('c_{}'.format(campaignKey))()) for campaignKey in campaigns ])
+                        campaignText = backport.text(messengerRes.serviceChannelMessages.battleResults.personalMissions.dyn('multiple')(), text=campaignTitlesFmt)
+                    else:
+                        campaignNameKey = 'c_{}'.format(first(campaigns))
+                        campaignText = backport.text(messengerRes.serviceChannelMessages.battleResults.personalMissions.dyn(campaignNameKey)())
+                    templateParams['text'] = campaignText
                 settings = self._getGuiSettings(message, templateName)
                 formatted = g_settings.msgTemplates.format(templateName, templateParams)
                 messageDataList.append(MessageData(formatted, settings))
@@ -420,7 +429,7 @@ class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
         for qID in pmQuestsIDs:
             pmType = personal_missions.g_cache.questByUniqueQuestID(qID)
             quest = self.__eventsCache.getPersonalMissions().getAllQuests().get(pmType.id)
-            if quest and (qID.endswith('_main') or qID.endswith('_main_award_list')):
+            if quest and not qID.startswith(PM3_PREFIX_NAME) and (qID.endswith('_main') or qID.endswith('_main_award_list')):
                 tmBonus = quest.getTankmanBonus()
                 if tmBonus.tankman:
                     tankmenAward = True
@@ -971,3 +980,59 @@ class CrewPerksFormatter(AsyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.startswith(cls.__QUEST_PREFIX)
+
+
+class BobTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
+    __TEMPLATE_MESSAGE = 'bobRewardMessage'
+    __bobController = dependency.descriptor(IBobController)
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        messageDataList = []
+        if isSynced:
+            data = message.data or {}
+            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
+            for qID in completedQuestIDs:
+                messageData = self.__buildMessage(qID, message)
+                if messageData is not None:
+                    messageDataList.append(messageData)
+
+        if messageDataList:
+            callback(messageDataList)
+        callback([MessageData(None, None)])
+        return
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return cls.__bobController.personalRewardQuestName == questID or questID.startswith(cls.__bobController.teamRewardQuestPrefix) if cls.__bobController.personalRewardQuestName else False
+
+    def __buildMessage(self, questID, message):
+        data = message.data or {}
+        questData = {}
+        rewards = data.get('detailedRewards', {}).get(questID, {})
+        questData.update(rewards)
+        fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
+        if fmt is not None:
+            templateParams = {'achieves': fmt}
+            settings = self._getGuiSettings(message, self.__TEMPLATE_MESSAGE)
+            formatted = g_settings.msgTemplates.format(self.__TEMPLATE_MESSAGE, templateParams)
+            return MessageData(formatted, settings)
+        else:
+            return
+
+
+class ParagonsTokenQuestsSubformatter(SyncTokenQuestsSubFormatter):
+
+    def format(self, message, *args):
+        from notification.decorators import ParagonsAchievementDecorator
+        if not message:
+            return []
+        msgType = ParagonsSystemMessages.FIRST_MAIN_REWARD_ACHIEVED
+        formatted = g_settings.msgTemplates.format(ParagonsSystemMessages.FIRST_MAIN_REWARD_ACHIEVED, ctx={})
+        return [MessageData(formatted, self._getGuiSettings(message, messageType=msgType, isSoundable=True, decorator=ParagonsAchievementDecorator))]
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isParagonsQuestID(questID)

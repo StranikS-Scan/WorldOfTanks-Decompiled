@@ -1,25 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/cgf_components/marker_component.py
-import logging
-from collections import defaultdict
-import CGF
-import GUI
-import GenericComponents
-import Math
 import typing
-from GenericComponents import TransformComponent, EntityGOSync
+import logging
+import CGF
 import Event
+from GenericComponents import TransformComponent, EntityGOSync
 import math_utils
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from cache import cached_property
 from cgf_script.bonus_caps_rules import bonusCapsManager
 from cgf_script.component_meta_class import ComponentProperty, CGFMetaTypes, registerComponent
 from cgf_script.managers_registrator import onAddedQuery, onRemovedQuery, autoregister
-from constants import IS_CLIENT, IS_CGF_DUMP
-from frameworks.wulf import ViewStatus
-from gui.impl.gen import R
 from helpers import dependency
-from skeletons.gui.impl import IGuiLoader
+from constants import IS_CLIENT, IS_CGF_DUMP
+import Math
 if IS_CLIENT:
     from skeletons.gui.battle_session import IBattleSessionProvider
     from CurrentVehicle import g_currentPreviewVehicle
@@ -181,91 +175,3 @@ class CombatMarkerManager(CGF.ComponentManager):
     @onRemovedQuery(CombatMarker)
     def onRemovedMarker(self, combatMarker):
         self.__guiSessionProvider.shared.areaMarker.removeMarker(combatMarker.markerID)
-
-
-@registerComponent
-class LobbyGameFaceMarker(object):
-    domain = CGF.DomainOption.DomainClient
-    layoutID = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Parent layoutID')
-    markerName = ComponentProperty(type=CGFMetaTypes.STRING, editorName='Marker name')
-
-    def __init__(self):
-        super(LobbyGameFaceMarker, self).__init__()
-        self.viewLayoutID = _parseLayoutPath(self.layoutID)
-
-
-def _parseLayoutPath(path):
-    res = R.views
-    for p in path.split('.')[2:]:
-        res = res.dyn(p)
-
-    if not res.exists():
-        _logger.error('Wrong view path %s', path)
-        return R.invalid()
-    return res()
-
-
-class LobbyGFMarkersManager(CGF.ComponentManager):
-    __guiLoader = dependency.descriptor(IGuiLoader)
-
-    def __init__(self, *args):
-        self.markerCtrl = GUI.WGMarkerPositionController()
-        super(LobbyGFMarkersManager, self).__init__(*args)
-        self.__viewMarkers = defaultdict(dict)
-
-    def activate(self):
-        self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
-
-    def deactivate(self):
-        self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
-        self.__viewMarkers.clear()
-        self.markerCtrl.clear()
-
-    @onAddedQuery(CGF.GameObject, LobbyGameFaceMarker, GenericComponents.TransformComponent)
-    def onMarkerAdded(self, go, markerComponent, transformComponent):
-        _logger.debug('onMarkerAdded %s %s', markerComponent.viewLayoutID, markerComponent.markerName)
-        if markerComponent.viewLayoutID:
-            self.__viewMarkers[markerComponent.viewLayoutID][go.id] = (markerComponent, transformComponent)
-            for view in self.__guiLoader.windowsManager.getViewsByLayout(markerComponent.viewLayoutID):
-                if view.viewStatus == ViewStatus.LOADED:
-                    self.__loadMarker(markerComponent, transformComponent, view)
-
-    @onRemovedQuery(CGF.GameObject, LobbyGameFaceMarker)
-    def onMarkerRemoved(self, go, markerComponent):
-        _logger.debug('onMarkerRemoved %s %s', markerComponent.viewLayoutID, markerComponent.markerName)
-        if markerComponent.viewLayoutID in self.__viewMarkers:
-            self.__viewMarkers[markerComponent.viewLayoutID].pop(go.id)
-            for view in self.__guiLoader.windowsManager.getViewsByLayout(markerComponent.viewLayoutID):
-                if view.viewStatus == ViewStatus.LOADED:
-                    self.__removeMarker(markerComponent, view)
-
-    def __onViewStatusChanged(self, uniqueID, newState):
-        if newState == ViewStatus.LOADING:
-            view = self.__guiLoader.windowsManager.getView(uniqueID)
-            markersComponent = self.__viewMarkers.get(view.layoutID)
-            if markersComponent:
-                for marker, trensform in markersComponent.itervalues():
-                    self.__loadMarker(marker, trensform, view)
-
-        elif newState == ViewStatus.DESTROYING:
-            view = self.__guiLoader.windowsManager.getView(uniqueID)
-            markersComponent = self.__viewMarkers.get(view.layoutID)
-            if markersComponent:
-                for marker, _ in markersComponent.itervalues():
-                    self.__removeMarker(marker, view)
-
-    def __loadMarker(self, markerComponent, transformComponent, view):
-        markerModel = self.__parseMarkerName(view, markerComponent.markerName)
-        self.markerCtrl.add(markerModel.proxy, transformComponent.worldTransform.translation)
-
-    def __removeMarker(self, markerComponent, view):
-        markerModel = self.__parseMarkerName(view, markerComponent.markerName)
-        self.markerCtrl.remove(markerModel.proxy)
-
-    @classmethod
-    def __parseMarkerName(cls, view, name):
-        res = view.viewModel
-        for p in name.split('.'):
-            res = getattr(res, p)
-
-        return res

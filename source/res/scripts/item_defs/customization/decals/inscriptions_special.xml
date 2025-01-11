@@ -4755,6 +4755,7 @@
     <name>	RushStoneWolf_Inscription_2024_MT	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
     <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
     <decal>
       <id>	31160	</id>
@@ -5143,5 +5144,40 @@
     </decal>
     <tags>	hiddenInUI styleOnly	</tags>
     <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattleBloggers_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31280	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_01_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_01_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31281	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_02_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_02_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31282	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_03_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_03_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31283	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_04_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_04_2025/description	</description>
+    </decal>
   </itemGroup>
 </inscriptions_special.xml>

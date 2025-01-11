@@ -21,7 +21,8 @@ _ENEMY_OFFSET_DISABLED_BY_GAMEPLAY = ('assault',
  'domination',
  'domination30x30',
  'epic',
- 'comp7')
+ 'comp7',
+ 'bob')
 
 def makeClientTeamBaseID(team, baseID):
     if baseID is None:

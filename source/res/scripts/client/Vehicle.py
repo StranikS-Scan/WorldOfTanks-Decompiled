@@ -202,6 +202,7 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
         self.typeDescriptor = None
         self.appearance = None
         self.onAppearanceReady = Event()
+        self.onUnderWaterSwitch = Event()
         self.isPlayerVehicle = False
         self.isStarted = False
         self.__isEnteringWorld = False
@@ -408,7 +409,9 @@ class Vehicle(BigWorld.Entity, BWEntitiyComponentTracker, BattleAbilitiesCompone
             firstHitDir = compMatrix.applyVector(firstHitDirLocal)
             physParams = effectsDescr['physicsParams']
             g_playerEvents.onProjectileExplosion(compMatrix.translation, firstHitDir, physParams['shellVelocity'], physParams['shellMass'], physParams['splashRadius'], physParams['splashStrength'])
-            self.appearance.receiveShotImpulse(firstHitDir, effectsDescr['targetImpulse'])
+            targetImpulse = effectsDescr['targetImpulse']
+            if targetImpulse > 0.0:
+                self.appearance.receiveShotImpulse(firstHitDir, targetImpulse)
             player = BigWorld.player()
             player.inputHandler.onVehicleShaken(self, compMatrix.translation, firstHitDir, effectsDescr['caliber'], effectsDescr['shellType'], ShakeReason.HIT if hasDamageHit else ShakeReason.HIT_NO_DAMAGE)
             showFriendlyFlashBang = False

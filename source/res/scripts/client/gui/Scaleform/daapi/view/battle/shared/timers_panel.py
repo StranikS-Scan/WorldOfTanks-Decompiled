@@ -43,7 +43,8 @@ _TIMERS_PRIORITY = {(_TIMER_STATES.OVERTURNED, _TIMER_STATES.CRITICAL_VIEW): 1,
  (_TIMER_STATES.FIRE, _TIMER_STATES.WARNING_VIEW): 7,
  (_TIMER_STATES.INSPIRE_SOURCE, _TIMER_STATES.WARNING_VIEW): 8,
  (_TIMER_STATES.INSPIRE_INACTIVATION_SOURCE, _TIMER_STATES.WARNING_VIEW): 8,
- (_TIMER_STATES.ABILITY, _TIMER_STATES.WARNING_VIEW): 8}
+ (_TIMER_STATES.ABILITY, _TIMER_STATES.WARNING_VIEW): 8,
+ (_TIMER_STATES.THERMAL_VISION_WARNING, _TIMER_STATES.WARNING_VIEW): 9}
 _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.STUN_FLAME,
  _TIMER_STATES.CAPTURE_BLOCK,
@@ -57,7 +58,8 @@ _SECONDARY_TIMERS = (_TIMER_STATES.STUN,
  _TIMER_STATES.BERSERKER,
  _TIMER_STATES.REPAIRING,
  _TIMER_STATES.REPAIRING_CD,
- _TIMER_STATES.ABILITY)
+ _TIMER_STATES.ABILITY,
+ _TIMER_STATES.THERMAL_VISION_WARNING)
 _MAX_DISPLAYED_SECONDARY_STATUS_TIMERS = 2
 _VERTICAL_SHIFT_WITH_AUTOLOADER_IN_SNIPER_MODE = 42
 
@@ -440,7 +442,10 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
 
     def _generateSecondaryTimersData(self):
         link = BATTLE_NOTIFICATIONS_TIMER_LINKAGES.SECONDARY_TIMER_UI
-        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR), self._getNotificationTimerData(_TIMER_STATES.ABILITY, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.ABILITY_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN, noiseVisible=False)]
+        data = [self._getNotificationTimerData(_TIMER_STATES.STUN, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_ICON, link, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR),
+         self._getNotificationTimerData(_TIMER_STATES.STUN_FLAME, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.STUN_FLAME_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR),
+         self._getNotificationTimerData(_TIMER_STATES.ABILITY, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.ABILITY_ICON, link, BATTLE_NOTIFICATIONS_TIMER_COLORS.GREEN, noiseVisible=False),
+         self._getNotificationTimerData(_TIMER_STATES.THERMAL_VISION_WARNING, BATTLE_NOTIFICATIONS_TIMER_LINKAGES.THERMAL_VISION_WARNING, link, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.YELLOW)]
         return data
 
     def _getNotificationTimerData(self, typeId, iconName, linkage, color=BATTLE_NOTIFICATIONS_TIMER_COLORS.ORANGE, noiseVisible=False, pulseVisible=False, text='', countdownVisible=True, isCanBeMainType=False, priority=10000, iconOffsetY=0, description=''):
@@ -742,6 +747,8 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self.__hideAll()
         elif state == VEHICLE_VIEW_STATE.ABILITY:
             self.__showAbilityTimer(value)
+        elif state == VEHICLE_VIEW_STATE.THERMAL_VISION_WARNING:
+            self.__showThermalVisionTimer(value)
 
     def __onCameraChanged(self, ctrlMode, vehicleID=None):
         if ctrlMode == 'video':
@@ -753,3 +760,10 @@ class TimersPanel(TimersPanelMeta, MethodsRules):
             self._hideTimer(_TIMER_STATES.ABILITY)
         else:
             self._showTimer(_TIMER_STATES.ABILITY, value.get('duration'), _TIMER_STATES.WARNING_VIEW, value.get('endTime'))
+
+    def __showThermalVisionTimer(self, value):
+        startTime, duration = value
+        if startTime <= 0:
+            self._hideTimer(_TIMER_STATES.THERMAL_VISION_WARNING)
+        else:
+            self._showTimer(_TIMER_STATES.THERMAL_VISION_WARNING, duration, _TIMER_STATES.WARNING_VIEW, startTime + duration, startTime)

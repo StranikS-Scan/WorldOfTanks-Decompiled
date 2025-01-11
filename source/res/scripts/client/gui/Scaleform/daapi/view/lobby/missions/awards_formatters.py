@@ -13,7 +13,6 @@ from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-MERGED_BONUS_NAME = 'mergedBonus'
 _OPERATION_AWARDS_COUNT = 3
 DISPLAY_ALL_AWARDS = -1
 
@@ -26,7 +25,7 @@ def formatShortData(bonus, size):
 class CurtailingAwardsComposer(QuestsBonusComposer):
 
     def __init__(self, displayedAwardsCount, awardsFormatter=None):
-        self._displayedRewardsCount = int(displayedAwardsCount)
+        self._displayedRewardsCount = displayedAwardsCount
         super(CurtailingAwardsComposer, self).__init__(awardsFormatter)
 
     def getShortBonusesData(self, bonuses):
@@ -236,11 +235,6 @@ class BonusNameQuestsBonusComposer(PackRentVehiclesAwardComposer):
         packBonus['bonusName'] = bonus.bonusName
         return packBonus
 
-    def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
-        mergedBonus = super(BonusNameQuestsBonusComposer, self)._packMergedBonuses(mergedBonuses, size)
-        mergedBonus['bonusName'] = MERGED_BONUS_NAME
-        return mergedBonus
-
 
 class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
 
@@ -260,11 +254,6 @@ class LootBoxBonusComposer(BonusNameQuestsBonusComposer):
         if sortKey is not None:
             preformattedBonuses = sorted(preformattedBonuses, key=sortKey)
         return self._packBonuses(preformattedBonuses, size)
-
-    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
-        packBonus = super(LootBoxBonusComposer, self)._packBonus(bonus, size)
-        packBonus['newCount'] = bonus.newCount
-        return packBonus
 
 
 class NewStyleBonusComposer(LootBoxBonusComposer):

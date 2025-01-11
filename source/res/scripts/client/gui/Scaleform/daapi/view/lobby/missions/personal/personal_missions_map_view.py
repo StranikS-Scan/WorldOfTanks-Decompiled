@@ -61,10 +61,11 @@ class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavig
     def _populate(self):
         super(PersonalMissionsMapView, self)._populate()
         self.refresh()
+        self.__mapBranch = self.getBranch()
         WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_MISSION_BRANCH[self.getBranch()], SOUNDS.BRANCH_SELECTED)
 
     def _dispose(self):
-        WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_MISSION_BRANCH[self.getBranch()], SOUNDS.BRANCH_DEFAULT)
+        WWISE.WW_setRTCPGlobal(SOUNDS.RTCP_MISSION_BRANCH[self.__mapBranch], SOUNDS.BRANCH_DEFAULT)
         super(PersonalMissionsMapView, self)._dispose()
 
     def __getQuestsData(self, chainID, quests):

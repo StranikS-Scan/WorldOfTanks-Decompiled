@@ -1,0 +1,23 @@
+<ThermalVisionController.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <stateStatus>
+      <Type>	THERMAL_VISION_STATE_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </stateStatus>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <ClientMethods>
+    <onThermalObserved>
+      <Arg>	OBJECT_ID	</Arg>
+    </onThermalObserved>
+    <onThermalDisappear>
+      <Arg>	OBJECT_ID	</Arg>
+    </onThermalDisappear>
+  </ClientMethods>
+  <DefaultKeyName>	thermalVisionController	</DefaultKeyName>
+</ThermalVisionController.def>

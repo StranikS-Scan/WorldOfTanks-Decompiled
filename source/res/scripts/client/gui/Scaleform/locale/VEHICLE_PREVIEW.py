@@ -25,6 +25,7 @@ class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS = '#vehicle_preview:header/backBtn/descrLabel/battleMatters'
     HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERSMAINREWARD = '#vehicle_preview:header/backBtn/descrLabel/battleMattersMainReward'
     HEADER_BACKBTN_DESCRLABEL_COLLECTIONS = '#vehicle_preview:header/backBtn/descrLabel/collections'
+    HEADER_BACKBTN_DESCRLABEL_BOB = '#vehicle_preview:header/backBtn/descrLabel/bob'
     HEADER_TITLE = '#vehicle_preview:header/title'
     HEADER_CLOSEBTN_LABEL = '#vehicle_preview:header/closeBtn/label'
     HERO_HEADER_TITLE = '#vehicle_preview:hero/header/title'
@@ -33,6 +34,7 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_LABEL = '#vehicle_preview:buyingPanel/Label'
     BUYINGPANEL_ALERTLABEL = '#vehicle_preview:buyingPanel/alertLabel'
     BUYINGPANEL_UNIQUEVEHICLELABEL = '#vehicle_preview:buyingPanel/uniqueVehicleLabel'
+    BUYINGPANEL_PMOPERATIONVEHICLELABEL = '#vehicle_preview:buyingPanel/pmOperationVehicleLabel'
     BUYINGPANEL_AVAILABLEFORWOTPLUS = '#vehicle_preview:buyingPanel/availableForWotPlus'
     BUYINGPANEL_TRADEINLABEL = '#vehicle_preview:buyingPanel/tradeInLabel'
     BUYINGPANEL_OFFER_RENT_TITLE_FRONTLINE_ORDINAL = '#vehicle_preview:buyingPanel/offer/rent/title/frontline/ordinal'
@@ -67,14 +69,12 @@ class VEHICLE_PREVIEW(object):
     BUYINGPANEL_BUYBTN_LABEL_BUYITEMPACK = '#vehicle_preview:buyingPanel/buyBtn/label/buyItemPack'
     BUYINGPANEL_BUYBTN_LABEL_RENT = '#vehicle_preview:buyingPanel/buyBtn/label/rent'
     BUYINGPANEL_BUYBTN_LABEL_RESTORE = '#vehicle_preview:buyingPanel/buyBtn/label/restore'
-    BUYINGPANEL_BUYBTN_LABEL_RESTOREREQUESTED = '#vehicle_preview:buyingPanel/buyBtn/label/restoreRequested'
     BUYINGPANEL_BUYBTN_LABEL_RESEARCH = '#vehicle_preview:buyingPanel/buyBtn/label/research'
     BUYINGPANEL_BUYBTN_LABEL_OBTAIN = '#vehicle_preview:buyingPanel/buyBtn/label/obtain'
     BUYINGPANEL_BUYBTN_LABEL_SHOWADVENTCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/showAdventCalendar'
     BUYINGPANEL_BUYBTN_LABEL_OFFSPRING = '#vehicle_preview:buyingPanel/buyBtn/label/offspring'
     BUYINGPANEL_NOTRESEARCHEDVEHICLEWARNING = '#vehicle_preview:buyingPanel/notResearchedVehicleWarning'
     BUYINGPANEL_COLLECTIBLE_NOTRESEARCHEDVEHICLESWARNING = '#vehicle_preview:buyingPanel/collectible/notResearchedVehiclesWarning'
-    BUYINGPANEL_BUYBTN_LABEL_TOCALENDAR = '#vehicle_preview:buyingPanel/buyBtn/label/toCalendar'
     BUYINGPANEL_COMPENSATION = '#vehicle_preview:buyingPanel/compensation'
     BUYINGPANEL_COMPENSATION_BODY = '#vehicle_preview:buyingPanel/compensation/body'
     BUYINGPANEL_PRESENT = '#vehicle_preview:buyingPanel/present'
@@ -153,7 +153,8 @@ class VEHICLE_PREVIEW(object):
      HEADER_BACKBTN_DESCRLABEL_RESOURCEWELL,
      HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS,
      HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERSMAINREWARD,
-     HEADER_BACKBTN_DESCRLABEL_COLLECTIONS)
+     HEADER_BACKBTN_DESCRLABEL_COLLECTIONS,
+     HEADER_BACKBTN_DESCRLABEL_BOB)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)
     BUYINGPANEL_OFFER_RENT_LABEL_ENUM = (BUYINGPANEL_OFFER_RENT_LABEL_CYCLE, BUYINGPANEL_OFFER_RENT_LABEL_CYCLES, BUYINGPANEL_OFFER_RENT_LABEL_SEASON)
     BUYINGPANEL_OFFER_RENT_NAME_ENUM = (BUYINGPANEL_OFFER_RENT_NAME_CYCLE, BUYINGPANEL_OFFER_RENT_NAME_CYCLES, BUYINGPANEL_OFFER_RENT_NAME_SEASON)

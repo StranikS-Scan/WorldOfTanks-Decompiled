@@ -7332,6 +7332,7 @@
   </itemGroup>
   <itemGroup>
     <name>	RushStoneWolf_Emblem_2024_MT	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <decal>
@@ -7719,6 +7720,20 @@
       <type>	emblem	</type>
       <userString>	#vehicle_customization:RushIceBear_Emblem_15_2024_MT/name	</userString>
       <description>	#vehicle_customization:RushIceBear_Emblem_15_2024_MT/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattleBloggers_Emblem_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:emblem/cool	</userString>
+    <decal>
+      <id>	31284	</id>
+      <type>	emblem	</type>
+      <texture>	gui/maps/vehicles/decals/player_stickers/cool/BattleBloggers_Emblem_2025.dds	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Emblem_01_2025/description	</description>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -14584,6 +14599,7 @@
     <name>	RushStoneWolf_Inscription_2024_MT	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
     <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
     <decal>
       <id>	31160	</id>
@@ -14972,6 +14988,41 @@
     </decal>
     <tags>	hiddenInUI styleOnly	</tags>
     <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattleBloggers_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31280	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_01_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_01_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31281	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_02_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_02_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31282	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_03_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_03_2025/description	</description>
+    </decal>
+    <decal>
+      <id>	31283	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattleBloggers_Inscription_04_2025.dds	</texture>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattleBloggers_Inscription_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Inscription_04_2025/description	</description>
+    </decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/IGR	</userString>

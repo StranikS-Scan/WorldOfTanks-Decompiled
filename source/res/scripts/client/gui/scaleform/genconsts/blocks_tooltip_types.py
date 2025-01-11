@@ -63,6 +63,7 @@ class BLOCKS_TOOLTIP_TYPES(object):
     TOOLTIP_QUEST_REWARD_ITEM_BLOCK_LINKAGE = 'QuestRewardItemBlockUI'
     TOOLTIP_QUEST_PROGRESS_BLOCK_LINKAGE = 'QuestProgressBlockUI'
     TOOLTIP_QUEST_OR_CONDITION_BLOCK_LINKAGE = 'QuestOrConditionBlockUI'
+    TOOLTIP_BOB_TEAM_PROGRESS_BLOCK = 'BobTeamProgressBlockUI'
     ALIGN_LEFT = 'left'
     ALIGN_RIGHT = 'right'
     ALIGN_CENTER = 'center'

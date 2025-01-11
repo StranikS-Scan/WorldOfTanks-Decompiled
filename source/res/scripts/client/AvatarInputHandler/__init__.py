@@ -39,6 +39,7 @@ from AvatarInputHandler.commands.prebattle_setups_control import PrebattleSetups
 from AvatarInputHandler.commands.radar_control import RadarControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
 from AvatarInputHandler.commands.rocket_acceleration_control import RocketAccelerationControl
+from AvatarInputHandler.commands.thermal_vision_control import ThermalVisionControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpdateControl
 from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePanelControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
@@ -215,6 +216,7 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
     siegeModeSoundNotifications = ComponentDescriptor()
     steadyVehicleMatrixCalculator = ComponentDescriptor()
     rocketAccelerationControl = ComponentDescriptor()
+    thermalVisionControl = ComponentDescriptor()
     DEFAULT_AIH_WORLD_ID = -1
 
     def __init__(self, spaceID):
@@ -286,6 +288,10 @@ class AvatarInputHandler(CallbackDelayer, ScriptGameObject):
                 if not self.rocketAccelerationControl:
                     self.rocketAccelerationControl = RocketAccelerationControl()
                 self.__commands.append(self.rocketAccelerationControl)
+            if typeDescr.hasThermalVision:
+                if not self.thermalVisionControl:
+                    self.thermalVisionControl = ThermalVisionControl()
+                self.__commands.append(self.thermalVisionControl)
             if not (notifications and self.siegeModeSoundNotifications and notifications.getModeType() == self.siegeModeSoundNotifications.getModeType()):
                 modeChanged = False
                 if self.siegeModeSoundNotifications:

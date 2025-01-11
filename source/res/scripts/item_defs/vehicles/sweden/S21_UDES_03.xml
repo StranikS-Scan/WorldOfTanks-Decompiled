@@ -40,14 +40,14 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	20	</armor_1>
-      <armor_2>	30	</armor_2>
+      <armor_1>	35	</armor_1>
+      <armor_2>	40	</armor_2>
       <armor_3>	20	</armor_3>
-      <armor_4>	20	</armor_4>
+      <armor_4>	30	</armor_4>
       <armor_5>	20	</armor_5>
       <armor_6>	20	</armor_6>
       <armor_7>	15	</armor_7>
-      <armor_8>	10	</armor_8>
+      <armor_8>	20	</armor_8>
       <armor_9>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
       <armor_10>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11388	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -2556,9 +2556,9 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	30	</armor_1>
-            <armor_2>	20	</armor_2>
-            <armor_3>	20	</armor_3>
+            <armor_1>	40	</armor_1>
+            <armor_2>	35	</armor_2>
+            <armor_3>	35	</armor_3>
             <armor_4>	20	</armor_4>
             <gun>	30	</gun>
           </armor>
@@ -2568,7 +2568,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
-          <reloadTime>	7.1	</reloadTime>
+          <reloadTime>	6.4	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
@@ -2829,9 +2829,9 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	30	</armor_1>
-            <armor_2>	20	</armor_2>
-            <armor_3>	20	</armor_3>
+            <armor_1>	40	</armor_1>
+            <armor_2>	35	</armor_2>
+            <armor_3>	35	</armor_3>
             <armor_4>	20	</armor_4>
             <gun>	40	</gun>
           </armor>
@@ -2841,7 +2841,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 0 1 0	</maxPitch>
           </pitchLimits>
-          <reloadTime>	11.7	</reloadTime>
+          <reloadTime>	10.3	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>

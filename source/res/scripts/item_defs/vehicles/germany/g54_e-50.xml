@@ -3029,6 +3029,10 @@
     <Turret_1_E-50>
       <userString>	#germany_vehicles:Turret_1_E-50	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_E-50	  <cost>	23670	</cost>
+        </turret>
+      </unlocks>
       <level>	8	</level>
       <price>	31700	</price>
       <armor>
@@ -3090,8 +3094,6 @@
           </pitchLimits>
           <unlocks>
             <gun>	_75mm_KwK45_L100	  <cost>	16100	</cost>
-            </gun>
-            <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3188,7 +3190,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_KwK_L70>
-        <_75mm_KwK45_L100>	shared	  <maxAmmo>	80	</maxAmmo>
+        <_75mm_KwK45_L100>	shared	  <unlocks>
+            <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
+            </gun>
+          </unlocks>
+          <maxAmmo>	80	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -3307,8 +3313,6 @@
             <maxPitch>	0 8 0.405587 8 0.5 7 0.592032 8 1 8	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <turret>	Turret_2_E-50	  <cost>	23670	</cost>
-            </turret>
             <gun>	_88mm_KwK_L100	  <cost>	43500	</cost>
             </gun>
           </unlocks>

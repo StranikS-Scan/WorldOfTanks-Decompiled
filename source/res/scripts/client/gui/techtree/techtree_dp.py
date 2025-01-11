@@ -128,6 +128,7 @@ class TechTreeDataProvider(object):
         unlocked = unlocked or set()
         topLevel = self.getTopLevel(vTypeCD)
         isEarlyAccess = self.itemsCache.items.getItemByCD(vTypeCD).isEarlyAccess
+        isLockedByParagons = self.itemsCache.items.getItemByCD(vTypeCD).isLockedByParagons
         available = False
         topIDs = set()
         compare = []
@@ -137,7 +138,7 @@ class TechTreeDataProvider(object):
             idx, xpCost, required = nextLevel[vTypeCD]
             discount, newCost = self.getBlueprintDiscountData(vTypeCD, level, xpCost)
             isEarlyAccessUnlock = isEarlyAccess and vTypeCD not in self.earlyAccessController.getBlockedVehicles() and (parentCD in unlocked or vTypeCD == self.earlyAccessController.getFirstVehicleCD())
-            if required.issubset(unlocked) and parentCD in unlocked or isEarlyAccessUnlock:
+            if required.issubset(unlocked) and parentCD in unlocked and not isLockedByParagons or isEarlyAccessUnlock:
                 topIDs.add(parentCD)
                 compare.append(UnlockProps(parentCD, idx, newCost, topIDs, discount, xpCost))
                 available = True

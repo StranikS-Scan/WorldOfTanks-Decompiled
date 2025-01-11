@@ -11,7 +11,7 @@ class SwitcherType(IntEnum):
 class ProgressionStylesBuyingPanelModel(ViewModel):
     __slots__ = ('onChange',)
 
-    def __init__(self, properties=7, commands=1):
+    def __init__(self, properties=8, commands=1):
         super(ProgressionStylesBuyingPanelModel, self).__init__(properties=properties, commands=commands)
 
     def getCurrentLevel(self):
@@ -56,13 +56,20 @@ class ProgressionStylesBuyingPanelModel(ViewModel):
     def setStyleID(self, value):
         self._setNumber(6, value)
 
+    def getNotificationText(self):
+        return self._getString(7)
+
+    def setNotificationText(self, value):
+        self._setString(7, value)
+
     def _initialize(self):
         super(ProgressionStylesBuyingPanelModel, self)._initialize()
-        self._addNumberProperty('currentLevel', 0)
-        self._addNumberProperty('selectedLevel', 0)
+        self._addNumberProperty('currentLevel', 1)
+        self._addNumberProperty('selectedLevel', 1)
         self._addBoolProperty('isReady', False)
         self._addNumberProperty('numberOfBullets', 4)
         self._addBoolProperty('isBulletsBeforeCurrentDisabled', True)
         self._addNumberProperty('switcherType')
         self._addNumberProperty('styleID', 0)
+        self._addStringProperty('notificationText', '')
         self.onChange = self._addCommand('onChange')

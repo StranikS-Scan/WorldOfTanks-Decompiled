@@ -3,6 +3,7 @@
 import logging
 import typing
 from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
+from gui.impl.gen.view_models.views.lobby.techtree.extended_node_state_flags import ExtendedNodeStateFlags
 from gui.techtree.dumpers import _BaseDumper
 from gui.techtree.settings import NODE_STATE
 from gui.techtree.settings import UnlockStats
@@ -297,6 +298,15 @@ class _ItemsData(object):
             state = NODE_STATE.addIfNot(state, NodeStateFlags.EARLY_ACCESS)
         return state
 
+    def _checkParagonsState(self, state, vehicleItem):
+        state = NODE_STATE.removeIfHas(state, ExtendedNodeStateFlags.LOCKED_BY_PARAGONS)
+        if vehicleItem.isLockedByParagons:
+            state = NODE_STATE.addIfNot(state, ExtendedNodeStateFlags.LOCKED_BY_PARAGONS)
+        state = NODE_STATE.removeIfHas(state, ExtendedNodeStateFlags.RESET_FINISHED_PARAGONS)
+        if vehicleItem.isResetParagons:
+            state = NODE_STATE.addIfNot(state, ExtendedNodeStateFlags.RESET_FINISHED_PARAGONS)
+        return state
+
     def _addNode(self, nodeCD, node):
         index = len(self._nodes)
         self._nodesIdx[nodeCD] = index
@@ -355,6 +365,18 @@ class _ItemsData(object):
 
     def _needLast2BuyFlag(self, nodeCD):
         raise NotImplementedError
+
+    def _nextAvailableToUnlock(self, nodeCD):
+        result = set()
+        if self.getItem(nodeCD).isPremium:
+            return result
+        nextLevels = g_techTreeDP.getNextLevel(nodeCD)
+        for nextCD in nextLevels:
+            isNextToUnlock, isEnoughXP = g_techTreeDP.isVehicleAvailableToUnlock(nextCD)
+            if isNextToUnlock and isEnoughXP:
+                result.add(nextCD)
+
+        return result
 
     def _isLastUnlocked(self, nodeCD):
         if self.getItem(nodeCD).isPremium:

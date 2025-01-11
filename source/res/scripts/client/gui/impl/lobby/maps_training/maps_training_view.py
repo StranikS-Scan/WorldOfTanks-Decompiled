@@ -106,6 +106,9 @@ class MapsTrainingView(MapsTrainingBaseView, IGlobalListener):
         super(MapsTrainingView, self)._onLoaded(*args, **kwargs)
         self.__checkCamera()
 
+    def onPrbEntitySwitching(self):
+        self.destroyWindow()
+
     def _finalize(self):
         self.__finalizationInProgress = True
         self.__blur.fini()

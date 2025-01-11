@@ -33,7 +33,7 @@ from PlayerEvents import g_playerEvents
 _logger = logging.getLogger(__name__)
 USE_SERVER_RECRUIT_DELTA = True
 REQUEST_INCREMENT_COOLDOWN = 1
-REFERRAL_LOOTBOX_TYPE = 'rp_2024'
+REFERRAL_LOOTBOX_CATEGORY = 'rp_2024'
 
 class ReferralProgramController(GameWindowController, IReferralProgramController):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -58,7 +58,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
         super(ReferralProgramController, self).fini()
 
     def onLobbyStarted(self, ctx):
-        self.__GUILootboxes.addShopWindowHandler(REFERRAL_LOOTBOX_TYPE, partial(self.showWindow, url=getReferralShopURL()))
+        self.__GUILootboxes.addShopWindowHandler(REFERRAL_LOOTBOX_CATEGORY, partial(self.showWindow, url=getReferralShopURL()))
 
     def showWindow(self, url=None, invokedFrom=None):
         if not self.__referralDisabled:

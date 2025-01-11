@@ -33,7 +33,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, IBobController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -128,7 +128,7 @@ class _SelectorItem(object):
         return False
 
     def isInSquad(self, state):
-        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC)
+        return state.isInUnit(PREBATTLE_TYPE.SQUAD) or state.isInUnit(PREBATTLE_TYPE.EVENT) or state.isInUnit(PREBATTLE_TYPE.EPIC) or state.isInUnit(PREBATTLE_TYPE.BOB)
 
     def setLocked(self, value):
         self._isLocked = value
@@ -365,6 +365,52 @@ class _EventBattlesItem(_SelectorItem):
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EVENT_BATTLES)
         self._isVisible = self.__eventBattlesCtrl.isEnabled()
+
+
+class _BobItem(_SelectorItem):
+    bobController = dependency.descriptor(IBobController)
+
+    def isRandomBattle(self):
+        return True
+
+    def getSpecialBGIcon(self):
+        return backport.image(_R_ICONS.buttons.selectorRendererBGEvent()) if self.bobController.isModeActive() else ''
+
+    def getFormattedLabel(self):
+        battleTypeName = super(_BobItem, self).getFormattedLabel()
+        availabilityStr = self.__getAvailabilityStr()
+        return battleTypeName if availabilityStr is None else '{}\n{}'.format(battleTypeName, text_styles.leadingText(text_styles.main(availabilityStr), -2))
+
+    def select(self):
+        super(_BobItem, self).select()
+        selectorUtils.setBattleTypeAsKnown(self._selectorType)
+
+    def _update(self, state):
+        self._isSelected = state.isQueueSelected(QUEUE_TYPE.BOB)
+        isDisabled = not self.bobController.isRegistered() or not self.bobController.isModeActive()
+        self._isDisabled = state.hasLockedState or isDisabled and not self.bobController.isValidBattleType()
+        if self.bobController.isEnabled():
+            self._isVisible = self.bobController.isRegistrationPeriodEnabled() or bool(self.bobController.getCurrentSeason())
+        else:
+            self._isVisible = False
+
+    def __getAvailabilityStr(self):
+        if self._isVisible and self.bobController.hasAnySeason():
+            resShortCut = R.strings.menu.headerButtons.battle.types.bob
+            currentSeason = self.bobController.getCurrentSeason()
+            if currentSeason is not None:
+                if not self.bobController.isEnabled():
+                    return backport.text(resShortCut.availability.frozen())
+                if self.bobController.isPostEventTime():
+                    return backport.text(resShortCut.availability.postEvent())
+                timeLeft = time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(currentSeason.getEndDate()))
+                return backport.getTillTimeStringByRClass(timeLeft, resShortCut.availability.timeLeft)
+            nextSeason = self.bobController.getNextSeason()
+            if nextSeason is not None:
+                timeStamp = time_utils.makeLocalServerTime(nextSeason.getStartDate())
+                date = backport.getShortDateFormat(timeStamp)
+                return backport.text(resShortCut.availability.until(), date=date)
+        return
 
 
 class _BattleSelectorItems(object):
@@ -937,6 +983,10 @@ def _addComp7BattleType(items):
     items.append(_Comp7Item(MENU.HEADERBUTTONS_BATTLE_TYPES_COMP7, PREBATTLE_ACTION_NAME.COMP7, 1, SELECTOR_BATTLE_TYPES.COMP7))
 
 
+def _addBobBattleType(items):
+    items.append(_BobItem(backport.text(_R_BATTLE_TYPES.bob()), PREBATTLE_ACTION_NAME.BOB, 1, SELECTOR_BATTLE_TYPES.BOB))
+
+
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _addRankedBattleType(items, lobbyContext=None):
     settings = lobbyContext.getServerSettings()
@@ -1012,7 +1062,8 @@ BATTLES_SELECTOR_ITEMS = {PREBATTLE_ACTION_NAME.RANDOM: _addRandomBattleType,
  PREBATTLE_ACTION_NAME.MAPS_TRAINING: _addMapsTrainingBattleType,
  PREBATTLE_ACTION_NAME.EPIC: _addEpicBattleType,
  PREBATTLE_ACTION_NAME.EVENT_BATTLE: _addEventBattlesType,
- PREBATTLE_ACTION_NAME.COMP7: _addComp7BattleType}
+ PREBATTLE_ACTION_NAME.COMP7: _addComp7BattleType,
+ PREBATTLE_ACTION_NAME.BOB: _addBobBattleType}
 
 def _createItems():
     items = []

@@ -273,6 +273,7 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self._setMarkerReplied(marker, False)
             self._setMarkerSticky(handle, False)
             self._setMarkerBoundEnabled(handle, False)
+            self.__hideDetectedByThermalVision(handle)
         elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
             vMarker, numberOfReplies, isTargetForPlayer, isPermanent = value
             self.__showActionMarker(handle, vMarker, vehicleID, numberOfReplies, isTargetForPlayer, isPermanent)
@@ -296,6 +297,8 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
             self.__updateFLRegenerationKitMarker(vehicleID, handle, value)
         elif eventID == _EVENT_ID.ABILITY:
             self._updateAbilityMarker(vehicleID, value, handle, BATTLE_MARKER_STATES.ABILITY_STATE, showCountdown=True, isSourceVehicle=True)
+        elif eventID == _EVENT_ID.DETECTED_BY_THERMAL_VISION:
+            self.__showDetectedByThermalVision(handle, value)
 
     def _onChatCommandTargetUpdate(self, _, chatCommandStates):
         for vehicleID, state in chatCommandStates.iteritems():
@@ -692,6 +695,12 @@ class VehicleMarkerPlugin(MarkerPlugin, ChatCommunicationComponent, IArenaVehicl
         if marker and not avatar_getter.isVehicleAlive() and not marker.getIsPlayerTeam():
             self._setMarkerBoundEnabled(marker.getMarkerID(), False)
         return
+
+    def __showDetectedByThermalVision(self, handle, isAlly):
+        self._invokeMarker(handle, 'showDetectedByPyrometer', isAlly)
+
+    def __hideDetectedByThermalVision(self, handle):
+        self._invokeMarker(handle, 'hideDetectedByPyrometer')
 
     def __handleCallback(self, markerID, targetID):
         self.__removeMarkerCallback(markerID)

@@ -12,9 +12,3 @@ class IFestivityFactory(object):
 
     def getController(self):
         raise NotImplementedError
-
-    def getDataSyncKey(self):
-        raise NotImplementedError
-
-    def getChildControllerInterface(self):
-        raise NotImplementedError

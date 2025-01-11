@@ -33,6 +33,7 @@ class _RewardType(_Enum):
     BOOK = 'book'
     BATTLE_BOOSTER = 'battleBooster'
     EXP_EQUIPMENTS = 'expequipments'
+    DEVICE_PM3 = 'new_device_pm3'
 
 
 @unique

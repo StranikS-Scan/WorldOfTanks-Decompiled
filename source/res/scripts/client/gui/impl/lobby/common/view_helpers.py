@@ -20,8 +20,7 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, pac
         bContentIdList = packer.getContentId(bonus) if withTooltips else []
         for bIndex, bModel in enumerate(bonusList):
             bModel.setIndex(bIndex + startIndex)
-            if withTooltips:
-                tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
+            tooltipIndex = _packBonusTooltip(bModel, bIndex, bTooltipList, bContentIdList, tooltipData, tooltipIndex)
             bonusModelsList.addViewModel(bModel)
 
     return

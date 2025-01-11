@@ -3,6 +3,7 @@
 from functools import partial
 import typing
 from gui.impl.gen import R
+from gui.prb_control.entities.listener import IGlobalListener
 from story_mode.gui.impl.gen.view_models.views.lobby.mission_selection_view_model import MissionSelectionViewModel
 from story_mode.gui.impl.lobby.base_prb_view import BasePrbView
 from story_mode.gui.impl.lobby.mission_tooltip import MissionTooltip
@@ -12,7 +13,7 @@ from story_mode.uilogging.story_mode.consts import LogButtons
 from story_mode.uilogging.story_mode.loggers import SelectMissionWindow
 from story_mode_common.story_mode_constants import UNDEFINED_MISSION_ID
 
-class MissionSelectionView(BasePrbView):
+class MissionSelectionView(BasePrbView, IGlobalListener):
     LAYOUT_ID = R.views.story_mode.lobby.MissionSelectionView()
     MODEL_CLASS = MissionSelectionViewModel
     _COMMON_SOUND_SPACE = STORY_MODE_SOUND_SPACE
@@ -26,6 +27,7 @@ class MissionSelectionView(BasePrbView):
 
     def _onLoading(self, *args, **kwargs):
         super(MissionSelectionView, self)._onLoading(*args, **kwargs)
+        self.startGlobalListening()
         model = self.getViewModel()
         self.__updateSelectedMission(model)
         self.__updateMissions(model, True)
@@ -35,8 +37,12 @@ class MissionSelectionView(BasePrbView):
         viewModel = self.getViewModel()
         self._uiLogger.logOpen(viewModel.getMissionId() if viewModel else UNDEFINED_MISSION_ID)
 
+    def onPrbEntitySwitching(self):
+        self.destroyWindow()
+
     def _finalize(self):
         self._uiLogger.logClose()
+        self.stopGlobalListening()
         super(MissionSelectionView, self)._finalize()
 
     def _getEvents(self):

@@ -494,6 +494,13 @@
             <measureType>	percents	</measureType>
             <value>	-0.001	</value>
           </arg>
+          <arg>
+            <situationalParam>	true	</situationalParam>
+            <paramName>	temperatureGunHeating	</paramName>
+            <measureType>	percents	</measureType>
+            <value>	-0.001	</value>
+            <isKpiVisible>	false	</isKpiVisible>
+          </arg>
         </descr>
         <params>
           <param>
@@ -523,6 +530,16 @@
           </param>
           <param>
             <name>	clipFireRate	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	-0.001	</value>
+          </param>
+          <param>
+            <name>	autoShootFireUntilOverheatTime	</name>
+            <situationalParam>	true	</situationalParam>
+            <value>	+0.001	</value>
+          </param>
+          <param>
+            <name>	autoShootFlameChangeShellTime	</name>
             <situationalParam>	true	</situationalParam>
             <value>	-0.001	</value>
           </param>

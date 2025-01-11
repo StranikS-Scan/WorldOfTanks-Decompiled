@@ -6,7 +6,7 @@ import typing
 from collections import namedtuple
 from CurrentVehicle import g_currentVehicle
 from comp7_common import Comp7QuestType
-from gui.impl.lobby.comp7.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
+from gui.shared.gui_items.customization.c11n_helpers import getProgressionStyleCamouflage
 from items.vehicles import VehicleDescriptor
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
@@ -226,7 +226,7 @@ class RankRewardsPage(PageSubModelPresenter):
     def __getPreviewOutfit(cls, style, bonus):
         branchID = bonus.getBranchID()
         progressLevel = bonus.getProgressLevel()
-        camo = getComp7ProgressionStyleCamouflage(style.id, branchID, progressLevel)
+        camo = getProgressionStyleCamouflage(style.id, branchID, progressLevel)
         season = first(style.seasons)
         outfit = style.getOutfit(season)
         outfitComponent = outfit.pack()

@@ -388,17 +388,26 @@ class ShopAccessor(BaseAccessor):
     def get_inventory_entitlements(self, callback, entitlement_codes):
         return self._data_source.get_inventory_entitlements(callback, entitlement_codes)
 
-    def get_storefront_products(self, callback, storefront):
-        return self._data_source.get_storefront_products(callback, storefront)
+    def get_storefront_products(self, callback, storefront, user_country):
+        return self._data_source.get_storefront_products(callback, storefront, user_country)
 
-    def buy_storefront_products(self, callback, storefront, productCode, requestData):
-        return self._data_source.buy_storefront_products(callback, storefront, productCode, requestData)
+    def buy_storefront_products(self, callback, storefront, productCode, requestData, user_country):
+        return self._data_source.buy_storefront_products(callback, storefront, productCode, requestData, user_country)
 
 
 class UILoggingAccessor(BaseAccessor):
 
     def get_uilogging_session(self, callback):
         return self._data_source.get_uilogging_session(callback)
+
+
+class BobAccessor(BaseAccessor):
+
+    def get_teams(self, callback):
+        return self._data_source.get_teams(callback)
+
+    def get_team_skills(self, callback, timestamp):
+        return self._data_source.get_team_skills(callback, timestamp)
 
 
 class Requester(object):
@@ -418,6 +427,7 @@ class Requester(object):
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     agate = RequestDescriptor(AgateAccessor)
+    wgbob = RequestDescriptor(BobAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)

@@ -171,7 +171,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def unlocks(self):
-        return self.getCacheValue('unlocks', list())
+        return self.getCacheValue('unlocks', set())
 
     @property
     def initialUnlocks(self):

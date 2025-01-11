@@ -7,6 +7,7 @@ from collections import namedtuple
 import typing
 import BigWorld
 import personal_missions
+from account_helpers.AccountSettings import AccountSettings, LAST_SELECTED_PM_BRANCH
 from battle_pass_common import BattlePassConsts
 from constants import EVENT_TYPE
 from dog_tags_common.components_config import componentConfigAdapter as cca
@@ -14,6 +15,10 @@ from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHang
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
 from gui.Scaleform.daapi.view.lobby.server_events.awards_formatters import BattlePassTextBonusesPacker
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getEventPostBattleInfo, get2dProgressionStylePostBattleInfo, DebutBoxesQuestPostBattleInfo, EarlyAccessQuestPostBattleInfo
+from gui.impl.lobby.paragons.paragons_helpers.paragons_helpers import calculateReceivedLevel
+from gui.paragons.paragons_bonuses_packers import packBonusesForPostBattle
+from gui.paragons.paragons_constants import PARAGONS_POST_BATTLE_FAKE_QUEST_ID
+from gui.server_events.bonuses import getMergedBonusesFromDicts, getNonQuestBonuses
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.genConsts.PROGRESSIVEREWARD_CONSTANTS import PROGRESSIVEREWARD_CONSTANTS as prConst
@@ -31,7 +36,7 @@ from gui.server_events import formatters
 from gui.server_events.awards_formatters import QuestsBonusComposer
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
 from gui.server_events.events_helpers import isC11nQuest, getDataByC11nQuest
-from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, text_styles
+from gui.shared.formatters import getItemPricesVO, getItemUnlockPricesVO, text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Tankman import getCrewSkinIconSmall
 from gui.shared.gui_items.Vehicle import getLevelIconPath
@@ -41,7 +46,8 @@ from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from skeletons.gui.game_control import IBattlePassController, IDebutBoxesController, IEarlyAccessController
+from math_utils import clamp
+from skeletons.gui.game_control import IBattlePassController, IDebutBoxesController, IEarlyAccessController, IParagonsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -52,6 +58,7 @@ if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import BattlePassProgress
 _POST_BATTLE_RES = R.strings.battle_pass.reward.postBattle
 _MIN_BATTLES_TO_SHOW_PROGRESS = 5
+_PARAGONS_POST_BATTLE_RES = R.strings.paragons.postBattle
 _logger = logging.getLogger(__name__)
 
 def isQuestCompleted(_, pPrev, pCur):
@@ -341,6 +348,10 @@ class BattlePassProgressBlock(base.StatsBlock):
     def __makeProgressQuestInfo(cls, progress, level):
         isFreePoints = progress.pointsAux and not progress.isLevelMax or progress.isLevelMax and level == progress.currLevel
         chapterID = progress.chapterID
+        if chapterID and not cls.__battlePass.isChapterCompleted(chapterID):
+            linkTooltip = TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS
+        else:
+            linkTooltip = TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT
         return {'status': cls.__getMissionState(isDone=level < progress.currLevel),
          'questID': BattlePassConsts.FAKE_QUEST_ID,
          'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
@@ -351,18 +362,22 @@ class BattlePassProgressBlock(base.StatsBlock):
          'currentProgrVal': progress.pointsNew,
          'tasksCount': -1,
          'progrBarType': cls.__getProgressBarType(not progress.isDone),
-         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID and not cls.__battlePass.isChapterCompleted(chapterID) else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
+         'linkTooltip': linkTooltip}
 
     @classmethod
     def __makeProgressPointsInfo(cls, progress):
         chapterID = progress.chapterID
+        if chapterID and not cls.__battlePass.isChapterCompleted(chapterID):
+            linkTooltip = TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS
+        else:
+            linkTooltip = TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT
         return {'status': '',
          'questID': BattlePassConsts.FAKE_QUEST_ID,
          'eventType': EVENT_TYPE.BATTLE_QUEST,
          'description': backport.text(_POST_BATTLE_RES.progress.points()),
          'progrBarType': formatters.PROGRESS_BAR_TYPE.NONE,
          'tasksCount': -1,
-         'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID and not cls.__battlePass.isChapterCompleted(chapterID) else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
+         'linkTooltip': linkTooltip}
 
     @classmethod
     def __makeProgressList(cls, progress, level):
@@ -519,10 +534,10 @@ class QuestsProgressBlock(base.StatsBlock):
             if info is not None:
                 self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem('', info))
 
-        pm2Progress = reusable.personal.getPM2Progress()
-        if pm2Progress:
+        pmProgress = reusable.personal.getPMProgress()
+        if pmProgress:
             quests = self.eventsCache.getPersonalMissions().getAllQuests()
-            for qID, data in pm2Progress.iteritems():
+            for qID, data in pmProgress.iteritems():
                 quest = quests[qID]
                 if quest in personalMissions:
                     personalMissions[quest].update(data)
@@ -585,13 +600,21 @@ class QuestsProgressBlock(base.StatsBlock):
                  isCompleted)
         return data
 
-    @staticmethod
-    def __sortPersonalMissions(a, b):
+    @classmethod
+    def __sortPersonalMissions(cls, a, b):
         aFullCompleted, bFullCompleted = a.isFullCompleted(), b.isFullCompleted()
         if aFullCompleted != bFullCompleted:
             return bFullCompleted - aFullCompleted
         aCompleted, bCompleted = a.isCompleted(), b.isCompleted()
-        return bCompleted - aCompleted if aCompleted != bCompleted else b.getCampaignID() - a.getCampaignID()
+        if aCompleted != bCompleted:
+            return bCompleted - aCompleted
+        lastSelectedBranch = AccountSettings.getSettings(LAST_SELECTED_PM_BRANCH)
+        if lastSelectedBranch:
+            isSelectedA = a.getPMType().branch == lastSelectedBranch
+            isSelectedB = b.getPMType().branch == lastSelectedBranch
+            if isSelectedA != isSelectedB:
+                return isSelectedB - isSelectedA
+        return b.getCampaignID() - a.getCampaignID()
 
     @staticmethod
     def __sortCommonQuestsFunc(aData, bData):
@@ -706,3 +729,137 @@ class QuestProgressiveCustomizationVO(base.DirectStatsItem):
             self._value['linkBtnEnabled'] = linkBtnEnabled
             self._value['linkBtnTooltip'] = backport.text(linkBtnTooltip)
         return self._value
+
+
+class ParagonsProgressBlock(base.StatsBlock):
+    _itemsCache = dependency.descriptor(IItemsCache)
+    __paragons = dependency.descriptor(IParagonsController)
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        extInfo = reusable.personal.avatar.extensionInfo
+        paragonChapter = extInfo.get('paragonChapter', -1)
+        prevTotalCoins = extInfo.get('originalParagonCoins', 0)
+        coinsGranted = extInfo.get('paragonCoins', 0) - prevTotalCoins
+        if coinsGranted and paragonChapter == -1:
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatEmptyChapterParagonsProgressPoints(coinsGranted)))
+        elif coinsGranted and paragonChapter in self.__paragons.config.getChapterIDs():
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatParagonsProgressPoints(coinsGranted, paragonChapter, prevTotalCoins)))
+        elif coinsGranted:
+            _logger.warning('Unknown chapter id %s is in post battle', paragonChapter)
+
+    @classmethod
+    def __formatParagonsProgressPoints(cls, pointsGranted, chapter, prevTotalCoins):
+        startLevel = calculateReceivedLevel(prevTotalCoins, 0, chapter, paragonsCtrl=cls.__paragons)
+        receivedLevel = calculateReceivedLevel(prevTotalCoins, pointsGranted, chapter, paragonsCtrl=cls.__paragons)
+        return ('', {'awards': cls.__makeProgressRewards(startLevel, receivedLevel, chapter),
+          'questInfo': cls.__makeMainInfo(chapter),
+          'questType': EVENT_TYPE.BATTLE_QUEST,
+          'progressList': cls.__makeProgressListPoints(pointsGranted, prevTotalCoins, startLevel, receivedLevel, chapter),
+          'linkBtnTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.btnlabel.active()),
+          'linkBtnEnabled': True})
+
+    @classmethod
+    def __formatEmptyChapterParagonsProgressPoints(cls, pointsGranted):
+        return ('', {'awards': [],
+          'questInfo': cls.__makeMainInfo(None),
+          'questType': EVENT_TYPE.BATTLE_QUEST,
+          'progressList': [cls.__getParagonsExtraCoinsInfo(pointsGranted)],
+          'linkBtnTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.btnlabel.select()),
+          'linkBtnEnabled': True})
+
+    @classmethod
+    def __makeProgressRewards(cls, startLevel, receivedLevel, chapter):
+        rewards = []
+        for level in xrange(startLevel + 1, receivedLevel + 1):
+            rewards.append(cls.__paragons.config.getRewardsByChapterAndLevel(chapter, level))
+
+        if not rewards:
+            return []
+        mergedRewards = getMergedBonusesFromDicts(rewards)
+        bonuses = []
+        for bonusType, bonusValue in mergedRewards.iteritems():
+            bonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
+
+        rewardsList = packBonusesForPostBattle(bonuses)
+
+        def makeUnavailableBlockData():
+            return formatters.packTextBlock(text_styles.alert(backport.text(R.strings.quests.bonuses.notAvailable())))
+
+        if rewardsList:
+            return [ award.getDict() for award in rewardsList ]
+        return [makeUnavailableBlockData().getDict()]
+
+    @classmethod
+    def __makeMainInfo(cls, chapter):
+        return {'status': '',
+         'questID': PARAGONS_POST_BATTLE_FAKE_QUEST_ID,
+         'eventType': EVENT_TYPE.BATTLE_QUEST,
+         'description': '{} {}'.format(icons.makeImageTag(backport.image(R.images.gui.maps.icons.paragons.paragon_flat_20x20())), text_styles.highlightText(backport.text(R.strings.paragons.project.name()))),
+         'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+         'tasksCount': -1,
+         'linkTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.btnlabel.active() if chapter else _PARAGONS_POST_BATTLE_RES.tooltip.btnlabel.select())}
+
+    @classmethod
+    def __makeProgressListPoints(cls, pointsGranted, prevTotalCoins, startLevel, receivedLevel, chapter):
+        progressList = []
+        maxChapterLevel = len(cls.__paragons.config.getChapterLevelIDs(chapter))
+        resultsCoins = prevTotalCoins + pointsGranted
+        progressList.append(cls.__getChapterProgressInfo(receivedLevel, chapter, maxChapterLevel))
+        nextStartLevel = min(startLevel + 1, maxChapterLevel)
+        nextReceivedLevel = min(receivedLevel + 1, maxChapterLevel)
+        levelsDiff = 0
+        for level in xrange(nextStartLevel, nextReceivedLevel + 1):
+            levelPoints = cls.__paragons.config.getParagonsCoinsAmountForLevelUnlock(chapter, level)
+            if level > 1:
+                prevPoints = cls.__paragons.config.getParagonsCoinsAmountForLevelUnlock(chapter, level - 1)
+            else:
+                prevPoints = 0
+            maxProgrVal = levelPoints - prevPoints
+            prevProgressVal = clamp(0, maxProgrVal, prevTotalCoins - prevPoints)
+            progressInLevel = clamp(0, maxProgrVal, resultsCoins - prevPoints)
+            progressDiff = progressInLevel - prevProgressVal
+            if progressDiff:
+                progressList.append(cls.__getParagonsLevelInfo(level, progressInLevel, maxProgrVal, progressDiff))
+            levelsDiff += progressDiff
+
+        storageDiff = max(pointsGranted - levelsDiff, 0)
+        if storageDiff:
+            progressList.append(cls.__getParagonsExtraCoinsInfo(storageDiff))
+        return progressList
+
+    @classmethod
+    def __getChapterProgressInfo(cls, receivedLevel, chapter, maxChapterLevel):
+        tfFieldName = 'description' if receivedLevel >= maxChapterLevel else 'title'
+        pointsInfo = {tfFieldName: backport.text(_PARAGONS_POST_BATTLE_RES.subtitle(), name=backport.text(R.strings.paragons.chapterName.short.dyn('id_{}'.format(chapter))())),
+         'maxProgrVal': maxChapterLevel,
+         'progressDiffTooltip': '',
+         'currentProgrVal': receivedLevel,
+         'progrBarType': formatters.PROGRESS_BAR_TYPE.NONE,
+         'questState': cls.__getStatusState(receivedLevel >= maxChapterLevel)}
+        return pointsInfo
+
+    @classmethod
+    def __getParagonsLevelInfo(cls, level, progressInLevel, maxProgrVal, progressDiff):
+        pointsInfo = {'description': backport.text(_PARAGONS_POST_BATTLE_RES.progress(), number=backport.getIntegralFormat(level)),
+         'maxProgrVal': maxProgrVal,
+         'progressDiff': '+ {}'.format(progressDiff),
+         'progressDiffTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.coins()),
+         'currentProgrVal': progressInLevel,
+         'progrBarType': formatters.PROGRESS_BAR_TYPE.SIMPLE,
+         'questState': cls.__getStatusState(progressInLevel >= maxProgrVal)}
+        return pointsInfo
+
+    @classmethod
+    def __getParagonsExtraCoinsInfo(cls, points):
+        pointsInfo = {'description': backport.text(_PARAGONS_POST_BATTLE_RES.extraCoins()),
+         'progressDiff': '{} {}'.format(points, icons.makeImageTag(backport.image(R.images.gui.maps.icons.paragons.paragon_20x20()))),
+         'progressDiffTooltip': backport.text(_PARAGONS_POST_BATTLE_RES.tooltip.coins()),
+         'currentProgrVal': points,
+         'progrBarType': formatters.PROGRESS_BAR_TYPE.NONE}
+        return pointsInfo
+
+    @classmethod
+    def __getStatusState(cls, isDone):
+        return {'statusState': MISSIONS_STATES.COMPLETED,
+         'statusText': text_styles.bonusAppliedText(backport.text(R.strings.quests.quests.status.done()))} if isDone else None

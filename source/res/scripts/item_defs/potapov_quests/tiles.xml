@@ -136,6 +136,48 @@
       <chain_4>	readyForBattleAllianceFrance	</chain_4>
     </achievements>
   </tail_7>
+  <tail_8>
+    <id>	8	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs>	9	</nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	25	</questsInChain>
+    <chainsCountToUnlockNext>	3	</chainsCountToUnlockNext>
+    <completeChainWithoutAdd>	True	</completeChainWithoutAdd>
+    <userString>	#personal_missions_details:tile_8	</userString>
+    <description>	#personal_missions_details:tile_8_descr	</description>
+    <iconID>	tile_8_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t8:main	</tokens>
+  </tail_8>
+  <tail_9>
+    <id>	9	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs>	10	</nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	25	</questsInChain>
+    <chainsCountToUnlockNext>	3	</chainsCountToUnlockNext>
+    <completeChainWithoutAdd>	True	</completeChainWithoutAdd>
+    <userString>	#personal_missions_details:tile_9	</userString>
+    <description>	#personal_missions_details:tile_9_descr	</description>
+    <iconID>	tile_9_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t9:main	</tokens>
+  </tail_9>
+  <tail_10>
+    <id>	10	</id>
+    <seasonID>	3	</seasonID>
+    <nextTileIDs></nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	25	</questsInChain>
+    <chainsCountToUnlockNext>	0	</chainsCountToUnlockNext>
+    <completeChainWithoutAdd>	True	</completeChainWithoutAdd>
+    <userString>	#personal_missions_details:tile_10	</userString>
+    <description>	#personal_missions_details:tile_10_descr	</description>
+    <iconID>	tile_10_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s3:t10:main	</tokens>
+  </tail_10>
   <quests>
     <tokenQuest>
       <enabled>	true	</enabled>
@@ -1586,6 +1628,214 @@
       </conditions>
       <bonus>
         <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t8	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t8:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <vehicle>	usa:A161_ARMT	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <dossier>
+          <name>	playerBadges:10038	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t8_badge	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t8:add	</id>
+              <greaterOrEqual>	15	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:10039	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t9	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t9:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <vehicle>	usa:A173_TF_2_CLARK	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <dossier>
+          <name>	playerBadges:10040	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t9_badge	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t9:add	</id>
+              <greaterOrEqual>	15	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:10041	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t10	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t10:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <vehicle>	france:F119_Projet_Murat	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <dossier>
+          <name>	playerBadges:10042	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s3_t10_badge	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s3:t10:add	</id>
+              <greaterOrEqual>	15	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:10043	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_badge_s3	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <quest>
+                <id>	pt_final_s3_t8_badge	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </quest>
+              <quest>
+                <id>	pt_final_s3_t9_badge	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </quest>
+              <quest>
+                <id>	pt_final_s3_t10_badge	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </quest>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	singleAchievements:personalMissionsThird	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+          <unique>	true	</unique>
+        </dossier>
+        <dossier>
+          <name>	playerBadges:10044	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <dossier>
+          <name>	playerBadges:10045	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
       </bonus>
     </tokenQuest>
   </quests>

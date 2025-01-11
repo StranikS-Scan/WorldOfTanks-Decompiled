@@ -8,7 +8,7 @@ from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.guaranteed
 class LootboxViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(LootboxViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -61,67 +61,61 @@ class LootboxViewModel(ViewModel):
     def setAutoOpenTime(self, value):
         self._setNumber(7, value)
 
-    def getManualMaxOpenCount(self):
-        return self._getNumber(8)
-
-    def setManualMaxOpenCount(self, value):
-        self._setNumber(8, value)
-
     def getIconName(self):
-        return self._getString(9)
+        return self._getString(8)
 
     def setIconName(self, value):
-        self._setString(9, value)
+        self._setString(8, value)
 
     def getUserName(self):
-        return self._getString(10)
+        return self._getString(9)
 
     def setUserName(self, value):
-        self._setString(10, value)
+        self._setString(9, value)
 
     def getDescriptionKey(self):
-        return self._getString(11)
+        return self._getString(10)
 
     def setDescriptionKey(self, value):
-        self._setString(11, value)
+        self._setString(10, value)
 
     def getVideoRes(self):
-        return self._getResource(12)
+        return self._getResource(11)
 
     def setVideoRes(self, value):
-        self._setResource(12, value)
+        self._setResource(11, value)
 
     def getIsInfinite(self):
-        return self._getBool(13)
+        return self._getBool(12)
 
     def setIsInfinite(self, value):
-        self._setBool(13, value)
+        self._setBool(12, value)
 
     def getUnlockKeyIDs(self):
-        return self._getArray(14)
+        return self._getArray(13)
 
     def setUnlockKeyIDs(self, value):
-        self._setArray(14, value)
+        self._setArray(13, value)
 
     @staticmethod
     def getUnlockKeyIDsType():
         return int
 
     def getBonusGroups(self):
-        return self._getArray(15)
+        return self._getArray(14)
 
     def setBonusGroups(self, value):
-        self._setArray(15, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getBonusGroupsType():
         return unicode
 
     def getProgressionStage(self):
-        return self._getNumber(16)
+        return self._getNumber(15)
 
     def setProgressionStage(self, value):
-        self._setNumber(16, value)
+        self._setNumber(15, value)
 
     def _initialize(self):
         super(LootboxViewModel, self)._initialize()
@@ -133,7 +127,6 @@ class LootboxViewModel(ViewModel):
         self._addNumberProperty('tier', 0)
         self._addBoolProperty('isOpenEnabled', True)
         self._addNumberProperty('autoOpenTime', 0)
-        self._addNumberProperty('manualMaxOpenCount', 0)
         self._addStringProperty('iconName', 'unknown')
         self._addStringProperty('userName', 'unknown')
         self._addStringProperty('descriptionKey', 'unknown')

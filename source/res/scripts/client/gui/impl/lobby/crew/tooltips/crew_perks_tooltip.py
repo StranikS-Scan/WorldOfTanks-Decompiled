@@ -80,6 +80,7 @@ class CrewPerksTooltip(ViewImpl):
                 self.fillCurrentLvlInfo(vm)
             else:
                 vm.setDescription(self._skill.getMaxLvlDescription())
+                vm.setAlertDescription(self._skill.getMaxLvlAlertDescription())
         return
 
     def fillCurrentLvlInfo(self, vm):
@@ -98,4 +99,5 @@ class CrewPerksTooltip(ViewImpl):
                 boosters.addViewModel(booster)
 
         vm.setDescription(self._skill.currentLvlDescription % keyArgs)
+        vm.setAlertDescription(self._skill.alertDescription % keyArgs)
         return

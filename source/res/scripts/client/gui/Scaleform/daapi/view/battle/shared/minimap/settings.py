@@ -48,6 +48,7 @@ class ENTRY_SYMBOL_NAME(object):
     MARK_OBJECTIVE_REPLY_DEF = 'PositionDefendReplyEntry'
     MARK_OBJECTIVE_REPLY_ATK = 'PositionAttackReplyEntry'
     MARK_POSITION = 'PositionFlashEntry'
+    THERMAL_VISION_ENTRY = 'ThermalVisionEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
     ARTY_HIT_DOT_MARKER = 'ArtyHitDotMarkerUI'
     LOCATION_MARKER = 'MarkGoingToPositionEntryUI'
@@ -98,6 +99,13 @@ class CIRCLE_STYLE(object):
         MAX_VIEW_RANGE = 16777215
         VIEW_RANGE = 2621223
         MIN_SPOTTING_RANGE = 4499630
+
+
+class THERMAL_VISION_SECTOR_AS3_DESCR(object):
+    AS_INIT_MAP_SIZE = 'as_initMapSize'
+    AS_SET_SETTINGS = 'as_setSectorSettings'
+    AS_UPDATE_STATE = 'as_updateSectorState'
+    AS_UPDATE_VISIBILITY = 'as_updateSectorVisibility'
 
 
 class VIEW_RANGE_CIRCLES_AS3_DESCR(object):

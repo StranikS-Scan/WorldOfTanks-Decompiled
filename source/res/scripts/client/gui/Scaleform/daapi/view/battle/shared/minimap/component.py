@@ -8,6 +8,7 @@ import SoundGroups
 from AvatarInputHandler import AvatarInputHandler
 from gui.Scaleform.daapi.view.battle.shared.map_zones.minimap import MapZonesEntriesPlugin
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings, plugins
+from gui.Scaleform.daapi.view.battle.shared.minimap.plugin_items.thermal_sector import ThermalSectorPlugin
 from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.battle_control import minimap_utils, avatar_getter
@@ -158,7 +159,8 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
          'area': plugins.AreaStaticMarkerPlugin,
          'area_markers': plugins.AreaMarkerEntriesPlugin,
          'spgShot': plugins.EnemySPGShotPlugin,
-         'map_zones': MapZonesEntriesPlugin}
+         'map_zones': MapZonesEntriesPlugin,
+         ThermalSectorPlugin.NAME: ThermalSectorPlugin}
         return setup
 
     def _createFlashComponent(self):

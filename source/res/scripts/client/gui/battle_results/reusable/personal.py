@@ -430,7 +430,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '_economicsRecords', '__questsProgress', '__PMProgress', '__rankInfo', '__isTeamKiller', '__progressiveReward', '__premiumMask', '__isAddXPBonusApplied', '__c11nProgress', '__dogTags', '__goldBankGain', '__xpProgress')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, bonusType, personal):
@@ -448,7 +448,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self._economicsRecords = _EconomicsRecordsChains()
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
-        self.__PM2Progress = {}
+        self.__PMProgress = {}
         self.__c11nProgress = {}
         self.__xpProgress = {}
         self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, {}, {}, False, 0, 0)
@@ -540,8 +540,8 @@ class PersonalInfo(shared.UnpackedInfo):
     def getGoldBankGain(self):
         return self.__goldBankGain
 
-    def getPM2Progress(self):
-        return self.__PM2Progress
+    def getPMProgress(self):
+        return self.__PMProgress
 
     def getC11nProgress(self):
         return self.__c11nProgress
@@ -602,7 +602,7 @@ class PersonalInfo(shared.UnpackedInfo):
         infoAvatar = info['avatar']
         if infoAvatar:
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))
-            self.__PM2Progress.update(infoAvatar.get('PM2Progress', {}))
+            self.__PMProgress.update(infoAvatar.get('PMProgress', {}))
             self.__rankInfo = PostBattleRankInfo.fromDict(infoAvatar)
             self.__progressiveReward = infoAvatar.get('progressiveReward')
             self.__dogTags.update(infoAvatar.get('dogTags', {}))
@@ -624,7 +624,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self.__isTeamKiller = data['isTeamKiller'] if 'isTeamKiller' in data else False
             self.__premiumMask = data.get('premMask', PREMIUM_TYPE.NONE)
             self.__questsProgress.update(data.get('questsProgress', {}))
-            self.__PM2Progress.update(data.get('PM2Progress', {}))
+            self.__PMProgress.update(data.get('PMProgress', {}))
             self.__c11nProgress[intCD] = data.get('c11nProgress', {})
             self.__xpProgress[intCD] = {'xp': data.get('xp', 0),
              'xpByTmen': data.get('xpByTmen', [])}

@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class VideoViewModel(ViewModel):
     __slots__ = ('onCloseBtnClick', 'onVideoStarted', 'onVideoStopped', 'onLoadError')
 
-    def __init__(self, properties=7, commands=4):
+    def __init__(self, properties=5, commands=4):
         super(VideoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVideoSource(self):
@@ -27,38 +27,24 @@ class VideoViewModel(ViewModel):
     def setIsWindowAccessible(self, value):
         self._setBool(2, value)
 
-    def getCanEscape(self):
+    def getIsUIVisible(self):
         return self._getBool(3)
 
-    def setCanEscape(self, value):
+    def setIsUIVisible(self, value):
         self._setBool(3, value)
 
-    def getIsUIVisible(self):
+    def getIsVignetteVisible(self):
         return self._getBool(4)
 
-    def setIsUIVisible(self, value):
-        self._setBool(4, value)
-
-    def getUiShowDelay(self):
-        return self._getNumber(5)
-
-    def setUiShowDelay(self, value):
-        self._setNumber(5, value)
-
-    def getIsVignetteVisible(self):
-        return self._getBool(6)
-
     def setIsVignetteVisible(self, value):
-        self._setBool(6, value)
+        self._setBool(4, value)
 
     def _initialize(self):
         super(VideoViewModel, self)._initialize()
         self._addResourceProperty('videoSource', R.invalid())
         self._addNumberProperty('subtitleTrack', 0)
         self._addBoolProperty('isWindowAccessible', True)
-        self._addBoolProperty('canEscape', True)
         self._addBoolProperty('isUIVisible', False)
-        self._addNumberProperty('uiShowDelay', -1)
         self._addBoolProperty('isVignetteVisible', True)
         self.onCloseBtnClick = self._addCommand('onCloseBtnClick')
         self.onVideoStarted = self._addCommand('onVideoStarted')

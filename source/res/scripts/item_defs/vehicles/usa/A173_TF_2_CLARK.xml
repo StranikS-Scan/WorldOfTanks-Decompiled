@@ -1073,6 +1073,7 @@
                   <wheelName>	W_L6	</wheelName>
                   <wheelName>	W_L5	</wheelName>
                   <wheelName>	W_L4	</wheelName>
+                  <isGroudGroup>	true	</isGroudGroup>
                   <groupRadius>	0.251767	</groupRadius>
                   <groupInnerOffset>	0.450552	</groupInnerOffset>
                   <groupOuterOffset>	-0.350552	</groupOuterOffset>
@@ -1116,16 +1117,16 @@
                   <row3>	-1.926659 0.962621 -0.297975	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000003 0.330215 1.513974	</row3>
+                  <row0>	1.000000 -0.000002 0.000006	</row0>
+                  <row1>	-0.000003 0.949901 0.733272	</row1>
+                  <row2>	-0.000002 -0.183318 0.237475	</row2>
+                  <row3>	-1.451603 0.292050 -0.171283	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000007 0.768400 2.084421	</row3>
+                  <row0>	1.000000 -0.000002 0.000008	</row0>
+                  <row1>	0.000005 0.903035 -0.429566	</row1>
+                  <row2>	-0.000002 0.128870 0.270911	</row2>
+                  <row3>	-1.451603 0.924873 -0.001599	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1154,6 +1155,7 @@
                   <groupRadius>	0.251767	</groupRadius>
                   <groupInnerOffset>	-0.450552	</groupInnerOffset>
                   <groupOuterOffset>	0.350552	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R4	</wheelName>
@@ -1194,16 +1196,16 @@
                   <row3>	1.927000 0.962621 -0.297975	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000003 0.330215 1.513970	</row3>
+                  <row0>	1.000000 -0.000002 0.000007	</row0>
+                  <row1>	-0.000003 0.949901 0.733273	</row1>
+                  <row2>	-0.000002 -0.183318 0.237475	</row2>
+                  <row3>	1.462208 0.292050 -0.289112	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000007 0.768400 2.084420	</row3>
+                  <row0>	1.000000 -0.000002 0.000008	</row0>
+                  <row1>	0.000005 0.903035 -0.429566	</row1>
+                  <row2>	-0.000002 0.128870 0.270911	</row2>
+                  <row3>	1.462208 0.924873 -0.228358	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1230,6 +1232,7 @@
                   <groupRadius>	0.300951	</groupRadius>
                   <groupInnerOffset>	0.450552	</groupInnerOffset>
                   <groupOuterOffset>	-0.350552	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L2	</wheelName>
@@ -1245,6 +1248,7 @@
                   <groupRadius>	0.26	</groupRadius>
                   <groupInnerOffset>	0.450552	</groupInnerOffset>
                   <groupOuterOffset>	-0.350552	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L0	</wheelName>
@@ -1279,16 +1283,10 @@
                   <row3>	-1.926660 0.962621 0.281721	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 2.500000	</row2>
-                  <row3>	0.000004 0.330215 -1.891437	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000008 0.768400 -1.752279	</row3>
+                  <row0>	1.000000 -0.000002 0.000007	</row0>
+                  <row1>	-0.000007 1.452973 1.374361	</row1>
+                  <row2>	-0.000002 -0.206154 0.217946	</row2>
+                  <row3>	-1.423112 0.596441 -0.246330	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1309,6 +1307,7 @@
                   <groupRadius>	0.289551	</groupRadius>
                   <groupInnerOffset>	-0.450552	</groupInnerOffset>
                   <groupOuterOffset>	0.350552	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R2	</wheelName>
@@ -1324,6 +1323,7 @@
                   <groupRadius>	0.26	</groupRadius>
                   <groupInnerOffset>	-0.450552	</groupInnerOffset>
                   <groupOuterOffset>	0.350552	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R0	</wheelName>
@@ -1358,16 +1358,10 @@
                   <row3>	1.927000 0.962621 0.281721	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 2.500000	</row2>
-                  <row3>	0.000004 0.330215 -1.891440	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	3.500000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.500000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.000000	</row2>
-                  <row3>	0.000008 0.768400 -1.752280	</row3>
+                  <row0>	1.000000 -0.000002 0.000007	</row0>
+                  <row1>	-0.000007 1.452971 1.374358	</row1>
+                  <row2>	-0.000002 -0.206154 0.217946	</row2>
+                  <row3>	1.422999 0.620619 -0.310167	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1406,9 +1400,6 @@
           </geometry>
           <startIndex>	1	</startIndex>
           <count>	2	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <trackPairIdx>	1	</trackPairIdx>
         </group>
         <wheel>
@@ -1488,9 +1479,6 @@
           </geometry>
           <startIndex>	1	</startIndex>
           <count>	2	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <trackPairIdx>	1	</trackPairIdx>
         </group>
         <wheel>
@@ -1560,6 +1548,7 @@
             <frontmostGroundWheelName>	W_R0	</frontmostGroundWheelName>
           </trackTrace>
         </traces>
+        <generalWheels>	true	</generalWheels>
       </wheels>
       <trackNodes>
         <trackPair>
@@ -1693,118 +1682,24 @@
         </trackPair>
       </trackNodes>
       <groundNodes>
-        <node>
-          <name>	Track_L0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+        <group>
+          <template>	Track_L	</template>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L6	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <affectedWheelsTemplate>	W_L	</affectedWheelsTemplate>
+        </group>
+        <group>
+          <template>	Track_R	</template>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R6	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.1	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <affectedWheelsTemplate>	W_R	</affectedWheelsTemplate>
+        </group>
       </groundNodes>
       <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
       <effects>
@@ -2736,10 +2631,9 @@
             <maxPitch>	0 8 0.38 8 0.46 3 0.54 3 0.62 8 1 8	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
-          <reloadTime>	0.1	</reloadTime>
-          <forcedReloadTime>	10	</forcedReloadTime>
+          <reloadTime>	10	</reloadTime>
           <aimingTime>	1.0	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.001	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	0.1	</afterShot>
@@ -2748,6 +2642,7 @@
           <autoShoot>
             <shotDispersionPerSec>	2.0	</shotDispersionPerSec>
             <maxShotDispersion>	3	</maxShotDispersion>
+            <rate>	10	</rate>
           </autoShoot>
           <temperatureMechanics>
             <heatingPerShot>	2	</heatingPerShot>
@@ -2850,7 +2745,7 @@
             </armor_27>
             <gun>	10	</gun>
           </armor>
-          <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+          <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
           <effects>	shot_flame_autoshoot	</effects>
           <customizationSlots>
             <slot>

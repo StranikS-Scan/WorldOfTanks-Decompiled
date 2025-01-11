@@ -2020,44 +2020,45 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_140mm_50_3rd_Year_Type_7x7>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_150mm_45_41st_Year_Type_7x7>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <gun>	60	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.080556 10 0.083333 9.8 0.086111 9.6 0.088889 9.4 0.091667 9.5 0.094444 9.6 0.097222 9.7 0.1 9.8 0.102778 9.9 0.108333 10 0.472222 10 0.475 9.7 0.477778 9.3 0.483333 9.4 0.516667 9.4 0.522222 9.3 0.525 9.7 0.527778 10 0.891667 10 0.897222 9.9 0.9 9.8 0.902778 9.7 0.905556 9.6 0.908333 9.5 0.911111 9.4 0.913889 9.6 0.916667 9.8 0.919444 10 1 10	</maxPitch>
+            <maxPitch>	0 8 0.138889 8 0.166667 10 0.333333 10 0.361111 8 0.638889 8 0.666667 10 0.833333 10 0.861111 8 1 8	</maxPitch>
           </pitchLimits>
-          <invisibilityFactorAtShot>	0.152	</invisibilityFactorAtShot>
-          <reloadTime>	17.1	</reloadTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
+          <reloadTime>	17.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	4.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <models>
-            <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/japan/J20_Type_2605/crash/lod0/Gun_02.model	</exploded>
             <sets>
               <J20_Type_2605_3Dst>
-                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_01.model	</exploded>
+                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_3Dst/crash/lod0/Gun_02.model	</exploded>
               </J20_Type_2605_3Dst>
               <J20_Type_2605_BXI_3DSt>
-                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/crash/lod0/Gun_01.model	</exploded>
+                <undamaged>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/japan/J20_Type_2605/_skins/J20_Type_2605_BXI_3DSt/crash/lod0/Gun_02.model	</exploded>
               </J20_Type_2605_BXI_3DSt>
             </sets>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/japan/J20_Type_2605/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/japan/J20_Type_2605/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/japan/J20_Type_2605/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_largeext	</effects>
+          <effects>	shot_huge	</effects>
           <reloadEffect>	reload115_152	</reloadEffect>
           <customizationSlots>
             <slot>
@@ -2112,7 +2113,7 @@
             <density>	102.417 104.351	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_140mm_50_3rd_Year_Type_7x7>
+        </_150mm_45_41st_Year_Type_7x7>
       </guns>
       <models>
         <undamaged>	vehicles/japan/J20_Type_2605/normal/lod0/Turret_01.model	</undamaged>

@@ -662,10 +662,10 @@
     <description>	#gb_vehicles:GB114_Vickers_MBT_Mk3_desc	</description>
     <shortDescriptionSpecial>	#gb_vehicles:GB114_Vickers_MBT_Mk3_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#gb_vehicles:GB114_Vickers_MBT_Mk3_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD testTank secret mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit	</tags>
+    <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit	</tags>
     <level>	8	</level>
   </GB114_Vickers_MBT_Mk3>
   <GB113_Matilda_LVT>
@@ -1232,4 +1232,15 @@
     <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special	</tags>
     <level>	10	</level>
   </GB128_Nemesis>
+  <GB120_Concept_No_5_bob>
+    <id>	31002	</id>
+    <userString>	#gb_vehicles:GB120_Concept_No_5_bob	</userString>
+    <shortUserString>	#gb_vehicles:GB120_Concept_No_5_bob_short	</shortUserString>
+    <description>	#gb_vehicles:GB120_Concept_No_5_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_sniper private HD secret bob cannot_be_sold wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <level>	10	</level>
+  </GB120_Concept_No_5_bob>
 </list.xml>

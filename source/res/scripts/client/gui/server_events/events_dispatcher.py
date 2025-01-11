@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_dispatcher.py
 import constants
-import logging
+from battle_pass_common import BattlePassConsts
 from gui import SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import parseEventID
@@ -9,25 +9,26 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionIn
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_main_quests_view_model import PageViewIdEnum
+from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsOperationWindow
+from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
 from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
+from gui.paragons.paragons_constants import PARAGONS_POST_BATTLE_FAKE_QUEST_ID
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
 from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView
-from gui.server_events import awards, events_helpers, recruit_helper, anniversary_helper
 from gui.shared.events import PersonalMissionsEvent
 from helpers import dependency
+from personal_missions import PM_BRANCH
+from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController
 from skeletons.gui.impl import INotificationWindowController, IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from gui.impl.lobby.reward_window import TwitchRewardWindow, GiveAwayRewardWindow, PiggyBankRewardWindow
-from shared_utils import first
-from battle_pass_common import BattlePassConsts
-_logger = logging.getLogger(__name__)
-OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
- PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
 _EVENTS_REWARD_WINDOW = {recruit_helper.RecruitSourceID.TWITCH_0: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_1: TwitchRewardWindow,
  recruit_helper.RecruitSourceID.TWITCH_2: TwitchRewardWindow,
@@ -113,26 +114,39 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
 def showPersonalMission(missionID=None):
     if not canOpenPMPage(missionID=missionID):
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
+    eventsCache = dependency.instance(IEventsCache)
+    mission = eventsCache.getPersonalMissions().getAllQuests()[int(missionID)]
+    operationID = mission.getOperationID()
+    branchID = mission.getPMType().branch
+    if branchID == PM_BRANCH.PERSONAL_MISSION_3:
+        showPersonalMissionsOperationWindow(PageViewIdEnum.QUEST, operationID, missionID)
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'eventID': missionID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionsChain(operationID, chainID):
     if not canOpenPMPage(operationID=operationID):
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'operationID': operationID,
-     'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
+    if operationID in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+        showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, operationID)
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'operationID': operationID,
+         'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMissionOperationsPage(branchID, operationID):
     if not canOpenPMPage(branchID, operationID):
-        showPersonalMissionsOperationsMap()
+        showPersonalMissionsOperationsMap(branchID)
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'branch': branchID,
-     'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
+    if branchID == PM_BRANCH.PERSONAL_MISSION_3:
+        showPersonalMissionsOperationWindow(PageViewIdEnum.QUESTS, operationID)
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS), ctx={'branch': branchID,
+         'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionsOperationsMap():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS)), EVENT_BUS_SCOPE.LOBBY)
+def showPersonalMissionsOperationsMap(branchID=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx={'branch': branchID}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
@@ -215,10 +229,6 @@ def showPersonalMissionAwards():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionStartPage():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
 def hidePersonalMissionDetails():
     g_eventBus.handleEvent(events.HideWindowEvent(events.HideWindowEvent.HIDE_PERSONAL_MISSION_DETAILS_VIEW), EVENT_BUS_SCOPE.LOBBY)
 
@@ -233,6 +243,7 @@ def showProgressiveItemsBrowserView(ctx):
 
 def showMission(eventID, eventType=None):
     from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+    from gui.impl.lobby.paragons.paragons_window_events import showParagonsNavigationView
     if eventType == constants.EVENT_TYPE.C11N_PROGRESSION:
         itemIntCD, vehicleIntCD = parseEventID(eventID)
         service = dependency.instance(ICustomizationService)
@@ -251,6 +262,9 @@ def showMission(eventID, eventType=None):
         if eventID == BattlePassConsts.FAKE_QUEST_ID:
             hideWebBrowserOverlay()
             showMissionsBattlePass()
+            return
+        elif eventID == PARAGONS_POST_BATTLE_FAKE_QUEST_ID:
+            showParagonsNavigationView()
             return
         if quest is None or quest.isHidden():
             prefix = events_helpers.getMarathonPrefix(eventID)
@@ -415,6 +429,11 @@ def showPersonalMissionFirstEntryAwardView(ctx):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def showPersonalMissionFirstEntryView(ctx):
+    alias = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showActions(tab=None, anchor=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STORE), ctx={'tab': tab,
      'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -423,15 +442,6 @@ def showActions(tab=None, anchor=None):
 @dependency.replace_none_kwargs(armoryYardCtrl=IArmoryYardController)
 def goToArmoryYardQuests(armoryYardCtrl=None):
     armoryYardCtrl.goToArmoryYardQuests()
-
-
-@dependency.replace_none_kwargs(debutBoxesCtrl=IDebutBoxesController)
-def showDebutBoxesQuests(debutBoxesCtrl=None):
-    groupId = None
-    if debutBoxesCtrl.isEnabled():
-        groupId = debutBoxesCtrl.getGroupID()
-    showMissionsGrouped(groupID=groupId, anchor=groupId)
-    return
 
 
 def _showMissions(**kwargs):

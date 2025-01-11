@@ -133,16 +133,31 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def _update(self):
         handler = avatar_getter.getInputHandler()
-        if handler is None or not handler.isStarted or not handler.isAssaultSPG:
+        if handler is None or not handler.isStarted or not self.__isAlive:
             return
         else:
             entryID = self.__cameraIDs[_S_NAME.DIRECTION_ENTRY]
             if entryID:
-                vehicle = BigWorld.player().getVehicleAttached()
-                shotPoint = handler.getDesiredShotPoint(ignoreAimingMode=True, ignoreDetached=True)
-                hitPoint, _ = getShotTargetInfo(vehicle, shotPoint + math_utils.VectorConstant.Vector3J.scale(25), BigWorld.player().gunRotator)
-                self._invoke(entryID, 'as_updateShotDistance', vehicle.position.distTo(hitPoint))
+                distance = None
+                if handler.isAssaultSPG:
+                    distance = self.__getAssaultSPGDistance(handler)
+                elif handler.isFlamethrower:
+                    distance = self.__getFlameDistance()
+                if distance is None:
+                    return
+                self._invoke(entryID, 'as_updateShotDistance', distance)
             return
+
+    @staticmethod
+    def __getAssaultSPGDistance(handler):
+        vehicle = BigWorld.player().getVehicleAttached()
+        shotPoint = handler.getDesiredShotPoint(ignoreAimingMode=True, ignoreDetached=True)
+        hitPoint, _ = getShotTargetInfo(vehicle, shotPoint + math_utils.VectorConstant.Vector3J.scale(25), BigWorld.player().gunRotator)
+        return vehicle.position.distTo(hitPoint)
+
+    @staticmethod
+    def __getFlameDistance():
+        return BigWorld.player().getVehicleDescriptor().shot.maxDistance
 
     def initControlMode(self, mode, available):
         super(PersonalEntriesPlugin, self).initControlMode(mode, available)
@@ -163,7 +178,6 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         self.__updateViewPointEntry(vehicleID)
         self._updateDeadPointEntry()
         self._invalidateMarkup()
-        self.__updateDistanceIndicatorSettings()
 
     def clearCamera(self):
         if self.__currentCameraIDs:
@@ -183,7 +197,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             getter = self.settingsCore.getSetting
             if GUI_SETTINGS.showDirectionLine:
                 value = getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
-                if not value:
+                if not value or self.__isNeedDistanceIndicator():
                     self.__hideDirectionLine()
             if GUI_SETTINGS.showSectorLines and self.__yawLimits is not None:
                 value = getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
@@ -207,7 +221,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     def updateSettings(self, diff):
         if not self.__isAlive:
             return
-        if settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
+        if self._canShowDirectionLine() and settings_constants.GAME.SHOW_VECTOR_ON_MAP in diff and GUI_SETTINGS.showDirectionLine:
             value = diff[settings_constants.GAME.SHOW_VECTOR_ON_MAP]
             if value:
                 self.__showDirectionLine()
@@ -241,7 +255,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
                 else:
                     self.__removeViewRangeCircle()
             self._updateCirlcesState()
-            self.__updateInterval()
+            self.__updateDistanceIndicatorSettings()
 
     def setDefaultViewRangeCircleSize(self, size):
         self.__defaultViewRangeCircleSize = size
@@ -407,6 +421,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
             self._hideMarkup()
 
     def _hideMarkup(self):
+        self.__updateDistanceIndicatorSettings()
         self.__hideDirectionLine()
         self.__clearYawLimit()
         if self.__viewPointID:
@@ -465,6 +480,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
                 self._setActive(self.__circlesID, True)
             elif self.__circlesID is not None:
                 self._setActive(self.__circlesID, False)
+            self.__updateDistanceIndicatorSettings()
             return
 
     def updateVehiclesInfo(self, updated, arenaDP):
@@ -487,7 +503,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         return self.settingsCore.getSetting(settings_constants.GAME.MINIMAP_DRAW_RANGE)
 
     def _canShowDirectionLine(self):
-        return True
+        return not self.__isNeedDistanceIndicator()
 
     def _enableCameraEntryInCtrlMode(self, ctrlMode):
         return True
@@ -613,9 +629,8 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
 
     def __isNeedDistanceIndicator(self):
         vehicleID = self._arenaDP.getAttachedVehicleID()
-        vectorOnMapIsEnabled = self.settingsCore.getSetting(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
-        distanceIndicatorEnabled = self._arenaDP.getVehicleInfo(vehicleID).vehicleType.isAssaultVehicle
-        return distanceIndicatorEnabled and vectorOnMapIsEnabled and self.__isAlive
+        distanceIndicatorEnabled = self._arenaDP.getVehicleInfo(vehicleID).vehicleType.isAssaultVehicle or self._arenaDP.getVehicleInfo(vehicleID).vehicleType.isAutoShootFlamethrowerVehicle
+        return distanceIndicatorEnabled and self.__isAlive
 
 
 class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController):

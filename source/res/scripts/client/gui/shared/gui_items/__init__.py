@@ -10,7 +10,6 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES,
 from gui.shared.money import Currency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from helpers import dependency
-from collections import namedtuple
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
@@ -316,8 +315,7 @@ class KPI(object):
         VEHICLE_TURRET_OR_CUTTING_ROTATION_SPEED = 'vehicleTurretOrCuttingRotationSpeed'
         VEHICLE_FORWARD_MAX_SPEED = 'vehicleForwardMaxSpeed'
         VEHICLE_BACKWARD_MAX_SPEED = 'vehicleBackwardMaxSpeed'
-        SHOTS_LIMIT_FOR_GUN_BOOST = 'shotsLimitForGunBoost'
-        MIN_TIME_BETWEEN_RELOAD_BOOST = 'minTimeBetweenReloadBoost'
+        LIMITS_FOR_GUN_BOOST = 'limitsForGunBoost'
         VEHICLE_GUN_AND_GUN_CLIP_COOLDOWN = 'vehicleGunAndGunClipCooldown'
         EQUIPMENT_PREPARATION_TIME = 'equipmentPreparationTime'
         DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND = 'damageAndPiercingDistributionLowerBound'
@@ -339,6 +337,12 @@ class KPI(object):
         COMMANDER_HIT_CHANCE = 'commanderHitChance'
         WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
         VEHICLE_ALLY_RADIO_DISTANCE = 'vehicleAllyRadioDistance'
+        TEMPERATURE_STATES_COUNT = 'temperatureStatesCount'
+        TEMPERATURE_MAX_TEMPERATURE = 'temperatureMaxTemperature'
+        TEMPERATURE_HEATING_PER_SEC = 'temperatureHeatingPerSec'
+        TEMPERATURE_COOLING_PER_SEC = 'temperatureCoolingPerSec'
+        TEMPERATURE_COOLING_DELAY = 'temperatureCoolingDelay'
+        TEMPERATURE_DAMAGE_FACTOR = 'temperatureDamageFactor'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         CREW_LEVEL = 'crewLevel'
@@ -443,6 +447,27 @@ def kpiFormatValue(kpiName, value, addEnding=True):
 def kpiFormatNoSignValue(kpiName, value, addEnding=True):
     res = getNiceNumberFormat(value)
     return kpiAddEnding(kpiName, res) if addEnding else res
+
+
+def kpiFormatNoSignWithSpec(kpiName, values, addEnding=True):
+    value, specValue = values
+    return (kpiFormatNoSignValue(kpiName, value, False), kpiFormatNoSignValue(kpiName + 'Spec', specValue, addEnding))
+
+
+def kpiFormatNoSignList(kpiName, values, addEnding=True):
+    res = [ getNiceNumberFormat(value) for value in values ]
+    return kpiAddEnding(kpiName, res) if addEnding else res
+
+
+def kpiFormatNoSignEndingForEveryValueList(kpiName, values, addEnding=True):
+    res = [ getNiceNumberFormat(value) for value in values ]
+    if addEnding:
+        resWithEnding = []
+        for value in res:
+            resWithEnding.append(kpiAddEnding(kpiName, value))
+
+        return resWithEnding
+    return res
 
 
 def kpiFormatWithSpec(kpiName, values, addEnding=True):

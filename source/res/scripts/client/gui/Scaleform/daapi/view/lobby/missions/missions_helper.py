@@ -28,6 +28,7 @@ from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BAT
 from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium, isDebutBoxesQuest, isVersusAIQuest
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
+from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from gui.shared.formatters import text_styles, icons, time_formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -36,7 +37,8 @@ from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from potapov_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from quest_xml_source import MAX_BONUS_LIMIT
-from shared_utils import first
+from shared_utils import first, findFirst
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IDebutBoxesController
@@ -1401,3 +1403,21 @@ def getMapRegionTooltipData(state, quest):
          'isSpecial': True,
          'specialArgs': [quest.getID(), state]}
     return tooltipData
+
+
+def checkOldCampaignsIntroSeen():
+    from gui.server_events.events_dispatcher import showPersonalMissionFirstEntryAwardView
+    from gui.server_events.events_dispatcher import showPersonalMissionFirstEntryView
+    settingsCore = dependency.instance(ISettingsCore)
+    eventsCache = dependency.instance(IEventsCache)
+    uiStorage = settingsCore.serverSettings.getUIStorage()
+    if not uiStorage.get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN):
+        showPersonalMissionFirstEntryView(ctx=None)
+        return False
+    else:
+        if not uiStorage.get(PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN):
+            if findFirst(operator.methodcaller('isAwardAchieved'), eventsCache.getPersonalMissions().getAllOperations().values()):
+                showPersonalMissionFirstEntryAwardView(ctx=None)
+                return False
+            settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
+        return True

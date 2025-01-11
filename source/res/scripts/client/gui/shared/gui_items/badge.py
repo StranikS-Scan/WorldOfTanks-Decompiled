@@ -8,6 +8,7 @@ from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.settings import getBadgeIconPath, getAwardBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen_utils import INVALID_RES_ID
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n, dependency
 from shared_utils import CONST_CONTAINER
@@ -89,6 +90,9 @@ class Badge(GUIItem):
 
     def getBigIcon(self):
         return self.__getIconPath(BADGES_ICONS.X80)
+
+    def getBonusIcon(self):
+        return self.__getBonusIconPath()
 
     def getIconX110(self):
         return self.__getIconPath(BADGES_ICONS.X110)
@@ -175,6 +179,11 @@ class Badge(GUIItem):
         else:
             iconPath = getBadgeIconPath(size, iconPostfix)
         return iconPath
+
+    def __getBonusIconPath(self):
+        unicName = 'badge_%s' % self.getIconPostfix()
+        resID = R.images.gui.maps.icons.library.badges.c_80x80.dyn(unicName)()
+        return None if resID == INVALID_RES_ID else backport.image(resID)
 
     def __checkType(self, badgeType):
         return self.data['type'] & badgeType > 0

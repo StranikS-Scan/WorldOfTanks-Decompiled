@@ -34,6 +34,8 @@ class ProjectileMover(object):
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged += self.__onCameraChanged
+        self.ribbonsByAttacker = dict()
+        self.removalCallbacks = dict()
         self.__debugDrawer = None
         return
 
@@ -41,6 +43,14 @@ class ProjectileMover(object):
         return self.__projectiles.get(shotID)
 
     def destroy(self):
+        for _, ribbons in self.ribbonsByAttacker.iteritems():
+            for ribbon in ribbons:
+                removalCallback = self.removalCallbacks.pop(ribbon, None)
+                ribbon.destroy()
+                if removalCallback:
+                    BigWorld.cancelCallback(removalCallback)
+
+        self.ribbonsByAttacker = None
         player = BigWorld.player()
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
@@ -81,10 +91,31 @@ class ProjectileMover(object):
              'attackerID': attackerID,
              'effectsData': {}}
             if not gEffectsDisabled():
+                shooter = BigWorld.entity(attackerID)
+                if shooter and shooter.appearance:
+                    node = shooter.appearance.compoundModel.node('HP_gunFire')
+                    if node is not None:
+                        model.position = node.position
                 BigWorld.player().addModel(model)
                 model.addMotor(projectileMotor)
                 model.visible = False
                 model.visibleAttachments = True
+                ribbonDescrs = [ x for x in projEffects.descriptors() if 'FlamethrowerRibbon' in x.__class__.__name__ ]
+                if ribbonDescrs:
+                    ribbonDescr = ribbonDescrs[0]
+                    maxLifeTime = maxDistance / refVelocity.length
+                    ribbons = self.ribbonsByAttacker
+                    if not ribbons.get(attackerID, None):
+                        ribbons[attackerID] = [BigWorld.FlamethrowerRibbon(BigWorld.player().spaceID, -gravity, maxLifeTime, isOwnShoot, ribbonDescr.id)]
+                    elif ribbons[attackerID][-1].timeFromLastBullet() > ribbons[attackerID][-1].connectionTimeThreshold():
+                        ribbons[attackerID].append(BigWorld.FlamethrowerRibbon(BigWorld.player().spaceID, -gravity, maxLifeTime, isOwnShoot, ribbonDescr.id))
+                    ribbon = proj['flamethrowerRibbon'] = ribbons[attackerID][-1]
+                    removalCallback = self.removalCallbacks.pop(ribbon, None)
+                    if removalCallback:
+                        BigWorld.cancelCallback(removalCallback)
+                    ribbon.addNode(model, refVelocity, shotID)
+                    if shooter and shooter.appearance:
+                        ribbon.setGunpointNode(shooter.appearance.compoundModel.node('HP_gunFire'))
                 projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID, collisionTime=collisionTime)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)
@@ -174,6 +205,18 @@ class ProjectileMover(object):
             effectsDescr = proj['effectsDescr']
             projEffects = effectsDescr['projectile'][2]
             projEffects.detachFrom(proj['effectsData'], 'stopFlying', deathType)
+            ribbon = proj.pop('flamethrowerRibbon', None)
+            if ribbon:
+                ribbon.removeNode(proj['model'])
+                if ribbon.mayBeDeleted():
+                    attackerID = proj['attackerID']
+
+                    def remove():
+                        self.ribbonsByAttacker[attackerID].remove(ribbon)
+                        ribbon.destroy()
+                        self.removalCallbacks.pop(ribbon)
+
+                    self.removalCallbacks[ribbon] = BigWorld.callback(1.0, remove)
             if proj['showExplosion'] and explode:
                 self.__addExplosionEffect(position, proj, impactVelDir)
             return
@@ -217,6 +260,7 @@ class ProjectileMover(object):
 
     def __onCameraChanged(self, cameraName, currentVehicleId=None):
         self.__ballistics.setBallisticsAutoScale(cameraName != 'sniper')
+        BigWorld.FlamethrowerRibbon.onCameraChanged(cameraName == 'sniper')
 
 
 class EntityCollisionData(object):

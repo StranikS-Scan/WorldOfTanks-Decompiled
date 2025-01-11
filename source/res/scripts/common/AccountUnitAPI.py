@@ -103,6 +103,9 @@ class UnitClientAPI(object):
     def createSquadByQueueType(self, queueType, unitExtrasInitStr='', modeExtrasStr=''):
         return self._doCreate(0, queueType=queueType, unitExtrasInitStr=unitExtrasInitStr, modeExtrasStr=modeExtrasStr)
 
+    def createBobSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.BOB)
+
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
 

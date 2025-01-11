@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
-from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter
+from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerConvertersSubFormatter
 from messenger.formatters import service_channel as _sc
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.formatters import token_quest_subformatters
+from messenger.formatters.new_year_post_event.converter_formatters import NewYearMandarinsConverterFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
@@ -19,13 +20,11 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.CrewPerksFormatter()))
-_HANGAR_QUESTS_SUB_FORMATTERS = [token_quest_subformatters.BattleMattersAwardsFormatter()]
-
-def registerHangarQuestSubFormatters(formatters):
-    _HANGAR_QUESTS_SUB_FORMATTERS.extend(formatters)
-
-
+ token_quest_subformatters.CrewPerksFormatter(),
+ token_quest_subformatters.BobTokenQuestFormatter(),
+ token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
+registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)
+_HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
 _PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMissionsFormatter(),)
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
@@ -126,7 +125,9 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.collectionsItems.index(): _sc.CollectionsItemsFormatter(),
  _SM_TYPE.collectionsReward.index(): _sc.CollectionsRewardFormatter(),
  _SM_TYPE.earlyAccessCompensation.index(): _sc.EarlyAccessCompensationFormatter(),
- _SM_TYPE.earlyAccessVehicle.index(): _sc.EarlyAccessVehicleObtainFormatter()}
+ _SM_TYPE.earlyAccessVehicle.index(): _sc.EarlyAccessVehicleObtainFormatter(),
+ _SM_TYPE.paragonsLevelRewardsReceived.index(): _sc.ParagonsLevelCompletedFormatter(),
+ _SM_TYPE.paragonsCoinsGranted.index(): _sc.ParagonsCoinsGrantedFormatter()}
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -263,3 +264,7 @@ def initRegistrationFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PREMIUM_SUBS_RECEIVED_FROM_INVOICE, _wotPlusFormatters.PremiumSubsReceivedFromInvoiceFormatter())
     registerMessengerServerFormatter(_SM_TYPE.earlyAccessCompensation.index(), _sc.EarlyAccessCompensationFormatter())
     registerMessengerServerFormatter(_SM_TYPE.earlyAccessVehicle.index(), _sc.EarlyAccessVehicleObtainFormatter())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PM3_CAMPAIGN_COMPLETED_PERFECT, _sc.PM3CampaignCompletedPerfect())
+    registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.PARAGONS_SM_TYPE, _sc.ParagonsFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.paragonsLevelRewardsReceived.index(), _sc.ParagonsLevelCompletedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.paragonsCoinsGranted.index(), _sc.ParagonsCoinsGrantedFormatter())

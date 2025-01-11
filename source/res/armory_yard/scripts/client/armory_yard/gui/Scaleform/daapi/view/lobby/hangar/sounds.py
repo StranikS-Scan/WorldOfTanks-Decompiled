@@ -1,20 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: armory_yard/scripts/client/armory_yard/gui/Scaleform/daapi/view/lobby/hangar/sounds.py
-import WWISE
+import SoundGroups
 from gui.impl.gen import R
 from gui.impl.lobby.video.video_sound_manager import IVideoSoundManager, SoundManagerStates
 from shared_utils import CONST_CONTAINER
 
 class ArmoryYardSounds(CONST_CONTAINER):
-    VIDEO_ARMOUR = 'ay_vid_stage_08'
-    VIDEO_GUN = 'ay_vid_stage_16'
-    VIDEO_TURRET = 'ay_vid_stage_18'
-    VIDEO_TRACKS = 'ay_vid_stage_22'
-    VIDEO_REWARD = 'ay_vid_stage_26'
-    VIDEO_INTRO = 'ay_vid_stage_00'
+    VIDEO_ARMOUR = 'ay_vid_stage_armour'
+    VIDEO_GUN = 'ay_vid_stage_gun'
+    VIDEO_TURRET = 'ay_vid_stage_turret'
+    VIDEO_TRACKS = 'ay_vid_stage_tracks'
+    VIDEO_REWARD = 'ay_vid_stage_reward'
+    VIDEO_INTRO = 'ay_vid_stage_intro'
     VIDEO_PAUSE = 'ay_video_pause'
     VIDEO_RESUME = 'ay_video_resume'
     VIDEO_STOP = 'ay_video_stop'
+    VIDEO_RTPC = 'RTPC_ext_video_volume'
 
 
 class ArmoryYardVideoSoundControl(IVideoSoundManager):
@@ -34,24 +35,32 @@ class ArmoryYardVideoSoundControl(IVideoSoundManager):
     def videoSoundEvent(self):
         return self.__getMapping().get(self.__videoID)
 
+    def isVideoStarted(self):
+        return self.__state is not None
+
     def start(self):
         sound = self.videoSoundEvent
         if sound:
-            WWISE.WW_eventGlobal(sound)
+            self.setVolume()
+            SoundGroups.g_instance.playSound2D(sound)
             self.__state = SoundManagerStates.PLAYING
 
     def stop(self):
         if self.__state != SoundManagerStates.STOPPED:
-            WWISE.WW_eventGlobal(ArmoryYardSounds.VIDEO_STOP)
+            SoundGroups.g_instance.playSound2D(ArmoryYardSounds.VIDEO_STOP)
             self.__state = SoundManagerStates.STOPPED
 
     def pause(self):
-        WWISE.WW_eventGlobal(ArmoryYardSounds.VIDEO_PAUSE)
+        SoundGroups.g_instance.playSound2D(ArmoryYardSounds.VIDEO_PAUSE)
         self.__state = SoundManagerStates.PAUSE
 
     def unpause(self):
-        WWISE.WW_eventGlobal(ArmoryYardSounds.VIDEO_RESUME)
+        SoundGroups.g_instance.playSound2D(ArmoryYardSounds.VIDEO_RESUME)
         self.__state = SoundManagerStates.PLAYING
+
+    def setVolume(self):
+        volumeLevel = SoundGroups.g_instance.getMaxVolumeFromCategories(SoundGroups.USER_SETTINGS_CATEGORY_NAMES)
+        SoundGroups.g_instance.setRTPC(ArmoryYardSounds.VIDEO_RTPC, volumeLevel)
 
     def __getMapping(self):
         mapping = {}

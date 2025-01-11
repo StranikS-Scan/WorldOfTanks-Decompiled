@@ -54,8 +54,6 @@ class WalletController(IWalletController):
         wallet = BigWorld.player().serverSettings['wallet']
         self.__useGold = bool(wallet[0])
         self.__useFreeXP = bool(wallet[1])
-        if self.__useFreeXP:
-            self.__checkFreeXPConditions()
         if self.itemsCache.items.stats.mayConsumeWalletResources:
             status = self.STATUS.AVAILABLE
         else:

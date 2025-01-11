@@ -9,13 +9,13 @@ from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDIC
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
-from gui.Scaleform.daapi.view.meta.RocketAcceleratorIndicatorMeta import RocketAcceleratorIndicatorMeta
+from gui.Scaleform.daapi.view.meta.CommonIndicatorMeta import CommonIndicatorMeta
 from gui.Scaleform.flash_wrapper import Flash, InputKeyMode
 from gui.Scaleform.daapi.view.battle.shared.vehicles import siege_component
 from gui.Scaleform.daapi.view.meta.SiegeModeIndicatorMeta import SiegeModeIndicatorMeta
 from gui.Scaleform.daapi.view.meta.SixthSenseMeta import SixthSenseMeta
 from gui.Scaleform.genConsts.DAMAGEINDICATOR import DAMAGEINDICATOR
-from gui.Scaleform.genConsts.ROCKET_ACCELERATOR_INDICATOR import ROCKET_ACCELERATOR_INDICATOR
+from gui.Scaleform.genConsts.COMMON_INDICATOR_CONSTS import COMMON_INDICATOR_CONSTS
 from gui.Scaleform.genConsts.SIEGE_MODE_CONSTS import SIEGE_MODE_CONSTS
 from gui.Scaleform.genConsts.SIXTHSENSEINDICATOR_CONSTS import SIXTHSENSEINDICATOR_CONSTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -1088,13 +1088,13 @@ class _PredictionIndicator(PredictionIndicatorMeta, IHitIndicator):
         return
 
 
-UI_ROCKET_STATE_MAP = {ROCKET_ACCELERATION_STATE.NOT_RUNNING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.DEPLOYING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.PREPARING: ROCKET_ACCELERATOR_INDICATOR.PREPARING,
- ROCKET_ACCELERATION_STATE.READY: ROCKET_ACCELERATOR_INDICATOR.READY,
- ROCKET_ACCELERATION_STATE.ACTIVE: ROCKET_ACCELERATOR_INDICATOR.ACTIVE,
- ROCKET_ACCELERATION_STATE.DISABLED: ROCKET_ACCELERATOR_INDICATOR.DISABLE,
- ROCKET_ACCELERATION_STATE.EMPTY: ROCKET_ACCELERATOR_INDICATOR.PREPARING}
+UI_ROCKET_STATE_MAP = {ROCKET_ACCELERATION_STATE.NOT_RUNNING: COMMON_INDICATOR_CONSTS.PREPARING,
+ ROCKET_ACCELERATION_STATE.DEPLOYING: COMMON_INDICATOR_CONSTS.PREPARING,
+ ROCKET_ACCELERATION_STATE.PREPARING: COMMON_INDICATOR_CONSTS.PREPARING,
+ ROCKET_ACCELERATION_STATE.READY: COMMON_INDICATOR_CONSTS.READY,
+ ROCKET_ACCELERATION_STATE.ACTIVE: COMMON_INDICATOR_CONSTS.ACTIVE,
+ ROCKET_ACCELERATION_STATE.DISABLED: COMMON_INDICATOR_CONSTS.DISABLE,
+ ROCKET_ACCELERATION_STATE.EMPTY: COMMON_INDICATOR_CONSTS.PREPARING}
 
 class RocketIndicatorUpdater(object):
 
@@ -1151,7 +1151,7 @@ class RocketIndicatorUpdater(object):
         self._updateProgress()
 
 
-class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
+class RocketAcceleratorIndicator(CommonIndicatorMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):

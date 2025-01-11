@@ -7,9 +7,10 @@ import BigWorld
 import Windowing
 from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MISSIONS_PAGE, NY_DAILY_QUESTS_VISITED
+from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LuiRules
+from gui.marathon.bob_event import BobEvent
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
 from wg_async import wg_async, wg_await
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -42,7 +43,7 @@ from gui.shared.event_dispatcher import showHangar
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv, BattleMattersSoundEnv
+from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv, BattleMattersSoundEnv, BobPageSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
@@ -174,6 +175,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             return MissionsPremiumSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
+            if self.__marathonPrefix == BobEvent.BOB_EVENT_PREFIX:
+                return BobPageSoundEnv
             return MarathonPageSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             return MissionsCategoriesSoundEnv
@@ -309,7 +312,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def __fireTabChangedEvent(self):
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
+         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
         if self.currentTab:
             self.currentTab.markVisited()
 
@@ -448,8 +452,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                         newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:
                     newEventsCount = self.__mapboxCtrl.getUnseenItemsCount()
-                    if not AccountSettings.getNewYear(NY_DAILY_QUESTS_VISITED):
-                        newEventsCount += 1
                 elif self.currentTab is not None and self.__currentTabAlias == alias:
                     suitableEvents = self.__getSuitableEvents(self.currentTab)
                     newEventsCount = len(settings.getNewCommonEvents(suitableEvents))
@@ -641,14 +643,13 @@ class MissionView(MissionViewBase):
         result = []
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
-        nyBannerAdded = self._appendNYBanner(result)
         for data in self._builder.getBlocksData(self.__viewQuests, self.__filter):
             self._appendBlockDataToResult(result, data)
             self._totalQuestsCount += self._getQuestTotalCountFromBlockData(data)
             self._filteredQuestsCount += self._getQuestFilteredCountFromBlockData(data)
 
         self._questsDP.buildList(result)
-        if not self._totalQuestsCount and not nyBannerAdded:
+        if not self._totalQuestsCount:
             self.as_showDummyS(self._getDummy())
         else:
             self.as_hideDummyS()
@@ -698,16 +699,13 @@ class MissionView(MissionViewBase):
     def __filter(self, event):
         if self._filterData.get(HIDE_UNAVAILABLE, False) and not event.isAvailable()[0]:
             return False
-        return False if self._filterData.get(HIDE_DONE, False) and event.isCompleted() else event.shouldBeShown()
+        return False if self._filterData.get(HIDE_DONE, False) and event.isCompleted() else True
 
     def _getViewQuestFilter(self):
         return None
 
     def __onPremiumTypeChanged(self, newAcctType):
         self.markVisited()
-
-    def _appendNYBanner(self, _):
-        return False
 
 
 class ElenMissionView(MissionViewBase):

@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_progress/formatters.py
+import itertools
 from collections import namedtuple
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.server_events.personal_progress.storage import PostBattleProgressStorage, LobbyProgressStorage
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
-from personal_missions_constants import DISPLAY_TYPE, MULTIPLIER_SCOPE
+from personal_missions_constants import DISPLAY_TYPE, MULTIPLIER_SCOPE, CONTAINER
 from shared_utils import first, findFirst
 
 class ProgressesFormatter(object):
@@ -38,7 +41,9 @@ class ProgressesFormatter(object):
             if isMain is not None:
                 progresses = self._storage.getHeaderProgresses(isMain)
                 if progresses:
-                    result.append(first(progresses.values()).getHeaderData())
+                    for progress in progresses.itervalues():
+                        result.append(progress.getHeaderData())
+
                 else:
                     result.append(self.__addDummyHeaderProgress(isMain))
             else:
@@ -49,14 +54,8 @@ class ProgressesFormatter(object):
                         mainProgresses.append(progress)
                     addProgresses.append(progress)
 
-                if mainProgresses:
-                    result.append(first(mainProgresses).getHeaderData())
-                else:
-                    result.append(self.__addDummyHeaderProgress(isMain=True))
-                if addProgresses:
-                    result.append(first(addProgresses).getHeaderData())
-                else:
-                    result.append(self.__addDummyHeaderProgress(isMain=False))
+                self.__addHeaderData(result, mainProgresses, isMain=True)
+                self.__addHeaderData(result, addProgresses, isMain=False)
         return result
 
     @classmethod
@@ -65,14 +64,23 @@ class ProgressesFormatter(object):
 
     @classmethod
     def _sortedBodyProgresses(cls, progresses):
-        return sorted(progresses.itervalues(), key=lambda p: (not p.isMain(), p.getPriority()))
+        return sorted(progresses.itervalues(), key=lambda p: (p.groupID(), not p.isMain(), p.getPriority()))
+
+    def __addHeaderData(self, result, progresses, isMain):
+        if progresses:
+            for progress in progresses:
+                result.append(progress.getHeaderData())
+
+        else:
+            result.append(self.__addDummyHeaderProgress(isMain=isMain))
 
     def __addDummyHeaderProgress(self, isMain):
-        orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
-        key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_ADD
         if isMain:
             orderType = QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE
             key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_MAIN
+        else:
+            orderType = QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
+            key = PERSONAL_MISSIONS.CONDITIONS_UNLIMITED_LABEL_ADD
         return {'progressType': self._dummyHeaderType,
          'orderType': orderType,
          'header': i18n.makeString(key)}
@@ -104,35 +112,51 @@ class DetailedProgressFormatter(ProgressesFormatter):
 
 
 class PostBattleConditionsFormatter(object):
-    __slots__ = ('__event', '__storage', '__wasMultiplied', '__wasFailed')
+    __slots__ = ('_event', '_storage', '__wasMultiplied', '_progressBeforeFailed')
 
     def __init__(self, event, progressData):
         data = progressData or {}
-        self.__event = event
-        self.__storage = None
+        self._event = event
+        self._storage = None
         self.__wasMultiplied = data.get('multiplied')
-        self.__wasFailed = data.get('wasFailed')
-        self.__storage = PostBattleProgressStorage(event.getGeneralQuestID(), event.getConditionsConfig(), data.get('current'), event.isOneBattleQuest())
+        self._progressBeforeFailed = data.get('progressBeforeFailed') or {}
+        self._storage = PostBattleProgressStorage(event.getGeneralQuestID(), event.getConditionsConfig(), data.get('current'), event.isOneBattleQuest())
         return
 
     def getConditionsData(self, isMain):
-        return {'statusText': self.__getStatusText(isMain),
+        return {'statusText': self._getStatusText(*self.__getStatusConditionValues(isMain)),
          'text': self.__getQuestDescrText(isMain)}
 
     def getMultiplierDescription(self):
         if self.__wasMultiplied:
-            for progress in self.__storage.getBodyProgresses().itervalues():
+            for progress in self._storage.getBodyProgresses().itervalues():
                 multiplier = progress.getMultiplier()
                 if multiplier:
                     return progress.getFormattedMultiplierValue(MULTIPLIER_SCOPE.POST_BATTLE)
 
     def getFailedDescription(self):
-        if self.__wasFailed:
-            progresses = self.__storage.getBodyProgresses()
-            progresses.update(self.__storage.getHeaderProgresses())
-            for progress in progresses.itervalues():
-                if progress.getProgressID() in self.__wasFailed:
-                    return text_styles.concatStylesToSingleLine(text_styles.alert(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_ATTENTION)), ' ', text_styles.main(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_DESCR)))
+        if self._progressBeforeFailed:
+            progresses = self._storage.getBodyProgresses()
+            progresses.update(self._storage.getHeaderProgresses())
+            if self._shouldShowFailedText(progresses):
+                return text_styles.concatStylesToSingleLine(text_styles.alert(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_ATTENTION)), ' ', text_styles.main(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_FAILED_DESCR)))
+
+    def _shouldShowFailedText(self, progresses):
+        return any((progressID in self._progressBeforeFailed for progressID in progresses.iterkeys()))
+
+    def _getStatusText(self, current, goal, state, isCumulative=True):
+        currentStr = backport.getNiceNumberFormat(current)
+        goalStr = backport.getIntegralFormat(goal)
+        if state == QUEST_PROGRESS_STATE.COMPLETED:
+            if isCumulative:
+                return ''.join([text_styles.bonusAppliedText(currentStr), text_styles.success(' / %s' % goalStr)])
+            progressDesc = text_styles.bonusAppliedText(i18n.makeString(QUESTS.QUESTS_STATUS_DONE))
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, 16, 16, -2, 8)
+            statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
+            return statusLabel
+        if not isCumulative:
+            return ''
+        return ''.join([text_styles.error(currentStr), text_styles.failedStatusText(' / %s' % goalStr)]) if state == QUEST_PROGRESS_STATE.FAILED else ''.join([text_styles.stats(currentStr), text_styles.main(' / %s' % goalStr)])
 
     def __getQuestDescrText(self, isMain):
         if isMain:
@@ -142,29 +166,84 @@ class PostBattleConditionsFormatter(object):
         return _packCondition(title, self.__getStrConditions(isMain))
 
     def __getStrConditions(self, isMain):
-        return '\n'.join([ progress.getDescription() for progress in self.__storage.getBodyProgresses(isMain).itervalues() ])
-
-    def __getStatusText(self, isMain):
-        statusConditionValues = self.__getStatusConditionValues(isMain)
-        if statusConditionValues:
-            current, goal, state = statusConditionValues
-            currentStr = backport.getNiceNumberFormat(current)
-            goalStr = backport.getIntegralFormat(goal)
-            if state == QUEST_PROGRESS_STATE.COMPLETED:
-                return ''.join([text_styles.bonusAppliedText(currentStr), text_styles.success(' / %s' % goalStr)])
-            if state == QUEST_PROGRESS_STATE.FAILED:
-                return ''.join([text_styles.error(currentStr), text_styles.failedStatusText(' / %s' % goalStr)])
-            return ''.join([text_styles.stats(currentStr), text_styles.main(' / %s' % goalStr)])
+        return '\n'.join([ progress.getDescription() for progress in self._storage.getBodyProgresses(isMain).itervalues() ])
 
     def __getStatusConditionValues(self, isMain):
-        for progress in self.__storage.getBodyProgresses(isMain).itervalues():
+        for progress in self._storage.getBodyProgresses(isMain).itervalues():
             if progress.isCumulative():
                 return (progress.getCurrent(), progress.getGoal(), progress.getState())
 
-        for progress in self.__storage.getHeaderProgresses(isMain).itervalues():
+        for progress in self._storage.getHeaderProgresses(isMain).itervalues():
             return (progress.getCurrent(), progress.getGoal(), progress.getState())
 
-        return None
+
+class PM3PostBattleConditionsFormatter(PostBattleConditionsFormatter):
+
+    def getConditionsDataList(self, isMain):
+        result = []
+        isWithAdd = self._event.getPMType().withAdd
+        isQuestCumulative = any((progress.isCumulative() for progress in itertools.chain(self._storage.getBodyProgresses(isMain).itervalues(), self._storage.getHeaderProgresses(isMain).itervalues())))
+        limiterIDs = set((progress.getLimiter().getProgressID() for progress in self._storage.getBodyProgresses(isMain).itervalues() if progress.getLimiter()))
+        processedProgressIDs = set()
+        for progressID, progress in itertools.chain(self._storage.getHeaderProgresses(isMain).iteritems(), self._storage.getBodyProgresses(isMain).iteritems()):
+            if progressID in processedProgressIDs:
+                continue
+            if progressID in limiterIDs:
+                continue
+            isBattlesSeries = progress.getContainerType() == CONTAINER.HEADER
+            title = self.__getTitle(progress, isMain, isWithAdd, progress.getGoal() if isBattlesSeries else 0)
+            if isBattlesSeries:
+                descr = self.__getBattlesSeriesDescription(isMain, progress, processedProgressIDs)
+            elif not isQuestCumulative:
+                descr = self.__getGroupOfNonCumulativeQuestDescriptions(isMain, processedProgressIDs)
+            else:
+                descr = text_styles.main(progress.getDescription())
+            if progressID in self._progressBeforeFailed:
+                progressDict = self._progressBeforeFailed[progressID]
+                current = progressDict.get('value') or sum((1 for battle in progressDict.get('battles', []) if battle))
+                statusText = self._getStatusText(current, progressDict['goal'], QUEST_PROGRESS_STATE.FAILED)
+            else:
+                state = QUEST_PROGRESS_STATE.COMPLETED if not isQuestCumulative and self._event.isCompleted() else progress.getState()
+                statusText = self._getStatusText(progress.getCurrent(), progress.getGoal(), state, isCumulative=isQuestCumulative)
+            processedProgressIDs.add(progressID)
+            result.append({'statusText': statusText,
+             'text': _packCondition(title, descr)})
+
+        if len(result) > 1:
+            hasAnyOrGroup = any((data['config'].get('isInOrGroup', False) for data in self._event.getConditionsConfig().itervalues()))
+            if hasAnyOrGroup:
+                for data in result[:-1]:
+                    data['text'] += '\n\n' + text_styles.leadingText(text_styles.yellowText(i18n.makeString('#quests:details/groups/or')), 1)
+
+        return result
+
+    def _shouldShowFailedText(self, progresses):
+        return all((progress.getProgressID() in self._progressBeforeFailed for progress in progresses.itervalues() if progress.isAward()))
+
+    def __getTitle(self, progress, isMain, withAdd, battleSeriesCount):
+        if withAdd:
+            if isMain:
+                return PERSONAL_MISSIONS.TASKDETAILSVIEW_MAINCONDITIONS
+            return PERSONAL_MISSIONS.TASKDETAILSVIEW_ADDITIONALCONDITIONS
+        return backport.text(R.strings.personal_missions_details.quest_common_condition_title_battlesSeries(), count=battleSeriesCount) if battleSeriesCount > 0 else backport.text(R.strings.personal_missions_details.dyn('%s_title_%s' % (self._event.getGeneralQuestID(), progress.getProgressID()))())
+
+    def __getBattlesSeriesDescription(self, isMain, battlesSeriesProgress, processedProgressIDs):
+        relatedDescriptions = []
+        for progressID, progress in self._storage.getBodyProgresses(isMain).iteritems():
+            if progress.groupID() == battlesSeriesProgress.groupID() and progress != battlesSeriesProgress and progressID not in processedProgressIDs:
+                relatedDescriptions.append(text_styles.main(progress.getDescription()))
+                processedProgressIDs.add(progressID)
+
+        return '\n'.join(relatedDescriptions)
+
+    def __getGroupOfNonCumulativeQuestDescriptions(self, isMain, processedProgressIDs):
+        nonCumulativeDescriptions = []
+        for progressID, progress in self._storage.getBodyProgresses(isMain).iteritems():
+            if not progress.isCumulative() and progressID not in processedProgressIDs:
+                nonCumulativeDescriptions.append(text_styles.main(progress.getDescription()))
+                processedProgressIDs.add(progressID)
+
+        return '\n'.join(nonCumulativeDescriptions)
 
 
 class PMTooltipConditionsFormatters(object):

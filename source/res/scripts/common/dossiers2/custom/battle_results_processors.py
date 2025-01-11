@@ -193,17 +193,13 @@ def updatePotapovQuestAchievements(accDossierDescr, progress):
     achievementCounters = dict()
     completedCounters = dict()
     tileCache = potapov_quests.g_tileCache
-    completedBranches = set()
     for questID, (flags, state) in progress.iteritems():
         if state < potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
             continue
         pqType = potapov_quests.g_cache.questByPotapovQuestID(questID)
-        if pqType.isFinal:
-            completedBranches.add(questID)
         tileInfo = tileCache.getTileInfo(pqType.tileID)
-        if state >= potapov_quests.PQ_STATE.NEED_GET_MAIN_REWARD:
-            seasonID = tileInfo['seasonID']
-            completedCounters[seasonID] = completedCounters.get(seasonID, 0) + 1
+        seasonID = tileInfo['seasonID']
+        completedCounters[seasonID] = completedCounters.get(seasonID, 0) + 1
         if state >= potapov_quests.PQ_STATE.NEED_GET_ADD_REWARD:
             pqAchievements = tileInfo['achievements'] or {}
             chainAchievement = pqAchievements.get(pqType.chainID, None)
@@ -218,8 +214,6 @@ def updatePotapovQuestAchievements(accDossierDescr, progress):
         if needToAward and not accDossierDescr[dossierBlockName][achievementName]:
             accDossierDescr[dossierBlockName][achievementName] = True
 
-    if len(completedBranches) and not accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal']:
-        accDossierDescr['steamAchievements']['steamDoAllBranchPotapovQuestMedal'] = True
     for chainAchievement, counter in achievementCounters.iteritems():
         if chainAchievement not in RECORD_CONFIGS:
             continue

@@ -2583,6 +2583,59 @@
       </damage>
     </armorSpalls>
   </_150mm_HE_Type96>
+  <_150mm_AP_Type1_O_I_120>
+    <id>	172	</id>
+    <userString>	#japan_vehicles:_150mm_AP_Type1_O_I_120	</userString>
+    <icon>	ap	</icon>
+    <price>	540	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_150mm_AP_Type1_O_I_120>
+  <_150mm_AP_Type2_O_I_120>
+    <id>	173	</id>
+    <userString>	#japan_vehicles:_150mm_AP_Type2_O_I_120	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	152.4	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_150mm_AP_Type2_O_I_120>
+  <_150mm_HE_Type96_O_I_120>
+    <id>	174	</id>
+    <userString>	#japan_vehicles:_150mm_HE_Type96_O_I_120	</userString>
+    <icon>	he_modern	</icon>
+    <price>	660	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	152.4	</caliber>
+    <explosionRadius>	3.57	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.57	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	400	</armor>
+        <devices>	102	</devices>
+      </damage>
+    </armorSpalls>
+  </_150mm_HE_Type96_O_I_120>
   <_150mm_Common_Type_0_HE>
     <id>	75	</id>
     <userString>	#japan_vehicles:_150mm_Common_Type_0_HE	</userString>
@@ -2610,27 +2663,17 @@
   <_150mm_Common_Type_0_HE_Kai>
     <id>	76	</id>
     <userString>	#japan_vehicles:_150mm_Common_Type_0_HE_Kai	</userString>
-    <icon>	he_modern_premium	</icon>
-    <price>	6400	</price>
+    <icon>	ap_premium	</icon>
+    <price>	5200	</price>
     <improved>	true	</improved>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
+    <kind>	ARMOR_PIERCING	</kind>
     <caliber>	152.4	</caliber>
-    <explosionRadius>	3.66	</explosionRadius>
     <isTracer>	true	</isTracer>
-    <effects>	largeHighExplosive	</effects>
+    <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	900	</armor>
+      <armor>	700	</armor>
       <devices>	203	</devices>
     </damage>
-    <armorSpalls>
-      <impactRadius>	3.66	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	450	</armor>
-        <devices>	100	</devices>
-      </damage>
-    </armorSpalls>
   </_150mm_Common_Type_0_HE_Kai>
   <_150mm_Common_Type_91_AP>
     <id>	90	</id>
@@ -2642,7 +2685,7 @@
     <isTracer>	true	</isTracer>
     <effects>	largeArmorPiercing	</effects>
     <damage>
-      <armor>	680	</armor>
+      <armor>	700	</armor>
       <devices>	203	</devices>
     </damage>
   </_150mm_Common_Type_91_AP>

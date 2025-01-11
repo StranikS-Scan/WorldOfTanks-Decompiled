@@ -7,7 +7,8 @@ g_campaignsCache = None
 PERSONAL_MISSIONS_XML_PATH = potapov_quests.POTAPOV_QUEST_XML_PATH
 
 class PM_BRANCH(potapov_quests.PQ_BRANCH):
-    ACTIVE_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2)
+    ACTIVE_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_3)
+    OLD_BRANCHES = (potapov_quests.PQ_BRANCH.REGULAR, potapov_quests.PQ_BRANCH.PERSONAL_MISSION_2)
 
 
 def isPersonalMissionsEnabled(gameParams, branch):
@@ -63,11 +64,11 @@ class PMCache(potapov_quests.PQCache):
     def questListByOperationIDChainID(self, tileID, chainID):
         return self.questListByTileIDChainID(tileID, chainID)
 
-    def finalMissionIDByOperationIDChainID(self, tileID, chainID):
-        return self.finalPotapovQuestIDByTileIDChainID(tileID, chainID)
+    def finalMissionIDsByOperationIDChainID(self, tileID, chainID):
+        return self.finalPotapovQuestIDsByTileIDChainID(tileID, chainID)
 
-    def initialMissionQuestIDByOperationIDChainID(self, tileID, chainID):
-        return self.initialPotapovQuestIDByTileIDChainID(tileID, chainID)
+    def initialMissionQuestIDsByOperationIDChainID(self, tileID, chainID):
+        return self.initialPotapovQuestIDsByTileIDChainID(tileID, chainID)
 
     def getPersonalMissionIDByUniqueID(self, uniqueQuestID):
         return self.getPotapovQuestIDByUniqueID(uniqueQuestID)

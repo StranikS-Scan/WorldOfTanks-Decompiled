@@ -52,13 +52,24 @@
     <R113M_122>	31002	</R113M_122>
     <Radio_R219_VK4502P_G>	31004	</Radio_R219_VK4502P_G>
     <_12RT_zv>	31005	</_12RT_zv>
+    <_9RM_122>	31009	</_9RM_122>
+    <_9R_D15>	31011	</_9R_D15>
+    <_9RM_D15>	31012	</_9RM_D15>
+    <_10R_715>	31015	</_10R_715>
+    <_12RT_715>	31016	</_12RT_715>
     <_10RKM_gvz_B>	31017	</_10RKM_gvz_B>
     <_10R_2SH>	31019	</_10R_2SH>
     <_10RK-26_02_G>	31022	</_10RK-26_02_G>
     <FuG_7_SU>	31023	</FuG_7_SU>
+    <_9RM_IS2>	31026	</_9RM_IS2>
     <P_113_265>	31028	</P_113_265>
     <R113M_02_B>	31029	</R113M_02_B>
+    <_9R_122>	31031	</_9R_122>
     <_10RK-26_2>	31032	</_10RK-26_2>
+    <_10RK-26_II>	31035	</_10RK-26_II>
+    <_10R_2SH_II>	31036	</_10R_2SH_II>
+    <R113M_bob>	31037	</R113M_bob>
+    <_10RK-26_bob>	31038	</_10RK-26_bob>
     <_10R_U18_T>	31018	</_10R_U18_T>
     <_10RT-26M>	220	</_10RT-26M>
     <R113K>	223	</R113K>
@@ -81,6 +92,10 @@
     <R113K_452>	31025	</R113K_452>
     <_10RK-26_T>	31008	</_10RK-26_T>
     <_10RT-26E_T>	31033	</_10RT-26E_T>
+    <AN_VRC_12>	31039	</AN_VRC_12>
+    <AN_GRC_8>	31040	</AN_GRC_8>
+    <R_113>	31041	</R_113>
+    <N22>	31042	</N22>
     <Development_Radio>	65000	</Development_Radio>
     <_9RM_MapsTraining_Dummy_LT_1>	12	</_9RM_MapsTraining_Dummy_LT_1>
     <_12LL_MapsTraining_Dummy_SPG_1>	33	</_12LL_MapsTraining_Dummy_SPG_1>
@@ -160,6 +175,28 @@
       <maxRegenHealth>	55	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </_9R>
+    <_9R_122>
+      <userString>	#ussr_vehicles:_9R	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2000	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_9R_122>
+    <_9R_D15>
+      <userString>	#ussr_vehicles:_9R	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	4200	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_9R_D15>
     <_71-TK-3U>
       <userString>	#ussr_vehicles:_71-TK-3U	</userString>
       <tags></tags>
@@ -206,6 +243,39 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_9RM>
+    <_9RM_122>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	20000	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_122>
+    <_9RM_D15>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	21000	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_D15>
+    <_9RM_IS2>
+      <userString>	#ussr_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_IS2>
     <_9RM_FL>
       <userString>	#ussr_vehicles:_9RM	</userString>
       <tags></tags>
@@ -300,6 +370,17 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </_10R_2SH>
+    <_10R_2SH_II>
+      <userString>	#ussr_vehicles:_10R_2SH	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24000	</price>
+      <weight>	100	</weight>
+      <distance>	660	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10R_2SH_II>
     <_10R_U18_T>
       <userString>	#ussr_vehicles:_10R_U18	</userString>
       <tags></tags>
@@ -312,6 +393,17 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	1	</repairCost>
     </_10R_U18_T>
+    <_10R_715>
+      <userString>	#ussr_vehicles:_10R_715	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	23000	</price>
+      <weight>	100	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_10R_715>
     <_10RB>
       <userString>	#ussr_vehicles:_10R	</userString>
       <tags></tags>
@@ -370,6 +462,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </P_113_265>
+    <_12RT_715>
+      <userString>	#ussr_vehicles:_12RT_715	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	42000	</price>
+      <weight>	110	</weight>
+      <distance>	655	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_715>
     <_12RT_zv>
       <userString>	#ussr_vehicles:_12RT	</userString>
       <tags></tags>
@@ -418,6 +521,30 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26>
+    <_10RK-26_bob>
+      <userString>	#ussr_vehicles:_10RK-26	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_bob>
+    <_10RK-26_II>
+      <userString>	#ussr_vehicles:_10RK-26	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_II>
     <_10RK-26_2>
       <userString>	#ussr_vehicles:_10RK-26_2	</userString>
       <tags></tags>
@@ -549,6 +676,18 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M>
+    <R113M_bob>
+      <userString>	#ussr_vehicles:R113M	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113M_bob>
     <R113M_02_B>
       <userString>	#ussr_vehicles:R113M	</userString>
       <tags></tags>
@@ -1144,5 +1283,53 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Radio_R219_VK4502P_G>
+    <AN_VRC_12>
+      <userString>	#ussr_vehicles:AN_VRC_12	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	26	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC_12>
+    <AN_GRC_8>
+      <userString>	#ussr_vehicles:AN_GRC_8	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	105	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_GRC_8>
+    <R_113>
+      <userString>	#ussr_vehicles:R_113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113>
+    <N22>
+      <userString>	#ussr_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22>
   </shared>
 </radios.xml>

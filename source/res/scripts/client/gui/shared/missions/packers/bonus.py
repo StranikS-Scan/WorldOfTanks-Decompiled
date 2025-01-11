@@ -16,21 +16,26 @@ from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusMo
 from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import ItemBonusModel
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
+from gui.impl.gen.view_models.common.missions.bonuses.progress_style_bonus_model import ProgressStyleBonusModel
 from gui.impl.lobby.loot_box.loot_box_helper import getLootBoxIDFromToken, getLootBoxKeyIDFromToken, getKeyByTokenID
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, GOLD_MISSION, ItemsBonusFormatter, TOKEN_SIZES, TokenBonusFormatter, formatCountLabel, CREW_BONUS_X3_TOKEN
 from gui.server_events.bonuses import formatBlueprint
 from gui.server_events.formatters import COMPLEX_TOKEN, TokenComplex, parseComplexToken
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items.crew_skin import localizedFullName
 from gui.shared.gui_items.customization import CustomizationTooltipContext
 from gui.shared.gui_items.customization.c11n_items import Style
+from gui.shared.gui_items.customization.c11n_helpers import getProgressionStyleCamouflage
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, i18n, time_utils
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.game_control import ICollectionsSystemController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.customization import ICustomizationService
 DOSSIER_BADGE_ICON_PREFIX = 'badge_'
 DOSSIER_ACHIEVEMENT_POSTFIX = '_achievement'
 DOSSIER_BADGE_POSTFIX = '_badge'
@@ -95,8 +100,7 @@ def getDefaultBonusPackersMap():
      constants.WoTPlusBonusType.EXCLUSIVE_VEHICLE: wotPlusBonusPacker,
      constants.WoTPlusBonusType.ATTENDANCE_REWARD: wotPlusBonusPacker,
      constants.WoTPlusBonusType.TEAM_CREDITS_BONUS: wotPlusBonusPacker,
-     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker,
-     'lootBoxToken': tokenBonusPacker}
+     constants.WoTPlusBonusType.DAILY_QUESTS_REWARDS: wotPlusBonusPacker}
 
 
 def getLocalizedBonusName(name):
@@ -695,6 +699,61 @@ class Customization3Dand2DbonusUIPacker(CustomizationBonusUIPacker):
         return packed
 
 
+class StyleProgressBonusUIPacker(BaseBonusUIPacker):
+    __c11nService = dependency.descriptor(ICustomizationService)
+
+    @classmethod
+    def _getBonusModel(cls):
+        return ProgressStyleBonusModel()
+
+    @classmethod
+    def _pack(cls, bonus):
+        return [cls._packSingleBonus(bonus)]
+
+    @classmethod
+    def _packSingleBonus(cls, bonus):
+        model = cls._getBonusModel()
+        cls._packCommon(bonus, model)
+        styleID = bonus.getStyleID()
+        branchID = bonus.getBranchID()
+        progressLevel = bonus.getProgressLevel()
+        camo = getProgressionStyleCamouflage(styleID, branchID, progressLevel)
+        if camo is not None:
+            icon = cls.__getIcon(styleID, progressLevel)
+            label = cls.__getLabel(camo)
+        else:
+            _logger.error('Missing camouflage for StyleProgressBonus: styleID=%s; level=%s', styleID, progressLevel)
+            icon = ''
+            label = ''
+        model.setIcon(icon)
+        model.setLabel(label)
+        model.setStyleID(styleID)
+        model.setBranchID(branchID)
+        model.setProgressLevel(progressLevel)
+        return model
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        styleID = bonus.getStyleID()
+        branchID = bonus.getBranchID()
+        progressLevel = bonus.getProgressLevel()
+        camo = getProgressionStyleCamouflage(styleID, branchID, progressLevel)
+        tooltipData = TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=camo.intCD))
+        return [tooltipData]
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [BACKPORT_TOOLTIP_CONTENT_ID]
+
+    @staticmethod
+    def __getIcon(styleID, progressLevel):
+        return 'style_progress_{styleID}_{progressLevel}'.format(styleID=styleID, progressLevel=progressLevel)
+
+    @staticmethod
+    def __getLabel(camo):
+        pass
+
+
 class DossierBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
@@ -808,6 +867,46 @@ class TankmenBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _getContentId(cls, bonus):
         return [ BACKPORT_TOOLTIP_CONTENT_ID for _ in bonus.getTankmenGroups().itervalues() ]
+
+
+class TmanTemplateBonusPacker(BaseBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                packed = cls.__packTmanTemplateToken(tokenID, bonus)
+                if packed is not None:
+                    result.append(packed)
+
+        return result
+
+    @classmethod
+    def _getToolTip(cls, bonus):
+        tooltipData = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, specialArgs=[tokenID]))
+
+        return tooltipData
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [ BACKPORT_TOOLTIP_CONTENT_ID for tokenID in bonus.getTokens().iterkeys() if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX) ]
+
+    @classmethod
+    def __packTmanTemplateToken(cls, tokenID, bonus):
+        recruitInfo = getRecruitInfo(tokenID)
+        if recruitInfo is None:
+            return
+        else:
+            model = TokenBonusModel()
+            cls._packCommon(bonus, model)
+            model.setIcon('tankwoman' if recruitInfo.isFemale() else 'tankman')
+            model.setLabel(recruitInfo.getFullUserName())
+            model.setUserName(recruitInfo.getFullUserName())
+            return model
 
 
 class VehiclesBonusUIPacker(BaseBonusUIPacker):
@@ -1106,11 +1205,9 @@ def packMissionsBonusModelAndTooltipData(bonuses, packer, model, tooltipData=Non
                     bonusTooltipList = list(bonusTooltipList)
                 else:
                     bonusList = sorted(bonusList, cmp=sort(bonus.getName()))
-            bonusContentIdList = packer.getContentId(bonus)
             for bonusIndex, item in enumerate(bonusList):
                 item.setIndex(bonusIndexTotal)
                 tooltipIdx = str(bonusIndexTotal)
-                item.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
                 if hasattr(item, 'setTooltipId'):
                     item.setTooltipId(tooltipIdx)
                 model.addViewModel(item)

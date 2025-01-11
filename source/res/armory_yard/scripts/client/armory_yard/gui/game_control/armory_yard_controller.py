@@ -45,6 +45,9 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.impl import backport
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from typing import Optional, Tuple
 AY_VIDEOS_FOLDER = '/'.join((GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH, 'armory_yard'))
 
 class BundleState(Enum):
@@ -64,6 +67,8 @@ class ArmoryYardController(IArmoryYardController):
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __entitlementsController = dependency.descriptor(IEntitlementsController)
     __BACKGROUND_ALPHA = 0
+    _VEHICLE_LVL_INDEX = 2
+    _VEHICLE_CLASS_INDEX = 3
 
     def __init__(self):
         self.__eventManager = EventManager()
@@ -183,6 +188,7 @@ class ArmoryYardController(IArmoryYardController):
     def fini(self):
         self.__serverSettings.stop()
         self.__eventManager.clear()
+        self.__soundManager.onSoundModeChanged(False)
         self.__soundManager.clear()
         self.__sceneLoadingManager.destroy()
         self.__cameraManager.destroy()
@@ -427,6 +433,18 @@ class ArmoryYardController(IArmoryYardController):
         finishPostProgressionTime = self.__serverSettings.getCurrentSeason().getEndDate()
         return (startPostProgressionTime, finishPostProgressionTime)
 
+    def getRequiredVehicleTypeAndLevelsForQuest(self, questID):
+        vehicleClasses = ()
+        vehicleLevels = set()
+        if questID is not None:
+            quest = self.__eventsCache.getQuestByID(questID)
+            if quest is not None:
+                conditions = quest.vehicleReqs.getConditions().find('vehicleDescr')
+                if conditions:
+                    vehicleClasses = conditions.parseFilters()[self._VEHICLE_CLASS_INDEX]
+                    vehicleLevels = conditions.parseFilters()[self._VEHICLE_LVL_INDEX]
+        return (vehicleClasses, sorted(vehicleLevels))
+
     def getAvailableQuestsCount(self):
         currentTime = time_utils.getServerUTCTime()
         isPrevChapterFinished = True
@@ -510,7 +528,6 @@ class ArmoryYardController(IArmoryYardController):
         self.__sceneLoadingManager.unloadScene(isReload=isReload)
 
     def onLoadingHangar(self):
-        self.__soundManager.onSoundModeChanged(False)
         self.__sceneLoadingManager.unloadScene()
         self.__cameraManager.goToHangar()
         self.__cameraManager.destroy()
@@ -555,27 +572,26 @@ class ArmoryYardController(IArmoryYardController):
             if cycle.startDate > nowTime and cycle.startDate - nowTime <= announcementCountdown:
                 self.onAnnouncement(cycle.startDate, cycle)
 
+    def nextCycleStartsSoonProcessor(self, state):
+        if state != State.ACTIVE or self.getAvailableQuestsCount() != 0:
+            return (state, False)
+        else:
+            currentTime = time_utils.getServerUTCTime()
+            nextCycle = self.getNextCycle(currentTime)
+            return (State.ACTIVE, True) if nextCycle is not None and nextCycle.startDate - currentTime <= time_utils.ONE_DAY else (State.COMPLETED, False)
+
     def getHangarFlagData(self):
         iconsPath = R.images.armory_yard.gui.maps.icons.entry_point
-        currentTime = time_utils.getServerUTCTime()
-        _, finishProgressionTime = self.getProgressionTimes()
-        deltaFinishProgressionTime = finishProgressionTime - currentTime
         state = self.getState()
-        availableQuestsCount = self.getAvailableQuestsCount()
-        enabled = state == State.ACTIVE
-        if state == State.ACTIVE:
-            nextCycle = self.getNextCycle(currentTime)
-            if nextCycle is not None and nextCycle.startDate - currentTime <= time_utils.ONE_DAY:
-                state = State.ACTIVE
-            elif self.isQuestActive() and availableQuestsCount == 0:
-                state = State.COMPLETED
-        if state == State.ACTIVE and deltaFinishProgressionTime >= time_utils.ONE_DAY:
-            label = str(availableQuestsCount)
+        state, isNextCycleStartsSoon = self.nextCycleStartsSoonProcessor(state)
+        if state == State.ACTIVE and not isNextCycleStartsSoon:
+            label = str(self.getAvailableQuestsCount())
             stateIcon = ''
         else:
             label = ''
             imageRes = iconsPath.dyn(state.value)
             stateIcon = backport.image(imageRes()) if imageRes.exists() else ''
+        enabled = state in (State.ACTIVE, State.COMPLETED)
         return (enabled,
          backport.image(iconsPath.flag_disabled()),
          stateIcon,
@@ -622,6 +638,8 @@ class ArmoryYardController(IArmoryYardController):
         if self.getBundleBlockToken() in diff:
             self.__bundlesProducts = []
         if self.serverSettings.getCurrencyToken() in diff:
+            if self.getTotalSteps() == self.getCurrencyTokenCount():
+                self.__isFinalQuestCompleted = True
             self.onProgressUpdated()
         for cycleID, _ in self.serverSettings.iterAllCycles():
             if getEndToken(cycleID) in diff or getStageToken(cycleID) in diff:

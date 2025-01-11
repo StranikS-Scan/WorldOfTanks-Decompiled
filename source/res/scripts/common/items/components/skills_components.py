@@ -79,6 +79,14 @@ class BasicSkill(legacy_stuff.LegacyStuff):
             return
 
     @property
+    def alertDescription(self):
+        if self.__i18n is not None:
+            return self.__i18n.alertDescription
+        else:
+            return component_constants.EMPTY_STRING
+            return
+
+    @property
     def icon(self):
         return self.__icon
 
@@ -252,14 +260,15 @@ class SkillsConfig(legacy_stuff.LegacyStuff):
 
 
 class SkillLocales(I18nComponent):
-    __slots__ = ('__maxLvlDescription', '__currentLvlDescription', '__altDescription', '__altInfo')
+    __slots__ = ('__maxLvlDescription', '__currentLvlDescription', '__altDescription', '__altInfo', '__alertDescription')
 
-    def __init__(self, userName='', description='', maxLvlDescription='', currentLvlDescription='', altDescription='', altInfo=''):
+    def __init__(self, userName='', description='', maxLvlDescription='', currentLvlDescription='', altDescription='', altInfo='', alertDescription=''):
         super(SkillLocales, self).__init__(userName, description, description)
         self.__maxLvlDescription = maxLvlDescription
         self.__currentLvlDescription = currentLvlDescription
         self.__altDescription = altDescription
         self.__altInfo = altInfo
+        self.__alertDescription = alertDescription
 
     @property
     def maxLvlDescription(self):
@@ -276,3 +285,7 @@ class SkillLocales(I18nComponent):
     @property
     def altInfo(self):
         return self.__altInfo
+
+    @property
+    def alertDescription(self):
+        return self.__alertDescription

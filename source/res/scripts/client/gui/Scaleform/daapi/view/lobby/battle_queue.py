@@ -253,6 +253,10 @@ class _Comp7QueueProvider(RandomQueueProvider):
          'highlight': isHighlight}
 
 
+class _BobQueueProvider(RandomQueueProvider):
+    pass
+
+
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANDOMS, RandomQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.EVENT_BATTLES, _EventQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.RANKED, _RankedQueueProvider)
@@ -260,6 +264,7 @@ registerBattleQueueProvider(constants.QUEUE_TYPE.EPIC, _EpicQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.BATTLE_ROYALE, _BattleRoyaleQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.MAPBOX, _MapboxQueueProvider)
 registerBattleQueueProvider(constants.QUEUE_TYPE.COMP7, _Comp7QueueProvider)
+registerBattleQueueProvider(constants.QUEUE_TYPE.BOB, _BobQueueProvider)
 
 def _providerFactory(proxy, qType):
     provider = collectBattleQueueProvider(qType) or QueueProvider

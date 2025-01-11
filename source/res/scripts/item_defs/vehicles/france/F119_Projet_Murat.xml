@@ -585,6 +585,7 @@
                   <groupRadius>	0.31992	</groupRadius>
                   <groupInnerOffset>	0.385	</groupInnerOffset>
                   <groupOuterOffset>	-0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L4	</wheelName>
@@ -665,6 +666,7 @@
                   <groupRadius>	0.31992	</groupRadius>
                   <groupInnerOffset>	-0.385	</groupInnerOffset>
                   <groupOuterOffset>	0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R4	</wheelName>
@@ -742,6 +744,7 @@
                   <groupRadius>	0.319112	</groupRadius>
                   <groupInnerOffset>	0.385	</groupInnerOffset>
                   <groupOuterOffset>	-0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L1	</wheelName>
@@ -754,6 +757,7 @@
                   <groupRadius>	0.33992	</groupRadius>
                   <groupInnerOffset>	0.385	</groupInnerOffset>
                   <groupOuterOffset>	-0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L0	</wheelName>
@@ -818,6 +822,7 @@
                   <groupRadius>	0.319112	</groupRadius>
                   <groupInnerOffset>	-0.385	</groupInnerOffset>
                   <groupOuterOffset>	0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R1	</wheelName>
@@ -830,6 +835,7 @@
                   <groupRadius>	0.33992	</groupRadius>
                   <groupInnerOffset>	-0.385	</groupInnerOffset>
                   <groupOuterOffset>	0.285	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R0	</wheelName>
@@ -1066,6 +1072,7 @@
           <trackPairIdx>	0	</trackPairIdx>
           <syncAngle>	27.692308	</syncAngle>
         </wheel>
+        <generalWheels>	true	</generalWheels>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
@@ -1213,102 +1220,24 @@
         </trackPair>
       </trackNodes>
       <groundNodes>
-        <node>
-          <name>	Track_L0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+        <group>
+          <template>	Track_L	</template>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <affectedWheelsTemplate>	W_L	</affectedWheelsTemplate>
+        </group>
+        <group>
+          <template>	Track_R	</template>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.3	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <affectedWheelsTemplate>	W_R	</affectedWheelsTemplate>
+        </group>
       </groundNodes>
       <splineDesc>
         <trackPair>

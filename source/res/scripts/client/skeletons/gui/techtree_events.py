@@ -5,7 +5,7 @@ from Event import Event
 class ITechTreeEventsListener(object):
     onEventsUpdated = None
     onSettingsChanged = None
-    onEntryPointUpdated = None
+    onParagonsEntryPointUpdated = None
 
     def init(self):
         raise NotImplementedError
@@ -39,4 +39,7 @@ class ITechTreeEventsListener(object):
         raise NotImplementedError
 
     def getActiveAction(self, vehicleCD=None, nationID=None):
+        raise NotImplementedError
+
+    def isParagonsEntryPointEnabled(self):
         raise NotImplementedError

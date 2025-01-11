@@ -1108,7 +1108,8 @@ _StrongholdEventConfig = namedtuple('_StrongholdEventConfig', ['name',
  'event_start_date',
  'visible_end_date',
  'event_end_date',
- 'show_top_medal'])
+ 'show_top_medal',
+ 'sprint_config'])
 _StrongholdEventConfig.__new__.__defaults__ = ('',
  [],
  [],
@@ -1120,17 +1121,26 @@ _StrongholdEventConfig.__new__.__defaults__ = ('',
  0,
  0,
  0,
- False)
+ False,
+ {})
 
 class StrongholdEventConfig(_StrongholdEventConfig, FieldsCheckerMixin):
 
-    @fmtUnavailableValue(fields=('event_start_date',))
+    @fmtUnavailableValue(fields=('sprint_config',))
     def getStartDate(self):
-        return self.event_start_date
+        return self.sprint_config.get('sprint_start_date', 0)
 
-    @fmtUnavailableValue(fields=('event_end_date',))
+    @fmtUnavailableValue(fields=('sprint_config',))
     def getEndDate(self):
-        return self.event_end_date
+        return self.sprint_config.get('sprint_end_date', 0)
+
+    @fmtUnavailableValue(fields=('sprint_config',))
+    def getSprintType(self):
+        return self.sprint_config.get('sprint_type', '')
+
+    @fmtUnavailableValue(fields=('sprint_config',))
+    def getSprintNumber(self):
+        return self.sprint_config.get('sprint_number', '')
 
 
 _StrongholdEventSettingsData = namedtuple('_StrongholdEventClanInfoData', ['event_config'])
@@ -1147,6 +1157,12 @@ class StrongholdEventSettingsData(_StrongholdEventSettingsData, FieldsCheckerMix
 
     def getVisibleEndDate(self):
         return self.getEventConfig().getEndDate()
+
+    def getSprintType(self):
+        return self.getEventConfig().getSprintType()
+
+    def getSprintNumber(self):
+        return self.getEventConfig().getSprintNumber()
 
 
 class ClanInviteWrapper(object):

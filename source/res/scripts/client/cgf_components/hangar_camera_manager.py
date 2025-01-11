@@ -15,7 +15,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared.utils import IHangarSpace
 from GenericComponents import TransformComponent
 from cgf_script.component_meta_class import registerComponent
-from cgf_script.managers_registrator import tickGroup, onAddedQuery, onRemovedQuery
+from cgf_script.managers_registrator import tickGroup, onAddedQuery
 from CameraComponents import CameraComponent, CameraFlightComponent, OrbitComponent, DofComponent, IdleComponent, ParallaxComponent, FovComponent, ShiftComponent
 from constants import IS_CLIENT
 if IS_CLIENT:
@@ -102,11 +102,6 @@ class _DOFParams(object):
 
 @registerComponent
 class CurrentCameraObject(object):
-    domain = CGF.DomainOption.DomainClient
-
-
-@registerComponent
-class CameraInFlightComponent(object):
     domain = CGF.DomainOption.DomainClient
 
 
@@ -197,7 +192,6 @@ class HangarCameraManager(CGF.ComponentManager):
             currentCameraQuery = CGF.Query(self.spaceID, (CGF.GameObject, CurrentCameraObject))
             for gameObject, _ in currentCameraQuery:
                 gameObject.removeComponentByType(CurrentCameraObject)
-                gameObject.removeComponentByType(CameraInFlightComponent)
 
             self.__deactivateCameraComponents()
             self.__cameraParallax.destroy()
@@ -217,17 +211,6 @@ class HangarCameraManager(CGF.ComponentManager):
         if cameraComponent.name == self.__cameraMode:
             self.switchToTank()
             _logger.info('HangarCameraManager::onCameraAdded')
-
-    @onRemovedQuery(CGF.GameObject, CurrentCameraObject)
-    def onCurrentCameraRemoved(self, go, _):
-        if go.findComponentByType(CameraInFlightComponent) is not None:
-            go.removeComponentByType(CameraInFlightComponent)
-        return
-
-    @onAddedQuery(CGF.GameObject, CameraInFlightComponent, CGF.No(CurrentCameraObject))
-    def onFlightWithoutCameraAdded(self, go, _):
-        _logger.info('Flight component without camera added')
-        go.removeComponentByType(CameraInFlightComponent)
 
     def getCurrentCameraName(self):
         return self.__cameraName
@@ -295,7 +278,7 @@ class HangarCameraManager(CGF.ComponentManager):
                 self.__setupCamera(gameObject, resetTransform)
                 self.__setupFlightParams(gameObject, prevCameraName)
                 self.__customizationHelper.setMotionBlurAmount(self.__flightParams.motionBlur)
-                self.__startFlight(gameObject, matrix, Math.Matrix(self.__cam.matrix))
+                self.__startFlight(matrix, Math.Matrix(self.__cam.matrix))
             return
 
     def resetCameraTarget(self, duration=0, resetRotation=True):
@@ -381,7 +364,7 @@ class HangarCameraManager(CGF.ComponentManager):
         self.__cam.moveTo(targetMatrix, sourceMatrix, pivotMaxDist, duration)
         return
 
-    def __startFlight(self, gameObject, prevMatrix, targetMatrix):
+    def __startFlight(self, prevMatrix, targetMatrix):
         spaceID = self._hangarSpace.spaceID
         if self.__flightParams.sequencePath:
             self.__flightCam = BigWorld.SequenceTransitionCamera(self.__flightParams.sequencePath, spaceID)
@@ -403,9 +386,6 @@ class HangarCameraManager(CGF.ComponentManager):
             self.__flightCam.spaceID = spaceID
             self.__flightCam.start(prevMatrix, targetMatrix, self.__flightParams.minDuration, self.__flightParams.maxDuration, self.__flightParams.positionEasing, self.__flightParams.rotationEasing)
         BigWorld.camera(self.__flightCam)
-        if gameObject.findComponentByType(CameraInFlightComponent) is None:
-            gameObject.createComponent(CameraInFlightComponent)
-        return
 
     def __handleLobbyViewMouseEvent(self, event):
         if self.__flightCam and self.__flightCam.isInTransition() or self.__cam.isInTransition():
@@ -539,13 +519,9 @@ class HangarCameraManager(CGF.ComponentManager):
                 distParams.maxValue = idleComponent.distLimits[1]
                 distParams.period = idleComponent.distPeriod
                 self.__cameraIdle.initialize(idleComponent.easingInTime, pitchParams, distParams, idleComponent.yawPeriod)
-            else:
-                self.__cameraIdle.finalize()
             parallaxComponent = gameObject.findComponentByType(ParallaxComponent)
             if parallaxComponent:
                 self.__cameraParallax.initialize(parallaxComponent.distanceDelta, parallaxComponent.angelsDelta, parallaxComponent.smoothing)
-            else:
-                self.__cameraParallax.finalize()
             if self.__minDist is not None:
                 self.setMinDist(self.__minDist)
                 self.__minDist = None
@@ -599,10 +575,6 @@ class HangarCameraManager(CGF.ComponentManager):
         if self.__isInSwitching:
             self.__isInSwitching = False
             self.onCameraSwitched(self.__cameraName)
-            cameraInFlightQuery = CGF.Query(self.spaceID, (CGF.GameObject, CameraInFlightComponent))
-            for gameObject, _ in cameraInFlightQuery:
-                gameObject.removeComponentByType(CameraInFlightComponent)
-
             self.__customizationHelper.setMotionBlurAmount(_DEFAULT_MOTION_BLUR_)
             self.__activateDOF()
             self.__cameraIdle.activate()

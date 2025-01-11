@@ -965,6 +965,9 @@
       <isPremiumSubs>
         <Type>	BOOL	</Type>
       </isPremiumSubs>
+      <bobInfo>
+        <Type>	PYTHON	</Type>
+      </bobInfo>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -1126,6 +1129,16 @@
       </endTime>
     </Properties>
   </IS_OBSERVED_BY_ENEMY>
+  <IN_THERMAL_SECTOR_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <duration>
+        <Type>	FLOAT32	</Type>
+      </duration>
+    </Properties>
+  </IN_THERMAL_SECTOR_STATUS>
   <SIEGE_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -1796,6 +1809,9 @@
       <botDisplayStatus>
         <Type>	UINT8	</Type>
       </botDisplayStatus>
+      <bobInfo>
+        <Type>	PYTHON	</Type>
+      </bobInfo>
     </Properties>
   </CLIENT_VEHICLE_PUBLIC_INFO>
   <PLAY_LIMITS>	FIXED_DICT	  <Properties>
@@ -1972,18 +1988,6 @@
       </isRespawnActive>
     </Properties>
   </VEHICLE_HEALTH_INFO>
-  <CAMERA_FLIGHT_POINT>	FIXED_DICT	  <Properties>
-      <point>
-        <Type>	VECTOR3	</Type>
-      </point>
-      <anchorName>
-        <Type>	STRING	</Type>
-      </anchorName>
-      <flightSpeed>
-        <Type>	FLOAT	</Type>
-      </flightSpeed>
-    </Properties>
-  </CAMERA_FLIGHT_POINT>
   <GUN_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <gunPosition>
@@ -2357,6 +2361,25 @@
       </spinFactor>
     </Properties>
   </SPIN_GUN_STATE_STATUS>
+  <THERMAL_VISION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <status>
+        <Type>	UINT8	</Type>
+      </status>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <duration>
+        <Type>	FLOAT32	</Type>
+      </duration>
+      <useCount>
+        <Type>	INT8	</Type>
+      </useCount>
+      <reloadTime>
+        <Type>	FLOAT32	</Type>
+      </reloadTime>
+    </Properties>
+  </THERMAL_VISION_STATE_STATUS>
   <GOODIE_RESOURCE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <type>

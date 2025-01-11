@@ -6,7 +6,7 @@ from frameworks.wulf import ViewModel
 class VehPostProgressionEntryPointTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(VehPostProgressionEntryPointTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getModulesExplored(self):
@@ -45,6 +45,12 @@ class VehPostProgressionEntryPointTooltipModel(ViewModel):
     def setHasVehiclesToUnlock(self, value):
         self._setBool(5, value)
 
+    def getIsVehicleElite(self):
+        return self._getBool(6)
+
+    def setIsVehicleElite(self, value):
+        self._setBool(6, value)
+
     def _initialize(self):
         super(VehPostProgressionEntryPointTooltipModel, self)._initialize()
         self._addNumberProperty('modulesExplored', 0)
@@ -53,3 +59,4 @@ class VehPostProgressionEntryPointTooltipModel(ViewModel):
         self._addResourceProperty('description', R.invalid())
         self._addResourceProperty('status', R.invalid())
         self._addBoolProperty('hasVehiclesToUnlock', False)
+        self._addBoolProperty('isVehicleElite', False)

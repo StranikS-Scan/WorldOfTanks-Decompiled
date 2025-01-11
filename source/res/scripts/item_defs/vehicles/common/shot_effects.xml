@@ -4686,7 +4686,7 @@
         </tracerSound>
       </effects>
     </projectile>
-    <targetImpulse>	0.32	</targetImpulse>
+    <targetImpulse></targetImpulse>
     <targetStickers>
       <armorResisted>	flame_ricochet	</armorResisted>
       <armorPierced>	flame_hole	</armorPierced>
@@ -5522,7 +5522,7 @@
         </tracerSound>
       </effects>
     </projectile>
-    <targetImpulse>	0.32	</targetImpulse>
+    <targetImpulse></targetImpulse>
     <targetStickers>
       <armorResisted>	flame_ricochet	</armorResisted>
       <armorPierced>	flame_hole	</armorPierced>
@@ -6346,7 +6346,7 @@
           <startKey>	flying	</startKey>
           <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/shells_eff/trace_flame_small_aep.eff	</file>
+          <file>	particles/shells_eff/trace_flame_rbn.eff	</file>
           <force>	1	</force>
         </pixie>
         <tracerSound>
@@ -6356,9 +6356,91 @@
           <wwsoundNPC>	flamer_tracer_NPC	</wwsoundNPC>
           <wwsoundPC>	flamer_tracer_PC	</wwsoundPC>
         </tracerSound>
+        <flamethrowerRibbon>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <deferred>
+            <materialParams>
+              <textures>
+                <formAndColor>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_flameForm.dds	</formAndColor>
+                <tintFromLifetime>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_tintLifespan.dds	</tintFromLifetime>
+                <tintFromAlpha>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_gradientMap.dds	</tintFromAlpha>
+                <distortionPhaseOffsetMap>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_distortionPhase_temp.dds	</distortionPhaseOffsetMap>
+                <distortionMap>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_distortionMap.dds	</distortionMap>
+              </textures>
+              <colorUScrollingSpeed>	-1.500000	</colorUScrollingSpeed>
+              <colorUTiling>	33.000000	</colorUTiling>
+              <tintFromLengthUVScale>	1.000000 1.000000	</tintFromLengthUVScale>
+              <distortionPhaseMapScale>	100.000000	</distortionPhaseMapScale>
+              <distortionScrollingSpeed>	-0.700000 -1.000000	</distortionScrollingSpeed>
+              <distortionUTiling>	44.000000	</distortionUTiling>
+              <distortionUVScale>	1.000000	</distortionUVScale>
+              <distortionPower>	0.500000	</distortionPower>
+              <glowMultiplierRange>	45.000000 16.000000	</glowMultiplierRange>
+              <shouldUseLuminanceCorrection>	true	</shouldUseLuminanceCorrection>
+              <softFactor>	1.000000	</softFactor>
+              <fadeIn>	7.000000	</fadeIn>
+              <fadeOut>	15.000000	</fadeOut>
+            </materialParams>
+            <meshParams>
+              <distanceDifferenceFadeRange>	0.500000 0.600000	</distanceDifferenceFadeRange>
+              <widthRange>	0.700000 8.000000	</widthRange>
+              <sniperModeWidthRange>	0.400000 7.000000	</sniperModeWidthRange>
+              <skipByDistanceThreshold>	3.000000	</skipByDistanceThreshold>
+              <sniperModeOwnWidthFactorClamp>	0.600000 1.000000	</sniperModeOwnWidthFactorClamp>
+              <applyAlphaToTangentPatches>	true	</applyAlphaToTangentPatches>
+              <tangentPatchesThreshold>	0.200000	</tangentPatchesThreshold>
+              <tangentPatchesAlphaMultiplier>	0.200000	</tangentPatchesAlphaMultiplier>
+              <lastPatchShrink>	true	</lastPatchShrink>
+              <lastPatchWidthMultiplier>	0.200000	</lastPatchWidthMultiplier>
+              <lastPatchAlphaMultiplier>	0.700000	</lastPatchAlphaMultiplier>
+              <mockProjectileFollowSpeedFactor>	0.300000	</mockProjectileFollowSpeedFactor>
+              <connectionTimeThreshold>	0.310000	</connectionTimeThreshold>
+            </meshParams>
+          </deferred>
+          <forward>
+            <materialParams>
+              <textures>
+                <formAndColor>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_flameForm_forward.dds	</formAndColor>
+                <tintFromLifetime>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_tintLifespan_forward.dds	</tintFromLifetime>
+                <tintFromAlpha>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_gradientMap_forward.dds	</tintFromAlpha>
+                <distortionPhaseOffsetMap>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_distortionPhase_forward_temp.dds	</distortionPhaseOffsetMap>
+                <distortionMap>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_distortionMap_forward.dds	</distortionMap>
+              </textures>
+              <colorUScrollingSpeed>	-1.500000	</colorUScrollingSpeed>
+              <colorUTiling>	33.000000	</colorUTiling>
+              <tintFromLengthUVScale>	1.000000 1.000000	</tintFromLengthUVScale>
+              <distortionPhaseMapScale>	100.000000	</distortionPhaseMapScale>
+              <distortionScrollingSpeed>	-0.700000 -1.000000	</distortionScrollingSpeed>
+              <distortionUTiling>	44.000000	</distortionUTiling>
+              <distortionUVScale>	1.000000	</distortionUVScale>
+              <distortionPower>	0.400000	</distortionPower>
+              <glowMultiplierRange>	16.000000 8.000000	</glowMultiplierRange>
+              <shouldUseLuminanceCorrection>	true	</shouldUseLuminanceCorrection>
+              <softFactor>	1.000000	</softFactor>
+              <fadeIn>	7.000000	</fadeIn>
+              <fadeOut>	15.000000	</fadeOut>
+            </materialParams>
+            <meshParams>
+              <distanceDifferenceFadeRange>	0.500000 0.600000	</distanceDifferenceFadeRange>
+              <widthRange>	1.000000 8.000000	</widthRange>
+              <sniperModeWidthRange>	0.400000 7.000000	</sniperModeWidthRange>
+              <skipByDistanceThreshold>	3.000000	</skipByDistanceThreshold>
+              <sniperModeOwnWidthFactorClamp>	0.500000 0.700000	</sniperModeOwnWidthFactorClamp>
+              <applyAlphaToTangentPatches>	true	</applyAlphaToTangentPatches>
+              <tangentPatchesThreshold>	0.200000	</tangentPatchesThreshold>
+              <tangentPatchesAlphaMultiplier>	0.200000	</tangentPatchesAlphaMultiplier>
+              <lastPatchShrink>	true	</lastPatchShrink>
+              <lastPatchWidthMultiplier>	0.100000	</lastPatchWidthMultiplier>
+              <lastPatchAlphaMultiplier>	0.700000	</lastPatchAlphaMultiplier>
+              <mockProjectileFollowSpeedFactor>	0.300000	</mockProjectileFollowSpeedFactor>
+              <connectionTimeThreshold>	0.310000	</connectionTimeThreshold>
+            </meshParams>
+          </forward>
+        </flamethrowerRibbon>
       </effects>
     </projectile>
-    <targetImpulse>	0.32	</targetImpulse>
+    <targetImpulse></targetImpulse>
     <targetStickers>
       <armorResisted></armorResisted>
       <armorPierced></armorPierced>
@@ -6692,13 +6774,7 @@
             </stage>
           </stages>
         </friendlyFlashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/shells_eff/hit_flame_small_aep.eff	</file>
-          <force>	1	</force>
-        </pixie>
+        <pixie></pixie>
         <light>
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
@@ -6733,7 +6809,7 @@
       <timeline>
         <lightingEnd>	0.15	</lightingEnd>
         <soundplaystop>	7	</soundplaystop>
-        <endpixie>	0.1	</endpixie>
+        <endpixie>	2.1	</endpixie>
         <end>	1	</end>
       </timeline>
       <effects>
@@ -6763,7 +6839,7 @@
           <startKey>	start	</startKey>
           <endKey>	endpixie	</endKey>
           <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/shells_eff/hit_flame_small_aep.eff	</file>
+          <file>	particles/shells_eff/hit_flame_tank_small.eff	</file>
           <force>	1	</force>
         </pixie>
         <light>
@@ -6833,13 +6909,7 @@
             </stage>
           </stages>
         </flashBang>
-        <pixie>
-          <startKey>	start	</startKey>
-          <endKey>	endpixie	</endKey>
-          <orientBySurfaceNormal>	true	</orientBySurfaceNormal>
-          <file>	particles/shells_eff/hit_flame_small_aep.eff	</file>
-          <force>	1	</force>
-        </pixie>
+        <pixie></pixie>
         <light>
           <startKey>	start	</startKey>
           <endKey>	lightingEnd	</endKey>
@@ -7168,7 +7238,7 @@
       <shellVelocity>	1000	</shellVelocity>
       <shellMass>	900	</shellMass>
       <splashRadius>	3	</splashRadius>
-      <splashStrength>	4	</splashStrength>
+      <splashStrength>	0.4	</splashStrength>
     </physicsParams>
   </smallFlame_Pneumatic_1>
   <smallFlame_Pneumatic_2>
@@ -7182,7 +7252,7 @@
           <startKey>	flying	</startKey>
           <endKey>	stopFlying	</endKey>
           <position>	Scene Root	</position>
-          <file>	particles/shells_eff/trace_flame_small_aep_alt.eff	</file>
+          <file>	particles/shells_eff/trace_flame_rbn_alt.eff	</file>
           <force>	1	</force>
         </pixie>
         <tracerSound>
@@ -7192,9 +7262,91 @@
           <wwsoundNPC>	flamer_tracer_NPC	</wwsoundNPC>
           <wwsoundPC>	flamer_tracer_PC	</wwsoundPC>
         </tracerSound>
+        <flamethrowerRibbon>
+          <startKey>	flying	</startKey>
+          <endKey>	stopFlying	</endKey>
+          <deferred>
+            <materialParams>
+              <textures>
+                <formAndColor>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_flameForm.dds	</formAndColor>
+                <tintFromLifetime>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_tintLifespan.dds	</tintFromLifetime>
+                <tintFromAlpha>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_gradientMap.dds	</tintFromAlpha>
+                <distortionPhaseOffsetMap>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_distortionPhase_temp.dds	</distortionPhaseOffsetMap>
+                <distortionMap>	particles/content_deferred/GFX_models/GFX_textures/Ribbon_Textures/rb_distortionMap.dds	</distortionMap>
+              </textures>
+              <colorUScrollingSpeed>	-1.500000	</colorUScrollingSpeed>
+              <colorUTiling>	33.000000	</colorUTiling>
+              <tintFromLengthUVScale>	1.000000 1.000000	</tintFromLengthUVScale>
+              <distortionPhaseMapScale>	100.000000	</distortionPhaseMapScale>
+              <distortionScrollingSpeed>	-0.700000 -1.000000	</distortionScrollingSpeed>
+              <distortionUTiling>	44.000000	</distortionUTiling>
+              <distortionUVScale>	1.000000	</distortionUVScale>
+              <distortionPower>	0.500000	</distortionPower>
+              <glowMultiplierRange>	32.000000 4.000000	</glowMultiplierRange>
+              <shouldUseLuminanceCorrection>	true	</shouldUseLuminanceCorrection>
+              <softFactor>	1.000000	</softFactor>
+              <fadeIn>	7.000000	</fadeIn>
+              <fadeOut>	15.000000	</fadeOut>
+            </materialParams>
+            <meshParams>
+              <distanceDifferenceFadeRange>	0.500000 0.600000	</distanceDifferenceFadeRange>
+              <widthRange>	0.500000 7.000000	</widthRange>
+              <sniperModeWidthRange>	0.400000 7.000000	</sniperModeWidthRange>
+              <skipByDistanceThreshold>	3.000000	</skipByDistanceThreshold>
+              <sniperModeOwnWidthFactorClamp>	0.350000 0.700000	</sniperModeOwnWidthFactorClamp>
+              <applyAlphaToTangentPatches>	true	</applyAlphaToTangentPatches>
+              <tangentPatchesThreshold>	0.200000	</tangentPatchesThreshold>
+              <tangentPatchesAlphaMultiplier>	0.200000	</tangentPatchesAlphaMultiplier>
+              <lastPatchShrink>	true	</lastPatchShrink>
+              <lastPatchWidthMultiplier>	0.200000	</lastPatchWidthMultiplier>
+              <lastPatchAlphaMultiplier>	0.700000	</lastPatchAlphaMultiplier>
+              <mockProjectileFollowSpeedFactor>	0.300000	</mockProjectileFollowSpeedFactor>
+              <connectionTimeThreshold>	0.310000	</connectionTimeThreshold>
+            </meshParams>
+          </deferred>
+          <forward>
+            <materialParams>
+              <textures>
+                <formAndColor>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_flameForm_forward.dds	</formAndColor>
+                <tintFromLifetime>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_tintLifespan_forward.dds	</tintFromLifetime>
+                <tintFromAlpha>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_gradientMap_forward.dds	</tintFromAlpha>
+                <distortionPhaseOffsetMap>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_distortionPhase_forward_temp.dds	</distortionPhaseOffsetMap>
+                <distortionMap>	particles/content_forward/PFX_textures/RibbonTextures_forward/rb_distortionMap_forward.dds	</distortionMap>
+              </textures>
+              <colorUScrollingSpeed>	-1.500000	</colorUScrollingSpeed>
+              <colorUTiling>	33.000000	</colorUTiling>
+              <tintFromLengthUVScale>	1.000000 1.000000	</tintFromLengthUVScale>
+              <distortionPhaseMapScale>	100.000000	</distortionPhaseMapScale>
+              <distortionScrollingSpeed>	-0.700000 -1.000000	</distortionScrollingSpeed>
+              <distortionUTiling>	44.000000	</distortionUTiling>
+              <distortionUVScale>	1.000000	</distortionUVScale>
+              <distortionPower>	1.000000	</distortionPower>
+              <glowMultiplierRange>	22.000000 11.000000	</glowMultiplierRange>
+              <shouldUseLuminanceCorrection>	true	</shouldUseLuminanceCorrection>
+              <softFactor>	1.000000	</softFactor>
+              <fadeIn>	6.000000	</fadeIn>
+              <fadeOut>	15.000000	</fadeOut>
+            </materialParams>
+            <meshParams>
+              <distanceDifferenceFadeRange>	0.500000 0.600000	</distanceDifferenceFadeRange>
+              <widthRange>	0.700000 7.000000	</widthRange>
+              <sniperModeWidthRange>	0.400000 7.000000	</sniperModeWidthRange>
+              <skipByDistanceThreshold>	3.000000	</skipByDistanceThreshold>
+              <sniperModeOwnWidthFactorClamp>	0.500000 0.700000	</sniperModeOwnWidthFactorClamp>
+              <applyAlphaToTangentPatches>	true	</applyAlphaToTangentPatches>
+              <tangentPatchesThreshold>	0.200000	</tangentPatchesThreshold>
+              <tangentPatchesAlphaMultiplier>	0.200000	</tangentPatchesAlphaMultiplier>
+              <lastPatchShrink>	true	</lastPatchShrink>
+              <lastPatchWidthMultiplier>	0.200000	</lastPatchWidthMultiplier>
+              <lastPatchAlphaMultiplier>	0.700000	</lastPatchAlphaMultiplier>
+              <mockProjectileFollowSpeedFactor>	0.300000	</mockProjectileFollowSpeedFactor>
+              <connectionTimeThreshold>	0.310000	</connectionTimeThreshold>
+            </meshParams>
+          </forward>
+        </flamethrowerRibbon>
       </effects>
     </projectile>
-    <targetImpulse>	0.32	</targetImpulse>
+    <targetImpulse></targetImpulse>
     <targetStickers>
       <armorResisted></armorResisted>
       <armorPierced></armorPierced>
@@ -8004,7 +8156,7 @@
       <shellVelocity>	1000	</shellVelocity>
       <shellMass>	900	</shellMass>
       <splashRadius>	3	</splashRadius>
-      <splashStrength>	4	</splashStrength>
+      <splashStrength>	0.4	</splashStrength>
     </physicsParams>
   </smallFlame_Pneumatic_2>
   <smallHollowCharge>
@@ -29861,6 +30013,10 @@
           <wwsoundNPC>	psb_apfsds_large_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_apfsds_large_PC	</wwsoundPC>
           <doppler>	RTPC_ext_artillery_doppler_factor	</doppler>
+          <tracerStopSound>
+            <wwstopSoundNPC>	psb_apfsds_npc_stop	</wwstopSoundNPC>
+            <wwstopSoundPC>	psb_apfsds_pc_stop	</wwstopSoundPC>
+          </tracerStopSound>
           <tracerDelaySound>
             <wwsoundEnemy>	imp_artillery_close_body_large_enemy	</wwsoundEnemy>
             <wwsoundAlly>	imp_artillery_close_body_large_ally	</wwsoundAlly>
@@ -40997,6 +41153,10 @@
           <wwsoundNPC>	psb_apfsds_huge_NPC	</wwsoundNPC>
           <wwsoundPC>	psb_apfsds_huge_PC	</wwsoundPC>
           <doppler>	RTPC_ext_artillery_doppler_factor	</doppler>
+          <tracerStopSound>
+            <wwstopSoundNPC>	psb_apfsds_npc_stop	</wwstopSoundNPC>
+            <wwstopSoundPC>	psb_apfsds_pc_stop	</wwstopSoundPC>
+          </tracerStopSound>
           <tracerDelaySound>
             <wwsoundEnemy>	imp_artillery_close_body_large_enemy	</wwsoundEnemy>
             <wwsoundAlly>	imp_artillery_close_body_large_ally	</wwsoundAlly>

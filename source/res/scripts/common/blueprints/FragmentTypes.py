@@ -3,16 +3,18 @@
 import nations
 import typing
 from backports.functools_lru_cache import lru_cache
-from items import vehicles, ITEM_TYPES
+from items import vehicles, ITEM_TYPES, ITEM_TYPE_NAMES
+from items.vehicles import parseIntCompactDescr, makeIntCompactDescrByID
 from random_utils import wchoices
-from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
+from debug_utils import LOG_DEBUG_DEV, LOG_CODEPOINT_WARNING
 from . import g_cache, BlueprintsException, getAllResearchedVehicles
 from BlueprintTypes import BlueprintTypes
+SPECIAL_VEHICLE_ID = 255
 
 class BlueprintFragment(object):
-    __slots__ = ('nationID', 'vehTypeCD', 'total', 'isUniversal', 'getXPValueForFragments', 'makeIntCompDescr', 'getRequiredFragmentCounts', 'decayExtraFragments')
+    __slots__ = ('nationID', 'vehTypeCD', 'total')
     FTYPE = BlueprintTypes.NONE
-    nationID = property(lambda self: self.vehTypeCD >> 4 & 15)
+    nationID = property(lambda self: parseIntCompactDescr(self.vehTypeCD)[1])
 
     def __init__(self, vehTypeCD=0, total=0, enableException=True):
         self.vehTypeCD = vehTypeCD
@@ -22,7 +24,7 @@ class BlueprintFragment(object):
         pass
 
     def makeIntCompDescr(self, normalized=False):
-        return _makeIntCompDescr(self.vehTypeCD, self.FTYPE, normalized)
+        return _makeIntFragmentCompDescr(self.vehTypeCD, self.FTYPE, normalized)
 
     def isUniversal(self):
         return False
@@ -38,10 +40,10 @@ class BlueprintFragment(object):
 
     @staticmethod
     def fromIntFragmentCD(fragmentCD, enableException=True):
-        myFragmentType = getFragmentType(fragmentCD)
+        fType, nationID, innationID = _parseIntFragmentCompDescr(fragmentCD)
         for cls in BlueprintFragment.__subclasses__():
-            if myFragmentType == cls.FTYPE:
-                return cls(ITEM_TYPES.vehicle + (fragmentCD & 65520), enableException)
+            if fType == cls.FTYPE:
+                return cls(makeIntCompactDescrByID('vehicle', nationID, innationID), enableException)
 
         raise BlueprintsException('Invalid fragment compact descriptor', fragmentCD)
 
@@ -54,10 +56,10 @@ class NationalBlueprintFragment(BlueprintFragment):
     @lru_cache(maxsize=len(nations.NAMES) * 2)
     def fromNation(nationNameOrId):
         nationID = nations.INDICES.get(nationNameOrId, -1) if type(nationNameOrId) is str else nationNameOrId
-        return NationalBlueprintFragment(65280 + (nationID << 4) + ITEM_TYPES.vehicle)
+        return NationalBlueprintFragment(makeIntCompactDescrByID('vehicle', nationID, SPECIAL_VEHICLE_ID))
 
     def __repr__(self):
-        return 'nBPF:{}'.format(self.vehTypeCD >> 4 & 15)
+        return 'nBPF:{}'.format(_parseIntFragmentCompDescr(self.vehTypeCD)[1])
 
     def isUniversal(self):
         return True
@@ -86,11 +88,11 @@ class VehicleBlueprintFragment(BlueprintFragment):
 
     @property
     def asNationalCD(self):
-        return (self.vehTypeCD & 65520) + BlueprintTypes.NATIONAL
+        return _makeIntFragmentCompDescr(self.vehTypeCD, BlueprintTypes.NATIONAL, False)
 
     @property
     def asIntelligenceDataCD(self):
-        return (self.vehTypeCD & 65520) + BlueprintTypes.INTELLIGENCE_DATA
+        return _makeIntFragmentCompDescr(self.vehTypeCD, BlueprintTypes.INTELLIGENCE_DATA, False)
 
     def getXPValueForFragments(self, count):
         return self.progressPerFragment * count if count < self.total else 1.0
@@ -136,7 +138,7 @@ class IntelligenceDataFragment(BlueprintFragment):
 
 def getFragmentType(ifragmentCD):
     if type(ifragmentCD) in (int, long):
-        return ifragmentCD & 15
+        return _parseIntFragmentCompDescr(ifragmentCD)[0]
     raise BlueprintsException('Wrong fragment compact descriptor', ifragmentCD)
 
 
@@ -150,45 +152,57 @@ def toIntFragmentCD(fragment):
 
 def isValidFragment(maybeFragment, defaultUnlocks=()):
     if type(maybeFragment) in (int, long):
-        if maybeFragment & 15 == 1 and defaultUnlocks:
+        fType = _parseIntFragmentCompDescr(maybeFragment)[0]
+        if fType == BlueprintTypes.VEHICLE and defaultUnlocks:
             vehType = vehicles.getVehicleType(maybeFragment)
             if not vehType.isCollectorVehicle:
                 return maybeFragment not in defaultUnlocks
         else:
-            return maybeFragment & 15 in BlueprintTypes.ALL
+            return fType in BlueprintTypes.ALL
     return False
 
 
 def isUniversalFragment(maybeFragment):
-    return maybeFragment and maybeFragment & 15 in BlueprintTypes.UNIVERSAL if type(maybeFragment) in (int, long) else False
+    return _parseIntFragmentCompDescr(maybeFragment)[0] in BlueprintTypes.UNIVERSAL if type(maybeFragment) in (int, long) else False
 
 
 def isSimilar(fragmentTypeCD1, fragmentTypeCD2, strict=True):
     if strict:
         return fragmentTypeCD1 == fragmentTypeCD2
-    if 15 & fragmentTypeCD1 == BlueprintTypes.VEHICLE:
-        return isSimilar(fragmentTypeCD1, fragmentTypeCD2, True)
-    if 15 & fragmentTypeCD1 == BlueprintTypes.NATIONAL:
-        return isSimilar(fragmentTypeCD1 & 255, fragmentTypeCD2 & 255, True)
-    return isSimilar(fragmentTypeCD1 & 15, fragmentTypeCD2 & 15, True) if 15 & fragmentTypeCD1 == BlueprintTypes.INTELLIGENCE_DATA else False
+    fType1 = getFragmentType(fragmentTypeCD1)
+    fType2 = getFragmentType(fragmentTypeCD2)
+    if fType1 == BlueprintTypes.VEHICLE:
+        return fragmentTypeCD1 == fragmentTypeCD2
+    if fType1 == BlueprintTypes.NATIONAL:
+        _, nationID1, _ = _parseIntFragmentCompDescr(fragmentTypeCD1)
+        _, nationID2, _ = _parseIntFragmentCompDescr(fragmentTypeCD2)
+        return fType1 == fType2 and nationID1 == nationID2
+    return fType1 == fType2 if fType1 == BlueprintTypes.INTELLIGENCE_DATA else False
 
 
 @lru_cache(maxsize=512)
 def normalizeFragment(ifragmentCD):
-    vehTypeCD = ITEM_TYPES.vehicle + (ifragmentCD & 65520)
-    fType = getFragmentType(ifragmentCD)
-    return _makeIntCompDescr(vehTypeCD, fType, normalized=True)
+    fType, nationID, innationID = _parseIntFragmentCompDescr(ifragmentCD)
+    vehTypeCD = makeIntCompactDescrByID('vehicle', nationID, innationID)
+    return _makeIntFragmentCompDescr(vehTypeCD, fType, normalized=True)
 
 
 @lru_cache(maxsize=512)
-def _makeIntCompDescr(vehTypeCD, fType, normalized):
+def _makeIntFragmentCompDescr(vehTypeCD, fType, normalized):
+    _, nationID, innationID = _parseIntFragmentCompDescr(vehTypeCD)
+    itemTypeName = ITEM_TYPE_NAMES[fType]
     if BlueprintTypes.INTELLIGENCE_DATA == fType:
-        return ((65521 if normalized else vehTypeCD) & 65520) + fType
+        return makeIntCompactDescrByID(itemTypeName, nations.NONE_INDEX if normalized else nationID, SPECIAL_VEHICLE_ID if normalized else innationID)
     if BlueprintTypes.NATIONAL == fType:
-        return ((vehTypeCD | 65280 if normalized else vehTypeCD) & 65520) + fType
+        return makeIntCompactDescrByID(itemTypeName, nationID, SPECIAL_VEHICLE_ID if normalized else innationID)
     if BlueprintTypes.VEHICLE == fType:
-        return (vehTypeCD & 65520) + fType
-    LOG_ERROR('Incorrect fType={}'.format(fType))
+        return makeIntCompactDescrByID(itemTypeName, nationID, innationID)
+    LOG_CODEPOINT_WARNING(vehTypeCD, fType, normalized)
+
+
+@lru_cache(maxsize=512)
+def _parseIntFragmentCompDescr(fragmentCD):
+    return parseIntCompactDescr(fragmentCD)
 
 
 @lru_cache(maxsize=512)

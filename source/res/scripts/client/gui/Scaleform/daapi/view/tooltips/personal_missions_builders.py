@@ -21,5 +21,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PersonalMissionsMapRegionTooltipData(contexts.PersonalMissionContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.OPERATIONS_CHAIN_DETAILS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationsChainDetailsTooltipData(contexts.PersonalMissionContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.OPERATION_POSTPONED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.OperationPostponedTooltipData(contexts.PersonalMissionOperationContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.PM3_GIFT_TOKEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, personal_missions.PM3GiftTokenTooltipData(contexts.PM3GiftTokenContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_ANNOUNCE, None, personal_missions.PMMissionAnnounceTooltipData(contexts.ToolTipContext(None))),
-     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_OLD_OPERATIONS, None, personal_missions.PMOldOperationsTooltipData(contexts.ToolTipContext(None))))
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_OLD_OPERATIONS, None, personal_missions.PMOldOperationsTooltipData(contexts.ToolTipContext(None))),
+     TooltipWindowBuilder(TOOLTIPS_CONSTANTS.PM3_QUEST_CARD_TOOLTIP, None, personal_missions.PM3QuestCardTooltipData(contexts.ToolTipContext(None))))

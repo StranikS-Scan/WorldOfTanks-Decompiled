@@ -158,6 +158,34 @@
         <team2></team2>
       </teamBasePositions>
     </comp7>
+    <bob>
+      <boundingBox>
+        <bottomLeft>	-500.000000 -350.000000	</bottomLeft>
+        <upperRight>	350.000000 500.000000	</upperRight>
+      </boundingBox>
+      <teamSpawnPoints>
+        <team1>
+          <position>	207.252426 454.885773	</position>
+        </team1>
+        <team2>
+          <position>	-450.232330 -191.345703	</position>
+        </team2>
+      </teamSpawnPoints>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/01_karelia/mmap_comp7.dds	</minimap>
+      <controlPoint>	-241.936005 245.584000	</controlPoint>
+    </bob>
   </gameplayTypes>
   <mapActivities>
     <warplane>

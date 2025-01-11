@@ -175,10 +175,6 @@ class EffectsListPlayer(object):
         self.__data = dict()
         return
 
-    @property
-    def isStarted(self):
-        return self.__isStarted
-
     def play(self, model, startKeyPoint=None, callbackFunc=None, waitForKeyOff=False):
         needPlay, newKey = self.__isNeedToPlay(waitForKeyOff)
         if not needPlay:
@@ -754,7 +750,7 @@ class _NodeSoundEffectDesc(_BaseSoundEvent):
 
 
 class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
-    __slots__ = ('_parameters', '__stopSoundEventName', '__tracerDelaySound')
+    __slots__ = ('_parameters', '__stopEventSound', '__tracerDelaySound')
     TYPE = '_TracerSoundEffectDesc'
     shellTypesMap = {'AP': 0,
      'HE': 1,
@@ -766,7 +762,14 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         shellType = dataSection.readString('type', '').split()[0]
         shellType = _TracerSoundEffectDesc.shellTypesMap.get(shellType, 0)
         self._parameters = [SoundStartParam('psb_shell_type', shellType)]
-        self.__stopSoundEventName = ''
+        self._setStopEventsName(dataSection)
+        self._setDelaySoundSection(dataSection)
+
+    def _setStopEventsName(self, dataSection):
+        stopSoundEventNames = dataSection['tracerStopSound']
+        self.__stopEventSound = _TracerStopEventSound(stopSoundEventNames)
+
+    def _setDelaySoundSection(self, dataSection):
         delaySoundSection = dataSection['tracerDelaySound']
         if delaySoundSection is not None:
             self.__tracerDelaySound = _TracerDelaySound(delaySoundSection)
@@ -782,7 +785,7 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         isPlayer, _ = self._isPlayer(args)
         soundName, _ = self._getName(args)
         if soundName and not soundName[0].startswith('flamer'):
-            self.__stopSoundEventName = 'psb_pc_stop' if isPlayer else 'psb_npc_stop'
+            self.__stopEventSound.setSound(isPlayer)
         soundObject = super(_TracerSoundEffectDesc, self).create(model, effects, args)
         if soundObject is not None and self.__tracerDelaySound is not None:
             self.__tracerDelaySound.create(soundObject, args)
@@ -796,8 +799,9 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         if soundObject is not None:
             if self._dopplerEffect is not None:
                 soundObject.stopDopplerEffect()
-            if self.__stopSoundEventName:
-                soundObject.play(self.__stopSoundEventName)
+            stopSound = self.__stopEventSound.getSound()
+            if stopSound is not None:
+                soundObject.play(stopSound)
             else:
                 soundObject.stopAll()
         super(_TracerSoundEffectDesc, self).delete(elem, 0)
@@ -807,6 +811,22 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         attackerID = args.get('attackerID', None)
         avatar = BigWorld.player()
         return (attackerID == BigWorld.player().playerVehicleID, attackerID) if not avatar.isVehicleAlive and attackerID is not None else super(_TracerSoundEffectDesc, self)._isPlayer(args)
+
+
+class _TracerStopEventSound(object):
+    __slots__ = ('_soundsName', '_sound')
+
+    def __init__(self, dataSection):
+        defaultSounds = ('psb_pc_stop', 'psb_npc_stop')
+        self._soundsName = (dataSection.readString('wwstopSoundPC', defaultSounds[0]) if dataSection else defaultSounds[0], dataSection.readString('wwstopSoundNPC', defaultSounds[1]) if dataSection else defaultSounds[1])
+        self._sound = None
+        return
+
+    def setSound(self, isPlayer):
+        self._sound = self._soundsName[0] if isPlayer else self._soundsName[1]
+
+    def getSound(self):
+        return self._sound
 
 
 class _CollisionSoundEffectDesc(_BaseSoundEvent):
@@ -1398,6 +1418,19 @@ class _AutoShootEffectDesc(_EffectDesc):
         self.deactivationSound = sound_readers.readWWTripleSoundConfig(dataSection['deactivationSound'])
 
 
+class _FlamethrowerRibbonEffectDesc(_EffectDesc):
+    __slots__ = ('_id',)
+    TYPE = '_FlamethrowerRibbonEffectDesc'
+
+    def __init__(self, dataSection):
+        super(_FlamethrowerRibbonEffectDesc, self).__init__(dataSection)
+        self._id = BigWorld.FlamethrowerRibbon.addParams(dataSection)
+
+    @property
+    def id(self):
+        return self._id
+
+
 _effectDescFactory = {'pixie': _PixieEffectDesc,
  'animation': _AnimationEffectDesc,
  'sound': _SoundEffectDesc,
@@ -1418,7 +1451,8 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'light': _LightEffectDesc,
  'destructionSound': _DestructionSoundEffectDesc,
  'lifetimeSound': _DestructionSoundEffectDesc,
- 'autoShoot': _AutoShootEffectDesc}
+ 'autoShoot': _AutoShootEffectDesc,
+ 'flamethrowerRibbon': _FlamethrowerRibbonEffectDesc}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

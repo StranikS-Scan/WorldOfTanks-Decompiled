@@ -6,7 +6,6 @@ from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_ERROR
 from frameworks.wulf import WindowLayer
 from PlayerEvents import g_playerEvents
-from gifts.gifts_common import GiftEventID
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
@@ -24,6 +23,7 @@ from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
 from gui.shared.utils.functions import makeTooltip
+from gui.paragons.paragons_constants import ParagonsSystemMessages
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency, time_utils
 from items import makeIntCompactDescrByID
@@ -35,9 +35,8 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IEarlyAccessController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController, IEarlyAccessController, IParagonsController
 from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.game_control import IGiftSystemController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
 if typing.TYPE_CHECKING:
@@ -61,17 +60,16 @@ class _NotificationDecorator(object):
         self._isOrderChanged = False
         self._entityID = entityID
         self._entity = entity
-        self._settings = settings
         self._make(entity, settings)
 
     def __repr__(self):
         return '{0:>s}(typeID = {1:n}, entityID = {2:n})'.format(self.__class__.__name__, self.getType(), self.getID())
 
     def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder()) if isinstance(other, _NotificationDecorator) else -1
+        return cmp(self.getOrder(), other.getOrder())
 
     def __eq__(self, other):
-        return isinstance(other, _NotificationDecorator) and self.getType() == other.getType() and self.getID() == other.getID()
+        return self.getType() == other.getType() and self.getID() == other.getID()
 
     def clear(self):
         self._entityID = 0
@@ -118,18 +116,6 @@ class _NotificationDecorator(object):
         result = False
         if self._settings:
             result = self._settings.isNotify
-        return result
-
-    def onlyNCList(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyNCList
-        return result
-
-    def onlyPopUp(self):
-        result = False
-        if self._settings:
-            result = self._settings.onlyPopUp
         return result
 
     def showAt(self):
@@ -187,15 +173,6 @@ class _NotificationDecorator(object):
     def decrementCounterOnHidden(self):
         return True
 
-    def resetCounter(self):
-        return True
-
-    def getCount(self):
-        pass
-
-    def updateCounter(self):
-        return False
-
 
 class SearchCriteria(_NotificationDecorator):
     __slots__ = ('_typeID',)
@@ -241,7 +218,7 @@ class MessageDecorator(_NotificationDecorator):
                 self._settings.showAt = _makeShowTime()
         message = formatted.copy() if formatted else {}
         for key in _ICONS_FIELDS:
-            if key in message:
+            if key in formatted:
                 message[key] = makePathToIcon(message[key])
             message[key] = ''
 
@@ -286,23 +263,6 @@ class EmailConfirmationReminderMessageDecorator(MessageDecorator):
 
     def getGroup(self):
         return NotificationGroup.OFFER
-
-
-class PsaCoinReminderMessageDecorator(MessageDecorator):
-
-    def __init__(self, entityID, coinCount, msgPrLevel=NotificationPriorityLevel.LOW):
-        entity = g_settings.msgTemplates.format('PsaCoinReminder', ctx={'count': str(coinCount)}, data={'savedData': coinCount})
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=msgPrLevel)
-        super(PsaCoinReminderMessageDecorator, self).__init__(entityID, entity, settings)
-
-    def getType(self):
-        return NOTIFICATION_TYPE.PSACOIN_REMINDER
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getSavedData(self):
-        return self._vo['message'].get('savedData', 0)
 
 
 class LockButtonMessageDecorator(MessageDecorator):
@@ -1376,26 +1336,6 @@ class BattleMattersReminderDecorator(MessageDecorator):
         return (state, tooltip)
 
 
-class GiftSystemOperationsFactory(object):
-    __giftsController = dependency.descriptor(IGiftSystemController)
-    __OPENED_DECORATORS = {}
-    __SENT_DECORATORS = {}
-
-    @classmethod
-    def createGiftOpenedDecorator(cls, clientID, model, ctx):
-        lootboxID = ctx['lootbox'].getID()
-        eventID = cls.__giftsController.getSettings().itemToEventID.get(lootboxID, GiftEventID.UNKNOWN)
-        return cls.__OPENED_DECORATORS.get(eventID, cls.__createNothing)(clientID, model, ctx)
-
-    @classmethod
-    def createGiftSentDecorator(cls, clientID, model, ctx):
-        return cls.__SENT_DECORATORS.get(ctx['eventID'], cls.__createNothing)(clientID, model, ctx)
-
-    @classmethod
-    def __createNothing(cls, *_):
-        return None
-
-
 class EarlyAccessDecorator(MessageDecorator):
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
 
@@ -1436,3 +1376,77 @@ class EarlyAccessDecorator(MessageDecorator):
                 state = NOTIFICATION_BUTTON_STATE.DEFAULT
             buttonsStates['submit'] = state
             return
+
+
+class ParagonsMessageDecorator(MessageDecorator):
+    __ctrl = dependency.descriptor(IParagonsController)
+    _chapter = None
+    _level = None
+    _isVehicleReceived = False
+
+    @property
+    def featureIsInactive(self):
+        return not self.__ctrl.isEnabled or self.__ctrl.isPaused
+
+    def __init__(self, entityID, entity=None, settings=None, model=None):
+        super(ParagonsMessageDecorator, self).__init__(entityID, entity, settings, model)
+        auxData = settings.auxData
+        if auxData:
+            self._chapter = auxData.get('chapter')
+            self._level = auxData.get('level')
+            self._isVehicleReceived = False
+        self.__ctrl.onSelectedRewardMarked += self.__onSelectedRewardMarked
+        self.__ctrl.onSettingsChanged += self.__onSettingsChanged
+
+    def clear(self):
+        self.__ctrl.onSelectedRewardMarked -= self.__onSelectedRewardMarked
+        self.__ctrl.onSettingsChanged -= self.__onSettingsChanged
+        super(ParagonsMessageDecorator, self).clear()
+
+    def _make(self, formatted=None, settings=None):
+        self.__updateButtons()
+        super(ParagonsMessageDecorator, self)._make(formatted, settings)
+
+    def __updateButtons(self):
+        if self._entity is None or not self._entity.get('buttonsLayout'):
+            return
+        else:
+            state = NOTIFICATION_BUTTON_STATE.DEFAULT | NOTIFICATION_BUTTON_STATE.VISIBLE
+            if self._isVehicleReceived or self.featureIsInactive:
+                state = NOTIFICATION_BUTTON_STATE.HIDDEN
+            buttonsStates = self._entity.get('buttonsStates')
+            if buttonsStates is None:
+                self._entity.setdefault('buttonsStates', {}).update({'submit': state})
+            else:
+                buttonsStates['submit'] = state
+            return
+
+    def __onSelectedRewardMarked(self, chapter, level, _):
+        self.__update(chapter, level, True)
+
+    def __onSettingsChanged(self, _):
+        self.__update(self._chapter, self._level, False)
+
+    def __update(self, chapter, level, isVehicleReceived):
+        if self._chapter != chapter or self._level != level:
+            return
+        else:
+            self._isVehicleReceived = isVehicleReceived
+            if self._model is not None:
+                self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
+            return
+
+
+class ParagonsAchievementDecorator(MessageDecorator):
+
+    def _make(self, formatted=None, settings=None):
+        self._settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.HIGH)
+        if settings.messageType == ParagonsSystemMessages.FIRST_MAIN_REWARD_ACHIEVED:
+            pathToIcon = backport.image(R.images.gui.maps.icons.paragons.messenger.notification_icon_first11())
+        if settings.messageType == ParagonsSystemMessages.FIRST_CHAPTER_COMPLETED:
+            pathToIcon = backport.image(R.images.gui.maps.icons.paragons.messenger.notification_icon_first_chapter())
+        formatted['icon'] = pathToIcon
+        self._vo = {'typeID': self.getType(),
+         'entityID': self.getID(),
+         'message': formatted,
+         'notify': self.isNotify()}

@@ -40,14 +40,14 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	20	</armor_1>
-      <armor_2>	30	</armor_2>
+      <armor_1>	35	</armor_1>
+      <armor_2>	40	</armor_2>
       <armor_3>	20	</armor_3>
-      <armor_4>	20	</armor_4>
+      <armor_4>	30	</armor_4>
       <armor_5>	20	</armor_5>
       <armor_6>	20	</armor_6>
       <armor_7>	15	</armor_7>
-      <armor_8>	10	</armor_8>
+      <armor_8>	20	</armor_8>
       <armor_9>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_9>
       <armor_10>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11388	</weight>
-    <maxHealth>	800	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -1003,7 +1003,7 @@
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleRotation>	0.01	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1771,7 +1771,7 @@
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleRotation>	0.01	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -2557,9 +2557,9 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	30	</armor_1>
-            <armor_2>	20	</armor_2>
-            <armor_3>	20	</armor_3>
+            <armor_1>	40	</armor_1>
+            <armor_2>	35	</armor_2>
+            <armor_3>	35	</armor_3>
             <armor_4>	20	</armor_4>
             <gun>	30	</gun>
           </armor>
@@ -2831,9 +2831,9 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	30	</armor_1>
-            <armor_2>	20	</armor_2>
-            <armor_3>	20	</armor_3>
+            <armor_1>	40	</armor_1>
+            <armor_2>	35	</armor_2>
+            <armor_3>	35	</armor_3>
             <armor_4>	20	</armor_4>
             <gun>	40	</gun>
           </armor>
@@ -3151,11 +3151,11 @@
       <engines>
         <Saab_Scania_DS14>
           <smplEnginePower>	400	</smplEnginePower>
-          <smplFwMaxSpeed>	5	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
         </Saab_Scania_DS14>
         <Leyland_L60>
           <smplEnginePower>	500	</smplEnginePower>
-          <smplFwMaxSpeed>	5	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
         </Leyland_L60>
       </engines>
       <chassis>

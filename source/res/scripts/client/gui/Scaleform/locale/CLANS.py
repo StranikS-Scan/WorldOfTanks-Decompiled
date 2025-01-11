@@ -504,6 +504,8 @@ class CLANS(object):
     CLANLANDING_NOTIFICATION_ARCHIVED = '#clans:clanLanding/notification/archived'
     CLANLANDING_NOTIFICATION_DELETED = '#clans:clanLanding/notification/deleted'
     BANNER_TITLE = '#clans:banner/title'
+    BANNER_TYPE_MANEUVERS = '#clans:banner/type/maneuvers'
+    BANNER_TYPE_GM = '#clans:banner/type/gm'
     BANNER_INFO_BATTLESEND = '#clans:banner/info/battlesEnd'
     BANNER_INFO_BATTLESTODAY = '#clans:banner/info/battlesToday'
     BANNER_INFO_BATTLESTOMORROW = '#clans:banner/info/battlesTomorrow'

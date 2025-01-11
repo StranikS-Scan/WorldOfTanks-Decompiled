@@ -33,6 +33,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
     _COMMON_SOUND_SPACE = STYLE_PREVIEW_SOUND_SPACE
 
     def __init__(self, ctx=None):
+        self._COMMON_SOUND_SPACE = ctx.get('soundSpace', self._COMMON_SOUND_SPACE)
         super(VehicleStylePreview, self).__init__(ctx)
         self.__ctx = ctx
         self._style = ctx['style']
@@ -71,11 +72,7 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
         self.__hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
         self.__heroTanksControl.setInteractive(False)
-        self.as_setDataS({'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
-         'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
-         'backBtnDescrLabel': self.__backBtnDescrLabel,
-         'showCloseBtn': _SHOW_CLOSE_BTN,
-         'showBackButton': _SHOW_BACK_BTN})
+        self.as_setDataS(self._getData())
         self.as_setAdditionalInfoS(self._getAdditionalInfoVO())
         if self.__backPreviewAlias and self.__backPreviewAlias == VIEW_ALIAS.LOBBY_STORE:
             self.__uiFlowLogger.logOpenPreview()
@@ -101,6 +98,13 @@ class VehicleStylePreview(LobbySelectableView, VehicleBasePreviewMeta):
 
     def _createSelectableLogic(self):
         return PreviewSelectableLogic()
+
+    def _getData(self):
+        return {'closeBtnLabel': backport.text(R.strings.vehicle_preview.header.closeBtn.label()),
+         'backBtnLabel': backport.text(R.strings.vehicle_preview.header.backBtn.label()),
+         'backBtnDescrLabel': self.__backBtnDescrLabel,
+         'showCloseBtn': _SHOW_CLOSE_BTN,
+         'showBackButton': _SHOW_BACK_BTN}
 
     def _getAdditionalInfoVO(self):
         return {'objectSubtitle': text_styles.main(backport.text(getGroupFullNameResourceID(self._style.groupID))),

@@ -1276,6 +1276,8 @@ class SniperControlMode(_GunControlMode):
     _BINOCULARS_MODE_SUFFIX = ['usual', 'coated']
     BinocularsModeDesc = namedtuple('BinocularsModeDesc', ('background', 'distortion', 'rgbCube', 'greenOffset', 'blueOffset', 'aberrationRadius', 'distortionAmount'))
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
+    THERMAL_BACKGROUND_PATH = 'system/maps/thermal_slens_map.dds'
+    THERMAL_SHADER_COLOR = 2044715
 
     @staticmethod
     def enableLensEffects(enable):
@@ -1480,6 +1482,8 @@ class SniperControlMode(_GunControlMode):
         self._binoculars.setDistortionTexture(modeDesc.distortion)
         self._binoculars.setColorGradingTexture(modeDesc.rgbCube)
         self._binoculars.setParams(modeDesc.greenOffset, modeDesc.blueOffset, modeDesc.aberrationRadius, modeDesc.distortionAmount)
+        self._binoculars.setPyrometerVignetteTexture(self.THERMAL_BACKGROUND_PATH)
+        self._binoculars.setPyrometerColour(self.THERMAL_SHADER_COLOR)
         return
 
     def __siegeModeStateChanged(self, newState, timeToNewMode):

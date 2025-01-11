@@ -6,13 +6,14 @@ from collections import defaultdict, namedtuple
 from functools import partial
 from typing import TYPE_CHECKING, Optional
 import BigWorld
+from adisp import adisp_async, adisp_process
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 import constants
 import dossiers2
 import nations
 import wg_async as future_async
 from PlayerEvents import g_playerEvents
 from account_shared import LayoutIterator
-from adisp import adisp_async, adisp_process
 from battle_pass_common import BATTLE_PASS_PDATA_KEY
 from constants import CustomizationInvData, SkinInvData
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_NOTE
@@ -28,7 +29,6 @@ from items import getTypeOfCompactDescr, makeIntCompactDescrByID, tankmen, vehic
 from items.components.c11n_constants import CustomizationDisplayType, SeasonType
 from items.components.crew_skins_constants import CrewSkinType
 from nation_change.nation_change_helpers import isMainInNationGroupSafe, iterVehTypeCDsInNationGroup, iterVehiclesWithNationGroupInOrder
-from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from skeletons.gui.game_control import IVehiclePostProgressionController
 from skeletons.gui.shared import IItemsCache, IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -38,6 +38,7 @@ if TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
+    from typing import Any
 DO_LOG_BROKEN_SYNC = False
 
 def getDiffID(itemdID):
@@ -252,7 +253,6 @@ class REQ_CRITERIA(object):
         ACTIVE_OR_MAIN_IN_NATION_GROUP = RequestCriteria(PredicateCondition(lambda item: item.activeInNationGroup if item.isInInventory else isMainInNationGroupSafe(item.intCD)))
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
         PREMIUM = RequestCriteria(PredicateCondition(lambda item: item.isPremium))
-        SPECIAL = RequestCriteria(PredicateCondition(lambda item: item.isSpecial))
         READY = RequestCriteria(PredicateCondition(lambda item: item.isReadyToFight))
         OBSERVER = RequestCriteria(PredicateCondition(lambda item: item.isObserver))
         EARN_CRYSTALS = RequestCriteria(PredicateCondition(lambda item: item.isEarnCrystals))
@@ -294,6 +294,7 @@ class REQ_CRITERIA(object):
         FUN_RANDOM = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForFunRandomBattles))
         COMP7 = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForComp7Battles))
         MODE_HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isModeHidden))
+        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -301,7 +302,6 @@ class REQ_CRITERIA(object):
         CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         CAN_NOT_BE_SOLD = RequestCriteria(PredicateCondition(lambda item: item.canNotBeSold))
         IS_IN_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isInBattle))
-        IS_IN_UNIT = RequestCriteria(PredicateCondition(lambda item: item.isInUnit))
         SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         NAME_VEHICLE_WITH_SHORT = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableShortUserName or nameVehicle in item.searchableUserName)))
@@ -411,6 +411,7 @@ class REQ_CRITERIA(object):
 
 class RESEARCH_CRITERIA(object):
     VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.MAPS_TRAINING | ~REQ_CRITERIA.VEHICLE.HAS_ANY_TAG(constants.BATTLE_MODE_VEHICLE_TAGS) | ~REQ_CRITERIA.VEHICLE.BATTLE_ROYALE
+    UNLOCKED_VEHICLES = VEHICLE_TO_UNLOCK | REQ_CRITERIA.UNLOCKED
 
 
 class ItemsRequester(IItemsRequester):
@@ -687,7 +688,7 @@ class ItemsRequester(IItemsRequester):
             self.inventory.initC11nItemsNoveltyData()
         else:
             for statName, data in diff.get('stats', {}).iteritems():
-                if statName in ('unlocks', ('unlocks', '_r')):
+                if statName in ('unlocks', ('unlocks', '_r'), ('unlocks', '_d')):
                     self._invalidateUnlocks(data, invalidate)
                 if statName == 'eliteVehicles':
                     invalidate[GUI_ITEM_TYPE.VEHICLE].update(data)
@@ -838,8 +839,8 @@ class ItemsRequester(IItemsRequester):
     def getStockVehicle(self, typeCompDescr):
         return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else None
 
-    def getVehicleCopy(self, vehicle):
-        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self, extData=self.__inventory.getVehExtData(vehicle.intCD))
+    def getVehicleCopy(self, vehicle, battleModifiers=None):
+        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self, extData=self.__inventory.getVehExtData(vehicle.intCD), battleModifiers=battleModifiers)
 
     def getVehicleCopyByCD(self, typeCompDescr):
         vehicle = self.getItemByCD(typeCompDescr)
@@ -899,7 +900,7 @@ class ItemsRequester(IItemsRequester):
         return result
 
     @future_async.wg_async
-    def getItemsAsync(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, callback=None):
+    def getItemsAsync(self, itemTypeID=None, criteria=REQ_CRITERIA.EMPTY, nationID=None, onlyWithPrices=True, minPerTick=None, maxPerTick=None, callback=None):
         result = ItemsCollection()
         if not isinstance(itemTypeID, tuple):
             itemTypeID = (itemTypeID,)
@@ -922,7 +923,7 @@ class ItemsRequester(IItemsRequester):
 
             return
 
-        yield future_async.wg_await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=10, maxPerTick=100, logID='getItemsAsync', tickLength=0.0))
+        yield future_async.wg_await(future_async.distributeLoopOverTicks(asyncGetItems(), minPerTick=minPerTick, maxPerTick=maxPerTick, logID='getItemsAsync', tickLength=0.0))
         callback(result)
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):

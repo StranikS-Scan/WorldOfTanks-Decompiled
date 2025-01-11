@@ -185,6 +185,9 @@ class VOIPChatController(IVOIPChatController):
         if arenaBonusType == ARENA_BONUS_TYPE.COMP7:
             cls.__showComp7Message(enable)
             return
+        if arenaBonusType == ARENA_BONUS_TYPE.BOB:
+            cls.__showBobMessage(enable)
+            return
         if enable:
             msg = backport.text(R.strings.messenger.client.dynSquad.enableVOIP())
         else:
@@ -203,3 +206,11 @@ class VOIPChatController(IVOIPChatController):
         else:
             msg = backport.text(R.strings.messenger.client.COMP7.disableVOIP(), keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
         g_messengerEvents.onComp7VOIPNotificationReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.PLAYER if enable else ACTION_MESSAGE_TYPE.WARNING))
+
+    @staticmethod
+    def __showBobMessage(enable):
+        if enable:
+            msg = backport.text(R.strings.bob.battleMessages.enableVOIP())
+        else:
+            msg = backport.text(R.strings.bob.battleMessages.disableVOIP())
+        g_messengerEvents.onBobVOIPNotificationReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.PLAYER))

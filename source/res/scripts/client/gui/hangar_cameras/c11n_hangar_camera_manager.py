@@ -123,8 +123,11 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             position = appearance.getVehicleCentralPoint()
             m = Math.Matrix(appearance.compoundModel.node(TankPartNames.HULL))
             targetPos = m.applyPoint(position)
+            vehicleDirection = Math.Matrix(self.vEntity.matrix).applyToAxis(2)
+            dot = vehicleDirection.dot(Math.Vector3(0, 0, 1))
+            styleInfoYaw = math.acos(dot) + _STYLE_INFO_YAW
             mat = Math.Matrix()
-            mat.setRotateYPR((_STYLE_INFO_YAW, -_STYLE_INFO_PITCH, 0.0))
+            mat.setRotateYPR((styleInfoYaw, -_STYLE_INFO_PITCH, 0.0))
             pivotDir = mat.applyVector(Math.Vector3(1, 0, 0))
             pivotDir = Math.Vector3(pivotDir.x, 0, pivotDir.z)
             pivotDir.normalise()
@@ -132,8 +135,8 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             width = hullAABB[1].x - hullAABB[0].x
             length = hullAABB[1].z - hullAABB[0].z
             height = hullAABB[1].y - hullAABB[0].y
-            hullViewSpaceX = width * abs(math.cos(_STYLE_INFO_YAW)) + length * abs(math.sin(_STYLE_INFO_YAW))
-            hullViewSpaceZ = width * abs(math.sin(_STYLE_INFO_YAW)) + length * abs(math.cos(_STYLE_INFO_YAW))
+            hullViewSpaceX = width * abs(math.cos(styleInfoYaw)) + length * abs(math.sin(styleInfoYaw))
+            hullViewSpaceZ = width * abs(math.sin(styleInfoYaw)) + length * abs(math.cos(styleInfoYaw))
             aspect = BigWorld.getAspectRatio()
             halfFOVTan = math.tan(BigWorld.projection().fov * 0.5)
             distW = hullViewSpaceX / (_STYLE_INFO_MAX_VEHICLE_WIDTH * 2 * halfFOVTan * aspect)
@@ -148,7 +151,7 @@ class C11nHangarCameraManager(TimeDeltaMeter):
             if isRendererPipelineDeferred():
                 paramsDOF = self.__getStyleInfoDOFParams(futureCamPos)
             cameraManager.setDOFParams(True, paramsDOF)
-            cameraManager.moveCamera(targetPos, _STYLE_INFO_YAW, _STYLE_INFO_PITCH, dist, EASING_TRANSITION_DURATION)
+            cameraManager.moveCamera(targetPos, styleInfoYaw, _STYLE_INFO_PITCH, dist, EASING_TRANSITION_DURATION)
             self.enableMovementByMouse(enableRotation=False, enableZoom=False)
             self.__currentMode = C11nCameraModes.STYLE_INFO
             return

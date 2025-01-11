@@ -17,6 +17,7 @@ class GRAPHICS(CONST_CONTAINER):
     TRIPLE_BUFFERED = 'tripleBuffered'
     IGB_HARDWARE_ACCELERATION = 'igbHardwareAcceleration'
     COLOR_BLIND = 'isColorBlind'
+    UI_EFFECTS = 'uiEffects'
     GRAPHICS_QUALITY_HD_SD = 'graphicsQualityHDSD'
     GRAPHICS_QUALITY_HD_SD_HIGH = 'graphicsQualityHDSDHigh'
     IS_SD_QUALITY = 'isSDQuality'
@@ -392,6 +393,10 @@ class OnceOnlyHints(CONST_CONTAINER):
     REFERRAL_ENTRY_POINT_HINT = 'ReferralEntryPointHint'
     BATTLE_SELECTOR_BAR_AI_HINT = 'BattleSelectorBarAIHint'
     LOOT_PROBABILITY_HINT = 'LootProbabilityHint'
+    PERSONAL_MISSIONS_OPERATION_HINT = 'PersonalMissionsOperationHint'
+    PM_NEW_CAMPAIGN_HINT = 'NewCampaignHint'
+    PARAGONS_FIRST_RESET_HINT = 'ParagonsFirstResetHint'
+    PARAGONS_ENTRY_POINT_HINT = 'ParagonsEntryPointHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

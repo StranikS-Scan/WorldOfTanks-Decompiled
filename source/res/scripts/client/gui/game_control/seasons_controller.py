@@ -3,7 +3,7 @@
 from constants import GameSeasonType
 from soft_exception import SoftException
 from helpers import dependency
-from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IBattleRoyaleController, IMapboxController, IEventBattlesController, IComp7Controller
+from skeletons.gui.game_control import ISeasonsController, IRankedBattlesController, IEpicBattleMetaGameController, IBattleRoyaleController, IMapboxController, IEventBattlesController, IComp7Controller, IBobController
 from gui.shared.system_factory import registerSeasonProviderHandler, collectSeasonProviderHandler
 registerSeasonProviderHandler(GameSeasonType.RANKED, lambda *args, **kwargs: dependency.instance(IRankedBattlesController))
 registerSeasonProviderHandler(GameSeasonType.EPIC, lambda *args, **kwargs: dependency.instance(IEpicBattleMetaGameController))
@@ -11,6 +11,7 @@ registerSeasonProviderHandler(GameSeasonType.BATTLE_ROYALE, lambda *args, **kwar
 registerSeasonProviderHandler(GameSeasonType.MAPBOX, lambda *args, **kwargs: dependency.instance(IMapboxController))
 registerSeasonProviderHandler(GameSeasonType.EVENT_BATTLES, lambda *args, **kwargs: dependency.instance(IEventBattlesController))
 registerSeasonProviderHandler(GameSeasonType.COMP7, lambda *args, **kwargs: dependency.instance(IComp7Controller))
+registerSeasonProviderHandler(GameSeasonType.BOB, lambda *args, **kwargs: dependency.instance(IBobController))
 
 class SeasonsController(ISeasonsController):
 

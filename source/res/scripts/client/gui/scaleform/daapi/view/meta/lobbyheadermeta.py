@@ -103,6 +103,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_updateAnonymizedStateS(self, isAnonymized):
         return self.flashObject.as_updateAnonymizedState(isAnonymized) if self._isDAAPIInited() else None
 
+    def as_updateUiEffectsStateS(self, isEnabled):
+        return self.flashObject.as_updateUiEffectsState(isEnabled) if self._isDAAPIInited() else None
+
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None
 
@@ -121,8 +124,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_setFightBtnTooltipS(self, tooltip, isSpecial):
         return self.flashObject.as_setFightBtnTooltip(tooltip, isSpecial) if self._isDAAPIInited() else None
 
-    def as_updateOnlineCounterS(self, clusterStats, regionStats, tooltip, isAvailable):
-        return self.flashObject.as_updateOnlineCounter(clusterStats, regionStats, tooltip, isAvailable) if self._isDAAPIInited() else None
+    def as_updateOnlineCounterS(self, clusterStats, tooltip, isAvailable):
+        return self.flashObject.as_updateOnlineCounter(clusterStats, tooltip, isAvailable) if self._isDAAPIInited() else None
 
     def as_initOnlineCounterS(self, visible):
         return self.flashObject.as_initOnlineCounter(visible) if self._isDAAPIInited() else None
@@ -156,6 +159,3 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setButtonHighlightS(self, btnAlias, highlightImage):
         return self.flashObject.as_setButtonHighlight(btnAlias, highlightImage) if self._isDAAPIInited() else None
-
-    def as_updateNYVisibilityS(self, isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible):
-        return self.flashObject.as_updateNYVisibility(isShowBattleBtnGlow, isShowMainMenuGlow, nyWidgetVisible) if self._isDAAPIInited() else None

@@ -30,6 +30,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
+    from gui.Scaleform.daapi.view.battle.shared.indicator_items.thermal_vision import ThermalVisionIndicator
     from gui.Scaleform.daapi.view.battle.classic import stats_exchange
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
@@ -69,7 +70,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, MapsTrainingGameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_HINT, battle_hint.BattleHint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.MAPS_TRAINING_GOALS, MapsTrainingBattleGoals, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.MAPS_TRAINING_GOALS, MapsTrainingBattleGoals, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.THERMAL_VISION_INDICATOR, ThermalVisionIndicator, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

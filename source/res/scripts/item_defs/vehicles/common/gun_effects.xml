@@ -77,12 +77,12 @@
             <startKey>	start	</startKey>
             <effectsPrefab>	particles/Tank/customization/A172_Astron_FL/fire_shot_prefab.prefab	</effectsPrefab>
             <activationSound>
-              <wwsoundPC></wwsoundPC>
-              <wwsoundNPC></wwsoundNPC>
+              <wwsoundPC>	heavy_flamer_shot_start_PC	</wwsoundPC>
+              <wwsoundNPC>	heavy_flamer_shot_start_NPC	</wwsoundNPC>
             </activationSound>
             <deactivationSound>
-              <wwsoundPC></wwsoundPC>
-              <wwsoundNPC></wwsoundNPC>
+              <wwsoundPC>	heavy_flamer_shot_stop_PC	</wwsoundPC>
+              <wwsoundNPC>	heavy_flamer_shot_stop_NPC	</wwsoundNPC>
             </deactivationSound>
           </autoShoot>
         </effects>

@@ -7577,6 +7577,129 @@
     </vehicleFilter>
   </itemGroup>
   <itemGroup>
+    <name>	23 February 2025	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31210	</id>
+      <userString>	#vehicle_customization:23_February_2025/Paint/name	</userString>
+      <description>	#vehicle_customization:23_February_2025/Paint/description	</description>
+      <color>	124 57 30 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/sweden_color_05.png	</texture>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	ArmoryYard 5 2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31246	</id>
+      <userString>	#vehicle_customization:paint/ArmoryYard_Summer_2025/name	</userString>
+      <description>	#vehicle_customization:paint/ArmoryYard_Summer_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/poland_color_04.png	</texture>
+      <color>	90 114 78 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <season>	summer	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31247	</id>
+      <userString>	#vehicle_customization:paint/ArmoryYard_Desert_2025/name	</userString>
+      <description>	#vehicle_customization:paint/ArmoryYard_Desert_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	140 133 71 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <season>	desert	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	31248	</id>
+      <userString>	#vehicle_customization:paint/ArmoryYard_Winter_2025/name	</userString>
+      <description>	#vehicle_customization:paint/ArmoryYard_Winter_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/italy_color_03.png	</texture>
+      <color>	146 161 163 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <season>	winter	</season>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	8_March_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31249	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
+      <color>	24 78 78 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+      <userString>	#vehicle_customization:8_march_2025_paint/name	</userString>
+      <description>	#vehicle_customization:8_march_2025_paint/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Alpha_2024	</name>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <historical>	2	</historical>
+    <paint>
+      <id>	31250	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <userString>	#vehicle_customization:Alpha_2024_Paint/name	</userString>
+      <description>	#vehicle_customization:Alpha_2024_Paint/description	</description>
+      <color>	5 5 28 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.3	</metallic>
+      <tags>	hiddenInUI	</tags>
+      <priceGroup>	paints 20g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	Prostokvashino_NY_2025	</name>
     <season>	ALL	</season>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
@@ -7596,6 +7719,392 @@
       </vehicleFilter>
       <userString>	#vehicle_customization:Prostokvashino_2025_Paint_01/name	</userString>
       <description>	#vehicle_customization:Prostokvashino_2025_Paint_01/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattleBloggers_Prem_Paint_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31253	</id>
+      <color>	71 6 2 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint01_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint01_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31254	</id>
+      <color>	184 9 23 255	</color>
+      <gloss>	0.53	</gloss>
+      <metallic>	0.74	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_07.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint01_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint01_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31255	</id>
+      <color>	184 0 9 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint01_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint01_03_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31256	</id>
+      <color>	20 44 69 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint01_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint01_04_2025/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <paint>
+      <id>	31257	</id>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint02_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint02_01_2025/description	</description>
+      <color>	55 43 102 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+    </paint>
+    <paint>
+      <id>	31258	</id>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint02_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint02_02_2025/description	</description>
+      <color>	184 23 96 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.47	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_07.png	</texture>
+    </paint>
+    <paint>
+      <id>	31259	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint02_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint02_03_2025/description	</description>
+      <color>	176 31 184 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+    </paint>
+    <paint>
+      <id>	31260	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint02_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint02_04_2025/description	</description>
+      <color>	54 15 54 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.18	</metallic>
+    </paint>
+    <paint>
+      <id>	31261	</id>
+      <color>	69 23 45 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint03_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint03_01_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+    </paint>
+    <paint>
+      <id>	31262	</id>
+      <color>	184 148 90 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.74	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint03_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint03_02_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+    </paint>
+    <paint>
+      <id>	31263	</id>
+      <color>	184 170 79 255	</color>
+      <gloss>	0.81	</gloss>
+      <metallic>	0.79	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint03_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint03_03_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_16.png	</texture>
+    </paint>
+    <paint>
+      <id>	31264	</id>
+      <color>	31 17 0 255	</color>
+      <gloss>	0.523	</gloss>
+      <metallic>	0.454	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint03_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint03_04_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+    </paint>
+    <paint>
+      <id>	31265	</id>
+      <color>	23 31 69 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint04_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint04_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31266	</id>
+      <color>	55 75 145 255	</color>
+      <gloss>	0.49	</gloss>
+      <metallic>	0.63	</metallic>
+      <texture>	gui/maps/vehicles/repaints/granny.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint04_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint04_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31267	</id>
+      <color>	12 41 184 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.59	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint04_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint04_03_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31268	</id>
+      <color>	48 13 0 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Paint04_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Paint04_04_2025/description	</description>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattleBloggers_Paint_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31211	</id>
+      <color>	69 23 45 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint01_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint01_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31212	</id>
+      <color>	88 43 3 255	</color>
+      <gloss>	0.47	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_05.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint01_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint01_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31213	</id>
+      <color>	69 23 45 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint02_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint02_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31214	</id>
+      <color>	126 55 4 255	</color>
+      <gloss>	0.47	</gloss>
+      <metallic>	0.46	</metallic>
+      <texture>	gui/maps/vehicles/repaints/germany_color_07.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint02_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint02_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31215	</id>
+      <color>	69 23 45 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint03_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint03_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31216	</id>
+      <color>	205 159 27 255	</color>
+      <gloss>	0.59	</gloss>
+      <metallic>	0.69	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_16.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_03_Paint03_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_03_Paint03_02_2025/description	</description>
+    </paint>
+    <tags>	hiddenInUI styleOnly	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31217	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint01_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint01_01_2025/description	</description>
+      <color>	23 31 69 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+    </paint>
+    <paint>
+      <id>	31218	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_19.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint01_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint01_02_2025/description	</description>
+      <color>	54 70 147 255	</color>
+      <gloss>	0.48	</gloss>
+      <metallic>	0.25	</metallic>
+    </paint>
+    <paint>
+      <id>	31219	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint02_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint02_01_2025/description	</description>
+      <color>	23 31 69 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+    </paint>
+    <paint>
+      <id>	31220	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_19.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint02_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint02_02_2025/description	</description>
+      <color>	44 61 145 255	</color>
+      <gloss>	0.55	</gloss>
+      <metallic>	0.42	</metallic>
+    </paint>
+    <paint>
+      <id>	31221	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint03_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint03_01_2025/description	</description>
+      <color>	23 31 69 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+    </paint>
+    <paint>
+      <id>	31222	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
+      <userString>	#vehicle_customization:BattleBloggers_04_Paint03_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Paint03_02_2025/description	</description>
+      <color>	31 55 173 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.48	</metallic>
+    </paint>
+    <paint>
+      <id>	31223	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	55 43 102 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint01_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint01_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31224	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	76 22 81 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint01_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint01_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31225	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	55 43 102 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint02_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint02_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31226	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	127 42 133 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.34	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint02_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint02_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31227	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	55 43 102 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint03_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint03_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31228	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	168 0 177 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.6	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_02_Paint03_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_02_Paint03_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31229	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <color>	71 6 2 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint01_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint01_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31230	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	127 47 50 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint01_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint01_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31231	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <color>	71 6 2 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint02_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint02_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31232	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <color>	91 16 19 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.7	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint02_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint02_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31233	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <color>	71 6 2 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.36	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint03_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint03_01_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31234	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	180 0 9 255	</color>
+      <gloss>	0.41	</gloss>
+      <metallic>	0.74	</metallic>
+      <userString>	#vehicle_customization:BattleBloggers_01_Paint03_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_01_Paint03_02_2025/description	</description>
     </paint>
   </itemGroup>
 </custom_paints.xml>

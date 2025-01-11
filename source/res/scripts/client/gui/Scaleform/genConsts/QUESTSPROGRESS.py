@@ -4,12 +4,15 @@ from debug_utils import LOG_WARNING
 
 class QUESTSPROGRESS(object):
     C_183X63_OPERATION_1 = '183x63_operation_1'
+    C_183X63_OPERATION_10 = '183x63_operation_10'
     C_183X63_OPERATION_2 = '183x63_operation_2'
     C_183X63_OPERATION_3 = '183x63_operation_3'
     C_183X63_OPERATION_4 = '183x63_operation_4'
     C_183X63_OPERATION_5 = '183x63_operation_5'
     C_183X63_OPERATION_6 = '183x63_operation_6'
     C_183X63_OPERATION_7 = '183x63_operation_7'
+    C_183X63_OPERATION_8 = '183x63_operation_8'
+    C_183X63_OPERATION_9 = '183x63_operation_9'
     DONE = 'done'
     FAILED = 'failed'
     IN_PROGRESS = 'in_progress'
@@ -42,12 +45,15 @@ class QUESTSPROGRESS(object):
      ORANGE_MEDIUM_TANK,
      ORANGE_SPG)
     C_183X63_OPERATION_ENUM = (C_183X63_OPERATION_1,
+     C_183X63_OPERATION_10,
      C_183X63_OPERATION_2,
      C_183X63_OPERATION_3,
      C_183X63_OPERATION_4,
      C_183X63_OPERATION_5,
      C_183X63_OPERATION_6,
-     C_183X63_OPERATION_7)
+     C_183X63_OPERATION_7,
+     C_183X63_OPERATION_8,
+     C_183X63_OPERATION_9)
 
     @classmethod
     def getQPSilverVehicleType(cls, vType):

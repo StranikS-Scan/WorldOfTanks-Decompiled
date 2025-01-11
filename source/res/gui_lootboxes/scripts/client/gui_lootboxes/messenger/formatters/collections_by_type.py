@@ -5,8 +5,10 @@ from gui.shared.system_factory import registerMessengerClientFormatter, register
 from gui_lootboxes.gui.lb_gui_constants import SCH_CLIENT_MSG_TYPE
 from gui_lootboxes.messenger.formatters import auto_boxes_subformatters
 from gui_lootboxes.messenger.formatters.service_channel import LootBoxOpenedFormatter, LootBoxAutoOpenFormatter
-from debug_utils import LOG_DEBUG
-_AUTO_BOXES_SUB_FORMATTERS = [auto_boxes_subformatters.EventBoxesFormatter(), auto_boxes_subformatters.EventLootBoxesFormatter()]
+_AUTO_BOXES_SUB_FORMATTERS = (auto_boxes_subformatters.EventBoxesFormatter(),
+ auto_boxes_subformatters.EventLootBoxesFormatter(),
+ auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter(),
+ auto_boxes_subformatters.NYPostEventSurpriseMachineFormatter())
 
 def registerLootBoxClientFormatters():
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LB_OPENED, LootBoxOpenedFormatter())
@@ -14,8 +16,3 @@ def registerLootBoxClientFormatters():
 
 def registerLootBoxServerFormatters():
     registerMessengerServerFormatter(_SM_TYPE.lootBoxesAutoOpenReward.index(), LootBoxAutoOpenFormatter(subFormatters=_AUTO_BOXES_SUB_FORMATTERS))
-
-
-def registerAutoBoxesSubFormatter(formatter):
-    LOG_DEBUG('formatter {} added to AUTO_BOXES_SUB_FORMATTERS'.format(formatter.__class__.__name__))
-    _AUTO_BOXES_SUB_FORMATTERS.append(formatter)

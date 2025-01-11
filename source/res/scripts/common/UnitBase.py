@@ -14,7 +14,7 @@ from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, rep
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, FunRandomRoster, Comp7Roster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, FunRandomRoster, Comp7Roster, BobRoster
 if TYPE_CHECKING:
     from typing import List as TList, Tuple as TTuple, Dict as TDict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
@@ -366,6 +366,7 @@ class UNIT_MGR_FLAGS:
     RTS = 65536
     FUN_RANDOM = 131072
     COMP7 = 262144
+    BOB = 524288
     VERSUS_AI = 1073741824
 
 
@@ -444,7 +445,8 @@ VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS = {UNIT_MGR_FLAGS.EVENT: (('event_battles',
  UNIT_MGR_FLAGS.EPIC: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'epic_battles'}),
  UNIT_MGR_FLAGS.BATTLE_ROYALE: (('battle_royale',), tuple()),
  UNIT_MGR_FLAGS.STRONGHOLD: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'clanWarsBattles'}),
- UNIT_MGR_FLAGS.COMP7: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'comp7'})}
+ UNIT_MGR_FLAGS.COMP7: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'comp7'}),
+ UNIT_MGR_FLAGS.BOB: (tuple(), BATTLE_MODE_VEHICLE_TAGS - {'bob'})}
 UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE = {UNIT_MGR_FLAGS.EVENT: PREBATTLE_TYPE.EVENT,
  UNIT_MGR_FLAGS.EPIC: PREBATTLE_TYPE.EPIC,
  UNIT_MGR_FLAGS.BATTLE_ROYALE: PREBATTLE_TYPE.BATTLE_ROYALE,
@@ -453,7 +455,8 @@ UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE = {UNIT_MGR_FLAGS.EVENT: PREBATTLE_TYPE.EVENT,
  UNIT_MGR_FLAGS.SPEC_BATTLE: PREBATTLE_TYPE.CLAN,
  UNIT_MGR_FLAGS.STRONGHOLD: PREBATTLE_TYPE.STRONGHOLD,
  UNIT_MGR_FLAGS.TOURNAMENT: PREBATTLE_TYPE.TOURNAMENT,
- UNIT_MGR_FLAGS.COMP7: PREBATTLE_TYPE.COMP7}
+ UNIT_MGR_FLAGS.COMP7: PREBATTLE_TYPE.COMP7,
+ UNIT_MGR_FLAGS.BOB: PREBATTLE_TYPE.BOB}
 
 def _prebattleTypeFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
@@ -471,7 +474,8 @@ UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME = {UNIT_MGR_FLAGS.EVENT: 'EventUnitMgr',
  UNIT_MGR_FLAGS.BATTLE_ROYALE: 'SquadUnitMgr',
  UNIT_MGR_FLAGS.SPEC_BATTLE: 'SpecUnitMgr',
  UNIT_MGR_FLAGS.STRONGHOLD: 'StrongholdUnitMgr',
- UNIT_MGR_FLAGS.COMP7: 'Comp7UnitMgr'}
+ UNIT_MGR_FLAGS.COMP7: 'Comp7UnitMgr',
+ UNIT_MGR_FLAGS.BOB: 'BobUnitMgr'}
 
 def _entityNameFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
@@ -486,7 +490,8 @@ UNIT_MGR_FLAGS_TO_INVITATION_TYPE = {UNIT_MGR_FLAGS.EVENT: INVITATION_TYPE.EVENT
  UNIT_MGR_FLAGS.MAPBOX: INVITATION_TYPE.MAPBOX,
  UNIT_MGR_FLAGS.SQUAD: INVITATION_TYPE.SQUAD,
  UNIT_MGR_FLAGS.DEFAULT: INVITATION_TYPE.SQUAD,
- UNIT_MGR_FLAGS.COMP7: INVITATION_TYPE.COMP7}
+ UNIT_MGR_FLAGS.COMP7: INVITATION_TYPE.COMP7,
+ UNIT_MGR_FLAGS.BOB: INVITATION_TYPE.BOB}
 
 def _invitationTypeFromFlags(flags):
     flag = flags ^ UNIT_MGR_FLAGS.SQUAD if flags != UNIT_MGR_FLAGS.SQUAD and flags & UNIT_MGR_FLAGS.SQUAD else flags
@@ -535,8 +540,9 @@ class ROSTER_TYPE:
     MAPBOX_ROSTER = UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.SQUAD
     FUN_RANDOM_ROSTER = UNIT_MGR_FLAGS.FUN_RANDOM | UNIT_MGR_FLAGS.SQUAD
     COMP7_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.COMP7
+    BOB_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.BOB
     VERSUS_AI_ROSTER = UNIT_MGR_FLAGS.VERSUS_AI | UNIT_MGR_FLAGS.SQUAD
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.FUN_RANDOM | COMP7_ROSTER | UNIT_MGR_FLAGS.VERSUS_AI
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | STRONGHOLD_ROSTER | TOURNAMENT_ROSTER | UNIT_MGR_FLAGS.EPIC | UNIT_MGR_FLAGS.BATTLE_ROYALE | UNIT_MGR_FLAGS.MAPBOX | UNIT_MGR_FLAGS.FUN_RANDOM | COMP7_ROSTER | UNIT_MGR_FLAGS.VERSUS_AI | UNIT_MGR_FLAGS.BOB
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -570,6 +576,7 @@ class UnitPlayerDataKey(object):
     VEH_DICT = 'vehDict'
     VEH_BATTLES_COUNT = 'vehBattlesCount'
     EXTRA_DATA = 'extraData'
+    TOKENS = 'tokens'
 
 
 PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER = {PREBATTLE_TYPE.UNIT: UNIT_MGR_FLAGS.DEFAULT,
@@ -583,7 +590,8 @@ PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT = {PREBATTLE_TYPE.SQUAD: ROSTER_TYPE.SQUAD
  PREBATTLE_TYPE.EPIC: ROSTER_TYPE.EPIC_ROSTER,
  PREBATTLE_TYPE.BATTLE_ROYALE: ROSTER_TYPE.BATTLE_ROYALE_ROSTER,
  PREBATTLE_TYPE.MAPBOX: ROSTER_TYPE.MAPBOX_ROSTER,
- PREBATTLE_TYPE.COMP7: ROSTER_TYPE.COMP7_ROSTER}
+ PREBATTLE_TYPE.COMP7: ROSTER_TYPE.COMP7_ROSTER,
+ PREBATTLE_TYPE.BOB: ROSTER_TYPE.BOB_ROSTER}
 QUEUE_TYPE_BY_UNIT_MGR_ROSTER = {QUEUE_TYPE.EVENT_BATTLES: ROSTER_TYPE.EVENT_ROSTER}
 ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.SQUAD_ROSTER: SquadRoster,
@@ -594,7 +602,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.EPIC_ROSTER: EpicRoster,
  ROSTER_TYPE.BATTLE_ROYALE_ROSTER: BattleRoyaleRoster,
  ROSTER_TYPE.MAPBOX_ROSTER: MapBoxRoster,
- ROSTER_TYPE.COMP7_ROSTER: Comp7Roster}
+ ROSTER_TYPE.COMP7_ROSTER: Comp7Roster,
+ ROSTER_TYPE.BOB_ROSTER: BobRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -946,7 +955,7 @@ class UnitBase(OpsUnpacker):
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
         for i in xrange(0, playerCount):
-            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData = self.__unpackPlayerData(unpacking)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData, tokens = self.__unpackPlayerData(unpacking)
             unpacking = unpacking[blockLength:]
             playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
              UnitPlayerDataKey.TIME_JOIN: timeJoin,
@@ -960,7 +969,8 @@ class UnitBase(OpsUnpacker):
              UnitPlayerDataKey.IGRTYPE: igrType,
              UnitPlayerDataKey.BADGES: badges,
              UnitPlayerDataKey.IS_PREMIUM: isPremium,
-             UnitPlayerDataKey.EXTRA_DATA: extraData}
+             UnitPlayerDataKey.EXTRA_DATA: extraData,
+             UnitPlayerDataKey.TOKENS: tokens}
             self._addPlayer(accountDBID, **playerData)
 
         for i in xrange(0, profilesCount):
@@ -1419,7 +1429,7 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData = self.__unpackPlayerData(packedOps)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, accountWTR, peripheryID, clanDBID, isPremium, nickName, clanAbbrev, badges, extraData, tokens = self.__unpackPlayerData(packedOps)
         playerData = {UnitPlayerDataKey.ACCOUNT_ID: accountID,
          UnitPlayerDataKey.TIME_JOIN: timeJoin,
          UnitPlayerDataKey.ROLE: role,
@@ -1432,7 +1442,8 @@ class UnitBase(OpsUnpacker):
          UnitPlayerDataKey.IGRTYPE: igrType,
          UnitPlayerDataKey.BADGES: badges,
          UnitPlayerDataKey.IS_PREMIUM: isPremium,
-         UnitPlayerDataKey.EXTRA_DATA: extraData}
+         UnitPlayerDataKey.EXTRA_DATA: extraData,
+         UnitPlayerDataKey.TOKENS: tokens}
         self._addPlayer(accountDBID, **playerData)
         return packedOps[blockLength:]
 
@@ -1499,6 +1510,7 @@ class UnitBase(OpsUnpacker):
         badges = kwargs.get(UnitPlayerDataKey.BADGES, BadgesCommon.selectedBadgesEmpty())
         packed += BadgesCommon.packPlayerBadges(badges)
         packed += self.__packPlayerExtraData(self._makePlayerExtraDataForClient(kwargs.get('extraData', {})))
+        packed += self.__packTokensData(kwargs.get('tokens', set()))
         return packed
 
     def __unpackPlayerData(self, packedData):
@@ -1513,6 +1525,8 @@ class UnitBase(OpsUnpacker):
         offset += lenBadgesInfo
         extraData, lenExtraData = self.__unpackPlayerExtraData(packedData, offset)
         offset += lenExtraData
+        tokens, lenTokensInfo = self.__unpackTokensData(packedData, offset)
+        offset += lenTokensInfo
         return (offset,
          accountDBID,
          accountID,
@@ -1527,7 +1541,8 @@ class UnitBase(OpsUnpacker):
          nickName,
          clanAbbrev,
          badges,
-         extraData)
+         extraData,
+         tokens)
 
     @staticmethod
     def __packPlayerExtraData(packedData):
@@ -1558,3 +1573,24 @@ class UnitBase(OpsUnpacker):
         offset += lenString
         self._setProfileVehicle(accountDBID, profileVehCD, profileOutfitCD, seasonType, marksOnGun)
         return offset
+
+    @staticmethod
+    def __packTokensData(packedData):
+        packed = struct.pack('<B', len(packedData))
+        for token in packedData:
+            packed += packPascalString(token)
+
+        return packed
+
+    @staticmethod
+    def __unpackTokensData(packedData, initialOffset):
+        offset = initialOffset
+        tokensLength = struct.unpack_from('<B', packedData, offset)[0]
+        offset += struct.calcsize('<B')
+        tokens = set()
+        for _ in range(tokensLength):
+            token, lenBytes = unpackPascalString(packedData, offset)
+            tokens.add(token)
+            offset += lenBytes
+
+        return (tokens, offset - initialOffset)

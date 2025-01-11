@@ -260,7 +260,7 @@ class SelectableRewardBase(ViewImpl):
             count = self._getRewardsInCartCount(rewardName) + reward['receivedRewards']
             if reward['receivedRewards'] >= reward['limit'] > 0:
                 state = SelectableRewardItemModel.STATE_RECEIVED
-            elif count >= reward['limit'] > 0 or count >= self.__tabs[tabName]['limit'] or self.__getTotalTabCount(tabName) >= self.__tabs[tabName]['limit']:
+            elif count >= reward['limit'] > 0 or count >= self.__tabs[tabName]['limit'] and count >= self.__tabs[tabName]['limitSelectCount'] or self.__getTotalTabCount(tabName) >= self.__tabs[tabName]['limit']:
                 state = SelectableRewardItemModel.STATE_LIMITED
             else:
                 state = SelectableRewardItemModel.STATE_NORMAL
@@ -285,8 +285,10 @@ class SelectableRewardBase(ViewImpl):
             tabContent = self.__tabs[tabType]
             tabContent.setdefault('limit', 0)
             tabContent.setdefault('count', 0)
+            tabContent.setdefault('limitSelectCount', 0)
             tabContent.setdefault('rewards', OrderedDict())
             tabContent['limit'] += self._helper.getRemainedChoices(reward)
+            tabContent['limitSelectCount'] += self._helper.getGiftTokenCount(reward)
             tabContent['tooltip'] = self._helper.getTabTooltipData(reward)
 
         return

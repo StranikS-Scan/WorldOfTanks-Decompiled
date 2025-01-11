@@ -8,6 +8,7 @@ class HANGAR_HEADER_QUESTS(object):
     QUEST_TYPE_MARATHON = 'showMarathonQuests'
     QUEST_TYPE_PERSONAL_REGULAR = 'regular'
     QUEST_TYPE_PERSONAL_PM2 = 'pm2'
+    QUEST_TYPE_PERSONAL_PM3 = 'pm3'
     QUEST_TYPE_EVENT = 'eventQuest'
     QUEST_TYPE_BATTLE_PASS = 'questBattlePass'
     QUEST_TYPE_BATTLE_ROYALE = 'questBattleRoyale'

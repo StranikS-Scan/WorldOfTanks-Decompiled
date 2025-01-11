@@ -30,6 +30,7 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
@@ -67,7 +68,7 @@ from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController, IBoostersController, IBattlePassController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IWotPlusController, IArmoryYardController, IBoostersController, IBattlePassController, IParagonsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -127,6 +128,10 @@ def showComp7PrimeTimeWindow():
 
 def showRankedBattleIntro():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showBobPrimeTimeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():
@@ -621,7 +626,6 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
                 else:
                     showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previewBackCb=previewBackCb, previousBackAlias=previousBackAlias, hangarVehicleCD=hangarVehicleCD)
             ClientSelectableCameraObject.switchCamera(entity, 'HeroTank')
-            entity.onSelect()
             break
 
     return
@@ -892,12 +896,6 @@ def showBubbleTooltip(msg):
     g_eventBus.handleEvent(events.BubbleTooltipEvent(events.BubbleTooltipEvent.SHOW, msg), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVideoView(videoResID, onVideoStarted=None, onVideoStopped=None, onVideoClosed=None, isAutoClose=False, soundControl=None, canEscape=True, isUIVisible=False, uiShowDelay=-1):
-    from gui.impl.lobby.video.video_view import VideoViewWindow
-    window = VideoViewWindow(videoResID, onVideoStarted=onVideoStarted, onVideoStopped=onVideoStopped, onVideoClosed=onVideoClosed, isAutoClose=isAutoClose, soundControl=soundControl, canEscape=canEscape, isUIVisible=isUIVisible, uiShowDelay=uiShowDelay)
-    window.load()
-
-
 def showReferralProgramWindow(url=None):
     referralController = dependency.instance(IReferralProgramController)
     if url is None:
@@ -994,10 +992,34 @@ def showBattlePassVehicleAwardWindow(data, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showBobPersonalRewardWindow(bonuses, notificationMgr=None):
+    from gui.impl.lobby.bob.bob_personal_rewards_view import BobPersonalRewardWindow
+    window = BobPersonalRewardWindow(bonuses)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showBobTeamRewardWindow(bonuses, level, notificationMgr=None):
+    from gui.impl.lobby.bob.bob_team_rewards_view import BobTeamRewardWindow
+    window = BobTeamRewardWindow(bonuses, level)
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
 def showDedicationRewardWindow(bonuses, data, closeCallback=None):
     from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
     window = DedicationRewardWindow(bonuses, data, closeCallback)
     window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showParagonsRewardsWindow(bonuses, chapter=None, level=None, isVehicleSelected=False, addToQueue=True, notificationMgr=None):
+    from gui.impl.lobby.paragons.paragons_rewards_view import ParagonsRewardsViewWindow
+    window = ParagonsRewardsViewWindow(rewards=bonuses, chapter=chapter, level=level, isVehicleSelected=isVehicleSelected)
+    if addToQueue:
+        notificationMgr.append(WindowNotificationCommand(window))
+    else:
+        window.load()
 
 
 def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabel='', *args, **kwargs):
@@ -1019,7 +1041,12 @@ def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrL
      'backCallback': backCallback,
      'backPreviewAlias': kwargs.get('backPreviewAlias'),
      'backBtnDescrLabel': backBtnDescrLabel,
-     'styleLevel': kwargs.get('styleLevel')}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'showCloseBtn': kwargs.get('showCloseBtn'),
+     'styleLevel': kwargs.get('styleLevel'),
+     'availableLevel': kwargs.get('availableLevel'),
+     'progressStyleGroupID': kwargs.get('progressStyleGroupID'),
+     'notificationText': kwargs.get('notificationText'),
+     'soundSpace': kwargs.get('soundSpace')}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showBattlePassStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
@@ -2213,6 +2240,32 @@ def showRankedProgressionWindow():
     RankedProgressionWindow().load()
 
 
+def checkParagonsIntroSeen(func):
+    from gui.impl.lobby.paragons.paragons_window_events import showParagonsIntroView
+    from account_helpers.AccountSettings import AccountSettings, Paragons
+    from functools import partial
+
+    @dependency.replace_none_kwargs(paragonsCtrl=IParagonsController)
+    def getParagonsFunc(paragonsCtrl=None):
+        return paragonsCtrl
+
+    def wrapper(*args, **kwargs):
+        paragonsCtrl = getParagonsFunc()
+        isParagonsActive = paragonsCtrl.isEnabled and not paragonsCtrl.isPaused
+        if isParagonsActive and paragonsCtrl.isLimitedUiRuleCompleted and not AccountSettings.getParagons(Paragons.INTRO_SEEN):
+            showParagonsIntroView(onCloseCallback=partial(func, *args, **kwargs))
+        else:
+            func(*args, **kwargs)
+
+    return wrapper
+
+
+@checkParagonsIntroSeen
+def checkParagonsIntroCallback():
+    pass
+
+
+@checkParagonsIntroSeen
 def showVehicleTechTreeView(vehTypeCompDescr=None):
     from gui.impl.lobby.techtree.vehicle_tech_tree import VehicleTechTree
     from gui.techtree.go_back_helper import BackButtonContextKeys

@@ -20,6 +20,7 @@ from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 from VehicleStickers import VehicleStickers
 from cgf_obsolete_script.script_game_object import ComponentDescriptor, ScriptGameObject
 from cgf_obsolete_script.auto_properties import AutoProperty
+from cgf_components.customizable_model_component import CustomizableModelManager
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import model_assembler
@@ -71,6 +72,7 @@ class CommonTankAppearance(ScriptGameObject):
     isObserver = property(lambda self: self.__isObserver)
     outfit = property(lambda self: self.__outfit)
     renderMode = property(lambda self: self.__renderMode)
+    customizablePrefabsManager = property(lambda self: self._customizablePrefabsManager)
 
     def _setFashions(self, fashions, isTurretDetached=False):
         if IS_EDITOR and self.__fashions:
@@ -184,6 +186,7 @@ class CommonTankAppearance(ScriptGameObject):
         self.__filterRetrieverGameObjects = []
         self._vehicleStickers = None
         self._vehicleInfo = {}
+        self._customizablePrefabsManager = CGF.getManager(spaceID, CustomizableModelManager)
         self.__vID = 0
         self.__renderMode = None
         self.__frameTimestamp = 0

@@ -16,6 +16,7 @@ from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.i18n import makeString
+from personal_missions import PM_BRANCH
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -38,7 +39,7 @@ class PersonalMissionFirstEntryAwardView(LobbySubView, PersonalMissionsNavigatio
     def bigBtnClicked(self):
         settingsCore = dependency.instance(ISettingsCore)
         settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
-        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx={'branch': PM_BRANCH.REGULAR}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onEscapePress(self):
         self.closeView()

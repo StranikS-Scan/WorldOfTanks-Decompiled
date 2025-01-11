@@ -1335,6 +1335,12 @@ def _migrateTo129(core, data, initialized):
     nyStorageData[NewYearStorageKeys.NY_FIRST_QUEST_ENTRANCE] = 0
 
 
+def _migrateTo130(core, data, initialized):
+    from account_helpers.AccountSettings import BOB_CAROUSEL_FILTER_1, BOB_CAROUSEL_FILTER_2, DEFAULT_VALUES, KEY_FILTERS
+    data['bobCarouselFilter1'] = DEFAULT_VALUES[KEY_FILTERS][BOB_CAROUSEL_FILTER_1]
+    data['bobCarouselFilter2'] = DEFAULT_VALUES[KEY_FILTERS][BOB_CAROUSEL_FILTER_2]
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1839,12 +1845,16 @@ _versions = ((1,
   _migrateTo127,
   False,
   False),
- (127,
+ (128,
   _migrateTo128,
   False,
   False),
- (127,
+ (129,
   _migrateTo129,
+  False,
+  False),
+ (130,
+  _migrateTo130,
   False,
   False))
 

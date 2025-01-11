@@ -41,6 +41,7 @@ class BATTLE_VIEW_ALIASES(object):
     HIT_DIRECTION = 'hitDirection'
     SIEGE_MODE_INDICATOR = 'siegeModeIndicator'
     ROCKET_ACCELERATOR_INDICATOR = 'rocketAcceleratorIndicator'
+    THERMAL_VISION_INDICATOR = 'thermalVisionIndicator'
     BOOTCAMP_CONSUMABLES_PANEL = 'bootcampConsumablesPanel'
     BOOTCAMP_RIBBONS_PANEL = 'bootcampRibbonsPanel'
     BOOTCAMP_SECONDARY_HINT = 'bootcampSecondaryHint'

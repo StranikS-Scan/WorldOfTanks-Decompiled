@@ -47,8 +47,9 @@ class PMQuestSelect(_PMRequest):
         selectConfirmatorEnable = oldQuest is not None and oldQuest != personalMission
         self.addPlugins([plugins.PMLockedByVehicle(self._branch, deselectedQuests),
          plugins.PMSlotsValidator(events_cache.getQuestsProgress(self._branch), removedCount=int(oldQuest is not None)),
-         plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShow', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() not in (5, 6, 7)),
+         plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShow', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (1, 2, 3, 4)),
          plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShowPM2', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() == 6),
+         plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShowPM3', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (8, 9, 10)),
          plugins.PMProgressResetConfirmator(personalMission, oldQuest, isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (5, 7))])
         return
 

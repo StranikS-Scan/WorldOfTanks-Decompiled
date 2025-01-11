@@ -7,14 +7,15 @@ from skeletons.gui.server_events import IEventsCache
 PERSONAL_MISSION_TOKEN = 'token:pt:final:s%s:t%s'
 MAIN_PERSONAL_MISSION_TOKEN = PERSONAL_MISSION_TOKEN + ':main'
 ADD_PERSONAL_MISSION_TOKEN = PERSONAL_MISSION_TOKEN + ':add'
-PERSONAL_MISSION_COMPLETE_TOKEN = PERSONAL_MISSION_TOKEN + ':complete'
 PERSONAL_MISSION_BADGES_TOKEN = 'token:pt:s%s:badges'
 FINAL_PERSONAL_MISSION_TOKEN = 'pt_final_s%s_t%s'
 CHAMPION_BADGES_BY_BRANCH = {PM_BRANCH.REGULAR: 'pt_final_badge',
- PM_BRANCH.PERSONAL_MISSION_2: 'pt_final_badge_s2'}
+ PM_BRANCH.PERSONAL_MISSION_2: 'pt_final_badge_s2',
+ PM_BRANCH.PERSONAL_MISSION_3: 'pt_final_badge_s3'}
 OPERATIONS_TOKENS_PATTERNS = (PERSONAL_MISSION_TOKEN, MAIN_PERSONAL_MISSION_TOKEN, ADD_PERSONAL_MISSION_TOKEN)
 BRANCH_TO_OPERATION_IDS = {PM_BRANCH.REGULAR: (1, 2, 3, 4),
- PM_BRANCH.PERSONAL_MISSION_2: (5, 6, 7)}
+ PM_BRANCH.PERSONAL_MISSION_2: (5, 6, 7),
+ PM_BRANCH.PERSONAL_MISSION_3: (8, 9, 10)}
 OPERATION_ID_TO_BRANCH = {operationsId:branch for branch in BRANCH_TO_OPERATION_IDS.iterkeys() for operationsId in BRANCH_TO_OPERATION_IDS[branch]}
 CHAMPION_BADGE_AT_OPERATION_ID = {operationIds[-1]:CHAMPION_BADGES_BY_BRANCH[branch] for branch, operationIds in BRANCH_TO_OPERATION_IDS.iteritems()}
 
@@ -24,7 +25,8 @@ def getBranchByOperationId(operationId):
 
 def getFinalTokenQuestIdByOperationId(operationId):
     season = {PM_BRANCH.REGULAR: 1,
-     PM_BRANCH.PERSONAL_MISSION_2: 2}
+     PM_BRANCH.PERSONAL_MISSION_2: 2,
+     PM_BRANCH.PERSONAL_MISSION_3: 3}
     return FINAL_PERSONAL_MISSION_TOKEN % (season[getBranchByOperationId(operationId)], operationId)
 
 
@@ -112,10 +114,6 @@ def tokenBonusFinder(tokenID):
         return bonus.getName() == 'battleToken' and tokenID in bonus.getTokens()
 
     return finder
-
-
-def operationCompletionBonusFinder(operation):
-    return tokenBonusFinder(PERSONAL_MISSION_COMPLETE_TOKEN % (operation.getCampaignID(), operation.getID()))
 
 
 def badgeBonusFinder():

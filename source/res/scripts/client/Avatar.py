@@ -104,6 +104,7 @@ from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
 import VOIP
+from helpers.thermal_vision.constants import RTPC_EVENT_WARNING
 _logger = logging.getLogger(__name__)
 
 class _CRUISE_CONTROL_MODE(object):
@@ -274,6 +275,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__deadOnLoading = False
         self.isStaticWeatherSwitchEnabled = False
         self.arena = None
+        self._thermalWarningTime = (0, 0)
         return
 
     @property
@@ -776,6 +778,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     if key == Keys.KEY_M:
                         self.base.setDevelopmentFeature(0, 'temperatureGunController/reset_temperature_gun', 0, '')
                         return True
+                    if key == Keys.KEY_COMMA:
+                        self.base.setDevelopmentFeature(0, 'temperatureGunController/max_temperature_gun', 0, '')
+                        return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
                     return True
@@ -857,7 +862,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         gui_event_dispatcher.choiceConsumable(key)
                         return True
                 isComp7 = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7)
-                if not isComp7 and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
+                isBob = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BOB)
+                if not isComp7 and not isBob and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
                     if self.__isPlayerInSquad() and not BattleReplay.isPlaying():
                         if VOIP.getVOIPManager().isVoiceSupported():
                             gui_event_dispatcher.toggleVoipChannelEnabled(self.arenaBonusType)
@@ -1147,6 +1153,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def onSwitchViewpoint(self, vehicleID, position):
         LOG_DEBUG('onSwitchViewpoint', vehicleID, position)
+        self.updateThermalWarningTimer(0, 0)
         self.onSwitchingViewPoint()
         self.inputHandler.ctrl.onSwitchViewpoint(vehicleID, position)
         staticPosition = position
@@ -1404,6 +1411,13 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 ctrl.onVehicleStatusChanged()
             return
 
+    def updateInThermalSectorStatus(self, startTime, duration):
+        vehicle = self.getVehicleAttached()
+        if vehicle is not None and not vehicle.sixthSenseState:
+            self.updateThermalWarningTimer(startTime, duration)
+        self._thermalWarningTime = (startTime, duration)
+        return
+
     def setVehicleOverturned(self, isOverturned):
         self.__isVehicleOverturned = isOverturned
 
@@ -1459,6 +1473,15 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             value = DestroyTimerViewState(code, period[1], TIMER_VIEW_STATE.WARNING, period[0])
         self.guiSessionProvider.invalidateVehicleState(state, value)
         return
+
+    def updateThermalWarningTimer(self, startTime, duration):
+        state = VEHICLE_VIEW_STATE.THERMAL_VISION_WARNING
+        value = (startTime, duration)
+        self.guiSessionProvider.invalidateVehicleState(state, value)
+        if startTime > 0:
+            RTPC_EVENT_WARNING.play(duration)
+        else:
+            RTPC_EVENT_WARNING.stop()
 
     def updateVehicleDeathZoneTimer(self, time, zoneID, entered=True, finishTime=None, isCausingDamage=False, state=TIMER_VIEW_STATE.CRITICAL):
         timer = VEHICLE_VIEW_STATE.DEATHZONE_TIMER
@@ -1744,6 +1767,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def onObservedByEnemy(self, vehicleID, isObserved):
         if not self.__updateVehicleStatus(vehicleID):
             return
+        if isObserved:
+            self.updateThermalWarningTimer(0, 0)
+        else:
+            self.updateThermalWarningTimer(*self._thermalWarningTime)
         self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY, isObserved)
 
     def battleEventsSummary(self, summary):

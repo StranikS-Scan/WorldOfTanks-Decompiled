@@ -45,7 +45,7 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	120	</armor_1>
+      <armor_1>	150	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	40	</armor_3>
       <armor_4>	40	</armor_4>
@@ -65,7 +65,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35200	</weight>
-    <maxHealth>	720	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -3342,7 +3342,7 @@
         <armor_1>	120	</armor_1>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3457,8 +3457,6 @@
           <unlocks>
             <gun>	_100mm_SA_47_AC	  <cost>	34500	</cost>
             </gun>
-            <vehicle>	F36_AMX_AC_Mle1948	  <cost>	70000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3552,7 +3550,11 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_90mm_canon_DCA_45_AC>
-        <_100mm_SA_47_AC>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_100mm_SA_47_AC>	shared	  <unlocks>
+            <vehicle>	F36_AMX_AC_Mle1948	  <cost>	70000	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	72	</maxAmmo>
           <armor>
             <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>

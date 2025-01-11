@@ -1,15 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_views.py
-import typing
 from functools import partial
 import BigWorld
 from adisp import adisp_process
-from skeletons.gui.impl import INewYearNavigation
 from wg_async import wg_async, wg_await
 from constants import PremiumConfigs
 from debug_utils import LOG_ERROR
 from gui import DialogsInterface
-from gui.gift_system.constants import HubUpdateReason
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -38,7 +35,7 @@ from gui.shared.event_dispatcher import showTankPremiumAboutPage, showDebutBoxes
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController, IFestivityController
+from skeletons.gui.game_control import IReloginController, IMarathonEventsController, IBrowserController, IDebutBoxesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui import makeHtmlString
@@ -177,9 +174,11 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.MissionsEvent.RELOAD_TAB_CONTEXT, self.__onReloadTabContext, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.MissionsEvent.RELOAD_TAB_CONTEXT, self.__onReloadTabContext, EVENT_BUS_SCOPE.LOBBY)
         self.__cancelLoadBrowserCallback()
         self.__browserView = None
         super(MissionsMarathonView, self)._dispose()
@@ -209,6 +208,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
             else:
                 browser.skipEscape = False
                 browser.useSpecialKeys = True
+
+    def __onReloadTabContext(self, *args):
+        self.reload()
 
 
 class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
@@ -353,8 +355,6 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 class MissionsCategoriesView(_GroupedMissionsView):
     _lobbyContext = dependency.descriptor(ILobbyContext)
-    _festivityController = dependency.descriptor(IFestivityController)
-    _newYearNavigation = dependency.descriptor(INewYearNavigation)
     __showDQInMissionsTab = False
 
     @classmethod
@@ -373,17 +373,12 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def onClickButtonDetails(self):
         showTankPremiumAboutPage()
 
-    def onNyQuestsClick(self):
-        self._newYearNavigation.switchToQuests()
-
     def _populate(self):
         super(MissionsCategoriesView, self)._populate()
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
-        self._festivityController.onStateChanged += self.__festivityStateChanged
 
     def _dispose(self):
         self._lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-        self._festivityController.onStateChanged -= self.__festivityStateChanged
         super(MissionsCategoriesView, self)._dispose()
 
     @staticmethod
@@ -393,26 +388,12 @@ class MissionsCategoriesView(_GroupedMissionsView):
     def _getViewQuestFilter(self):
         return self.getViewQuestFilterIncludingDailyQuests() if self.__showDQInMissionsTab else self.getViewQuestFilter()
 
-    def _appendNYBanner(self, quests):
-        if self._festivityController.isEnabled():
-            blockId = QUESTS_ALIASES.MISSIONS_NY_BANNER_VIEW_ALIAS
-            quests.append({'blockId': blockId})
-            return True
-        return False
-
-    def _onGiftHubUpdate(self, reason, extra=None):
-        if reason == HubUpdateReason.SETTINGS:
-            self._filterMissions()
-
     def __onServerSettingsChange(self, diff):
         if PremiumConfigs.PREM_QUESTS not in diff:
             return
         diffConfig = diff.get(PremiumConfigs.PREM_QUESTS)
         if 'enabled' in diffConfig:
             self._onEventsUpdate()
-
-    def __festivityStateChanged(self):
-        self._filterMissions()
 
 
 class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):

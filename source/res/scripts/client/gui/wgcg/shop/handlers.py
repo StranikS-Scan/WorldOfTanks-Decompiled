@@ -15,7 +15,7 @@ class ShopRequestHandlers(RequestHandlers):
         return self._requester.doRequestEx(ctx, callback, ('shop', 'get_inventory_entitlements'), entitlement_codes=ctx.getEntitlementCodes())
 
     def __getStorefrontProducts(self, ctx, callback):
-        return self._requester.doRequestEx(ctx, callback, ('shop', 'get_storefront_products'), storefront=ctx.getStorefront())
+        return self._requester.doRequestEx(ctx, callback, ('shop', 'get_storefront_products'), storefront=ctx.getStorefront(), user_country=ctx.getCountryCode())
 
     def __buyStorefrontProducts(self, ctx, callback):
-        return self._requester.doRequestEx(ctx, callback, ('shop', 'buy_storefront_products'), storefront=ctx.getStorefront(), productCode=ctx.getProductCode(), requestData=ctx.getData())
+        return self._requester.doRequestEx(ctx, callback, ('shop', 'buy_storefront_products'), storefront=ctx.getStorefront(), productCode=ctx.getProductCode(), requestData=ctx.getData(), user_country=ctx.getCountryCode())

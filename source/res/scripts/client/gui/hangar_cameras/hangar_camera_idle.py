@@ -71,16 +71,6 @@ class HangarCameraIdle(HangarCameraSettingsListener, CallbackDelayer, TimeDeltaM
         self.__yawPeriod = yawPeriod
         self.__isInitialized = True
 
-    def finalize(self):
-        self.__easingInTime = None
-        self.__pitchParams = None
-        self.__distParams = None
-        self.__yawPeriod = None
-        self.__isInitialized = False
-        if self.__isActive:
-            self.deactivate()
-        return
-
     def activate(self):
         if self.__isActive or not self.__isInitialized:
             return

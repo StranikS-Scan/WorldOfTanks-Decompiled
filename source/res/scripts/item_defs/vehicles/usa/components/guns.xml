@@ -174,10 +174,13 @@
     <_90mm_Gun_T208_atac>	31006	</_90mm_Gun_T208_atac>
     <_155mm_AT_Gun_T7E1_57>	31009	</_155mm_AT_Gun_T7E1_57>
     <_155mm_Gun_T7>	31010	</_155mm_Gun_T7>
+    <_40mm_T13E2_flamegun>	31011	</_40mm_T13E2_flamegun>
+    <_40mm_T13E3_flamegun>	31012	</_40mm_T13E3_flamegun>
     <_40mm_M7_8_flamegun>	31013	</_40mm_M7_8_flamegun>
     <_40mm_T13E3C2_flamegun>	31015	</_40mm_T13E3C2_flamegun>
     <_120mm_Gun_T179_T>	31016	</_120mm_Gun_T179_T>
     <_40mm_M7_8_flamegun_T>	31017	</_40mm_M7_8_flamegun_T>
+    <_40mm_M7_6E2_flamegun>	31018	</_40mm_M7_6E2_flamegun>
     <_40mm_T13E3_flamegun_T>	31019	</_40mm_T13E3_flamegun_T>
     <_120mm_Gun_M58A_T>	31007	</_120mm_Gun_M58A_T>
   </ids>
@@ -1236,11 +1239,11 @@
         </_2pdr_HE_Mk.2>
       </shots>
     </Ordnance_QF_2pdr_AT_Gun_Mk.X>
-    <_40mm_T13E3_flamegun_T>
-      <userString>	#usa_vehicles:_40mm_T13E3_flamegun_T	</userString>
-      <tags>	lockedReloadTime	</tags>
+    <_40mm_T13E2_flamegun>
+      <userString>	#usa_vehicles:_40mm_T13E2_flamegun	</userString>
+      <tags></tags>
       <level>	8	</level>
-      <price>	98000	</price>
+      <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.01	</impulse>
       <recoil>
@@ -1250,7 +1253,59 @@
       </recoil>
       <effects>	shot_flame_autoshoot	</effects>
       <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.0	</reloadTime>
+      <maxAmmo>	92	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	900	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_40mm_T13E2_flameshell_basic>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	200	</maxDistance>
+          <piercingPower>	70 70	</piercingPower>
+        </_40mm_T13E2_flameshell_basic>
+        <_40mm_T13E2_flameshell_alternative>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	80	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	100	</maxDistance>
+          <piercingPower>	70 70	</piercingPower>
+        </_40mm_T13E2_flameshell_alternative>
+      </shots>
+    </_40mm_T13E2_flamegun>
+    <_40mm_T13E3_flamegun>
+      <userString>	#usa_vehicles:_40mm_T13E3_flamegun	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.01	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.01	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_flame_autoshoot	</effects>
+      <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
@@ -1274,14 +1329,66 @@
       <shots>
         <_40mm_T13E3_flameshell_basic>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	200	</speed>
+          <speed>	100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	200	</maxDistance>
           <piercingPower>	80 80	</piercingPower>
         </_40mm_T13E3_flameshell_basic>
         <_40mm_T13E3_flameshell_alternative>
           <defaultPortion>	0.5	</defaultPortion>
+          <speed>	80	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	100	</maxDistance>
+          <piercingPower>	80 80	</piercingPower>
+        </_40mm_T13E3_flameshell_alternative>
+      </shots>
+    </_40mm_T13E3_flamegun>
+    <_40mm_T13E3_flamegun_T>
+      <userString>	#usa_vehicles:_40mm_T13E3_flamegun_T	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	98000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.01	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.01	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_flame_autoshoot	</effects>
+      <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.0	</reloadTime>
+      <maxAmmo>	92	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	900	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_40mm_T13E3_flameshell_basic>
+          <defaultPortion>	0.5	</defaultPortion>
           <speed>	100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	200	</maxDistance>
+          <piercingPower>	80 80	</piercingPower>
+        </_40mm_T13E3_flameshell_basic>
+        <_40mm_T13E3_flameshell_alternative>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	80	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	100	</maxDistance>
           <piercingPower>	80 80	</piercingPower>
@@ -1290,7 +1397,7 @@
     </_40mm_T13E3_flamegun_T>
     <_40mm_T13E3C2_flamegun>
       <userString>	#usa_vehicles:_40mm_T13E3C2_flamegun	</userString>
-      <tags>	lockedReloadTime	</tags>
+      <tags></tags>
       <level>	10	</level>
       <price>	280000	</price>
       <notInShop>	true	</notInShop>
@@ -1302,7 +1409,7 @@
       </recoil>
       <effects>	shot_flame_autoshoot	</effects>
       <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
@@ -1326,7 +1433,7 @@
       <shots>
         <_40mm_T13E3C2_flameshell_basic>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	200	</speed>
+          <speed>	100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	200	</maxDistance>
           <piercingPower>	70 70	</piercingPower>
@@ -1340,9 +1447,61 @@
         </_40mm_T13E3C2_flameshell_alternative>
       </shots>
     </_40mm_T13E3C2_flamegun>
+    <_40mm_M7_6E2_flamegun>
+      <userString>	#usa_vehicles:_40mm_M7_6E2_flamegun	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	220000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.01	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.01	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_flame_autoshoot	</effects>
+      <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.0	</reloadTime>
+      <maxAmmo>	92	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
+      <weight>	900	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.38	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_40mm_M7_6E2_flameshell_basic>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	200	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_40mm_M7_6E2_flameshell_basic>
+        <_40mm_M7_6E2_flameshell_alternative>
+          <defaultPortion>	0.5	</defaultPortion>
+          <speed>	80	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	100	</maxDistance>
+          <piercingPower>	90 90	</piercingPower>
+        </_40mm_M7_6E2_flameshell_alternative>
+      </shots>
+    </_40mm_M7_6E2_flamegun>
     <_40mm_M7_8_flamegun>
       <userString>	#usa_vehicles:_40mm_M7_8_flamegun	</userString>
-      <tags>	lockedReloadTime	</tags>
+      <tags></tags>
       <level>	10	</level>
       <price>	300000	</price>
       <notInShop>	true	</notInShop>
@@ -1354,7 +1513,7 @@
       </recoil>
       <effects>	shot_flame_autoshoot	</effects>
       <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
@@ -1378,14 +1537,14 @@
       <shots>
         <_40mm_M7_8_flameshell_basic>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	200	</speed>
+          <speed>	100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	200	</maxDistance>
           <piercingPower>	100 100	</piercingPower>
         </_40mm_M7_8_flameshell_basic>
         <_40mm_M7_8_flameshell_alternative>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	100	</speed>
+          <speed>	80	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	100	</maxDistance>
           <piercingPower>	100 100	</piercingPower>
@@ -1394,7 +1553,7 @@
     </_40mm_M7_8_flamegun>
     <_40mm_M7_8_flamegun_T>
       <userString>	#usa_vehicles:_40mm_M7_8_flamegun_T	</userString>
-      <tags>	lockedReloadTime	</tags>
+      <tags></tags>
       <level>	10	</level>
       <price>	300000	</price>
       <notInShop>	true	</notInShop>
@@ -1406,7 +1565,7 @@
       </recoil>
       <effects>	shot_flame_autoshoot	</effects>
       <burstStartEffects>	shot_flame_firstBurstShot	</burstStartEffects>
-      <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+      <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
@@ -1430,14 +1589,14 @@
       <shots>
         <_40mm_M7_8_flameshell_basic>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	200	</speed>
+          <speed>	100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	200	</maxDistance>
           <piercingPower>	100 100	</piercingPower>
         </_40mm_M7_8_flameshell_basic>
         <_40mm_M7_8_flameshell_alternative>
           <defaultPortion>	0.5	</defaultPortion>
-          <speed>	100	</speed>
+          <speed>	80	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	100	</maxDistance>
           <piercingPower>	100 100	</piercingPower>

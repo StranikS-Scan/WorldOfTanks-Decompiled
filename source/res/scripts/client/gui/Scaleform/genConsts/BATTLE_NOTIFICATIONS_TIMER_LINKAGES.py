@@ -85,3 +85,4 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     COMP7_MARCH_ICON = 'Comp7MarchIconUI'
     COMP7_AGGRESSIVE_DETECTION_ICON = 'Comp7AggressiveDetectionIconUI'
     ABILITY_ICON = 'secondaryAbilityIconUI'
+    THERMAL_VISION_WARNING = 'thermalVisionWarningUI'

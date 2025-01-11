@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/personal_progress/storage.py
 import typing
 import quest_progress
+from constants import QUEST_PROGRESS_STATE
 from gui.server_events.personal_progress import builders
 from gui.server_events.personal_progress import collectors
 from gui.server_events.personal_progress import visitors
@@ -10,10 +11,11 @@ from personal_missions_constants import VISIBLE_SCOPE, CONTAINER
 class ClientProgressStorage(quest_progress.ProgressStorage):
 
     def __init__(self, generalQuestID, questCfg, savedProgresses, hasLockedProgresses):
+        self._orProgresses = set()
         self._hasLockedProgresses = hasLockedProgresses
         super(ClientProgressStorage, self).__init__(questCfg, savedProgresses)
-        wrappersVisitors = self._getMetricsVisitors()
         progresses = self.getProgresses()
+        wrappersVisitors = self._getMetricsVisitors()
         for progress in progresses.itervalues():
             progress.markAsVisited()
             progress.postProcess(progresses)
@@ -26,6 +28,20 @@ class ClientProgressStorage(quest_progress.ProgressStorage):
     def update(self, progressesInfo):
         if progressesInfo is not None:
             super(ClientProgressStorage, self).update(progressesInfo)
+            progresses = self.getProgresses()
+            for progressID, progressInfo in progressesInfo.iteritems():
+                progress = progresses.get(progressID)
+                if progress and progress.isInOrGroup() and progress.isCompleted():
+                    isInOrGroupKey = (progress.isMain(), progress.isAward())
+                    self._orProgresses.add(isInOrGroupKey)
+
+            for progressID, progressInfo in progressesInfo.iteritems():
+                progress = progresses.get(progressID)
+                if progress and progress.isInOrGroup() and progressInfo['state'] == QUEST_PROGRESS_STATE.FAILED:
+                    isInOrGroupKey = (progress.isMain(), progress.isAward())
+                    if isInOrGroupKey in self._orProgresses:
+                        progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
+
             self._updateLocks()
         return
 

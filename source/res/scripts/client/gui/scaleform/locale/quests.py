@@ -15,6 +15,7 @@ class QUESTS(object):
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
     MISSIONS_TAB_BATTLEMATTERS = '#quests:missions/tab/battleMatters'
     MISSIONS_TAB_WINBACK = '#quests:missions/tab/winback'
+    MISSIONS_TAB_BOB = '#quests:missions/tab/bob'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -68,6 +69,9 @@ class QUESTS(object):
     BONUSNAME_BLUEPRINTS_NATION = '#quests:bonusName/blueprints/nation'
     BONUSNAME_BLUEPRINTS_NATION_ANY = '#quests:bonusName/blueprints/nation/any'
     BONUSNAME_BLUEPRINTS_UNIVERSAL = '#quests:bonusName/blueprints/universal'
+    BONUSNAME_PARAGONSUNLOCKS = '#quests:bonusName/paragonsUnlocks'
+    BONUSNAME_TMANTOKEN = '#quests:bonusName/tmanToken'
+    BONUSNAME_STYLEPROGRESS = '#quests:bonusName/styleProgress'
     BONUSES_CREDITS_DESCRIPTION = '#quests:bonuses/credits/description'
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
@@ -83,10 +87,6 @@ class QUESTS(object):
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
-    BONUSNAME_NY22FILLERS = '#quests:bonusName/ny22Fillers'
-    BONUSNAME_NEWYEARSLOT = '#quests:bonusName/newYearSlot'
-    BONUSES_VARIADICDISCOUNT_DISCOUNTAMOUNT = '#quests:bonuses/variadicDiscount/discountAmount'
-    BONUSES_VARIADICDISCOUNT_BUTTONLABEL = '#quests:bonuses/variadicDiscount/buttonLabel'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
     QUESTS_TITLE_CURRENTLYAVAILABLE = '#quests:quests/title/currentlyAvailable'
@@ -950,6 +950,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_5_BATTLESCOUNT = '#quests:details/dossier/5/battlesCount'
     DETAILS_DOSSIER_6_BATTLESCOUNT = '#quests:details/dossier/6/battlesCount'
     DETAILS_DOSSIER_7_BATTLESCOUNT = '#quests:details/dossier/7/battlesCount'
+    DETAILS_DOSSIER_32_BATTLESCOUNT = '#quests:details/dossier/32/battlesCount'
     DETAILS_DOSSIER_9_BATTLESCOUNT = '#quests:details/dossier/9/battlesCount'
     DETAILS_DOSSIER_13_BATTLESCOUNT = '#quests:details/dossier/13/battlesCount'
     DETAILS_DOSSIER_16_BATTLESCOUNT = '#quests:details/dossier/16/battlesCount'
@@ -1038,6 +1039,9 @@ class QUESTS(object):
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
     MISSIONS_TAB_LABEL_MARATHON = '#quests:missions/tab/label/marathon'
+    MISSIONS_TAB_LABEL_BOB = '#quests:missions/tab/label/bob'
+    MISSIONS_TAB_BOB_HEADER = '#quests:missions/tab/bob/header'
+    MISSIONS_TAB_BOB_BODY = '#quests:missions/tab/bob/body'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
@@ -1274,7 +1278,7 @@ class QUESTS(object):
     BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT = '#quests:bonusName/entitlements/testEntitlement'
     BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT = '#quests:bonusName/entitlements/ranked_2020_discount'
     BONUSNAME_ENTITLEMENTS_RANKED_202203_ACCESS = '#quests:bonusName/entitlements/ranked_202203_access'
-    BONUSNAME_ENTITLEMENTS_NY25_MARKETPLACE_UNLOCK = '#quests:bonusName/entitlements/ny25_marketplace_unlock'
+    BONUSNAME_ENTITLEMENTS_PARAGON_REWARDS_CHOICE_V_11 = '#quests:bonusName/entitlements/paragon_rewards_choice_v_11'
     BONUSNAME_BATTLE_BONUS_X5 = '#quests:bonusName/battle_bonus_x5'
     BONUSNAME_CREW_BONUS_X3 = '#quests:bonusName/crew_bonus_x3'
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
@@ -1553,6 +1557,7 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_ONLYADDDONE = '#quests:personalMission/status/onlyAddDone'
     PERSONALMISSION_STATUS_MAINDONE = '#quests:personalMission/status/mainDone'
     PERSONALMISSION_STATUS_FULLDONE = '#quests:personalMission/status/fullDone'
+    PERSONALMISSION_STATUS_ALLDONE = '#quests:personalMission/status/allDone'
     PERSONALMISSION_STATUS_DONEWITHPAWN = '#quests:personalMission/status/doneWithPawn'
     PERSONALMISSION_STATUS_INPROGRESS = '#quests:personalMission/status/inProgress'
     PERSONALMISSION_STATUS_ISONPAUSE = '#quests:personalMission/status/isOnPause'
@@ -1689,13 +1694,10 @@ class QUESTS(object):
     INFOPAGE_DAILYMISSIONTITLE = '#quests:infoPage/dailyMissionTitle'
     INFOPAGE_PREMIUMMISSIONSTITLE = '#quests:infoPage/premiumMissionsTitle'
     INFOPAGE_DAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/default'
-    DAILYQUESTS_INFO_NYDAILYMISSIONS = '#quests:dailyQuests/info/NYDailyMissions'
-    DAILYQUESTS_INFO_DAILYMISSIONTITLE = '#quests:dailyQuests/info/dailyMissionTitle'
     INFOPAGE_DAILYMISSIONS_SUBSCRIPTION_DEFAULT = '#quests:infoPage/dailyMissions/subscription/default'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_DEFAULT = '#quests:infoPage/dailyMissions/battlePassDailyMissions/default'
     INFOPAGE_DAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/winback'
     INFOPAGE_DAILYMISSIONS_BATTLEPASSDAILYMISSIONS_WINBACK = '#quests:infoPage/dailyMissions/battlePassDailyMissions/winback'
-    DAILYQUESTS_INFO_GIFTSYSTEMDISABLEDDAILYMISSIONS = '#quests:dailyQuests/info/giftSystemDisabledDailyMissions'
     INFOPAGE_PREMIUMMISSIONS_DEFAULT = '#quests:infoPage/premiumMissions/default'
     INFOPAGE_PREMIUMMISSIONS_WINBACK = '#quests:infoPage/premiumMissions/winback'
     INFOPAGE_PREMIUMMISSIONS_WINBACK_COMP7ACTIVE = '#quests:infoPage/premiumMissions/winback_comp7Active'
@@ -1713,9 +1715,6 @@ class QUESTS(object):
     INFOPAGE_MISSIONSWITCH_HRS = '#quests:infoPage/missionSwitch_hrs'
     INFOPAGE_MISSIONSWITCH_MIN = '#quests:infoPage/missionSwitch_min'
     INFOPAGE_MISSIONSWITCH_WINBACK = '#quests:infoPage/missionSwitch/winback'
-    INFOPAGE_LOOTBOXCONDITIONSTITLE = '#quests:infoPage/lootboxConditionsTitle'
-    INFOPAGE_LOOTBOXCONDITIONS_DEFAULT = '#quests:infoPage/lootboxConditions/default'
-    INFOPAGE_LOOTBOXCONDITIONS_BUTTON = '#quests:infoPage/lootboxConditions/button'
     DAILYQUESTS_CONDITION_DODAMAGE = '#quests:dailyQuests/condition/doDamage'
     DAILYQUESTS_CONDITION_EARNEXP = '#quests:dailyQuests/condition/earnExp'
     DAILYQUESTS_CONDITION_DESTROYMODULE_FEW = '#quests:dailyQuests/condition/destroyModule_few'
@@ -1745,8 +1744,6 @@ class QUESTS(object):
     DEBUTBOXES_MISSIONS_HEADER_CAPTION3 = '#quests:debutBoxes/missions/header/caption3'
     DEBUTBOXES_MISSIONS_HEADER_DISABLED = '#quests:debutBoxes/missions/header/disabled'
     DEBUTBOXES_MISSIONS_HEADER_INFO = '#quests:debutBoxes/missions/header/info'
-    LOOTBOX_BOXCOUNT = '#quests:lootBox/boxCount'
-    LOOTBOX_BOXESLABEL = '#quests:lootBox/boxesLabel'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1785,8 +1782,9 @@ class QUESTS(object):
      BONUSNAME_BLUEPRINTS_NATION,
      BONUSNAME_BLUEPRINTS_NATION_ANY,
      BONUSNAME_BLUEPRINTS_UNIVERSAL,
-     BONUSNAME_NY22FILLERS,
-     BONUSNAME_NEWYEARSLOT,
+     BONUSNAME_PARAGONSUNLOCKS,
+     BONUSNAME_TMANTOKEN,
+     BONUSNAME_STYLEPROGRESS,
      BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
@@ -1855,7 +1853,7 @@ class QUESTS(object):
      BONUSNAME_ENTITLEMENTS_TESTENTITLEMENT,
      BONUSNAME_ENTITLEMENTS_RANKED_2020_DISCOUNT,
      BONUSNAME_ENTITLEMENTS_RANKED_202203_ACCESS,
-     BONUSNAME_ENTITLEMENTS_NY25_MARKETPLACE_UNLOCK,
+     BONUSNAME_ENTITLEMENTS_PARAGON_REWARDS_CHOICE_V_11,
      BONUSNAME_BATTLE_BONUS_X5,
      BONUSNAME_CREW_BONUS_X3,
      BONUSNAME_BATTLEPASSPOINTS,
@@ -2249,6 +2247,7 @@ class QUESTS(object):
      DETAILS_DOSSIER_5_BATTLESCOUNT,
      DETAILS_DOSSIER_6_BATTLESCOUNT,
      DETAILS_DOSSIER_7_BATTLESCOUNT,
+     DETAILS_DOSSIER_32_BATTLESCOUNT,
      DETAILS_DOSSIER_9_BATTLESCOUNT,
      DETAILS_DOSSIER_13_BATTLESCOUNT,
      DETAILS_DOSSIER_16_BATTLESCOUNT,

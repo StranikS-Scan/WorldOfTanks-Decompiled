@@ -6,6 +6,7 @@ from gui.techtree.data import _ItemsData, _checkCollectibleEnabled
 from gui.techtree.settings import NODE_STATE, MAX_PATH_LIMIT, RESEARCH_ITEMS, UnlockProps, DEFAULT_UNLOCK_PROPS
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.impl.gen.view_models.views.lobby.techtree.node_state_flags import NodeStateFlags
+from gui.impl.gen.view_models.views.lobby.techtree.extended_node_state_flags import ExtendedNodeStateFlags
 from gui.game_control.veh_comparison_basket import getInstalledModulesCDs
 from gui.shop import canBuyGoldForItemThroughWeb
 from gui.shared.economics import getGUIPrice
@@ -238,6 +239,7 @@ class ResearchItemsData(_ItemsData):
         xp = 0
         bpfProps = None
         state = NodeStateFlags.LOCKED
+        extendedState = ExtendedNodeStateFlags.DEFAULT
         if topLevel and itemTypeID == GUI_ITEM_TYPE.VEHICLE:
             available, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, level=guiItem.level, **unlockStats._asdict())
             xp = g_techTreeDP.getAllVehiclePossibleXP(unlockProps.parentID, unlockStats)
@@ -291,6 +293,7 @@ class ResearchItemsData(_ItemsData):
             state = self._checkTradeInState(state, guiItem)
             state = self._checkTechTreeEvents(state, guiItem, unlockProps)
             state = self._checkEarlyAccessState(state, guiItem)
+            extendedState = self._checkParagonsState(extendedState, guiItem)
             bpfProps = self._getBlueprintsProps(nodeCD, rootItem.level)
             if bpfProps is not None and bpfProps.totalCount > 0:
                 state |= NodeStateFlags.BLUEPRINT
@@ -301,7 +304,7 @@ class ResearchItemsData(_ItemsData):
         displayInfo = {'path': path,
          'renderer': renderer,
          'level': level}
-        return nodes.RealNode(nodeCD, guiItem, unlockStats.getVehXP(nodeCD), state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price)
+        return nodes.RealNode(nodeCD, guiItem, unlockStats.getVehXP(nodeCD), state, displayInfo, unlockProps=unlockProps, bpfProps=bpfProps, price=price, extendedState=extendedState)
 
     def _getAnnouncementData(self, nodeCD, path, level):
         info = g_techTreeDP.getAnnouncementByCD(nodeCD)

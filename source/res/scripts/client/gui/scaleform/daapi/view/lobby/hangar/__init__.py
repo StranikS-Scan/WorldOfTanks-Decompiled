@@ -30,7 +30,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.SwitchModePanel import SwitchModePanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
     from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, BattlePassCarouselFilterPopover, BattleRoyaleCarouselFilterPopover
-    from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel, RankedTankCarousel, EpicBattleTankCarousel, BattlePassTankCarousel, MapboxTankCarousel, Comp7TankCarousel, DebutBoxesTankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel, RankedTankCarousel, EpicBattleTankCarousel, BattlePassTankCarousel, MapboxTankCarousel, Comp7TankCarousel, DebutBoxesTankCarousel, BobTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView, StrongholdAdsView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -62,12 +62,15 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.TournamentsView import TournamentsView
     from gui.impl.lobby.resource_well.entry_point import ResourceWellEntryPointComponent
     from gui.impl.lobby.collective_goal.entry_point import CollectiveGoalEntryPointComponent
+    from gui.impl.lobby.universal_flag.entry_point import UniversalFlagEntryPointComponent
     from gui.impl.lobby.personal_reserves.personal_reserves_widget_inject import PersonalReservesWidgetInject
     from gui.impl.lobby.comp7.main_widget import Comp7MainWidgetComponent
     from gui.Scaleform.daapi.view.lobby.hangar.carousel_event_entry_widget import CarouselEventEntryHolder
     from gui.Scaleform.daapi.view.lobby.hangar.battle_royale_widget import BattleRoyaleHangarWidgetInject
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.stronghold_entry_point import StrongholdEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.early_access_entry_point import EarlyAccessEntryPoint
+    from gui.Scaleform.daapi.view.lobby.hangar.bob_entry_point import BobEntryPoint
+    from gui.impl.lobby.bob.bob_widget_view import BobWidgetComponent
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -90,6 +93,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL, MapboxTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.COMP7_TANK_CAROUSEL, Comp7TankCarousel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.BOB_TANK_CAROUSEL, BobTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RANKED_WIDGET, RankedBattlesHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK, AlertMessageBlock, ScopeTemplates.DEFAULT_SCOPE),
@@ -113,10 +117,13 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.MARATHON_ENTRY_POINT, MarathonEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RESOURCE_WELL_ENTRY_POINT, ResourceWellEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.COLLECTIVE_GOAL_ENTRY_POINT, CollectiveGoalEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.UNIVERSAL_FLAG_ENTRY_POINT, UniversalFlagEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLE_MATTERS_ENTRY_POINT, BattleMattersEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.PERSONAL_RESERVES_WIDGET_INJECT, PersonalReservesWidgetInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CAROUSEL_EVENT_ENTRY_HOLDER, CarouselEventEntryHolder, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EARLY_ACCESS_SECONDARY_ENTRY_POINT, EarlyAccessEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.EARLY_ACCESS_SECONDARY_ENTRY_POINT, EarlyAccessEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.BOB_ENTRY_POINT, BobEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(HANGAR_ALIASES.BOB_HANGAR_WIDGET, BobWidgetComponent, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -140,11 +147,3 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MANUAL_BROWSER_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
-
-
-def getHangarConfig(manager):
-    from gui.Scaleform.daapi.view.lobby.hangar.Hangar import HangarSoundSpaceSettings
-    from gui.sounds.filters import StatesGroup, States
-    settings = HangarSoundSpaceSettings(name='hangar', entranceStates={'STATE_hangar_place': 'STATE_hangar_place_garage',
-     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
-    manager.addInstance(HangarSoundSpaceSettings, settings)

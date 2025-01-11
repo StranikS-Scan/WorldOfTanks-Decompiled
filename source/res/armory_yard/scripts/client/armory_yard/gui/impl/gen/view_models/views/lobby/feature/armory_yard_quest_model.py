@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class ArmoryYardQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=14, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(ArmoryYardQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterId(self):
@@ -15,17 +15,37 @@ class ArmoryYardQuestModel(QuestModel):
     def setChapterId(self, value):
         self._setNumber(11, value)
 
-    def getVehicleType(self):
-        return self._getString(12)
+    def getLevels(self):
+        return self._getArray(12)
 
-    def setVehicleType(self, value):
-        self._setString(12, value)
+    def setLevels(self, value):
+        self._setArray(12, value)
+
+    @staticmethod
+    def getLevelsType():
+        return int
+
+    def getShowLevelsAsRange(self):
+        return self._getBool(13)
+
+    def setShowLevelsAsRange(self, value):
+        self._setBool(13, value)
+
+    def getVehicleTypes(self):
+        return self._getArray(14)
+
+    def setVehicleTypes(self, value):
+        self._setArray(14, value)
+
+    @staticmethod
+    def getVehicleTypesType():
+        return unicode
 
     def getBattleTypes(self):
-        return self._getArray(13)
+        return self._getArray(15)
 
     def setBattleTypes(self, value):
-        self._setArray(13, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getBattleTypesType():
@@ -34,5 +54,7 @@ class ArmoryYardQuestModel(QuestModel):
     def _initialize(self):
         super(ArmoryYardQuestModel, self)._initialize()
         self._addNumberProperty('chapterId', 0)
-        self._addStringProperty('vehicleType', '')
+        self._addArrayProperty('levels', Array())
+        self._addBoolProperty('showLevelsAsRange', False)
+        self._addArrayProperty('vehicleTypes', Array())
         self._addArrayProperty('battleTypes', Array())

@@ -66,3 +66,4 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'
     ABILITY = 'ability'
+    THERMAL_VISION_WARNING = 'thermalVisionWarning'

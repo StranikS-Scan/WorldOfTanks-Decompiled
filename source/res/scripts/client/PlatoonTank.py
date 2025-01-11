@@ -87,6 +87,7 @@ class PlatoonTank(ClientSelectableCameraVehicle):
 
     def __init__(self):
         self.__tankInfo = None
+        self.__visibilityBlocked = False
         ClientSelectableCameraVehicle.__init__(self)
         return
 
@@ -95,6 +96,7 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         _logger.debug('Platoon tank with slot index: %s', self.slotIndex)
         self._platoonCtrl.onPlatoonTankUpdated += self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged += self._setVisible
+        self._platoonCtrl.onPlatoonTankVisualizationBlocked += self.visibilityBlocked
         self._platoonCtrl.onPlatoonTankRemove += self.__onPlatoonTankRemove
         self._platoonCtrl.registerPlatoonTank(self)
         super(PlatoonTank, self).setEnable(False)
@@ -102,6 +104,7 @@ class PlatoonTank(ClientSelectableCameraVehicle):
     def onLeaveWorld(self):
         self._platoonCtrl.onPlatoonTankUpdated -= self._updatePlatoonTank
         self._platoonCtrl.onPlatoonTankVisualizationChanged -= self._setVisible
+        self._platoonCtrl.onPlatoonTankVisualizationBlocked -= self.visibilityBlocked
         self._platoonCtrl.onPlatoonTankRemove -= self.__onPlatoonTankRemove
         super(PlatoonTank, self).onLeaveWorld()
 
@@ -110,6 +113,12 @@ class PlatoonTank(ClientSelectableCameraVehicle):
 
     def setEnable(self, enabled):
         pass
+
+    def visibilityBlocked(self, blocked):
+        if self.__visibilityBlocked == blocked:
+            return
+        self.__visibilityBlocked = blocked
+        self._setVisible(not blocked)
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None, outfit=None):
         if self.__tankInfo and self.__tankInfo.vehCompDescr != '':
@@ -152,7 +161,7 @@ class PlatoonTank(ClientSelectableCameraVehicle):
         self.removeVehicle()
 
     def _setVisible(self, visible):
-        if visible and self.__tankInfo and self.__tankInfo.canDisplayModel and self.__tankInfo.vehCompDescr != '':
+        if not self.__visibilityBlocked and visible and self.__tankInfo and self.__tankInfo.canDisplayModel and self.__tankInfo.vehCompDescr != '':
             self.recreateVehicle()
         elif self.isVehicleLoaded:
             self._onVehicleDestroy()

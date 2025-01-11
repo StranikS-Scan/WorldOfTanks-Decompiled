@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/__init__.py
-from operator import methodcaller
+from account_helpers.AccountSettings import AccountSettings, PersonalMissions
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import checkOldCampaignsIntroSeen
 from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_award_view import PersonalMissionFirstEntryAwardView
 from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_first_entry_view import PersonalMissionFirstEntryView
 from gui.Scaleform.daapi.view.lobby.missions.personal.tank_girls_popover import TankgirlsPopover
@@ -12,13 +13,10 @@ from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.app_loader import settings as app_settings
-from gui.server_events.pm_constants import PM_TUTOR_FIELDS
+from gui.impl.lobby.personal_missions.personal_missions_window_events import showIntroVideoView, showIntroView
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
-from helpers import dependency
-from shared_utils import findFirst
-from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.server_events import IEventsCache
+from personal_missions import PM_BRANCH
 
 def getContextMenuHandlers():
     pass
@@ -34,7 +32,11 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_operations import PersonalMissionOperations
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_quest_award_screen import PersonalMissionsQuestAwardScreen
     from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_browser_view import PersonalMissionsBrowserView
+    from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_operations import PMOldOperations
+    from gui.Scaleform.daapi.view.lobby.missions.personal.personal_missions_operations import PM3Operations
     return (ViewSettings(VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, PersonalMissionOperations, 'personalMissionsOperations.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ComponentSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PM_OLD_OPERATIONS, PMOldOperations, ScopeTemplates.VIEW_SCOPE),
+     ComponentSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PM3_OPERATIONS, PM3Operations, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, PersonalMissionsPage, 'personalMissionsPage.swf', WindowLayer.SUB_VIEW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, PersonalMissionsOperationAwardsScreen, 'personalMissionAwardsScreen.swf', WindowLayer.FULLSCREEN_WINDOW, PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATION_AWARDS_SCREEN_ALIAS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ComponentSettings(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_MAP_VIEW_ALIAS, PersonalMissionsMapView, ScopeTemplates.VIEW_SCOPE),
@@ -57,8 +59,6 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS, self.loadPersonalMissionsView),
          (VIEW_ALIAS.LOBBY_PERSONAL_MISSION_DETAILS, self.loadViewByCtxEvent),
-         (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS, self.loadPersonalMissionsView),
-         (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS, self.loadPersonalMissionsView),
          (PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, self.loadPersonalMissionsView),
          (PERSONAL_MISSIONS_ALIASES.FREE_SHEET_POPOVER, self.loadViewByCtxEvent),
          (PERSONAL_MISSIONS_ALIASES.TANK_GIRLS_POPOVER, self.loadViewByCtxEvent),
@@ -80,21 +80,21 @@ class PersonalMissionsPackageBusinessHandler(PackageBusinessHandler):
             Waiting.hide('loadPage')
 
     def loadPersonalMissionsView(self, event):
-        settingsCore = dependency.instance(ISettingsCore)
-        eventsCache = dependency.instance(IEventsCache)
-        uiStorage = settingsCore.serverSettings.getUIStorage()
-        goByDefault = True
-        if not uiStorage.get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN):
-            self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_VIEW_ALIAS), ctx=event.ctx))
-            goByDefault = False
-        elif not uiStorage.get(PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN):
-            if findFirst(methodcaller('isAwardAchieved'), eventsCache.getPersonalMissions().getAllOperations().values()):
-                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSION_FIRST_ENTRY_AWARD_VIEW_ALIAS), ctx=event.ctx))
-                goByDefault = False
-            else:
-                settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_AWARDS_SHOWN: True})
-        if goByDefault:
-            if event.alias == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS:
-                self.loadViewByCtxEvent(LoadViewEvent(SFViewLoadParams(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), ctx=event.ctx))
-            else:
-                self.loadViewByCtxEvent(event)
+        ctx = event.ctx
+        isPersonalMissionsAlias = event.alias == VIEW_ALIAS.LOBBY_PERSONAL_MISSIONS
+        if isPersonalMissionsAlias:
+            isPM3IntroNotSeen = not AccountSettings.getPersonalMissions(PersonalMissions.INTRO_SEEN)
+            if isPM3IntroNotSeen:
+                if ctx:
+                    branch = ctx.get('branch')
+                else:
+                    branch = PM_BRANCH.PERSONAL_MISSION_3
+                if branch == PM_BRANCH.PERSONAL_MISSION_3:
+                    showIntroView()
+                    showIntroVideoView()
+                    return
+        ctx = ctx or {}
+        isPM3Branch = ctx.get('branch') == PM_BRANCH.PERSONAL_MISSION_3
+        if not isPM3Branch:
+            checkOldCampaignsIntroSeen()
+        self.loadViewByCtxEvent(event)

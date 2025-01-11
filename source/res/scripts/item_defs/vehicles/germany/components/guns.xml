@@ -167,6 +167,7 @@
     <_75mm_KwK41_L58_conic_C>	31001	</_75mm_KwK41_L58_conic_C>
     <Gun_VK4502P_G>	31004	</Gun_VK4502P_G>
     <_150mm_Erich_Konzept_I>	31005	</_150mm_Erich_Konzept_I>
+    <_128mm_KwK_L50>	31007	</_128mm_KwK_L50>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -5083,14 +5084,14 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	218 197	</piercingPower>
+          <piercingPower>	234 220	</piercingPower>
         </_90mm_Pzgr39_48>
         <_90mm_Pzgr40_48>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1250	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	259 228	</piercingPower>
+          <piercingPower>	268 250	</piercingPower>
         </_90mm_Pzgr40_48>
         <_90mm_Sprg48>
           <defaultPortion>	0.05	</defaultPortion>
@@ -5373,7 +5374,7 @@
           <speed>	1070	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	221 198	</piercingPower>
+          <piercingPower>	241 234	</piercingPower>
         </_100mm_BR-412D>
         <_100mm_3UBK4>
           <defaultPortion>	0.0	</defaultPortion>
@@ -6769,7 +6770,7 @@
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	21.875	</rotationSpeed>
-      <reloadTime>	12.0	</reloadTime>
+      <reloadTime>	10.0	</reloadTime>
       <maxAmmo>	40	</maxAmmo>
       <aimingTime>	2.85714285714286	</aimingTime>
       <weight>	3600	</weight>
@@ -7328,6 +7329,64 @@
         </_128mm_SprG18>
       </shots>
     </_128mm_L50P>
+    <_128mm_KwK_L50>
+      <userString>	#germany_vehicles:_128mm_KwK_L50	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.77714285714290	</reloadTime>
+      <maxAmmo>	62	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	3480	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_128mm_PzGr39E>
+          <defaultPortion>	0.85	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	246 241	</piercingPower>
+        </_128mm_PzGr39E>
+        <_128mm_PzGr40E>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	311 263	</piercingPower>
+        </_128mm_PzGr40E>
+        <_128mm_SprG18E>
+          <defaultPortion>	0.15	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	65 65	</piercingPower>
+        </_128mm_SprG18E>
+      </shots>
+    </_128mm_KwK_L50>
     <_128mm_KwK44_L55>
       <userString>	#germany_vehicles:_128mm_KwK44_L55	</userString>
       <tags></tags>

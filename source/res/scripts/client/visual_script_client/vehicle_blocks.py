@@ -11,6 +11,7 @@ from visual_script.tunable_event_block import TunableEventBlock
 from skeletons.gui.battle_session import IBattleSessionProvider
 from visual_script.vehicle_blocks import VehicleMeta
 from visual_script.vehicle_blocks_bases import NoCrewCriticalBase, OptionalDevicesBase, VehicleClassBase, GunTypeInfoBase, VehicleForwardSpeedBase, VehicleCooldownEquipmentBase, VehicleClipFullAndReadyBase, GetTankOptDevicesHPModBase, IsInHangarBase, VehicleRadioDistanceBase, NoInnerDeviceDamagedBase
+from visual_script_client.vehicle_common import TunableVehicleEventBlock
 from constants import IS_VS_EDITOR
 from PlayerEvents import g_playerEvents
 from visual_script.dependency import dependencyImporter
@@ -211,6 +212,42 @@ class IsVehicleOverturned(Block, VehicleMeta):
     def _exec(self):
         avatar = BigWorld.player()
         self._res.setValue(avatar.isVehicleOverturned)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class OnUnderWaterSwitch(TunableVehicleEventBlock, VehicleMeta):
+    _EVENT_SLOT_NAMES = ['onUnderWaterSwitch']
+
+    def __init__(self, *args, **kwargs):
+        super(OnUnderWaterSwitch, self).__init__(*args, **kwargs)
+        self._isUnderWater = self._makeDataOutputSlot('isUnderWater', SLOT_TYPE.BOOL, None)
+        return
+
+    @staticmethod
+    def event(vehicle):
+        return vehicle.onUnderWaterSwitch
+
+    @TunableEventBlock.eventProcessor
+    def _onEvent(self, isUnderWater):
+        self._isUnderWater.setValue(isUnderWater)
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.CLIENT]
+
+
+class IsUnderwater(Block, VehicleMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(IsUnderwater, self).__init__(*args, **kwargs)
+        self._inVehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._res = self._makeDataOutputSlot('isUnderwater', SLOT_TYPE.BOOL, self._exec)
+
+    def _exec(self):
+        self._res.setValue(self._inVehicle.getValue().appearance.isUnderwater)
 
     @classmethod
     def blockAspects(cls):

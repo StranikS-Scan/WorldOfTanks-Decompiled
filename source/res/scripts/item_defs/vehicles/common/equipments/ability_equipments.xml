@@ -2,7 +2,7 @@
   <sure_shot>
     <id>	11000	</id>
     <userString>	#artefacts:sure_shot/name	</userString>
-    <description>	#artefacts:sure_shot/descr/active	</description>
+    <description>	#artefacts:sure_shot/descr	</description>
     <icon>	sure_shot 0 0	</icon>
     <price>	100	</price>
     <notInShop>	True	</notInShop>
@@ -16,7 +16,7 @@
           <plan>	abilities/sure_shot_server	</plan>
         </server>
         <client>
-          <plan>	abilities/sure_shot_client	</plan>
+          <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
       <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>
@@ -69,7 +69,7 @@
   <juggernaut>
     <id>	11001	</id>
     <userString>	#artefacts:juggernaut/name	</userString>
-    <description>	#artefacts:juggernaut/descr/active	</description>
+    <description>	#artefacts:juggernaut/descr	</description>
     <icon>	juggernaut 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
@@ -83,7 +83,7 @@
           <plan>	abilities/juggernaut_server	</plan>
         </server>
         <client>
-          <plan>	abilities/juggernaut_client	</plan>
+          <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
       <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>
@@ -123,19 +123,16 @@
         <value>	-3	</value>
       </add>
       <add>
-        <name>	shotsLimitForGunBoost	</name>
+        <name>	limitsForGunBoost	</name>
         <value>	10	</value>
-      </add>
-      <add>
-        <name>	minTimeBetweenReloadBoost	</name>
-        <value>	1	</value>
+        <specValue>	1	</specValue>
       </add>
     </kpi>
   </juggernaut>
   <concentration>
     <id>	11002	</id>
     <userString>	#artefacts:concentration/name	</userString>
-    <description>	#artefacts:concentration/descr/active	</description>
+    <description>	#artefacts:concentration/descr	</description>
     <icon>	concentration 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
@@ -149,7 +146,7 @@
           <plan>	abilities/concentration_server	</plan>
         </server>
         <client>
-          <plan>	abilities/concentration_client	</plan>
+          <plan>	abilities/base_ability_controller_client	</plan>
         </client>
       </visualScript>
       <cooldownSeconds>	180	  <exports>	vse tooltip	</exports>

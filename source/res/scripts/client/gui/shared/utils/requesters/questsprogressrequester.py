@@ -127,8 +127,8 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
         return self.__getQuestsData()['selected'] if pqProgress else []
 
     def getTankmanLastIDs(self, nationID):
-        pqProgress = self.__getQuestsData()
-        return self.__getQuestsData()['lastIDs'].get(nationID, self._DefaultLastWomanIDs) if pqProgress else self._DefaultLastWomanIDs
+        pqProgress = self.__getPersonalMissionsData()
+        return pqProgress['lastIDs'].get(nationID, self._DefaultLastWomanIDs) if pqProgress else self._DefaultLastWomanIDs
 
     def _response(self, resID, value, callback=None):
         if value is not None:
@@ -140,7 +140,7 @@ class PersonalMissionsProgressRequester(_QuestsProgressRequester):
         return self.getCacheValue('potapovQuests', {})
 
     def __getConditionsProgress(self):
-        return self.getCacheValue('pm2_progress', {})
+        return self.getCacheValue('pm_progress', {})
 
     def __getQuestsData(self):
         return self.__getPersonalMissionsData().get(self._questsType, {})

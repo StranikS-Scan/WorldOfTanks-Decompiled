@@ -263,6 +263,15 @@ class BattleFeedbackAdaptor(IBattleController):
     def showActionMessage(self, vehicleID, message, isAlly):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_SHOW_MESSAGE, vehicleID, (message, isAlly))
 
+    def showActiveThermalVision(self, entityId, isAlly):
+        self.onVehicleFeedbackReceived(_FET.DETECTED_BY_THERMAL_VISION, entityId, isAlly)
+
+    def updateThermalSectorState(self, entityId, state):
+        self.onMinimapFeedbackReceived(_FET.THERMAL_VISION_STATE_CHANGED, entityId, state)
+
+    def updateThermalSectorSettings(self, entityId, params):
+        self.onMinimapFeedbackReceived(_FET.THERMAL_VISION_UPDATE_SETTINGS, entityId, params)
+
     def setVehicleAttrs(self, vehicleID, attrs):
         self.__attrs = attrs
         self.onVehicleFeedbackReceived(_FET.VEHICLE_ATTRS_CHANGED, vehicleID, dict(self.__attrs))

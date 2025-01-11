@@ -10,10 +10,11 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController, IArenaVehiclesController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
+from gui.server_events.event_items import getPM3QuestTypeByQuestID
 from gui.server_events.personal_progress.formatters import DetailedProgressFormatter
 from gui.server_events.personal_progress.storage import BattleProgressStorage
 from helpers import dependency
-from personal_missions import PM_STATE
+from personal_missions import PM_STATE, PM_BRANCH
 from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -121,19 +122,31 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
         selectedQuest = self.__selectedQuest
         if selectedQuest:
             formatter = self.__getFormatter(selectedQuest)
+            isMainOnly = None
+            if selectedQuest.getCampaignID() == PM_BRANCH.PERSONAL_MISSION_3:
+                questIcon = getPM3QuestTypeByQuestID(selectedQuest.getID())
+                if selectedQuest.getAddQuestID() is None:
+                    isMainOnly = True
+            else:
+                questIcon = selectedQuest.getMajorTag()
             return {'questName': selectedQuest.getUserName(),
              'questID': selectedQuest.getID(),
              'questIndexStr': str(selectedQuest.getInternalID()),
-             'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
-             'headerProgress': formatter.headerFormat(),
+             'questIcon': RES_ICONS.getAllianceGoldIcon(questIcon),
+             'headerProgress': formatter.headerFormat(isMainOnly),
              'bodyProgress': formatter.bodyFormat()}
-        return {}
+        else:
+            return {}
 
     def getQuestShortInfoData(self):
         selectedQuest = self.__selectedQuest
+        if selectedQuest.getCampaignID() == PM_BRANCH.PERSONAL_MISSION_3:
+            questIcon = getPM3QuestTypeByQuestID(selectedQuest.getID())
+        else:
+            questIcon = selectedQuest.getMajorTag()
         return {'questName': selectedQuest.getUserName(),
          'questIndexStr': str(selectedQuest.getInternalID()),
-         'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag())} if selectedQuest else {}
+         'questIcon': RES_ICONS.getAllianceGoldIcon(questIcon)} if selectedQuest else {}
 
     def getQuestHeaderProgresses(self):
         formatter = self.__getFormatter(self.__selectedQuest)

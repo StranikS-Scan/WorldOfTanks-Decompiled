@@ -14,8 +14,8 @@ from skeletons.gui.game_control import IBattlePassController
 class BattlePassGiftTokenTooltipData(BlocksTooltipData):
     _MAX_GIFTS_COUNT = 12
 
-    def __init__(self, context):
-        super(BattlePassGiftTokenTooltipData, self).__init__(context, TOOLTIP_TYPE.BATTLE_PASS_GIFT_TOKEN)
+    def __init__(self, context, tooltipType=TOOLTIP_TYPE.BATTLE_PASS_GIFT_TOKEN):
+        super(BattlePassGiftTokenTooltipData, self).__init__(context, tooltipType)
         self._setContentMargin(top=20, left=20, bottom=20, right=20)
         self._setMargins(10, 15)
         self._setWidth(420)
@@ -41,9 +41,14 @@ class BattlePassGiftTokenTooltipData(BlocksTooltipData):
         return formatters.packImageBlockData(img=backport.image(image()), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-1))
 
     @classmethod
-    def __packGiftNameBlocks(cls, shortName, giftsNames, isOfferEnabled):
+    def _getBlocks(cls, shortName):
         rOffer = R.strings.tooltips.battlePassOffer
         blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(rOffer.title.dyn(shortName)())))]
+        return (rOffer, blocks)
+
+    @classmethod
+    def __packGiftNameBlocks(cls, shortName, giftsNames, isOfferEnabled):
+        rOffer, blocks = cls._getBlocks(shortName)
         if isOfferEnabled:
             if shortName in ('brochure_gift', 'guide_gift', 'blueprint_gift', 'book_gift'):
                 blocks.append(formatters.packTextBlockData(text=text_styles.gold(backport.text(rOffer.allNations()))))

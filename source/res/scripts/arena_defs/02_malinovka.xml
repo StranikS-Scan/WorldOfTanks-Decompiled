@@ -119,6 +119,34 @@
       </pointsOfInterestUDO>
       <controlPoint>	311.075958 306.079224	</controlPoint>
     </comp7>
+    <bob>
+      <boundingBox>
+        <bottomLeft>	-300.0 -300.0	</bottomLeft>
+        <upperRight>	500.0 500.0	</upperRight>
+      </boundingBox>
+      <teamSpawnPoints>
+        <team1>
+          <position>	450.773071 -4.439447	</position>
+        </team1>
+        <team2>
+          <position>	-13.262107 444.567413	</position>
+        </team2>
+      </teamSpawnPoints>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/02_malinovka/mmap_comp7.dds	</minimap>
+      <controlPoint>	311.075989 306.079010	</controlPoint>
+    </bob>
   </gameplayTypes>
   <useAdvancedPhysics>	true	</useAdvancedPhysics>
   <roadMap></roadMap>

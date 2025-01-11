@@ -117,6 +117,8 @@
     <Maybach_HL_235_850_02_B>	31005	</Maybach_HL_235_850_02_B>
     <Moteur_moderne_4M_26_1>	31006	</Moteur_moderne_4M_26_1>
     <Hispano-Suiza_HS110_7x7>	31007	</Hispano-Suiza_HS110_7x7>
+    <Hispano_Suiza_12Z>	31008	</Hispano_Suiza_12Z>
+    <Maybach_HL_295_F_bob>	31009	</Maybach_HL_295_F_bob>
     <Development_Engine>	65000	</Development_Engine>
     <AMX_B_271_SH>	10000	</AMX_B_271_SH>
     <Detroit_Diesel_6V53T_SH>	10001	</Detroit_Diesel_6V53T_SH>
@@ -1035,6 +1037,23 @@
       <rpm_min>	362	</rpm_min>
       <rpm_max>	2972	</rpm_max>
     </Maybach_HL_235_850_02_B>
+    <Hispano_Suiza_12Z>
+      <userString>	#france_vehicles:Hispano_Suiza_12Z	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1250	</power>
+      <weight>	620	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	390	</rpm_min>
+      <rpm_max>	2350	</rpm_max>
+    </Hispano_Suiza_12Z>
     <Aster>
       <userString>	#france_vehicles:Aster	</userString>
       <tags>	diesel	</tags>
@@ -1396,6 +1415,23 @@
       <rpm_min>	404	</rpm_min>
       <rpm_max>	2305	</rpm_max>
     </Maybach_HL_295_F>
+    <Maybach_HL_295_F_bob>
+      <userString>	#france_vehicles:Maybach_HL_295_F	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	123000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </Maybach_HL_295_F_bob>
     <Maybach_HL_295_F_fallout>
       <userString>	#france_vehicles:Maybach_HL_295_F_fallout	</userString>
       <tags>	gasoline	</tags>

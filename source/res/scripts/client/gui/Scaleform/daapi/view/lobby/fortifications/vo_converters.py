@@ -59,7 +59,7 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, maxPlayerCount=MAX_PLAYE
             slot['filterState'] = 0
             slot['vehicles'] = ()
             slot['isRemoveAvailable'] = unitEntity.getPermissions().canAssignToSlot(slot['player']['dbID'])
-            frozenVehicles = unitEntity.getEventFrozenVehicles(slot['player']['dbID'])
+            frozenVehicles = unitEntity.getEventFrozenVehicles(slot['player']['dbID'], vehLevel=rosterSettings.getMaxLevel())
             if frozenVehicles is not None and slot['selectedVehicle'] is not None:
                 slot['hasFrozenVehicle'] = _updateStrongholdEventVehicleVO(slot['selectedVehicle'], frozenVehicles)
             continue

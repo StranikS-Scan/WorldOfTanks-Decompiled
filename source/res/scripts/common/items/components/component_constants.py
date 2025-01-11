@@ -8,7 +8,7 @@ Autoreload = collections.namedtuple('Autoreload', ['reloadTime',
  'boostStartTime',
  'boostResidueTime',
  'boostFraction'])
-AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec', 'maxShotDispersion'])
+AutoShoot = collections.namedtuple('AutoShoot', ['shotDispersionPerSec', 'maxShotDispersion', 'shotInterval'])
 SpinGun = collections.namedtuple('SpinGun', ['spinUpTimeout',
  'spinDownTimeout',
  'isSpinUpShootingEnable',
@@ -51,7 +51,7 @@ DEFAULT_GUN_BURST = (1, 0.0)
 DEFAULT_GUN_CLIP = (1, 0.0)
 DEFAULT_GUN_DUALGUN = DualGun(chargeTime=4.0, shootImpulse=100.0, reloadLockTime=10.0, reloadTimes=(10, 8), rateTime=5, chargeThreshold=0.5, afterShotDelay=0.5, preChargeIndication=0.25, chargeCancelTime=0.18)
 DEFAULT_GUN_DUAL_ACCURACY = DualAccuracy(afterShotDispersionAngle=1.0, coolingDelay=5.0)
-DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0)
+DEFAULT_GUN_AUTOSHOOT = AutoShoot(shotDispersionPerSec=0.0, maxShotDispersion=0.0, shotInterval=0.0)
 DEFAULT_SPIN_GUN = SpinGun(startFactor=0.0, spinUpTimeout=0.0, spinDownTimeout=0.0, isSpinUpShootingEnable=True)
 DEFAULT_FAKE_TURRETS = {'lobby': (),
  'battle': ()}

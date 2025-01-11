@@ -5,9 +5,9 @@ import typing
 from collections import namedtuple
 from functools import partial
 import wg_async as future_async
+from adisp import adisp_process, adisp_async
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
-from adisp import adisp_async, adisp_process
 from constants import IS_EDITOR
 from gui import DialogsInterface, makeHtmlString
 from gui.Scaleform.Waiting import Waiting
@@ -32,7 +32,8 @@ from helpers import dependency
 from items import tankmen
 from items.components import skills_constants
 from items.components.c11n_constants import SeasonType
-from skeletons.gui.game_control import IEpicBattleMetaGameController, IWotPlusController
+from paragons_common import getAllParagonsEntitlements
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IWotPlusController, IParagonsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -727,7 +728,7 @@ class PMSelectConfirmator(CheckBoxConfirmator):
         self.oldQuest = oldQuest
 
     def _makeMeta(self):
-        return CheckBoxDialogMeta('questsConfirmDialog', messageCtx={'newQuest': self.quest.getUserName(),
+        return CheckBoxDialogMeta('questsConfirmPm3Dialog' if self.settingFieldName == 'questsConfirmDialogShowPM3' else 'questsConfirmDialog', messageCtx={'newQuest': self.quest.getUserName(),
          'oldQuest': self.oldQuest.getUserName()})
 
 
@@ -1229,3 +1230,65 @@ class AsyncDialogConfirmator(AsyncConfirmator):
             callback(makeSuccess())
             return
         callback(makeError())
+
+
+class ParagonsResetBranchValidator(SyncValidator):
+    __slots__ = ('__branchID',)
+    __paragonsController = dependency.descriptor(IParagonsController)
+
+    def __init__(self, branchID, isEnabled=True):
+        super(ParagonsResetBranchValidator, self).__init__(isEnabled)
+        self.__branchID = branchID
+
+    def _validate(self):
+        return makeSuccess() if self.__branchID in self.__paragonsController.branches.availableToResetBranchIds else makeError('branch_is_not_available_for_reset')
+
+
+class ParagonsSetChapterValidator(SyncValidator):
+    __slots__ = ('__chapterID',)
+    __paragonsController = dependency.descriptor(IParagonsController)
+
+    def __init__(self, chapterID, isEnabled=True):
+        super(ParagonsSetChapterValidator, self).__init__(isEnabled)
+        self.__chapterID = chapterID
+
+    def _validate(self):
+        return makeSuccess() if self.__chapterID in self.__paragonsController.allChapterIDs else makeError('nonexistent chapter with chapterID={}'.format(self.__chapterID))
+
+
+class ParagonsSetChapterLevelValidator(SyncValidator):
+    __slots__ = ('__chapterID', '__levelID')
+    __paragonsController = dependency.descriptor(IParagonsController)
+
+    def __init__(self, chapterID, levelID, isEnabled=True):
+        super(ParagonsSetChapterLevelValidator, self).__init__(isEnabled)
+        self.__chapterID = chapterID
+        self.__levelID = levelID
+
+    def _validate(self):
+        return makeSuccess() if self.__levelID in self.__paragonsController.config.getChapterLevelIDs(self.__chapterID) else makeError('nonexistent level id {} in chapterID={}'.format(self.__levelID, self.__chapterID))
+
+
+class ParagonsValidateSelectedRewardEntCode(SyncValidator):
+    __slots__ = ('__entCode',)
+
+    def __init__(self, entCode, isEnabled=True):
+        super(ParagonsValidateSelectedRewardEntCode, self).__init__(isEnabled)
+        self.__entCode = entCode
+
+    def _validate(self):
+        return makeSuccess() if self.__entCode in getAllParagonsEntitlements() else makeError('wrong entitlement for mark {}'.format(self.__entCode))
+
+
+class ParagonsValidateSelectedRewardInOrder(SyncValidator):
+    __slots__ = ('__entCode', '__chapterID', '__levelID')
+    __paragonsController = dependency.descriptor(IParagonsController)
+
+    def __init__(self, chapterID, levelID, entCode, isEnabled=True):
+        super(ParagonsValidateSelectedRewardInOrder, self).__init__(isEnabled)
+        self.__entCode = entCode
+        self.__chapterID = chapterID
+        self.__levelID = levelID
+
+    def _validate(self):
+        return makeSuccess() if (self.__chapterID, self.__levelID) not in self.__paragonsController.paragons.getSelectedRewardsOrder(self.__entCode) else makeError('reward already added to order {} {} {}'.format(self.__chapterID, self.__levelID, self.__entCode))

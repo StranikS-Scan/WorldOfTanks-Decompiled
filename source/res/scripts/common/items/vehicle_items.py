@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicle_items.py
 import functools
+import typing
 import Math
 import nations
 from constants import SHELL_TYPES, ATTACK_REASON
@@ -14,6 +15,8 @@ from items.components import shell_components
 from items.components import sound_components
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass
+if typing.TYPE_CHECKING:
+    from items.components.shared_components import ThermalVisionParams
 
 class VEHICLE_ITEM_STATUS(object):
     UNDEFINED = 0
@@ -259,7 +262,7 @@ class Radio(InstallableItem):
 @add_shallow_copy()
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState', 'thermalVision')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -283,6 +286,7 @@ class Turret(InstallableItem):
         self.customizableVehicleAreas = None
         self.prefabs = component_constants.EMPTY_TUPLE
         self.multiGunState = None
+        self.thermalVision = None
         return
 
     @property
@@ -293,14 +297,13 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'forcedReloadTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'burstStartEffects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'shootImpulses', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'autoShoot', 'spin', 'edgeByVisualModel', 'prefabs', 'spinEffect', 'temperature', '__weakref__', 'shootImpulses', 'dualAccuracy')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'burstStartEffects', 'reloadEffect', 'reloadEffectSets', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'shootImpulses', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'autoShoot', 'spin', 'edgeByVisualModel', 'prefabs', 'spinEffect', 'temperature', '__weakref__', 'shootImpulses', 'dualAccuracy')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.reloadTime = component_constants.ZERO_FLOAT
         self.aimingTime = component_constants.ZERO_FLOAT
-        self.forcedReloadTime = component_constants.ZERO_FLOAT
         self.maxAmmo = component_constants.ZERO_INT
         self.invisibilityFactorAtShot = component_constants.ZERO_FLOAT
         self.turretYawLimits = None

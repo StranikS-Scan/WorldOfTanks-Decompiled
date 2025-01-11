@@ -3,6 +3,7 @@
 import logging
 from operator import attrgetter
 from account_helpers.AccountSettings import ArmoryYard, AccountSettings
+from frameworks.wulf.view.array import fillIntsArray
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.shared.missions.packers.events import BattleQuestUIDataPacker
 from gui.shared.view_helpers.blur_manager import CachedBlur
@@ -14,7 +15,11 @@ from armory_yard.gui.impl.gen.view_models.views.lobby.feature.armory_yard_quest_
 from armory_yard.gui.shared.bonus_packers import getArmoryYardBonusPacker
 from armory_yard.gui.window_events import showArmoryYardInfoPage
 _logger = logging.getLogger(__name__)
-VEHICLE_TYPE_INDEX = 3
+VEHICLE_TYPES = ['lightTank',
+ 'mediumTank',
+ 'heavyTank',
+ 'SPG',
+ 'AT-SPG']
 
 class _QuestsTabPresenter(object):
     __slots__ = ('__viewModel', '__tooltipData', '__closeCB', '__eventsSubscriber', '__blur', '__mainViewlayer', '__parent', '__isProgressCompleted')
@@ -135,6 +140,7 @@ class _QuestsTabPresenter(object):
         completedQuests = 0
         for quest in self.__armoryYardCtrl.iterCycleProgressionQuests(cycleID):
             totalQuests += 1
+            vehicleClasses, vehicleLevels = self.__armoryYardCtrl.getRequiredVehicleTypeAndLevelsForQuest(quest.getID())
             packer = BattleQuestUIDataPacker(quest, bonusPackerGetter=getArmoryYardBonusPacker)
             questModel = packer.pack(model=ArmoryYardQuestModel())
             questModel.setChapterId(cycleID)
@@ -144,12 +150,17 @@ class _QuestsTabPresenter(object):
                 questModel.setStatus(EventStatus.DONE)
             if isChapterDisabled:
                 questModel.setStatus(EventStatus.LOCKED)
-            conditions = quest.vehicleReqs.getConditions().find('vehicleDescr')
-            if conditions:
-                vehicleTypes = conditions.parseFilters()[VEHICLE_TYPE_INDEX]
-                questModel.setVehicleType(vehicleTypes[0] if vehicleTypes else '')
+            vehicleTypes = questModel.getVehicleTypes()
+            vehicleTypes.clear()
+            if vehicleClasses:
+                for vehicleClass in vehicleClasses:
+                    vehicleTypes.addString(vehicleClass)
+
             else:
-                questModel.setVehicleType('')
+                for item in VEHICLE_TYPES:
+                    vehicleTypes.addString(item)
+
+            vehicleTypes.invalidate()
             battleTypes = questModel.getBattleTypes()
             battleTypes.clear()
             battleConditions = quest.preBattleCond.getConditions().find('bonusTypes')
@@ -158,6 +169,8 @@ class _QuestsTabPresenter(object):
                     battleTypes.addNumber(battleType)
 
             battleTypes.invalidate()
+            fillIntsArray(vehicleLevels, questModel.getLevels())
+            questModel.setShowLevelsAsRange(self.__isShowLevelsAsRange(vehicleLevels))
             self.__tooltipData[quest.getID()] = packer.getTooltipData()
             questsModel.addViewModel(questModel)
 
@@ -176,3 +189,13 @@ class _QuestsTabPresenter(object):
     def __onAboutEvent(self):
         self.__blur.disable()
         showArmoryYardInfoPage(parent=self.__parent, closeCallback=lambda *_, **__: self.__blur.enable())
+
+    @staticmethod
+    def __isShowLevelsAsRange(levels):
+        if len(levels) < 2:
+            return False
+        for i, level in enumerate(levels[1:]):
+            if level != levels[i] + 1:
+                return False
+
+        return True

@@ -20,7 +20,9 @@ from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.customization.constants import CustomizationModeSource, CustomizationModes
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.paragons.navigation_view_model import TabId
 from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessQuestsView, showEarlyAccessVehicleView
+from gui.impl.lobby.paragons.paragons_window_events import showParagonsNavigationView, showParagonsSelectRewardsWindow
 from gui.impl.lobby.poll.poll_browser_action import PollBrowserButtonHandler
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
@@ -40,7 +42,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, IMapboxController, ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IReferralProgramController, IArmoryYardController, IShopSalesEventController, IParagonsController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
 from skeletons.gui.web import IWebController
@@ -55,6 +57,7 @@ from uilogging.wot_plus.logging_constants import NotificationAdditionalData
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from wg_async import wg_async, wg_await
+from gui.shared.event_dispatcher import showVehicleTechTreeView
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -1440,6 +1443,72 @@ class _OpenPollBrowserHandler(ActionHandler):
         PollBrowserButtonHandler.invoke(**savedData)
 
 
+class ParagonsProjectViewHandler(NavigationDisabledActionHandler):
+    __paragonsCtrl = dependency.descriptor(IParagonsController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        chosenChapter = self.__paragonsCtrl.chapterID
+        if chosenChapter is None and self.__paragonsCtrl.isAnyChapterAvailable:
+            showParagonsNavigationView(tabId=TabId.CHAPTERS)
+        else:
+            showParagonsNavigationView(tabId=TabId.PROGRESS)
+        return
+
+
+class ParagonsSelectRewardViewHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        auxData = notification.getSettings().auxData
+        if auxData is not None:
+            showParagonsSelectRewardsWindow(auxData['chapter'], auxData['level'], auxData['entitlements'][0])
+        return
+
+
+class ParagonsCharaptersViewHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showParagonsNavigationView(tabId=TabId.CHAPTERS)
+
+
+class ShowParagonsResearchesViewHandler(NavigationDisabledActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def doAction(self, model, entityID, action):
+        showVehicleTechTreeView()
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1511,7 +1580,11 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenComp7ShopHandler,
  _OpenEarlyAccessVehicleHandler,
  _OpenEarlyAccessQuestsHandler,
- _OpenPollBrowserHandler)
+ _OpenPollBrowserHandler,
+ ParagonsProjectViewHandler,
+ ParagonsCharaptersViewHandler,
+ ShowParagonsResearchesViewHandler,
+ ParagonsSelectRewardViewHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

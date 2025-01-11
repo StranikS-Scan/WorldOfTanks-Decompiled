@@ -613,6 +613,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         if isUnderWater and self.damageState.effect not in ('submersionDeath',):
             self._stopEffects()
         if self._vehicle is not None:
+            self._vehicle.onUnderWaterSwitch(isUnderWater)
             if self._vehicle.isOnFire():
                 self._vehicle.fire.onUnderWaterSwitch(isUnderWater)
         return
@@ -656,6 +657,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
                         elif self.trackScrollController is not None:
                             hasContact = 0 if self.trackScrollController.hasContact() else 1
                         self.dirtComponent.update(self.filter.averageSpeed, waterHeight, self.waterSensor.waterHeightWorld, self.terrainMatKind[2], hasContact, simDt)
+                        self.customizablePrefabsManager.updateDirtComponents(self.id, self.filter.averageSpeed, waterHeight, self.waterSensor.waterHeightWorld, self.terrainMatKind[2], hasContact, simDt)
                     self.__dirtUpdateTime = time
                 if distanceFromPlayer <= _PERIODIC_TIME_DIRT[1][0] or self._vehicle.isPlayerVehicle:
                     dt = _PERIODIC_TIME_DIRT[0][0]

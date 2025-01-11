@@ -2567,6 +2567,59 @@
       </damage>
     </armorSpalls>
   </_130mm_Common_HE>
+  <_130mm_OP_Mle1923>
+    <id>	31013	</id>
+    <userString>	#france_vehicles:_130mm_OP_Mle1923	</userString>
+    <icon>	ap	</icon>
+    <price>	1250	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_OP_Mle1923>
+  <_130mm_OPS_130>
+    <id>	31014	</id>
+    <userString>	#france_vehicles:_130mm_OPS_130	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	130	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_130mm_OPS_130>
+  <_130mm_OE_Mle1923>
+    <id>	31015	</id>
+    <userString>	#france_vehicles:_130mm_OE_Mle1923	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1035	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	130	</caliber>
+    <explosionRadius>	2.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	640	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	320	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_130mm_OE_Mle1923>
   <_155mm_OE_mle_1917>
     <id>	53	</id>
     <userString>	#france_vehicles:_155mm_OE_mle_1917	</userString>

@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	15000	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -2578,20 +2578,20 @@
         </turret>
       </unlocks>
       <armor>
-        <armor_1>	120	</armor_1>
-        <armor_2>	105	</armor_2>
-        <armor_3>	90	</armor_3>
+        <armor_1>	190	</armor_1>
+        <armor_2>	140	</armor_2>
+        <armor_3>	110	</armor_3>
         <armor_4>	75	</armor_4>
-        <armor_5>	15	</armor_5>
+        <armor_5>	35	</armor_5>
         <armor_6>	30	</armor_6>
         <armor_7>	90	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	60	</armor_9>
-        <armor_10>	30	</armor_10>
+        <armor_10>	35	</armor_10>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2615,27 +2615,27 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_01.model	</undamaged>
@@ -2708,27 +2708,27 @@
             <maxPitch>	0 7 0.366894 7 0.430556 6 0.569444 6 0.633106 7 1 7	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	5.7	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_02.model	</undamaged>
@@ -3417,14 +3417,14 @@
       <level>	9	</level>
       <price>	48000	</price>
       <unlocks>
-        <gun>	_100mm_D10T	  <cost>	16500	</cost>
+        <gun>	_100mm_D10T_T_44	  <cost>	16500	</cost>
         </gun>
         <gun>	_122mm_D-25-44	  <cost>	26700	</cost>
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	190	</armor_1>
-        <armor_2>	170	</armor_2>
+        <armor_1>	240	</armor_1>
+        <armor_2>	190	</armor_2>
         <armor_3>	130	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	15	</armor_5>
@@ -3432,15 +3432,15 @@
         <armor_7>	100	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	45	</armor_9>
-        <armor_10>	35	</armor_10>
+        <armor_10>	45	</armor_10>
         <armor_11>	85	</armor_11>
         <armor_12>	45	</armor_12>
-        <armor_13>	90	</armor_13>
+        <armor_13>	110	</armor_13>
         <armor_14>	60	</armor_14>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7800	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3461,34 +3461,34 @@
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
-            <gun>	30	</gun>
+            <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	4.7	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_03.model	</undamaged>
@@ -3561,34 +3561,34 @@
             <maxPitch>	0 7 0.366894 7 0.430556 6 0.569444 6 0.633106 7 1 7	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
-            <gun>	30	</gun>
+            <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	5.6	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	4.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_04.model	</undamaged>
@@ -3655,7 +3655,7 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_85mm_D5T-85BM>
-        <_100mm_D10T>	shared	  <unlocks>
+        <_100mm_D10T_T_44>	shared	  <unlocks>
             <gun>	_100mm_LB-1	  <cost>	19100	</cost>
             </gun>
           </unlocks>
@@ -3665,34 +3665,34 @@
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	9.1	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_05.model	</undamaged>
@@ -3758,31 +3758,35 @@
             <density>	89.2327 94.0795	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_100mm_D10T>
+        </_100mm_D10T_T_44>
         <_100mm_LB-1>	shared	  <maxAmmo>	56	</maxAmmo>
+          <unlocks>
+            <vehicle>	R40_T-54	  <cost>	142000	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
           </pitchLimits>
           <reloadTime>	7.5	</reloadTime>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <gun>	40	</gun>
           </armor>
@@ -3868,25 +3872,25 @@
             <minPitch>	0 -23 1 -23	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 4 0.555556 4 0.619218 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	15.2	</reloadTime>
+          <reloadTime>	13.4	</reloadTime>
           <armor>
-            <armor_1>	190	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
             <gun>	60	</gun>
           </armor>
@@ -3896,7 +3900,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	3.0	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/russian/R20_T-44/normal/lod0/Gun_07.model	</undamaged>
@@ -4578,8 +4582,6 @@
       </unlocks>
     </V-2-44>
     <V-2-54>	shared	  <unlocks>
-        <vehicle>	R40_T-54	  <cost>	142000	</cost>
-        </vehicle>
         <engine>	V-54-6	  <cost>	27650	</cost>
         </engine>
       </unlocks>
@@ -4650,9 +4652,9 @@
       <_122mm_D-25-44>
         <delta>	1.3	</delta>
       </_122mm_D-25-44>
-      <_100mm_D10T>
+      <_100mm_D10T_T_44>
         <delta>	1.1594202	</delta>
-      </_100mm_D10T>
+      </_100mm_D10T_T_44>
     </guns>
     <armour>	1.08057228	</armour>
   </clientAdjustmentFactors>

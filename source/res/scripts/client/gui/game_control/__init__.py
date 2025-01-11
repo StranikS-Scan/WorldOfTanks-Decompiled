@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
+from shared_utils import CONST_CONTAINER
 from typing import TYPE_CHECKING
 import constants
 from gui.shared.system_factory import collectGameControllers
-from shared_utils import CONST_CONTAINER
 from skeletons.festivity_factory import IFestivityFactory
 if TYPE_CHECKING:
     from helpers.dependency import DependencyManager
@@ -77,6 +77,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.collective_goal_entry_point_controller import CollectiveGoalEntryPointController
     from gui.game_control.collective_goal_marathons_controller import CollectiveGoalMarathonsController
+    from gui.game_control.universal_flag_entry_point_controller import UniversalFlagEntryPointController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.entitlements.entitlements_controller import EntitlementsController
@@ -89,7 +90,15 @@ def getGameControllersConfig(manager):
     from gui.hangar_presets.hangar_gui_controller import HangarGuiController
     from gui.game_control.extension_stubs.gui_lootboxes_controller import GuiLootBoxesControllerStub
     from gui.game_control.early_access_controller import EarlyAccessController
+    from gui.game_control.lobby_cdn_controller import LobbyCdnController
     from gui.impl.lobby.mode_selector.mode_selector_controller import ModeSelectorController
+    from gui.game_control.personal_missions_controller import PersonalMissionsController
+    from gui.game_control.hangar_feature_state_controller import HangarFeatureStateController
+    from gui.game_control.bob_controller import BobController as _BobCtrl
+    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
+    from gui.game_control.bob_announcement_controller import BobAnnouncementController as _BobAnnouncementCtrl
+    from gui.game_control.paragons_controller import ParagonsController
+    from gui.game_control.paragons_reward_controller import ParagonsRewardsShopController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -101,11 +110,7 @@ def getGameControllersConfig(manager):
         method(interface, controller, finalizer='fini')
 
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
-    festivityFactory = manager.getService(IFestivityFactory)
-    festivityController = festivityFactory.getController()
-    _config(_interface.IFestivityController, festivityController)
-    if festivityFactory.getChildControllerInterface() is not None:
-        manager.addInstance(festivityFactory.getChildControllerInterface(), festivityController)
+    _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
     _config(_interface.IGameSessionController, _GameSessions())
@@ -150,6 +155,9 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
+    _config(_interface.IBobController, _BobCtrl())
+    _config(_interface.IBobSoundController, _BobSoundCtrl())
+    _config(_interface.IBobAnnouncementController, _BobAnnouncementCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -172,13 +180,18 @@ def getGameControllersConfig(manager):
     _config(_interface.IDailyQuestIntroPresenter, DailyQuestsIntroPresenter())
     _config(_interface.ICollectiveGoalEntryPointController, CollectiveGoalEntryPointController())
     _config(_interface.ICollectiveGoalMarathonsController, CollectiveGoalMarathonsController())
+    _config(_interface.IUniversalFlagEntryPointController, UniversalFlagEntryPointController())
+    _config(_interface.ILobbyCdnController, LobbyCdnController())
     _config(_interface.IAchievements20Controller, _Ach20Ctrl())
     _config(_interface.ILimitedUIController, LimitedUIController())
     _config(_interface.IHangarGuiController, HangarGuiController())
     _config(_interface.IDebutBoxesController, DebutBoxesController())
     _config(_interface.IGuiLootBoxesController, GuiLootBoxesControllerStub())
     _config(_interface.IShopSalesEventController, _ShopSalesController())
+    _config(_interface.IParagonsController, ParagonsController())
+    _config(_interface.IParagonsRewardsShopController, ParagonsRewardsShopController())
+    _config(_interface.IHangarFeatureStateController, HangarFeatureStateController())
     _config(_interface.IEarlyAccessController, EarlyAccessController())
     _config(_interface.IModeSelectorController, ModeSelectorController())
+    _config(_interface.IPersonalMissionsController, PersonalMissionsController())
     collectGameControllers(_config)
-    return

@@ -384,7 +384,8 @@ class ClientArena(object):
          'maxHealth': info[24],
          'vehPostProgression': info[25],
          'customRoleSlotTypeId': info[26],
-         'botDisplayStatus': info[27]}
+         'botDisplayStatus': info[27],
+         'bobInfo': info[28]}
         return (info[0], infoAsDict)
 
     def __getVehicleType(self, compactDescr, extData):

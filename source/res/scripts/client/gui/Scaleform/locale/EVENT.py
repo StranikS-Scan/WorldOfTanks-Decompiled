@@ -14,6 +14,9 @@ class EVENT(object):
     SHOPSALES_EVENTSTARTFORMAT = '#event:shopSales/eventStartFormat'
     SHOPSALES_EVENTFINISHFORMAT = '#event:shopSales/eventFinishFormat'
     SHOPSALES_TITLE = '#event:shopSales/title'
+    UNIVERSALFLAG_UNAVALIBLEHEADER = '#event:universalFlag/unavalibleHeader'
+    UNIVERSALFLAG_UNAVALIBLETEXT = '#event:universalFlag/unavalibleText'
+    UNIVERSALFLAG_TIMERFORMAT = '#event:universalFlag/timerFormat'
     ALL_ENUM = (PUNISHMENTWINDOW_REASON_EVENT_DESERTER,
      PUNISHMENTWINDOW_REASON_EVENT_AFK,
      BATTLEHINTS_TESTMESSAGE,
@@ -24,7 +27,10 @@ class EVENT(object):
      SHOPSALES_ENDDATETEXT,
      SHOPSALES_EVENTSTARTFORMAT,
      SHOPSALES_EVENTFINISHFORMAT,
-     SHOPSALES_TITLE)
+     SHOPSALES_TITLE,
+     UNIVERSALFLAG_UNAVALIBLEHEADER,
+     UNIVERSALFLAG_UNAVALIBLETEXT,
+     UNIVERSALFLAG_TIMERFORMAT)
 
     @classmethod
     def all(cls, key0):

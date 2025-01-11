@@ -228,6 +228,8 @@ class ClassicPage(SharedPage):
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
             if vehicle and vehicle.typeDescriptor.hasRocketAcceleration:
                 components.add(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR)
+            if vehicle and vehicle.typeDescriptor.hasThermalVision:
+                components.add(BATTLE_VIEW_ALIASES.THERMAL_VISION_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)
         else:

@@ -10,6 +10,7 @@ from highlight_component import HighlightManager
 from on_click_components import ClickManager
 from armory_yard_components import AssemblyStageIndexManager
 from hangar_camera_manager import HangarCameraManager
+from c11n_logic_manager import C11nLogicManager
 
 @registerRule
 class SelectionRule(Rule):
@@ -49,6 +50,16 @@ class CameraRule(Rule):
     domain = CGF.DomainOption.DomainClient
 
     @registerManager(HangarCameraManager)
+    def reg1(self):
+        return None
+
+
+@registerRule
+class C11nLogicRule(Rule):
+    category = 'Hangar rules'
+    domain = CGF.DomainOption.DomainClient
+
+    @registerManager(C11nLogicManager)
     def reg1(self):
         return None
 

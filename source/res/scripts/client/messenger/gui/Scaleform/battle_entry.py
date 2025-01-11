@@ -9,7 +9,7 @@ from gui.shared.events import MessengerEvent, ChannelManagementEvent
 from messenger import g_settings
 from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui.Scaleform import channels, FILL_COLORS
-from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter, getComp7VOIPNotificationFormatter
+from messenger.gui.Scaleform.data.message_formatters import getMessageFormatter, getComp7VOIPNotificationFormatter, getBobVOIPNotificationFormatter
 from messenger.gui.interfaces import IGUIEntry
 from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_TYPE
 from messenger.m_constants import MESSENGER_SCOPE
@@ -69,6 +69,7 @@ class BattleEntry(IGUIEntry):
         g_messengerEvents.onErrorReceived += self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived += self.__me_onWarningReceived
         g_messengerEvents.onComp7VOIPNotificationReceived += self.__me_onComp7VOIPNotificationReceived
+        g_messengerEvents.onBobVOIPNotificationReceived += self.__me_onBobVOIPNotificationReceived
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated += self.__ms_onColorsSchemesUpdated
         self.__initialized = 0
@@ -86,6 +87,7 @@ class BattleEntry(IGUIEntry):
         g_messengerEvents.onErrorReceived -= self.__me_onErrorReceived
         g_messengerEvents.onWarningReceived -= self.__me_onWarningReceived
         g_messengerEvents.onComp7VOIPNotificationReceived -= self.__me_onComp7VOIPNotificationReceived
+        g_messengerEvents.onBobVOIPNotificationReceived -= self.__me_onBobVOIPNotificationReceived
         g_settings.onUserPreferencesUpdated -= self.__ms_onUserPreferencesUpdated
         g_settings.onColorsSchemesUpdated -= self.__ms_onColorsSchemesUpdated
         g_settings.resetBattleReceiverIfNeed()
@@ -197,6 +199,15 @@ class BattleEntry(IGUIEntry):
             view.addMessage(formatted, fillColor=fillColor)
         return
 
+    def __showBobVOIPNotificationMessage(self, actionMessage):
+        formatter = getBobVOIPNotificationFormatter(actionMessage)
+        formatted = formatter.getFormattedMessage()
+        fillColor = formatter.getFillColor()
+        view = self.__view()
+        if view is not None:
+            view.addMessage(formatted, fillColor=fillColor)
+        return
+
     def __me_onBattleUserActionReceived(self, action, user):
         message = getUserActionReceivedMessage(action, user)
         if message:
@@ -241,6 +252,9 @@ class BattleEntry(IGUIEntry):
 
     def __me_onComp7VOIPNotificationReceived(self, message):
         self.__showComp7VOIPNotificationMessage(message)
+
+    def __me_onBobVOIPNotificationReceived(self, message):
+        self.__showBobVOIPNotificationMessage(message)
 
     def __ms_onUserPreferencesUpdated(self):
         view = self.__view()

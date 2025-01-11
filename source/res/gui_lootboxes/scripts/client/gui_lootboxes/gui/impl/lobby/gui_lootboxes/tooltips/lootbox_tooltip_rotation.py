@@ -3,7 +3,6 @@
 from frameworks.wulf import ViewSettings, Array
 from gui_lootboxes.gui.impl.gen.view_models.views.lobby.gui_lootboxes.tooltips.lootbox_tooltip_rotation_model import LootboxTooltipRotationModel
 from gui.impl.gen import R
-from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.loot_box.loot_box_helper import isAllVehiclesObtainedInSlot
 from shared_utils import first, findFirst
 from helpers import dependency
@@ -14,7 +13,7 @@ from gui.shared.money import Currency
 from gui.shared.gui_items.Vehicle import getNationLessName
 
 class LootboxRotationTooltip(ViewImpl):
-    __slots__ = ('__lootBox', '__vehicles', '__rewards')
+    __slots__ = ('__lootBox', '__vehicles')
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, lootBox=None):
@@ -22,7 +21,6 @@ class LootboxRotationTooltip(ViewImpl):
         settings.model = LootboxTooltipRotationModel()
         super(LootboxRotationTooltip, self).__init__(settings)
         self.__vehicles = []
-        self.__rewards = []
         self.__lootBox = lootBox
 
     @property
@@ -34,7 +32,6 @@ class LootboxRotationTooltip(ViewImpl):
         with self.viewModel.transaction() as vm:
             self.__setCompensation(vm)
             self.__setVehicle(vm)
-            self.__setRewards(vm)
             if self.__lootBox.hasLootLists():
                 rotationStage = self.__lootBox.getRotationStage()
                 lootLists = self.__lootBox.getLootLists()
@@ -45,8 +42,7 @@ class LootboxRotationTooltip(ViewImpl):
                 vm.setStageRotation(0)
         return
 
-    @staticmethod
-    def __fillVehicle(model, vehicle):
+    def __fillVehicle(self, model, vehicle):
         model.setName(getNationLessName(vehicle.name))
         model.setVehicleName(vehicle.shortUserName)
         model.setInInventory(vehicle.isInInventory)
@@ -56,24 +52,18 @@ class LootboxRotationTooltip(ViewImpl):
 
     def __parseVehicleRotationLootbox(self):
         vehiclesList = []
-        rewardsList = []
         lootLists = self.__lootBox.getLootLists()
         for rotation in lootLists:
             vehiclesRotationList = []
-            rewardRotationList = []
             firstSlot = findFirst(lambda x: x is not None, rotation)
             if firstSlot is not None:
                 for bonus in rotation[firstSlot]['bonuses']:
                     if bonus.getName() == 'vehicles':
                         vehiclesRotationList.extend((i[0] for i in bonus.getVehicles()))
-                    if bonus.getName() != 'battleToken':
-                        rewardRotationList.append(bonus)
 
                 vehiclesList.append(vehiclesRotationList)
-                rewardsList.append(rewardRotationList)
 
         self.__vehicles = vehiclesList
-        self.__rewards = rewardsList
         return
 
     def __setCompensation(self, viewModel):
@@ -106,13 +96,3 @@ class LootboxRotationTooltip(ViewImpl):
             vehiclesListStage.addArray(vehicleInStage)
 
         vehiclesListStage.invalidate()
-
-    def __setRewards(self, viewModel):
-        rewardsListStage = viewModel.getRewardsStageList()
-        rewardsListStage.clear()
-        for rewards in self.__rewards:
-            rewardInStage = Array()
-            packBonusModelAndTooltipData(rewards, rewardInStage)
-            rewardsListStage.addArray(rewardInStage)
-
-        rewardsListStage.invalidate()

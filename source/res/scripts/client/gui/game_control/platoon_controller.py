@@ -168,6 +168,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.currentPlatoonLayouts = buildCurrentLayouts()
         self.onFilterUpdate = Event.Event()
         self.onPlatoonTankVisualizationChanged = Event.Event()
+        self.onPlatoonTankVisualizationBlocked = Event.Event()
         self.onChannelControllerChanged = Event.Event()
         self.onAvailableTiersForSearchChanged = Event.Event()
         self.onMembersUpdate = Event.Event()

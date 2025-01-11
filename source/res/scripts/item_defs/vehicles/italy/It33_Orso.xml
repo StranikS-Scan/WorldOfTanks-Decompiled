@@ -78,6 +78,13 @@
       <undamaged>	vehicles/italy/It33_Orso/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/italy/It33_Orso/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/italy/It33_Orso/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <It33_Orso_3Dst_01>
+          <undamaged>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Hull.model	</exploded>
+        </It33_Orso_3Dst_01>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -1132,6 +1139,62 @@
         <showOn>	16	</showOn>
         <clipAngle>	1.345823	</clipAngle>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15100	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	It33_Orso_3Dst_01	</compatibleModels>
+        <position>	-1.180696 1.237803 3.712237	</position>
+        <rotation>	0.459281 -0.000005 3.141591	</rotation>
+        <scale>	0.464646 0.46426 0.464646	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.348019	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15101	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	It33_Orso_3Dst_01	</compatibleModels>
+        <position>	1.26346 1.22125 -3.51982	</position>
+        <rotation>	2.493885 -0.000035 -0.000002	</rotation>
+        <scale>	0.622076 0.334124 0.622075	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.345823	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15102	</slotId>
+        <tags>	direction_left_to_right formfactor_square	</tags>
+        <compatibleModels>	It33_Orso_3Dst_01	</compatibleModels>
+        <position>	0.263885 1.368887 3.03528	</position>
+        <rotation>	0.585929 -0.000005 3.141591	</rotation>
+        <scale>	0.918338 0.591991 0.918341	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	1.372178	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15103	</slotId>
+        <tags>	direction_right_to_left formfactor_square	</tags>
+        <compatibleModels>	It33_Orso_3Dst_01	</compatibleModels>
+        <position>	1.157135 1.237803 3.712237	</position>
+        <rotation>	0.459281 0.000005 3.141591	</rotation>
+        <scale>	0.464646 0.46426 0.464646	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.348019	</clipAngle>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1173,6 +1236,13 @@
         <undamaged>	vehicles/italy/It33_Orso/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/italy/It33_Orso/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/italy/It33_Orso/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <It33_Orso_3Dst_01>
+            <undamaged>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Chassis.model	</exploded>
+          </It33_Orso_3Dst_01>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -2229,6 +2299,13 @@
             <undamaged>	vehicles/italy/It33_Orso/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/italy/It33_Orso/crash/lod0/Gun_02.model	</destroyed>
             <exploded>	vehicles/italy/It33_Orso/crash/lod0/Gun_02.model	</exploded>
+            <sets>
+              <It33_Orso_3Dst_01>
+                <undamaged>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/normal/lod0/Gun_02.model	</undamaged>
+                <destroyed>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Gun_02.model	</destroyed>
+                <exploded>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Gun_02.model	</exploded>
+              </It33_Orso_3Dst_01>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/italy/It33_Orso/collision/Gun_02.model	</collisionModelServer>
@@ -2246,6 +2323,13 @@
         <undamaged>	vehicles/italy/It33_Orso/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/italy/It33_Orso/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/italy/It33_Orso/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <It33_Orso_3Dst_01>
+            <undamaged>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/italy/It33_Orso/_skin/It33_Orso_3Dst_01/crash/lod0/Turret_01.model	</exploded>
+          </It33_Orso_3Dst_01>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/italy/It33_Orso/collision/Turret_01.model	</collisionModelServer>
@@ -2590,6 +2674,16 @@
           <scale>	1.141471 1.14147 1.141471	</scale>
           <showOn>	256	</showOn>
         </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35030	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	It33_Orso_3Dst_01	</compatibleModels>
+          <position>	0.89488 2.270289 0.340079	</position>
+          <rotation>	-0.002667 -0.008953 2.905883	</rotation>
+          <scale>	0.360939 0.360938 0.360939	</scale>
+          <showOn>	256	</showOn>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2598,7 +2692,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.968 -0.084 1.011 0 0.66 0.157 0.5 0.511 0.411 0.466 0.592 0.517 0.168 0 0.205	</physicsShape>
+      <physicsShape>	1.009 0.012 1.055 0 0.734 0.223 0.702 0.761 0.423 0.466 0.559 0.5 0.219 0 0.205	</physicsShape>
       <camouflage>
         <density>	124.100182 124.550476	</density>
         <aoTextureSize>	1024 512	</aoTextureSize>
@@ -2630,10 +2724,10 @@
               <rollingFriction>	0.18515	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.1127	</rollingFriction>
+              <rollingFriction>	0.0966	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_common.py
+import weakref
 import BigWorld
 from visual_script import ASPECT
 from visual_script.dependency import dependencyImporter
+from visual_script.slot_types import SLOT_TYPE
 from visual_script.tunable_event_block import TunableEventBlock
 TriggersManager = dependencyImporter('TriggersManager')
 edgeCases = {'track': ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1'),
@@ -132,3 +134,79 @@ class TunablePlayerVehicleEventBlock(TunableEventBlock, TriggerListener):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
+
+
+class TunableVehicleEventBlock(TunableEventBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(TunableVehicleEventBlock, self).__init__(*args, **kwargs)
+        self._subscriber = VehicleSubscriber(self)
+        self._sub = self._makeEventInputSlot('subscribe', self._onSubscribe)
+        self._unsub = self._makeEventInputSlot('unsubscribe', self._onUnsubscribe)
+        self._outSub = self._makeEventOutputSlot('outSubscribe')
+        self._outUnsub = self._makeEventOutputSlot('outUnSubscribe')
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+
+    def onFinishScript(self):
+        self._subscriber.unsubscribeAll()
+
+    def validate(self):
+        return 'Vehicle value is required' if not self._vehicle.hasValue() else super(TunableVehicleEventBlock, self).validate()
+
+    def onEvent(self, *args, **kwargs):
+        return self._onEvent(*args, **kwargs)
+
+    @staticmethod
+    def event(vehicle):
+        pass
+
+    @TunableEventBlock.eventProcessor
+    def _onEvent(self, *args, **kwargs):
+        pass
+
+    def _onSubscribe(self):
+        vehicle = self._vehicle.getValue()
+        self._subscriber.subscribe(vehicle)
+        self._outSub.call()
+
+    def _onUnsubscribe(self):
+        vehicle = self._vehicle.getValue()
+        self._subscriber.unsubscribe(vehicle)
+        self._outUnsub.call()
+
+
+class VehicleSubscriber(object):
+
+    def __init__(self, block):
+        self._block = weakref.proxy(block)
+        self._subscribedVehicles = []
+
+    @property
+    def subscribedVehicles(self):
+        return tuple(self._subscribedVehicles)
+
+    def subscribe(self, vehicle):
+        if vehicle.id not in self._subscribedVehicles:
+            self._subscribedVehicles.append(vehicle.id)
+            self._subscribe(vehicle)
+
+    def unsubscribe(self, vehicle):
+        if vehicle.id in self._subscribedVehicles:
+            self._subscribedVehicles.remove(vehicle.id)
+            self._unsubscribe(vehicle)
+
+    def unsubscribeAll(self):
+        for vehicleId in self._subscribedVehicles:
+            vehicle = BigWorld.entities.get(vehicleId)
+            if vehicle:
+                self._unsubscribe(vehicle)
+
+        del self._subscribedVehicles[:]
+
+    def _subscribe(self, vehicle):
+        event = self._block.event(vehicle)
+        event += self._block.onEvent
+
+    def _unsubscribe(self, vehicle):
+        event = self._block.event(vehicle)
+        event -= self._block.onEvent

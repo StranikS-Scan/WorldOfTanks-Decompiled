@@ -15,7 +15,7 @@ class PerkType(Enum):
 class CrewPerksTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(CrewPerksTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -72,11 +72,17 @@ class CrewPerksTooltipModel(ViewModel):
     def setDescription(self, value):
         self._setString(8, value)
 
+    def getAlertDescription(self):
+        return self._getString(9)
+
+    def setAlertDescription(self, value):
+        self._setString(9, value)
+
     def getBoosters(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setBoosters(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getBoostersType():
@@ -93,4 +99,5 @@ class CrewPerksTooltipModel(ViewModel):
         self._addBoolProperty('isZeroPerk', False)
         self._addBoolProperty('isIrrelevant', False)
         self._addStringProperty('description', '')
+        self._addStringProperty('alertDescription', '')
         self._addArrayProperty('boosters', Array())

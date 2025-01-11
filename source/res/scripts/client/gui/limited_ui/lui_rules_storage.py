@@ -34,6 +34,7 @@ class LuiRules(enum.Enum):
     CRAFT_MACHINE_ENTRY_POINT = 'CraftMachineEntryPoint'
     SHOP_SALES_ENTRY_POINT = 'ShopSalesEntryPoint'
     MAPBOX_ENTRY_POINT = 'MapboxEntryPoint'
+    UNIVERSAL_FLAG_ENTRY_POINT = 'universalFlagEntryPoint'
     EPIC_BATTLES_ENTRY_POINT = 'EpicBattlesEntryPoint'
     BATTLE_MISSIONS = 'BattleMissions'
     HERO_TANK = 'HeroTank'
@@ -53,6 +54,8 @@ class LuiRules(enum.Enum):
     GUI_COSMIC_ENTRY_POINT = 'CosmicEntryPoint'
     SUBSCRIPTION_STATE = 'SubscriptionState'
     EARLY_ACCESS_ENTRY_POINT = 'EarlyAccessEntryPoint'
+    PARAGONS_ENTRY_POINT = 'ParagonsEntryPoint'
+    NEW_CAMPAIGN_HINT = 'NewCampaignHint'
 
 
 class _LimitedUIRule(namedtuple('_LimitedUIRule', ('idx', 'expression', 'tokens', 'message'))):

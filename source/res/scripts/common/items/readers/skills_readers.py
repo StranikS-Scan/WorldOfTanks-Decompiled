@@ -39,7 +39,7 @@ def _readLocales(skillName, section):
 
     localeRoot = R.strings.crew_perks.dyn(skillName)
     altRoot = localeRoot.dyn('alt')
-    return skills_components.SkillLocales(section.readString('userString', localeText(localeRoot, 'name')), section.readString('shortDescription', localeText(localeRoot, 'shortDescription')), section.readString('maxLvlDescription', localeText(localeRoot, 'maxLvlDescription')), section.readString('currentLvlDescription', localeText(localeRoot, 'currentLvlDescription')), section.readString('altDescription', localeText(altRoot, 'description')), section.readString('altInfo', localeText(altRoot, 'info')))
+    return skills_components.SkillLocales(section.readString('userString', localeText(localeRoot, 'name')), section.readString('shortDescription', localeText(localeRoot, 'shortDescription')), section.readString('maxLvlDescription', localeText(localeRoot, 'maxLvlDescription')), section.readString('currentLvlDescription', localeText(localeRoot, 'currentLvlDescription')), section.readString('altDescription', localeText(altRoot, 'description')), section.readString('altInfo', localeText(altRoot, 'info')), section.readString('alertDescription', localeText(localeRoot, 'alertDescription')))
 
 
 def _readUISettings(xmlCtx, section, subsectionName):

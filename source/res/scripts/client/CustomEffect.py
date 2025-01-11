@@ -575,7 +575,7 @@ class MainCustomSelector(MainSelectorBase):
 
 
 class MainTemplateSelector(MainSelectorBase):
-    METADATA_SPLITTER = ':'
+    METADATA_SPLITTER = '__'
     TYPE_SPLITTER = '_'
     HP_PREFIX = 'HP_'
     NODE_TYPES_MAPPING = {'track': TrackEffectNode}

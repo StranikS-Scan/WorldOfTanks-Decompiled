@@ -19,7 +19,7 @@ from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as ms
-from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController
+from skeletons.gui.game_control import IBattleRoyaleController, IBootcampController, IDebutBoxesController, IEarlyAccessController, IParagonsController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -63,12 +63,12 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController, earlyAccessCtrl=IEarlyAccessController)
-def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, earlyAccessCtrl=None):
-    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl)
+@dependency.replace_none_kwargs(bootcampCtrl=IBootcampController, debutBoxCtrl=IDebutBoxesController, earlyAccessCtrl=IEarlyAccessController, paragonsCtrl=IParagonsController)
+def getVehicleDataVO(vehicle, bootcampCtrl=None, debutBoxCtrl=None, earlyAccessCtrl=None, paragonsCtrl=None):
+    return _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl)
 
 
-def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl):
+def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, paragonsCtrl):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -148,6 +148,8 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl):
      'extraImage': extraImage}
     if earlyAccessCtrl.isEnabled():
         data.update({'isEarlyAccess': vehicle.intCD in earlyAccessCtrl.getPostProgressionVehicles() and earlyAccessCtrl.isPostProgressionQueueSelected()})
+    if vehicle.isResetParagons and paragonsCtrl.getVehicleProgressPoints(vehicle.intCD) > 0:
+        data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points')})
     return data
 
 
@@ -229,12 +231,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self._currentVehicleInvID = vehicle.invID
         return self._currentVehicleInvID
 
-    def selectFilteredVehicle(self, vehicle):
-        if vehicle is not None and vehicle.isInInventory:
-            self._selectedIdx = -1
-            self._currentVehicleInvID = vehicle.invID
-        return
-
     def updateVehicles(self, vehiclesCDs=None, filterCriteria=None, forceUpdate=False):
         if self._itemsCache is None:
             return
@@ -278,7 +274,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = -1
         visibleVehiclesIntCDs = [ vehicle.intCD for vehicle in self._getCurrentVehicles() ]
         sortedVehicleIndices = self._getSortedIndices()
-        self._filteredIndices += self._getBeforeAdditionalItemsIndexes()
         for idx in sortedVehicleIndices:
             vehicle = self._vehicles[idx]
             if vehicle.intCD in visibleVehiclesIntCDs:
@@ -323,9 +318,6 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         return []
 
     def _getAdditionalItemsIndexes(self):
-        return []
-
-    def _getBeforeAdditionalItemsIndexes(self):
         return []
 
     def _syncRandomStats(self):

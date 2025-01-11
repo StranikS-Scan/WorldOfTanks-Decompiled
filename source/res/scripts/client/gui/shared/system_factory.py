@@ -48,9 +48,7 @@ AMMUNITION_PANEL_VIEW = 44
 VEHICLE_VIEW_STATE = 45
 DYN_OBJ_CACHE = 46
 SHARED_REPO = 47
-FESTIVITY_FACTORY = 48
-BONUS_MERGERS = 49
-SERVICE_CHANNEL_SUBFORMATTERS = 50
+CONVERTERS_EXT_DATA_FORMATTERS = 48
 
 class _CollectEventsManager(object):
 
@@ -148,18 +146,6 @@ def registerGameControllers(controllersList):
 
 def collectGameControllers(configurator):
     __collectEM.handleEvent(GAME_CONTROLLERS, ctx={'configurator': configurator})
-
-
-def registerFestivityFactory(factory):
-
-    def onCollect(ctx):
-        ctx['factories'].append(factory)
-
-    __collectEM.addListener(FESTIVITY_FACTORY, onCollect)
-
-
-def collectFestivityFactories():
-    return __collectEM.handleEvent(FESTIVITY_FACTORY, ctx={'factories': []}).get('factories', [])
 
 
 def registerBattleControllerRepo(guiType, repoCls):
@@ -408,6 +394,18 @@ def registerTokenQuestsSubFormatters(formatters):
 
 def collectTokenQuestsSubFormatters():
     return __collectEM.handleEvent(TOKEN_QUEST_SUBFORMATTERS, ctx={'formatters': []}).get('formatters')
+
+
+def registerConvertersSubFormatter(dataKey, formatter):
+
+    def onCollect(ctx):
+        ctx['formatter'] = formatter
+
+    __collectEM.addListener((CONVERTERS_EXT_DATA_FORMATTERS, dataKey), onCollect)
+
+
+def collectConvertersSubFormatter(dataKey):
+    return __collectEM.handleEvent((CONVERTERS_EXT_DATA_FORMATTERS, dataKey), ctx={}).get('formatter')
 
 
 def registerPrbInviteHtmlFormatter(prbType, formatterCls):
@@ -745,27 +743,3 @@ def registerDynObjCache(queueType, dynCache):
 
 def collectDynObjCache(queueType):
     return __collectEM.handleEvent((DYN_OBJ_CACHE, queueType), ctx={}).get('dynCache')
-
-
-def registerClientBonusMergers(predicate, mergeFunction):
-
-    def onCollect(ctx):
-        ctx['mergers'].append((predicate, mergeFunction))
-
-    __collectEM.addListener(BONUS_MERGERS, onCollect)
-
-
-def collectClientBonusMergers():
-    return __collectEM.handleEvent(BONUS_MERGERS, ctx={'mergers': []})['mergers']
-
-
-def registerServiceChannelSubformatter(callContext, subformatter):
-
-    def onCollect(ctx):
-        ctx['formatters'].append(subformatter)
-
-    __collectEM.addListener((SERVICE_CHANNEL_SUBFORMATTERS, callContext), onCollect)
-
-
-def collectServiceChannelSubformatter(callContext):
-    return __collectEM.handleEvent((SERVICE_CHANNEL_SUBFORMATTERS, callContext), ctx={'formatters': []}).get('formatters', [])

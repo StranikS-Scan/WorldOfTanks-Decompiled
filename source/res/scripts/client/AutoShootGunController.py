@@ -5,9 +5,7 @@ import typing
 import weakref
 import BigWorld
 import CGF
-import Math
-from aih_constants import ShakeReason
-from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState, CLIP_MIN_RATE
+from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
 from constants import SERVER_TICK_LENGTH
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_helpers import getGunSoundObject
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_wrappers import checkStateStatus
@@ -16,7 +14,6 @@ from helpers.CallbackDelayer import CallbackDelayer
 from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicle_systems.model_assembler import loadAppearancePrefab
-from vehicle_systems.tankStructure import TankNodeNames
 if typing.TYPE_CHECKING:
     from cgf_components.auto_shoot_guns_component import AutoShootingGunBurstPixie
     from GenericComponents import ParticleComponent
@@ -77,18 +74,6 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
     def removeShotGameObject(self, shotGameObject):
         self.__shotObjects.discard(shotGameObject)
 
-    def receiveShotsImpulse(self, dt):
-        appearance = self.__vehicle.appearance
-        if appearance is None or appearance.compoundModel is None:
-            return
-        else:
-            shootRatePerSecond = self.__controller.getShootRatePerSecond()
-            if shootRatePerSecond == 0.0:
-                return
-            gunNode = appearance.compoundModel.node(TankNodeNames.GUN_INCLINATION)
-            appearance.receiveShotImpulse(Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), appearance.typeDescriptor.gun.impulse * shootRatePerSecond * dt)
-            return
-
     def updateAutoShootingStatus(self, stateStatus):
         burstInProgress = self.hasDelayedCallback(self.__updateBurst)
         if stateStatus is None or stateStatus.state != AutoShootGunState.SHOOT:
@@ -105,61 +90,25 @@ class AutoShootGunShootingAnimator(CallbackDelayer):
 
     def __activateBurst(self):
         gunSoundObject = getGunSoundObject(self.__vehicle)
-        self.__showBurstStart()
-        self.__updateBurst(gunSoundObject=gunSoundObject)
+        self.__updateBurstParticles(self.__controller.getShootRatePerSecond())
         gunSoundObject.play(self.__activationSound)
 
     def __deactivateBurst(self, burstInProgress):
-        self.__playGunObjectSound(self.__deactivationSound if burstInProgress else '')
+        getGunSoundObject(self.__vehicle).play(self.__deactivationSound if burstInProgress else '')
         self.__updateBurstParticles(0.0)
-        for recoilAnimator in self.__recoilAnimators:
-            recoilAnimator.disableLoop()
-
-    def __playGunObjectSound(self, soundName):
-        if soundName:
-            getGunSoundObject(self.__vehicle).play(soundName)
 
     def __showBurstStart(self):
         for shotGameObject in self.__shotObjects:
             shotGameObject.deactivate()
             shotGameObject.activate()
 
-        for recoilAnimator in self.__recoilAnimators:
-            recoilAnimator.enableLoop()
-
-    def __shakePlayerCamera(self):
-        appearance = self.__vehicle.appearance
-        if appearance is None or appearance.compoundModel is None:
-            return
-        else:
-            gunFireNode = appearance.compoundModel.node('HP_gunFire')
-            gunNode = appearance.compoundModel.node(TankNodeNames.GUN_INCLINATION)
-            if gunFireNode is None or gunNode is None:
-                return
-            BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, Math.Matrix(gunFireNode).translation, Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), self.__vehicle.typeDescriptor.shot.shell.caliber, self.__vehicle.typeDescriptor.shot.shell.kind, ShakeReason.OWN_SHOT)
-            return
-
-    def __updateBurst(self, gunSoundObject=None):
-        burstRate = self.__controller.getShootRatePerSecond()
-        self.__shakePlayerCamera()
-        self.__updateBurstRecoil(burstRate)
-        self.__updateBurstParticles(burstRate)
-        self.__updateBurstSounds(gunSoundObject)
+    @staticmethod
+    def __updateBurst():
         return SERVER_TICK_LENGTH
 
     def __updateBurstParticles(self, rate):
         for particleConfig, particleComponent in self.__burstParticles.iteritems():
             particleComponent.setEmissionRate(rate * particleConfig.rateFactor)
-
-    def __updateBurstRecoil(self, rate):
-        for recoilAnimator in self.__recoilAnimators:
-            recoilAnimator.shotsPerSec = rate
-
-    def __updateBurstSounds(self, gunSoundObject=None):
-        if self.__vehicle.isPlayerVehicle:
-            gunSoundObject = gunSoundObject or getGunSoundObject(self.__vehicle)
-            clipPercent = self.__sessionProvider.shared.ammo.getClipPercentLeft()
-            gunSoundObject.setRTPC('RTPC_ext_acann_shell_remain', clipPercent * 100)
 
 
 class AutoShootGunController(BigWorld.DynamicScriptComponent):
@@ -196,11 +145,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
 
     @checkStateStatus(states=(AutoShootGunState.SHOOT,), defReturn=0.0)
     def getShootRatePerSecond(self, _):
-        spinningCtrl = self.entity.dynamicComponents.get('spinGunController', None)
-        spinningFactor = spinningCtrl.getSpinningValue() if spinningCtrl is not None else 1.0
-        temperatureCtrl = self.entity.dynamicComponents.get('temperatureGunController', None)
-        temperatureFactor = temperatureCtrl.getAutoShootRateFactor() if temperatureCtrl is not None else 1.0
-        return max(self.__defaultShootRate * spinningFactor * temperatureFactor, CLIP_MIN_RATE)
+        return self.__defaultShootRate
 
     def set_stateStatus(self, _=None):
         if self.__isAvatarReady():
@@ -228,8 +173,14 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
         return player is not None and player.userSeesWorld()
 
     def __isAppearanceReady(self):
-        appearance = self.entity.appearance
-        return appearance is not None and appearance.isConstructed
+        player = BigWorld.player()
+        if player is None or player.isDisableRespawnMode:
+            return False
+        elif not self.entity.typeDescriptor.gun.autoShoot.shotInterval:
+            return False
+        else:
+            appearance = self.entity.appearance
+            return appearance is not None and appearance.isConstructed
 
     def __isPlayerVehicle(self, player=None):
         player = player or BigWorld.player()
@@ -243,7 +194,7 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
             return
         else:
             params = self.entity.typeDescriptor.gun
-            shotInterval = params.clip[1] if params.clip[1] != 0.0 else params.reloadTime
+            shotInterval = params.autoShoot.shotInterval
             self.__defaultShootRate = 1.0 / shotInterval
             _, effects, _ = params.effects
             autoShootEffect = effects.relatedEffects.get('autoShoot', None)

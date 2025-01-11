@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/skeletons/gui/game_control.py
 import typing
 from constants import ARENA_BONUS_TYPE
+from enum import Enum
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence
+    from typing import Callable, Dict, Iterable, Iterator, List, Optional, Set, Tuple, Union, Sequence, Any
     from armory_yard.gui.game_control.armory_yard_controller import _ServerSettings
     from battle_pass_common import FinalReward
     from collections_common import Collection, CollectionItem
@@ -24,12 +25,12 @@ if typing.TYPE_CHECKING:
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
     from gui.game_control.early_access_controller import _EarlyAccessSystemMessagesController
-    from gui.impl.lobby.early_access.hangar_feature_state import EarlyAccessHangarFeatureState
     from gui.gift_system.hubs.base.hub_core import IGiftEventHub
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
     from gui.limited_ui.lui_rules_storage import LuiRules
     from gui.mapbox.mapbox_survey_manager import MapboxSurveyManager
     from gui.periodic_battles.models import AlertData, PeriodInfo, PrimeTime
+    from gui.bob.bob_requesters import TeamsRequester, TeamSkillsRequester
     from gui.prb_control.items import ValidationResult
     from gui.ranked_battles.constants import YearAwardsNames
     from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
@@ -37,7 +38,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, WebSeasonInfo
     from gui.ranked_battles.ranked_models import BattleRankInfo, Division, PostBattleRankInfo, Rank
     from gui.server_events.bonuses import BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, SimpleBonus, TokensBonus, WoTPlusBonus, SelectableBonus
-    from gui.server_events.event_items import RankedQuest, Quest
+    from gui.server_events.event_items import RankedQuest, Quest, PMOperation, PersonalMission
     from gui.shared.event_bus import SharedEvent
     from gui.shared.gui_items import Tankman, Vehicle, ItemsCollection
     from gui.shared.gui_items.artefacts import OptionalDevice
@@ -47,7 +48,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Tankman import TankmanSkill
     from gui.shared.money import Currency, DynamicMoney, Money, CURRENCY_TYPE
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig, EarlyAccessConfig, ModeSelectorConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig, EarlyAccessConfig, ModeSelectorConfig, ParagonsConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason, GameSeasonCycle
     from items.artefacts import Equipment
@@ -56,6 +57,8 @@ if typing.TYPE_CHECKING:
     from gui.entitlements.entitlement_model import AgateEntitlement
     from gui.server_events.event_items import Quest
     from gui.Scaleform.framework.entities.View import ViewKeyDynamic
+    from account_helpers.paragons import Paragons
+    from gui.game_control.paragons_controller import _ParagonsBranchesController
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
     BonusOpts = Optional[TokensBonus, SelectableBonus]
 
@@ -464,6 +467,7 @@ class IPlatoonController(IGameController):
     onMembersUpdate = None
     onPlatoonTankUpdated = None
     onPlatoonTankVisualizationChanged = None
+    onPlatoonTankVisualizationBlocked = None
     onChannelControllerChanged = None
     onAvailableTiersForSearchChanged = None
     onAutoSearchCooldownChanged = None
@@ -1728,9 +1732,6 @@ class ICraftmachineController(IGameController):
 
 class ICalendarController(IGameController):
 
-    def mustShow(self):
-        raise NotImplementedError
-
     def updateHeroAdventActionInfo(self):
         raise NotImplementedError
 
@@ -1777,52 +1778,11 @@ class IClanNotificationController(IGameController):
 
 class IFestivityController(IGameController):
     onStateChanged = None
-    onUpdateSlot = None
-    onSetHangToyEffectEnabled = None
 
     def isEnabled(self):
         raise NotImplementedError
 
-    def isPostEvent(self):
-        raise NotImplementedError
-
     def getHangarQuestsFlagData(self):
-        raise NotImplementedError
-
-    def getHangarWidgetLinkage(self):
-        raise NotImplementedError
-
-    def getHangarEdgeColor(self):
-        raise NotImplementedError
-
-    def isWidgetVisible(self, prbState, alias=None):
-        raise NotImplementedError
-
-    def isQuestEntryPointVisible(self, prbState, alias=None):
-        raise NotImplementedError
-
-    def isCreditBonusVisible(self, prbState):
-        raise NotImplementedError
-
-    def isOnboardingFinished(self):
-        raise NotImplementedError
-
-    @property
-    def tutorial(self):
-        raise NotImplementedError
-
-
-class IFestivityTutorialController(IGameController):
-    onIntroComplete = None
-
-    def shouldStartIntro(self):
-        raise NotImplementedError
-
-    @property
-    def isActive(self):
-        raise NotImplementedError
-
-    def tryStartIntro(self):
         raise NotImplementedError
 
 
@@ -2579,9 +2539,6 @@ class IGuiLootBoxesController(IGameController, IEntitlementsConsumer):
     def getGuiLootBoxByTokenID(self, tokenID):
         raise NotImplementedError
 
-    def getInfoPageURL(self, lootboxType):
-        raise NotImplementedError
-
 
 class IGuiLootBoxesIntroController(IGameController):
 
@@ -2852,6 +2809,65 @@ class ICollectiveGoalEntryPointController(IGameController):
 
 class ICollectiveGoalMarathonsController(IGameController):
     onMarathonUpdated = None
+
+
+class IUniversalFlagEntryPointController(IGameController):
+
+    class VisibilityState(str, Enum):
+        HIDDEN = 'hidden'
+        SHOWN = 'shown'
+        MAINTANANCE = 'maintenance'
+
+    class TimerIconType(str, Enum):
+        FLAG = 'flag'
+        CLOCK = 'clock'
+        NONE = 'none'
+
+    class FlagBackground(object):
+        __slots__ = ('active', 'activeHover', 'disabled', 'disabledHover')
+
+        def __init__(self):
+            self.active = ''
+            self.activeHover = ''
+            self.disabled = ''
+            self.disabledHover = ''
+
+    onDataUpdated = None
+
+    @property
+    def visibilityState(self):
+        raise NotImplementedError
+
+    @property
+    def timerTime(self):
+        raise NotImplementedError
+
+    @property
+    def timerIconType(self):
+        raise NotImplementedError
+
+    @property
+    def timerText(self):
+        raise NotImplementedError
+
+    def openEvent(self):
+        raise NotImplementedError
+
+    @property
+    def eventCaption(self):
+        raise NotImplementedError
+
+    @property
+    def eventDescription(self):
+        raise NotImplementedError
+
+    @property
+    def flagBackground(self):
+        raise NotImplementedError
+
+    @property
+    def tooltipBackground(self):
+        raise NotImplementedError
 
 
 class IFunRandomController(IGameController):
@@ -3302,6 +3318,9 @@ class IArmoryYardController(IGameController):
     def getState(self):
         raise NotImplementedError
 
+    def getRequiredVehicleTypeAndLevelsForQuest(self, questID):
+        raise NotImplementedError
+
     def update(self):
         raise NotImplementedError
 
@@ -3742,6 +3761,16 @@ class IModeSelectorController(IGameController):
         raise NotImplementedError
 
 
+class IHangarFeatureStateController(IGameController):
+    cgfCameraManager = None
+
+    def enter(self, layoutID, doHideHeader=True):
+        raise NotImplementedError
+
+    def exit(self, layoutID):
+        raise NotImplementedError
+
+
 class IEarlyAccessController(IGameController, ISeasonProvider):
     onQuestsUpdated = None
     onBalanceUpdated = None
@@ -3756,10 +3785,6 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
 
     @property
     def sysMessageController(self):
-        raise NotImplementedError
-
-    @property
-    def hangarFeatureState(self):
         raise NotImplementedError
 
     @staticmethod
@@ -3897,4 +3922,449 @@ class IVersusAIController(IGameController):
         raise NotImplementedError
 
     def shouldBeDefaultMode(self):
+        raise NotImplementedError
+
+
+class ILobbyCdnController(IGameController):
+    onSynced = None
+
+    def resolveCdnImage(self, url):
+        raise NotImplementedError
+
+
+class IPersonalMissionsController(IGameController):
+    onQuestsUpdated = None
+    onUpdated = None
+    cgfCameraManager = None
+    onItemCacheUpdated = None
+    sysMessageController = None
+    onRewardsViewClose = None
+
+    def fini(self):
+        raise NotImplementedError
+
+    def getPreviousOperationName(self, currentOperationId):
+        raise NotImplementedError
+
+    def getMinMaxVehicleLevelForOperation(self, operation):
+        raise NotImplementedError
+
+    def getOperationChainsData(self, operation):
+        raise NotImplementedError
+
+    def getMainBadgesForOperation(self, operation):
+        raise NotImplementedError
+
+    def onLobbyInited(self, event):
+        raise NotImplementedError
+
+    def getAddBadgesForOperation(self, operation):
+        raise NotImplementedError
+
+    def getPrevQuestId(self, currentQuestId):
+        raise NotImplementedError
+
+    def getNextQuestId(self, currentQuestId):
+        raise NotImplementedError
+
+    def getLinesIdsByChainAndOperationId(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getQuestsChainsByOperationId(self, operationId):
+        raise NotImplementedError
+
+    def getCompletedQuestsByChainAndOperationId(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getQuestsByChainAndOperationId(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getFinalQuestsByChainAndOperationId(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getInitialQuestsByChainAndOperationId(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getOperationById(self, operationId):
+        raise NotImplementedError
+
+    def getQuestFromGeneralID(self, generalID):
+        raise NotImplementedError
+
+    def getOperations(self):
+        raise NotImplementedError
+
+    def getFinalQuests(self):
+        raise NotImplementedError
+
+    def getAllQuests(self):
+        raise NotImplementedError
+
+    def getQuest(self, questId):
+        raise NotImplementedError
+
+    def getQuestsByOperationId(self, operationId):
+        raise NotImplementedError
+
+    def getCompletedQuestsByOperationId(self, operationId):
+        raise NotImplementedError
+
+    def getFullCompletedQuestsByOperationId(self, operationId):
+        raise NotImplementedError
+
+    def getSelectedQuestForChain(self, chainId, operationId):
+        raise NotImplementedError
+
+
+class IBobController(IGameController, ISeasonProvider):
+    onPrimeTimeStatusUpdated = None
+    onUpdated = None
+    onTokensUpdated = None
+
+    @property
+    def teamTokens(self):
+        raise NotImplementedError
+
+    @property
+    def leaderTokens(self):
+        raise NotImplementedError
+
+    @property
+    def pointsToken(self):
+        raise NotImplementedError
+
+    @property
+    def tokenToClaimPersonalReward(self):
+        raise NotImplementedError
+
+    @property
+    def personalRewardQuestName(self):
+        raise NotImplementedError
+
+    @property
+    def teamRewardQuestPrefix(self):
+        raise NotImplementedError
+
+    @property
+    def personalLevel(self):
+        raise NotImplementedError
+
+    @property
+    def lactOpenedBobUrl(self):
+        raise NotImplementedError
+
+    @lactOpenedBobUrl.setter
+    def lactOpenedBobUrl(self, value):
+        raise NotImplementedError
+
+    @property
+    def leaderTokenFirstType(self):
+        return NotImplementedError
+
+    @property
+    def teamsChannelName(self):
+        return NotImplementedError
+
+    @property
+    def teamSkillsChannelName(self):
+        return NotImplementedError
+
+    @property
+    def teamsRequester(self):
+        return NotImplementedError
+
+    @property
+    def teamSkillsRequester(self):
+        return NotImplementedError
+
+    @property
+    def battleModifiers(self):
+        raise NotImplementedError
+
+    def isBattleModifiersAvailable(self):
+        raise NotImplementedError
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isModeActive(self):
+        raise NotImplementedError
+
+    def isRegistrationEnabled(self):
+        raise NotImplementedError
+
+    def isRegistrationPeriodEnabled(self):
+        raise NotImplementedError
+
+    def isPostEventTime(self):
+        raise NotImplementedError
+
+    def isRegistered(self):
+        raise NotImplementedError
+
+    def isPaused(self):
+        raise NotImplementedError
+
+    def isPlayerBlogger(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def isValidBattleType(self):
+        raise NotImplementedError
+
+    def isBobPointsToken(self, tokenID):
+        raise NotImplementedError
+
+    def isAllZeroScore(self):
+        raise NotImplementedError
+
+    def needShowEventTab(self):
+        raise NotImplementedError
+
+    def getConfig(self):
+        raise NotImplementedError
+
+    def getCurrentTeamID(self):
+        raise NotImplementedError
+
+    def getPrimeTimes(self):
+        raise NotImplementedError
+
+    def hasAvailablePrimeTimeServers(self):
+        raise NotImplementedError
+
+    def hasAnyPeripheryWithPrimeTime(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        raise NotImplementedError
+
+    def getPrimeTimeStatus(self, peripheryID=None):
+        raise NotImplementedError
+
+    def claimReward(self, token, callback=None):
+        raise NotImplementedError
+
+    def getAvailablePersonalRewardCount(self):
+        raise NotImplementedError
+
+    def getTeamLevelTokensCount(self):
+        raise NotImplementedError
+
+    def getPlayerPoints(self):
+        raise NotImplementedError
+
+    def getReceivedTeamRewards(self):
+        raise NotImplementedError
+
+    def isFrozen(self):
+        raise NotImplementedError
+
+    def getTimeTillRegistrationStartOrEnd(self):
+        raise NotImplementedError
+
+
+class IBobAnnouncementController(IGameController):
+    onAnnouncementUpdated = None
+
+    @property
+    def currentAnnouncement(self):
+        raise NotImplementedError
+
+    def clickAnnouncement(self):
+        raise NotImplementedError
+
+
+class IBobSoundController(IGameController):
+
+    def onStylePreviewOpen(self):
+        raise NotImplementedError
+
+    def onStylePreviewClose(self):
+        raise NotImplementedError
+
+
+class IParagonsController(IGameController, IEntitlementsConsumer):
+    onSettingsChanged = None
+    onAvailabilityChanged = None
+    onLevelIncreased = None
+    onProgressPointsChanged = None
+    onFeatureStateChanged = None
+    onParagonsUnlocksChanged = None
+    onParagonsStateChanged = None
+    onParagonsUnlocksStateChanged = None
+    onSelectedRewardMarked = None
+    onSelectedRewardTokenReceived = None
+
+    @property
+    def serverSettings(self):
+        raise NotImplementedError
+
+    @property
+    def isConsumesEntitlements(self):
+        raise NotImplementedError
+
+    @property
+    def paragons(self):
+        raise NotImplementedError
+
+    @property
+    def branches(self):
+        raise NotImplementedError
+
+    @property
+    def config(self):
+        raise NotImplementedError
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isPaused(self):
+        raise NotImplementedError
+
+    @property
+    def isAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def wasEverAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def isLimitedUiRuleCompleted(self):
+        raise NotImplementedError
+
+    @property
+    def isEnabledAndAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def chapterID(self):
+        raise NotImplementedError
+
+    @property
+    def availableChapters(self):
+        raise NotImplementedError
+
+    @property
+    def isAnyChapterAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def progress(self):
+        raise NotImplementedError
+
+    @property
+    def level(self):
+        raise NotImplementedError
+
+    @property
+    def minUnlockedNecessaryLevelVehiclesCount(self):
+        raise NotImplementedError
+
+    @property
+    def unlockedNecessaryLevelVehicleCDs(self):
+        raise NotImplementedError
+
+    @property
+    def unlockedNecessaryLevelVehiclesCount(self):
+        raise NotImplementedError
+
+    @property
+    def paragonsUnlockIDs(self):
+        raise NotImplementedError
+
+    @property
+    def lockedItems(self):
+        raise NotImplementedError
+
+    @property
+    def resetVehicles(self):
+        raise NotImplementedError
+
+    @property
+    def allChapterIDs(self):
+        return NotImplementedError
+
+    @property
+    def availableChapterIDs(self):
+        return NotImplementedError
+
+    @property
+    def completedChapterIDs(self):
+        return NotImplementedError
+
+    def getFirstChapterWithAvailableRewards(self):
+        return NotImplementedError
+
+    def isAllSelectablesClaimed(self):
+        return NotImplementedError
+
+    def getSelectedRewardCountInChapter(self, chapterID, entCode):
+        return NotImplementedError
+
+    def getSelectedRewardPositionInOrder(self, chapterID, levelID, entCode):
+        return NotImplementedError
+
+    def getSelectedRewardTokenID(self, chapterID, levelID, entCode):
+        return NotImplementedError
+
+    def getSelectedRewardsReceivedTokens(self, entCode):
+        return NotImplementedError
+
+    def isVehicleReset(self, compDescr):
+        raise NotImplementedError
+
+    def isChapterComplete(self, chapterID=None):
+        return NotImplementedError
+
+    def isItemLocked(self, compDescr):
+        raise NotImplementedError
+
+    def setChapter(self, chapterID, callback=None):
+        raise NotImplementedError
+
+    def getDefaultVehicleProgressPoints(self, vehicleLevel):
+        raise NotImplementedError
+
+    def getVehicleProgressPoints(self, compDescr):
+        raise NotImplementedError
+
+    def getVehicleProgressPointsMultiplier(self, compDescr):
+        raise NotImplementedError
+
+    def getVehicleResetBonusBlueprintsCount(self, compDescr):
+        raise NotImplementedError
+
+    def getBranchResetVehicles(self, branchID):
+        raise NotImplementedError
+
+    def getMaxLevelVehicles(self):
+        raise NotImplementedError
+
+    def getHiddenUIItems(self):
+        raise NotImplementedError
+
+
+class IParagonsRewardsShopController(IGameController):
+    onSelectableRewardReceived = None
+
+    def getProducts(self):
+        raise NotImplementedError
+
+    def buyProduct(self, productCode):
+        raise NotImplementedError
+
+    def fetchProducts(self, callback=lambda x: x):
+        raise NotImplementedError
+
+    @property
+    def entitlements(self):
+        raise NotImplementedError
+
+    def selectableRewardReceived(self, data):
         raise NotImplementedError

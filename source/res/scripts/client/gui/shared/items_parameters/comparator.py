@@ -7,7 +7,7 @@ from constants import BonusTypes
 from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import params_cache
 from shared_utils import first
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_RELOAD_TIME
 if typing.TYPE_CHECKING:
     from gui.shared.items_parameters.params import _PenaltyInfo
 BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
@@ -56,7 +56,12 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  DUAL_GUN_RATE_TIME,
  DUAL_ACCURACY_COOLING_DELAY,
  KPI.Name.ART_NOTIFICATION_DELAY_FACTOR,
- KPI.Name.DAMAGED_MODULES_DETECTION_TIME])
+ KPI.Name.DAMAGED_MODULES_DETECTION_TIME,
+ AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME,
+ AUTOSHOOT_FLAME_CHANGE_SHELL_TIME,
+ AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME,
+ THERMAL_VISION_OBSERVE_TIME,
+ THERMAL_VISION_RELOAD_TIME])
 PARAMS_WITH_BATTLE_MODIFIERS = {'maxHealth': {'vehicleHealth'}}
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime', CHASSIS_REPAIR_TIME]
 PARAMS_WITH_IGNORED_EMPTY_VALUES = {SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME}
@@ -274,18 +279,21 @@ CONDITIONAL_BONUSES = {('invisibilityMovingFactor',
                                                                                                  ('deluxImprovedConfiguration', BonusTypes.OPTIONAL_DEVICE),
                                                                                                  ('trophyBasicImprovedConfiguration', BonusTypes.OPTIONAL_DEVICE),
                                                                                                  ('trophyUpgradedImprovedConfiguration', BonusTypes.OPTIONAL_DEVICE))},
- ('reloadTime', 'reloadTimeSecs', 'avgDamagePerMinute'): {(('improvedVentilationBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                               ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                               ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                               ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                               ('trophyBasicImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                               ('trophyUpgradedImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)),
-                                                          (('rammerBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('tankRammer_tier1', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                  ('tankRammer_tier2', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                  ('tankRammer_tier3', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                  ('deluxRammer', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                  ('trophyBasicTankRammer', BonusTypes.OPTIONAL_DEVICE),
-                                                                                                                  ('trophyUpgradedTankRammer', BonusTypes.OPTIONAL_DEVICE))},
+ ('reloadTime',
+ 'reloadTimeSecs',
+ 'avgDamagePerMinute',
+ AUTOSHOOT_FLAME_CHANGE_SHELL_TIME): {(('improvedVentilationBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                                     ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                                     ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                                     ('deluxImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                                     ('trophyBasicImprovedVentilation', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                                     ('trophyUpgradedImprovedVentilation', BonusTypes.OPTIONAL_DEVICE)),
+                                                                                                (('rammerBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('tankRammer_tier1', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                        ('tankRammer_tier2', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                        ('tankRammer_tier3', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                        ('deluxRammer', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                        ('trophyBasicTankRammer', BonusTypes.OPTIONAL_DEVICE),
+                                                                                                                                                        ('trophyUpgradedTankRammer', BonusTypes.OPTIONAL_DEVICE))},
  ('clipFireRate', 'autoReloadTime', 'dualAccuracyCoolingDelay'): {(('improvedVentilationBattleBooster', BonusTypes.BATTLE_BOOSTER),): (('improvedVentilation_tier1', BonusTypes.OPTIONAL_DEVICE),
                                                                                                                                        ('improvedVentilation_tier2', BonusTypes.OPTIONAL_DEVICE),
                                                                                                                                        ('improvedVentilation_tier3', BonusTypes.OPTIONAL_DEVICE),

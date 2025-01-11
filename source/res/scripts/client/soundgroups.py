@@ -32,6 +32,13 @@ MASTER_VOLUME_DEFAULT = 0.5
 OFF_POSTFIX = '_off'
 DEFAULT_SIX_SENSE = 'lightbulb'
 CUSTOM_MP3_EVENTS = ('sixthSense', 'soundExploring', 'sixthSense' + OFF_POSTFIX)
+USER_SETTINGS_CATEGORY_NAMES = ('gui',
+ 'vehicles',
+ 'voice',
+ 'effects',
+ 'ambient',
+ 'music',
+ 'music_hangar')
 
 class CREW_GENDER_SWITCHES(object):
     GROUP = 'SWITCH_ext_vo_gender'
@@ -424,8 +431,19 @@ class SoundGroups(object):
             self.onMusicVolumeChanged(categoryName, self.__masterVolume, self.getVolume(categoryName))
         self.onVolumeChanged(categoryName, volume)
 
+    def setRTPC(self, name, level):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: setRTPC', name, level)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
+        return WWISE.WW_setRTPCBus(name, level * 100.0)
+
     def getVolume(self, categoryName):
         return self.__volumeByCategory[categoryName]
+
+    def getMaxVolumeFromCategories(self, categoryNames):
+        return max((self.__volumeByCategory.get(key, 0.0) for key in categoryNames))
 
     def savePreferences(self):
         ds = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES]
@@ -640,7 +658,20 @@ class SoundGroups(object):
         return
 
     def setSwitch(self, group, switch):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: setSwitch', group, switch)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
         WWISE.WW_setSwitch(group, switch)
 
     def setState(self, stateName, stateValue):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: setState', stateName, stateValue)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
         WWISE.WW_setState(stateName, stateValue)
+
+    def setRTCPGlobal(self, group, value):
+        WWISE.WW_setRTCPGlobal(group, value)

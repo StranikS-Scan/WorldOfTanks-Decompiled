@@ -1,20 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/listeners.py
+import copy
 import json
+import logging
 import time
 import datetime
 import weakref
-import logging
 from collections import defaultdict
 from functools import partial
 from typing import TYPE_CHECKING, Tuple
 import WWISE
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess
+from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_MARATHON_STARTED, TRADING_CARAVAN_NOTIFICATIONS, PROGRESSIVE_REWARD_VISITED, RESOURCE_WELL_END_SHOWN, RESOURCE_WELL_NOTIFICATIONS, RESOURCE_WELL_START_SHOWN, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, ArmoryYard, REFERRAL_PROGRAM_PGB_FULL, BIRTHDAY_2023_INTRO_SHOWN, SUBSCRIPTION_LAST_EXPIRATION_NOTIFICATION, BattleMatters, EarlyAccess, Paragons
 from adisp import adisp_process
 from armory_yard.gui.shared.formatters import formatSpentCurrencies, formatPurchaseItems, formatBundlePurchase
 from armory_yard_constants import State
+from personal_missions import PM_BRANCH
+from paragons_helpers import pushParagonsBranchIsUnavalableMessage, pushParagonsBranchIsAvalableMessage, pushParagonsEnableMessage, pushParagonsContinuingMessage, pushParagonsBranchResetAvailableMessage, pushParagonsNewStageAvailableMessage, pushParagonsDisableMessage
 from renewable_subscription_common.settings_constants import WotPlusState
 from early_access_common import EARLY_ACCESS_POSTPR_KEY
 from battle_pass_common import FinalReward
@@ -63,15 +66,15 @@ from helpers.time_utils import getTimestampByStrDate
 from messenger import MessengerEntry
 from messenger.formatters import TimeFormatter
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_ID
-from ids_generators import SequenceIDGenerator
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from nations import AVAILABLE_NAMES
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, PsaCoinReminderMessageDecorator, GiftSystemOperationsFactory, EarlyAccessDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, WGNCPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
+from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IArmoryYardShopController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectionsSystemController, IEventsNotificationsController, IGameSessionController, ILimitedUIController, IResourceWellController, ISeniorityAwardsController, ISteamCompletionController, IArmoryYardController, IReferralProgramController, IWotPlusController, IEarlyAccessController, IArmoryYardShopController, IParagonsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -82,7 +85,6 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 from tutorial.control.game_vars import getVehicleByIntCD
 from wg_async import wg_async, wg_await
-from shared_utils import first
 if TYPE_CHECKING:
     from typing import List, Dict, Optional, Any, Type
     from notification.NotificationsModel import NotificationsModel
@@ -2068,7 +2070,9 @@ class ArmoryYardListener(_NotificationListener):
 
     def __onShopPurchaseComplete(self, productId, currencies, rewards, isBundle):
         SystemMessages.pushMessage(text=backport.text(R.strings.armory_shop.notifications.financialTransaction(), date=TimeFormatter.getLongDatetimeFormat(time.time()), currencies=formatSpentCurrencies(currencies)), type=self.__getShopPurchaseSMType(currencies), priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.currencyUpdate.financial_transaction())})
-        SystemMessages.pushMessage(text=formatBundlePurchase(productId, rewards) if isBundle else formatPurchaseItems(rewards), type=SystemMessages.SM_TYPE.InformationHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.purchase())})
+        text = formatBundlePurchase(productId, rewards) if isBundle else formatPurchaseItems(rewards)
+        smType = SystemMessages.SM_TYPE.ArmoryYardBundlePurchase if isBundle else SystemMessages.SM_TYPE.InformationHeader
+        SystemMessages.pushMessage(text=text, type=smType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.titles.purchase())})
 
     def __payed(self, isPostProgression, count, price=None, currency=Currency.GOLD):
         bodySection = self.ARMORY_YARD_TEXT.postPayed if isPostProgression else self.ARMORY_YARD_TEXT.payed
@@ -2337,112 +2341,6 @@ class Birthday2023Listener(_NotificationListener):
                 showBirthday2023Intro()
 
 
-class PsaCoinReminderListener(_NotificationListener):
-    __bootCampController = dependency.descriptor(IBootcampController)
-    __saCtrl = dependency.descriptor(ISeniorityAwardsController)
-    __itemsCache = dependency.descriptor(IItemsCache)
-    MSG_ID = 0
-
-    def start(self, model):
-        result = super(PsaCoinReminderListener, self).start(model)
-        if result:
-            self.__saCtrl.onUpdated += self.__tryNotify
-            self.__itemsCache.onSyncCompleted += self.__tryNotify
-            self.__tryNotify()
-        return result
-
-    def stop(self):
-        super(PsaCoinReminderListener, self).stop()
-        self.__saCtrl.onUpdated -= self.__tryNotify
-        self.__itemsCache.onSyncCompleted -= self.__tryNotify
-
-    def __tryNotify(self, *_):
-        if self.__bootCampController.isInBootcamp():
-            return
-        coinsCount = self.__saCtrl.getSACoin()
-        if not self.__saCtrl.isEnabled or coinsCount <= 0:
-            self.__onCoinsRemoved()
-        else:
-            msgPrLevel = NotificationPriorityLevel.LOW
-            notification = PsaCoinReminderMessageDecorator(self.MSG_ID, coinsCount, msgPrLevel)
-            self.__onCoinsAdded(notification)
-
-    def __onCoinsAdded(self, newNotification):
-        model = self._model()
-        if model:
-            prevNotifacation = model.getNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID())
-            if prevNotifacation is None:
-                model.addNotification(newNotification)
-            else:
-                savedCount = newNotification.getSavedData()
-                prevSavedCount = prevNotifacation.getSavedData()
-                if prevSavedCount != savedCount:
-                    model.updateNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, newNotification.getID(), newNotification.getEntity(), False)
-        return
-
-    def __onCoinsRemoved(self):
-        model = self._model()
-        if model:
-            model.removeNotification(NOTIFICATION_TYPE.PSACOIN_REMINDER, self.MSG_ID)
-
-
-class GiftSystemOperationsListener(_NotificationListener, UsersInfoHelper):
-    __NOTIFICATION_TYPE = NOTIFICATION_TYPE.GIFT_SYSTEM_OPERATION
-
-    def __init__(self):
-        super(GiftSystemOperationsListener, self).__init__()
-        self.__idGenerator = SequenceIDGenerator()
-        self.__userNamePendingNotifications = defaultdict(set)
-
-    def start(self, model):
-        result = super(GiftSystemOperationsListener, self).start(model)
-        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
-        g_eventBus.addListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
-        return result
-
-    def stop(self):
-        self.__userNamePendingNotifications.clear()
-        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_SENT, self.__onGiftSent)
-        g_eventBus.removeListener(events.GiftSystemOperationEvent.GIFT_OPENED, self.__onGiftOpened)
-        super(GiftSystemOperationsListener, self).stop()
-
-    def onUserNamesReceived(self, names):
-        model = self._model()
-        if not model:
-            return
-        for userDBID, userName in names.iteritems():
-            if userDBID not in self.__userNamePendingNotifications:
-                continue
-            for entityID in self.__userNamePendingNotifications[userDBID]:
-                operationDecorator = model.getNotification(self.__NOTIFICATION_TYPE, entityID)
-                if not operationDecorator:
-                    continue
-                operationDecorator.setUserInfo(userName)
-                model.updateNotification(self.__NOTIFICATION_TYPE, entityID, operationDecorator.getEntity(), False)
-
-            self.__userNamePendingNotifications[userDBID] = set()
-
-    def __onGiftOpened(self, event):
-        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftOpenedDecorator, event.ctx)
-
-    def __onGiftSent(self, event):
-        self.__addOperationNofication(GiftSystemOperationsFactory.createGiftSentDecorator, event.ctx)
-
-    def __addOperationNofication(self, factory, ctx):
-        model = self._model()
-        if not model:
-            return
-        notification = factory(self.__idGenerator.next(), model, ctx)
-        userName = self.getUserName(notification.getUserID())
-        if userName:
-            notification.initUserInfo(userName, self.getUserClanAbbrev(notification.getUserID()))
-        else:
-            self.__userNamePendingNotifications[notification.getUserID()].add(notification.getID())
-            self.syncUsersInfo()
-        if notification:
-            model.addNotification(notification)
-
-
 class EarlyAccessListener(_NotificationListener):
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -2577,6 +2475,198 @@ class EarlyAccessListener(_NotificationListener):
         self.__onQuestsUpdated()
 
 
+class PersonalMissionsListener(_NotificationListener):
+    __SWITCH_KEY_PM1 = 'isRegularQuestEnabled'
+    __SWITCH_KEY_PM2 = 'isPM2QuestEnabled'
+    __SWITCH_KEY_PM3 = 'isPM3QuestEnabled'
+    __lobbyContext = dependency.descriptor(ILobbyContext)
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self):
+        super(PersonalMissionsListener, self).__init__()
+        self.__disabledPMOperations = {}
+        self.__disabledPersonalMissions = {}
+
+    def start(self, model):
+        result = super(PersonalMissionsListener, self).start(model)
+        self.__updateCachedData()
+        self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged
+        return result
+
+    def stop(self):
+        self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onSettingsChanged
+        self.__disabledPMOperations = {}
+        self.__disabledPersonalMissions = {}
+        super(PersonalMissionsListener, self).stop()
+
+    def __updateCachedData(self):
+        serverSettings = self.__lobbyContext.getServerSettings()
+        self.__disabledPMOperations = copy.copy(serverSettings.getDisabledPMOperations())
+        self.__disabledPersonalMissions = copy.copy(serverSettings.getDisabledPersonalMissions())
+
+    def __onSettingsChanged(self, diff):
+        for switchKey in (self.__SWITCH_KEY_PM1, self.__SWITCH_KEY_PM2, self.__SWITCH_KEY_PM3):
+            if switchKey in diff:
+                self.__pushCampaignMessage(switchKey, diff[switchKey])
+
+        if 'disabledPMOperations' in diff:
+            disabledOPs = set(diff['disabledPMOperations'].keys())
+            oldDisabledOPs = set(self.__disabledPMOperations.keys())
+            newDisabledOPs = disabledOPs - oldDisabledOPs
+            newEnabledOPs = oldDisabledOPs - disabledOPs
+            for opID in newDisabledOPs:
+                self.__pushOperationMessage(opID, False)
+
+            for opID in newEnabledOPs:
+                self.__pushOperationMessage(opID, True)
+
+        if 'disabledPersonalMissions' in diff:
+            disabledQuests = set(diff['disabledPersonalMissions'].keys())
+            oldDisabledQuests = set(self.__disabledPersonalMissions.keys())
+            newDisabledQuests = disabledQuests - oldDisabledQuests
+            for branch in PM_BRANCH.ACTIVE_BRANCHES:
+                selectedBranchQuests = self.__eventsCache.getPersonalMissions().getSelectedQuestsForBranch(branch)
+                for qID, selectedQuest in selectedBranchQuests.iteritems():
+                    if qID in newDisabledQuests:
+                        self.__pushQuestMessage(selectedQuest, selectedBranchQuests)
+
+        self.__updateCachedData()
+
+    def __pushCampaignMessage(self, switchKey, isEnabled):
+        campaignKey = None
+        if switchKey == self.__SWITCH_KEY_PM1:
+            campaignKey = 1
+        elif switchKey == self.__SWITCH_KEY_PM2:
+            campaignKey = 2
+        elif switchKey == self.__SWITCH_KEY_PM3:
+            campaignKey = 3
+        campaignRes = R.strings.system_messages.personalMissions.switch.campaign
+        smType = SM_TYPE.InformationHeader if isEnabled else SM_TYPE.ErrorHeader
+        text = backport.text(campaignRes.enabled()) if isEnabled else backport.text(campaignRes.disabled())
+        campaignTitle = backport.text(R.strings.personal_missions.campaignTitle.dyn('c_{}'.format(campaignKey))())
+        SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, type=smType, text=text, messageData={'header': backport.text(campaignRes.header(), campaignTitle=campaignTitle)})
+        return
+
+    def __pushOperationMessage(self, operationID, isEnabled):
+        operationRes = R.strings.system_messages.personalMissions.switch.operation
+        smType = SM_TYPE.InformationHeader if isEnabled else SM_TYPE.ErrorHeader
+        text = backport.text(operationRes.enabled()) if isEnabled else backport.text(operationRes.disabled())
+        operationTitle = backport.text(R.strings.personal_missions.operations.dyn('title%s' % operationID)())
+        SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, type=smType, text=text, messageData={'header': backport.text(operationRes.header(), operationTitle=operationTitle)})
+
+    def __pushQuestMessage(self, disabledQuest, selectedCampaignQuests):
+        questRes = R.strings.system_messages.personalMissions.switch.quest
+        questTitle = disabledQuest.getUserName()
+        selectedQuestTitles = ', '.join([ quest.getUserName() for quest in selectedCampaignQuests.itervalues() ])
+        text = backport.text(questRes.disabled(), questTitle=questTitle, selectedQuestTitles=selectedQuestTitles)
+        SystemMessages.pushMessage(priority=NotificationPriorityLevel.MEDIUM, type=SM_TYPE.WarningHeader, text=text, messageData={'header': backport.text(questRes.header(), questTitle=questTitle)})
+
+
+class ParagonsListener(_NotificationListener):
+    __paragonsController = dependency.descriptor(IParagonsController)
+    __luiController = dependency.descriptor(ILimitedUIController)
+
+    def start(self, model):
+        result = super(ParagonsListener, self).start(model)
+        if not AccountSettings.getSettings(Paragons.PROJECT_IS_ENABLED_NOTIFICATION_WAS_SHOWN) and not AccountSettings.getSettings(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN) and not self.__isPaused and self.__isEnabled:
+            AccountSettings.setParagons(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN, True)
+        self.__onProjectEnabledOrContinued(None)
+        self.__subscribe()
+        return result
+
+    def stop(self):
+        self.__unsubscribe()
+        super(ParagonsListener, self).stop()
+
+    def __subscribe(self):
+        self.__luiController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__updateIsLimitedUiRuleCompleted)
+        self.__paragonsController.onSettingsChanged += self.__onProjectEnabledOrContinued
+        self.__paragonsController.onSettingsChanged += self.__onProjectDisabledOrPaused
+        self.__paragonsController.branches.onResettableBranchesChanged += self.__onResettableBranchAvailable
+        self.__paragonsController.onParagonsUnlocksStateChanged += self.__onParagonsUnlocksStateChanged
+
+    def __unsubscribe(self):
+        self.__luiController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__updateIsLimitedUiRuleCompleted)
+        self.__paragonsController.onSettingsChanged -= self.__onProjectEnabledOrContinued
+        self.__paragonsController.onSettingsChanged -= self.__onProjectDisabledOrPaused
+        self.__paragonsController.branches.onResettableBranchesChanged -= self.__onResettableBranchAvailable
+        self.__paragonsController.onParagonsUnlocksStateChanged -= self.__onParagonsUnlocksStateChanged
+
+    def __onParagonsUnlocksStateChanged(self, branchStates):
+        for _, branchState in branchStates.iteritems():
+            if branchState:
+                pushParagonsBranchIsAvalableMessage()
+            pushParagonsBranchIsUnavalableMessage()
+
+    def __updateIsLimitedUiRuleCompleted(self, *_):
+        self.__onProjectEnabledOrContinued(None)
+        self.__onProjectDisabledOrPaused(None)
+        return
+
+    @property
+    def __isPaused(self):
+        return self.__paragonsController.isPaused
+
+    @property
+    def __isEnabled(self):
+        return self.__paragonsController.isEnabled
+
+    @property
+    def __isPausedOrLimitedUiIsNotCompleted(self):
+        return self.__isPaused or not self.__paragonsController.isLimitedUiRuleCompleted
+
+    @property
+    def __isParagonsInvisible(self):
+        return not self.__isEnabled or self.__isPausedOrLimitedUiIsNotCompleted
+
+    def __onProjectEnabledOrContinued(self, diff):
+        projectIsContinuingWasShown = AccountSettings.getParagons(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN)
+        if projectIsContinuingWasShown and self.__isPaused:
+            AccountSettings.setParagons(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN, False)
+            return
+        projectIsEnabledWasShown = AccountSettings.getParagons(Paragons.PROJECT_IS_ENABLED_NOTIFICATION_WAS_SHOWN)
+        if self.__isParagonsInvisible or projectIsEnabledWasShown and projectIsContinuingWasShown:
+            return
+        if not projectIsEnabledWasShown:
+            AccountSettings.setParagons(Paragons.PROJECT_IS_ENABLED_NOTIFICATION_WAS_SHOWN, True)
+            pushParagonsEnableMessage()
+            return
+        if not projectIsContinuingWasShown:
+            AccountSettings.setParagons(Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN, True)
+            pushParagonsContinuingMessage()
+            return
+        self.__onNewStageAvailable(diff)
+
+    def __onProjectDisabledOrPaused(self, _):
+        if not self.__isParagonsInvisible and AccountSettings.getParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN):
+            AccountSettings.setParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN, False)
+            return
+        if self.__isParagonsInvisible and not AccountSettings.getParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN):
+            pushParagonsDisableMessage()
+            AccountSettings.setParagons(Paragons.PROJECT_IS_DISABLED_NOTIFICATION_WAS_SHOWN, True)
+            return
+
+    def __onResettableBranchAvailable(self, resetableBranchIds):
+        if self.__isParagonsInvisible:
+            return
+        if not resetableBranchIds:
+            AccountSettings.setParagons(Paragons.BRANCH_RESET_AVAILABILITY_NOTIFICATION_WAS_SHOWN, False)
+            return
+        if AccountSettings.getParagons(Paragons.BRANCH_RESET_AVAILABILITY_NOTIFICATION_WAS_SHOWN):
+            return
+        AccountSettings.setParagons(Paragons.BRANCH_RESET_AVAILABILITY_NOTIFICATION_WAS_SHOWN, True)
+        pushParagonsBranchResetAvailableMessage()
+
+    def __onNewStageAvailable(self, _):
+        charapterCounter = len(self.__paragonsController.allChapterIDs)
+        if self.__isParagonsInvisible or AccountSettings.getParagons(Paragons.CHAPTER_COUNTER) >= charapterCounter:
+            return
+        AccountSettings.setParagons(Paragons.CHAPTER_COUNTER, charapterCounter)
+        if charapterCounter <= 1:
+            return
+        pushParagonsNewStageAvailableMessage()
+
+
 registerNotificationsListeners((ServiceChannelListener,
  MissingEventsListener,
  PrbInvitesListener,
@@ -2603,7 +2693,9 @@ registerNotificationsListeners((ServiceChannelListener,
  BattleMattersTaskReminderListener,
  TradingCaravanListener,
  SubscriptionListener,
- EarlyAccessListener))
+ EarlyAccessListener,
+ PersonalMissionsListener,
+ ParagonsListener))
 
 class NotificationsListeners(_NotificationListener):
 

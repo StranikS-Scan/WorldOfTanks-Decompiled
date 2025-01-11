@@ -29,8 +29,7 @@ class ArenaSyncObject(object):
     def synchronize(self, isFullSync, diff):
         if isFullSync:
             self.__cache.clear()
-        changeList = {}
-        changeList[''] = diff
+        changeList = {'': diff}
         synchronizeDicts(diff, self.__cache, '', changeList, AttributeDict)
         self.__processChangeList(changeList)
 

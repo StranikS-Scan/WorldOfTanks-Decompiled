@@ -21,6 +21,7 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
+    from gui.Scaleform.daapi.view.battle.shared.indicator_items.thermal_vision import ThermalVisionIndicator
     from gui.Scaleform.daapi.view.battle.shared import damage_info_panel
     from gui.Scaleform.daapi.view.battle.shared import debug_panel
     from gui.Scaleform.daapi.view.battle.shared import indicators
@@ -49,7 +50,8 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.CALLOUT_PANEL, callout_panel.CalloutPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_NOTIFIER, battle_notifier.BattleNotifier, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.ROCKET_ACCELERATOR_INDICATOR, indicators.RocketAcceleratorIndicator, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.PERSONAL_RESERVES_TAB, personal_reserves_tab.PersonalReservesTab, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.PERSONAL_RESERVES_TAB, personal_reserves_tab.PersonalReservesTab, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.THERMAL_VISION_INDICATOR, ThermalVisionIndicator, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

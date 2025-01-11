@@ -1073,6 +1073,7 @@
                   <wheelName>	W_L6	</wheelName>
                   <wheelName>	W_L5	</wheelName>
                   <wheelName>	W_L4	</wheelName>
+                  <isGroudGroup>	true	</isGroudGroup>
                   <groupRadius>	0.28	</groupRadius>
                   <groupInnerOffset>	0.389959	</groupInnerOffset>
                   <groupOuterOffset>	-0.289959	</groupOuterOffset>
@@ -1150,6 +1151,7 @@
                   <groupRadius>	0.28	</groupRadius>
                   <groupInnerOffset>	-0.389959	</groupInnerOffset>
                   <groupOuterOffset>	0.289959	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R6	</wheelName>
@@ -1230,6 +1232,7 @@
                   <groupRadius>	0.28	</groupRadius>
                   <groupInnerOffset>	0.389959	</groupInnerOffset>
                   <groupOuterOffset>	-0.289959	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_L2	</wheelName>
@@ -1304,6 +1307,7 @@
                   <groupRadius>	0.28	</groupRadius>
                   <groupInnerOffset>	-0.389959	</groupInnerOffset>
                   <groupOuterOffset>	0.289959	</groupOuterOffset>
+                  <isGroudGroup>	true	</isGroudGroup>
                 </wheelGroup>
                 <wheelGroup>
                   <wheelName>	WD_R2	</wheelName>
@@ -1384,9 +1388,6 @@
           <radius>	0.35	</radius>
           <startIndex>	0	</startIndex>
           <count>	4	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <geometry>
             <radius>	0.35	</radius>
           </geometry>
@@ -1409,9 +1410,6 @@
           <radius>	0.35	</radius>
           <startIndex>	0	</startIndex>
           <count>	4	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <geometry>
             <radius>	0.35	</radius>
           </geometry>
@@ -1476,9 +1474,6 @@
           <radius>	0.35	</radius>
           <startIndex>	4	</startIndex>
           <count>	4	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <geometry>
             <radius>	0.35	</radius>
           </geometry>
@@ -1501,9 +1496,6 @@
           <radius>	0.35	</radius>
           <startIndex>	4	</startIndex>
           <count>	4	</count>
-          <scrollProcessor>
-            <connectedToEngine>	false	</connectedToEngine>
-          </scrollProcessor>
           <geometry>
             <radius>	0.35	</radius>
           </geometry>
@@ -1561,6 +1553,7 @@
             <frontmostGroundWheelName>	W_R0	</frontmostGroundWheelName>
           </trackTrace>
         </traces>
+        <generalWheels>	true	</generalWheels>
       </wheels>
       <trackNodes>
         <trackPair>
@@ -1643,134 +1636,24 @@
         </trackPair>
       </trackNodes>
       <groundNodes>
-        <node>
-          <name>	Track_L0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+        <group>
+          <template>	Track_L	</template>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L6	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_L7	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R0	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <affectedWheelsTemplate>	W_L	</affectedWheelsTemplate>
+        </group>
+        <group>
+          <template>	Track_R	</template>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
           <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R1	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R2	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R3	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	1	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R4	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R5	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R6	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
-        <node>
-          <name>	Track_R7	</name>
-          <collisionSamplesCount>	1	</collisionSamplesCount>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.2	</maxOffset>
-          <trackPairIdx>	0	</trackPairIdx>
-        </node>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <affectedWheelsTemplate>	W_R	</affectedWheelsTemplate>
+        </group>
       </groundNodes>
       <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
       <effects>
@@ -2798,7 +2681,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
-      <maxHealth>	450	</maxHealth>
+      <maxHealth>	500	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -2819,10 +2702,9 @@
             <maxPitch>	0 10 0.38 10 0.42 6 0.58 6 0.62 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.5	</shotDispersionRadius>
-          <reloadTime>	0.1	</reloadTime>
-          <forcedReloadTime>	8	</forcedReloadTime>
+          <reloadTime>	8	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.001	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	0.1	</afterShot>
@@ -2831,13 +2713,14 @@
           <autoShoot>
             <shotDispersionPerSec>	1.0	</shotDispersionPerSec>
             <maxShotDispersion>	2	</maxShotDispersion>
+            <rate>	10	</rate>
           </autoShoot>
           <temperatureMechanics>
             <heatingPerShot>	2	</heatingPerShot>
             <heatingPerSec>	20	</heatingPerSec>
             <coolingDelay>	2.0	</coolingDelay>
-            <coolingPerSec>	10	</coolingPerSec>
-            <coolingOverheatPerSec>	14	</coolingOverheatPerSec>
+            <coolingPerSec>	12	</coolingPerSec>
+            <coolingOverheatPerSec>	16	</coolingOverheatPerSec>
             <thermalStateHysteresis>	1	</thermalStateHysteresis>
             <temperatureSegmentSize>	5	</temperatureSegmentSize>
             <thermalStates>
@@ -2847,7 +2730,7 @@
                 <modifiers></modifiers>
               </state>
               <state>
-                <maxTemperature>	100	</maxTemperature>
+                <maxTemperature>	110	</maxTemperature>
                 <isOverheated>	True	</isOverheated>
                 <modifiers>
                   <mul>
@@ -2861,7 +2744,7 @@
                 </modifiers>
               </state>
               <state>
-                <maxTemperature>	140	</maxTemperature>
+                <maxTemperature>	160	</maxTemperature>
                 <isOverheated>	True	</isOverheated>
                 <modifiers>
                   <mul>
@@ -2961,7 +2844,7 @@
             <collisionModelClient>	vehicles/american/A172_ASTRON_FL/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_flame_autoshoot	</effects>
-          <reloadEffect>	reload20_45_flamePneumatic	</reloadEffect>
+          <reloadEffect>	reload20_45_flameHeavyAutoshoot	</reloadEffect>
           <shotOffset>	-0.049476 0.003298 0	</shotOffset>
           <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>

@@ -18,7 +18,6 @@ from notification.BaseNotificationView import BaseNotificationView
 from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
 from skeletons.gui.game_control import IPromoController, IWinbackController
 from skeletons.gui.impl import IGuiLoader
-from skeletons.gui.game_control import IGiftSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
@@ -28,7 +27,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
     __winbackController = dependency.descriptor(IWinbackController)
     __promoController = dependency.descriptor(IPromoController)
     __guiLoader = dependency.descriptor(IGuiLoader)
-    __giftsController = dependency.descriptor(IGiftSystemController)
 
     def __init__(self, _):
         super(NotificationListView, self).__init__()
@@ -120,7 +118,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self._model.resetNotifiedMessagesCount(self.__currentGroup)
 
     def __getMessagesList(self):
-        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup and not item.onlyPopUp() ]
+        filtered = [ item for item in self._model.collection.getListIterator() if item.getGroup() == self.__currentGroup ]
         return [ self.__getListVO(item) for item in filtered ]
 
     def __getEmptyListMsg(self, hasMessages):
@@ -139,8 +137,6 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         self.__updateCounters()
 
     def __onNotificationUpdated(self, notification, isStateChanged):
-        if notification.updateCounter():
-            self._model.updateNotifiedMessagesCount(*notification.getCounterInfo())
         if notification.getGroup() == self.__currentGroup:
             if notification.isOrderChanged():
                 self.__setNotificationList()

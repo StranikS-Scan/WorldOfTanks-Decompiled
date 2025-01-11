@@ -1,0 +1,36 @@
+<h10_mt_23feb_2025.xml>
+  <name>	#arenas:h08_mt_hangar/name	</name>
+  <description>	#arenas:h08_mt_hangar/description	</description>
+  <wwambientSound>	hangar_h08_amb_silence	</wwambientSound>
+  <wwmusic>	hangar_h08_amb_silence	</wwmusic>
+  <soundRemapping>
+    <loadBanks>
+      <bank>
+        <name>	hangar_h08_mt_hangar_inside.bnk	</name>
+      </bank>
+      <bank>
+        <name>	env_Hangar.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ambient.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h10_mt_hangar_outside.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h10_mt_hangar_outside.pck	</name>
+      </bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <boundingBox>
+    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
+    <upperRight>	300.000000 300.000000	</upperRight>
+  </boundingBox>
+</h10_mt_23feb_2025.xml>

@@ -1,0 +1,30 @@
+<240101-0000_500101-0000_paragons_first_eleven_badge.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	paragons_first_11_received	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	paragons:first_eleven_received_badge	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </token>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	singleAchievements:ParagonsFirstElevenVehicle	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+          <unique>	True	</unique>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</240101-0000_500101-0000_paragons_first_eleven_badge.xml>

@@ -5,8 +5,11 @@ from gui.battle_control.controllers.consumables import ammo_ctrl
 from gui.battle_control.controllers.consumables import equipment_ctrl
 from gui.battle_control.controllers.consumables import opt_devices_ctrl
 from gui.battle_control.controllers.consumables import comp7_equipment_ctrl
-_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7EquipmentController}
-_REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController}
+from gui.battle_control.controllers.consumables import bob_equipment_ctrl
+_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7EquipmentController,
+ ARENA_BONUS_TYPE.BOB: bob_equipment_ctrl.BobEquipmentController}
+_REPLAY_EQUIPMENT_CONTROLLERS = {ARENA_BONUS_TYPE.COMP7: comp7_equipment_ctrl.Comp7ReplayEquipmentController,
+ ARENA_BONUS_TYPE.BOB: bob_equipment_ctrl.BobReplayEquipmentController}
 
 def createAmmoCtrl(setup):
     if setup.isReplayRecording:

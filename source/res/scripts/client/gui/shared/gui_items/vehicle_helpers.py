@@ -20,3 +20,10 @@ def getRoleMessage(role):
 def isSecretExtendedNonInventoryVehicle(vehTypeCompDescr):
     vehicle = dependency.instance(IItemsCache).items.getItemByCD(vehTypeCompDescr)
     return vehicle.isSecretExtended and vehicle.invID == -1
+
+
+def removeNationFromTechName(string):
+    result = string.split(':')
+    if len(result) > 1:
+        return result[1]
+    return result[0] if result else ''

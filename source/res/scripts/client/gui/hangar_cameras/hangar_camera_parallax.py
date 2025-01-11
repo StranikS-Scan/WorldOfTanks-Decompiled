@@ -70,14 +70,6 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.__smoothingMultiplier = smoothing
         self.__isInitialized = True
 
-    def finalize(self):
-        self.__distanceDelta = Math.Vector2(0.0, 0.0)
-        self.__anglesDelta = Math.Vector2(0.0, 0.0)
-        self.__smoothingMultiplier = 0.0
-        self.__isInitialized = False
-        if self.__isActive:
-            self.deactivate()
-
     def activate(self):
         if self.__isActive or not self.__isInitialized:
             return

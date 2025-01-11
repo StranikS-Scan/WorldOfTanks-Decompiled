@@ -10,7 +10,7 @@ from constants import MarathonConfig, IS_CLIENT
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
-from hover_component import IsHoveredComponent, SelectionComponent, IsExternalHoveredComponent
+from hover_component import IsHoveredComponent, SelectionComponent
 if IS_CLIENT:
     from gui.impl import backport
     from gui.impl.gen import R
@@ -107,18 +107,12 @@ class ClickManager(CGF.ComponentManager):
         self._hangarSpace.onMouseUp -= self._onMouseUp
 
     def _onMouseDown(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject,
-         IsHoveredComponent,
-         SelectionComponent,
-         CGF.No(IsExternalHoveredComponent)))
+        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
         for go, _, __ in clickQuery:
             self._selectedGO = go
 
     def _onMouseUp(self):
-        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject,
-         IsHoveredComponent,
-         SelectionComponent,
-         CGF.No(IsExternalHoveredComponent)))
+        clickQuery = CGF.Query(self.spaceID, (CGF.GameObject, IsHoveredComponent, SelectionComponent))
         for go, _, selectionComponent in clickQuery:
             if self._selectedGO == go:
                 _logger.info('ClickManager::Clicked')

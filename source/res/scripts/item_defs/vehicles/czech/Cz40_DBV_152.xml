@@ -5,14 +5,13 @@
     <gunner></gunner>
     <driver></driver>
     <loader></loader>
-    <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	50	</forward>
-    <backward>	18	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.195	</moving>
@@ -74,9 +73,9 @@
     <weight>	8000	</weight>
     <maxHealth>	1440	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	280	</maxHealth>
-      <maxRegenHealth>	190	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	188	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/czech/Cz40_DBV_152/normal/lod0/Hull.model	</undamaged>
@@ -437,6 +436,33 @@
         <anchorShift>	0.06	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-1.667575 0.16889 -0.763	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999994 0.999994 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	1.678432 0.16889 -0.762611	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0.876802 0.341685 -3.286	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.99999 0.999985 0.99999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -455,7 +481,7 @@
       <userString>	#czech_vehicles:Chassis_Cz40_DBV_152	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	82500	</price>
+      <price>	80000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -472,9 +498,9 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	300	</maxHealth>
-      <maxRegenHealth>	225	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	188	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/czech/Cz40_DBV_152/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/czech/Cz40_DBV_152/crash/lod0/Chassis.model	</destroyed>
@@ -1448,7 +1474,7 @@
         </right>
       </physicalTracks>
       <camouflage></camouflage>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.71999979	</repairTime>
     </Chassis_Cz40_DBV_152>
   </chassis>
   <turrets0>
@@ -1456,7 +1482,7 @@
       <userString>	#czech_vehicles:Turret_1_Cz40_DBV_152	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	66000	</price>
+      <price>	80000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	140	</armor_1>
@@ -1495,9 +1521,9 @@
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	185	</maxHealth>
+        <maxRegenHealth>	93	</maxRegenHealth>
+        <repairCost>	10	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
@@ -1508,7 +1534,7 @@
       <guns>
         <_152_mm_D_20SM>	shared	  <maxAmmo>	35	</maxAmmo>
           <armor>
-            <gun>	70	</gun>
+            <gun>	60	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -2059,6 +2085,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.603544	</clipAngle>
           <anchorShift>	0.06	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	1.239 0.963464 -1.353	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0 0.877 0.193153	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

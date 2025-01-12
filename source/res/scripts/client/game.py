@@ -17,27 +17,26 @@ import TriggersManager
 import VOIP
 import WebBrowser
 import constants
+import persistent_data_cache as pdc
 import services_config
 from MemoryCriticalController import g_critMemHandler
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR, LOG_NOTE
 from gui import onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler
-from gui.shared import personality as gui_personality
 from gui.game_loading import loading as gameLoading
+from gui.impl.dialogs import dialogs
+from gui.shared import personality as gui_personality
 from helpers import RSSDownloader, OfflineMode, LightingGenerationMode
 from helpers import dependency, log
+from helpers import styles_perf_toolset
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
-from wg_async import wg_async, wg_await
-from gui.impl.dialogs import dialogs
 from system_events import g_systemEvents
-from helpers import styles_perf_toolset
+from wg_async import wg_async, wg_await
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
     LOG_CURRENT_EXCEPTION()
-
-sys.setrecursionlimit(sys.getrecursionlimit() + 100)
 
 class ServiceLocator(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -56,6 +55,7 @@ def init(scriptConfig, engineConfig, userPreferences):
     try:
         log.config.setupFromXML()
         gameLoading.step()
+        pdc.init(scriptConfig, engineConfig, userPreferences, gameLoading.step)
         import extension_rules
         extension_rules.init()
         import python_macroses
@@ -73,7 +73,7 @@ def init(scriptConfig, engineConfig, userPreferences):
         CommandMapping.g_instance = CommandMapping.CommandMapping()
         gameLoading.step()
         from helpers import DecalMap
-        DecalMap.g_instance = DecalMap.DecalMap(scriptConfig['decal'])
+        DecalMap.init(scriptConfig['decal'])
         gameLoading.step()
         from helpers import EdgeDetectColorController
         EdgeDetectColorController.g_instance = EdgeDetectColorController.EdgeDetectColorController(scriptConfig['silhouetteColors'])
@@ -160,14 +160,15 @@ def init(scriptConfig, engineConfig, userPreferences):
 
 def start():
     LOG_DEBUG('start')
+    pdc.start()
     styles_perf_toolset.setup()
     checkBotNet()
     if OfflineMode.onStartup():
-        gameLoading.getLoader().idl()
+        gameLoading.getLoader().idle()
         LOG_DEBUG('OfflineMode')
         return
     if LightingGenerationMode.onStartup():
-        gameLoading.getLoader().idl()
+        gameLoading.getLoader().idle()
         LOG_DEBUG('LightingGenerationMode')
         return
     ServiceLocator.connectionMgr.onConnected += onConnected
@@ -185,6 +186,7 @@ def abort():
 def fini():
     global g_replayCtrl
     LOG_DEBUG('fini')
+    pdc.fini()
     if g_replayCtrl is not None:
         g_replayCtrl.stop(isDestroyed=True)
     BigWorld.wg_setScreenshotNotifyCallback(None)

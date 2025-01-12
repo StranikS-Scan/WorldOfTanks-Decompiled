@@ -64,6 +64,10 @@ class ThreadPool(object):
         self._workers = []
         self._workersLimit = workersLimit
 
+    @property
+    def isRunning(self):
+        return self._running
+
     def start(self):
         for _ in xrange(self._workersLimit):
             worker = self._createNewWorker()

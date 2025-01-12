@@ -19,14 +19,11 @@ from gui.impl.gen import R
 from gui.server_events.bonuses import TmanTemplateTokensBonus, LootBoxTokensBonus, CustomizationsBonus
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
-from new_year.ny_constants import RESOURCES_ORDER
-from shared_utils import findFirst, first
+from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController
 from wg_async import wg_async, wg_await
 _logger = logging.getLogger(__name__)
 LootBoxInfo = namedtuple('LootBoxInfo', ('id', 'name', 'category', 'bonuses'))
-NyResourceInfo = namedtuple('NyResource', ('resourceName', 'resourceValue'))
 
 def getQuestNeededTokensCount(quest):
     if quest is not None:
@@ -43,8 +40,8 @@ def getAccountTokensAmount(token, itemsCache=None):
 
 @wg_async
 @dependency.replace_none_kwargs(controller=IAdventCalendarController)
-def openAndWaitDoor(dayID, currency='', callback=None, controller=None):
-    doorOpenStatus = yield wg_await(controller.awaitDoorOpenQuestCompletion(dayID, currency=currency))
+def openAndWaitDoor(dayID, callback=None, controller=None):
+    doorOpenStatus = yield wg_await(controller.awaitDoorOpenQuestCompletion(dayID=dayID))
     if not doorOpenStatus:
         pushOpenDoorFailedError()
     if callback:
@@ -113,15 +110,3 @@ def setAdventCalendarSetting(settingName, settingValue):
     settings = AccountSettings.getSettings(AdventCalendar.SETTINGS)
     settings.update({settingName: settingValue})
     AccountSettings.setSettings(AdventCalendar.SETTINGS, settings)
-
-
-@dependency.replace_none_kwargs(controller=INewYearController)
-def getMaxResource(controller=None):
-    defaultResource = first(RESOURCES_ORDER)
-    maxResource = NyResourceInfo(resourceName=defaultResource, resourceValue=controller.currencies.getResouceBalance(defaultResource.value))
-    for r in RESOURCES_ORDER:
-        currenResourceValue = controller.currencies.getResouceBalance(r.value)
-        if currenResourceValue > maxResource.resourceValue:
-            maxResource = NyResourceInfo(resourceName=r, resourceValue=currenResourceValue)
-
-    return maxResource

@@ -4,7 +4,7 @@ from typing import Optional
 import BigWorld
 from constants import CustomizationInvData
 from gui.SystemMessages import pushMessagesFromResult
-from items.components.c11n_constants import SeasonType
+from items.components.c11n_constants import SeasonType, ItemTags
 from Event import Event, EventManager
 from adisp import adisp_process
 from gui import g_tankActiveCamouflage
@@ -35,6 +35,8 @@ _MODULES_NAMES = ('turret',
  'engine',
  'gun',
  'radio')
+RESTORE_WITH_STYLE = 'restoreWithStyle'
+LOCKED_OUTFIT = 'lockedOutfit'
 
 class _CachedVehicle(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -340,12 +342,6 @@ class _CurrentVehicle(_CachedVehicle):
     def selectNoVehicle(self):
         self._selectVehicle(0)
 
-    def selectVehicleByCD(self, vehicleCD):
-        vehicleData = self.itemsCache.items.inventory.getItemData(vehicleCD)
-        if vehicleData is not None:
-            self.selectVehicle(vehicleData.invID)
-        return
-
     def getDossier(self):
         return self.itemsCache.items.getVehicleDossier(self.item.intCD)
 
@@ -464,7 +460,7 @@ g_currentVehicle = _CurrentVehicle()
 
 class PreviewAppearance(object):
 
-    def refreshVehicle(self, item, outfit=None, showWaitingBg=True):
+    def refreshVehicle(self, item, outfit=None):
         raise NotImplementedError
 
     @property
@@ -475,9 +471,9 @@ class PreviewAppearance(object):
 class _RegularPreviewAppearance(PreviewAppearance):
     hangarSpace = dependency.descriptor(IHangarSpace)
 
-    def refreshVehicle(self, item, outfit=None, showWaitingBg=True):
+    def refreshVehicle(self, item, outfit=None):
         if item is not None:
-            self.hangarSpace.updatePreviewVehicle(item, outfit, showWaitingBg)
+            self.hangarSpace.updatePreviewVehicle(item, outfit)
         else:
             g_currentVehicle.refreshModel(outfit)
         return
@@ -490,8 +486,11 @@ class _RegularPreviewAppearance(PreviewAppearance):
 
 class HeroTankPreviewAppearance(PreviewAppearance):
 
-    def refreshVehicle(self, item, outfit=None, showWaitingBg=True):
-        pass
+    def refreshVehicle(self, item, outfit=None):
+        if item is None:
+            from ClientSelectableCameraObject import ClientSelectableCameraObject
+            ClientSelectableCameraObject.switchCamera()
+        return
 
     @property
     def vehicleEntityID(self):
@@ -524,7 +523,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
 
     def destroy(self):
         super(_CurrentPreviewVehicle, self).destroy()
-        self.__isHeroTank = False
         self.__item = None
         self.__defaultItem = None
         self.__vehAppearance = None
@@ -540,8 +538,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def updateVehicleDescriptorInModel(self):
         pass
 
-    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None, showWaitingBg=True):
-        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit, showWaitingBg)
+    def selectVehicle(self, vehicleCD=None, vehicleStrCD=None, style=None, outfit=None):
+        self._selectVehicle(vehicleCD, vehicleStrCD, style, outfit)
         self.onSelected()
 
     def selectNoVehicle(self):
@@ -654,21 +652,25 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         super(_CurrentPreviewVehicle, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.unlocks': self._onUpdateUnlocks})
 
-    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None, showWaitingBg=True):
+    def _selectVehicle(self, vehicleCD, vehicleStrCD=None, style=None, outfit=None):
         if not self.__isNeedToRefreshVehicle(vehicleCD, style, outfit):
             return
         else:
-            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False, showBg=showWaitingBg)
+            Waiting.show('updateCurrentVehicle', isSingle=True, overlapsUI=False)
             self.onChangeStarted()
             self.__defaultItem = self.__getPreviewVehicle(vehicleCD)
             if vehicleStrCD is not None:
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleCD, vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
+            if self.__item is not None and outfit is None and style is None and (RESTORE_WITH_STYLE in self.__item.tags or LOCKED_OUTFIT in self.__item.tags):
+                criteria = REQ_CRITERIA.CUSTOMIZATION.FOR_VEHICLE(self.__item)
+                criteria |= REQ_CRITERIA.CUSTOMIZATION.HAS_TAGS([ItemTags.LOCKED_ON_VEHICLE])
+                style = first(self.itemsCache.items.getStyles(criteria).values())
             if style is not None and outfit is None:
                 outfit = self.__getPreviewOutfitByStyle(style)
             if self.__vehAppearance is not None:
-                self.__vehAppearance.refreshVehicle(self.__item, outfit, showWaitingBg)
+                self.__vehAppearance.refreshVehicle(self.__item, outfit)
             self._setChangeCallback()
             return
 

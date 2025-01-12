@@ -59,7 +59,7 @@ class PlayerMessages(fading_messages.FadingMessages):
             if equipmentID:
                 equipment = vehicles.g_cache.equipments().get(equipmentID)
                 if equipment is not None:
-                    postfix = '_'.join((postfix, equipment.name.split('_')[0].upper()))
+                    postfix = '_'.join((postfix, equipment.messagePostfix))
             self.showMessage(code, {'target': getFullName(targetID, showClan=False),
              'attacker': getFullName(attackerID, showClan=False)}, extra=(('target', targetID), ('attacker', attackerID)), postfix=postfix)
             return

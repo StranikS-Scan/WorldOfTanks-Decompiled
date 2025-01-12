@@ -90,7 +90,7 @@ class PrebattleView(BaseWaitQueueView, IArenaLoadController):
             if self._missionLoreSettings.music.start:
                 SoundGroups.g_instance.playSound2D(self._missionLoreSettings.music.start)
         self._uiLogger.logOpen(missionId=self.missionId, info=None if self.viewModel and self.viewModel.getIsLoading() else LogButtons.BATTLE)
-        loading.getLoader().idl()
+        loading.getLoader().idle()
         return
 
     def _finalize(self):

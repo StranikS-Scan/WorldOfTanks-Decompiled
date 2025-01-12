@@ -85,14 +85,6 @@ class GameLoadingSettings(object):
         sequence = LocalSequenceModel(name='__static__', order=SequenceOrders.RANDOM, slides=slides)
         return CdnCacheDefaultsModel(sequence=sequence, minShowTimeSec=slideDuration, transition=slideTransitionDuration)
 
-    def getStatusTexts(self):
-        statusTextDuration = self._settings.readFloat('statusTextDuration', DEFAULT_SLIDE_DURATION)
-        statusTextListSection = self._settings['statusTextList']
-        if statusTextListSection is None:
-            return []
-        else:
-            return [ StatusTextModel(text=makeString(text.asString), minShowTimeSec=statusTextDuration) for text in statusTextListSection.values() ]
-
     def getProgressSettingsByType(self, loadingType):
         loadingTypeSection = self._getLoadingTypeSection(loadingType)
         if loadingTypeSection is None:
@@ -128,7 +120,7 @@ class GameLoadingSettings(object):
                     milestoneName = Milestones(milestoneName)
                     milestonesForType[milestoneName] = LoadingMilestoneModel(name=milestoneName, percent=milestoneSection.readInt('percent'), forceApply=milestoneSection.readBool('forceApply'), status=status)
 
-            defaultMilestones = milestonesForTypes.get(MilestonesTypes.CONNECTION)
+            defaultMilestones = milestonesForTypes.get(MilestonesTypes.DEFAULT)
             if defaultMilestones is None:
                 raise SoftException('Default milestones type should be in settings.')
             if not defaultMilestones:
@@ -152,20 +144,24 @@ class GameLoadingSettings(object):
         else:
             stateSection = statesSection[state]
             showVfx = False
+            showSmallLogo = True
             contentState = ContentState.INVISIBLE
             ageRatingPath = self._getAgeRatingPath()
             info = ''
+            minimalDuration = 0.0
             if stateSection is not None:
-                showVfx = stateSection.readBool('showVfx', False)
-                contentStateValue = stateSection.readInt('contentState', ContentState.INVISIBLE.value)
-                info = makeString(stateSection.readString('info') or '')
+                showVfx = stateSection.readBool('showVfx', showVfx)
+                showSmallLogo = stateSection.readBool('showSmallLogo', showSmallLogo)
+                contentStateValue = stateSection.readInt('contentState', contentState.value)
+                info = makeString(stateSection.readString('info', info))
+                minimalDuration = stateSection.readFloat('minimalDuration', minimalDuration)
                 if contentStateValue not in ContentState.values():
                     _logger.warning('Not supported contentState value for %s state: %s not in %s.', state, contentStateValue, ContentState.values())
                 else:
                     contentState = ContentState(contentStateValue)
             else:
                 _logger.warning('No section can be found for %s view state', state)
-            return ImageViewSettingsModel(showVfx=showVfx, contentState=contentState, ageRatingPath=ageRatingPath, info=info)
+            return ImageViewSettingsModel(showVfx=showVfx, contentState=contentState, ageRatingPath=ageRatingPath, info=info, showSmallLogo=showSmallLogo, minimalDuration=minimalDuration)
 
     def _getAgeRatingPath(self):
         if self._ageRatingPath is None:

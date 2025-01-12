@@ -390,6 +390,13 @@ class BADGE(object):
     BADGE_171_DESCR = '#badge:badge_171_descr'
     BADGE_172 = '#badge:badge_172'
     BADGE_172_DESCR = '#badge:badge_172_descr'
+    BADGE_173 = '#badge:badge_173'
+    BADGE_173_DESCR = '#badge:badge_173_descr'
+    BADGE_174 = '#badge:badge_174'
+    BADGE_174_DESCR = '#badge:badge_174_descr'
+    BADGE_175 = '#badge:badge_175'
+    BADGE_175_DESCR = '#badge:badge_175_descr'
+    SUFFIX_BADGE_175 = '#badge:suffix/badge_175'
     BADGE_ENUM = (BADGE_0,
      BADGE_0_DESCR,
      BADGE_1,
@@ -750,7 +757,13 @@ class BADGE(object):
      BADGE_171,
      BADGE_171_DESCR,
      BADGE_172,
-     BADGE_172_DESCR)
+     BADGE_172_DESCR,
+     BADGE_173,
+     BADGE_173_DESCR,
+     BADGE_174,
+     BADGE_174_DESCR,
+     BADGE_175,
+     BADGE_175_DESCR)
     BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
      BADGE_11_SHORT,
      BADGE_12_SHORT,
@@ -939,7 +952,10 @@ class BADGE(object):
      BADGE_169_DESCR,
      BADGE_170_DESCR,
      BADGE_171_DESCR,
-     BADGE_172_DESCR)
+     BADGE_172_DESCR,
+     BADGE_173_DESCR,
+     BADGE_174_DESCR,
+     BADGE_175_DESCR)
     BADGE_ALL_DESCR_LONG_ENUM = (BADGE_102_DESCR_LONG,)
 
     @classmethod

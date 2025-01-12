@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/rewards_screen_model.py
 from enum import Enum, IntEnum
 from frameworks.wulf import Array
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division, Rank, SeasonName
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7BonusModel
@@ -20,29 +21,6 @@ class Type(IntEnum):
     SELECTEDREWARDS = 8
 
 
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
-
-class Division(IntEnum):
-    A = 1
-    B = 2
-    C = 3
-    D = 4
-    E = 5
-
-
-class SeasonName(Enum):
-    FIRST = 'first'
-    SECOND = 'second'
-    THIRD = 'third'
-
-
 class ShopInfoType(Enum):
     NONE = 'none'
     OPEN = 'open'
@@ -50,9 +28,9 @@ class ShopInfoType(Enum):
 
 
 class RewardsScreenModel(ViewModel):
-    __slots__ = ('onClose', 'onOpenShop')
+    __slots__ = ('onClose', 'onOpenShop', 'onOpenNextScreen')
 
-    def __init__(self, properties=15, commands=2):
+    def __init__(self, properties=16, commands=3):
         super(RewardsScreenModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -167,6 +145,12 @@ class RewardsScreenModel(ViewModel):
     def setShowSeasonResults(self, value):
         self._setBool(14, value)
 
+    def getHasNextScreen(self):
+        return self._getBool(15)
+
+    def setHasNextScreen(self, value):
+        self._setBool(15, value)
+
     def _initialize(self):
         super(RewardsScreenModel, self)._initialize()
         self._addViewModelProperty('vehicle', VehicleModel())
@@ -184,5 +168,7 @@ class RewardsScreenModel(ViewModel):
         self._addBoolProperty('hasYearlyVehicle', False)
         self._addArrayProperty('seasonsResults', Array())
         self._addBoolProperty('showSeasonResults', False)
+        self._addBoolProperty('hasNextScreen', False)
         self.onClose = self._addCommand('onClose')
         self.onOpenShop = self._addCommand('onOpenShop')
+        self.onOpenNextScreen = self._addCommand('onOpenNextScreen')

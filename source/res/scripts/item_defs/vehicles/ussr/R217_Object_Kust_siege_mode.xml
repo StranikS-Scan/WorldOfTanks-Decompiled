@@ -72,9 +72,9 @@
     <weight>	24000	</weight>
     <maxHealth>	960	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -722,6 +722,51 @@
         <anchorShift>	0.788591	</anchorShift>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.793 0.163229 -0.81	</position>
+        <rotation>	0 0 1.570796	</rotation>
+        <scale>	0.999986 0.999986 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.786 0.163229 -0.81	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999998 0.999998 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-0.000006 -0.127 -3.066	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999993 0.999994 0.999993	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-1.202 0.893 -1.248	</position>
+        <rotation>	-0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	1.196 0.862 -1.245	</position>
+        <rotation>	-0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	gunMantlet	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -757,8 +802,8 @@
         <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R217_Object_Kust/normal/lod0/Chassis.model	</undamaged>
@@ -1629,7 +1674,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_R217_Object_Kust>
   </chassis>
   <turrets0>
@@ -1647,15 +1692,15 @@
       <maxHealth>	240	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <repairCost>	2	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_130mm_M_65B>
@@ -1673,7 +1718,7 @@
             </armor_5>
             <armor_6>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <gun>	40	</gun>
+            <gun>	50	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>

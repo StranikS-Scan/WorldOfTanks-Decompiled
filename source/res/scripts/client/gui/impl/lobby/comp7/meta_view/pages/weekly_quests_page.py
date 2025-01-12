@@ -1,44 +1,41 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/pages/weekly_quests_page.py
 import logging
-from collections import namedtuple
+from itertools import izip
 import typing
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_UI_SECTION, COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT
 from frameworks.wulf.view.array import fillViewModelsArray
-from gui.impl import backport
+from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
+from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progress_points_model import ProgressPointsModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import WeeklyQuestsModel, SeasonState
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7.comp7_bonus_packer import getComp7BonusPacker, packTokensRewardsQuestBonuses, packQuestBonuses
-from gui.impl.lobby.comp7.comp7_quest_helpers import getComp7WeeklyProgressionQuests, getComp7WeeklyQuests, getActualSeasonWeeklyRewardToken
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
-from gui.periodic_battles.models import PeriodType
 from gui.shared.missions.packers.events import Comp7WeeklyQuestPacker
-from helpers import dependency, time_utils
-from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.gui.game_control import IComp7Controller
-from skeletons.gui.server_events import IEventsCache
+from helpers import dependency
+from skeletons.gui.game_control import IComp7Controller, IComp7WeeklyQuestsController
 if typing.TYPE_CHECKING:
-    from gui.server_events.event_items import Quest
+    from typing import Dict, Iterator, List, Optional, Tuple, Union
+    from frameworks.wulf import ViewEvent
+    from gui.game_control.comp7_controller import Comp7Controller
+    from gui.game_control.comp7_weekly_quests_controller import Comp7WeeklyQuestsController, _Comp7WeeklyQuests
+    from gui.impl.backport import TooltipData
+    from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.quest_card_model import QuestCardModel
+    from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import WeeklyQuestsModel
+    from gui.server_events.event_items import Quest, TokenQuest
 _logger = logging.getLogger(__name__)
-_BonusData = namedtuple('_BonusData', ('bonus', 'tooltip'))
 
 class WeeklyQuestsPage(PageSubModelPresenter):
-    __slots__ = ('__quests', '__bonusData', '__questsTimer')
-    __eventsCache = dependency.descriptor(IEventsCache)
+    pageId = MetaRootViews.WEEKLYQUESTS
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __comp7WeeklyQuestsCtrl = dependency.descriptor(IComp7WeeklyQuestsController)
+    __slots__ = ('__tooltipDataById',)
 
     def __init__(self, viewModel, parentView):
         super(WeeklyQuestsPage, self).__init__(viewModel, parentView)
-        self.__quests = {}
-        self.__bonusData = {}
-        self.__questsTimer = CallbackDelayer()
-
-    @property
-    def pageId(self):
-        return MetaRootViews.WEEKLYQUESTS
+        self.__tooltipDataById = {}
 
     @property
     def viewModel(self):
@@ -46,12 +43,10 @@ class WeeklyQuestsPage(PageSubModelPresenter):
 
     def initialize(self):
         super(WeeklyQuestsPage, self).initialize()
-        self.__updateData()
+        self.__updateData(self.__comp7WeeklyQuestsCtrl.getQuests())
 
     def finalize(self):
-        self.__quests.clear()
-        self.__bonusData = {}
-        self.__questsTimer.clearCallbacks()
+        self.__tooltipDataById.clear()
         super(WeeklyQuestsPage, self).finalize()
 
     def createToolTip(self, event):
@@ -59,95 +54,84 @@ class WeeklyQuestsPage(PageSubModelPresenter):
             tooltipId = event.getArgument('tooltipId')
             if tooltipId is None:
                 return
-            bonusData = self.__bonusData[tooltipId]
-            window = backport.BackportTooltipWindow(bonusData.tooltip, self.parentView.getParentWindow(), event)
+            tooltipData = self.__tooltipDataById[tooltipId]
+            window = BackportTooltipWindow(tooltipData, self.parentView.getParentWindow(), event)
             window.load()
             return window
         else:
             return
 
     def _getEvents(self):
-        return ((self.__eventsCache.onSyncCompleted, self.__onEventsSyncCompleted), (self.__comp7Controller.onStatusUpdated, self.__onStatusUpdated))
+        return ((self.__comp7WeeklyQuestsCtrl.onWeeklyQuestsUpdated, self.__onWeeklyQuestsUpdated), (self.getViewModel().onAnimationEnd, self.__onAnimationEnd))
 
-    def __updateData(self):
-        self.__quests = getComp7WeeklyQuests()
-        with self.viewModel.transaction() as tx:
-            self.__updateTimer(tx)
-            self.__updateQuests(tx)
-            self.__updateProgression(tx)
+    def __onWeeklyQuestsUpdated(self, quests):
+        self.__updateData(quests)
 
-    def __updateTimer(self, model):
-        if self.__quests:
-            quest = next(iter(self.__quests.values()))
-            model.setResetTimeLeft(quest.getFinishTimeLeft())
-            self.__questsTimer.delayCallback(quest.getFinishTimeLeft(), self.__updateData)
-        model.setSeasonState(self.__getPeriodState())
+    def __updateData(self, quests):
+        with self.getViewModel().transaction() as model:
+            model.setTimeToNewQuests(quests.getTimeToNewQuests())
+            self.__setProgressAnimationToBeShown(model, quests.numCompletedBattleQuests)
+            fillViewModelsArray(self.__updateQuestCardModels(self.__sliceOffCompletedWeeksExceptLast(quests, model.QUESTS_PER_WEEK)), model.getQuestCards())
+            fillViewModelsArray(self.__updateProgressPointModels(quests.sortedTokenQuests, quests.numBattleQuestsToCompleteByTokenQuestIdx), model.getProgressPoints())
 
-    def __getPeriodState(self):
-        periodInfo = self.__comp7Controller.getPeriodInfo()
-        currentTime = time_utils.getCurrentLocalServerTimestamp()
-        if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            return SeasonState.NOTSTARTED
-        if periodInfo.periodType in (PeriodType.AFTER_SEASON,
-         PeriodType.AFTER_CYCLE,
-         PeriodType.ALL_NOT_AVAILABLE_END,
-         PeriodType.NOT_AVAILABLE_END,
-         PeriodType.STANDALONE_NOT_AVAILABLE_END):
-            return SeasonState.FINISHED
-        return SeasonState.LASTWEEK if periodInfo.cycleBorderRight.delta(currentTime) < time_utils.ONE_WEEK else SeasonState.ACTIVE
+    def __updateQuestCardModels(self, sortedBattleQuests):
+        bonusPacker = getComp7BonusPacker()
+        questPacker = Comp7WeeklyQuestPacker()
+        for combinedID, quest in sortedBattleQuests:
+            if not quest.isStarted():
+                return
+            packedBonuses, tooltipsData = packQuestBonuses(quest.getBonuses(), bonusPacker)
+            self.__updateRewardsInTooltips(combinedID, packedBonuses, tooltipsData)
+            questCardModel = questPacker.pack(quest)
+            fillViewModelsArray(packedBonuses, questCardModel.getRewards())
+            yield questCardModel
 
-    def __updateQuests(self, model):
-        questCards = []
-        sortedQuestsIds = sorted(self.__quests.keys())
-        for qID in sortedQuestsIds:
-            quest = self.__quests[qID]
-            questCardModel = Comp7WeeklyQuestPacker(quest, self.__getPeriodState()).pack()
-            packedBonuses, tooltipsData = packQuestBonuses(quest.getBonuses(), getComp7BonusPacker())
-            self.__updateRewards(qID, questCardModel, packedBonuses, tooltipsData)
-            questCards.append(questCardModel)
-
-        fillViewModelsArray(questCards, model.getQuestCards())
-
-    def __updateProgression(self, model):
-        settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-        lastTokensCount = settings.get(COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT, 0)
-        progressionTokenName = getActualSeasonWeeklyRewardToken()
-        if progressionTokenName is not None:
-            currentTokensCount = self.__eventsCache.questsProgress.getTokenCount(progressionTokenName)
-        else:
-            currentTokensCount = 0
-        model.setPreviousTokenValue(lastTokensCount)
-        model.setCurrentTokenValue(currentTokensCount)
-        self.__updateProgressionPoints(model)
-        settings[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = currentTokensCount
-        AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
-        return
-
-    def __updateProgressionPoints(self, model):
-        progressPointsModels = []
-        quests = getComp7WeeklyProgressionQuests()
-        for qID in sorted(quests.keys()):
-            quest = quests[qID]
+    def __updateProgressPointModels(self, tokenQuests, numBattleQuestsToCompleteByTokenQuestIdx):
+        for (ID, quest), cnt in izip(tokenQuests, numBattleQuestsToCompleteByTokenQuestIdx):
             progressPointsModel = ProgressPointsModel()
-            progressPointsModel.setCount(qID)
+            progressPointsModel.setCount(cnt)
             packedBonuses, tooltipsData = packTokensRewardsQuestBonuses(quest)
-            self.__updateRewards(qID, progressPointsModel, packedBonuses, tooltipsData)
-            progressPointsModels.append(progressPointsModel)
+            self.__updateRewardsInTooltips(ID, packedBonuses, tooltipsData)
+            fillViewModelsArray(packedBonuses, progressPointsModel.getRewards())
+            yield progressPointsModel
 
-        fillViewModelsArray(progressPointsModels, model.getProgressPoints())
-
-    def __updateRewards(self, qID, model, packedBonuses, tooltipsData):
-        rewards = []
-        for idx, (packedBonus, tooltipData) in enumerate(zip(packedBonuses, tooltipsData)):
+    def __updateRewardsInTooltips(self, qID, packedBonuses, tooltipsData):
+        for idx, (packedBonus, tooltipData) in enumerate(izip(packedBonuses, tooltipsData)):
             tooltipId = '%s_%s' % (qID, idx)
+            self.__tooltipDataById[tooltipId] = tooltipData
             packedBonus.setTooltipId(tooltipId)
-            rewards.append(packedBonus)
-            self.__bonusData[tooltipId] = _BonusData(packedBonus, tooltipData)
 
-        fillViewModelsArray(rewards, model.getRewards())
+    @staticmethod
+    def __sliceOffCompletedWeeksExceptLast(weeklyQuests, questsPerWeek):
+        quests = weeklyQuests.sortedBattleQuests
+        if not quests:
+            _logger.error('There are no quests in WeeklyQuestsPage.')
+            return []
+        for lastQuestInWeekIndex in xrange(questsPerWeek - 1, weeklyQuests.numBattleQuests, questsPerWeek):
+            _, lastQuestOfWeek = quests[lastQuestInWeekIndex]
+            if not lastQuestOfWeek.isCompleted():
+                firstQuestOfWeekIndex = lastQuestInWeekIndex - questsPerWeek + 1
+                if lastQuestOfWeek.isStarted():
+                    return quests[firstQuestOfWeekIndex:]
+                return quests[firstQuestOfWeekIndex - questsPerWeek:]
 
-    def __onEventsSyncCompleted(self):
-        self.__updateData()
+        return quests[-questsPerWeek:]
 
-    def __onStatusUpdated(self, _):
-        self.__updateData()
+    @staticmethod
+    def __setProgressAnimationToBeShown(model, numCompletedBattleQuests):
+        settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+        previousQuestsPassed = settings.get(COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT, 0)
+        if numCompletedBattleQuests < previousQuestsPassed:
+            previousQuestsPassed = numCompletedBattleQuests
+            settings[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = previousQuestsPassed
+            AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
+        model.setPreviousQuestsPassed(previousQuestsPassed)
+        model.setQuestsPassed(numCompletedBattleQuests)
+
+    def __onAnimationEnd(self):
+        with self.getViewModel().transaction() as model:
+            questsPassed = model.getQuestsPassed()
+            model.setPreviousQuestsPassed(questsPassed)
+            settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
+            settings[COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT] = questsPassed
+            AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)

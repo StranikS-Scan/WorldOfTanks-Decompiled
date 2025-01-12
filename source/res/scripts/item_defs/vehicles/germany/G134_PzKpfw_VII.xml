@@ -846,7 +846,35 @@
         <slotId>	18001	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-1.963 -0.007458 -1.193429	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999979 0.999979 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	1.963 -0.007458 -1.19343	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	-0.000004 0.093163 -3.601	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999997 0.999997 0.999997	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -2559,6 +2587,24 @@
           <position>	0 -0.626 -1.231	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_gunJoint	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.706 1.275 -0.337798	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0.830604 1.29 -0.30298	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

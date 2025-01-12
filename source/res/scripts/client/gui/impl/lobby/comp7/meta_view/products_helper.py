@@ -22,7 +22,7 @@ _PRODUCT_TYPE_TO_MODEL = {ProductTypes.VEHICLE: VehicleProductModel,
  ProductTypes.STYLE3D: Style3dProductModel,
  ProductTypes.REWARD: RewardProductModel}
 _PRODUCT_TYPE_ORDER = [ProductTypes.VEHICLE, ProductTypes.STYLE3D, ProductTypes.REWARD]
-_COMP7_PREV_SEASON_PRODUCTS = [51313,
+_COMP7_PREV_SEASON_PRODUCTS = {51313,
  23884,
  52049,
  24140,
@@ -33,7 +33,8 @@ _COMP7_PREV_SEASON_PRODUCTS = [51313,
  223820,
  60977,
  28665,
- 30201]
+ 30201,
+ 31225}
 if typing.TYPE_CHECKING:
     from gui.game_control.comp7_shop_controller import ShopPageProductInfo
 

@@ -11,8 +11,7 @@ from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQues
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.quest_card_model import QuestCardModel, CardState
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.weekly_quests_model import SeasonState
-from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7WeeklyQuestID
+from gui.periodic_battles.models import PeriodType as PT
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.events_helpers import isPremium, isDailyQuest
 from gui.server_events.formatters import DECORATION_SIZES
@@ -24,7 +23,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IComp7Controller
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    from gui.server_events.event_items import ServerEventAbstract
+    from typing import Optional, Tuple
+    from gui.server_events.event_items import ServerEventAbstract, Quest
     from gui.server_events.bonuses import SimpleBonus
     from gui.shared.missions.packers.bonus import BonusUIPacker
 _logger = logging.getLogger(__name__)
@@ -124,68 +124,71 @@ class PrivateMissionUIDataPacker(_EventUIDataPacker):
     pass
 
 
-class Comp7WeeklyQuestPacker(_EventUIDataPacker):
+class Comp7WeeklyQuestPacker(object):
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __slots__ = ('__isUnavailablePeriod', '__isComp7Available', '__hasSuitableVehicles')
 
-    def __init__(self, quest, seasonState):
-        super(Comp7WeeklyQuestPacker, self).__init__(quest)
-        self.__seasonState = seasonState
-        self.__unavailableSeasonStates = (SeasonState.NOTSTARTED, SeasonState.FINISHED)
+    def __init__(self):
+        self.__isUnavailablePeriod = self.__comp7Controller.getPeriodInfo().periodType in (PT.BEFORE_SEASON,
+         PT.BEFORE_CYCLE,
+         PT.BETWEEN_SEASONS,
+         PT.AFTER_SEASON,
+         PT.AFTER_CYCLE,
+         PT.ALL_NOT_AVAILABLE_END,
+         PT.NOT_AVAILABLE_END,
+         PT.STANDALONE_NOT_AVAILABLE_END)
+        self.__isComp7Available = self.__comp7Controller.isAvailable()
+        self.__hasSuitableVehicles = self.__comp7Controller.hasSuitableVehicles()
 
-    def pack(self, model=None):
-        if model is None:
-            model = QuestCardModel()
-        model.setState(self.__getQuestState())
-        self.__updateQuestAttributes(model)
+    def pack(self, quest):
+        iconKey, currentProgress, totalProgress, description = self.getData(quest)
+        state = self.__getQuestState(quest)
+        if not currentProgress and state == CardState.COMPLETED:
+            currentProgress = totalProgress
+        model = QuestCardModel()
+        model.setState(state)
+        model.setCurrentProgress(currentProgress)
+        model.setTotalProgress(totalProgress)
+        model.setDescription(description)
+        model.setIconKey(iconKey)
         return model
 
-    def __getQuestState(self):
-        if self._event.isCompleted():
+    @staticmethod
+    def getData(quest):
+        result = (u'', 0, 1, u'')
+        if not quest:
+            return result
+        rootPostBattle = ConditionGroupModel()
+        PostBattleConditionPacker().pack(quest, rootPostBattle)
+        postBattle = findFirstConditionModel(rootPostBattle)
+        rootBonusCond = ConditionGroupModel()
+        BonusConditionPacker().pack(quest, rootBonusCond)
+        bonusCond = findFirstConditionModel(rootBonusCond)
+        bonusCondPriority = bonusCond or postBattle
+        if bonusCondPriority:
+            postBattlePriority = postBattle or bonusCond
+            result = (postBattlePriority.getIconKey(),
+             bonusCondPriority.getCurrent(),
+             bonusCondPriority.getTotal() or 1,
+             quest.getDescription() or bonusCondPriority.getDescrData())
+        rootBonusCond.unbind()
+        rootPostBattle.unbind()
+        return result
+
+    def __getQuestState(self, quest):
+        if quest.isCompleted():
             return CardState.COMPLETED
-        return CardState.ACTIVE if self._event.isAvailable()[0] and self.__comp7Controller.isAvailable() else self.__getLockedState()
-
-    def __getLockedState(self):
-        isFirstQuest = parseComp7WeeklyQuestID(self._event.getID()) == '1_1'
-        if isFirstQuest and not self.__comp7Controller.hasSuitableVehicles():
-            return CardState.LOCKEDBYNOXVEHICLES
-        return CardState.LOCKEDBYINACTIVESEASON if self.__seasonState in self.__unavailableSeasonStates else CardState.LOCKEDBYPREVIOUSQUEST
-
-    def __updateQuestAttributes(self, cardModel):
-        description = self._event.getDescription()
-        iconKey = ''
-        currentProgress = 0
-        totalProgress = 0
-        rootModel, postBattleConditionModel = self.__getConditionsByPacker(PostBattleConditionPacker)
-        if postBattleConditionModel is not None:
-            iconKey = postBattleConditionModel.getIconKey()
-            currentProgress = postBattleConditionModel.getCurrent()
-            totalProgress = postBattleConditionModel.getTotal()
-            description = description or postBattleConditionModel.getDescrData()
-        rootModel.unbind()
-        rootModel, conditionModel = self.__getConditionsByPacker(BonusConditionPacker)
-        if conditionModel is not None:
-            iconKey = conditionModel.getIconKey()
-            currentProgress = conditionModel.getCurrent()
-            totalProgress = conditionModel.getTotal()
-            description = description or conditionModel.getDescrData()
-        rootModel.unbind()
-        if currentProgress == 0 and cardModel.getState() == CardState.COMPLETED:
-            currentProgress = 1
-        cardModel.setDescription(description)
-        cardModel.setIconKey(iconKey)
-        cardModel.setCurrentProgress(currentProgress)
-        cardModel.setTotalProgress(totalProgress or 1)
-        return
-
-    def __getConditionsByPacker(self, packerClass):
-        postBattleConditions = ConditionGroupModel()
-        packerClass().pack(self._event, postBattleConditions)
-        return (postBattleConditions, findFirstConditionModel(postBattleConditions))
+        if self.__isUnavailablePeriod:
+            return CardState.LOCKED_BY_INACTIVE_SEASON
+        if quest.isAvailable()[0] and self.__isComp7Available:
+            if self.__hasSuitableVehicles:
+                return CardState.ACTIVE
+            return CardState.LOCKED_BY_NO_X_VEHICLES
+        return CardState.LOCKED_BY_PREVIOUS_QUEST
 
 
 class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
     eventsCache = dependency.descriptor(IEventsCache)
-    _NY_BONUSES_ORDER = ('battleToken', 'entitlements')
 
     def pack(self, model=None):
         if model is not None and not isinstance(model, DailyQuestModel):
@@ -196,19 +199,6 @@ class DailyQuestUIDataPacker(BattleQuestUIDataPacker):
             self._packModel(model)
             self.__resolveQuestIcon(model)
             return model
-
-    def _packModel(self, model):
-        super(DailyQuestUIDataPacker, self)._packModel(model)
-        model.setIsLockedForReroll(self._event.getData().get('meta', {}).get('locked', False))
-
-    def _packBonuses(self, model):
-        self._tooltipData = {}
-        packer = getDefaultBonusPacker()
-        bonuses = sorted(self._event.getBonuses(), key=self.__keySortOrder)
-        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, self._tooltipData, bonuses)
-
-    def __keySortOrder(self, bonus):
-        return self._NY_BONUSES_ORDER.index(bonus.getName()) if bonus.getName() in self._NY_BONUSES_ORDER else len(self._NY_BONUSES_ORDER)
 
     def __resolveQuestIcon(self, model):
         iconId = self._event.getIconID()

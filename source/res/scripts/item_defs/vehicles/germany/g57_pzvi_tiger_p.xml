@@ -1122,7 +1122,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	18000	</weight>
-      <maxLoad>	60500	</maxLoad>
+      <maxLoad>	61000	</maxLoad>
       <terrainResistance>	1.4 1.7 3.4	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2933,12 +2933,8 @@
       <tags></tags>
       <level>	6	</level>
       <price>	20440	</price>
-      <unlocks>
-        <turret>	Turret_2_PzVI_Tiger_P	  <cost>	12520	</cost>
-        </turret>
-      </unlocks>
       <armor>
-        <armor_1>	100	</armor_1>
+        <armor_1>	180	</armor_1>
         <armor_2>	95	</armor_2>
         <armor_3>	80	</armor_3>
         <armor_4>	80	</armor_4>
@@ -2949,6 +2945,9 @@
         <armor_9>	0	</armor_9>
         <armor_11>	50	</armor_11>
         <armor_12>	100	</armor_12>
+        <armor_13>	180	</armor_13>
+        <armor_14>	140	</armor_14>
+        <armor_15>	120	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8900	</weight>
@@ -2966,303 +2965,10 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	125	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
+        <_88mm_Kw_K_36_L_56_Typ_101>	shared	  <maxAmmo>	92	</maxAmmo>
           <unlocks>
-            <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
+            <gun>	_88mm_Kw_K_43_L_71_Typ_101	  <cost>	16500	</cost>
             </gun>
-            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 0.366894 6 0.430556 5 0.569444 5 0.633106 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G57_PzVI_Tiger_P/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.029794 0.009594 2.2263	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.028742 0.233387 0.355382	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.029794 0.009594 2.2263	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.051927 2.24026 2.38129	</position>
-              <rotation>	1.4397 -0.011557 3.12924	</rotation>
-              <scale>	1.59236 0.299999 1.59238	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.075538	</clipAngle>
-              <anchorShift>	0.74915	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011213 2.12733 2.14098	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.41499 0.921639 1.41502	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.716174	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.448983 2.2201 2.39334	</position>
-              <rotation>	1.55508 -3.03796 0.102977	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.107961	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.449015 2.22009 2.39335	</position>
-              <rotation>	1.55508 3.039 -0.1019	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.107954	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	-0.011213 2.12733 2.14098	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.50437 0.979858 1.50441	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.728398	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.059588 0.018003 3.60341	</rayStart>
-              <rayEnd>	0.059588 0.018003 4.03041	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.427	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
-            <density>	103.411 102.706	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G57_PzVI_Tiger_P/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.07231 0.000629 1.03395	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.071873 0.233402 0.247631	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.07231 0.000629 1.03395	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.051927 2.24026 2.38129	</position>
-              <rotation>	1.4397 -0.011557 3.12924	</rotation>
-              <scale>	1.59236 0.299998 1.59238	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.075538	</clipAngle>
-              <anchorShift>	0.74915	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011217 2.12723 2.14099	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.41499 0.92164 1.41502	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.703942	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.448983 2.2201 2.39334	</position>
-              <rotation>	1.5551 -3.03795 0.102977	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.107961	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.449015 2.22009 2.39335	</position>
-              <rotation>	1.55508 3.039 -0.101901	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.107954	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	-0.011213 2.12733 2.14098	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.50437 0.979858 1.50441	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.728398	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.05893 -0.001042 1.32769	</rayStart>
-              <rayEnd>	0.05893 -0.001042 1.75469	</rayEnd>
-              <rayUp>	0.095 0 0	</rayUp>
-              <size>	0.427	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
-            <density>	100.419 100.681	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
-          <unlocks>
-            <gun>	_88mm_KwK_43_L71	  <cost>	16500	</cost>
-            </gun>
-            <vehicle>	G67_VK4502A	  <cost>	90000	</cost>
-            </vehicle>
           </unlocks>
           <reloadTime>	7	</reloadTime>
           <shotDispersionFactors>
@@ -3289,7 +2995,7 @@
             </armor_9>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
@@ -3405,11 +3111,15 @@
             <density>	117.533 107.619	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_36_L56>
-        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	68	</maxAmmo>
+        </_88mm_Kw_K_36_L_56_Typ_101>
+        <_88mm_Kw_K_43_L_71_Typ_101>	shared	  <maxAmmo>	68	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_PzVI_Tiger_P	  <cost>	12520	</cost>
+            </turret>
+          </unlocks>
           <reloadTime>	8.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3433,7 +3143,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
@@ -3548,7 +3258,7 @@
             <density>	94.729 103.976	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_43_L71>
+        </_88mm_Kw_K_43_L_71_Typ_101>
       </guns>
       <models>
         <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Turret_01.model	</undamaged>
@@ -4090,6 +3800,12 @@
       <userString>	#germany_vehicles:Turret_2_PzVI_Tiger_P	</userString>
       <shortUserString>	#germany_vehicles:Turret_2_PzVI_Tiger_P_short	</shortUserString>
       <tags></tags>
+      <unlocks>
+        <vehicle>	G67_VK4502A	  <cost>	90000	</cost>
+        </vehicle>
+        <vehicle>	G115_Typ_205B	  <cost>	101500	</cost>
+        </vehicle>
+      </unlocks>
       <level>	7	</level>
       <price>	30150	</price>
       <armor>
@@ -4104,6 +3820,9 @@
         <armor_9>	50	</armor_9>
         <armor_11>	50	</armor_11>
         <armor_12>	100	</armor_12>
+        <armor_13>	200	</armor_13>
+        <armor_14>	160	</armor_14>
+        <armor_15>	140	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9500	</weight>
@@ -4121,292 +3840,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	125	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 0.366894 6 0.430556 5 0.569444 5 0.633106 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G57_PzVI_Tiger_P/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.06623 0.009602 2.22632	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.059943 0.236067 0.229714	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.06623 0.009602 2.22632	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.051941 2.24026 2.3813	</position>
-              <rotation>	1.4397 -0.011504 3.12929	</rotation>
-              <scale>	1.59236 0.299999 1.59238	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.075538	</clipAngle>
-              <anchorShift>	0.74915	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011189 2.16321 2.13168	</position>
-              <rotation>	1.22727 -0.003806 3.13682	</rotation>
-              <scale>	1.32928 0.865808 1.3293	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.581059	</clipAngle>
-              <anchorShift>	0.586795	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.449002 2.22009 2.39336	</position>
-              <rotation>	1.55508 3.03856 -0.102341	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.010151	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.448996 2.2201 2.39335	</position>
-              <rotation>	1.5551 -3.03839 0.102538	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.010038	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	-0.011226 2.12733 2.14099	</position>
-              <rotation>	1.22727 -0.003806 3.13682	</rotation>
-              <scale>	1.50437 0.979858 1.50441	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.679675	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.059588 0.017903 3.61106	</rayStart>
-              <rayEnd>	0.059588 0.017903 4.03806	</rayEnd>
-              <rayUp>	0.071 0 0	</rayUp>
-              <size>	0.427	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.55 0.55 0.000000 0.000000	</tiling>
-            <density>	103.411 102.706	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	135	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -17 1 -17	</minPitch>
-            <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G57_PzVI_Tiger_P/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G57_PzVI_Tiger_P/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G57_PzVI_Tiger_P/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.066695 0.000629 1.03351	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.059945 0.23596 0.229705	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.066695 0.000629 1.03351	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.051927 2.24026 2.38129	</position>
-              <rotation>	1.4397 -0.011557 3.12924	</rotation>
-              <scale>	1.59236 0.299999 1.59238	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.075538	</clipAngle>
-              <anchorShift>	0.74915	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.011174 2.1631 2.13167	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.32928 0.865808 1.3293	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.581059	</clipAngle>
-              <anchorShift>	0.586793	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x4	</tags>
-              <position>	-0.011213 2.12733 2.14098	</position>
-              <rotation>	1.22727 -0.003826 3.1368	</rotation>
-              <scale>	1.50437 0.979858 1.50441	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.86221	</clipAngle>
-              <anchorShift>	0.679678	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45003	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.448983 2.2201 2.39334	</position>
-              <rotation>	1.5551 -3.03795 0.102977	</rotation>
-              <scale>	0.587606 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.010041	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45004	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.449015 2.22009 2.39335	</position>
-              <rotation>	1.5551 3.039 -0.101901	</rotation>
-              <scale>	0.587607 0.16 0.58761	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.582996	</clipAngle>
-              <anchorShift>	0.010154	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.058413 -0.001042 1.32867	</rayStart>
-              <rayEnd>	0.058413 -0.001042 1.75567	</rayEnd>
-              <rayUp>	0.096 0 0	</rayUp>
-              <size>	0.427	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
-            <density>	100.419 100.681	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
+        <_88mm_Kw_K_36_L_56_Typ_101>	shared	  <maxAmmo>	92	</maxAmmo>
           <reloadTime>	6.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -4432,7 +3866,7 @@
             </armor_9>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
@@ -4548,8 +3982,8 @@
             <density>	117.533 107.619	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_36_L56>
-        <_88mm_KwK_43_L71>	shared	  <maxAmmo>	68	</maxAmmo>
+        </_88mm_Kw_K_36_L_56_Typ_101>
+        <_88mm_Kw_K_43_L_71_Typ_101>	shared	  <maxAmmo>	68	</maxAmmo>
           <reloadTime>	7.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -4576,7 +4010,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -17 1 -17	</minPitch>
             <maxPitch>	0 6 0.366894 6 0.430556 3 0.569444 3 0.633106 6 1 6	</maxPitch>
@@ -4691,7 +4125,7 @@
             <density>	94.729 103.976	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_43_L71>
+        </_88mm_Kw_K_43_L_71_Typ_101>
       </guns>
       <models>
         <undamaged>	vehicles/german/G57_PzVI_Tiger_P/normal/lod0/Turret_02.model	</undamaged>
@@ -5232,45 +4666,29 @@
   </turrets0>
   <engines>
     <Porsche_Typ_100_1A>	shared	  <unlocks>
-        <engine>	Porsche_Typ_100_1	  <cost>	6200	</cost>
+        <engine>	Porsche_Typ_101_P	  <cost>	12000	</cost>
         </engine>
       </unlocks>
     </Porsche_Typ_100_1A>
-    <Porsche_Typ_100_1>	shared	  <unlocks>
-        <vehicle>	G115_Typ_205B	  <cost>	101500	</cost>
-        </vehicle>
-        <engine>	Porsche_Typ_100_3	  <cost>	12000	</cost>
-        </engine>
-      </unlocks>
-    </Porsche_Typ_100_1>
-    <Porsche_Typ_100_3>	shared	</Porsche_Typ_100_3>
+    <Porsche_Typ_101_P>	shared	</Porsche_Typ_101_P>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
         <Porsche_Typ_100_1A>
-          <smplEnginePower>	581.5046	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Porsche_Typ_100_1A>
-        <Porsche_Typ_100_1>
-          <smplEnginePower>	634.3687	</smplEnginePower>
+        <Porsche_Typ_101_P>
+          <smplEnginePower>	720	</smplEnginePower>
           <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Porsche_Typ_100_1>
-        <Porsche_Typ_100_3>
-          <smplEnginePower>	708.3784	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
-        </Porsche_Typ_100_3>
+        </Porsche_Typ_101_P>
       </engines>
       <chassis>
         <Chassis_PzVI_Tiger_P>

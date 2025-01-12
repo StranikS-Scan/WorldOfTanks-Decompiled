@@ -1,12 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/data_structures.py
 from collections import defaultdict
+from constants import PICKLER_PROTOCOL_METHODS
 from soft_exception import SoftException
 
 class DictObj(dict):
 
     def __getattr__(self, name):
-        return self[name] if name in self else None
+        if name in self:
+            return self[name]
+        else:
+            if name in PICKLER_PROTOCOL_METHODS:
+                raise AttributeError(name)
+            return None
 
     def __setattr__(self, name, value):
         self[name] = value

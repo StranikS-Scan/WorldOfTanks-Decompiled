@@ -5,7 +5,6 @@ from functools import partial
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
-from items.components.ny_constants import CURRENT_YEAR_BADGE_ID, PREVIOUS_YEARS_BADGE_IDS
 _SECONDS_IN_DAY = 86400
 TOTAL_STATS_DEPENDENCIES = {}
 
@@ -314,13 +313,6 @@ EPIC_BATTLE_STATS_DEPENDENCIES = {}
 
 def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
     pass
-
-
-PLAYER_BADGES_DEPENDENCIES = {}
-
-def _set_PLAYER_BADGES_DEPENDENCIES():
-    global PLAYER_BADGES_DEPENDENCIES
-    PLAYER_BADGES_DEPENDENCIES.update({CURRENT_YEAR_BADGE_ID: [_updateNYBadges]})
 
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -1116,13 +1108,6 @@ def _processAchievementDependency(achievement, requiredAchievements, dossierDesc
         achievement.updateValueInDossier(dossierDescr, currentValue, currentStage, currentTimestamp)
 
 
-def _updateNYBadges(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    for badgeID in PREVIOUS_YEARS_BADGE_IDS:
-        dossierBlockDescr.pop(badgeID, None)
-
-    return
-
-
 def init():
     _set_TOTAL_STATS_DEPENDENCIES()
     _set_A15X15_STATS_DEPENDENCIES()
@@ -1145,4 +1130,3 @@ def init():
     _set_RANKED_STATS_DEPENDENCIES()
     _set_EPIC_BATTLE_STATS_DEPENDENCIES()
     _set_STEAM_ACHIEVEMENT_DEPENDENCIES()
-    _set_PLAYER_BADGES_DEPENDENCIES()

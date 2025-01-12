@@ -137,8 +137,7 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             elif equipment is not None:
                 if not self.sessionProvider.arenaVisitor.gui.isComp7Battle() and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
                     entityID = 0
-                name = equipment.code if equipment.code else equipment.name
-                code = '_'.join((code, name.split('_')[0].upper()))
+                code = '_'.join((code, equipment.messagePostfix))
         elif postfix:
             extCode = '{0}_{1}'.format(code, postfix)
             if extCode in self._messages:

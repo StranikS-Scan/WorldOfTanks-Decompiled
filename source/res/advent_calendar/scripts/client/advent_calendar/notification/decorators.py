@@ -7,8 +7,8 @@ from notification.settings import NOTIFICATION_TYPE
 
 class AdventCalendarDoorsAvailableDecorator(MessageDecorator):
 
-    def __init__(self, entityID, model=None, linkageData=None, template=None, priority=NotificationPriorityLevel.LOW):
-        super(AdventCalendarDoorsAvailableDecorator, self).__init__(entityID, self.__makeEntity(linkageData, template), self.__makeSettings(priority), model)
+    def __init__(self, entityID, model=None, linkageData=None, priority=NotificationPriorityLevel.LOW):
+        super(AdventCalendarDoorsAvailableDecorator, self).__init__(entityID, self.__makeEntity(linkageData), self.__makeSettings(priority), model)
 
     def getGroup(self):
         return NotificationGroup.OFFER
@@ -17,8 +17,8 @@ class AdventCalendarDoorsAvailableDecorator(MessageDecorator):
         return NOTIFICATION_TYPE.ADVENT_CALENDAR_DOORS_AVAILABLE
 
     @staticmethod
-    def __makeEntity(linkageData, template):
-        return g_settings.msgTemplates.format(template, data={'linkageData': linkageData})
+    def __makeEntity(linkageData):
+        return g_settings.msgTemplates.format('AdventCalendarReminder', data={'linkageData': linkageData})
 
     @staticmethod
     def __makeSettings(priority):

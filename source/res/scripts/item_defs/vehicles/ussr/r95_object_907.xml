@@ -859,6 +859,33 @@
         <rotation>	0 0 0	</rotation>
         <attachNode>	HP_turretJoint	</attachNode>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.663 0.184 -0.85418	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999995 0.999995 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.663 0.184 -0.85418	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.600001 0.404508 -3.459	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999988 0.999988 0.999988	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1316,7 +1343,6 @@
             </R95_Object_907_stock_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.82711	</xStart>
@@ -1526,7 +1552,6 @@
             </R95_Object_907_stock_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.82507	</xStart>
@@ -2500,6 +2525,24 @@
           <position>	0 -0.217 -1.203	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_gunJoint	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.390702 0.81951 -0.756	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0.643 0.94726 -0.519	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

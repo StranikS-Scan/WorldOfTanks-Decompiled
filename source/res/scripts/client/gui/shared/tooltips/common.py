@@ -5,14 +5,11 @@ import logging
 import math
 from collections import namedtuple, defaultdict
 from gui.impl.lobby.collection.tooltips.collection_item_tooltip_view import CollectionItemTooltipView
-from gui.impl.lobby.new_year.tooltips.ny_gift_machine_token_tooltip import NyGiftMachineTokenTooltip
-from gui.impl.lobby.new_year.tooltips.ny_sack_random_reward_tooltip import NySackRandomRewardTooltip
 from gui.impl.lobby.personal_reserves.booster_tooltip import BoosterTooltip
 from gui.impl.lobby.personal_reserves.quest_booster_tooltip import QuestBoosterTooltip
 from gui.impl.lobby.personal_reserves.tooltips.personal_reserves_tooltip_view import PersonalReservesTooltipView
 from gui.impl.pub import ToolTipWindow
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
-from gui.impl.lobby.new_year.tooltips.ny_resource_tooltip import NyResourceTooltip
 from helpers.i18n import makeString
 import ArenaType
 import ResMgr
@@ -46,11 +43,6 @@ from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import Vehi
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.lobby.tooltips.veh_post_progression_entry_point_tooltip import VehPostProgressionEntryPointTooltip
-from gui.impl.lobby.new_year.tooltips.ny_resource_list_tooltip import NyResourceListTooltip
-from gui.impl.lobby.new_year.tooltips.ny_random_resource_tooltip import NyRandomResourceTooltip
-from gui.impl.lobby.new_year.tooltips.ny_resource_shop_tooltip import NyResourceShopTooltip
-from gui.impl.lobby.new_year.tooltips.ny_reward_kit_restriction_tooltip import NyRewardKitRestrictionTooltip
-from gui.impl.lobby.new_year.tooltips.ny_vehicle_bonuses_tooltip import NyVehicleBonusesTooltip
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
@@ -1428,93 +1420,6 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         return content
 
 
-class NYAmmunitionVehicleBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYAmmunitionVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_AMMUNITION_BONUSES)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(NyVehicleBonusesTooltip(*args), useDecorator=False)
-
-
-class NYVehicleBonusTooltipWindowData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(NYVehicleBonusTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_VEHICLE_BONUS)
-
-    def getDisplayableData(self, *args, **kwargs):
-        return DecoratedTooltipWindow(NyVehicleBonusesTooltip(*args), useDecorator=False)
-
-
-class NyResourceTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyResourceTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_RESOURCE)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyResourceTooltip(*args)
-
-
-class NyResourceShopTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyResourceShopTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_RESOURCE_FOR_SHOP)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyResourceShopTooltip(*args)
-
-
-class NyRewardKitRestrictionTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyRewardKitRestrictionTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_REWARD_KIT_RESTRICTION)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyRewardKitRestrictionTooltip(*args)
-
-
-class NyResourceListTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyResourceListTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_RESOURCE_LIST)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyResourceListTooltip()
-
-
-class NyRandomResourceTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyRandomResourceTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_RANDOM_RESOURCE)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyRandomResourceTooltip(*args)
-
-
-class NyCoinTokenTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NyCoinTokenTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_COIN_TOKEN)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NyGiftMachineTokenTooltip(*args)
-
-
-class NewYearFillers(BlocksTooltipData):
-
-    def __init__(self, context):
-        super(NewYearFillers, self).__init__(context, None)
-        self._setWidth(365)
-        self._setContentMargin(0, 0, 0, 0)
-        return
-
-    def _packBlocks(self, *args, **kwargs):
-        items = super(NewYearFillers, self)._packBlocks(*args, **kwargs)
-        blocks = [formatters.packImageBlockData(backport.image(R.images.gui.maps.icons.newYear.infotype.icon_filler())), formatters.packTextBlockData(text_styles.highTitle(backport.text(R.strings.ny.fillersTooltip.header())), padding=formatters.packPadding(-364, 30, 0, 30)), formatters.packTextBlockData(text_styles.mainBig(backport.text(R.strings.ny.fillersTooltip.description())), padding=formatters.packPadding(240, 30, 30, 30))]
-        items.append(formatters.packBuildUpBlockData(blocks=blocks))
-        return items
-
-
 class VehiclePointsTooltipContentWindowData(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1716,12 +1621,3 @@ class QuestBoosterTooltipContent(WulfTooltipData):
 
     def getTooltipContent(self, boosterID, *args, **kwargs):
         return QuestBoosterTooltip(boosterID)
-
-
-class NySackRandomRewardTooltipContentWindowData(WulfTooltipData):
-
-    def __init__(self, context):
-        super(NySackRandomRewardTooltipContentWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.NY_SACK_RANDOM_REWARD)
-
-    def getTooltipContent(self, *args, **kwargs):
-        return NySackRandomRewardTooltip(*args)

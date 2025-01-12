@@ -1,18 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/meta_view/progression_item_base_model.py
-from enum import IntEnum
 from frameworks.wulf import Array
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Rank
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_division import ProgressionDivision
-
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
 
 class ProgressionItemBaseModel(ViewModel):
     __slots__ = ()

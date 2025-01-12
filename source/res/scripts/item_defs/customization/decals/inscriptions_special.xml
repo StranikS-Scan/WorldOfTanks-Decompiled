@@ -4546,6 +4546,55 @@
       <mirror>	false	</mirror>
       <tags>	styleOnly	</tags>
     </decal>
+    <decal>
+      <id>	1121	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_777.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_777	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1122	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_778.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_778	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1123	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_779.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_779	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1124	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_780.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_780	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1125	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_781.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_781	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1126	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_782.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_782	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1127	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_783.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_783	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
     <name>	Manticore	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
@@ -4619,6 +4668,25 @@
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1103	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_767.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_767	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Battle of the Bulge	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <vehicleFilter>
@@ -4669,6 +4737,37 @@
       <mirror>	false	</mirror>
     </decal>
     <name>	NY 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1135	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_796.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_796	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1136	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_797.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_797	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1137	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_798.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_798	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Lunar NY 2025	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
 </inscriptions_special.xml>

@@ -1,19 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/season_point_model.py
-from enum import Enum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import SeasonName, SeasonPointState
 from frameworks.wulf import ViewModel
-
-class SeasonPointState(Enum):
-    ACHIEVED = 'achieved'
-    POSSIBLE = 'possible'
-    NOTACHIEVED = 'notAchieved'
-
-
-class SeasonName(Enum):
-    FIRST = 'first'
-    SECOND = 'second'
-    THIRD = 'third'
-
 
 class SeasonPointModel(ViewModel):
     __slots__ = ()

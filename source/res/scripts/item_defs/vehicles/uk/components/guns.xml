@@ -123,9 +123,16 @@
     <OQF_55_pdr_CG>	132	</OQF_55_pdr_CG>
     <Twin_105_mm_Gun_L7_MBC>	137	</Twin_105_mm_Gun_L7_MBC>
     <QF_6_pounder_Mk_V_B>	138	</QF_6_pounder_Mk_V_B>
+    <Twin_120_mm_Gun_L1_MBC>	140	</Twin_120_mm_Gun_L1_MBC>
     <_105mm_AT_Gun_L7A1_GSOR>	141	</_105mm_AT_Gun_L7A1_GSOR>
     <OQF_17pdr_Gun_Mk_VII_B>	144	</OQF_17pdr_Gun_Mk_VII_B>
+    <Twin_20pdr_Gun_MBC>	145	</Twin_20pdr_Gun_MBC>
+    <Twin_20pdr_Gun_MBC_MkII>	146	</Twin_20pdr_Gun_MBC_MkII>
+    <Twin_32pdr_Gun_MBC>	147	</Twin_32pdr_Gun_MBC>
+    <Twin_32pdr_Gun_MBC_Mk2>	148	</Twin_32pdr_Gun_MBC_Mk2>
+    <Twin_105_mm_Gun_T8_MBC>	149	</Twin_105_mm_Gun_T8_MBC>
     <_123mm_OQF_Mk_1_7x7>	502	</_123mm_OQF_Mk_1_7x7>
+    <_105mm_Gun_L7_HEAT_7x7>	503	</_105mm_Gun_L7_HEAT_7x7>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -3820,6 +3827,211 @@
         </_17pdr_HE_Mk0T>
       </shots>
     </_17pdr_OQF_AT_Mk_V>
+    <Twin_20pdr_Gun_MBC>
+      <userString>	#gb_vehicles:Twin_20pdr_Gun_MBC	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	twingun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	7.7	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	2350	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20pdr_AP_Mk1_MBC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	204 188	</piercingPower>
+        </_20pdr_AP_Mk1_MBC>
+        <_20pdr_APC_Mk2_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	235 214	</piercingPower>
+        </_20pdr_APC_Mk2_MBC>
+        <_20pdr_HE_Mk3_MBC>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	930	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	42 42	</piercingPower>
+        </_20pdr_HE_Mk3_MBC>
+      </shots>
+    </Twin_20pdr_Gun_MBC>
+    <Twin_20pdr_Gun_MBC_MkII>
+      <userString>	#gb_vehicles:Twin_20pdr_Gun_MBC_MkII	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	80000	</price>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	twingun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	2450	</weight>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20pdr_AP_Mk1b_MBC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	209 190	</piercingPower>
+        </_20pdr_AP_Mk1b_MBC>
+        <_20pdr_APC_Mk2b_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1170	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	240 222	</piercingPower>
+        </_20pdr_APC_Mk2b_MBC>
+        <_20pdr_HE_Mk3b_MBC>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	950	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	42 42	</piercingPower>
+        </_20pdr_HE_Mk3b_MBC>
+      </shots>
+    </Twin_20pdr_Gun_MBC_MkII>
+    <Twin_32pdr_Gun_MBC>
+      <userString>	#gb_vehicles:Twin_32pdr_Gun_MBC	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	twingun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	7.1	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	2850	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.35	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_32pdr_AP_Mk1_MBC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	970	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	219 198	</piercingPower>
+        </_32pdr_AP_Mk1_MBC>
+        <_32pdr_APC_Mk2_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1190	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 230	</piercingPower>
+        </_32pdr_APC_Mk2_MBC>
+        <_32pdr_HE_Mk5_MBC>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	970	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	47 47	</piercingPower>
+        </_32pdr_HE_Mk5_MBC>
+      </shots>
+    </Twin_32pdr_Gun_MBC>
+    <Twin_32pdr_Gun_MBC_Mk2>
+      <userString>	#gb_vehicles:Twin_32pdr_Gun_MBC_Mk2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	100000	</price>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	twingun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	30	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	2900	</weight>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_32pdr_AP_Mk1b_MBC>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	232 217	</piercingPower>
+        </_32pdr_AP_Mk1b_MBC>
+        <_32pdr_APDS_Mk2b_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1220	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	282 269	</piercingPower>
+        </_32pdr_APDS_Mk2b_MBC>
+        <_32pdr_HE_Mk5b_MBC>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	47 47	</piercingPower>
+        </_32pdr_HE_Mk5b_MBC>
+      </shots>
+    </Twin_32pdr_Gun_MBC_Mk2>
     <_18_pdr_SPG_Gun>
       <userString>	#gb_vehicles:_18_pdr_SPG_Gun	</userString>
       <tags></tags>
@@ -5143,6 +5355,57 @@
         </_105mm_HE_L7_MBC>
       </shots>
     </Twin_105_mm_Gun_L7_MBC>
+    <Twin_105_mm_Gun_T8_MBC>
+      <userString>	#gb_vehicles:Twin_105_mm_Gun_T8_MBC	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	twingun_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	12	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	2.2	</aimingTime>
+      <weight>	3055	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_T32_MBC>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 230	</piercingPower>
+        </_105mm_AP_T32_MBC>
+        <_105mm_APCR_T29E3_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1240	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	303 181	</piercingPower>
+        </_105mm_APCR_T29E3_MBC>
+        <_105mm_HE_M11_MBC>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1030	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M11_MBC>
+      </shots>
+    </Twin_105_mm_Gun_T8_MBC>
     <_105mm_L7_SFC>
       <userString>	#gb_vehicles:_105mm_L7_SFC	</userString>
       <tags></tags>
@@ -5489,6 +5752,63 @@
         </_105mm_HE_L7>
       </shots>
     </_105mm_Gun_L7_HEAT>
+    <_105mm_Gun_L7_HEAT_7x7>
+      <userString>	#gb_vehicles:_105mm_Gun_L7_HEAT	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APCR_L7>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1478	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	268 258	</piercingPower>
+        </_105mm_APCR_L7>
+        <_105mm_HEAT_L7>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mm_HEAT_L7>
+        <_105mm_HE_L7>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_105mm_HE_L7>
+      </shots>
+    </_105mm_Gun_L7_HEAT_7x7>
     <QF_105mm_LT_Gun>
       <userString>	#gb_vehicles:QF_105mm_LT_Gun	</userString>
       <tags></tags>
@@ -5995,6 +6315,58 @@
         </_120mm_HE_L1A1>
       </shots>
     </_120mm_Gun_L1A1>
+    <Twin_120_mm_Gun_L1_MBC>
+      <userString>	#gb_vehicles:Twin_120_mm_Gun_L1_MBC	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	True	</notInShop>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	twingun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0 10 0.4 10 0.42 1 0.58 1 0.6 10 1 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	80	</maxAmmo>
+      <aimingTime>	1.8	</aimingTime>
+      <weight>	4850	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.180	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_AP_L1_MBC>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	258 240	</piercingPower>
+        </_120mm_AP_L1_MBC>
+        <_120mm_APDS_L1_MBC>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1280	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	318 296	</piercingPower>
+        </_120mm_APDS_L1_MBC>
+        <_120mm_HE_L1_MBC>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_HE_L1_MBC>
+      </shots>
+    </Twin_120_mm_Gun_L1_MBC>
     <_120mm_Gun_L1A1_FL>
       <userString>	#gb_vehicles:_120mm_Gun_L1A1	</userString>
       <tags></tags>

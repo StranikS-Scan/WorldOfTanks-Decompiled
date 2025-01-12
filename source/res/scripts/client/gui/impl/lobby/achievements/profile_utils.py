@@ -195,6 +195,7 @@ def fillAdvancedAchievementModel(achievement, achievementModel=None, withCurrent
         model.setIsTrophy(achievement.isDeprecated)
         if achievement.getTimeStamp():
             model.setReceivedDate(getRegionalDateTime(achievement.getTimeStamp(), DateTimeFormatsEnum.FULLDATE))
+            model.setReceivedShortDate(getRegionalDateTime(achievement.getTimeStamp(), DateTimeFormatsEnum.SHORTDATE))
     return achievementModel
 
 
@@ -328,8 +329,12 @@ def fillDetailsModel(achievement, tooltipData, detailsModel=None, itemsCache=Non
             rewardArray.clear()
             packBonusModelAndTooltipData(rewards.getBonuses(), rewardArray, tooltipData=tooltipData, packer=packer)
         progress = achievement.getProgress()
-        receivedDate = getRegionalDateTime(achievement.getTimeStamp(), DateTimeFormatsEnum.FULLDATE) if progress.isCompleted() else ''
+        isCompleted = progress.isCompleted()
+        timestamp = achievement.getTimeStamp() if isCompleted else None
+        receivedDate = getRegionalDateTime(timestamp, DateTimeFormatsEnum.FULLDATE) if isCompleted else ''
+        receivedShortDate = getRegionalDateTime(timestamp, DateTimeFormatsEnum.SHORTDATE) if isCompleted else ''
         model.setReceivedDate(receivedDate)
+        model.setReceivedShortDate(receivedShortDate)
         if achievement.getDisplayType() == AchievementType.SUBCATEGORY:
             model.setProgressType(ProgressType.PERCENTAGE)
         else:

@@ -7,7 +7,8 @@
       <showPostBattleStat>	true	</showPostBattleStat>
       <conditions>
         <description>
-          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_2/condition	</key>
+          <en>	Be among the top 7 Solo players or top 5 Platoons 1 times	</en>
+          <ru>	ÐÐ¾Ð¹ÑÐ¸ Ð² ÑÐ¾Ð¿-7 Ð² Ð¾Ð´Ð¸Ð½Ð¾ÑÐºÑ Ð¸Ð»Ð¸ Ð² ÑÐ¾Ð¿-5 Ð² ÑÐ¾ÑÑÐ°Ð²Ðµ Ð²Ð·Ð²Ð¾Ð´Ð° 1 ÑÐ°Ð·	</ru>
         </description>
         <preBattle>
           <account>
@@ -22,7 +23,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	10	</count>
+            <count>	1	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -63,7 +64,8 @@
       <showPostBattleStat>	true	</showPostBattleStat>
       <conditions>
         <description>
-          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_3/condition	</key>
+          <en>	Be among the top 5 Solo players or top 3 Platoons 2 times	</en>
+          <ru>	ÐÐ¾Ð¹ÑÐ¸ Ð² ÑÐ¾Ð¿-5 Ð² Ð¾Ð´Ð¸Ð½Ð¾ÑÐºÑ Ð¸Ð»Ð¸ Ð² ÑÐ¾Ð¿-3 Ð² ÑÐ¾ÑÑÐ°Ð²Ðµ Ð²Ð·Ð²Ð¾Ð´Ð° 2 ÑÐ°Ð·Ð°	</ru>
         </description>
         <preBattle>
           <account>
@@ -78,7 +80,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	20	</count>
+            <count>	2	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -119,7 +121,8 @@
       <showPostBattleStat>	true	</showPostBattleStat>
       <conditions>
         <description>
-          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_4/condition	</key>
+          <en>	Be among the top 3 Solo players or top 2 Platoons 2 times	</en>
+          <ru>	ÐÐ¾Ð¹ÑÐ¸ Ð² ÑÐ¾Ð¿-3 Ð² Ð¾Ð´Ð¸Ð½Ð¾ÑÐºÑ Ð¸Ð»Ð¸ Ð² ÑÐ¾Ð¿-2 Ð² ÑÐ¾ÑÑÐ°Ð²Ðµ Ð²Ð·Ð²Ð¾Ð´Ð° 2 ÑÐ°Ð·Ð°	</ru>
         </description>
         <preBattle>
           <account>
@@ -134,7 +137,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	25	</count>
+            <count>	2	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -175,7 +178,8 @@
       <showPostBattleStat>	true	</showPostBattleStat>
       <conditions>
         <description>
-          <key>	#vehicle_customization:customization/tooltip/quests/br_summer_style_900_5/condition	</key>
+          <en>	Be the top Solo player or Platoon and cause 7,000 HP of damage in a battle 3 times	</en>
+          <ru>	ÐÐ¾Ð¹ÑÐ¸ Ð² ÑÐ¾Ð¿-1 Ð² Ð¾Ð´Ð¸Ð½Ð¾ÑÐºÑ Ð¸Ð»Ð¸ Ð²Ð¾ Ð²Ð·Ð²Ð¾Ð´Ðµ Ð¸ Ð½Ð°Ð½ÐµÑÑÐ¸ 7 000 ÐµÐ´. ÑÑÐ¾Ð½Ð° Ð² Ð±Ð¾Ñ 3 ÑÐ°Ð·Ð°	</ru>
         </description>
         <preBattle>
           <account>
@@ -190,7 +194,7 @@
         </preBattle>
         <common>
           <battles>
-            <count>	25	</count>
+            <count>	3	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -202,7 +206,7 @@
               <lessOrEqual>	1	</lessOrEqual>
             </results>
             <vehicleDamage>
-              <greaterOrEqual>	10000	</greaterOrEqual>
+              <greaterOrEqual>	7000	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>

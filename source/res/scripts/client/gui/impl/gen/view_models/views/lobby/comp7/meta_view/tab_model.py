@@ -1,17 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/meta_view/tab_model.py
-from enum import IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from frameworks.wulf import ViewModel
-
-class MetaRootViews(IntEnum):
-    PROGRESSION = 0
-    RANKREWARDS = 1
-    YEARLYREWARDS = 2
-    WEEKLYQUESTS = 3
-    SHOP = 4
-    LEADERBOARD = 5
-    YEARLYSTATISTICS = 6
-
 
 class TabModel(ViewModel):
     __slots__ = ()

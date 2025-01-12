@@ -252,7 +252,7 @@
       <Flags>	CELL_PRIVATE	</Flags>
     </cp>
     <arenaUniqueID>
-      <Type>	UINT64	</Type>
+      <Type>	ARENA_UNIQUE_ID	</Type>
       <Flags>	OWN_CLIENT	</Flags>
       <ExposedForReplay>	true	</ExposedForReplay>
     </arenaUniqueID>
@@ -549,7 +549,7 @@
     <receiveFirstDetectionFromArena>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	UINT16	</Arg>
+      <Arg>	UINT32	</Arg>
     </receiveFirstDetectionFromArena>
     <requestDamagedDevicesFromFor>
       <Arg>	OBJECT_ID	</Arg>

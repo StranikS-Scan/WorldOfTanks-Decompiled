@@ -1,22 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/ArenaType.py
 import os
-from realm_utils import ResMgr
-from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
-from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, HAS_DEV_RESOURCES, MinimapLayerType
-from constants import IS_CELLAPP, IS_BASEAPP
+from collections import defaultdict
+from functools import partial
+from typing import Dict
+import persistent_data_cache_common as pdc
+from Math import Vector2
+from SpaceVisibilityFlags import SpaceVisibilityFlagsFactory, SpaceVisibilityFlags
+from constants import ARENA_BONUS_TYPE_IDS, ARENA_GAMEPLAY_IDS, ARENA_GAMEPLAY_NAMES, TEAMS_IN_ARENA, MinimapLayerType, PICKLER_PROTOCOL_METHODS
 from constants import CHAT_COMMAND_FLAGS
+from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH
+from constants import IS_CELLAPP, IS_BASEAPP
 from coordinate_system import AXIS_ALIGNED_DIRECTION
-from items.vehicles import CAMOUFLAGE_KINDS
+from data_structures import DictObj
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import _xml
-from typing import Dict
+from items.vehicles import CAMOUFLAGE_KINDS
+from persistent_data_cache_common.serializers import WGPickleSerializer
+from realm_utils import ResMgr
 from soft_exception import SoftException
-from collections import defaultdict
-from data_structures import DictObj
 from visual_script.misc import ASPECT, VisualScriptTag, readVisualScriptPlanParams, readVisualScriptPlans
-from SpaceVisibilityFlags import SpaceVisibilityFlagsFactory, SpaceVisibilityFlags
-from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -68,11 +71,12 @@ def buildArenaTypeID(gameplayID, geometryID):
 _LIST_XML = ARENA_TYPE_XML_PATH + '_list_.xml'
 _DEFAULT_XML = ARENA_TYPE_XML_PATH + '_default_.xml'
 
-def init(isFullCache=True):
+def _readCache(isFullCache):
     global g_gameplayNames
     global g_cache
     global g_geometryNamesToIDs
     global g_gameplaysMask
+    global g_geometryCache
     rootSection = ResMgr.openSection(_LIST_XML)
     if rootSection is None:
         raise SoftException("Can't open '%s'" % _LIST_XML)
@@ -98,7 +102,45 @@ def init(isFullCache=True):
     ResMgr.purge(_DEFAULT_XML, True)
     g_gameplaysMask = getGameplaysMask(g_gameplayNames)
     g_geometryNamesToIDs = {arenaType.geometryName:arenaType.geometryID for arenaType in g_cache.itervalues()}
-    return
+    return (g_cache,
+     g_geometryCache,
+     g_spaceCache,
+     g_geometryNamesToIDs,
+     g_gameplayNames,
+     g_gameplaysMask)
+
+
+class _CacheSerializer(WGPickleSerializer):
+    __slots__ = ()
+
+    def deserialize(self, data):
+        global g_gameplaysMask
+        cache, geometryCache, spaceCache, geometryNamesToIDs, gameplayNames, gameplaysMask = super(_CacheSerializer, self).deserialize(data)
+        g_cache.update(cache)
+        g_geometryCache.update(geometryCache)
+        g_spaceCache.update(spaceCache)
+        g_geometryNamesToIDs.update(geometryNamesToIDs)
+        g_gameplayNames.update(gameplayNames)
+        g_gameplaysMask = gameplaysMask
+        return (cache,
+         geometryCache,
+         spaceCache,
+         geometryNamesToIDs,
+         gameplayNames,
+         gameplaysMask)
+
+    def rollbackSideEffects(self):
+        global g_gameplaysMask
+        g_cache.clear()
+        g_geometryCache.clear()
+        g_spaceCache.clear()
+        g_geometryNamesToIDs.clear()
+        g_gameplayNames.clear()
+        g_gameplaysMask = 0
+
+
+def init(isFullCache=True):
+    pdc.load('arena_type_cache', partial(_readCache, isFullCache), _CacheSerializer())
 
 
 class _BonusTypeOverridesMixin(object):
@@ -109,6 +151,8 @@ class _BonusTypeOverridesMixin(object):
         return
 
     def __getattr__(self, name):
+        if name in PICKLER_PROTOCOL_METHODS:
+            raise AttributeError(name)
         return self.__bonusTypeCfg.get(self._bonusType, {}).get(name) if self._bonusType is not None else None
 
     def __enter__(self):
@@ -199,7 +243,6 @@ class _DroneSettingHolder(object):
 
 
 def __buildCache(geometryID, geometryName, defaultXml, isFullCache, isDevelopmentArena=False):
-    global g_geometryCache
     sectionName = ARENA_TYPE_XML_PATH + geometryName + '.xml'
     section = ResMgr.openSection(sectionName)
     if section is None:

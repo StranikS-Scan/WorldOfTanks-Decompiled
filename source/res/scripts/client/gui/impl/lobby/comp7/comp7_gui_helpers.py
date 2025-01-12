@@ -26,7 +26,7 @@ def isSeasonStasticsShouldBeShown(comp7Controller=None):
 
 
 def isComp7OnboardingShouldBeShown():
-    return _needToShowComp7Intro() and not _hasParticipantToken()
+    return _needToShowComp7Intro(includePreannounced=True) and not _hasParticipantToken()
 
 
 def isComp7WhatsNewShouldBeShown():
@@ -35,10 +35,10 @@ def isComp7WhatsNewShouldBeShown():
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def updateComp7LastSeason(comp7Controller=None):
-    if not comp7Controller.hasActiveSeason():
+    season = comp7Controller.getCurrentSeason(includePreannounced=True)
+    if not season:
         return
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    season = comp7Controller.getCurrentSeason()
     settings[COMP7_LAST_SEASON] = seasonNameBySeasonNumber(season.getNumber())
     AccountSettings.setUIFlag(COMP7_UI_SECTION, settings)
 
@@ -50,11 +50,13 @@ def isViewShown(key, settingsCore=None):
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def _needToShowComp7Intro(comp7Controller=None):
-    if not comp7Controller.hasActiveSeason():
+def _needToShowComp7Intro(comp7Controller=None, includePreannounced=False):
+    if not comp7Controller.isAvailable():
+        return False
+    season = comp7Controller.getCurrentSeason(includePreannounced=includePreannounced)
+    if not season:
         return False
     settings = AccountSettings.getUIFlag(COMP7_UI_SECTION)
-    season = comp7Controller.getCurrentSeason()
     return settings.get(COMP7_LAST_SEASON) != seasonNameBySeasonNumber(season.getNumber())
 
 
@@ -64,7 +66,7 @@ def _hasParticipantToken(comp7Controller=None, itemsCache=None):
         tokenInfo = itemsCache.items.tokens.getTokens().get(participantToken)
         if tokenInfo is not None:
             _, count = tokenInfo
-            if count > 0:
-                return True
+            return count > 0 and True
+        continue
 
     return False

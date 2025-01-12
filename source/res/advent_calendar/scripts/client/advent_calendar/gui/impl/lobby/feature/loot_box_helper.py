@@ -4,10 +4,6 @@ from collections import namedtuple
 from copy import copy
 from advent_calendar.gui.feature.constants import GUARANTEED_REWARD_GROUP_NAME
 from gui.server_events.bonuses import getNonQuestBonuses
-from helpers import dependency, int2roman
-from items.components.ny_constants import ToyTypes
-from new_year.ny_toy_info import NewYearCurrentToyInfo
-from skeletons.gui.shared import IItemsCache
 Slot = namedtuple('Slot', ('name', 'probability', 'bonuses'))
 
 class LootBoxHelper(object):
@@ -64,7 +60,7 @@ class LootBoxHelper(object):
                 name = b.getName()
                 if name == 'oneof':
                     bonuses.extend(LootBoxHelper.__parseOneOfSection(b.getValue()))
-                if name == 'ny25Toys':
+                if name == 'ny24Toys':
                     bonuses.extend(_extractNyRandomToy(b.getValue()))
                 bonuses.append(b)
 
@@ -89,70 +85,10 @@ def _extractNyRandomToy(rawData):
     bonuses = []
     for bonusValue in rawData.itervalues():
         for toyId, count in bonusValue.iteritems():
-            bonuses.extend(getNonQuestBonuses('randomNyToy', count, ctx={'toyId': toyId}))
+            bonuses.extend(getNonQuestBonuses('randomNy24Toy', count, ctx={'toyId': toyId}))
 
     return bonuses
 
 
 def _stripSlotName(name):
     return name.replace('slot_', '')
-
-
-_VEHICLES_TIER_THRESHOLD = 8
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def isHighTierBonusVehicle(bonus, itemsCache=None):
-    vehicle = itemsCache.items.getItemByCD(bonus.getValue().keys()[0])
-    return vehicle.level >= _VEHICLES_TIER_THRESHOLD if vehicle else None
-
-
-def extractCustomizationBonus(bonus):
-    value = bonus.getValue()
-    if isinstance(value, list):
-        value = value[0]
-    return bonus.getC11nItem(value)
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def extractItemBonus(bonus, itemsCache=None):
-    item = itemsCache.items.getItemByCD(bonus.getValue().keys()[0])
-    return item.userName if item else ''
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def extractVehicleBonus(bonus, itemsCache=None):
-    vehicle = itemsCache.items.getItemByCD(bonus.getValue().keys()[0])
-    return '{vehName} ({vehLevel})'.format(vehName=vehicle.userName, vehLevel=int2roman(vehicle.level)) if vehicle else ''
-
-
-_BONUS_TYPE_VALUE_EXTRACTOR = {'items': extractItemBonus,
- 'highTierVehicles': extractVehicleBonus,
- 'lowTierVehicles': extractVehicleBonus}
-
-def processProbabilityBonuses(probabilityGroups):
-    processedBonuses = {}
-    for probabilityGroup in probabilityGroups:
-        bonusItems = {}
-        for bonus in probabilityGroup.bonuses:
-            bonusType = bonus.getName()
-            if bonusType == 'currencies':
-                bonusType = bonus.getCode()
-            elif bonusType == 'vehicles':
-                bonusType = 'highTierVehicles' if isHighTierBonusVehicle(bonus) else 'lowTierVehicles'
-            elif bonusType == 'customizations':
-                value = extractCustomizationBonus(bonus)
-                if value:
-                    bonusType = value.itemTypeName
-                    if bonusType == 'style':
-                        bonusType += '_3d' if value.is3D else '_2d'
-                    bonusItems.setdefault(bonusType, set()).add(value.userName)
-                    continue
-            elif bonusType == 'randomNyToy':
-                toyId = bonus.getContext().get('toyId')
-                if toyId is not None and NewYearCurrentToyInfo(toyId).getToyType() == ToyTypes.COLOR_FIR:
-                    bonusType = ToyTypes.COLOR_FIR
-            bonusItems.setdefault(bonusType, set()).add(_BONUS_TYPE_VALUE_EXTRACTOR.get(bonusType, lambda b: str(b.getValue()))(bonus))
-
-        processedBonuses.setdefault(probabilityGroup.name, {}).setdefault(probabilityGroup.probability, {}).update(bonusItems)
-
-    return processedBonuses

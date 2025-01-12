@@ -13,7 +13,7 @@ from constants import IS_EDITOR
 from helpers import dependency
 import Math
 from items.vehicles import getItemByCompactDescr
-from items.components.c11n_constants import CustomizationType, DecalType
+from items.components.c11n_constants import CustomizationType, DecalType, SLOT_DEFAULT_ALLOWED_MODEL
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import stricted_loading
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames, TankNodeNames
@@ -638,7 +638,7 @@ class VehicleStickers(object):
 
     show = property(lambda self: self.__show, __setShow)
 
-    def __init__(self, spaceID, vehicleDesc, insigniaRank=0, outfit=None):
+    def __init__(self, spaceID, vehicleDesc, insigniaRank=0, outfit=None, currentModelsSet=None):
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
         self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
@@ -647,7 +647,8 @@ class VehicleStickers(object):
         self.__componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
         if outfit is None:
             outfit = Outfit(vehicleCD=vehicleDesc.makeCompactDescr())
-        componentSlots = self._createComponentSlots(vehicleDesc, vehicleDesc.turret.showEmblemsOnGun, outfit)
+        modelsSet = currentModelsSet if IS_EDITOR else outfit.modelsSet
+        componentSlots = self._createComponentSlots(vehicleDesc, vehicleDesc.turret.showEmblemsOnGun, modelsSet)
         if not isUseDebugStickers():
             self.__stickerPacks = self._createStickerPacks(vehicleDesc, outfit, insigniaRank)
         else:
@@ -738,22 +739,45 @@ class VehicleStickers(object):
         return
 
     @classmethod
-    def _createComponentSlots(cls, vehicleDesc, showEmblemsOnGun, outfit):
+    def _createComponentSlots(cls, vehicleDesc, showEmblemsOnGun, modelsSet):
         showEmblemsOnGun = vehicleDesc.turret.showEmblemsOnGun
-        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots), (TankPartNames.GUN if showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots), (TankPartNames.TURRET if showEmblemsOnGun else TankPartNames.GUN, [ slot for slot in vehicleDesc.gun.emblemSlots if slot.type != 'insigniaOnGun' ]))
-        gunSlots = cls._createGunSlots(vehicleDesc, outfit)
+        componentSlots = ((TankPartNames.HULL, cls._filterClanEmblems(vehicleDesc.hull.emblemSlots, modelsSet)), (TankPartNames.GUN if showEmblemsOnGun else TankPartNames.TURRET, cls._filterClanEmblems(vehicleDesc.turret.emblemSlots, modelsSet)), (TankPartNames.TURRET if showEmblemsOnGun else TankPartNames.GUN, cls._filterClanEmblems([ slot for slot in vehicleDesc.gun.emblemSlots if slot.type != 'insigniaOnGun' ], modelsSet)))
+        gunSlots = cls._createGunSlots(vehicleDesc, modelsSet)
         if gunSlots:
             componentSlots += gunSlots
         return componentSlots
 
     @classmethod
-    def _createGunSlots(cls, vehicleDesc, outfit):
+    def _filterClanEmblems(cls, emblemSlots, modelsSet):
+        clanSlots = []
+        nonClanSlots = []
+        for slot in emblemSlots:
+            if slot.type == 'clan':
+                clanSlots.append(slot)
+            nonClanSlots.append(slot)
+
+        filteredSlots = []
+        for slot in clanSlots:
+            if modelsSet is not None:
+                if modelsSet == '':
+                    modelsSet = SLOT_DEFAULT_ALLOWED_MODEL
+                if modelsSet in slot.compatibleModels:
+                    filteredSlots.append(slot)
+
+        if not filteredSlots:
+            for slot in clanSlots:
+                if not slot.compatibleModels:
+                    filteredSlots.append(slot)
+
+        return nonClanSlots + filteredSlots
+
+    @classmethod
+    def _createGunSlots(cls, vehicleDesc, modelsSet):
         gunEmblemSlots = vehicleDesc.gun.emblemSlots
-        outfitModelSet = outfit.modelsSet
         compatibleGunSlots = []
-        if outfitModelSet:
+        if modelsSet:
             for gSlot in gunEmblemSlots:
-                if outfitModelSet in gSlot.compatibleModels:
+                if modelsSet in gSlot.compatibleModels:
                     compatibleGunSlots.append(gSlot)
 
         if not compatibleGunSlots:

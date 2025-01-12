@@ -51,6 +51,12 @@ class IBattleResultsService(object):
     def getAdditionalXPValue(self, arenaUniqueID):
         raise NotImplementedError
 
+    def submitPlayerSatisfactionRating(self, areneUniqueID, rating):
+        raise NotImplementedError
+
+    def getPlayerSatisfactionRating(self, arenaUniqueID):
+        raise NotImplementedError
+
     def isCrewSameForArena(self, arenaUniqueID):
         raise NotImplementedError
 

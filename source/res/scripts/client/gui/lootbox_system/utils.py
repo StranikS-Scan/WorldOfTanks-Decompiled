@@ -123,7 +123,7 @@ def getVehicleForStyle(style, itemsCache=None):
     else:
         getVehicleByCD = itemsCache.items.getItemByCD
         getVehiclesStats = itemsCache.items.getAccountDossier().getRandomStats().getVehicles
-        vehiclesStats = {vehicleCD:value for vehicleCD, value in getVehiclesStats() if not getVehicleByCD(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(getVehicleByCD(vehicleCD))}
+        vehiclesStats = {vehicleCD:value for vehicleCD, value in getVehiclesStats().iteritems() if not getVehicleByCD(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(getVehicleByCD(vehicleCD))}
         if vehiclesStats:
             sortedVehicles = sorted(vehiclesStats.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
             if sortedVehicles:

@@ -6,7 +6,7 @@ import BigWorld
 import Event
 from Account import PlayerAccount
 from adisp import adisp_async, adisp_process
-from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE
+from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE, PlayerSatisfactionRating
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from gui import SystemMessages
 from gui.battle_results import context, emblems, reusable, stored_sorting
@@ -15,9 +15,11 @@ from gui.battle_results.composer import RegularStatsComposer
 from gui.battle_results.settings import PREMIUM_STATE
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.gui_items.processors.common import BattleResultsGetter, PremiumBonusApplier
+from gui.shared.gui_items.processors.player_satisfaction_rating import PlayerSatisfactionRatingProcessor
 from gui.shared.system_factory import collectBattleResultStatsCtrl
 from gui.shared.utils import decorators
 from helpers import dependency
+from helpers.func_utils import isDeveloperFunc
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -43,7 +45,7 @@ class BattleResultsService(IBattleResultsService):
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     wotPlusController = dependency.descriptor(IWotPlusController)
-    __slots__ = ('__battleResults', '__statsCtrls', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus')
+    __slots__ = ('__battleResults', '__statsCtrls', '__buy', '__eventsManager', 'onResultPosted', '__appliedAddXPBonus', '__playerSatisfactionRatings')
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
@@ -51,6 +53,7 @@ class BattleResultsService(IBattleResultsService):
         self.__buy = set()
         self.__appliedAddXPBonus = set()
         self.__eventsManager = Event.EventManager()
+        self.__playerSatisfactionRatings = dict()
         self.onResultPosted = Event.Event(self.__eventsManager)
 
     def init(self):
@@ -116,6 +119,9 @@ class BattleResultsService(IBattleResultsService):
         else:
             self.__updateReusableInfo(reusableInfo)
             arenaUniqueID = reusableInfo.arenaUniqueID
+            playerSatisfactionRating = reusableInfo.personal.avatar.playerSatisfactionRating
+            if playerSatisfactionRating != PlayerSatisfactionRating.NONE:
+                self.__playerSatisfactionRatings[arenaUniqueID] = playerSatisfactionRating
             statsCtrl = createStatsCtrl(reusableInfo)
             statsCtrl.setResults(result, reusableInfo)
             self.__statsCtrls[arenaUniqueID] = statsCtrl
@@ -171,6 +177,25 @@ class BattleResultsService(IBattleResultsService):
     def getAdditionalXPValue(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)
         return 0 if arenaInfo is None else arenaInfo.extraXP
+
+    @adisp_process
+    def submitPlayerSatisfactionRating(self, arenaUniqueID, rating):
+        result = yield PlayerSatisfactionRatingProcessor(arenaUniqueID, rating).request()
+        if result and result.userMsg:
+            _logger.warning(result.userMsg)
+        if result and result.success:
+            self.__playerSatisfactionRatings[arenaUniqueID] = rating
+
+    def getPlayerSatisfactionRating(self, arenaUniqueID):
+        return self.__playerSatisfactionRatings.get(arenaUniqueID, PlayerSatisfactionRating.NONE)
+
+    @isDeveloperFunc
+    def resetPlayerSatisfactionRatings(self):
+        arenaUniqueIDs = self.__playerSatisfactionRatings.keys()
+        if not arenaUniqueIDs:
+            return
+        BigWorld.player().registerWithPlayerSatisfactionMgr(arenaUniqueIDs)
+        self.__playerSatisfactionRatings.clear()
 
     def isCrewSameForArena(self, arenaUniqueID):
         arenaInfo = self.__getAdditionalXPBattles().get(arenaUniqueID)

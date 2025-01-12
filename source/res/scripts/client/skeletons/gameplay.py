@@ -8,6 +8,8 @@ class GameplayStateID(object):
     BATTLE_REPLAY = 'game.replay'
     ACCOUNT = 'online.account'
     AVATAR = 'online.avatar'
+    WAITING_MAIN_LOOP = 'offline.waiting.main.loop'
+    SYNCHRONIZATION = 'offline.synchronization'
     LOGIN = 'offline.login'
     ACCOUNT_ENTERING = 'account.entering'
     ACCOUNT_SHOW_GUI = 'account.show_gui'
@@ -26,6 +28,11 @@ class GameplayStateID(object):
     BATTLE_REPLAY_REWIND = 'replay.rewind'
     BATTLE_REPLAY_FINISHED = 'replay.finished'
     BATTLE_REPLAY_NEXT = 'replay.next'
+
+
+class OfflineEventID(object):
+    MAIN_LOOP_INITIALIZED = 'game.offline.main.loop.initialized'
+    SYNCHRONIZED = 'game.offline.synchronized'
 
 
 class PlayerEventID(object):

@@ -43,7 +43,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	127	</armor_1>
+      <armor_1>	146.1	</armor_1>
       <armor_2>	120	</armor_2>
       <armor_3>	63.5	</armor_3>
       <armor_4>	38.1	</armor_4>
@@ -54,7 +54,7 @@
       <armor_9>	88.9	</armor_9>
       <armor_10>	25.4	</armor_10>
       <armor_11>	70	</armor_11>
-      <armor_12>	95	</armor_12>
+      <armor_12>	101.6	</armor_12>
       <armor_13>	40	</armor_13>
       <armor_14>	44.4	</armor_14>
       <armor_15>	55	</armor_15>
@@ -3569,100 +3569,12 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	90	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	3.5	</reloadTime>
-          <unlocks>
-            <gun>	_76mm_Gun_T91E5	  <cost>	6550	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	25	</gun>
-          </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.2	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002484 0.001874 1.47186	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.002478 0.180737 0.180737	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002484 0.001874 1.47186	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.74494	</rayStart>
-              <rayEnd>	0 0 2.24494	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/american/A142_Pawlack_Tank/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A142_Pawlack_Tank/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A142_Pawlack_Tank/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A142_Pawlack_Tank/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A142_Pawlack_Tank/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <camouflage>
-            <density>	118.952 119.069	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Gun_M1A2>
         <_76mm_Gun_T91E5>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	3.5	</reloadTime>
+          <reloadTime>	4.6	</reloadTime>
           <unlocks>
             <turret>	Turret_2_A142_Pawlack_Tank	  <cost>	5100	</cost>
             </turret>
@@ -4250,98 +4162,12 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.015	</invisibilityFactor>
       <guns>
-        <_76mm_Gun_M1A2>	shared	  <maxAmmo>	90	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	3.4	</reloadTime>
-          <armor>
-            <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	155	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	76.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_7>	125	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <gun>	25	</gun>
-          </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.1	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.002484 0.001874 1.47186	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.002478 0.180737 0.180737	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.002484 0.001874 1.47186	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 0 1.74494	</rayStart>
-              <rayEnd>	0 0 2.24494	</rayEnd>
-              <rayUp>	0.082 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/american/A142_Pawlack_Tank/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A142_Pawlack_Tank/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A142_Pawlack_Tank/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A142_Pawlack_Tank/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A142_Pawlack_Tank/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <camouflage>
-            <density>	118.896 118.888	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_76mm_Gun_M1A2>
         <_76mm_Gun_T91E5>	shared	  <maxAmmo>	90	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	3.4	</reloadTime>
+          <reloadTime>	4.4	</reloadTime>
           <armor>
             <armor_1>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4991,11 +4817,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

@@ -1,10 +1,148 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gameplay/states.py
-from frameworks.state_machine import State, StateFlags
+import logging
+import enum
+import typing
+import BattleReplay
+import BigWorld
+import persistent_data_cache as pdc
+import wg_async
+from PlayerEvents import g_playerEvents
+from constants import IS_DEVELOPMENT
+from frameworks.state_machine import State, StateFlags, StringEvent
 from frameworks.state_machine import StringEventTransition
-from skeletons.gameplay import GameplayStateID
+from gui.game_loading import loading as gameLoading
+from gui.game_loading.resources.consts import Milestones
+from shared_utils import safeCancelCallback
+from skeletons.gameplay import GameplayStateID, OfflineEventID
 from skeletons.gameplay import PlayerEventID
 from skeletons.gameplay import ReplayEventID
+if typing.TYPE_CHECKING:
+    from gameplay.machine import GameplayStateMachine
+_logger = logging.getLogger(__name__)
+
+@enum.unique
+class SyncingProgress(enum.IntEnum):
+    NOT_STARTED = 0
+    SYNCING = 1
+    COMPLETE = 2
+    CANCELED = 3
+
+
+class WaitingMainLoopState(State):
+    __slots__ = ('_callbackId',)
+
+    def __init__(self):
+        super(WaitingMainLoopState, self).__init__(GameplayStateID.WAITING_MAIN_LOOP, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
+        self._callbackId = None
+        return
+
+    def clear(self):
+        self._cancelWaiting()
+        super(WaitingMainLoopState, self).clear()
+
+    def _onEntered(self):
+        super(WaitingMainLoopState, self)._onEntered()
+        self._initWaiting()
+
+    def _onExited(self):
+        self._cancelWaiting()
+        super(WaitingMainLoopState, self)._onExited()
+
+    def _initWaiting(self):
+        if self._callbackId is None:
+            self._callbackId = BigWorld.callback(0.0, self._onCompleteEvent)
+            _logger.debug('[%s] Waiting initialized.', self)
+        else:
+            _logger.error('[%s] Waiting already initialized.', self)
+        return
+
+    def _cancelWaiting(self):
+        if self._callbackId is not None:
+            safeCancelCallback(self._callbackId)
+            self._callbackId = None
+            _logger.debug('[%s] Waiting canceled.', self)
+        return
+
+    def _onCompleteEvent(self):
+        self._cancelWaiting()
+        machine = self.getMachine()
+        if machine is not None:
+            machine.post(StringEvent(OfflineEventID.MAIN_LOOP_INITIALIZED))
+        else:
+            _logger.error('[%s] not registered in state machine.', self)
+        return
+
+
+class SynchronizationState(State):
+    __slots__ = ('_syncProgress', '_savePDC')
+    _PDC_SAVING_TIMEOUT = 120.0 if not IS_DEVELOPMENT else None
+    _GAME_LOADING_TIMEOUT = 15.0 if not IS_DEVELOPMENT else None
+
+    def __init__(self, savePDC=True):
+        super(SynchronizationState, self).__init__(GameplayStateID.SYNCHRONIZATION, flags=StateFlags.SINGULAR)
+        self._syncProgress = SyncingProgress.NOT_STARTED
+        self._savePDC = savePDC
+
+    def clear(self):
+        self._syncProgress = SyncingProgress.CANCELED
+        super(SynchronizationState, self).clear()
+
+    @staticmethod
+    def _fireSavingPDCEvent():
+        g_playerEvents.onLoadingMilestoneReached(Milestones.SAVING_PDC)
+
+    @wg_async.wg_async
+    def _onEntered(self):
+        super(SynchronizationState, self)._onEntered()
+        if self._syncProgress == SyncingProgress.NOT_STARTED:
+            canceled = yield wg_async.wg_await(self._sync())
+            if canceled:
+                raise wg_async.AsyncReturn(None)
+        else:
+            _logger.error('[%s] Already %s.', self, self._syncProgress)
+        self._onCompleteEvent()
+        return
+
+    @wg_async.wg_async
+    def _sync(self):
+        self._syncProgress = SyncingProgress.SYNCING
+        _logger.debug('[%s] Loading started.', self)
+        if self._savePDC:
+            pdcEvents = pdc.getEventsDispatcher()
+            if pdcEvents is not None:
+                pdcEvents.onCacheDataSavingStarted += self._fireSavingPDCEvent
+            yield wg_async.wg_await(pdc.save(timeout=self._PDC_SAVING_TIMEOUT))
+            if pdcEvents is not None:
+                pdcEvents.onCacheDataSavingStarted -= self._fireSavingPDCEvent
+            if self._syncProgress != SyncingProgress.SYNCING:
+                _logger.debug('[%s] PDC saved. Loading skipped -> %s.', self, self._syncProgress)
+                raise wg_async.AsyncReturn(True)
+        else:
+            _logger.debug('[%s] PDC saving skipped.', self)
+        gameLoadingWaiting = gameLoading.getLoader()
+        gameLoadingWaiting.setGameLoadingComplete()
+        yield wg_async.wg_await(gameLoadingWaiting.wait(timeout=self._GAME_LOADING_TIMEOUT))
+        if self._syncProgress != SyncingProgress.SYNCING:
+            _logger.debug('[%s] Waiting released. Loading skipped -> %s.', self, self._syncProgress)
+            raise wg_async.AsyncReturn(True)
+        self._syncProgress = SyncingProgress.COMPLETE
+        _logger.debug('[%s] Loading completed.', self)
+        raise wg_async.AsyncReturn(False)
+        return
+
+    def _onExited(self):
+        self._syncProgress = SyncingProgress.CANCELED
+        super(SynchronizationState, self)._onExited()
+
+    def _onCompleteEvent(self):
+        machine = self.getMachine()
+        if machine is not None:
+            machine.post(StringEvent(OfflineEventID.SYNCHRONIZED))
+        else:
+            _logger.error('[%s] not registered in state machine.', self)
+        return
+
 
 class OfflineState(State):
     __slots__ = ()
@@ -13,12 +151,26 @@ class OfflineState(State):
         super(OfflineState, self).__init__(stateID=GameplayStateID.OFFLINE, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
 
     @property
-    def login(self):
+    def waitingMainLoop(self):
         return self.getChildByIndex(0)
 
+    @property
+    def synchronization(self):
+        return self.getChildByIndex(1)
+
+    @property
+    def login(self):
+        return self.getChildByIndex(2)
+
     def configure(self):
-        login = State(stateID=GameplayStateID.LOGIN, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
+        waitingMainLoop = WaitingMainLoopState()
+        synchronization = SynchronizationState()
+        login = State(stateID=GameplayStateID.LOGIN, flags=StateFlags.SINGULAR)
+        self.addChildState(waitingMainLoop)
+        self.addChildState(synchronization)
         self.addChildState(login)
+        waitingMainLoop.addTransition(StringEventTransition(OfflineEventID.MAIN_LOOP_INITIALIZED), target=synchronization)
+        synchronization.addTransition(StringEventTransition(OfflineEventID.SYNCHRONIZED), target=login)
 
 
 class OnlineState(State):
@@ -142,6 +294,17 @@ class AvatarState(State):
         arenaLoaded.addTransition(StringEventTransition(PlayerEventID.AVATAR_BECOME_NON_PLAYER), target=exiting)
 
 
+class BattleReplayLoadingState(State):
+    __slots__ = ()
+
+    def __init__(self):
+        super(BattleReplayLoadingState, self).__init__(stateID=GameplayStateID.BATTLE_REPLAY_LOADING, flags=StateFlags.SINGULAR)
+
+    def enter(self):
+        super(BattleReplayLoadingState, self).enter()
+        BattleReplay.g_replayCtrl.autoStartBattleReplay()
+
+
 class BattleReplayInitState(State):
     __slots__ = ()
 
@@ -164,11 +327,23 @@ class BattleReplayInitState(State):
     def nextReplay(self):
         return self.getChildByIndex(3)
 
+    @property
+    def waitingMainLoop(self):
+        return self.getChildByIndex(4)
+
+    @property
+    def synchronization(self):
+        return self.getChildByIndex(5)
+
     def configure(self):
-        loading = State(stateID=GameplayStateID.BATTLE_REPLAY_LOADING, flags=StateFlags.SINGULAR | StateFlags.INITIAL)
+        waitingMainLoop = WaitingMainLoopState()
+        synchronization = SynchronizationState(savePDC=False)
+        loading = BattleReplayLoadingState()
         differs = State(stateID=GameplayStateID.BATTLE_REPLAY_VERSION_DIFFERS)
         starting = State(stateID=GameplayStateID.BATTLE_REPLAY_STARTING)
         nextReplay = State(stateID=GameplayStateID.BATTLE_REPLAY_NEXT)
+        waitingMainLoop.addTransition(StringEventTransition(OfflineEventID.MAIN_LOOP_INITIALIZED), target=synchronization)
+        synchronization.addTransition(StringEventTransition(OfflineEventID.SYNCHRONIZED), target=loading)
         loading.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMATION), target=differs)
         nextReplay.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMATION), target=differs)
         differs.addTransition(StringEventTransition(ReplayEventID.REPLAY_VERSION_CONFIRMED), target=starting)
@@ -176,6 +351,8 @@ class BattleReplayInitState(State):
         self.addChildState(differs)
         self.addChildState(starting)
         self.addChildState(nextReplay)
+        self.addChildState(waitingMainLoop)
+        self.addChildState(synchronization)
 
 
 class BattleReplayPlayingState(State):

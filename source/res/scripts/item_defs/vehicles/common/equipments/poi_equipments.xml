@@ -4,41 +4,33 @@
     <userString>	#artefacts:poi_artillery_aoe/name	</userString>
     <description>	#artefacts:poi_artillery_aoe/descr	</description>
     <icon>	poi_artillery 0 0	</icon>
-    <price>	150	  <gold></gold>
-    </price>
+    <price>	0	</price>
     <notInShop>	true	</notInShop>
-    <tags>	notForSale avatar trigger poiEquipment	</tags>
+    <tags>	notForSale poiEquipment	</tags>
     <type>	battleAbilities	</type>
-    <code>	artillery	</code>
+    <messagePostfix>	artillery	</messagePostfix>
     <soundNotification>	comp_7_ability_ready	</soundNotification>
-    <script>	PoiArtilleryEquipment	  <shortDescription>	#artefacts:poi_artillery_aoe/shortDescr	</shortDescription>
-      <longDescription>	#artefacts:poi_artillery_aoe/longDescr	</longDescription>
-      <shortFilterAlert></shortFilterAlert>
-      <longFilterAlert></longFilterAlert>
-      <cooldownTime>	0	</cooldownTime>
-      <cooldownFactors></cooldownFactors>
-      <sharedCooldownTime>	0	</sharedCooldownTime>
-      <consumeAmmo>	true	</consumeAmmo>
-      <disableAllyDamage>	true	</disableAllyDamage>
-      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
-      <minApplyRadius>	20	</minApplyRadius>
-      <maxApplyRadius>	300	</maxApplyRadius>
-      <requireAssists>	true	</requireAssists>
-      <delay>	3	</delay>
+    <script>	PoiArtilleryEquipment	  <visualScript>
+        <server>
+          <plan>	PointsOfInterest/abilities/artillery_server	</plan>
+        </server>
+      </visualScript>
+      <delay>	3	  <exports>	vse tooltip	</exports>
+      </delay>
+      <radius>	25	  <exports>	vse tooltip	</exports>
+      </radius>
+      <damage>	400	  <exports>	vse tooltip	</exports>
+      </damage>
+      <stunDuration>	10	  <exports>	vse tooltip	</exports>
+      </stunDuration>
+      <fraction>	0	  <exports>	vse tooltip	</exports>
+      </fraction>
+      <areaShow>	always	</areaShow>
       <duration>	1.0	</duration>
-      <maxCount>	1	</maxCount>
-      <shotsNumber>	1	</shotsNumber>
-      <explodeDestructible>	true	</explodeDestructible>
-      <areaRadius>	25	</areaRadius>
       <areaVisual>	content/Interface/TargetPoint/circle_shot_area.visual	</areaVisual>
       <areaUsedPrefab>	content/CGFPrefabs/Battle/Consumables/shot_area.prefab	</areaUsedPrefab>
-      <areaVisibleToEnemies>	false	</areaVisibleToEnemies>
       <areaColor>	0xFF25FF25	</areaColor>
-      <areaShow>	before	</areaShow>
-      <noOwner>	false	</noOwner>
-      <attackerType>	ARTILLERY_EQ	</attackerType>
-      <shotSoundPreDelay>	1	</shotSoundPreDelay>
-      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <requireAssists>	true	</requireAssists>
       <effects>
         <action>
           <shotEffects>	epicArtilleryStrike	</shotEffects>
@@ -48,25 +40,6 @@
           <repeatDelayDeviationPercent>	0	</repeatDelayDeviationPercent>
         </action>
       </effects>
-      <actions>
-        <action>
-          <type>	DamageVehicleWithDispersion	</type>
-          <applyTo>	enemy_team	</applyTo>
-          <args>
-            <damage>	400	</damage>
-            <damageDispersionPercent>	0	</damageDispersionPercent>
-          </args>
-        </action>
-        <action>
-          <type>	StunVehicleAndSendResults	</type>
-          <applyTo>	all	</applyTo>
-          <args>
-            <shellCompactDescr>	88858	</shellCompactDescr>
-            <sendAttackResults>	True	</sendAttackResults>
-            <ignoreStunResistanceDuration>	False	</ignoreStunResistanceDuration>
-          </args>
-        </action>
-      </actions>
     </script>
   </poi_artillery_aoe>
   <poi_radar>

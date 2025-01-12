@@ -39,10 +39,6 @@ class BattleReplayMachine(StateMachine):
         self.addState(initialization)
         self.addState(playing)
 
-    def start(self, doValidate=True):
-        super(BattleReplayMachine, self).start(doValidate)
-        BattleReplay.g_replayCtrl.autoStartBattleReplay()
-
 
 def create():
     if BattleReplay.g_replayCtrl.getAutoStartFileName():

@@ -134,7 +134,7 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
                 self.__radialKeyDown = key
                 if not self.hasDelayedCallback(self.__delayOpenRadialMenu) and avatar_getter.isVehicleAlive() and not isPlayerObserver:
                     if self.__commandReceivedData is None and cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
-                        self._openRadialMenu()
+                        self.__openRadialMenu()
                     else:
                         self.delayCallback(_DELAY_FOR_OPENING_RADIAL_MENU, self.__delayOpenRadialMenu)
                 return True
@@ -232,9 +232,9 @@ class CalloutController(CallbackDelayer, IViewComponentsController):
         containerManager = self.__appLoader.getApp().containerManager
         if containerManager.isModalViewsIsExists() or self.__appLoader.getApp().hasGuiControlModeConsumers(*_CONSUMERS_LOCKS):
             return
-        self._openRadialMenu()
+        self.__openRadialMenu()
 
-    def _openRadialMenu(self):
+    def __openRadialMenu(self):
         self.__radialMenuIsOpen = True
         if avatar_getter.isVehicleAlive() and not self.sessionProvider.getCtx().isPlayerObserver():
             self.__executeHide()

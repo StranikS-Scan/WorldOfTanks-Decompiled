@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/bonus_readers.py
 import time
-from functools import partial
 from typing import Union, TYPE_CHECKING
 import dossiers2
 from dynamic_currencies import g_dynamicCurrenciesData
@@ -14,11 +13,10 @@ from blueprints.FragmentTypes import isUniversalFragment
 from dossiers2.custom.account_layout import ACCOUNT_DOSSIER_DICT_BLOCKS
 from dossiers2.custom.cache import getCache
 from invoices_helpers import checkAccountDossierOperation
-from items import vehicles, tankmen, utils, collectibles, new_year
+from items import vehicles, tankmen, utils
 from items.components.c11n_constants import SeasonType
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from constants import DOSSIER_TYPE, IS_DEVELOPMENT, SEASON_TYPE_BY_NAME, EVENT_TYPE, INVOICE_LIMITS, ENTITLEMENT_OPS, DailyQuestsLevels, MAX_LOG_EXT_INFO_LEN
-from items.components.ny_constants import YEARS_INFO, YEARS
 from soft_exception import SoftException
 from customization_quests_common import validateCustomizationQuestToken
 if TYPE_CHECKING:
@@ -863,24 +861,6 @@ def __readMetaSection(bonus, _name, section, eventType, checkLimit):
         return
 
 
-def __readBonus_nyToy(bonus, _name, section, eventType, year, checkLimit):
-    if section.has_key('id'):
-        tid = section['id'].asInt
-        cache = collectibles.g_cache[YEARS.getYearStrFromYearNum(year)].toys
-        if tid not in cache:
-            raise SoftException('Unknown NY{} toyID: {}'.format(year, tid))
-        count = section['count'].asInt if section.has_key('count') else 0
-        isCurrentYear = year == YEARS_INFO.CURRENT_YEAR
-        slotID = section['slotID'].asInt if section.has_key('slotID') else -1
-        if isCurrentYear and slotID == -1:
-            raise SoftException('Missing slot id')
-        if isCurrentYear and (slotID < 0 or slotID >= len(new_year.g_cache.slots) or new_year.g_cache.slots[slotID].type != cache[tid].type):
-            raise SoftException('Invalid slot id: {}'.format(slotID))
-        toysCollectionKey = YEARS_INFO.getCollectionKeyForYear(year)
-        nyToys = bonus.setdefault(toysCollectionKey, {})
-        nyToys.setdefault(slotID, {})[tid] = count
-
-
 def __readBonus_optionalData(config, bonusReaders, section, eventType):
     limitIDs, bonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     probabilityStageCount = config.get('probabilityStageCount', 1)
@@ -1140,7 +1120,6 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'blueprintAny': __readBonus_blueprintAny,
  'currency': __readBonus_currency,
  'freePremiumCrew': __readBonus_freePremiumCrew}
-__BONUS_READERS.update({'ny{}Toy'.format(year):partial(__readBonus_nyToy, year=year) for year in YEARS.ALL})
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

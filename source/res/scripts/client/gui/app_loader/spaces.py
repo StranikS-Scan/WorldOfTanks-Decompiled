@@ -107,7 +107,7 @@ class CloseGameLoadingMixin(object):
         super(CloseGameLoadingMixin, self).fini(*args, **kwargs)
 
     def _closeGameLoading(self):
-        gameLoading.getLoader().idl()
+        gameLoading.getLoader().idle()
 
     def _unsubscribe(self):
         self.__cancelCallback()

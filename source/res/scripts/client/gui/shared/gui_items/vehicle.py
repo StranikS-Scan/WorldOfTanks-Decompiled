@@ -608,10 +608,6 @@ class Vehicle(FittingItem):
         name = getNationLessName(self.name)
         return getShopVehicleIconPath(size, name)
 
-    def getSnapshotIcon(self):
-        name = getIconResourceName(getNationLessName(self.name))
-        return RES_ICONS.getSnapshotIcon(name)
-
     @property
     def invID(self):
         return self._inventoryID

@@ -100,9 +100,11 @@ class SkillMatrixComponent(ComponentBase):
 
     def _fillViewModel(self, vm):
         perksResetGracePeriod = getPerksResetGracePeriod()
-        hasFreeReset = not self.context.tankman.descriptor.firstSkillResetDisabled
-        vm.setHasResetDiscount(not self.context.resetDisabled and (self.context.hasDropSkillDiscount or hasFreeReset or perksResetGracePeriod > 0))
-        vm.setIsResetDisable(self.context.resetDisabled)
+        isResetFree = not self.context.tankman.descriptor.firstSkillResetDisabled or perksResetGracePeriod > 0
+        resetDisabled = self.context.resetDisabled
+        vm.setHasResetDiscount(not resetDisabled and (self.context.hasDropSkillDiscount or isResetFree))
+        vm.setIsResetFree(not resetDisabled and isResetFree)
+        vm.setIsResetDisable(resetDisabled)
         vm.setHasIncreaseDiscount(self.context.hasIncreaseDiscount)
         vm.setResetGracePeriodLeft(perksResetGracePeriod)
         self._fillMajorSkills(vm)

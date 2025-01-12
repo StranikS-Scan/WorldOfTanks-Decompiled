@@ -419,7 +419,7 @@ class Rarity(object):
     EPIC = 'epic'
     LEGENDARY = 'legendary'
     FILTERABLE = (LEGENDARY, EPIC, RARE)
-    UI_EFFECT = (LEGENDARY, EPIC)
+    UI_EFFECT = (EPIC, LEGENDARY)
     ALL = FILTERABLE + (UNKNOWN,)
 
 

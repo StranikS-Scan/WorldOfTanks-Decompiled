@@ -39,6 +39,9 @@ class GameSeason(object):
     def hasTentativeDates(self):
         return bool(self.__data.get('tentativeDates'))
 
+    def getPreannounceStartDate(self):
+        return self.__data.get('startPreannounce')
+
     def isLastCycle(self, cycleID):
         return self.getLastCycleInfo().ordinalNumber == self.getCycleInfo(cycleID).ordinalNumber
 
@@ -262,6 +265,15 @@ def getSeasonNumber(config, seasonID):
     else:
         seasonData = seasons.get(seasonID, {})
         return seasonData.get('number', None)
+
+
+def getSeasonData(config, seasonID):
+    seasons = config.get('seasons', {})
+    if not seasons:
+        return None
+    else:
+        seasonData = seasons.get(seasonID, {})
+        return seasonData
 
 
 def getCurrentSeasonNumber(config, currentTime=None):

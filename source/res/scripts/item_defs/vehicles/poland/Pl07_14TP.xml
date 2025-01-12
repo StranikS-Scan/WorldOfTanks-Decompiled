@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -1186,7 +1186,7 @@
         <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	4200	</weight>
-      <maxLoad>	14500	</maxLoad>
+      <maxLoad>	14600	</maxLoad>
       <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
       <brakeForce>	32500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
@@ -2790,522 +2790,6 @@
     </Chassis_Pl07_14TP_2>
   </chassis>
   <turrets0>
-    <Turret_1_Pl07_14TP>
-      <userString>	#poland_vehicles:Turret_1_Pl07_14TP	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	2100	</price>
-      <unlocks>
-        <turret>	Turret_2_Pl07_14TP	  <cost>	1100	</cost>
-        </turret>
-      </unlocks>
-      <armor>
-        <armor_1>	18	</armor_1>
-        <armor_2>	16	</armor_2>
-        <armor_3>	16	</armor_3>
-        <armor_4>	16	</armor_4>
-        <armor_5>	16	</armor_5>
-        <armor_6>	8	</armor_6>
-        <armor_8>	0	</armor_8>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	1000	</weight>
-      <maxHealth>	80	</maxHealth>
-      <rotationSpeed>	35	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	300	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	60	</maxHealth>
-        <maxRegenHealth>	30	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
-      <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	160	</maxAmmo>
-          <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	12	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	16	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.16665 0.016339 0.797436	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.117785 0.117786	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.166651 0.016336 0.79744	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.06221 2.20714 1.5265	</position>
-              <rotation>	0.096107 0.000591 3.13776	</rotation>
-              <scale>	0.702804 0.297908 0.702806	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.860386	</clipAngle>
-              <anchorShift>	-0.045831	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.166359 -0.000869 0.864307	</rayStart>
-              <rayEnd>	0.166359 -0.000869 1.064307	</rayEnd>
-              <rayUp>	0.0333 0 0	</rayUp>
-              <size>	0.2	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.166359 -0.000869 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	0.48 0.24 0.000000 0.000000	</tiling>
-            <density>	126.363 129.09	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_37mm_Bofors_wz_37>
-      </guns>
-      <models>
-        <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Turret_01.model	</exploded>
-      </models>
-      <hitTester>
-        <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Turret_01.model	</collisionModelClient>
-      </hitTester>
-      <gunPosition>	-0.063912 0.398609 0.715551	</gunPosition>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.015 -0.008 1 0 0.563 0.208 0.747 0.67 0.5 0.5 0.204 0.5 0.068 0.995 0.138	</physicsShape>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	-0.000004 0.645059 -0.000001	</anchorPosition>
-          <anchorDirection>	-0 1 0	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	-0.000004 0.645059 -0.000001	</anchorPosition>
-          <anchorDirection>	-0 1 0	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33000	</slotId>
-          <rayStart>	-0.66104 0.337461 0.299618	</rayStart>
-          <rayEnd>	-0.482958 0.29993 0.216687	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.3	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33001	</slotId>
-          <isMirrored>	true	</isMirrored>
-          <rayStart>	0.66104 0.337461 0.299618	</rayStart>
-          <rayEnd>	0.482958 0.29993 0.216687	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.3	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35000	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.060296 2.18363 1.21705	</position>
-          <rotation>	0.25376 -0.00003 3.13765	</rotation>
-          <scale>	0.643143 0.272619 0.643144	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.024167	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35001	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.010463 2.26329 0.941934	</position>
-          <rotation>	0.096107 0.000591 3.13776	</rotation>
-          <scale>	1.09375 0.463627 1.09376	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.797238	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004175	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35002	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.00037 2.26115 0.060289	</position>
-          <rotation>	2.97525 -0.000014 -0.000034	</rotation>
-          <scale>	0.51757 0.219391 0.517571	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	-0.035823	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35003	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.000356 1.92066 -0.237865	</position>
-          <rotation>	1.75149 -0.000194 -0.00019	</rotation>
-          <scale>	0.438108 0.185708 0.438108	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.044171	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35004	</slotId>
-          <tags>	formfactor_square direction_right_to_left	</tags>
-          <position>	-0.235258 1.92994 0.034655	</position>
-          <rotation>	1.56436 3.04278 1.40323	</rotation>
-          <scale>	0.457779 0.194046 0.457779	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.094169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35005	</slotId>
-          <tags>	formfactor_square direction_right_to_left	</tags>
-          <position>	-0.580637 1.88544 0.809555	</position>
-          <rotation>	1.56436 3.04265 1.44588	</rotation>
-          <scale>	0.671102 0.317508 0.671102	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.094169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35006	</slotId>
-          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-          <position>	-0.644361 1.88539 0.811211	</position>
-          <rotation>	1.56423 3.04263 1.44581	</rotation>
-          <scale>	1.09148 0.799999 1.09148	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35007	</slotId>
-          <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-          <position>	-0.64469 1.9198 0.799609	</position>
-          <rotation>	1.56418 3.04262 1.44581	</rotation>
-          <scale>	1.40893 1.03267 1.40893	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35008	</slotId>
-          <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-          <position>	-0.645916 1.92011 0.752566	</position>
-          <rotation>	1.56412 3.0426 1.44573	</rotation>
-          <scale>	1.8509 1.35661 1.8509	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.034169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35009	</slotId>
-          <tags>	formfactor_rect1x6 direction_right_to_left	</tags>
-          <position>	-0.645905 1.90476 0.752464	</position>
-          <rotation>	1.56415 3.04262 1.44571	</rotation>
-          <scale>	1.8509 1.35661 1.8509	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35010	</slotId>
-          <tags>	formfactor_square direction_left_to_right	</tags>
-          <position>	0.235304 1.92993 0.034656	</position>
-          <rotation>	1.56437 -3.03655 -1.39703	</rotation>
-          <scale>	0.457779 0.194046 0.457779	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.094168	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35011	</slotId>
-          <tags>	formfactor_square direction_left_to_right	</tags>
-          <position>	0.580676 1.88541 0.809558	</position>
-          <rotation>	1.5643 -3.03642 -1.43961	</rotation>
-          <scale>	0.671101 0.317507 0.671102	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.094169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35012	</slotId>
-          <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
-          <position>	0.644401 1.88536 0.811213	</position>
-          <rotation>	1.56403 -3.03669 -1.43969	</rotation>
-          <scale>	1.09148 0.799998 1.09148	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.034169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35013	</slotId>
-          <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-          <position>	0.644731 1.91978 0.799612	</position>
-          <rotation>	1.56415 -3.03665 -1.43965	</rotation>
-          <scale>	1.40892 1.03267 1.40893	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.034169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35014	</slotId>
-          <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-          <position>	0.645956 1.92008 0.752568	</position>
-          <rotation>	1.56396 -3.03672 -1.43992	</rotation>
-          <scale>	1.8509 1.35661 1.8509	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35015	</slotId>
-          <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
-          <position>	0.645946 1.90474 0.752467	</position>
-          <rotation>	1.56398 -3.03668 -1.43995	</rotation>
-          <scale>	1.8509 1.35661 1.8509	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.034168	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35016	</slotId>
-          <tags>	formfactor_rect1x2	</tags>
-          <position>	-0.010496 2.26861 0.88675	</position>
-          <rotation>	0.096107 0.000591 3.13776	</rotation>
-          <scale>	1.09375 0.463627 1.09376	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004174	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35017	</slotId>
-          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-          <position>	-0.011078 2.25531 1.02503	</position>
-          <rotation>	-3.13414 1.5673 -0.095897	</rotation>
-          <scale>	1.35364 0.573791 1.35365	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004171	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35018	</slotId>
-          <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-          <position>	-0.010032 2.2792 0.776616	</position>
-          <rotation>	-3.13414 1.5673 -0.095897	</rotation>
-          <scale>	1.87402 0.79437 1.87402	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004174	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35019	</slotId>
-          <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-          <position>	-0.004599 2.27916 0.776634	</position>
-          <rotation>	-3.13414 1.5673 -0.095897	</rotation>
-          <scale>	1.87402 0.79437 1.87402	</scale>
-          <showOn>	4352	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004173	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35020	</slotId>
-          <tags>	formfactor_rect1x3	</tags>
-          <position>	-0.008586 2.26861 0.886748	</position>
-          <rotation>	0.096107 0.000591 3.13776	</rotation>
-          <scale>	1.11284 0.471719 1.11285	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004167	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35021	</slotId>
-          <tags>	formfactor_rect1x4	</tags>
-          <position>	-0.008586 2.2686 0.886748	</position>
-          <rotation>	0.096107 0.000591 3.13776	</rotation>
-          <scale>	1.11284 0.471719 1.11285	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.004176	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35022	</slotId>
-          <tags>	formfactor_rect1x3	</tags>
-          <position>	-0.008782 2.30497 0.496352	</position>
-          <rotation>	3.13222 -0.000007 -0.00002	</rotation>
-          <scale>	0.875615 0.371162 0.875624	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.860386	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	-0.035834	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35023	</slotId>
-          <tags>	formfactor_square safe left direction_right_to_left	</tags>
-          <position>	-0.519415 1.89713 1.04559	</position>
-          <rotation>	1.50124 -1.30687 2.83049	</rotation>
-          <scale>	0.523208 0.247537 0.523208	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.799693	</clipAngle>
-          <anchorShift>	0.124169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35024	</slotId>
-          <tags>	formfactor_square safe right direction_left_to_right	</tags>
-          <position>	0.489089 1.89138 1.10035	</position>
-          <rotation>	1.49954 1.37533 -2.76226	</rotation>
-          <scale>	0.515786 0.244025 0.515786	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.718796	</clipAngle>
-          <anchorShift>	0.124169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35025	</slotId>
-          <tags>	formfactor_rect1x2 safe left direction_right_to_left	</tags>
-          <position>	-0.584402 2.02791 0.817647	</position>
-          <rotation>	1.67825 1.53762 -0.059539	</rotation>
-          <scale>	0.64472 0.305026 0.64472	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.447295	</clipAngle>
-          <anchorShift>	0.054169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35026	</slotId>
-          <tags>	formfactor_rect1x2 safe right direction_left_to_right	</tags>
-          <position>	0.607146 1.8047 0.867502	</position>
-          <rotation>	1.67821 -1.53764 0.059519	</rotation>
-          <scale>	0.654581 0.309692 0.654581	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.655965	</clipAngle>
-          <anchorShift>	0.054169	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35027	</slotId>
-          <tags>	formfactor_rect1x2 mimic left direction_right_to_left	</tags>
-          <position>	-0.644368 1.89664 0.811285	</position>
-          <rotation>	1.56422 3.04262 1.44579	</rotation>
-          <scale>	1.24451 0.809727 1.24451	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.833433	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35028	</slotId>
-          <tags>	formfactor_rect1x2 mimic right direction_left_to_right	</tags>
-          <position>	0.644408 1.89662 0.811288	</position>
-          <rotation>	1.56408 -3.03649 -1.43969	</rotation>
-          <scale>	1.24451 0.809727 1.24451	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.833433	</clipAngle>
-          <anchorShift>	0.03417	</anchorShift>
-        </slot>
-      </customizationSlots>
-      <customization>
-        <customizableVehicleAreas>
-          <paint>	TURRET	</paint>
-          <camouflage>	TURRET	</camouflage>
-        </customizableVehicleAreas>
-      </customization>
-      <camouflage>
-        <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
-        <density>	117.272 116.318	</density>
-        <aoTextureSize>	512 256	</aoTextureSize>
-      </camouflage>
-    </Turret_1_Pl07_14TP>
     <Turret_2_Pl07_14TP>
       <userString>	#poland_vehicles:Turret_2_Pl07_14TP	</userString>
       <tags></tags>
@@ -3345,7 +2829,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.037	</invisibilityFactor>
       <guns>
-        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	160	</maxAmmo>
+        <_47mm_armata_wz_39>	shared	  <maxAmmo>	100	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3355,28 +2839,28 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	2.8	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_small	</effects>
           <reloadEffect>	reload20_45	</reloadEffect>
@@ -3384,39 +2868,31 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0.020811 -0.021692 0.792142	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
+              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	0.134641 0.108652 0.108656	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
+              <anchorPosition>	0 0.108655 0.108656	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0.020811 -0.021692 0.792145	</anchorPosition>
+              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
               <anchorDirection>	0 0 1	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.041621 -0.043383 0.838641	</rayStart>
-              <rayEnd>	-0.041621 -0.043383 1.038641	</rayEnd>
-              <rayUp>	0.0333 0 0	</rayUp>
-              <size>	0.2	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49001	</slotId>
-              <rayStart>	-0.041621 -0.043383 0.838641	</rayStart>
-              <rayEnd>	-0.041621 -0.043383 1.038641	</rayEnd>
-              <rayUp>	0.0333 0 0	</rayUp>
-              <size>	0.2	</size>
+              <rayStart>	-0.041632 -0.046242 1.32399	</rayStart>
+              <rayEnd>	-0.041632 -0.046242 1.62399	</rayEnd>
+              <rayUp>	0.047 0 0	</rayUp>
+              <size>	0.3	</size>
             </slot>
           </customizationSlots>
           <customization>
@@ -3427,14 +2903,16 @@
           </customization>
           <camouflage>
             <tiling>	0.48 0.24 0.000000 0.000000	</tiling>
-            <density>	126.363 129.09	</density>
+            <density>	131.027 130.915	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_37mm_Bofors_wz_37>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	92	</maxAmmo>
+        </_47mm_armata_wz_39>
+        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	120	</maxAmmo>
           <unlocks>
-            <gun>	_47mm_armata_wz_39	  <cost>	1400	</cost>
-            </gun>
+            <vehicle>	Pl33_SDP_Wz_40	  <cost>	11830	</cost>
+            </vehicle>
+            <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3445,14 +2923,14 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	6.5	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	6.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <clip>
             <count>	4	</count>
             <rate>	150	</rate>
@@ -3521,90 +2999,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_40mm_auto_Boforsa>
-        <_47mm_armata_wz_39>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <vehicle>	Pl33_SDP_Wz_40	  <cost>	11830	</cost>
-            </vehicle>
-            <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.108655 0.108656	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.041632 -0.046242 1.32399	</rayStart>
-              <rayEnd>	-0.041632 -0.046242 1.62399	</rayEnd>
-              <rayUp>	0.047 0 0	</rayUp>
-              <size>	0.3	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.48 0.24 0.000000 0.000000	</tiling>
-            <density>	131.027 130.915	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_armata_wz_39>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Turret_02.model	</undamaged>
@@ -4121,12 +3515,12 @@
     <detailed>
       <engines>
         <J_V12_M>
-          <smplEnginePower>	250	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	280	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </J_V12_M>
         <PLInz_RWA>
-          <smplEnginePower>	280	</smplEnginePower>
-          <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
+          <smplEnginePower>	300	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </PLInz_RWA>
       </engines>
       <chassis>

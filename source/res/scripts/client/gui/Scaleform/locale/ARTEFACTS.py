@@ -824,6 +824,7 @@ class ARTEFACTS(object):
     COMP7_AGGRESSIVE_DETECTION_DESCR_ACTIVE = '#artefacts:comp7_aggressive_detection/descr/active'
     COMP7_MARCH_NAME = '#artefacts:comp7_march/name'
     COMP7_MARCH_DESCR_ACTIVE = '#artefacts:comp7_march/descr/active'
+    COMP7_ROLE_SKILL_DESCR_STARTLEVEL = '#artefacts:comp7_role_skill/descr/startLevel'
     POI_RADAR_NAME = '#artefacts:poi_radar/name'
     POI_RADAR_DESCR = '#artefacts:poi_radar/descr'
     POI_ARTILLERY_AOE_NAME = '#artefacts:poi_artillery_aoe/name'

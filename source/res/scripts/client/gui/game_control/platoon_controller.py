@@ -57,7 +57,7 @@ from gui.impl.lobby.platoon.platoon_helpers import convertTierFilterToList
 from gui.prb_control.settings import REQUEST_TYPE
 from cgf_components.hangar_camera_manager import HangarCameraManager
 if TYPE_CHECKING:
-    from typing import Any, Optional as TOptional, Tuple as TTuple
+    from typing import Any, Optional as TOptional, Tuple as TTuple, List, Dict
     from UnitBase import ProfileVehicle
 _logger = logging.getLogger(__name__)
 _MIN_PERF_PRESET_NAME = 'MIN'
@@ -424,7 +424,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def getPlatoonSlotsData(self):
         entity = self.prbEntity
-        orderedSlots = {}
+        orderedSlots = []
         if isinstance(entity, UnitEntity):
             unitFullData = entity.getUnitFullData(entity.getID())
             if unitFullData.unit is None:

@@ -89,7 +89,7 @@ class OnboardingQueueView(BaseWaitQueueView):
     def _hideGameLoading(self):
         self._uiLogger.logGameLoadingClose()
         self._hideGameLoadingCallbackId = None
-        loading.getLoader().idl()
+        loading.getLoader().idle()
         return
 
     @UseStoryModeFading()

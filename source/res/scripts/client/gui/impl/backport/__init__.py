@@ -8,6 +8,6 @@ from gui.impl.backport.backport_system_locale import getIntegralFormat, getGoldF
 from gui.impl.backport.backport_system_locale import getFractionalFormat, getNiceNumberFormat
 from gui.impl.backport.backport_system_locale import getShortTimeFormat, getLongTimeFormat
 from gui.impl.backport.backport_system_locale import getShortDateFormat, getLongDateFormat
-from gui.impl.backport.backport_system_locale import getYearMonthFormat, getDateTimeFormat
+from gui.impl.backport.backport_system_locale import getYearMonthFormat, getDateTimeFormat, getShortDateTimeFormat
 from gui.impl.backport.backport_system_locale import upper, lower
-__all__ = ('text', 'ntext', 'msgid', 'sound', 'image', 'layout', 'getTillTimeStringByRClass', 'BackportTooltipWindow', 'TooltipData', 'createTooltipData', 'BackportContextMenuWindow', 'createContextMenuData', 'getIntegralFormat', 'getGoldFormat', 'getFractionalFormat', 'getNiceNumberFormat', 'getShortTimeFormat', 'getLongTimeFormat', 'getShortDateFormat', 'getLongDateFormat', 'getYearMonthFormat', 'getDateTimeFormat', 'upper', 'lower')
+__all__ = ('text', 'ntext', 'msgid', 'sound', 'image', 'layout', 'getTillTimeStringByRClass', 'BackportTooltipWindow', 'TooltipData', 'createTooltipData', 'BackportContextMenuWindow', 'createContextMenuData', 'getIntegralFormat', 'getGoldFormat', 'getFractionalFormat', 'getNiceNumberFormat', 'getShortTimeFormat', 'getLongTimeFormat', 'getShortDateFormat', 'getLongDateFormat', 'getYearMonthFormat', 'getDateTimeFormat', 'getShortDateTimeFormat', 'upper', 'lower')

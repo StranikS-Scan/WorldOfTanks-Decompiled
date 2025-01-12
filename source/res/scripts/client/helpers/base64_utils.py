@@ -36,7 +36,8 @@ def unpack(packed, default=None):
      cPickle.PickleError,
      UnicodeError,
      TypeError,
-     ValueError):
+     ValueError,
+     EOFError):
         _logger.exception('Unpacking data fail.')
 
     return default

@@ -568,7 +568,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.STYLE: StyleItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.PAINT: PaintItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.STYLE: StyleItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.FONT: Font, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.DECAL: DecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.PAINT: PaintItem, CustomizationType.SEQUENCE: SequenceItem}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -596,47 +596,47 @@ class _Filter(object):
     def match(self, item):
         raise NotImplementedError
 
+class VehicleFilterNode(object):
+    __metaclass__ = ReflectionMetaclass
+    __slots__ = ('nations', 'levels', 'tags', 'vehicles')
+    def __init__(self):
+        self.nations = None
+        self.levels = None
+        self.tags = None
+        self.vehicles = None
+
+    def __deepcopy__(self, memodict = {}):
+        newItem = type(self)()
+        newItem.nations = deepcopy(self.nations)
+        newItem.levels = deepcopy(self.levels)
+        newItem.vehicles = deepcopy(self.vehicles)
+        newItem.tags = deepcopy(self.tags)
+        return newItem
+
+    def __str__(self):
+        result = []
+        if self.nations:
+            result.append(str(self.nations))
+        if self.levels:
+            result.append(str(self.levels))
+        if self.vehicles:
+            result.append(str(self.vehicles))
+        if self.tags:
+            result.append(str(self.tags))
+        return '; '.join(result)
+
+    def match(self, vehicleDescr):
+        return self.matchVehicleType(vehicleDescr.type)
+
+    def matchVehicleType(self, vehicleType):
+        nationID = vehicleType.customizationNationID
+        if (self.nations and nationID not in self.nations) or ((self.levels and vehicleType.level not in self.levels) or ((self.vehicles and (vehicleType.compactDescr not in self.vehicles or (self.tags and not self.tags < vehicleType.tags))) or (self.tags and (not self.tags < vehicleType.tags)))):
+            return False
+        else:
+            return True
+
 class VehicleFilter(_Filter):
     __metaclass__ = ReflectionMetaclass
-    class FilterNode(object):
-        __metaclass__ = ReflectionMetaclass
-        __slots__ = ('nations', 'levels', 'tags', 'vehicles')
-        def __init__(self):
-            self.nations = None
-            self.levels = None
-            self.tags = None
-            self.vehicles = None
-
-        def __deepcopy__(self, memodict = {}):
-            newItem = type(self)()
-            newItem.nations = deepcopy(self.nations)
-            newItem.levels = deepcopy(self.levels)
-            newItem.vehicles = deepcopy(self.vehicles)
-            newItem.tags = deepcopy(self.tags)
-            return newItem
-
-        def __str__(self):
-            result = []
-            if self.nations:
-                result.append(str(self.nations))
-            if self.levels:
-                result.append(str(self.levels))
-            if self.vehicles:
-                result.append(str(self.vehicles))
-            if self.tags:
-                result.append(str(self.tags))
-            return '; '.join(result)
-
-        def match(self, vehicleDescr):
-            return self.matchVehicleType(vehicleDescr.type)
-
-        def matchVehicleType(self, vehicleType):
-            nationID = vehicleType.customizationNationID
-            if (self.nations and nationID not in self.nations) or ((self.levels and vehicleType.level not in self.levels) or ((self.vehicles and (vehicleType.compactDescr not in self.vehicles or (self.tags and not self.tags < vehicleType.tags))) or (self.tags and (not self.tags < vehicleType.tags)))):
-                return False
-            else:
-                return True
-
     def match(self, vehicleDescr):
         include = (not self.include) or any(f.match(vehicleDescr) for f in self.include)
         return include and not (self.exclude and any(f.match(vehicleDescr) for f in self.exclude))
@@ -645,37 +645,37 @@ class VehicleFilter(_Filter):
         include = (not self.include) or any(f.matchVehicleType(vehicleType) for f in self.include)
         return include and not (self.exclude and any(f.matchVehicleType(vehicleType) for f in self.exclude))
 
+class ItemsFilterNode(object):
+    __slots__ = ('ids', 'itemGroupNames', 'tags', 'types', 'customizationDisplayType')
+    def __init__(self):
+        self.ids = None
+        self.itemGroupNames = None
+        self.tags = None
+        self.types = None
+        self.customizationDisplayType = None
+
+    def __str__(self):
+        result = []
+        if self.ids is not None:
+            result.append(str(self.ids))
+        if self.itemGroupNames is not None:
+            result.append(str(self.itemGroupNames))
+        if self.tags is not None:
+            result.append(str(self.tags))
+        if self.types is not None:
+            result.append(str(self.types))
+        if self.customizationDisplayType is not None:
+            result.append(str(self.customizationDisplayType))
+        return '; '.join(result)
+
+    def matchItem(self, item):
+        if (self.ids is not None and item.id not in self.ids) or ((self.itemGroupNames is not None and item.parentGroup.name not in self.itemGroupNames) or ((self.tags is not None and not self.tags < item.tags) or ((self.types is not None and (item.itemType == CustomizationType.DECAL and (item.type not in self.types or (self.customizationDisplayType is not None and item.customizationDisplayType != self.customizationDisplayType)))) or (self.customizationDisplayType is not None and (item.customizationDisplayType != self.customizationDisplayType))))):
+            return False
+        else:
+            return True
+
 class ItemsFilter(_Filter):
     __metaclass__ = ReflectionMetaclass
-    class FilterNode(object):
-        __slots__ = ('ids', 'itemGroupNames', 'tags', 'types', 'customizationDisplayType')
-        def __init__(self):
-            self.ids = None
-            self.itemGroupNames = None
-            self.tags = None
-            self.types = None
-            self.customizationDisplayType = None
-
-        def __str__(self):
-            result = []
-            if self.ids is not None:
-                result.append(str(self.ids))
-            if self.itemGroupNames is not None:
-                result.append(str(self.itemGroupNames))
-            if self.tags is not None:
-                result.append(str(self.tags))
-            if self.types is not None:
-                result.append(str(self.types))
-            if self.customizationDisplayType is not None:
-                result.append(str(self.customizationDisplayType))
-            return '; '.join(result)
-
-        def matchItem(self, item):
-            if (self.ids is not None and item.id not in self.ids) or ((self.itemGroupNames is not None and item.parentGroup.name not in self.itemGroupNames) or ((self.tags is not None and not self.tags < item.tags) or ((self.types is not None and (item.itemType == CustomizationType.DECAL and (item.type not in self.types or (self.customizationDisplayType is not None and item.customizationDisplayType != self.customizationDisplayType)))) or (self.customizationDisplayType is not None and (item.customizationDisplayType != self.customizationDisplayType))))):
-                return False
-            else:
-                return True
-
     def match(self, item):
         include = (not self.include) or any(f.matchItem(item) for f in self.include)
         return include and not (self.exclude and any(f.matchItem(item) for f in self.exclude))
@@ -800,7 +800,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.INSIGNIA: self.insignias, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.SEQUENCE: self.sequences, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals}
+        self.itemTypes = {CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.DECAL: self.decals, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.INSIGNIA: self.insignias, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.ATTACHMENT: self.attachments}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
@@ -1226,7 +1226,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

@@ -2044,6 +2044,42 @@
         </effects>
       </variant1>
     </tree_Birch_Bold_15m_touchdown>
+    <tree_Birch_Dry_2m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_fall.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Birch_Dry_2m_fall>
+    <tree_Birch_Dry_2m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Dry_2m_touchdown.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down_small	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Birch_Dry_2m_touchdown>
     <tree_Linden_Town_Dry_16m_fall>
       <variant1>
         <stages>
@@ -7438,425 +7474,6 @@
         </effects>
       </variant1>
     </hd_bld_SU_206_Cellar>
-    <hd_paper_tree_big_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_large	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_big_02>
-    <hd_paper_tree_big_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_07.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_large	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_big_01>
-    <hd_paper_tree_medium>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_05.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_medium>
-    <hd_paper_tree_small>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_03.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_small>
-    <hd_paper_tree_green_big_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_02.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_large	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_green_big_02>
-    <hd_paper_tree_green_big_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_08.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_large	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_green_big_01>
-    <hd_paper_tree_green_medium>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_06.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_large	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_green_medium>
-    <hd_paper_tree_green_small>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_178_PaperTree_04.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_paper_tree_green_small>
-    <hd_env_UNI_186_PaperBush_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_186_PaperBush_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_186_PaperBush_01>
-    <hd_env_UNI_186_PaperBush_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_186_PaperBush_02.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params>
-              <debrisAmount>	58.580002	</debrisAmount>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_186_PaperBush_02>
-    <hd_env_UNI_186_PaperBush_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_186_PaperBush_03.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_186_PaperBush_03>
-    <hd_env_UNI_186_PaperBush_04>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_186_PaperBush_04.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_186_PaperBush_04>
-    <hd_env_UNI_179_PaperStone_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_179_PaperStone_03.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_179_PaperStone_03>
-    <hd_env_UNI_179_PaperStone_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_179_PaperStone_02.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_179_PaperStone_02>
-    <hd_env_UNI_179_PaperStone_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_179_PaperStone_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_179_PaperStone_01>
-    <hd_env_UNI_184_PaperFence_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_184_PaperFence_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_184_PaperFence_01>
-    <hd_env_UNI_188_PaperSnowman_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_03.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_03>
-    <hd_env_UNI_188_PaperSnowman_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_02.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_02>
-    <hd_env_UNI_188_PaperSnowman_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_01.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_medium	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_01>
-    <hd_env_UNI_188_PaperSnowman_04>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_04.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_04>
-    <hd_env_UNI_188_PaperSnowman_05>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_05.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_05>
-    <hd_env_UNI_188_PaperSnowman_06>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_UNI_188_PaperSnowman_06.eff	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	ev_gift_hunt_ny25_destructible_small	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_UNI_188_PaperSnowman_06>
     <hd_bld_AS_007_HouseForRest_01>
       <variant1>
         <stages>

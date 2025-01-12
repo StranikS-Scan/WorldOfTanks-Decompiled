@@ -846,7 +846,7 @@ class TankmanSkill(GUIItem):
 
     @property
     def isSituational(self):
-        return self._typeName is SkillTypeName.SITUATIONAL
+        return self._typeName == SkillTypeName.SITUATIONAL
 
     @property
     def userName(self):

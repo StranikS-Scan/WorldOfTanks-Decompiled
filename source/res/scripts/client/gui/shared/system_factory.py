@@ -60,7 +60,7 @@ QUEST_FLAGS = 56
 BATTLE_RESULTS_STATS_SORTING = 57
 LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
 EQUIPMENT_TRIGGERS = 59
-GAMEFACE_NOTIFICATIONS = 60
+LOW_PRIORITY_WULF_WINDOWS = 60
 
 class _CollectEventsManager(object):
 
@@ -902,13 +902,13 @@ def collectBattleResultsStatsSorting():
     return __collectEM.handleEvent(BATTLE_RESULTS_STATS_SORTING, {'sortingKey': {}})['sortingKey']
 
 
-def registerGamefaceNotifications(gamefaceNotifications):
+def registerLowPriorityWulfWindows(layoutsID):
 
     def onCollect(ctx):
-        ctx['gamefaceNotifications'].update(gamefaceNotifications)
+        ctx.extend(layoutsID)
 
-    __collectEM.addListener(GAMEFACE_NOTIFICATIONS, onCollect)
+    __collectEM.addListener(LOW_PRIORITY_WULF_WINDOWS, onCollect)
 
 
-def collectGamefaceNotifications():
-    return __collectEM.handleEvent(GAMEFACE_NOTIFICATIONS, ctx={'gamefaceNotifications': {}})['gamefaceNotifications']
+def collectLowPriorityWindows():
+    return __collectEM.handleEvent(LOW_PRIORITY_WULF_WINDOWS, ctx=[])

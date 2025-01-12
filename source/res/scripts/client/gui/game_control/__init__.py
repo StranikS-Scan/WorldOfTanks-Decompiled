@@ -18,7 +18,7 @@ class CalendarInvokeOrigin(CONST_CONTAINER):
 
 def getGameControllersConfig(manager):
     from gui.game_control.AOGAS import AOGASController as _AOGAS
-    from gui.game_control.AwardController import NyAwardController as _Awards
+    from gui.game_control.AwardController import AwardController as _Awards
     from gui.game_control.anonymizer_controller import AnonymizerController as _Anonymizer
     from gui.game_control.BoostersController import BoostersController as _Boosters
     from gui.game_control.BrowserController import BrowserController as _Browser
@@ -68,25 +68,18 @@ def getGameControllersConfig(manager):
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
     from gui.game_control.comp7_controller import Comp7Controller as _Comp7Ctrl
     from gui.game_control.comp7_shop_controller import Comp7ShopController
+    from gui.game_control.comp7_weekly_quests_controller import Comp7WeeklyQuestsController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusController
     from gui.game_control.optional_devices_assistant_controller import OptionalDevicesAssistantController
     from gui.game_control.telecom_rentals_controller import TelecomRentalsNotificationController
     from gui.game_control.event_battles_controller import EventBattlesController
     from gui.game_control.gift_system_controller import GiftSystemController
-    from skeletons import new_year as _NYInterface
-    from new_year.celebrity.celebrity_scene_ctrl import CelebritySceneController as _CelebritySceneController
-    from new_year.celebrity.celebrity_controller import CelebrityController as _CelebrityController
-    from new_year.ny_tutorial_controller import NewYearTutorialController
-    from new_year.gift_machine_controller import GiftMachineController as _GiftMachineController
-    from new_year.friend_service_controller import FriendServiceController as _FriendServiceController
-    from new_year.ny_trigger_hints import NewYearTriggerHintsController
     from gui.game_control.seniority_awards_controller import SeniorityAwardsController as _SeniorityAwardsController
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
-    from gui.game_control.event_lootboxes_controller import EventLootBoxesController
     from gui.game_control.lootbox_system_controller import LootBoxSystemController
     from gui.entitlements.entitlements_controller import EntitlementsController
     from gui.game_control.winback_controller import WinbackController
@@ -98,7 +91,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.live_ops_web_events_controller import LiveOpsWebEventsController
     from gui.game_control.achievements_controller import AchievementsController
     from gui.game_control.achievements_earning_controller import Achievements20EarningController
-    from gui.game_control.gf_notifications_controller import GFNotificationsController
     from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
     from gui.game_control.fading_controller import FadingController
     tracker = GameStateTracker()
@@ -157,6 +149,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
     _config(_interface.IComp7ShopController, Comp7ShopController())
+    _config(_interface.IComp7WeeklyQuestsController, Comp7WeeklyQuestsController())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())
@@ -173,15 +166,8 @@ def getGameControllersConfig(manager):
     _config(_interface.IOptionalDevicesAssistantController, OptionalDevicesAssistantController())
     _config(_interface.ITelecomRentalsNotificationController, TelecomRentalsNotificationController())
     _config(_interface.IGiftSystemController, GiftSystemController())
-    _config(_NYInterface.ICelebritySceneController, _CelebritySceneController())
-    _config(_NYInterface.ICelebrityController, _CelebrityController())
-    _config(_NYInterface.INewYearTutorialController, NewYearTutorialController())
-    _config(_NYInterface.INewYearTriggerHintsController, NewYearTriggerHintsController())
-    _config(_NYInterface.IGiftMachineController, _GiftMachineController())
-    _config(_NYInterface.IFriendServiceController, _FriendServiceController())
     _config(_interface.IRTSBattlesController, RTSBattlesController())
     _config(_interface.IResourceWellController, ResourceWellController())
-    _config(_interface.IEventLootBoxesController, EventLootBoxesController())
     _config(_interface.ILootBoxSystemController, LootBoxSystemController())
     _config(_interface.IEntitlementsController, EntitlementsController())
     _config(_interface.ICollectionsSystemController, CollectionsSystemController())
@@ -194,7 +180,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ILiveOpsWebEventsController, LiveOpsWebEventsController())
     _config(_interface.IAchievementsController, AchievementsController())
     _config(_interface.IAchievements20EarningController, Achievements20EarningController())
-    _config(_interface.IGFNotificationsController, GFNotificationsController())
     _config(_interface.IExchangeRatesWithDiscountsProvider, ExchangeRatesWithDiscountsProvider())
     _config(_interface.IFadingController, FadingController())
     collectGameControllers(_config)

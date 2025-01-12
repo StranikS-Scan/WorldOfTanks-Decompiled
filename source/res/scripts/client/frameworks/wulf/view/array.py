@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/frameworks/wulf/view/array.py
 import typing
 from contextlib import contextmanager
-from typing import Union
 from ..py_object_binder import PyObjectEntity
 from ..py_object_wrappers import PyObjectArray
+if typing.TYPE_CHECKING:
+    from typing import Iterable, Union
+    from .. import ViewModel
 T = typing.TypeVar('T')
 
 class Array(PyObjectEntity, typing.Iterable[T]):

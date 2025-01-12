@@ -1,29 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/platoon/platoon_rank_data.py
-from enum import IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division, Rank
 from frameworks.wulf import ViewModel
-
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
-
-class Division(IntEnum):
-    A = 1
-    B = 2
-    C = 3
-    D = 4
-    E = 5
-
 
 class PlatoonRankData(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(PlatoonRankData, self).__init__(properties=properties, commands=commands)
 
     def getRank(self):
@@ -44,8 +27,22 @@ class PlatoonRankData(ViewModel):
     def setScore(self, value):
         self._setNumber(2, value)
 
+    def getFrom(self):
+        return self._getNumber(3)
+
+    def setFrom(self, value):
+        self._setNumber(3, value)
+
+    def getTo(self):
+        return self._getNumber(4)
+
+    def setTo(self, value):
+        self._setNumber(4, value)
+
     def _initialize(self):
         super(PlatoonRankData, self)._initialize()
         self._addNumberProperty('rank')
         self._addNumberProperty('division')
         self._addNumberProperty('score', 0)
+        self._addNumberProperty('from', 0)
+        self._addNumberProperty('to', 0)

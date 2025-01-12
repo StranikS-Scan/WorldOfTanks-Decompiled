@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/attachment_slot_manager.py
+from functools import partial
 import CGF
 import Math
 import GenericComponents
@@ -88,6 +89,14 @@ def _getAttachmentFromSlot(appearance, slotId):
 
 
 def _updateAttachmentSlot(appearance, gameObject, attachmentSlot):
+
+    def _onLoaded(prefabPath, go):
+        hierarchy = CGF.HierarchyManager(go.spaceID)
+        findResult = hierarchy.findComponentInParent(go, AttachmentSlotComponent)
+        if findResult is not None and len(findResult) > 1 and findResult[1].prefabPath != prefabPath:
+            CGF.removeGameObject(go)
+        return
+
     hierarchy = CGF.HierarchyManager(gameObject.spaceID)
     attachment = _getAttachmentFromSlot(appearance, attachmentSlot.slotId)
     if attachment and attachmentSlot.update(attachment.scale, attachment.rotation, attachment.modelName):
@@ -96,7 +105,7 @@ def _updateAttachmentSlot(appearance, gameObject, attachmentSlot):
             CGF.removeGameObject(child)
 
         if attachment.modelName:
-            CGF.loadGameObjectIntoHierarchy(attachment.modelName, gameObject, _getAttachmentTransform(attachment))
+            CGF.loadGameObjectIntoHierarchy(attachment.modelName, gameObject, _getAttachmentTransform(attachment), hierarchyLoadedCallback=partial(_onLoaded, attachment.modelName))
     elif not attachment:
         attachmentSlot.clear()
         children = hierarchy.getChildren(gameObject) or []

@@ -140,6 +140,7 @@ class BATTLE_RESULTS(object):
     COMMON_VEHICLESTATE_DEAD13 = '#battle_results:common/vehicleState/dead13'
     COMMON_VEHICLESTATE_DEAD27 = '#battle_results:common/vehicleState/dead27'
     COMMON_VEHICLESTATE_DEAD29 = '#battle_results:common/vehicleState/dead29'
+    COMMON_VEHICLESTATE_DEAD30 = '#battle_results:common/vehicleState/dead30'
     COMMON_VEHICLESTATE_DEAD35 = '#battle_results:common/vehicleState/dead35'
     COMMON_VEHICLESTATE_PREMATURELEAVE = '#battle_results:common/vehicleState/prematureLeave'
     COMMON_DETAILS_NOPREMTITLE = '#battle_results:common/details/noPremTitle'
@@ -315,8 +316,6 @@ class BATTLE_RESULTS(object):
     DETAILS_CALCULATIONS_WOTPLUS = '#battle_results:details/calculations/wotPlus'
     DETAILS_CALCULATIONS_XPRECORD = '#battle_results:details/calculations/xpRecord'
     DETAILS_CALCULATIONS_SQUADBONUS = '#battle_results:details/calculations/squadBonus'
-    DETAILS_CALCULATIONS_NEWYEAR = '#battle_results:details/calculations/newYear'
-    DETAILS_CALCULATIONS_VEHICLEBRANCH = '#battle_results:details/calculations/vehicleBranch'
     DETAILS_CALCULATIONS_NOPENALTY = '#battle_results:details/calculations/noPenalty'
     DETAILS_CALCULATIONS_EVENT = '#battle_results:details/calculations/event'
     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER = '#battle_results:details/calculations/fairPlayViolation/deserter'
@@ -431,8 +430,6 @@ class BATTLE_RESULTS(object):
      DETAILS_CALCULATIONS_WOTPLUS,
      DETAILS_CALCULATIONS_XPRECORD,
      DETAILS_CALCULATIONS_SQUADBONUS,
-     DETAILS_CALCULATIONS_NEWYEAR,
-     DETAILS_CALCULATIONS_VEHICLEBRANCH,
      DETAILS_CALCULATIONS_NOPENALTY,
      DETAILS_CALCULATIONS_EVENT,
      DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER,
@@ -528,6 +525,7 @@ class BATTLE_RESULTS(object):
      COMMON_VEHICLESTATE_DEAD13,
      COMMON_VEHICLESTATE_DEAD27,
      COMMON_VEHICLESTATE_DEAD29,
+     COMMON_VEHICLESTATE_DEAD30,
      COMMON_VEHICLESTATE_DEAD35)
 
     @classmethod

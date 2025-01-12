@@ -38,18 +38,18 @@
     <ctf>
       <teamBasePositions>
         <team1>
-          <position1>	85.432190 -167.152176	</position1>
+          <position1>	85.416489 -167.155136	</position1>
         </team1>
         <team2>
-          <position1>	-72.202568 141.256195	</position1>
+          <position1>	-72.202553 141.256042	</position1>
         </team2>
       </teamBasePositions>
       <teamSpawnPoints>
         <team1>
-          <position>	13.326 -306.419	</position>
+          <position>	13.326000 -306.419006	</position>
         </team1>
         <team2>
-          <position>	-3.164 282.311	</position>
+          <position>	-3.164000 282.311005	</position>
         </team2>
       </teamSpawnPoints>
     </ctf>
@@ -58,19 +58,70 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-325.562 96.459	</position>
+          <position>	-325.562012 96.459000	</position>
         </team1>
         <team2>
-          <position>	316.803 0.031	</position>
+          <position>	316.803009 0.031000	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-41.347172 224.069397	</position1>
-          <position2>	-215.285431 -235.364349	</position2>
+          <position1>	-41.347176 224.069412	</position1>
+          <position2>	-215.285446 -235.364365	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
     </assault2>
+    <comp7>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <minimap>	spaces/63_tundra/mmap_comp7.dds	</minimap>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	226.333817 12.452535	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-212.323151 116.796173	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-74.165421 -17.048069	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-135.040771 -160.105453	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-250.780975 -54.391441	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	117.347801 -364.045715	</position>
+        </team1>
+        <team2>
+          <position>	25.454082 298.561859	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	114.308556 8.932974	</controlPoint>
+    </comp7>
   </gameplayTypes>
 </63_tundra.xml>

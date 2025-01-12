@@ -8,7 +8,8 @@ from helpers import dependency
 from helpers.time_utils import getServerUTCTime
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
-from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonName, SeasonState
+from gui.impl.gen.view_models.views.lobby.comp7.enums import SeasonName
+from gui.impl.gen.view_models.views.lobby.comp7.season_model import SeasonState
 if typing.TYPE_CHECKING:
     from comp7_ranks_common import Comp7Division
     from helpers.server_settings import Comp7RanksConfig
@@ -22,17 +23,19 @@ _SEASONS_NAMES_BY_NUMBER = {1: SeasonName.FIRST,
 SEASONS_NUMBERS_BY_NAME = {v.value:k for k, v in _SEASONS_NAMES_BY_NUMBER.iteritems()}
 
 def setDivisionInfo(model, division=None):
+    division = division or comp7_shared.getPlayerDivision()
     if division is None:
-        division = comp7_shared.getPlayerDivision()
-    divisionValue = comp7_shared.getDivisionEnumValue(division)
-    model.setName(divisionValue)
-    model.setFrom(division.range.begin)
-    model.setTo(division.range.end + 1)
-    return
+        return
+    else:
+        divisionValue = comp7_shared.getDivisionEnumValue(division)
+        model.setName(divisionValue)
+        model.setFrom(division.range.begin)
+        model.setTo(division.range.end + 1)
+        return
 
 
 def getValidSeason(season=None):
-    return season or _getCurrentSeason() or _getPrevSeason() or _getNextSeason()
+    return season or _getCurrentSeason() or _getPreannouncedSeason() or _getPrevSeason() or _getNextSeason()
 
 
 def setSeasonInfo(model, season=None):
@@ -95,6 +98,11 @@ def getSeasonNameEnum(season=None):
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def _getCurrentSeason(comp7Controller=None):
     return comp7Controller.getCurrentSeason()
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
+def _getPreannouncedSeason(comp7Controller=None):
+    return comp7Controller.getPreannouncedSeason()
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)

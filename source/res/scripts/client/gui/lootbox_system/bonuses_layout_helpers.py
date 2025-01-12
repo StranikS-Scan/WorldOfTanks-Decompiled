@@ -81,7 +81,7 @@ class _VehiclesSubTypeGetter(_BaseSubTypeGetter):
             c11nItem = getCustomizationItem(styleID, 'style')
             if c11nItem is not None and c11nItem.isLockedOnVehicle:
                 subType = _HelperTypes.LOCKED_STYLE
-                if c11nItem.modelsSet:
+                if c11nItem.is3D:
                     subType = _HelperTypes.LOCKED_3D_STYLE
         if bonus.isRentVehicle(vehInfo):
             subType = _HelperTypes.RENT
@@ -99,7 +99,7 @@ class _CustomizationSubTypeGetter(_BaseSubTypeGetter):
         if itemType == 'style':
             if c11nItem.isLockedOnVehicle:
                 return _HelperTypes.LOCKED_STYLE
-            if c11nItem.modelsSet:
+            if c11nItem.is3D:
                 return _HelperTypes.STYLE_3D
         return itemType
 

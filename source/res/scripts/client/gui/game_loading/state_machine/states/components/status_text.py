@@ -5,6 +5,7 @@ import game_loading_bindings
 from frameworks.state_machine import StateFlags, StateEvent
 from gui.game_loading import loggers
 from gui.game_loading.resources.consts import MilestonesTypes, Milestones
+from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.models import LoadingMilestoneModel
 from gui.game_loading.state_machine.states.base import BaseViewResourcesTickingState, BaseTickingState
 from gui.game_loading.state_machine.states.handlers.milestones import StatusTextMilestonesHandler
@@ -22,8 +23,8 @@ class StatusTextStateComponent(BaseViewResourcesTickingState):
 class MilestoneStatusTextStateComponent(BaseTickingState):
     __slots__ = ('_milestonesHandler', '_milestone', '_retainMilestones')
 
-    def __init__(self, stateID, milestonesSettings, flags=StateFlags.UNDEFINED, isSelfTicking=False, onCompleteEvent=None):
-        super(MilestoneStatusTextStateComponent, self).__init__(stateID=stateID, flags=flags, isSelfTicking=isSelfTicking, onCompleteEvent=onCompleteEvent)
+    def __init__(self, stateID, milestonesSettings, flags=StateFlags.UNDEFINED, tickingMode=TickingMode.MANUAL, onCompleteEvent=None):
+        super(MilestoneStatusTextStateComponent, self).__init__(stateID=stateID, flags=flags, tickingMode=tickingMode, onCompleteEvent=onCompleteEvent)
         self._milestonesHandler = StatusTextMilestonesHandler(milestonesSettings=milestonesSettings)
         self._milestone = self._milestonesHandler.getCurrentMilestone()
         self._retainMilestones = False
@@ -32,20 +33,20 @@ class MilestoneStatusTextStateComponent(BaseTickingState):
     def setRetainMilestones(self, value):
         self._retainMilestones = value
 
-    def _onEntered(self):
-        super(MilestoneStatusTextStateComponent, self)._onEntered()
+    def _start(self):
         self._milestonesHandler.onMilestoneReached += self._onMilestoneReached
         self._milestonesHandler.onMilestoneTypeChanged += self._onMilestoneTypeChanged
         if not self._retainMilestones:
             self._milestone = None
-            self._milestonesHandler.init()
+            self._milestonesHandler.chooseDefaultMilestoneType()
         elif self._milestone is not None:
             self._onMilestoneReached(self._milestone)
         self._milestonesHandler.start()
+        super(MilestoneStatusTextStateComponent, self)._start()
         return
 
-    def _onExited(self):
-        super(MilestoneStatusTextStateComponent, self)._onExited()
+    def _stop(self):
+        super(MilestoneStatusTextStateComponent, self)._stop()
         self._milestonesHandler.stop()
         self._milestonesHandler.onMilestoneReached -= self._onMilestoneReached
         self._milestonesHandler.onMilestoneTypeChanged -= self._onMilestoneTypeChanged

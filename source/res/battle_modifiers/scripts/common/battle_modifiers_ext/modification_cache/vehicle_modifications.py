@@ -94,7 +94,7 @@ class VehicleModifier(object):
                 gun.clip = (clipCount, modifiers(BattleParams.CLIP_INTERVAL, clipInterval))
             if gun.burst != DEFAULT_GUN_BURST:
                 burstCount, burstInterval = gun.burst
-                gun.clip = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval))
+                gun.burst = (burstCount, modifiers(BattleParams.BURST_INTERVAL, burstInterval))
             if gun.autoreload != DEFAULT_GUN_AUTORELOAD:
                 modifiedReloadTime = [ modifiers(BattleParams.AUTORELOAD_TIME, reloadTime) for reloadTime in gun.autoreload.reloadTime ]
                 gun.autoreload = gun.autoreload._replace(reloadTime=tuple(modifiedReloadTime))
@@ -105,7 +105,8 @@ class VehicleModifier(object):
             dispFactors = gun.shotDispersionFactors
             gun.shotDispersionFactors = {'turretRotation': modifiers(BattleParams.DISP_FACTOR_TURRET_ROTATION, dispFactors['turretRotation']),
              'afterShot': modifiers(BattleParams.DISP_FACTOR_AFTER_SHOT, dispFactors['afterShot']),
-             'whileGunDamaged': modifiers(BattleParams.DISP_FACTOR_WHILE_GUN_DAMAGED, dispFactors['whileGunDamaged'])}
+             'whileGunDamaged': modifiers(BattleParams.DISP_FACTOR_WHILE_GUN_DAMAGED, dispFactors['whileGunDamaged']),
+             'afterShotInBurst': dispFactors['afterShotInBurst']}
             if gun.dualGun != DEFAULT_GUN_DUALGUN:
                 reloadTimes = [ modifiers(BattleParams.RELOAD_TIME, reloadTime) for reloadTime in gun.dualGun.reloadTimes ]
                 gun.dualGun = gun.dualGun._replace(reloadTimes=tuple(reloadTimes))

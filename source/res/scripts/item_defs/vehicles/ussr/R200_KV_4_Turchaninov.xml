@@ -75,11 +75,11 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	50000	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1280	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R200_KV_4_Turchaninov/normal/lod0/Hull.model	</undamaged>
@@ -801,26 +801,26 @@
       <userString>	#ussr_vehicles:Chassis_R200_KV_4_Turchaninov	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	33600	</price>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
       </armor>
       <weight>	20000	</weight>
-      <maxLoad>	112560	</maxLoad>
+      <maxLoad>	93000	</maxLoad>
       <terrainResistance>	1.3 1.5 2.5	</terrainResistance>
-      <brakeForce>	51000	</brakeForce>
+      <brakeForce>	90000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	22	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	165	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R200_KV_4_Turchaninov/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R200_KV_4_Turchaninov/crash/lod0/Chassis.model	</destroyed>
@@ -1653,7 +1653,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_R200_KV_4_Turchaninov>
   </chassis>
   <turrets0>
@@ -1682,18 +1682,18 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	15575	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	320	</maxHealth>
       <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	150	</maxHealth>
-        <maxRegenHealth>	75	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <repairCost>	2	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_107mm_ZiS_6U>	shared	  <maxAmmo>	70	</maxAmmo>
@@ -1722,17 +1722,19 @@
             </armor_11>
             <armor_12>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_12>
+            <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0.00000 -20.00 1.00000 -20.00	</minPitch>
             <maxPitch>	0.00000 6.00 0.25000 6.00 0.41667 5.00 0.50000 5.00 0.58333 5.00 0.75000 6.00 1.00000 6.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	8.1	</reloadTime>
+          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
@@ -1839,9 +1841,9 @@
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34001	</slotId>
-          <rayStart>	1.178247 0.807954 -0.619313	</rayStart>
-          <rayEnd>	0.801753 0.672882 -0.619129	</rayEnd>
-          <rayUp>	0.33769 -0.941253 0.002717	</rayUp>
+          <rayStart>	1.182286 0.795646 -0.639285	</rayStart>
+          <rayEnd>	0.805792 0.660574 -0.639101	</rayEnd>
+          <rayUp>	-0.337688 0.941258 0.000165	</rayUp>
           <size>	0.75	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </slot>

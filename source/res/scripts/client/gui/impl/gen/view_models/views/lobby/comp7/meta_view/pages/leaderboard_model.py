@@ -105,7 +105,7 @@ class LeaderboardModel(ViewModel):
         self._addNumberProperty('lastBestUserPosition', -1)
         self._addNumberProperty('leaderboardUpdateTimestamp', 0)
         self._addNumberProperty('from', 2000)
-        self._addNumberProperty('topPercentage', 10)
+        self._addNumberProperty('topPercentage', 0)
         self._addNumberProperty('recordsCount', 0)
         self._addNumberProperty('ownSpaID', 0)
         self._addArrayProperty('items', Array())

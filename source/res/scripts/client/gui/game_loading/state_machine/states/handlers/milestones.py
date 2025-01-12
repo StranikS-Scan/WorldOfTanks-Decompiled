@@ -21,11 +21,11 @@ class MilestonesHandler(object):
         self._time = 0
         self.onMilestoneReached = Event.SafeEvent()
         self.onMilestoneTypeChanged = Event.SafeEvent()
-        self.init()
+        self.chooseDefaultMilestoneType()
         return
 
-    def init(self):
-        self._chooseMilestonesType(MilestonesTypes.CONNECTION)
+    def chooseDefaultMilestoneType(self):
+        self._chooseMilestonesType(MilestonesTypes.DEFAULT)
 
     def start(self):
         self._time = time.time()
@@ -79,8 +79,8 @@ class MilestonesHandler(object):
 
 
 class StatusTextMilestonesHandler(MilestonesHandler):
-    pass
+    __slots__ = ()
 
 
 class ProgressBarMilestonesHandler(MilestonesHandler):
-    pass
+    __slots__ = ()

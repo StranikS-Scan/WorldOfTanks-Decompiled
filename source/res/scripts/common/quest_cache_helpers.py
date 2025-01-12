@@ -20,9 +20,9 @@ def _getEventName(eventType):
     return EVENT_TYPE.TYPE_TO_NAME.get(eventType, '<wrong EVENT_TYPE>')
 
 
-def readQuestsFromFile(filePath, eventType):
+def readQuestsFromFile(filePath, eventType, auxData=None):
     xmlSource = quest_xml_source.Source()
-    nodes = xmlSource.readFromInternalFile(filePath, int(time.time()))
+    nodes = xmlSource.readFromInternalFile(filePath, int(time.time()), auxData=auxData)
     nodes = nodes.get(eventType, None)
     questIDs = set()
     if nodes is None:

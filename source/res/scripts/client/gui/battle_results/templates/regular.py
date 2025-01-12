@@ -79,7 +79,8 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'modificationStr': '',
  'modificationIconPath': '',
  'rank': None,
- 'epicMode': False})
+ 'epicMode': False,
+ 'showRateSatisfactionCmp': False})
 _CLAN_COMMON_VO_META = base.PropertyMeta((('clanDBID', -1, 'clanDBID'), ('clanAbbrev', '', 'clanAbbrev')))
 _CLAN_COMMON_VO_META.bind(common.ClanInfoBlock)
 CLANS_COMMON_VO_META = base.PropertyMeta((('allies', common.ClanInfoBlock(field='allies'), 'allies'), ('enemies', common.ClanInfoBlock(field='enemies'), 'enemies')))
@@ -138,6 +139,7 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibili
 REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(15, epic.StrBattleModificationItem('modificationStr'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(16, epic.BattleModificationItem('modificationIconPath'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(17, common.ShowRateSatisfactionCmp('showRateSatisfactionCmp'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'isLegionnaire': False,
  'creditsStr': '0',

@@ -186,20 +186,14 @@ class NodeType(object):
      VEHICLE: ModifierDomain.VEHICLE_COMPONENTS}
 
 
-class ShellCaliber(object):
+class Caliber(object):
     AUTO = 'auto'
     SMALL = 'small'
     MEDIUM = 'medium'
     MAIN = 'main'
     LARGE = 'large'
     HUGE = 'huge'
-    NAME_TO_CALIBER = OrderedDict(((HUGE, 155),
-     (LARGE, 108),
-     (MAIN, 85),
-     (MEDIUM, 50),
-     (SMALL, 20),
-     (AUTO, 7)))
-    CALIBERS_AND_NAMES = None
+    NAME_TO_CALIBER = OrderedDict()
 
     @classmethod
     def get(cls, targetCaliber):
@@ -208,6 +202,24 @@ class ShellCaliber(object):
                 return name
 
         return cls.AUTO
+
+
+class GunCaliber(Caliber):
+    NAME_TO_CALIBER = OrderedDict(((Caliber.HUGE, 140),
+     (Caliber.LARGE, 105),
+     (Caliber.MAIN, 85),
+     (Caliber.MEDIUM, 50),
+     (Caliber.SMALL, 20),
+     (Caliber.AUTO, 7)))
+
+
+class ShellCaliber(Caliber):
+    NAME_TO_CALIBER = OrderedDict(((Caliber.HUGE, 155),
+     (Caliber.LARGE, 108),
+     (Caliber.MAIN, 85),
+     (Caliber.MEDIUM, 50),
+     (Caliber.SMALL, 20),
+     (Caliber.AUTO, 7)))
 
 
 class ShellKind(object):
@@ -243,19 +255,22 @@ class RemappingConditionNames(object):
     REMAPPING_NAME = 'remappingName'
     NATION = 'nation'
     OUTFIT = 'outfit'
-    CALIBER = 'caliber'
     GUN_NAME = 'gunName'
+    GUN_CALIBER = 'gunCaliber'
     SHELL_KIND = 'shellKind'
     SHELL_SHOTS_COUNT = 'shellShotsCount'
+    SHELL_CALIBER = 'shellCaliber'
     ALL = {REMAPPING_NAME,
      NATION,
      OUTFIT,
-     CALIBER,
      GUN_NAME,
+     GUN_CALIBER,
      SHELL_KIND,
-     SHELL_SHOTS_COUNT}
+     SHELL_SHOTS_COUNT,
+     SHELL_CALIBER}
 
 
 class RemappingNames(object):
     TEST = 'test'
-    ALL = set(() + ((TEST,) if IS_DEVELOPMENT else ()))
+    FEP_NEW_YEAR = 'fep_new_year'
+    ALL = set((FEP_NEW_YEAR,) + ((TEST,) if IS_DEVELOPMENT else ()))

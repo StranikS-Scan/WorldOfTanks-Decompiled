@@ -105,6 +105,7 @@
     <Maybach_HL_230P45_BPXIV>	125	</Maybach_HL_230P45_BPXIV>
     <Moteur_moderne_3M_27_oie>	126	</Moteur_moderne_3M_27_oie>
     <Citroen_105>	127	</Citroen_105>
+    <Renault_MIDS>	130	</Renault_MIDS>
     <Maybach_HL_295_a_injection_d_essence_FL>	501	</Maybach_HL_295_a_injection_d_essence_FL>
     <Maybach_HL_295_FL>	502	</Maybach_HL_295_FL>
     <SOFAM_8Gxb_B_7x7>	503	</SOFAM_8Gxb_B_7x7>
@@ -435,6 +436,23 @@
       <rpm_min>	394	</rpm_min>
       <rpm_max>	2016	</rpm_max>
     </Detroit_Diesel_6V53T-S>
+    <Renault_MIDS>
+      <userString>	#france_vehicles:Renault_MIDS	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Skoda_Prague_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Skoda_Prague_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	770	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Renault_MIDS>
     <Hispano-Suiza_HS110>
       <userString>	#france_vehicles:Hispano-Suiza_HS110	</userString>
       <tags>	diesel	</tags>
@@ -556,15 +574,15 @@
       <userString>	#france_vehicles:Maybach_Mb_IV_Zeppelin_x2	</userString>
       <tags>	gasoline	</tags>
       <level>	3	</level>
-      <price>	3000	</price>
+      <price>	5000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
       <power>	500	</power>
       <weight>	800	</weight>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	25	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2801	</rpm_max>
@@ -1611,15 +1629,15 @@
     <Moteur_moderne_3M_27_oie>
       <userString>	#france_vehicles:Moteur_moderne_3M_27_oie	</userString>
       <tags>	gasoline	</tags>
-      <level>	7	</level>
-      <price>	34400	</price>
+      <level>	8	</level>
+      <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	550	</power>
+      <power>	480	</power>
       <weight>	635	</weight>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	280	</rpm_min>

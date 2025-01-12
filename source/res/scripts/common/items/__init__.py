@@ -2,10 +2,10 @@
 # Embedded file name: scripts/common/items/__init__.py
 import typing
 import nations
-from items import _xml
 from constants import IS_CLIENT, ITEM_DEFS_PATH
-from soft_exception import SoftException
 from extension_utils import ResMgr
+from items import _xml
+from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
 _g_itemTypes = None
@@ -175,6 +175,8 @@ def init(preloadEverything, pricesToCollect=None, step=None):
         pricesToCollect['operationPrices'] = {}
         pricesToCollect['progressionLvlPrices'] = {}
         pricesToCollect['notInShopProgressionLvlItems'] = {}
+    from items.components import path_builder
+    path_builder.init()
     from items import stun
     stun.init()
     from items import vehicles
@@ -185,9 +187,6 @@ def init(preloadEverything, pricesToCollect=None, step=None):
     tankmen.init(preloadEverything, pricesToCollect)
     from items import perks
     perks.init(preloadEverything)
-    from items import new_year, collectibles
-    collectibles.init()
-    new_year.init()
     return
 
 

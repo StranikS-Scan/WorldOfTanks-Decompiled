@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/whats_new_view.py
 import typing
-from shared_utils import first
 import SoundGroups
-from comp7_common import rentVehiclesQuestIDBySeasonNumber
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -22,7 +20,6 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
-from items import vehicles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
@@ -30,6 +27,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 SOUND_NAME = 'comp_7_whatsnew_appear'
+RENT_VEHICLES_CDS = [66593, 22097, 53137]
 
 class WhatsNewView(ViewImpl, IGlobalListener):
     __slots__ = ()
@@ -125,44 +123,20 @@ class WhatsNewView(ViewImpl, IGlobalListener):
 
     def __updateData(self):
         with self.viewModel.transaction() as vm:
+            comp7_model_helpers.setElitePercentage(vm)
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
-            self.__setReconFlightDelay(vm)
             self.__setVehicles(vm)
 
-    def __setReconFlightDelay(self, viewModel):
-        cache = vehicles.g_cache
-        equipmentID = cache.equipmentIDs().get('comp7_recon')
-        reconFlightDelay = cache.equipments().get(equipmentID).startupDelay
-        viewModel.setReconFlightDelay(reconFlightDelay)
-
     def __setVehicles(self, viewModel):
-        rentVehicles = self.__getRentVehicles()
         vehiclesList = viewModel.getVehicles()
         vehiclesList.clear()
-        for vehicleCD in rentVehicles:
+        for vehicleCD in RENT_VEHICLES_CDS:
             vehicleItem = self.__itemsCache.items.getItemByCD(vehicleCD)
             vehicleModel = VehicleModel()
             fillVehicleModel(vehicleModel, vehicleItem)
             vehiclesList.addViewModel(vehicleModel)
 
         vehiclesList.invalidate()
-
-    def __getRentVehicles(self):
-        rentVehicles = []
-        actualSeasonNumber = self.__comp7Controller.getActualSeasonNumber()
-        if actualSeasonNumber is None:
-            return rentVehicles
-        else:
-            questID = rentVehiclesQuestIDBySeasonNumber(actualSeasonNumber)
-            rentVehiclesQuest = first(self.__eventsCache.getAllQuests(lambda q: q.getID() == questID).values())
-            if rentVehiclesQuest is None:
-                return rentVehicles
-            for vehBonus in rentVehiclesQuest.getBonuses('vehicles'):
-                for intCD, vehInfo in vehBonus.getValue().iteritems():
-                    rentVehicles.append((intCD, vehInfo.get('bonusOrder')))
-
-            rentVehicles = sorted(rentVehicles, key=lambda x: (x[1] is None, x[1], x[0]))
-            return [ intCD for intCD, _ in rentVehicles ]
 
     def __onClose(self):
         self.destroyWindow()

@@ -13,12 +13,10 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from wg_async import wg_async
-from skeletons.new_year import INewYearController
 _logger = logging.getLogger(__name__)
 
 class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
     _settingsCore = dependency.descriptor(ISettingsCore)
-    _nyController = dependency.descriptor(INewYearController)
 
     def update(self, fullUpdate=True):
         with self.viewModel.transaction():
@@ -34,13 +32,11 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
         super(HangarAmmunitionPanelView, self)._addListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex += self._onChangeSetupIndex
         self.viewModel.onEscKeyDown += self.__onEscKeyDown
-        self._nyController.onStateChanged += self.__onStateChanged
 
     def _removeListeners(self):
         super(HangarAmmunitionPanelView, self)._removeListeners()
         self.viewModel.ammunitionPanel.onChangeSetupIndex -= self._onChangeSetupIndex
         self.viewModel.onEscKeyDown -= self.__onEscKeyDown
-        self._nyController.onStateChanged -= self.__onStateChanged
 
     @wg_async
     def _onPanelSectionSelected(self, args):
@@ -71,6 +67,3 @@ class HangarAmmunitionPanelView(BaseAmmunitionPanelView):
         isFullUpdate = not self._wasVehicleOnLoading and self.vehItem is not None
         self.update(fullUpdate=isFullUpdate)
         return
-
-    def __onStateChanged(self):
-        self.update(fullUpdate=True)

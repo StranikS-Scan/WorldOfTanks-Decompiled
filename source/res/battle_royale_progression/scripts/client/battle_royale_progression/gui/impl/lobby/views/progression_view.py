@@ -9,9 +9,13 @@ from frameworks.wulf.view.submodel_presenter import SubModelPresenter
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.periodic_battles.models import PrimeTimeStatus
 from gui.server_events.events_helpers import EventInfoModel
 from gui.shared import event_dispatcher
-from helpers import dependency
+from gui.shared.utils.scheduled_notifications import SimpleNotifier
+from helpers import dependency, time_utils
+from helpers.time_utils import ONE_DAY, getTimeDeltaFromNow, ONE_MINUTE
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.server_events import IEventsCache
 
@@ -19,11 +23,15 @@ class ProgressionView(SubModelPresenter):
     battleRoyale = dependency.descriptor(IBattleRoyaleController)
     brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     eventsCache = dependency.descriptor(IEventsCache)
-    __slots__ = ('__tooltipData',)
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    _UPDATE_TIMER_DELAY = ONE_MINUTE
+    __slots__ = ('__tooltipData', '__notifier')
 
     def __init__(self, viewModel, parentView):
         super(ProgressionView, self).__init__(viewModel, parentView)
         self.__tooltipData = {}
+        self.__notifier = None
+        return
 
     @property
     def viewModel(self):
@@ -46,6 +54,7 @@ class ProgressionView(SubModelPresenter):
 
     def finalize(self):
         self.brProgression.saveCurPoints()
+        self.__stopNotification()
         super(ProgressionView, self).finalize()
 
     def _getEvents(self):
@@ -55,11 +64,27 @@ class ProgressionView(SubModelPresenter):
          (self.brProgression.onSettingsChanged, self.__updateModel),
          (self.eventsCache.onSyncCompleted, self.__onSyncCompleted))
 
+    def __restartNotifier(self, updateTime):
+        self.__stopNotification()
+        self.__notifier = SimpleNotifier(lambda : updateTime, self.__updateQuestTimer)
+        self.__notifier.startNotification()
+
+    def __stopNotification(self):
+        if self.__notifier is not None:
+            self.__notifier.stopNotification()
+            self.__notifier.clear()
+            self.__notifier = None
+        return
+
     def __onClose(self):
         event_dispatcher.showHangar()
 
     def __onAboutClicked(self):
         self.battleRoyale.openInfoPageWindow()
+
+    def __updateQuestTimer(self):
+        with self.viewModel.transaction() as model:
+            self.__setBattleQuestTimeLeft(model.battleQuests)
 
     def __updateMissionVisitedArray(self, missionVisitedArray, questsIDs):
         missionVisitedArray.clear()
@@ -116,8 +141,7 @@ class ProgressionView(SubModelPresenter):
         progressionLevels.invalidate()
 
     def __updateBattleQuestsCards(self, battleQuestsModel, data):
-        newCountdownVal = EventInfoModel.getDailyProgressResetTimeDelta()
-        battleQuestsModel.setCurrentTimerDate(newCountdownVal)
+        self.__setBattleQuestTimeLeft(battleQuestsModel)
         questsList = battleQuestsModel.getTasksBattle()
         questsList.clear()
         bonusIndexTotal = len(self.__tooltipData)
@@ -135,6 +159,30 @@ class ProgressionView(SubModelPresenter):
             questsList.addViewModel(questModels)
 
         questsList.invalidate()
+
+    def __setBattleQuestTimeLeft(self, battleQuestsModel):
+        status, primeTimeLeft, _ = self.battleRoyale.getPrimeTimeStatus()
+        if primeTimeLeft == 0 and status in (PrimeTimeStatus.NOT_AVAILABLE, PrimeTimeStatus.NOT_SET, PrimeTimeStatus.FROZEN):
+            battleQuestsModel.setShowEventEnded(True)
+            self.__stopNotification()
+            return
+        timerDate, isShowPrimeTime = self.__getTimerData()
+        battleQuestsModel.setCurrentTimerDate(timerDate)
+        battleQuestsModel.setShowPrimeTime(isShowPrimeTime)
+        self.__restartNotifier(timerDate + (self._UPDATE_TIMER_DELAY if timerDate > 0 else 0))
+
+    def __getTimerData(self):
+        dailyQuestProgressDelta = EventInfoModel.getDailyProgressResetTimeDelta()
+        currentCycleEndTime = self.battleRoyale.getEndTime()
+        currServerTime = time_utils.getCurrentLocalServerTimestamp()
+        cycleTimeLeft = currentCycleEndTime - currServerTime
+        isShowPrimeTime = False
+        if cycleTimeLeft < ONE_DAY and cycleTimeLeft < dailyQuestProgressDelta:
+            primeTime = self.battleRoyale.getPrimeTimes().get(self.connectionMgr.peripheryID)
+            lastPrimeTimeEnd = max([ period[1] for period in primeTime.getPeriodsBetween(int(currServerTime), currentCycleEndTime) ])
+            dailyQuestProgressDelta = getTimeDeltaFromNow(lastPrimeTimeEnd)
+            isShowPrimeTime = True
+        return (dailyQuestProgressDelta, isShowPrimeTime)
 
     def __markAsVisited(self, data):
         for seenQuestID in data['battleQuests'].keys():

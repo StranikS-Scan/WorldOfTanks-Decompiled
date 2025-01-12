@@ -49,12 +49,18 @@ class ARENAS(object):
     TYPE_COMP7_SHORT_DESCRIPTION = '#arenas:type/comp7/short_description'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
+    C_01_KARELIA_FP_NAME = '#arenas:01_karelia_fp/name'
+    C_01_KARELIA_FP_DESCRIPTION = '#arenas:01_karelia_fp/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
     C_02_MALINOVKA_DESCRIPTION = '#arenas:02_malinovka/description'
+    C_02_MALINOVKA_FP_NAME = '#arenas:02_malinovka_fp/name'
+    C_02_MALINOVKA_FP_DESCRIPTION = '#arenas:02_malinovka_fp/description'
     C_04_HIMMELSDORF_NAME = '#arenas:04_himmelsdorf/name'
     C_04_HIMMELSDORF_DESCRIPTION = '#arenas:04_himmelsdorf/description'
     C_05_PROHOROVKA_NAME = '#arenas:05_prohorovka/name'
     C_05_PROHOROVKA_DESCRIPTION = '#arenas:05_prohorovka/description'
+    C_05_PROHOROVKA_FP_NAME = '#arenas:05_prohorovka_fp/name'
+    C_05_PROHOROVKA_FP_DESCRIPTION = '#arenas:05_prohorovka_fp/description'
     C_06_ENSK_NAME = '#arenas:06_ensk/name'
     C_06_ENSK_DESCRIPTION = '#arenas:06_ensk/description'
     C_07_LAKEVILLE_NAME = '#arenas:07_lakeville/name'
@@ -166,7 +172,6 @@ class ARENAS(object):
     C_210_BF_EPIC_DESERT_DESCRIPTION = '#arenas:210_bf_epic_desert/description'
     C_08_RUINBERG_SM24_NAME = '#arenas:08_ruinberg_sm24/name'
     C_08_RUINBERG_SM24_DESCRIPTION = '#arenas:08_ruinberg_sm24/description'
-    C_226_GIFT_ATTACK_NAME = '#arenas:226_gift_attack/name'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -213,12 +218,18 @@ class ARENAS(object):
      TYPE_COMP7_SHORT_DESCRIPTION,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
+     C_01_KARELIA_FP_NAME,
+     C_01_KARELIA_FP_DESCRIPTION,
      C_02_MALINOVKA_NAME,
      C_02_MALINOVKA_DESCRIPTION,
+     C_02_MALINOVKA_FP_NAME,
+     C_02_MALINOVKA_FP_DESCRIPTION,
      C_04_HIMMELSDORF_NAME,
      C_04_HIMMELSDORF_DESCRIPTION,
      C_05_PROHOROVKA_NAME,
      C_05_PROHOROVKA_DESCRIPTION,
+     C_05_PROHOROVKA_FP_NAME,
+     C_05_PROHOROVKA_FP_DESCRIPTION,
      C_06_ENSK_NAME,
      C_06_ENSK_DESCRIPTION,
      C_07_LAKEVILLE_NAME,
@@ -329,8 +340,7 @@ class ARENAS(object):
      C_210_BF_EPIC_DESERT_NAME,
      C_210_BF_EPIC_DESERT_DESCRIPTION,
      C_08_RUINBERG_SM24_NAME,
-     C_08_RUINBERG_SM24_DESCRIPTION,
-     C_226_GIFT_ATTACK_NAME)
+     C_08_RUINBERG_SM24_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

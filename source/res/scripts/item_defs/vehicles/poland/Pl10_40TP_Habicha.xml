@@ -2810,94 +2810,14 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	330	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_75mm_wz_22_24>	shared	  <maxAmmo>	74	</maxAmmo>
-          <unlocks>
-            <gun>	_75mm_wz_36_37	  <cost>	4500	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.425833 8 0.440493 7 0.559444 7 0.574082 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl10_40TP_Habicha/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/poland/Pl10_40TP_Habicha/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl10_40TP_Habicha/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl10_40TP_Habicha/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000071 0.004272 1.80426	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.222252 0.222251	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000071 0.004272 1.80426	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000139 0.008544 2.12457	</rayStart>
-              <rayEnd>	-0.000139 0.008544 2.62457	</rayEnd>
-              <rayUp>	0.072 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.73 0.73 0.000000 0.000000	</tiling>
-            <density>	186.652 186.729	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_wz_22_24>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	90	</maxAmmo>
+        <_75mm_wz_36_37M>	shared	  <maxAmmo>	90	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_Pl10_40TP_Habicha	  <cost>	5150	</cost>
             </turret>
@@ -2909,14 +2829,14 @@
             </armor_2>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.7	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -2976,7 +2896,7 @@
             <density>	176.086 182.534	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_wz_36_37>
+        </_75mm_wz_36_37M>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Turret_01.model	</undamaged>
@@ -3555,90 +3475,18 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.962	</invisibilityFactor>
       <guns>
-        <_75mm_wz_22_24>	shared	  <maxAmmo>	74	</maxAmmo>
+        <_75mm_wz_36_37M>	shared	  <maxAmmo>	90	</maxAmmo>
           <armor>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.425833 8 0.440493 6 0.559444 6 0.574082 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl10_40TP_Habicha/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl10_40TP_Habicha/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/poland/Pl10_40TP_Habicha/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl10_40TP_Habicha/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl10_40TP_Habicha/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.002363 0.000828 1.66944	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.192581 0.192582	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.002363 0.000828 1.66944	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.004728 0.001657 2.09424	</rayStart>
-              <rayEnd>	0.004728 0.001657 2.59424	</rayEnd>
-              <rayUp>	0.071 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
-            <density>	186.652 186.729	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_wz_22_24>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	90	</maxAmmo>
-          <armor>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -3698,7 +3546,7 @@
             <density>	176.086 182.534	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_75mm_wz_36_37>
+        </_75mm_wz_36_37M>
         <_90mm_wz_39_40>	shared	  <maxAmmo>	74	</maxAmmo>
           <unlocks>
             <vehicle>	Pl11_45TP_Habicha	  <cost>	43550	</cost>
@@ -4349,11 +4197,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N2_C>	shared	  <unlocks>
-        <radio>	RKB_C	  <cost>	620	</cost>
-        </radio>
-      </unlocks>
-    </N2_C>
     <RKB_C>	shared	</RKB_C>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
@@ -4361,11 +4204,11 @@
     <detailed>
       <engines>
         <Maybach_HL_120>
-          <smplEnginePower>	400	</smplEnginePower>
+          <smplEnginePower>	550	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_120>
         <Maybach_HL_157>
-          <smplEnginePower>	450	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
           <smplFwMaxSpeed>	50	</smplFwMaxSpeed>
         </Maybach_HL_157>
       </engines>

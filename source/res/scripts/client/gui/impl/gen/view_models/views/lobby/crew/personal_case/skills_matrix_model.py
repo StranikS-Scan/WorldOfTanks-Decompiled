@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.crew.personal_case.tankman_skills_grou
 class SkillsMatrixModel(ComponentBaseModel):
     __slots__ = ('onIncrease', 'onReset', 'onSkillClick', 'onSetAnimationInProgress')
 
-    def __init__(self, properties=7, commands=4):
+    def __init__(self, properties=8, commands=4):
         super(SkillsMatrixModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -30,23 +30,29 @@ class SkillsMatrixModel(ComponentBaseModel):
     def setHasResetDiscount(self, value):
         self._setBool(3, value)
 
-    def getHasIncreaseDiscount(self):
+    def getIsResetFree(self):
         return self._getBool(4)
 
-    def setHasIncreaseDiscount(self, value):
+    def setIsResetFree(self, value):
         self._setBool(4, value)
 
+    def getHasIncreaseDiscount(self):
+        return self._getBool(5)
+
+    def setHasIncreaseDiscount(self, value):
+        self._setBool(5, value)
+
     def getResetGracePeriodLeft(self):
-        return self._getNumber(5)
+        return self._getNumber(6)
 
     def setResetGracePeriodLeft(self, value):
-        self._setNumber(5, value)
+        self._setNumber(6, value)
 
     def getBonusSkills(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setBonusSkills(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getBonusSkillsType():
@@ -57,6 +63,7 @@ class SkillsMatrixModel(ComponentBaseModel):
         self._addViewModelProperty('mainSkills', TankmanSkillsGroupModel())
         self._addBoolProperty('isResetDisable', False)
         self._addBoolProperty('hasResetDiscount', False)
+        self._addBoolProperty('isResetFree', False)
         self._addBoolProperty('hasIncreaseDiscount', False)
         self._addNumberProperty('resetGracePeriodLeft', 0)
         self._addArrayProperty('bonusSkills', Array())

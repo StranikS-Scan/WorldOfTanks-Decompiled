@@ -58,8 +58,24 @@ class StatisticsCategoryTooltipView(ViewImpl):
     def __setBonuses(self, model=None):
         model.bonuses.clearItems()
         rewards, _ = self.__lootBoxes.getStatistics()
+        _mergeCustomizations(rewards.get(Type.CUSTOMIZATIONS.value, []))
         _PACK_REWARDS[self.__bonusesCategory](rewards, model)
         model.bonuses.invalidate()
+
+
+def _mergeCustomizations(customizations):
+    result = []
+    checking = {}
+    for customization in customizations:
+        unicItem = (customization['id'], customization['custType'])
+        if customization.get('compensatedNumber', 0):
+            result.append(customization)
+        if unicItem not in checking:
+            checking[unicItem] = customization
+            result.append(customization)
+        checking[unicItem]['value'] += customization.get('value', 0)
+
+    customizations[:] = result
 
 
 def _packVehicles(rewards, model):
@@ -103,10 +119,11 @@ def _pack3DStyles(rewards, model, itemsCache=None):
 
 def _pack2DStyles(rewards, model):
     totalCompensatedCount = 0
-    for style, compensatedCount in _iter2DStyles(rewards):
+    for style, compensatedCount, count in _iter2DStyles(rewards):
         if not compensatedCount:
             bonusModel = StatisticsCategoryTooltipBonusModel()
             bonusModel.setLabel(style.userName)
+            bonusModel.setCount(count)
             model.bonuses.addViewModel(bonusModel)
         totalCompensatedCount += compensatedCount
 
@@ -266,7 +283,7 @@ def _iter3DStyles(rewards, customization=None):
 
 @dependency.replace_none_kwargs(customization=ICustomizationService)
 def _iter2DStyles(rewards, customization=None):
-    return ((s, data.get('compensatedNumber', 0)) for s, data in _iterStyles(rewards) if s.itemTypeName == Type.STYLE.value and not s.is3D and not s.isLockedOnVehicle)
+    return ((s, data.get('compensatedNumber', 0), data.get('value', 0)) for s, data in _iterStyles(rewards) if s.itemTypeName == Type.STYLE.value and not s.is3D and not s.isLockedOnVehicle)
 
 
 def _iterNoStyles(rewards):

@@ -98,6 +98,7 @@
     <_90mm_canon_DCA_45_BPXIV>	121	</_90mm_canon_DCA_45_BPXIV>
     <Canon_bitube_de_105_mm_D_1507>	122	</Canon_bitube_de_105_mm_D_1507>
     <_25mm_Canon_Raccourci_Mle_1934_A>	123	</_25mm_Canon_Raccourci_Mle_1934_A>
+    <_90mm_T90_22_Mle_F3>	126	</_90mm_T90_22_Mle_F3>
     <_120mm_D_1203_A_FL>	501	</_120mm_D_1203_A_FL>
     <_120mm_SA_46_AC_FL>	502	</_120mm_SA_46_AC_FL>
     <_105mm_D1504_7x7>	503	</_105mm_D1504_7x7>
@@ -2235,7 +2236,7 @@
       <userString>	#france_vehicles:_75mm_APX_1897	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	22360	</price>
+      <price>	10000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.46	</impulse>
       <recoil>
@@ -2255,9 +2256,9 @@
       <maxAmmo>	90	</maxAmmo>
       <aimingTime>	2.28571428571429	</aimingTime>
       <weight>	461	</weight>
-      <maxHealth>	94	</maxHealth>
-      <maxRegenHealth>	47	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.41142857142857	</shotDispersionRadius>
       <shotDispersionFactors>
@@ -2691,6 +2692,68 @@
         </_90mm_OE_mle_1924>
       </shots>
     </_90mm_F3M>
+    <_90mm_T90_22_Mle_F3>
+      <userString>	#france_vehicles:_90mm_T90_22_Mle_F3	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.46	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.38	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	17	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	1.8	</aimingTime>
+      <weight>	2000	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	2	</count>
+        <rate>	90	</rate>
+      </clip>
+      <shots>
+        <_90mm_OFL_F1>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	202 188	</piercingPower>
+        </_90mm_OFL_F1>
+        <_90mm_OFL_F3>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1220	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	235 212	</piercingPower>
+        </_90mm_OFL_F3>
+        <_90mm_OE_F2>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_OE_F2>
+      </shots>
+    </_90mm_T90_22_Mle_F3>
     <_90mm_CN_90_F3>
       <userString>	#france_vehicles:_90mm_CN_90_F3	</userString>
       <tags></tags>
@@ -3672,8 +3735,8 @@
       <userString>	#france_vehicles:Canon_bitube_de_105_mm_D_1507	</userString>
       <shortUserString>	#france_vehicles:Canon_bitube_de_105_mm_D_1507_short	</shortUserString>
       <tags></tags>
-      <level>	10	</level>
-      <price>	300000	</price>
+      <level>	8	</level>
+      <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.46	</impulse>
       <recoil>
@@ -3688,18 +3751,18 @@
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
-      <rotationSpeed>	21.875	</rotationSpeed>
-      <reloadTime>	10	</reloadTime>
-      <maxAmmo>	50	</maxAmmo>
-      <aimingTime>	2	</aimingTime>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10.5	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	1.7	</aimingTime>
       <weight>	3000	</weight>
-      <maxHealth>	208	</maxHealth>
-      <maxRegenHealth>	104	</maxRegenHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.34	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
       <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
+        <turretRotation>	0.15	</turretRotation>
         <afterShot>	3.0	</afterShot>
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>

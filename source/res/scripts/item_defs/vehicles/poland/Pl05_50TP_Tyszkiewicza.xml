@@ -1632,8 +1632,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -2426,10 +2426,6 @@
       <tags></tags>
       <level>	8	</level>
       <price>	32500	</price>
-      <unlocks>
-        <turret>	Turret_2_Pl05_50TP_Tyszkiewicza	  <cost>	26200	</cost>
-        </turret>
-      </unlocks>
       <armor>
         <armor_1>	250	</armor_1>
         <armor_2>	210	</armor_2>
@@ -2500,14 +2496,14 @@
             </armor_12>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12.5	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.6	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -2592,6 +2588,10 @@
           </camouflage>
         </_122mm_wz_53>
         <_130mm_R_14_wz_56>	shared	  <maxAmmo>	30	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_Pl05_50TP_Tyszkiewicza	  <cost>	26200	</cost>
+            </turret>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.437778 8 0.448216 6.5 0.551667 6.5 0.562237 8 1 8	</maxPitch>
@@ -3323,14 +3323,14 @@
             </armor_9>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	11.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -4152,11 +4152,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <RTU_Jesion_M>	shared	  <unlocks>
-        <radio>	R_113_P	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </RTU_Jesion_M>
     <R_113_P>	shared	</R_113_P>
   </radios>
   <physics>

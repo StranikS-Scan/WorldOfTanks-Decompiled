@@ -28,12 +28,14 @@ class LoadingTypes(str, EnumWithValues):
 
 @enum.unique
 class MilestonesTypes(str, EnumWithValues):
-    CONNECTION = 'connection'
+    DEFAULT = 'default'
     STANDARD = 'standard'
 
 
 @enum.unique
 class Milestones(str, EnumWithValues):
+    CLIENT_LOADING = 'client_loading'
+    SAVING_PDC = 'saving_pdc'
     CONNECTION = 'connection'
     ENTER = 'enter'
     INVENTORY = 'inventory'

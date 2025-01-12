@@ -7,12 +7,14 @@ from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus, WindowLayer
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.selectable_reward.common import Comp7SelectableRewardManager
 from gui.game_control.comp7_shop_controller import ShopControllerStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import createTooltipData
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import RootViewModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.tab_model import MetaRootViews, TabModel
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.tab_model import TabModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.impl.lobby.comp7.comp7_lobby_sounds import getComp7MetaSoundSpace, playComp7MetaViewTabSound
@@ -29,12 +31,14 @@ from gui.impl.pub import ViewImpl
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showComp7WhatsNewScreen
+from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showComp7WhatsNewScreen, showComp7AllRewardsSelectionWindow
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IComp7ShopController
 from skeletons.gui.impl import IGuiLoader
+from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
+    from gui.offers import OffersDataProvider
 _logger = logging.getLogger(__name__)
 
 class MetaRootView(ViewImpl, IGlobalListener):
@@ -42,6 +46,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __comp7ShopController = dependency.descriptor(IComp7ShopController)
     __guiLoader = dependency.descriptor(IGuiLoader)
+    __offersProvider = dependency.descriptor(IOffersDataProvider)
     _COMMON_SOUND_SPACE = getComp7MetaSoundSpace()
 
     def __init__(self, layoutID, *args, **kwargs):
@@ -134,6 +139,7 @@ class MetaRootView(ViewImpl, IGlobalListener):
         page.initialize(*args, **kwargs)
         self.viewModel.setPageViewId(page.pageId)
         comp7_model_helpers.setScheduleInfo(model=self.viewModel.scheduleInfo)
+        self.__updateWeeklyQuestsClaimRewardsModel()
         self.__addListeners()
         return
 
@@ -157,6 +163,8 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.__comp7ShopController.onDataUpdated += self.__onShopDataUpdated
         if self.__guiLoader.windowsManager is not None:
             self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
+        self.__offersProvider.onOffersUpdated += self.__updateWeeklyQuestsClaimRewardsModel
+        self.viewModel.claimRewardsModel.onGoToRewardSelection += showComp7AllRewardsSelectionWindow
         self.startGlobalListening()
         return
 
@@ -173,6 +181,8 @@ class MetaRootView(ViewImpl, IGlobalListener):
         self.__comp7ShopController.onDataUpdated -= self.__onShopDataUpdated
         if self.__guiLoader.windowsManager is not None:
             self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
+        self.__offersProvider.onOffersUpdated -= self.__updateWeeklyQuestsClaimRewardsModel
+        self.viewModel.claimRewardsModel.onGoToRewardSelection -= showComp7AllRewardsSelectionWindow
         self.stopGlobalListening()
         return
 
@@ -198,14 +208,19 @@ class MetaRootView(ViewImpl, IGlobalListener):
         if self.__comp7Controller.isOffline:
             showHangar()
 
+    def __updateWeeklyQuestsClaimRewardsModel(self):
+        rewardsCount = Comp7SelectableRewardManager.getRemainedChoicesForFeature()
+        self.viewModel.claimRewardsModel.setRewardsCount(rewardsCount)
+
     def __initPages(self):
-        pages = (ProgressionPage(self.viewModel.progressionModel, self),
-         RankRewardsPage(self.viewModel.rankRewardsModel, self),
-         YearlyRewardsPage(self.viewModel.yearlyRewardsModel, self),
-         WeeklyQuestsPage(self.viewModel.weeklyQuestsModel, self),
-         LeaderboardPage(self.viewModel.leaderboardModel, self),
-         ShopPage(self.viewModel.shopModel, self),
-         YearlyStatisticsPage(self.viewModel.yearlyStatisticsModel, self))
+        model = self.getViewModel()
+        pages = (ProgressionPage(model.progressionModel, self),
+         RankRewardsPage(model.rankRewardsModel, self),
+         YearlyRewardsPage(model.yearlyRewardsModel, self),
+         WeeklyQuestsPage(model.weeklyQuestsModel, self),
+         LeaderboardPage(model.leaderboardModel, self),
+         ShopPage(model.shopModel, self),
+         YearlyStatisticsPage(model.yearlyStatisticsModel, self))
         self.__pages = {p.pageId:p for p in pages}
 
     def __clearPages(self):

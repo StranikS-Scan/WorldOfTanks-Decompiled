@@ -76,7 +76,7 @@ class DialogWindow(Window):
     gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__blur', '__scope', '__event', '__result')
 
-    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW, layer=None):
+    def __init__(self, content=None, bottomContent=None, parent=None, balanceContent=None, enableBlur=True, flags=DialogFlags.TOP_WINDOW):
         if content is not None:
             pass
         settings = WindowSettings()
@@ -84,8 +84,6 @@ class DialogWindow(Window):
         settings.decorator = DialogDecorator(balanceContent, bottomContent)
         settings.content = content
         settings.parent = parent
-        if layer:
-            settings.layer = layer
         super(DialogWindow, self).__init__(settings)
         self.__scope = AsyncScope()
         self.__event = AsyncEvent(scope=self.__scope)

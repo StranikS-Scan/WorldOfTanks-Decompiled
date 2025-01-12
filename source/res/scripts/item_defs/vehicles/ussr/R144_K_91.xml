@@ -658,7 +658,35 @@
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.912 0.011 -0.750556	</position>
+        <rotation>	0 -0 1.570796	</rotation>
+        <scale>	0.99999 0.99999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.667001 0.093 -1.434695	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999986 0.999986 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.249718 -0.191 -3.262	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999978 0.999978 0.999978	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -2128,11 +2156,11 @@
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
-              <compatibleModels>	R144_K_91_3Dst_BPXV	</compatibleModels>
               <slotId>	49001	</slotId>
               <rayStart>	-0.000001 -0.004983 1.43	</rayStart>
               <rayEnd>	-0.000001 -0.004983 2.16	</rayEnd>
               <rayUp>	0.094 0 0	</rayUp>
+              <compatibleModels>	R144_K_91_3Dst_BPXV	</compatibleModels>
               <size>	0.73	</size>
             </slot>
           </customizationSlots>
@@ -2712,7 +2740,26 @@
           <slotId>	38000	</slotId>
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
           <hiddenForUser>	true	</hiddenForUser>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.568039 0.915999 -0.473231	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0.725 0.955 0.541	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

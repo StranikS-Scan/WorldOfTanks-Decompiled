@@ -80,11 +80,11 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	53439	</weight>
-    <maxHealth>	480	</maxHealth>
+    <maxHealth>	560	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	83	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/french/F77_FCM_2C/normal/lod0/Hull.model	</undamaged>
@@ -754,7 +754,7 @@
       <userString>	#france_vehicles:Chassis_F77_FCM_2C	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1730	</price>
+      <price>	2000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -771,9 +771,9 @@
         <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	75	</maxHealth>
+      <maxRegenHealth>	56	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
       <models>
         <undamaged>	vehicles/french/F77_FCM_2C/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F77_FCM_2C/crash/lod0/Chassis.model	</destroyed>
@@ -1081,7 +1081,7 @@
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	6.75555563	</repairTime>
     </Chassis_F77_FCM_2C>
   </chassis>
   <turrets0>
@@ -1089,7 +1089,7 @@
       <userString>	#france_vehicles:Turret_1_F77_FCM_2C	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	2350	</price>
+      <price>	2000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	35	</armor_1>
@@ -1108,12 +1108,12 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	70	</maxHealth>
-        <maxRegenHealth>	35	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	3	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	320	</circularVisionRadius>
       <surveyingDeviceHealth>

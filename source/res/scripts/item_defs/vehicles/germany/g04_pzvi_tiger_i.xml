@@ -14,10 +14,10 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.055	</moving>
-    <still>	0.109	</still>
+    <moving>	0.058	</moving>
+    <still>	0.116	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
-    <firePenalty>	0.164	</firePenalty>
+    <firePenalty>	0.174	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -60,23 +60,13 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25350	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
-    <variants>
-      <hull2>
-        <turret0>	PzVI_Porsche_Turm	</turret0>
-        <turretPositions>
-          <turret>	0.001037 0.742058 -0.166892	</turret>
-        </turretPositions>
-        <turretHardPoints>
-          <hardPoint>	HP_turretJoint_2	</hardPoint>
-        </turretHardPoints>
-      </hull2>
-    </variants>
+    <variants></variants>
     <models>
       <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Hull.model	</destroyed>
@@ -100,10 +90,10 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.001037 0.772058 -0.166712	</turret>
+      <turret>	0.001037 0.742058 -0.166892	</turret>
     </turretPositions>
     <turretHardPoints>
-      <hardPoint>	HP_turretJoint_1	</hardPoint>
+      <hardPoint>	HP_turretJoint_2	</hardPoint>
     </turretHardPoints>
     <hitTester>
       <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Hull.model	</collisionModelServer>
@@ -1218,13 +1208,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <PzVI_Standardketten>
-      <userString>	#germany_vehicles:PzVI_Standardketten	</userString>
+    <Chassis_G04_PzVI_Tiger_I>
+      <userString>	#germany_vehicles:Chassis_G04_PzVI_Tiger_I	</userString>
       <tags></tags>
       <level>	6	</level>
       <price>	15000	</price>
       <unlocks>
-        <chassis>	PzVI_Vetstaerktketten	  <cost>	9705	</cost>
+        <chassis>	Chassis_G04_PzVI_Tiger_I_2	  <cost>	9705	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1232,7 +1222,7 @@
         <rightTrack>	40	</rightTrack>
       </armor>
       <weight>	19000	</weight>
-      <maxLoad>	57000	</maxLoad>
+      <maxLoad>	58000	</maxLoad>
       <terrainResistance>	1.3 1.5 3.1	</terrainResistance>
       <brakeForce>	51000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -2243,9 +2233,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </PzVI_Standardketten>
-    <PzVI_Vetstaerktketten>
-      <userString>	#germany_vehicles:PzVI_Vetstaerktketten	</userString>
+    </Chassis_G04_PzVI_Tiger_I>
+    <Chassis_G04_PzVI_Tiger_I_2>
+      <userString>	#germany_vehicles:Chassis_G04_PzVI_Tiger_I_2	</userString>
       <tags></tags>
       <level>	7	</level>
       <price>	21600	</price>
@@ -3265,826 +3255,12 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </PzVI_Vetstaerktketten>
+    </Chassis_G04_PzVI_Tiger_I_2>
   </chassis>
   <turrets0>
-    <PzVI_Anfangsturm>
-      <userString>	#germany_vehicles:PzVI_Anfangsturm	</userString>
-      <shortUserString>	#germany_vehicles:PzVI_Anfangsturm_short	</shortUserString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	15820	</price>
-      <armor>
-        <armor_1>	100	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	80	</armor_3>
-        <armor_4>	80	</armor_4>
-        <armor_5>	25	</armor_5>
-        <armor_6>	25	</armor_6>
-        <armor_7>	50	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	60	</armor_9>
-        <armor_10>	80	</armor_10>
-        <armor_11>	80	</armor_11>
-        <armor_12>	80	</armor_12>
-        <armor_14>	25	</armor_14>
-        <armor_16>	100	</armor_16>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	8250	</weight>
-      <maxHealth>	280	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	370	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	90	</maxHealth>
-        <maxRegenHealth>	45	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
-      <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	130	</maxAmmo>
-          <unlocks>
-            <gun>	_88mm_KwK_36_L56	  <cost>	9500	</cost>
-            </gun>
-            <gun>	_105mm_StuH42_L28Pz	  <cost>	3800	</cost>
-            </gun>
-          </unlocks>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 6 0.527778 6 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <G04_PzVI_Tiger_I_E_3DSt>
-                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_01.model	</exploded>
-              </G04_PzVI_Tiger_I_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000932 0.040953 2.18369	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000894 0.259814 0.361795	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000932 0.040953 2.18369	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.013825 2.2463 0.712405	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.34155 1.2554 1.34156	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.081348	</clipAngle>
-              <anchorShift>	0.744916	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.013826 2.24059 0.635129	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.57597 1.47479 1.57599	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.840599	</clipAngle>
-              <anchorShift>	0.744918	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.001002 0.023551 3.63604	</rayStart>
-              <rayEnd>	0.001002 0.023551 4.13904	</rayEnd>
-              <rayUp>	0.075 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
-            <density>	91.425 93.1735	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
-        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
-          <unlocks>
-            <turret>	PzVI_Porsche_Turm	  <cost>	11130	</cost>
-            </turret>
-          </unlocks>
-          <reloadTime>	6.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 5 0.527778 5 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_07.model	</exploded>
-            <sets>
-              <G04_PzVI_Tiger_I_E_3DSt>
-                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_07.model	</undamaged>
-                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_07.model	</destroyed>
-                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_07.model	</exploded>
-              </G04_PzVI_Tiger_I_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004426 0.030501 1.93415	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000896 0.25972 0.361783	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004426 0.030501 1.93415	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.013825 2.2463 0.712405	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.34155 1.2554 1.34156	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.081348	</clipAngle>
-              <anchorShift>	0.987652	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.013826 2.24059 0.635129	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.57598 1.47479 1.57599	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.840599	</clipAngle>
-              <anchorShift>	1.00237	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000037 0.022151 3.17958	</rayStart>
-              <rayEnd>	0.000037 0.022151 3.68258	</rayEnd>
-              <rayUp>	0.069 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
-            <density>	95.595 94.9889	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_88mm_KwK_36_L56>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_03.model	</exploded>
-            <sets>
-              <G04_PzVI_Tiger_I_E_3DSt>
-                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_03.model	</undamaged>
-                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_03.model	</destroyed>
-                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_03.model	</exploded>
-              </G04_PzVI_Tiger_I_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000089 0.028126 1.20789	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000897 0.259705 0.361776	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000089 0.028126 1.20789	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.013825 2.2463 0.712405	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.34155 1.2554 1.34156	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.081348	</clipAngle>
-              <anchorShift>	0.744916	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.013826 2.24059 0.635129	</position>
-              <rotation>	1.2583 -0.0001 3.14149	</rotation>
-              <scale>	1.57597 1.47479 1.57599	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.840599	</clipAngle>
-              <anchorShift>	0.744917	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000001 0.021321 1.47768	</rayStart>
-              <rayEnd>	0.000001 0.021321 1.98068	</rayEnd>
-              <rayUp>	0.098 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
-            <density>	92.6424 92.6443	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-      </guns>
-      <models>
-        <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Turret_01.model	</exploded>
-        <sets>
-          <G04_PzVI_Tiger_I_E_3DSt>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Turret_01.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_01.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Turret_01.model	</exploded>
-          </G04_PzVI_Tiger_I_E_3DSt>
-        </sets>
-      </models>
-      <hitTester>
-        <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Turret_01.model	</collisionModelClient>
-      </hitTester>
-      <gunPosition>	-0.001039 0.447133 0.883142	</gunPosition>
-      <physicsShape>	0.922 0.006 1.001 0 0.639 0.035 0.878 0.691 0.309 0.5 0.218 0.5 0.149 0.547 0.05	</physicsShape>
-      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	31000	</slotId>
-          <anchorPosition>	-0 0.874707 0.167311	</anchorPosition>
-          <anchorDirection>	0 1 0	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	camouflage	</slotType>
-          <slotId>	32000	</slotId>
-          <anchorPosition>	-0 0.874707 0.167311	</anchorPosition>
-          <anchorDirection>	0 1 0	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33000	</slotId>
-          <rayStart>	-0.907958 0.416824 0.765977	</rayStart>
-          <rayEnd>	-0.860191 0.404709 0.757516	</rayEnd>
-          <rayUp>	0.237859 0.970192 -0.046373	</rayUp>
-          <size>	0.32	</size>
-        </slot>
-        <slot>
-          <slotType>	player	</slotType>
-          <slotId>	33001	</slotId>
-          <isMirrored>	true	</isMirrored>
-          <rayStart>	0.913412 0.387362 0.735722	</rayStart>
-          <rayEnd>	0.865849 0.374721 0.726896	</rayEnd>
-          <rayUp>	-0.248571 0.967515 -0.046125	</rayUp>
-          <size>	0.32	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </slot>
-        <slot>
-          <slotType>	inscription	</slotType>
-          <slotId>	34000	</slotId>
-          <rayStart>	-0.002452 0.313212 -1.32143	</rayStart>
-          <rayEnd>	-0.002452 0.241625 -0.927896	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.7	</size>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35000	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.007925 2.27767 -1.24547	</position>
-          <rotation>	1.74907 -0.000043 -0.000019	</rotation>
-          <scale>	1.05896 0.309281 1.05895	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.981748	</clipAngle>
-          <anchorShift>	0.121243	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35001	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	-0.008995 2.69427 0.240277	</position>
-          <rotation>	0.2156 -0.000014 3.14156	</rotation>
-          <scale>	1.68932 0.395153 1.68932	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.641102	</clipAngle>
-          <anchorShift>	0.087063	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35002	</slotId>
-          <tags>	formfactor_rect1x2	</tags>
-          <position>	0.000031 2.31024 -1.28076	</position>
-          <rotation>	1.57249 -0.004849 -0.004849	</rotation>
-          <scale>	1.33228 0.636331 1.33229	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.02139	</clipAngle>
-          <anchorShift>	0.067822	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35003	</slotId>
-          <tags>	formfactor_rect1x3	</tags>
-          <position>	-0.000132 2.14445 -1.34965	</position>
-          <rotation>	1.543 0.000259 0.00026	</rotation>
-          <scale>	1.32643 0.633543 1.32644	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.08823	</clipAngle>
-          <anchorShift>	0.076832	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35004	</slotId>
-          <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-          <position>	-0.88392 2.29654 -0.1681	</position>
-          <rotation>	1.78443 1.5313 -0.107351	</rotation>
-          <scale>	1.82095 0.607972 1.82098	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.047469	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35005	</slotId>
-          <tags>	formfactor_rect1x3	</tags>
-          <position>	-0.000409 3.11373 0.365842	</position>
-          <rotation>	0.074855 -0.002032 3.14155	</rotation>
-          <scale>	1.61756 0.772576 1.61759	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.04285	</clipAngle>
-          <anchorShift>	-0.323386	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35006	</slotId>
-          <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-          <position>	-0.881543 2.28366 -0.142657	</position>
-          <rotation>	1.7058 1.45718 -0.182209	</rotation>
-          <scale>	1.77019 0.591027 1.77023	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.081623	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35007	</slotId>
-          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-          <position>	-1.13408 2.33484 -0.192471	</position>
-          <rotation>	1.78496 1.51652 0.026357	</rotation>
-          <scale>	1.83802 0.770345 1.83803	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.74502	</clipAngle>
-          <anchorShift>	-0.185662	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35008	</slotId>
-          <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
-          <position>	0.000323 2.71922 -0.120484	</position>
-          <rotation>	0.000044 -1.56905 3.13974	</rotation>
-          <scale>	2.12904 1.01688 2.12906	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.883137	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.082487	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35009	</slotId>
-          <tags>	formfactor_rect1x3 direction_left_to_right	</tags>
-          <position>	0.88157 2.28364 -0.142658	</position>
-          <rotation>	1.70571 -1.45717 0.182221	</rotation>
-          <scale>	1.77019 0.591027 1.77023	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.081623	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35010	</slotId>
-          <tags>	formfactor_rect1x4 direction_left_to_right	</tags>
-          <position>	0.883948 2.29653 -0.1681	</position>
-          <rotation>	1.78442 -1.53135 0.10734	</rotation>
-          <scale>	1.82095 0.607972 1.82098	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.04747	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35011	</slotId>
-          <tags>	formfactor_rect1x6 direction_right_to_left	</tags>
-          <position>	-0.880234 2.30723 -0.158115	</position>
-          <rotation>	1.74756 1.46655 -0.171702	</rotation>
-          <scale>	1.78827 0.597061 1.7883	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.074626	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35012	</slotId>
-          <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
-          <position>	0.880262 2.30721 -0.158115	</position>
-          <rotation>	1.74759 -1.46659 0.171745	</rotation>
-          <scale>	1.78827 0.597061 1.7883	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.739904	</clipAngle>
-          <anchorShift>	0.074627	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35013	</slotId>
-          <tags>	formfactor_square direction_right_to_left	</tags>
-          <position>	-1.25425 2.35177 0.042389	</position>
-          <rotation>	1.31869 -1.51995 -2.99084	</rotation>
-          <scale>	1.0304 1.0304 1.0304	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.995548	</clipAngle>
-          <anchorShift>	-0.288957	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35014	</slotId>
-          <tags>	formfactor_square direction_left_to_right	</tags>
-          <position>	1.25431 2.35173 0.042389	</position>
-          <rotation>	1.3187 1.52001 2.99079	</rotation>
-          <scale>	1.0304 1.0304 1.0304	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.995548	</clipAngle>
-          <anchorShift>	-0.28896	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35015	</slotId>
-          <tags>	formfactor_square	</tags>
-          <position>	0.000084 2.98677 -0.431427	</position>
-          <rotation>	-3.13204 -0.009123 -0.000013	</rotation>
-          <scale>	1.60802 0.499996 1.60801	</scale>
-          <showOn>	256	</showOn>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.04974	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35016	</slotId>
-          <tags>	formfactor_rect1x2	</tags>
-          <position>	-0.008994 2.74366 0.299056	</position>
-          <rotation>	0.2156 -0.000014 3.14156	</rotation>
-          <scale>	1.60802 0.376135 1.60802	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.00403	</clipAngle>
-          <anchorShift>	0.02756	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35017	</slotId>
-          <tags>	formfactor_square direction_right_to_left	</tags>
-          <position>	-0.824485 2.29874 -0.614012	</position>
-          <rotation>	1.96378 1.30097 -0.147286	</rotation>
-          <scale>	1.0304 1.0304 1.0304	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.41059	</clipAngle>
-          <anchorShift>	0.059303	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35018	</slotId>
-          <tags>	formfactor_square direction_left_to_right	</tags>
-          <position>	0.824512 2.29873 -0.614012	</position>
-          <rotation>	1.96377 -1.30097 0.147311	</rotation>
-          <scale>	1.0304 1.0304 1.0304	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.41059	</clipAngle>
-          <anchorShift>	0.059303	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35019	</slotId>
-          <tags>	formfactor_rect1x2 direction_left_to_right	</tags>
-          <position>	1.1341 2.33482 -0.192471	</position>
-          <rotation>	1.78487 -1.51657 -0.026356	</rotation>
-          <scale>	1.83802 0.770344 1.83803	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.745021	</clipAngle>
-          <anchorShift>	-0.185659	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35020	</slotId>
-          <tags>	formfactor_rect1x3 direction_right_to_left	</tags>
-          <position>	-0.000333 2.7136 -0.089396	</position>
-          <rotation>	-0.403707 -1.5449 3.05503	</rotation>
-          <scale>	2.12904 1.01688 2.12906	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.424173	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.107356	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35021	</slotId>
-          <tags>	formfactor_rect1x4 direction_right_to_left	</tags>
-          <position>	0.000253 2.7193 -0.16091	</position>
-          <rotation>	0.000044 -1.56905 3.13974	</rotation>
-          <scale>	2.12904 1.01688 2.12906	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.883137	</clipAngle>
-          <verticalMirror>	true	</verticalMirror>
-          <anchorShift>	0.107358	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35022	</slotId>
-          <tags>	formfactor_square safe left direction_right_to_left	</tags>
-          <position>	-1.02912 2.29828 0.379895	</position>
-          <rotation>	1.31869 -1.51995 -3.10395	</rotation>
-          <scale>	0.508392 0.508393 0.508393	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.995548	</clipAngle>
-          <anchorShift>	-0.062784	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35023	</slotId>
-          <tags>	formfactor_square safe right direction_left_to_right	</tags>
-          <position>	1.0236 2.32479 0.27229	</position>
-          <rotation>	1.82308 -1.52679 0.054094	</rotation>
-          <scale>	0.683193 0.683196 0.683193	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.995548	</clipAngle>
-          <anchorShift>	-0.062786	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35024	</slotId>
-          <tags>	formfactor_rect1x2 safe left direction_right_to_left	</tags>
-          <position>	-0.967876 2.29401 0.440695	</position>
-          <rotation>	1.35076 -1.4153 3.11324	</rotation>
-          <scale>	0.654083 0.274137 0.654088	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.74502	</clipAngle>
-          <anchorShift>	0.040504	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35025	</slotId>
-          <tags>	formfactor_rect1x2 safe right direction_left_to_right	</tags>
-          <position>	0.986386 2.31348 0.303421	</position>
-          <rotation>	1.35259 1.48482 3.05629	</rotation>
-          <scale>	0.814984 0.341574 0.81499	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.74502	</clipAngle>
-          <anchorShift>	0.040505	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35026	</slotId>
-          <tags>	formfactor_rect1x2 mimic left direction_right_to_left	</tags>
-          <position>	-0.960322 2.28248 0.164327	</position>
-          <rotation>	1.78494 1.51102 0.02098	</rotation>
-          <scale>	1.16077 0.486499 1.16078	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.74502	</clipAngle>
-          <anchorShift>	0.063607	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35027	</slotId>
-          <tags>	formfactor_rect1x2 mimic right direction_left_to_right	</tags>
-          <position>	0.96035 2.28247 0.164327	</position>
-          <rotation>	1.78492 -1.51111 -0.020942	</rotation>
-          <scale>	1.16077 0.486499 1.16078	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.74502	</clipAngle>
-          <anchorShift>	0.063612	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35028	</slotId>
-          <tags>	formfactor_rect1x2 cover direction_right_to_left	</tags>
-          <position>	0.000409 2.27792 0.092746	</position>
-          <rotation>	0.000044 -1.56905 2.98553	</rotation>
-          <scale>	5.9784 3.21377 7.65686	</scale>
-          <hiddenForUser>	true	</hiddenForUser>
-          <showOn>	4368	</showOn>
-          <clipAngle>	0.53661	</clipAngle>
-          <anchorShift>	0.540503	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35029	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
-          <position>	-0.008995 2.720163 0.142158	</position>
-          <rotation>	0.2156 -0.000014 3.14156	</rotation>
-          <scale>	0.759984 0.17777 0.759985	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.641101	</clipAngle>
-          <anchorShift>	0.087063	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35030	</slotId>
-          <tags>	formfactor_square	</tags>
-          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
-          <position>	-0.260779 2.277672 -1.24547	</position>
-          <rotation>	1.749072 0.194632 -0.00002	</rotation>
-          <scale>	0.836863 0.244415 0.836857	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	0.981748	</clipAngle>
-          <anchorShift>	0.121243	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35031	</slotId>
-          <tags>	formfactor_square direction_right_to_left	</tags>
-          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
-          <position>	-1.184043 2.267958 0.299208	</position>
-          <rotation>	1.31869 -1.519949 -2.990839	</rotation>
-          <scale>	0.413077 0.581019 0.413078	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.033235	</clipAngle>
-          <anchorShift>	-0.18	</anchorShift>
-        </slot>
-        <slot>
-          <slotType>	projectionDecal	</slotType>
-          <slotId>	35032	</slotId>
-          <tags>	formfactor_square direction_left_to_right	</tags>
-          <compatibleModels>	G04_PzVI_Tiger_I_E_3DSt	</compatibleModels>
-          <position>	0.794073 2.417706 -0.446852	</position>
-          <rotation>	1.963771 -1.300972 0.147312	</rotation>
-          <scale>	0.560571 0.560572 0.560572	</scale>
-          <showOn>	256	</showOn>
-          <clipAngle>	1.410591	</clipAngle>
-          <anchorShift>	0.0893	</anchorShift>
-        </slot>
-      </customizationSlots>
-      <customization>
-        <customizableVehicleAreas>
-          <paint>	TURRET	</paint>
-          <camouflage>	TURRET	</camouflage>
-        </customizableVehicleAreas>
-      </customization>
-      <camouflage>
-        <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
-        <density>	104.473 104.614	</density>
-        <aoTextureSize>	512 512	</aoTextureSize>
-      </camouflage>
-    </PzVI_Anfangsturm>
-    <PzVI_Porsche_Turm>
-      <userString>	#germany_vehicles:PzVI_Porsche_Turm	</userString>
-      <shortUserString>	#germany_vehicles:PzVI_Porsche_Turm_short	</shortUserString>
+    <Turret_2_G04_PzVI_Tiger_I>
+      <userString>	#germany_vehicles:Turret_2_G04_PzVI_Tiger_I	</userString>
+      <shortUserString>	#germany_vehicles:Turret_2_G04_PzVI_Tiger_I_short	</shortUserString>
       <tags></tags>
       <level>	8	</level>
       <price>	33220	</price>
@@ -4106,7 +3282,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8950	</weight>
-      <maxHealth>	380	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -4119,263 +3295,9 @@
         <maxRegenHealth>	45	</maxRegenHealth>
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
-      <invisibilityFactor>	1.064	</invisibilityFactor>
       <guns>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	130	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.40856 8 0.472222 4 0.527778 4 0.59144 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <G04_PzVI_Tiger_I_E_3DSt>
-                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_02.model	</exploded>
-              </G04_PzVI_Tiger_I_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000932 0.004786 2.18369	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000893 0.195695 0.323365	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000932 0.004786 2.18369	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.463252 2.222 1.30508	</position>
-              <rotation>	1.54423 3.13999 -0.366895	</rotation>
-              <scale>	0.558832 0.332494 0.558828	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.714703	</clipAngle>
-              <anchorShift>	0.048544	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000066 2.2516 1.40598	</position>
-              <rotation>	1.36623 0.000328 3.14136	</rotation>
-              <scale>	1.15669 0.4 1.15668	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.689859	</clipAngle>
-              <anchorShift>	0.683913	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.463168 2.22203 1.30508	</position>
-              <rotation>	1.54423 3.13823 0.368645	</rotation>
-              <scale>	0.558831 0.332494 0.558828	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.714703	</clipAngle>
-              <anchorShift>	0.065224	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000001 0.011551 3.65696	</rayStart>
-              <rayEnd>	0.000001 0.011551 4.15996	</rayEnd>
-              <rayUp>	0.073 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
-            <density>	91.425 93.1735	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
-        <_105mm_StuH42_L28Pz>	shared	  <maxAmmo>	70	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	210	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.394671 8 0.458333 2 0.541667 2 0.605329 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G04_PzVI_Tiger_I/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/german/G04_PzVI_Tiger_I/crash/lod0/Gun_04.model	</exploded>
-            <sets>
-              <G04_PzVI_Tiger_I_E_3DSt>
-                <undamaged>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/normal/lod0/Gun_04.model	</undamaged>
-                <destroyed>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_04.model	</destroyed>
-                <exploded>	vehicles/german/G04_PzVI_Tiger_I/_skins/G04_PzVI_Tiger_I_E_3DSt/crash/lod0/Gun_04.model	</exploded>
-              </G04_PzVI_Tiger_I_E_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G04_PzVI_Tiger_I/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G04_PzVI_Tiger_I/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004426 0.030589 0.979888	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.000894 0.195585 0.323358	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004426 0.030589 0.979888	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_square direction_right_to_left	</tags>
-              <position>	0.463252 2.222 1.30508	</position>
-              <rotation>	1.54424 3.13999 -0.366893	</rotation>
-              <scale>	0.558832 0.332494 0.558828	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.714703	</clipAngle>
-              <anchorShift>	0.048703	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.000068 2.25089 1.40309	</position>
-              <rotation>	1.36624 0.000405 3.1413	</rotation>
-              <scale>	1.15669 0.4 1.15668	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.651067	</clipAngle>
-              <anchorShift>	0.683923	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.463168 2.22203 1.30508	</position>
-              <rotation>	1.54423 3.13823 0.368652	</rotation>
-              <scale>	0.558831 0.332494 0.558828	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.714703	</clipAngle>
-              <anchorShift>	0.065002	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.008853 0.012346 1.14383	</rayStart>
-              <rayEnd>	-0.008853 0.012346 1.64683	</rayEnd>
-              <rayUp>	0.098 0 0	</rayUp>
-              <size>	0.503	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
-            <density>	92.6424 92.6443	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_88mm_KwK_36_L56>	shared	  <maxAmmo>	92	</maxAmmo>
-          <reloadTime>	5.5	</reloadTime>
+        <_88mm_Kw_K_36_L_56_Ausf_E>	shared	  <maxAmmo>	92	</maxAmmo>
+          <reloadTime>	5.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -4500,7 +3422,7 @@
             <density>	95.595 94.9889	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_88mm_KwK_36_L56>
+        </_88mm_Kw_K_36_L_56_Ausf_E>
         <_88mm_KwK_43_L71_N>	shared	  <maxAmmo>	72	</maxAmmo>
           <unlocks>
             <vehicle>	G16_PzVIB_Tiger_II	  <cost>	78000	</cost>
@@ -5102,7 +4024,7 @@
         <density>	94.6164 94.5247	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </PzVI_Porsche_Turm>
+    </Turret_2_G04_PzVI_Tiger_I>
   </turrets0>
   <engines>
     <Maybach_HL_210_TRM_P45>	shared	  <unlocks>
@@ -5116,16 +4038,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
@@ -5141,7 +4053,7 @@
         </Maybach_HL_230_TRM_P45>
       </engines>
       <chassis>
-        <PzVI_Standardketten>
+        <Chassis_G04_PzVI_Tiger_I>
           <grounds>
             <soft>
               <rollingFriction>	0.24955	</rollingFriction>
@@ -5153,8 +4065,8 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </PzVI_Standardketten>
-        <PzVI_Vetstaerktketten>
+        </Chassis_G04_PzVI_Tiger_I>
+        <Chassis_G04_PzVI_Tiger_I_2>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -5166,7 +4078,7 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </PzVI_Vetstaerktketten>
+        </Chassis_G04_PzVI_Tiger_I_2>
       </chassis>
     </detailed>
   </physics>

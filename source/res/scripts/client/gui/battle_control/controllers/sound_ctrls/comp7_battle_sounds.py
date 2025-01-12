@@ -281,10 +281,9 @@ class _ArtillerySoundPlayer(SoundPlayer):
 
     def __onEquipmentAreaCreated(self, equipment, position, endTime, level=None):
         if equipment.name in self.__COMP7_ARTILLERY_NAMES:
-            radius = equipment.getRadiusBasedOnSkillLevel(level) if level is not None else equipment.areaRadius
+            radius = equipment.getRadiusBasedOnSkillLevel(level) if level else equipment.radius
             self.__artilleryAreas.append(_ArtilleryAreaParams(position, radius, endTime))
             self.__updateAttack()
-        return
 
     def __updateAttack(self):
         aliveAreas, expiredAreas = [], []

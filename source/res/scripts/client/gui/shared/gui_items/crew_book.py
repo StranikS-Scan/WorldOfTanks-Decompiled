@@ -53,7 +53,7 @@ class CrewBook(FittingItem):
         return self._bookData().type
 
     def isCommon(self):
-        return self.getBookType() is CREW_BOOK_RARITY.CREW_COMMON
+        return self.getBookType() == CREW_BOOK_RARITY.CREW_COMMON
 
     def getBookTypeOrder(self):
         return CREW_BOOK_RARITY.ORDER[self.getBookType()]

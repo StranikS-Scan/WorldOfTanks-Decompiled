@@ -6,6 +6,8 @@ from gui.battle_control.controllers.repositories import ClassicControllersReposi
 class FunRandomControllerRepository(ClassicControllersRepository):
     __slots__ = ()
 
-    @staticmethod
-    def _getSoundController(setup):
-        return createFunRandomBattleSoundsController(setup)
+    @classmethod
+    def create(cls, setup):
+        repository = super(FunRandomControllerRepository, cls).create(setup)
+        repository.addController(createFunRandomBattleSoundsController(setup))
+        return repository

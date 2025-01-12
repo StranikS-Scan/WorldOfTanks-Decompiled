@@ -81,6 +81,7 @@ class _PlayerEvents(object):
         self.onHideBattleHint = Event.SafeEvent()
         self.onEmptyBattleHintsQueue = Event.SafeEvent()
         self.onTracerReceived = Event.Event()
+        self.onUILoggingStarted = Event.SafeEvent()
 
 
 g_playerEvents = _PlayerEvents()

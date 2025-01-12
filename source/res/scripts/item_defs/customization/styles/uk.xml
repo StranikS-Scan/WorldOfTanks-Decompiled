@@ -2006,58 +2006,6 @@
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	styles 5000g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <vehicles>	uk:GB32_Tortoise	</vehicles>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	962	</id>
-      <texture>	gui/maps/vehicles/styles/GB32_Tortoise_NY25_3DSt.png	</texture>
-      <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
-      <maxNumber>	1	</maxNumber>
-      <userString>	#vehicle_customization:special_style/GB32_Tortoise_NY25_3DSt	</userString>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/GB32_Tortoise_NY25_3DSt_desc/long	</longDescriptionSpecial>
-      <tags>	progression_required NY_style c11n3D	</tags>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <insignias>
-            <item>
-              <id>	75	</id>
-              <appliedTo>	4096	</appliedTo>
-            </item>
-          </insignias>
-          <attachments>
-            <item>
-              <id>	123	</id>
-              <slotId>	18000	</slotId>
-            </item>
-          </attachments>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
     <historical>	2	</historical>
     <priceGroup>	styles 100g notInShop	</priceGroup>
     <vehicleFilter>
@@ -2127,6 +2075,58 @@
             <item>
               <id>	131	</id>
               <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 5000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB32_Tortoise	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	962	</id>
+      <texture>	gui/maps/vehicles/styles/GB32_Tortoise_NY25_3DSt.png	</texture>
+      <modelsSet>	GB32_Tortoise_NY25_3DSt	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB32_Tortoise_NY25_3DSt	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB32_Tortoise_NY25_3DSt_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required NY_style c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	75	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <id>	123	</id>
+              <slotId>	18000	</slotId>
             </item>
           </attachments>
         </outfit>

@@ -47,9 +47,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.manual.manual_main_view import ManualMainView
     from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
     from gui.Scaleform.daapi.view.lobby.hangar.daily_quest_widget import DailyQuestWidget
-    from gui.impl.lobby.new_year.widgets.ny_main_widget import NyMainWidgetInject
-    from gui.impl.lobby.new_year.surprise_gift_entrypoint_view.surprise_gift_entrypoint_view import NyGiftWidgetInject
-    from gui.impl.lobby.loot_box.reward_kit_entry_point import RewardKitEntrancePointInjectWidget
     from gui.Scaleform.daapi.view.lobby.hangar.progressive_reward_widget import ProgressiveRewardWidget
     from gui.Scaleform.daapi.view.lobby.hangar.ammunition_panel_inject import AmmunitionPanelInject
     from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BattlePassEntryPointComponent
@@ -67,6 +64,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.battle_royale_widget import BattleRoyaleHangarWidgetInject
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.stronghold_entry_point import StrongholdEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.prestige_hangar_entry_point_inject import PrestigeHangarEntryPointInject
+    from gui.impl.lobby.player_satisfaction_rating.player_satisfaction_widget import PlayerSatisfactionWidget
     return (ViewSettings(VIEW_ALIAS.LOBBY_HANGAR, Hangar, 'hangar.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -114,9 +112,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.BATTLE_MATTERS_ENTRY_POINT, BattleMattersEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.PERSONAL_RESERVES_WIDGET_INJECT, PersonalReservesWidgetInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CAROUSEL_EVENT_ENTRY_HOLDER, CarouselEventEntryHolder, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.NY_MAIN_WIDGET_UI, NyMainWidgetInject, None),
-     ComponentSettings(HANGAR_ALIASES.NY_GIFT_WIDGET_UI, NyGiftWidgetInject, None),
-     ComponentSettings(HANGAR_ALIASES.REWARD_KITS_ENTRANCE_POINT, RewardKitEntrancePointInjectWidget, None))
+     ComponentSettings(HANGAR_ALIASES.PLAYER_SATISFACTION_WIDGET, PlayerSatisfactionWidget, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

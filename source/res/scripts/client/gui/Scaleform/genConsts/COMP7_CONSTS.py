@@ -26,3 +26,4 @@ class COMP7_CONSTS(object):
     COMP7_RANK_SUB_TASK_UI = 'Comp7RankSubTaskUI'
     COMP7_QUALIFICATION_SUB_TASK_UI = 'Comp7QualificationSubTaskUI'
     STATUS_MARKER_CONFIRMED_STATE = 'confirmed'
+    COMP7_SHOP_ID = 'comp7Shop'

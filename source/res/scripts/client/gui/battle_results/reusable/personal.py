@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/reusable/personal.py
 from collections import namedtuple
 import typing
-from constants import PREMIUM_TYPE
+from constants import PREMIUM_TYPE, PlayerSatisfactionRating
 from gui.battle_results.reusable import records, ReusableInfoFactory
 from gui.battle_results.reusable import shared
 from gui.battle_results.reusable import sort_keys
@@ -53,15 +53,16 @@ class SquadBonusInfo(object):
 
 
 class PersonalAvatarInfo(object):
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo', '__playerSatisfactionRating')
 
-    def __init__(self, bonusType, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
+    def __init__(self, bonusType, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, avatarPlayerSatisfactionRating=(), **kwargs):
         super(PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
         self.__team = team
         self.__isPrematureLeave = isPrematureLeave
         self.__eligibleForCrystalRewards = eligibleForCrystalRewards
+        self.__playerSatisfactionRating = avatarPlayerSatisfactionRating
         fairplayViolationsCls = ReusableInfoFactory.fairplayViolationForBonusType(bonusType)
         self.__fairplayViolations = fairplayViolationsCls(*(fairplayViolations or ()))
         squadBonusInfoCls = ReusableInfoFactory.squadBonusInfoForBonusType(bonusType)
@@ -92,6 +93,13 @@ class PersonalAvatarInfo(object):
     @property
     def eligibleForCrystalRewards(self):
         return self.__eligibleForCrystalRewards
+
+    @property
+    def playerSatisfactionRating(self):
+        if not self.__playerSatisfactionRating:
+            return PlayerSatisfactionRating.NONE
+        rating, _ = self.__playerSatisfactionRating
+        return rating
 
     @property
     def extensionInfo(self):

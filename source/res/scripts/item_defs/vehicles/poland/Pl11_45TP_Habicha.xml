@@ -3416,18 +3416,18 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_wz_39_40>	shared	  <maxAmmo>	45	</maxAmmo>
+        <_90mm_wz_39_40M>	shared	  <maxAmmo>	45	</maxAmmo>
           <armor>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8.2	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <reloadTime>	7.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -3487,7 +3487,7 @@
             <density>	92.4734 109.266	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_90mm_wz_39_40>
+        </_90mm_wz_39_40M>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl11_45TP_Habicha/normal/lod0/Turret_01.model	</undamaged>
@@ -4082,18 +4082,18 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.926	</invisibilityFactor>
       <guns>
-        <_90mm_wz_39_40>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_90mm_wz_39_40M>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	7.6	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -4164,7 +4164,7 @@
             <density>	92.4734 109.266	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_90mm_wz_39_40>
+        </_90mm_wz_39_40M>
         <_105mm_Bofors_wz_34>	shared	  <maxAmmo>	40	</maxAmmo>
           <unlocks>
             <vehicle>	Pl13_53TP_Markowskiego	  <cost>	84200	</cost>
@@ -4791,11 +4791,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <N2_L>	shared	  <unlocks>
-        <radio>	RKD	  <cost>	3700	</cost>
-        </radio>
-      </unlocks>
-    </N2_L>
     <RKD>	shared	</RKD>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

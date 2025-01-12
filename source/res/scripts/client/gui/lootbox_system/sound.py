@@ -1,9 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lootbox_system/sound.py
+import logging
 from enum import Enum
+from typing import TYPE_CHECKING
 import WWISE
+from gui.impl import backport
+from gui.impl.gen import R
 from helpers import dependency
-from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import ILootBoxSystemController
+import SoundGroups
+if TYPE_CHECKING:
+    from typing import Tuple
+_logger = logging.getLogger(__name__)
 
 class _LootBoxesSounds(str, Enum):
     STATE_GROUP = 'STATE_hangar_place'
@@ -20,13 +28,13 @@ class _LootBoxesSounds(str, Enum):
     INFOPAGE_EXIT = 'gui_lb_infopage_exit'
 
 
-def enterLootBoxesSoundState():
+def enterLootBoxesSoundState(eventName=''):
     WWISE.WW_setState(_LootBoxesSounds.STATE_GROUP, _LootBoxesSounds.STATE_LOOTBOXES)
-    _playAmbientOn()
+    _playAmbientOn(eventName)
 
 
-def exitLootBoxesSoundState():
-    _playAmbientOff()
+def exitLootBoxesSoundState(eventName=''):
+    _playAmbientOff(eventName)
     WWISE.WW_setState(_LootBoxesSounds.STATE_GROUP, _LootBoxesSounds.STATE_GARAGE)
 
 
@@ -38,33 +46,42 @@ def exitLootBoxesMultipleRewardState():
     WWISE.WW_setState(_LootBoxesSounds.STATE_OVERLAY_GROUP, _LootBoxesSounds.STATE_REWARDS_EXIT)
 
 
-def playInfopageEnterSound():
-    _playSound((_LootBoxesSounds.INFOPAGE_ENTER,))
+def playInfopageEnterSound(eventName=''):
+    _playSound((_LootBoxesSounds.INFOPAGE_ENTER,), eventName)
 
 
-def playInfopageExitSound():
-    _playSound((_LootBoxesSounds.INFOPAGE_EXIT,))
+def playInfopageExitSound(eventName=''):
+    _playSound((_LootBoxesSounds.INFOPAGE_EXIT,), eventName)
 
 
-def playVideoPauseSound():
-    _playSound((_LootBoxesSounds.VIDEO_PAUSE,))
+def playVideoPauseSound(eventName=''):
+    _playSound((_LootBoxesSounds.VIDEO_PAUSE,), eventName)
 
 
-def playVideoResumeSound():
-    _playSound((_LootBoxesSounds.VIDEO_RESUME,))
+def playVideoResumeSound(eventName=''):
+    _playSound((_LootBoxesSounds.VIDEO_RESUME,), eventName)
 
 
-def _playAmbientOn():
-    _playSound((_LootBoxesSounds.AMBIENT_ON,))
+def _playAmbientOn(eventName):
+    _playSound((_LootBoxesSounds.AMBIENT_ON,), eventName)
 
 
-def _playAmbientOff():
-    _playSound((_LootBoxesSounds.AMBIENT_OFF,))
+def _playAmbientOff(eventName):
+    _playSound((_LootBoxesSounds.AMBIENT_OFF,), eventName)
 
 
-@dependency.replace_none_kwargs(appLoader=IAppLoader)
-def _playSound(names, appLoader=None):
-    app = appLoader.getApp()
-    if app and app.soundManager:
-        for name in names:
-            app.soundManager.playEffectSound(name)
+def _playSound(soundNames, eventName):
+    for soundName in soundNames:
+        SoundGroups.g_instance.playSound2D(_getSound(soundName, eventName))
+
+
+@dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
+def _getSound(soundName, eventName, lootBoxes=ILootBoxSystemController):
+    eventSoundName = '_'.join((soundName, eventName or lootBoxes.eventName))
+    soundRes = R.sounds.dyn(eventSoundName)
+    if not soundRes.exists():
+        _logger.debug('Event sound: "%s" not found, try to use default: "%s"', eventSoundName, soundName)
+        soundRes = R.sounds.dyn(soundName)
+        if not soundRes.exists():
+            _logger.error('Event sound: "%s" not found', soundName)
+    return backport.sound(soundRes())

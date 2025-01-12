@@ -97,7 +97,7 @@ class NotRecruitedTooltipData(BlocksTooltipData):
         blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel())))
         specialIcon = item.getSpecialIcon()
         blocks.append(formatters.packImageBlockData(img=specialIcon if specialIcon is not None else item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=350 if specialIcon is not None else -1, height=238 if specialIcon is not None else -1))
-        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40, left=25)))
+        blocks.append(formatters.packSeparatorBlockData(paddings=formatters.packPadding(top=-40)))
         descrStr = i18n.makeString(item.getDescription())
         hasDescr = descrStr != EMPTY_STRING
         if hasDescr:

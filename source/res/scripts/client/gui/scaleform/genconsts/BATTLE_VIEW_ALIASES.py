@@ -103,4 +103,3 @@ class BATTLE_VIEW_ALIASES(object):
     COMP7_TANK_CAROUSEL = 'comp7BattleTankCarousel'
     COMP7_TANK_CAROUSEL_FILTER_POPOVER = 'comp7TankCarouselFilterPopover'
     COMP7_RECON_FLIGHT = 'comp7ReconFlight'
-    GRINCH_HUD = 'grinchHud'

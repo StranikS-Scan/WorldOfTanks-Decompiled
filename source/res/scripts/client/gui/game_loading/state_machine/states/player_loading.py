@@ -5,6 +5,7 @@ import game_loading_bindings
 from frameworks.state_machine import StateFlags
 from gui.game_loading.preferences import GameLoadingPreferences
 from gui.game_loading.state_machine.const import GameLoadingStates, MINIMUM_PLAYER_LOADING_PROGRESS_BAR_MAX_VALUE
+from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.base import BaseGroupTickingStates
 from gui.game_loading.state_machine.states.components.progress_bar import MilestoneProgressBarStateComponent
@@ -18,7 +19,7 @@ class PlayerLoadingSlideState(SlideState):
     __slots__ = ()
 
     def __init__(self, images, viewSettings):
-        super(PlayerLoadingSlideState, self).__init__(stateID=GameLoadingStates.PLAYER_LOADING_SLIDE.value, flags=StateFlags.UNDEFINED, images=images, imageViewSettings=viewSettings, isSelfTicking=True, onCompleteEvent=None)
+        super(PlayerLoadingSlideState, self).__init__(stateID=GameLoadingStates.PLAYER_LOADING_SLIDE.value, flags=StateFlags.UNDEFINED, images=images, imageViewSettings=viewSettings, tickingMode=TickingMode.SELF_TICKING, onCompleteEvent=None, startFromFirstShownImage=True)
         return
 
 
@@ -26,7 +27,7 @@ class PlayerLoadingMilestoneProgressStateComponent(MilestoneProgressBarStateComp
     __slots__ = ()
 
     def __init__(self, preferences, settings, milestonesSettings):
-        super(PlayerLoadingMilestoneProgressStateComponent, self).__init__(preferences=preferences, settings=settings, milestonesSettings=milestonesSettings, stateID=GameLoadingStates.PLAYER_LOADING_PROGRESS.value, flags=StateFlags.UNDEFINED, isSelfTicking=True, onCompleteEvent=None)
+        super(PlayerLoadingMilestoneProgressStateComponent, self).__init__(preferences=preferences, settings=settings, milestonesSettings=milestonesSettings, stateID=GameLoadingStates.PLAYER_LOADING_PROGRESS.value, flags=StateFlags.UNDEFINED, tickingMode=TickingMode.SELF_TICKING, onCompleteEvent=None)
         return
 
     def _saveProgressMax(self, progressMax):
@@ -39,7 +40,7 @@ class PlayerLoadingStatusTextStateComponent(MilestoneStatusTextStateComponent):
     __slots__ = ()
 
     def __init__(self, milestonesSettings):
-        super(PlayerLoadingStatusTextStateComponent, self).__init__(stateID=GameLoadingStates.PLAYER_LOADING_STATUS.value, flags=StateFlags.UNDEFINED, milestonesSettings=milestonesSettings, isSelfTicking=True, onCompleteEvent=None)
+        super(PlayerLoadingStatusTextStateComponent, self).__init__(stateID=GameLoadingStates.PLAYER_LOADING_STATUS.value, flags=StateFlags.UNDEFINED, milestonesSettings=milestonesSettings, tickingMode=TickingMode.SELF_TICKING, onCompleteEvent=None)
         return
 
 

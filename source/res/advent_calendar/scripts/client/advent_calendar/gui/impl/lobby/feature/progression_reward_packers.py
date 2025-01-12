@@ -124,6 +124,6 @@ class LootboxTokensPacker(BaseProgressionRewardPacker):
         result = []
         for tokenID in bonus.getTokens().iterkeys():
             if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
-                result.append(TooltipData(specialArgs=(questID,)))
+                result.append(TooltipData())
 
         return result

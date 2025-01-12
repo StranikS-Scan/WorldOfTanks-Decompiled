@@ -106,6 +106,7 @@
         <UI>
           <stringKey>	uk	</stringKey>
           <background>	uk	</background>
+          <order>	377 387 447	</order>
         </UI>
         <stages>
           <stage>
@@ -114,7 +115,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	209 215 221 227 233 239 245 377 387	</requiredAchievementIDs>
+          <requiredAchievementIDs>	209 215 221 227 233 239 245 377 387 447	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -7985,6 +7986,113 @@
         </stages>
         <conditions>
           <vehicle>	uk:GB141_GSOR_the_TANK	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	442	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	Cz40_DBV_152	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	czech:Cz40_DBV_152	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	443	</id>
+        <UI>
+          <stringKey>	GB142_FV230_Canopener	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB142_FV230_Canopener	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	444	</id>
+        <UI>
+          <stringKey>	GB140_FV224_Chopper	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB140_FV224_Chopper	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	445	</id>
+        <UI>
+          <stringKey>	GB148_FV227_Conceiver	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB148_FV227_Conceiver	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	446	</id>
+        <UI>
+          <stringKey>	GB143_FV229_Contender	</stringKey>
+          <background>	uk	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	uk:GB143_FV229_Contender	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	447	</id>
+        <UI>
+          <stringKey>	branch_uk_GB142_FV230_Canopener	</stringKey>
+          <vehicle>	uk:GB142_FV230_Canopener	</vehicle>
+          <background>	uk_branch	</background>
+          <iconPosition>	bottom	</iconPosition>
+          <order>	228 444 445 446 443	</order>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	50	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <requiredAchievementIDs>	228 444 445 446 443	</requiredAchievementIDs>
         </conditions>
       </achievement>
     </vehicleAchievements>

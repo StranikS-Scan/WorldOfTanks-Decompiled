@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/meta_view/root_view_model.py
-from enum import IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.claim_rewards_model import ClaimRewardsModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.leaderboard_model import LeaderboardModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progression_model import ProgressionModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_model import RankRewardsModel
@@ -12,20 +13,10 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_statistic
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.sidebar_model import SidebarModel
 from gui.impl.gen.view_models.views.lobby.comp7.schedule_info_model import ScheduleInfoModel
 
-class MetaRootViews(IntEnum):
-    PROGRESSION = 0
-    RANKREWARDS = 1
-    YEARLYREWARDS = 2
-    WEEKLYQUESTS = 3
-    SHOP = 4
-    LEADERBOARD = 5
-    YEARLYSTATISTICS = 6
-
-
 class RootViewModel(ViewModel):
     __slots__ = ('onClose', 'onInfoPageOpen', 'onWhatsNewScreenOpen')
 
-    def __init__(self, properties=10, commands=3):
+    def __init__(self, properties=11, commands=3):
         super(RootViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -100,11 +91,19 @@ class RootViewModel(ViewModel):
     def getYearlyStatisticsModelType():
         return YearlyStatisticsModel
 
+    @property
+    def claimRewardsModel(self):
+        return self._getViewModel(9)
+
+    @staticmethod
+    def getClaimRewardsModelType():
+        return ClaimRewardsModel
+
     def getPageViewId(self):
-        return MetaRootViews(self._getNumber(9))
+        return MetaRootViews(self._getNumber(10))
 
     def setPageViewId(self, value):
-        self._setNumber(9, value.value)
+        self._setNumber(10, value.value)
 
     def _initialize(self):
         super(RootViewModel, self)._initialize()
@@ -117,6 +116,7 @@ class RootViewModel(ViewModel):
         self._addViewModelProperty('yearlyRewardsModel', YearlyRewardsModel())
         self._addViewModelProperty('shopModel', ShopModel())
         self._addViewModelProperty('yearlyStatisticsModel', YearlyStatisticsModel())
+        self._addViewModelProperty('claimRewardsModel', ClaimRewardsModel())
         self._addNumberProperty('pageViewId')
         self.onClose = self._addCommand('onClose')
         self.onInfoPageOpen = self._addCommand('onInfoPageOpen')

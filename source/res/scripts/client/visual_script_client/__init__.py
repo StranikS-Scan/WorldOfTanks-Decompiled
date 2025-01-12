@@ -30,7 +30,6 @@ def registerForGeneral():
     import cgf_blocks
     import pve_battle_hud_blocks
     import battle_hints_blocks
-    import new_year_blocks
     g_blockRegistrar.regBlocksFromModule(event_platform_blocks)
     g_blockRegistrar.regBlocksFromModule(arena_blocks)
     g_blockRegistrar.regBlocksFromModule(vehicle_blocks)
@@ -46,8 +45,6 @@ def registerForGeneral():
     g_blockRegistrar.regType(player_blocks.PlayerControlMode)
     g_blockRegistrar.regBlocksFromModule(camera_blocks)
     g_blockRegistrar.regBlocksFromModule(pve_battle_hud_blocks)
-    g_blockRegistrar.regBlocksFromModule(new_year_blocks)
-    g_blockRegistrar.regContext(AbilityContextClient)
     g_blockRegistrar.regContext(EntityContextClient)
     g_blockRegistrar.regContext(VehicleContextClient)
 

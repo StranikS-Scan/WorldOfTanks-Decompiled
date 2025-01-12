@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/actions/__init__.py
 import BigWorld
+import game_loading_bindings
 from adisp import adisp_process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from frameworks.wulf import WindowLayer
@@ -169,7 +170,7 @@ class DisconnectFromPeriphery(Action):
 
     def isRunning(self):
         if self.__endTime:
-            if self.__endTime <= BigWorld.time():
+            if self.__endTime <= BigWorld.time() and not game_loading_bindings.getIsTransitioning():
                 self.__endTime = None
                 self.gameplay.goToLoginByRQ()
             else:

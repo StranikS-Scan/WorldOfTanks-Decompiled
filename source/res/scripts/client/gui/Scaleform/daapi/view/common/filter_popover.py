@@ -169,8 +169,7 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
              'selected': isSelected(entry)})
 
         for entry in mapping[FILTER_POPOVER_SECTION.HIDDEN]:
-            dataVO['hidden'].append({'id': entry,
-             'label': text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry)),
+            dataVO['hidden'].append({'label': text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry)),
              'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), '#tank_carousel_filter:tooltip/{}/body'.format(entry)),
              'selected': isSelected(entry)})
 

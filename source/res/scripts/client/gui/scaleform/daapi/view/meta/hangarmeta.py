@@ -67,12 +67,6 @@ class HangarMeta(View):
     def as_hideTeaserTimerS(self):
         return self.flashObject.as_hideTeaserTimer() if self._isDAAPIInited() else None
 
-    def as_setRewardKitsVisibleS(self, value):
-        return self.flashObject.as_setRewardKitsVisible(value) if self._isDAAPIInited() else None
-
-    def as_setGiftEntryVisibleS(self, value):
-        return self.flashObject.as_setGiftEntryVisible(value) if self._isDAAPIInited() else None
-
     def as_showSwitchToAmmunitionS(self):
         return self.flashObject.as_showSwitchToAmmunition() if self._isDAAPIInited() else None
 
@@ -87,3 +81,6 @@ class HangarMeta(View):
 
     def as_setBattleRoyaleSpaceLoadedS(self, showAnimation):
         return self.flashObject.as_setBattleRoyaleSpaceLoaded(showAnimation) if self._isDAAPIInited() else None
+
+    def as_setComp7SpaceLoadedS(self, isLoaded):
+        return self.flashObject.as_setComp7SpaceLoaded(isLoaded) if self._isDAAPIInited() else None

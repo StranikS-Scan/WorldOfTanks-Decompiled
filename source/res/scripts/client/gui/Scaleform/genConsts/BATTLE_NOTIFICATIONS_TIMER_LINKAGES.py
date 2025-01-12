@@ -75,6 +75,3 @@ class BATTLE_NOTIFICATIONS_TIMER_LINKAGES(object):
     COMP7_AOE_INSPIRE_ICON = 'Comp7AoeInspireIconUI'
     COMP7_MARCH_ICON = 'Comp7MarchIconUI'
     COMP7_AGGRESSIVE_DETECTION_ICON = 'Comp7AggressiveDetectionIconUI'
-    GRINCH_WARNING_ICON = 'grinchWarningTimerUI'
-    GRINCH_DANGER_ICON = 'grinchDangerTimerDeathZoneUI'
-    GRINCH_FLARE_MARK_ICON = 'grinchFlareMarkTimerUI'

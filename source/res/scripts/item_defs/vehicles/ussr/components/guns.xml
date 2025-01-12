@@ -5522,7 +5522,7 @@
       <userString>	#ussr_vehicles:_100mm_T_12A	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	115000	</price>
+      <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
       <recoil>
@@ -5542,8 +5542,8 @@
       <maxAmmo>	24	</maxAmmo>
       <aimingTime>	2.85714285714286	</aimingTime>
       <weight>	2300	</weight>
-      <maxHealth>	164	</maxHealth>
-      <maxRegenHealth>	82	</maxRegenHealth>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.388571428571429	</shotDispersionRadius>
@@ -7258,8 +7258,8 @@
     <_107mm_ZiS_6U>
       <userString>	#ussr_vehicles:_107mm_ZiS_6U	</userString>
       <tags></tags>
-      <level>	9	</level>
-      <price>	180000	</price>
+      <level>	8	</level>
+      <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
       <recoil>
@@ -7275,18 +7275,18 @@
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	8.8	</reloadTime>
-      <maxAmmo>	32	</maxAmmo>
-      <aimingTime>	4.04	</aimingTime>
+      <reloadTime>	8.5	</reloadTime>
+      <maxAmmo>	70	</maxAmmo>
+      <aimingTime>	2.3	</aimingTime>
       <weight>	2820	</weight>
-      <maxHealth>	194	</maxHealth>
-      <maxRegenHealth>	97	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.42	</shotDispersionRadius>
       <shotDispersionFactors>
-        <turretRotation>	0.08	</turretRotation>
-        <afterShot>	3.0	</afterShot>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	4	</afterShot>
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <shots>
@@ -11013,8 +11013,8 @@
     <_130mm_M_65B>
       <userString>	#ussr_vehicles:_130mm_M_65B	</userString>
       <tags></tags>
-      <level>	10	</level>
-      <price>	330000	</price>
+      <level>	8	</level>
+      <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.62	</impulse>
       <recoil>
@@ -11034,9 +11034,9 @@
       <maxAmmo>	40	</maxAmmo>
       <aimingTime>	3	</aimingTime>
       <weight>	4300	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
       <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.43	</shotDispersionRadius>
       <shotDispersionFactors>
@@ -12307,6 +12307,7 @@
         <amplitude>	0.38	</amplitude>
         <recoilEffect>	main	</recoilEffect>
       </recoil>
+      <effectsCaliber>	85	</effectsCaliber>
       <effects>	shot_main	</effects>
       <reloadEffect>	reload85_107	</reloadEffect>
       <turretYawLimits>	-180 180	</turretYawLimits>

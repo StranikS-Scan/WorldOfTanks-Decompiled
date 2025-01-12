@@ -103,10 +103,18 @@
     <Rolls_Royse_Meteor_MkIX>	126	</Rolls_Royse_Meteor_MkIX>
     <Rolls_Royce_Meteor_M120A>	131	</Rolls_Royce_Meteor_M120A>
     <Rolls_Royce_Meteor_GD>	132	</Rolls_Royce_Meteor_GD>
+    <Rolls_Royce_Griffon_180>	134	</Rolls_Royce_Griffon_180>
     <Meteorite_M120_GSOR>	135	</Meteorite_M120_GSOR>
     <Rolls_Royce_Meteor_Mk_IVA>	137	</Rolls_Royce_Meteor_Mk_IVA>
+    <Rolls_Royce_Meteor_Mk_IXA>	138	</Rolls_Royce_Meteor_Mk_IXA>
+    <Rolls_Royce_Meteor_M120B>	139	</Rolls_Royce_Meteor_M120B>
+    <Rolls_Royce_Meteor_M120C>	140	</Rolls_Royce_Meteor_M120C>
+    <Rolls_Royce_Meteor_M120F>	141	</Rolls_Royce_Meteor_M120F>
+    <Leyland_L60_No_4_Mk_2>	142	</Leyland_L60_No_4_Mk_2>
+    <Leyland_L60_No_4_Mk_3>	143	</Leyland_L60_No_4_Mk_3>
     <Rolls_Royce_Griffon_FL>	501	</Rolls_Royce_Griffon_FL>
     <Rolls_Royce_Griffon_7x7>	502	</Rolls_Royce_Griffon_7x7>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>	503	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -171,6 +179,22 @@
       <rpm_min>	632	</rpm_min>
       <rpm_max>	2354	</rpm_max>
     </Rolls_Royse_Meteor_MkV>
+    <Rolls_Royce_Meteor_Mk_IXA>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_Mk_IXA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	30000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	750	</weight>
+      <maxHealth>	205	</maxHealth>
+      <maxRegenHealth>	103	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	497	</rpm_min>
+      <rpm_max>	2663	</rpm_max>
+    </Rolls_Royce_Meteor_Mk_IXA>
     <Rolls_Royse_FB_60>
       <userString>	#gb_vehicles:Rolls_Royse_FB_60	</userString>
       <tags>	gasoline	</tags>
@@ -235,6 +259,38 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Rolls_Royce_B80P>
+    <Rolls_Royce_Meteor_M120B>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_M120B	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	40000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	950	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	429	</rpm_min>
+      <rpm_max>	2817	</rpm_max>
+    </Rolls_Royce_Meteor_M120B>
+    <Rolls_Royce_Meteor_M120C>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_M120C	</userString>
+      <tags>	gasoline	</tags>
+      <level>	7	</level>
+      <price>	40000	</price>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	830	</power>
+      <weight>	940	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	362	</rpm_min>
+      <rpm_max>	2972	</rpm_max>
+    </Rolls_Royce_Meteor_M120C>
     <Daimler_DQ450>
       <userString>	#gb_vehicles:Daimler_DQ450	</userString>
       <tags>	gasoline	</tags>
@@ -251,6 +307,22 @@
       <rpm_min>	400	</rpm_min>
       <rpm_max>	3200	</rpm_max>
     </Daimler_DQ450>
+    <Rolls_Royce_Meteor_M120F>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_M120F	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	980	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	483	</rpm_min>
+      <rpm_max>	2053	</rpm_max>
+    </Rolls_Royce_Meteor_M120F>
     <Daimler_D2458_V_8>
       <userString>	#gb_vehicles:Daimler_D2458_V_8	</userString>
       <tags>	gasoline	</tags>
@@ -1137,6 +1209,23 @@
       <rpm_min>	474	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </Rolls_Royce_Griffon>
+    <Rolls_Royce_Griffon_180>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon_180	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1250	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	390	</rpm_min>
+      <rpm_max>	2350	</rpm_max>
+    </Rolls_Royce_Griffon_180>
     <Rolls_Royce_Griffon_FL>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
       <tags>	gasoline	</tags>
@@ -1487,6 +1576,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2161	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1040	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2161	</rpm_max>
+    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <Ford_V8-220>
       <userString>	#gb_vehicles:Ford_V8-220	</userString>
       <tags>	gasoline	</tags>
@@ -1670,6 +1776,40 @@
       <rpm_min>	312	</rpm_min>
       <rpm_max>	2264	</rpm_max>
     </Leyland_L60_No_4_Mk_1A>
+    <Leyland_L60_No_4_Mk_3>
+      <userString>	#gb_vehicles:Leyland_L60_No_4_Mk_3	</userString>
+      <shortUserString>	#gb_vehicles:Leyland_L60_No_4_Mk_3_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1050	</power>
+      <weight>	1150	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
+    </Leyland_L60_No_4_Mk_3>
+    <Leyland_L60_No_4_Mk_2>
+      <userString>	#gb_vehicles:Leyland_L60_No_4_Mk_2	</userString>
+      <shortUserString>	#gb_vehicles:Leyland_L60_No_4_Mk_2_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Leyland_L60_No_4_Mk_2>
     <Continental_AOI-1195-5>
       <userString>	#gb_vehicles:Continental_AOI-1195-5	</userString>
       <shortUserString>	#gb_vehicles:Continental_AOI-1195-5_short	</shortUserString>

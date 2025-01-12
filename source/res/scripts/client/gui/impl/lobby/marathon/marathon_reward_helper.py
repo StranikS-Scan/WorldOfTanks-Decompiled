@@ -3,10 +3,9 @@
 from collections import namedtuple
 import re
 from gui.impl.gen import R
-from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.shared.gui_items import Vehicle
 from helpers import dependency, int2roman
-from skeletons.gui.impl import IGuiLoader, INotificationWindowController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 SpecialRewardData = namedtuple('SpecialRewardData', ('sourceName', 'congratsSourceId', 'vehicleName', 'vehicleLvl', 'vehicleIsElite', 'vehicleType', 'goToVehicleBtn', 'videoShownKey'))
 
@@ -23,8 +22,7 @@ def loadedViewPredicate(layoutID):
     return lambda view: view.layoutID == layoutID
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showMarathonReward(vehicleCD, videoShownKey, notificationMgr=None):
+def showMarathonReward(vehicleCD, videoShownKey):
     from gui.impl.lobby.marathon.marathon_reward_view import MarathonRewardViewWindow
     uiLoader = dependency.instance(IGuiLoader)
     itemsCache = dependency.instance(IItemsCache)
@@ -39,7 +37,7 @@ def showMarathonReward(vehicleCD, videoShownKey, notificationMgr=None):
             if uiLoader.windowsManager.findViews(loadedViewPredicate(viewID)):
                 return
             window = MarathonRewardViewWindow(specialRewardData)
-            notificationMgr.append(WindowNotificationCommand(window))
+            window.load()
     return
 
 

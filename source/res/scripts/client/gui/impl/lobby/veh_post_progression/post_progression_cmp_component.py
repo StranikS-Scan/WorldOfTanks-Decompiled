@@ -103,7 +103,7 @@ class PostProgressionCmpComponentView(PostProgressionBaseComponentView):
         cmp_helpers.getCmpConfiguratorMainView().installPostProgression(customProgressionState)
         self.__onExitAction()
 
-    def __onExitAction(self):
+    def __onExitAction(self, *_):
         self.onExitAction()
 
     def __onResetAction(self):

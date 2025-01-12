@@ -64,7 +64,7 @@
       <Backupable>	false	</Backupable>
     </accountSessionID>
     <arenaUniqueID>
-      <Type>	UINT64	</Type>
+      <Type>	ARENA_UNIQUE_ID	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
       <ExposedForReplay>	true	</ExposedForReplay>
     </arenaUniqueID>
@@ -203,7 +203,7 @@
       <Flags>	CELL_PRIVATE	</Flags>
     </accountDBIDOnCell>
     <arenaUniqueIDOnCell>
-      <Type>	UINT64	</Type>
+      <Type>	ARENA_UNIQUE_ID	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </arenaUniqueIDOnCell>
     <arenaTypeIDOnCell>
@@ -594,7 +594,7 @@
       </Arg>
     </explodeProjectile>
     <refreshVehicle>
-      <Arg>	UINT16	</Arg>
+      <Arg>	UINT32	</Arg>
     </refreshVehicle>
     <activateEquipment>
       <Exposed>	OWN_CLIENT	</Exposed>
@@ -678,6 +678,10 @@
       <Arg>	BOOL	</Arg>
     </setSendKillCamSimulationData>
     <onSendSyncObjectsTo></onSendSyncObjectsTo>
+    <submitPlayerSatisfactionRating>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	INT8	</Arg>
+    </submitPlayerSatisfactionRating>
   </CellMethods>
   <BaseMethods>
     <onCreateCellSuccess></onCreateCellSuccess>

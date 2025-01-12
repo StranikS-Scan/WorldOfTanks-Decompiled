@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/loot_boxes_system/__init__.py
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.lootbox_system.bonuses_packers import mergeNeededBonuses
 from gui.lootbox_system.common import ViewID, Views
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from shared_utils import first
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.impl import IGuiLoader
@@ -29,6 +29,7 @@ def _isValidViewID(_, data):
 
 class _LootBoxInfo(W2CSchema):
     id = Field(required=True, type=int)
+    full_info = Field(type=bool, default=False)
 
 
 class _ShowViewSchema(W2CSchema):
@@ -56,7 +57,7 @@ class LootBoxSystemWebApi(object):
             result['guaranteed_bonus_limit'] = guaranteedFrequency
             result['max_attempts_to_guaranteed_bonus'] = guaranteedFrequency - attemptsAfterReward
             result['category'] = lootBox.getCategory()
-            result['slots'] = self.__addBonusesInfo(self.__lootBoxes.getBoxInfo(cmd.id).get('slots', {}))
+            result['slots'] = self.__addBonusesInfo(self.__lootBoxes.getBoxInfo(cmd.id).get('slots', {}), cmd.full_info)
         return result
 
     @w2c(_ShowViewSchema, 'show_box')
@@ -76,21 +77,16 @@ class LootBoxSystemWebApi(object):
         if cmd.view_id == ViewsIDs.OVERLAY:
             self.__closeExistingShopOverlay()
 
-    def __addBonusesInfo(self, slotsInfo):
+    def __addBonusesInfo(self, slotsInfo, fullInfo):
         result = {}
         for idx, slotData in slotsInfo.iteritems():
             bonuses = mergeNeededBonuses(slotData.get('bonuses', []))
             result.update({idx: {'probability': int(slotData.get('probability', [0])[0] * 10000 + 1e-06) / 100.0,
                    'bonuses': []}})
             for bonus in bonuses:
-                bonusList = bonus.getWrappedEventLootBoxesBonusList()
+                bonusList = bonus.getWrappedLootBoxesBonusList()
                 for bonusEntry in bonusList:
-                    if bonusEntry['type'] in ItemPackTypeGroup.VEHICLE:
-                        bonusEntry['type'] = ItemPackType.VEHICLE
-                        for size in AWARDS_SIZES.ALL():
-                            bonusEntry['icon'][size] = RES_ICONS.getVehicleAwardIcon(size)
-
-                    if not self.__isExistingBonus(bonusEntry, result[idx]['bonuses']):
+                    if not self.__isExistingBonus(bonusEntry, result[idx]['bonuses'], fullInfo):
                         bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
                         result[idx]['bonuses'].append(bonusEntry)
                         if bonusEntry.get('overlayIcon') is not None:
@@ -99,7 +95,14 @@ class LootBoxSystemWebApi(object):
         return result
 
     @staticmethod
-    def __isExistingBonus(bonusEntry, bonuses):
+    def __isExistingBonus(bonusEntry, bonuses, fullInfo):
+        if bonusEntry['type'] in ItemPackTypeGroup.VEHICLE:
+            if fullInfo:
+                return bonusEntry['id'] in (b['id'] for b in bonuses)
+            bonusEntry['type'] = ItemPackType.VEHICLE
+            for size in AWARDS_SIZES.ALL():
+                bonusEntry['icon'][size] = RES_ICONS.getVehicleAwardIcon(size)
+
         return bonusEntry['type'] in (b['type'] for b in bonuses)
 
     def __closeExistingShopOverlay(self):

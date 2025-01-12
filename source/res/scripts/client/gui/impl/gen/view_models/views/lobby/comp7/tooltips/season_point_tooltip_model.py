@@ -1,13 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/tooltips/season_point_tooltip_model.py
-from enum import Enum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import SeasonPointState
 from frameworks.wulf import ViewModel
-
-class SeasonPointState(Enum):
-    ACHIEVED = 'achieved'
-    POSSIBLE = 'possible'
-    NOTACHIEVED = 'notAchieved'
-
 
 class SeasonPointTooltipModel(ViewModel):
     __slots__ = ()

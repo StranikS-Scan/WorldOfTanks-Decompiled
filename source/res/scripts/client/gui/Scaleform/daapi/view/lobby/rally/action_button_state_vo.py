@@ -34,15 +34,6 @@ class ActionButtonStateVO(dict):
         self.__flags = unitEntity.getFlags()
         self.__settings = unitEntity.getRosterSettings()
         self.__canTakeSlot = not self._playerInfo.isLegionary()
-        self._prepareRestrictions()
-        stateKey, stateCtx = self.__getState()
-        self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
-        self['label'] = self._getLabel()
-        self['isEnabled'] = self.__isEnabled
-        self['isReady'] = self._playerInfo.isReady
-        self['toolTipData'] = self.__toolTipData
-
-    def _prepareRestrictions(self):
         self.__INVALID_UNIT_MESSAGES = {UNIT_RESTRICTION.UNDEFINED: ('', {}),
          UNIT_RESTRICTION.UNIT_IS_FULL: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {}),
          UNIT_RESTRICTION.UNIT_IS_LOCKED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISLOCKED, {}),
@@ -94,12 +85,18 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.MODE_NOT_SET: ('', {}),
          UNIT_RESTRICTION.MODE_NOT_AVAILABLE: ('', {}),
          UNIT_RESTRICTION.BAN_IS_SET: ('', {}),
-         UNIT_RESTRICTION.RATING_RESTRICTION: (backport.text(R.strings.comp7.unit.message.ratingRestriction(), rating=self.__comp7Ctrl.getPlatoonRatingRestriction()), {}),
+         UNIT_RESTRICTION.RANK_RESTRICTION: (backport.text(R.strings.comp7.unit.message.rankRangeRestriction()), {}),
          UNIT_RESTRICTION.MODE_OFFLINE: (backport.text(R.strings.comp7.unit.message.modeOffline()), {}),
          UNIT_RESTRICTION.PLAY_LIMITS_IS_ACTIVE: (backport.text(R.strings.cyberSport.window.unit.message.play_limits_is_active()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {}),
          UNIT_RESTRICTION.HAS_FROZEN_VEHICLES: (backport.text(R.strings.cyberSport.window.unit.message.has_frozen_vehicles()), {})}
+        stateKey, stateCtx = self.__getState()
+        self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
+        self['label'] = self._getLabel()
+        self['isEnabled'] = self.__isEnabled
+        self['isReady'] = self._playerInfo.isReady
+        self['toolTipData'] = self.__toolTipData
 
     def getSimpleState(self):
         stateKey, stateCtx = self.__getState()
@@ -197,6 +194,3 @@ class ActionButtonStateVO(dict):
                 if stateStringCandidate is not None:
                     stateString = stateStringCandidate
             return (stateString, {})
-
-    def addRestriction(self, key, message):
-        self.__INVALID_UNIT_MESSAGES[key] = (self.__getNotAvailableIcon() + message, {})

@@ -1,33 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/season_statistics_model.py
-from enum import Enum, IntEnum
 from frameworks.wulf import Array
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division, Rank, SeasonName
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.summary_statistics_model import SummaryStatisticsModel
 from gui.impl.gen.view_models.views.lobby.comp7.vehicle_statistics_model import VehicleStatisticsModel
-
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
-
-class SeasonName(Enum):
-    FIRST = 'first'
-    SECOND = 'second'
-    THIRD = 'third'
-
-
-class Division(IntEnum):
-    A = 1
-    B = 2
-    C = 3
-    D = 4
-    E = 5
-
 
 class SeasonStatisticsModel(ViewModel):
     __slots__ = ('onClose',)

@@ -34,8 +34,12 @@
     <WS_No.22_CT>	46	</WS_No.22_CT>
     <WS_No_22_Mk_3>	51	</WS_No_22_Mk_3>
     <WS_No_19_GD>	52	</WS_No_19_GD>
+    <SR_C42H>	54	</SR_C42H>
     <WS_No_A41_GSOR>	55	</WS_No_A41_GSOR>
     <WS_No_38_AFV>	57	</WS_No_38_AFV>
+    <WS_No_22c>	58	</WS_No_22c>
+    <WS_No_19_Mk_IIB>	59	</WS_No_19_Mk_IIB>
+    <SR_C42a>	60	</SR_C42a>
     <C42_FL>	501	</C42_FL>
     <C45_7x7>	502	</C45_7x7>
     <C42_IGR>	60001	</C42_IGR>
@@ -213,6 +217,18 @@
       <maxRegenHealth>	84	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </N22>
+    <WS_No_22c>
+      <userString>	#gb_vehicles:WS_No_22c	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	460	</distance>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </WS_No_22c>
     <WS_No_38_AFV>
       <userString>	#gb_vehicles:WS_No_38_AFV	</userString>
       <tags></tags>
@@ -375,6 +391,30 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42_VHF>
+    <SR_C42a>
+      <userString>	#gb_vehicles:SR_C42a	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	45	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SR_C42a>
+    <SR_C42H>
+      <userString>	#gb_vehicles:SR_C42H	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SR_C42H>
     <C42_B47>
       <userString>	#gb_vehicles:C42_B47	</userString>
       <tags></tags>
@@ -387,6 +427,18 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </C42_B47>
+    <WS_No_19_Mk_IIB>
+      <userString>	#gb_vehicles:WS_No_19_Mk_IIB	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </WS_No_19_Mk_IIB>
     <C13B42>
       <userString>	#gb_vehicles:C13B42	</userString>
       <tags></tags>

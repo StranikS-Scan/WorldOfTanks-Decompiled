@@ -363,9 +363,9 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     def __changeTrainingRoomSettings(self, settings):
         if settings and settings.areSettingsChanged(self.prbEntity.getSettings()):
             settings.setWaitingID('prebattle/change_settings')
-            result, errorCode = yield self.prbDispatcher.sendPrbRequest(settings)
+            result = yield self.prbDispatcher.sendPrbRequest(settings)
             if not result:
-                self._showActionErrorMessage(errorCode)
+                self._showActionErrorMessage()
 
     def __getPlayersMaxCount(self):
         playersMaxCount = self.prbEntity.getTeamLimits()['maxCount'][0]

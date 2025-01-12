@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_7	</primaryArmor>
     <weight>	13000	</weight>
-    <maxHealth>	472	</maxHealth>
+    <maxHealth>	480	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -3363,21 +3363,21 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	88	</maxHealth>
-      <rotationSpeed>	40	</rotationSpeed>
+      <maxHealth>	80	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	320	</circularVisionRadius>
+      <circularVisionRadius>	340	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_40mm_auto_Boforsa_II>	shared	  <maxAmmo>	180	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3388,15 +3388,15 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	5.3	</reloadTime>
+          <reloadTime>	6.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2	</aimingTime>
           <clip>
-            <count>	4	</count>
+            <count>	6	</count>
             <rate>	150	</rate>
           </clip>
           <burst>
@@ -3455,7 +3455,7 @@
             <density>	129.051 130.77	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_40mm_auto_Boforsa>
+        </_40mm_auto_Boforsa_II>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl12_25TP_KSUST_II/normal/lod0/Turret_01.model	</undamaged>
@@ -3923,7 +3923,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3900	</weight>
-      <maxHealth>	118	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	49	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3938,7 +3938,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.766	</invisibilityFactor>
       <guns>
-        <_40mm_auto_Boforsa>	shared	  <maxAmmo>	180	</maxAmmo>
+        <_40mm_auto_Boforsa_II>	shared	  <maxAmmo>	240	</maxAmmo>
           <armor>
             <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3948,16 +3948,16 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	7.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <clip>
-            <count>	4	</count>
+            <count>	8	</count>
             <rate>	150	</rate>
           </clip>
           <burst>
@@ -4016,11 +4016,9 @@
             <density>	129.051 130.77	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_40mm_auto_Boforsa>
-        <_75mm_wz_1897>	shared	  <maxAmmo>	90	</maxAmmo>
+        </_40mm_auto_Boforsa_II>
+        <_75mm_wz_1897>	shared	  <maxAmmo>	85	</maxAmmo>
           <unlocks>
-            <gun>	_75mm_wz_36_37	  <cost>	4500	</cost>
-            </gun>
             <vehicle>	Pl10_40TP_Habicha	  <cost>	23930	</cost>
             </vehicle>
           </unlocks>
@@ -4034,14 +4032,14 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	5.2	</reloadTime>
+          <reloadTime>	5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -10 1 -10	</minPitch>
@@ -4100,83 +4098,6 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_75mm_wz_1897>
-        <_75mm_wz_36_37>	shared	  <maxAmmo>	85	</maxAmmo>
-          <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_5>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -10 1 -10	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl12_25TP_KSUST_II/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl12_25TP_KSUST_II/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/poland/Pl12_25TP_KSUST_II/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl12_25TP_KSUST_II/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl12_25TP_KSUST_II/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000017 -0.003612 1.81	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.184278 0.16738 0.255563	</anchorPosition>
-              <anchorDirection>	-0 0.707229 0.706984	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000017 -0.003612 1.81	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000035 -0.007223 2.50928	</rayStart>
-              <rayEnd>	0.000035 -0.007223 2.90928	</rayEnd>
-              <rayUp>	0.073 0 0	</rayUp>
-              <size>	0.4	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	128.351 129.782	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_wz_36_37>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl12_25TP_KSUST_II/normal/lod0/Turret_02.model	</undamaged>

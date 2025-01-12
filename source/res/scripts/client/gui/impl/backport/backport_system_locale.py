@@ -42,6 +42,10 @@ def getDateTimeFormat(value):
     return u'{0:>s} {1:>s}'.format(wulf.getDateFormat(value, wulf.DateFormatType.LONG_FORMAT), wulf.getTimeFormat(value, wulf.TimeFormatType.SHORT_FORMAT))
 
 
+def getShortDateTimeFormat(value):
+    return u'{0:>s} {1:>s}'.format(wulf.getDateFormat(value, wulf.DateFormatType.SHORT_FORMAT), wulf.getTimeFormat(value, wulf.TimeFormatType.SHORT_FORMAT))
+
+
 def upper(value):
     return wulf.caseMap(value, wulf.CaseType.UPPERCASE)
 

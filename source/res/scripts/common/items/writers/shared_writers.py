@@ -62,6 +62,7 @@ def writeEmblemSlots(slotDS, slot):
         slotDS.write('emblemId', slot.emblemId)
     if slot.type == 'insigniaOnGun':
         _xml.rewriteBool(slotDS, 'applyToFabric', slot.applyToFabric, True)
+    if slot.type in ('insigniaOnGun', 'clan'):
         _xml.rewriteString(slotDS, 'compatibleModels', ' '.join(slot.compatibleModels), '')
     slotDS.write('size', slot.size)
     _xml.rewriteBool(slotDS, 'hideIfDamaged', slot.hideIfDamaged, False)

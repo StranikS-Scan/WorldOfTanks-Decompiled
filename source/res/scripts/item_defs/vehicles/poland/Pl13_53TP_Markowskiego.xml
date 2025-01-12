@@ -3158,15 +3158,15 @@
         </turret>
       </unlocks>
       <armor>
-        <armor_1>	200	</armor_1>
-        <armor_2>	180	</armor_2>
+        <armor_1>	230	</armor_1>
+        <armor_2>	210	</armor_2>
         <armor_3>	110	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	40	</armor_5>
-        <armor_6>	160	</armor_6>
-        <armor_7>	70	</armor_7>
+        <armor_6>	180	</armor_6>
+        <armor_7>	80	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	70	</armor_9>
+        <armor_9>	80	</armor_9>
         <armor_10>	140	</armor_10>
         <armor_11>	125	</armor_11>
         <armor_12>	100	</armor_12>
@@ -3194,18 +3194,18 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_Bofors_wz_34>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_Bofors_wz_34M>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	9.3	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -3285,7 +3285,7 @@
             <density>	98.2242 102.283	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_Bofors_wz_34>
+        </_105mm_Bofors_wz_34M>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl13_53TP_Markowskiego/normal/lod0/Turret_01.model	</undamaged>
@@ -3853,7 +3853,7 @@
       <level>	8	</level>
       <price>	41000	</price>
       <unlocks>
-        <gun>	_122mm_D_25T_P	  <cost>	22500	</cost>
+        <gun>	_122mm_wz_53	  <cost>	46000	</cost>
         </gun>
       </unlocks>
       <armor>
@@ -3897,7 +3897,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.133	</invisibilityFactor>
       <guns>
-        <_105mm_Bofors_wz_34>	shared	  <maxAmmo>	50	</maxAmmo>
+        <_105mm_Bofors_wz_34M>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3923,14 +3923,14 @@
             </armor_12>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	9	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	8.7	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -4019,134 +4019,7 @@
             <density>	98.2242 102.283	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_Bofors_wz_34>
-        <_122mm_D_25T_P>	shared	  <maxAmmo>	40	</maxAmmo>
-          <unlocks>
-            <gun>	_122mm_wz_53	  <cost>	46000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	230	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	140	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <armor_8>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_9>
-            <armor_10>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	130	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_12>
-            <gun>	50	</gun>
-          </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	12.5	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	3	</aimingTime>
-          <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.402778 8 0.416667 6 0.433333 5 0.441667 4 0.558333 4 0.566667 6 0.602778 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl13_53TP_Markowskiego/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl13_53TP_Markowskiego/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/poland/Pl13_53TP_Markowskiego/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl13_53TP_Markowskiego/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl13_53TP_Markowskiego/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
-          <drivenJoints>
-            <master>
-              <node>	Gun	</node>
-              <table>
-                <row>	-25	</row>
-                <row>	-13.703	</row>
-              </table>
-              <slaves>
-                <slave>
-                  <node>	Joint_01	</node>
-                  <table>
-                    <row>	-11.815	</row>
-                    <row>	-0.436	</row>
-                  </table>
-                </slave>
-              </slaves>
-            </master>
-          </drivenJoints>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000451 -0.002824 2.3559	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.27327 0.273271	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000451 -0.002824 2.3559	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	0.004324 1.28612 1.71317	</position>
-              <rotation>	0.695837 -0.000204 3.14106	</rotation>
-              <scale>	2.5868 2.58681 2.5868	</scale>
-              <showOn>	4368	</showOn>
-              <clipAngle>	0.435814	</clipAngle>
-              <anchorShift>	1.279194	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000903 -0.005648 3.10957	</rayStart>
-              <rayEnd>	-0.000903 -0.005648 3.60957	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	100.607 100.43	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_122mm_D_25T_P>
+        </_105mm_Bofors_wz_34M>
         <_122mm_wz_53>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
             <vehicle>	Pl05_50TP_Tyszkiewicza	  <cost>	106700	</cost>
@@ -4783,11 +4656,6 @@
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
-    <RTU_Jesion_M>	shared	  <unlocks>
-        <radio>	R_113_P	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </RTU_Jesion_M>
     <R_113_P>	shared	</R_113_P>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	15	</backward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.034	</moving>
@@ -852,7 +852,26 @@
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.700007 0.23 -0.715382	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999998 0.999998 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.7 0.23 -0.715382	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -1698,7 +1717,6 @@
             </sync>
           </teethSyncs>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.761165	</xStart>
@@ -1876,7 +1894,6 @@
             </sync>
           </teethSyncs>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.84083	</xStart>
@@ -2105,7 +2122,6 @@
             </sync>
           </teethSyncs>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.770585	</xStart>
@@ -2283,7 +2299,6 @@
             </sync>
           </teethSyncs>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.855576	</xStart>
@@ -2464,11 +2479,13 @@
         <armor_17>	165.1	</armor_17>
         <armor_18>	88.9	</armor_18>
         <armor_19>	355.6	</armor_19>
+        <armor_20>	133.4	</armor_20>
+        <armor_21>	146.1	</armor_21>
       </armor>
       <primaryArmor>	armor_19 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
       <maxHealth>	440	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -2512,6 +2529,10 @@
             <armor_21>	342.9	</armor_21>
             <armor_22>	266.7	</armor_22>
             <armor_23>	241.3	</armor_23>
+            <armor_24>	279.4	</armor_24>
+            <armor_25>	203.2	</armor_25>
+            <armor_26>	190.5	</armor_26>
+            <armor_27>	139.7	</armor_27>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -2520,7 +2541,7 @@
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -13 0.0555556 -13 0.222222 -18 0.347222 -18 0.375 -16 0.625 -16 0.652778 -18 0.777778 -18 0.944444 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
+            <maxPitch>	0 12 0.45833 12 0.47222 10 0.52778 10 0.54167 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
@@ -3097,6 +3118,33 @@
               <anchorShift>	0.010109	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.470193 0.936 -2.311	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	turret	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48001	</slotId>
+              <position>	-0.552 0.871 -0.931	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48002	</slotId>
+              <position>	0.000014 0.744 -2.896	</position>
+              <rotation>	-0 -1.570796 1.570796	</rotation>
+              <scale>	0.999972 1.389986 0.99997	</scale>
+              <applyType>	universal	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0 0 4.19147	</rayStart>
@@ -3178,18 +3226,22 @@
             <armor_21>	342.9	</armor_21>
             <armor_22>	266.7	</armor_22>
             <armor_23>	241.3	</armor_23>
+            <armor_24>	279.4	</armor_24>
+            <armor_25>	203.2	</armor_25>
+            <armor_26>	190.5	</armor_26>
+            <armor_27>	139.7	</armor_27>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	11	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	10	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -13 0.0555556 -13 0.222222 -18 0.347222 -18 0.375 -16 0.625 -16 0.652778 -18 0.777778 -18 0.944444 -13 1 -13	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
+            <maxPitch>	0 12 0.45833 12 0.47222 10 0.52778 10 0.54167 12 1 12	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3753,6 +3805,33 @@
               <scale>	0.428985 0.345187 0.428984	</scale>
               <showOn>	4096	</showOn>
               <anchorShift>	0.010109	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.470193 0.936 -2.311	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	turret	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48001	</slotId>
+              <position>	-0.552 0.871 -0.931	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48002	</slotId>
+              <position>	0.000014 0.744 -2.896	</position>
+              <rotation>	-0 -1.570796 1.570796	</rotation>
+              <scale>	0.999972 1.38999 0.99997	</scale>
+              <applyType>	universal	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>

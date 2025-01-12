@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
 import types
+import os
+import enum
 import BigWorld
 import ResMgr
 import i18n
@@ -8,9 +10,10 @@ import constants
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from debug_utils import LOG_CURRENT_EXCEPTION
 from soft_exception import SoftException
-from abc import abstractmethod
+from external_strings_utils import unicode_from_utf8
 VERSION_FILE_PATH = '../version.xml'
 _CLIENT_VERSION = None
+LOC_VERSION_FILE_PATH = '../loc_version.xml'
 
 def gEffectsDisabled():
     return False
@@ -218,3 +221,13 @@ def unicodeToStr(data):
 
         return res
     return data
+
+
+def getPreferencesDirPath():
+    _, prefsPath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())
+    return os.path.dirname(prefsPath)
+
+
+class ExitCode(enum.IntEnum):
+    SUCCESS = 0
+    FAILED = 1

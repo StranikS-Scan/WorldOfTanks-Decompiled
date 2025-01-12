@@ -875,8 +875,35 @@
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
-        <compatibleModels>	Cz04_T50_51_Waf_3DSt	</compatibleModels>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.541 0.186 -1.125108	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.99996 0.99996 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.541 0.186 -1.12511	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999968 0.999968 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.000001 0.075321 -3.367	</position>
+        <rotation>	-0 -1.570796 1.48353	</rotation>
+        <scale>	0.999796 0.999847 0.999809	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -2695,6 +2722,24 @@
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_FX_1	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.015 0.884 -1.336	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	-0.720271 0.852494 0.189758	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

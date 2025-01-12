@@ -7,7 +7,7 @@ class RibbonsPanelMeta(BaseDAAPIComponent):
     def onShow(self, ribbonId):
         self._printOverrideError('onShow')
 
-    def onChange(self, ribbonId):
+    def onChange(self):
         self._printOverrideError('onChange')
 
     def onHide(self, ribbonId):

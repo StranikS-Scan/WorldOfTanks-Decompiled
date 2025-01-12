@@ -12,8 +12,8 @@ from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from frameworks.wulf.view.array import fillViewModelsArray
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.constants import Constants
-from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointState
-from gui.impl.gen.view_models.views.lobby.comp7.season_statistics_model import SeasonStatisticsModel, SummaryStatisticsModel, VehicleStatisticsModel, SeasonName
+from gui.impl.gen.view_models.views.lobby.comp7.enums import SeasonName, SeasonPointState
+from gui.impl.gen.view_models.views.lobby.comp7.season_statistics_model import SeasonStatisticsModel, SummaryStatisticsModel, VehicleStatisticsModel
 from gui.impl.gen.view_models.views.lobby.comp7.summary_statistics_model import SummaryStatisticsType
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.comp7 import comp7_shared

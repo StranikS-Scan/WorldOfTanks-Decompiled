@@ -29,7 +29,7 @@ _SIMPLE_VALUE_STATS = ('fortResource', 'slots', 'berths', 'freeXP', 'dossier', '
 _DICT_STATS = ('vehTypeXP', 'vehTypeLocks', 'restrictions', 'globalVehicleLocks', 'dummySessionStats', 'maxResearchedLevelByNation', 'weeklyVehicleCrystals')
 _GROWING_SET_STATS = ('unlocks', 'eliteVehicles', 'multipliedXPVehs', 'multipliedRankedBattlesVehs')
 _ACCOUNT_STATS = ('clanDBID', 'attrs', 'premiumExpiryTime', 'autoBanTime', 'globalRating')
-_CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isSsrPlayEnabled', 'isEmergencyModeEnabled')
+_CACHE_STATS = ('isFinPswdVerified', 'mayConsumeWalletResources', 'oldVehInvIDs', 'isEmergencyModeEnabled')
 _CACHE_DICT_STATS = ('SPA', 'entitlements', 'dynamicCurrencies', 'comp7')
 _PREFERRED_MAPS_KEY = 'preferredMaps'
 _ADDITIONAL_XP_CACHE_KEY = '_additionalXPCache'
@@ -298,10 +298,6 @@ class Stats(object):
             proxy = None
         self.__account._doCmdInt2Str(AccountCommands.CMD_ADD_TOKENS, tokenCount, limit, token, proxy)
         return
-
-    def addTokensList(self, tokens):
-        for token in tokens:
-            self.addTokens(token)
 
     def drawTokens(self, token, callback=None):
         if callback is not None:

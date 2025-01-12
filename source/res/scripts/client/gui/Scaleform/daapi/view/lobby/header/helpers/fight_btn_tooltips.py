@@ -234,6 +234,9 @@ def getComp7FightBtnTooltipData(result, isInSquad):
     elif state == PRE_QUEUE_RESTRICTION.SHOP_PAGE_OPENED:
         header = None
         body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
+    elif state == PRE_QUEUE_RESTRICTION.MODE_IS_IN_PREANNOUNCE:
+        header = backport.text(resShortCut.comp7Preannounce.header())
+        body = backport.text(resShortCut.comp7Preannounce.body())
     else:
         return getRandomTooltipData(result, isInSquad)
     return makeTooltip(header, body)

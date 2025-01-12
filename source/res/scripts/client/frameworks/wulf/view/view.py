@@ -203,9 +203,6 @@ class View(PyObjectEntity, typing.Generic[TViewModel]):
     def createContextMenu(self, event):
         return None
 
-    def canBeClosed(self):
-        return True
-
     def _onLoading(self, *args, **kwargs):
         pass
 

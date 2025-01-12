@@ -930,7 +930,7 @@
       <maxLoad>	60000	</maxLoad>
       <terrainResistance>	1.3 1.4 2	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
@@ -1837,7 +1837,7 @@
       <maxLoad>	63000	</maxLoad>
       <terrainResistance>	1.2 1.3 1.9	</terrainResistance>
       <brakeForce>	55000	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.2	</vehicleMovement>
@@ -2827,14 +2827,14 @@
             <maxPitch>	0.00000 10.00 0.25000 10.00 0.41667 9.00 0.50000 6.00 0.58333 9.00 0.75000 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	8.7	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	10.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -3517,13 +3517,13 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	8.5	</reloadTime>
+          <reloadTime>	9.9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -4228,16 +4228,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <_Type96_Bo>	shared	  <unlocks>
-        <radio>	_Type3_Otsu	  <cost>	4000	</cost>
-        </radio>
-      </unlocks>
-    </_Type96_Bo>
-    <_Type3_Otsu>	shared	  <unlocks>
-        <radio>	_Type3_Ko	  <cost>	9300	</cost>
-        </radio>
-      </unlocks>
-    </_Type3_Otsu>
     <_Type3_Ko>	shared	</_Type3_Ko>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

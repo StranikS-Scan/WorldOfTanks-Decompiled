@@ -62,6 +62,7 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
         isStarted = self.__comp7Controller.hasActiveSeason()
         nextSeason = self.__comp7Controller.getNextSeason()
         prevSeason = self.__comp7Controller.getPreviousSeason()
+        isInPreannounce = self.__comp7Controller.isInPreannounceState()
         isBeforeSeasons = not prevSeason and nextSeason
         isAfterLastSeason = not nextSeason and prevSeason
         with self.viewModel.transaction() as vm:
@@ -69,6 +70,9 @@ class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
                 vm.setTimeLeft(self.__getSeasonTimeLeft())
                 self._addReward(ModeSelectorRewardID.PROGRESSION_STYLE)
                 self._addReward(ModeSelectorRewardID.BONES)
+            elif isInPreannounce:
+                preannouncedSeason = self.__comp7Controller.getPreannouncedSeason()
+                vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart.dyn(getSeasonNameEnum().value)(), date=backport.getShortDateFormat(preannouncedSeason.getStartDate())))
             elif isBeforeSeasons:
                 vm.setStatusNotActive(backport.text(R.strings.mode_selector.mode.comp7.seasonStart(), date=backport.getShortDateFormat(nextSeason.getStartDate())))
             elif isAfterLastSeason:

@@ -403,6 +403,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         colorPassEnabled = visibilityMask & BigWorld.ColorPassBit != 0
         self.compoundModel.visible = visibilityMask
         self.compoundModel.skipColorPass = not colorPassEnabled
+        self.compoundModel.skipEdgeDrawerPass = not colorPassEnabled
         self.showStickers(colorPassEnabled)
         if self.crashedTracksController is not None:
             self.crashedTracksController.setVisible(visibilityMask)

@@ -27,5 +27,5 @@ class PremiumVehicleTooltip(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(PremiumVehicleTooltip, self)._onLoading()
         with self.viewModel.transaction() as model:
-            model.setVehTypeName(backport.text(R.strings.crew.premiumVehType.plural.lowerCase.dyn(self.__vehType.replace('-', '_'))()))
+            model.setVehTypeName(backport.text(R.strings.crew.premiumVehType.plural.lowerCase.base.dyn(self.__vehType.replace('-', '_'))()))
             model.setNationName(backport.text(R.strings.nations.dyn(self.__nation)()))

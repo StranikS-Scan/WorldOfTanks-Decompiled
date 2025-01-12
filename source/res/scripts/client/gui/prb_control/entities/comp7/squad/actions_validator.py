@@ -40,19 +40,19 @@ class _Comp7PlayerValidator(UnitPlayerValidator):
         if self.__comp7Ctrl.isBanned:
             return ValidationResult(False, UNIT_RESTRICTION.BAN_IS_SET, None)
         else:
-            ratings = self.__getPlayersRatings()
-            return ValidationResult(False, UNIT_RESTRICTION.RATING_RESTRICTION, None) if ratings and max(ratings) - min(ratings) > self.__comp7Ctrl.getPlatoonRatingRestriction() else super(_Comp7PlayerValidator, self)._validate()
+            ranks = self.__getPlayersRanks()
+            return ValidationResult(False, UNIT_RESTRICTION.RANK_RESTRICTION, None) if ranks and max(ranks) - min(ranks) > self.__comp7Ctrl.getPlatoonRankRestriction() else super(_Comp7PlayerValidator, self)._validate()
 
-    def __getPlayersRatings(self):
-        playersRating = []
+    def __getPlayersRanks(self):
+        playersRanks = []
         for slotData in self.__platoonCtrl.getPlatoonSlotsData():
             playerData = slotData.get('player')
             if playerData is None:
                 continue
             comp7EnqueueData = playerData.get('extraData', {}).get('comp7EnqueueData', {})
-            playersRating.append(comp7EnqueueData.get('rating', 0))
+            playersRanks.append(comp7EnqueueData.get('rank', 0))
 
-        return playersRating
+        return playersRanks
 
 
 class _Comp7ModeStatusValidator(BaseActionsValidator):

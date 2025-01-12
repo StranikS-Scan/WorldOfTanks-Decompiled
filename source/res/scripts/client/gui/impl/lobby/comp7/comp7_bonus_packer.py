@@ -15,6 +15,8 @@ from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7Bo
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
 from gui.impl.lobby.comp7.comp7_bonus_helpers import BonusTypes, getBonusType, splitDossierBonuses
 from gui.impl.lobby.comp7.comp7_c11n_helpers import getComp7ProgressionStyleCamouflage
+from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7OfferYearlyRewardToken
+from gui.selectable_reward.common import Comp7SelectableRewardManager
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses, C11nProgressTokenBonus, COMP7_TOKEN_WEEKLY_REWARD_NAME, getVehicleCrewReward, CountableIntegralBonus, CustomizationsBonus, VehiclesBonus, _BONUSES, TankmenBonus
 from gui.shared.gui_items.Tankman import getFullUserName
@@ -26,7 +28,6 @@ from helpers import dependency
 from items import tankmen
 from items.tankmen import getNationConfig
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
@@ -407,20 +408,19 @@ class Comp7TokenWeeklyRewardUIPacker(TokenBonusUIPacker):
 
 
 class Comp7OfferBonusUIPacker(BaseBonusUIPacker):
-    _comp7Controller = dependency.descriptor(IComp7Controller)
+    _selectableRewardManager = Comp7SelectableRewardManager
     _offersDataProvider = dependency.descriptor(IOffersDataProvider)
 
     @classmethod
     def _pack(cls, bonus):
-        models = []
         giftCount = cls._getGiftCount(bonus)
-        if giftCount > 0:
-            model = TokenBonusModel()
-            model.setName('deluxe_gift')
-            model.setLabel(backport.text(R.strings.comp7.rewards.bonus.deluxe_gift()))
-            model.setValue(str(giftCount))
-            models.append(model)
-        return models
+        if giftCount <= 0:
+            return []
+        model = TokenBonusModel()
+        model.setName('deluxe_gift')
+        model.setLabel(backport.text(R.strings.comp7.rewards.bonus.deluxe_gift()))
+        model.setValue(str(giftCount))
+        return [model]
 
     @classmethod
     def _getToolTip(cls, bonus):
@@ -428,9 +428,10 @@ class Comp7OfferBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getGiftCount(cls, bonus):
-        tokens = {t:v.get('count', 0) for t, v in bonus.getValue().iteritems() if cls._comp7Controller.isComp7OfferToken(t)}
-        offers = {cls._offersDataProvider.getOfferByToken(token):count for token, count in tokens.iteritems()}
-        return sum([ cls.__getOfferGiftCount(offer, count) for offer, count in offers.iteritems() ])
+        isComp7OfferToken = cls._selectableRewardManager.isFeatureReward
+        tokens = ((token, v.get('count', 0)) for token, v in bonus.getValue().iteritems() if isComp7OfferToken(token))
+        offers = ((cls._offersDataProvider.getOfferByToken(token), count) for token, count in tokens)
+        return sum((cls.__getOfferGiftCount(offer, count) for offer, count in offers))
 
     @classmethod
     def __getOfferGiftCount(cls, offer, count):
@@ -441,7 +442,7 @@ class Comp7YearlyMetaOfferPacker(Comp7OfferBonusUIPacker):
 
     @classmethod
     def _getGiftCount(cls, bonus):
-        return sum([ v.get('count', 0) for t, v in bonus.getValue().iteritems() if cls._comp7Controller.isComp7OfferToken(t) ])
+        return sum((v.get('count', 0) for t, v in bonus.getValue().iteritems() if isComp7OfferYearlyRewardToken(t)))
 
 
 def packQuestBonuses(bonuses, bonusPacker, order=None):

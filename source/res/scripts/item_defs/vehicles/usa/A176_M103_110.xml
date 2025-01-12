@@ -73,9 +73,9 @@
     <weight>	31000	</weight>
     <maxHealth>	1560	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/american/A176_M103_110/normal/lod0/Hull.model	</undamaged>
@@ -429,6 +429,33 @@
         <doubleSided>	false	</doubleSided>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.865039 0.278832 -1.100299	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.865 0.278832 -1.1003	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999999 0.999998 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0.000003 0.173568 -3.543072	</position>
+        <rotation>	-0.00001 -1.589162 1.563598	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -447,7 +474,8 @@
       <userString>	#usa_vehicles:Chassis_A176_M103_110	</userString>
       <tags></tags>
       <level>	9	</level>
-      <price>	61500	</price>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -455,12 +483,12 @@
       <weight>	8000	</weight>
       <maxLoad>	62500	</maxLoad>
       <terrainResistance>	1.2 1.3 2.4	</terrainResistance>
-      <brakeForce>	45500	</brakeForce>
+      <brakeForce>	55219	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	27	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1493,7 +1521,7 @@
         </right>
       </physicalTracks>
       <camouflage></camouflage>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_A176_M103_110>
   </chassis>
   <turrets0>
@@ -1501,7 +1529,8 @@
       <userString>	#usa_vehicles:Turret_1_A176_M103_110	</userString>
       <tags></tags>
       <level>	9	</level>
-      <price>	55000	</price>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	254	</armor_1>
         <armor_2>	158.8	</armor_2>
@@ -1537,15 +1566,15 @@
       <maxHealth>	390	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	120	</maxHealth>
-        <maxRegenHealth>	74	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	49	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
+        <repairCost>	2	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_110mm_Gun_EXP_7M>	shared	  <maxAmmo>	55	</maxAmmo>
@@ -1558,12 +1587,12 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	45	</gun>
+            <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	8.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1571,7 +1600,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.380783 8 0.444444 7 0.555556 7 0.619218 8 1 8	</maxPitch>
           </pitchLimits>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <customizationSlots>
@@ -2024,6 +2053,24 @@
           <clipAngle>	0.998882	</clipAngle>
           <anchorShift>	1.14483	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.802366 1.440444 -1.08493	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.884758 1.43903 -1.070192	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2052,7 +2099,7 @@
     <detailed>
       <engines>
         <Continental_AV-1790-7M>
-          <smplEnginePower>	950	</smplEnginePower>
+          <smplEnginePower>	900	</smplEnginePower>
           <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
         </Continental_AV-1790-7M>
       </engines>

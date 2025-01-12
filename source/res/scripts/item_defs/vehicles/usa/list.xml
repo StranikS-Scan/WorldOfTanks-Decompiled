@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -376,6 +375,18 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </A69_T110E5>
+  <A69_T110E5_7x7>
+    <id>	260	</id>
+    <userString>	#usa_vehicles:A69_T110E5_7x7	</userString>
+    <shortUserString>	#usa_vehicles:A69_T110E5_7x7_short	</shortUserString>
+    <description>	#usa_vehicles:T110_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
+    <level>	10	</level>
+  </A69_T110E5_7x7>
   <A72_T25_2>
     <id>	43	</id>
     <userString>	#usa_vehicles:T25_2	</userString>
@@ -526,7 +537,7 @@
     <userString>	#usa_vehicles:M53_55	</userString>
     <description>	#usa_vehicles:M53_55_descr	</description>
     <price>	3550000	</price>
-    <tags>	SPG role_SPG HD mediumSPG improvedVentilation_class2_user tankRammer_class1_user antifragmentationLining_medium_user NY_style	</tags>
+    <tags>	SPG role_SPG HD mediumSPG improvedVentilation_class2_user tankRammer_class1_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </A88_M53_55>
   <A87_M44>
@@ -967,7 +978,7 @@
     <price>	9400	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user NY_video	</tags>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </A168_XM_57>
   <A72_T25_2_SH>
@@ -1144,7 +1155,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -1548,7 +1558,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user NY_style	</tags>
+    <tags>	heavyTank role_HT_universal HD special builtinRepairkit_user improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	9	</level>
   </A125_AEP_1>
   <A124_T54E2>

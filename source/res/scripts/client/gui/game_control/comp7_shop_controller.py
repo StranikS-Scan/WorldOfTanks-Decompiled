@@ -10,7 +10,7 @@ import Event
 from gui.SystemMessages import SM_TYPE, pushMessage
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.base_product_model import Rank
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Rank
 from gui.impl.lobby.comp7 import comp7_shared
 from gui.platform.products_fetcher.wot_shop.fetch_result import ResponseData, ResponseStatus
 from gui.wgcg.wot_shop.controller import IWotShopController
@@ -182,7 +182,7 @@ class Comp7ShopController(IComp7ShopController):
 
     def __onConfigChanged(self):
         config = self.__comp7Controller.getModeSettings()
-        isShopEnabled = config is not None and config.isShopEnabled
+        isShopEnabled = config is not None and config.isShopEnabled and config.isEnabled
         if self.__isShopEnabled != isShopEnabled:
             self.__isShopEnabled = isShopEnabled
             self.onShopStateChanged()

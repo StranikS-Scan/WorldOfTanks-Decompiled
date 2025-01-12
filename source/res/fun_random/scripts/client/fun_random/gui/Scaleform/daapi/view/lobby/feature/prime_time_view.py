@@ -7,6 +7,8 @@ from gui.Scaleform.daapi.view.lobby.prime_time_view_base import ServerListItemPr
 from gui.Scaleform.daapi.view.meta.RankedPrimeTimeMeta import RankedPrimeTimeMeta
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared.formatters import text_styles
+from gui.shared.formatters.servers import makePingStatusIcon
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 
@@ -57,8 +59,13 @@ class FunRandomPrimeTimeView(RankedPrimeTimeMeta, FunAssetPacksMixin, FunSubMode
 
     def _getServerText(self, serverList, serverInfo, isServerNameShort=False):
         if any((server.isAvailable() for server in serverList)):
-            availableKey = 'availableServers' if len(serverList) > 1 else 'availableServer'
-            return backport.text(R.strings.fun_random.primeTimes.dyn(availableKey)())
+            if len(serverList) > 1:
+                availableKey = 'availableServers'
+                server = ''
+            else:
+                availableKey = 'availableServer'
+                server = text_styles.neutral(text_styles.concatStylesToSingleLine(' ', serverInfo.getShortName() if isServerNameShort else serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
+            return backport.text(R.strings.fun_random.primeTimes.dyn(availableKey)()) + server
         return super(FunRandomPrimeTimeView, self)._getServerText(serverList, serverInfo, isServerNameShort)
 
     @filterHoldingSubModeUpdates

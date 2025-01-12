@@ -7,9 +7,9 @@ import adisp
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.impl.backport import BackportContextMenuWindow, createContextMenuData
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews, Rank
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.leaderboard_model import LeaderboardModel, State
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.table_record_model import TableRecordModel, Rank
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
+from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.table_record_model import TableRecordModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
 from gui.impl.lobby.comp7.tooltips.last_update_tooltip import LastUpdateTooltip

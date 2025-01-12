@@ -19,21 +19,20 @@ from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import 
 from fun_random.gui.impl.lobby.tooltips.fun_random_progression_tooltip_view import FunRandomProgressionTooltipView
 from fun_random.gui.impl.lobby.tooltips.fun_random_reward_box_tooltip_views import NearestAdditionalRewardsTooltip
 from gui.impl import backport
-from gui.impl.auxiliary.tooltips.simple_tooltip import createSimpleTooltip
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.shared import events, g_eventBus
 from gui.shared.events import ModeSubSelectorEvent, FullscreenModeSelectorEvent
+from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, time_utils
 from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
-    from frameworks.wulf import View, Window, Array
+    from frameworks.wulf import View, Array
     from frameworks.wulf.view.view_event import ViewEvent
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
-    from gui.impl.backport import TooltipData
 _logger = logging.getLogger(__name__)
 _SUB_MODE_CARD_STATE_MAP = {FunSubModesState.AFTER_SEASON: CardState.FINISHED,
  FunSubModesState.BEFORE_SEASON: CardState.NOT_STARTED,
@@ -65,12 +64,12 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
         if tooltipID == ModeSelectorTooltipsConstants.FUN_RANDOM_CALENDAR_TOOLTIP:
             subMode = self.__getSubModeByEvent(event)
             if subMode is not None:
-                return self.__createBackportTooltip(backport.createTooltipData(isSpecial=True, specialAlias=tooltipID, specialArgs=(subMode.getSubModeID(),)))
+                return backport.createTooltipData(isSpecial=True, specialAlias=tooltipID, specialArgs=(subMode.getSubModeID(),))
             return
         elif tooltipID == ModeSelectorTooltipsConstants.DISABLED_TOOLTIP:
             subMode = self.__getSubModeByEvent(event)
             if subMode is not None and subMode.isFrozen():
-                return createSimpleTooltip(self.getParentWindow(), event, body=backport.text(R.strings.fun_random.modeSubSelector.disabledCard.tooltip.body()))
+                return backport.createTooltipData(tooltip=makeTooltip(body=backport.text(R.strings.fun_random.modeSubSelector.disabledCard.tooltip.body())))
             return
         else:
             return None if tooltipID is None else self.__tooltips.get(tooltipID)
@@ -153,11 +152,6 @@ class FunModeSubSelectorView(ViewImpl, FunAssetPacksMixin, FunSubModesWatcher, F
 
     def __getSubModeEndDelta(self, status):
         return getFormattedTimeLeft(time_utils.getTimeDeltaFromNowInLocal(status.rightBorder)) if status.state in FunSubModesState.INNER_STATES else ''
-
-    def __createBackportTooltip(self, tooltipData):
-        window = backport.BackportTooltipWindow(tooltipData, self.getParentWindow())
-        window.load()
-        return window
 
     def __createCardModel(self, subMode, selectedSubModeID):
         subModeID = subMode.getSubModeID()

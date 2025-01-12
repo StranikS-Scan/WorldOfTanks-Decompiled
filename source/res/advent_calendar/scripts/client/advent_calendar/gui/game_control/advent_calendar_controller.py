@@ -6,13 +6,12 @@ import Event
 from BWUtil import AsyncReturn
 from adisp import adisp_process
 from advent_calendar.gui.feature.constants import ADVENT_CALENDAR_QUEST_POSTFIX, ADVENT_CALENDAR_TOKEN, ADVENT_CALENDAR_QUEST_PREFIX, ADVENT_CALENDAR_PROGRESSION_QUEST_PREFIX, ADVENT_CALENDAR_QUEST_RE_PATTERN
-from advent_calendar.gui.impl.lobby.feature.advent_helper import getQuestNeededTokensCount, getProgressionRewardType, LootBoxInfo
+from advent_calendar.gui.impl.lobby.feature.advent_helper import getQuestNeededTokensCount, getProgressionRewardType
 from advent_calendar.gui.impl.lobby.feature.bonus_grouper import QuestRewardsGroups, AdventCalendarQuestsBonusGrouper
-from advent_calendar.gui.impl.lobby.feature.loot_box_helper import LootBoxHelper, processProbabilityBonuses
 from advent_calendar.helpers.server_settings import AdventCalendarConfig
 from advent_calendar.skeletons.game_controller import IAdventCalendarController
 from advent_calendar_common.advent_calendar_constants import GAME_PARAMS_KEY
-from constants import SECONDS_IN_DAY, Configs
+from constants import SECONDS_IN_DAY
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.SystemMessages import SM_TYPE
@@ -22,7 +21,6 @@ from gui.server_events.bonuses import LootBoxTokensBonus
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
-from helpers.server_settings import _LootBoxesTooltipConfig
 from shared_utils import nextTick, first
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -151,12 +149,12 @@ class AdventCalendarController(IAdventCalendarController):
         return
 
     @wg_async
-    def awaitDoorOpenQuestCompletion(self, dayID, currency=''):
+    def awaitDoorOpenQuestCompletion(self, dayID):
         self.__awaitedQuestId = self.getDoorOpenQuestName(dayID)
         processorResult = None
         try:
             try:
-                processorResult = yield await_callback(self.__openAdventCalendarDoor, timeout=OPEN_DOOR_COMPLETED_TIMEOUT)(dayID, currency=currency)
+                processorResult = yield await_callback(self.__openAdventCalendarDoor, timeout=OPEN_DOOR_COMPLETED_TIMEOUT)(dayID)
             except TimeoutError:
                 _logger.error('Received Timeout error waiting for %s quest completion', self.__awaitedQuestId)
             except BrokenPromiseError:
@@ -213,14 +211,10 @@ class AdventCalendarController(IAdventCalendarController):
             return AdventCalendarConfig(**rawSettings)
         return AdventCalendarConfig()
 
-    @property
-    def _lootBoxesTooltipConfig(self):
-        return self.__lobbyContext.getServerSettings().lootBoxesTooltipConfig if self.__lobbyContext else _LootBoxesTooltipConfig()
-
     def __onSettingsChanged(self, diff):
         if any((key in diff for key in _TRACKING_CONFIGS)):
             self.__update()
-        if Configs.LOOTBOXES_TOOLTIP_CONFIG.value in diff:
+        if 'lootBoxes_config' in diff:
             self.__updateLootBoxInfo()
         if 'quests' in diff:
             self.__progressionRewardsQuestsOrdered = self.__getProgressionRewardQuestsOrdered()
@@ -297,20 +291,7 @@ class AdventCalendarController(IAdventCalendarController):
         return box
 
     def __updateLootBoxInfo(self):
-        box = self.__getRewardsLootBox()
-        if not box:
-            _logger.warning('No LootBox bonuses for progression quests')
-            return
-        else:
-            rawBonuses = self._lootBoxesTooltipConfig.boxes.get(box.getID())
-            if rawBonuses is None:
-                _logger.warning('No bonuses for lootbox %d were found', box.getID())
-                return
-            bonuses = LootBoxHelper.getLootBoxBonuses(rawBonuses.copy())
-            if bonuses:
-                self.__lootBoxInfo = LootBoxInfo(id=box.getID(), name=box.getUserName(), category=box.getCategory(), bonuses=processProbabilityBonuses(bonuses))
-                self.onLootBoxInfoUpdated()
-            return
+        pass
 
     def __startNotifiers(self):
         if self.isActive:
@@ -335,10 +316,10 @@ class AdventCalendarController(IAdventCalendarController):
         return
 
     @adisp_process
-    def __openAdventCalendarDoor(self, dayID, currency='', callback=None):
+    def __openAdventCalendarDoor(self, dayID, callback=None):
         _logger.info('Sending request to open door=%d', dayID)
         from advent_calendar.gui.feature.processor import AdventCalendarDoorsProcessor
-        result = yield AdventCalendarDoorsProcessor(int(dayID), currency=currency).request()
+        result = yield AdventCalendarDoorsProcessor(int(dayID)).request()
         _logger.info('Result of door open request=%s', result)
         if callback:
             callback(result)

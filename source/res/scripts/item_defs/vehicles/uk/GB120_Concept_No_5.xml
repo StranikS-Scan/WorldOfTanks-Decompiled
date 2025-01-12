@@ -336,11 +336,38 @@
       </slot>
       <slot>
         <slotType>	attachment	</slotType>
-        <compatibleModels>	GB120_Concept_No_5_3Dst_BPXV	</compatibleModels>
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.481 0.341128 -0.891809	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.99999 0.99999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.481 0.341128 -0.891809	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.524282 0.271 -3.422	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999988 0.999988 0.999988	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -829,6 +856,15 @@
               <anchorPosition>	-0.000045 0.001998 3.35604	</anchorPosition>
               <anchorDirection>	-0 1 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000091 0.224 0.606037	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	large	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -1341,11 +1377,20 @@
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
-          <compatibleModels>	GB120_Concept_No_5_3Dst_BPXV	</compatibleModels>
           <slotId>	38000	</slotId>
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
           <hiddenForUser>	true	</hiddenForUser>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.00009 0.981 -2.475876	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

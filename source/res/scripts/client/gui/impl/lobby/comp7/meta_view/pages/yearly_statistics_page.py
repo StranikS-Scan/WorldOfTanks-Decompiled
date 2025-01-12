@@ -4,9 +4,9 @@ from shared_utils import findFirst
 from comp7_common import seasonPointsCodeBySeasonNumber
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.impl.gen.view_models.views.lobby.comp7.constants import Constants
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_statistics_model import YearlyStatisticsModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_statistics_season_model import YearlyStatisticsSeasonModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.comp7_model_helpers import setSeasonInfo, SEASONS_NUMBERS_BY_NAME
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter

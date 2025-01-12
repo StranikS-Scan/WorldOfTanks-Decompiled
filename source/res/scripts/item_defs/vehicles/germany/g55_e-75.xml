@@ -1172,13 +1172,13 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_E-75>
-      <userString>	#germany_vehicles:Chassis_E-75	</userString>
+    <Chassis_G55_E-75>
+      <userString>	#germany_vehicles:Chassis_G55_E-75	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	28000	</price>
       <unlocks>
-        <chassis>	Chassis_E-75_2	  <cost>	25300	</cost>
+        <chassis>	Chassis_G55_E-75_2	  <cost>	25300	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -2079,9 +2079,9 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_E-75>
-    <Chassis_E-75_2>
-      <userString>	#germany_vehicles:Chassis_E-75_2	</userString>
+    </Chassis_G55_E-75>
+    <Chassis_G55_E-75_2>
+      <userString>	#germany_vehicles:Chassis_G55_E-75_2	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	60150	</price>
@@ -2983,22 +2983,22 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_E-75_2>
+    </Chassis_G55_E-75_2>
   </chassis>
   <turrets0>
-    <Turret_1_E-75>
-      <userString>	#germany_vehicles:Turret_1_E-75	</userString>
+    <Turret_1_G55_E-75>
+      <userString>	#germany_vehicles:Turret_1_G55_E-75	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	28000	</price>
       <unlocks>
-        <turret>	Turret_2_E-75	  <cost>	24450	</cost>
+        <turret>	Turret_2_G55_E-75	  <cost>	24450	</cost>
         </turret>
       </unlocks>
       <armor>
-        <armor_1>	245	</armor_1>
-        <armor_2>	120	</armor_2>
-        <armor_3>	80	</armor_3>
+        <armor_1>	260	</armor_1>
+        <armor_2>	140	</armor_2>
+        <armor_3>	100	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	40	</armor_5>
         <armor_6>	40	</armor_6>
@@ -3008,10 +3008,10 @@
         <armor_10>	40	</armor_10>
         <armor_11>	80	</armor_11>
         <armor_12>	80	</armor_12>
-        <armor_13>	140	</armor_13>
+        <armor_13>	160	</armor_13>
         <armor_14>	50	</armor_14>
-        <armor_15>	100	</armor_15>
-        <armor_16>	100	</armor_16>
+        <armor_15>	120	</armor_15>
+        <armor_16>	120	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_2 armor_4	</primaryArmor>
       <weight>	10938	</weight>
@@ -3029,231 +3029,15 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_88mm_KwK_43_L71_N>	shared	  <maxAmmo>	92	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 6 0.527778 6 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_105mm_KwK45_L52_N	  <cost>	16800	</cost>
-            </gun>
-          </unlocks>
-          <reloadTime>	7.7	</reloadTime>
+        <_105mm_Kw_K_L_68_Ausf_E>	shared	  <maxAmmo>	42	</maxAmmo>
+          <reloadTime>	9.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_01.model	</exploded>
-            <sets>
-              <G55_E75_3DSt_NEx>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_01.model	</exploded>
-              </G55_E75_3DSt_NEx>
-              <G55_E-75_MDXXIII4_3DSt>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_01.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_01.model	</exploded>
-              </G55_E-75_MDXXIII4_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000036 -0.026121 2.53365	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.23919 0.23919	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000036 -0.026121 2.53365	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000072 -0.052243 4.13744	</rayStart>
-              <rayEnd>	-0.000072 -0.052243 4.59744	</rayEnd>
-              <rayUp>	0.075 0 0	</rayUp>
-              <size>	0.46	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49001	</slotId>
-              <rayStart>	-0.000072 -0.052243 4.29	</rayStart>
-              <rayEnd>	-0.000072 -0.052243 4.75	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
-              <size>	0.46	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
-            <density>	85.8401 80.2419	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_88mm_KwK_43_L71_N>
-        <_105mm_KwK45_L52_N>	shared	  <maxAmmo>	56	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 6 0.527778 6 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_105mm_KwK46_L68_N	  <cost>	46000	</cost>
-            </gun>
-          </unlocks>
-          <reloadTime>	10.1	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <models>
-            <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_02.model	</exploded>
-            <sets>
-              <G55_E75_3DSt_NEx>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_02.model	</exploded>
-              </G55_E75_3DSt_NEx>
-              <G55_E-75_MDXXIII4_3DSt>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_02.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_02.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_02.model	</exploded>
-              </G55_E-75_MDXXIII4_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000002 -0.026139 2.3348	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.23919 0.23919	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000002 -0.026139 2.3348	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000138 -0.051689 3.68456	</rayStart>
-              <rayEnd>	0.000138 -0.051689 4.14456	</rayEnd>
-              <rayUp>	0.087 0 0	</rayUp>
-              <size>	0.46	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49001	</slotId>
-              <rayStart>	0.000138 -0.051689 3.81	</rayStart>
-              <rayEnd>	0.000138 -0.051689 4.27	</rayEnd>
-              <rayUp>	0.1 0 0	</rayUp>
-              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
-              <size>	0.46	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
-            <density>	87.7032 82.607	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_KwK45_L52_N>
-        <_105mm_KwK46_L68_N>	shared	  <maxAmmo>	42	</maxAmmo>
-          <reloadTime>	10.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -3267,8 +3051,8 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.31	</shotDispersionRadius>
+          <aimingTime>	2.2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
@@ -3339,7 +3123,7 @@
             <density>	81.5288 80.2971	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK46_L68_N>
+        </_105mm_Kw_K_L_68_Ausf_E>
       </guns>
       <models>
         <undamaged>	vehicles/german/G55_E-75/normal/lod0/Turret_01.model	</undamaged>
@@ -3903,9 +3687,9 @@
         <density>	96.3167 96.2439	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_1_E-75>
-    <Turret_2_E-75>
-      <userString>	#germany_vehicles:Turret_2_E-75	</userString>
+    </Turret_1_G55_E-75>
+    <Turret_2_G55_E-75>
+      <userString>	#germany_vehicles:Turret_2_G55_E-75	</userString>
       <tags></tags>
       <level>	9	</level>
       <price>	59500	</price>
@@ -3946,199 +3730,8 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.976	</invisibilityFactor>
       <guns>
-        <_88mm_KwK_43_L71_N>	shared	  <maxAmmo>	92	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	7.3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	285	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_05.model	</exploded>
-            <sets>
-              <G55_E75_3DSt_NEx>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_05.model	</exploded>
-              </G55_E75_3DSt_NEx>
-              <G55_E-75_MDXXIII4_3DSt>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_05.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_05.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_05.model	</exploded>
-              </G55_E-75_MDXXIII4_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000036 -0.026121 2.53365	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.237513 0.237512	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000036 -0.026121 2.53365	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.000072 -0.052243 4.3	</rayStart>
-              <rayEnd>	-0.000072 -0.052243 4.76	</rayEnd>
-              <rayUp>	0.09 0 0	</rayUp>
-              <size>	0.46	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
-            <density>	85.8401 80.2419	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_88mm_KwK_43_L71_N>
-        <_105mm_KwK45_L52_N>	shared	  <maxAmmo>	56	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
-          </pitchLimits>
-          <reloadTime>	8.9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	285	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	175	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <models>
-            <undamaged>	vehicles/german/G55_E-75/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G55_E-75/crash/lod0/Gun_06.model	</exploded>
-            <sets>
-              <G55_E75_3DSt_NEx>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/normal/lod0/Gun_06.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E75_3DSt_NEx/crash/lod0/Gun_06.model	</exploded>
-              </G55_E75_3DSt_NEx>
-              <G55_E-75_MDXXIII4_3DSt>
-                <undamaged>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/normal/lod0/Gun_06.model	</undamaged>
-                <destroyed>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_06.model	</destroyed>
-                <exploded>	vehicles/german/G55_E-75/_skins/G55_E-75_MDXXIII4_3DSt/crash/lod0/Gun_06.model	</exploded>
-              </G55_E-75_MDXXIII4_3DSt>
-            </sets>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G55_E-75/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G55_E-75/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000002 -0.026139 2.3348	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.237513 0.237512	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000002 -0.026139 2.3348	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000138 -0.051689 3.83	</rayStart>
-              <rayEnd>	0.000138 -0.051689 4.29	</rayEnd>
-              <rayUp>	0.086 0 0	</rayUp>
-              <size>	0.46	</size>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49001	</slotId>
-              <rayStart>	0.000138 -0.051689 3.04	</rayStart>
-              <rayEnd>	0.000138 -0.051689 3.5	</rayEnd>
-              <rayUp>	0.13 0 0	</rayUp>
-              <compatibleModels>	G55_E-75_MDXXIII4_3DSt	</compatibleModels>
-              <size>	0.46	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
-            <density>	87.7032 82.607	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_KwK45_L52_N>
-        <_105mm_KwK46_L68_N>	shared	  <maxAmmo>	42	</maxAmmo>
-          <reloadTime>	9.1	</reloadTime>
+        <_105mm_Kw_K_L_68_Ausf_E>	shared	  <maxAmmo>	42	</maxAmmo>
+          <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -4159,8 +3752,8 @@
             </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.002778 8 0.016667 8 0.417779 8 0.437241 6 0.458333 6 0.472222 5.5 0.527778 5.5 0.541667 6 0.602594 8 0.983333 8 0.997222 8 1 8	</maxPitch>
@@ -4231,7 +3824,7 @@
             <density>	81.5288 80.2971	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_105mm_KwK46_L68_N>
+        </_105mm_Kw_K_L_68_Ausf_E>
         <_128mm_KwK44_L55_N>	shared	  <maxAmmo>	36	</maxAmmo>
           <unlocks>
             <vehicle>	G56_E-100	  <cost>	183010	</cost>
@@ -4899,46 +4492,36 @@
         <density>	94.3459 94.3215	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_E-75>
+    </Turret_2_G55_E-75>
   </turrets0>
   <engines>
-    <Maybach_HL_230_TRM_P45>	shared	  <unlocks>
+    <Maybach_HL_234_TRM_P40>	shared	  <unlocks>
         <engine>	Maybach_HL_234_TRM_P45	  <cost>	26500	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_230_TRM_P45>
+    </Maybach_HL_234_TRM_P40>
     <Maybach_HL_234_TRM_P45>	shared	</Maybach_HL_234_TRM_P45>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_230_TRM_P45>
-          <smplEnginePower>	740.0968	</smplEnginePower>
+        <Maybach_HL_234_TRM_P40>
+          <smplEnginePower>	800	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
-        </Maybach_HL_230_TRM_P45>
+        </Maybach_HL_234_TRM_P40>
         <Maybach_HL_234_TRM_P45>
           <smplEnginePower>	951.553	</smplEnginePower>
           <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Maybach_HL_234_TRM_P45>
       </engines>
       <chassis>
-        <Chassis_E-75>
+        <Chassis_G55_E-75>
           <grounds>
             <soft>
               <rollingFriction>	0.1932	</rollingFriction>
@@ -4950,8 +4533,8 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_E-75>
-        <Chassis_E-75_2>
+        </Chassis_G55_E-75>
+        <Chassis_G55_E-75_2>
           <grounds>
             <soft>
               <rollingFriction>	0.1771	</rollingFriction>
@@ -4963,7 +4546,7 @@
               <rollingFriction>	0.08855	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_E-75_2>
+        </Chassis_G55_E-75_2>
       </chassis>
     </detailed>
   </physics>

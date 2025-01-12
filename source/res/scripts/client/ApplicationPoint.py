@@ -234,5 +234,12 @@ class _Comp7RedLineApplicationPointEffect(_Comp7ApplicationPointEffect, EffectRu
         self._callbackDelayer.delayCallback(max(0.0, equipmentDelay - timeSinceLaunch), self.playEffect, AoeEffects.ACTION, self._position, radius)
 
 
+class _PoiArtilleryAoeApplicationPointEffect(_Comp7RedLineApplicationPointEffect):
+
+    def _getRadius(self):
+        return self._equipment.radius
+
+
 _EQUIPMENT_APPLICATION_POINTS = {'comp7_recon': _Comp7ReconApplicationPointEffect,
- 'comp7_redline': _Comp7RedLineApplicationPointEffect}
+ 'comp7_redline': _Comp7RedLineApplicationPointEffect,
+ 'poi_artillery_aoe': _PoiArtilleryAoeApplicationPointEffect}

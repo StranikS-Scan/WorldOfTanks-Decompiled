@@ -8,7 +8,7 @@ from shared_utils import first, findFirst
 if typing.TYPE_CHECKING:
     from fun_random.gui.feature.models.progressions import FunProgression
 _START_STAGE = 0
-_PbsProgress = namedtuple('_PbsProgress', ('description', 'isUnlimitedProgression', 'bonuses', 'previousStage', 'currentStage', 'maximumStage', 'previousPoints', 'currentPoints', 'maximumPoints', 'earnedPoints'))
+_PbsProgress = namedtuple('_PbsProgress', ('description', 'isUnlimitedProgression', 'bonuses', 'previousStage', 'currentStage', 'maximumStage', 'previousPoints', 'currentPoints', 'maximumPoints', 'earnedPoints', 'stageRequiredCounters'))
 
 class _PostbattleProgressionHelper(object):
     __slots__ = ('_triggers', '_altTriggers', '_executors', '_countersProgress')
@@ -77,7 +77,8 @@ class FunPbsProgressionHelper(_PostbattleProgressionHelper):
         previousStageIdx = findFirst(lambda s: previousPoints < s.requiredCounter, progression.stages, progression.stages[0]).stageIndex
         previousStage = progression.stages[previousStageIdx]
         descr = first(activeTriggers.values()).getDescription() if len(activeTriggers) == 1 else conditions.text
-        return _PbsProgress(isUnlimitedProgression=False, description=descr, previousStage=previousStageIdx + 1, currentStage=currentStageIdx, maximumStage=progression.state.maximumStageIndex + 1, previousPoints=previousPoints - previousStage.prevRequiredCounter, currentPoints=currentPoints - currentStage.prevRequiredCounter, earnedPoints=earnedPoints, maximumPoints=currentStage.requiredCounter - currentStage.prevRequiredCounter, bonuses=self._getBonuses(progression))
+        requiredCounters = [ stage.requiredCounter for stage in progression.stages ]
+        return _PbsProgress(isUnlimitedProgression=False, description=descr, previousStage=previousStageIdx + 1, currentStage=currentStageIdx, maximumStage=progression.state.maximumStageIndex + 1, previousPoints=previousPoints - previousStage.prevRequiredCounter, currentPoints=currentPoints - currentStage.prevRequiredCounter, earnedPoints=earnedPoints, maximumPoints=currentStage.requiredCounter - currentStage.prevRequiredCounter, stageRequiredCounters=requiredCounters, bonuses=self._getBonuses(progression))
 
     def _getBonuses(self, progression):
         completedStages = sorted([ stage for stage in progression.stages if stage.executorID in self._executors ])
@@ -112,13 +113,13 @@ class FunPbsUnlimitedProgressionHelper(_PostbattleProgressionHelper):
             pointsPerStage = unlimitedProgression.maximumCounter
             earnedPoints, totalPoints = self._getPoints()
             if totalPoints > pointsPerStage:
-                diffStage = earnedPoints // pointsPerStage
                 currentPoints = totalPoints % pointsPerStage
                 previousPoints = (totalPoints - earnedPoints) % pointsPerStage
+                diffStage = (earnedPoints + previousPoints) // pointsPerStage
             else:
                 diffStage, previousPoints = divmod(totalPoints - earnedPoints, pointsPerStage)
                 currentPoints = totalPoints
-            return _PbsProgress(isUnlimitedProgression=True, description=unlimitedProgression.unlimitedTrigger.getDescription(), previousStage=_START_STAGE, currentStage=_START_STAGE + abs(diffStage), maximumStage=unlimitedProgression.unlimitedExecutor.bonusCond.getBonusLimit(), previousPoints=previousPoints, currentPoints=currentPoints, earnedPoints=earnedPoints, maximumPoints=pointsPerStage, bonuses=self._getBonuses(progression, abs(diffStage)))
+            return _PbsProgress(isUnlimitedProgression=True, description=unlimitedProgression.unlimitedTrigger.getDescription(), previousStage=_START_STAGE, currentStage=_START_STAGE + abs(diffStage), maximumStage=unlimitedProgression.unlimitedExecutor.bonusCond.getBonusLimit(), previousPoints=previousPoints, currentPoints=currentPoints, earnedPoints=earnedPoints, maximumPoints=pointsPerStage, stageRequiredCounters=[], bonuses=self._getBonuses(progression, abs(diffStage)))
 
     def _getBonuses(self, progression, diffStage=None):
         diffStage = diffStage if diffStage is not None and diffStage > 1 else 1

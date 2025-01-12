@@ -74,7 +74,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	20101	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -4207,8 +4207,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8000	</weight>
-      <maxHealth>	230	</maxHealth>
-      <rotationSpeed>	23	</rotationSpeed>
+      <maxHealth>	160	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -4222,7 +4222,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_90mm_Gun_M41_Y>	shared	  <maxAmmo>	54	</maxAmmo>
-          <reloadTime>	9	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -4246,7 +4246,7 @@
           <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4822,8 +4822,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	330	</maxHealth>
-      <rotationSpeed>	25	</rotationSpeed>
+      <maxHealth>	260	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -4838,7 +4838,7 @@
       <invisibilityFactor>	1.007	</invisibilityFactor>
       <guns>
         <_90mm_Gun_M41_Y>	shared	  <maxAmmo>	60	</maxAmmo>
-          <reloadTime>	9	</reloadTime>
+          <reloadTime>	8.5	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -4847,7 +4847,7 @@
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -4913,7 +4913,7 @@
             <vehicle>	A139_M_III_Y	  <cost>	89800	</cost>
             </vehicle>
           </unlocks>
-          <reloadTime>	8.8	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
@@ -4921,7 +4921,7 @@
           <armor>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
@@ -5538,11 +5538,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN-GRC-3>	shared	  <unlocks>
-        <radio>	AN-ARC-27	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
   <physics>

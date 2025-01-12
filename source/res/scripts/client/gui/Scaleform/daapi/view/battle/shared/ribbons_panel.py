@@ -263,17 +263,17 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
         if ribbon and ribbon.isRoleBonus():
             sound = _SHOW_RIBBON_EXP_SOUND_NAME
-        self._playSound(sound)
+        self.__playSound(sound)
 
-    def onChange(self, _):
-        self._playSound(_CHANGE_RIBBON_SOUND_NAME)
+    def onChange(self):
+        self.__playSound(_CHANGE_RIBBON_SOUND_NAME)
 
     def onHide(self, ribbonID):
         ribbon = self._ribbonsAggregator.getRibbon(ribbonID)
         _logger.debug('RIBBON PANEL: onHide: ribbonID=%s, ribbon="%s"', ribbonID, ribbon)
         if ribbon is not None:
             self._ribbonsAggregator.resetRibbonData(ribbonID)
-            self._playSound(_HIDE_RIBBON_SOUND_NAME)
+            self.__playSound(_HIDE_RIBBON_SOUND_NAME)
         return
 
     def getCtrlScope(self):
@@ -352,7 +352,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
                 self.__invalidateRibbon(ribbon, method)
                 self.__delayedRibbons.remove((ribbon.getID(), method))
 
-    def _playSound(self, eventName):
+    def __playSound(self, eventName):
         if not self.__isVisible or not _RIBBON_SOUNDS_ENABLED:
             return
         soundNotifications = avatar_getter.getSoundNotifications()

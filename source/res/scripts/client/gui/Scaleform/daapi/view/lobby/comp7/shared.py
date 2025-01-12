@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/comp7/shared.py
+import typing
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
@@ -8,6 +9,7 @@ from gui.periodic_battles.models import AlertData, PeriodType
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.time_formatters import getTillTimeByResource
 from gui.shared.utils.functions import makeTooltip
+from season_common import GameSeason
 
 class Comp7AlertData(AlertData):
     _RES_ROOT = R.strings.comp7.alertMessage
@@ -59,3 +61,8 @@ class Comp7AlertData(AlertData):
     @classmethod
     def constructForOffline(cls):
         return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonVisible=False, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.modeOffline())), shadowFilterVisible=True)
+
+    @classmethod
+    def constructForPreannounce(cls, season):
+        seasonName = comp7_model_helpers.getSeasonNameEnum(season).value
+        return cls(alertIcon=backport.image(R.images.gui.maps.icons.library.alertBigIcon()), buttonVisible=False, statusText=text_styles.vehicleStatusCriticalText(backport.text(cls._RES_ROOT.preannounce.dyn(seasonName)(), date=backport.getShortDateTimeFormat(season.getStartDate()))))

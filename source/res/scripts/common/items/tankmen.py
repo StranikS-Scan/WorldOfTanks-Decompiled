@@ -7,6 +7,7 @@ from collections import defaultdict
 from functools import partial
 from itertools import chain, izip
 from typing import Any, Dict, List, Optional, Sequence, Set, TYPE_CHECKING, Tuple
+import persistent_data_cache_common as pdc
 import nations
 from constants import ITEM_DEFS_PATH, NEW_PERK_SYSTEM as NPS, VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV, LOG_ERROR, LOG_WARNING
@@ -60,14 +61,22 @@ _CREW_SKINS_XML_PATH = ITEM_DEFS_PATH + 'crewSkins/'
 _CREW_BOOKS_XML_PATH = ITEM_DEFS_PATH + 'crewBooks/'
 g_cache = None
 
+def _createNationsConfig():
+    global _g_nationsConfig
+    for nationID in xrange(len(nations.NAMES)):
+        getNationConfig(nationID)
+
+    return _g_nationsConfig
+
+
 def init(preloadEverything, pricesToCollect):
     global g_cache
+    global _g_nationsConfig
+    global _g_skillsConfig
     g_cache = Cache()
     if preloadEverything:
-        getSkillsConfig()
-        for nationID in xrange(len(nations.NAMES)):
-            getNationConfig(nationID)
-
+        _g_skillsConfig = pdc.load('tankmen_skills_config', getSkillsConfig)
+        _g_nationsConfig = pdc.load('tankmen_nations_config', _createNationsConfig)
         g_cache.initCrewSkins(pricesToCollect)
         g_cache.initCrewBooks(pricesToCollect)
 
@@ -90,7 +99,6 @@ def getSkillsMask(skills):
 ALL_SKILLS_MASK = getSkillsMask([ skill for skill in LEARNABLE_ACTIVE_SKILLS if skill != 'reserved' ])
 
 def getNationConfig(nationID):
-    global _g_nationsConfig
     if _g_nationsConfig[nationID] is None:
         nationName = nations.NAMES[nationID]
         if nationName not in nations.AVAILABLE_NAMES:

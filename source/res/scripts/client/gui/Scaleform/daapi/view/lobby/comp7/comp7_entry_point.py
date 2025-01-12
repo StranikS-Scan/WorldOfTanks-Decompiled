@@ -3,13 +3,14 @@
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.ResizableEntryPointMeta import ResizableEntryPointMeta
 from gui.impl.lobby.comp7 import comp7_model_helpers
+from gui.impl.lobby.comp7.comp7_shared import getBannerSeasonState
+from gui.impl.lobby.comp7.tooltips.banner_tooltip import BannerTooltip
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.banner_model import BannerModel, State
-from gui.periodic_battles.models import PeriodType
+from gui.impl.gen.view_models.views.lobby.comp7.banner_model import BannerModel
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from helpers import dependency, time_utils
 from shared_utils import nextTick
@@ -32,8 +33,6 @@ class Comp7EntryPoint(ResizableEntryPointMeta):
 
 
 class Comp7EntryPointView(ViewImpl, Notifiable):
-    __START_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
-    __END_NOTIFICATIONS_PERIOD_LENGTH = time_utils.ONE_DAY * 14
     __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -46,6 +45,9 @@ class Comp7EntryPointView(ViewImpl, Notifiable):
     @property
     def viewModel(self):
         return super(Comp7EntryPointView, self).getViewModel()
+
+    def createToolTipContent(self, event, contentID):
+        return BannerTooltip() if contentID == R.views.lobby.comp7.tooltips.BannerTooltip() else super(Comp7EntryPointView, self).createToolTipContent(event, contentID)
 
     def setIsSingle(self, value):
         self.__isSingle = value
@@ -86,32 +88,12 @@ class Comp7EntryPointView(ViewImpl, Notifiable):
             periodInfo = self.__comp7Controller.getPeriodInfo()
             with self.viewModel.transaction() as tx:
                 tx.setIsSingle(self.__isSingle)
-                tx.setState(self.__getPeriodState(periodInfo))
                 tx.setTimeLeftUntilPrimeTime(periodInfo.primeDelta)
                 season = self.__comp7Controller.getCurrentSeason() or self.__comp7Controller.getNextSeason() or self.__comp7Controller.getPreviousSeason()
                 comp7_model_helpers.setSeasonInfo(model=tx.season, season=season)
+                tx.season.setState(getBannerSeasonState())
         else:
             nextTick(self.destroy)()
-
-    def __getPeriodState(self, periodInfo):
-        currentTime = time_utils.getCurrentLocalServerTimestamp()
-        if periodInfo.periodType in (PeriodType.BEFORE_SEASON, PeriodType.BEFORE_CYCLE, PeriodType.BETWEEN_SEASONS):
-            return State.NOTSTARTED
-        if periodInfo.periodType in (PeriodType.AFTER_SEASON,
-         PeriodType.AFTER_CYCLE,
-         PeriodType.ALL_NOT_AVAILABLE_END,
-         PeriodType.NOT_AVAILABLE_END,
-         PeriodType.STANDALONE_NOT_AVAILABLE_END):
-            return State.END
-        if periodInfo.periodType in (PeriodType.ALL_NOT_AVAILABLE, PeriodType.STANDALONE_NOT_AVAILABLE):
-            return State.DISABLED
-        if periodInfo.cycleBorderLeft.delta(currentTime) < self.__START_NOTIFICATIONS_PERIOD_LENGTH:
-            status = State.JUSTSTARTED
-        elif periodInfo.cycleBorderRight.delta(currentTime) < self.__END_NOTIFICATIONS_PERIOD_LENGTH:
-            status = State.ENDSOON
-        else:
-            status = State.ACTIVE
-        return status
 
     def __onOpen(self):
         self.destroy()

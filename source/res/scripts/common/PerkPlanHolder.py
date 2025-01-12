@@ -59,6 +59,15 @@ class PCPlanHolder(object):
             self._plans.append(plan)
             break
 
+    @wg_async
+    def stop(self):
+
+        def asyncLoop():
+            for plan in self._plans:
+                yield plan.stop()
+
+        yield wg_await(distributeLoopOverTicks(asyncLoop(), maxPerTick=1, logID='stop'))
+
     def triggerVSPlanEvent(self, event):
         if not self._isReadyForEvent.is_set():
             if self._loader and self._loader.state in LoadState.STATUS_LOADED:

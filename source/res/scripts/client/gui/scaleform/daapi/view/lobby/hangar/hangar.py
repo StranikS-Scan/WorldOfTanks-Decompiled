@@ -20,11 +20,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
 from gui.Scaleform.daapi.view.lobby.hangar.carousel_event_entry_widget import isAnyEntryVisible
 from gui.Scaleform.daapi.view.meta.HangarMeta import HangarMeta
-from new_year.ny_helper import getNYGeneralConfig
-from ny_common.settings import NY_CONFIG_NAME, NYGeneralConsts
-from skeletons.gui.server_events import IEventsCache
-from skeletons.new_year import INewYearTutorialController
-from sound_gui_manager import CommonSoundSpaceSettings
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -38,7 +33,6 @@ from gui.hangar_presets.hangar_gui_helpers import ifComponentAvailable
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.marathon.marathon_event import MarathonEvent
-from gui.impl.new_year.sounds import NewYearSoundVars, NewYearSoundStates
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
@@ -54,24 +48,23 @@ from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.sounds.filters import States, StatesGroup
 from gui.tournament.tournament_helpers import isTournamentEnabled
-from gui.server_events.event_items import Quest
 from helpers import dependency
-from helpers.CallbackDelayer import CallbackDelayer, CallbacksSetByID
+from helpers.CallbackDelayer import CallbackDelayer
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
-from helpers.time_utils import ONE_MINUTE, getServerUTCTime
+from helpers.time_utils import ONE_MINUTE
 from nation_change_helpers.client_nation_change_helper import getChangeNationTooltip
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IEventLootBoxesController, IHangarGuiController, IIGRController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IWotPlusController
-from skeletons.gui.game_control import IFestivityController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IHangarGuiController, IIGRController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IWotPlusController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
+from sound_gui_manager import CommonSoundSpaceSettings
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window, View
@@ -81,7 +74,6 @@ _HELP_LAYOUT_RESTRICTED_LAYERS = (WindowLayer.TOP_SUB_VIEW,
  WindowLayer.WINDOW,
  WindowLayer.OVERLAY,
  WindowLayer.TOP_WINDOW)
-_UPDATE_SURPRISE_GIFT_ID = 1
 
 def _predicateHelpLayoutRestrictedWindow(window):
     return window.typeFlag != WindowFlags.TOOLTIP and window.typeFlag != WindowFlags.CONTEXT_MENU and window.layer in _HELP_LAYOUT_RESTRICTED_LAYERS and window.windowStatus in (WindowStatus.LOADING, WindowStatus.LOADED) and not window.isHidden()
@@ -95,8 +87,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     SOUND_STATE_PLACE = 'STATE_hangar_place'
     SOUND_STATE_PLACE_GARAGE = 'STATE_hangar_place_garage'
     _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name='hangar', entranceStates={SOUND_STATE_PLACE: SOUND_STATE_PLACE_GARAGE,
-     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF,
-     NewYearSoundVars.STATE_NEWYEAR_PLACE: NewYearSoundStates.HANGAR}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
+     StatesGroup.HANGAR_FILTERED: States.HANGAR_FILTERED_OFF}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     __background_alpha__ = 0.0
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
@@ -113,15 +104,11 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _offersBannerController = dependency.descriptor(IOffersBannerController)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
-    _festivityController = dependency.descriptor(IFestivityController)
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __marathonCtrl = dependency.descriptor(IMarathonEventsController)
     __comp7Controller = dependency.descriptor(IComp7Controller)
-    __eventLootBoxes = dependency.descriptor(IEventLootBoxesController)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
-    __nyTutorialController = dependency.descriptor(INewYearTutorialController)
-    __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
@@ -134,8 +121,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__teaser = None
         self.__timer = None
         self.__comp7BanTimer = None
-        self.__delayer = None
-        self.__surpriseToken = getNYGeneralConfig().getSurpriseToken()
         self.__updateDogTagsState()
         self.__updateCustomizationHint()
         nextTick(ClientSelectableCameraObject.switchCamera)()
@@ -177,7 +162,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff and g_currentVehicle.isPresent():
                 if g_currentVehicle.item.invID in diff[GUI_ITEM_TYPE.VEHICLE]:
                     self.__updateAmmoPanel()
-                    self.__updateParams()
             return
 
     def onPlayerStateChanged(self, entity, roster, accountInfo):
@@ -206,8 +190,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateHeaderComponent()
 
     def onEscape(self):
-        if self.__nyTutorialController.inProgress():
-            return
         dialogsContainer = self.app.containerManager.getContainer(WindowLayer.TOP_WINDOW)
         if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}):
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MENU)), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -224,8 +206,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         windowsManager = self.gui.windowsManager
         windows = windowsManager.findWindows(_predicateHelpLayoutRestrictedWindow)
         views = windowsManager.findViews(_predicateHelpLayoutRestrictedView)
-        visibleLayers = self.app.containerManager.getVisibleLayers()
-        if WindowLayer.VIEW in visibleLayers and not windows and not views:
+        if not windows and not views:
             self.gui.windowsManager.onWindowStatusChanged += self.__onWindowLoaded
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()
@@ -238,7 +219,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def _populate(self):
         LobbySelectableView._populate(self)
         self.__hangarGuiCtrl.holdHangar(self)
-        self.__delayer = CallbacksSetByID()
         self.__timer = CallbackDelayer()
         self.__comp7BanTimer = CallbackDelayer()
         self.__isSpaceReadyForC11n = self.hangarSpace.spaceInited
@@ -249,7 +229,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.hangarSpace.onVehicleChanged += self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
-        self._festivityController.onStateChanged += self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
@@ -268,10 +247,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onOfflineStatusUpdated += self.__updateAlertMessage
         self.__comp7Controller.onTournamentBannerStateChanged += self.__updateComp7TournamentWidget
         self.__comp7Controller.onGrandTournamentBannerAvailabilityChanged += self.__updateComp7GrandTournamentWidget
-        self.__eventsCache.onSyncCompleted += self.__onEventsCacheSyncCompleted
         self.hangarSpace.setVehicleSelectable(True)
         self.__lootBoxes.onStatusChanged += self.__onLootBoxesStatusChanged
-        self.__eventLootBoxes.onStatusChange += self.__onLootBoxesStatusChanged
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
         unitMgr = prb_getters.getClientUnitMgr()
@@ -292,11 +269,13 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_playerEvents.onLoadingMilestoneReached(Milestones.HANGAR_UI_READY)
         self._offersBannerController.showBanners()
         self.__updateCarouselEventEntryState()
+        self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         g_currentPreviewVehicle.selectNoVehicle()
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
         if self.battleRoyaleController.isBattleRoyaleMode() and self.hangarSpace.spaceInited:
             self.__onBattleRoyaleSpaceLoaded(False)
+        self.__updateIsComp7SpaceLoaded()
         g_clientUpdateManager.addCallback('inventory', self.__onInventoryUpdate)
 
     def _dispose(self):
@@ -308,14 +287,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(AmmunitionPanelViewEvent.SECTION_SELECTED, self.__onOptDeviceClick, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(AmmunitionPanelViewEvent.CLOSE_VIEW, self.__oAmmunitionPanelViewClose, scope=EVENT_BUS_SCOPE.LOBBY)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
-        self.__eventLootBoxes.onStatusChange -= self.__onLootBoxesStatusChanged
         self.__lootBoxes.onStatusChanged -= self.__onLootBoxesStatusChanged
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
         self.hangarSpace.onVehicleChangeStarted -= self.__onVehicleLoading
         self.hangarSpace.onVehicleChanged -= self.__onVehicleLoaded
         self.hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
-        self._festivityController.onStateChanged -= self.__updateFestivityState
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.rankedController.onGameModeStatusTick -= self.__updateAlertMessage
@@ -333,7 +310,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__comp7Controller.onOfflineStatusUpdated -= self.__updateAlertMessage
         self.__comp7Controller.onTournamentBannerStateChanged -= self.__updateComp7TournamentWidget
         self.__comp7Controller.onGrandTournamentBannerAvailabilityChanged -= self.__updateComp7GrandTournamentWidget
-        self.__eventsCache.onSyncCompleted -= self.__onEventsCacheSyncCompleted
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -347,7 +323,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         self.battlePassController.onSeasonStateChanged -= self.__switchCarousels
-        self.__delayer.clear()
         self.__timer.clearCallbacks()
         self.__timer = None
         self.__comp7BanTimer.clearCallbacks()
@@ -357,7 +332,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self._offersBannerController.hideBanners()
         self.__hangarGuiCtrl.releaseHangar()
         LobbySelectableView._dispose(self)
-        self.__surpriseToken = None
         return
 
     def __updateDogTagsState(self):
@@ -439,9 +413,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateState()
         return
 
-    def __onEventsCacheSyncCompleted(self):
-        self.__updateSurpriseState()
-
     def __onTeaserReceived(self, teaserData, showCallback, closeCallback):
         if self.__teaser is None:
             self.__teaser = TeaserViewer(self, showCallback, closeCallback)
@@ -494,8 +465,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateComp7GrandTournamentWidget()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleTournamentBanner()
-        self.__updateFestivityState()
-        self.__updateSurpriseState()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -534,7 +503,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateState(self, force=False):
         state = g_currentVehicle.getViewState()
-        self.__updateFestivityState()
         isBattleRoyaleMode = self.battleRoyaleController.isBattleRoyaleMode()
         isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n and not isBattleRoyaleMode
         if isC11nEnabled:
@@ -576,6 +544,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateComp7GrandTournamentWidget()
         self.__updateAlertMessage()
         self.__updateBattleRoyaleTournamentBanner()
+        self.__updateIsComp7SpaceLoaded()
 
     def __onEntityUpdated(self, *_):
         self.__onEntityChanged()
@@ -607,9 +576,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateState()
         if Configs.PRESTIGE_CONFIG.value in diff:
             self.__updatePrestigeProgressWidget()
-        if diff.get(NY_CONFIG_NAME, {}).get(NYGeneralConsts.CONFIG_NAME):
-            self.__surpriseToken = getNYGeneralConfig().getSurpriseToken()
-            self.__updateSurpriseState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -653,6 +619,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateCarouselEventEntryState(self):
         self.as_updateCarouselEventEntryStateS(isAnyEntryVisible())
+
+    def __updateIsComp7SpaceLoaded(self):
+        self.as_setComp7SpaceLoadedS(self.__comp7Controller.isComp7PrbActive())
 
     @ifComponentAvailable(HANGAR_CONSTS.COMP7_MODIFIERS)
     def __updateComp7ModifiersWidget(self):
@@ -709,31 +678,3 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.ATTACHMENT, REQ_CRITERIA.CUSTOMIZATION.ON_ACCOUNT | REQ_CRITERIA.CUSTOM(lambda item: not item.descriptor.isHiddenInUI()))
         if items:
             getTutorialGlobalStorage().setValue(GLOBAL_FLAG.UNLOCKED_3D_CUSTOMIZATION, True)
-
-    def __updateFestivityState(self):
-        self.as_setRewardKitsVisibleS(self._festivityController.isEnabled())
-        self.__updateSurpriseState()
-
-    def __updateSurpriseState(self):
-        surpriseTokenQuest = self.__getSurpriseTokenQuest()
-        timeToUpdate = 0
-        if surpriseTokenQuest:
-            timeStamp = surpriseTokenQuest.getFinishTime() if surpriseTokenQuest.isAvailable().isValid else surpriseTokenQuest.getStartTime()
-            timeToUpdate = timeStamp - getServerUTCTime()
-            if timeToUpdate > 0:
-                self.__delayer.delayCallback(_UPDATE_SURPRISE_GIFT_ID, timeToUpdate, self.__updateSurpriseState)
-        if surpriseTokenQuest and not surpriseTokenQuest.isCompleted() and (surpriseTokenQuest.isAvailable().isValid or surpriseTokenQuest.isAvailable().reason == 'in_future') and self._festivityController.isEnabled() and timeToUpdate > 0:
-            self.as_setGiftEntryVisibleS(True)
-        else:
-            self.as_setGiftEntryVisibleS(False)
-
-    def __isSurpriseQuest(self, quest):
-        questId = quest if isinstance(quest, str) else quest.getID()
-        return questId.startswith(self.__surpriseToken)
-
-    def __getSurpriseTokenQuest(self):
-        if self.__surpriseToken is None:
-            return
-        else:
-            quests = self.__eventsCache.getAllQuests(self.__isSurpriseQuest)
-            return quests.get(self.__surpriseToken)

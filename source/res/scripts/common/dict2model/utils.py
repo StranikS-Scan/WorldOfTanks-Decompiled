@@ -90,7 +90,7 @@ def _mergeDicts(destination, source, deep=True):
         if key in destination:
             dstValue, srcValue = destination[key], source[key]
             if isinstance(dstValue, dict) and isinstance(srcValue, dict):
-                _mergeDicts(dstValue, srcValue)
+                _mergeDicts(dstValue, srcValue, deep=deep)
             elif dstValue is srcValue:
                 pass
             else:

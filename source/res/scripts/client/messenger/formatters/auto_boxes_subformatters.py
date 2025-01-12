@@ -11,14 +11,12 @@ from gui.lootbox_system.common import TEXT_RESOURCE_PREFIX, NotificationPathPart
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.dossier import getAchievementFactory
-from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, EventLootBoxes, WTLootBoxes, NewYearLootBoxes, getNyAutoOpenBoxTypes
-from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
+from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, WTLootBoxes, NewYearLootBoxes
+from gui.shared.notifications import NotificationGroup, NotificationPriorityLevel
 from helpers import dependency
-from items.components.ny_constants import NySackLootBox
 from messenger import g_settings
 from messenger.formatters.service_channel import LootBoxAchievesFormatter, QuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
 from messenger.formatters.service_channel_helpers import MessageData, getCustomizationItemData, getRewardsForBoxes
-from new_year.gift_machine_helper import getCoinType
 from skeletons.gui.shared import IItemsCache
 
 class IAutoLootBoxSubFormatter(object):
@@ -105,19 +103,44 @@ class EventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
         return ', '.join(boxes)
 
 
-class EventLootBoxesFormatter(EventBoxesFormatter):
+class NYPostEventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
+    __MESSAGE_TEMPLATE = 'LootBoxesAutoOpenMessage'
+    __REWARDS_TEMPLATE = 'LootBoxRewardsSysMessage'
+    __REQUIERED_BOX_TYPES = {NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM, NewYearLootBoxes.SPECIAL}
+
+    @adisp_async
+    @adisp_process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        if isSynced:
+            openedBoxesIDs = self.getBoxesOfThisGroup(message.data)
+            callback([self.__getMainMessage(message, openedBoxesIDs), self.__getRewardsMessage(message, openedBoxesIDs)])
+        else:
+            callback([MessageData(None, None)])
+        return
 
     @classmethod
     def _isBoxOfThisGroup(cls, boxID):
-        return cls._isBoxOfRequiredTypes(boxID, EventLootBoxes.ALL())
+        return cls._isBoxOfRequiredTypes(boxID, cls.__REQUIERED_BOX_TYPES)
 
-    @staticmethod
-    def _getMessageTemplate():
-        pass
+    def __getMainMessage(self, message, openedBoxesIDs):
+        count = backport.text(R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.counter(), count=sum((message.data[boxId]['count'] for boxId in openedBoxesIDs)))
+        oldStyleCount = {bID:message.data[bID]['count'] for bID in openedBoxesIDs}
+        rewards = getRewardsForBoxes(message, openedBoxesIDs)
+        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'count': count}, data={'savedData': {'rewards': rewards,
+                       'boxIDs': oldStyleCount}})
+        settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
+        settings.groupID = NotificationGroup.OFFER
+        settings.showAt = BigWorld.time()
+        return MessageData(formatted, settings)
 
-    @staticmethod
-    def _getTextResPath():
-        return R.strings.lootboxes.notification.lootBoxesAutoOpen
+    def __getRewardsMessage(self, message, openedBoxesIDs):
+        allRewards = getRewardsForBoxes(message, openedBoxesIDs)
+        fmt = self._achievesFormatter.formatQuestAchieves(allRewards, asBattleFormatter=False, processTokens=False)
+        formattedRewards = g_settings.msgTemplates.format(self.__REWARDS_TEMPLATE, ctx={'text': fmt})
+        settingsRewards = self._getGuiSettings(message, self.__REWARDS_TEMPLATE)
+        settingsRewards.showAt = BigWorld.time()
+        return MessageData(formattedRewards, settingsRewards)
 
 
 class NYGiftSystemSurpriseFormatter(AsyncAutoLootBoxSubFormatter):
@@ -248,7 +271,7 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
             openedEventsBoxes = self.__getEventNames(message.data) if openedBoxesIDs else {}
             messages = []
             for name in openedEventsBoxes.keys():
-                if R.strings.dyn(TEXT_RESOURCE_PREFIX + name).dyn(NotificationPathPart.MAIN).dyn(NotificationPathPart.AUTOOPEN).isValid():
+                if R.strings.dyn(TEXT_RESOURCE_PREFIX + name).isValid():
                     eventBoxes = openedEventsBoxes.pop(name)
                     messages.append(self.__getMessage(message, eventBoxes, name))
                     openedBoxesIDs -= eventBoxes
@@ -290,84 +313,3 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
         settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE, priorityLevel=NotificationPriorityLevel.HIGH)
         settings.showAt = BigWorld.time()
         return MessageData(formatted, settings)
-
-
-class NyLootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
-    __MESSAGE_TEMPLATE = 'NyLootBoxSystemAutoOpenMessage'
-    __REWARDS_TEMPLATE = 'LootBoxRewardsSysMessage'
-    __BREAK = '<br/>'
-    __DOUBLE_BREAK = R.strings.lootbox_system.helpers.doubleBreakLine()
-    __TEXT_RESOURCE_PATH = R.strings.messenger
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        if isSynced:
-            boxIDs = self.getBoxesOfThisGroup(message.data)
-            callback([self.__getMainMessage(message, boxIDs), self.__getRewardsMessage(message, boxIDs)])
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def getSupportedBoxTypes(cls):
-        return getNyAutoOpenBoxTypes()
-
-    @classmethod
-    def getBoxesOfThisGroup(cls, data):
-        types = cls.getSupportedBoxTypes()
-        return {boxId for boxId, info in data.iteritems() if info.get('type') in types and info.get('count', 0) > 0}
-
-    def __getBoxTypeCounts(self, data, boxIDs):
-        boxTypeCounts = {}
-        for boxID in boxIDs:
-            boxType = data[boxID]['type']
-            boxTypeCounts[boxType] = boxTypeCounts.setdefault(boxType, 0) + data[boxID]['count']
-
-        return boxTypeCounts
-
-    def __getTextResource(self, path):
-        resource = self.__TEXT_RESOURCE_PATH
-        for part in path:
-            resource = resource.dyn(part)
-
-        return resource
-
-    def __getBoxTextResource(self, textPathParts, boxType):
-        if boxType == NewYearLootBoxes.PREMIUM:
-            return self.__getTextResource(textPathParts + [NotificationPathPart.BOXES_COUNTER])
-        if boxType == NySackLootBox.TYPE:
-            return self.__getTextResource(textPathParts + [NotificationPathPart.SACKS_COUNTER])
-        return self.__getTextResource(textPathParts + [NotificationPathPart.COINS_COUNTER]) if boxType == getCoinType() else None
-
-    def __getMainMessage(self, message, boxIDs):
-        boxTypeCounts = self.__getBoxTypeCounts(message.data, boxIDs)
-        textPathParts = [NotificationPathPart.MAIN, NotificationPathPart.AUTOOPEN]
-        header = backport.text(self.__getTextResource(textPathParts + [NotificationPathPart.HEADER])())
-        description = backport.text(self.__getTextResource(textPathParts + [NotificationPathPart.BOXES_AND_COINS])())
-        count = backport.text(self.__DOUBLE_BREAK)
-        counters = []
-        for boxType in self.getSupportedBoxTypes():
-            if boxTypeCounts.get(boxType, 0) > 0:
-                countRes = self.__getBoxTextResource(textPathParts, boxType)
-                counters.append(backport.text(countRes(), count=text_styles.stats(boxTypeCounts[boxType])))
-
-        count += self.__BREAK.join(counters)
-        boxes = {boxID:message.data[boxID]['count'] for boxID in boxIDs}
-        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'header': header,
-         'description': description,
-         'count': count}, data={'savedData': {'rewards': getRewardsForBoxes(message, set(boxes.keys())),
-                       'boxIDs': boxes}})
-        settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE, priorityLevel=NotificationPriorityLevel.LOW)
-        settings.showAt = BigWorld.time()
-        settings.groupID = NotificationGroup.OFFER
-        return MessageData(formatted, settings)
-
-    def __getRewardsMessage(self, message, boxIDs):
-        allRewards = getRewardsForBoxes(message, boxIDs)
-        fmt = self._achievesFormatter.formatQuestAchieves(allRewards, asBattleFormatter=False, processTokens=False)
-        formattedRewards = g_settings.msgTemplates.format(self.__REWARDS_TEMPLATE, ctx={'text': fmt})
-        settingsRewards = self._getGuiSettings(message, self.__REWARDS_TEMPLATE)
-        settingsRewards.showAt = BigWorld.time()
-        return MessageData(formattedRewards, settingsRewards)

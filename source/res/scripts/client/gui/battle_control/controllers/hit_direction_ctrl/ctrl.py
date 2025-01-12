@@ -22,16 +22,14 @@ _logger = logging.getLogger(__name__)
 
 class HitDirectionController(IViewComponentsController):
     __slots__ = ('__uiHitComponents', '__isVisible', '__callbackIDs', '__damageIndicatorCrits', '__damageIndicatorAllies', '__damageIndicatorExtType', '__arenaDP', '__weakref__')
-    _DAMAGE_PULL_CLASS = HitDamagePull
-    _ARTY_PULL_CLASS = ArtyHitPredictionPull
     settingsCore = dependency.descriptor(ISettingsCore)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
         super(HitDirectionController, self).__init__()
-        self.__uiHitComponents = {HitType.HIT_DAMAGE: HitDamageComponent(self._DAMAGE_PULL_CLASS()),
-         HitType.ARTY_HIT_PREDICTION: BaseHitComponent(self._ARTY_PULL_CLASS())}
+        self.__uiHitComponents = {HitType.HIT_DAMAGE: HitDamageComponent(HitDamagePull()),
+         HitType.ARTY_HIT_PREDICTION: BaseHitComponent(ArtyHitPredictionPull())}
         self.__isVisible = False
         self.__arenaDP = weakref.proxy(setup.arenaDP)
 

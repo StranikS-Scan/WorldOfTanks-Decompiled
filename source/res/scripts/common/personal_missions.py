@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/personal_missions.py
+import typing
 import potapov_quests
+import persistent_data_cache_common as pdc
+from quest_xml_source import QuestValidationSerializer
 g_cache = None
 g_operationsCache = None
 g_campaignsCache = None
@@ -26,15 +29,20 @@ PM_BRANCH_TO_FREE_TOKEN_NAME = potapov_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
 PM_BRANCH_TO_FINAL_PAWN_COST = potapov_quests.PM_BRANCH_TO_FINAL_PAWN_COST
 PM_REWARD_BY_DEMAND = potapov_quests.PQ_REWARD_BY_DEMAND
 
+def _createPMCache():
+    auxData = {}
+    return (PMCache(auxData), auxData)
+
+
 def init():
     global g_cache
     global g_campaignsCache
     global g_operationsCache
-    potapov_quests.g_seasonCache = potapov_quests.SeasonCache()
-    potapov_quests.g_tileCache = potapov_quests.TileCache()
-    g_campaignsCache = CampaignsCache()
-    g_operationsCache = OperationsCache()
-    g_cache = PMCache()
+    potapov_quests.g_seasonCache = pdc.load('personal_missions_season_cache', potapov_quests.SeasonCache)
+    potapov_quests.g_tileCache = pdc.load('personal_missions_tile_cache', potapov_quests.TileCache)
+    g_campaignsCache = pdc.load('personal_missions_campaigns_cache', CampaignsCache)
+    g_operationsCache = pdc.load('personal_missions_operations_cache', OperationsCache)
+    g_cache, _ = pdc.load('personal_missions_cache', _createPMCache, QuestValidationSerializer())
 
 
 class CampaignsCache(potapov_quests.SeasonCache):

@@ -29,16 +29,16 @@ class WhatsNewViewModel(ViewModel):
     def getVehiclesType():
         return VehicleModel
 
-    def getReconFlightDelay(self):
-        return self._getReal(2)
+    def getTopPercentage(self):
+        return self._getNumber(2)
 
-    def setReconFlightDelay(self, value):
-        self._setReal(2, value)
+    def setTopPercentage(self, value):
+        self._setNumber(2, value)
 
     def _initialize(self):
         super(WhatsNewViewModel, self)._initialize()
         self._addViewModelProperty('scheduleInfo', ScheduleInfoModel())
         self._addArrayProperty('vehicles', Array())
-        self._addRealProperty('reconFlightDelay', 0.0)
+        self._addNumberProperty('topPercentage', 0)
         self.onClose = self._addCommand('onClose')
         self.onVideoOpen = self._addCommand('onVideoOpen')

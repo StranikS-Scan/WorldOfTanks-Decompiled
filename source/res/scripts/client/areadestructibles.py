@@ -2,17 +2,18 @@
 # Embedded file name: scripts/client/AreaDestructibles.py
 import math
 import random
+from collections import namedtuple
 from functools import partial
 from time import clock
-from collections import namedtuple
 import BigWorld
-import Math
 import DestructiblesCache
+import Math
+import WWISE
+import persistent_data_cache_common as pdc
+import physics_shared
 from constants import DESTRUCTIBLE_MATKIND
 from debug_utils import LOG_ERROR, LOG_CODEPOINT_WARNING
 from helpers import isPlayerAccount
-import physics_shared
-import WWISE
 COLOR_WHITE = 4294967295L
 COLOR_RED = 4294901760L
 g_cache = None
@@ -27,7 +28,7 @@ def init():
     global g_destructiblesManager
     global g_cache
     global g_destructiblesAnimator
-    g_cache = ClientDestructiblesCache()
+    g_cache = pdc.load('area_destructibles_cache', ClientDestructiblesCache)
     g_destructiblesManager = DestructiblesManager()
     g_destructiblesAnimator = _DestructiblesAnimator()
 

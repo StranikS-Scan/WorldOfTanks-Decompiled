@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	15	</backward>
+    <backward>	17	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.045	</moving>
@@ -68,7 +68,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	21459	</weight>
-    <maxHealth>	1160	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -820,8 +820,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -2348,8 +2348,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <trackPairParams>
@@ -3907,8 +3907,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	240	</maxHealth>
-      <rotationSpeed>	23	</rotationSpeed>
+      <maxHealth>	200	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -3921,104 +3921,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Gun_M41_Y>	shared	  <maxAmmo>	54	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_90mm_Gun_T208_rifled	  <cost>	18800	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	241.3	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	195	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	220	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	8	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000026 0.000259 1.72405	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000001 0.223462 0.044356	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000026 0.000259 1.72405	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000065 2.14546 1.57451	</position>
-              <rotation>	0.601686 -0.000093 3.14143	</rotation>
-              <scale>	1.47491 0.606629 1.4749	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.853394	</clipAngle>
-              <anchorShift>	0.2064	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0.010101 2.03636	</rayStart>
-              <rayEnd>	0 -0.010101 2.53636	</rayEnd>
-              <rayUp>	0.09601 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/american/A139_M_III_Y/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A139_M_III_Y/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A139_M_III_Y/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A139_M_III_Y/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A139_M_III_Y/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	121.321 119.944	</density>
-            <aoTextureSize>	512.000000 256.000000	</aoTextureSize>
-          </camouflage>
-        </_90mm_Gun_M41_Y>
         <_90mm_Gun_T208_rifled>	shared	  <maxAmmo>	54	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -4043,9 +3945,9 @@
             </armor_6>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	6.9	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.11	</turretRotation>
@@ -4656,8 +4558,6 @@
       <level>	8	</level>
       <price>	34400	</price>
       <unlocks>
-        <vehicle>	A144_M_VI_Y	  <cost>	163300	</cost>
-        </vehicle>
         <gun>	_105mm_Gun_T254_Y_III	  <cost>	18900	</cost>
         </gun>
       </unlocks>
@@ -4697,8 +4597,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	10000	</weight>
-      <maxHealth>	290	</maxHealth>
-      <rotationSpeed>	25	</rotationSpeed>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
@@ -4712,100 +4612,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.998	</invisibilityFactor>
       <guns>
-        <_90mm_Gun_M41_Y>	shared	  <maxAmmo>	60	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	225	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	7	</reloadTime>
-          <aimingTime>	2.2	</aimingTime>
-          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.09	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000026 0.000259 1.72405	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000001 0.223462 0.044356	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000026 0.000259 1.72405	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	0.000065 2.14546 1.57451	</position>
-              <rotation>	0.601686 -0.000093 3.14143	</rotation>
-              <scale>	1.47491 0.606629 1.4749	</scale>
-              <showOn>	4352	</showOn>
-              <clipAngle>	0.853394	</clipAngle>
-              <anchorShift>	0.346279	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0 -0.010101 2.03636	</rayStart>
-              <rayEnd>	0 -0.010101 2.53636	</rayEnd>
-              <rayUp>	0.09601 0 0	</rayUp>
-              <size>	0.5	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <models>
-            <undamaged>	vehicles/american/A139_M_III_Y/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A139_M_III_Y/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A139_M_III_Y/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A139_M_III_Y/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A139_M_III_Y/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_main_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	121.321 119.944	</density>
-            <aoTextureSize>	512.000000 256.000000	</aoTextureSize>
-          </camouflage>
-        </_90mm_Gun_M41_Y>
         <_90mm_Gun_T208_rifled>	shared	  <maxAmmo>	60	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -4826,9 +4632,9 @@
             </armor_6>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	6.4	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.09	</turretRotation>
@@ -4901,12 +4707,16 @@
           </camouflage>
         </_90mm_Gun_T208_rifled>
         <_105mm_Gun_T254_Y_III>	shared	  <maxAmmo>	46	</maxAmmo>
+          <unlocks>
+            <vehicle>	A144_M_VI_Y	  <cost>	163300	</cost>
+            </vehicle>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <reloadTime>	8.9	</reloadTime>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.13	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -4927,7 +4737,7 @@
             </armor_6>
             <gun>	45	</gun>
           </armor>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -5586,11 +5396,6 @@
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <AN-GRC-3>	shared	  <unlocks>
-        <radio>	AN-ARC-27	  <cost>	9000	</cost>
-        </radio>
-      </unlocks>
-    </AN-GRC-3>
     <AN-ARC-27>	shared	</AN-ARC-27>
   </radios>
   <physics>

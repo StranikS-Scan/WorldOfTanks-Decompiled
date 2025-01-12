@@ -101,10 +101,6 @@ BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
-LAST_LOGGED_SERVER_DAY = 'lastLoggedServerDay'
-LAST_SEEN_COLLECTING_NOTIFY_TIME = 'lastSeenCollectingNotifyTime'
-LAST_SEEN_FRIENDS_NOTIFY_TIME = 'lastSeenFriendsNotifyTime'
-LAST_SEEN_NO_FRIENDS_NOTIFY_TIME = 'lastSeenNoFriendsNotifyTime'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -139,7 +135,7 @@ OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES = 'overridenHeaderCounterActionAliases'
 LIVE_OPS_WEB_EVENTS_COUNTERS = 'liveOpsWebEventsCounters'
 LIVE_OPS_WEB_EVENTS_UI_FLAGS = 'liveOpsWebEventsUIFlags'
 COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP = 'comp7BondEquipmentReminderShown'
-COMP7_YEARLY_REWARD_SEEN = 'comp7YearlyRewardSeen'
+COMP7_LAST_SEASON_WITH_SEEN_REWARD = 'comp7LastSeasonWithSeenReward'
 VEHICLE_CAROUSEL_COUNTERS_SEEN = 'vehicleCarouselCountersSeen'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -222,8 +218,9 @@ MARATHON_VIDEO_WAS_SHOWN_PREFIX = 'marathonRewardVideoWasShown'
 SUBTITLES = 'subtitles'
 MODULES_ANIMATION_SHOWN = 'collectibleVehiclesAnimWasShown'
 NEW_SHOP_TABS = 'newShopTabs'
-IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
+IS_COMP7_BONS_BANNER_VISITED = 'isComp7BonsBannerVisited'
 LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
+CUSTOM_SHOP_SETTINGS = 'customShopSettings'
 QUESTS = 'quests'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
@@ -256,27 +253,20 @@ MINIMAP_SIZE = 'minimapSize'
 COMP7_LIGHT_INTRO_SHOWN = 'comp7LightIntroShown'
 COMP7_UI_SECTION = 'comp7'
 COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT = 'comp7WeeklyQuestsPageTokensCount'
+COMP7_WEEKLY_QUEST_WIDGET_PROGRESS = 'comp7WeeklyQuestWidgetProgress'
+COMP7_WEEKLY_QUEST_IN_WIDGET_ID = 'comp7WeeklyQuestInWidgetID'
+COMP7_WEEKLY_QUEST_IN_WIDGET_STATE = 'comp7WeeklyQuestInWidgetState'
 COMP7_SHOP_SEEN_PRODUCTS = 'comp7ShopSeenProducts'
 COMP7_LAST_SEASON = 'comp7LastSeason'
 FUN_RANDOM_NOTIFICATIONS = 'funRandomNotifications'
 FUN_RANDOM_NOTIFICATIONS_FROZEN = 'funRandomNotificationsFrozen'
 FUN_RANDOM_NOTIFICATIONS_PROGRESSIONS = 'funRandomNotificationsProgressions'
 FUN_RANDOM_NOTIFICATIONS_SUB_MODES = 'funRandomNotificationsSubModes'
-LOOT_BOXES = 'lootBoxes'
-EVENT_LOOT_BOXES = 'eventLootBoxes'
 LOOTBOX_SYSTEM = 'lootBoxSystem'
-NY_DAILY_QUESTS_VISITED = 'NYDailyQuestsVisited'
-NY_GIFT_MACHINE_BUY_TOKEN_VISITED = 'NYGiftMachineBuyTokenVisited'
-NY_SACK_INFO_VISITED = 'NYSackInfoVisited'
-NY_SACK_INFO_LAST_SELECTED = 'NYSackInfoLastSelected'
-NY_RESOURCE_COLLECTING_AVAILABLE = 'NYResourceCollectingAvailable'
-NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE = 'NYResourceFriendsCollectingAvailable'
 LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
 LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
-LOOT_BOXES_VIEWED_COUNT = 'lootBoxesViewedCount'
 LOOT_BOXES_HAS_NEW = 'lootBoxesHasNew'
-LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
 LOOT_BOXES_UNIQUE_ID = 'lootBoxesUniqueID'
 LOOT_BOXES_INTRO_VIDEO_SHOWN = 'lootBoxesIntroVideoShown'
 COLLECTIONS_SECTION = 'collections'
@@ -331,9 +321,6 @@ class BattleMatters(object):
     REMINDER_LAST_DISPLAY_TIME = 'reminderLastDisplayTime'
 
 
-NY_CELEBRITY_DAY_QUESTS_VISITED_MASK = 'NYCelebrityDayQuestsVisitedMask'
-NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK = 'NYCelebrityDayQuestsCompletedMask'
-
 class Winback(object):
     WINBACK_SETTINGS = 'winbackSettings'
     COMPLETED_STARTING_QUEST_COUNT = 'completedStartingQuestCount'
@@ -349,17 +336,6 @@ class AdventCalendar(object):
     LAST_DAY_POPUP_SEEN = 'adventCalendarLastDayPopupSeen'
 
 
-NY_CELEBRITY_ADV_QUESTS_VISITED_MASK = 'NYCelebrityAdvQuestsVisitedMask'
-NY_CELEBRITY_ADV_QUESTS_COMPLETED_MASK = 'NYCelebrityAdvQuestsCompletedMask'
-NY_GUEST_ACTIVITY_SHOWN = 'NYGuestActivityShown'
-NY_MAX_LEVEL_MESSAGE_CLOSE = 'NYMaxLevelMessageClose'
-NY_DOG_PAGE_VISITED = 'NYDogPageVisited'
-NY_NARKET_PLACE_PAGE_VISITED = 'NYMarketPlaceVisited'
-NY_CAT_PAGE_VISITED = 'NYCatPageVisited'
-NY_FRIENDS_BANNER_SHOWN = 'NYFriendsBannerShown'
-NY_NO_FRIENDS_PAGE_RESET_TIME = 'NYNoFriendsPageResetTime'
-NY_REWARD_KIT_OPEN = 'NYRewardKitOpen'
-NY_GIFT_MACHINE_HINT_VISIBLE = 'NYGiftMachineHintVisible'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 MODE_SELECTOR_BATTLE_PASS_SHOWN = 'modeSelectorBattlePassShown'
 RANKED_LAST_CYCLE_ID = 'rankedLastCycleID'
@@ -605,7 +581,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'favorite': False,
                                               'bonus': False,
                                               'crystals': False,
-                                              'newYear': False,
                                               'role_HT_assault': False,
                                               'role_HT_break': False,
                                               'role_HT_support': False,
@@ -669,7 +644,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False,
                                           'crystals': False,
-                                          'newYear': False,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_support': False,
@@ -1083,7 +1057,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'vehicleCarouselStats': True,
                 WHEELED_DEATH_DELAY_COUNT: 10,
                 FREE_CAM_USES_COUNT: 0,
-                'lootBoxVideoOff': False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         BattleCommStorageKeys.SHOW_LOCATION_MARKERS: True,
                                                         GAME.DISPLAY_PLATOON_MEMBERS: True,
@@ -1247,24 +1220,16 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COMP7_LIGHT_PROGRESSION_POINTS_SEEN: 0,
                 COMP7_LIGHT_INTRO_SHOWN: False,
                 ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON: 0,
-                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
-                                                LOOT_BOXES_WAS_FINISHED: False,
-                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
-                                                LOOT_BOXES_VIEWED_COUNT: 0,
-                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
                 LOOTBOX_SYSTEM: {LOOT_BOXES_UNIQUE_ID: 0,
                                  LOOT_BOXES_WAS_STARTED: False,
                                  LOOT_BOXES_WAS_FINISHED: False,
                                  LOOT_BOXES_INTRO_VIDEO_SHOWN: False,
                                  LOOT_BOXES_HAS_NEW: False,
                                  LOOT_BOXES_OPEN_ANIMATION_ENABLED: True},
+                CUSTOM_SHOP_SETTINGS: {},
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
-                LAST_LOGGED_SERVER_DAY: 0,
-                LAST_SEEN_COLLECTING_NOTIFY_TIME: -1,
-                LAST_SEEN_FRIENDS_NOTIFY_TIME: -1,
-                LAST_SEEN_NO_FRIENDS_NOTIFY_TIME: -1,
                 ACHIEVEMENTS_INFO: {ACHIEVEMENTS_WTR_RANKS: {},
                                     ACHIEVEMENTS_INITIAL_BATTLE_COUNT: -1,
                                     ACHIEVEMENTS_MAX_WTR_POINTS: 0,
@@ -1306,7 +1271,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SENIORITY_AWARDS_COUNTER: 1,
                 DEMOUNT_KIT_SEEN: False,
                 RECERTIFICATION_FORM_SEEN: False,
-                NEW_SHOP_TABS: {IS_COLLECTIBLE_VEHICLES_VISITED: False},
+                NEW_SHOP_TABS: {IS_COMP7_BONS_BANNER_VISITED: False},
                 VPP_ENTRY_POINT_LAST_SEEN_STEP: {},
                 LIVE_OPS_WEB_EVENTS_COUNTERS: {},
                 VEHICLE_CAROUSEL_COUNTERS_SEEN: {}},
@@ -1332,7 +1297,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                  COLLECTION_RENEW_SEEN: {},
                                                  COLLECTIONS_UPDATED_ENTRY_SEEN: False},
                      COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP: None,
-                     COMP7_YEARLY_REWARD_SEEN: False},
+                     COMP7_LAST_SEASON_WITH_SEEN_REWARD: None},
  KEY_SESSION_SETTINGS: {STORAGE_VEHICLES_CAROUSEL_FILTER_1: {'ussr': False,
                                                              'germany': False,
                                                              'usa': False,
@@ -1429,6 +1394,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                         LAST_SHOP_ACTION_COUNTER_MODIFICATION: None,
                         OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES: set()},
  KEY_UI_FLAGS: {COMP7_UI_SECTION: {COMP7_WEEKLY_QUESTS_PAGE_TOKENS_COUNT: 0,
+                                   COMP7_WEEKLY_QUEST_WIDGET_PROGRESS: 0,
+                                   COMP7_WEEKLY_QUEST_IN_WIDGET_ID: '',
+                                   COMP7_WEEKLY_QUEST_IN_WIDGET_STATE: '',
                                    COMP7_SHOP_SEEN_PRODUCTS: set(),
                                    COMP7_LAST_SEASON: None},
                 COLLECTIONS_SECTION: {COLLECTION_SHOWN_NEW_REWARDS: {},
@@ -1464,26 +1432,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'uiSpamVisited_OfferBannerWindow': False,
                 'uiSpamVisited_StrongholdView': False,
                 EXCHANGE_GOLD_RATE_DISCOUNT_ANIMATION_SHOWED: set(),
-                EXCHANGE_XP_RATE_DISCOUNT_ANIMATION_SHOWED: set(),
-                NY_DAILY_QUESTS_VISITED: False,
-                NY_CELEBRITY_DAY_QUESTS_VISITED_MASK: 0,
-                NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK: 0,
-                NY_CELEBRITY_ADV_QUESTS_VISITED_MASK: 0,
-                NY_CELEBRITY_ADV_QUESTS_COMPLETED_MASK: 0,
-                NY_GUEST_ACTIVITY_SHOWN: False,
-                NY_GIFT_MACHINE_BUY_TOKEN_VISITED: False,
-                NY_MAX_LEVEL_MESSAGE_CLOSE: False,
-                NY_DOG_PAGE_VISITED: False,
-                NY_NARKET_PLACE_PAGE_VISITED: None,
-                NY_CAT_PAGE_VISITED: False,
-                NY_FRIENDS_BANNER_SHOWN: False,
-                NY_NO_FRIENDS_PAGE_RESET_TIME: 0,
-                NY_SACK_INFO_VISITED: False,
-                NY_SACK_INFO_LAST_SELECTED: 1,
-                NY_RESOURCE_COLLECTING_AVAILABLE: False,
-                NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE: False,
-                NY_REWARD_KIT_OPEN: False,
-                NY_GIFT_MACHINE_HINT_VISIBLE: True},
+                EXCHANGE_XP_RATE_DISCOUNT_ANIMATION_SHOWED: set()},
  KEY_BATTLE_HINTS: {},
  KEY_NEWBIE_HINTS: {}}
 
@@ -1520,7 +1469,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 81
+    version = 82
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2246,55 +2195,18 @@ class AccountSettings(object):
                         hintsSection.write('displayHistory', _pack(displayHistory))
 
             if currVersion < 81:
+                pass
+            if currVersion < 82:
+                from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
                 for key, section in _filterAccountSection(ads):
-                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
-                    if LAST_LOGGED_SERVER_DAY in keySettings.keys():
-                        keySettings.write(LAST_LOGGED_SERVER_DAY, _pack(0))
-                    if LAST_SEEN_COLLECTING_NOTIFY_TIME in keySettings.keys():
-                        keySettings.write(LAST_SEEN_COLLECTING_NOTIFY_TIME, _pack(-1))
-                    if LAST_SEEN_FRIENDS_NOTIFY_TIME in keySettings.keys():
-                        keySettings.write(LAST_SEEN_FRIENDS_NOTIFY_TIME, _pack(-1))
-                    if LAST_SEEN_NO_FRIENDS_NOTIFY_TIME in keySettings.keys():
-                        keySettings.write(LAST_SEEN_NO_FRIENDS_NOTIFY_TIME, _pack(-1))
-                    keyUIFlagsSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
-                    if NY_DAILY_QUESTS_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_DAILY_QUESTS_VISITED, _pack(False))
-                    if NY_CELEBRITY_DAY_QUESTS_VISITED_MASK in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_CELEBRITY_DAY_QUESTS_VISITED_MASK, _pack(0))
-                    if NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_CELEBRITY_DAY_QUESTS_COMPLETED_MASK, _pack(0))
-                    if NY_CELEBRITY_ADV_QUESTS_VISITED_MASK in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_CELEBRITY_ADV_QUESTS_VISITED_MASK, _pack(0))
-                    if NY_CELEBRITY_ADV_QUESTS_COMPLETED_MASK in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_CELEBRITY_ADV_QUESTS_COMPLETED_MASK, _pack(0))
-                    if NY_GUEST_ACTIVITY_SHOWN in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_GUEST_ACTIVITY_SHOWN, _pack(False))
-                    if NY_GIFT_MACHINE_BUY_TOKEN_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_GIFT_MACHINE_BUY_TOKEN_VISITED, _pack(False))
-                    if NY_MAX_LEVEL_MESSAGE_CLOSE in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_MAX_LEVEL_MESSAGE_CLOSE, _pack(False))
-                    if NY_DOG_PAGE_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_DOG_PAGE_VISITED, _pack(False))
-                    if NY_NARKET_PLACE_PAGE_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_NARKET_PLACE_PAGE_VISITED, _pack(None))
-                    if NY_CAT_PAGE_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_CAT_PAGE_VISITED, _pack(False))
-                    if NY_FRIENDS_BANNER_SHOWN in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_FRIENDS_BANNER_SHOWN, _pack(False))
-                    if NY_SACK_INFO_VISITED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_SACK_INFO_VISITED, _pack(False))
-                    if NY_SACK_INFO_LAST_SELECTED in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_SACK_INFO_LAST_SELECTED, _pack(1))
-                    if NY_RESOURCE_COLLECTING_AVAILABLE in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_RESOURCE_COLLECTING_AVAILABLE, _pack(False))
-                    if NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_RESOURCE_FRIENDS_COLLECTING_AVAILABLE, _pack(False))
-                    if NY_REWARD_KIT_OPEN in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_REWARD_KIT_OPEN, _pack(False))
-                    if NY_GIFT_MACHINE_HINT_VISIBLE in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_GIFT_MACHINE_HINT_VISIBLE, _pack(True))
-                    if NY_NO_FRIENDS_PAGE_RESET_TIME in keyUIFlagsSettings.keys():
-                        keyUIFlagsSettings.write(NY_NO_FRIENDS_PAGE_RESET_TIME, _pack(0))
+                    accSettings = AccountSettings._readSection(section, KEY_COUNTERS)
+                    if accSettings.has_key(NEW_SHOP_TABS):
+                        counters = _unpack(accSettings[NEW_SHOP_TABS].asString)
+                        if IS_COMP7_BONS_BANNER_VISITED not in counters:
+                            counters[IS_COMP7_BONS_BANNER_VISITED] = False
+                        if 'isCollectibleVehiclesVisited' in counters:
+                            del counters['isCollectibleVehiclesVisited']
+                        accSettings.write(NEW_SHOP_TABS, _pack(counters))
 
             ads.writeInt('version', AccountSettings.version)
         return

@@ -13,26 +13,26 @@ class ProgressType(Enum):
 class DetailsModel(AdvancedAchievementModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(DetailsModel, self).__init__(properties=properties, commands=commands)
 
     def getProgressType(self):
-        return ProgressType(self._getString(14))
+        return ProgressType(self._getString(15))
 
     def setProgressType(self, value):
-        self._setString(14, value.value)
+        self._setString(15, value.value)
 
     def getSpecificItemLevel(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setSpecificItemLevel(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
 
     def getRewards(self):
-        return self._getArray(16)
+        return self._getArray(17)
 
     def setRewards(self, value):
-        self._setArray(16, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getRewardsType():

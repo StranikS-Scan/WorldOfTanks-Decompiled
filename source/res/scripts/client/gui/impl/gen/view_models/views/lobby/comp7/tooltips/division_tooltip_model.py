@@ -1,24 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/tooltips/division_tooltip_model.py
-from enum import IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division, Rank
 from frameworks.wulf import ViewModel
-
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
-
-class Division(IntEnum):
-    A = 1
-    B = 2
-    C = 3
-    D = 4
-    E = 5
-
 
 class DivisionTooltipModel(ViewModel):
     __slots__ = ()

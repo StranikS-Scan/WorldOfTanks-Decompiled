@@ -2015,8 +2015,6 @@ class TOOLTIPS(object):
     AWARDITEM_ADDITIONAL_BONUSES_BODY = '#tooltips:awardItem/additional_bonuses/body'
     AWARDITEM_OPTIONAL_DEVICES_ASSISTANT_HEADER = '#tooltips:awardItem/optional_devices_assistant/header'
     AWARDITEM_OPTIONAL_DEVICES_ASSISTANT_BODY = '#tooltips:awardItem/optional_devices_assistant/body'
-    AWARDITEM_COMP7TOKENWEEKLYREWARD_HEADER = '#tooltips:awardItem/comp7TokenWeeklyReward/header'
-    AWARDITEM_COMP7TOKENWEEKLYREWARD_BODY = '#tooltips:awardItem/comp7TokenWeeklyReward/body'
     AWARDITEM_TOURCOIN_HEADER = '#tooltips:awardItem/tourcoin/header'
     AWARDITEM_TOURCOIN_BODY = '#tooltips:awardItem/tourcoin/body'
     AWARDITEM_INDUSTRIALRESOURCE_HEADER = '#tooltips:awardItem/industrialResource/header'
@@ -2457,7 +2455,6 @@ class TOOLTIPS(object):
     HANGAR_HEADER_WGMONEYTOOLTIP_EARNEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/earnedValue'
     HANGAR_HEADER_WGMONEYTOOLTIP_TOTALVALUE = '#tooltips:hangar/header/wgmoneyTooltip/totalValue'
     QUESTS_AWARDS_ADDITIONAL_HEADER = '#tooltips:quests/awards/additional/header'
-    QUESTS_AWARDS_ADDITIONAL_HEADER_COUNT = '#tooltips:quests/awards/additional/header/count'
     QUESTS_AWARDS_NEAREST_HEADER = '#tooltips:quests/awards/nearest/header'
     QUESTS_AWARDS_ADDITIONAL_BOTTOM = '#tooltips:quests/awards/additional/bottom'
     QUESTS_VEHICLES_HEADER = '#tooltips:quests/vehicles/header'
@@ -3773,6 +3770,8 @@ class TOOLTIPS(object):
     ROLESKILL_DESCRIPTION_ACTIVE = '#tooltips:roleSkill/description/active'
     ROLESKILL_DESCRIPTION_PASSIVE = '#tooltips:roleSkill/description/passive'
     ROLESKILL_INFO = '#tooltips:roleSkill/info'
+    ROLESKILL_STARTLEVEL_LOBBY = '#tooltips:roleSkill/startLevel/lobby'
+    ROLESKILL_STARTLEVEL_BATTLE = '#tooltips:roleSkill/startLevel/battle'
     PERIODICREWARD_HEADER = '#tooltips:periodicReward/header'
     PERIODICREWARD_COMP7_BODY = '#tooltips:periodicReward/comp7/body'
     NOTRECRUITEDTANKMAN_COMMANDER_REBRANDING_DESC = '#tooltips:notrecruitedtankman/commander_rebranding/desc'
@@ -4229,7 +4228,6 @@ class TOOLTIPS(object):
      AWARDITEM_BADGES_HEADER,
      AWARDITEM_ADDITIONAL_BONUSES_HEADER,
      AWARDITEM_OPTIONAL_DEVICES_ASSISTANT_HEADER,
-     AWARDITEM_COMP7TOKENWEEKLYREWARD_HEADER,
      AWARDITEM_TOURCOIN_HEADER,
      AWARDITEM_INDUSTRIALRESOURCE_HEADER,
      AWARDITEM_WDRCOIN_HEADER,
@@ -4318,7 +4316,6 @@ class TOOLTIPS(object):
      AWARDITEM_BADGES_BODY,
      AWARDITEM_ADDITIONAL_BONUSES_BODY,
      AWARDITEM_OPTIONAL_DEVICES_ASSISTANT_BODY,
-     AWARDITEM_COMP7TOKENWEEKLYREWARD_BODY,
      AWARDITEM_TOURCOIN_BODY,
      AWARDITEM_INDUSTRIALRESOURCE_BODY,
      AWARDITEM_WDRCOIN_BODY,

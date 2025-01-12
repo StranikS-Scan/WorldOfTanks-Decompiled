@@ -5,26 +5,26 @@ from gui.impl.gen.view_models.views.lobby.achievements.advanced_achievement_mode
 class UpcomingModel(AdvancedAchievementModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(UpcomingModel, self).__init__(properties=properties, commands=commands)
 
     def getSpecificItemName(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setSpecificItemName(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def getSpecificItemLevel(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setSpecificItemLevel(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
 
     def getIsResearchable(self):
-        return self._getBool(16)
+        return self._getBool(17)
 
     def setIsResearchable(self, value):
-        self._setBool(16, value)
+        self._setBool(17, value)
 
     def _initialize(self):
         super(UpcomingModel, self)._initialize()

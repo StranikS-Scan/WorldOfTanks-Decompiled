@@ -85,6 +85,10 @@ class AvatarPostmortemComponent(object):
                 return CTRL_MODE_NAME.LOOK_AT_KILLER
         if self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.KILL_CAM) and (currentControlMode is CTRL_MODE_NAME.LOOK_AT_KILLER or currentControlMode not in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES):
             return CTRL_MODE_NAME.KILL_CAM
+        if currentControlMode == CTRL_MODE_NAME.KILL_CAM and self.isPostmortemFeatureEnabled(CTRL_MODE_NAME.DEATH_FREE_CAM) and self.isPostmortemModificationActive(CTRL_MODE_NAME.DEATH_FREE_CAM, POSTMORTEM_MODIFIERS.FORCED_IF_NO_LIVES):
+            respawnCtrl = self._guiSessionProvider.dynamic.respawn
+            if respawnCtrl and not respawnCtrl.playerLives:
+                return CTRL_MODE_NAME.DEATH_FREE_CAM
         if currentControlMode in (CTRL_MODE_NAME.KILL_CAM, CTRL_MODE_NAME.DEATH_FREE_CAM):
             return CTRL_MODE_NAME.POSTMORTEM
         if currentControlMode == CTRL_MODE_NAME.POSTMORTEM:

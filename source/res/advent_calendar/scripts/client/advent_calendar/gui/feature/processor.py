@@ -7,10 +7,9 @@ _logger = logging.getLogger(__name__)
 
 class AdventCalendarDoorsProcessor(Processor):
 
-    def __init__(self, dayID, currency=''):
+    def __init__(self, dayID):
         super(AdventCalendarDoorsProcessor, self).__init__()
         self.__dayID = dayID
-        self.__currency = currency
 
     def _errorHandler(self, code, errStr='', ctx=None):
         _logger.error('Failed to open door=%d, errorCode=%d, errorMsg=%s', self.__dayID, code, errStr)
@@ -18,4 +17,4 @@ class AdventCalendarDoorsProcessor(Processor):
 
     def _request(self, callback):
         _logger.debug('Make server request to open Advent door number: %d', self.__dayID)
-        BigWorld.player().AdventCalendarAccountComponent.openAdventCalendarDoor(self.__dayID, self.__currency, lambda code, errStr: self._response(code, callback, errStr))
+        BigWorld.player().AdventCalendarAccountComponent.openAdventCalendarDoor(self.__dayID, lambda code, errStr: self._response(code, callback, errStr))

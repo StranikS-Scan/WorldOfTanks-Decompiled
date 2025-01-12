@@ -12,6 +12,7 @@ from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
 from gui.impl.pub import ViewImpl
 from gui.impl.lobby.missions.daily_quests_view import DailyTabs
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.main_wnd_state_watcher import ClientMainWindowStateWatcher
 from gui.shared.missions.packers.events import getEventUIDataPacker, findFirstConditionModel
@@ -19,6 +20,7 @@ from gui.shared.events import LobbySimpleEvent
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.server_events.events_helpers import dailyQuestsSortFunc, EventInfoModel
 from helpers import dependency
+from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
@@ -37,10 +39,11 @@ def predicateTooltipWindow(window):
     return window.content is not None and window.typeFlag == WindowFlags.TOOLTIP
 
 
-class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
+class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher, IGlobalListener):
     __slots__ = ('__parentId', '__tooltipEnabled', '__layout', '__visitedQuests', '__markVisitedCallbackID')
     eventsCache = dependency.descriptor(IEventsCache)
     __gui = dependency.descriptor(IGuiLoader)
+    __comp7Controller = dependency.descriptor(IComp7Controller)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.VIEW, DailyQuestsWidgetViewModel())
@@ -118,6 +121,7 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         else:
             with self.getViewModel().transaction() as tx:
                 tx.setCountdown(newCountdownVal)
+                tx.setIsComp7Hangar(False)
                 modelQuests = tx.getQuests()
                 modelQuests.clear()
                 modelQuests.reserve(len(quests))

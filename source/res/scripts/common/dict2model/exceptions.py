@@ -32,6 +32,9 @@ class ValidationErrorMessage(object):
 
         return self._str
 
+    def __repr__(self):
+        return self.__str__()
+
     def __add__(self, other):
         if not isinstance(other, ValidationErrorMessage):
             raise SoftException('Unsupported error message type: {}'.format(type(other)))

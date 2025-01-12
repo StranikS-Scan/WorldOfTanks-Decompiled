@@ -50,6 +50,7 @@
     <W_2_58D>	53	</W_2_58D>
     <SGT_3Cz_M_OSP3>	54	</SGT_3Cz_M_OSP3>
     <SGT_3Cz_M_7x7>	502	</SGT_3Cz_M_7x7>
+    <GTD_2T6x2_7x7>	503	</GTD_2T6x2_7x7>
     <Development_Engine>	65000	</Development_Engine>
     <Maybach_VL_2_SH>	36	</Maybach_VL_2_SH>
     <SGT_3Cz_SH>	37	</SGT_3Cz_SH>
@@ -471,7 +472,7 @@
       <price>	25000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	400	</power>
+      <power>	550	</power>
       <weight>	750	</weight>
       <maxHealth>	145	</maxHealth>
       <maxRegenHealth>	73	</maxRegenHealth>
@@ -519,7 +520,7 @@
       <price>	34000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
+      <power>	600	</power>
       <weight>	800	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
@@ -599,7 +600,7 @@
       <price>	12000	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	250	</power>
+      <power>	280	</power>
       <weight>	510	</weight>
       <maxHealth>	104	</maxHealth>
       <maxRegenHealth>	52	</maxRegenHealth>
@@ -631,7 +632,7 @@
       <price>	900	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	130	</power>
+      <power>	140	</power>
       <weight>	300	</weight>
       <maxHealth>	44	</maxHealth>
       <maxRegenHealth>	22	</maxRegenHealth>
@@ -647,7 +648,7 @@
       <price>	3800	</price>
       <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
-      <power>	140	</power>
+      <power>	150	</power>
       <weight>	350	</weight>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	39	</maxRegenHealth>
@@ -663,7 +664,7 @@
       <price>	18500	</price>
       <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	280	</power>
+      <power>	300	</power>
       <weight>	550	</weight>
       <maxHealth>	124	</maxHealth>
       <maxRegenHealth>	62	</maxRegenHealth>
@@ -853,6 +854,23 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </GTD_2T6x2>
+    <GTD_2T6x2_7x7>
+      <userString>	#poland_vehicles:GTD_2T6x2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	400	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2035	</rpm_max>
+    </GTD_2T6x2_7x7>
     <V-2-34_B>
       <userString>	#poland_vehicles:V-2-34_B	</userString>
       <tags>	diesel	</tags>

@@ -10,8 +10,8 @@
   <postProgressionTree>	role_HT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	35	</forward>
-    <backward>	14	</backward>
+    <forward>	40	</forward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.039	</moving>
@@ -45,15 +45,15 @@
   <hull>
     <armor>
       <armor_1>	180	</armor_1>
-      <armor_2>	120	</armor_2>
+      <armor_2>	165	</armor_2>
       <armor_3>	70	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	20	</armor_6>
       <armor_7>	70	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	145	</armor_9>
-      <armor_10>	40	</armor_10>
+      <armor_9>	180	</armor_9>
+      <armor_10>	45	</armor_10>
       <armor_11>	60	</armor_11>
       <armor_12>	20	</armor_12>
       <armor_13>	50	</armor_13>
@@ -61,9 +61,9 @@
       <armor_15>	20	</armor_15>
       <armor_16>	40	</armor_16>
       <armor_17>	35	</armor_17>
-      <armor_18>	150	</armor_18>
-      <armor_19>	120	</armor_19>
-      <armor_20>	40	</armor_20>
+      <armor_18>	210	</armor_18>
+      <armor_19>	185	</armor_19>
+      <armor_20>	55	</armor_20>
       <leftTrack>	20	</leftTrack>
       <rightTrack>	20	</rightTrack>
     </armor>
@@ -720,6 +720,33 @@
         <clipAngle>	0.79594	</clipAngle>
         <anchorShift>	0.04	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.713 0.24083 -2.29586	</position>
+        <rotation>	-0.000001 -0 1.570796	</rotation>
+        <scale>	0.999997 0.999997 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.713 0.24083 -2.295859	</position>
+        <rotation>	0.000001 3.141592 1.570796	</rotation>
+        <scale>	0.999999 0.999999 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.565 0.620595 -5.028	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999982 0.999982 0.999982	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1168,7 +1195,6 @@
             <length>	0.159498	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-4.58003	</xStart>
@@ -1391,7 +1417,6 @@
             <length>	0.159493	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-4.58012	</xStart>
@@ -1618,8 +1643,8 @@
         <armor_14>	220	</armor_14>
         <armor_15>	60	</armor_15>
         <armor_16>	200	</armor_16>
-        <armor_17>	160	</armor_17>
-        <armor_18>	110	</armor_18>
+        <armor_17>	200	</armor_17>
+        <armor_18>	135	</armor_18>
         <armor_19>	70	</armor_19>
         <armor_20>	100	</armor_20>
         <armor_21>	40	</armor_21>
@@ -1632,7 +1657,7 @@
         <armor_29>	60	</armor_29>
         <armor_30>	90	</armor_30>
         <armor_31>	160	</armor_31>
-        <armor_32>	180	</armor_32>
+        <armor_32>	210	</armor_32>
       </armor>
       <primaryArmor>	armor_11 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
@@ -1690,7 +1715,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0.00000 7.00 0.25000 7.00 0.36111 6.00 0.50000 0.00 0.63889 6.00 0.75000 7.00 1.00000 7.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.28	</shotDispersionRadius>
+          <shotDispersionRadius>	0.22	</shotDispersionRadius>
           <reloadTime>	8.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2288,6 +2313,24 @@
           <clipAngle>	0.814385	</clipAngle>
           <anchorShift>	0.740805	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.492236 1.145095 -2.836	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.558 1.146 -2.804	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2318,7 +2361,7 @@
       <engines>
         <Mitsubishi_MT_1100>
           <smplEnginePower>	1050	</smplEnginePower>
-          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Mitsubishi_MT_1100>
       </engines>
       <chassis>

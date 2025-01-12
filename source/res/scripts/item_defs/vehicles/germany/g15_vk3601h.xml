@@ -994,14 +994,14 @@
     </camouflage>
   </hull>
   <chassis>
-    <VK3601H_henshelketten>
-      <userString>	#germany_vehicles:VK3601H_henshelketten	</userString>
-      <shortUserString>	#germany_vehicles:VK3601H_henshelketten_short	</shortUserString>
+    <Chassis_G15_VK3601H>
+      <userString>	#germany_vehicles:Chassis_G15_VK3601H	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G15_VK3601H_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
       <price>	9970	</price>
       <unlocks>
-        <chassis>	VK3601H_henshelketten_ausf_B	  <cost>	4935	</cost>
+        <chassis>	Chassis_G15_VK3601H_2	  <cost>	4935	</cost>
         </chassis>
       </unlocks>
       <armor>
@@ -1893,10 +1893,10 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </VK3601H_henshelketten>
-    <VK3601H_henshelketten_ausf_B>
-      <userString>	#germany_vehicles:VK3601H_henshelketten_ausf_B	</userString>
-      <shortUserString>	#germany_vehicles:VK3601H_henshelketten_ausf_B_short	</shortUserString>
+    </Chassis_G15_VK3601H>
+    <Chassis_G15_VK3601H_2>
+      <userString>	#germany_vehicles:Chassis_G15_VK3601H_2	</userString>
+      <shortUserString>	#germany_vehicles:Chassis_G15_VK3601H_2_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	15440	</price>
@@ -2789,15 +2789,19 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	8	</repairTime>
-    </VK3601H_henshelketten_ausf_B>
+    </Chassis_G15_VK3601H_2>
   </chassis>
   <turrets0>
-    <VK3601H_Standardturm>
-      <userString>	#germany_vehicles:VK3601H_Standardturm	</userString>
-      <shortUserString>	#germany_vehicles:VK3601H_Standardturm_short	</shortUserString>
+    <Turret_1_G15_VK3601H>
+      <userString>	#germany_vehicles:Turret_1_G15_VK3601H	</userString>
+      <shortUserString>	#germany_vehicles:Turret_1_G15_VK3601H_short	</shortUserString>
       <tags></tags>
       <level>	5	</level>
       <price>	9680	</price>
+      <unlocks>
+        <turret>	Turret_2_G15_VK3601H	  <cost>	4415	</cost>
+        </turret>
+      </unlocks>
       <armor>
         <armor_1>	80	</armor_1>
         <armor_2>	60	</armor_2>
@@ -2824,164 +2828,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_StuH42_L28Pz>	shared	  <unlocks>
-            <gun>	_75mm_KwK_L70	  <cost>	4600	</cost>
-            </gun>
-            <turret>	VK3601H_Grosseturm	  <cost>	4415	</cost>
-            </turret>
-            <gun>	_75mm_KwK41_L58_conic	  <cost>	9200	</cost>
-            </gun>
-          </unlocks>
-          <maxAmmo>	50	</maxAmmo>
-          <armor>
-            <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <reloadTime>	8	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.458333 8 0.472222 3 0.527778 3 0.541667 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <models>
-            <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G15_VK3601H/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G15_VK3601H/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G15_VK3601H/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G15_VK3601H/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004668 -0.002992 1.03706	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.20155 0.201549	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004668 -0.002992 1.03706	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.009297 -0.007984 1.36839	</rayStart>
-              <rayEnd>	-0.009297 -0.007984 1.72939	</rayEnd>
-              <rayUp>	0.086 0 0	</rayUp>
-              <size>	0.361	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <density>	94.737 108.99	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_75mm_KwK_L70>	shared	  <reloadTime>	4.8	</reloadTime>
-          <maxAmmo>	65	</maxAmmo>
-          <armor>
-            <armor_1>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.458333 8 0.472222 4 0.527778 4 0.541667 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G15_VK3601H/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G15_VK3601H/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G15_VK3601H/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G15_VK3601H/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.004734 -0.003379 2.20094	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.20155 0.201549	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.004734 -0.003379 2.20094	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.009467 -0.005957 3.65157	</rayStart>
-              <rayEnd>	-0.009467 -0.005957 4.01257	</rayEnd>
-              <rayUp>	0.07 0 0	</rayUp>
-              <size>	0.361	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
-            <density>	111.618 111.853	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
         <_75mm_KwK41_L58_conic>	shared	  <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -2997,7 +2843,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
+          <reloadTime>	4.4	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3509,10 +3355,10 @@
         <density>	121.822 121.775	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3601H_Standardturm>
-    <VK3601H_Grosseturm>
-      <userString>	#germany_vehicles:VK3601H_Grosseturm	</userString>
-      <shortUserString>	#germany_vehicles:VK3601H_Grosseturm_short	</shortUserString>
+    </Turret_1_G15_VK3601H>
+    <Turret_2_G15_VK3601H>
+      <userString>	#germany_vehicles:Turret_2_G15_VK3601H	</userString>
+      <shortUserString>	#germany_vehicles:Turret_2_G15_VK3601H_short	</shortUserString>
       <tags></tags>
       <level>	6	</level>
       <price>	14560	</price>
@@ -3553,161 +3399,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.866	</invisibilityFactor>
       <guns>
-        <_105mm_StuH42_L28Pz>	shared	  <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <maxAmmo>	50	</maxAmmo>
-          <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.55	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G15_VK3601H/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G15_VK3601H/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G15_VK3601H/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G15_VK3601H/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_large_mb	</effects>
-          <reloadEffect>	reload85_107	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000112 0.000015 1.09083	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.266099 0.266099	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000112 0.000015 1.09083	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000224 -0.00197 1.476	</rayStart>
-              <rayEnd>	0.000224 -0.00197 1.848	</rayEnd>
-              <rayUp>	0.087 0 0	</rayUp>
-              <size>	0.372	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.48 1.48 0.000000 0.000000	</tiling>
-            <density>	94.737 108.99	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_105mm_StuH42_L28Pz>
-        <_75mm_KwK_L70>	shared	  <maxAmmo>	65	</maxAmmo>
-          <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.4	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <models>
-            <undamaged>	vehicles/german/G15_VK3601H/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/german/G15_VK3601H/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/german/G15_VK3601H/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G15_VK3601H/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G15_VK3601H/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium_mb	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.000027 -0.000371 2.25028	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.266099 0.266099	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.000027 -0.000371 2.25028	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	0.000093 -0.000743 3.80079	</rayStart>
-              <rayEnd>	0.000093 -0.000743 4.09079	</rayEnd>
-              <rayUp>	0.069 0 0	</rayUp>
-              <size>	0.29	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <edgeByVisualModel>	false	</edgeByVisualModel>
-          <camouflage>
-            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
-            <density>	111.618 111.853	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_75mm_KwK_L70>
         <_75mm_KwK41_L58_conic>	shared	  <armor>
             <armor_1>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4348,46 +4039,36 @@
         <density>	98.6107 98.5862	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </VK3601H_Grosseturm>
+    </Turret_2_G15_VK3601H>
   </turrets0>
   <engines>
-    <Maybach_HL_150>	shared	  <unlocks>
+    <Maybach_HL_174_V1>	shared	  <unlocks>
         <engine>	Maybach_HL_174	  <cost>	6200	</cost>
         </engine>
       </unlocks>
-    </Maybach_HL_150>
+    </Maybach_HL_174_V1>
     <Maybach_HL_174>	shared	</Maybach_HL_174>
   </engines>
   <fuelTanks>
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG12	  <cost>	7200	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG12>	shared	</FuG12>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL_150>
-          <smplEnginePower>	422.9124	</smplEnginePower>
+        <Maybach_HL_174_V1>
+          <smplEnginePower>	450	</smplEnginePower>
           <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
-        </Maybach_HL_150>
+        </Maybach_HL_174_V1>
         <Maybach_HL_174>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	50.5	</smplFwMaxSpeed>
         </Maybach_HL_174>
       </engines>
       <chassis>
-        <VK3601H_henshelketten>
+        <Chassis_G15_VK3601H>
           <grounds>
             <soft>
               <rollingFriction>	0.24955	</rollingFriction>
@@ -4399,8 +4080,8 @@
               <rollingFriction>	0.10465	</rollingFriction>
             </firm>
           </grounds>
-        </VK3601H_henshelketten>
-        <VK3601H_henshelketten_ausf_B>
+        </Chassis_G15_VK3601H>
+        <Chassis_G15_VK3601H_2>
           <grounds>
             <soft>
               <rollingFriction>	0.23345	</rollingFriction>
@@ -4412,7 +4093,7 @@
               <rollingFriction>	0.0966	</rollingFriction>
             </firm>
           </grounds>
-        </VK3601H_henshelketten_ausf_B>
+        </Chassis_G15_VK3601H_2>
       </chassis>
     </detailed>
   </physics>

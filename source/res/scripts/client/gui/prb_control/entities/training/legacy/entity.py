@@ -341,11 +341,9 @@ class TrainingEntity(LegacyEntity):
             return
 
     def changeArenaGui(self, ctx, callback=None):
-        isWatcherChanged = self.__updateVehiclesWatcher()
-        if not isWatcherChanged:
-            return
-        self._validateStatusIfModeChanged()
+        self.__updateVehiclesWatcher()
         self.__updateTrainingLimits()
+        self._validateStatusIfModeChanged()
 
     def isComp7Arena(self):
         return self.getSettings()['arenaGuiType'] in (ARENA_GUI_TYPE.COMP7, ARENA_GUI_TYPE.TRAINING_COMP7)
@@ -412,13 +410,13 @@ class TrainingEntity(LegacyEntity):
     def __updateVehiclesWatcher(self):
         watcherType = BaseVehiclesWatcher if not self.isComp7Arena() else Comp7VehiclesWatcher
         if type(self.__watcher) is watcherType:
-            return False
+            return
         else:
             if self.__watcher is not None:
                 self.__watcher.stop()
             self.__watcher = watcherType()
             self.__watcher.start()
-            return True
+            return
 
     def __updateTrainingLimits(self):
         limits = TrainingLimits if not self.isComp7Arena() else Comp7TrainingLimits

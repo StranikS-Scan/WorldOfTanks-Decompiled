@@ -714,6 +714,33 @@
         <clipAngle>	0.434722	</clipAngle>
         <anchorShift>	-0.119614	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.595995 0.66126 0.448356	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	0.999974 0.999974 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.596 0.66126 0.448356	</position>
+        <rotation>	0 3.141592 1.570796	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.000005 0.081 -3.973	</position>
+        <rotation>	-0 -1.570798 1.208848	</rotation>
+        <scale>	0.999994 0.999994 0.999994	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1537,6 +1564,15 @@
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.007 0.666 0.789399	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000001 -0.17632 7.20039	</rayStart>
@@ -2125,6 +2161,15 @@
           <showOn>	272	</showOn>
           <clipAngle>	0.515899	</clipAngle>
           <anchorShift>	-0.0693	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	1.061 1.374 1.479694	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

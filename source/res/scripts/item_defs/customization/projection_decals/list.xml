@@ -8911,6 +8911,48 @@
       <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
       <mirror>	false	</mirror>
     </projection_decal>
+    <projection_decal>
+      <id>	1164	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_831.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_614	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1165	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_832.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_615	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1166	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_833.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_616	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1167	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_834.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_617	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1168	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_835.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_618	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1169	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_836.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_619	</userString>
+      <tags>	styleOnly formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
     <name>	Manticore	</name>
   </itemGroup>
   <itemGroup>
@@ -9244,7 +9286,7 @@
     <priceGroup>	projection_decals 160g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <projection_decal>
@@ -9392,6 +9434,39 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	NY 2025	</name>
+  </itemGroup>
+  <itemGroup>
+    <name>	Lunar NY 2025	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1186	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_854.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_854	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1187	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_855.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_855	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1188	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_856.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_856	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
@@ -11470,6 +11545,25 @@
     <name>	Prime Gaming 2024	</name>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1107	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_787.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_787	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	Steam Unlock	</name>
+  </itemGroup>
+  <itemGroup>
     <name>	Lumberjack_NonCN	</name>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
@@ -11562,6 +11656,25 @@
     <name>	GameON Exhibition	</name>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+      </include>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1163	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_830.dds	</texture>
+      <userString>	#vehicle_customization:special_style/gb_ht_line	</userString>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <name>	GB HT Line	</name>
+  </itemGroup>
+  <itemGroup>
     <name>	Boosteroid	</name>
     <userString>	#vehicle_customization:projection_decals/special	</userString>
     <season>	ALL	</season>
@@ -11578,6 +11691,20 @@
       <mirror>	true	</mirror>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_843	</userString>
       <tags>	formfactor_square disableVerticalMirror direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	16036	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_857.dds	</texture>
+      <mirror>	true	</mirror>
+      <tags>	disableVerticalMirror formfactor_square direction_right_to_left	</tags>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_857	</userString>
+    </projection_decal>
+    <projection_decal>
+      <id>	16037	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_858.dds	</texture>
+      <mirror>	true	</mirror>
+      <tags>	disableVerticalMirror formfactor_square direction_right_to_left	</tags>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_858	</userString>
     </projection_decal>
   </itemGroup>
 </list.xml>

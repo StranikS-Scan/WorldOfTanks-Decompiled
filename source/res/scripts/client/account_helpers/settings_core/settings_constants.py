@@ -396,7 +396,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     NEW_C11N_SECTION_HINT = 'NewC11nSectionHint'
     C11N_VEHICLE_LIST_HINT = 'C11nVehicleListHint'
     VEHICLE_C11N_FILTER_HINT = 'VehicleC11nFilterHint'
-    GRINCH_PROGRESSION_FIGHT_BUTTON_HINT = 'GrinchProgressionFightButtonHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -519,18 +518,3 @@ class ReferralProgram(CONST_CONTAINER):
 
 
 COLOR_GRADING_TECHNIQUE_DEFAULT = 0
-
-class NYLootBoxesStorageKeys(CONST_CONTAINER):
-    NEW_COUNT = 'newCount'
-    DELIVERED_COUNT = 'deliveredCount'
-
-
-class NewYearStorageKeys(CONST_CONTAINER):
-    NY_STATISTICS_HINT_SHOWN = 'nyLootboxStatisticsHintShown'
-    CELEBRITY_SCREEN_VISITED = 'celebrityScreenVisited'
-    LOOT_BOX_VIDEO_OFF = 'lootBoxVideoOff'
-    NY_INTRO_SHOWN = 'nyIntroShown'
-    BOOL_FLAGS = (NY_STATISTICS_HINT_SHOWN,
-     CELEBRITY_SCREEN_VISITED,
-     LOOT_BOX_VIDEO_OFF,
-     NY_INTRO_SHOWN)

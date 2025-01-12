@@ -1140,14 +1140,14 @@
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	125 113	</piercingPower>
+          <piercingPower>	142 127	</piercingPower>
         </_75mm_AP_Type_T6>
         <_75mm_AP_Type_TK6>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	180 162	</piercingPower>
+          <piercingPower>	186 164	</piercingPower>
         </_75mm_AP_Type_TK6>
         <_75mm_HE_Type_T6>
           <defaultPortion>	0.10	</defaultPortion>
@@ -1368,7 +1368,7 @@
           <speed>	780	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	115 103	</piercingPower>
+          <piercingPower>	124 108	</piercingPower>
         </_75mm_AP_Type_T4>
         <_75mm_AP_Type_TK4>
           <defaultPortion>	0.0	</defaultPortion>
@@ -1477,8 +1477,8 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <dualAccuracy>
-        <afterShotDispersionRadius>	0.42	</afterShotDispersionRadius>
-        <coolingDelay>	16	</coolingDelay>
+        <afterShotDispersionRadius>	0.4	</afterShotDispersionRadius>
+        <coolingDelay>	15	</coolingDelay>
       </dualAccuracy>
       <shots>
         <_105mm_AP_M68>
@@ -1509,6 +1509,7 @@
       <tags></tags>
       <level>	9	</level>
       <price>	190000	</price>
+      <notInShop>	True	</notInShop>
       <impulse>	0.68	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
@@ -1599,7 +1600,7 @@
         <whileGunDamaged>	2.0	</whileGunDamaged>
       </shotDispersionFactors>
       <dualAccuracy>
-        <afterShotDispersionRadius>	0.42	</afterShotDispersionRadius>
+        <afterShotDispersionRadius>	0.4	</afterShotDispersionRadius>
         <coolingDelay>	14	</coolingDelay>
       </dualAccuracy>
       <shots>
@@ -1656,7 +1657,7 @@
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
       <shotDispersionRadius>	0.4	</shotDispersionRadius>
       <dualAccuracy>
-        <afterShotDispersionRadius>	0.42	</afterShotDispersionRadius>
+        <afterShotDispersionRadius>	0.38	</afterShotDispersionRadius>
         <coolingDelay>	12	</coolingDelay>
       </dualAccuracy>
       <shotDispersionFactors>
@@ -3226,14 +3227,14 @@
           <speed>	1000	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	208 196	</piercingPower>
+          <piercingPower>	215 198	</piercingPower>
         </_105mm_AP_Type_92>
         <_105mm_HEAT_Type_92>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	880	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	250 250	</piercingPower>
+          <piercingPower>	270 270	</piercingPower>
         </_105mm_HEAT_Type_92>
         <_105mm_HE_Type_92B>
           <defaultPortion>	0.05	</defaultPortion>

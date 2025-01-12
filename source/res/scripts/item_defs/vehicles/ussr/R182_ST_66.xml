@@ -63,9 +63,9 @@
     <weight>	18650	</weight>
     <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	120	</maxRegenHealth>
-      <repairCost>	2.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <models>
       <undamaged>	vehicles/russian/R182_ST_66/normal/lod0/Hull.model	</undamaged>
@@ -836,6 +836,33 @@
         <clipAngle>	1.20016	</clipAngle>
         <anchorShift>	0.152488	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.681 0.192 -1.460819	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999995 0.999995 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.666895 0.192 -1.46082	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-0.84607 0.1485 -4.172	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999987 0.999987 0.999987	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -871,9 +898,9 @@
         <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	7.5	</repairCost>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
       <models>
         <undamaged>	vehicles/russian/R182_ST_66/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R182_ST_66/crash/lod0/Chassis.model	</destroyed>
@@ -3036,7 +3063,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_R182_ST_66>
   </chassis>
   <turrets0>
@@ -3076,15 +3103,15 @@
       <maxHealth>	260	</maxHealth>
       <rotationSpeed>	35	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	140	</maxHealth>
-        <maxRegenHealth>	70	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <repairCost>	2	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <_100mm_T_12A>	shared	  <maxAmmo>	40	</maxAmmo>
@@ -3772,6 +3799,24 @@
           <showOn>	4368	</showOn>
           <clipAngle>	0.801787	</clipAngle>
           <anchorShift>	1.00321	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.0018 1.071233 -0.690689	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	1.003 0.879 0.570189	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

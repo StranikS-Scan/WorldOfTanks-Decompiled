@@ -2,107 +2,98 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/comp7_quest_helpers.py
 import logging
 import re
-from enum import Enum
 import typing
-from comp7_common import Comp7QuestType, CLIENT_VISIBLE_QUESTS_TYPE, COMP7_QUEST_ID_REGEXP, weeklyRewardTokenBySeasonNumber
+from comp7_common import Comp7QuestType, offerWeeklyQuestsRewardTokenBySeasonNumber, offerWeeklyQuestsRewardGiftTokenBySeasonNumber, COMP7_OFFER_YEARLY_REWARD_GIFT_TOKEN_PREFIX, COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX, weeklyQuestsCompleteTokenName
+from gui.shared.items_cache import ItemsCache
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    from typing import Optional, Type
     from comp7_ranks_common import Comp7Division
+    from gui.game_control.comp7_controller import Comp7Controller
     from helpers.server_settings import Comp7RanksConfig
 _logger = logging.getLogger(__name__)
 
 def isComp7Quest(qID, seasonNumber=None):
-    parsedId = _QuestIDParser(qID)
-    return parsedId.isComp7Quest() and (seasonNumber is None or parsedId.season == seasonNumber)
+    parsedId = Comp7ParsedQuestID(qID)
+    return parsedId and (seasonNumber is None or parsedId.season == seasonNumber)
 
 
 def isComp7VisibleQuest(qID):
-    parsedID = _QuestIDParser(qID)
-    return parsedID.isComp7Quest() and parsedID.questType in CLIENT_VISIBLE_QUESTS_TYPE
+    parsedID = Comp7ParsedQuestID(qID)
+    return parsedID and parsedID.questType.isVisible()
 
 
 def getComp7QuestType(qID):
-    return _QuestIDParser(qID).questType
+    parsedID = Comp7ParsedQuestID(qID)
+    return parsedID.questType if parsedID else None
 
 
-def parseComp7RanksQuestID(qID):
-    return __getDivisionFromQuest(qID)
-
-
-def getRequiredTokensCountToComplete(qID):
-    return int(_QuestIDParser(qID).extraInfo)
-
-
-def parseComp7WeeklyQuestID(qID):
-    return _QuestIDParser(qID).extraInfo
-
-
-def parseComp7PeriodicQuestID(qID):
-    return __getDivisionFromQuest(qID)
-
-
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getComp7WeeklyProgressionQuests(eventsCache=None):
-    quests = eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.TOKENS)
-    quests = {getRequiredTokensCountToComplete(qID):quest for qID, quest in quests.iteritems()}
-    return quests
-
-
-@dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getComp7WeeklyQuests(eventsCache=None):
-    quests = eventsCache.getAllQuests(lambda q: isComp7VisibleQuest(q.getID()) and getComp7QuestType(q.getID()) == Comp7QuestType.WEEKLY and not q.isOutOfDate() and q.isStarted())
-    quests = {parseComp7WeeklyQuestID(qID):quest for qID, quest in quests.iteritems()}
-    return quests
-
-
-@dependency.replace_none_kwargs(ctrl=IComp7Controller)
-def getActualSeasonWeeklyRewardToken(ctrl=None):
-    actualSeasonNumber = ctrl.getActualSeasonNumber()
-    return weeklyRewardTokenBySeasonNumber(actualSeasonNumber) if actualSeasonNumber else None
+def isFirstWeeklyQuest(qID):
+    qID = Comp7ParsedQuestID(qID)
+    return qID and qID.extraInfo == '1_1'
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
-def __getDivisionFromQuest(qID, lobbyCtx=None):
-    parsedID = _QuestIDParser(qID)
+def parseComp7RanksQuestID(qID, lobbyCtx=None):
     ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
+    parsedID = Comp7ParsedQuestID(qID)
     divisionID = int(parsedID.extraInfo)
     return findFirst(lambda d: d.dvsnID == divisionID, ranksConfig.divisions)
 
 
-class _QuestIDParser(object):
+parseComp7PeriodicQuestID = parseComp7RanksQuestID
 
-    class _GroupIDs(Enum):
-        MASKOT = 0
-        SEASON = 1
-        TYPE = 2
-        EXTRA_INFO = 3
+def getRequiredTokensCountToComplete(qID):
+    return int(Comp7ParsedQuestID(qID).extraInfo)
 
-    __ID_REGEXP = re.compile(COMP7_QUEST_ID_REGEXP)
 
-    def __init__(self, questID):
-        self.__match = self.__ID_REGEXP.match(questID)
-        self.__groups = self.__match.groups() if self.__match else None
-        return
+@dependency.replace_none_kwargs(ctrl=IComp7Controller)
+def getComp7WeeklyQuestsCompleteToken(ctrl=None):
+    actualSeasonNumber = ctrl.getActualSeasonNumber()
+    return weeklyQuestsCompleteTokenName(actualSeasonNumber) if actualSeasonNumber else None
 
-    def isComp7Quest(self):
-        return self.__match is not None
 
-    @property
-    def questType(self):
-        rawQuestType = self.__getGroupValue(self._GroupIDs.TYPE)
-        return Comp7QuestType(rawQuestType) if rawQuestType else None
+@dependency.replace_none_kwargs(ctrl=IComp7Controller)
+def getComp7OfferWeeklyQuestsRewardToken(ctrl=None):
+    actualSeasonNumber = ctrl.getActualSeasonNumber()
+    return offerWeeklyQuestsRewardTokenBySeasonNumber(actualSeasonNumber) if actualSeasonNumber else None
 
-    @property
-    def season(self):
-        return int(self.__getGroupValue(self._GroupIDs.SEASON))
 
-    @property
-    def extraInfo(self):
-        return self.__getGroupValue(self._GroupIDs.EXTRA_INFO)
+def isComp7OfferYearlyRewardToken(token):
+    return token.startswith(COMP7_OFFER_YEARLY_REWARD_TOKEN_PREFIX)
 
-    def __getGroupValue(self, groupID):
-        return self.__groups[groupID.value] if self.__match else None
+
+def isComp7OfferYearlyRewardGiftToken(token):
+    return token.startswith(COMP7_OFFER_YEARLY_REWARD_GIFT_TOKEN_PREFIX)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def hasAvailableOfferYearlyRewardGiftTokens(itemsCache=None):
+    tokens = itemsCache.items.tokens.getTokens().iteritems()
+    return any((amount[1] > 0 and isComp7OfferYearlyRewardGiftToken(name) for name, amount in tokens))
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache, comp7Controller=IComp7Controller)
+def hasAvailableWeeklyQuestsOfferGiftTokens(itemsCache=None, comp7Controller=None):
+    season = comp7Controller.getActualSeasonNumber()
+    return False if season is None else offerWeeklyQuestsRewardGiftTokenBySeasonNumber(season) in itemsCache.items.tokens.getTokens()
+
+
+class Comp7ParsedQuestID(object):
+    __questIDMatcher = re.compile('comp7_(\\d+)_(\\d+)_({})_(.+)'.format('|'.join((el.value for el in Comp7QuestType)))).match
+    __slots__ = ('season', 'questType', 'extraInfo')
+
+    def __new__(cls, questID):
+        match = cls.__questIDMatcher(questID)
+        if match:
+            self = super(cls, cls).__new__(cls)
+            mascot, season, questType, self.extraInfo = match.groups()
+            self.season = int(season)
+            self.questType = Comp7QuestType(questType)
+            return self
+        else:
+            return None

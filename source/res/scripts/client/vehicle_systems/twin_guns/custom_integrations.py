@@ -1,18 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/twin_guns/custom_integrations.py
-import typing
 import weakref
+import typing
 import TriggersManager
+from TriggersManager import TRIGGER_TYPE
 from aih_constants import ShakeReason
+from debug_utils import LOG_CODEPOINT_WARNING
 from events_handler import eventHandler
 from helpers import dependency
 from items.vehicles import MultiGunInstance
 from skeletons.gui.battle_session import IBattleSessionProvider
-from TriggersManager import TRIGGER_TYPE
-from vehicle_systems.instant_status_helpers import invokeShotsDoneStatus
 from vehicle_systems.entity_components.vehicle_mechanic_component import ifPlayerVehicle, ifObservedVehicle
-from vehicle_systems.twin_guns.system_interfaces import ITwinShootingListener
+from vehicle_systems.instant_status_helpers import invokeShotsDoneStatus
 from vehicle_systems.shake_helpers import shakeMultiGunPlayerDynamicCamera
+from vehicle_systems.twin_guns.system_interfaces import ITwinShootingListener
 if typing.TYPE_CHECKING:
     from Avatar import PlayerAvatar
     from TwinGunController import TwinGunController
@@ -61,14 +62,20 @@ class TwinGunCustomIntegrations(ITwinShootingListener):
     @eventHandler
     def onDiscreteShot(self, gunIndex):
         invokeShotsDoneStatus(self.__vehicle)
-        shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[gunIndex], ShakeReason.OWN_SHOT_DELAYED)
+        if 0 <= gunIndex < len(self.__multiGun):
+            shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[gunIndex], ShakeReason.OWN_SHOT_DELAYED)
+        else:
+            LOG_CODEPOINT_WARNING()
         self.__processAvatarSingleDiscreteShot()
 
     @eventHandler
     def onDoubleShot(self, _):
         invokeShotsDoneStatus(self.__vehicle)
-        shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[0], ShakeReason.OWN_SHOT_DELAYED)
-        shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[1], ShakeReason.OWN_SHOT_DELAYED)
+        if len(self.__multiGun) == 2:
+            shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[0], ShakeReason.OWN_SHOT_DELAYED)
+            shakeMultiGunPlayerDynamicCamera(self.__vehicle, self.__multiGun[1], ShakeReason.OWN_SHOT_DELAYED)
+        else:
+            LOG_CODEPOINT_WARNING()
         self.__processAvatarSingleDiscreteShot()
 
     @ifObservedVehicle

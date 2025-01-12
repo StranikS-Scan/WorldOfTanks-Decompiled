@@ -3,11 +3,9 @@
 import typing
 from adisp import adisp_process
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division, MetaRootViews, Rank
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progression_item_model import ProgressionItemModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.progression_model import ProgressionModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_division import Division
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
 from gui.impl.lobby.comp7.meta_view import meta_view_helper
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter

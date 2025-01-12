@@ -96,10 +96,11 @@ class CreateApplicationPoint(Block, EntityMeta):
             errorVScript(self, 'Unknown equipment [{}]'.format(equipmentName))
             return
         else:
+            level = self._level.getValue() if self._level.hasValue() else 0
             entity = BigWorld.createEntity('ApplicationPoint', self._arena.getValue().spaceID, self._position.getValue(), (mat.roll, mat.pitch, mat.yaw), {'vehicleID': vehicle.id,
              'equipmentID': equipmentID,
              'launchTime': BigWorld.time(),
-             'level': self._level.getValue()})
+             'level': level})
             self._entity.setValue(weakref.proxy(entity))
             self._out.call()
             return

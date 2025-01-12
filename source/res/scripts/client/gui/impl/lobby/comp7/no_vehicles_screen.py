@@ -1,16 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/no_vehicles_screen.py
-from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
+from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.backport import BackportTooltipWindow
-from gui.impl.backport import createTooltipData
+from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import NoVehiclesScreenModel
 from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import ErrorReason
+from gui.impl.gen.view_models.views.lobby.comp7.no_vehicles_screen_model import NoVehiclesScreenModel
 from gui.impl.lobby.comp7 import comp7_model_helpers
 from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller
 
@@ -65,14 +64,14 @@ class NoVehiclesScreen(ViewImpl, IGlobalListener):
         return ((self.viewModel.onClose, self.__onClose), (self.__comp7Controller.onComp7ConfigChanged, self.__onComp7ConfigChanged), (self.__comp7Controller.onStatusUpdated, self.__onStatusUpdated))
 
     def __onClose(self):
-        self.destroyWindow()
+        showHangar()
 
     def __onComp7ConfigChanged(self):
         self.__updateData()
 
     def __onStatusUpdated(self, status):
         if comp7_model_helpers.isModeForcedDisabled(status):
-            self.destroyWindow()
+            showHangar()
         else:
             self.__onPollServerTime()
 
@@ -95,9 +94,3 @@ class NoVehiclesScreen(ViewImpl, IGlobalListener):
     def __onPollServerTime(self):
         with self.viewModel.transaction() as vm:
             comp7_model_helpers.setScheduleInfo(vm.scheduleInfo)
-
-
-class NoVehiclesScreenWindow(LobbyNotificationWindow):
-
-    def __init__(self, parent=None):
-        super(NoVehiclesScreenWindow, self).__init__(wndFlags=WindowFlags.WINDOW, content=NoVehiclesScreen(layoutID=R.views.lobby.comp7.NoVehiclesScreen()), parent=parent, layer=WindowLayer.TOP_SUB_VIEW)

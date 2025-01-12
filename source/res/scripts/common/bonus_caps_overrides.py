@@ -7,6 +7,7 @@ from constants import ARENA_BONUS_TYPE_NAMES
 from soft_exception import SoftException
 if TYPE_CHECKING:
     from ResMgr import DataSection
+    BonusCapsOverridesType = Dict[int, Dict[str, Set[str]]]
 
 def readBonusCapsOverrides(section):
     overrides = dict()
@@ -14,8 +15,6 @@ def readBonusCapsOverrides(section):
         return overrides
     else:
         for name, data in section.items():
-            if ARENA_BONUS_TYPE_NAMES.get(name, None) is None:
-                raise SoftException('Invalid arena type {}'.format(name))
             nameID = ARENA_BONUS_TYPE_NAMES.get(name, None)
             if nameID is None:
                 raise SoftException('Incorrect arena type name: {}'.format(name))

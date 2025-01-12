@@ -256,7 +256,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         self.onBoxesUpdated()
 
     def __updateBoxesInfo(self):
-        boxes = [ lb for lb in self.__itemsCache.items.tokens.getLootBoxes().itervalues() if lb.getType() == self.eventName ]
+        boxes = self.__itemsCache.items.tokens.getLootBoxes().values()
         boxesInfoData = {}
         if boxes:
             self.__updateBoxes(boxes, boxesInfoData, self.__getTooltipConfig())

@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.item_bonus_model import It
 class FunRandomProgressModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=13, commands=0):
         super(FunRandomProgressModel, self).__init__(properties=properties, commands=commands)
 
     def getHasProgress(self):
@@ -86,6 +86,16 @@ class FunRandomProgressModel(ViewModel):
     def getRewardsType():
         return ItemBonusModel
 
+    def getStageRequiredCounters(self):
+        return self._getArray(12)
+
+    def setStageRequiredCounters(self, value):
+        self._setArray(12, value)
+
+    @staticmethod
+    def getStageRequiredCountersType():
+        return int
+
     def _initialize(self):
         super(FunRandomProgressModel, self)._initialize()
         self._addBoolProperty('hasProgress', False)
@@ -100,3 +110,4 @@ class FunRandomProgressModel(ViewModel):
         self._addNumberProperty('currentPoints', -1)
         self._addNumberProperty('maximumPoints', -1)
         self._addArrayProperty('rewards', Array())
+        self._addArrayProperty('stageRequiredCounters', Array())

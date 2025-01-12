@@ -2,13 +2,13 @@
 # Embedded file name: scripts/common/cgf_script/entity_dyn_components.py
 
 
-class BWEntityComponentTracker(object):
+class BWEntitiyComponentTracker(object):
 
     def onDynamicComponentCreated(self, component):
         existing = self.entityGameObject.findComponentByType(type(component))
         if existing is None:
             self.entityGameObject.addComponent(component)
-        supMethod = getattr(super(BWEntityComponentTracker, self), 'onDynamicComponentCreated', None)
+        supMethod = getattr(super(BWEntitiyComponentTracker, self), 'onDynamicComponentCreated', None)
         if supMethod is not None:
             supMethod(self, component)
         return
@@ -17,7 +17,7 @@ class BWEntityComponentTracker(object):
         existing = self.entityGameObject.findComponentByType(type(component))
         if existing is component:
             self.entityGameObject.removeComponent(component)
-        supMethod = getattr(super(BWEntityComponentTracker, self), 'onDynamicComponentDestroyed', None)
+        supMethod = getattr(super(BWEntitiyComponentTracker, self), 'onDynamicComponentDestroyed', None)
         if supMethod is not None:
             supMethod(self, component)
         return

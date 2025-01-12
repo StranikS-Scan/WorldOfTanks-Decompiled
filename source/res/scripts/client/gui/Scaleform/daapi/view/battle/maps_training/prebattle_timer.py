@@ -41,6 +41,9 @@ class MapsTrainingPreBattleTimer(MapsTrainingPrebattleTimerMeta):
         self.as_setSideS(backport.text(strings.prebattle.scenario(), map=backport.text(R.strings.arenas.dyn('c_{}'.format(mapName)).name()), scenario=backport.text(strings.scenarioNum()).format(scenario=scenarioIndex), vehicleType=backport.text(strings.vehicleType.dyn(self.__playerClass)())))
         self.mapsTrainingController.requestInitialDataFromServer(makeCallbackWeak(self.__setGoalsData))
 
+    def _isDisplayWinCondition(self):
+        return False
+
     def __setGoalsData(self):
         typeID = self.sessionProvider.arenaVisitor.type.getID()
         _, geometryID = ArenaType.parseTypeID(typeID)

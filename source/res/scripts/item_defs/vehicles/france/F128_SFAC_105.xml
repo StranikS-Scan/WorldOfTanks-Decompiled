@@ -11,7 +11,7 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	60	</forward>
+    <forward>	55	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -63,9 +63,9 @@
     <weight>	12990	</weight>
     <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	240	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	158	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
     </ammoBayHealth>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -421,8 +421,8 @@
         <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/french/F128_SFAC_105/normal/lod0/Chassis.model	</undamaged>
@@ -1313,7 +1313,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_F128_SFAC_105>
   </chassis>
   <turrets0>
@@ -1351,15 +1351,15 @@
       <maxHealth>	220	</maxHealth>
       <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <maxHealth>	155	</maxHealth>
+        <maxRegenHealth>	78	</maxRegenHealth>
+        <repairCost>	8	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
+        <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
         <Canon_bitube_de_105_mm_D_1507>	shared	  <maxAmmo>	40	</maxAmmo>
@@ -1376,7 +1376,7 @@
             </armor_5>
             <armor_6>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <gun>	20	</gun>
+            <gun>	15	</gun>
           </armor>
           <turretYawLimits>	-69 69	</turretYawLimits>
           <pitchLimits>
@@ -1391,12 +1391,12 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
-            <reloadLockTime>	4	</reloadLockTime>
+            <reloadLockTime>	3	</reloadLockTime>
             <reloadTimes>	10.5 10.5	</reloadTimes>
             <rateTime>	4	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
@@ -1554,6 +1554,15 @@
               <showOn>	4368	</showOn>
               <clipAngle>	1.06116	</clipAngle>
               <anchorShift>	0.8	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0 0.486 2.37496	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -2128,6 +2137,42 @@
           <clipAngle>	0.458588	</clipAngle>
           <anchorShift>	0.11	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-1.287 1.074157 1.486124	</position>
+          <rotation>	-0 -0 1.553343	</rotation>
+          <scale>	0.999987 0.999987 1	</scale>
+          <applyType>	universal	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	1.287 1.07416 1.486	</position>
+          <rotation>	-0 3.141593 1.570796	</rotation>
+          <scale>	0.999998 0.999998 0.999998	</scale>
+          <applyType>	universal	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	-0.959446 1.46763 -1.072	</position>
+          <rotation>	-0 -1.553343 1.570796	</rotation>
+          <scale>	0.999977 0.99997 0.99997	</scale>
+          <applyType>	universal	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38003	</slotId>
+          <position>	1.029 1.551 1.208281	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2169,8 +2214,8 @@
     <detailed>
       <engines>
         <Moteur_moderne_3M_27_oie>
-          <smplEnginePower>	550	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplEnginePower>	480	</smplEnginePower>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Moteur_moderne_3M_27_oie>
       </engines>
       <chassis>

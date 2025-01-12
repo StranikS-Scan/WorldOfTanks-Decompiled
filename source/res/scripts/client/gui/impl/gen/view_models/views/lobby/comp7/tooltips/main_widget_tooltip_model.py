@@ -1,24 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/tooltips/main_widget_tooltip_model.py
-from enum import Enum, IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Rank, SeasonName
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import DivisionInfoModel
 from gui.impl.gen.view_models.views.lobby.comp7.qualification_model import QualificationModel
-
-class Rank(IntEnum):
-    FIRST = 6
-    SECOND = 5
-    THIRD = 4
-    FOURTH = 3
-    FIFTH = 2
-    SIXTH = 1
-
-
-class SeasonName(Enum):
-    FIRST = 'first'
-    SECOND = 'second'
-    THIRD = 'third'
-
 
 class MainWidgetTooltipModel(ViewModel):
     __slots__ = ()

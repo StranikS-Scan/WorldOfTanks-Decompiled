@@ -1,17 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/epicBattle/epic_quest_progress_view.py
+from gui.Scaleform.daapi.view.battle_results_window import IBattleResultsComponent
 from gui.Scaleform.daapi.view.meta.EpicQuestProgressInfoMeta import EpicQuestProgressInfoMeta
 from gui.shared import g_eventBus, events
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 
-class EpicQuestProgressView(EpicQuestProgressInfoMeta):
+class EpicQuestProgressView(EpicQuestProgressInfoMeta, IBattleResultsComponent):
     __slots__ = ()
     __battleResults = dependency.descriptor(IBattleResultsService)
 
     def showQuestById(self, questId, eventType):
         g_eventBus.handleEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, ctx={'questId': questId,
          'eventType': eventType}))
+
+    def setArenaUniqueID(self, arenaUniqueID):
+        self.updateQuestsInfo(arenaUniqueID)
 
     def updateQuestsInfo(self, arenaUniqueID):
         battleResultsVO = self.__battleResults.getResultsVO(arenaUniqueID)

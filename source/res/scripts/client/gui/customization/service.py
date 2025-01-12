@@ -320,7 +320,6 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                 if cameraManager.getCurrentCameraName() == CUSTOMIZATION_CAMERA_NAME:
                     cameraManager.switchToTank()
         self.__destroyCtx()
-        g_eventBus.handleEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.onVisibilityChanged(False)
         return
 

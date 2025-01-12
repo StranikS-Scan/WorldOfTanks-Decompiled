@@ -2,12 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/comp7_lobby_sounds.py
 from enum import Enum
 import SoundGroups
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from sound_gui_manager import CommonSoundSpaceSettings
-
-class LobbySounds(Enum):
-    LEAVE_MODE = 'comp_7_hangar_drone_stop'
-
 
 class MetaViewSounds(Enum):
     ENTER_EVENT = 'comp_7_progression_enter'

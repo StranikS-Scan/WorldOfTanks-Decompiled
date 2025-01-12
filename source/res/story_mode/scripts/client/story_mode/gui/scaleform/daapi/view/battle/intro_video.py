@@ -54,7 +54,7 @@ class IntroVideo(IntroVideoMeta, IArenaLoadController):
             return
 
     def spaceLoadCompleted(self):
-        loading.getLoader().idl()
+        loading.getLoader().idle()
         if BattleReplay.isPlaying():
             self._storyModeCtrl.goToBattle()
             self.destroy()

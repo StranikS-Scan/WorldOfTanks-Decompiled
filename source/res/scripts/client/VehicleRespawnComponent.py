@@ -73,5 +73,9 @@ class VehicleRespawnComponent(DynamicScriptComponent):
             return
 
     def _explodeVehicleBeforeRespawn(self):
-        if not self.entity.isAlive():
+        avatar = BigWorld.player()
+        if avatar is None or avatar.playerVehicleID != self.entity.id:
+            return
+        else:
             RespawnDestroyEffect.play(self.entity.id)
+            return

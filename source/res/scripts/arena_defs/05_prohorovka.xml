@@ -4,8 +4,8 @@
   <geometry>	spaces/05_prohorovka	</geometry>
   <estimatedLoad>	0.55	</estimatedLoad>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <roundLength>	900	</roundLength>
   <minimap>	spaces/05_prohorovka/mmap.dds	</minimap>
@@ -56,10 +56,10 @@
       <artilleryPreparationChance>	0.7	</artilleryPreparationChance>
       <teamBasePositions>
         <team1>
-          <position1>	-125.100021 448.300110	</position1>
+          <position1>	-125.100235 448.299774	</position1>
         </team1>
         <team2>
-          <position1>	51.599991 -447.000000	</position1>
+          <position1>	51.599747 -447.000000	</position1>
         </team2>
       </teamBasePositions>
     </ctf>
@@ -67,35 +67,31 @@
       <artilleryPreparationChance>	0.5	</artilleryPreparationChance>
       <teamSpawnPoints>
         <team1>
-          <position>	-133 427	</position>
-          <position>	39 427	</position>
+          <position>	-133.000000 427.000000	</position>
+          <position>	39.000000 427.000000	</position>
         </team1>
         <team2>
-          <position>	-149 -425	</position>
-          <position>	185 -414	</position>
+          <position>	-149.000000 -425.000000	</position>
+          <position>	185.000000 -414.000000	</position>
         </team2>
       </teamSpawnPoints>
-      <teamBasePositions>
-        <team1></team1>
-        <team2></team2>
-      </teamBasePositions>
-      <controlPoint>	171.058380 16.351452	</controlPoint>
+      <controlPoint>	171.058044 16.351353	</controlPoint>
     </domination>
     <assault2>
       <winnerIfTimeout>	1	</winnerIfTimeout>
       <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-122.312 425.031	</position>
+          <position>	-122.311996 425.031006	</position>
         </team1>
         <team2>
-          <position>	48.913 -435.870	</position>
+          <position>	48.912998 -435.869995	</position>
         </team2>
       </teamSpawnPoints>
       <teamBasePositions>
         <team1>
-          <position1>	-163.605850 256.277740	</position1>
-          <position2>	156.715866 151.554276	</position2>
+          <position1>	-163.605865 256.277771	</position1>
+          <position2>	156.715881 151.554291	</position2>
         </team1>
         <team2></team2>
       </teamBasePositions>
@@ -103,13 +99,68 @@
     <maps_training>
       <teamBasePositions>
         <team1>
-          <position1>	-125.100021 448.300110	</position1>
+          <position1>	-125.100235 448.299774	</position1>
         </team1>
         <team2>
-          <position1>	51.599991 -447.000000	</position1>
+          <position1>	51.599747 -447.000000	</position1>
         </team2>
       </teamBasePositions>
     </maps_training>
+    <comp7>
+      <boundingBox>
+        <bottomLeft>	-500.0 -400.0	</bottomLeft>
+        <upperRight>	300.0 400.0	</upperRight>
+      </boundingBox>
+      <visualScript>
+        <server>
+          <plan>	PointsOfInterest/pointsOfInterest	</plan>
+        </server>
+      </visualScript>
+      <minimap>	spaces/05_prohorovka/mmap_comp7.dds	</minimap>
+      <recon>
+        <flyDirections>
+          <flyDirection>
+            <team>	1	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+          <flyDirection>
+            <team>	2	</team>
+            <direction>	0 0 1	</direction>
+          </flyDirection>
+        </flyDirections>
+      </recon>
+      <pointsOfInterestUDO>
+        <point>
+          <position>	-367.538055 109.224442	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	238.352493 14.065578	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-144.345505 13.792422	</position>
+          <type>	1	</type>
+        </point>
+        <point>
+          <position>	-362.920563 -175.327728	</position>
+          <type>	2	</type>
+        </point>
+        <point>
+          <position>	-294.691437 -9.340135	</position>
+          <type>	1	</type>
+        </point>
+      </pointsOfInterestUDO>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-54.481041 364.451477	</position>
+        </team1>
+        <team2>
+          <position>	10.233442 -339.277588	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	87.177795 12.534485	</controlPoint>
+    </comp7>
   </gameplayTypes>
   <mapActivities>
     <scenario>

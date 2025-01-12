@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/pages/yearly_rewards_page.py
 from functools import partial
 import typing
-from gui.impl.lobby.comp7.tooltips.crew_members_tooltip import CrewMembersTooltip
 from shared_utils import first, findFirst
 from account_helpers.settings_core.settings_constants import GuiSettingsBehavior
 from account_helpers import AccountSettings
@@ -10,12 +9,11 @@ from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from comp7_common import seasonPointsCodeBySeasonNumber
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews, Rank, SeasonPointState, SeasonName
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_card_model import YearlyRewardsCardModel, RewardsState
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.yearly_rewards_model import YearlyRewardsModel, BannerState
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import ProgressionItemBaseModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
-from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointState, SeasonName, SeasonPointModel
-from gui.impl.gen.view_models.views.lobby.comp7.tooltips.general_rank_tooltip_model import Rank
+from gui.impl.gen.view_models.views.lobby.comp7.season_point_model import SeasonPointModel
 from gui.impl.gen.view_models.views.lobby.comp7.year_model import YearState
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
@@ -23,8 +21,10 @@ from gui.impl.lobby.comp7.comp7_bonus_packer import packYearlyRewardMetaView
 from gui.impl.lobby.comp7.comp7_c11n_helpers import getStylePreviewVehicle
 from gui.impl.lobby.comp7.comp7_model_helpers import SEASONS_NUMBERS_BY_NAME, getSeasonNameEnum, setElitePercentage
 from gui.impl.lobby.comp7.comp7_shared import getPlayerDivisionByRating, getRankEnumValue, getPlayerDivision, getProgressionYearState
+from gui.impl.lobby.comp7.comp7_quest_helpers import hasAvailableOfferYearlyRewardGiftTokens
 from gui.impl.lobby.comp7.meta_view.meta_view_helper import getRankDivisions, setDivisionData, setRankData
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
+from gui.impl.lobby.comp7.tooltips.crew_members_tooltip import CrewMembersTooltip
 from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from gui.impl.lobby.comp7.tooltips.general_rank_tooltip import GeneralRankTooltip
 from gui.impl.lobby.comp7.tooltips.season_point_tooltip import SeasonPointTooltip
@@ -169,7 +169,8 @@ class YearlyRewardsPage(PageSubModelPresenter):
         styleBonus = findFirst(lambda bonus: bonus.getName() == 'customizations', bonuses)
         style = self.__c11nService.getItemByID(GUI_ITEM_TYPE.STYLE, styleBonus.getStyleID())
         vehicleCD = getStylePreviewVehicle(style, makeVehicleTypeCompDescrByName(_DEFAULT_PREVIEW_VEHICLE))
-        showStylePreview(vehicleCD, style, backCallback=partial(showComp7MetaRootView, self.pageId, cardIndex))
+        backBtnDescrLabel = backport.text(R.strings.comp7.yearlyRewards.preview.backButton())
+        showStylePreview(vehicleCD, style, backCallback=partial(showComp7MetaRootView, self.pageId, cardIndex), backBtnDescrLabel=backBtnDescrLabel)
 
     @args2params(int, int)
     def __onVehiclePreviewOpen(self, cd, cardIndex):
@@ -239,7 +240,7 @@ class YearlyRewardsPage(PageSubModelPresenter):
                 isReceivedRewards = self.__comp7Controller.isYearlyRewardReceived()
                 if not isReceivedRewards:
                     model.setBannerState(BannerState.NOTACCRUEDREWARDS)
-                elif self.__comp7Controller.hasAvailableOfferTokens():
+                elif hasAvailableOfferYearlyRewardGiftTokens():
                     model.setBannerState(BannerState.REWARDSSELECTIONAVAILABLE)
                 else:
                     model.setBannerState(BannerState.REWARDSRECEIVED)

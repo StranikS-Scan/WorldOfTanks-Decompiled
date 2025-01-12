@@ -3,9 +3,10 @@
 from collections import namedtuple
 from copy import copy
 import typing
+from account_helpers.AccountSettings import COMP7_LAST_SEASON_WITH_SEEN_REWARD
+from gui.selectable_reward.common import Comp7SelectableRewardManager
 from shared_utils import first, findFirst
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import COMP7_YEARLY_REWARD_SEEN
 from comp7_common import seasonPointsCodeBySeasonNumber
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
 from frameworks.wulf.view.array import fillIntsArray, fillViewModelsArray
@@ -14,27 +15,29 @@ from gui.game_control.comp7_shop_controller import ShopControllerStatus
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
-from gui.impl.gen.view_models.views.lobby.comp7.rewards_screen_model import Type, Rank, RewardsScreenModel, ShopInfoType
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews, Rank
+from gui.impl.gen.view_models.views.lobby.comp7.rewards_screen_model import Type, RewardsScreenModel, ShopInfoType
 from gui.impl.gen.view_models.views.lobby.comp7.season_result import SeasonResult
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.comp7 import comp7_shared, comp7_qualification_helpers
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses, packTokensRewardsQuestBonuses, packQualificationRewardsQuestBonuses, packYearlyRewardsBonuses, packYearlyRewardCrew, packSelectedRewardsBonuses
 from gui.impl.lobby.comp7.comp7_model_helpers import getSeasonNameEnum
-from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, getRequiredTokensCountToComplete, parseComp7PeriodicQuestID
+from gui.impl.lobby.comp7.comp7_quest_helpers import hasAvailableWeeklyQuestsOfferGiftTokens, parseComp7RanksQuestID, parseComp7PeriodicQuestID
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from gui.server_events.bonuses import VehiclesBonus
-from gui.shared.event_dispatcher import showComp7MetaRootView, showComp7YearlyRewardsSelectionWindow
+from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IComp7Controller, IComp7ShopController, IHangarSpaceSwitchController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    from typing import List, Tuple, Callable
     from comp7_ranks_common import Comp7Division
+    from frameworks.wulf import Command
     from frameworks.wulf.view.view_event import ViewEvent
     from gui.server_events.event_items import TokenQuest
 _MAX_MAIN_REWARDS_COUNT = 4
@@ -116,7 +119,7 @@ class _BaseRewardsView(ViewImpl):
 
 class _QuestRewardsView(_BaseRewardsView):
     _comp7ShopController = dependency.descriptor(IComp7ShopController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
+    _comp7Controller = dependency.descriptor(IComp7Controller)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
 
     def _onLoading(self, *args, **kwargs):
@@ -137,20 +140,20 @@ class _QuestRewardsView(_BaseRewardsView):
             self._setProductsData()
 
     def __onOpenShop(self):
-        if not self.__comp7Controller.isComp7PrbActive():
+        if not self._comp7Controller.isComp7PrbActive():
             self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
             comp7_prb_helpers.selectComp7()
             return
         self.__goToShop()
 
     def __onSpaceUpdated(self):
-        if not self.__comp7Controller.isComp7PrbActive():
+        if not self._comp7Controller.isComp7PrbActive():
             return
         self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
         self.__goToShop()
 
     def __goToShop(self):
-        showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+        event_dispatcher.showComp7MetaRootView(tabId=MetaRootViews.SHOP)
         self.destroyWindow()
 
 
@@ -203,13 +206,25 @@ class RanksRewardsView(_QuestRewardsView):
 
 class TokensRewardsView(_QuestRewardsView):
 
+    def __init__(self, *args, **kwargs):
+        self.__onCloseCallback = None
+        super(TokensRewardsView, self).__init__(*args, **kwargs)
+        return
+
+    def setNoNotifyViewClosedCallback(self, callback):
+        self.__onCloseCallback = callback
+
     def _onLoading(self, *args, **kwargs):
         super(TokensRewardsView, self)._onLoading(self, *args, **kwargs)
         with self.viewModel.transaction() as vm:
             vm.setSeasonName(getSeasonNameEnum())
             vm.setType(Type.TOKENSREWARDS)
             quest = first(kwargs['quests'])
-            vm.setTokensCount(getRequiredTokensCountToComplete(quest.getID()))
+            vm.setTokensCount(sum((token.getNeededCount() for token in quest.accountReqs.getTokens())))
+            isRewardChoosable = hasAvailableWeeklyQuestsOfferGiftTokens()
+            vm.setHasNextScreen(isRewardChoosable)
+        if isRewardChoosable:
+            AccountSettings.setNotifications(COMP7_LAST_SEASON_WITH_SEEN_REWARD, self._comp7Controller.getActualSeasonNumber())
 
     def _packBonuses(self, *args, **kwargs):
         return packTokensRewardsQuestBonuses(quest=first(kwargs['quests']))
@@ -219,6 +234,24 @@ class TokensRewardsView(_QuestRewardsView):
 
     def _getMainRewardsCount(self):
         return _MAX_MAIN_REWARDS_COUNT
+
+    def _getEvents(self):
+        eventsList = super(TokensRewardsView, self)._getEvents()
+        eventsList.append((self.getViewModel().onOpenNextScreen, self.__onOpenNextScreen))
+        return eventsList
+
+    def _onClose(self):
+        self.destroyWindow()
+        if self.__onCloseCallback:
+            self.__onCloseCallback()
+            self.__onCloseCallback = None
+        return
+
+    def __onOpenNextScreen(self):
+        self.__onCloseCallback = None
+        self.destroyWindow()
+        event_dispatcher.showComp7WeeklyQuestsRewardsSelectionWindow()
+        return
 
 
 class QualificationRewardsView(_QuestRewardsView):
@@ -279,12 +312,13 @@ class YearlyRewardsView(_BaseRewardsView):
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     __itemsCache = dependency.descriptor(IItemsCache)
+    _selectableRewardManager = Comp7SelectableRewardManager
 
     def __init__(self, *args, **kwargs):
         super(YearlyRewardsView, self).__init__(*args, **kwargs)
         self.__bonuses = kwargs['bonuses']
         tokenBonus = self.__bonuses.get('tokens', {}).keys()
-        self.__hasOfferReward = bool(findFirst(self.__comp7Controller.isComp7OfferToken, tokenBonus))
+        self.__hasOfferReward = bool(findFirst(self._selectableRewardManager.isFeatureReward, tokenBonus))
         self.__hasYearlyVehicle = VehiclesBonus.VEHICLES_BONUS in self.__bonuses
 
     def createToolTip(self, event):
@@ -310,7 +344,6 @@ class YearlyRewardsView(_BaseRewardsView):
             if showSeasonResults:
                 self.__updateSeasonsResults(vm)
             self.__updateYearlyVehicle(vm, self.__bonuses)
-        AccountSettings.setNotifications(COMP7_YEARLY_REWARD_SEEN, True)
 
     def _finalize(self):
         self.__bonuses = None
@@ -341,7 +374,7 @@ class YearlyRewardsView(_BaseRewardsView):
             return
         super(YearlyRewardsView, self)._onClose()
         if self.__hasOfferReward:
-            showComp7YearlyRewardsSelectionWindow()
+            event_dispatcher.showComp7YearlyRewardsSelectionWindow()
 
     def __updateSeasonsResults(self, model):
         results = []

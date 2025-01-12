@@ -216,6 +216,7 @@ class StyledMode(CustomizationMode):
         super(StyledMode, self)._cancelChanges()
         self._ctx.stylesDiffsCache.clearModeDiffs(self.__is3DMode)
         self.__modifiedStyle = self.__originalStyle
+        self.__autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
 
     def _getRequestData(self, purchaseItems):
         requestData = super(StyledMode, self)._getRequestData(purchaseItems)

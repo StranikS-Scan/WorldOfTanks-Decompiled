@@ -84,6 +84,8 @@ class LoginView(LoginPageMeta):
 
     @wg_async
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
+        if Waiting.isVisible():
+            return
         if self._loginMode.showRememberServerWarning:
             builder = ResSimpleDialogBuilder()
             builder.setFlags(WindowFlags.DIALOG | WindowFlags.WINDOW_FULLSCREEN)
@@ -133,6 +135,7 @@ class LoginView(LoginPageMeta):
     @uniprof.regionDecorator(label='offline.login', scope='enter')
     def _populate(self):
         View._populate(self)
+        self.app.setBackgroundAlpha(0)
         self._serversDP = ServersDataProvider()
         self._serversDP.setFlashObject(self.as_getServersDPS())
         self.as_enableS(True)

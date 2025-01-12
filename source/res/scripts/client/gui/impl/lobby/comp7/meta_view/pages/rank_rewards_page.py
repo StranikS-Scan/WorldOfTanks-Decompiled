@@ -8,10 +8,9 @@ from shared_utils import first
 from comp7_common import Comp7QuestType
 from gui.impl.backport import BackportTooltipWindow
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews, Rank
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_item_model import RankRewardsItemModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_model import RankRewardsModel
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses

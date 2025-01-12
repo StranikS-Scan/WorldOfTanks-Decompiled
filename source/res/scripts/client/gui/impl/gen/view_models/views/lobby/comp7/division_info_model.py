@@ -1,15 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/comp7/division_info_model.py
-from enum import IntEnum
+from gui.impl.gen.view_models.views.lobby.comp7.enums import Division
 from frameworks.wulf import ViewModel
-
-class Division(IntEnum):
-    A = 1
-    B = 2
-    C = 3
-    D = 4
-    E = 5
-
 
 class DivisionInfoModel(ViewModel):
     __slots__ = ()

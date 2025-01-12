@@ -25,7 +25,7 @@ class AdvancedAchievementIconSizeMap(Enum):
 class AdvancedAchievementModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=14, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(AdvancedAchievementModel, self).__init__(properties=properties, commands=commands)
 
     def getType(self):
@@ -112,6 +112,12 @@ class AdvancedAchievementModel(ViewModel):
     def setReceivedDate(self, value):
         self._setString(13, value)
 
+    def getReceivedShortDate(self):
+        return self._getString(14)
+
+    def setReceivedShortDate(self, value):
+        self._setString(14, value)
+
     def _initialize(self):
         super(AdvancedAchievementModel, self)._initialize()
         self._addStringProperty('type')
@@ -128,3 +134,4 @@ class AdvancedAchievementModel(ViewModel):
         self._addNumberProperty('stage', 0)
         self._addBoolProperty('isTrophy', False)
         self._addStringProperty('receivedDate', '')
+        self._addStringProperty('receivedShortDate', '')

@@ -46,6 +46,7 @@ from gui.prb_control import prbEntityProperty
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
+from helpers.func_utils import isDeveloperFunc
 from items import tankmen
 from messenger import MessengerEntry
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
@@ -827,7 +828,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def prb_changeArena(self, arenaTypeID, callback):
         if events.isPlayerEntityChanging:
             return
-        self._doCmdInt3(AccountCommands.CMD_PRB_CH_ARENA, arenaTypeID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode=errorCode))
+        self._doCmdInt3(AccountCommands.CMD_PRB_CH_ARENA, arenaTypeID, 0, 0, lambda requestID, resultID, errorCode: callback(resultID))
 
     def prb_changeRoundLength(self, roundLength, callback):
         if events.isPlayerEntityChanging:
@@ -1072,6 +1073,20 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         groupID = int(BigWorld.serverTime())
         while doActionsData:
             factory.doAction(*(doActionsData.pop(0) + (groupID, groupSize)))
+
+    def submitPlayerSatisfactionRating(self, arenaUniqueID, rating, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr)
+        else:
+            proxy = None
+        self._doCmdInt2(AccountCommands.CMD_SUBMIT_PLAYER_SATISFACTION_RATING, arenaUniqueID, rating, proxy)
+        return
+
+    @isDeveloperFunc
+    def registerWithPlayerSatisfactionMgr(self, arenaUniqueIDs):
+        arenaUniqueIDsStrList = [ str(arenaUniqueID) for arenaUniqueID in arenaUniqueIDs ]
+        self._doCmdStrArr(AccountCommands.CMD_REGISTER_BATTLES_WITH_PLAYER_SATISFACTION_MGR, arenaUniqueIDsStrList, None)
+        return
 
     def _doCmdNoArgs(self, cmd, callback):
         return self.__doCmd('doCmdNoArgs', cmd, callback)

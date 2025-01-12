@@ -492,21 +492,3 @@ class OnVehicleShaked(Block, VehicleMeta):
     @classmethod
     def blockAspects(cls):
         return [ASPECT.CLIENT]
-
-
-class HasDamagedModules(Block, VehicleMeta):
-
-    def __init__(self, *args, **kwargs):
-        super(HasDamagedModules, self).__init__(*args, **kwargs)
-        self._outSlot = self._makeDataOutputSlot('res', SLOT_TYPE.BOOL, self._execute)
-
-    def _execute(self):
-        from gui.battle_control import avatar_getter, vehicle_getter
-        from gui.battle_control.battle_constants import DEVICE_STATE_AS_DAMAGE
-        iterator = vehicle_getter.VehicleDeviceStatesIterator(avatar_getter.getVehicleDeviceStates(), avatar_getter.getVehicleTypeDescriptor())
-        damaged = [ name for name, state in iterator if state in DEVICE_STATE_AS_DAMAGE ]
-        self._outSlot.setValue(bool(damaged))
-
-    @classmethod
-    def blockAspects(cls):
-        return [ASPECT.CLIENT]

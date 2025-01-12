@@ -30,9 +30,3 @@ class LobbyPageMeta(View):
 
     def as_setSubContainerItemsVisibilityS(self, isVisible):
         return self.flashObject.as_setSubContainerItemsVisibility(isVisible) if self._isDAAPIInited() else None
-
-    def as_hideMessengerBarS(self, isVisible):
-        return self.flashObject.as_hideMessengerBar(isVisible) if self._isDAAPIInited() else None
-
-    def as_updateNYVisibilityS(self, nyWidgetVisible):
-        return self.flashObject.as_updateNYVisibility(nyWidgetVisible) if self._isDAAPIInited() else None

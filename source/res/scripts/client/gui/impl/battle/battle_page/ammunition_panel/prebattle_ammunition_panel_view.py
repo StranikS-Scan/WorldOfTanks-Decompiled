@@ -4,7 +4,6 @@ from account_helpers.settings_core.settings_constants import CONTROLS
 from typing import TYPE_CHECKING
 import CommandMapping
 from Event import Event, EventManager
-from constants import ROLE_TYPE_TO_LABEL
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.battle.battle_page.ammunition_panel.ammunition_panel import PrebattleAmmunitionPanel
 from gui.impl.battle.battle_page.ammunition_panel.groups_controller import COMMAND_MAPPING
@@ -169,22 +168,10 @@ class Comp7PrebattleAmmunitionPanelView(PrebattleAmmunitionPanelView):
 
     def updateViewVehicle(self, vehicle, fullUpdate=True):
         super(Comp7PrebattleAmmunitionPanelView, self).updateViewVehicle(vehicle, fullUpdate)
-        roleSkill = self.__getVehicleRoleSkill(vehicle)
-        if roleSkill is None:
+        roleSkill, body = getRoleEquipmentTooltipParts(vehicle)
+        if not roleSkill:
             return
-        else:
-            startLevel = self.__getVehicleRoleSkillStartLevel(vehicle)
-            header, body = getRoleEquipmentTooltipParts(roleSkill, startLevel)
-            with self.viewModel.transaction() as tx:
-                tx.roleSkillSlot.setRoleSkill(roleSkill.name)
-                tx.roleSkillSlot.setTooltipHeader(header)
-                tx.roleSkillSlot.setTooltipBody(body)
-            return
-
-    def __getVehicleRoleSkill(self, vehicle):
-        roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-        return self.__comp7Controller.getRoleEquipment(roleName)
-
-    def __getVehicleRoleSkillStartLevel(self, vehicle):
-        roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-        return self.__comp7Controller.getEquipmentStartLevel(roleName)
+        with self.viewModel.transaction() as tx:
+            tx.roleSkillSlot.setRoleSkill(roleSkill.name)
+            tx.roleSkillSlot.setTooltipHeader(roleSkill.userString)
+            tx.roleSkillSlot.setTooltipBody(body or '')

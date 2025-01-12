@@ -119,6 +119,12 @@ class BasePerksController(object):
     def clean(self):
         self._scopedPerks = ()
         self._modifiedFactors = defaultdict(lambda : defaultdict(list))
+        self.stop()
+
+    def stop(self):
+        if self._planHolder is not None:
+            self._planHolder.stop()
+        return
 
     def destroy(self):
         self._destroyPlanHolder()

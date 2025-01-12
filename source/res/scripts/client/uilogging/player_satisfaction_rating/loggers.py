@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/uilogging/player_satisfaction_rating/loggers.py
 import json
 import logging
-import typing
 from enum import Enum
+from typing import TYPE_CHECKING
 import BigWorld
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from uilogging.base.logger import MetricsLogger
 from uilogging.player_satisfaction_rating.logging_constants import FEATURE, NO_MIN_VIEW_TIME, POST_BATTLE_CM_ACTION_TO_PLAYER_SATISFACTION_CM_ACTION, PlayerSatisfactionRatingLogActions, MIN_VIEW_TIME, PlayerSatisfactionRatingKeys, PlayerSatisfactionRatingCMActions, PlayerSatisfactionRatingInfoKeys, PlayerSatisfationRatingInviteSource, ARENA_PERIOD_TO_KEY, PlayerSatisfactionRatingRadialMenuActions, RADIAL_MENU_ACTIONS_TO_LOGGING_ACTIONS
 from wotdecorators import noexcept
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.lobby_constants import USER
     from uilogging.types import ParentScreenType, ItemType
     from typing import Optional, Any, Union

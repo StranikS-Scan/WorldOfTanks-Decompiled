@@ -24,7 +24,9 @@ class StyleDiffsCache(object):
         storage['is3D'] = style.is3D
 
     def saveDiff(self, style, season, diff):
-        self.__diffs.setdefault(style.intCD, {})[season] = diff
+        storage = self.__diffs.setdefault(style.intCD, {})
+        storage[season] = diff
+        storage['is3D'] = style.is3D
 
     def getDiffs(self, style):
         diffs = {season:self.getDiff(style, season) for season in SeasonType.COMMON_SEASONS}

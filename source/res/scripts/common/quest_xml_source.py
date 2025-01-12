@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
+import sys
 import time
+import typing
 import ArenaType
 import ResMgr
 import nations
-from items.components.ny_constants import CurrentNYConstants, PREV_NY_TOYS_BONUSES
+from persistent_data_cache_common.serializers import WGPickleSerializer
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
@@ -26,6 +28,7 @@ _WEEKDAYS = {'Mon': 1,
  'Sun': 7}
 _YEAR = 31556926
 MAX_BONUS_LIMIT = 1000000
+NEAREST_TIME_BOUNDARY = 'nearestTimeBoundary'
 
 class XMLNode(object):
     __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'bonusDelayed', 'groupContent', 'scripts')
@@ -94,18 +97,21 @@ class Source(object):
             raise SoftException("Can not open '%s'" % path)
         return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime, gStartTime, gFinishTime)
 
-    def readFromInternalFile(self, path, curTime):
+    def readFromInternalFile(self, path, curTime, auxData=None):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
             raise SoftException("Can not open '%s'" % path)
-        return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
+        return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime, auxData=auxData)
 
     def readFromString(self, xml, curTime):
         section = ResMgr.DataSection('root').createSectionFromString(xml)
         return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
 
-    def __readXML(self, section, curTime, gStartTime=DEFAULT_QUEST_START_TIME, gFinishTime=DEFAULT_QUEST_FINISH_TIME):
+    def __readXML(self, section, curTime, gStartTime=DEFAULT_QUEST_START_TIME, gFinishTime=DEFAULT_QUEST_FINISH_TIME, auxData=None):
+        if auxData is not None:
+            if NEAREST_TIME_BOUNDARY not in auxData:
+                auxData[NEAREST_TIME_BOUNDARY] = sys.maxsize
         nodes = {}
         for typeName, questSection in section.items():
             enabled = questSection.readBool('enabled', False)
@@ -114,8 +120,15 @@ class Source(object):
             eventType = EVENT_TYPE.NAME_TO_TYPE[typeName]
             mainNode = XMLNode('main')
             mainNode.info = info = self.__readHeader(eventType, questSection, curTime, gStartTime, gFinishTime)
-            if not info['announceTime'] <= curTime <= info['finishTime']:
-                LOG_WARNING('Skipping outdated quest', info['id'], curTime, info['announceTime'], info['finishTime'])
+            announceTime = info['announceTime']
+            finishTime = info['finishTime']
+            if auxData is not None:
+                if announceTime > curTime:
+                    auxData[NEAREST_TIME_BOUNDARY] = min(auxData[NEAREST_TIME_BOUNDARY], announceTime)
+                if finishTime > curTime:
+                    auxData[NEAREST_TIME_BOUNDARY] = min(auxData[NEAREST_TIME_BOUNDARY], finishTime)
+            if not announceTime <= curTime <= finishTime:
+                LOG_WARNING('Skipping outdated quest', info['id'], curTime, announceTime, finishTime)
                 continue
             if eventType == EVENT_TYPE.GROUP:
                 mainNode.groupContent = tuple(self.__readGroupContent(questSection))
@@ -260,7 +273,7 @@ class Source(object):
         if finishTime > gFinishTime:
             raise SoftException('Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime))
         if progressExpiryTime < finishTime:
-            raise SoftException('Invalid progress expiry time. progressExpiryTime:%s < finishTime:%s' % (progressExpiryTime, finishTime))
+            raise SoftException('Invalid progress expiry time. progressExpiryTime:%s < finishTime:%s (id:%s)' % (progressExpiryTime, finishTime, id))
         requiredToken = questSection.readString('requiredToken', '')
         if eventType == EVENT_TYPE.PERSONAL_QUEST:
             if not requiredToken:
@@ -538,9 +551,7 @@ class Source(object):
          'freePremiumCrew',
          'entitlementList',
          'dailyQuestReroll',
-         'noviceReset',
-         CurrentNYConstants.TOY_BONUS}
-        bonusTypes.update(PREV_NY_TOYS_BONUSES)
+         'noviceReset'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST, EVENT_TYPE.NT_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         if eventType in (EVENT_TYPE.NT_QUEST,):
@@ -896,3 +907,14 @@ def collectSections(root):
                 sections.extend(collectSections(sectionPath))
 
     return sections
+
+
+class QuestValidationSerializer(WGPickleSerializer):
+    __slots__ = ()
+
+    def deserialize(self, data):
+        rawData, auxData = super(QuestValidationSerializer, self).deserialize(data)
+        if NEAREST_TIME_BOUNDARY in auxData:
+            if auxData[NEAREST_TIME_BOUNDARY] <= time.time():
+                raise SoftException('Quest validation failed: Got an outdated quest!')
+        return (rawData, auxData)

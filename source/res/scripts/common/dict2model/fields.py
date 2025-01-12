@@ -265,10 +265,10 @@ class Nested(Field):
         self._schema = schema
 
     def _serialize(self, incoming, onlyPublic=False):
-        return self._schema.serialize(incoming, onlyPublic=False, silent=False)
+        return self._schema.serialize(incoming, onlyPublic=onlyPublic, silent=False)
 
     def _deserialize(self, incoming, onlyPublic=False):
-        return self._schema.deserialize(incoming, onlyPublic=False, silent=False)
+        return self._schema.deserialize(incoming, onlyPublic=onlyPublic, silent=False)
 
 
 class List(Field):

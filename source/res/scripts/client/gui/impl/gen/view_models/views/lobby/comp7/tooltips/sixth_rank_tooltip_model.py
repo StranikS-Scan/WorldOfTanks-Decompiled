@@ -16,4 +16,4 @@ class SixthRankTooltipModel(ViewModel):
 
     def _initialize(self):
         super(SixthRankTooltipModel, self)._initialize()
-        self._addNumberProperty('topPercentage', 10)
+        self._addNumberProperty('topPercentage', 0)

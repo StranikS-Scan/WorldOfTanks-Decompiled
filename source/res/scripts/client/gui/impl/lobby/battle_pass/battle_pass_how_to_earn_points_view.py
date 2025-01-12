@@ -223,27 +223,30 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         viewModel.getCards().addViewModel(gameModeCard)
 
     def __createSpecialVehCard(self, viewModel, gameType=ARENA_BONUS_TYPE.REGULAR):
-        gameModeCard = GameModeCardModel()
-        gameModeCard.setCardType(PointsCardType.TECH)
         specialTanksIntCDs = self.__battlePass.getSpecialVehicles()
-        for specialTanksIntCD in specialTanksIntCDs:
-            vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
-            pointsDiff = self.__battlePass.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
-            if vehicle is None or pointsDiff.textID == 0:
-                _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
-                continue
-            item = VehicleItemModel()
-            item.setVehicleType(vehicle.type)
-            item.setVehicleLevel(vehicle.level)
-            item.setVehicleName(vehicle.userName)
-            item.setVehicleBonus(pointsDiff.bonus)
-            item.setVehicleTop(pointsDiff.top)
-            item.setTextResource(backport.text(pointsDiff.textID))
-            item.setIsElite(vehicle.isElite)
-            gameModeCard.getVehiclesList().addViewModel(item)
+        if not specialTanksIntCDs:
+            return
+        else:
+            gameModeCard = GameModeCardModel()
+            gameModeCard.setCardType(PointsCardType.TECH)
+            for specialTanksIntCD in specialTanksIntCDs:
+                vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
+                pointsDiff = self.__battlePass.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
+                if vehicle is None or pointsDiff.textID == 0:
+                    _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
+                    continue
+                item = VehicleItemModel()
+                item.setVehicleType(vehicle.type)
+                item.setVehicleLevel(vehicle.level)
+                item.setVehicleName(vehicle.userName)
+                item.setVehicleBonus(pointsDiff.bonus)
+                item.setVehicleTop(pointsDiff.top)
+                item.setTextResource(backport.text(pointsDiff.textID))
+                item.setIsElite(vehicle.isElite)
+                gameModeCard.getVehiclesList().addViewModel(item)
 
-        viewModel.getCards().addViewModel(gameModeCard)
-        return
+            viewModel.getCards().addViewModel(gameModeCard)
+            return
 
     def _getEvents(self):
         return ((self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.__battlePass.onSeasonStateChanged, self.__onSeasonStateChanged), (self.viewModel.onLinkClick, self.__onLinkClick))

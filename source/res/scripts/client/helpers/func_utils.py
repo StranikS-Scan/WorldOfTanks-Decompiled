@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
 from collections import namedtuple
-from functools import partial
+from functools import partial, wraps
 from time import sleep, time
 import typing
 import BigWorld
 from BWUtil import AsyncReturn
 from PlayerEvents import g_playerEvents
+from constants import IS_DEVELOPMENT
 from wg_async import wg_async, wg_await, AsyncScope, AsyncEvent, BrokenPromiseError
 from debug_utils import LOG_DEBUG
 FLASH_IMG_PREFIX = 'img://'
@@ -154,3 +155,12 @@ def cooldownCallerDecorator(cooldown, paramsMerger):
 
 def replaceImgPrefix(path):
     return path.replace(FLASH_IMG_PREFIX, '')
+
+
+def isDeveloperFunc(func):
+
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        return None if not IS_DEVELOPMENT else func(*args, **kwargs)
+
+    return decorator

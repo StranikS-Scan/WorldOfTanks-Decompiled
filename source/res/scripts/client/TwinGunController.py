@@ -57,9 +57,11 @@ class TwinGunController(VehicleMechanicGunPrefabComponent):
         self.__shootingEvents.destroy()
         super(TwinGunController, self).onDestroy()
 
+    @ifAppearanceReady
     def onDiscreteShot(self, gunIndex):
         self.__shootingEvents.processDiscreteShot(gunIndex)
 
+    @ifAppearanceReady
     def onDoubleShot(self):
         self.__shootingEvents.processDoubleShot()
 

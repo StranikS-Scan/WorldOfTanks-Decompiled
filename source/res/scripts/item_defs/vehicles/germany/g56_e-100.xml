@@ -892,8 +892,8 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_E-100>
-      <userString>	#germany_vehicles:Chassis_E-100	</userString>
+    <Chassis_G56_E-100>
+      <userString>	#germany_vehicles:Chassis_G56_E-100	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
@@ -1896,11 +1896,11 @@
         </customizableVehicleAreas>
       </customization>
       <repairTime>	6.85714293	</repairTime>
-    </Chassis_E-100>
+    </Chassis_G56_E-100>
   </chassis>
   <turrets0>
-    <Turret_2_E-100>
-      <userString>	#germany_vehicles:Turret_2_E-100	</userString>
+    <Turret_2_G56_E-100>
+      <userString>	#germany_vehicles:Turret_2_G56_E-100	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	66000	</price>
@@ -1910,7 +1910,7 @@
         </gun>
       </unlocks>
       <armor>
-        <armor_1>	270	</armor_1>
+        <armor_1>	280	</armor_1>
         <armor_2>	210	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	150	</armor_4>
@@ -1920,14 +1920,14 @@
         <armor_8>	0	</armor_8>
         <armor_9>	150	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_9>
-        <armor_10>	310	</armor_10>
+        <armor_10>	320	</armor_10>
         <armor_11>	150	</armor_11>
         <armor_12>	200	</armor_12>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	58000	</weight>
       <maxHealth>	540	</maxHealth>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	22	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	180	</maxHealth>
         <maxRegenHealth>	90	</maxRegenHealth>
@@ -1940,7 +1940,7 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_128mm_KwK44_L55_N>	shared	  <maxAmmo>	72	</maxAmmo>
+        <_128mm_Kw_K_44_L_55_Ausf_E>	shared	  <maxAmmo>	72	</maxAmmo>
           <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -1962,7 +1962,7 @@
             </armor_6>
             <gun>	60	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.162	</invisibilityFactorAtShot>
           <pitchLimits>
@@ -2057,7 +2057,7 @@
             <density>	61.5894 69.7873	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
-        </_128mm_KwK44_L55_N>
+        </_128mm_Kw_K_44_L_55_Ausf_E>
         <_150mm_KwK44_L38>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2783,7 +2783,7 @@
         <density>	78.0867 81.0227	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
       </camouflage>
-    </Turret_2_E-100>
+    </Turret_2_G56_E-100>
   </turrets0>
   <engines>
     <Maybach_HL_234P60>	shared	</Maybach_HL_234P60>
@@ -2803,7 +2803,7 @@
         </Maybach_HL_234P60>
       </engines>
       <chassis>
-        <Chassis_E-100>
+        <Chassis_G56_E-100>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
@@ -2815,7 +2815,7 @@
               <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
-        </Chassis_E-100>
+        </Chassis_G56_E-100>
       </chassis>
     </detailed>
   </physics>

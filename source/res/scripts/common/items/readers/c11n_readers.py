@@ -101,7 +101,7 @@ class BaseCustomizationItemXmlReader(object):
 
     @staticmethod
     def __readFilterNodeFromXml(xmlCtx, section):
-        fn = cc.VehicleFilter.FilterNode()
+        fn = cc.VehicleFilterNode()
         strNations = ix.readStringOrNone(xmlCtx, section, 'nations')
         if strNations:
             r = []
@@ -421,7 +421,7 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
 
     @staticmethod
     def __readItemFilterNodeFromXml(itemType, xmlCtx, section):
-        fn = cc.ItemsFilter.FilterNode()
+        fn = cc.ItemsFilterNode()
         if section.has_key('id'):
             fn.ids = ix.readTupleOfPositiveInts(xmlCtx, section, 'id')
         if section.has_key('itemGroupName'):

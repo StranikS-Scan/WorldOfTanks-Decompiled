@@ -32,7 +32,7 @@ class SiegeModeControl(InputHandlerCommand):
             if vehicle is None:
                 return False
             vehicleDescr = vehicle.typeDescriptor
-            if vehicleDescr.type.isDualgunVehicleType:
+            if vehicleDescr.hasAutoSiegeMode or vehicleDescr.type.isDualgunVehicleType:
                 return False
             onlyInBattleSwitch = vehicleDescr.isTwinGunVehicle
             if onlyInBattleSwitch and self.__sessionProvider.arenaVisitor.getArenaPeriod() != ARENA_PERIOD.BATTLE:

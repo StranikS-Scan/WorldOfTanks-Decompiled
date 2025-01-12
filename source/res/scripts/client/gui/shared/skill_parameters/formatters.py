@@ -16,7 +16,7 @@ def getDescriptionValue(paramDescrArg, value):
 
 
 def _formatParamValue(paramDescrArg, value):
-    convertedValue = value * 100 if paramDescrArg.measureType is ParamMeasureType.PERCENTS else value
+    convertedValue = value * 100 if paramDescrArg.measureType == ParamMeasureType.PERCENTS else value
     formattedValue = str(getNiceNumberFormat(round(convertedValue, 3)))
     measuredValue = getMeasureText(formattedValue, paramDescrArg)
     return measuredValue
@@ -33,14 +33,14 @@ def getKpiValue(paramDescrArg, value):
 
 
 def getParamSign(value):
-    return EMPTY_STRING if value is ParamSignType.SIGN_LESS else str(backport.text(R.strings.crew_perks.sign.dyn(value)()))
+    return EMPTY_STRING if value == ParamSignType.SIGN_LESS else str(backport.text(R.strings.crew_perks.sign.dyn(value)()))
 
 
 def getKpiDescription(paramDescrArg):
     paramName = paramDescrArg.name
-    if paramDescrArg.sign is ParamSignType.SIGN_LESS:
+    if paramDescrArg.sign == ParamSignType.SIGN_LESS:
         return str(backport.text(R.strings.tank_setup.kpi.bonus.neutral.dyn(paramName)()))
-    isPositive = paramDescrArg.sign is ParamSignType.PLUS
+    isPositive = paramDescrArg.sign == ParamSignType.PLUS
     if paramName in VEHICLE_ATTR_TO_KPI_NAME_MAP:
         kpiText = getVehicleParameterText(VEHICLE_ATTR_TO_KPI_NAME_MAP[paramName], isPositive=isPositive, isTTC=True)
     else:

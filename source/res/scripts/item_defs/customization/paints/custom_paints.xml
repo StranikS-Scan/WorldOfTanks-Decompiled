@@ -6105,6 +6105,42 @@
     </usages>
   </itemGroup>
   <itemGroup>
+    <name>	Advent Calendar 2024	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	507	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_41.png	</texture>
+      <color>	16 40 81 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:special_style/advent_calendar_2024_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	508	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
+      <color>	49 108 204 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:special_style/advent_calendar_2024_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
     <name>	Vikings	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
@@ -6187,32 +6223,53 @@
     </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Advent Calendar 2024	</name>
+    <name>	Battle of the Bulge	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>
-    <historical>	2	</historical>
+    <historical>	1	</historical>
     <priceGroup>	paints 20g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <paint>
-      <id>	507	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_41.png	</texture>
-      <color>	16 40 81 255	</color>
-      <gloss>	0.63	</gloss>
-      <metallic>	0.235	</metallic>
-      <userString>	#vehicle_customization:special_style/advent_calendar_2024_1	</userString>
+      <id>	510	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
+      <color>	141 154 166 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.203	</metallic>
+      <userString>	#vehicle_customization:special_style/battle_of_bulge	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	beast 4	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <paint>
-      <id>	508	</id>
-      <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
-      <color>	49 108 204 255	</color>
+      <id>	521	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_06.png	</texture>
+      <color>	26 48 55 255	</color>
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
-      <userString>	#vehicle_customization:special_style/advent_calendar_2024_2	</userString>
+      <userString>	#vehicle_customization:special_style/beast_4	</userString>
       <tags>	hiddenInUI	</tags>
     </paint>
     <usages>

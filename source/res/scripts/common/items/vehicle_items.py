@@ -290,7 +290,7 @@ class Turret(InstallableItem):
 @add_shallow_copy('__weakref__')
 class Gun(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', 'dualAccuracy', 'isDamageMutable', 'forcedReloadTime', 'autoShoot', 'twinGun', '__weakref__')
+    __slots__ = ('rotationSpeed', 'reloadTime', 'aimingTime', 'maxAmmo', 'invisibilityFactorAtShot', 'effectsCaliber', 'effects', 'reloadEffect', 'impulse', 'recoil', 'animateEmblemSlots', 'shotOffset', 'turretYawLimits', 'pitchLimits', 'staticTurretYaw', 'staticPitch', 'shotDispersionAngle', 'shotDispersionFactors', 'burst', 'clip', 'shots', 'autoreload', 'autoreloadHasBoost', 'drivenJoints', 'customizableVehicleAreas', 'dualGun', 'edgeByVisualModel', 'prefabs', 'shootImpulses', 'dualAccuracy', 'isDamageMutable', 'forcedReloadTime', 'autoShoot', 'twinGun', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Gun, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -317,6 +317,7 @@ class Gun(InstallableItem):
         self.autoShoot = component_constants.DEFAULT_GUN_AUTOSHOOT
         self.twinGun = component_constants.DEFAULT_GUN_TWINGUN
         self.drivenJoints = None
+        self.effectsCaliber = component_constants.ZERO_FLOAT
         self.effects = None
         self.reloadEffect = None
         self.impulse = component_constants.ZERO_FLOAT
@@ -373,7 +374,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsCaliber', 'effectsIndex', 'tags', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -388,6 +389,7 @@ class Shell(BasicItem):
         self.piercingPowerRandomizationType = RandomizationType.NORMAL
         self.stun = None
         self.type = None
+        self.effectsCaliber = component_constants.ZERO_FLOAT
         self.effectsIndex = component_constants.ZERO_INT
         self.dynamicEffectsIndexes = component_constants.EMPTY_TUPLE
         self.isGold = False

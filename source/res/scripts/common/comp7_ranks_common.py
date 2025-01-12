@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/comp7_ranks_common.py
-from typing import Optional, FrozenSet, Tuple
+from typing import Optional, FrozenSet, Tuple, Dict
 from cache import cached_property
 from intervals import Interval
 from soft_exception import SoftException
@@ -12,16 +12,16 @@ COMP7_UNDEFINED_DIVISION_SERIAL_IDX = 0
 class Comp7Division(object):
     __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints', 'serialIdx')
 
-    def __init__(self, serialIdx, dvsnDict):
-        pointsRange = dvsnDict['range']
+    def __init__(self, serialIdx, divisionInfo):
+        pointsRange = divisionInfo['range']
         self.range = pointsRange if type(pointsRange) is Interval else Interval(*pointsRange)
-        self.rank = dvsnDict['rank']
-        self.dvsnID = dvsnDict['id']
-        self.index = dvsnDict['index']
-        self.tags = frozenset(dvsnDict.get('tags', ()))
-        self.activityPointsPerBattle = dvsnDict['rankInactivity']['activityPointsPerBattle'] if 'rankInactivity' in dvsnDict else 0
-        self.hasRankInactivity = dvsnDict.get('hasRankInactivity', False)
-        self.seasonPoints = dvsnDict.get('seasonPoints', 0)
+        self.rank = divisionInfo['rank']
+        self.dvsnID = divisionInfo['id']
+        self.index = divisionInfo['index']
+        self.tags = frozenset(divisionInfo.get('tags', ()))
+        self.activityPointsPerBattle = divisionInfo.get('rankInactivity', {}).get('activityPointsPerBattle', 0)
+        self.hasRankInactivity = divisionInfo.get('hasRankInactivity', False)
+        self.seasonPoints = divisionInfo.get('seasonPoints', 0)
         self.serialIdx = serialIdx
 
     def __cmp__(self, other):
@@ -52,12 +52,8 @@ class Comp7RanksConfig(object):
 
     @cached_property
     def divisions(self):
-        divs = []
-        for serialIdx, dvsnDict in enumerate(self._config.get('divisions', ())):
-            division = Comp7Division(serialIdx, dvsnDict)
-            divs.append(division)
-
-        return tuple(divs)
+        divisions = self._config.get('divisions', ())
+        return tuple((Comp7Division(serialIdx, divisionInfo) for serialIdx, divisionInfo in enumerate(divisions)))
 
     @cached_property
     def ranks(self):

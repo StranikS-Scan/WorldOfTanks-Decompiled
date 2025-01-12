@@ -5,7 +5,7 @@ from functools import partial
 import typing
 from Event import EventsSubscriber
 from comp7_common import ROLE_EQUIPMENT_TAG
-from constants import ROLE_TYPE_TO_LABEL, ARENA_PERIOD
+from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.consumables_panel import ConsumablesPanel
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest.poi_helpers import getPoiTypeByEquipment
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
@@ -21,8 +21,10 @@ from points_of_interest_shared import PoiType, POI_EQUIPMENT_TAG
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
-    from gui.battle_control.controllers.consumables.comp7_equipment_ctrl import Comp7EquipmentController
+    from typing import Optional
     from gui.battle_control.arena_info.interfaces import IComp7PrebattleSetupController
+    from gui.battle_control.controllers.consumables.comp7_equipment_ctrl import Comp7EquipmentController
+    from gui.battle_control.controllers.consumables.equipment_ctrl import _OrderItem
 _logger = logging.getLogger(__name__)
 
 class Comp7ConsumablesPanel(ConsumablesPanel):
@@ -88,7 +90,7 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
 
     def _buildEquipmentSlotTooltipText(self, item):
         if self.__isRoleEquipment(item):
-            return self.__buildRoleEquipmentTooltipText(item)
+            return self.__buildRoleEquipmentTooltipText()
         return self.__buildPoIEquipmentTooltipText(item) if self.__isPoiEquipment(item) else super(Comp7ConsumablesPanel, self)._buildEquipmentSlotTooltipText(item)
 
     def __addRoleEquipmentSlot(self, intCD, item):
@@ -146,21 +148,18 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
 
     def __updatePrebattleRoleSkill(self):
         arena = avatar_getter.getArena()
-        if arena is not None and arena.period < ARENA_PERIOD.BATTLE and self.__prebattleCtrl is not None:
-            vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
-            if vehicle is not None:
-                roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-                roleSkillEquipment = self.__comp7Controller.getRoleEquipment(roleName)
-                roleStartLevel = self.__comp7Controller.getEquipmentStartLevel(roleName)
-                if roleSkillEquipment is None:
-                    if not avatar_getter.isObserver():
-                        _logger.error('No equipment found for vehicle %s', vehicle.descriptor.name)
-                    return
-                bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)
-                icon = backport.image(self._R_COMP7_EQUIPMENT_ICON.dyn(roleSkillEquipment.icon[0])())
-                tooltip = TOOLTIP_FORMAT.format(*getRoleEquipmentTooltipParts(roleSkillEquipment, roleStartLevel))
-                self.as_addRoleSkillSlotS(self._ROLE_EQUIPMENT_IDX, bwKey, sfKey, 0, 0.0, 0.0, icon, tooltip, ANIMATION_TYPES.NONE)
-        return
+        if not arena or arena.period >= ARENA_PERIOD.BATTLE or not self.__prebattleCtrl:
+            return
+        vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
+        if not vehicle:
+            return
+        roleSkill, body = getRoleEquipmentTooltipParts(vehicle)
+        if not roleSkill:
+            return
+        bwKey, sfKey = self._genKey(self._ROLE_EQUIPMENT_IDX)
+        icon = backport.image(self._R_COMP7_EQUIPMENT_ICON.dyn(roleSkill.icon[0])())
+        tooltip = TOOLTIP_FORMAT.format(roleSkill.userString, body or '')
+        self.as_addRoleSkillSlotS(self._ROLE_EQUIPMENT_IDX, bwKey, sfKey, 0, 0.0, 0.0, icon, tooltip, ANIMATION_TYPES.NONE)
 
     @staticmethod
     def __isRoleEquipment(item):
@@ -170,18 +169,14 @@ class Comp7ConsumablesPanel(ConsumablesPanel):
     def __isPoiEquipment(item):
         return item is not None and POI_EQUIPMENT_TAG in item.getTags()
 
-    def __buildRoleEquipmentTooltipText(self, item):
+    def __buildRoleEquipmentTooltipText(self):
         vehicle = self.__prebattleCtrl.getCurrentGUIVehicle()
-        if vehicle is None:
+        if not vehicle:
             _logger.info('Cannot create roleEquipment tooltip, spawnInfoForVehicle not received yet')
-            return
+            return None
         else:
-            roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role)
-            startLevel = self.__comp7Controller.getEquipmentStartLevel(roleName)
-            equipment = item.getDescriptor()
-            header, body = getRoleEquipmentTooltipParts(equipment, startLevel)
-            tooltip = TOOLTIP_FORMAT.format(header, body)
-            return tooltip
+            roleSkill, body = getRoleEquipmentTooltipParts(vehicle)
+            return TOOLTIP_FORMAT.format(roleSkill.userString if roleSkill else '', body or '')
 
     @staticmethod
     def __buildPoIEquipmentTooltipText(item):

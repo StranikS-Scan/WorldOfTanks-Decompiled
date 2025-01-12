@@ -4,6 +4,7 @@ import typing
 from frameworks.state_machine import StateFlags
 import game_loading_bindings
 from gui.game_loading import loggers
+from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.states.base import BaseTickingState
 from gui.game_loading.state_machine.states.handlers.milestones import ProgressBarMilestonesHandler
 if typing.TYPE_CHECKING:
@@ -15,8 +16,8 @@ _logger = loggers.getStatesLogger()
 class ProgressBarStateComponent(BaseTickingState):
     __slots__ = ('_ticks', '_progress', '_progressLimit', '_progressMax', '_settings', '_preferences')
 
-    def __init__(self, stateID, settings, preferences=None, flags=StateFlags.UNDEFINED, isSelfTicking=False, onCompleteEvent=None):
-        super(ProgressBarStateComponent, self).__init__(stateID=stateID, flags=flags, isSelfTicking=isSelfTicking, onCompleteEvent=onCompleteEvent)
+    def __init__(self, stateID, settings, preferences=None, flags=StateFlags.UNDEFINED, tickingMode=TickingMode.MANUAL, onCompleteEvent=None):
+        super(ProgressBarStateComponent, self).__init__(stateID=stateID, flags=flags, tickingMode=tickingMode, onCompleteEvent=onCompleteEvent)
         self._settings = settings
         self._preferences = preferences
         if self._preferences is None or self._preferences.getLoadingMax(self.getStateID()) is None:
@@ -74,8 +75,8 @@ class ProgressBarStateComponent(BaseTickingState):
 class MilestoneProgressBarStateComponent(ProgressBarStateComponent):
     __slots__ = ('_milestonesHandler', '_milestone', '_milestoneLimit', '_retainMilestones')
 
-    def __init__(self, settings, preferences, milestonesSettings, stateID, flags=StateFlags.UNDEFINED, isSelfTicking=False, onCompleteEvent=None):
-        super(MilestoneProgressBarStateComponent, self).__init__(settings=settings, preferences=preferences, stateID=stateID, flags=flags, isSelfTicking=isSelfTicking, onCompleteEvent=onCompleteEvent)
+    def __init__(self, settings, preferences, milestonesSettings, stateID, flags=StateFlags.UNDEFINED, tickingMode=TickingMode.MANUAL, onCompleteEvent=None):
+        super(MilestoneProgressBarStateComponent, self).__init__(settings=settings, preferences=preferences, stateID=stateID, flags=flags, tickingMode=tickingMode, onCompleteEvent=onCompleteEvent)
         self._milestone = None
         self._milestonesHandler = ProgressBarMilestonesHandler(milestonesSettings=milestonesSettings)
         self._retainMilestones = False
@@ -84,20 +85,20 @@ class MilestoneProgressBarStateComponent(ProgressBarStateComponent):
     def setRetainMilestones(self, value):
         self._retainMilestones = value
 
-    def _onEntered(self):
-        super(MilestoneProgressBarStateComponent, self)._onEntered()
+    def _start(self):
         self._milestonesHandler.onMilestoneReached += self._onMilestoneReached
         self._milestonesHandler.onMilestoneTypeChanged += self._onMilestoneTypeChanged
         if not self._retainMilestones:
             self._milestone = None
-            self._milestonesHandler.init()
+            self._milestonesHandler.chooseDefaultMilestoneType()
         elif self._milestone is not None:
             self._onMilestoneReached(self._milestone)
         self._milestonesHandler.start()
+        super(MilestoneProgressBarStateComponent, self)._start()
         return
 
-    def _onExited(self):
-        super(MilestoneProgressBarStateComponent, self)._onExited()
+    def _stop(self):
+        super(MilestoneProgressBarStateComponent, self)._stop()
         self._milestonesHandler.stop()
         self._milestonesHandler.onMilestoneReached -= self._onMilestoneReached
         self._milestonesHandler.onMilestoneTypeChanged -= self._onMilestoneTypeChanged

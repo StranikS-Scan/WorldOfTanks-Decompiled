@@ -5,6 +5,7 @@
   <DB_ID>	INT64	</DB_ID>
   <EXTRA_ID>	UINT8	</EXTRA_ID>
   <VEH_TYPE_CD>	UINT32	</VEH_TYPE_CD>
+  <ARENA_UNIQUE_ID>	UINT64	</ARENA_UNIQUE_ID>
   <SERVER_STATISTICS>	FIXED_DICT	  <Properties>
       <clusterCCU>
         <Type>	UINT32	</Type>
@@ -557,7 +558,7 @@
         <Type>	BOOL	</Type>
       </forbidInBattleInvitations>
       <arenaUniqueID>
-        <Type>	UINT64	</Type>
+        <Type>	ARENA_UNIQUE_ID	</Type>
       </arenaUniqueID>
       <team>
         <Type>	UINT8	</Type>
@@ -630,18 +631,9 @@
       <userExtraSettings>
         <Type>	USER_EXTRA_SETTINGS	</Type>
       </userExtraSettings>
-      <isSsrRecordEnabled>
-        <Type>	BOOL	</Type>
-      </isSsrRecordEnabled>
-      <isSsrPlayEnabled>
-        <Type>	BOOL	</Type>
-      </isSsrPlayEnabled>
       <componentsData>
         <Type>	PYTHON	</Type>
       </componentsData>
-      <accountsAdditionalInfo>
-        <Type>	PYTHON	</Type>
-      </accountsAdditionalInfo>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>

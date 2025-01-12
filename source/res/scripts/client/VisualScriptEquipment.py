@@ -23,7 +23,8 @@ class VisualScriptEquipment(DynamicScriptComponent):
         player = BigWorld.player()
         descriptor = vehicles.getItemByCompactDescr(self.compactDescr)
         arenaInfo = player.arena.arenaInfo
-        self._vsPlan = arenaInfo.visualScriptCache.getPlan(descriptor.name, descriptor.visualScript[ASPECT.CLIENT])
+        planDefs = arenaInfo.visualScriptOverrides.updateParams(descriptor.visualScript[ASPECT.CLIENT])
+        self._vsPlan = arenaInfo.visualScriptCache.getPlan(descriptor.name, planDefs)
         self._context = AbilityContextClient(self.entity, equipmentName=descriptor.name)
         self._vsPlan.setContext(self._context)
         self._vsPlan.start()

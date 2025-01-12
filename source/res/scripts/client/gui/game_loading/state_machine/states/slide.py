@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/slide.py
-import time
 import typing
 import game_loading_bindings
 from frameworks.state_machine import StateFlags
 from gui.game_loading import loggers
-from gui.game_loading.common import normalizeGfImagePath
 from gui.game_loading.resources.consts import InfoStyles
+from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.base import BaseState, BaseViewResourcesTickingState
+from gui.impl.utils.path import normalizeGfImagePath
 if typing.TYPE_CHECKING:
     from frameworks.state_machine import StateEvent
     from gui.game_loading.resources.models import LocalImageModel
@@ -30,7 +30,8 @@ def _showImage(image, settings):
      'transitionTime': image.transition,
      'ageRatingPath': settings.ageRatingPath,
      'info': settings.info,
-     'infoStyle': InfoStyles.DEFAULT.value}
+     'infoStyle': InfoStyles.DEFAULT.value,
+     'showSmallLogo': settings.showSmallLogo}
     game_loading_bindings.setViewData(data)
     _logger.debug('Image [%s] shown.', image)
 
@@ -49,6 +50,10 @@ class StaticSlideState(BaseState):
     def lastShownImage(self):
         return self._image
 
+    @property
+    def timeLeft(self):
+        pass
+
     def setImage(self, image):
         self._image = image
         _logger.debug('[%s] image [%s] set.', self, image)
@@ -64,35 +69,49 @@ class StaticSlideState(BaseState):
 
 
 class SlideState(BaseViewResourcesTickingState):
-    __slots__ = ('_image', '_imageViewSettings', '_isImageOverridden')
+    __slots__ = ('_firstImageToShow', '_firstShownImage', '_lastShownImage', '_imageViewSettings', '_startFromFirstShownImage')
 
-    def __init__(self, stateID, images, imageViewSettings, flags=StateFlags.UNDEFINED, isSelfTicking=False, onCompleteEvent=None):
-        super(SlideState, self).__init__(stateID=stateID, resources=images, flags=flags, isSelfTicking=isSelfTicking, onCompleteEvent=onCompleteEvent)
-        self._image = None
+    def __init__(self, stateID, images, imageViewSettings, flags=StateFlags.UNDEFINED, tickingMode=TickingMode.MANUAL, onCompleteEvent=None, startFromFirstShownImage=False):
+        super(SlideState, self).__init__(stateID=stateID, resources=images, flags=flags, tickingMode=tickingMode, minDurationEventTime=imageViewSettings.minimalDuration, onCompleteEvent=onCompleteEvent)
+        self._startFromFirstShownImage = startFromFirstShownImage
+        self._lastShownImage = None
+        self._firstShownImage = None
+        self._firstImageToShow = None
         self._imageViewSettings = imageViewSettings
-        self._isImageOverridden = False
         return
 
     @property
     def lastShownImage(self):
-        return self._image
-
-    @property
-    def timeLeft(self):
-        return max(self._nextTickTime - time.time(), 0)
+        return self._lastShownImage
 
     def setImage(self, image):
-        self._image = image
-        self._nextTickTime = time.time() + image.minShowTimeSec
-        self._isImageOverridden = True
+        self._firstImageToShow = image
         _logger.debug('[%s] image [%s] set.', self, image)
 
-    def _onEntered(self):
-        super(SlideState, self)._onEntered()
-        if self._isImageOverridden and self._image:
-            self._isImageOverridden = False
-            self._view(self._image)
+    def _stop(self):
+        if self._startFromFirstShownImage:
+            self.setImage(self._firstShownImage)
+        super(SlideState, self)._stop()
+
+    def _selectResource(self):
+        if not self._firstImageToShow:
+            return super(SlideState, self)._selectResource()
+        else:
+            image = self._firstImageToShow
+            self._firstImageToShow = None
+            _logger.debug('[%s] first image to show selected <%s>.', self, image)
+            return image
+
+    def _beforeView(self):
+        self._resetWaiting()
+        super(SlideState, self)._beforeView()
 
     def _view(self, image):
-        self._image = image
+        if not self._firstShownImage:
+            self._firstShownImage = image
+        self._lastShownImage = image
         _showImage(image, self._imageViewSettings)
+
+    def _onMinDurationTimeReached(self):
+        self._releaseWaiting()
+        super(SlideState, self)._onMinDurationTimeReached()

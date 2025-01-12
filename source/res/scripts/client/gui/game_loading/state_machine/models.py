@@ -5,16 +5,18 @@ from gui.game_loading.resources.models import StatusTextModel
 from gui.game_loading.state_machine.const import ContentState
 
 class ImageViewSettingsModel(object):
-    __slots__ = ('showVfx', 'contentState', 'ageRatingPath', 'info')
+    __slots__ = ('showVfx', 'contentState', 'ageRatingPath', 'info', 'showSmallLogo', 'minimalDuration')
 
-    def __init__(self, showVfx=True, contentState=ContentState.INVISIBLE, ageRatingPath='', info=''):
+    def __init__(self, showVfx=True, contentState=ContentState.INVISIBLE, ageRatingPath='', info='', showSmallLogo=True, minimalDuration=0.0):
         self.showVfx = showVfx
         self.contentState = contentState
         self.ageRatingPath = ageRatingPath
         self.info = info
+        self.showSmallLogo = showSmallLogo
+        self.minimalDuration = minimalDuration
 
     def __repr__(self):
-        return '<ImageViewSettingsModel(vfx={}, contentState={}, ageRatingPath={}, info={})>'.format(self.showVfx, self.contentState, self.ageRatingPath, self.info)
+        return '<ImageViewSettingsModel(vfx={}, contentState={}, ageRatingPath={}, info={}, showSmallLogo={}, minimalDuration={})>'.format(self.showVfx, self.contentState, self.ageRatingPath, self.info, self.showSmallLogo, self.minimalDuration)
 
 
 class ProgressSettingsModel(object):

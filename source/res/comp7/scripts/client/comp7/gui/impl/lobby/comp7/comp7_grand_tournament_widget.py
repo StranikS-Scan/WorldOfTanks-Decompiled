@@ -86,7 +86,6 @@ class Comp7GrandTournamentWidget(ViewImpl):
     def __updateBanner(self):
         widgetData = self.__comp7Controller.getGrandTournamentBannerData()
         if widgetData is None:
-            logging.warning('No widget data to show')
             return
         else:
             with self.viewModel.transaction() as tx:

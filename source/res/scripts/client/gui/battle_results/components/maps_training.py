@@ -2,10 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_results/components/maps_training.py
 import logging
 from ArenaType import parseTypeID
-from gui.impl import backport
-from gui.impl.gen import R
 from gui.battle_results.components import base
-from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.server_events.bonuses import getNonQuestBonuses
 from helpers import dependency
 from maps_training_common.helpers import getMapsTrainingAwards
@@ -21,16 +18,6 @@ _STAT_FIELD_NAMES = ('damageDealt', 'damageBlockedByArmor')
 BATTLE_STATS_KILLS = 'kills'
 BATTLE_STATS_RESULT_FIELDS = {BATTLE_STATS_KILLS: 'kills'}
 BATTLE_STATS_ICONS = {BATTLE_STATS_KILLS: 'statIconDestroyed'}
-
-class BattleResultBlock(base.StatsBlock):
-
-    def setRecord(self, result, reusable):
-        teamResult = reusable.getPersonalTeamResult()
-        teamResultStr = backport.text(R.strings.maps_training.result.dyn('title' + teamResult.title())())
-        self.addNextComponent(base.DirectStatsItem('win', teamResult == PLAYER_TEAM_RESULT.WIN))
-        self.addNextComponent(base.DirectStatsItem('value', teamResult))
-        self.addNextComponent(base.DirectStatsItem('str', teamResultStr))
-
 
 class BattleGoalsBlock(base.StatsBlock):
 

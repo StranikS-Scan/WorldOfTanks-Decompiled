@@ -9,7 +9,7 @@ class CongratsViewModel(ViewModel):
     ADVANCED_SHINE_ORANGE = 'advancedShine'
     ADVANCED_SHINE_BLUE = 'advancedShineBlue'
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=10, commands=0):
         super(CongratsViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleIsElite(self):
@@ -72,36 +72,6 @@ class CongratsViewModel(ViewModel):
     def setAdvancedShineName(self, value):
         self._setString(9, value)
 
-    def getGroupAttachName(self):
-        return self._getString(10)
-
-    def setGroupAttachName(self, value):
-        self._setString(10, value)
-
-    def getAttachName(self):
-        return self._getString(11)
-
-    def setAttachName(self, value):
-        self._setString(11, value)
-
-    def getAttachUserName(self):
-        return self._getString(12)
-
-    def setAttachUserName(self, value):
-        self._setString(12, value)
-
-    def getRarity(self):
-        return self._getString(13)
-
-    def setRarity(self, value):
-        self._setString(13, value)
-
-    def getIntCD(self):
-        return self._getNumber(14)
-
-    def setIntCD(self, value):
-        self._setNumber(14, value)
-
     def _initialize(self):
         super(CongratsViewModel, self)._initialize()
         self._addBoolProperty('vehicleIsElite', False)
@@ -114,8 +84,3 @@ class CongratsViewModel(ViewModel):
         self._addStringProperty('congratsSourceId', '')
         self._addStringProperty('shineSwfAlias', 'ShineAnimUI')
         self._addStringProperty('advancedShineName', 'advancedShine')
-        self._addStringProperty('groupAttachName', '')
-        self._addStringProperty('attachName', '')
-        self._addStringProperty('attachUserName', '')
-        self._addStringProperty('rarity', '')
-        self._addNumberProperty('intCD', 0)

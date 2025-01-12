@@ -22,15 +22,6 @@ class GuaranteedRewardInfoTooltip(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(GuaranteedRewardInfoTooltip, self)._onLoading(*args, **kwargs)
-        self.__updateState()
-
-    def _getEvents(self):
-        return ((self.__lootBoxes.onStatusChanged, self.__onLootBoxesStatusChanged),)
-
-    def __onLootBoxesStatusChanged(self):
-        self.__updateState()
-
-    def __updateState(self):
         with self.viewModel.transaction() as vmTx:
-            vmTx.setGuaranteedFrequency(self.__lootBoxes.getBoxInfoByCategory(self.__category).get('boxCountToGuaranteedBonus', 0))
+            vmTx.setGuaranteedFrequency(self.__lootBoxes.getBoxInfoByCategory(self.__category).get('limit', 0))
             vmTx.setEventName(self.__lootBoxes.eventName)

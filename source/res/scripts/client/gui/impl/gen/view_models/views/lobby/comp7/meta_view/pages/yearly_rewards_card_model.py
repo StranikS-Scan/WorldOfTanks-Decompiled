@@ -14,12 +14,6 @@ class RewardsState(Enum):
     CLAIMED = 'claimed'
 
 
-class SeasonPointState(Enum):
-    ACHIEVED = 'achieved'
-    POSSIBLE = 'possible'
-    NOTACHIEVED = 'notAchieved'
-
-
 class YearlyRewardsCardModel(ViewModel):
     __slots__ = ()
 

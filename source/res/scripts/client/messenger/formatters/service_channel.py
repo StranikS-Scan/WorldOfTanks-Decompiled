@@ -4329,13 +4329,12 @@ class BattlePassRewardFormatter(WaitItemsSyncFormatter):
                 description = backport.text(self.__MESSAGES.battlePassReward.battle.chapterFinal.text(), chapter=text_styles.credits(chapterName))
             template = self.__PROGRESSION_BUTTON_TEMPLATE
             savedData = {u'chapterID': chapterID}
+        elif self.__battlePass.isHoliday():
+            description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
+            template = self.__PROGRESSION_BUTTON_TEMPLATE
         else:
-            if self.__battlePass.isHoliday():
-                description = backport.text(self.__MESSAGES.battlePassHReward.battle.final.text(), chapter=text_styles.credits(chapterName))
-                template = self.__PROGRESSION_BUTTON_TEMPLATE
-            else:
-                description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
-                template = self.__SHOP_BUTTON_TEMPLATE
+            description = backport.text(self.__MESSAGES.battlePassReward.battle.final.text(), season=self.__battlePass.getSeasonNum())
+            template = self.__SHOP_BUTTON_TEMPLATE
             additionalText = backport.text(self.__MESSAGES.battlePassReward.battle.final.additionalText())
         return (description,
          template,

@@ -9951,6 +9951,51 @@
     <priceGroup>	styles 1250g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	448	</id>
+      <texture>	gui/maps/vehicles/styles/valentines_day.png	</texture>
+      <userString>	#vehicle_customization:special_style/valentines_day	</userString>
+      <description>	#vehicle_customization:special_style/valentines_day_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/valentines_day_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	221	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	85	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1250g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
@@ -23802,6 +23847,131 @@
               <appliedTo>	30583	</appliedTo>
             </item>
           </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	1036	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_1.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_1	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_1_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_1_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	887	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1170	</id>
+              <tags>	formfactor_rect1x2 mimic left	</tags>
+            </item>
+            <item>
+              <id>	1170	</id>
+              <tags>	formfactor_rect1x2 mimic right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	1037	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_2.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_2	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_2_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_2_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	888	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1171	</id>
+              <tags>	formfactor_rect1x2 mimic left	</tags>
+            </item>
+            <item>
+              <id>	1171	</id>
+              <tags>	formfactor_rect1x2 mimic right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	1038	</id>
+      <texture>	gui/maps/vehicles/styles/bp2025_holiday_3.png	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_3	</userString>
+      <tags>	progression_required c11n2D	</tags>
+      <description>	#vehicle_customization:special_style/bp2025_holiday_3_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bp2025_holiday_3_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	889	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	1172	</id>
+              <tags>	formfactor_rect1x2 mimic left	</tags>
+            </item>
+            <item>
+              <id>	1172	</id>
+              <tags>	formfactor_rect1x2 mimic right	</tags>
+            </item>
+          </projection_decals>
         </outfit>
       </outfits>
       <itemFilters>

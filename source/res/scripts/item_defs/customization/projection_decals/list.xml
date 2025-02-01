@@ -3293,6 +3293,32 @@
     <priceGroup>	projection_decals 190g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	380	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_55.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_55	</userString>
+      <tags>	formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	381	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_56.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_56	</userString>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <name>	Valentine's Day	</name>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
@@ -9354,6 +9380,68 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	Battlepass 2025	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt usa:A174_T57_58_Rush_Ep1 ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1152	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_819.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_819/description	</description>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_819	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1170	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_837.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_1	</userString>
+      <tags>	styleOnly formfactor_rect1x2	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1171	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_838.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_2	</userString>
+      <tags>	styleOnly formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1172	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_839.dds	</texture>
+      <userString>	#vehicle_customization:special_style/bp2025_holiday_3	</userString>
+      <tags>	styleOnly formfactor_square	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1173	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_840.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_840	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1174	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_841.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_841	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1175	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_842.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_842	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/holiday	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -10091,32 +10179,6 @@
       <mirror>	false	</mirror>
     </projection_decal>
     <name>	Maslenitsa	</name>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <priceGroup>	projection_decals 190g notInShop	</priceGroup>
-    <vehicleFilter>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <projection_decal>
-      <id>	380	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_55.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_55	</userString>
-      <tags>	formfactor_square	</tags>
-      <mirror>	false	</mirror>
-    </projection_decal>
-    <projection_decal>
-      <id>	381	</id>
-      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/projection_decal_56.dds	</texture>
-      <userString>	#vehicle_customization:projection_decals/holiday/projection_decal_56	</userString>
-      <tags>	formfactor_square direction_right_to_left	</tags>
-      <mirror>	true	</mirror>
-    </projection_decal>
-    <name>	Valentine's Day	</name>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:projection_decals/holiday	</userString>

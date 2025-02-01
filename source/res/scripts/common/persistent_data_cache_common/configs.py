@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/persistent_data_cache_common/configs.py
-import os
 import typing
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -11,8 +10,8 @@ class BasePDCConfig(object):
 
     def __init__(self, version, cacheFilePath):
         self.version = version
-        if not os.path.isabs(cacheFilePath):
-            raise SoftException('Cache file path cannot be relative or empty.')
+        if not cacheFilePath:
+            raise SoftException('Cache file path cannot be empty.')
         self.cacheFilePath = cacheFilePath
 
     def __repr__(self):

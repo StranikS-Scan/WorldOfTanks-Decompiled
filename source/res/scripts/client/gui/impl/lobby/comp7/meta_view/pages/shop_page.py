@@ -346,6 +346,7 @@ class ShopPage(PageSubModelPresenter):
 
     def __goToStyle(self):
         self.__switchCameraToDefault = False
+        self.__switchVehicleToDefault = False
         customizationCallback = partial(_onCustomizationLoadedCallback, styleCD=self.__currentItemCD)
         if self.__c11nService.getCtx() is None:
             self.__c11nService.showCustomization(g_currentPreviewVehicle.invID, callback=customizationCallback)

@@ -275,8 +275,6 @@ def packSingleRetrain(wulfList, priceData):
         packTooltipModel(cardVM.cardTooltip, tooltipData)
         if isOperationDisable:
             cardVM.setCardState(CardState.DISABLED)
-            cardVM.cardTooltip.setHeader(R.strings.dialogs.retrain.discountTooltip.header())
-            cardVM.cardTooltip.setBody(R.strings.dialogs.retrain.discountTooltip.body())
         return
 
     packPriceList(wulfList, priceData, _packCustomValues, _IMAGE.retrain, _RETRAIN_LOC)

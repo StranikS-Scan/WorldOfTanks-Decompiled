@@ -23,7 +23,7 @@ if typing.TYPE_CHECKING:
 _logger = getLogger('Manager')
 PDC_CREATE_ARG = 'pdcCreate'
 PDC_OFF_ARG = 'pdcOff'
-PDC_CACHE_FILE_PATH = os.path.abspath('./data.wgpdc')
+PDC_CACHE_FILE_PATH = './data.wgpdc'
 _eventDispatcher = None
 
 def getEventsDispatcher():

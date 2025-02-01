@@ -4695,6 +4695,38 @@
       </exclude>
     </vehicleFilter>
     <decal>
+      <id>	1128	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_784.dds	</texture>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_819/description	</description>
+      <userString>	#vehicle_customization:inscription/special/special_784	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1129	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_785.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_785	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1130	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_786.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_786	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Battle Pass 2025	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
       <id>	1107	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_770.dds	</texture>
       <userString>	#vehicle_customization:inscription/special/special_770	</userString>

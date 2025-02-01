@@ -81,6 +81,7 @@ if TYPE_CHECKING:
     from ResMgr import DataSection
     from items.artefacts import OptionalDevice, Equipment
     from items.components.supply_slots_components import SupplySlotsCache, SupplySlot
+    from persistent_data_cache_common.types import TData
     from helpers.EntityExtra import EntityExtra
 VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'mediumTank',
@@ -304,9 +305,21 @@ def vehicleAttributeFactors():
 WHEEL_SIZE_COEF = 2.2
 _g_prices = None
 
-class CamouflageBonus():
-    MIN = 1.0
-    MAX = 0.0
+class CamouflageBonus(object):
+    _DEFAULT_MIN = 1.0
+    _DEFAULT_MAX = 0.0
+    MIN = _DEFAULT_MIN
+    MAX = _DEFAULT_MAX
+
+    @classmethod
+    def update(cls, bonusValue):
+        cls.MIN = min(cls.MIN, bonusValue)
+        cls.MAX = max(cls.MAX, bonusValue)
+
+    @classmethod
+    def reset(cls):
+        cls.MIN = cls._DEFAULT_MIN
+        cls.MAX = cls._DEFAULT_MAX
 
 
 if IS_CLIENT:
@@ -319,7 +332,8 @@ if IS_CLIENT:
         __slots__ = ()
 
         def deserialize(self, data):
-            rawData, effectList, auxiliaryData, prohibitedNumbers = super(_CacheSerializer, self).deserialize(data)
+            deserialized = super(_CacheSerializer, self).deserialize(data)
+            cache, effectList, auxiliaryData, prohibitedNumbers = deserialized
             CustomEffect.setEffectList(effectList)
             from items.components.c11n_components import PersonalNumberItem
             PersonalNumberItem.setProhibitedNumbers(prohibitedNumbers)
@@ -332,7 +346,12 @@ if IS_CLIENT:
             for artilleryData, res in auxiliaryData[ARTILLERY_DATA]:
                 self._validate(BigWorld.PyGroundEffectManager().loadArtillery(artilleryData), res)
 
-            return rawData
+            for vehType in cache.getVehicles():
+                camouflageBonus = vehType.invisibilityDeltas.get('camouflageBonus')
+                if camouflageBonus is not None:
+                    CamouflageBonus.update(camouflageBonus)
+
+            return cache
 
         def serialize(self, rawData):
             global _auxSerializingData
@@ -351,6 +370,7 @@ if IS_CLIENT:
             from items.components.c11n_components import PersonalNumberItem
             PersonalNumberItem.setProhibitedNumbers(())
             _auxSerializingData = None
+            CamouflageBonus.reset()
             return
 
         @staticmethod
@@ -2019,8 +2039,7 @@ class VehicleType(object):
             self.healthBurnPerSecLossFraction = _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION
         self.invisibility = (_xml.readFraction(xmlCtx, section, 'invisibility/moving'), _xml.readFraction(xmlCtx, section, 'invisibility/still'))
         camouflageBonus = _xml.readFraction(xmlCtx, section, 'invisibility/camouflageBonus')
-        CamouflageBonus.MIN = min(CamouflageBonus.MIN, camouflageBonus)
-        CamouflageBonus.MAX = max(CamouflageBonus.MAX, camouflageBonus)
+        CamouflageBonus.update(camouflageBonus)
         self.invisibilityDeltas = {'camouflageBonus': camouflageBonus,
          'firePenalty': _xml.readFraction(xmlCtx, section, 'invisibility/firePenalty')}
         self.optDevsOverrides = _readOptDevsOverrides(xmlCtx, section['optDevsOverrides'])
@@ -2533,6 +2552,9 @@ class Cache(object):
         vt = VehicleType(nationID, basicInfo, xmlPath, vehMode)
         self.__vehicles[id] = vt
         return vt
+
+    def getVehicles(self):
+        return self.__vehicles.values()
 
     def chassis(self, nationID):
         return self.__getList(nationID, 'chassis')

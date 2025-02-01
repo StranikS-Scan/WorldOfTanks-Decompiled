@@ -2809,6 +2809,18 @@
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.036 0 1.084 0 0.531 0.157 0.531 0.368 0.681 0.5 0.337 0.5 0.088 0.514 0	</physicsShape>
+      <multiGun>
+        <gun>
+          <gunNode>	G_L	</gunNode>
+          <gunFire>	HP_gunFire_L	</gunFire>
+          <position>	0.119000 0.249692 1.125001	</position>
+        </gun>
+        <gun>
+          <gunNode>	G_R	</gunNode>
+          <gunFire>	HP_gunFire_R	</gunFire>
+          <position>	-0.119000 0.249692 1.125001	</position>
+        </gun>
+      </multiGun>
       <camouflage>
         <density>	114.502899 114.531914	</density>
         <aoTextureSize>	512 512	</aoTextureSize>
@@ -3417,6 +3429,18 @@
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	1.095 0 1.132 0 0.54 0.122 0.258 0 0.62 0.537 0.405 0.5 0.163 0.505 0	</physicsShape>
+      <multiGun>
+        <gun>
+          <gunNode>	G_L	</gunNode>
+          <gunFire>	HP_gunFire_L	</gunFire>
+          <position>	0.119000 0.292126 1.150000	</position>
+        </gun>
+        <gun>
+          <gunNode>	G_R	</gunNode>
+          <gunFire>	HP_gunFire_R	</gunFire>
+          <position>	-0.119000 0.24958 1.17534	</position>
+        </gun>
+      </multiGun>
       <camouflage>
         <density>	114.502899 114.531914	</density>
         <aoTextureSize>	512 512	</aoTextureSize>

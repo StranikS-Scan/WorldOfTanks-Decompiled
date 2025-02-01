@@ -268,7 +268,7 @@ class ResetBranchView(ViewImpl):
             returnedRowModel.setName(optDevice.userName)
             returnedRowModel.setIntCD(optDevice.intCD)
             returnedRowModel.setCount(1)
-            returnedRowModel.setIcon(optDevice.icon)
+            returnedRowModel.setIcon(optDevice.iconName)
             returnedRowModel.setOverlayIcon(optDevice.getOverlayType())
             groupInfoArray.addViewModel(returnedRowModel)
 

@@ -24,4 +24,4 @@ class RestRewardsTooltipView(ViewImpl):
         with self.viewModel.transaction() as vm:
             rewardsModel = vm.getRewards()
             rewardsModel.clear()
-            fillViewModelsArray(self._rewards, rewardsModel)
+            fillViewModelsArray(self.__rewards, rewardsModel)

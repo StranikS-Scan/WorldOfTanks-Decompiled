@@ -10,7 +10,9 @@ from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_re
 from gui.impl.lobby.personal_missions.tooltips.rest_rewards_tooltip_view import RestRewardsTooltipView
 from gui.impl.pub import ViewImpl
 from gui.selectable_reward.common import PersonalMissionsSelectableRewardManager
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from helpers import dependency
+from personal_missions import PM_BRANCH
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IPersonalMissionsController
 from gui.impl.backport.backport_tooltip import _BackportTooltipContent
@@ -145,12 +147,17 @@ class PersonalMissionsRewardsView(ViewImpl):
         return settings.get(operationId, 0)
 
     def processOperationData(self, vm):
-        operation = self.__personalMissionsController.getOperationById(self.__operationID)
+        pm3ctrl = self.__personalMissionsController
+        operation = pm3ctrl.getOperationById(self.__operationID)
         if operation is None or not operation.isFullCompleted():
             return
         else:
+            bonusList = []
+            if all((pm3ctrl.getOperationById(operationId).isFullCompleted() for operationId in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3])):
+                bonusList.extend(pm3ctrl.getBadgesForChampionQuestPM3())
             self.applyDataForGeneralProgress(vm, self.__operationID)
-            packBonusModelAndTooltipData(self.__personalMissionsController.getAddBonusesForOperation(operation), vm.getRewards(), self.__tooltipData)
+            bonusList.extend(pm3ctrl.getAddBonusesForOperation(operation))
+            packBonusModelAndTooltipData(bonusList, vm.getRewards(), self.__tooltipData)
             vm.setIsOperationAddRewards(True)
             vm.setOperationName(operation.getShortUserName())
             return

@@ -7,7 +7,7 @@
       <conditions>
         <postBattle>
           <vehicleDamage>
-            <greaterOrEqual>	3250	</greaterOrEqual>
+            <greaterOrEqual>	2500	</greaterOrEqual>
           </vehicleDamage>
         </postBattle>
       </conditions>
@@ -35,7 +35,7 @@
           <and>
             <vehicleDamage>
               <whileFullHealth></whileFullHealth>
-              <greaterOrEqual>	3250	</greaterOrEqual>
+              <greaterOrEqual>	2500	</greaterOrEqual>
             </vehicleDamage>
             <win></win>
           </and>

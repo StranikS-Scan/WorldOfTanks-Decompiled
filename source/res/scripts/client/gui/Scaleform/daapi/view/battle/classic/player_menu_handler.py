@@ -238,7 +238,7 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def __addCommunicationInfo(self, options):
         isForbiddenBattleType = self.arenaVisitor.gui.isTrainingBattle()
-        if self.__userInfo.isAlly and not isForbiddenBattleType:
+        if not isForbiddenBattleType:
             isEnabled = True
             if self.__userInfo.isTemporaryIgnored:
                 optionID = BATTLE_CHAT_OPTION_ID.ENABLE_COMMUNICATIONS

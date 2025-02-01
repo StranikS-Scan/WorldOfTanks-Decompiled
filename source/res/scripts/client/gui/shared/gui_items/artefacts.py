@@ -49,6 +49,10 @@ class VehicleArtefact(FittingItem):
     def icon(self):
         return self.descriptor.icon[0]
 
+    @property
+    def iconName(self):
+        return self.descriptor.iconName
+
     def formattedShortDescription(self, formatter):
         description = super(VehicleArtefact, self).shortDescription
         return description.format(**formatter)

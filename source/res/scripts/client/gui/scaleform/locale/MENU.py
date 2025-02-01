@@ -621,7 +621,6 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLEGUNRELOADTIMERECEIVESHOT = '#menu:extraParams/name/vehicleGunReloadTimeReceiveShot'
     EXTRAPARAMS_NAME_LIMITSFORGUNBOOST = '#menu:extraParams/name/limitsForGunBoost'
     EXTRAPARAMS_NAME_TEMPERATURESTATESCOUNT = '#menu:extraParams/name/temperatureStatesCount'
-    EXTRAPARAMS_NAME_TEMPERATUREMAXTEMPERATURE = '#menu:extraParams/name/temperatureMaxTemperature'
     EXTRAPARAMS_NAME_TEMPERATUREHEATINGPERSEC = '#menu:extraParams/name/temperatureHeatingPerSec'
     EXTRAPARAMS_NAME_TEMPERATURECOOLINGPERSEC = '#menu:extraParams/name/temperatureCoolingPerSec'
     EXTRAPARAMS_NAME_TEMPERATURECOOLINGDELAY = '#menu:extraParams/name/temperatureCoolingDelay'

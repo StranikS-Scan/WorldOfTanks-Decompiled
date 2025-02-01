@@ -3,11 +3,14 @@
 from typing import Union, Any, Dict, List
 from Event import Event, EventManager
 import personal_missions
-from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL, DOSSIER_TYPE
+from dossiers2.ui.achievements import BADGES_BLOCK
 from frameworks.wulf import Array
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.server_events import finders
+from gui.server_events.bonuses import DossierBonus
 from gui.server_events.event_items import PMOperation, PersonalMission
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS, CHAMPION_BADGE_AT_OPERATION_ID
 from gui.shared.utils.scheduled_notifications import Notifiable
 from helpers import dependency, time_utils
 from personal_missions import PM_BRANCH
@@ -232,6 +235,19 @@ class PersonalMissionsController(IPersonalMissionsController):
         previousOperationId = currentOperationId - 1
         operations = self.getOperations()
         return '' if previousOperationId not in operations.keys() else operations[previousOperationId].getShortUserName()
+
+    def getBadgesForChampionQuestPM3(self):
+        lastPM3Operation = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][-1]
+        pm3ChampionTokenQuestID = CHAMPION_BADGE_AT_OPERATION_ID[lastPM3Operation]
+        championQuest = self.__eventsCache.getQuestByID(pm3ChampionTokenQuestID)
+        bonusList = []
+        if championQuest:
+            for name, value in championQuest.getRawBonuses().iteritems():
+                for (blockName, idx), data in value.get(DOSSIER_TYPE.ACCOUNT, {}).iteritems():
+                    if blockName == BADGES_BLOCK:
+                        bonusList.append(DossierBonus(name, {DOSSIER_TYPE.ACCOUNT: {(blockName, idx): data}}))
+
+        return bonusList
 
     def __onQuestsUpdated(self, diff):
         if any((questId.startswith('pm3') for questId in set(diff))):

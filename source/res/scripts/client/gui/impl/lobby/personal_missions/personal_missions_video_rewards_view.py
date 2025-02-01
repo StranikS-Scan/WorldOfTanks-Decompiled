@@ -4,8 +4,6 @@ import itertools
 import logging
 import BigWorld
 import Windowing
-from constants import DOSSIER_TYPE
-from dossiers2.ui.achievements import BADGES_BLOCK
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_video_rewards_view_model import PersonalMissionsVideoRewardsViewModel, OperationState
@@ -13,8 +11,7 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
-from gui.server_events.bonuses import DossierBonus
-from gui.server_events.finders import BRANCH_TO_OPERATION_IDS, CHAMPION_BADGE_AT_OPERATION_ID
+from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from items.vehicles import getVehicleClassFromVehicleType
 from helpers import dependency
 from personal_missions import PM_BRANCH
@@ -88,22 +85,16 @@ class PersonalMissionsVideoRewardsView(ViewImpl):
                 vm.setIsWindowAccessible(Windowing.isWindowAccessible())
                 vm.setVideoName(self.__getVideoNameByPreset(self.__operation.getID()))
                 bonusList = []
+                pm3ctrl = self.__personalMissionsController
                 for bonus in itertools.chain(*self.__operation.getBonuses().itervalues()):
                     if bonus.getName() not in ('vehicles', 'slots'):
                         bonusList.append(bonus)
 
                 if self.__operation.isFullCompleted():
-                    bonusList.extend(self.__personalMissionsController.getAddBonusesForOperation(self.__operation))
+                    bonusList.extend(pm3ctrl.getAddBonusesForOperation(self.__operation))
                 lastPM3Operation = BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][-1]
-                if self.__operation.getID() == lastPM3Operation:
-                    pm3ChampionTokenQuestID = CHAMPION_BADGE_AT_OPERATION_ID[lastPM3Operation]
-                    championQuest = self.__eventsCache.getQuestByID(pm3ChampionTokenQuestID)
-                    if championQuest:
-                        for name, value in championQuest.getRawBonuses().iteritems():
-                            for (blockName, idx), data in value.get(DOSSIER_TYPE.ACCOUNT, {}).iteritems():
-                                if blockName == BADGES_BLOCK:
-                                    bonusList.append(DossierBonus(name, {DOSSIER_TYPE.ACCOUNT: {(blockName, idx): data}}))
-
+                if self.__operation.getID() == lastPM3Operation and all((pm3ctrl.getOperationById(operationId).isFullCompleted() for operationId in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3])):
+                    bonusList.extend(pm3ctrl.getBadgesForChampionQuestPM3())
                 packBonusModelAndTooltipData(bonusList, vm.getRewards(), self.__tooltipData)
                 vm.setState(OperationState.COMPLETEWITHHONOR if self.__operation.isFullCompleted() else OperationState.COMPLETE)
             Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)

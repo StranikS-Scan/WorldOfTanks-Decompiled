@@ -114,6 +114,10 @@ class QuestModelParser(object):
         if titleResId > 0:
             title = backport.text(titleResId, **paramsObj)
         descriptionId = R.strings.personal_missions_details.dyn(descriptionName)()
+        for key, value in paramsObj.iteritems():
+            if isinstance(value, int):
+                paramsObj[key] = backport.getNiceNumberFormat(value)
+
         if descriptionId > 0:
             description = backport.text(descriptionId, **paramsObj)
         return (title, description)

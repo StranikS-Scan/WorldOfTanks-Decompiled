@@ -491,11 +491,12 @@ class _ParagonsBranchesController(object):
     @property
     def resettableBranchIds(self):
         if self.__resettableBranchIds is None:
+            if not self.__ctrl.isEnabledAndAvailable:
+                return set()
             self.__resettableBranchIds = set()
-            if self.__ctrl.isEnabledAndAvailable:
-                self.__resettableBranchIds.update(self.__ctrl.paragons.resetBranchesIds)
-                for vehCD in self.__ctrl.unlockedNecessaryLevelVehicleCDs:
-                    self.__resettableBranchIds.update(vehicles.g_cache.paragonsBranchesToReset.getResetBranchIdsByVehicleCd(vehCD))
+            self.__resettableBranchIds.update(self.__ctrl.paragons.resetBranchesIds)
+            for vehCD in self.__ctrl.unlockedNecessaryLevelVehicleCDs:
+                self.__resettableBranchIds.update(vehicles.g_cache.paragonsBranchesToReset.getResetBranchIdsByVehicleCd(vehCD))
 
         return self.__resettableBranchIds
 

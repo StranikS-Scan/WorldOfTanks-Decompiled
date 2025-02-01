@@ -891,4 +891,12 @@
     </colors>
     <overTerrainHeight>	0.3	</overTerrainHeight>
   </spawnPointsConfig>
+  <flameOverheat>
+    <effect>
+      <path>	particles/Tank/shots/fl_overheat.eff	</path>
+    </effect>
+    <effect>
+      <path>	particles/Tank/shots/fl_overheat_long_smoke.eff	</path>
+    </effect>
+  </flameOverheat>
 </dynamic_objects.xml>

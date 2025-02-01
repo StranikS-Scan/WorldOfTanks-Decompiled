@@ -37,7 +37,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_helpers.stats_composer import RankedBattlesStatsComposer
     from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, WebSeasonInfo
     from gui.ranked_battles.ranked_models import BattleRankInfo, Division, PostBattleRankInfo, Rank
-    from gui.server_events.bonuses import BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, SimpleBonus, TokensBonus, WoTPlusBonus, SelectableBonus
+    from gui.server_events.bonuses import BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, SimpleBonus, TokensBonus, WoTPlusBonus, SelectableBonus, DossierBonus
     from gui.server_events.event_items import RankedQuest, Quest, PMOperation, PersonalMission
     from gui.shared.event_bus import SharedEvent
     from gui.shared.gui_items import Tankman, Vehicle, ItemsCollection
@@ -4013,6 +4013,9 @@ class IPersonalMissionsController(IGameController):
         raise NotImplementedError
 
     def getSelectedQuestForChain(self, chainId, operationId):
+        raise NotImplementedError
+
+    def getBadgesForChampionQuestPM3(self):
         raise NotImplementedError
 
 

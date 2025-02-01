@@ -506,22 +506,40 @@ class VehicleParams(_ParameterBase):
     def autoShootFireUntilOverheatTimeSituational(self):
         return self.__autoShootFireUntilOverheatTime(isSituational=True)
 
+    @staticmethod
+    def __getTemperatureStateHeatingTimes(temperatureStates):
+        prevMaxTemperature = 0
+        heatingTimes = []
+        for state in temperatureStates:
+            stateTemperatureRange = float(state.temperature - prevMaxTemperature)
+            heatingTimes.append(stateTemperatureRange / state.heatingPerSec)
+            prevMaxTemperature = state.temperature
+
+        return heatingTimes
+
+    @staticmethod
+    def __getTemperatureStateCoolingTimer(temperatureStates):
+        prevMaxTemperature = 0
+        coolingTimes = []
+        for state in temperatureStates:
+            stateTemperatureRange = float(state.temperature - prevMaxTemperature)
+            coolingTimes.append(stateTemperatureRange / state.coolingPerSec)
+            prevMaxTemperature = state.temperature
+
+        return coolingTimes
+
     def __autoShootFireUntilOverheatTime(self, isSituational=False):
         gunTemperature = self._itemDescr.gun.temperature
         if gunTemperature is None:
             return
         else:
-            untilOverheatTime = 0.0
-            prevMaxTemperature = 0
-            for state in gunTemperature.states:
-                untilOverheatTime += float(state.temperature - prevMaxTemperature) / state.heatingPerSec
-                prevMaxTemperature = state.temperature
-
+            heatingTimes = self.__getTemperatureStateHeatingTimes(gunTemperature.states)
+            untilOverheatTime = sum(heatingTimes, 0.0)
             loaderDesperadoReloadFactor = 1
             if isSituational:
                 loaderDesperadoReloadFactor = self.__getFactorValueFromSkill(LOADER_DESPERADO_SKILL, AUTOSHOOT_FIRE_UNTIL_OVERHEAT_TIME, Tankman.ROLES.LOADER, isSituational)
-            untilOverheatTime *= loaderDesperadoReloadFactor
-            return _timesToSecs(untilOverheatTime) if untilOverheatTime > 0.0 else None
+            untilOverheatTime /= loaderDesperadoReloadFactor
+            return untilOverheatTime if untilOverheatTime > 0.0 else None
 
     @property
     def temperatureStatesCount(self):
@@ -529,19 +547,22 @@ class VehicleParams(_ParameterBase):
         return len(gunTemperature.states) if gunTemperature is not None else None
 
     @property
-    def temperatureMaxTemperature(self):
-        gunTemperature = self._itemDescr.gun.temperature
-        return tuple((state.temperature for state in gunTemperature.states)) if gunTemperature is not None else None
-
-    @property
     def temperatureHeatingPerSec(self):
         gunTemperature = self._itemDescr.gun.temperature
-        return tuple((state.heatingPerSec for state in gunTemperature.states)) if gunTemperature is not None else None
+        if gunTemperature is not None:
+            heatingTimes = self.__getTemperatureStateHeatingTimes(gunTemperature.states)
+            return heatingTimes
+        else:
+            return
 
     @property
     def temperatureCoolingPerSec(self):
         gunTemperature = self._itemDescr.gun.temperature
-        return tuple((state.coolingPerSec for state in gunTemperature.states)) if gunTemperature is not None else None
+        if gunTemperature is not None:
+            coolingTimes = self.__getTemperatureStateCoolingTimer(gunTemperature.states)
+            return coolingTimes
+        else:
+            return
 
     @property
     def temperatureCoolingDelay(self):

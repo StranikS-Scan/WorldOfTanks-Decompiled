@@ -403,10 +403,7 @@ class VehicleGunRotator(object):
             vehicleMatrix = self.getAvatarOwnVehicleStabilisedMatrix()
             shotTurretYaw, shotGunPitch = getShotAngles(descr, vehicleMatrix, (prevTurretYaw, self.__gunPitch), targetPoint, overrideGunPosition=self.__gunPosition)
             estimatedTurretYaw = self.getNextTurretYaw(prevTurretYaw, shotTurretYaw, maxTurretRotationSpeed * timeDiff, turretYawLimits)
-            if replayCtrl.isRecording:
-                self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)
-            else:
-                self.__turretYaw = turretYaw = estimatedTurretYaw
+            self.__turretYaw = turretYaw = self.__syncWithServerTurretYaw(estimatedTurretYaw)
             if maxTurretRotationSpeed != 0:
                 self.estimatedTurretRotationTime = abs(turretYaw - shotTurretYaw) / maxTurretRotationSpeed
             else:
@@ -475,18 +472,19 @@ class VehicleGunRotator(object):
 
     def __syncWithServerTurretYaw(self, turretYaw):
         vehicle = self._avatar.vehicle
-        if vehicle is not None:
+        if vehicle is None:
+            return turretYaw
+        else:
             serverTurretYaw, _ = vehicle.getServerGunAngles()
             diff = serverTurretYaw - turretYaw
             absDeviation = min(diff % (2.0 * pi), -diff % (2.0 * pi))
-            allowedDeviation = self.__TURRET_YAW_ALLOWED_ERROR_CONST
-            allowedDeviation += self.__TURRET_YAW_ALLOWED_ERROR_FACTOR * self.__maxTurretRotationSpeed
-            if absDeviation > allowedDeviation:
-                latency = BigWorld.LatencyInfo().value[3]
-                errorDueLatency = latency * self.__maxTurretRotationSpeed
-                if absDeviation > allowedDeviation + errorDueLatency:
-                    return serverTurretYaw
-        return turretYaw
+            allowedDeviation = self.__TURRET_YAW_ALLOWED_ERROR_CONST + self.__TURRET_YAW_ALLOWED_ERROR_FACTOR * self.__maxTurretRotationSpeed
+            if absDeviation < allowedDeviation:
+                return turretYaw
+            latency = BigWorld.LatencyInfo().value[3]
+            errorDueLatency = latency * self.__maxTurretRotationSpeed
+            isReturnServerYaw = absDeviation > allowedDeviation + errorDueLatency
+            return serverTurretYaw if isReturnServerYaw else turretYaw
 
     def __getRotationWays(self, curAngle, shotAngle):
         shotDiff1 = shotAngle - curAngle

@@ -90,6 +90,10 @@ class _ServiceHelpersMixin(object):
         component = CustomizationOutfit(decals=decals)
         return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
 
+    def getOutfitByStyleId(self, vehicleCD, styleId):
+        component = CustomizationOutfit(styleId=styleId)
+        return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
+
     def tryOnOutfit(self, outfit):
         self.hangarSpace.updateVehicleOutfit(outfit)
 

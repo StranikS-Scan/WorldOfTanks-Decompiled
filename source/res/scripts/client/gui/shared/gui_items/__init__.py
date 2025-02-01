@@ -338,7 +338,6 @@ class KPI(object):
         WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
         VEHICLE_ALLY_RADIO_DISTANCE = 'vehicleAllyRadioDistance'
         TEMPERATURE_STATES_COUNT = 'temperatureStatesCount'
-        TEMPERATURE_MAX_TEMPERATURE = 'temperatureMaxTemperature'
         TEMPERATURE_HEATING_PER_SEC = 'temperatureHeatingPerSec'
         TEMPERATURE_COOLING_PER_SEC = 'temperatureCoolingPerSec'
         TEMPERATURE_COOLING_DELAY = 'temperatureCoolingDelay'

@@ -9,6 +9,7 @@ class EventState(IntEnum):
     PAUSED = 2
     COMPLETED = 3
     NOTSTARTED = 4
+    SOLDOUT = 5
 
 
 class EntryPointModel(ViewModel):

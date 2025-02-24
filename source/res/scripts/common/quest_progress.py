@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_progress.py
 from collections import defaultdict
+from itertools import chain
 from constants import QUEST_PROGRESS_STATE
 from personal_missions_constants import PROGRESS_TEMPLATE
 
@@ -491,7 +492,6 @@ class BaseQuestProgress(object):
 
     def __init__(self, questCfg, savedProgresses):
         self._progressStorage = ProgressStorage(questCfg, savedProgresses)
-        self._wasCompleted = self.checkComplete(self._progressStorage.getMainProgress())
         self._timeProvider = lambda : 0
         self._progressBeforeFailed = {}
         self.updateIfConditionsAreAlreadySolved()
@@ -511,6 +511,14 @@ class BaseQuestProgress(object):
     def getMainProgress(self):
         return self._progressStorage.getMainProgress()
 
+    def completeMainProgress(self):
+        for progress in self._progressStorage.getMainProgress():
+            progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
+
+    def completeAddProgress(self):
+        for progress in self._progressStorage.getAddProgress():
+            progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
+
     @staticmethod
     def checkComplete(progresses):
         if not progresses:
@@ -520,16 +528,6 @@ class BaseQuestProgress(object):
 
     def updateIfConditionsAreAlreadySolved(self):
         progresses = self._progressStorage.getMainProgress()
-        if not progresses:
-            return
-        for progress in progresses:
-            if progress.isCumulative() and progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
-                pID = progress.getProgressID()
-                if progress.checkIsCompleted():
-                    self.setCompleted(pID, True)
-                elif progress.checkIsFailed():
-                    self.setZero(pID)
-
         isMainProgressCompleted = self.checkComplete(progresses)
         if isMainProgressCompleted and progresses[0].isInOrGroup():
             for progress in progresses:
@@ -537,18 +535,49 @@ class BaseQuestProgress(object):
                     progress.setState(QUEST_PROGRESS_STATE.COMPLETED)
 
         progresses = self._progressStorage.getAddProgress()
-        for progress in progresses:
+        if self.checkComplete(progresses) and progresses[0].isInOrGroup():
+            for progress in progresses:
+                if progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
+                    self.setCompleted(progress.getProgressID(), isMainProgressCompleted)
+
+    def rebalanceProgress(self):
+        mainProgresses = self._progressStorage.getMainProgress()
+        for progress in mainProgresses:
+            if progress.isCumulative() and progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
+                pID = progress.getProgressID()
+                if progress.checkIsCompleted():
+                    self.setCompleted(pID, True)
+                elif progress.checkIsFailed():
+                    self.setWasFailed(pID, True)
+                    self.setZero(pID)
+
+        isMainProgressCompleted = self.checkComplete(mainProgresses)
+        addProgresses = self._progressStorage.getAddProgress()
+        for progress in addProgresses:
             if progress.isCumulative() and progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
                 pID = progress.getProgressID()
                 if progress.checkIsCompleted():
                     self.setCompleted(pID, isMainProgressCompleted)
                 elif progress.checkIsFailed():
+                    self.setWasFailed(pID, True)
                     self.setZero(pID)
 
-        if self.checkComplete(progresses) and progresses[0].isInOrGroup():
-            for progress in progresses:
-                if progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
-                    self.setCompleted(progress.getProgressID(), isMainProgressCompleted)
+        if not any((True for progress in mainProgresses if progress.isCumulative())):
+            if self.checkComplete(addProgresses):
+                self.completeMainProgress()
+        limitedProgressesToWipe = {}
+        for progress in self.getProgresses().itervalues():
+            if progress.isCumulative() and not progress.isAward() and progress.checkIsCompleted():
+                limitedProgressesToWipe[progress.isMain(), progress.groupID()] = progress.getProgressID()
+
+        for progress in chain(mainProgresses, addProgresses):
+            if progress.isCumulative() and progress.getState() not in QUEST_PROGRESS_STATE.FINISHED_STATES:
+                limitedKey = (progress.isMain(), progress.groupID())
+                if limitedKey in limitedProgressesToWipe:
+                    self.setWasFailed(progress.getProgressID(), True)
+                    self.setZero(progress.getProgressID())
+                    self.setWasFailed(limitedProgressesToWipe[limitedKey], True)
+                    self.setZero(limitedProgressesToWipe[limitedKey])
 
     def setCompleted(self, progressID, isMainProgressCompleted=True):
         progress = self._progressStorage.getProgress(progressID)
@@ -736,18 +765,8 @@ class BaseQuestProgress(object):
                 self._progressBeforeFailed.clear()
         return
 
-    def wasFailed(self, progressID):
-        progress = self._progressStorage.getProgress(progressID)
-        if progress.isAward():
-            return bool(self._progressBeforeFailed)
-        else:
-            return False
-
     def getProgressBeforeFailed(self):
         return self._progressBeforeFailed
-
-    def wasCompleted(self):
-        return self._wasCompleted
 
 
 def hasCorrespondedCamouflage(vehDescr, outfit):

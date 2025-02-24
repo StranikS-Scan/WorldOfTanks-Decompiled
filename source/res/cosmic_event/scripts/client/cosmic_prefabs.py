@@ -19,6 +19,11 @@ class Vehicle(object):
     RANGE = (COLLISION_EFFECT, RAMMING_FIELD)
 
 
+class Debuf(object):
+    STUN_DEBUF = 'content/CGFPrefabs/cosmic_event/cosmic_event_stun_debuff.prefab'
+    RANGE = (STUN_DEBUF,)
+
+
 class Loot(object):
     COSMIC_BLACK_HOLE = 'content/CGFPrefabs/cosmic_event/cosmic_event_supernova_item.prefab'
     COSMIC_SHOOTING = 'content/CGFPrefabs/cosmic_event/cosmic_event_sniper_shoot_item.prefab'

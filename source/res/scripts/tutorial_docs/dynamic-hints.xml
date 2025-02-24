@@ -1,0 +1,41 @@
+<dynamic-hints.xml>
+  <gui>	gui/tutorial-lobby-gui.xml	</gui>
+  <hints>
+    <hint>	BattlePassChapterChoiceHint	  <item-id>	BattlePassChapterChoice	</item-id>
+      <text>	_(#battle_pass:chapterChoice/triggerHint/noActiveHasMarathon)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_BattlePassActiveChapter	</global-active>
+      </condition>
+    </hint>
+    <hint>	BattlePassProgressionHint	  <item-id>	ChapterHeaderTrigger	</item-id>
+      <text>	_(#battle_pass:chapterChoice/triggerHint/noActiveHasMarathon)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_BattlePassProgression	</global-active>
+      </condition>
+    </hint>
+    <hint>	BattlePassEntryPointHint	  <item-id>	EntryPointTrigger	</item-id>
+      <text>	_(#battle_pass:chapterChoice/triggerHint/noActiveHasMarathon)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <condition>
+        <global-active>	_BattlePassEntryPoint	</global-active>
+      </condition>
+    </hint>
+  </hints>
+</dynamic-hints.xml>

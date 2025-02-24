@@ -53,6 +53,7 @@ class GetPlayerVehicleGun(Block, PlayerMeta):
         super(GetPlayerVehicleGun, self).__init__(*args, **kwargs)
         self._gunPosition = self._makeDataOutputSlot('gunPosition', SLOT_TYPE.VECTOR3, self._getGunPosition)
         self._gunDirection = self._makeDataOutputSlot('gunDirection', SLOT_TYPE.VECTOR3, self._getGunDirection)
+        self._isLocked = self._makeDataOutputSlot('isLocked', SLOT_TYPE.BOOL, self._isGunLocked)
 
     def _getGunPosition(self):
         avatar = self._avatar
@@ -66,6 +67,11 @@ class GetPlayerVehicleGun(Block, PlayerMeta):
             _, direction = avatar.gunRotator.getCurShotPosition()
             direction.normalise()
             self._gunDirection.setValue(direction)
+
+    def _isGunLocked(self):
+        avatar = self._avatar
+        if avatar:
+            self._isLocked.setValue(avatar.gunRotator.isGunLocked())
 
 
 class GetPlayerGunMarkerInfo(Block, PlayerMeta):

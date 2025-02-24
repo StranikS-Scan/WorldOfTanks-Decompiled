@@ -9,7 +9,7 @@ class SectionParser(object):
     def getTagName(self):
         raise NotImplementedError
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         raise NotImplementedError
 
     def _readString(self, name, section):
@@ -29,9 +29,9 @@ class ParsersCollection(SectionParser):
     def clear(self):
         self._parsers.clear()
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         for name, sub in section.items():
             if name in self._parsers:
                 parser = self._parsers[name]
-                yield parser.parse(sub)
+                yield parser.parse(sub, section)
             LOG_WARNING('Tag {0} is not supported. It is ignored.'.format(name))

@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/components/stronghold_battles_list_view.py
 import BigWorld
 from adisp import adisp_process
+from constants import PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
+from gui.prb_control.dispatcher import g_prbLoader
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from debug_utils import LOG_ERROR
@@ -68,8 +70,14 @@ class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
 
     @adisp_process
     def __loadBrowser(self, width, height):
+        entity = g_prbLoader.getDispatcher().getEntity()
+        extraParams = ''
+        if entity.getEntityType() == PREBATTLE_TYPE.STRONGHOLD:
+            extraParams = entity.getOpenListExtraParams()
         battlesListUrl = getStrongholdBattlesListUrl()
         if battlesListUrl is not None:
+            if extraParams:
+                battlesListUrl = battlesListUrl + extraParams
             self.__browserId = yield self.browserCtrl.load(url=battlesListUrl, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=(width, height))
         self.__browser = self.browserCtrl.getBrowser(self.__browserId)
         if self.__browser is not None:

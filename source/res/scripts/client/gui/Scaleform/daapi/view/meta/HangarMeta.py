@@ -31,8 +31,8 @@ class HangarMeta(View):
     def as_setComp7ModifiersVisibleS(self, value):
         return self.flashObject.as_setComp7ModifiersVisible(value) if self._isDAAPIInited() else None
 
-    def as_setBobModifiersVisibleS(self, value):
-        return self.flashObject.as_setBobModifiersVisible(value) if self._isDAAPIInited() else None
+    def as_setFunRandomModifiersVisibleS(self, value):
+        return self.flashObject.as_setFunRandomModifiersVisible(value) if self._isDAAPIInited() else None
 
     def as_setVisibleS(self, value):
         return self.flashObject.as_setVisible(value) if self._isDAAPIInited() else None

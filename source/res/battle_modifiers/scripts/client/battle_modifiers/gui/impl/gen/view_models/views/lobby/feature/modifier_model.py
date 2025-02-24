@@ -56,6 +56,7 @@ class ModType(Enum):
     EQUIPMENT_COOLDOWN = 'equipmentCooldown'
     INVISIBILITY_FACTOR_AT_SHOT = 'invisibilityFactorAtShot'
     VEHICLE_AOI_RADIUS = 'vehicleAoIRadius'
+    THERMAL_VISION_DISTANCE = 'thermalVisionDistance'
 
 
 class ModPhysType(Enum):
@@ -76,6 +77,7 @@ class ModPhysType(Enum):
     DEVIATION = 'deviation'
     LOGIC = 'logic'
     HORSEPOWER = 'horsepower'
+    POINTS_PER_SECOND = 'points_per_second'
 
 
 class ModUseType(Enum):

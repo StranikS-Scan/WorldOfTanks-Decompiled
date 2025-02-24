@@ -38,6 +38,10 @@ class QuestCardTooltip(ViewImpl):
             return QuestState.NAPREVIOUSALL
         if not quest.hasRequiredVehicles():
             return QuestState.NATECH
+        if quest.isOnPause:
+            if quest.isCompleted():
+                return QuestState.DONEPAUSE
+            return QuestState.PAUSE
         if quest.isInProgress():
             if quest.isCompleted():
                 return QuestState.INPROGRESSHONOR

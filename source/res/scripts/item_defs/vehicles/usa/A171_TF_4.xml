@@ -5395,7 +5395,6 @@
             <coolingPerSec>	10	</coolingPerSec>
             <coolingOverheatPerSec>	14	</coolingOverheatPerSec>
             <thermalStateHysteresis>	1	</thermalStateHysteresis>
-            <temperatureSegmentSize>	5	</temperatureSegmentSize>
             <thermalStates>
               <state>
                 <maxTemperature>	60	</maxTemperature>
@@ -5439,21 +5438,21 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0.318005 0.338818	</anchorPosition>
-              <anchorDirection>	-0 0 0	</anchorDirection>
+              <anchorPosition>	-0.000001 0.20793 1.818135	</anchorPosition>
+              <anchorDirection>	0 0 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.166931 1.869437	</anchorPosition>
+              <anchorPosition>	0.000001 0.350557 0.308627	</anchorPosition>
               <anchorDirection>	-0 0 0	</anchorDirection>
-              <applyTo>	4096	</applyTo>
+              <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	-0 0.166931 1.86944	</anchorPosition>
+              <anchorPosition>	-0.000001 0.20793 1.81814	</anchorPosition>
               <anchorDirection>	-0 0 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
@@ -6023,7 +6022,6 @@
             <coolingPerSec>	12	</coolingPerSec>
             <coolingOverheatPerSec>	16	</coolingOverheatPerSec>
             <thermalStateHysteresis>	1	</thermalStateHysteresis>
-            <temperatureSegmentSize>	5	</temperatureSegmentSize>
             <thermalStates>
               <state>
                 <maxTemperature>	60	</maxTemperature>
@@ -6067,21 +6065,21 @@
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0.318005 0.338818	</anchorPosition>
+              <anchorPosition>	0.000001 0.182554 2.49711	</anchorPosition>
               <anchorDirection>	-0 0 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>
             <slot>
               <slotType>	paint	</slotType>
               <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.160984 2.146431	</anchorPosition>
+              <anchorPosition>	0 0.325925 0.306526	</anchorPosition>
               <anchorDirection>	-0 0 0	</anchorDirection>
               <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
               <slotId>	42000	</slotId>
-              <anchorPosition>	0 0.160984 2.14643	</anchorPosition>
+              <anchorPosition>	0.000001 0.182554 2.49711	</anchorPosition>
               <anchorDirection>	-0 0 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
             </slot>

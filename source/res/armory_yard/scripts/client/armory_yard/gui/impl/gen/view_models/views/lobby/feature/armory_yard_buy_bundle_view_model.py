@@ -16,7 +16,7 @@ class ArmoryYardBuyBundleViewModel(ViewModel):
     __slots__ = ('onBuyBundle', 'onBack', 'onClose')
     MAX_VISIBLE_REWARDS = 10
 
-    def __init__(self, properties=8, commands=3):
+    def __init__(self, properties=9, commands=3):
         super(ArmoryYardBuyBundleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -51,27 +51,33 @@ class ArmoryYardBuyBundleViewModel(ViewModel):
     def setEndLevel(self, value):
         self._setNumber(4, value)
 
+    def getLevelCount(self):
+        return self._getNumber(5)
+
+    def setLevelCount(self, value):
+        self._setNumber(5, value)
+
     def getRewards(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setRewards(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getRewardsType():
         return ItemBonusModel
 
     def getIsWalletAvailable(self):
-        return self._getBool(6)
-
-    def setIsWalletAvailable(self, value):
-        self._setBool(6, value)
-
-    def getIsBlurEnabled(self):
         return self._getBool(7)
 
-    def setIsBlurEnabled(self, value):
+    def setIsWalletAvailable(self, value):
         self._setBool(7, value)
+
+    def getIsBlurEnabled(self):
+        return self._getBool(8)
+
+    def setIsBlurEnabled(self, value):
+        self._setBool(8, value)
 
     def _initialize(self):
         super(ArmoryYardBuyBundleViewModel, self)._initialize()
@@ -80,6 +86,7 @@ class ArmoryYardBuyBundleViewModel(ViewModel):
         self._addStringProperty('type')
         self._addNumberProperty('startLevel', 0)
         self._addNumberProperty('endLevel', 0)
+        self._addNumberProperty('levelCount', 0)
         self._addArrayProperty('rewards', Array())
         self._addBoolProperty('isWalletAvailable', True)
         self._addBoolProperty('isBlurEnabled', False)

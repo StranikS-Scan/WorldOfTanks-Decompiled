@@ -260,12 +260,25 @@
     <shortUserString>	#czech_vehicles:Cz00_COSM_Gravizapa_short	</shortUserString>
     <shortDescriptionSpecial>	#czech_vehicles:Cz00_COSM_Gravizapa_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#czech_vehicles:Cz00_COSM_Gravizapa_long_special	</longDescriptionSpecial>
-    <tags>	lightTank HD secret hidden_in_hangar special event_battles cannot_be_sold lockCrew lockCrewSkills lockOutfit lockEquipment lockShells	</tags>
+    <tags>	lightTank HD secret hidden_in_hangar special event_battles cannot_be_sold lockCrew lockCrewSkills lockOutfit lockEquipment lockShells mode_hidden	</tags>
     <level>	1	</level>
     <price>	1	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
   </Cz00_COSM_Gravizapa>
+  <Cz00_COSM_Pepelac>
+    <id>	40001	</id>
+    <userString>	#czech_vehicles:Cz00_COSM_Pepelac	</userString>
+    <description>	#czech_vehicles:Cz00_COSM_Pepelac_descr	</description>
+    <shortUserString>	#czech_vehicles:Cz00_COSM_Pepelac_short	</shortUserString>
+    <shortDescriptionSpecial>	#czech_vehicles:Cz00_COSM_Pepelac_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#czech_vehicles:Cz00_COSM_Pepelac_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank HD secret hidden_in_hangar special event_battles cannot_be_sold lockCrew lockCrewSkills lockOutfit lockEquipment lockShells mode_hidden	</tags>
+    <level>	1	</level>
+  </Cz00_COSM_Pepelac>
   <Cz32_Vz_58_Koncept>
     <id>	31001	</id>
     <userString>	#czech_vehicles:Cz32_Vz_58_Koncept	</userString>
@@ -318,4 +331,17 @@
     <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </Cz37_Vz_59_Dravec>
+  <Cz30_TBT>
+    <id>	31005	</id>
+    <userString>	#czech_vehicles:Cz30_TBT	</userString>
+    <shortUserString>	#czech_vehicles:Cz30_TBT_short	</shortUserString>
+    <description>	#czech_vehicles:Cz30_TBT_descr	</description>
+    <shortDescriptionSpecial>	#czech_vehicles:Cz30_TBT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#czech_vehicles:Cz30_TBT_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD tankRammer_class1_user improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </Cz30_TBT>
 </list.xml>

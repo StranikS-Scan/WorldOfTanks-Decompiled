@@ -16,7 +16,7 @@ class _NotificationParser(shared_parsers.SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         if section.name != self.getTagName():
             raise ParseError('Root tag "{0}" is invalid'.format(section.name))
         notifyID = section.readInt64('notification_id', 0)

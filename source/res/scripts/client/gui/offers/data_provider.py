@@ -251,7 +251,7 @@ class OffersDataProvider(IOffersDataProvider):
     @_ifNotSynced(None)
     def _checkAvailableOffersChanged(self):
         if self._lastAvailableOffers is not None:
-            availableOffers = {offer.id for offer in self._ioffers() if self._itemsCache.items.tokens.getToken(offer.token)}
+            availableOffers = {offer.id for offer in self._ioffers() if not offer.requiredToken or self._itemsCache.items.tokens.getToken(offer.token)}
             missing = len(self._lastAvailableOffers - availableOffers)
             if missing:
                 if missing == 1:

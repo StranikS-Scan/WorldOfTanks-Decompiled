@@ -1524,52 +1524,6 @@ class ModeSelectorConfig(namedtuple('ModeSelectorConfig', 'columnSettings')):
         return False if not all((isinstance(v, (tuple, list)) and len(v) == 2 and all((isinstance(i, int) for i in v)) for v in self.columnSettings.values())) else True
 
 
-class _BobConfig(namedtuple('_BobConfig', ('isEnabled',
- 'isPaused',
- 'registration',
- 'url',
- 'peripheryIDs',
- 'primeTimes',
- 'seasons',
- 'cycleTimes',
- 'levels',
- 'teams',
- 'forbiddenClassTags',
- 'forbiddenVehTypes',
- 'teamTokens',
- 'leaderTokens',
- 'leaderTokenFirstType',
- 'pointsToken',
- 'addPersonalRewardToken',
- 'claimPersonalRewardToken',
- 'personalRewardQuest',
- 'teamRewardQuestPrefix',
- 'teamLevelToken',
- 'teamRewardTokenPrefix',
- 'teamsChannel',
- 'teamSkillsChannel',
- 'createVivoxTeamChannels',
- 'battleModifiersDescr'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, registration={}, url='', peripheryIDs={}, primeTimes={}, seasons={}, cycleTimes={}, levels=set(), teams={}, forbiddenVehTypes=set(), forbiddenClassTags=set(), teamTokens=set(), leaderTokens=set(), leaderTokenFirstType='', pointsToken='', addPersonalRewardToken='', claimPersonalRewardToken='', personalRewardQuest='', teamRewardQuestPrefix='', teamLevelToken='', teamRewardTokenPrefix='', teamsChannel='', teamSkillsChannel='', createVivoxTeamChannels=False, battleModifiersDescr=())
-        defaults.update(kwargs)
-        return super(_BobConfig, cls).__new__(cls, **defaults)
-
-    def asDict(self):
-        return self._asdict()
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class _ParagonsDefaultResetVehicleConfig(namedtuple('_ParagonsDefaultResetVehicleConfig', ('level',
  'resetBonusBlueprintsCount',
  'progressPointsAmount',
@@ -1997,11 +1951,6 @@ class ServerSettings(object):
             self.__modeSelectorConfig = makeTupleByDict(ModeSelectorConfig, self.__serverSettings[Configs.MODE_SELECTOR_CONFIG.value])
         else:
             self.__modeSelectorConfig = ModeSelectorConfig.defaults()
-        if 'bob_config' in self.__serverSettings:
-            LOG_DEBUG('bob_config', self.__serverSettings['bob_config'])
-            self.__bobSettings = makeTupleByDict(_BobConfig, self.__serverSettings['bob_config'])
-        else:
-            self.__bobSettings = _BobConfig.defaults()
         self.__schemaManager.set(self.__serverSettings)
         if Configs.PARAGONS_CONFIG.value in self.__serverSettings:
             LOG_DEBUG(Configs.PARAGONS_CONFIG.value, self.__serverSettings[Configs.PARAGONS_CONFIG.value])
@@ -2047,8 +1996,6 @@ class ServerSettings(object):
             self.__updateComp7PrestigeRanks(serverSettingsDiff)
         if Configs.COMP7_REWARDS_CONFIG.value in serverSettingsDiff:
             self.__updateComp7Rewards(serverSettingsDiff)
-        if 'bob_config' in serverSettingsDiff:
-            self.__updateBob(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -2255,10 +2202,6 @@ class ServerSettings(object):
     @property
     def comp7RewardsConfig(self):
         return self.__comp7RewardsConfig
-
-    @property
-    def bobConfig(self):
-        return self.__bobSettings
 
     @property
     def telecomConfig(self):
@@ -2770,9 +2713,6 @@ class ServerSettings(object):
     def __updateComp7Rewards(self, targetSettings):
         config = targetSettings[Configs.COMP7_REWARDS_CONFIG.value]
         self.__comp7RewardsConfig = self.__comp7RewardsConfig.replace(config)
-
-    def __updateBob(self, targetSettings):
-        self.__bobSettings = self.__bobSettings.replace(targetSettings['bob_config'])
 
     def __updateParagons(self, targetSettings):
         self.__paragonsConfig = self.__paragonsConfig.replace(targetSettings[Configs.PARAGONS_CONFIG.value])

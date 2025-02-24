@@ -17,11 +17,11 @@
       </cooldownSeconds>
       <duration>	7	  <exports>	vse tooltip	</exports>
       </duration>
-      <radius>	35	  <exports>	vse tooltip	</exports>
+      <radius>	30	  <exports>	vse tooltip	</exports>
       </radius>
-      <heal>	25 50 75	  <exports>	vse	</exports>
+      <heal>	20 45 70	  <exports>	vse	</exports>
       </heal>
-      <secondaryHealDebuff>	20	  <exports>	vse tooltip	</exports>
+      <secondaryHealDebuff>	25	  <exports>	vse tooltip	</exports>
       </secondaryHealDebuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -41,11 +41,11 @@
           <plan>	comp7Abilities/allySupport_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	30	  <exports>	vse	</exports>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
       </cooldownSeconds>
       <duration>	20	  <exports>	vse tooltip	</exports>
       </duration>
-      <crewBuff>	7 12 17	  <exports>	vse tooltip	</exports>
+      <crewBuff>	10 15 20	  <exports>	vse tooltip	</exports>
       </crewBuff>
     </script>
   </comp7_ally_support>
@@ -70,9 +70,9 @@
       </cooldownSeconds>
       <duration>	10	  <exports>	vse tooltip	</exports>
       </duration>
-      <heal>	10 15 25	  <exports>	vse	</exports>
+      <heal>	10 15 20	  <exports>	vse	</exports>
       </heal>
-      <gunReloadTimeBuff>	5	  <exports>	vse tooltip	</exports>
+      <gunReloadTimeBuff>	4	  <exports>	vse tooltip	</exports>
       </gunReloadTimeBuff>
       <tickInterval>	1.0	  <exports>	vse	</exports>
       </tickInterval>
@@ -144,9 +144,9 @@
           <plan>	comp7Abilities/aoeInspire_server	</plan>
         </server>
       </visualScript>
-      <cooldownSeconds>	15	  <exports>	vse	</exports>
+      <cooldownSeconds>	10	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	20	  <exports>	vse tooltip	</exports>
+      <duration>	25	  <exports>	vse tooltip	</exports>
       </duration>
       <crewBuff>	25 40 55	  <exports>	vse tooltip	</exports>
       </crewBuff>
@@ -213,9 +213,9 @@
           <plan>	comp7Abilities/fastRecharge_client	</plan>
         </client>
       </visualScript>
-      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      <cooldownSeconds>	15	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <gunReloadTimeBuff>	0.7 0.5 0.3	  <exports>	vse	</exports>
+      <gunReloadTimeBuff>	0.65 0.45 0.25	  <exports>	vse	</exports>
       </gunReloadTimeBuff>
     </script>
   </comp7_fast_recharge>
@@ -241,7 +241,7 @@
       </enginePowerFactor>
       <stunDurationFactor>	0.25	  <exports>	vse	</exports>
       </stunDurationFactor>
-      <repairBuff>	33	  <exports>	vse tooltip	</exports>
+      <repairBuff>	75	  <exports>	vse tooltip	</exports>
       </repairBuff>
       <gunReloadBoost>	4.0	  <exports>	vse tooltip	</exports>
       </gunReloadBoost>
@@ -295,7 +295,7 @@
       </dispersionFactor>
       <damageDistance>	350	  <exports>	vse tooltip	</exports>
       </damageDistance>
-      <damageFactors>	1.05 1.2 1.65	  <exports>	vse tooltip	</exports>
+      <damageFactors>	1.15 1.25 1.65	  <exports>	vse tooltip	</exports>
       </damageFactors>
     </script>
   </comp7_sniper>
@@ -325,7 +325,7 @@
       </extraHealFactor>
       <fwdSpeedBoost>	20	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>
-      <bkwSpeedBoost>	1	  <exports>	vse tooltip	</exports>
+      <bkwSpeedBoost>	15	  <exports>	vse tooltip	</exports>
       </bkwSpeedBoost>
       <enginePowerBuff>	15	  <exports>	vse tooltip	</exports>
       </enginePowerBuff>
@@ -342,7 +342,7 @@
     <soundNotification>	comp_7_ability_ready	</soundNotification>
     <script>	Comp7ReconEquipment	  <visualScript>
         <server>
-          <plan>	comp7Abilities/recon_server	</plan>
+          <plan>	comp7Abilities/recon_point_server	</plan>
         </server>
       </visualScript>
       <cooldownSeconds>	25	  <exports>	vse	</exports>

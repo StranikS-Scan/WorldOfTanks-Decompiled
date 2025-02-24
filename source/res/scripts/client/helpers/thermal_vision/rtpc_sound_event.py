@@ -15,7 +15,8 @@ class RTPCSoundEvent(CallbackDelayer):
     def play(self, duration):
         if duration <= 0:
             return
-        SoundGroups.g_instance.playSound2D(self.startSound)
+        if not self.hasDelayedCallback(self._updateValue):
+            SoundGroups.g_instance.playSound2D(self.startSound)
         self.delayCallback(0, self._updateValue, duration, BigWorld.time())
 
     def stop(self):

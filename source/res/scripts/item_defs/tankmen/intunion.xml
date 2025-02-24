@@ -1,0 +1,3986 @@
+<intunion.xml>
+  <ranks>
+    <private>
+      <userString>	#intunion_tankmen:ranksIU/private	</userString>
+      <icon>	intunion-1.png	</icon>
+    </private>
+    <lance_corporal>
+      <userString>	#intunion_tankmen:ranksIU/lance_corporal	</userString>
+      <icon>	intunion-2.png	</icon>
+    </lance_corporal>
+    <junior_sergeant>
+      <userString>	#intunion_tankmen:ranksIU/junior_sergeant	</userString>
+      <icon>	intunion-3.png	</icon>
+    </junior_sergeant>
+    <sergeant>
+      <userString>	#intunion_tankmen:ranksIU/sergeant	</userString>
+      <icon>	intunion-4.png	</icon>
+    </sergeant>
+    <senior_sergeant>
+      <userString>	#intunion_tankmen:ranksIU/senior_sergeant	</userString>
+      <icon>	intunion-5.png	</icon>
+    </senior_sergeant>
+    <sergeant_major>
+      <userString>	#intunion_tankmen:ranksIU/sergeant_major	</userString>
+      <icon>	intunion-6.png	</icon>
+    </sergeant_major>
+    <junior_lieutenant>
+      <userString>	#intunion_tankmen:ranksIU/junior_lieutenant	</userString>
+      <icon>	intunion-7.png	</icon>
+    </junior_lieutenant>
+    <lieutenant>
+      <userString>	#intunion_tankmen:ranksIU/lieutenant	</userString>
+      <icon>	intunion-8.png	</icon>
+    </lieutenant>
+    <senior_lieutenant>
+      <userString>	#intunion_tankmen:ranksIU/senior_lieutenant	</userString>
+      <icon>	intunion-9.png	</icon>
+    </senior_lieutenant>
+    <captain>
+      <userString>	#intunion_tankmen:ranksIU/captain	</userString>
+      <icon>	intunion-10.png	</icon>
+    </captain>
+    <major>
+      <userString>	#intunion_tankmen:ranksIU/major	</userString>
+      <icon>	intunion-11.png	</icon>
+    </major>
+  </ranks>
+  <roleRanks>
+    <commander>	junior_sergeant sergeant senior_sergeant sergeant_major
+			junior_lieutenant lieutenant senior_lieutenant captain major	</commander>
+    <driver>	lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+			junior_lieutenant lieutenant senior_lieutenant captain	</driver>
+    <gunner>	lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+			junior_lieutenant lieutenant senior_lieutenant captain	</gunner>
+    <radioman>	private lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+			junior_lieutenant lieutenant senior_lieutenant	</radioman>
+    <loader>	private lance_corporal junior_sergeant sergeant senior_sergeant sergeant_major
+			junior_lieutenant lieutenant senior_lieutenant	</loader>
+  </roleRanks>
+  <normalGroups>
+    <men1>
+      <groupID>	0	</groupID>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_1>	#intunion_tankmen:names/iunionn1	</_1>
+        <_2>	#intunion_tankmen:names/iunionn2	</_2>
+        <_3>	#intunion_tankmen:names/iunionn3	</_3>
+        <_4>	#intunion_tankmen:names/iunionn4	</_4>
+        <_5>	#intunion_tankmen:names/iunionn5	</_5>
+        <_6>	#intunion_tankmen:names/iunionn6	</_6>
+        <_7>	#intunion_tankmen:names/iunionn7	</_7>
+        <_8>	#intunion_tankmen:names/iunionn8	</_8>
+        <_9>	#intunion_tankmen:names/iunionn9	</_9>
+        <_10>	#intunion_tankmen:names/iunionn10	</_10>
+        <_11>	#intunion_tankmen:names/iunionn11	</_11>
+        <_12>	#intunion_tankmen:names/iunionn12	</_12>
+        <_13>	#intunion_tankmen:names/iunionn13	</_13>
+        <_14>	#intunion_tankmen:names/iunionn14	</_14>
+        <_15>	#intunion_tankmen:names/iunionn15	</_15>
+        <_16>	#intunion_tankmen:names/iunionn16	</_16>
+        <_17>	#intunion_tankmen:names/iunionn17	</_17>
+        <_18>	#intunion_tankmen:names/iunionn18	</_18>
+        <_19>	#intunion_tankmen:names/iunionn19	</_19>
+        <_20>	#intunion_tankmen:names/iunionn20	</_20>
+        <_21>	#intunion_tankmen:names/iunionn21	</_21>
+        <_22>	#intunion_tankmen:names/iunionn22	</_22>
+        <_23>	#intunion_tankmen:names/iunionn23	</_23>
+        <_24>	#intunion_tankmen:names/iunionn24	</_24>
+        <_25>	#intunion_tankmen:names/iunionn25	</_25>
+        <_26>	#intunion_tankmen:names/iunionn26	</_26>
+        <_27>	#intunion_tankmen:names/iunionn27	</_27>
+        <_28>	#intunion_tankmen:names/iunionn28	</_28>
+        <_29>	#intunion_tankmen:names/iunionn29	</_29>
+        <_30>	#intunion_tankmen:names/iunionn30	</_30>
+        <_31>	#intunion_tankmen:names/iunionn31	</_31>
+        <_32>	#intunion_tankmen:names/iunionn32	</_32>
+        <_33>	#intunion_tankmen:names/iunionn33	</_33>
+        <_34>	#intunion_tankmen:names/iunionn34	</_34>
+        <_35>	#intunion_tankmen:names/iunionn35	</_35>
+        <_36>	#intunion_tankmen:names/iunionn36	</_36>
+        <_37>	#intunion_tankmen:names/iunionn37	</_37>
+        <_38>	#intunion_tankmen:names/iunionn38	</_38>
+        <_39>	#intunion_tankmen:names/iunionn39	</_39>
+        <_40>	#intunion_tankmen:names/iunionn40	</_40>
+        <_41>	#intunion_tankmen:names/iunionn41	</_41>
+        <_42>	#intunion_tankmen:names/iunionn42	</_42>
+        <_43>	#intunion_tankmen:names/iunionn43	</_43>
+      </firstNames>
+      <lastNames>
+        <_1>	#intunion_tankmen:names/iunion1	</_1>
+        <_2>	#intunion_tankmen:names/iunion2	</_2>
+        <_3>	#intunion_tankmen:names/iunion3	</_3>
+        <_4>	#intunion_tankmen:names/iunion4	</_4>
+        <_5>	#intunion_tankmen:names/iunion5	</_5>
+        <_6>	#intunion_tankmen:names/iunion6	</_6>
+        <_7>	#intunion_tankmen:names/iunion7	</_7>
+        <_8>	#intunion_tankmen:names/iunion8	</_8>
+        <_9>	#intunion_tankmen:names/iunion9	</_9>
+        <_10>	#intunion_tankmen:names/iunion10	</_10>
+        <_11>	#intunion_tankmen:names/iunion11	</_11>
+        <_12>	#intunion_tankmen:names/iunion12	</_12>
+        <_13>	#intunion_tankmen:names/iunion13	</_13>
+        <_14>	#intunion_tankmen:names/iunion14	</_14>
+        <_15>	#intunion_tankmen:names/iunion15	</_15>
+        <_16>	#intunion_tankmen:names/iunion16	</_16>
+        <_17>	#intunion_tankmen:names/iunion17	</_17>
+        <_18>	#intunion_tankmen:names/iunion18	</_18>
+        <_19>	#intunion_tankmen:names/iunion19	</_19>
+        <_20>	#intunion_tankmen:names/iunion20	</_20>
+        <_21>	#intunion_tankmen:names/iunion21	</_21>
+        <_22>	#intunion_tankmen:names/iunion22	</_22>
+        <_23>	#intunion_tankmen:names/iunion23	</_23>
+        <_24>	#intunion_tankmen:names/iunion24	</_24>
+        <_25>	#intunion_tankmen:names/iunion25	</_25>
+        <_26>	#intunion_tankmen:names/iunion26	</_26>
+        <_27>	#intunion_tankmen:names/iunion27	</_27>
+        <_28>	#intunion_tankmen:names/iunion28	</_28>
+        <_29>	#intunion_tankmen:names/iunion29	</_29>
+        <_30>	#intunion_tankmen:names/iunion30	</_30>
+        <_31>	#intunion_tankmen:names/iunion31	</_31>
+        <_32>	#intunion_tankmen:names/iunion32	</_32>
+        <_33>	#intunion_tankmen:names/iunion33	</_33>
+        <_34>	#intunion_tankmen:names/iunion34	</_34>
+        <_35>	#intunion_tankmen:names/iunion35	</_35>
+        <_36>	#intunion_tankmen:names/iunion36	</_36>
+        <_37>	#intunion_tankmen:names/iunion37	</_37>
+        <_38>	#intunion_tankmen:names/iunion38	</_38>
+        <_39>	#intunion_tankmen:names/iunion39	</_39>
+        <_40>	#intunion_tankmen:names/iunion40	</_40>
+        <_41>	#intunion_tankmen:names/iunion41	</_41>
+        <_42>	#intunion_tankmen:names/iunion42	</_42>
+        <_43>	#intunion_tankmen:names/iunion43	</_43>
+      </lastNames>
+      <icons>
+        <_1>	intunion-1.png	</_1>
+        <_2>	intunion-2.png	</_2>
+        <_3>	intunion-3.png	</_3>
+        <_4>	intunion-4.png	</_4>
+        <_5>	intunion-5.png	</_5>
+        <_6>	intunion-6.png	</_6>
+        <_7>	intunion-7.png	</_7>
+        <_8>	intunion-8.png	</_8>
+        <_9>	intunion-9.png	</_9>
+        <_10>	intunion-10.png	</_10>
+        <_11>	intunion-11.png	</_11>
+        <_12>	intunion-12.png	</_12>
+        <_13>	intunion-13.png	</_13>
+        <_14>	intunion-14.png	</_14>
+        <_15>	intunion-15.png	</_15>
+        <_16>	intunion-16.png	</_16>
+        <_17>	intunion-17.png	</_17>
+        <_18>	intunion-18.png	</_18>
+        <_19>	intunion-19.png	</_19>
+        <_20>	intunion-20.png	</_20>
+        <_21>	intunion-21.png	</_21>
+        <_22>	intunion-22.png	</_22>
+        <_23>	intunion-23.png	</_23>
+        <_24>	intunion-24.png	</_24>
+        <_25>	intunion-25.png	</_25>
+        <_26>	intunion-26.png	</_26>
+        <_27>	intunion-27.png	</_27>
+        <_28>	intunion-28.png	</_28>
+        <_29>	intunion-29.png	</_29>
+        <_30>	intunion-30.png	</_30>
+        <_31>	intunion-31.png	</_31>
+        <_32>	intunion-32.png	</_32>
+        <_33>	intunion-33.png	</_33>
+        <_34>	intunion-34.png	</_34>
+        <_35>	intunion-35.png	</_35>
+      </icons>
+    </men1>
+  </normalGroups>
+  <premiumGroups>
+    <men1>
+      <groupID>	0	</groupID>
+      <weight>	1.0	</weight>
+      <sex>	male	</sex>
+      <firstNames>
+        <_2001>	#intunion_tankmen:names/iunionn1	</_2001>
+      </firstNames>
+      <lastNames>
+        <_2001>	#intunion_tankmen:names/iunion1	</_2001>
+      </lastNames>
+      <icons>
+        <_2001>	intunion-1.png	</_2001>
+      </icons>
+    </men1>
+    <women1>
+      <groupID>	1	</groupID>
+      <weight>	0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	false	</notInShop>
+      <firstNames>
+        <_11001>	#intunion_tankmen:names/iunionn11001	</_11001>
+        <_11002>	#intunion_tankmen:names/iunionn11002	</_11002>
+        <_11003>	#intunion_tankmen:names/iunionn11003	</_11003>
+        <_11004>	#intunion_tankmen:names/iunionn11004	</_11004>
+        <_11005>	#intunion_tankmen:names/iunionn11005	</_11005>
+        <_11006>	#intunion_tankmen:names/iunionn11006	</_11006>
+        <_11007>	#intunion_tankmen:names/iunionn11007	</_11007>
+        <_11008>	#intunion_tankmen:names/iunionn11008	</_11008>
+      </firstNames>
+      <lastNames>
+        <_11001>	#intunion_tankmen:names/iunion11001	</_11001>
+        <_11002>	#intunion_tankmen:names/iunion11002	</_11002>
+        <_11003>	#intunion_tankmen:names/iunion11003	</_11003>
+        <_11004>	#intunion_tankmen:names/iunion11004	</_11004>
+        <_11005>	#intunion_tankmen:names/iunion11005	</_11005>
+        <_11006>	#intunion_tankmen:names/iunion11006	</_11006>
+        <_11007>	#intunion_tankmen:names/iunion11007	</_11007>
+        <_11008>	#intunion_tankmen:names/iunion11008	</_11008>
+      </lastNames>
+      <icons>
+        <_11001>	intunion-female-1.png	</_11001>
+        <_11002>	intunion-female-2.png	</_11002>
+        <_11003>	intunion-female-3.png	</_11003>
+        <_11004>	intunion-female-4.png	</_11004>
+        <_11005>	intunion-female-5.png	</_11005>
+        <_11006>	intunion-female-6.png	</_11006>
+        <_11007>	intunion-female-7.png	</_11007>
+        <_11008>	intunion-female-8.png	</_11008>
+      </icons>
+    </women1>
+    <men_Buffon_Football>
+      <groupID>	4	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3005>	#intunion_tankmen:names/Gianluigi	</_3005>
+      </firstNames>
+      <lastNames>
+        <_3005>	#intunion_tankmen:names/Buffon	</_3005>
+      </lastNames>
+      <icons>
+        <_3005>	italy-Buffon.png	</_3005>
+      </icons>
+    </men_Buffon_Football>
+    <twitch_girl_commander>
+      <groupID>	5	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3006>	#intunion_tankmen:names/twitch_girln1	</_3006>
+      </firstNames>
+      <lastNames>
+        <_3006>	#intunion_tankmen:names/twitch_girl1	</_3006>
+      </lastNames>
+      <icons>
+        <_3006>	twitch_girl.png	</_3006>
+      </icons>
+    </twitch_girl_commander>
+    <ny19_girl_L4>
+      <groupID>	6	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3007>	#intunion_tankmen:names/ny19_girl_L4n	</_3007>
+      </firstNames>
+      <lastNames>
+        <_3007>	#intunion_tankmen:names/ny19_girl_L4	</_3007>
+      </lastNames>
+      <icons>
+        <_3007>	ny19_woman_L4.png	</_3007>
+      </icons>
+    </ny19_girl_L4>
+    <ny19_girl_L6>
+      <groupID>	7	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3008>	#intunion_tankmen:names/ny19_girl_L6n	</_3008>
+      </firstNames>
+      <lastNames>
+        <_3008>	#intunion_tankmen:names/ny19_girl_L6	</_3008>
+      </lastNames>
+      <icons>
+        <_3008>	ny19_woman_L6.png	</_3008>
+      </icons>
+    </ny19_girl_L6>
+    <ny19_girl_L8>
+      <groupID>	8	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3009>	#intunion_tankmen:names/ny19_girl_L8n	</_3009>
+      </firstNames>
+      <lastNames>
+        <_3009>	#intunion_tankmen:names/ny19_girl_L8	</_3009>
+      </lastNames>
+      <icons>
+        <_3009>	ny19_woman_L8.png	</_3009>
+      </icons>
+    </ny19_girl_L8>
+    <ny19_girl_L10>
+      <groupID>	9	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3010>	#intunion_tankmen:names/ny19_girl_L10n	</_3010>
+      </firstNames>
+      <lastNames>
+        <_3010>	#intunion_tankmen:names/ny19_girl_L10	</_3010>
+      </lastNames>
+      <icons>
+        <_3010>	ny19_woman_L10.png	</_3010>
+      </icons>
+    </ny19_girl_L10>
+    <ny19_men>
+      <groupID>	10	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3011>	#intunion_tankmen:names/ny19_menn1	</_3011>
+      </firstNames>
+      <lastNames>
+        <_3011>	#intunion_tankmen:names/ny19_men1	</_3011>
+      </lastNames>
+      <icons>
+        <_3011>	ny19_men.png	</_3011>
+      </icons>
+    </ny19_men>
+    <twitch_guy_commander>
+      <groupID>	11	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_2014>	#intunion_tankmen:names/twitch_guyn1	</_2014>
+      </firstNames>
+      <lastNames>
+        <_2014>	#intunion_tankmen:names/twitch_guy1	</_2014>
+      </lastNames>
+      <icons>
+        <_2014>	twitch_guy.png	</_2014>
+      </icons>
+    </twitch_guy_commander>
+    <commander_marina>
+      <groupID>	12	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_2015>	#intunion_tankmen:names/commander_marina_n	</_2015>
+      </firstNames>
+      <lastNames>
+        <_2015>	#intunion_tankmen:names/commander_marina	</_2015>
+      </lastNames>
+      <icons>
+        <_2015>	commander_marina.png	</_2015>
+      </icons>
+    </commander_marina>
+    <men_race19_commanderA>
+      <groupID>	13	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3012>	#intunion_tankmen:names/race19_commanderAn	</_3012>
+      </firstNames>
+      <lastNames>
+        <_3012>	#intunion_tankmen:names/race19_commanderA	</_3012>
+      </lastNames>
+      <icons>
+        <_3012>	race19-commander-a.png	</_3012>
+      </icons>
+    </men_race19_commanderA>
+    <men_race19_commanderB>
+      <groupID>	14	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3013>	#intunion_tankmen:names/race19_commanderBn	</_3013>
+      </firstNames>
+      <lastNames>
+        <_3013>	#intunion_tankmen:names/race19_commanderB	</_3013>
+      </lastNames>
+      <icons>
+        <_3013>	race19-commander-b.png	</_3013>
+      </icons>
+    </men_race19_commanderB>
+    <men_race19_commanderC>
+      <groupID>	15	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3014>	#intunion_tankmen:names/race19_commanderCn	</_3014>
+      </firstNames>
+      <lastNames>
+        <_3014>	#intunion_tankmen:names/race19_commanderC	</_3014>
+      </lastNames>
+      <icons>
+        <_3014>	race19-commander-c.png	</_3014>
+      </icons>
+    </men_race19_commanderC>
+    <men_race19_commanderA_en>
+      <groupID>	16	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoiceEn	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3015>	#intunion_tankmen:names/race19_commanderAn	</_3015>
+      </firstNames>
+      <lastNames>
+        <_3015>	#intunion_tankmen:names/race19_commanderA	</_3015>
+      </lastNames>
+      <icons>
+        <_3015>	race19-commander-a.png	</_3015>
+      </icons>
+    </men_race19_commanderA_en>
+    <men_race19_commanderB_en>
+      <groupID>	17	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoiceEn	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3016>	#intunion_tankmen:names/race19_commanderBn	</_3016>
+      </firstNames>
+      <lastNames>
+        <_3016>	#intunion_tankmen:names/race19_commanderB	</_3016>
+      </lastNames>
+      <icons>
+        <_3016>	race19-commander-b.png	</_3016>
+      </icons>
+    </men_race19_commanderB_en>
+    <men_race19_commanderC_en>
+      <groupID>	18	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander racerSpecialVoiceEn	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3017>	#intunion_tankmen:names/race19_commanderCn	</_3017>
+      </firstNames>
+      <lastNames>
+        <_3017>	#intunion_tankmen:names/race19_commanderC	</_3017>
+      </lastNames>
+      <icons>
+        <_3017>	race19-commander-c.png	</_3017>
+      </icons>
+    </men_race19_commanderC_en>
+    <commander_pumpkin>
+      <groupID>	19	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_2022>	#intunion_tankmen:names/commander_pumpkin_n	</_2022>
+      </firstNames>
+      <lastNames>
+        <_2022>	#intunion_tankmen:names/commander_pumpkin	</_2022>
+      </lastNames>
+      <icons>
+        <_2022>	twitch6_pumpkin_twitch.png	</_2022>
+      </icons>
+    </commander_pumpkin>
+    <commander_natale>
+      <groupID>	20	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_2016>	#intunion_tankmen:names/commander_natale_n	</_2016>
+      </firstNames>
+      <lastNames>
+        <_2016>	#intunion_tankmen:names/commander_natale	</_2016>
+      </lastNames>
+      <icons>
+        <_2016>	twitch8.png	</_2016>
+      </icons>
+    </commander_natale>
+    <ny20_girl_Christmas>
+      <groupID>	21	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3018>	#intunion_tankmen:names/ny20_girl_Christmasn	</_3018>
+      </firstNames>
+      <lastNames>
+        <_3018>	#intunion_tankmen:names/ny20_girl_Christmas	</_3018>
+      </lastNames>
+      <icons>
+        <_3018>	ny20_girl_Christmas.png	</_3018>
+      </icons>
+    </ny20_girl_Christmas>
+    <ny20_girl_Fairytale>
+      <groupID>	22	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3019>	#intunion_tankmen:names/ny20_girl_Fairytalen	</_3019>
+      </firstNames>
+      <lastNames>
+        <_3019>	#intunion_tankmen:names/ny20_girl_Fairytale	</_3019>
+      </lastNames>
+      <icons>
+        <_3019>	ny20_girl_Fairytale.png	</_3019>
+      </icons>
+    </ny20_girl_Fairytale>
+    <ny20_girl_NewYear>
+      <groupID>	23	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3020>	#intunion_tankmen:names/ny20_girl_NewYearn	</_3020>
+      </firstNames>
+      <lastNames>
+        <_3020>	#intunion_tankmen:names/ny20_girl_NewYear	</_3020>
+      </lastNames>
+      <icons>
+        <_3020>	ny20_girl_NewYear.png	</_3020>
+      </icons>
+    </ny20_girl_NewYear>
+    <ny20_girl_Oriental>
+      <groupID>	24	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3021>	#intunion_tankmen:names/ny20_girl_Orientaln	</_3021>
+      </firstNames>
+      <lastNames>
+        <_3021>	#intunion_tankmen:names/ny20_girl_Oriental	</_3021>
+      </lastNames>
+      <icons>
+        <_3021>	ny20_girl_Oriental.png	</_3021>
+      </icons>
+    </ny20_girl_Oriental>
+    <ny20_men>
+      <groupID>	25	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3022>	#intunion_tankmen:names/ny20_menn	</_3022>
+      </firstNames>
+      <lastNames>
+        <_3022>	#intunion_tankmen:names/ny20_men	</_3022>
+      </lastNames>
+      <icons>
+        <_3022>	ny20_men.png	</_3022>
+      </icons>
+    </ny20_men>
+    <ny20_snowmen>
+      <groupID>	26	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3023>	#intunion_tankmen:names/ny20_snowmenn	</_3023>
+      </firstNames>
+      <lastNames>
+        <_3023>	#intunion_tankmen:names/ny20_snowmen	</_3023>
+      </lastNames>
+      <icons>
+        <_3023>	ny20_snowmen.png	</_3023>
+      </icons>
+    </ny20_snowmen>
+    <bob20_commander1_ru>
+      <groupID>	27	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander ru1_LebwaSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3024>	#intunion_tankmen:names/bob20_commander1n_ru	</_3024>
+      </firstNames>
+      <lastNames>
+        <_3024>	#intunion_tankmen:names/bob20_commander1_ru	</_3024>
+      </lastNames>
+      <icons>
+        <_3024>	bob20_commander1_ru.png	</_3024>
+      </icons>
+    </bob20_commander1_ru>
+    <bob20_commander2_ru>
+      <groupID>	28	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander ru2_YushaSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3025>	#intunion_tankmen:names/bob20_commander2n_ru	</_3025>
+      </firstNames>
+      <lastNames>
+        <_3025>	#intunion_tankmen:names/bob20_commander2_ru	</_3025>
+      </lastNames>
+      <icons>
+        <_3025>	bob20_commander2_ru.png	</_3025>
+      </icons>
+    </bob20_commander2_ru>
+    <bob20_commander3_ru>
+      <groupID>	29	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander ru3_Amway921SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3026>	#intunion_tankmen:names/bob20_commander3n_ru	</_3026>
+      </firstNames>
+      <lastNames>
+        <_3026>	#intunion_tankmen:names/bob20_commander3_ru	</_3026>
+      </lastNames>
+      <icons>
+        <_3026>	bob20_commander3_ru.png	</_3026>
+      </icons>
+    </bob20_commander3_ru>
+    <bob20_commander4_ru>
+      <groupID>	30	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander ru4_KorbenDallasSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3027>	#intunion_tankmen:names/bob20_commander4n_ru	</_3027>
+      </firstNames>
+      <lastNames>
+        <_3027>	#intunion_tankmen:names/bob20_commander4_ru	</_3027>
+      </lastNames>
+      <icons>
+        <_3027>	bob20_commander4_ru.png	</_3027>
+      </icons>
+    </bob20_commander4_ru>
+    <bob20_commander1_eu>
+      <groupID>	31	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander eu1_MailandSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3028>	#intunion_tankmen:names/bob20_commander1n_eu	</_3028>
+      </firstNames>
+      <lastNames>
+        <_3028>	#intunion_tankmen:names/bob20_commander1_eu	</_3028>
+      </lastNames>
+      <icons>
+        <_3028>	bob20_commander1_eu.png	</_3028>
+      </icons>
+    </bob20_commander1_eu>
+    <bob20_commander2_eu>
+      <groupID>	32	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander eu2_Skill4ltuSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3029>	#intunion_tankmen:names/bob20_commander2n_eu	</_3029>
+      </firstNames>
+      <lastNames>
+        <_3029>	#intunion_tankmen:names/bob20_commander2_eu	</_3029>
+      </lastNames>
+      <icons>
+        <_3029>	bob20_commander2_eu.png	</_3029>
+      </icons>
+    </bob20_commander2_eu>
+    <bob20_commander3_eu>
+      <groupID>	33	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander eu3_DezgamezSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3030>	#intunion_tankmen:names/bob20_commander3n_eu	</_3030>
+      </firstNames>
+      <lastNames>
+        <_3030>	#intunion_tankmen:names/bob20_commander3_eu	</_3030>
+      </lastNames>
+      <icons>
+        <_3030>	bob20_commander3_eu.png	</_3030>
+      </icons>
+    </bob20_commander3_eu>
+    <bob20_commander4_eu>
+      <groupID>	34	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander eu4_AwesomeEpicGuysSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3031>	#intunion_tankmen:names/bob20_commander4n_eu	</_3031>
+      </firstNames>
+      <lastNames>
+        <_3031>	#intunion_tankmen:names/bob20_commander4_eu	</_3031>
+      </lastNames>
+      <icons>
+        <_3031>	bob20_commander4_eu.png	</_3031>
+      </icons>
+    </bob20_commander4_eu>
+    <bob20_commander1_na>
+      <groupID>	35	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3032>	#intunion_tankmen:names/bob20_commander1n_na	</_3032>
+      </firstNames>
+      <lastNames>
+        <_3032>	#intunion_tankmen:names/bob20_commander1_na	</_3032>
+      </lastNames>
+      <icons>
+        <_3032>	bob20_commander1_na.png	</_3032>
+      </icons>
+    </bob20_commander1_na>
+    <bob20_commander2_na>
+      <groupID>	36	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3033>	#intunion_tankmen:names/bob20_commander2n_na	</_3033>
+      </firstNames>
+      <lastNames>
+        <_3033>	#intunion_tankmen:names/bob20_commander2_na	</_3033>
+      </lastNames>
+      <icons>
+        <_3033>	bob20_commander2_na.png	</_3033>
+      </icons>
+    </bob20_commander2_na>
+    <bob20_commander1_asia>
+      <groupID>	37	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3034>	#intunion_tankmen:names/bob20_commander1n_asia	</_3034>
+      </firstNames>
+      <lastNames>
+        <_3034>	#intunion_tankmen:names/bob20_commander1_asia	</_3034>
+      </lastNames>
+      <icons>
+        <_3034>	bob20_commander1_asia.png	</_3034>
+      </icons>
+    </bob20_commander1_asia>
+    <bob20_commander2_asia>
+      <groupID>	38	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3035>	#intunion_tankmen:names/bob20_commander2n_asia	</_3035>
+      </firstNames>
+      <lastNames>
+        <_3035>	#intunion_tankmen:names/bob20_commander2_asia	</_3035>
+      </lastNames>
+      <icons>
+        <_3035>	bob20_commander2_asia.png	</_3035>
+      </icons>
+    </bob20_commander2_asia>
+    <commander_cesare>
+      <groupID>	39	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3036>	#intunion_tankmen:names/commander_cesare_n	</_3036>
+      </firstNames>
+      <lastNames>
+        <_3036>	#intunion_tankmen:names/commander_cesare	</_3036>
+      </lastNames>
+      <icons>
+        <_3036>	twitch10.png	</_3036>
+      </icons>
+    </commander_cesare>
+    <commander_starlight>
+      <groupID>	40	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3037>	#intunion_tankmen:names/commander_starlight_n	</_3037>
+      </firstNames>
+      <lastNames>
+        <_3037>	#intunion_tankmen:names/commander_starlight	</_3037>
+      </lastNames>
+      <icons>
+        <_3037>	twitch11.png	</_3037>
+      </icons>
+    </commander_starlight>
+    <commander_maeve>
+      <groupID>	41	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3042>	#intunion_tankmen:names/commander_maeve_n	</_3042>
+      </firstNames>
+      <lastNames>
+        <_3042>	#intunion_tankmen:names/commander_maeve	</_3042>
+      </lastNames>
+      <icons>
+        <_3042>	twitch12.png	</_3042>
+      </icons>
+    </commander_maeve>
+    <hw19_commander1>
+      <groupID>	42	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_25001>	#intunion_tankmen:names/hw19_commander1n	</_25001>
+      </firstNames>
+      <lastNames>
+        <_25001>	#intunion_tankmen:names/hw19_commander1	</_25001>
+      </lastNames>
+      <icons>
+        <_25001>	hw19_commander1.png	</_25001>
+      </icons>
+    </hw19_commander1>
+    <hw19_commander2>
+      <groupID>	43	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_25002>	#intunion_tankmen:names/hw19_commander2n	</_25002>
+      </firstNames>
+      <lastNames>
+        <_25002>	#intunion_tankmen:names/hw19_commander2	</_25002>
+      </lastNames>
+      <icons>
+        <_25002>	hw19_commander2.png	</_25002>
+      </icons>
+    </hw19_commander2>
+    <hw19_commander3>
+      <groupID>	44	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_25003>	#intunion_tankmen:names/hw19_commander3n	</_25003>
+      </firstNames>
+      <lastNames>
+        <_25003>	#intunion_tankmen:names/hw19_commander3	</_25003>
+      </lastNames>
+      <icons>
+        <_25003>	hw19_commander3.png	</_25003>
+      </icons>
+    </hw19_commander3>
+    <hw19_commander4>
+      <groupID>	45	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_25004>	#intunion_tankmen:names/hw19_commander4n	</_25004>
+      </firstNames>
+      <lastNames>
+        <_25004>	#intunion_tankmen:names/hw19_commander4	</_25004>
+      </lastNames>
+      <icons>
+        <_25004>	hw19_commander4.png	</_25004>
+      </icons>
+    </hw19_commander4>
+    <hw19_commander5>
+      <groupID>	46	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_25005>	#intunion_tankmen:names/hw19_commander5n	</_25005>
+      </firstNames>
+      <lastNames>
+        <_25005>	#intunion_tankmen:names/hw19_commander5	</_25005>
+      </lastNames>
+      <icons>
+        <_25005>	hw19_commander5.png	</_25005>
+      </icons>
+    </hw19_commander5>
+    <hw21_commander1>
+      <groupID>	141	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_26001>	#intunion_tankmen:names/hw21_commander1n	</_26001>
+      </firstNames>
+      <lastNames>
+        <_26001>	#intunion_tankmen:names/hw21_commander1	</_26001>
+      </lastNames>
+      <icons>
+        <_26001>	hw21_commander1.png	</_26001>
+      </icons>
+    </hw21_commander1>
+    <hw21_commander2>
+      <groupID>	142	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_26002>	#intunion_tankmen:names/hw21_commander2n	</_26002>
+      </firstNames>
+      <lastNames>
+        <_26002>	#intunion_tankmen:names/hw21_commander2	</_26002>
+      </lastNames>
+      <icons>
+        <_26002>	hw21_commander2.png	</_26002>
+      </icons>
+    </hw21_commander2>
+    <hw21_commander4>
+      <groupID>	144	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_26004>	#intunion_tankmen:names/hw21_commander4n	</_26004>
+      </firstNames>
+      <lastNames>
+        <_26004>	#intunion_tankmen:names/hw21_commander4	</_26004>
+      </lastNames>
+      <icons>
+        <_26004>	hw21_commander4.png	</_26004>
+      </icons>
+    </hw21_commander4>
+    <hw21_commander5>
+      <groupID>	145	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_26005>	#intunion_tankmen:names/hw21_commander5n	</_26005>
+      </firstNames>
+      <lastNames>
+        <_26005>	#intunion_tankmen:names/hw21_commander5	</_26005>
+      </lastNames>
+      <icons>
+        <_26005>	hw21_commander5.png	</_26005>
+      </icons>
+    </hw21_commander5>
+    <ny21_men>
+      <groupID>	47	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander celebrity21SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3043>	#intunion_tankmen:names/ny21_menn	</_3043>
+      </firstNames>
+      <lastNames>
+        <_3043>	#intunion_tankmen:names/ny21_men	</_3043>
+      </lastNames>
+      <icons>
+        <_3043>	ny21_men.png	</_3043>
+      </icons>
+    </ny21_men>
+    <ny21_girl_1>
+      <groupID>	48	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3044>	#intunion_tankmen:names/ny21_girl_1n	</_3044>
+      </firstNames>
+      <lastNames>
+        <_3044>	#intunion_tankmen:names/ny21_girl_1	</_3044>
+      </lastNames>
+      <icons>
+        <_3044>	ny21_girl_1.png	</_3044>
+      </icons>
+    </ny21_girl_1>
+    <ny21_girl_2>
+      <groupID>	49	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3045>	#intunion_tankmen:names/ny21_girl_2n	</_3045>
+      </firstNames>
+      <lastNames>
+        <_3045>	#intunion_tankmen:names/ny21_girl_2	</_3045>
+      </lastNames>
+      <icons>
+        <_3045>	ny21_girl_2.png	</_3045>
+      </icons>
+    </ny21_girl_2>
+    <ny21_girl_3>
+      <groupID>	50	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3046>	#intunion_tankmen:names/ny21_girl_3n	</_3046>
+      </firstNames>
+      <lastNames>
+        <_3046>	#intunion_tankmen:names/ny21_girl_3	</_3046>
+      </lastNames>
+      <icons>
+        <_3046>	ny21_girl_3.png	</_3046>
+      </icons>
+    </ny21_girl_3>
+    <ny21_girl_4>
+      <groupID>	51	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3047>	#intunion_tankmen:names/ny21_girl_4n	</_3047>
+      </firstNames>
+      <lastNames>
+        <_3047>	#intunion_tankmen:names/ny21_girl_4	</_3047>
+      </lastNames>
+      <icons>
+        <_3047>	ny21_girl_4.png	</_3047>
+      </icons>
+    </ny21_girl_4>
+    <commander_omelia>
+      <groupID>	52	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3048>	#intunion_tankmen:names/commander_omelia_n	</_3048>
+      </firstNames>
+      <lastNames>
+        <_3048>	#intunion_tankmen:names/commander_omelia	</_3048>
+      </lastNames>
+      <icons>
+        <_3048>	twitch13.png	</_3048>
+      </icons>
+    </commander_omelia>
+    <bob21_commander_ru1_Yusha>
+      <groupID>	56	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru1_Yusha_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3049>	#intunion_tankmen:names/bob21_commander_ru1_Yusha_n	</_3049>
+      </firstNames>
+      <lastNames>
+        <_3049>	#intunion_tankmen:names/bob21_commander_ru1_Yusha	</_3049>
+      </lastNames>
+      <icons>
+        <_3049>	bob21_blogger8_ru.png	</_3049>
+      </icons>
+    </bob21_commander_ru1_Yusha>
+    <bob21_commander_ru1_Vspishka>
+      <groupID>	57	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru1_Vspishka_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3050>	#intunion_tankmen:names/bob21_commander_ru1_Vspishka_n	</_3050>
+      </firstNames>
+      <lastNames>
+        <_3050>	#intunion_tankmen:names/bob21_commander_ru1_Vspishka	</_3050>
+      </lastNames>
+      <icons>
+        <_3050>	bob21_blogger7_ru.png	</_3050>
+      </icons>
+    </bob21_commander_ru1_Vspishka>
+    <bob21_commander_ru2_Amway921>
+      <groupID>	58	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru2_Amway921_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3051>	#intunion_tankmen:names/bob21_commander_ru2_Amway921_n	</_3051>
+      </firstNames>
+      <lastNames>
+        <_3051>	#intunion_tankmen:names/bob21_commander_ru2_Amway921	</_3051>
+      </lastNames>
+      <icons>
+        <_3051>	bob21_blogger1_ru.png	</_3051>
+      </icons>
+    </bob21_commander_ru2_Amway921>
+    <bob21_commander_ru2_Korbendailas>
+      <groupID>	59	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru2_Korbendailas_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3052>	#intunion_tankmen:names/bob21_commander_ru2_Korbendailas_n	</_3052>
+      </firstNames>
+      <lastNames>
+        <_3052>	#intunion_tankmen:names/bob21_commander_ru2_Korbendailas	</_3052>
+      </lastNames>
+      <icons>
+        <_3052>	bob21_blogger4_ru.png	</_3052>
+      </icons>
+    </bob21_commander_ru2_Korbendailas>
+    <bob21_commander_ru3_Lebwa>
+      <groupID>	60	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru3_Lebwa_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3053>	#intunion_tankmen:names/bob21_commander_ru3_Lebwa_n	</_3053>
+      </firstNames>
+      <lastNames>
+        <_3053>	#intunion_tankmen:names/bob21_commander_ru3_Lebwa	</_3053>
+      </lastNames>
+      <icons>
+        <_3053>	bob21_blogger5_ru.png	</_3053>
+      </icons>
+    </bob21_commander_ru3_Lebwa>
+    <bob21_commander_ru3_Inspirer>
+      <groupID>	61	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru3_Inspirer_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3054>	#intunion_tankmen:names/bob21_commander_ru3_Inspirer_n	</_3054>
+      </firstNames>
+      <lastNames>
+        <_3054>	#intunion_tankmen:names/bob21_commander_ru3_Inspirer	</_3054>
+      </lastNames>
+      <icons>
+        <_3054>	bob21_blogger3_ru.png	</_3054>
+      </icons>
+    </bob21_commander_ru3_Inspirer>
+    <bob21_commander_ru4_Evilgranny>
+      <groupID>	62	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru4_Evilgranny_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3055>	#intunion_tankmen:names/bob21_commander_ru4_Evilgranny_n	</_3055>
+      </firstNames>
+      <lastNames>
+        <_3055>	#intunion_tankmen:names/bob21_commander_ru4_Evilgranny	</_3055>
+      </lastNames>
+      <icons>
+        <_3055>	bob21_blogger2_ru.png	</_3055>
+      </icons>
+    </bob21_commander_ru4_Evilgranny>
+    <bob21_commander_ru4_Nearyou>
+      <groupID>	63	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_ru4_Nearyou_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3056>	#intunion_tankmen:names/bob21_commander_ru4_Nearyou_n	</_3056>
+      </firstNames>
+      <lastNames>
+        <_3056>	#intunion_tankmen:names/bob21_commander_ru4_Nearyou	</_3056>
+      </lastNames>
+      <icons>
+        <_3056>	bob21_blogger6_ru.png	</_3056>
+      </icons>
+    </bob21_commander_ru4_Nearyou>
+    <bob21_commander_eu1_Circon>
+      <groupID>	64	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_eu1_Circon_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3057>	#intunion_tankmen:names/bob21_commander_eu1_Circon_n	</_3057>
+      </firstNames>
+      <lastNames>
+        <_3057>	#intunion_tankmen:names/bob21_commander_eu1_Circon	</_3057>
+      </lastNames>
+      <icons>
+        <_3057>	bob21_blogger1_eu.png	</_3057>
+      </icons>
+    </bob21_commander_eu1_Circon>
+    <bob21_commander_eu2_Dakillzor>
+      <groupID>	65	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_eu2_Dakillzor_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3058>	#intunion_tankmen:names/bob21_commander_eu2_Dakillzor_n	</_3058>
+      </firstNames>
+      <lastNames>
+        <_3058>	#intunion_tankmen:names/bob21_commander_eu2_Dakillzor	</_3058>
+      </lastNames>
+      <icons>
+        <_3058>	bob21_blogger2_eu.png	</_3058>
+      </icons>
+    </bob21_commander_eu2_Dakillzor>
+    <bob21_commander_eu3_Newmulti2k>
+      <groupID>	66	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_eu3_Newmulti2k_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3059>	#intunion_tankmen:names/bob21_commander_eu3_Newmulti2k_n	</_3059>
+      </firstNames>
+      <lastNames>
+        <_3059>	#intunion_tankmen:names/bob21_commander_eu3_Newmulti2k	</_3059>
+      </lastNames>
+      <icons>
+        <_3059>	bob21_blogger3_eu.png	</_3059>
+      </icons>
+    </bob21_commander_eu3_Newmulti2k>
+    <bob21_commander_eu4_Orzanel>
+      <groupID>	67	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_eu4_Orzanel_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3060>	#intunion_tankmen:names/bob21_commander_eu4_Orzanel_n	</_3060>
+      </firstNames>
+      <lastNames>
+        <_3060>	#intunion_tankmen:names/bob21_commander_eu4_Orzanel	</_3060>
+      </lastNames>
+      <icons>
+        <_3060>	bob21_blogger4_eu.png	</_3060>
+      </icons>
+    </bob21_commander_eu4_Orzanel>
+    <bob21_commander_na1_Cabbagemechanic>
+      <groupID>	68	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_na1_Cabbagemechanic_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3061>	#intunion_tankmen:names/bob21_commander_na1_Cabbagemechanic_n	</_3061>
+      </firstNames>
+      <lastNames>
+        <_3061>	#intunion_tankmen:names/bob21_commander_na1_Cabbagemechanic	</_3061>
+      </lastNames>
+      <icons>
+        <_3061>	bob21_blogger1_na.png	</_3061>
+      </icons>
+    </bob21_commander_na1_Cabbagemechanic>
+    <bob21_commander_na2_Tragicloss>
+      <groupID>	69	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_na2_Tragicloss_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3062>	#intunion_tankmen:names/bob21_commander_na2_Tragicloss_n	</_3062>
+      </firstNames>
+      <lastNames>
+        <_3062>	#intunion_tankmen:names/bob21_commander_na2_Tragicloss	</_3062>
+      </lastNames>
+      <icons>
+        <_3062>	bob21_blogger3_na.png	</_3062>
+      </icons>
+    </bob21_commander_na2_Tragicloss>
+    <bob21_commander_na3_Cmdraf>
+      <groupID>	70	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_na3_Cmdraf_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3063>	#intunion_tankmen:names/bob21_commander_na3_Cmdraf_n	</_3063>
+      </firstNames>
+      <lastNames>
+        <_3063>	#intunion_tankmen:names/bob21_commander_na3_Cmdraf	</_3063>
+      </lastNames>
+      <icons>
+        <_3063>	bob21_blogger2_na.png	</_3063>
+      </icons>
+    </bob21_commander_na3_Cmdraf>
+    <bob21_commander_asia1_Mastertortoise>
+      <groupID>	71	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_asia1_Mastertortoise_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3064>	#intunion_tankmen:names/bob21_commander_asia1_Mastertortoise_n	</_3064>
+      </firstNames>
+      <lastNames>
+        <_3064>	#intunion_tankmen:names/bob21_commander_asia1_Mastertortoise	</_3064>
+      </lastNames>
+      <icons>
+        <_3064>	bob21_blogger2_asia.png	</_3064>
+      </icons>
+    </bob21_commander_asia1_Mastertortoise>
+    <bob21_commander_asia2_Summertiger>
+      <groupID>	72	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_asia2_Summertiger_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3065>	#intunion_tankmen:names/bob21_commander_asia2_Summertiger_n	</_3065>
+      </firstNames>
+      <lastNames>
+        <_3065>	#intunion_tankmen:names/bob21_commander_asia2_Summertiger	</_3065>
+      </lastNames>
+      <icons>
+        <_3065>	bob21_blogger3_asia.png	</_3065>
+      </icons>
+    </bob21_commander_asia2_Summertiger>
+    <bob21_commander_asia3_Maharlika>
+      <groupID>	73	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bb21_asia3_Maharlika_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3066>	#intunion_tankmen:names/bob21_commander_asia3_Maharlika_n	</_3066>
+      </firstNames>
+      <lastNames>
+        <_3066>	#intunion_tankmen:names/bob21_commander_asia3_Maharlika	</_3066>
+      </lastNames>
+      <icons>
+        <_3066>	bob21_blogger1_asia.png	</_3066>
+      </icons>
+    </bob21_commander_asia3_Maharlika>
+    <tankmen_bp3_1>
+      <groupID>	74	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3067>	#intunion_tankmen:names/tankmen_bp3_1_n	</_3067>
+      </firstNames>
+      <lastNames>
+        <_3067>	#intunion_tankmen:names/tankmen_bp3_1	</_3067>
+      </lastNames>
+      <icons>
+        <_3067>	bp_commander_3_1.png	</_3067>
+      </icons>
+    </tankmen_bp3_1>
+    <tankmen_bp3_2>
+      <groupID>	75	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3068>	#intunion_tankmen:names/tankmen_bp3_2_n	</_3068>
+      </firstNames>
+      <lastNames>
+        <_3068>	#intunion_tankmen:names/tankmen_bp3_2	</_3068>
+      </lastNames>
+      <icons>
+        <_3068>	bp_commander_3_3.png	</_3068>
+      </icons>
+    </tankmen_bp3_2>
+    <tankmen_bp3_3>
+      <groupID>	76	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3069>	#intunion_tankmen:names/tankmen_bp3_3_n	</_3069>
+      </firstNames>
+      <lastNames>
+        <_3069>	#intunion_tankmen:names/tankmen_bp3_3	</_3069>
+      </lastNames>
+      <icons>
+        <_3069>	bp_commander_3_2.png	</_3069>
+      </icons>
+    </tankmen_bp3_3>
+    <commander_duke>
+      <groupID>	77	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander duke_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3070>	#intunion_tankmen:names/commander_duke_n	</_3070>
+      </firstNames>
+      <lastNames>
+        <_3070>	#intunion_tankmen:names/commander_duke	</_3070>
+      </lastNames>
+      <icons>
+        <_3070>	twitch14.png	</_3070>
+      </icons>
+    </commander_duke>
+    <commander_cobra>
+      <groupID>	78	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander cobra_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3071>	#intunion_tankmen:names/commander_cobra_n	</_3071>
+      </firstNames>
+      <lastNames>
+        <_3071>	#intunion_tankmen:names/commander_cobra	</_3071>
+      </lastNames>
+      <icons>
+        <_3071>	twitch15.png	</_3071>
+      </icons>
+    </commander_cobra>
+    <tankmen_bp5_1>
+      <groupID>	79	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3074>	#intunion_tankmen:names/tankmen_bp5_1_n	</_3074>
+      </firstNames>
+      <lastNames>
+        <_3074>	#intunion_tankmen:names/tankmen_bp5_1	</_3074>
+      </lastNames>
+      <icons>
+        <_3074>	bp_commander_5_1.png	</_3074>
+      </icons>
+    </tankmen_bp5_1>
+    <tankmen_bp5_2>
+      <groupID>	80	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3075>	#intunion_tankmen:names/tankmen_bp5_2_n	</_3075>
+      </firstNames>
+      <lastNames>
+        <_3075>	#intunion_tankmen:names/tankmen_bp5_2	</_3075>
+      </lastNames>
+      <icons>
+        <_3075>	bp_commander_5_2.png	</_3075>
+      </icons>
+    </tankmen_bp5_2>
+    <tankmen_bp5_3>
+      <groupID>	81	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3076>	#intunion_tankmen:names/tankmen_bp5_3_n	</_3076>
+      </firstNames>
+      <lastNames>
+        <_3076>	#intunion_tankmen:names/tankmen_bp5_3	</_3076>
+      </lastNames>
+      <icons>
+        <_3076>	bp_commander_5_3.png	</_3076>
+      </icons>
+    </tankmen_bp5_3>
+    <commander_twitch_mochizuki>
+      <groupID>	82	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3077>	#intunion_tankmen:names/commander_twitch_mochizuki_n	</_3077>
+      </firstNames>
+      <lastNames>
+        <_3077>	#intunion_tankmen:names/commander_twitch_mochizuki	</_3077>
+      </lastNames>
+      <icons>
+        <_3077>	twitch16.png	</_3077>
+      </icons>
+    </commander_twitch_mochizuki>
+    <tankmen_bp6_1>
+      <groupID>	84	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3078>	#intunion_tankmen:names/tankmen_bp6_1_n	</_3078>
+      </firstNames>
+      <lastNames>
+        <_3078>	#intunion_tankmen:names/tankmen_bp6_1	</_3078>
+      </lastNames>
+      <icons>
+        <_3078>	bp_commander_6_1.png	</_3078>
+      </icons>
+    </tankmen_bp6_1>
+    <tankmen_bp6_2>
+      <groupID>	85	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3079>	#intunion_tankmen:names/tankmen_bp6_2_n	</_3079>
+      </firstNames>
+      <lastNames>
+        <_3079>	#intunion_tankmen:names/tankmen_bp6_2	</_3079>
+      </lastNames>
+      <icons>
+        <_3079>	bp_commander_6_2.png	</_3079>
+      </icons>
+    </tankmen_bp6_2>
+    <tankmen_bp6_3>
+      <groupID>	86	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3080>	#intunion_tankmen:names/tankmen_bp6_3_n	</_3080>
+      </firstNames>
+      <lastNames>
+        <_3080>	#intunion_tankmen:names/tankmen_bp6_3	</_3080>
+      </lastNames>
+      <icons>
+        <_3080>	bp_commander_6_3.png	</_3080>
+      </icons>
+    </tankmen_bp6_3>
+    <commander_twitch_ermelinda>
+      <groupID>	92	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3086>	#intunion_tankmen:names/commander_twitch_ermelinda_n	</_3086>
+      </firstNames>
+      <lastNames>
+        <_3086>	#intunion_tankmen:names/commander_twitch_ermelinda	</_3086>
+      </lastNames>
+      <icons>
+        <_3086>	twitch17.png	</_3086>
+      </icons>
+    </commander_twitch_ermelinda>
+    <ny22_girl_1>
+      <groupID>	93	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3087>	#intunion_tankmen:names/ny22_girl_1n	</_3087>
+      </firstNames>
+      <lastNames>
+        <_3087>	#intunion_tankmen:names/ny22_girl_1	</_3087>
+      </lastNames>
+      <icons>
+        <_3087>	ny22_girl_1.png	</_3087>
+      </icons>
+    </ny22_girl_1>
+    <ny22_girl_2>
+      <groupID>	94	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3088>	#intunion_tankmen:names/ny22_girl_2n	</_3088>
+      </firstNames>
+      <lastNames>
+        <_3088>	#intunion_tankmen:names/ny22_girl_2	</_3088>
+      </lastNames>
+      <icons>
+        <_3088>	ny22_girl_2.png	</_3088>
+      </icons>
+    </ny22_girl_2>
+    <ny22_girl_3>
+      <groupID>	95	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3089>	#intunion_tankmen:names/ny22_girl_3n	</_3089>
+      </firstNames>
+      <lastNames>
+        <_3089>	#intunion_tankmen:names/ny22_girl_3	</_3089>
+      </lastNames>
+      <icons>
+        <_3089>	ny22_girl_3.png	</_3089>
+      </icons>
+    </ny22_girl_3>
+    <ny22_girl_4>
+      <groupID>	96	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3090>	#intunion_tankmen:names/ny22_girl_4n	</_3090>
+      </firstNames>
+      <lastNames>
+        <_3090>	#intunion_tankmen:names/ny22_girl_4	</_3090>
+      </lastNames>
+      <icons>
+        <_3090>	ny22_girl_4.png	</_3090>
+      </icons>
+    </ny22_girl_4>
+    <ny22_men_A>
+      <groupID>	97	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3091>	#intunion_tankmen:names/ny22_men_An	</_3091>
+      </firstNames>
+      <lastNames>
+        <_3091>	#intunion_tankmen:names/ny22_men_A	</_3091>
+      </lastNames>
+      <icons>
+        <_3091>	ny22_men_A.png	</_3091>
+      </icons>
+    </ny22_men_A>
+    <commander_bjornson>
+      <groupID>	98	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3092>	#intunion_tankmen:names/commander_bjornson_n	</_3092>
+      </firstNames>
+      <lastNames>
+        <_3092>	#intunion_tankmen:names/commander_bjornson	</_3092>
+      </lastNames>
+      <icons>
+        <_3092>	twitch31.png	</_3092>
+      </icons>
+    </commander_bjornson>
+    <ny22_men>
+      <groupID>	99	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander celebrity22SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3093>	#intunion_tankmen:names/ny22_menn	</_3093>
+      </firstNames>
+      <lastNames>
+        <_3093>	#intunion_tankmen:names/ny22_men	</_3093>
+      </lastNames>
+      <icons>
+        <_3093>	ny22_men.png	</_3093>
+      </icons>
+    </ny22_men>
+    <yandex_1>
+      <groupID>	100	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3094>	#intunion_tankmen:names/yandex_1n	</_3094>
+      </firstNames>
+      <lastNames>
+        <_3094>	#intunion_tankmen:names/yandex_1	</_3094>
+      </lastNames>
+      <icons>
+        <_3094>	yandex_1.png	</_3094>
+      </icons>
+    </yandex_1>
+    <tankmen_bp7_1>
+      <groupID>	101	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3095>	#intunion_tankmen:names/tankmen_bp7_1_n	</_3095>
+      </firstNames>
+      <lastNames>
+        <_3095>	#intunion_tankmen:names/tankmen_bp7_1	</_3095>
+      </lastNames>
+      <icons>
+        <_3095>	bp_commander_7_1.png	</_3095>
+      </icons>
+    </tankmen_bp7_1>
+    <tankmen_bp7_2>
+      <groupID>	102	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3096>	#intunion_tankmen:names/tankmen_bp7_2_n	</_3096>
+      </firstNames>
+      <lastNames>
+        <_3096>	#intunion_tankmen:names/tankmen_bp7_2	</_3096>
+      </lastNames>
+      <icons>
+        <_3096>	bp_commander_7_4.png	</_3096>
+      </icons>
+    </tankmen_bp7_2>
+    <tankmen_bp7_3>
+      <groupID>	103	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3097>	#intunion_tankmen:names/tankmen_bp7_3_n	</_3097>
+      </firstNames>
+      <lastNames>
+        <_3097>	#intunion_tankmen:names/tankmen_bp7_3	</_3097>
+      </lastNames>
+      <icons>
+        <_3097>	bp_commander_7_2.png	</_3097>
+      </icons>
+    </tankmen_bp7_3>
+    <tankmen_bp7_4>
+      <groupID>	104	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3098>	#intunion_tankmen:names/tankmen_bp7_4_n	</_3098>
+      </firstNames>
+      <lastNames>
+        <_3098>	#intunion_tankmen:names/tankmen_bp7_4	</_3098>
+      </lastNames>
+      <icons>
+        <_3098>	bp_commander_7_3.png	</_3098>
+      </icons>
+    </tankmen_bp7_4>
+    <tankmen_bp8_6>
+      <groupID>	105	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3104>	#intunion_tankmen:names/tankmen_bp8_6_n	</_3104>
+      </firstNames>
+      <lastNames>
+        <_3104>	#intunion_tankmen:names/tankmen_bp8_6	</_3104>
+      </lastNames>
+      <icons>
+        <_3104>	bp_commander_8_6.png	</_3104>
+      </icons>
+    </tankmen_bp8_6>
+    <tankmen_bp8_7>
+      <groupID>	106	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3105>	#intunion_tankmen:names/tankmen_bp8_7_n	</_3105>
+      </firstNames>
+      <lastNames>
+        <_3105>	#intunion_tankmen:names/tankmen_bp8_7	</_3105>
+      </lastNames>
+      <icons>
+        <_3105>	bp_commander_8_7.png	</_3105>
+      </icons>
+    </tankmen_bp8_7>
+    <tankmen_bp8_8>
+      <groupID>	107	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3106>	#intunion_tankmen:names/tankmen_bp8_8_n	</_3106>
+      </firstNames>
+      <lastNames>
+        <_3106>	#intunion_tankmen:names/tankmen_bp8_8	</_3106>
+      </lastNames>
+      <icons>
+        <_3106>	bp_commander_8_8.png	</_3106>
+      </icons>
+    </tankmen_bp8_8>
+    <commander_bingo>
+      <groupID>	108	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3107>	#intunion_tankmen:names/commander_bingo_n	</_3107>
+      </firstNames>
+      <lastNames>
+        <_3107>	#intunion_tankmen:names/commander_bingo	</_3107>
+      </lastNames>
+      <icons>
+        <_3107>	twitch33.png	</_3107>
+      </icons>
+    </commander_bingo>
+    <commander_baroness>
+      <groupID>	109	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander baroness22SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3108>	#intunion_tankmen:names/commander_baroness_n	</_3108>
+      </firstNames>
+      <lastNames>
+        <_3108>	#intunion_tankmen:names/commander_baroness	</_3108>
+      </lastNames>
+      <icons>
+        <_3108>	gi_joe_2022_baroness.png	</_3108>
+      </icons>
+    </commander_baroness>
+    <commander_cover_girl>
+      <groupID>	110	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander coverGirl22SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3109>	#intunion_tankmen:names/commander_cover_girl_n	</_3109>
+      </firstNames>
+      <lastNames>
+        <_3109>	#intunion_tankmen:names/commander_cover_girl	</_3109>
+      </lastNames>
+      <icons>
+        <_3109>	gi_joe_2022_cover_girl.png	</_3109>
+      </icons>
+    </commander_cover_girl>
+    <tankmen_bp9_1>
+      <groupID>	111	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3112>	#intunion_tankmen:names/tankmen_bp9_1_n	</_3112>
+      </firstNames>
+      <lastNames>
+        <_3112>	#intunion_tankmen:names/tankmen_bp9_1	</_3112>
+      </lastNames>
+      <icons>
+        <_3112>	bp_commander_9_1.png	</_3112>
+      </icons>
+    </tankmen_bp9_1>
+    <tankmen_bp9_2>
+      <groupID>	112	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3113>	#intunion_tankmen:names/tankmen_bp9_2_n	</_3113>
+      </firstNames>
+      <lastNames>
+        <_3113>	#intunion_tankmen:names/tankmen_bp9_2	</_3113>
+      </lastNames>
+      <icons>
+        <_3113>	bp_commander_9_2.png	</_3113>
+      </icons>
+    </tankmen_bp9_2>
+    <tankmen_bp9_3>
+      <groupID>	113	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3114>	#intunion_tankmen:names/tankmen_bp9_3_n	</_3114>
+      </firstNames>
+      <lastNames>
+        <_3114>	#intunion_tankmen:names/tankmen_bp9_3	</_3114>
+      </lastNames>
+      <icons>
+        <_3114>	bp_commander_9_3.png	</_3114>
+      </icons>
+    </tankmen_bp9_3>
+    <commander_quickybaby>
+      <groupID>	116	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander quickyBabySpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3115>	#intunion_tankmen:names/commander_quickybaby_n	</_3115>
+      </firstNames>
+      <lastNames>
+        <_3115>	#intunion_tankmen:names/commander_quickybaby	</_3115>
+      </lastNames>
+      <icons>
+        <_3115>	commander_quickybaby.png	</_3115>
+      </icons>
+    </commander_quickybaby>
+    <wt22_boss_commander>
+      <groupID>	114	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ermelinda_SpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_2052>	#intunion_tankmen:names/wt22_boss_commander_n	</_2052>
+      </firstNames>
+      <lastNames>
+        <_2052>	#intunion_tankmen:names/wt22_boss_commander	</_2052>
+      </lastNames>
+      <icons>
+        <_2052>	wt_2022_boss.png	</_2052>
+      </icons>
+    </wt22_boss_commander>
+    <wt22_hunter_commander>
+      <groupID>	115	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader villanelle_SpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_2053>	#intunion_tankmen:names/wt22_hunter_commander_n	</_2053>
+      </firstNames>
+      <lastNames>
+        <_2053>	#intunion_tankmen:names/wt22_hunter_commander	</_2053>
+      </lastNames>
+      <icons>
+        <_2053>	wt_2022_hunter.png	</_2053>
+      </icons>
+    </wt22_hunter_commander>
+    <commander_rebranding>
+      <groupID>	117	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3116>	#intunion_tankmen:names/commander_rebranding_n	</_3116>
+      </firstNames>
+      <lastNames>
+        <_3116>	#intunion_tankmen:names/commander_rebranding	</_3116>
+      </lastNames>
+      <icons>
+        <_3116>	crossivent_ekipazh.png	</_3116>
+      </icons>
+    </commander_rebranding>
+    <ny23ruby_girl_1>
+      <groupID>	129	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3129>	#intunion_tankmen:names/ny23ruby_girl_1n	</_3129>
+      </firstNames>
+      <lastNames>
+        <_3129>	#intunion_tankmen:names/ny23ruby_girl_1	</_3129>
+      </lastNames>
+      <icons>
+        <_3129>	ny23ruby_girl_1.png	</_3129>
+      </icons>
+    </ny23ruby_girl_1>
+    <ny23_girl_m>
+      <groupID>	130	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander celebrity23SpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3130>	#intunion_tankmen:names/ny23_girl_mn	</_3130>
+      </firstNames>
+      <lastNames>
+        <_3130>	#intunion_tankmen:names/ny23_girl_m	</_3130>
+      </lastNames>
+      <icons>
+        <_3130>	ny23_girl_m.png	</_3130>
+      </icons>
+    </ny23_girl_m>
+    <ny23_girl_1>
+      <groupID>	131	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3131>	#intunion_tankmen:names/ny23_girl_1n	</_3131>
+      </firstNames>
+      <lastNames>
+        <_3131>	#intunion_tankmen:names/ny23_girl_1	</_3131>
+      </lastNames>
+      <icons>
+        <_3131>	ny23_girl_1.png	</_3131>
+      </icons>
+    </ny23_girl_1>
+    <ny23_girl_2>
+      <groupID>	132	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3132>	#intunion_tankmen:names/ny23_girl_2n	</_3132>
+      </firstNames>
+      <lastNames>
+        <_3132>	#intunion_tankmen:names/ny23_girl_2	</_3132>
+      </lastNames>
+      <icons>
+        <_3132>	ny23_girl_2.png	</_3132>
+      </icons>
+    </ny23_girl_2>
+    <ny23_girl_3>
+      <groupID>	133	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3133>	#intunion_tankmen:names/ny23_girl_3n	</_3133>
+      </firstNames>
+      <lastNames>
+        <_3133>	#intunion_tankmen:names/ny23_girl_3	</_3133>
+      </lastNames>
+      <icons>
+        <_3133>	ny23_girl_3.png	</_3133>
+      </icons>
+    </ny23_girl_3>
+    <ny23_girl_4>
+      <groupID>	134	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden	</tags>
+      <roles>	commander radioman loader driver gunner	</roles>
+      <firstNames>
+        <_3134>	#intunion_tankmen:names/ny23_girl_4n	</_3134>
+      </firstNames>
+      <lastNames>
+        <_3134>	#intunion_tankmen:names/ny23_girl_4	</_3134>
+      </lastNames>
+      <icons>
+        <_3134>	ny23_girl_4.png	</_3134>
+      </icons>
+    </ny23_girl_4>
+    <tankmen_bph_1>
+      <groupID>	125	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander commander_bph_2022_1	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3125>	#intunion_tankmen:names/tankmen_bph_1_n	</_3125>
+      </firstNames>
+      <lastNames>
+        <_3125>	#intunion_tankmen:names/tankmen_bph_1	</_3125>
+      </lastNames>
+      <icons>
+        <_3125>	bp_commander_h_1.png	</_3125>
+      </icons>
+    </tankmen_bph_1>
+    <tankmen_bph_2>
+      <groupID>	126	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander commander_bph_2022_2	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3126>	#intunion_tankmen:names/tankmen_bph_2_n	</_3126>
+      </firstNames>
+      <lastNames>
+        <_3126>	#intunion_tankmen:names/tankmen_bph_2	</_3126>
+      </lastNames>
+      <icons>
+        <_3126>	bp_commander_h_2.png	</_3126>
+      </icons>
+    </tankmen_bph_2>
+    <tankmen_bph_3>
+      <groupID>	127	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander commander_bph_2022_3	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3127>	#intunion_tankmen:names/tankmen_bph_3_n	</_3127>
+      </firstNames>
+      <lastNames>
+        <_3127>	#intunion_tankmen:names/tankmen_bph_3	</_3127>
+      </lastNames>
+      <icons>
+        <_3127>	bp_commander_h_3.png	</_3127>
+      </icons>
+    </tankmen_bph_3>
+    <tankmen_bph_4>
+      <groupID>	128	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander commander_bph_2022_4	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3128>	#intunion_tankmen:names/tankmen_bph_4_n	</_3128>
+      </firstNames>
+      <lastNames>
+        <_3128>	#intunion_tankmen:names/tankmen_bph_4	</_3128>
+      </lastNames>
+      <icons>
+        <_3128>	bp_commander_h_4.png	</_3128>
+      </icons>
+    </tankmen_bph_4>
+    <hw22_witch_kordelia>
+      <groupID>	120	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander witchesCrew witchesSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3120>	#intunion_tankmen:names/hw22_witch_kordelia_n	</_3120>
+      </firstNames>
+      <lastNames>
+        <_3120>	#intunion_tankmen:names/hw22_witch_kordelia	</_3120>
+      </lastNames>
+      <icons>
+        <_3120>	hw22_witch_kordelia.png	</_3120>
+      </icons>
+    </hw22_witch_kordelia>
+    <hw22_witch_sibilla>
+      <groupID>	121	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden gunner witchesCrew	</tags>
+      <roles>	gunner	</roles>
+      <firstNames>
+        <_3121>	#intunion_tankmen:names/hw22_witch_sibilla_n	</_3121>
+      </firstNames>
+      <lastNames>
+        <_3121>	#intunion_tankmen:names/hw22_witch_sibilla	</_3121>
+      </lastNames>
+      <icons>
+        <_3121>	hw22_witch_sibilla.png	</_3121>
+      </icons>
+    </hw22_witch_sibilla>
+    <hw22_witch_aurelia>
+      <groupID>	122	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden loader witchesCrew	</tags>
+      <roles>	loader	</roles>
+      <firstNames>
+        <_3122>	#intunion_tankmen:names/hw22_witch_aurelia_n	</_3122>
+      </firstNames>
+      <lastNames>
+        <_3122>	#intunion_tankmen:names/hw22_witch_aurelia	</_3122>
+      </lastNames>
+      <icons>
+        <_3122>	hw22_witch_aurelia.png	</_3122>
+      </icons>
+    </hw22_witch_aurelia>
+    <hw22_witch_deirdra>
+      <groupID>	123	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden driver witchesCrew	</tags>
+      <roles>	driver	</roles>
+      <firstNames>
+        <_3123>	#intunion_tankmen:names/hw22_witch_deirdra_n	</_3123>
+      </firstNames>
+      <lastNames>
+        <_3123>	#intunion_tankmen:names/hw22_witch_deirdra	</_3123>
+      </lastNames>
+      <icons>
+        <_3123>	hw22_witch_deirdra.png	</_3123>
+      </icons>
+    </hw22_witch_deirdra>
+    <hw22_tailrius>
+      <groupID>	124	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden radioman witchesCrew	</tags>
+      <roles>	radioman	</roles>
+      <firstNames>
+        <_3124>	#intunion_tankmen:names/hw22_tailrius_n	</_3124>
+      </firstNames>
+      <lastNames>
+        <_3124>	#intunion_tankmen:names/hw22_tailrius	</_3124>
+      </lastNames>
+      <icons>
+        <_3124>	hw22_tailrius.png	</_3124>
+      </icons>
+    </hw22_tailrius>
+    <commander_ferenc>
+      <groupID>	135	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3135>	#intunion_tankmen:names/commander_ferenc_n	</_3135>
+      </firstNames>
+      <lastNames>
+        <_3135>	#intunion_tankmen:names/commander_ferenc	</_3135>
+      </lastNames>
+      <icons>
+        <_3135>	twitch35.png	</_3135>
+      </icons>
+    </commander_ferenc>
+    <tankmen_bp10_1>
+      <groupID>	136	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3136>	#intunion_tankmen:names/tankmen_bp10_1_n	</_3136>
+      </firstNames>
+      <lastNames>
+        <_3136>	#intunion_tankmen:names/tankmen_bp10_1	</_3136>
+      </lastNames>
+      <icons>
+        <_3136>	bp_commander_10_1.png	</_3136>
+      </icons>
+    </tankmen_bp10_1>
+    <tankmen_bp10_2>
+      <groupID>	137	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3137>	#intunion_tankmen:names/tankmen_bp10_2_n	</_3137>
+      </firstNames>
+      <lastNames>
+        <_3137>	#intunion_tankmen:names/tankmen_bp10_2	</_3137>
+      </lastNames>
+      <icons>
+        <_3137>	bp_commander_10_2.png	</_3137>
+      </icons>
+    </tankmen_bp10_2>
+    <tankmen_bp10_3>
+      <groupID>	138	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3138>	#intunion_tankmen:names/tankmen_bp10_3_n	</_3138>
+      </firstNames>
+      <lastNames>
+        <_3138>	#intunion_tankmen:names/tankmen_bp10_3	</_3138>
+      </lastNames>
+      <icons>
+        <_3138>	bp_commander_10_3.png	</_3138>
+      </icons>
+    </tankmen_bp10_3>
+    <commander_nansen>
+      <groupID>	139	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3139>	#intunion_tankmen:names/commander_nansen_n	</_3139>
+      </firstNames>
+      <lastNames>
+        <_3139>	#intunion_tankmen:names/commander_nansen	</_3139>
+      </lastNames>
+      <icons>
+        <_3139>	twitch38.png	</_3139>
+      </icons>
+    </commander_nansen>
+    <commander_hillen>
+      <groupID>	140	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3140>	#intunion_tankmen:names/commander_hillen_n	</_3140>
+      </firstNames>
+      <lastNames>
+        <_3140>	#intunion_tankmen:names/commander_hillen	</_3140>
+      </lastNames>
+      <icons>
+        <_3140>	twitch39.png	</_3140>
+      </icons>
+    </commander_hillen>
+    <tankmen_bp11_1>
+      <groupID>	146	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3141>	#intunion_tankmen:names/tankmen_bp11_1_n	</_3141>
+      </firstNames>
+      <lastNames>
+        <_3141>	#intunion_tankmen:names/tankmen_bp11_1	</_3141>
+      </lastNames>
+      <icons>
+        <_3141>	bp_commander_11_1.png	</_3141>
+      </icons>
+    </tankmen_bp11_1>
+    <tankmen_bp11_2>
+      <groupID>	147	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3142>	#intunion_tankmen:names/tankmen_bp11_2_n	</_3142>
+      </firstNames>
+      <lastNames>
+        <_3142>	#intunion_tankmen:names/tankmen_bp11_2	</_3142>
+      </lastNames>
+      <icons>
+        <_3142>	bp_commander_11_2.png	</_3142>
+      </icons>
+    </tankmen_bp11_2>
+    <tankmen_bp11_3>
+      <groupID>	148	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3143>	#intunion_tankmen:names/tankmen_bp11_3_n	</_3143>
+      </firstNames>
+      <lastNames>
+        <_3143>	#intunion_tankmen:names/tankmen_bp11_3	</_3143>
+      </lastNames>
+      <icons>
+        <_3143>	bp_commander_11_3.png	</_3143>
+      </icons>
+    </tankmen_bp11_3>
+    <tankmen_bp11_4>
+      <groupID>	149	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3144>	#intunion_tankmen:names/tankmen_bp11_4_n	</_3144>
+      </firstNames>
+      <lastNames>
+        <_3144>	#intunion_tankmen:names/tankmen_bp11_4	</_3144>
+      </lastNames>
+      <icons>
+        <_3144>	bp_commander_11_4.png	</_3144>
+      </icons>
+    </tankmen_bp11_4>
+    <commander_whiskers>
+      <groupID>	156	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_3146>	#intunion_tankmen:names/commander_whiskers_n	</_3146>
+      </firstNames>
+      <lastNames>
+        <_3146>	#intunion_tankmen:names/commander_whiskers	</_3146>
+      </lastNames>
+      <icons>
+        <_3146>	twitch43.png	</_3146>
+      </icons>
+    </commander_whiskers>
+    <tankmen_bp12_1>
+      <groupID>	157	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3147>	#intunion_tankmen:names/tankmen_bp12_1_n	</_3147>
+      </firstNames>
+      <lastNames>
+        <_3147>	#intunion_tankmen:names/tankmen_bp12_1	</_3147>
+      </lastNames>
+      <icons>
+        <_3147>	bp_commander_12_1.png	</_3147>
+      </icons>
+    </tankmen_bp12_1>
+    <tankmen_bp12_2>
+      <groupID>	158	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3148>	#intunion_tankmen:names/tankmen_bp12_2_n	</_3148>
+      </firstNames>
+      <lastNames>
+        <_3148>	#intunion_tankmen:names/tankmen_bp12_2	</_3148>
+      </lastNames>
+      <icons>
+        <_3148>	bp_commander_12_2.png	</_3148>
+      </icons>
+    </tankmen_bp12_2>
+    <tankmen_bp12_3>
+      <groupID>	159	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3149>	#intunion_tankmen:names/tankmen_bp12_3_n	</_3149>
+      </firstNames>
+      <lastNames>
+        <_3149>	#intunion_tankmen:names/tankmen_bp12_3	</_3149>
+      </lastNames>
+      <icons>
+        <_3149>	bp_commander_12_3.png	</_3149>
+      </icons>
+    </tankmen_bp12_3>
+    <tankmen_bp12_4>
+      <groupID>	160	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_3150>	#intunion_tankmen:names/tankmen_bp12_4_n	</_3150>
+      </firstNames>
+      <lastNames>
+        <_3150>	#intunion_tankmen:names/tankmen_bp12_4	</_3150>
+      </lastNames>
+      <icons>
+        <_3150>	bp_commander_12_4.png	</_3150>
+      </icons>
+    </tankmen_bp12_4>
+    <commander_bp_IvanCarevich>
+      <groupID>	31001	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander IvanCarevichSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31001>	#intunion_tankmen:names/commander_bp_IvanCarevich_n	</_31001>
+      </firstNames>
+      <lastNames>
+        <_31001>	#intunion_tankmen:names/commander_bp_IvanCarevich	</_31001>
+      </lastNames>
+      <icons>
+        <_31001>	commander_bp_IvanCarevich.png	</_31001>
+      </icons>
+    </commander_bp_IvanCarevich>
+    <commander_bp_Vasilisa>
+      <groupID>	31002	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander VasilisaSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31002>	#intunion_tankmen:names/commander_bp_Vasilisa_n	</_31002>
+      </firstNames>
+      <lastNames>
+        <_31002>	#intunion_tankmen:names/commander_bp_Vasilisa	</_31002>
+      </lastNames>
+      <icons>
+        <_31002>	commander_bp_Vasilisa.png	</_31002>
+      </icons>
+    </commander_bp_Vasilisa>
+    <commander_bp_Kashchei>
+      <groupID>	31003	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander KashcheiSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31003>	#intunion_tankmen:names/commander_bp_Kashchei_n	</_31003>
+      </firstNames>
+      <lastNames>
+        <_31003>	#intunion_tankmen:names/commander_bp_Kashchei	</_31003>
+      </lastNames>
+      <icons>
+        <_31003>	commander_bp_Kashchei.png	</_31003>
+      </icons>
+    </commander_bp_Kashchei>
+    <commander_bp_BabaYaga>
+      <groupID>	31004	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander BabaYagaSpecialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31004>	#intunion_tankmen:names/commander_bp_BabaYaga_n	</_31004>
+      </firstNames>
+      <lastNames>
+        <_31004>	#intunion_tankmen:names/commander_bp_BabaYaga	</_31004>
+      </lastNames>
+      <icons>
+        <_31004>	commander_bp_BabaYaga.png	</_31004>
+      </icons>
+    </commander_bp_BabaYaga>
+    <commander_mf_Trus>
+      <groupID>	31014	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader TrusSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31014>	#intunion_tankmen:names/commander_mf_Trus_n	</_31014>
+      </firstNames>
+      <lastNames>
+        <_31014>	#intunion_tankmen:names/commander_mf_Trus	</_31014>
+      </lastNames>
+      <icons>
+        <_31014>	commander_mf_Trus.png	</_31014>
+      </icons>
+    </commander_mf_Trus>
+    <commander_mf_Balbes>
+      <groupID>	31015	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader BalbesSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31015>	#intunion_tankmen:names/commander_mf_Balbes_n	</_31015>
+      </firstNames>
+      <lastNames>
+        <_31015>	#intunion_tankmen:names/commander_mf_Balbes	</_31015>
+      </lastNames>
+      <icons>
+        <_31015>	commander_mf_Balbes.png	</_31015>
+      </icons>
+    </commander_mf_Balbes>
+    <commander_mf_Byvaly>
+      <groupID>	31016	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ByvalySpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31016>	#intunion_tankmen:names/commander_mf_Byvaly_n	</_31016>
+      </firstNames>
+      <lastNames>
+        <_31016>	#intunion_tankmen:names/commander_mf_Byvaly	</_31016>
+      </lastNames>
+      <icons>
+        <_31016>	commander_mf_Byvaly.png	</_31016>
+      </icons>
+    </commander_mf_Byvaly>
+    <commander_Nikolay_Kuznetsov>
+      <groupID>	31017	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31017>	#intunion_tankmen:names/commander_Nikolay_Kuznetsov_n	</_31017>
+      </firstNames>
+      <lastNames>
+        <_31017>	#intunion_tankmen:names/commander_Nikolay_Kuznetsov	</_31017>
+      </lastNames>
+      <icons>
+        <_31017>	commander_Nikolay_Kuznetsov.png	</_31017>
+      </icons>
+    </commander_Nikolay_Kuznetsov>
+    <tankmen_bp12MT_1>
+      <groupID>	31010	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31010>	#intunion_tankmen:names/tankmen_bp12MT_1_n	</_31010>
+      </firstNames>
+      <lastNames>
+        <_31010>	#intunion_tankmen:names/tankmen_bp12MT_1	</_31010>
+      </lastNames>
+      <icons>
+        <_31010>	tankmen_bp12MT_1.png	</_31010>
+      </icons>
+    </tankmen_bp12MT_1>
+    <tankmen_bp12MT_2>
+      <groupID>	31011	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31011>	#intunion_tankmen:names/tankmen_bp12MT_2_n	</_31011>
+      </firstNames>
+      <lastNames>
+        <_31011>	#intunion_tankmen:names/tankmen_bp12MT_2	</_31011>
+      </lastNames>
+      <icons>
+        <_31011>	tankmen_bp12MT_2.png	</_31011>
+      </icons>
+    </tankmen_bp12MT_2>
+    <tankmen_bp12MT_3>
+      <groupID>	31012	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31012>	#intunion_tankmen:names/tankmen_bp12MT_3_n	</_31012>
+      </firstNames>
+      <lastNames>
+        <_31012>	#intunion_tankmen:names/tankmen_bp12MT_3	</_31012>
+      </lastNames>
+      <icons>
+        <_31012>	tankmen_bp12MT_3.png	</_31012>
+      </icons>
+    </tankmen_bp12MT_3>
+    <tankmen_bp12MT_4>
+      <groupID>	31013	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31013>	#intunion_tankmen:names/tankmen_bp12MT_4_n	</_31013>
+      </firstNames>
+      <lastNames>
+        <_31013>	#intunion_tankmen:names/tankmen_bp12MT_4	</_31013>
+      </lastNames>
+      <icons>
+        <_31013>	tankmen_bp12MT_4.png	</_31013>
+      </icons>
+    </tankmen_bp12MT_4>
+    <tankmen_hw_IvanCarevich>
+      <groupID>	31005	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew IvanCarevichHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31005>	#intunion_tankmen:names/tankmen_hw_IvanCarevich_n	</_31005>
+      </firstNames>
+      <lastNames>
+        <_31005>	#intunion_tankmen:names/tankmen_hw_IvanCarevich	</_31005>
+      </lastNames>
+      <icons>
+        <_31005>	tankmen_hw_IvanCarevich.png	</_31005>
+      </icons>
+    </tankmen_hw_IvanCarevich>
+    <tankmen_hw_Vasilisa>
+      <groupID>	31006	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew VasilisaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31006>	#intunion_tankmen:names/tankmen_hw_Vasilisa_n	</_31006>
+      </firstNames>
+      <lastNames>
+        <_31006>	#intunion_tankmen:names/tankmen_hw_Vasilisa	</_31006>
+      </lastNames>
+      <icons>
+        <_31006>	tankmen_hw_Vasilisa.png	</_31006>
+      </icons>
+    </tankmen_hw_Vasilisa>
+    <tankmen_hw_Kashchei>
+      <groupID>	31007	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew KashcheiHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31007>	#intunion_tankmen:names/tankmen_hw_Kashchei_n	</_31007>
+      </firstNames>
+      <lastNames>
+        <_31007>	#intunion_tankmen:names/tankmen_hw_Kashchei	</_31007>
+      </lastNames>
+      <icons>
+        <_31007>	tankmen_hw_Kashchei.png	</_31007>
+      </icons>
+    </tankmen_hw_Kashchei>
+    <tankmen_hw_BabaYaga>
+      <groupID>	31008	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew BabaYagaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31008>	#intunion_tankmen:names/tankmen_hw_BabaYaga_n	</_31008>
+      </firstNames>
+      <lastNames>
+        <_31008>	#intunion_tankmen:names/tankmen_hw_BabaYaga	</_31008>
+      </lastNames>
+      <icons>
+        <_31008>	tankmen_hw_BabaYaga.png	</_31008>
+      </icons>
+    </tankmen_hw_BabaYaga>
+    <tankmen_hw_Katrina>
+      <groupID>	31009	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader hwCrew KatrinaHWSpecialVoice crewHWvoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31009>	#intunion_tankmen:names/tankmen_hw_Katrina_n	</_31009>
+      </firstNames>
+      <lastNames>
+        <_31009>	#intunion_tankmen:names/tankmen_hw_Katrina	</_31009>
+      </lastNames>
+      <icons>
+        <_31009>	tankmen_hw_Katrina.png	</_31009>
+      </icons>
+    </tankmen_hw_Katrina>
+    <ny24_tankmen_procyon>
+      <groupID>	31018	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31018>	#intunion_tankmen:names/ny24_tankmen_procyon_n	</_31018>
+      </firstNames>
+      <lastNames>
+        <_31018>	#intunion_tankmen:names/ny24_tankmen_procyon	</_31018>
+      </lastNames>
+      <icons>
+        <_31018>	ny24_tankmen_procyon.png	</_31018>
+      </icons>
+    </ny24_tankmen_procyon>
+    <ny24_tankmen_1>
+      <groupID>	31019	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31019>	#intunion_tankmen:names/ny24_tankmen_1_n	</_31019>
+      </firstNames>
+      <lastNames>
+        <_31019>	#intunion_tankmen:names/ny24_tankmen_1	</_31019>
+      </lastNames>
+      <icons>
+        <_31019>	ny24_tankmen_1.png	</_31019>
+      </icons>
+    </ny24_tankmen_1>
+    <ny24_tankmen_2>
+      <groupID>	31020	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31020>	#intunion_tankmen:names/ny24_tankmen_2_n	</_31020>
+      </firstNames>
+      <lastNames>
+        <_31020>	#intunion_tankmen:names/ny24_tankmen_2	</_31020>
+      </lastNames>
+      <icons>
+        <_31020>	ny24_tankmen_2.png	</_31020>
+      </icons>
+    </ny24_tankmen_2>
+    <ny24_tankmen_3>
+      <groupID>	31021	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31021>	#intunion_tankmen:names/ny24_tankmen_3_n	</_31021>
+      </firstNames>
+      <lastNames>
+        <_31021>	#intunion_tankmen:names/ny24_tankmen_3	</_31021>
+      </lastNames>
+      <icons>
+        <_31021>	ny24_tankmen_3.png	</_31021>
+      </icons>
+    </ny24_tankmen_3>
+    <ny24_tankmen_4>
+      <groupID>	31022	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31022>	#intunion_tankmen:names/ny24_tankmen_4_n	</_31022>
+      </firstNames>
+      <lastNames>
+        <_31022>	#intunion_tankmen:names/ny24_tankmen_4	</_31022>
+      </lastNames>
+      <icons>
+        <_31022>	ny24_tankmen_4.png	</_31022>
+      </icons>
+    </ny24_tankmen_4>
+    <tankmen_Ar_Holstinin>
+      <groupID>	31023	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ariaCrew	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31023>	#intunion_tankmen:names/tankmen_Ar_Holstinin_n	</_31023>
+      </firstNames>
+      <lastNames>
+        <_31023>	#intunion_tankmen:names/tankmen_Ar_Holstinin	</_31023>
+      </lastNames>
+      <icons>
+        <_31023>	tankmen_Ar_Holstinin.png	</_31023>
+      </icons>
+    </tankmen_Ar_Holstinin>
+    <tankmen_Ar_Udalov>
+      <groupID>	31024	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ariaCrew	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31024>	#intunion_tankmen:names/tankmen_Ar_Udalov_n	</_31024>
+      </firstNames>
+      <lastNames>
+        <_31024>	#intunion_tankmen:names/tankmen_Ar_Udalov	</_31024>
+      </lastNames>
+      <icons>
+        <_31024>	tankmen_Ar_Udalov.png	</_31024>
+      </icons>
+    </tankmen_Ar_Udalov>
+    <tankmen_Ar_Popov>
+      <groupID>	31025	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ariaCrew	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31025>	#intunion_tankmen:names/tankmen_Ar_Popov_n	</_31025>
+      </firstNames>
+      <lastNames>
+        <_31025>	#intunion_tankmen:names/tankmen_Ar_Popov	</_31025>
+      </lastNames>
+      <icons>
+        <_31025>	tankmen_Ar_Popov.png	</_31025>
+      </icons>
+    </tankmen_Ar_Popov>
+    <tankmen_Ar_Zhorik>
+      <groupID>	31026	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader AriaZhorikSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31026>	#intunion_tankmen:names/tankmen_Ar_Zhorik_n	</_31026>
+      </firstNames>
+      <lastNames>
+        <_31026>	#intunion_tankmen:names/tankmen_Ar_Zhorik	</_31026>
+      </lastNames>
+      <icons>
+        <_31026>	tankmen_Ar_Zhorik.png	</_31026>
+      </icons>
+    </tankmen_Ar_Zhorik>
+    <tankmen_Ar_Zhitnyakov>
+      <groupID>	31027	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ariaCrew	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31027>	#intunion_tankmen:names/tankmen_Ar_Zhitnyakov_n	</_31027>
+      </firstNames>
+      <lastNames>
+        <_31027>	#intunion_tankmen:names/tankmen_Ar_Zhitnyakov	</_31027>
+      </lastNames>
+      <icons>
+        <_31027>	tankmen_Ar_Zhitnyakov.png	</_31027>
+      </icons>
+    </tankmen_Ar_Zhitnyakov>
+    <tankmen_Ar_Dubinin>
+      <groupID>	31028	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ariaCrew	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31028>	#intunion_tankmen:names/tankmen_Ar_Dubinin_n	</_31028>
+      </firstNames>
+      <lastNames>
+        <_31028>	#intunion_tankmen:names/tankmen_Ar_Dubinin	</_31028>
+      </lastNames>
+      <icons>
+        <_31028>	tankmen_Ar_Dubinin.png	</_31028>
+      </icons>
+    </tankmen_Ar_Dubinin>
+    <tankmen_MF_1>
+      <groupID>	31029	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31029>	#intunion_tankmen:names/tankmen_MF_1_n	</_31029>
+      </firstNames>
+      <lastNames>
+        <_31029>	#intunion_tankmen:names/tankmen_MF_1	</_31029>
+      </lastNames>
+      <icons>
+        <_31029>	tankmen_MF_1.png	</_31029>
+      </icons>
+    </tankmen_MF_1>
+    <tankmen_MF_2>
+      <groupID>	31030	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31030>	#intunion_tankmen:names/tankmen_MF_2_n	</_31030>
+      </firstNames>
+      <lastNames>
+        <_31030>	#intunion_tankmen:names/tankmen_MF_2	</_31030>
+      </lastNames>
+      <icons>
+        <_31030>	tankmen_MF_2.png	</_31030>
+      </icons>
+    </tankmen_MF_2>
+    <tankmen_MF_3>
+      <groupID>	31031	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31031>	#intunion_tankmen:names/tankmen_MF_3_n	</_31031>
+      </firstNames>
+      <lastNames>
+        <_31031>	#intunion_tankmen:names/tankmen_MF_3	</_31031>
+      </lastNames>
+      <icons>
+        <_31031>	tankmen_MF_3.png	</_31031>
+      </icons>
+    </tankmen_MF_3>
+    <tankmen_MF_4>
+      <groupID>	31032	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31032>	#intunion_tankmen:names/tankmen_MF_4_n	</_31032>
+      </firstNames>
+      <lastNames>
+        <_31032>	#intunion_tankmen:names/tankmen_MF_4	</_31032>
+      </lastNames>
+      <icons>
+        <_31032>	tankmen_MF_4.png	</_31032>
+      </icons>
+    </tankmen_MF_4>
+    <tankmen_MF_5_d_Vova>
+      <groupID>	31033	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader DyadyaVovaSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31033>	#intunion_tankmen:names/tankmen_MF_5_d_Vova_n	</_31033>
+      </firstNames>
+      <lastNames>
+        <_31033>	#intunion_tankmen:names/tankmen_MF_5_d_Vova	</_31033>
+      </lastNames>
+      <icons>
+        <_31033>	tankmen_MF_5_d_Vova.png	</_31033>
+      </icons>
+    </tankmen_MF_5_d_Vova>
+    <tankmen_MF_6_Scripach>
+      <groupID>	31034	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader ScripachSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31034>	#intunion_tankmen:names/tankmen_MF_6_Scripach_n	</_31034>
+      </firstNames>
+      <lastNames>
+        <_31034>	#intunion_tankmen:names/tankmen_MF_6_Scripach	</_31034>
+      </lastNames>
+      <icons>
+        <_31034>	tankmen_MF_6_Scripach.png	</_31034>
+      </icons>
+    </tankmen_MF_6_Scripach>
+    <tankmen_MF_7_Uef>
+      <groupID>	31035	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader UefSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31035>	#intunion_tankmen:names/tankmen_MF_7_Uef_n	</_31035>
+      </firstNames>
+      <lastNames>
+        <_31035>	#intunion_tankmen:names/tankmen_MF_7_Uef	</_31035>
+      </lastNames>
+      <icons>
+        <_31035>	tankmen_MF_7_Uef.png	</_31035>
+      </icons>
+    </tankmen_MF_7_Uef>
+    <tankmen_MF_8_Bi>
+      <groupID>	31036	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader BiSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31036>	#intunion_tankmen:names/tankmen_MF_8_Bi_n	</_31036>
+      </firstNames>
+      <lastNames>
+        <_31036>	#intunion_tankmen:names/tankmen_MF_8_Bi	</_31036>
+      </lastNames>
+      <icons>
+        <_31036>	tankmen_MF_8_Bi.png	</_31036>
+      </icons>
+    </tankmen_MF_8_Bi>
+    <tankmen_BP13_1>
+      <groupID>	31037	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31037>	#intunion_tankmen:names/tankmen_BP13_1_n	</_31037>
+      </firstNames>
+      <lastNames>
+        <_31037>	#intunion_tankmen:names/tankmen_BP13_1	</_31037>
+      </lastNames>
+      <icons>
+        <_31037>	tankmen_BP13_1.png	</_31037>
+      </icons>
+    </tankmen_BP13_1>
+    <tankmen_BP13_2>
+      <groupID>	31038	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31038>	#intunion_tankmen:names/tankmen_BP13_2_n	</_31038>
+      </firstNames>
+      <lastNames>
+        <_31038>	#intunion_tankmen:names/tankmen_BP13_2	</_31038>
+      </lastNames>
+      <icons>
+        <_31038>	tankmen_BP13_2.png	</_31038>
+      </icons>
+    </tankmen_BP13_2>
+    <tankmen_BP13_3>
+      <groupID>	31039	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31039>	#intunion_tankmen:names/tankmen_BP13_3_n	</_31039>
+      </firstNames>
+      <lastNames>
+        <_31039>	#intunion_tankmen:names/tankmen_BP13_3	</_31039>
+      </lastNames>
+      <icons>
+        <_31039>	tankmen_BP13_3.png	</_31039>
+      </icons>
+    </tankmen_BP13_3>
+    <tankmen_BP13_4>
+      <groupID>	31040	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31040>	#intunion_tankmen:names/tankmen_BP13_4_n	</_31040>
+      </firstNames>
+      <lastNames>
+        <_31040>	#intunion_tankmen:names/tankmen_BP13_4	</_31040>
+      </lastNames>
+      <icons>
+        <_31040>	tankmen_BP13_4.png	</_31040>
+      </icons>
+    </tankmen_BP13_4>
+    <tankmen_BP14_1>
+      <groupID>	31044	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31044>	#intunion_tankmen:names/tankmen_BP14_1_n	</_31044>
+      </firstNames>
+      <lastNames>
+        <_31044>	#intunion_tankmen:names/tankmen_BP14_1	</_31044>
+      </lastNames>
+      <icons>
+        <_31044>	tankmen_BP14_1.png	</_31044>
+      </icons>
+    </tankmen_BP14_1>
+    <tankmen_BP14_2>
+      <groupID>	31045	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31045>	#intunion_tankmen:names/tankmen_BP14_2_n	</_31045>
+      </firstNames>
+      <lastNames>
+        <_31045>	#intunion_tankmen:names/tankmen_BP14_2	</_31045>
+      </lastNames>
+      <icons>
+        <_31045>	tankmen_BP14_2.png	</_31045>
+      </icons>
+    </tankmen_BP14_2>
+    <tankmen_BP14_3>
+      <groupID>	31046	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31046>	#intunion_tankmen:names/tankmen_BP14_3_n	</_31046>
+      </firstNames>
+      <lastNames>
+        <_31046>	#intunion_tankmen:names/tankmen_BP14_3	</_31046>
+      </lastNames>
+      <icons>
+        <_31046>	tankmen_BP14_3.png	</_31046>
+      </icons>
+    </tankmen_BP14_3>
+    <tankmen_BP14_4>
+      <groupID>	31047	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31047>	#intunion_tankmen:names/tankmen_BP14_4_n	</_31047>
+      </firstNames>
+      <lastNames>
+        <_31047>	#intunion_tankmen:names/tankmen_BP14_4	</_31047>
+      </lastNames>
+      <icons>
+        <_31047>	tankmen_BP14_4.png	</_31047>
+      </icons>
+    </tankmen_BP14_4>
+    <tankmen_BP14_5>
+      <groupID>	31048	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31048>	#intunion_tankmen:names/tankmen_BP14_5_n	</_31048>
+      </firstNames>
+      <lastNames>
+        <_31048>	#intunion_tankmen:names/tankmen_BP14_5	</_31048>
+      </lastNames>
+      <icons>
+        <_31048>	tankmen_BP14_5.png	</_31048>
+      </icons>
+    </tankmen_BP14_5>
+    <tankmen_2024_racer_1>
+      <groupID>	31054	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31054>	#intunion_tankmen:names/tankmen_2024_racer_1_n	</_31054>
+      </firstNames>
+      <lastNames>
+        <_31054>	#intunion_tankmen:names/tankmen_2024_racer_1	</_31054>
+      </lastNames>
+      <icons>
+        <_31054>	tankmen_2024_racer_1.png	</_31054>
+      </icons>
+    </tankmen_2024_racer_1>
+    <tankmen_2024_racer_2>
+      <groupID>	31055	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31055>	#intunion_tankmen:names/tankmen_2024_racer_2_n	</_31055>
+      </firstNames>
+      <lastNames>
+        <_31055>	#intunion_tankmen:names/tankmen_2024_racer_2	</_31055>
+      </lastNames>
+      <icons>
+        <_31055>	tankmen_2024_racer_2.png	</_31055>
+      </icons>
+    </tankmen_2024_racer_2>
+    <tankmen_2024_racer_3>
+      <groupID>	31056	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31056>	#intunion_tankmen:names/tankmen_2024_racer_3_n	</_31056>
+      </firstNames>
+      <lastNames>
+        <_31056>	#intunion_tankmen:names/tankmen_2024_racer_3	</_31056>
+      </lastNames>
+      <icons>
+        <_31056>	tankmen_2024_racer_3.png	</_31056>
+      </icons>
+    </tankmen_2024_racer_3>
+    <tankmen_2024_racer_4>
+      <groupID>	31057	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31057>	#intunion_tankmen:names/tankmen_2024_racer_4_n	</_31057>
+      </firstNames>
+      <lastNames>
+        <_31057>	#intunion_tankmen:names/tankmen_2024_racer_4	</_31057>
+      </lastNames>
+      <icons>
+        <_31057>	tankmen_2024_racer_4.png	</_31057>
+      </icons>
+    </tankmen_2024_racer_4>
+    <tankmen_BP14_AC_1>
+      <groupID>	31049	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31049>	#intunion_tankmen:names/tankmen_BP14_AC_1_n	</_31049>
+      </firstNames>
+      <lastNames>
+        <_31049>	#intunion_tankmen:names/tankmen_BP14_AC_1	</_31049>
+      </lastNames>
+      <icons>
+        <_31049>	tankmen_BP14_AC_1.png	</_31049>
+      </icons>
+    </tankmen_BP14_AC_1>
+    <tankmen_BP14_AC_2>
+      <groupID>	31050	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31050>	#intunion_tankmen:names/tankmen_BP14_AC_2_n	</_31050>
+      </firstNames>
+      <lastNames>
+        <_31050>	#intunion_tankmen:names/tankmen_BP14_AC_2	</_31050>
+      </lastNames>
+      <icons>
+        <_31050>	tankmen_BP14_AC_2.png	</_31050>
+      </icons>
+    </tankmen_BP14_AC_2>
+    <tankmen_BP14_AC_3>
+      <groupID>	31051	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader a157FSpecialVoice	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31051>	#intunion_tankmen:names/tankmen_BP14_AC_3_n	</_31051>
+      </firstNames>
+      <lastNames>
+        <_31051>	#intunion_tankmen:names/tankmen_BP14_AC_3	</_31051>
+      </lastNames>
+      <icons>
+        <_31051>	tankmen_BP14_AC_3.png	</_31051>
+      </icons>
+    </tankmen_BP14_AC_3>
+    <tankmen_BP14_AC_4>
+      <groupID>	31052	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31052>	#intunion_tankmen:names/tankmen_BP14_AC_4_n	</_31052>
+      </firstNames>
+      <lastNames>
+        <_31052>	#intunion_tankmen:names/tankmen_BP14_AC_4	</_31052>
+      </lastNames>
+      <icons>
+        <_31052>	tankmen_BP14_AC_4.png	</_31052>
+      </icons>
+    </tankmen_BP14_AC_4>
+    <tankmen_BP14_AC_5>
+      <groupID>	31053	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31053>	#intunion_tankmen:names/tankmen_BP14_AC_5_n	</_31053>
+      </firstNames>
+      <lastNames>
+        <_31053>	#intunion_tankmen:names/tankmen_BP14_AC_5	</_31053>
+      </lastNames>
+      <icons>
+        <_31053>	tankmen_BP14_AC_5.png	</_31053>
+      </icons>
+    </tankmen_BP14_AC_5>
+    <tankmen_BP15_1>
+      <groupID>	31058	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31058>	#intunion_tankmen:names/tankmen_BP15_1_n	</_31058>
+      </firstNames>
+      <lastNames>
+        <_31058>	#intunion_tankmen:names/tankmen_BP15_1	</_31058>
+      </lastNames>
+      <icons>
+        <_31058>	tankmen_BP15_1.png	</_31058>
+      </icons>
+    </tankmen_BP15_1>
+    <tankmen_BP15_2>
+      <groupID>	31059	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31059>	#intunion_tankmen:names/tankmen_BP15_2_n	</_31059>
+      </firstNames>
+      <lastNames>
+        <_31059>	#intunion_tankmen:names/tankmen_BP15_2	</_31059>
+      </lastNames>
+      <icons>
+        <_31059>	tankmen_BP15_2.png	</_31059>
+      </icons>
+    </tankmen_BP15_2>
+    <tankmen_BP15_3>
+      <groupID>	31060	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31060>	#intunion_tankmen:names/tankmen_BP15_3_n	</_31060>
+      </firstNames>
+      <lastNames>
+        <_31060>	#intunion_tankmen:names/tankmen_BP15_3	</_31060>
+      </lastNames>
+      <icons>
+        <_31060>	tankmen_BP15_3.png	</_31060>
+      </icons>
+    </tankmen_BP15_3>
+    <tankmen_BP15_4>
+      <groupID>	31061	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31061>	#intunion_tankmen:names/tankmen_BP15_4_n	</_31061>
+      </firstNames>
+      <lastNames>
+        <_31061>	#intunion_tankmen:names/tankmen_BP15_4	</_31061>
+      </lastNames>
+      <icons>
+        <_31061>	tankmen_BP15_4.png	</_31061>
+      </icons>
+    </tankmen_BP15_4>
+    <tankmen_BP15_5>
+      <groupID>	31062	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31062>	#intunion_tankmen:names/tankmen_BP15_5_n	</_31062>
+      </firstNames>
+      <lastNames>
+        <_31062>	#intunion_tankmen:names/tankmen_BP15_5	</_31062>
+      </lastNames>
+      <icons>
+        <_31062>	tankmen_BP15_5.png	</_31062>
+      </icons>
+    </tankmen_BP15_5>
+    <tankmen_WT2024_Marat>
+      <groupID>	31063	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31063>	#intunion_tankmen:names/tankmen_WT2024_Marat_n	</_31063>
+      </firstNames>
+      <lastNames>
+        <_31063>	#intunion_tankmen:names/tankmen_WT2024_Marat	</_31063>
+      </lastNames>
+      <icons>
+        <_31063>	tankmen_WT2024_Marat.png	</_31063>
+      </icons>
+    </tankmen_WT2024_Marat>
+    <tankmen_WT2024_Elisa>
+      <groupID>	31064	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31064>	#intunion_tankmen:names/tankmen_WT2024_Elisa_n	</_31064>
+      </firstNames>
+      <lastNames>
+        <_31064>	#intunion_tankmen:names/tankmen_WT2024_Elisa	</_31064>
+      </lastNames>
+      <icons>
+        <_31064>	tankmen_WT2024_Elisa.png	</_31064>
+      </icons>
+    </tankmen_WT2024_Elisa>
+    <tankmen_T3_1>
+      <groupID>	31070	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31070>	#intunion_tankmen:names/tankmen_T3_1_n	</_31070>
+      </firstNames>
+      <lastNames>
+        <_31070>	#intunion_tankmen:names/tankmen_T3_1	</_31070>
+      </lastNames>
+      <icons>
+        <_31070>	tankmen_T3_1.png	</_31070>
+      </icons>
+    </tankmen_T3_1>
+    <tankmen_T3_2>
+      <groupID>	31071	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31071>	#intunion_tankmen:names/tankmen_T3_2_n	</_31071>
+      </firstNames>
+      <lastNames>
+        <_31071>	#intunion_tankmen:names/tankmen_T3_2	</_31071>
+      </lastNames>
+      <icons>
+        <_31071>	tankmen_T3_2.png	</_31071>
+      </icons>
+    </tankmen_T3_2>
+    <tankmen_T3_3>
+      <groupID>	31072	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31072>	#intunion_tankmen:names/tankmen_T3_3_n	</_31072>
+      </firstNames>
+      <lastNames>
+        <_31072>	#intunion_tankmen:names/tankmen_T3_3	</_31072>
+      </lastNames>
+      <icons>
+        <_31072>	tankmen_T3_3.png	</_31072>
+      </icons>
+    </tankmen_T3_3>
+    <tankmen_T3_4>
+      <groupID>	31073	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31073>	#intunion_tankmen:names/tankmen_T3_4_n	</_31073>
+      </firstNames>
+      <lastNames>
+        <_31073>	#intunion_tankmen:names/tankmen_T3_4	</_31073>
+      </lastNames>
+      <icons>
+        <_31073>	tankmen_T3_4.png	</_31073>
+      </icons>
+    </tankmen_T3_4>
+    <tankmen_T3_5>
+      <groupID>	31074	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31074>	#intunion_tankmen:names/tankmen_T3_5_n	</_31074>
+      </firstNames>
+      <lastNames>
+        <_31074>	#intunion_tankmen:names/tankmen_T3_5	</_31074>
+      </lastNames>
+      <icons>
+        <_31074>	tankmen_T3_5.png	</_31074>
+      </icons>
+    </tankmen_T3_5>
+    <ny25_tankmen_1>
+      <groupID>	31075	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31075>	#intunion_tankmen:names/ny25_tankmen_1_n	</_31075>
+      </firstNames>
+      <lastNames>
+        <_31075>	#intunion_tankmen:names/ny25_tankmen_1	</_31075>
+      </lastNames>
+      <icons>
+        <_31075>	ny25_tankmen_1.png	</_31075>
+      </icons>
+    </ny25_tankmen_1>
+    <ny25_tankmen_2>
+      <groupID>	31076	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31076>	#intunion_tankmen:names/ny25_tankmen_2_n	</_31076>
+      </firstNames>
+      <lastNames>
+        <_31076>	#intunion_tankmen:names/ny25_tankmen_2	</_31076>
+      </lastNames>
+      <icons>
+        <_31076>	ny25_tankmen_2.png	</_31076>
+      </icons>
+    </ny25_tankmen_2>
+    <ny25_tankmen_3>
+      <groupID>	31077	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31077>	#intunion_tankmen:names/ny25_tankmen_3_n	</_31077>
+      </firstNames>
+      <lastNames>
+        <_31077>	#intunion_tankmen:names/ny25_tankmen_3	</_31077>
+      </lastNames>
+      <icons>
+        <_31077>	ny25_tankmen_3.png	</_31077>
+      </icons>
+    </ny25_tankmen_3>
+    <ny25_tankmen_4>
+      <groupID>	31078	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31078>	#intunion_tankmen:names/ny25_tankmen_4_n	</_31078>
+      </firstNames>
+      <lastNames>
+        <_31078>	#intunion_tankmen:names/ny25_tankmen_4	</_31078>
+      </lastNames>
+      <icons>
+        <_31078>	ny25_tankmen_4.png	</_31078>
+      </icons>
+    </ny25_tankmen_4>
+    <ny25_tankmen_5>
+      <groupID>	31079	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31079>	#intunion_tankmen:names/ny25_tankmen_5_n	</_31079>
+      </firstNames>
+      <lastNames>
+        <_31079>	#intunion_tankmen:names/ny25_tankmen_5	</_31079>
+      </lastNames>
+      <icons>
+        <_31079>	ny25_tankmen_5.png	</_31079>
+      </icons>
+    </ny25_tankmen_5>
+    <bob25_commander_1>
+      <groupID>	31080	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bob25_commander_1_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31080>	#intunion_tankmen:names/bob25_commander_1_n	</_31080>
+      </firstNames>
+      <lastNames>
+        <_31080>	#intunion_tankmen:names/bob25_commander_1	</_31080>
+      </lastNames>
+      <icons>
+        <_31080>	bob25_commander_1.png	</_31080>
+      </icons>
+    </bob25_commander_1>
+    <bob25_commander_2>
+      <groupID>	31081	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bob25_commander_2_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31081>	#intunion_tankmen:names/bob25_commander_2_n	</_31081>
+      </firstNames>
+      <lastNames>
+        <_31081>	#intunion_tankmen:names/bob25_commander_2	</_31081>
+      </lastNames>
+      <icons>
+        <_31081>	bob25_commander_2.png	</_31081>
+      </icons>
+    </bob25_commander_2>
+    <bob25_commander_3>
+      <groupID>	31082	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bob25_commander_3_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31082>	#intunion_tankmen:names/bob25_commander_3_n	</_31082>
+      </firstNames>
+      <lastNames>
+        <_31082>	#intunion_tankmen:names/bob25_commander_3	</_31082>
+      </lastNames>
+      <icons>
+        <_31082>	bob25_commander_3.png	</_31082>
+      </icons>
+    </bob25_commander_3>
+    <bob25_commander_4>
+      <groupID>	31083	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander bob25_commander_4_specialVoice	</tags>
+      <roles>	commander	</roles>
+      <firstNames>
+        <_31083>	#intunion_tankmen:names/bob25_commander_4_n	</_31083>
+      </firstNames>
+      <lastNames>
+        <_31083>	#intunion_tankmen:names/bob25_commander_4	</_31083>
+      </lastNames>
+      <icons>
+        <_31083>	bob25_commander_4.png	</_31083>
+      </icons>
+    </bob25_commander_4>
+    <ny25_matroskin>
+      <groupID>	31084	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31084>	#intunion_tankmen:names/ny25_matroskin_n	</_31084>
+      </firstNames>
+      <lastNames>
+        <_31084>	#intunion_tankmen:names/ny25_matroskin	</_31084>
+      </lastNames>
+      <icons>
+        <_31084>	ny25_matroskin.png	</_31084>
+      </icons>
+    </ny25_matroskin>
+    <ny25_tamatama>
+      <groupID>	31085	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31085>	#intunion_tankmen:names/ny25_tamatama_n	</_31085>
+      </firstNames>
+      <lastNames>
+        <_31085>	#intunion_tankmen:names/ny25_tamatama	</_31085>
+      </lastNames>
+      <icons>
+        <_31085>	ny25_tamatama.png	</_31085>
+      </icons>
+    </ny25_tamatama>
+    <ny25_hvataika>
+      <groupID>	31086	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31086>	#intunion_tankmen:names/ny25_hvataika_n	</_31086>
+      </firstNames>
+      <lastNames>
+        <_31086>	#intunion_tankmen:names/ny25_hvataika	</_31086>
+      </lastNames>
+      <icons>
+        <_31086>	ny25_hvataika.png	</_31086>
+      </icons>
+    </ny25_hvataika>
+    <ny25_sharik>
+      <groupID>	31087	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31087>	#intunion_tankmen:names/ny25_sharik_n	</_31087>
+      </firstNames>
+      <lastNames>
+        <_31087>	#intunion_tankmen:names/ny25_sharik	</_31087>
+      </lastNames>
+      <icons>
+        <_31087>	ny25_sharik.png	</_31087>
+      </icons>
+    </ny25_sharik>
+    <cosm25_1>
+      <groupID>	31088	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	male	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31088>	#intunion_tankmen:names/cosm25_1_n	</_31088>
+      </firstNames>
+      <lastNames>
+        <_31088>	#intunion_tankmen:names/cosm25_1	</_31088>
+      </lastNames>
+      <icons>
+        <_31088>	cosm25_1.png	</_31088>
+      </icons>
+    </cosm25_1>
+    <cosm25_2>
+      <groupID>	31089	</groupID>
+      <weight>	0.0	</weight>
+      <sex>	female	</sex>
+      <notInShop>	true	</notInShop>
+      <tags>	passportReplacementForbidden commander gunner driver radioman loader	</tags>
+      <roles>	commander gunner driver radioman loader	</roles>
+      <firstNames>
+        <_31089>	#intunion_tankmen:names/cosm25_2_n	</_31089>
+      </firstNames>
+      <lastNames>
+        <_31089>	#intunion_tankmen:names/cosm25_2	</_31089>
+      </lastNames>
+      <icons>
+        <_31089>	cosm25_2.png	</_31089>
+      </icons>
+    </cosm25_2>
+  </premiumGroups>
+</intunion.xml>

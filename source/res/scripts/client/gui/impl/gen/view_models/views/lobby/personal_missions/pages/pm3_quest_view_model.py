@@ -13,9 +13,11 @@ class QuestState(Enum):
     AVAILABLE = 'available'
     INPROGRESS = 'in_progress'
     INPROGRESSHONOR = 'in_progress_honor'
+    PAUSE = 'pause'
     DONE = 'done'
     DONEBASIC = 'done_basic'
     DONEHONOR = 'done_honor'
+    DONEPAUSE = 'done_pause'
 
 
 class QuestLineType(Enum):
@@ -27,9 +29,9 @@ class QuestLineType(Enum):
 
 
 class Pm3QuestViewModel(ViewModel):
-    __slots__ = ('applyQuest', 'switchSelected', 'backToOperation', 'nextQuest', 'prevQuest', 'getSelectionBonus', 'updateRewards')
+    __slots__ = ('applyQuest', 'switchSelected', 'backToOperation', 'nextQuest', 'prevQuest', 'getSelectionBonus', 'updateRewards', 'resetQuest', 'pauseQuest')
 
-    def __init__(self, properties=5, commands=7):
+    def __init__(self, properties=5, commands=9):
         super(Pm3QuestViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -82,3 +84,5 @@ class Pm3QuestViewModel(ViewModel):
         self.prevQuest = self._addCommand('prevQuest')
         self.getSelectionBonus = self._addCommand('getSelectionBonus')
         self.updateRewards = self._addCommand('updateRewards')
+        self.resetQuest = self._addCommand('resetQuest')
+        self.pauseQuest = self._addCommand('pauseQuest')

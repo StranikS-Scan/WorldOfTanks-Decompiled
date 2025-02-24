@@ -34,7 +34,6 @@ from personal_missions import PM_BRANCH
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.offers import IOffersDataProvider
-from skeletons.gui.game_control import IBobController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
@@ -195,8 +194,7 @@ def getDefaultFormattersMap():
      'rankedBonusBattles': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter(),
      'battlePassPoints': BattlePassBonusFormatter(),
-     'currencies': CurrenciesBonusFormatter(),
-     'bobTokens': tokenBonusFormatter}
+     'currencies': CurrenciesBonusFormatter()}
 
 
 def getEpicFormattersMap():
@@ -743,7 +741,6 @@ class SeniorityPremiumDaysBonusFormatter(PremiumDaysBonusFormatter):
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
-    bobController = dependency.descriptor(IBobController)
 
     @staticmethod
     def getBonusFactorTooltip(name):
@@ -778,8 +775,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                 formatted = self._formatResource(token, bonus)
             elif isEarlyAccessToken(tokenID):
                 formatted = self._formatEarlyAccessToken(token, bonus)
-            elif self.bobController.isBobPointsToken(tokenID) and self.bobController.isEnabled():
-                formatted = self._formatBobPointsToken(token, bonus)
             return formatted
 
     def _formatBRComplexToken(self, complexToken, token, bonus):
@@ -882,16 +877,6 @@ class TokenBonusFormatter(SimpleBonusFormatter):
     def __getBRProgressionTooltip():
         tokenBase = R.strings.battle_royale_progression.quests.bonuses.progressionToken
         return makeTooltip(backport.text(tokenBase.header()), backport.text(tokenBase.body()))
-
-    def _formatBobPointsToken(self, token, bonus):
-        if token.count <= 0:
-            return None
-        else:
-            header = backport.text(R.strings.bob.quests.bonuses.token.bob_points.header())
-            body = backport.text(R.strings.bob.quests.bonuses.token.bob_points.body())
-            image = lambda size: R.images.gui.maps.icons.quests.bonuses.dyn(size).bob_points()
-            images = {size:backport.image(image(size)) for size in AWARDS_SIZES.ALL()}
-            return PreformattedBonus(bonusName=bonus.getName(), label=self._formatBonusLabel(token.count), userName=header, labelFormatter=self._getLabelFormatter(bonus), images=images, tooltip=makeTooltip(header=header, body=body), align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus))
 
 
 class RankedPointFormatter(TokenBonusFormatter):

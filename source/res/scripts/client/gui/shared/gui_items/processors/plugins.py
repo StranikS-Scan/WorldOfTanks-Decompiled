@@ -769,6 +769,11 @@ class PMDiscardConfirmator(DialogAbstractConfirmator):
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84,
          'alert': _wrapHtmlMessage(backport.text(R.strings.dialogs.questsConfirmDiscardDialog.message.alert()))})
 
+    def _gfMakeMeta(self):
+        from gui.shared import event_dispatcher
+        showDialog = partial(event_dispatcher.showPMDiscardConfirmationDialog, self.curQuest.getID())
+        return showDialog
+
 
 class PMPawnConfirmator(DialogAbstractConfirmator):
     eventsCache = dependency.descriptor(IEventsCache)

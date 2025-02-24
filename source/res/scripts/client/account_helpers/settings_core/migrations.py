@@ -556,7 +556,7 @@ def _migrateTo65(core, data, initialized):
 
 
 def _migrateTo66(core, data, initialized):
-    data['battlePassStorage'][BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
+    data['battlePassStorage']['dailyQuestsIntroShown'] = False
 
 
 def _migrateTo67(core, data, initialized):
@@ -1338,9 +1338,7 @@ def _migrateTo129(core, data, initialized):
 
 
 def _migrateTo130(core, data, initialized):
-    from account_helpers.AccountSettings import BOB_CAROUSEL_FILTER_1, BOB_CAROUSEL_FILTER_2, DEFAULT_VALUES, KEY_FILTERS
-    data['bobCarouselFilter1'] = DEFAULT_VALUES[KEY_FILTERS][BOB_CAROUSEL_FILTER_1]
-    data['bobCarouselFilter2'] = DEFAULT_VALUES[KEY_FILTERS][BOB_CAROUSEL_FILTER_2]
+    pass
 
 
 def _migrateTo131(core, data, initialized):
@@ -1354,6 +1352,28 @@ def _migrateTo131(core, data, initialized):
             AccountSettings.setSettings(GRAPHICS.UI_EFFECTS, uiEffectsIsEnabled)
         else:
             _logger.warning('Graphic presets are not found')
+    return
+
+
+def _migrateTo132(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.FLAMETHROWER_HIGHLIGHTS_COUNTER] = 0
+
+
+def _migrateTo133(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.UI_STORAGE_2][UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER] = 0
+
+
+def _migrateTo134(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, 0)
+    clear = data['clear']
+    settingOffset = 134217728
+    if storedValue & settingOffset:
+        clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
+    if data['battlePassStorage'].get('dailyQuestsIntroShown') is not None:
+        data['battlePassStorage'].pop('dailyQuestsIntroShown')
     return
 
 
@@ -1875,6 +1895,18 @@ _versions = ((1,
   False),
  (131,
   _migrateTo131,
+  False,
+  False),
+ (132,
+  _migrateTo132,
+  False,
+  False),
+ (133,
+  _migrateTo133,
+  False,
+  False),
+ (134,
+  _migrateTo134,
   False,
   False))
 

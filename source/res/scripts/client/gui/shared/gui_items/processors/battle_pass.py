@@ -33,25 +33,28 @@ class _BattlePassActivateChapterValidator(SyncValidator):
 
 class _BattlePassActivateChapterConfirmator(MessageConfirmator):
 
-    def __init__(self, chapterID, isEnabled=True):
+    def __init__(self, chapterID, parent, isEnabled=True):
         super(_BattlePassActivateChapterConfirmator, self).__init__(None, isEnabled)
         self.__chapterID = chapterID
+        self.__parent = parent
         return
 
     def _gfMakeMeta(self):
-        return partial(event_dispatcher.showBattlePassActivateChapterConfirmDialog, self.__chapterID)
+        return partial(event_dispatcher.showBattlePassActivateChapterConfirmDialog, self.__chapterID, self.__parent)
 
 
 class BattlePassActivateChapterProcessor(Processor):
     __battlePassController = dependency.descriptor(IBattlePassController)
     __WAITING_TEXT = 'switchChapter'
 
-    def __init__(self, chapterID, seasonID):
+    def __init__(self, chapterID, seasonID, parent):
         super(BattlePassActivateChapterProcessor, self).__init__()
         self.__chapterID = chapterID
         self.__seasonID = seasonID
         self.__hasActiveChapter = self.__battlePassController.hasActiveChapter()
-        self.addPlugins((_BattlePassActivateChapterValidator(self.__chapterID), _BattlePassActivateChapterConfirmator(self.__chapterID)))
+        self.addPlugin(_BattlePassActivateChapterValidator(self.__chapterID))
+        if self.__hasActiveChapter:
+            self.addPlugin(_BattlePassActivateChapterConfirmator(self.__chapterID, parent))
 
     def _request(self, callback):
         Waiting.show(self.__WAITING_TEXT)

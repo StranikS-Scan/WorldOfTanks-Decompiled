@@ -6,8 +6,10 @@
     <cosmic_event_hook_shot>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_hook_shot>
     <cosmic_event_shield>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_shield>
     <cosmic_event_power_shot>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_power_shot>
+    <cosmic_event_wave>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_wave>
+    <cosmic_event_stun_shot>	NoneExtra : VisualScriptEquipmentExtra	</cosmic_event_stun_shot>
     <cosmic_event_overturn>	NoneExtra : cosmic_event_cell.cosmic_vehicle_extras.OverturnCosmicEvent	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
-      <liftOverTimeout>	5.0	</liftOverTimeout>
+      <liftOverTimeout>	2.0	</liftOverTimeout>
       <gameplayFactors></gameplayFactors>
     </cosmic_event_overturn>
   </extras>

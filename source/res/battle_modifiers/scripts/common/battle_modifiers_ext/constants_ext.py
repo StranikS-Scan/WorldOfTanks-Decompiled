@@ -64,6 +64,7 @@ class PhysicalType(object):
     PROBABILITY = 14
     DEVIATION = 15
     LOGIC = 16
+    POINTS_PER_SECOND = 17
     ID_TO_NAME = {UNDEFINED: 'undefined',
      SECONDS: 'seconds',
      MINUTES: 'minutes',
@@ -80,7 +81,8 @@ class PhysicalType(object):
      HORSEPOWER: 'horsepower',
      PROBABILITY: 'probability',
      DEVIATION: 'deviation',
-     LOGIC: 'logic'}
+     LOGIC: 'logic',
+     POINTS_PER_SECOND: 'points_per_second'}
     NAME_TO_ID = dict(((v, k) for k, v in ID_TO_NAME.iteritems()))
     ALL = set(NAME_TO_ID.itervalues())
     NAMES = set(ID_TO_NAME.itervalues())
@@ -139,6 +141,7 @@ class ClientDomain(object):
     SUSTAINING = 'sustaining'
     VISIBILITY = 'visibility'
     VITALITY = 'vitality'
+    REPAIR_POINT = 'stepRepairPoint'
     ALL = None
 
 

@@ -105,10 +105,10 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	1.63434 0.074789 2.49193	</rayStart>
-        <rayEnd>	1.43524 0.072103 2.5107	</rayEnd>
-        <rayUp>	0 1 0	</rayUp>
-        <size>	0.28	</size>
+        <rayStart>	-0.703786 0.324006 2.233872	</rayStart>
+        <rayEnd>	-0.703786 0.324006 2.033871	</rayEnd>
+        <rayUp>	0.000667 1 0	</rayUp>
+        <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -3381,18 +3381,35 @@
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.00711 0.455455 0.263213	</rayStart>
-          <rayEnd>	0.617357 0.455422 0.173245	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
+          <rayStart>	0.912899 0.455422 -1.070395	</rayStart>
+          <rayEnd>	0.537487 0.455395 -0.932312	</rayEnd>
+          <rayUp>	-0.00008 1 -0.000018	</rayUp>
+          <size>	0.3	</size>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <rayStart>	-0.906228 0.455407 -1.065087	</rayStart>
+          <rayEnd>	-0.530815 0.455379 -0.927004	</rayEnd>
+          <rayUp>	0.00008 1 -0.000018	</rayUp>
           <size>	0.3	</size>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34000	</slotId>
-          <rayStart>	-0.992395 0.452435 0.299741	</rayStart>
-          <rayEnd>	-0.602652 0.452401 0.209776	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.64	</size>
+          <rayStart>	-1.00069 0.452436 0.301656	</rayStart>
+          <rayEnd>	-0.610947 0.452402 0.211691	</rayEnd>
+          <rayUp>	0.000083 1 -0.000019	</rayUp>
+          <size>	0.6	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34001	</slotId>
+          <rayStart>	1.002127 0.452452 0.344892	</rayStart>
+          <rayEnd>	0.612384 0.452418 0.254927	</rayEnd>
+          <rayUp>	-0.000083 1 -0.000019	</rayUp>
+          <size>	0.6	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </slot>
         <slot>
@@ -4287,18 +4304,35 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.62046 0.454902 0.44279	</rayStart>
-          <rayEnd>	-0.60638 0.454621 0.016622	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.28	</size>
+          <isMirrored>	true	</isMirrored>
+          <rayStart>	1.259584 0.455459 -0.570112	</rayStart>
+          <rayEnd>	0.884171 0.455432 -0.432029	</rayEnd>
+          <rayUp>	-0.00008 1 -0.000018	</rayUp>
+          <size>	0.3	</size>
+        </slot>
+        <slot>
+          <slotType>	player	</slotType>
+          <slotId>	33001	</slotId>
+          <rayStart>	-1.224051 0.455435 -0.577015	</rayStart>
+          <rayEnd>	-0.848638 0.455408 -0.438932	</rayEnd>
+          <rayUp>	0.00008 1 -0.000018	</rayUp>
+          <size>	0.3	</size>
         </slot>
         <slot>
           <slotType>	inscription	</slotType>
           <slotId>	34000	</slotId>
-          <rayStart>	1.22767 0.445942 0.083653	</rayStart>
-          <rayEnd>	1.02767 0.445898 0.081875	</rayEnd>
-          <rayUp>	0 1 0	</rayUp>
-          <size>	0.56	</size>
+          <rayStart>	1.211236 0.445939 0.271644	</rayStart>
+          <rayEnd>	1.015757 0.445896 0.229321	</rayEnd>
+          <rayUp>	-0.00022 1 -0.000003	</rayUp>
+          <size>	0.48	</size>
+        </slot>
+        <slot>
+          <slotType>	inscription	</slotType>
+          <slotId>	34001	</slotId>
+          <rayStart>	-1.216295 0.445882 0.288438	</rayStart>
+          <rayEnd>	-1.024734 0.44584 0.230924	</rayEnd>
+          <rayUp>	0.00022 1 -0.000003	</rayUp>
+          <size>	0.48	</size>
         </slot>
         <slot>
           <slotType>	projectionDecal	</slotType>

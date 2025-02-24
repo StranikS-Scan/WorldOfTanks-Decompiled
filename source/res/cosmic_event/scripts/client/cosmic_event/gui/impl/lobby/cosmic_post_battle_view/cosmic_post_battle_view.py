@@ -17,6 +17,8 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
 from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.player_entry import PlayerEntry
+from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
+from gui.shared.gui_items.Vehicle import Vehicle
 if typing.TYPE_CHECKING:
     from typing import Sequence, Dict, Tuple, Callable, Optional, Any
     from Event import Event
@@ -26,10 +28,16 @@ if typing.TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 _scoringToKey = [(ScoringTypeEnum.SHOT, 'cosmicScore/SHOT'),
  (ScoringTypeEnum.RAM, 'cosmicScore/RAMMING'),
+ (ScoringTypeEnum.BOOSTME, 'cosmicScore/BOOST_ME'),
  (ScoringTypeEnum.KILL, 'cosmicScore/KILL'),
+ (ScoringTypeEnum.ASSIST, 'cosmicScore/ASSIST'),
  (ScoringTypeEnum.SCAN, 'cosmicScore/ARTIFACT_SCAN'),
  (ScoringTypeEnum.PICKUP, 'cosmicScore/PICKUP'),
- (ScoringTypeEnum.ABILITYHIT, 'cosmicScore/ABILITY_HIT')]
+ (ScoringTypeEnum.ABILITYHIT, 'cosmicScore/ABILITY_HIT'),
+ (ScoringTypeEnum.PICKUPMASTER, 'cosmicScore/PICKUP_MASTER'),
+ (ScoringTypeEnum.REVENGE, 'cosmicScore/REVENGE'),
+ (ScoringTypeEnum.KILLSTREAK, 'cosmicScore/KILL_STREAK'),
+ (ScoringTypeEnum.FIRSTBLOOD, 'cosmicScore/FIRST_BLOOD')]
 _rewardKeys = ['index',
  'name',
  'value',
@@ -116,6 +124,7 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         model.setTotalPoints(personalData['cosmicTotalScore'])
         model.setKillAmount(personalData['kills'])
         model.setPickupAmount(personalData['cosmicBattleEvent/PICKUP'])
+        model.setKillStreak(personalData['cosmicBattleEvent/MAX_KILL_SERIES'])
 
     def _setBattleOverTimestamp(self, model):
         commonData = self._getCommonData()
@@ -146,13 +155,19 @@ class CosmicPostBattleView(ViewImpl, LobbyHeaderVisibility):
         playerEntry.setPlayerClan(clan)
         playerEntry.setTotalPoints(vehicleData['cosmicTotalScore'])
         playerEntry.setIsDeserter(isDeserter)
+        vehicle = Vehicle(typeCompDescr=vehicleData['typeCompDescr'])
+        vehicleEnum = COSMIC_VEHICLES_ROVER_ENUM.get(vehicle.typeDescr.name, COSMIC_VEHICLES_ROVER_ENUM['default'])
+        playerEntry.setVehicle(vehicleEnum.value)
         playerScores = playerEntry.getPlayersScore()
         _fillScoreList(playerScores, vehicleData)
         playerEntry.setPlace(place)
         return playerEntry
 
     def _setHasDailyQuests(self, model):
-        model.setHasDailyQuests(any((not quest.isCompleted() for quest in self.__progressionController.getDailyQuests().values())))
+        currentQuests = self.__progressionController.collectSortedRelevantDailyQuests().values()
+        if not currentQuests:
+            _logger.info('No current quests')
+        model.setHasDailyQuests(any((not quest.isCompleted() for quest in currentQuests)))
 
     def _fillQuestsList(self, model):
         quests = self._getRelevantDailyQuests()

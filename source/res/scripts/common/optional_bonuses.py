@@ -390,6 +390,10 @@ class BonusNodeAcceptor(object):
 
             return result or None
 
+    def setCounters(self, counters):
+        for limitID, counterTuple in counters.iteritems():
+            self.__cooldowns[limitID], self.__uses[limitID], self.__bonusProbabilityUses[limitID] = counterTuple
+
     def getBonusCache(self):
         return self.__bonusCache
 
@@ -455,6 +459,9 @@ class BonusNodeAcceptor(object):
 
     def getProbabilityStages(self):
         return self.__probabilitiesStage
+
+    def setModifiedProbabilityStage(self, probabilitiesStage):
+        self.__probabilitiesStage[1] = probabilitiesStage
 
     def getCurrentProbabilityStage(self):
         return self.__probabilitiesStage[0]

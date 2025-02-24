@@ -7,7 +7,6 @@ from web.client_web_api.comp7 import Comp7BattleResultEventHandler
 from web.client_web_api.platform import PlatformEventHandler
 from web.client_web_api.ranked import BrowsersBridgeC2W, RankedEventHandler
 from web.client_web_api.reactive_comm import ReactiveCommunicationEventHandler
-from web.client_web_api.bob import BobTokensUpdateHandler, BobTeamsUpdateHandler
 from web.client_web_api.shop.stats import BalanceEventHandler
 from web.client_web_api.shop.telecom_rentals import TelecomTokenEventHandler
 from web.client_web_api.shop.unified_trade_in import UnifiedTradeInEventHandler
@@ -48,6 +47,4 @@ class WebEventSender(object):
          TelecomTokenEventHandler(self),
          BattlePassEventHandler(self),
          ReferralProgramEventHandler(self),
-         Comp7BattleResultEventHandler(self),
-         BobTokensUpdateHandler(self),
-         BobTeamsUpdateHandler(self))
+         Comp7BattleResultEventHandler(self))

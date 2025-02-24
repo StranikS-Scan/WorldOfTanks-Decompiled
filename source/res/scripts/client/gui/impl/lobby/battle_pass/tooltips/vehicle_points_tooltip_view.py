@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/vehicle_points_tooltip_view.py
 from frameworks.wulf import ViewSettings
-from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
+from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType, getFormattedTimeLeft
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.reward_points_model import RewardPointsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.tooltips.vehicle_points_tooltip_view_model import VehiclePointsTooltipViewModel
@@ -57,6 +57,7 @@ class VehiclePointsTooltipView(ViewImpl):
             model.setPointsTotal(limitPoints)
             model.setPointsReward(pointsReward)
             model.setIsElite(vehicle.isFullyElite)
+            model.setTimeTillEnd(getFormattedTimeLeft(self.__battlePassController.getTimeToLimitReset()))
             dispatcher = g_prbLoader.getDispatcher()
             if dispatcher:
                 queueType = dispatcher.getEntity().getQueueType()

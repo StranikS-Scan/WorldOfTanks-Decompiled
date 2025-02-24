@@ -11,7 +11,7 @@ class _CallbackActionParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return actions.Callback(self._readString('name', section), section.readBool('purge', True))
 
 
@@ -20,7 +20,7 @@ class _BrowseActionParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         name = self._readString('name', section)
         url = self._readString('href', section)
         target = section.readString('target', 'internal')
@@ -48,7 +48,7 @@ class _OpenWindowParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return actions.OpenWindow(self._readString('name', section), self._readString('target', section))
 
 
@@ -57,7 +57,7 @@ class _CustomActionsParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         ctx, _ = resource_helper.getRoot('')
         return actions.CustomAction(action_name=self._readString('name', section), **self.__parse(ctx, section))
 
@@ -82,7 +82,7 @@ class _ReplaceButtonsAction(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         text = section.asString
         if not text:
             raise ParseError('The content of action "{0}" is not defined.'.format(self.getTagName()))
@@ -94,7 +94,7 @@ class _ActionsParser(ParsersCollection):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         items = []
         for item in super(_ActionsParser, self).parse(section):
             items.append(item)

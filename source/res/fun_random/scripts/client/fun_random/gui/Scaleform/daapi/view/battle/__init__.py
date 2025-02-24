@@ -16,18 +16,17 @@ def getContextMenuHandlers():
 def getViewSettings():
     from fun_random.gui.Scaleform.daapi.view.battle.hint_panel.component import FunRandomBattleHintPanel
     from fun_random.gui.Scaleform.daapi.view.battle.battle_loading import FepBattleLoading
+    from fun_random.gui.Scaleform.daapi.view.battle.battle_page import FunRandomBattlePage
+    from fun_random.gui.Scaleform.daapi.view.battle.minimap import FunRandomMiniMapComponent
     from gui.impl.battle.battle_page.ammunition_panel import prebattle_ammunition_panel_inject
     from gui.Scaleform.daapi.view.battle.classic import full_stats
     from gui.Scaleform.daapi.view.battle.classic import players_panel
     from gui.Scaleform.daapi.view.battle.classic import stats_exchange
     from gui.Scaleform.daapi.view.battle.classic import team_bases_panel
-    from gui.Scaleform.daapi.view.battle.classic import minimap
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
-    from gui.Scaleform.daapi.view.battle.classic.page import ClassicPage
     from gui.Scaleform.daapi.view.battle.shared import frag_correlation_bar
     from gui.Scaleform.daapi.view.battle.shared import quest_progress_top_view
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
-    from gui.Scaleform.daapi.view.battle.shared import timers_panel
     from gui.Scaleform.daapi.view.battle.shared import consumables_panel
     from gui.Scaleform.daapi.view.battle.shared import perks_panel
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
@@ -35,15 +34,16 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import damage_panel
     from gui.Scaleform.daapi.view.battle.shared import messages
-    return (ViewSettings(VIEW_ALIAS.CLASSIC_BATTLE_PAGE, ClassicPage, 'battlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
+    from fun_random.gui.Scaleform.daapi.view.battle.status_notifications.panel import FunRandomStatusNotificationTimerPanel
+    return (ViewSettings(VIEW_ALIAS.CLASSIC_BATTLE_PAGE, FunRandomBattlePage, 'fepBattlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, FepBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, team_bases_panel.TeamBasesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, frag_correlation_bar.FragCorrelationBar, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FULL_STATS, full_stats.FullStatsComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYERS_PANEL, players_panel.PlayersPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.ClassicMinimapComponent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.TimersPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.MINIMAP, FunRandomMiniMapComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.STATUS_NOTIFICATIONS_PANEL, FunRandomStatusNotificationTimerPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),

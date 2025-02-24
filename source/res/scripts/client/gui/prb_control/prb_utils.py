@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/prb_utils.py
 import logging
 from gui.Scaleform.daapi.view.lobby.header.battle_selector_items import BATTLES_SELECTOR_ITEMS, BATTLES_SELECTOR_SQUAD_ITEMS
-from gui.impl.lobby.mode_selector.items.items_constants import DEFAULT_COLUMN_SETTINGS
+from gui.impl.lobby.mode_selector.items.items_constants import DEFAULT_COLUMN_SETTINGS, modeNamesByArenaBonusType
 from gui.prb_control.factories.PreQueueFactory import DEFAULT_QUEUE_TYPE_PRIORITIES
 from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_QUEUE_TYPE
 from gui.prb_control.settings import FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, QUEUE_TYPE_TO_PREBATTLE_TYPE, PREBATTLE_TYPE_TO_QUEUE_TYPE, REQUEST_TYPE, REQUEST_TYPE_NAMES
@@ -67,6 +67,14 @@ def addBattleItemToColumnSelector(prbActionName, selectorColumn, personality):
         raise SoftException('COLUMN_SETTINGS already has prbActionName:{prbActionName}. Personality: {p}'.format(prbActionName=prbActionName, p=personality))
     DEFAULT_COLUMN_SETTINGS.update({prbActionName: selectorColumn})
     msg = 'prbActionName:{prbActionName} was added to COLUMN_SETTINGS. Personality: {p}'.format(prbActionName=prbActionName, p=personality)
+    logging.debug(msg)
+
+
+def addDynamicModeSelectorPriorityAbility(prbActionName, bonusTypeName, personality):
+    if bonusTypeName in modeNamesByArenaBonusType:
+        raise SoftException('modeNamesByArenaBonusType already has bonusTypeName:{bonusTypeName}. Personality: {p}'.format(bonusTypeName=bonusTypeName, p=personality))
+    modeNamesByArenaBonusType.update({bonusTypeName: prbActionName})
+    msg = 'bonusTypeName:{bonusTypeName} was added to modeNamesByArenaBonusType. Personality: {p}'.format(bonusTypeName=bonusTypeName, p=personality)
     logging.debug(msg)
 
 

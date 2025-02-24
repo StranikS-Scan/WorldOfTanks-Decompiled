@@ -13,6 +13,7 @@ from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.techtree.techtree_dp import g_techTreeDP
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController, IEarlyAccessController, IParagonsController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -435,6 +436,7 @@ class _TechTreeDevRealmListener(_Listener):
 
     def __handleReloadData(self, event):
         if event.key is Keys.KEY_R:
+            g_techTreeDP.load(isReload=True)
             self._page.redraw()
 
 

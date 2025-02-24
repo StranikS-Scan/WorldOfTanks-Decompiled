@@ -13,7 +13,10 @@ from gui.prb_control.dispatcher import _PreBattleDispatcher
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events, g_eventBus
 from gui.shared.system_factory import collectBattleQueueProvider
+from cosmic_event.cosmic_constants import OLD_VEHICLE_NAME, NEW_VEHICLE_NAME
 from helpers import dependency
+from cosmic_account_settings import getLastSelectedVehicleID
+from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.cosmic_lobby_view_model import RoverEnum
 
 class QueueView(ViewImpl):
     __cosmicEventController = dependency.descriptor(ICosmicEventBattleController)
@@ -23,6 +26,11 @@ class QueueView(ViewImpl):
         qType = self.prbEntity.getQueueType()
         providerClass = collectBattleQueueProvider(qType)
         self._queueProvider = providerClass(self, qType)
+        vehicles = self.__cosmicEventController.getEventVehicles()
+        data = {vehData['name']:vehData['vehCD'] for _, vehData in vehicles}
+        self.__oldVehicleTypeCD = data[OLD_VEHICLE_NAME]
+        self.__newVehicleTypeCD = data[NEW_VEHICLE_NAME]
+        self.__selectedVehicleID = RoverEnum(getLastSelectedVehicleID())
         super(QueueView, self).__init__(settings)
 
     @property
@@ -33,9 +41,19 @@ class QueueView(ViewImpl):
     def prbEntity(self):
         return None
 
-    def setPlayersCount(self, count):
+    def setPlayersTypeCDs(self, vehTypeCompDescrs):
+        oldVehiclesCount = vehTypeCompDescrs.get(self.__oldVehicleTypeCD, 0)
+        newVehiclesCount = vehTypeCompDescrs.get(self.__newVehicleTypeCD, 0)
         with self.viewModel.transaction() as tx:
-            tx.setPlayersInQueue(count)
+            tx.setNewRoverQueue(newVehiclesCount)
+            tx.setOldRoverQueue(oldVehiclesCount)
+            tx.setPlayersInQueue(oldVehiclesCount + newVehiclesCount)
+            tx.setVehicle(self.__selectedVehicleID)
+
+    def setSelectedVehicle(self):
+        with self.viewModel.transaction() as tx:
+            resource = self.__cosmicEventController.getResourceIconForSelectedVehicle()
+            tx.setSelectedVehicleResource(resource)
 
     def _initialize(self, *args, **kwargs):
         super(QueueView, self)._initialize(*args, **kwargs)

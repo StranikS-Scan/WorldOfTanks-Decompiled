@@ -199,7 +199,7 @@ class RankRewardsPage(PageSubModelPresenter):
 
     @classmethod
     def __getPreviewVehicle(cls, style):
-        if g_currentVehicle.isPresent() and style.mayInstall(g_currentVehicle.item):
+        if g_currentVehicle.isPresent() and style.mayInstall(g_currentVehicle.item) and not g_currentVehicle.item.isOutfitLocked:
             return g_currentVehicle.item.intCD
         accDossier = cls.__itemsCache.items.getAccountDossier()
         vehicles = accDossier.getComp7Stats(season=COMP7_SEASON_NUMBERS[-1]).getVehicles()
@@ -209,14 +209,14 @@ class RankRewardsPage(PageSubModelPresenter):
             sortedVehicles = sorted(vehicles.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
             for vehicleCD, _ in sortedVehicles:
                 vehicle = cls.__itemsCache.items.getVehicleCopyByCD(vehicleCD)
-                if style.mayInstall(vehicle):
+                if style.mayInstall(vehicle) and not vehicle.isOutfitLocked:
                     return vehicleCD
 
         else:
             getVehicles = cls.__itemsCache.items.getVehicles
             sortedVehicles = sorted(getVehicles(REQ_CRITERIA.INVENTORY).values(), key=lambda vehicle: vehicle.level, reverse=True)
             for vehicle in sortedVehicles:
-                if style.mayInstall(vehicle):
+                if style.mayInstall(vehicle) and not vehicle.isOutfitLocked:
                     return vehicle.intCD
 
         vehicleDescr = VehicleDescriptor(typeName=_DEFAULT_PREVIEW_VEHICLE_TYPE)

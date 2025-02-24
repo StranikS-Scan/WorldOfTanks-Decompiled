@@ -10,6 +10,13 @@ class ScoreEvents(enum.IntEnum):
     PICKUP = 4
     ABILITY_HIT = 5
     ARTIFACT_SCAN = 6
+    ASSIST = 7
+    FIRST_BLOOD = 8
+    KILL_STREAK = 9
+    PICKUP_MASTER = 10
+    REVENGE = 11
+    BOOST_ME = 12
+    MAX_KILL_SERIES = 13
 
 
 @enum.unique
@@ -27,6 +34,7 @@ class Abilities(enum.IntEnum):
     GRAVITY_FIELD = 2
     SNIPER_SHOT = 3
     POWER_SHOT = 4
+    STUN_SHOT = 5
 
 
 @enum.unique

@@ -7,7 +7,7 @@ from collections import namedtuple
 import typing
 from enum import Enum, unique
 from battle_pass_integration import getBattlePassByGameMode
-from constants import ARENA_BONUS_TYPE, MAX_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
+from constants import ARENA_BONUS_TYPE, MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL, OFFER_TOKEN_PREFIX
 from debug_utils import LOG_ERROR
 from items import parseIntCompactDescr, vehicles
 if typing.TYPE_CHECKING:
@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
 BATTLE_PASS_TOKEN_PREFIX = 'battle_pass:'
 BATTLE_PASS_TOKEN_PASS = BATTLE_PASS_TOKEN_PREFIX + 'pass:'
 BATTLE_PASS_ENTITLEMENT_PASS = BATTLE_PASS_TOKEN_PASS.replace(':', '_')
-BATTLE_PASS_SHOP_ENTITLEMENT_PASS = 'battle_pass_shop_'
+BATTLE_PASS_SHOP_ENTITLEMENT_PASS = 'battle_pass_shop'
 BATTLE_PASS_OFFER_TOKEN_PREFIX = OFFER_TOKEN_PREFIX + BATTLE_PASS_TOKEN_PREFIX
 BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX = BATTLE_PASS_TOKEN_PREFIX + 'q_chain:'
 BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX = BATTLE_PASS_TOKEN_PREFIX + 'random_quest:'
@@ -66,6 +66,8 @@ MAX_NON_CHAPTER_POINTS = 1000000
 BATTLE_PASS_TOKEN_LIFETIME = 4320
 BATTLE_PASS_COST_CURRENCIES = {'gold'}
 BATTLE_PASS_MARATHON_COST_CURRENCIES = {'gold'}
+VEHICLE_POINTS_INDEX = 0
+VEHICLE_WEEK_CAP_SHIFT_INDEX = 1
 
 @unique
 class FinalReward(Enum):
@@ -128,7 +130,7 @@ class BattlePassStatsCommon(object):
     _SEASON_ID_FORMAT = '<I'
     _OTHER_STATS_FORMAT = '<3I'
     OtherStats = namedtuple('OtherStats', 'battles maxBase maxPost')
-    SeasonStats = namedtuple('SeasonStats', 'seasonID vehCDs vehPoints reachedCaps otherStats')
+    SeasonStats = namedtuple('SeasonStats', 'seasonID vehCDs vehPoints reachedCaps otherStats weekCapShift')
 
     @staticmethod
     def _packList(inputList):
@@ -144,11 +146,13 @@ class BattlePassStatsCommon(object):
     def makeSeasonStats(seasonID, vehiclePoints, seasonStats):
         vehCDs = []
         vehPoints = []
-        for vehCD, vehCDPoints in vehiclePoints.iteritems():
+        weekCapShift = []
+        for vehCD, (curVehCDPoints, curVehCDWeekShift) in vehiclePoints.iteritems():
             vehCDs.append(vehCD)
-            vehPoints.append(vehCDPoints)
+            vehPoints.append(curVehCDPoints)
+            weekCapShift.append(curVehCDWeekShift)
 
-        return BattlePassStatsCommon.SeasonStats(seasonID, tuple(vehCDs), tuple(vehPoints), tuple(seasonStats['reachedCaps']), BattlePassStatsCommon.OtherStats(seasonStats['battles'], sum((chapterStats.points for chapterStats in seasonStats.get('chaptersStats', {}).itervalues())), seasonStats.get('maxPost', 0)))
+        return BattlePassStatsCommon.SeasonStats(seasonID, tuple(vehCDs), tuple(vehPoints), tuple(seasonStats['reachedCaps']), BattlePassStatsCommon.OtherStats(seasonStats['battles'], sum((chapterStats.points for chapterStats in seasonStats.get('chaptersStats', {}).itervalues())), seasonStats.get('maxPost', 0)), tuple(weekCapShift))
 
     @staticmethod
     def packSeasonStats(seasonStats):
@@ -158,6 +162,7 @@ class BattlePassStatsCommon(object):
         res.append(BattlePassStatsCommon._packList(seasonStats.vehPoints))
         res.append(BattlePassStatsCommon._packList(seasonStats.reachedCaps))
         res.append(struct.pack(BattlePassStatsCommon._OTHER_STATS_FORMAT, *tuple(seasonStats.otherStats)))
+        res.append(BattlePassStatsCommon._packList(seasonStats.weekCapShift))
         return ''.join(res)
 
     @staticmethod
@@ -168,8 +173,9 @@ class BattlePassStatsCommon(object):
         vehPoints, offset = BattlePassStatsCommon._unpackList(packed, offset)
         reachedCaps, offset = BattlePassStatsCommon._unpackList(packed, offset)
         battles, maxBase, maxPost = struct.unpack_from(BattlePassStatsCommon._OTHER_STATS_FORMAT, packed, offset)
+        weekCapShift, offset = BattlePassStatsCommon._unpackList(packed, offset)
         offset += struct.calcsize(BattlePassStatsCommon._OTHER_STATS_FORMAT)
-        return (BattlePassStatsCommon.SeasonStats(seasonID, vehCDs, vehPoints, reachedCaps, BattlePassStatsCommon.OtherStats(battles, maxBase, maxPost)), offset)
+        return (BattlePassStatsCommon.SeasonStats(seasonID, vehCDs, vehPoints, reachedCaps, BattlePassStatsCommon.OtherStats(battles, maxBase, maxPost), weekCapShift), offset)
 
     @staticmethod
     def packSeasonStatsWithPrevStats(prevPackedStats, seasonStats):
@@ -217,10 +223,6 @@ def getBattlePassPassTokenName(season, chapter):
 
 def getBattlePassPassEntitlementName(season):
     return '{}{}'.format(BATTLE_PASS_ENTITLEMENT_PASS, season)
-
-
-def getBattlePassShopEntitlementName(season):
-    return '{}{}'.format(BATTLE_PASS_SHOP_ENTITLEMENT_PASS, season)
 
 
 def getSeasonAndChapterFromBattlePassToken(tokenID):
@@ -288,6 +290,10 @@ class BattlePassConfig(object):
         return self._season.get('seasonID', 0)
 
     @property
+    def levelsToTriggerHint(self):
+        return self._season.get('levelsToTriggerHint', 1)
+
+    @property
     def seasonNum(self):
         return self._season.get('seasonNum', 0)
 
@@ -320,12 +326,22 @@ class BattlePassConfig(object):
         return self._season.get('chapters', {})
 
     @property
-    def vehLevelCaps(self):
-        return self._season.get('vehLevelCaps', (0,) * MAX_VEHICLE_LEVEL)
+    def minVehLevelToEarnPoints(self):
+        return self._season.get('minVehLevelToEarnPoints', MIN_VEHICLE_LEVEL)
 
     @property
-    def vehCDCaps(self):
-        return self._season.get('vehCDCaps', {})
+    def vehWeekCaps(self):
+        return self._season.get('vehWeekCaps', ())
+
+    def vehWeekCapByShift(self, index):
+        if len(self.vehWeekCaps) <= index:
+            LOG_ERROR('BattlePass cannot get vehWeekCaps list item by its index, len(vehWeekCaps)={}, index={}'.format(len(self.vehWeekCaps), index))
+            return 0
+        return self.vehWeekCaps[index]
+
+    @property
+    def vehOverrides(self):
+        return self._season.get('vehOverrides', {})
 
     def getRewardType(self, chapterID):
         if chapterID not in self.chapters:
@@ -398,20 +414,19 @@ class BattlePassConfig(object):
     def isSpecialVehicle(self, vehTypeCompDescr):
         return vehTypeCompDescr in self.getSpecialVehicles()
 
+    @property
     def capBonusList(self):
         return self._season.get('capBonuses', (0,) * MAX_VEHICLE_LEVEL)
 
-    def capBonus(self, vehLevel):
-        return self.capBonusList()[vehLevel - 1]
+    def getVehWeekCapBonus(self, index):
+        if len(self.capBonusList) <= index:
+            LOG_ERROR('BattlePass cannot get capBonuses list item by its index, len(capBonuses)={}, index={}'.format(len(self.capBonusList), index))
+            return 0
+        return self.capBonusList[index]
 
-    def vehicleContribution(self, vehTypeCompDescr):
-        return self.vehicleCapacity(vehTypeCompDescr) + self.capBonusForVehTypeCompDescr(vehTypeCompDescr)
-
-    def capBonusForVehTypeCompDescr(self, vehTypeCompDescr):
-        return self.capBonusList()[getVehicleLevel(vehTypeCompDescr) - 1]
-
-    def vehicleCapacity(self, vehTypeCompDescr):
-        return self.vehCDCaps.get(vehTypeCompDescr, self.vehLevelCaps[getVehicleLevel(vehTypeCompDescr) - 1])
+    def capBonusByVehTypeCompDescr(self, vehTypeCompDescr):
+        vehCapBonus = self.vehOverrides.get(vehTypeCompDescr, {}).get('capBonus')
+        return vehCapBonus if vehCapBonus else self.getVehWeekCapBonus(getVehicleLevel(vehTypeCompDescr) - 1)
 
     def bonusPointsList(self, vehTypeCompDescr=None, isWinner=True, gameMode=ARENA_BONUS_TYPE.REGULAR):
         teamKey = 'win' if isWinner else 'lose'

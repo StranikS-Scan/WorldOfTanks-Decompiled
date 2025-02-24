@@ -209,6 +209,9 @@ class UtilWebApiMixin(object):
             if itemType == ItemPackType.CUSTOM_LOOTBOX:
                 lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(cmd.id)
                 if lootBox:
+                    if lootBox.isExtendedTooltip():
+                        self.__getTooltipMgr().onCreateWulfTooltip(TC.LOOT_BOX_EXTENDED_TOOLTIP, [cmd.id], cmd.extra['x'], cmd.extra['y'])
+                        return
                     self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=lootBox.getUserName(), body=lootBox.getDescriptionText()), 'INFO')
                 return
             if itemType == ItemPackType.CUSTOM_LOOTBOXKEY:

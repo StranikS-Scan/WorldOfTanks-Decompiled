@@ -105,6 +105,54 @@ class CreateApplicationPoint(Block, EntityMeta):
             return
 
 
+class CreateApplicationPointWithProximity(Block, EntityMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(CreateApplicationPointWithProximity, self).__init__(*args, **kwargs)
+        self._in = self._makeEventInputSlot('in', self._execute)
+        self._arena = self._makeDataInputSlot('arena', SLOT_TYPE.ARENA)
+        self._vehicle = self._makeDataInputSlot('vehicle', SLOT_TYPE.VEHICLE)
+        self._equipmentName = self._makeDataInputSlot('equipmentName', SLOT_TYPE.STR)
+        self._position = self._makeDataInputSlot('position', SLOT_TYPE.VECTOR3)
+        self._direction = self._makeDataInputSlot('direction', SLOT_TYPE.VECTOR3)
+        self._level = self._makeDataInputSlot('level', SLOT_TYPE.INT)
+        self._out = self._makeEventOutputSlot('out')
+        self._entity = self._makeDataOutputSlot('entity', SLOT_TYPE.ENTITY, None)
+        return
+
+    @classmethod
+    def blockAspects(cls):
+        return [ASPECT.SERVER]
+
+    def validate(self):
+        if not self._arena.hasValue():
+            return 'Arena value is required'
+        if not self._vehicle.hasValue():
+            return 'Vehicle value is required'
+        if not self._equipmentName.hasValue():
+            return 'EquipmentName value is required'
+        return 'Position value is required' if not self._position.hasValue() else ''
+
+    def _execute(self):
+        mat = Math.Matrix()
+        direction = self._direction.getValue() if self._direction.hasValue() else Math.Vector3(1.0, 0.0, 0.0)
+        mat.lookAt(Math.Vector3(0.0, 0.0, 0.0), direction, Math.Vector3(0.0, 1.0, 0.0))
+        vehicle = self._vehicle.getValue()
+        equipmentName = self._equipmentName.getValue()
+        equipmentID = items.vehicles.g_cache.equipmentIDs().get(equipmentName)
+        if equipmentID is None:
+            errorVScript(self, 'Unknown equipment [{}]'.format(equipmentName))
+            return
+        else:
+            entity = BigWorld.createEntity('ApplicationPointWithProximity', self._arena.getValue().spaceID, self._position.getValue(), (mat.roll, mat.pitch, mat.yaw), {'vehicleID': vehicle.id,
+             'equipmentID': equipmentID,
+             'launchTime': BigWorld.time(),
+             'level': self._level.getValue()})
+            self._entity.setValue(weakref.proxy(entity))
+            self._out.call()
+            return
+
+
 class DestroyEntity(Block, EntityMeta):
 
     def __init__(self, *args, **kwargs):

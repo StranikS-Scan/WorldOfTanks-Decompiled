@@ -19,6 +19,10 @@ def ownVehicleGunShotPositionGetter():
         return Math.Vector3(0.0, 0.0, 0.0) if not ownVehicle.typeDescriptor else ownVehicle.typeDescriptor.activeGunShotPosition
 
 
+def _getGunPointNode(vehicle):
+    return vehicle.appearance.compoundModel.node('HP_gunFire') if vehicle is not None and vehicle.appearance is not None and vehicle.appearance.compoundModel is not None else None
+
+
 class ProjectileMover(object):
     __START_POINT_MAX_DIFF = 20
     __PROJECTILE_HIDING_TIME = 0.05
@@ -92,10 +96,9 @@ class ProjectileMover(object):
              'effectsData': {}}
             if not gEffectsDisabled():
                 shooter = BigWorld.entity(attackerID)
-                if shooter and shooter.appearance:
-                    node = shooter.appearance.compoundModel.node('HP_gunFire')
-                    if node is not None:
-                        model.position = node.position
+                gunPointNode = _getGunPointNode(shooter)
+                if gunPointNode is not None:
+                    model.position = gunPointNode.position
                 BigWorld.player().addModel(model)
                 model.addMotor(projectileMotor)
                 model.visible = False
@@ -114,8 +117,8 @@ class ProjectileMover(object):
                     if removalCallback:
                         BigWorld.cancelCallback(removalCallback)
                     ribbon.addNode(model, refVelocity, shotID)
-                    if shooter and shooter.appearance:
-                        ribbon.setGunpointNode(shooter.appearance.compoundModel.node('HP_gunFire'))
+                    if gunPointNode is not None:
+                        ribbon.setGunpointNode(gunPointNode)
                 projEffects.attachTo(proj['model'], proj['effectsData'], 'flying', isPlayerVehicle=isOwnShoot, isArtillery=False, attackerID=attackerID, collisionTime=collisionTime)
             self.__projectiles[shotID] = proj
             FlockManager.getManager().onProjectile(startPoint)

@@ -282,7 +282,7 @@ class _ArtillerySoundPlayer(SoundPlayer):
             ctrl.onEquipmentAreaCreated -= self.__onEquipmentAreaCreated
         return
 
-    def __onEquipmentAreaCreated(self, equipment, position, endTime, level=None):
+    def __onEquipmentAreaCreated(self, equipment, position, endTime, level=None, team=None):
         if equipment.name in self.__COMP7_ARTILLERY_NAMES:
             radius = equipment.getRadiusBasedOnSkillLevel(level) if level is not None else equipment.areaRadius
             self.__artilleryAreas.append(_ArtilleryAreaParams(position, radius, endTime))

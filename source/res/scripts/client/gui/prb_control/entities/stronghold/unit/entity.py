@@ -17,6 +17,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
+from gui.prb_control.entities.base.unit.ctx import JoinUnitModeCtx
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
 from gui.prb_control.entities.stronghold.unit.actions_handler import StrongholdActionsHandler
 from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
@@ -88,10 +89,25 @@ class StrongholdDynamicRosterSettings(DynamicRosterSettings):
         return self._minClanMembersCount
 
 
+class StrongholdJoinUnitModeCtx(JoinUnitModeCtx):
+    __slots__ = ('kwargs',)
+
+    def __init__(self, prbType, waitingID='', flags=settings.FUNCTIONAL_FLAG.UNDEFINED, **kwargs):
+        super(StrongholdJoinUnitModeCtx, self).__init__(prbType, waitingID, flags)
+        self.kwargs = kwargs
+
+
 class StrongholdBrowserEntryPoint(UnitBrowserEntryPoint):
 
     def __init__(self):
+        self.__openListExtra = ''
         super(StrongholdBrowserEntryPoint, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
+
+    def setExtData(self, extData):
+        self.__openListExtra = extData.get('openListExtra', '')
+
+    def makeDefCtx(self):
+        return StrongholdJoinUnitModeCtx(self._prbType, flags=self.getFunctionalFlags(), openListExtra=self.__openListExtra)
 
 
 class StrongholdEntryPoint(UnitEntryPoint):
@@ -150,8 +166,12 @@ class StrongholdEntryPoint(UnitEntryPoint):
 
 class StrongholdBrowserEntity(UnitBrowserEntity):
 
-    def __init__(self):
+    def __init__(self, openListExtra=''):
+        self.__openListExtra = openListExtra
         super(StrongholdBrowserEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.STRONGHOLD)
+
+    def getOpenListExtraParams(self):
+        return self.__openListExtra
 
     def canKeepMode(self):
         return False
@@ -172,6 +192,13 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
         processor = StrongholdUnitRequestProcessor()
         processor.doRequest(StrongholdLeaveModeCtx(ctx.getID()), 'leave_mode')
         super(StrongholdBrowserEntity, self).leave(ctx, callback)
+
+    def getQueueType(self):
+        return QUEUE_TYPE.STRONGHOLD_UNITS
+
+    @staticmethod
+    def isSortie():
+        return True
 
 
 class StrongholdEntity(UnitEntity):

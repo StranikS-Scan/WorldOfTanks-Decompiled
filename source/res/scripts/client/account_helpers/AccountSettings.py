@@ -49,10 +49,6 @@ EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
 EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
 EPICBATTLE_CAROUSEL_FILTER_CLIENT_2 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_2'
-BOB_CAROUSEL_FILTER_1 = 'BOB_CAROUSEL_FILTER_1'
-BOB_CAROUSEL_FILTER_2 = 'BOB_CAROUSEL_FILTER_2'
-BOB_CAROUSEL_FILTER_CLIENT_1 = 'BOB_CAROUSEL_FILTER_CLIENT_1'
-BOB_IS_VOIP_IN_BATTLE_ACTIVATED = 'bobIsVoipInBattleActivated'
 STORAGE_VEHICLES_CAROUSEL_FILTER_1 = 'STORAGE_CAROUSEL_FILTER_1'
 STORAGE_BLUEPRINTS_CAROUSEL_FILTER = 'STORAGE_BLUEPRINTS_CAROUSEL_FILTER'
 BATTLEPASS_CAROUSEL_FILTER_1 = 'BATTLEPASS_CAROUSEL_FILTER_1'
@@ -150,6 +146,7 @@ LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
 BR_PROGRESSION_POINTS_SEEN = 'brProgressionPointsSeen'
 IS_BATTLE_PASS_MARATHON_STARTED = 'isBattlePassMarathonStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
+WIDGET_HINT_TRIGGER = 'widgetHintTrigger'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 IS_CUSTOMIZATION_INTRO_VIEWED = 'isCustomizationIntroViewed'
 CUSTOMIZATION_STYLE_ITEMS_VISITED = 'CustomizationStyleItemsVisited'
@@ -362,6 +359,12 @@ class PersonalMissions(object):
     OPERATIONS_VIDEO_REWARDS_STATUS = 'operationsVideoRewardsStatus'
 
 
+class FunRandomMaps(object):
+    FUN_RANDOM_MAPS_SETTINGS = 'funRandomMapsSettings'
+    FUN_RANDOM_LAST_SELECTED_MAP = 'funRandomLastSelectedMap'
+    FUN_RANDOM_WIDGET_VISITED_SUBMODES = 'funRandomWidgetVisitedSubModes'
+
+
 class Paragons(object):
     PARAGONS_SETTINGS = 'paragonsSettings'
     INTRO_SEEN = 'introSeen'
@@ -442,6 +445,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'sweden': False,
                                    'poland': False,
                                    'italy': False,
+                                   'intunion': False,
                                    'lightTank': False,
                                    'mediumTank': False,
                                    'heavyTank': False,
@@ -500,6 +504,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'sweden': False,
                                           'poland': False,
                                           'italy': False,
+                                          'intunion': False,
                                           'lightTank': False,
                                           'mediumTank': False,
                                           'heavyTank': False,
@@ -558,6 +563,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'sweden': False,
                                           'poland': False,
                                           'italy': False,
+                                          'intunion': False,
                                           'lightTank': True,
                                           'mediumTank': True,
                                           'heavyTank': True,
@@ -597,6 +603,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'sweden': False,
                                               'poland': False,
                                               'italy': False,
+                                              'intunion': False,
                                               'lightTank': False,
                                               'mediumTank': False,
                                               'heavyTank': False,
@@ -649,62 +656,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                      'searchNameVehicle': '',
                                                      'clanRented': False},
                BATTLEPASS_CAROUSEL_FILTER_1: {'isCommonProgression': False},
-               BOB_CAROUSEL_FILTER_1: {'ussr': False,
-                                       'germany': False,
-                                       'usa': False,
-                                       'china': False,
-                                       'france': False,
-                                       'uk': False,
-                                       'japan': False,
-                                       'czech': False,
-                                       'sweden': False,
-                                       'poland': False,
-                                       'italy': False,
-                                       'lightTank': True,
-                                       'mediumTank': True,
-                                       'heavyTank': True,
-                                       'SPG': False,
-                                       'AT-SPG': True,
-                                       'level_1': False,
-                                       'level_2': False,
-                                       'level_3': False,
-                                       'level_4': False,
-                                       'level_5': False,
-                                       'level_6': False,
-                                       'level_7': False,
-                                       'level_8': False,
-                                       'level_9': False,
-                                       'level_10': True,
-                                       'level_11': False},
-               BOB_CAROUSEL_FILTER_2: {'premium': False,
-                                       'elite': False,
-                                       'igr': False,
-                                       'rented': True,
-                                       'event': True,
-                                       'gameMode': False,
-                                       'favorite': False,
-                                       'bonus': False,
-                                       'crystals': False,
-                                       'debut_boxes': False,
-                                       'role_HT_assault': False,
-                                       'role_HT_break': False,
-                                       'role_HT_support': False,
-                                       'role_HT_universal': False,
-                                       'role_MT_universal': False,
-                                       'role_MT_sniper': False,
-                                       'role_MT_assault': False,
-                                       'role_MT_support': False,
-                                       'role_ATSPG_assault': False,
-                                       'role_ATSPG_universal': False,
-                                       'role_ATSPG_sniper': False,
-                                       'role_ATSPG_support': False,
-                                       'role_LT_universal': False,
-                                       'role_LT_wheeled': False,
-                                       'role_SPG': False,
-                                       'role_SPG_flame': False,
-                                       'role_SPG_assault': False},
-               BOB_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': '',
-                                              'clanRented': False},
                MAPBOX_CAROUSEL_FILTER_1: {'ussr': False,
                                           'germany': False,
                                           'usa': False,
@@ -716,6 +667,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'sweden': False,
                                           'poland': False,
                                           'italy': False,
+                                          'intunion': False,
                                           'lightTank': False,
                                           'mediumTank': False,
                                           'heavyTank': False,
@@ -771,6 +723,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'sweden': False,
                                               'poland': False,
                                               'italy': False,
+                                              'intunion': False,
                                               'lightTank': False,
                                               'mediumTank': False,
                                               'heavyTank': False,
@@ -828,6 +781,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'sweden': False,
                                          'poland': False,
                                          'italy': False,
+                                         'intunion': False,
                                          'lightTank': False,
                                          'mediumTank': False,
                                          'heavyTank': False,
@@ -886,6 +840,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                              'sweden': False,
                                              'poland': False,
                                              'italy': False,
+                                             'intunion': False,
                                              'lightTank': False,
                                              'mediumTank': False,
                                              'heavyTank': False,
@@ -1103,7 +1058,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COMP7_PREBATTLE_CAROUSEL_ROW_VALUE: -1,
                 COMP7_PREBATTLE_MINIMAP_SIZE: -1,
                 COMP7_IS_VOIP_IN_BATTLE_ACTIVATED: False,
-                BOB_IS_VOIP_IN_BATTLE_ACTIVATED: False,
                 'showVehicleIcon': False,
                 'showVehicleLevel': False,
                 'showExInf4Destroyed': False,
@@ -1135,6 +1089,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 GAME.PRE_COMMANDER_CAM: True,
                 GAME.COMMANDER_CAM: True,
                 GAME.SCROLL_SMOOTHING: True,
+                GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP: True,
+                GAME.DISABLE_THERMAL_VISION_EFFECT: True,
+                GAME.DISABLE_THERMAL_VISION_SECTOR_EFFECT: True,
                 'hangarCamPeriod': 1,
                 'hangarCamParallaxEnabled': True,
                 'players_panel': {'state': 2,
@@ -1339,6 +1296,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 LAST_BATTLE_PASS_POINTS_SEEN: {},
                 IS_BATTLE_PASS_MARATHON_STARTED: False,
                 IS_BATTLE_PASS_COLLECTION_SEEN: False,
+                WIDGET_HINT_TRIGGER: 0,
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
@@ -1483,6 +1441,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'sweden': False,
                                                              'poland': False,
                                                              'italy': False,
+                                                             'intunion': False,
                                                              'lightTank': False,
                                                              'mediumTank': False,
                                                              'heavyTank': False,
@@ -1532,6 +1491,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                              'sweden': False,
                                                              'poland': False,
                                                              'italy': False,
+                                                             'intunion': False,
                                                              'lightTank': False,
                                                              'mediumTank': False,
                                                              'heavyTank': False,
@@ -1633,7 +1593,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                               Paragons.NEED_TO_SHOW_ANIMATION_FOR_PARAGONS_RESET_BRANCH: False,
                               Paragons.PROJECT_IS_ENABLED_NOTIFICATION_WAS_SHOWN: False,
                               Paragons.PROJECT_IS_CONTINUING_NOTIFICATION_WAS_SHOWN: False,
-                              Paragons.CHAPTER_COUNTER: 1}}
+                              Paragons.CHAPTER_COUNTER: 1},
+ FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS: {FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP: None,
+                                          FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set()}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -2561,6 +2523,14 @@ class AccountSettings(object):
     @staticmethod
     def setPersonalMissions(name, value):
         AccountSettings._setValue(name, value, PersonalMissions.PERSONAL_MISSIONS_SETTINGS, True)
+
+    @staticmethod
+    def getFunRandom(name):
+        return AccountSettings._getValue(name, FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS, True)
+
+    @staticmethod
+    def setFunRandom(name, value):
+        AccountSettings._setValue(name, value, FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS, True)
 
     @staticmethod
     def clearPersonalMissions():

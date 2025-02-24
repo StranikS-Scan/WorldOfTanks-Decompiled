@@ -66,7 +66,7 @@ class GainCrystalInBattleItem(_GainResourceInBattleItem):
     __slots__ = ()
 
     def __init__(self, field, *path):
-        super(GainCrystalInBattleItem, self).__init__(((True, Currency.CRYSTAL),), 'getCrystalRecords', getIntegralFormat, field, *path)
+        super(GainCrystalInBattleItem, self).__init__(((True, Currency.CRYSTAL), (True, 'avatarCrystalEvent')), 'getCrystalRecords', getIntegralFormat, field, *path)
 
 
 class GainCrystalValueInBattleItem(_GainResourceInBattleItem):
@@ -628,7 +628,10 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
         label = backport.text(R.strings.battle_results.details.calculations.crystal.total())
         earned = self.__addRecordField('originalCrystal', result, label)
         label = backport.text(R.strings.battle_results.details.calculations.crystal.events())
-        earned += self.__addRecordField('events', result, label)
+        eventCrystal = result.getRecord('events') + result.getRecord('avatarCrystalEvent')
+        if eventCrystal:
+            self._addRecord(label, eventCrystal)
+            earned += eventCrystal
         label = backport.text(R.strings.battle_results.details.calculations.autoBoosters())
         expenses = self.__addRecordField('autoEquipCrystals', result, label)
         if earned or expenses:

@@ -70,6 +70,11 @@
           <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Hull.model	</exploded>
         </R132_VNII_100LT_3Dst>
+        <R132_VNII_100LT_3Dst_Lamp>
+          <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Hull.model	</exploded>
+        </R132_VNII_100LT_3Dst_Lamp>
       </sets>
     </models>
     <swinging>
@@ -743,6 +748,11 @@
             <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Chassis.model	</exploded>
           </R132_VNII_100LT_3Dst>
+          <R132_VNII_100LT_3Dst_Lamp>
+            <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Chassis.model	</exploded>
+          </R132_VNII_100LT_3Dst_Lamp>
         </sets>
       </models>
       <traces>
@@ -886,6 +896,45 @@
                   <row3>	-1.538354 0.858708 -0.199575	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	R132_VNII_100LT_3Dst_Lamp	</modelsSet>
+                <boxCollider>
+                  <row0>	2.035860 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.002310 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.137780	</row2>
+                  <row3>	0.000000 0.856574 -0.202170	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.352480	</row2>
+                  <row3>	0.000000 1.222450 -0.134853	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 -0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.079753 -0.289205	</row1>
+                  <row2>	0.000000 0.289205 0.079753	</row2>
+                  <row3>	0.000000 1.094410 -3.375500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.247800 0.169102	</row1>
+                  <row2>	0.000000 -0.304023 0.445512	</row2>
+                  <row3>	0.000000 1.122500 2.904210	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.405751 -0.130833	</row1>
+                  <row2>	0.000000 0.120355 0.373254	</row2>
+                  <row3>	-1.089850 0.601936 2.208410	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.414764 -0.098600	</row1>
+                  <row2>	0.000000 0.090703 0.381545	</row2>
+                  <row3>	-1.089850 0.588572 -1.760870	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -1014,6 +1063,45 @@
                   <row1>	0.000000 0.608157 0.000000	</row1>
                   <row2>	0.000000 0.000000 6.141083	</row2>
                   <row3>	1.538000 0.858708 -0.199575	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	R132_VNII_100LT_3Dst_Lamp	</modelsSet>
+                <boxCollider>
+                  <row0>	2.035860 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.002310 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.137780	</row2>
+                  <row3>	0.000000 0.856574 -0.202170	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.352480	</row2>
+                  <row3>	0.000000 1.222450 -0.134853	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 -0.000001 0.000000	</row0>
+                  <row1>	0.000000 0.079753 -0.289205	</row1>
+                  <row2>	0.000000 0.289205 0.079753	</row2>
+                  <row3>	0.000000 1.094410 -3.375500	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	2.874730 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.247800 0.169102	</row1>
+                  <row2>	0.000000 -0.304023 0.445512	</row2>
+                  <row3>	0.000000 1.122500 2.904210	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.405751 -0.130833	</row1>
+                  <row2>	0.000000 0.120355 0.373254	</row2>
+                  <row3>	1.090000 0.601936 2.208410	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.300000 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.414764 -0.098600	</row1>
+                  <row2>	0.000000 0.090703 0.381545	</row2>
+                  <row3>	1.090000 0.588572 -1.760870	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -2056,6 +2144,11 @@
                 <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Gun_01.model	</exploded>
               </R132_VNII_100LT_3Dst>
+              <R132_VNII_100LT_3Dst_Lamp>
+                <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Gun_01.model	</exploded>
+              </R132_VNII_100LT_3Dst_Lamp>
             </sets>
           </models>
           <hitTester>
@@ -2185,6 +2278,11 @@
             <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst/crash/lod0/Turret_01.model	</exploded>
           </R132_VNII_100LT_3Dst>
+          <R132_VNII_100LT_3Dst_Lamp>
+            <undamaged>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R132_VNII_100LT/_skins/R132_VNII_100LT_3Dst_Lamp/crash/lod0/Turret_01.model	</exploded>
+          </R132_VNII_100LT_3Dst_Lamp>
         </sets>
       </models>
       <hitTester>

@@ -3,6 +3,7 @@
 from typing import TYPE_CHECKING
 from skeletons.gui.game_control import IGameController, ISeasonProvider
 if TYPE_CHECKING:
+    from typing import Optional, List
     from Event import Event
     from cosmic_event.settings import CosmicEventConfig
     from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.cosmic_lobby_view_model import LobbyRouteEnum
@@ -12,12 +13,16 @@ class ICosmicEventBattleController(IGameController, ISeasonProvider):
     onCosmicConfigChanged = None
     onStatusTick = None
     onLobbyRouteChange = None
+    onVehicleSelected = None
 
     @property
     def isEnabled(self):
         raise NotImplementedError
 
     def getEventVehicle(self):
+        raise NotImplementedError
+
+    def getEventVehiclesIntCD(self):
         raise NotImplementedError
 
     def isAvailable(self):
@@ -75,4 +80,7 @@ class ICosmicEventBattleController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
     def closePostBattleScreen(self):
+        raise NotImplementedError
+
+    def getResourceIconForSelectedVehicle(self):
         raise NotImplementedError

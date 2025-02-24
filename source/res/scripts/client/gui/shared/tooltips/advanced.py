@@ -23,6 +23,7 @@ DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
 MULTI_TRACK_CHASSIS = 'vehicleMultiTrackChassis'
 AUTO_SHOOT_FLAME_GUN = 'vehicleAutoShootFlameGun'
+THERMAL_VISION = 'vehicleThermalVision'
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -167,6 +168,9 @@ class HangarModuleAdvanced(BaseAdvancedTooltip):
         if itemId == FITTING_TYPES.VEHICLE_GUN and item.isAutoShootFlameGun():
             movieKey = AUTO_SHOOT_FLAME_GUN
             descrKey = AUTO_SHOOT_FLAME_GUN
+        if itemId == FITTING_TYPES.VEHICLE_TURRET and item.hasThermalVision():
+            movieKey = THERMAL_VISION
+            descrKey = THERMAL_VISION
         if movieKey not in MODULE_MOVIES:
             movieModule = None
         else:
@@ -292,6 +296,7 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'ration_sweden': 'consumablesCoffeeWithCinnamonBuns',
  'ration_poland': 'consumablesBreadWithSchmaltz',
  'ration_italy': 'consumablesSpaghetti',
+ 'ration_intunion': 'consumables_intunion',
  'grousers': 'equipmentAdditionalGrousers',
  'artillery': 'artillery',
  'bomber': 'bomber',
@@ -312,7 +317,10 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  'improvedRotationMechanism': 'equipmentImprovedRotationMechanism',
  'additionalInvisibilityDevice': 'equipmentLowNoiseExhaustSystem',
  'improvedConfiguration': 'equipmentModifiedConfiguration',
- 'turbocharger': 'equipmentTurbocharger'}
+ 'turbocharger': 'equipmentTurbocharger',
+ THERMAL_VISION: 'thermalVision',
+ 'modernizedDamageVentilation': 'equipmentExperimentalDamageVentilation',
+ 'modernizedTankRammerSights': 'equipmentExperimentalTankRammerSights'}
 TANKMAN_MOVIES = {'commander': 'crewCommander',
  'driver': 'crewDriver',
  'gunner': 'crewGunner',

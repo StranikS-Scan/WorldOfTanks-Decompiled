@@ -15,7 +15,7 @@ from gui.impl.lobby.battle_pass.chapter_choice_view import ChapterChoiceView
 from gui.impl.lobby.battle_pass.intro_view import IntroView
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
+from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar, showBattlePassIntro
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from shared_utils import nextTick
@@ -131,6 +131,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         super(BattlePassViewsHolderComponent, self)._populate()
         self.__battlePass.onBattlePassSettingsChange += self.__onSettingsChanged
         self.__introVideoManager.init()
+        if not _hasTrueInBPStorage(_INTRO_SHOWN):
+            showBattlePassIntro()
 
     def _dispose(self):
         if self.__introVideoManager is not None:
@@ -173,8 +175,6 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         def isExtraActiveFirstTime():
             return ctrl.hasMarathon() and not self.__introVideoManager.isExtraVideoShown and isExtraIntroVideoExist()
 
-        if not _hasTrueInBPStorage(_INTRO_SHOWN):
-            return _R_VIEWS.BattlePassIntroView()
         return _R_VIEWS.BattlePassProgressionsView() if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)) else _R_VIEWS.ChapterChoiceView()
 
     def __setDummyVisible(self, isVisible):

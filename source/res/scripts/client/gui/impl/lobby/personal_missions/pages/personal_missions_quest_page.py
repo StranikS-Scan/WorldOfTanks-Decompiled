@@ -59,6 +59,10 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
     def getQuestState(self, quest):
         ctrl = self.__personalMissionsCtrl
         operation = ctrl.getOperationById(quest.getOperationID())
+        if quest.isOnPause:
+            if quest.isCompleted():
+                return QuestState.DONEPAUSE
+            return QuestState.PAUSE
         if not operation.isUnlocked():
             return QuestState.NAPREVIOUS
         if not quest.hasRequiredVehicles():
@@ -117,7 +121,29 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
          (self.viewModel.prevQuest, self.__prevQuest),
          (self.viewModel.getSelectionBonus, self.__getSelectionBonus),
          (self.viewModel.updateRewards, self.__updateData),
+         (self.viewModel.resetQuest, self.__resetQuest),
+         (self.viewModel.pauseQuest, self.__pauseQuest),
          (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onSettingsChange))
+
+    def __resetQuest(self, args):
+        self.__processResetQuest(args.get('id'))
+
+    def __pauseQuest(self, args):
+        self.__processPauseQuest(args.get('id'))
+
+    @decorators.adisp_process('updating')
+    def __processResetQuest(self, eventID):
+        quest = self.__personalMissionsCtrl.getQuest(eventID)
+        result = yield quests_proc.PMDiscard(quest, PM_BRANCH.PERSONAL_MISSION_3).request()
+        if result and result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+    @decorators.adisp_process('updating')
+    def __processPauseQuest(self, eventID):
+        quest = self.__personalMissionsCtrl.getQuest(eventID)
+        result = yield quests_proc.PMPause(quest, not quest.isOnPause, PM_BRANCH.PERSONAL_MISSION_3).request()
+        if result and result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     def __onSettingsChange(self, diff):
         if not any((key in SERVER_SETTINGS_KEYS for key in diff.iterkeys())):
@@ -184,6 +210,7 @@ class PersonalMissionQuestPage(PageSubModelPresenter):
             card.setState(self.getSmallCardState(quest))
             card.setIsSelected(questId == self.__currentQuestId)
             card.setIsLast(quest.isFinal())
+            card.setQuestName(quest.getUserName())
             cardsListModel.addViewModel(card)
             return
 

@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Type, Union
 NON_VEH_CD = 0
-BpPointsSettings = namedtuple('BpPointsSettings', 'vehTypeCompDescr, isWinner, rank')
+BpPointsSettings = namedtuple('BpPointsSettings', 'isWinner, rank')
 
 class BattlePassIntegrationInterface(object):
     __slots__ = ('teamSize', 'bonusTypeName', 'bonusType')
@@ -20,7 +20,7 @@ class BattlePassIntegrationInterface(object):
     def validatePoints(self, season):
         raise NotImplementedError()
 
-    def calculatePointsSettings(self, storage):
+    def calculatePointsSettings(self, avatarResults, battleResults):
         raise NotImplementedError()
 
 
@@ -34,6 +34,10 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
 
     def getTeamSize(self):
         return self.teamSize
+
+    @staticmethod
+    def _isWinnerTeam(battleResults):
+        return 'winnerTeam' in battleResults and 'team' in battleResults and battleResults['team'] == battleResults['winnerTeam']
 
     def validatePoints(self, season):
         points = season['points'][self.bonusType]
@@ -56,19 +60,19 @@ class BattlePassIntegrationRandom(BattlePassIntegrationInterface):
                 checkPointsList(winPoints, '{}/{}/win'.format(self.bonusTypeName, str(vehCD)))
                 checkPointsList(losePoints, '{}/{}/lose'.format(self.bonusTypeName, str(vehCD)))
 
-    def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, results = storage['tempResults'].items()[0]
-        rank = storage['avatarResults'].get('fareTeamXPPosition', 0)
-        isWinner = 'winnerTeam' in results and 'team' in results and results['team'] == results['winnerTeam']
-        return BpPointsSettings(vehTypeCompDescr, isWinner, rank)
+    def calculatePointsSettings(self, avatarResults, battleResults):
+        rank = avatarResults.get('fareTeamXPPosition', 0)
+        isWinner = self._isWinnerTeam(battleResults)
+        return BpPointsSettings(isWinner, rank)
 
 
 class BattlePassIntegrationEpicBattle(BattlePassIntegrationRandom):
     __slots__ = ('teamSize', 'bonusTypeName', 'bonusType')
 
-    def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, isWinner, rank = super(BattlePassIntegrationEpicBattle, self).calculatePointsSettings(storage)
-        return BpPointsSettings(NON_VEH_CD, isWinner, rank)
+    def calculatePointsSettings(self, avatarResults, battleResults):
+        rank = avatarResults.get('fareTeamXPPosition', 0)
+        isWinner = self._isWinnerTeam(battleResults)
+        return BpPointsSettings(isWinner, rank)
 
     def validatePoints(self, season):
         points = season['points'][self.bonusType]
@@ -109,11 +113,10 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
         if not self._checkBattleRoyalePointsSequence(points, 3):
             raise SoftException('BattlePass royale points are wrong.Example: win: 10 0 0 0..., lose: 0 7 7 5 5 5 0 0 ..3 thresholds. Should decrease')
 
-    def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, results = storage['tempResults'].items()[0]
-        place = storage['avatarResults']['brPosInBattle']
+    def calculatePointsSettings(self, avatarResults, battleResults):
+        place = avatarResults['brPosInBattle']
         isWinner = place == 1
-        return BpPointsSettings(vehTypeCompDescr, isWinner, place)
+        return BpPointsSettings(isWinner, place)
 
     @staticmethod
     def _checkBattleRoyalePointsSequence(points, thresholdTargetCount):
@@ -132,11 +135,16 @@ class BattlePassIntegrationBattleRoyale(BattlePassIntegrationRandom):
 
 class BattlePassIntegrationComp7(BattlePassIntegrationRandom):
 
-    def calculatePointsSettings(self, storage):
-        vehTypeCompDescr, results = storage['tempResults'].items()[0]
-        rank = storage['avatarResults'].get('fareTeamPrestigePointsPosition', 0)
-        isWinner = 'winnerTeam' in results and 'team' in results and results['team'] == results['winnerTeam']
-        return BpPointsSettings(vehTypeCompDescr, isWinner, rank)
+    def calculatePointsSettings(self, avatarResults, battleResults):
+        rank = avatarResults.get('fareTeamPrestigePointsPosition', 0)
+        isWinner = self._isWinnerTeam(battleResults)
+        return BpPointsSettings(isWinner, rank)
+
+
+_GAMEMODE_WITH_NON_VEHICLE_DESC = {ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD}
+
+def isGameModeWithNonVehicleDesc(arenaBonusType):
+    return arenaBonusType in _GAMEMODE_WITH_NON_VEHICLE_DESC
 
 
 _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='REGULAR'),
@@ -145,7 +153,10 @@ _BATTLEPASS_BY_GAMEMODE = {ARENA_BONUS_TYPE.REGULAR: BattlePassIntegrationRandom
  ARENA_BONUS_TYPE.COMP7: BattlePassIntegrationComp7(teamSize=7, bonusTypeName='COMP7'),
  ARENA_BONUS_TYPE.EPIC_BATTLE: BattlePassIntegrationEpicBattle(teamSize=30, bonusTypeName='EPIC_BATTLE'),
  ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO: BattlePassIntegrationBattleRoyale(teamSize=20, bonusTypeName='BATTLE_ROYALE_SOLO'),
- ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: BattlePassIntegrationBattleRoyale(teamSize=10, bonusTypeName='BATTLE_ROYALE_SQUAD')}
+ ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD: BattlePassIntegrationBattleRoyale(teamSize=10, bonusTypeName='BATTLE_ROYALE_SQUAD'),
+ ARENA_BONUS_TYPE.SORTIE_2: BattlePassIntegrationRandom(teamSize=7, bonusTypeName='SORTIE_2'),
+ ARENA_BONUS_TYPE.FORT_BATTLE_2: BattlePassIntegrationRandom(teamSize=15, bonusTypeName='FORT_BATTLE_2'),
+ ARENA_BONUS_TYPE.VERSUS_AI: BattlePassIntegrationRandom(teamSize=12, bonusTypeName='VERSUS_AI')}
 
 def getBattlePassByGameMode(arenaBonusType):
     return _BATTLEPASS_BY_GAMEMODE.get(arenaBonusType)

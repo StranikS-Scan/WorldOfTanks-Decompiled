@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/common/view_helpers.py
 import typing
+from gui.impl.gen import R
 from gui.shared.missions.packers.bonus import getDefaultBonusPacker
 if typing.TYPE_CHECKING:
     from typing import TypeVar
@@ -37,3 +38,12 @@ def _packBonusTooltip(bonusModel, bonusIndex, bonusTooltipList, bonusContentIdLi
         if bonusContentIdList:
             bonusModel.setTooltipContentId(str(bonusContentIdList[bonusIndex]))
         return tooltipIndex + 1
+
+
+def getLayoutIDByText(textLayoutID):
+    path = textLayoutID.split('.')
+    res = R.views
+    for src in path:
+        res = res.dyn(src)
+
+    return res

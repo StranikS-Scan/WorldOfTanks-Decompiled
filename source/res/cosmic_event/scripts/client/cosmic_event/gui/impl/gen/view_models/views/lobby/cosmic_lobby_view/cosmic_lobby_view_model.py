@@ -1,23 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/impl/gen/view_models/views/lobby/cosmic_lobby_view/cosmic_lobby_view_model.py
-from enum import Enum
+from enum import Enum, IntEnum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
+from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.medal_model import MedalModel
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.progression_model import ProgressionModel
+from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.rovers_model import RoversModel
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring_model import ScoringModel
 from gui.impl.gen.view_models.views.lobby.missions.widget.widget_quest_model import WidgetQuestModel
 
 class LobbyRouteEnum(Enum):
     MAIN = 'main'
     ARTEFACT = 'artefact'
-    VEHICLE = 'vehicle'
+    RULES = 'rules'
     PICKUPS = 'pickups'
 
 
-class CosmicLobbyViewModel(ViewModel):
-    __slots__ = ('onLobbyRouteChange', 'onClose', 'onAboutEvent', 'onShopClicked')
+class RoverEnum(IntEnum):
+    OLD = 1
+    NEW = 2
 
-    def __init__(self, properties=12, commands=4):
+
+class CosmicLobbyViewModel(ViewModel):
+    __slots__ = ('onLobbyRouteChange', 'onClose', 'onAboutEvent', 'onShopClicked', 'onVehicleChange')
+
+    def __init__(self, properties=19, commands=5):
         super(CosmicLobbyViewModel, self).__init__(properties=properties, commands=commands)
 
     def getFadeOut(self):
@@ -74,35 +81,85 @@ class CosmicLobbyViewModel(ViewModel):
     def setIsVehicleInBattle(self, value):
         self._setBool(8, value)
 
+    def getSelectedVehicle(self):
+        return RoverEnum(self._getNumber(9))
+
+    def setSelectedVehicle(self, value):
+        self._setNumber(9, value.value)
+
+    def getSelectedVehicleResource(self):
+        return self._getString(10)
+
+    def setSelectedVehicleResource(self, value):
+        self._setString(10, value)
+
+    def getIsSomethingHappeningWithArtefact(self):
+        return self._getBool(11)
+
+    def setIsSomethingHappeningWithArtefact(self, value):
+        self._setBool(11, value)
+
+    def getLastVisitedProgressionLevel(self):
+        return self._getNumber(12)
+
+    def setLastVisitedProgressionLevel(self, value):
+        self._setNumber(12, value)
+
+    def getIsProgressionFinished(self):
+        return self._getBool(13)
+
+    def setIsProgressionFinished(self, value):
+        self._setBool(13, value)
+
+    def getMedals(self):
+        return self._getArray(14)
+
+    def setMedals(self, value):
+        self._setArray(14, value)
+
+    @staticmethod
+    def getMedalsType():
+        return MedalModel
+
     def getScoring(self):
-        return self._getArray(9)
+        return self._getArray(15)
 
     def setScoring(self, value):
-        self._setArray(9, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getScoringType():
         return ScoringModel
 
     def getMissions(self):
-        return self._getArray(10)
+        return self._getArray(16)
 
     def setMissions(self, value):
-        self._setArray(10, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getMissionsType():
         return WidgetQuestModel
 
     def getProgression(self):
-        return self._getArray(11)
+        return self._getArray(17)
 
     def setProgression(self, value):
-        self._setArray(11, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getProgressionType():
         return ProgressionModel
+
+    def getRovers(self):
+        return self._getArray(18)
+
+    def setRovers(self, value):
+        self._setArray(18, value)
+
+    @staticmethod
+    def getRoversType():
+        return RoversModel
 
     def _initialize(self):
         super(CosmicLobbyViewModel, self)._initialize()
@@ -115,10 +172,18 @@ class CosmicLobbyViewModel(ViewModel):
         self._addNumberProperty('marsPointsTodaysLimit', 0)
         self._addStringProperty('lobbyRoute', LobbyRouteEnum.MAIN.value)
         self._addBoolProperty('isVehicleInBattle', False)
+        self._addNumberProperty('selectedVehicle', RoverEnum.OLD.value)
+        self._addStringProperty('selectedVehicleResource', '')
+        self._addBoolProperty('isSomethingHappeningWithArtefact', False)
+        self._addNumberProperty('lastVisitedProgressionLevel', 0)
+        self._addBoolProperty('isProgressionFinished', False)
+        self._addArrayProperty('medals', Array())
         self._addArrayProperty('scoring', Array())
         self._addArrayProperty('missions', Array())
         self._addArrayProperty('progression', Array())
+        self._addArrayProperty('rovers', Array())
         self.onLobbyRouteChange = self._addCommand('onLobbyRouteChange')
         self.onClose = self._addCommand('onClose')
         self.onAboutEvent = self._addCommand('onAboutEvent')
         self.onShopClicked = self._addCommand('onShopClicked')
+        self.onVehicleChange = self._addCommand('onVehicleChange')

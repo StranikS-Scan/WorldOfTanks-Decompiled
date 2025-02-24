@@ -84,9 +84,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.BAN_IS_SET: ('', {}),
          UNIT_RESTRICTION.RATING_RESTRICTION: (backport.text(R.strings.comp7.unit.message.ratingRestriction(), rating=self.__comp7Ctrl.getPlatoonRatingRestriction()), {}),
          UNIT_RESTRICTION.MODE_OFFLINE: (backport.text(R.strings.comp7.unit.message.modeOffline()), {}),
-         UNIT_RESTRICTION.PLAY_LIMITS_IS_ACTIVE: (backport.text(R.strings.cyberSport.window.unit.message.play_limits_is_active()), {}),
-         UNIT_RESTRICTION.BOB_TEAM_MISMATCH: (backport.text(R.strings.bob.prebattle.playerInvalid.teamMismatch()), {}),
-         UNIT_RESTRICTION.BOB_LEADER_FORBIDDEN: (backport.text(R.strings.bob.prebattle.playerInvalid.leaderForbidden()), {})}
+         UNIT_RESTRICTION.PLAY_LIMITS_IS_ACTIVE: (backport.text(R.strings.cyberSport.window.unit.message.play_limits_is_active()), {})}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (PLATOON.MEMBERS_FOOTER_VEHICLES_DIFFERENTLEVELS, {})}
         self.__NEUTRAL_UNIT_MESSAGES = {UNIT_RESTRICTION.UNIT_WILL_SEARCH_PLAYERS: (FORTIFICATIONS.UNIT_WINDOW_WILLSEARCHPLAYERS, {}),
          UNIT_RESTRICTION.HAS_FROZEN_VEHICLES: (backport.text(R.strings.cyberSport.window.unit.message.has_frozen_vehicles()), {})}

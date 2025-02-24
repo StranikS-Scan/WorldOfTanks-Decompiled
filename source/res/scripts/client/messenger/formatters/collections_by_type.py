@@ -21,7 +21,6 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
- token_quest_subformatters.BobTokenQuestFormatter(),
  token_quest_subformatters.ParagonsTokenQuestsSubformatter()))
 registerConvertersSubFormatter('newYear25', NewYearMandarinsConverterFormatter)
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
@@ -83,6 +82,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.battlePassBought.index(): _sc.BattlePassBoughtFormatter(),
  _SM_TYPE.battlePassGiftByOffer.index(): _sc.BattlePassGiftByOfferFormatter(),
  _SM_TYPE.battlePassReachedCap.index(): _sc.BattlePassReachedCapFormatter(),
+ _SM_TYPE.battlePassCapReset.index(): _sc.SimpleFormatter('BattlePassCapResetMessage'),
  _SM_TYPE.battlePassStyleRecieved.index(): _sc.BattlePassStyleReceivedFormatter(),
  _SM_TYPE.battlePassSeasonEnd.index(): _sc.BattlePassSeasonEndFormatter(),
  _SM_TYPE.battlePassUseNonChapterPoints.index(): _sc.BattlePassFreePointsUsedFormatter(),
@@ -187,6 +187,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.battlePassBought.index(), _sc.BattlePassBoughtFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassGiftByOffer.index(), _sc.BattlePassGiftByOfferFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassReachedCap.index(), _sc.BattlePassReachedCapFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.battlePassCapReset.index(), _sc.SimpleFormatter('BattlePassCapResetMessage'))
     registerMessengerServerFormatter(_SM_TYPE.battlePassStyleRecieved.index(), _sc.BattlePassStyleReceivedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassSeasonEnd.index(), _sc.BattlePassSeasonEndFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassUseNonChapterPoints.index(), _sc.BattlePassFreePointsUsedFormatter())

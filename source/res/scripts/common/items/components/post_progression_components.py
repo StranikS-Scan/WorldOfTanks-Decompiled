@@ -66,7 +66,7 @@ class ActionItem(SimpleItem):
         if IS_CLIENT or IS_WEB:
             self.imgName = _xml.readStringWithDefaultValue(xmlCtx, section, 'imgName', self.name)
             self.locName = _xml.readStringWithDefaultValue(xmlCtx, section, 'locName', self.name)
-            self.tooltipSection = _xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT)
+            self.tooltipSection = _xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT).split()
 
 
 class Modification(ActionItem):

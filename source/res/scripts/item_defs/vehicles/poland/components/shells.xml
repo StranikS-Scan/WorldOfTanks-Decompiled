@@ -1633,6 +1633,60 @@
       </damage>
     </armorSpalls>
   </_122mm_OF-471M>
+  <_122mm_PPK_471P>
+    <id>	31022	</id>
+    <userString>	#poland_vehicles:_122mm_PPK_471P	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1180	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_PPK_471P>
+  <_122mm_PK_3BK10>
+    <id>	31023	</id>
+    <userString>	#poland_vehicles:_122mm_PK_3BK10	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_PK_3BK10>
+  <_122mm_PW_471>
+    <id>	31024	</id>
+    <userString>	#poland_vehicles:_122mm_PW_471	</userString>
+    <icon>	he_modern	</icon>
+    <price>	790	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_PW_471>
   <_130mm_AZ_PB_46>
     <id>	11	</id>
     <userString>	#poland_vehicles:_130mm_AZ_PB_46	</userString>

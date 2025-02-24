@@ -11,7 +11,6 @@ class StatesGroup(CONST_CONTAINER):
     OVERLAY_HANGAR_GENERAL = 'STATE_overlay_hangar_general'
     VIDEO_OVERLAY = 'STATE_video_overlay'
     HANGAR_PLACE_TASKS = 'STATE_hangar_place_tasks'
-    BOB_PAGE = 'STATE_gamemode_progress_page'
 
 
 _ON_PATTERN = '{}_on'
@@ -193,20 +192,6 @@ class WWISEBattleMattersFilter(WWISEHangarTasksFilter):
         return States.HANGAR_PLACE_TASKS_BATTLE_MATTERS
 
 
-class WWISEBobPageFilter(_WWISEStateAmbient):
-
-    def __init__(self):
-        _WWISEStateAmbient.__init__(self, StatesGroup.BOB_PAGE)
-
-    def start(self):
-        super(WWISEBobPageFilter, self).start()
-        WWISE.WW_eventGlobal(Events.BOB_ENTER)
-
-    def stop(self):
-        super(WWISEBobPageFilter, self).stop()
-        WWISE.WW_eventGlobal(Events.BOB_EXIT)
-
-
 def getEmptyFilter():
     return EmptySoundFilter()
 
@@ -226,8 +211,7 @@ _filters = {SoundFilters.FILTERED_HANGAR: _selectFilter(WWISEFilteredHangarFilte
  SoundFilters.HANGAR_PLACE_TASKS_MISSIONS: _selectFilter(WWISEHangarTasksMissionsFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_BATTLE_PASS: _selectFilter(WWISEHangarTasksBPFilter()),
  SoundFilters.HANGAR_PLACE_TASKS_EVENTS: _selectFilter(WWISEEventPageFilter()),
- SoundFilters.HANGAR_PLACE_TASKS_BATTLE_MATTERS: _selectFilter(WWISEBattleMattersFilter()),
- SoundFilters.BOB_FILTER: _selectFilter(WWISEBobPageFilter())}
+ SoundFilters.HANGAR_PLACE_TASKS_BATTLE_MATTERS: _selectFilter(WWISEBattleMattersFilter())}
 
 def _setState(stateGroup, stateName):
     WWISE.WW_setState(stateGroup, stateName)

@@ -26,6 +26,10 @@ class _StrongholdsJoinBattleSchema(W2CSchema):
     periphery_id = Field(required=True, type=(int, long))
 
 
+class _StrongholdsOpenListSchema(W2CSchema):
+    extra_params_url = Field(required=False, type=basestring, default='')
+
+
 class _GetReserveParamsSchema(W2CSchema):
     reserve_intCDs = Field(required=True, type=list)
 
@@ -35,11 +39,11 @@ class StrongholdsWebApi(object):
     __itemsCache = dependency.descriptor(IItemsCache)
     __connectionMgr = dependency.descriptor(IConnectionManager)
 
-    @w2c(W2CSchema, 'open_list')
+    @w2c(_StrongholdsOpenListSchema, 'open_list')
     @adisp_process
     def handleOpenList(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
-        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST))
+        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST, extData={'openListExtra': cmd.extra_params_url}))
 
     @w2c(W2CSchema, 'leave_mode')
     @adisp_process

@@ -96,7 +96,7 @@ class _Comp7ApplicationPointEffect(_ApplicationPointEffect):
                 self._createMarker(duration)
         equipmentsCtrl = self._guiSessionProvider.shared.equipments
         if equipmentsCtrl:
-            equipmentsCtrl.onEquipmentAreaCreated(self._equipment, self._entity.position, self._entity.launchTime + self._equipment.delay, self._entity.level)
+            equipmentsCtrl.onEquipmentAreaCreated(self._equipment, self._entity.position, self._entity.launchTime + self._equipment.delay, self._entity.level, self._guiSessionProvider.getArenaDP().getVehicleInfo(self._entity.vehicleID).team)
 
     def onLeaveWorld(self):
         self._clearArea()
@@ -216,5 +216,18 @@ class _Comp7RedLineApplicationPointEffect(_Comp7ApplicationPointEffect, EffectRu
         self._callbackDelayer.delayCallback(self._equipment.delay, self.playEffect, AoeEffects.ACTION, self._position, radius)
 
 
-_EQUIPMENT_APPLICATION_POINTS = {'comp7_recon': _Comp7ReconApplicationPointEffect,
+class _Comp7ReconPointApplicationPointEffect(_Comp7ApplicationPointEffect):
+    _VIEW_STATE_DURATION = 5.0
+
+    def _getFeedbackEventId(self):
+        return FEEDBACK_EVENT_ID.VEHICLE_POINT_RECON
+
+    def _createMarker(self, duration):
+        pass
+
+    def _clearMarker(self):
+        pass
+
+
+_EQUIPMENT_APPLICATION_POINTS = {'comp7_recon': _Comp7ReconPointApplicationPointEffect,
  'comp7_redline': _Comp7RedLineApplicationPointEffect}

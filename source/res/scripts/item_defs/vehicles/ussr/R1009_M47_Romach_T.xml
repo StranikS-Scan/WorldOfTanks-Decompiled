@@ -1982,7 +1982,7 @@
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2050,7 +2050,7 @@
             <minPitch>	0 -19 1 -19	</minPitch>
             <maxPitch>	0 10 0.36 10 0.42 4 0.58 4 0.64 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9.6	</reloadTime>
+          <reloadTime>	10.0	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
@@ -2116,13 +2116,13 @@
       </guns>
       <thermalVision>
         <initialReloadTime>	20	</initialReloadTime>
-        <reloadTime>	40	</reloadTime>
-        <useCount>	4	</useCount>
-        <duration>	20	</duration>
+        <reloadTime>	45	</reloadTime>
+        <useCount>	3	</useCount>
+        <duration>	15	</duration>
         <hSectorAngle>	7.5	</hSectorAngle>
         <vSectorAngle>	15	</vSectorAngle>
         <distance>	445	</distance>
-        <timeToObserve>	4	</timeToObserve>
+        <timeToObserve>	5	</timeToObserve>
         <timeInObservation>	10	</timeInObservation>
       </thermalVision>
       <models>
@@ -2807,7 +2807,7 @@
     <detailed>
       <engines>
         <Continental_AV_1790_7B>
-          <smplEnginePower>	870	</smplEnginePower>
+          <smplEnginePower>	820	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </Continental_AV_1790_7B>
       </engines>

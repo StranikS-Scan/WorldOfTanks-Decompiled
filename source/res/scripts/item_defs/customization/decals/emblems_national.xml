@@ -1,7 +1,7 @@
 <emblems_national.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
   <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:czech0>	usa	</xmlns:czech0>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
@@ -9,6 +9,8 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/auto	</userString>
     <season>	ALL	</season>
@@ -117,7 +119,28 @@
       <userString>	#vehicle_customization:emblem/auto/italian_flag	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	31241	</id>
+      <texture>	gui/maps/vehicles/decals/union_nation.dds	</texture>
+      <userString>	#vehicle_customization:emblem/auto/un	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	National Emblems	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI vehicleBound nationalEmblem	</tags>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <decal>
+      <id>	31111	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_0.dds	</texture>
+      <userString>	#vehicle_customization:special_style/BlackFriday	</userString>
+      <mirror>	true	</mirror>
+    </decal>
+    <name>	Black Friday	</name>
     <type>	EMBLEM	</type>
   </itemGroup>
 </emblems_national.xml>

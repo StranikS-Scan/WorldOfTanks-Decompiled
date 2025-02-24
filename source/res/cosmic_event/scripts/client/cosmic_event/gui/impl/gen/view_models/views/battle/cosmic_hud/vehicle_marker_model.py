@@ -5,14 +5,14 @@ from cosmic_event.gui.impl.gen.view_models.views.battle.cosmic_hud.marker_model 
 class VehicleMarkerModel(MarkerModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(VehicleMarkerModel, self).__init__(properties=properties, commands=commands)
 
     def getPlayerName(self):
-        return self._getString(4)
+        return self._getString(5)
 
     def setPlayerName(self, value):
-        self._setString(4, value)
+        self._setString(5, value)
 
     def _initialize(self):
         super(VehicleMarkerModel, self)._initialize()

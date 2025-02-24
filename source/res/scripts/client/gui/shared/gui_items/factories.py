@@ -75,8 +75,8 @@ class GuiItemFactory(IGuiItemsFactory):
     def createVehicleFuelTank(self, intCompactDescr, proxy=None, descriptor=None):
         return VehicleFuelTank(intCompactDescr, proxy, descriptor)
 
-    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None, battleModifiers=None):
-        return Vehicle(strCompactDescr, inventoryID, typeCompDescr, proxy, extData, invData, battleModifiers)
+    def createVehicle(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
+        return Vehicle(strCompactDescr, inventoryID, typeCompDescr, proxy, extData, invData)
 
     def createTankman(self, strCompactDescr, inventoryID=-1, vehicle=None, dismissedAt=None, proxy=None, vehicleSlotIdx=-1):
         return Tankman(strCompactDescr, inventoryID, vehicle, dismissedAt, proxy, vehicleSlotIdx)

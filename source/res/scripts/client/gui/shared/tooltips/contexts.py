@@ -23,20 +23,16 @@ from gui.shared.items_parameters import params_helper, bonus_helper
 from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
-from helpers import dependency, time_utils
+from helpers import dependency
 from items import vehicles
-from items.vehicles import getItemByCompactDescr
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
 from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IComp7Controller
-from skeletons.gui.game_control import IBobController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.Scaleform.daapi.view.lobby.bob.bob_vehicle import g_bobVehicle
-from gui.Scaleform.daapi.view.lobby.bob.bob_vehicle_parameters import bobVehiclesComparator
 if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferGift, OfferEventData
     from gui.shared.gui_items.dossier.stats import AccountTotalStatsBlock
@@ -1291,13 +1287,13 @@ class DogTagInfoContext(ToolTipContext):
         super(DogTagInfoContext, self).__init__(TOOLTIP_COMPONENT.FINAL_STATISTIC, fieldsToExclude)
 
 
-class BattlePassGiftTokenContext(ToolTipContext):
+class SelectableBonusesGiftTokenContext(ToolTipContext):
     __slots__ = ('__hasOffer',)
     __offersProvider = dependency.descriptor(IOffersDataProvider)
     __battlePassController = dependency.descriptor(IBattlePassController)
 
     def __init__(self):
-        super(BattlePassGiftTokenContext, self).__init__(TOOLTIP_COMPONENT.BATTLE_PASS)
+        super(SelectableBonusesGiftTokenContext, self).__init__(TOOLTIP_COMPONENT.BATTLE_PASS)
         self.__hasOffer = True
 
     def buildItem(self, tokenID, **kwargs):
@@ -1308,62 +1304,6 @@ class BattlePassGiftTokenContext(ToolTipContext):
         offer = self.__offersProvider.getOfferByToken(offerToken)
         if offer is None:
             self.__hasOffer = False
-            return result
-        else:
-            if shortName in ('brochure_gift', 'guide_gift', 'book_gift'):
-                gift = first(offer.getAllGifts())
-                if gift is not None:
-                    result.append(gift.bonus.displayedItem.getXP())
-            else:
-                for gift in offer.getAllGifts():
-                    result.append(gift.title)
-
-            return result
-
-    def getParams(self):
-        return {'isOfferEnabled': self.__battlePassController.isOfferEnabled() and self.__hasOffer}
-
-
-class PM3GiftTokenContext(ToolTipContext):
-    __slots__ = ('__hasOffer',)
-    __offersProvider = dependency.descriptor(IOffersDataProvider)
-    __battlePassController = dependency.descriptor(IBattlePassController)
-    __EXPEQUIPMENTS_GIFTS_ITEM_CD = [38649, 39417, 40185]
-    __NEW_DEVICE_PM3_GIFTS_ITEM_CD = [16121,
-     17913,
-     18681,
-     19961,
-     20729,
-     21241,
-     22009,
-     22521,
-     23289,
-     24057,
-     24825,
-     25593,
-     26361]
-
-    def __init__(self):
-        super(PM3GiftTokenContext, self).__init__(TOOLTIP_COMPONENT.PERSONAL_MISSIONS)
-        self.__hasOffer = True
-
-    def buildItem(self, tokenID, **kwargs):
-        self.__hasOffer = True
-        result = []
-        shortName = tokenID.split(':')[2]
-        offerToken = getOfferTokenByGift(tokenID)
-        offer = self.__offersProvider.getOfferByToken(offerToken)
-        if offer is None:
-            if 'expequipments' in shortName:
-                for itemCD in self.__EXPEQUIPMENTS_GIFTS_ITEM_CD:
-                    result.append(getItemByCompactDescr(itemCD).shortUserString)
-
-            if 'new_device_pm3' in shortName:
-                for itemCD in self.__NEW_DEVICE_PM3_GIFTS_ITEM_CD:
-                    result.append(getItemByCompactDescr(itemCD).shortUserString)
-
-            if not result:
-                self.__hasOffer = False
             return result
         else:
             if shortName in ('brochure_gift', 'guide_gift', 'book_gift'):
@@ -1399,52 +1339,3 @@ class Comp7RoleSkillLobbyContext(ToolTipContext):
         cache = vehicles.g_cache
         equipmentID = cache.equipmentIDs().get(equipmentName)
         return cache.equipments().get(equipmentID) if equipmentID is not None else None
-
-
-class BobSkillContext(ToolTipContext):
-    __bobController = dependency.descriptor(IBobController)
-
-    def __init__(self, fieldsToExclude=None):
-        super(BobSkillContext, self).__init__(TOOLTIP_COMPONENT.BOB, fieldsToExclude)
-
-    def buildItem(self, teamID, *args, **kwargs):
-        skill = self.__bobController.teamSkillsRequester.getSkill(int(teamID))
-        return skill if skill is not None and skill.isActiveAt(time_utils.getServerUTCTime()) else None
-
-    def getParams(self):
-        return {'isPlayerBlogger': self.__bobController.isPlayerBlogger()}
-
-
-class BobProgressionContext(ToolTipContext):
-    __bobController = dependency.descriptor(IBobController)
-
-    def __init__(self, fieldsToExclude=None):
-        super(BobProgressionContext, self).__init__(TOOLTIP_COMPONENT.BOB, fieldsToExclude)
-
-    def buildItem(self, teamID, *args, **kwargs):
-        return self.__bobController.teamsRequester.getTeam(teamID)
-
-    def getParams(self):
-        return {'personalLevel': self.__bobController.personalLevel,
-         'rewardsCount': self.__bobController.getAvailablePersonalRewardCount(),
-         'teams': self.__bobController.teamsRequester.getTeamsList(),
-         'currentTeamID': self.__bobController.getCurrentTeamID()}
-
-
-class BobParamContext(HangarParamContext):
-
-    def getComparator(self):
-        return bobVehiclesComparator(g_bobVehicle.item, g_bobVehicle.defaultItem)
-
-    def buildItem(self, *args, **kwargs):
-        return g_bobVehicle.item
-
-    @staticmethod
-    def getBattleModifiersType():
-        pass
-
-
-class BobTechMainContext(TechMainContext):
-
-    def getVehicle(self):
-        return g_bobVehicle.item if g_bobVehicle.isPresent() else g_currentVehicle.item

@@ -70,6 +70,9 @@
     <_10R_2SH_II>	31036	</_10R_2SH_II>
     <R113M_bob>	31037	</R113M_bob>
     <_10RK-26_bob>	31038	</_10RK-26_bob>
+    <_10WSc>	31044	</_10WSc>
+    <R113_T>	31045	</R113_T>
+    <R113_B>	31046	</R113_B>
     <_10R_U18_T>	31018	</_10R_U18_T>
     <_10RT-26M>	220	</_10RT-26M>
     <R113K>	223	</R113K>
@@ -255,7 +258,7 @@
       <repairCost>	1.5	</repairCost>
     </_9RM_122>
     <_9RM_D15>
-      <userString>	#ussr_vehicles:_9RM	</userString>
+      <userString>	#ussr_vehicles:_9RM_D15	</userString>
       <tags></tags>
       <level>	8	</level>
       <price>	21000	</price>
@@ -628,6 +631,30 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113>
+    <R113_T>
+      <userString>	#ussr_vehicles:R113_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113_T>
+    <R113_B>
+      <userString>	#ussr_vehicles:R113_B	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113_B>
     <R113_R200_KV_4_Turchaninov>
       <userString>	#ussr_vehicles:R113_R200_KV_4_Turchaninov	</userString>
       <tags></tags>
@@ -1283,6 +1310,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Radio_R219_VK4502P_G>
+    <_10WSc>
+      <userString>	#ussr_vehicles:_10WSc	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc>
     <AN_VRC_12>
       <userString>	#ussr_vehicles:AN_VRC_12	</userString>
       <tags></tags>

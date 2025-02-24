@@ -34,6 +34,7 @@ class EpicStatusNotificationTimerPanel(StatusNotificationTimerPanel):
          epic_sn_items.ResupplyTimerSN,
          sn_items.StunSN,
          sn_items.StunFlameSN,
+         sn_items.ThermalWarningSN,
          epic_sn_items.EpicEnemySmokeSN,
          epic_sn_items.EpicEnemySmokePostEffectSN,
          epic_sn_items.EpicSmokeSN,
@@ -76,6 +77,7 @@ class EpicStatusNotificationTimerPanel(StatusNotificationTimerPanel):
         link = _LINKS.SECONDARY_TIMER_UI
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)
         self._addNotificationTimerSetting(data, _TYPES.STUN_FLAME, _LINKS.STUN_FLAME_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUNFLAME_INDICATOR)
+        self._addNotificationTimerSetting(data, _TYPES.THERMAL_VISION_WARNING, _LINKS.THERMAL_VISION_WARNING, link, color=_COLORS.YELLOW)
         self._addNotificationTimerSetting(data, _TYPES.CAPTURE_BLOCK, _LINKS.BLOCKED_ICON, link, _COLORS.ORANGE)
         self._addNotificationTimerSetting(data, _TYPES.SMOKE, _LINKS.SMOKE_ICON, link, _COLORS.GREEN)
         self._addNotificationTimerSetting(data, _TYPES.DAMAGING_SMOKE, _LINKS.ENEMY_SMOKE_ICON, link, _COLORS.ORANGE)

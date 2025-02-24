@@ -30,7 +30,6 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.genConsts.BATTLE_OF_BLOGGERS_ALIASES import BATTLE_OF_BLOGGERS_ALIASES
 from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
@@ -128,10 +127,6 @@ def showComp7PrimeTimeWindow():
 
 def showRankedBattleIntro():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLES_INTRO_ALIAS)), scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showBobPrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(BATTLE_OF_BLOGGERS_ALIASES.BOB_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showEpicBattlesPrimeTimeWindow():
@@ -992,20 +987,6 @@ def showBattlePassVehicleAwardWindow(data, notificationMgr=None):
     notificationMgr.append(WindowNotificationCommand(window))
 
 
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showBobPersonalRewardWindow(bonuses, notificationMgr=None):
-    from gui.impl.lobby.bob.bob_personal_rewards_view import BobPersonalRewardWindow
-    window = BobPersonalRewardWindow(bonuses)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showBobTeamRewardWindow(bonuses, level, notificationMgr=None):
-    from gui.impl.lobby.bob.bob_team_rewards_view import BobTeamRewardWindow
-    window = BobTeamRewardWindow(bonuses, level)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
 def showDedicationRewardWindow(bonuses, data, closeCallback=None):
     from gui.impl.lobby.dedication.dedication_reward_view import DedicationRewardWindow
     window = DedicationRewardWindow(bonuses, data, closeCallback)
@@ -1330,6 +1311,15 @@ def showBonusDelayedConfirmationDialog(vehicle, callback=None):
     callback(result)
 
 
+@wg_async
+def showPMDiscardConfirmationDialog(questID, callback=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
+    from gui.impl.lobby.personal_missions.personal_missions_quest_reset_view import PersonalMissionsQuestResetView
+    result = yield wg_await(dialogs.showSimple(FullScreenDialogWindowWrapper(PersonalMissionsQuestResetView(questID), doBlur=False)))
+    callback((result, {}))
+
+
 def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None, backBtnLabel=None, customCallbacks=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW), ctx={'offerID': offerID,
      'giftID': giftID,
@@ -1465,13 +1455,6 @@ def showSubscriptionDailyQuestsIntroWindow(parent=None):
     return
 
 
-def showBattlePassDailyQuestsIntroWindow(parent=None):
-    from gui.impl.lobby.battle_pass.battle_pass_daily_quests_intro_view import BattlePassDailyQuestsIntroWindow
-    window = BattlePassDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
-    window.load()
-    return
-
-
 def showBattlePassRewardsSelectionWindow(chapterID=0, level=0, onRewardsReceivedCallback=None, onCloseCallback=None):
     from gui.impl.lobby.battle_pass.rewards_selection_view import RewardsSelectionWindow
     window = RewardsSelectionWindow(chapterID, level, onRewardsReceivedCallback, onCloseCallback)
@@ -1517,12 +1500,10 @@ def showNewLevelWindow(pLevel=1, cLevel=2, pXp=50, cXp=70, boosterFlXP=30, origi
 
 
 @wg_async
-@dependency.replace_none_kwargs(guiLoader=IGuiLoader)
-def showBattlePassActivateChapterConfirmDialog(chapterID, callback, guiLoader=None):
+def showBattlePassActivateChapterConfirmDialog(chapterID, parent, callback):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.battle_pass.activate_chapter_confirm_dialog import ActivateChapterConfirmDialog
-    view = guiLoader.windowsManager.getViewByLayoutID(R.views.lobby.battle_pass.BattlePassProgressionsView())
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=view.getParentWindow()))
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(chapterID=chapterID, layoutID=ActivateChapterConfirmDialog.LAYOUT_ID, wrappedViewClass=ActivateChapterConfirmDialog, parent=parent.getParentWindow()))
     if result.busy:
         callback((False, {}))
     else:
@@ -2206,6 +2187,12 @@ def showCollectionsIntro():
         from gui.impl.lobby.collection.intro_view import IntroWindow
         window = IntroWindow(parent=getParentWindow())
         window.load()
+
+
+def showBattlePassIntro():
+    from gui.impl.lobby.battle_pass.intro_view import IntroWindow
+    window = IntroWindow(parent=getParentWindow())
+    window.load()
 
 
 def showAchievementEditView(*args, **kwargs):

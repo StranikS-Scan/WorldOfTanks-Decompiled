@@ -31,7 +31,7 @@ class ChapterType(Enum):
 class BattlePassEntryPointViewModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=21, commands=1):
+    def __init__(self, properties=22, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterType(self):
@@ -160,6 +160,12 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setFreePoints(self, value):
         self._setNumber(20, value)
 
+    def getShowHint(self):
+        return self._getBool(21)
+
+    def setShowHint(self, value):
+        self._setBool(21, value)
+
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
         self._addStringProperty('chapterType')
@@ -183,4 +189,5 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addStringProperty('battleType', '')
         self._addBoolProperty('isChapterChosen', False)
         self._addNumberProperty('freePoints', 0)
+        self._addBoolProperty('showHint', False)
         self.onClick = self._addCommand('onClick')

@@ -10,6 +10,7 @@ from gui.server_events.bonuses import SelectableBonus
 from gui.shared.gui_items.processors import makeError
 from gui.shared.gui_items.processors.offers import ReceiveMultipleOfferGiftsProcessor, ReceiveOfferGiftProcessor, BattleMattersOfferProcessor
 from helpers import dependency
+from personal_missions_constants import PM3_OFFER_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.offers import IOffersDataProvider
@@ -94,13 +95,13 @@ class SelectableRewardManager(object):
             return result
 
     @classmethod
+    def isAvailableBonus(cls, tokenID):
+        offer = SelectableRewardManager.__offersDataProvider.getOfferByToken(tokenID)
+        return offer is not None and offer.isOfferAvailable
+
+    @classmethod
     def getAvailableSelectableBonuses(cls, condition=None):
-
-        def isAvailableBonus(tokenID):
-            offer = SelectableRewardManager.__offersDataProvider.getOfferByToken(tokenID)
-            return offer is not None and offer.isOfferAvailable
-
-        return cls.getSelectableBonuses(lambda tokenID: isAvailableBonus(tokenID) and (not callable(condition) or condition(tokenID)))
+        return cls.getSelectableBonuses(lambda tokenID: cls.isAvailableBonus(tokenID) and (not callable(condition) or condition(tokenID)))
 
     @classmethod
     def getSelectableBonuses(cls, condition=None):
@@ -114,7 +115,12 @@ class SelectableRewardManager(object):
     @classmethod
     def getGiftTokenCount(cls, bonus):
         offer = cls._getBonusOffer(bonus)
-        return 0 if offer is None else offer.giftTokenCount
+        if offer is None:
+            return 0
+        else:
+            offerDataReceivedGifts = cls.__offersDataProvider.getReceivedGifts(offer.id)
+            countReceivedGifts = sum(offerDataReceivedGifts.itervalues())
+            return offer.availableTokens + countReceivedGifts
 
     @classmethod
     def getRemainedChoicesForFeature(cls):
@@ -165,12 +171,23 @@ class BattlePassSelectableRewardManager(SelectableRewardManager):
 
 
 class PersonalMissionsSelectableRewardManager(SelectableRewardManager):
+    __offersDataProvider = dependency.descriptor(IOffersDataProvider)
     _FEATURE = Features.PERSONAL_MISSIONS
+    __REWARD_EXTRA_ENDING = '_gift'
 
     @classmethod
     def getTabTooltipData(cls, selectableBonus):
         tokenID = selectableBonus.getValue().keys()[0]
+        if cls.__REWARD_EXTRA_ENDING in tokenID:
+            tokenID = tokenID.replace(cls.__REWARD_EXTRA_ENDING, '')
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[_getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
+
+    @classmethod
+    def isAvailableBonus(cls, tokenID):
+        if tokenID.startswith(PM3_OFFER_TOKEN_PREFIX):
+            tokenID = tokenID.replace('_gift', '')
+        offer = cls.__offersDataProvider.getOfferByToken(tokenID)
+        return offer is not None and offer.isOfferAvailable
 
 
 class RankedSelectableRewardManager(SelectableRewardManager):

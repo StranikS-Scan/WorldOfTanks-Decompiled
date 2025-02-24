@@ -80,7 +80,7 @@ from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController, IBobController
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IBootcampController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IEventBattlesController, IFunRandomController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IEarlyAccessController
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -96,7 +96,6 @@ from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.tutorial import ITutorialLoader
 from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
 from uilogging.wot_plus.loggers import WotPlusHeaderLogger
-from gui.bob import bob_helpers
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -303,7 +302,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
-    bobController = dependency.descriptor(IBobController)
     __SELECTOR_TOOLTIP_TYPE = TOOLTIPS.HEADER_BATTLETYPE
 
     def __init__(self):
@@ -318,7 +316,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__visibility = HeaderMenuVisibilityState.ALL
         self.__menuVisibilityHelper = _LobbyHeaderVisibilityHelper()
         self.__uiEffectsIsActive = False
-        self.__isBobEventEnabled = self.bobController.isModeActive()
         self._pr20UILogger = PersonalReservesActivationScreenFlowLogger()
         self._wotPlusUILogger = WotPlusHeaderLogger()
         return
@@ -603,7 +600,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__comp7Controller.onQualificationStateUpdated += self.__updateComp7
         self.__achievements20Controller.onUpdate += self.__onProfileVisited
         self.__earlyAccessController.onUpdated += self.__updateEarlyAccess
-        self.bobController.onUpdated += self.__onBobEventChanged
         g_playerEvents.onEnqueued += self._updatePrebattleControls
         g_playerEvents.onDequeued += self._updatePrebattleControls
         g_playerEvents.onArenaCreated += self._updatePrebattleControls
@@ -711,7 +707,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__earlyAccessController.onUpdated -= self.__updateEarlyAccess
         self.clanNotificationCtrl.onClanNotificationUpdated -= self.__updateStrongholdCounter
         self.__funRandomCtrl.subscription.removeSubModesWatcher(self._updatePrebattleControls, True)
-        self.bobController.onUpdated -= self.__onBobEventChanged
         g_playerEvents.onEnqueued -= self._updatePrebattleControls
         g_playerEvents.onDequeued -= self._updatePrebattleControls
         g_playerEvents.onArenaCreated -= self._updatePrebattleControls
@@ -1189,7 +1184,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             isLegacyTraining = state.isInLegacy(PREBATTLE_TYPE.TRAINING)
             isComp7 = state.isInPreQueue(constants.QUEUE_TYPE.COMP7) or state.isInUnit(constants.PREBATTLE_TYPE.COMP7)
             isVersusAI = state.isInPreQueue(constants.QUEUE_TYPE.VERSUS_AI) or state.isInUnit(constants.PREBATTLE_TYPE.VERSUS_AI)
-            isBob = state.isInPreQueue(constants.QUEUE_TYPE.BOB) or state.isInUnit(constants.PREBATTLE_TYPE.BOB)
+            isCosmic = state.isInPreQueue(constants.QUEUE_TYPE.COSMIC_EVENT) or state.isInUnit(constants.PREBATTLE_TYPE.COSMIC_EVENT)
             if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
                 extendedSquadInfoVo = self.platoonCtrl.buildExtendedSquadInfoVo()
                 if isSquadEnabled:
@@ -1214,8 +1209,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7SQUAD
                     elif isVersusAI:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_VERSUSAISQUAD
-                    elif isBob:
-                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_BOBSQUAD
                     else:
                         tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_SQUAD
                 else:
@@ -1228,6 +1221,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                             tooltip = MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_COMP7BANISSET
                         if not self.__comp7Controller.isQualificationSquadAllowed():
                             tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COMP7QUALIFICATIONSQUAD
+                    if isCosmic:
+                        tooltip = PLATOON.HEADERBUTTON_TOOLTIPS_COSMICSQUAD
                 hasEventSquadCap = bool(BONUS_CAPS.checkAny(constants.ARENA_BONUS_TYPE.EVENT_BATTLES, BONUS_CAPS.SQUADS))
                 isEventSquadEnable = isEvent and hasEventSquadCap
                 hasInfoPopover = self.platoonCtrl.hasWelcomeWindow() or self.platoonCtrl.canSelectSquadSize() or self.prbDispatcher.getEntity().getPermissions().hasSquadArrow()
@@ -1237,7 +1232,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             if self.__isFightBtnDisabled and not state.hasLockedState:
                 if isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
                     tooltipData = getEventTooltipData()
-                elif (g_currentVehicle.isOnlyForEpicBattles() or g_currentVehicle.isOnlyForBob()) and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
+                elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                     tooltipData = getEpicBattlesOnlyVehicleTooltipData(result)
                 elif g_currentVehicle.isOnlyForComp7Battles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                     tooltipData = getComp7BattlesOnlyVehicleTooltipData(result)
@@ -1261,8 +1256,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                     tooltipData = getComp7FightBtnTooltipData(result)
                 elif isVersusAI:
                     tooltipData = getVersusAIFightBtnTooltipData(result)
-                elif isBob:
-                    tooltipData = bob_helpers.getBobFightBtnTooltipData(result)
             elif isRoyale and g_currentVehicle.isOnlyForBattleRoyaleBattles():
                 tooltipData = TOOLTIPS_CONSTANTS.BATTLE_ROYALE_PERF_ADVANCED
                 isSpecial = True
@@ -1763,12 +1756,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             visitedQuestIds = questSettings[visitedKey]
             questSettings[visitedKey] = tuple((q for q in visitedQuestIds if not isDailyQuest(q) or q in currentDynamicQuests))
             AccountSettings.setSettings(QUESTS, questSettings)
-
-    def __onBobEventChanged(self):
-        newEventState = self.bobController.isModeActive()
-        if self.__isBobEventEnabled != newEventState:
-            self.__isBobEventEnabled = newEventState
-            self._updatePrebattleControls()
 
     def __clearMenuVisibiliby(self):
         self.__menuVisibilityHelper.clear()

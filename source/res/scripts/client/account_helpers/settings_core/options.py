@@ -307,7 +307,13 @@ class SoundSetting(SettingAbstract):
         return self.__toGuiVolume(SoundGroups.g_instance.getMasterVolume()) if self.group == 'master' else self.__toGuiVolume(SoundGroups.g_instance.getVolume(self.group))
 
     def _set(self, value):
-        return SoundGroups.g_instance.setMasterVolume(self.__toSysVolume(value)) if self.group == 'master' else SoundGroups.g_instance.setVolume(self.group, self.__toSysVolume(value))
+        if self.group == 'master':
+            volumeResult = SoundGroups.g_instance.setMasterVolume(self.__toSysVolume(value))
+        else:
+            volumeResult = SoundGroups.g_instance.setVolume(self.group, self.__toSysVolume(value))
+        if self.group in SoundGroups.USER_SETTINGS_CATEGORY_NAMES:
+            SoundGroups.g_instance.updateVideoVolume()
+        return volumeResult
 
 
 class SoundEnableSetting(SettingAbstract):

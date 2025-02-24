@@ -27,6 +27,7 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
     __nonAlphaNumPattern = re.compile(u'[^a-zA-Z]', re.M | re.S | re.U | re.I)
     __equivalents = {}
     __badWordPatterns = []
+    __badWordPatternsEN = []
 
     @classmethod
     def load(cls, resourceId):
@@ -52,27 +53,44 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
                     LOG_CURRENT_EXCEPTION()
 
             badWordsSection = dSection['badWords']
-            if badWordsSection is not None:
-                for badWordSet in badWordsSection.values():
-                    try:
-                        if badWordSet.has_key('include'):
-                            include = re.compile(badWordSet['include'].asWideString, re.M | re.S | re.U | re.I)
-                        else:
-                            include = re.compile(badWordSet.asWideString, re.M | re.S | re.U | re.I)
-                        exclude = None
-                        if badWordSet.has_key('exclude'):
-                            exclude = re.compile(badWordSet['exclude'].asWideString, re.M | re.S | re.U | re.I)
-                        obj.__badWordPatterns.append((include, exclude))
-                    except sre_compile.error:
-                        LOG_CURRENT_EXCEPTION()
-
+            badWordsSectionEN = dSection['badWordsEN']
+            cls.packBadWord(badWordsSection, ruPack=True)
+            cls.packBadWord(badWordsSectionEN, ruPack=False)
             ResMgr.purge(resourceId, True)
             return obj
+
+    @classmethod
+    def packBadWord(cls, badWordsSection, ruPack=True):
+        obj = BasicOLDictionary.__new__(cls)
+        if badWordsSection is not None:
+            for badWordSet in badWordsSection.values():
+                try:
+                    if badWordSet.has_key('include'):
+                        include = re.compile(badWordSet['include'].asWideString, re.M | re.S | re.U | re.I)
+                    else:
+                        include = re.compile(badWordSet.asWideString, re.M | re.S | re.U | re.I)
+                    exclude = None
+                    if badWordSet.has_key('exclude'):
+                        exclude = re.compile(badWordSet['exclude'].asWideString, re.M | re.S | re.U | re.I)
+                    if ruPack:
+                        obj.__badWordPatterns.append((include, exclude))
+                    else:
+                        obj.__badWordPatternsEN.append((include, exclude))
+                except sre_compile.error:
+                    LOG_CURRENT_EXCEPTION()
+
+        return
 
     def searchAndReplace(self, text):
         words = text.split(' ')
         for idx, word in enumerate(words):
             parsing = self.__nonAlphaNumPattern.sub('', word.lower())
+            for include, exclude in self.__badWordPatternsEN:
+                match = include.search(parsing)
+                if match and (exclude is None or not exclude.search(parsing)):
+                    words[idx] = self.replace(word)
+                    break
+
             for find, replace in self.__equivalents.iteritems():
                 parsing = parsing.replace(find, replace)
 

@@ -4,12 +4,19 @@ import constants
 import BattleFeedbackCommon
 from constants_utils import ConstInjector, AbstractBattleMode
 from battle_results import cosmic_event
+from cosmic_event_common import Abilities
 COSMIC_EVENT_ROCKET_BOOSTER = 'cosmic_event_rocket_booster'
 COSMIC_EVENT_SHIELD = 'cosmic_event_shield'
+COSMIC_EVENT_WAVE = 'cosmic_event_wave'
+COSMIC_EVENT_STUN_SHOT = 'cosmic_event_stun_shot'
 COSMIC_EVENT_BLACKHOLE = 'cosmic_event_black_hole'
 COSMIC_EVENT_OVERCHARGE = 'cosmic_event_gravity_field'
 COSMIC_EVENT_POWER_SHOT = 'cosmic_event_power_shot'
 COSMIC_EVENT_RAPIDSHELLING = 'cosmic_event_hook_shot'
+COSMIC_EVENT_RESPAWN_PROTECTION = 'respawn_protection'
+COSMIC_EVENT_SHOOT_ABILITY_NAME_TO_ID = {COSMIC_EVENT_RAPIDSHELLING: Abilities.SNIPER_SHOT,
+ COSMIC_EVENT_POWER_SHOT: Abilities.POWER_SHOT,
+ COSMIC_EVENT_STUN_SHOT: Abilities.STUN_SHOT}
 
 class ARENA_GUI_TYPE(constants.ARENA_GUI_TYPE, ConstInjector):
     COSMIC_EVENT = 300
@@ -38,6 +45,13 @@ class BATTLE_EVENT_TYPE(BattleFeedbackCommon.BATTLE_EVENT_TYPE, ConstInjector):
     COSMIC_PICKUP_ABILITY = 27
     COSMIC_ABILITY_HIT = 28
     COSMIC_SHOT = 29
+    COSMIC_ASSIST = 30
+    COSMIC_FIRST_BLOOD = 31
+    COSMIC_KILL_STREAK = 32
+    COSMIC_PICKUP_MASTER = 33
+    COSMIC_REVENGE = 34
+    COSMIC_BOOST_ME = 35
+    MAX_KILL_SERIES = 36
 
 
 class LOOT_TYPE(constants.LOOT_TYPE, ConstInjector):
@@ -92,4 +106,8 @@ class CosmicEventBattleMode(AbstractBattleMode):
 
 COSMIC_KEY = 'cosmic_keys'
 EVENT_STARTED_NOTIFICATION_VIEWED = 'event_started_notification_viewed'
-ACCOUNT_DEFAULT_SETTINGS = {COSMIC_KEY: {EVENT_STARTED_NOTIFICATION_VIEWED: False}}
+LAST_PROGRESSION_VISITED_LEVEL = 'last_progression_visited_level'
+SELECTED_VEHICLE_ID = 'selected_vehicle_id'
+ACCOUNT_DEFAULT_SETTINGS = {COSMIC_KEY: {EVENT_STARTED_NOTIFICATION_VIEWED: False,
+              LAST_PROGRESSION_VISITED_LEVEL: 0,
+              SELECTED_VEHICLE_ID: 1}}

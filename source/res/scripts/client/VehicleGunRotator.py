@@ -110,6 +110,7 @@ class VehicleGunRotator(object):
         if self.__timerID is not None:
             BigWorld.cancelCallback(self.__timerID)
             self.__timerID = None
+            self.__isLocked = True
         if not self.__isStarted:
             return
         else:
@@ -134,6 +135,9 @@ class VehicleGunRotator(object):
 
     def lock(self, isLocked):
         self.__isLocked = isLocked
+
+    def isGunLocked(self):
+        return self.__isLocked
 
     def reset(self):
         self.__turretYaw = self.__gunPitch = 0.0

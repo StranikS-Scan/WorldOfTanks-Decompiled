@@ -102,6 +102,8 @@ class GAME(CONST_CONTAINER):
     ENABLE_SPEEDOMETER = 'enableSpeedometer'
     ENABLE_REPAIR_TIMER = 'enableRepairTimer'
     ENABLE_BATTLE_NOTIFIER = 'enableBattleNotifier'
+    DISABLE_THERMAL_VISION_EFFECT = 'disableThermalVisionEffect'
+    DISABLE_THERMAL_VISION_SECTOR_EFFECT = 'disableThermalVisionSectorEffect'
     HANGAR_CAM_PERIOD = 'hangarCamPeriod'
     HANGAR_CAM_PARALLAX_ENABLED = 'hangarCamParallaxEnabled'
     PLAYERS_PANELS_SHOW_LEVELS = 'ppShowLevels'
@@ -121,6 +123,7 @@ class GAME(CONST_CONTAINER):
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'
     SHOW_ARTY_HIT_ON_MAP = 'showArtyHitOnMap'
+    SHOW_THERMAL_VISION_SECTOR_ON_MAP = 'showThermalVisionSectorOnMap'
     MINIMAP_VIEW_RANGE = 'minimapViewRange'
     MINIMAP_MAX_VIEW_RANGE = 'minimapMaxViewRange'
     MINIMAP_DRAW_RANGE = 'minimapDrawRange'
@@ -397,6 +400,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     PM_NEW_CAMPAIGN_HINT = 'NewCampaignHint'
     PARAGONS_FIRST_RESET_HINT = 'ParagonsFirstResetHint'
     PARAGONS_ENTRY_POINT_HINT = 'ParagonsEntryPointHint'
+    PARAGONS_RESEARCH_BUTTON_HINT = 'ParagonsResearchButtonHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):
@@ -488,7 +492,6 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     INTRO_VIDEO_SHOWN = 'introVideoShown'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
     FLAGS_VERSION = 'flagsVersion'
-    DAILY_QUESTS_INTRO_SHOWN = 'dailyQuestsIntroShown'
     EXTRA_CHAPTER_INTRO_SHOWN = 'extraChapterIntroShown'
     EXTRA_CHAPTER_VIDEO_SHOWN = 'extraChapterVideoShown'
 

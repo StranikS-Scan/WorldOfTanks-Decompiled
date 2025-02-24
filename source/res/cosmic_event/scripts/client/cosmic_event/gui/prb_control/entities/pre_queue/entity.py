@@ -23,6 +23,7 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
+from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from gui.prb_control.storages.local_storage import LocalStorage
     from typing import Optional
@@ -110,6 +111,8 @@ class CosmicEventBattleEntity(PreQueueEntity):
 
     def _makeQueueCtxByAction(self, action=None):
         vehicle = self.__cosmicEventBattleCtrl.getEventVehicle()
+        if not vehicle:
+            raise SoftException('[COSM25]: Invalid or outdated event vehicle')
         return CosmicEventBattleQueueCtx(vehicle.invID, waitingID='prebattle/join')
 
     def _createActionsValidator(self):

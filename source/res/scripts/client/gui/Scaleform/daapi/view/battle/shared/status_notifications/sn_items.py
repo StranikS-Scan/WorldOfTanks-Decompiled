@@ -13,6 +13,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, TIMER_VIEW_S
 from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
+from items.utils import isclose
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from gui.battle_control.battle_constants import DestroyTimerViewState, DeathZoneTimerViewState
@@ -410,6 +411,21 @@ class StunFlameSN(StunSN):
 
     def _getStunType(self):
         return StunTypes.FLAME.value
+
+
+class ThermalWarningSN(TimerSN):
+
+    def getItemID(self):
+        return VEHICLE_VIEW_STATE.THERMAL_VISION_WARNING
+
+    def getViewTypeID(self):
+        return BATTLE_NOTIFICATIONS_TIMER_TYPES.THERMAL_VISION_WARNING
+
+    def _update(self, value):
+        startTime, duration = value
+        isVisible = not (isclose(startTime, duration) and isclose(startTime, 0))
+        self._updateTimeParams(duration, startTime + duration)
+        self._setVisible(isVisible)
 
 
 class _SmokeBase(LocalizationProvider, TimerSN):

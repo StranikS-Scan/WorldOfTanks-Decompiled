@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/nations.py
-NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech', 'sweden', 'poland', 'italy')
+NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech', 'sweden', 'poland', 'italy', 'intunion')
 INDICES = dict(((n, i) for i, n in enumerate(NAMES)))
 MAP = {i:n for i, n in enumerate(NAMES)}
-AVAILABLE_NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech', 'sweden', 'poland', 'italy')
+AVAILABLE_NAMES = ('ussr', 'germany', 'usa', 'china', 'france', 'uk', 'japan', 'czech', 'sweden', 'poland', 'italy', 'intunion')
 NONE_INDEX = 15
 ALL_NATIONS_INDEX = -1
 
@@ -23,6 +23,6 @@ ALLIANCE_IDS = dict(((value, index) for index, value in enumerate(ALLIANCES_TAGS
 ALLIANCE_TO_NATIONS = {Alliances.USSR: frozenset(('ussr', 'china')),
  Alliances.GERMANY: frozenset(('germany', 'japan')),
  Alliances.USA: frozenset(('usa', 'uk', 'poland')),
- Alliances.FRANCE: frozenset(('france', 'czech', 'sweden', 'italy'))}
+ Alliances.FRANCE: frozenset(('france', 'czech', 'sweden', 'italy', 'intunion'))}
 ALLIANCE_IDS_MAP = {ai:set((INDICES[n] for n in ALLIANCE_TO_NATIONS[an])) for an, ai in ALLIANCE_IDS.iteritems()}
 NATION_TO_ALLIANCE_IDS_MAP = {ni:ai for ai, nations in ALLIANCE_IDS_MAP.iteritems() for ni in nations}

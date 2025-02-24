@@ -24,7 +24,7 @@ class ChapterType(Enum):
 class BattlePassAwardsViewModel(CommonViewModel):
     __slots__ = ('onBuyClick',)
 
-    def __init__(self, properties=16, commands=2):
+    def __init__(self, properties=17, commands=2):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -81,33 +81,39 @@ class BattlePassAwardsViewModel(CommonViewModel):
     def setIsNeedToShowOffer(self, value):
         self._setBool(11, value)
 
-    def getSeasonStopped(self):
+    def getIsWalletAvailable(self):
         return self._getBool(12)
 
-    def setSeasonStopped(self, value):
+    def setIsWalletAvailable(self, value):
         self._setBool(12, value)
 
+    def getSeasonStopped(self):
+        return self._getBool(13)
+
+    def setSeasonStopped(self, value):
+        self._setBool(13, value)
+
     def getWideRewardsIDs(self):
-        return self._getArray(13)
+        return self._getArray(14)
 
     def setWideRewardsIDs(self, value):
-        self._setArray(13, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getWideRewardsIDsType():
         return int
 
     def getChapterType(self):
-        return ChapterType(self._getString(14))
+        return ChapterType(self._getString(15))
 
     def setChapterType(self, value):
-        self._setString(14, value.value)
+        self._setString(15, value.value)
 
     def getAvailableChapterTypes(self):
-        return self._getArray(15)
+        return self._getArray(16)
 
     def setAvailableChapterTypes(self, value):
-        self._setArray(15, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getAvailableChapterTypesType():
@@ -123,6 +129,7 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addBoolProperty('isFinalReward', False)
         self._addBoolProperty('isBaseStyleLevel', False)
         self._addBoolProperty('isNeedToShowOffer', False)
+        self._addBoolProperty('isWalletAvailable', True)
         self._addBoolProperty('seasonStopped', False)
         self._addArrayProperty('wideRewardsIDs', Array())
         self._addStringProperty('chapterType')

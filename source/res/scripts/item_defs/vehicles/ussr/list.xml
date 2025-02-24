@@ -2523,18 +2523,18 @@
   </R132_VNII_100LT_7x7>
   <R211_Object_261_4_II>
     <id>	31014	</id>
-    <userString>	#ussr_vehicles:Object_261_4	</userString>
-    <shortUserString>	#ussr_vehicles:Object_261_4_short	</shortUserString>
-    <description>	#ussr_vehicles:Object_261_4_descr	</description>
+    <userString>	#ussr_vehicles:R211_Object_261_4_II	</userString>
+    <shortUserString>	#ussr_vehicles:R211_Object_261_4_II_short	</shortUserString>
+    <description>	#ussr_vehicles:R211_Object_261_4_II_descr	</description>
     <price>	6100000	</price>
     <tags>	SPG role_SPG_assault spgOnlyArtyMode assaultSPG HD sinai heavySPG tankRammer_class1_user extraHealthReserve_class1_user improvedVentilation_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </R211_Object_261_4_II>
   <R210_ISU_2SH_II>
     <id>	31015	</id>
-    <userString>	#ussr_vehicles:R210_ISU_2SH	</userString>
-    <shortUserString>	#ussr_vehicles:R210_ISU_2SH_short	</shortUserString>
-    <description>	#ussr_vehicles:R210_ISU_2SH_descr	</description>
+    <userString>	#ussr_vehicles:R210_ISU_2SH_II	</userString>
+    <shortUserString>	#ussr_vehicles:R210_ISU_2SH_II_short	</shortUserString>
+    <description>	#ussr_vehicles:R210_ISU_2SH_II_descr	</description>
     <price>	2610000	</price>
     <tags>	SPG role_SPG_assault spgOnlyArtyMode assaultSPG HD sinai heavySPG tankRammer_class1_user extraHealthReserve_class1_user improvedVentilation_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
@@ -2613,4 +2613,43 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
     <level>	8	</level>
   </R1012_Vickers_MBT_EXP_T>
+  <R230_Maus>
+    <id>	31023	</id>
+    <userString>	#ussr_vehicles:R230_Maus	</userString>
+    <shortUserString>	#ussr_vehicles:R230_Maus_short	</shortUserString>
+    <description>	#ussr_vehicles:R230_Maus_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R230_Maus_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R230_Maus_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user special secret testTank	</tags>
+    <level>	9	</level>
+  </R230_Maus>
+  <R1013_IS_3_T>
+    <id>	31024	</id>
+    <userString>	#ussr_vehicles:R1013_IS_3_T	</userString>
+    <shortUserString>	#ussr_vehicles:R1013_IS_3_T_short	</shortUserString>
+    <description>	#ussr_vehicles:R1013_IS_3_T_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R1013_IS_3_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R1013_IS_3_T_long_special	</longDescriptionSpecial>
+    <price>	8000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	7	</level>
+  </R1013_IS_3_T>
+  <R223_T_54B_1958>
+    <id>	31025	</id>
+    <userString>	#ussr_vehicles:R223_T_54B_1958	</userString>
+    <shortUserString>	#ussr_vehicles:R223_T_54B_1958_short	</shortUserString>
+    <description>	#ussr_vehicles:R223_T_54B_1958_descr	</description>
+    <shortDescriptionSpecial>	#ussr_vehicles:R223_T_54B_1958_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#ussr_vehicles:R223_T_54B_1958_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </R223_T_54B_1958>
 </list.xml>

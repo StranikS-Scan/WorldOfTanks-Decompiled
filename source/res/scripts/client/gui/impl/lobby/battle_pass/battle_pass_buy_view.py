@@ -54,7 +54,7 @@ class BattlePassBuyViewStates(object):
 g_BPBuyViewStates = BattlePassBuyViewStates()
 
 class BattlePassBuyView(ViewImpl):
-    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID', '__destroyAfterCallback')
+    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID', '__destroyAfterCallback', '__destroyCallback')
     __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -70,6 +70,7 @@ class BattlePassBuyView(ViewImpl):
         self.__tooltipWindow = None
         self.__packageID = None
         self.__destroyAfterCallback = False if ctx is None else ctx.get('destroyAfterCallback', False)
+        self.__destroyCallback = None if ctx is None else ctx.get('destroyCallback')
         super(BattlePassBuyView, self).__init__(settings)
         return
 
@@ -100,6 +101,8 @@ class BattlePassBuyView(ViewImpl):
         switchHangarOverlaySoundFilter(on=True)
 
     def _finalize(self):
+        if self.__destroyCallback and callable(self.__destroyCallback):
+            self.__destroyCallback()
         g_eventBus.removeListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
         switchHangarOverlaySoundFilter(on=False)
         self.__selectedPackage = None

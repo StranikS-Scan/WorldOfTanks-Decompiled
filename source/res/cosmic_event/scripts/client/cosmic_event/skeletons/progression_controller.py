@@ -55,3 +55,6 @@ class ICosmicEventProgressionController(IGameController):
 
     def collectSortedDailyQuests(self):
         raise NotImplementedError
+
+    def collectSortedRelevantDailyQuests(self):
+        raise NotImplementedError

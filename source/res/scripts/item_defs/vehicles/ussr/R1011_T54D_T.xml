@@ -700,8 +700,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1623,7 +1623,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1684,8 +1684,8 @@
             </armor_27>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
-          <reloadTime>	8.8	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	9.4	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
@@ -1790,13 +1790,13 @@
       </guns>
       <thermalVision>
         <initialReloadTime>	20	</initialReloadTime>
-        <reloadTime>	40	</reloadTime>
+        <reloadTime>	30	</reloadTime>
         <useCount>	4	</useCount>
-        <duration>	20	</duration>
+        <duration>	15	</duration>
         <hSectorAngle>	7.5	</hSectorAngle>
         <vSectorAngle>	15	</vSectorAngle>
         <distance>	445	</distance>
-        <timeToObserve>	4	</timeToObserve>
+        <timeToObserve>	5	</timeToObserve>
         <timeInObservation>	10	</timeInObservation>
       </thermalVision>
       <models>
@@ -2353,7 +2353,7 @@
     <detailed>
       <engines>
         <V_54B>
-          <smplEnginePower>	680	</smplEnginePower>
+          <smplEnginePower>	630	</smplEnginePower>
           <smplFwMaxSpeed>	48	</smplFwMaxSpeed>
         </V_54B>
       </engines>

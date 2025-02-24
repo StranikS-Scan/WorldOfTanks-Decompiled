@@ -11,6 +11,7 @@ from itertools import izip_longest
 from math import ceil, floor
 import BigWorld
 import typing
+from battle_modifiers_common import BattleParams
 from constants import SHELL_TYPES, PIERCING_POWER, BonusTypes, HAS_EXPLOSION, PenaltyTypes
 from gui import GUI_SETTINGS
 from gui.shared.formatters import text_styles
@@ -476,7 +477,7 @@ class VehicleParams(_ParameterBase):
     @property
     def thermalVisionDistance(self):
         params = self.__getThermalVisionParams()
-        return params.distance if params is not None else None
+        return int(self._itemDescr.battleModifiers(BattleParams.THERMAL_VISION_DISTANCE, params.distance)) if params is not None else None
 
     @property
     def dualAccuracyAfterShotDispersionAngle(self):
@@ -547,7 +548,7 @@ class VehicleParams(_ParameterBase):
         return len(gunTemperature.states) if gunTemperature is not None else None
 
     @property
-    def temperatureHeatingPerSec(self):
+    def temperatureHeatingTime(self):
         gunTemperature = self._itemDescr.gun.temperature
         if gunTemperature is not None:
             heatingTimes = self.__getTemperatureStateHeatingTimes(gunTemperature.states)
@@ -556,7 +557,7 @@ class VehicleParams(_ParameterBase):
             return
 
     @property
-    def temperatureCoolingPerSec(self):
+    def temperatureCoolingTime(self):
         gunTemperature = self._itemDescr.gun.temperature
         if gunTemperature is not None:
             coolingTimes = self.__getTemperatureStateCoolingTimer(gunTemperature.states)
@@ -608,6 +609,10 @@ class VehicleParams(_ParameterBase):
         lowerBoundRandomization = damageRandomization - lowerRandomizationFactor
         upperBoundRandomization = damageRandomization + upperRandomizationFactor
         minDamage, maxDamage = self._itemDescr.shot.shell.dmgLimits
+        if self.vehicleGunDamage:
+            damageMulKpi = self.vehicleGunDamage / 100.0 + 1
+            minDamage *= damageMulKpi
+            maxDamage *= damageMulKpi
         return (int(floor(minDamage - minDamage * lowerBoundRandomization)), int(ceil(maxDamage + maxDamage * upperBoundRandomization)))
 
     @property

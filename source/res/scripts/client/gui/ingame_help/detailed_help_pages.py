@@ -41,6 +41,7 @@ class HelpPagePriority(object):
     ASSAULT_SPG = 11
     TANK_WITH_ABILITY = 11
     AUTOSHOOT_FLAMETHROWER = 11
+    THERMAL_VISION = 11
 
 
 def addPage(datailedList, headerTitle, title, descr, vKeys, buttons, image, roleImage=None, roleActions=None, hintCtx=None):
@@ -529,6 +530,28 @@ class MultiTrackPagesBuilder(DetailedHelpPagesBuilder):
         return
 
 
+class ThermalVisionPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasThermalVision',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.THERMAL_VISION
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.thermalVision.page1.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.thermalVision.page1())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.thermalVisionHelp.page_1()), hintCtx=HelpHintContext.MECHANICS)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.thermalVision.page2.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.thermalVision.page2())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.thermalVisionHelp.page_2()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasThermalVision'] = hasThermalVision = vehicle is not None and vehicle.typeDescriptor.hasThermalVision
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasThermalVision
+        return
+
+
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -546,4 +569,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  AssaultTankPagesBuilder,
  MultiTrackPagesBuilder,
  TankWithAbilityPagesBuilder,
- AutoshootFlameTankPagesBuilder))
+ AutoshootFlameTankPagesBuilder,
+ ThermalVisionPagesBuilder))

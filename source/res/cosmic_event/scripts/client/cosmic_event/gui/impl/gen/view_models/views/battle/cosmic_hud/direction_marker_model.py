@@ -5,20 +5,20 @@ from cosmic_event.gui.impl.gen.view_models.views.battle.cosmic_hud.marker_model 
 class DirectionMarkerModel(MarkerModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(DirectionMarkerModel, self).__init__(properties=properties, commands=commands)
 
     def getDistance(self):
-        return self._getNumber(4)
+        return self._getNumber(5)
 
     def setDistance(self, value):
-        self._setNumber(4, value)
+        self._setNumber(5, value)
 
     def getAngle(self):
-        return self._getReal(5)
+        return self._getReal(6)
 
     def setAngle(self, value):
-        self._setReal(5, value)
+        self._setReal(6, value)
 
     def _initialize(self):
         super(DirectionMarkerModel, self)._initialize()

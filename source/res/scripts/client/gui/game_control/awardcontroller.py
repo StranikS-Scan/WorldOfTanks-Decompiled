@@ -44,7 +44,7 @@ from gui.battle_pass.battle_pass_helpers import getStyleInfoForChapter
 from gui.battle_pass.state_machine.state_machine_helpers import packStartEvent, packToken, defaultEventMethod, multipleBattlePassPurchasedEventMethod
 from gui.customization.shared import checkIsFirstProgressionDecalOnVehicle
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
-from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses, getBobTeamRewardsBonuses
+from gui.impl.auxiliary.rewards_helper import getProgressiveRewardBonuses
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_view.loot_congrats_types import LootCongratsTypes
 from gui.impl.lobby.early_access.early_access_window_events import showEarlyAccessRewardsView
@@ -63,7 +63,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showBobPersonalRewardWindow, showBobTeamRewardWindow, showParagonsRewardsWindow
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.system_factory import registerAwardControllerHandlers, collectAwardControllerHandlers
@@ -84,7 +84,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IBobController, IParagonsRewardsShopController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IParagonsRewardsShopController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -1866,7 +1866,7 @@ class PersonalMission3RewardHandler(BattleQuestsAutoWindowHandler):
         super(PersonalMission3RewardHandler, self).stop()
         self.__postponedAwards = {}
         self.__openedAwardScreen = False
-        self.eventsCache.onSyncCompleted -= self.__onShowAwardSyncCompleted
+        self.eventsCache.onProgressUpdated -= self.__onShowAwardSyncCompleted
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -1886,7 +1886,7 @@ class PersonalMission3RewardHandler(BattleQuestsAutoWindowHandler):
     def __tryShowAward(self, questId):
         nextQuest = self.__pm3Controller.getQuest(questId)
         if not nextQuest.isCompleted():
-            self.eventsCache.onSyncCompleted += self.__onShowAwardSyncCompleted
+            self.eventsCache.onProgressUpdated += self.__onShowAwardSyncCompleted
         else:
             self.__showAward(questId)
 
@@ -1894,7 +1894,7 @@ class PersonalMission3RewardHandler(BattleQuestsAutoWindowHandler):
         nextQuestId = first(self.__postponedAwards.iterkeys())
         quest = self.__pm3Controller.getQuest(nextQuestId)
         if quest.isCompleted():
-            self.eventsCache.onSyncCompleted -= self.__onShowAwardSyncCompleted
+            self.eventsCache.onProgressUpdated -= self.__onShowAwardSyncCompleted
             self.__showAward(nextQuestId)
 
     def __showAward(self, questId):
@@ -1972,79 +1972,6 @@ class PersonalMission3RewardHandler(BattleQuestsAutoWindowHandler):
             return
 
 
-class BobPersonalRewardHandler(ServiceChannelHandler):
-    __bobController = dependency.descriptor(IBobController)
-
-    def __init__(self, awardCtrl):
-        super(BobPersonalRewardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        if message is not None and message.data and isinstance(message.data, types.DictType):
-            if self.__hasBobPersonalRewardQuest(message.data.get('completedQuestIDs', [])):
-                return super(BobPersonalRewardHandler, self)._needToShowAward(ctx)
-        return False
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        for questId, rewards in message.data.get('detailedRewards', {}).iteritems():
-            if self.__isBobPersonalRewardQuest(questId):
-                bonuses = getBobTeamRewardsBonuses(rewards)
-                if bonuses:
-                    showBobPersonalRewardWindow(bonuses)
-                else:
-                    _logger.error('Could not show empty bonuses')
-
-    def __hasBobPersonalRewardQuest(self, completedQuestIds):
-        return self.__bobController.personalRewardQuestName in completedQuestIds
-
-    def __isBobPersonalRewardQuest(self, questId):
-        return questId == self.__bobController.personalRewardQuestName
-
-
-class BobTeamRewardHandler(ServiceChannelHandler):
-    __bobController = dependency.descriptor(IBobController)
-    QUEST_DELIMITER = ':'
-    REWARD_LEVEL_POSITION = 2
-    CHUNK_COUNT_OF_QUEST_NAME = 3
-
-    def __init__(self, awardCtrl):
-        super(BobTeamRewardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
-
-    def _needToShowAward(self, ctx):
-        _, message = ctx
-        if message is not None and message.data and isinstance(message.data, types.DictType):
-            if self.__hasBobTeamRewardQuest(message.data.get('completedQuestIDs', [])):
-                return super(BobTeamRewardHandler, self)._needToShowAward(ctx)
-        return False
-
-    def _showAward(self, ctx):
-        _, message = ctx
-        for questId, rewards in message.data.get('detailedRewards', {}).iteritems():
-            if self.__isBobTeamRewardQuest(questId):
-                level = self.__getLevelFromQuestID(questId)
-                bonuses = getBobTeamRewardsBonuses(rewards)
-                if bonuses:
-                    showBobTeamRewardWindow(bonuses, level)
-                else:
-                    _logger.error('Could not show empty bonuses')
-
-    def __getLevelFromQuestID(self, questId):
-        chunks = questId.split(self.QUEST_DELIMITER)
-        if len(chunks) == self.CHUNK_COUNT_OF_QUEST_NAME:
-            return int(chunks[self.REWARD_LEVEL_POSITION])
-        _logger.warning('Invalid questID=%s of Battle of Bloggers team reward', questId)
-
-    def __isBobTeamRewardQuest(self, questId):
-        questPrefix = self.__bobController.teamRewardQuestPrefix
-        return bool(questPrefix) and questId.startswith(questPrefix)
-
-    def __hasBobTeamRewardQuest(self, completedQuestIds):
-        teamRewardQuestPrefix = self.__bobController.teamRewardQuestPrefix
-        teamRewardQuestId = findFirst(lambda qId: qId.startswith(teamRewardQuestPrefix), completedQuestIds)
-        return teamRewardQuestId is not None
-
-
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2090,6 +2017,4 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PremiumSubsEntitlementReceivedHandler,
  Comp7CouponHandler,
  EarlyAccessQuestHandler,
- PersonalMission3RewardHandler,
- BobPersonalRewardHandler,
- BobTeamRewardHandler))
+ PersonalMission3RewardHandler))

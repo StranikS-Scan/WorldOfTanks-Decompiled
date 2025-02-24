@@ -69,6 +69,8 @@
       <armor_25>	120	</armor_25>
       <armor_26>	80	</armor_26>
       <armor_27>	60	</armor_27>
+      <leftTrack>	20	</leftTrack>
+      <rightTrack>	20	</rightTrack>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25180	</weight>
@@ -963,8 +965,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1338,73 +1340,73 @@
           <startNode>	Lever_Start_L1	</startNode>
           <jointNode>	Lever_Joint_L1	</jointNode>
           <trackNode>	Track_L1	</trackNode>
-          <limits>	175.0 130	</limits>
+          <limits>	175.0 130.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R1	</startNode>
           <jointNode>	Lever_Joint_R1	</jointNode>
           <trackNode>	Track_R1	</trackNode>
-          <limits>	175.0 130	</limits>
+          <limits>	175.0 130.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L2	</startNode>
           <jointNode>	Lever_Joint_L2	</jointNode>
           <trackNode>	Track_L2	</trackNode>
-          <limits>	175.0 125	</limits>
+          <limits>	175.0 125.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R2	</startNode>
           <jointNode>	Lever_Joint_R2	</jointNode>
           <trackNode>	Track_R2	</trackNode>
-          <limits>	175.0 125	</limits>
+          <limits>	175.0 125.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L3	</startNode>
           <jointNode>	Lever_Joint_L3	</jointNode>
           <trackNode>	Track_L3	</trackNode>
-          <limits>	175.0 120	</limits>
+          <limits>	175.0 120.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R3	</startNode>
           <jointNode>	Lever_Joint_R3	</jointNode>
           <trackNode>	Track_R3	</trackNode>
-          <limits>	175.0 120	</limits>
+          <limits>	175.0 120.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L4	</startNode>
           <jointNode>	Lever_Joint_L4	</jointNode>
           <trackNode>	Track_L4	</trackNode>
-          <limits>	185.0 115	</limits>
+          <limits>	185.0 115.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R4	</startNode>
           <jointNode>	Lever_Joint_R4	</jointNode>
           <trackNode>	Track_R4	</trackNode>
-          <limits>	185.0 115	</limits>
+          <limits>	185.0 115.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L5	</startNode>
           <jointNode>	Lever_Joint_L5	</jointNode>
           <trackNode>	Track_L5	</trackNode>
-          <limits>	195.0 123	</limits>
+          <limits>	195.0 123.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R5	</startNode>
           <jointNode>	Lever_Joint_R5	</jointNode>
           <trackNode>	Track_R5	</trackNode>
-          <limits>	195.0 123	</limits>
+          <limits>	195.0 123.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_L6	</startNode>
           <jointNode>	Lever_Joint_L6	</jointNode>
           <trackNode>	Track_L6	</trackNode>
-          <limits>	195.0 115	</limits>
+          <limits>	195.0 115.0	</limits>
         </lever>
         <lever>
           <startNode>	Lever_Start_R6	</startNode>
           <jointNode>	Lever_Joint_R6	</jointNode>
           <trackNode>	Track_R6	</trackNode>
-          <limits>	195.0 115	</limits>
+          <limits>	195.0 115.0	</limits>
         </lever>
       </leveredSuspension>
       <customizationSlots>
@@ -1602,23 +1604,6 @@
           <trackPairIdx>	0	</trackPairIdx>
         </node>
       </groundNodes>
-      <splineDesc>
-        <trackPair>
-          <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/sweden/S41_Bofors_Pagod_TK105/track/segment.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/sweden/S41_Bofors_Pagod_TK105/track/segment.model	</segmentModelRight>
-          <left>	vehicles/sweden/S41_Bofors_Pagod_TK105/track/left.track	</left>
-          <right>	vehicles/sweden/S41_Bofors_Pagod_TK105/track/right.track	</right>
-          <segmentLength>	0.15	</segmentLength>
-          <segmentOffset>	0.1	</segmentOffset>
-          <segment2Offset>	0.1	</segment2Offset>
-          <atlas>
-            <UTiles>	1	</UTiles>
-            <VTiles>	1	</VTiles>
-          </atlas>
-        </trackPair>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-      </splineDesc>
       <physicalTracks>
         <left>
           <trackPairIdx>	0	</trackPairIdx>
@@ -2532,7 +2517,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	0.968 0 1.056 0.021 0.589 0.155 0.5 0.5 0.5 0.5 0.5 0.5 0.61 0.526 0	</physicsShape>
+      <physicsShape>	0.93 -0.047 0.93 0 0.592 0.066 0.566 0.5 0.531 0.5 0.514 0.5 0.296 0.089 0	</physicsShape>
       <camouflage>
         <density>	98.770714 98.679306	</density>
         <aoTextureSize>	512 512	</aoTextureSize>

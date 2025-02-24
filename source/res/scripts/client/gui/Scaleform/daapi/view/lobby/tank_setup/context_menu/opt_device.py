@@ -131,7 +131,9 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
 
     def _initFlashValues(self, ctx):
         super(HangarOptDeviceSlotContextMenu, self)._initFlashValues(ctx)
-        self._slotsCount = self._getVehicleItems().installed.getCapacity()
+        installedDevices = self._getVehicleItems().installed
+        self._slotsCount = installedDevices.getCapacity()
+        self._isItemInstalled = self._getItem() in installedDevices
 
     @adisp_process
     def _demountProcess(self, isDestroy=False, everywhere=True):
@@ -168,6 +170,8 @@ class HangarOptDeviceSlotContextMenu(BaseHangarEquipmentSlotContextMenu):
         return self._getVehicle().optDevices
 
     def _isVisible(self, label):
+        if not self._isItemInstalled:
+            return False
         if label == TankSetupCMLabel.DEMOUNT:
             return self._isMounted and not self._isMountedMoreThanOne
         if label == TankSetupCMLabel.DEMOUNT_FROM_SETUP or label == TankSetupCMLabel.DEMOUNT_FROM_SETUPS:

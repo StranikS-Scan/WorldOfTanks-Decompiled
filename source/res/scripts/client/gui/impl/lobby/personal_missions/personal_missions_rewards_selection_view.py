@@ -4,10 +4,10 @@ from functools import partial
 from AccountCommands import RES_SUCCESS
 from frameworks.wulf import WindowFlags
 from gui import SystemMessages
-from gui.battle_pass.rewards_sort import getRewardTypesComparator, getRewardsComparator
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions.personal_missions_rewards_selection_view_model import PersonalMissionsRewardsSelectionViewModel
+from gui.impl.lobby.common.rewards_sort import getRewardsComparator, getRewardTypesComparator
 from gui.impl.lobby.common.selectable_reward_base import SelectableRewardBase
 from gui.impl.pub.lobby_window import LobbyWindow
 from gui.selectable_reward.common import PersonalMissionsSelectableRewardManager

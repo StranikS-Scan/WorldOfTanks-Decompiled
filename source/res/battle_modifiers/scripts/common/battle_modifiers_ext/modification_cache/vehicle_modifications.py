@@ -8,6 +8,7 @@ from battle_modifiers_ext.modification_cache.modification_cache import Modificat
 from constants import IS_CELLAPP, IS_CLIENT, SHELL_TYPES, SHELL_MECHANICS_TYPE, VEHICLE_MODE, HAS_EXPLOSION_EFFECT
 from math import tan, atan, cos, acos
 from items.components.component_constants import DEFAULT_GUN_CLIP, DEFAULT_GUN_BURST, DEFAULT_GUN_AUTORELOAD, DEFAULT_GUN_DUALGUN, KMH_TO_MS, MS_TO_KMH
+from items.components.shared_components import ThermalVisionParams
 from typing import TYPE_CHECKING, Optional, Type, Dict, Tuple, Union
 from Math import Vector2
 from debug_utils import LOG_DEBUG
@@ -75,6 +76,9 @@ class VehicleModifier(object):
         if modifiers.haveDomain(ModifierDomain.TURRET):
             turret.rotationSpeed = modifiers(BattleParams.TURRET_ROTATION_SPEED, turret.rotationSpeed)
             turret.circularVisionRadius = modifiers(BattleParams.VISION_RADIUS, turret.circularVisionRadius)
+            if turret.thermalVision:
+                turret.thermalVision = ThermalVisionParams.makeCopy(turret.thermalVision)
+                turret.thermalVision.distance = int(modifiers(BattleParams.THERMAL_VISION_DISTANCE, turret.thermalVision.distance))
         if modifiers.haveDomain(ModifierDomain.GUN_COMPONENTS):
             turret.guns = tuple((cls.__modifyGun(gun, modifiers) for gun in turret.guns))
         return turret

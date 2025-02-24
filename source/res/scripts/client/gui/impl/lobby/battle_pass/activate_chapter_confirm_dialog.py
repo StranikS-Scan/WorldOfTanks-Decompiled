@@ -48,7 +48,7 @@ class ActivateChapterConfirmDialog(DialogTemplateView):
     def _onLoading(self, *args, **kwargs):
         prevChapterID = self.__battlePassController.getCurrentChapterID()
         self.setSubView(DefaultDialogPlaceHolders.CONTENT, ChapterConfirm(prevChapterID, self.__nextChapterID))
-        self.addButton(ConfirmButton(_CONFIRM_RES.button.submit() if prevChapterID == 0 else _CONFIRM_RES.button.switch()))
+        self.addButton(ConfirmButton(_CONFIRM_RES.button.switch()))
         self.addButton(CancelButton(_CONFIRM_RES.button.cancel()))
         super(ActivateChapterConfirmDialog, self)._onLoading(*args, **kwargs)
 

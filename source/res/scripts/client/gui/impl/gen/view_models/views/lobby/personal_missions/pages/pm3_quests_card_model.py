@@ -9,6 +9,7 @@ class CardState(Enum):
     AVAILABLE = 'available'
     PAUSE = 'pause'
     INPROGRESS = 'inProgress'
+    INPROGRESSHONOR = 'inProgressHonor'
     DONES = 'doneSwitch'
     DONE = 'done'
     DONEP = 'donePause'

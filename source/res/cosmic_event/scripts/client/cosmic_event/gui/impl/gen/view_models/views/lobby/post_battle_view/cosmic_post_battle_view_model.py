@@ -8,7 +8,7 @@ from cosmic_event.gui.impl.gen.view_models.views.lobby.post_battle_view.player_e
 class CosmicPostBattleViewModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=8, commands=1):
+    def __init__(self, properties=9, commands=1):
         super(CosmicPostBattleViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -43,31 +43,37 @@ class CosmicPostBattleViewModel(ViewModel):
     def setPickupAmount(self, value):
         self._setNumber(4, value)
 
+    def getKillStreak(self):
+        return self._getNumber(5)
+
+    def setKillStreak(self, value):
+        self._setNumber(5, value)
+
     def getPlayersList(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setPlayersList(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getPlayersListType():
         return PlayerEntry
 
     def getDailyQuests(self):
-        return self._getArray(6)
+        return self._getArray(7)
 
     def setDailyQuests(self, value):
-        self._setArray(6, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getDailyQuestsType():
         return CosmicDailyMissions
 
     def getHasDailyQuests(self):
-        return self._getBool(7)
+        return self._getBool(8)
 
     def setHasDailyQuests(self, value):
-        self._setBool(7, value)
+        self._setBool(8, value)
 
     def _initialize(self):
         super(CosmicPostBattleViewModel, self)._initialize()
@@ -76,6 +82,7 @@ class CosmicPostBattleViewModel(ViewModel):
         self._addNumberProperty('totalPoints', 0)
         self._addNumberProperty('killAmount', 0)
         self._addNumberProperty('pickupAmount', 0)
+        self._addNumberProperty('killStreak', 0)
         self._addArrayProperty('playersList', Array())
         self._addArrayProperty('dailyQuests', Array())
         self._addBoolProperty('hasDailyQuests', False)

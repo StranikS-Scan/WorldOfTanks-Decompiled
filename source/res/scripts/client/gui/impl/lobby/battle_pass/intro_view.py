@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/intro_view.py
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.battle_pass.battle_pass_helpers import getIntroSlidesNames, getIntroVideoURL, isIntroVideoExist
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_intro_view_model import BattlePassIntroViewModel
 from gui.impl.gen.view_models.views.lobby.common.intro_slide_model import IntroSlideModel
-from gui.impl.pub import ViewImpl
-from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.impl.pub import ViewImpl, WindowImpl
+from gui.impl.pub.dialog_window import DialogFlags
 from gui.shared.event_dispatcher import showBrowserOverlayView, showHangar
+from gui.server_events.events_dispatcher import showMissionsBattlePass
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
@@ -25,7 +26,6 @@ class IntroView(ViewImpl):
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassIntroView())
-        settings.flags = ViewFlags.VIEW
         settings.model = BattlePassIntroViewModel()
         super(IntroView, self).__init__(settings)
 
@@ -62,6 +62,7 @@ class IntroView(ViewImpl):
                 slides.addViewModel(self.__createSlideModel(slideName, **placeholders))
 
             tx.setTitle(_TEXTS.title())
+            tx.setSubTitle(_TEXTS.subTitle())
             tx.setAbout(_TEXTS.aboutButton())
             tx.setButtonLabel(_TEXTS.button())
             tx.setBackground(_BG.common())
@@ -77,7 +78,7 @@ class IntroView(ViewImpl):
 
     def __close(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.INTRO_SHOWN: True})
-        showMissionsBattlePass()
+        self.destroyWindow()
 
     @staticmethod
     def __showVideo():
@@ -99,3 +100,9 @@ class IntroView(ViewImpl):
             showMissionsBattlePass()
         elif not self.__battlePass.isActive():
             showHangar()
+
+
+class IntroWindow(WindowImpl):
+
+    def __init__(self, parent=None):
+        super(IntroWindow, self).__init__(wndFlags=DialogFlags.TOP_FULLSCREEN_WINDOW, content=IntroView(), parent=parent)

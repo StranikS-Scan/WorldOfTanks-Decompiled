@@ -5,6 +5,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.mode_selector.items.base_item import ModeSelectorLegacyItem
 from gui.clans.clan_cache import g_clanCache
+from gui.impl.lobby.mode_selector.items import setBattlePassState
 
 class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
     __slots__ = ()
@@ -12,6 +13,7 @@ class StrongholdsModeSelectorItem(ModeSelectorLegacyItem):
     def _onInitializing(self):
         super(StrongholdsModeSelectorItem, self)._onInitializing()
         g_clientUpdateManager.addCallbacks({'stats.clanInfo': self.__clanInfoUpdateHandler})
+        setBattlePassState(self.viewModel)
         self.__resolveClanText()
 
     def _onDisposing(self):

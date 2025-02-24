@@ -15,7 +15,7 @@ from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IWalletController
 MAP_REWARD_REASON = {BattlePassRewardReason.PURCHASE_BATTLE_PASS: RewardReason.BUY_BATTLE_PASS,
  BattlePassRewardReason.GIFT_CHAPTER: RewardReason.GIFT_CHAPTER,
  BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS: RewardReason.BUY_BATTLE_PASS_LEVELS,
@@ -33,6 +33,7 @@ REWARD_SIZES = {'Standard': STANDART_REWARD_SIZE,
 class BattlePassAwardsView(ViewImpl):
     __slots__ = ('__tooltipItems', '__closeCallback', '__needNotifyClosing', '__showBuyCallback')
     __battlePass = dependency.descriptor(IBattlePassController)
+    __wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.battle_pass.BattlePassAwardsView())
@@ -63,7 +64,7 @@ class BattlePassAwardsView(ViewImpl):
         return None if tooltipId is None else self.__tooltipItems.get(tooltipId)
 
     def _getEvents(self):
-        return ((self.viewModel.onBuyClick, self.__onBuyClick),)
+        return ((self.viewModel.onBuyClick, self.__onBuyClick), (self.__wallet.onWalletStatusChanged, self.__updateWalletAvailability))
 
     def _onLoading(self, bonuses, packageBonuses, data, needNotifyClosing, *args, **kwargs):
         super(BattlePassAwardsView, self)._onLoading(*args, **kwargs)
@@ -98,6 +99,7 @@ class BattlePassAwardsView(ViewImpl):
             tx.setSeasonStopped(self.__battlePass.isPaused())
             tx.setIsBaseStyleLevel(styleLevel == 1)
             tx.setChapterType(ChapterType(self.__battlePass.getChapterType(chapterID)))
+            tx.setIsWalletAvailable(self.__wallet.isAvailable)
         if packageBonuses is not None and packageBonuses:
             self.__setPackageRewards(packageBonuses)
         self.__setAwards(bonuses, isFinalReward)
@@ -159,6 +161,10 @@ class BattlePassAwardsView(ViewImpl):
         composedBonuses = BattlePassAwardsManager.composeBonuses([bonuses])
         sortedBonuses = BattlePassAwardsManager.sortBonuses(BattlePassAwardsManager.uniteTokenBonuses(composedBonuses))
         packBonusModelAndTooltipData(sortedBonuses, self.viewModel.packageRewards, self.__tooltipItems)
+
+    def __updateWalletAvailability(self, *args, **kwargs):
+        with self.viewModel.transaction() as tx:
+            tx.setIsWalletAvailable(self.__wallet.isAvailable)
 
     def __onBuyClick(self):
         if callable(self.__showBuyCallback):

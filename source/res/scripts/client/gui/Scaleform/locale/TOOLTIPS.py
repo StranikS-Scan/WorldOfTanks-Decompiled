@@ -716,8 +716,6 @@ class TOOLTIPS(object):
     HEADER_PREMIUM_EXTEND_BODY = '#tooltips:header/premium_extend/body'
     HEADER_PREMSHOP_HEADER = '#tooltips:header/premShop/header'
     HEADER_PREMSHOP_BODY = '#tooltips:header/premShop/body'
-    HEADER_BOBSQUAD_HEADER = '#tooltips:header/bobSquad/header'
-    HEADER_BOBSQUAD_BODY = '#tooltips:header/bobSquad/body'
     HEADER_BATTLETYPE_HEADER = '#tooltips:header/battleType/header'
     HEADER_BATTLETYPE_BODY = '#tooltips:header/battleType/body'
     HEADER_REFILL_ACTION_ATTENTION = '#tooltips:header/refill_action/attention'
@@ -1203,7 +1201,6 @@ class TOOLTIPS(object):
     VEHICLE_DEAL_TELECOM_MAIN_TWITCHPRIME = '#tooltips:vehicle/deal/telecom/main/Twitchprime'
     VEHICLE_TRADE = '#tooltips:vehicle/trade'
     VEHICLE_DEAL_EPIC_MAIN = '#tooltips:vehicle/deal/epic/main'
-    VEHICLE_DEAL_BOB_MAIN = '#tooltips:vehicle/deal/bob/main'
     ANONYMIZER_TEAMSTATS_HEADER = '#tooltips:anonymizer/teamStats/header'
     ANONYMIZER_TEAMSTATS_BODY = '#tooltips:anonymizer/teamStats/body'
     QUESTS_PROGRESS_STRATEGIC = '#tooltips:quests/progress/strategic'
@@ -2468,7 +2465,6 @@ class TOOLTIPS(object):
     QUESTS_UNAVAILABLE_BULLET = '#tooltips:quests/unavailable/bullet'
     QUESTS_UNAVAILABLE_REQUIREMENT_HEADER = '#tooltips:quests/unavailable/requirement/header'
     QUESTS_UNAVAILABLE_TOKEN = '#tooltips:quests/unavailable/token'
-    QUESTS_UNAVAILABLE_BOBREGISTRATION = '#tooltips:quests/unavailable/bobRegistration'
     QUESTS_UNAVAILABLE_BOTTOM = '#tooltips:quests/unavailable/bottom'
     QUESTS_UNAVAILABLE_TIME_STATUSTOOLTIP = '#tooltips:quests/unavailable/time/statusTooltip'
     QUESTS_COMPLETE_PROGRESS_HEADER = '#tooltips:quests/complete/progress/header'
@@ -2550,6 +2546,7 @@ class TOOLTIPS(object):
     ADVANCED_VEHICLEMULTITRACKCHASSIS = '#tooltips:advanced/vehicleMultiTrackChassis'
     ADVANCED_VEHICLEWHEELEDCHASSIS = '#tooltips:advanced/vehicleWheeledChassis'
     ADVANCED_VEHICLETURRET = '#tooltips:advanced/vehicleTurret'
+    ADVANCED_VEHICLETHERMALVISION = '#tooltips:advanced/vehicleThermalVision'
     ADVANCED_COMMANDER = '#tooltips:advanced/commander'
     ADVANCED_DRIVER = '#tooltips:advanced/driver'
     ADVANCED_RADIOMAN = '#tooltips:advanced/radioman'
@@ -2595,6 +2592,8 @@ class TOOLTIPS(object):
     ADVANCED_ADDITIONALINVISIBILITYDEVICE = '#tooltips:advanced/additionalInvisibilityDevice'
     ADVANCED_IMPROVEDCONFIGURATION = '#tooltips:advanced/improvedConfiguration'
     ADVANCED_TURBOCHARGER = '#tooltips:advanced/turbocharger'
+    ADVANCED_MODERNIZEDDAMAGEVENTILATION = '#tooltips:advanced/modernizedDamageVentilation'
+    ADVANCED_MODERNIZEDTANKRAMMERSIGHTS = '#tooltips:advanced/modernizedTankRammerSights'
     CREW_ROLE_COMMANDER = '#tooltips:crew/role/commander'
     CREW_ROLE_DRIVER = '#tooltips:crew/role/driver'
     CREW_ROLE_RADIOMAN = '#tooltips:crew/role/radioman'
@@ -3937,6 +3936,20 @@ class TOOLTIPS(object):
     NOTRECRUITEDTANKMAN_NY25_HVATAIKA_DESC = '#tooltips:notrecruitedtankman/ny25_hvataika/desc'
     NOTRECRUITEDTANKMAN_NY25_SHARIK_LABEL = '#tooltips:notrecruitedtankman/ny25_sharik/label'
     NOTRECRUITEDTANKMAN_NY25_SHARIK_DESC = '#tooltips:notrecruitedtankman/ny25_sharik/desc'
+    NOTRECRUITEDTANKMAN_COSM25_1_DESC = '#tooltips:notrecruitedtankman/cosm25_1/desc'
+    NOTRECRUITEDTANKMAN_COSM25_1_LABEL = '#tooltips:notrecruitedtankman/cosm25_1/label'
+    NOTRECRUITEDTANKMAN_COSM25_2_DESC = '#tooltips:notrecruitedtankman/cosm25_2/desc'
+    NOTRECRUITEDTANKMAN_COSM25_2_LABEL = '#tooltips:notrecruitedtankman/cosm25_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_1_DESC = '#tooltips:notrecruitedtankman/tankmen_BP16_1/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_1_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP16_1/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_2_DESC = '#tooltips:notrecruitedtankman/tankmen_BP16_2/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_2_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP16_2/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_3_DESC = '#tooltips:notrecruitedtankman/tankmen_BP16_3/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_3_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP16_3/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_4_DESC = '#tooltips:notrecruitedtankman/tankmen_BP16_4/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_4_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP16_4/label'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_5_DESC = '#tooltips:notrecruitedtankman/tankmen_BP16_5/desc'
+    NOTRECRUITEDTANKMAN_TANKMEN_BP16_5_LABEL = '#tooltips:notrecruitedtankman/tankmen_BP16_5/label'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -4428,6 +4441,7 @@ class TOOLTIPS(object):
      ADVANCED_VEHICLEMULTITRACKCHASSIS,
      ADVANCED_VEHICLEWHEELEDCHASSIS,
      ADVANCED_VEHICLETURRET,
+     ADVANCED_VEHICLETHERMALVISION,
      ADVANCED_COMMANDER,
      ADVANCED_DRIVER,
      ADVANCED_RADIOMAN,
@@ -4472,7 +4486,9 @@ class TOOLTIPS(object):
      ADVANCED_IMPROVEDROTATIONMECHANISM,
      ADVANCED_ADDITIONALINVISIBILITYDEVICE,
      ADVANCED_IMPROVEDCONFIGURATION,
-     ADVANCED_TURBOCHARGER)
+     ADVANCED_TURBOCHARGER,
+     ADVANCED_MODERNIZEDDAMAGEVENTILATION,
+     ADVANCED_MODERNIZEDTANKRAMMERSIGHTS)
     ADVANCED_HEADER_SHELLTYPE_ENUM = (ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
      ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
@@ -4772,7 +4788,14 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY25_MATROSKIN_LABEL,
      NOTRECRUITEDTANKMAN_NY25_TAMATAMA_LABEL,
      NOTRECRUITEDTANKMAN_NY25_HVATAIKA_LABEL,
-     NOTRECRUITEDTANKMAN_NY25_SHARIK_LABEL)
+     NOTRECRUITEDTANKMAN_NY25_SHARIK_LABEL,
+     NOTRECRUITEDTANKMAN_COSM25_1_LABEL,
+     NOTRECRUITEDTANKMAN_COSM25_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_1_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_2_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_3_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_4_LABEL,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_5_LABEL)
     NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC,
      NOTRECRUITEDTANKMAN_BUFFON_DESC,
      NOTRECRUITEDTANKMAN_TANKWOMAN_DESC,
@@ -5028,7 +5051,14 @@ class TOOLTIPS(object):
      NOTRECRUITEDTANKMAN_NY25_MATROSKIN_DESC,
      NOTRECRUITEDTANKMAN_NY25_TAMATAMA_DESC,
      NOTRECRUITEDTANKMAN_NY25_HVATAIKA_DESC,
-     NOTRECRUITEDTANKMAN_NY25_SHARIK_DESC)
+     NOTRECRUITEDTANKMAN_NY25_SHARIK_DESC,
+     NOTRECRUITEDTANKMAN_COSM25_1_DESC,
+     NOTRECRUITEDTANKMAN_COSM25_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_1_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_2_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_3_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_4_DESC,
+     NOTRECRUITEDTANKMAN_TANKMEN_BP16_5_DESC)
     NOTRECRUITEDTANKMAN_ALL_HOWTOGETINFO_ENUM = (NOTRECRUITEDTANKMAN_TANKMAN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_TANKMEN_HOWTOGETINFO,
      NOTRECRUITEDTANKMAN_RACE19_COMMANDERA_HOWTOGETINFO,

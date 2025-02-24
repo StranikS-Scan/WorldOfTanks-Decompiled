@@ -305,6 +305,9 @@ class BattleModifiers(battle_modifiers.BattleModifiers):
     def getConstantsModification(self):
         return constants_modifications.g_cache.get(self)
 
+    def getModifiersIterValues(self):
+        return self.__modifiers.itervalues()
+
     def __readConfig(self, config):
         modifiers = self.__modifiers
         domain = 0

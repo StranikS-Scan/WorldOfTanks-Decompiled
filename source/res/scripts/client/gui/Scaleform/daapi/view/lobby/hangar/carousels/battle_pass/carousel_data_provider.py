@@ -18,8 +18,9 @@ class BattlePassCarouselDataProvider(HangarCarouselDataProvider):
             return result
         currentPoints, limitPoints = self.battlePassController.getVehicleProgression(vehicle.intCD)
         isSpecialVehicle = self.battlePassController.isSpecialVehicle(vehicle.intCD)
-        result['hasProgression'] = limitPoints > 0
-        if limitPoints > 0:
+        hasProgression = vehicle.level >= self.battlePassController.getMinVehLevelToEarnPoints()
+        result['hasProgression'] = hasProgression
+        if hasProgression:
             limitReached = currentPoints >= limitPoints
             pointsFormatter = formatSpecialVehPoints if isSpecialVehicle and limitReached else text_styles.counterLabelText
             limitFormatter = formatSpecialVehPoints if isSpecialVehicle else text_styles.counterLabelText

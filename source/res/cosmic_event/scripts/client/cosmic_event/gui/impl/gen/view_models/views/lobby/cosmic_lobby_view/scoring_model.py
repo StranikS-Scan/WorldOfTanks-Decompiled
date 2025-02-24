@@ -10,6 +10,12 @@ class ScoringTypeEnum(Enum):
     RAM = 'ram'
     SHOT = 'shot'
     ABILITYHIT = 'abilityHit'
+    ASSIST = 'assist'
+    FIRSTBLOOD = 'firstBlood'
+    KILLSTREAK = 'killStreak'
+    PICKUPMASTER = 'pickupMaster'
+    REVENGE = 'revenge'
+    BOOSTME = 'boostMe'
 
 
 class ScoringModel(ViewModel):

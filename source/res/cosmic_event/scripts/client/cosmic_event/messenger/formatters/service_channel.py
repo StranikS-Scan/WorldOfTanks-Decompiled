@@ -10,15 +10,25 @@ from cosmic_event.skeletons.progression_controller import ICosmicEventProgressio
 from cosmic_event_common.cosmic_event_common import checkIfViolator
 from gui.impl import backport
 from gui.impl.gen import R
-from helpers import int2roman, dependency
+from helpers import dependency
 from messenger import g_settings
 from messenger.formatters.service_channel import BattleResultsFormatter, ServiceChannelFormatter, QuestAchievesFormatter
+from gui.server_events.recruit_helper import getRecruitInfo
 from messenger.formatters.service_channel_helpers import MessageData, getRewardsForQuests
 from messenger.formatters.token_quest_subformatters import SyncTokenQuestsSubFormatter
 from cosmic_event.gui.gui_constants import ACHIEVEMENTS_IDS
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 _logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from typing import Dict, Any, List
+
+def _processCosmicTankmanToken(token):
+    if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+        tankmanInfo = getRecruitInfo(token)
+        if tankmanInfo is not None:
+            return g_settings.htmlTemplates.format('cosmicTMan', {'name': tankmanInfo.getFullUserName()})
+    return
+
 
 class CosmicBattleResultsFormatter(BattleResultsFormatter):
 
@@ -58,15 +68,32 @@ class CosmicDailyMessageFormatter(ServiceChannelFormatter):
         return cls._isQuestOfThisGroup(questID)
 
 
+class CosmicQuestAchievesFormatter(QuestAchievesFormatter):
+
+    @classmethod
+    def formatQuestAchieves(cls, data, asBattleFormatter, processCustomizations=True, processTokens=True):
+        result = super(CosmicQuestAchievesFormatter, cls).formatQuestAchieves(data, asBattleFormatter, processCustomizations, processTokens)
+        return result
+
+    @classmethod
+    def _processTokens(cls, data):
+        result = []
+        for token, _ in data.get('tokens', {}).iteritems():
+            if token.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                tankmanTokenResult = _processCosmicTankmanToken(token)
+                if tankmanTokenResult:
+                    result.append(tankmanTokenResult)
+
+        return cls._SEPARATOR.join(result)
+
+
 class CosmicProgressionMessageFormatter(SyncTokenQuestsSubFormatter):
     __TEMPLATE = 'CosmicProgressionMessage'
     _cosmicProgression = dependency.descriptor(ICosmicEventProgressionController)
 
     def format(self, message, *args):
-        stage = self._cosmicProgression.getCurrentStage()
         rewards = getRewardsForQuests(message, self._cosmicProgression.getQuests().keys())
-        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'stage': int2roman(stage),
-         'rewards': self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)})
+        formatted = g_settings.msgTemplates.format(self.__TEMPLATE, ctx={'rewards': CosmicQuestAchievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)})
         return [MessageData(formatted, self._getGuiSettings(message.data, self.__TEMPLATE))]
 
     @classmethod

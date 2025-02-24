@@ -18,7 +18,7 @@ from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import changeBonusTooltipData, packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag, isIntroVideoExist
+from gui.battle_pass.battle_pass_helpers import chaptersIDsComparator, fillBattlePassCompoundPrice, getDataByTankman, getExtraInfoPageURL, getFormattedTimeLeft, getInfoPageURL, getIntroVideoURL, getStyleForChapter, getTankmanInfo, isSeasonEndingSoon, TANKMAN_BONUS_NAME, updateBuyAnimationFlag, isIntroVideoExist, fillBattleTypes
 from gui.collection.collections_helpers import getCollectionRes, loadBattlePassFromCollections
 from gui.impl import backport
 from gui.impl.auxiliary.collections_helper import fillCollectionModel
@@ -29,17 +29,23 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.reward_level_model import 
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.pub import ViewImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.server_events.events_dispatcher import showMissionsBattlePass
+from gui.impl.lobby.battle_pass.tooltips.buy_stages_footer_tooltip_view import BuyStagesFooterTooltipView
+from gui.impl.lobby.battle_pass.tooltips.battle_types_tooltip_view import BattleTypesTooltipView
+from gui.impl.lobby.missions.daily_quests_view import DailyTabs
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showDailyQuests
+from gui.server_events.events_helpers import isDailyQuestsEnable
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showBattlePassBuyLevelWindow, showBattlePassBuyWindow, showBattlePassHowToEarnPointsView, showBattlePassStyleProgressionPreview, showBrowserOverlayView, showHangar, showShop, showStylePreview, showCollectionWindow
 from gui.shared.formatters.time_formatters import formatDate
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier, SimpleNotifier
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency, int2roman, time_utils
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IWalletController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import GLOBAL_FLAG
 from tutorial.control.game_vars import getVehicleByIntCD
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 _logger = logging.getLogger(__name__)
@@ -50,6 +56,10 @@ _CHAPTER_STATES = {ChapterState.ACTIVE: ChapterStates.ACTIVE,
  ChapterState.NOT_STARTED: ChapterStates.NOTSTARTED,
  ChapterState.DISABLED: ChapterStates.DISABLED}
 _FREE_POINTS_INDEX = 0
+
+def progressionTrigger(toShow):
+    getTutorialGlobalStorage().setValue(GLOBAL_FLAG.BATTLE_PASS_PROGRESSION, toShow)
+
 
 class BattlePassProgressionsView(ViewImpl):
     __slots__ = ('__tooltipItems', '__viewActive', '__notifier', '__chapterID', '__showReplaceRewardAnimations', '__specialTooltipItems')
@@ -85,11 +95,18 @@ class BattlePassProgressionsView(ViewImpl):
 
     @createTooltipContentDecorator()
     def createToolTipContent(self, event, contentID):
-        return super(BattlePassProgressionsView, self).createToolTipContent(event, contentID)
+        if not self.isFocused:
+            return None
+        elif contentID == R.views.lobby.battle_pass.tooltips.BuyStagesFooterTooltipView():
+            return BuyStagesFooterTooltipView(event.getArgument('isActive'))
+        else:
+            return BattleTypesTooltipView() if contentID == R.views.lobby.battle_pass.tooltips.BattleTypesTooltipView() else super(BattlePassProgressionsView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
         if tooltipId is None:
+            return
+        elif not self.isFocused:
             return
         else:
             tooltipData = self.__tooltipItems.get(tooltipId)
@@ -131,6 +148,9 @@ class BattlePassProgressionsView(ViewImpl):
          (self.viewModel.onBpbitClick, self.__showPointsShop),
          (self.viewModel.onTakeRewardsClick, self.__takeAllRewards),
          (self.viewModel.collectionEntryPoint.openCollection, self.__openCollection),
+         (self.viewModel.onBuyBP, self.__onBuyBP),
+         (self.viewModel.onBuyStages, self.__onBuyStages),
+         (self.viewModel.onTasksClick, self.__onTasksClick),
          (self.__battlePass.onPointsUpdated, self.__onPointsUpdated),
          (self.__battlePass.onBattlePassIsBought, self.__onBattlePassBought),
          (self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange),
@@ -166,6 +186,8 @@ class BattlePassProgressionsView(ViewImpl):
         self.__notifier.startNotification()
         self.__updateProgressData()
         self.__updateBuyButtonState()
+        self.__updateBattleTypes()
+        progressionTrigger(self.__battlePass.isShowHint())
 
     def _onLoaded(self, *args, **kwargs):
         super(BattlePassProgressionsView, self)._onLoaded(*args, **kwargs)
@@ -183,18 +205,28 @@ class BattlePassProgressionsView(ViewImpl):
     def __onActionClick(self):
         self.__resetBuyAnimation()
         ctrl = self.__battlePass
+        if not ctrl.isChapterCompleted(self.__chapterID):
+            ctrl.activateChapter(self.__chapterID, self)
+
+    def __onBuyBP(self):
+        self.__resetBuyAnimation()
+        ctrl = self.__battlePass
+        if not ctrl.isBought(chapterID=self.__chapterID):
+            self.__showBuyWindow(self.__getPreviewCallback())
+
+    def __onBuyStages(self):
+        self.__resetBuyAnimation()
+        ctrl = self.__battlePass
         if ctrl.isChapterActive(self.__chapterID):
             if ctrl.isBought(chapterID=self.__chapterID):
                 self.__showBuyLevelsWindow()
-            else:
-                self.__showBuyWindow(self.__getPreviewCallback())
-        elif not ctrl.isChapterCompleted(self.__chapterID):
-            ctrl.activateChapter(self.__chapterID)
-        elif not ctrl.isBought(chapterID=self.__chapterID):
-            self.__showBuyWindow(self.__getPreviewCallback())
 
     def __onAboutClick(self):
         self.__loadUrl(getExtraInfoPageURL() if self.__battlePass.isMarathonChapter(self.__chapterID) else getInfoPageURL())
+
+    def __onTasksClick(self):
+        if isDailyQuestsEnable():
+            showDailyQuests(subTab=DailyTabs.QUESTS)
 
     @staticmethod
     def __onClose():
@@ -355,6 +387,8 @@ class BattlePassProgressionsView(ViewImpl):
         model.setChapterType(ChapterType(self.__battlePass.getChapterType(self.__chapterID)))
         model.setIsSeasonEndingSoon(isSeasonEndingSoon())
         model.setSeasonText(self.__makeSeasonTimeText())
+        model.setShowHint(self.__battlePass.isShowHint())
+        model.setHasActiveChapter(self.__battlePass.hasActiveChapter())
         fillCollectionModel(model.collectionEntryPoint, self.__battlePass.getCurrentCollectionId())
         self.__setExpirations(model)
         if self.__battlePass.getRewardType(self.__chapterID) == FinalReward.STYLE:
@@ -435,6 +469,10 @@ class BattlePassProgressionsView(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setButtonState(state)
 
+    def __updateBattleTypes(self):
+        with self.viewModel.transaction() as model:
+            fillBattleTypes(model)
+
     @replaceNoneKwargsModel
     def __updateRewardSelectButton(self, model=None):
         model.setIsChooseDeviceEnabled(False)
@@ -467,6 +505,8 @@ class BattlePassProgressionsView(ViewImpl):
         viewActive = event.ctx.get('alias') == QUESTS_ALIASES.BATTLE_PASS_MISSIONS_VIEW_PY_ALIAS
         if self.__viewActive == viewActive and self.__viewActive:
             self.__clearSubViews()
+        else:
+            self.stopListeners()
         self.__viewActive = viewActive
 
     def __clearSubViews(self):

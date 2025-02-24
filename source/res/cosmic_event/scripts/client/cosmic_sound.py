@@ -44,7 +44,10 @@ class CosmicHangarSounds(object):
         play2DSoundEvent(cls._COSMIC_BATTLE_RESULTS)
 
     class CosmicProgression(object):
+        COSMIC_RTPC_PROGRESSION = 'RTPC_ext_cosmic_lobby_progress'
         _COSMIC_PROGRESSION_STAGES = ('ev_cosmic_vo_lobby_progression_0_1', 'ev_cosmic_vo_lobby_progression_1_2', 'ev_cosmic_vo_lobby_progression_2_3', 'ev_cosmic_vo_lobby_progression_3_4', 'ev_cosmic_vo_lobby_progression_4_5', 'ev_cosmic_vo_lobby_progression_5_6', 'ev_cosmic_vo_lobby_progression_6_7', 'ev_cosmic_vo_lobby_progression_7_8', 'ev_cosmic_vo_lobby_progression_8_9', 'ev_cosmic_vo_lobby_progression_9_10', 'ev_cosmic_vo_lobby_progression_completed')
+        _COSMIC_PROGRESSION_AMBIENT_START = 'ev_cosmic_hangar_object_drone'
+        _COSMIC_PROGRESSION_AMBIENT_STOP = 'ev_cosmic_hangar_object_drone_stop'
 
         @classmethod
         def getSoundObject(cls, currentStage):
@@ -55,13 +58,26 @@ class CosmicHangarSounds(object):
             else:
                 return SoundGroups.g_instance.getSound2D(cls._COSMIC_PROGRESSION_STAGES[currentStage])
 
+        @classmethod
+        def playAmbient(cls):
+            play2DSoundEvent(cls._COSMIC_PROGRESSION_AMBIENT_START)
+
+        @classmethod
+        def stopAmbient(cls):
+            play2DSoundEvent(cls._COSMIC_PROGRESSION_AMBIENT_STOP)
+
 
 class CosmicBattleSounds(object):
     START_BATTLE = 'ev_cosmic_vo_gameplay_start_battle'
-    ABILITY_PICK_UP_VOICE = 'ev_cosmic_vo_gameplay_booster'
     ENEMY_KILLED_VOICE = 'ev_cosmic_vo_gameplay_enemy_destroyed'
+    FIRST_BLOOD = 'ev_cosmic_vo_gameplay_first_blood'
+    REVENGE = 'ev_cosmic_vo_gameplay_enemy_destroyed_revenge'
     PLAYER_RESPAWN = 'ev_cosmic_vo_gameplay_respawn'
     _SCORE_NOTIFICATION = 'ev_cosmic_score_notification'
+    _SPECIAL_HINT = 'ev_cosmic_special_hint'
+    _KILL_STREAK_NOTIFICATION = {2: 'ev_cosmic_x2_kill_hint',
+     3: 'ev_cosmic_x3_kill_hint',
+     4: 'ev_cosmic_x4_kill_hint'}
     _ABILITY_PICK_UP_NOTIFICATION = 'ev_cosmic_pickup_notification'
     _ENEMY_KILLED_NOTIFICATION = 'ev_cosmic_enemy_killed'
     _ABILITY_PICK_UP = 'ev_cosmic_ability_pickup'
@@ -69,12 +85,16 @@ class CosmicBattleSounds(object):
     _BATTLE_PERIOD_MUSIC = 'ev_cosmic_music_start_battle'
     _AFTERBATTLE_PERIOD_MUSIC = 'ev_cosmic_music_end_battle'
     _RAMMING = 'ev_cosmic_tank_ram'
-    _CHEERUP_VOICE_FOR_FIRST_PHASE = ('ev_cosmic_vo_gameplay_cheerup1_high_place', 'ev_cosmic_vo_gameplay_cheerup1_medium_place', 'ev_cosmic_vo_gameplay_cheerup1_low_place')
-    _CHEERUP_VOICE_FOR_SECOND_PHASE = ('ev_cosmic_vo_gameplay_cheerup2_high_place', 'ev_cosmic_vo_gameplay_cheerup2_medium_place', 'ev_cosmic_vo_gameplay_cheerup2_low_place')
-    _AFTER_BATTLE_RESULTS_VOICES = ('ev_cosmic_vo_gameplay_finish_battle_first_place', 'ev_cosmic_vo_gameplay_finish_battle_second_third_place', 'ev_cosmic_vo_gameplay_finish_battle_medium_place', 'ev_cosmic_vo_gameplay_finish_battle_low_place')
+    _DRON_APPEAR_3D = 'ev_cosmic_ability_drone_appear'
+    _DRON_DISAPPEAR_3D = 'ev_cosmic_ability_drone_disappear'
+    _BOARD_JUMP_3D = 'ev_cosmic_booster_jump'
+    _GEYSER_SPLASH_3D = 'ev_cosmic_geyser_big'
+    _CHEERUP_VOICE_FOR_SECOND_PHASE = ('ev_cosmic_vo_gameplay_cheerup2_high_place',)
+    _AFTER_BATTLE_RESULTS_VOICES = ('ev_cosmic_vo_gameplay_finish_battle_first_place', 'ev_cosmic_vo_gameplay_finish_battle_other_place')
 
     class ScanningZone(object):
         SCANNING_ZONE_PREPARING = 'ev_cosmic_vo_gameplay_scan_prepare'
+        SCANNING_ZONE_FINAL_PREPARING = 'ev_cosmic_vo_gameplay_scan_prepare_final'
         _STATE_GROUP = 'STATE_ev_cosmic_object'
         _ACTIVE_STATE_VAL = 'STATE_ev_cosmic_object_active_on'
         _INACTIVE_STATE_VAL = 'STATE_ev_cosmic_object_active_off'
@@ -127,6 +147,8 @@ class CosmicBattleSounds(object):
         _RESPAWN_PROTECTION_ELAPSED = 'ev_cosmic_ability_respawn_protection_stop'
         _POWER_SHOT_ACTIVATED = 'ev_cosmic_ability_superShot_start'
         _POWER_SHOT_ELAPSED = 'ev_cosmic_ability_superShot_stop'
+        _STUN_SHOT_ACTIVATED = 'ev_cosmic_ability_superShot_start'
+        _STUN_SHOT_ELAPSED = 'ev_cosmic_ability_superShot_stop'
 
         @classmethod
         def playActivated(cls):
@@ -171,9 +193,27 @@ class CosmicBattleSounds(object):
         def playPowerShotElapsed(cls):
             play2DSoundEvent(cls._POWER_SHOT_ELAPSED)
 
+        @classmethod
+        def playStunShotActivated(cls):
+            play2DSoundEvent(cls._STUN_SHOT_ACTIVATED)
+
+        @classmethod
+        def playStunShotElapsed(cls):
+            play2DSoundEvent(cls._STUN_SHOT_ELAPSED)
+
     @classmethod
     def playScoreNotification(cls):
         play2DSoundEvent(cls._SCORE_NOTIFICATION)
+
+    @classmethod
+    def playSpecialHint(cls):
+        play2DSoundEvent(cls._SPECIAL_HINT)
+
+    @classmethod
+    def playKillStreak(cls, killStreak):
+        if killStreak > 1:
+            event = cls._KILL_STREAK_NOTIFICATION.get(killStreak, 'ev_cosmic_x4_kill_hint')
+            play2DSoundEvent(event)
 
     @classmethod
     def playAbilityPickup(cls):
@@ -194,10 +234,6 @@ class CosmicBattleSounds(object):
         play2DSoundEvent(cls._AFTERBATTLE_PERIOD_MUSIC)
 
     @classmethod
-    def playCheerupVoiceForFirstPhase(cls, playerPositionInRankedTable):
-        cls.__playCheerupVoice(playerPositionInRankedTable, cls._CHEERUP_VOICE_FOR_FIRST_PHASE)
-
-    @classmethod
     def playCheerupVoiceForSecondPhase(cls, playerPositionInRankedTable):
         cls.__playCheerupVoice(playerPositionInRankedTable, cls._CHEERUP_VOICE_FOR_SECOND_PHASE)
 
@@ -205,22 +241,30 @@ class CosmicBattleSounds(object):
     def __playCheerupVoice(cls, playerPositionInRankedTable, cheerupVoices):
         if 1 <= playerPositionInRankedTable <= 3:
             playVoiceover(cheerupVoices[0])
-        elif 3 < playerPositionInRankedTable <= 7:
-            playVoiceover(cheerupVoices[1])
-        elif playerPositionInRankedTable > 7:
-            playVoiceover(cheerupVoices[2])
 
     @classmethod
     def playAfterBattleResultVoice(cls, playerPositionInRankedTable):
         if playerPositionInRankedTable == 1:
             playVoiceover(cls._AFTER_BATTLE_RESULTS_VOICES[0])
-        elif 1 < playerPositionInRankedTable <= 3:
+        elif playerPositionInRankedTable > 1:
             playVoiceover(cls._AFTER_BATTLE_RESULTS_VOICES[1])
-        elif 3 < playerPositionInRankedTable <= 7:
-            playVoiceover(cls._AFTER_BATTLE_RESULTS_VOICES[2])
-        elif playerPositionInRankedTable > 7:
-            playVoiceover(cls._AFTER_BATTLE_RESULTS_VOICES[3])
 
     @classmethod
     def playRammingSound(cls, point):
         play3DSoundEvent(cls._RAMMING, point)
+
+    @classmethod
+    def playDronAppear(cls, point):
+        play3DSoundEvent(cls._DRON_APPEAR_3D, point)
+
+    @classmethod
+    def playDronDisappear(cls, point):
+        play3DSoundEvent(cls._DRON_DISAPPEAR_3D, point)
+
+    @classmethod
+    def playBoardJump(cls, point):
+        play3DSoundEvent(cls._BOARD_JUMP_3D, point)
+
+    @classmethod
+    def playGeyserSplash(cls, point):
+        play3DSoundEvent(cls._GEYSER_SPLASH_3D, point)

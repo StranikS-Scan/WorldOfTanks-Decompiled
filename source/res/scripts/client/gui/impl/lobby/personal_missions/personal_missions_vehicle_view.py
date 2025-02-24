@@ -16,6 +16,7 @@ from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsVehicleView, showPersonalMissionsOperationWindow
+from gui.impl.lobby.tooltips.vehicle_role_descr_view import VehicleRolesTooltipView
 from gui.impl.pub import ViewImpl
 from gui.server_events.pm3_constants import SOUNDS
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -65,6 +66,12 @@ class PersonalMissionsVehicleView(ViewImpl):
     @createBackportTooltipDecorator()
     def createToolTip(self, event):
         return super(PersonalMissionsVehicleView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.ranked.tooltips.RankedBattlesRolesTooltipView():
+            vehicleCD = event.getArgument('vehicleCD')
+            return VehicleRolesTooltipView(int(vehicleCD))
+        return super(PersonalMissionsVehicleView, self).createToolTipContent(event, contentID)
 
     def getTooltipData(self, event):
         tooltipDossierData = self.__getBackportTooltipData(event)

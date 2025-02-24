@@ -5,8 +5,8 @@
   <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
-    <bottomLeft>	-500.0 -500.0	</bottomLeft>
-    <upperRight>	500.0 500.0	</upperRight>
+    <bottomLeft>	-500.000000 -500.000000	</bottomLeft>
+    <upperRight>	500.000000 500.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/19_monastery/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
@@ -68,5 +68,21 @@
         </client>
       </visualScript>
     </bootcamp>
+    <domination3>
+      <minimap>	spaces/19_monastery/mmap_domination3.dds	</minimap>
+      <boundingBox>
+        <bottomLeft>	-345.000000 -295.000031	</bottomLeft>
+        <upperRight>	294.999969 344.999878	</upperRight>
+      </boundingBox>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-62.989624 -217.894302	</position>
+        </team1>
+        <team2>
+          <position>	-25.800980 258.634674	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-85.640717 -4.619980	</controlPoint>
+    </domination3>
   </gameplayTypes>
 </19_monastery.xml>

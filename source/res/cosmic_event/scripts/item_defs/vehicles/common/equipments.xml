@@ -28,7 +28,8 @@
   </cosmic_event_gravity_field>
   <cosmic_event_rocket_booster>
     <id>	9602	</id>
-    <userString>	#artefacts:cosmic_event_rocket_booster/name	</userString>
+    <userString>	#artefacts:acceleration/name	</userString>
+    <description>	#artefacts:acceleration/descr	</description>
     <icon>	cosmic_event_rocket_booster 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
@@ -45,7 +46,7 @@
       </visualScript>
       <cooldownSeconds>	8	  <exports>	vse	</exports>
       </cooldownSeconds>
-      <duration>	2	  <exports>	vse tooltip	</exports>
+      <duration>	3	  <exports>	vse tooltip	</exports>
       </duration>
     </script>
   </cosmic_event_rocket_booster>
@@ -116,7 +117,8 @@
   </cosmic_event_hook_shot>
   <cosmic_event_shield>
     <id>	9604	</id>
-    <userString>	#artefacts:cosmic_event_shield/name	</userString>
+    <userString>	#artefacts:shield/name	</userString>
+    <description>	#artefacts:shield/descr	</description>
     <icon>	cosmic_event_shield 0 0	</icon>
     <price>	0	</price>
     <notInShop>	True	</notInShop>
@@ -162,4 +164,66 @@
       </shotSpeed>
     </script>
   </cosmic_event_power_shot>
+  <cosmic_event_wave>
+    <id>	9610	</id>
+    <userString>	#artefacts:wave/name	</userString>
+    <description>	#artefacts:wave/descr	</description>
+    <icon>	cosmic_event_wave 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventWaveEquipment	  <visualScript>
+        <client>
+          <plan>	cosmic_event_abilities/wave_client	</plan>
+        </client>
+        <server>
+          <plan>	cosmic_event_abilities/wave_server	</plan>
+        </server>
+      </visualScript>
+      <impulseFactor>	700	  <exports>	vse	</exports>
+      </impulseFactor>
+      <radius>	15	  <exports>	vse tooltip	</exports>
+      </radius>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <duration>	1	  <exports>	vse	</exports>
+      </duration>
+    </script>
+  </cosmic_event_wave>
+  <cosmic_event_stun_shot>
+    <id>	9611	</id>
+    <userString>	#artefacts:stun_shot/name	</userString>
+    <description>	#artefacts:stun_shot/descr	</description>
+    <icon>	cosmic_event_stun_shot 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	notForSale public stopOutsideBattle	</tags>
+    <type>	battleAbilities	</type>
+    <soundNotification>	comp_7_ability_ready	</soundNotification>
+    <script>	cosmic_event_common.items.artefacts.CosmicEventStunShotEquipment	  <visualScript>
+        <server>
+          <plan>	cosmic_event_abilities/stun_shot_server	</plan>
+        </server>
+        <client>
+          <plan>	cosmic_event_abilities/stun_shot_client	</plan>
+        </client>
+      </visualScript>
+      <shellID>	10240890	  <exports>	vse	</exports>
+      </shellID>
+      <shotSpeed>	240	  <exports>	vse	</exports>
+      </shotSpeed>
+      <cooldownSeconds>	20	  <exports>	vse	</exports>
+      </cooldownSeconds>
+      <stunDuration>	7	  <exports>	vse	</exports>
+      </stunDuration>
+      <vehicleSpeedMultiplier>	0.4	  <exports>	vse	</exports>
+      </vehicleSpeedMultiplier>
+      <turretRotationSpeedMultiplier>	0.15	  <exports>	vse	</exports>
+      </turretRotationSpeedMultiplier>
+      <gunReloadTimeMultiplier>	2	  <exports>	vse	</exports>
+      </gunReloadTimeMultiplier>
+    </script>
+  </cosmic_event_stun_shot>
 </equipments.xml>

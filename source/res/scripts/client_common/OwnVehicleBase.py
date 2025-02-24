@@ -72,7 +72,7 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
     def update_inThermalSectorStatus(self, status):
         avatar = self._avatar()
         if avatar:
-            avatar.updateInThermalSectorStatus(status.startTime, status.duration)
+            avatar.updateInThermalSectorStatus(status.startTime, status.duration, status.isObserved)
 
     @noexcept
     def update_vehicleClipReloadTime(self, prop):

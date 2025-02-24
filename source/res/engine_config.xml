@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -449,12 +450,6 @@
           <name>	dog_tags_hangar.bnk	</name>
         </bank>
         <bank>
-          <name>	battle_of_bloggers.bnk	</name>
-        </bank>
-        <bank>
-          <name>	battle_of_bloggers.pck	</name>
-        </bank>
-        <bank>
           <name>	mode_selector.bnk	</name>
         </bank>
         <bank>
@@ -540,9 +535,6 @@
         </bank>
         <bank>
           <name>	style_3D_A143_M_V_Y_3DSt.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_A163_H_3_2.bnk	</name>
         </bank>
         <bank>
           <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
@@ -684,12 +676,6 @@
           <name>	style_3D_R123_Kirovets_Svaroshich.bnk	</name>
         </bank>
         <bank>
-          <name>	shell_extraction.bnk	</name>
-        </bank>
-        <bank>
-          <name>	gameplay.bnk	</name>
-        </bank>
-        <bank>
           <name>	style_3D_R165_Object_703_II_2_3dst.bnk	</name>
         </bank>
         <bank>
@@ -709,9 +695,6 @@
         </bank>
         <bank>
           <name>	style_3D_A143_M_V_Y_3DSt.bnk	</name>
-        </bank>
-        <bank>
-          <name>	style_3D_A163_H_3_2.bnk	</name>
         </bank>
         <bank>
           <name>	style_3D_G134_PzKpfw_VII_3dst_Kinetic.bnk	</name>

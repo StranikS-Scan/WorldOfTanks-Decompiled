@@ -84,6 +84,7 @@ from gui.wgnc import g_wgncProvider
 from gun_rotation_shared import decodeGunAngles
 from helpers import bound_effects, dependency, uniprof
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles
+from items.utils import isclose
 from material_kinds import EFFECT_MATERIALS
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -674,9 +675,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         return True
                     if key == Keys.KEY_1:
                         self.base.setDevelopmentFeature(0, 'heal', 0, '')
+                        self.base.setDevelopmentFeature(0, 'thermalVisionController/reset_use_count', 0, '')
                         return True
                     if key == Keys.KEY_2:
                         self.base.setDevelopmentFeature(0, 'reload_gun', 0, '')
+                        self.base.setDevelopmentFeature(0, 'thermalVisionController/finish_reload', 0, '')
                         return True
                     if key == Keys.KEY_3:
                         self.base.setDevelopmentFeature(0, 'start_fire', 0, '')
@@ -862,8 +865,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         gui_event_dispatcher.choiceConsumable(key)
                         return True
                 isComp7 = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.COMP7)
-                isBob = ARENA_BONUS_TYPE_CAPS.checkAny(self.arenaBonusType, ARENA_BONUS_TYPE_CAPS.BOB)
-                if not isComp7 and not isBob and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
+                if not isComp7 and cmdMap.isFired(CommandMapping.CMD_VOICECHAT_ENABLE, key) and not isDown:
                     if self.__isPlayerInSquad() and not BattleReplay.isPlaying():
                         if VOIP.getVOIPManager().isVoiceSupported():
                             gui_event_dispatcher.toggleVoipChannelEnabled(self.arenaBonusType)
@@ -1411,12 +1413,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 ctrl.onVehicleStatusChanged()
             return
 
-    def updateInThermalSectorStatus(self, startTime, duration):
-        vehicle = self.getVehicleAttached()
-        if vehicle is not None and not vehicle.sixthSenseState:
+    def updateInThermalSectorStatus(self, startTime, duration, isObserved):
+        if isclose(startTime, 0) or not isObserved:
             self.updateThermalWarningTimer(startTime, duration)
         self._thermalWarningTime = (startTime, duration)
-        return
 
     def setVehicleOverturned(self, isOverturned):
         self.__isVehicleOverturned = isOverturned
@@ -1475,9 +1475,12 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def updateThermalWarningTimer(self, startTime, duration):
-        state = VEHICLE_VIEW_STATE.THERMAL_VISION_WARNING
+        newTime = startTime + duration
+        prevTime = sum(self._thermalWarningTime)
+        if isclose(prevTime, newTime):
+            return
         value = (startTime, duration)
-        self.guiSessionProvider.invalidateVehicleState(state, value)
+        self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.THERMAL_VISION_WARNING, value)
         if startTime > 0:
             RTPC_EVENT_WARNING.play(duration)
         else:

@@ -9,7 +9,6 @@ from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter, D
 from gui.impl.auxiliary.tooltips.compensation_tooltip import CompensationTooltipContent, VehicleCompensationTooltipContent
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.loot_box_compensation_tooltip_model import LootBoxCompensationTooltipModel
-from gui.impl.lobby.seniority_awards.seniority_awards_sounds import playSound, LootBoxViewEvents
 from gui.shared import g_eventBus
 from gui.shared.events import GameEvent
 from gui.shared.notifications import NotificationPriorityLevel
@@ -23,11 +22,6 @@ def showRestrictedSysMessage():
         SystemMessages.pushMessage(text=backport.text(R.strings.lootboxes.restrictedMessage.body()), type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.HIGH, messageData={'header': backport.text(R.strings.lootboxes.restrictedMessage.header())})
 
     BigWorld.callback(0.0, _showRestrictedSysMessage)
-
-
-def fireCloseToHangar():
-    playSound(LootBoxViewEvents.ENTRY_VIEW_EXIT)
-    _closeLootBoxWindows()
 
 
 def getLootboxRendererModelPresenter(reward):

@@ -29,6 +29,7 @@ class RenewableSubWebApiMixin(object):
          'period_end': self._wotPlusCtrl.getExpiryTime(),
          'enabled_bonuses': self.getEnabledBonuses(serverSettings),
          'is_free_deluxe_demount_included': serverSettings.isFreeDeluxeEquipmentDemountingEnabled(),
+         'is_free_equipment_demount_included': serverSettings.isFreeEquipmentDemountingEnabled(),
          'status': self._wotPlusCtrl.getState().name}
 
     def getEnabledBonuses(self, serverSettings):

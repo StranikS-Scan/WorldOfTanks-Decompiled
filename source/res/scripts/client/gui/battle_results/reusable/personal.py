@@ -305,13 +305,16 @@ class _EconomicsRecordsChains(object):
         self._baseCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
         self._premiumCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
         self._premiumPlusCredits.addRecords(records.RawRecords({'avatarCreditsEvent': avatarCreditsEvent}))
-        avatarFreeXPEvent = sum((creditEvent[1] for creditEvent in infoAvatar.get('eventFreeXPList', [])))
+        avatarFreeXPEvent = sum((eventFreeXP[1] for eventFreeXP in infoAvatar.get('eventFreeXPList', [])))
         self._premiumPlusFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
         self._premiumPlusFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
         self._premiumFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
         self._premiumFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
         self._baseFreeXPAdd.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
         self._baseFreeXP.addRecords(records.RawRecords({'avatarFreeXPEvent': avatarFreeXPEvent}))
+        crystalEvent = sum((eventCrystal[1] for eventCrystal in infoAvatar.get('eventCrystalList', [])))
+        self._crystal.addRecords(records.RawRecords({'avatarCrystalEvent': crystalEvent}))
+        self._crystalDetails.addRecords(records.RawRecords({'avatarCrystalEvent': crystalEvent}))
 
     def _addMoneyResults(self, connector, results):
         if 'creditsReplay' in results and results['creditsReplay'] is not None:

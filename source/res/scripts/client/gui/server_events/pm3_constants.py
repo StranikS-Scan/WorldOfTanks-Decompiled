@@ -53,7 +53,6 @@ class VIDEO(object):
     STOP_EVENT = 'pm3_lbz_vid_stop'
     PAUSE = 'pm3_lbz_vid_pause'
     RESUME = 'pm3_lbz_vid_resume'
-    RTPC = 'RTPC_ext_video_volume'
     SOUND_INTRO = 'pm3_lbz_vid_intro'
     SOUND_REWARD_1 = 'pm3_lbz_vid_A161_ARMT'
     SOUND_REWARD_2 = 'pm3_lbz_vid_A173_TF_2_CLARK'

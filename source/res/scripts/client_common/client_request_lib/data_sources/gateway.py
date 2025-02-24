@@ -671,14 +671,5 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/agate/api/v5/inventory/getInventoryEntitlements/'
         return self._request_data(callback, url, method='POST', post_data=entitlementsFilter)
 
-    def get_teams(self, callback):
-        url = '/wgbob/get_teams/'
-        return self._request_data(callback, url, method='GET')
-
-    def get_team_skills(self, callback, timestamp):
-        url = '/wgbob/get_team_skills/'
-        get_data = {'timestamp': timestamp}
-        return self._request_data(callback, url, get_data=get_data, method='GET')
-
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

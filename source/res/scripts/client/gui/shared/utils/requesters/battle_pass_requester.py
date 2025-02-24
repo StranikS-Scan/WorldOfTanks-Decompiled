@@ -8,6 +8,9 @@ from skeletons.gui.shared.utils.requesters import IBattlePassRequester
 
 class BattlePassRequester(AbstractSyncDataRequester, IBattlePassRequester):
 
+    def getSumPoints(self):
+        return self.getCacheValue('sumPoints', 0)
+
     def getSeasonID(self):
         return self.getCacheValue('seasonID', 0)
 
@@ -17,8 +20,8 @@ class BattlePassRequester(AbstractSyncDataRequester, IBattlePassRequester):
     def getActiveChapterID(self):
         return self.getCacheValue('chapterID', 0)
 
-    def getPointsForVehicle(self, vehicleID, default=0):
-        return self.getCacheValue('vehiclePoints', {}).get(vehicleID, default)
+    def getVehiclePoints(self, vehicleID):
+        return self.getCacheValue('vehiclePoints', {}).get(vehicleID, (0, 0))
 
     def getChapterStats(self):
         return self.getCacheValue('seasonStats', {}).get('chaptersStats', {})

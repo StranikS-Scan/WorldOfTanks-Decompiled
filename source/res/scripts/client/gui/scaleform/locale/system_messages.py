@@ -87,7 +87,6 @@ class SYSTEM_MESSAGES(object):
     PREBATTLE_VEHICLEINVALID_EPICONLY = '#system_messages:prebattle/vehicleInvalid/epicOnly'
     PREBATTLE_VEHICLEINVALID_NOTSUPPORTFOR11LVL = '#system_messages:prebattle/vehicleInvalid/notSupportFor11lvl'
     PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE = '#system_messages:prebattle/vehicleInvalid/willBeUnlockedInBattle'
-    PREBATTLE_VEHICLEINVALID_BOBONLY = '#system_messages:prebattle/vehicleInvalid/bobOnly'
     PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS = '#system_messages:prebattle/vehicleInvalid/notSetReadyStatus'
     PREBATTLE_VEHICLEINVALID_FALLOUTONLY = '#system_messages:prebattle/vehicleInvalid/falloutOnly'
     PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS = '#system_messages:prebattle/vehicleInvalid/limits/nations'
@@ -193,6 +192,7 @@ class SYSTEM_MESSAGES(object):
     MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_MEDIUM = '#system_messages:memory_critical/tex_was_lowered_to_medium'
     MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_LOW = '#system_messages:memory_critical/tex_was_lowered_to_low'
     MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_MIN = '#system_messages:memory_critical/tex_was_lowered_to_min'
+    DX10_NODEFERRED_WARNING = '#system_messages:dx10_nodeferred_warning'
     TRADINGERROR_TOO_MANY_OUT_OFFERS = '#system_messages:tradingError/TOO_MANY_OUT_OFFERS'
     TRADINGERROR_NOT_ALLOWED = '#system_messages:tradingError/NOT_ALLOWED'
     TRADINGERROR_NO_WARES = '#system_messages:tradingError/NO_WARES'
@@ -1364,8 +1364,6 @@ class SYSTEM_MESSAGES(object):
     DEBUTBOXES_DISABLED_HEADER = '#system_messages:debutBoxes/disabled/header'
     DEBUTBOXES_DISABLED_BODY = '#system_messages:debutBoxes/disabled/body'
     COMP7_OPEN_SHOP = '#system_messages:comp7/open_shop'
-    BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN = '#system_messages:bob/claimeReward/server_error/COOLDOWN'
-    BOB_CLAIMEREWARD_SERVER_ERROR = '#system_messages:bob/claimeReward/server_error'
     PARAGONS_PROJECTAVAILABLE_TITLE = '#system_messages:paragons/projectAvailable/title'
     PARAGONS_PROJECTAVAILABLE_TEXT = '#system_messages:paragons/projectAvailable/text'
     PARAGONS_BRANCHRESETAVAILABLE_TITLE = '#system_messages:paragons/branchResetAvailable/title'
@@ -1594,7 +1592,6 @@ class SYSTEM_MESSAGES(object):
      PREBATTLE_VEHICLEINVALID_EPICONLY,
      PREBATTLE_VEHICLEINVALID_NOTSUPPORTFOR11LVL,
      PREBATTLE_VEHICLEINVALID_WILLBEUNLOCKEDINBATTLE,
-     PREBATTLE_VEHICLEINVALID_BOBONLY,
      PREBATTLE_VEHICLEINVALID_NOTSETREADYSTATUS,
      PREBATTLE_VEHICLEINVALID_FALLOUTONLY,
      PREBATTLE_VEHICLEINVALID_LIMITS_NATIONS,
@@ -1700,6 +1697,7 @@ class SYSTEM_MESSAGES(object):
      MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_MEDIUM,
      MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_LOW,
      MEMORY_CRITICAL_TEX_WAS_LOWERED_TO_MIN,
+     DX10_NODEFERRED_WARNING,
      TRADINGERROR_TOO_MANY_OUT_OFFERS,
      TRADINGERROR_NOT_ALLOWED,
      TRADINGERROR_NO_WARES,
@@ -2871,8 +2869,6 @@ class SYSTEM_MESSAGES(object):
      DEBUTBOXES_DISABLED_HEADER,
      DEBUTBOXES_DISABLED_BODY,
      COMP7_OPEN_SHOP,
-     BOB_CLAIMEREWARD_SERVER_ERROR_COOLDOWN,
-     BOB_CLAIMEREWARD_SERVER_ERROR,
      PARAGONS_PROJECTAVAILABLE_TITLE,
      PARAGONS_PROJECTAVAILABLE_TEXT,
      PARAGONS_BRANCHRESETAVAILABLE_TITLE,

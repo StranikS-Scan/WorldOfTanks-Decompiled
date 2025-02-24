@@ -92,6 +92,8 @@ class PersonalMissionQuestsPage(PageSubModelPresenter):
             if quest.isOnPause:
                 return CardState.DONEP
             if quest.isFinal():
+                if quest.isInProgress():
+                    return CardState.INPROGRESSHONOR
                 if quest.isFullCompleted():
                     return CardState.DONEH
                 return CardState.DONE

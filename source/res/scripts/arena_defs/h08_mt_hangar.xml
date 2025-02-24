@@ -15,13 +15,25 @@
         <name>	ambient.bnk	</name>
       </bank>
       <bank>
-        <name>	hangar_h08_mt_hangar_outside.bnk	</name>
+        <name>	hangar_h08_mt_hangar_outside_sequences.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h08_mt_hangar_outside_spring.bnk	</name>
+      </bank>
+      <bank>
+        <name>	hangar_h08_mt_hangar_outside_winter.bnk	</name>
       </bank>
       <bank>
         <name>	hangar_h08_mt_hangar_music.bnk	</name>
       </bank>
       <bank>
         <name>	hangar_h08_mt_hangar_music.pck	</name>
+      </bank>
+      <bank>
+        <name>	ev_cosmic_hangar.bnk	</name>
+      </bank>
+      <bank>
+        <name>	ev_cosmic_hangar.pck	</name>
       </bank>
     </loadBanks>
     <unloadBanks>
@@ -33,7 +45,7 @@
     <ctf></ctf>
   </gameplayTypes>
   <boundingBox>
-    <bottomLeft>	-300.000000 -300.000000	</bottomLeft>
-    <upperRight>	300.000000 300.000000	</upperRight>
+    <bottomLeft>	-200.000000 -100.000000	</bottomLeft>
+    <upperRight>	0.000000 100.000000	</upperRight>
   </boundingBox>
 </h08_mt_hangar.xml>

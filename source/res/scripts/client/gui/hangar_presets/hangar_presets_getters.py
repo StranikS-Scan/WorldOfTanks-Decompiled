@@ -64,8 +64,3 @@ class Comp7PresetsGetter(DefaultPresetsGetter):
 class MapboxPresetsGetter(DefaultPresetsGetter):
     __slots__ = ()
     _QUEUE_TYPE = QUEUE_TYPE.MAPBOX
-
-
-class BobPresetsGetter(DefaultPresetsGetter):
-    __slots__ = ()
-    _QUEUE_TYPE = QUEUE_TYPE.BOB

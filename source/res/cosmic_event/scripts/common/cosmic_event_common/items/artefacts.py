@@ -22,6 +22,24 @@ class CosmicEventGravityFieldEquipment(artefacts.VisualScriptEquipment, object):
         self._exportSlotsToVSE()
 
 
+class CosmicEventWaveEquipment(artefacts.VisualScriptEquipment, object):
+    __slots__ = ('radius', 'impulseFactor', 'duration', 'cooldownSeconds')
+
+    @property
+    def tooltipParams(self):
+        params = super(CosmicEventWaveEquipment, self).tooltipParams
+        params['radius'] = self.radius
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(CosmicEventWaveEquipment, self)._readConfig(xmlCtx, section)
+        self.radius = section.readFloat('radius')
+        self.impulseFactor = section.readFloat('impulseFactor')
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.duration = section.readFloat('duration')
+        self._exportSlotsToVSE()
+
+
 class CosmicEventRocketBoosterEquipment(artefacts.VisualScriptEquipment, object):
     __slots__ = ('duration', 'cooldownSeconds')
 
@@ -119,6 +137,33 @@ class CosmicEventPowerShotEquipment(artefacts.VisualScriptEquipment, object):
 
     def _readConfig(self, xmlCtx, section):
         super(CosmicEventPowerShotEquipment, self)._readConfig(xmlCtx, section)
+        self.shellID = section.readInt('shellID')
+        self.shotSpeed = section.readInt('shotSpeed')
+        self._exportSlotsToVSE()
+
+
+class CosmicEventStunShotEquipment(artefacts.VisualScriptEquipment, object):
+    __slots__ = ('cooldownSeconds', 'stunDuration', 'vehicleSpeedMultiplier', 'turretRotationSpeedMultiplier', 'gunReloadTimeMultiplier', 'shellID', 'shotSpeed')
+
+    @property
+    def tooltipParams(self):
+        params = super(CosmicEventStunShotEquipment, self).tooltipParams
+        params['cooldownSeconds'] = self.cooldownSeconds
+        params['stunDuration'] = self.stunDuration
+        params['vehicleSpeedMultiplier'] = self.vehicleSpeedMultiplier
+        params['turretRotationSpeedMultiplier'] = self.turretRotationSpeedMultiplier
+        params['gunReloadTimeMultiplier'] = self.gunReloadTimeMultiplier
+        params['shellID'] = self.shellID
+        params['shotSpeed'] = self.shotSpeed
+        return params
+
+    def _readConfig(self, xmlCtx, section):
+        super(CosmicEventStunShotEquipment, self)._readConfig(xmlCtx, section)
+        self.cooldownSeconds = section.readFloat('cooldownSeconds')
+        self.stunDuration = section.readFloat('stunDuration')
+        self.vehicleSpeedMultiplier = section.readFloat('vehicleSpeedMultiplier')
+        self.turretRotationSpeedMultiplier = section.readFloat('turretRotationSpeedMultiplier')
+        self.gunReloadTimeMultiplier = section.readFloat('gunReloadTimeMultiplier')
         self.shellID = section.readInt('shellID')
         self.shotSpeed = section.readInt('shotSpeed')
         self._exportSlotsToVSE()

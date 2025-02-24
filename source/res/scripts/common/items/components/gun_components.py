@@ -7,6 +7,7 @@ from wrapped_reflection_framework import reflectedNamedTuple
 from wrapped_reflection_framework import ReflectionMetaclass
 RecoilEffect = reflectedNamedTuple('RecoilEffect', ('lodDist', 'amplitude', 'backoffTime', 'returnTime'))
 SpinEffect = namedtuple('SpinEffect', ('activationSound', 'deactivationSound'))
+DEFAULT_TEMPERATURE_SEGMENT_SIZE = 5
 
 class GunShot(legacy_stuff.LegacyStuff):
     __slots__ = ('shell', 'defaultPortion', 'piercingPower', 'speed', 'gravity', 'maxDistance', 'maxHeight')
@@ -40,7 +41,7 @@ class TemperatureGunParams(object):
      'coolingDelay'])
     __slots__ = ('states', 'temperatureThresholds', 'temperatureSegmentSize')
 
-    def __init__(self, states, temperatureThresholds, temperatureSegmentSize):
+    def __init__(self, states, temperatureThresholds, temperatureSegmentSize=DEFAULT_TEMPERATURE_SEGMENT_SIZE):
         self.states = states
         self.temperatureThresholds = temperatureThresholds
         self.temperatureSegmentSize = temperatureSegmentSize

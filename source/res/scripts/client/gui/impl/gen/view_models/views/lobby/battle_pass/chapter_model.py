@@ -21,7 +21,7 @@ class ChapterType(Enum):
 class ChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(ChapterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -44,53 +44,60 @@ class ChapterModel(ViewModel):
     def setStyleName(self, value):
         self._setString(2, value)
 
+    def getTankman(self):
+        return self._getString(3)
+
+    def setTankman(self, value):
+        self._setString(3, value)
+
     def getCurrentLevel(self):
-        return self._getNumber(3)
+        return self._getNumber(4)
 
     def setCurrentLevel(self, value):
-        self._setNumber(3, value)
+        self._setNumber(4, value)
 
     def getChapterState(self):
-        return ChapterStates(self._getString(4))
+        return ChapterStates(self._getString(5))
 
     def setChapterState(self, value):
-        self._setString(4, value.value)
+        self._setString(5, value.value)
 
     def getIsVehicleInHangar(self):
-        return self._getBool(5)
-
-    def setIsVehicleInHangar(self, value):
-        self._setBool(5, value)
-
-    def getIsBought(self):
         return self._getBool(6)
 
-    def setIsBought(self, value):
+    def setIsVehicleInHangar(self, value):
         self._setBool(6, value)
 
+    def getIsBought(self):
+        return self._getBool(7)
+
+    def setIsBought(self, value):
+        self._setBool(7, value)
+
     def getLevelProgression(self):
-        return self._getNumber(7)
+        return self._getNumber(8)
 
     def setLevelProgression(self, value):
-        self._setNumber(7, value)
+        self._setNumber(8, value)
 
     def getFinalReward(self):
-        return self._getString(8)
+        return self._getString(9)
 
     def setFinalReward(self, value):
-        self._setString(8, value)
+        self._setString(9, value)
 
     def getChapterType(self):
-        return ChapterType(self._getString(9))
+        return ChapterType(self._getString(10))
 
     def setChapterType(self, value):
-        self._setString(9, value.value)
+        self._setString(10, value.value)
 
     def _initialize(self):
         super(ChapterModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
         self._addNumberProperty('chapterID', 0)
         self._addStringProperty('styleName', '')
+        self._addStringProperty('tankman', '')
         self._addNumberProperty('currentLevel', 0)
         self._addStringProperty('chapterState')
         self._addBoolProperty('isVehicleInHangar', False)

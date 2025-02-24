@@ -38,7 +38,6 @@ if TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.veh_post_progression.models.progression import PostProgressionItem
     from items.vehicles import VehicleType
-    from typing import Any
 DO_LOG_BROKEN_SYNC = False
 
 def getDiffID(itemdID):
@@ -294,7 +293,6 @@ class REQ_CRITERIA(object):
         FUN_RANDOM = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForFunRandomBattles))
         COMP7 = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForComp7Battles))
         MODE_HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isModeHidden))
-        BOB_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForBob))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
@@ -839,8 +837,8 @@ class ItemsRequester(IItemsRequester):
     def getStockVehicle(self, typeCompDescr):
         return self.itemsFactory.createVehicle(typeCompDescr=typeCompDescr) if getTypeOfCompactDescr(typeCompDescr) == GUI_ITEM_TYPE.VEHICLE else None
 
-    def getVehicleCopy(self, vehicle, battleModifiers=None):
-        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self, extData=self.__inventory.getVehExtData(vehicle.intCD), battleModifiers=battleModifiers)
+    def getVehicleCopy(self, vehicle):
+        return self.itemsFactory.createVehicle(typeCompDescr=vehicle.intCD, strCompactDescr=vehicle.descriptor.makeCompactDescr(), inventoryID=vehicle.invID, proxy=self, extData=self.__inventory.getVehExtData(vehicle.intCD))
 
     def getVehicleCopyByCD(self, typeCompDescr):
         vehicle = self.getItemByCD(typeCompDescr)

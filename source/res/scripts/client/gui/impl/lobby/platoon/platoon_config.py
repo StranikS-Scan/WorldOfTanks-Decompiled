@@ -8,7 +8,6 @@ from gui.impl.lobby.platoon.view.platoon_members_view import SquadMembersView, E
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.impl.lobby.platoon.view.platoon_members_view import MembersWindow
-from gui.impl.lobby.platoon.view.platoon_members_view import BobMembersView
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchWindow
 from gui.impl.lobby.platoon.view.platoon_selection_view import SelectionWindow
 from gui.impl.lobby.platoon.view.platoon_welcome_view import WelcomeView
@@ -45,15 +44,13 @@ PLATOON_VIEW_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: SquadMembersView,
  PREBATTLE_TYPE.EPIC: EpicMembersView,
  PREBATTLE_TYPE.BATTLE_ROYALE: BattleRoyalMembersView,
  PREBATTLE_TYPE.MAPBOX: MapboxMembersView,
- PREBATTLE_TYPE.COMP7: Comp7MembersView,
- PREBATTLE_TYPE.BOB: BobMembersView}
+ PREBATTLE_TYPE.COMP7: Comp7MembersView}
 QUEUE_TYPE_TO_PREBATTLE_ACTION_NAME = {QUEUE_TYPE.EVENT_BATTLES: PREBATTLE_ACTION_NAME.EVENT_SQUAD,
  QUEUE_TYPE.RANDOMS: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.EPIC: PREBATTLE_ACTION_NAME.SQUAD,
  QUEUE_TYPE.BATTLE_ROYALE: PREBATTLE_ACTION_NAME.BATTLE_ROYALE_SQUAD,
  QUEUE_TYPE.MAPBOX: PREBATTLE_ACTION_NAME.MAPBOX_SQUAD,
- QUEUE_TYPE.COMP7: PREBATTLE_ACTION_NAME.COMP7_SQUAD,
- QUEUE_TYPE.BOB: PREBATTLE_ACTION_NAME.BOB_SQUAD}
+ QUEUE_TYPE.COMP7: PREBATTLE_ACTION_NAME.COMP7_SQUAD}
 PRB_TYPE_TO_WELCOME_VIEW_CONTENT_FACTORY = {PREBATTLE_TYPE.SQUAD: WelcomeView,
  PREBATTLE_TYPE.FALLOUT: WelcomeView,
  PREBATTLE_TYPE.EVENT: WelcomeView,

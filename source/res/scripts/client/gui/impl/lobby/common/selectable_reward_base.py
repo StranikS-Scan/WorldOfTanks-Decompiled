@@ -23,6 +23,7 @@ class SelectableRewardBase(ViewImpl):
     __slots__ = ('__selectedTab', '__tabs', '__selectableRewards', '__cart', '_packer')
     _helper = SelectableRewardManager
     _packer = getDefaultBonusPacker()
+    __REWARD_EXTRA_ENDING = '_gift'
 
     def __init__(self, layoutID, selectableRewards, model=None):
         settings = ViewSettings(layoutID)
@@ -279,7 +280,7 @@ class SelectableRewardBase(ViewImpl):
 
     def __processTabs(self):
         for reward in self.__selectableRewards:
-            tabType = reward.getType()
+            tabType = self.__getValidTabType(reward.getType())
             if self.__tabs.get(tabType) is None:
                 self.__tabs[tabType] = {}
             tabContent = self.__tabs[tabType]
@@ -293,10 +294,13 @@ class SelectableRewardBase(ViewImpl):
 
         return
 
+    def __getValidTabType(self, tabType):
+        return tabType[:-len(self.__REWARD_EXTRA_ENDING)] if tabType.endswith(self.__REWARD_EXTRA_ENDING) else tabType
+
     def __processRewards(self):
         for selectableReward in self.__selectableRewards:
             offer = self._helper.getBonusOptions(selectableReward)
-            currentTab = self.__tabs[selectableReward.getType()]
+            currentTab = self.__tabs[self.__getValidTabType(selectableReward.getType())]
             for giftID, gift in offer.iteritems():
                 if currentTab.get('rewards') is None:
                     currentTab['rewards'] = {}

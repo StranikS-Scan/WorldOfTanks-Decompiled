@@ -306,3 +306,7 @@ class ThermalVisionParams(object):
             reprItems.append('{}={}'.format(item, getattr(self, item, None)))
 
         return ', '.join(reprItems)
+
+    @staticmethod
+    def makeCopy(other):
+        return ThermalVisionParams(initialReloadTime=other.initialReloadTime, reloadTime=other.reloadTime, duration=other.duration, hSectorAngle=math.degrees(other.hSectorAngle), vSectorAngle=math.degrees(other.vSectorAngle), distance=other.distance, timeToObserve=other.timeToObserve, timeInObservation=other.timeInObservation, useCount=other.useCount)

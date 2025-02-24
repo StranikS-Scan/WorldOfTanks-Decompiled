@@ -1,7 +1,7 @@
 <inscriptions_special.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
   <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:czech0>	usa	</xmlns:czech0>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
@@ -9,6 +9,8 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
@@ -5178,6 +5180,121 @@
       <type>	inscription	</type>
       <userString>	#vehicle_customization:BattleBloggers_Inscription_04_2025/name	</userString>
       <description>	#vehicle_customization:BattleBloggers_Inscription_04_2025/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Rush_BearThunderstorm_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31287	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31288	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_02_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31289	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_03_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31290	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_04_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_04_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_04_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31291	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_05_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_05_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_05_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31292	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_06_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_06_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_06_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31293	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_07_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_07_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_07_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31294	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/Rush_BearThunderstorm_Inscription_08_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_Inscription_08_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_Inscription_08_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <tags>	styleOnly hiddenInUI	</tags>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+  </itemGroup>
+  <itemGroup>
+    <name>	BattlePass_S16_2025	</name>
+    <userString>	#vehicle_customization:inscription/other	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <decal>
+      <id>	31310	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BattlePass_S16_Inscription_01_2025.dds	</texture>
+      <tags>	hiddenInUI styleOnly	</tags>
+      <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+      <type>	inscription	</type>
+      <userString>	#vehicle_customization:BattlePass_S16_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattlePass_S16_Inscription_02_2025/description	</description>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	COSM_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31285	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/COSM_Inscription_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_Inscription_01_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_Inscription_01_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+    <decal>
+      <id>	31286	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/COSM_Inscription_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_Inscription_02_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_Inscription_02_2025/description	</description>
+      <type>	inscription	</type>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	WebEvent_Inscription_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <decal>
+      <id>	31320	</id>
+      <userString>	#vehicle_customization:WebEvent_Inscription_2025/name	</userString>
+      <description>	#vehicle_customization:WebEvent_Inscription_2025/description	</description>
+      <type>	inscription	</type>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/WebEvent_Inscription_2025.dds	</texture>
     </decal>
   </itemGroup>
 </inscriptions_special.xml>

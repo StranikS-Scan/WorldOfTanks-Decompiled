@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/indicator_items/base.py
 from constants import BigWorld
+from gui.Scaleform.daapi.view.battle.shared.indicator_items.indicators_storage import g_indicatorsStorage
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.daapi.view.meta.CommonIndicatorMeta import CommonIndicatorMeta
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID, VEHICLE_VIEW_STATE
@@ -9,11 +10,11 @@ from helpers.events_handler import EventsHandler
 
 class BaseIndicator(CommonIndicatorMeta, EventsHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __slots__ = ('__isAllowedByContext', '__isEnabled')
 
-    def __init__(self, componentName):
+    def __init__(self):
         super(BaseIndicator, self).__init__()
         self.__isAllowedByContext = True
-        self.__componentName = componentName
         self.__isEnabled = False
 
     @property
@@ -27,14 +28,20 @@ class BaseIndicator(CommonIndicatorMeta, EventsHandler):
     def isValidVehicle(self, vehicle):
         raise NotImplementedError
 
+    @staticmethod
+    def componentName():
+        raise NotImplementedError
+
     def _populate(self):
         super(BaseIndicator, self)._populate()
-        self.__updateIndicatorOwner(self.attachedVehicle)
+        g_indicatorsStorage.add(self.componentName(), self)
+        self.__onVehicleControlling(self.attachedVehicle)
         self._subscribe()
         self.__updateVisibility()
 
     def _dispose(self):
         self._unsubscribe()
+        g_indicatorsStorage.pop(self.componentName())
         super(BaseIndicator, self)._dispose()
 
     def _getEvents(self):
@@ -43,6 +50,10 @@ class BaseIndicator(CommonIndicatorMeta, EventsHandler):
         result += self.__getComp7Events()
         result += self.__getVehicleStateEvents()
         return result
+
+    def _setVisible(self, state):
+        self.__isEnabled = state
+        self.__updateVisibility()
 
     def __getCrosshairEvents(self):
         crosshairCtrl = self.sessionProvider.shared.crosshair
@@ -69,7 +80,11 @@ class BaseIndicator(CommonIndicatorMeta, EventsHandler):
         return
 
     def __onVehicleControlling(self, vehicle):
-        self.__updateIndicatorOwner(vehicle)
+        if vehicle is None:
+            return
+        else:
+            self._setVisible(self.isValidVehicle(vehicle))
+            return
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.DESTROYED:
@@ -77,9 +92,6 @@ class BaseIndicator(CommonIndicatorMeta, EventsHandler):
             return
         if state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
             self.__updateDestroyed(value)
-            return
-        if state == VEHICLE_VIEW_STATE.AUTO_ROTATION:
-            self.__updateVisibility()
             return
 
     def __updateDestroyed(self, _):
@@ -95,22 +107,5 @@ class BaseIndicator(CommonIndicatorMeta, EventsHandler):
         else:
             self.__updateVisibility()
 
-    def _setVisible(self, state):
-        self.__isEnabled = state
-        self.__updateVisibility()
-
     def __updateVisibility(self):
         self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
-
-    def __updateIndicatorOwner(self, vehicle):
-        if vehicle is None:
-            return
-        elif not self.isValidVehicle(vehicle):
-            self._setVisible(False)
-            return
-        else:
-            self._setVisible(True)
-            component = vehicle.dynamicComponents.get(self.__componentName)
-            if component is not None:
-                component.setIndicator(self)
-            return

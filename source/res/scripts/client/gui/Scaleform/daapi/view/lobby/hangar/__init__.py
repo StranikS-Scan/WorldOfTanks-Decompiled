@@ -30,7 +30,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.SwitchModePanel import SwitchModePanel
     from gui.Scaleform.daapi.view.lobby.hangar.VehicleParameters import VehicleParameters
     from gui.Scaleform.daapi.view.common.filter_popover import TankCarouselFilterPopover, BattlePassCarouselFilterPopover, BattleRoyaleCarouselFilterPopover
-    from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel, RankedTankCarousel, EpicBattleTankCarousel, BattlePassTankCarousel, MapboxTankCarousel, Comp7TankCarousel, DebutBoxesTankCarousel, BobTankCarousel
+    from gui.Scaleform.daapi.view.lobby.hangar.carousels import TankCarousel, RankedTankCarousel, EpicBattleTankCarousel, BattlePassTankCarousel, MapboxTankCarousel, Comp7TankCarousel, DebutBoxesTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView, StrongholdAdsView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -69,8 +69,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.battle_royale_widget import BattleRoyaleHangarWidgetInject
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.stronghold_entry_point import StrongholdEntryPoint
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.early_access_entry_point import EarlyAccessEntryPoint
-    from gui.Scaleform.daapi.view.lobby.hangar.bob_entry_point import BobEntryPoint
-    from gui.impl.lobby.bob.bob_widget_view import BobWidgetComponent
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', WindowLayer.SUB_VIEW, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.STRONGHOLD_ADS, StrongholdAdsView, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.STRONGHOLD_ADS, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -93,7 +91,6 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL, MapboxTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.COMP7_TANK_CAROUSEL, Comp7TankCarousel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.BOB_TANK_CAROUSEL, BobTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RANKED_WIDGET, RankedBattlesHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK, AlertMessageBlock, ScopeTemplates.DEFAULT_SCOPE),
@@ -121,9 +118,7 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.BATTLE_MATTERS_ENTRY_POINT, BattleMattersEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.PERSONAL_RESERVES_WIDGET_INJECT, PersonalReservesWidgetInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CAROUSEL_EVENT_ENTRY_HOLDER, CarouselEventEntryHolder, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.EARLY_ACCESS_SECONDARY_ENTRY_POINT, EarlyAccessEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.BOB_ENTRY_POINT, BobEntryPoint, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.BOB_HANGAR_WIDGET, BobWidgetComponent, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(HANGAR_ALIASES.EARLY_ACCESS_SECONDARY_ENTRY_POINT, EarlyAccessEntryPoint, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

@@ -24,10 +24,6 @@ def getComp7VOIPNotificationFormatter(actionMessage):
     return DisableVOIPMessageFormatter(actionMessage) if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING else EnableVOIPMessageFormatter(actionMessage)
 
 
-def getBobVOIPNotificationFormatter(actionMessage):
-    return DisableVOIPMessageFormatter(actionMessage) if actionMessage.getType() == ACTION_MESSAGE_TYPE.WARNING else EnableVOIPMessageFormatter(actionMessage)
-
-
 class BaseMessageFormatter(object):
 
     def __init__(self, actionMessage):

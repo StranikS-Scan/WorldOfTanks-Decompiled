@@ -15,7 +15,7 @@ from constants import SERVER_TICK_LENGTH, ARENA_PERIOD, EQUIPMENT_STAGES
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring_model import ScoringTypeEnum
 from cosmic_event.gui.shared.events import ArtifactScanningEvent
 from cosmic_event.settings import HINTS
-from cosmic_event_common.cosmic_constants import BATTLE_EVENT_TYPE, COSMIC_EVENT_ROCKET_BOOSTER, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_POWER_SHOT, COSMIC_EVENT_BLACKHOLE, COSMIC_EVENT_OVERCHARGE, COSMIC_EVENT_SHIELD
+from cosmic_event_common.cosmic_constants import BATTLE_EVENT_TYPE, COSMIC_EVENT_RAPIDSHELLING, COSMIC_EVENT_OVERCHARGE
 from cosmic_sound import CosmicBattleSounds, playVoiceover
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.battle_control import avatar_getter
@@ -30,7 +30,10 @@ from helpers import dependency, time_utils
 from skeletons.gui.battle_session import IBattleSessionProvider, IArenaDataProvider
 from cosmic_event.gui.battle_control.controllers.consumables.equipment_ctrl import ExtraEquipmentTags
 from cosmic_event.gui.impl.battle.cosmic_hud.tooltips.ability_tooltip import AbilityTooltip
+from cosmic_event.skeletons.battle_controller import ICosmicEventBattleController
 from debug_utils import LOG_ERROR
+from cosmic_event.gui.gui_constants import ABILITY_TYPE_BY_EQUIP_NAME
+from cosmic_event.cosmic_constants import COSMIC_VEHICLES_ROVER_ENUM
 UPDATE_TICK_LENGTH = SERVER_TICK_LENGTH
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
@@ -52,13 +55,16 @@ SCORE_EVENT_IDS = {BATTLE_EVENT_TYPE.COSMIC_SHOT: ScoringTypeEnum.SHOT,
  BATTLE_EVENT_TYPE.COSMIC_PICKUP_ABILITY: ScoringTypeEnum.PICKUP,
  BATTLE_EVENT_TYPE.COSMIC_ARTIFACT_SCAN: ScoringTypeEnum.SCAN,
  BATTLE_EVENT_TYPE.COSMIC_KILL: ScoringTypeEnum.KILL,
- BATTLE_EVENT_TYPE.COSMIC_RAMMING: ScoringTypeEnum.RAM}
-_ABILITY_TYPE_BY_EQUIP_NAME = {COSMIC_EVENT_ROCKET_BOOSTER: Ability.ACCELERATION,
- COSMIC_EVENT_SHIELD: Ability.SHIELD,
- COSMIC_EVENT_RAPIDSHELLING: Ability.RAPID_SHELLING,
- COSMIC_EVENT_POWER_SHOT: Ability.POWER_SHOT,
- COSMIC_EVENT_BLACKHOLE: Ability.BLACK_HOLE,
- COSMIC_EVENT_OVERCHARGE: Ability.OVERCHARGE}
+ BATTLE_EVENT_TYPE.COSMIC_RAMMING: ScoringTypeEnum.RAM,
+ BATTLE_EVENT_TYPE.COSMIC_ASSIST: ScoringTypeEnum.ASSIST,
+ BATTLE_EVENT_TYPE.COSMIC_FIRST_BLOOD: ScoringTypeEnum.FIRSTBLOOD,
+ BATTLE_EVENT_TYPE.COSMIC_KILL_STREAK: ScoringTypeEnum.KILLSTREAK,
+ BATTLE_EVENT_TYPE.COSMIC_PICKUP_MASTER: ScoringTypeEnum.PICKUPMASTER,
+ BATTLE_EVENT_TYPE.COSMIC_REVENGE: ScoringTypeEnum.REVENGE,
+ BATTLE_EVENT_TYPE.COSMIC_BOOST_ME: ScoringTypeEnum.BOOSTME}
+SCORE_SPECIAL_EVENT_IDS = {BATTLE_EVENT_TYPE.COSMIC_PICKUP_ABILITY: ScoringTypeEnum.PICKUP,
+ BATTLE_EVENT_TYPE.COSMIC_ASSIST: ScoringTypeEnum.ASSIST,
+ BATTLE_EVENT_TYPE.COSMIC_BOOST_ME: ScoringTypeEnum.BOOSTME}
 _AMMO_START_IDX = 0
 _AMMO_COUNT = 1
 _EQUIPMENT_START_IDX = _AMMO_START_IDX + _AMMO_COUNT
@@ -81,8 +87,9 @@ def _getArenaScoreComponent():
 
 
 class CosmicHudView(ViewImpl):
-    __slots__ = ('__callbackDelayer', '_vehMarkersMan', '_currentGoal', '_respawnAnnouncement', '_scanningEvent', '_shootingAbilityCD', '_isShootingAbilityActive', '_markersCtrl', '_period')
+    __slots__ = ('__callbackDelayer', '_vehMarkersMan', '_currentGoal', '_respawnAnnouncement', '_scanningEvent', '_shootingAbilityCD', '_isShootingAbilityActive', '_markersCtrl', '_period', '__pickupAbilityCount')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    cosmicController = dependency.descriptor(ICosmicEventBattleController)
 
     def __init__(self):
         settings = ViewSettings(R.views.cosmic_event.battle.cosmic_hud.CosmicReactHudView(), ViewFlags.VIEW, CosmicHudViewModel())
@@ -96,6 +103,7 @@ class CosmicHudView(ViewImpl):
         self._shootingAbilityCD = None
         self._isShootingAbilityActive = False
         self._period = ARENA_PERIOD.IDLE
+        self.__pickupAbilityCount = 0
         return
 
     @property
@@ -130,8 +138,7 @@ class CosmicHudView(ViewImpl):
         playerVehicleInfo = arenaDP.getVehicleInfo()
         playerName = playerVehicleInfo.player.name
         self.viewModel.setPlayerName(playerName if playerName is not None else '')
-        totalScore = self.__getArenaScore()
-        self._updatePlayerListModel(totalScore)
+        self._updatePlayerListModel()
         self._currentGoal = AnnouncementGoal(HINTS.get(AnnouncementTypeEnum.AWAITINGPLAYERS.value), {})
         self.viewModel.setAnnouncementType(AnnouncementTypeEnum.AWAITINGPLAYERS)
         self.viewModel.setArenaPhase(ArenaPhaseEnum.PREBATTLE)
@@ -143,6 +150,7 @@ class CosmicHudView(ViewImpl):
             model.setKeyBind(self._getKeyString(i))
             abilitiesArray.addViewModel(model)
 
+        self._updateSelectedVehicle()
         _logger.info('HUD: onLoading')
         return
 
@@ -192,23 +200,39 @@ class CosmicHudView(ViewImpl):
             events.append((feedbackCtrl.onVehicleFeedbackReceived, self.__onVehicleFeedbackReceived))
         return events
 
-    def _updatePlayerListModel(self, totalScore):
+    def _updatePlayerListModel(self, totalScore=None):
+        revenges = self.__getArenaRevenges()
+        if totalScore is None:
+            totalScore = self.__getArenaScore()
         arenaDP = self.sessionProvider.getArenaDP()
         vehicles = arenaDP.getVehiclesInfoIterator()
-        scoreList = [ (totalScore.get(vInfo.vehicleID, 0), (vInfo.player.name, vInfo.player.clanAbbrev)) for vInfo in vehicles ]
+        scoreList = [ (totalScore.get(vInfo.vehicleID, 0), (vInfo.player.name, vInfo.player.clanAbbrev), vInfo.vehicleID) for vInfo in vehicles ]
         scoreList.sort(reverse=True)
+        playerVehicleID = BigWorld.player().playerVehicleID
+        revengeVehicleId = revenges.get(playerVehicleID)
         with self.viewModel.transaction() as model:
             playerList = model.getPlayerList()
             playerList.clear()
             playerList.reserve(len(scoreList))
             for scoreItem in scoreList:
+                vehicleId = scoreItem[2]
                 model = PlayerRecordModel()
                 model.setName(scoreItem[1][0] if scoreItem[1] else '')
                 model.setClanAbbrev(scoreItem[1][1] if scoreItem[1] else '')
                 model.setScore(scoreItem[0])
+                vehicle = BigWorld.entity(vehicleId)
+                if vehicle is not None:
+                    name = vehicle.typeDescriptor.name
+                    model.setVehicle(COSMIC_VEHICLES_ROVER_ENUM.get(name, COSMIC_VEHICLES_ROVER_ENUM['default']))
+                model.setRevenge(revengeVehicleId == vehicleId)
                 playerList.addViewModel(model)
 
             playerList.invalidate()
+        return
+
+    def _updateSelectedVehicle(self):
+        with self.viewModel.transaction() as model:
+            model.setSelectedVehicleID(self.cosmicController.selectedVehicleID)
 
     def __getPlayerPositionInRankedTable(self):
         totalScore = self.__getArenaScore()
@@ -222,17 +246,6 @@ class CosmicHudView(ViewImpl):
                 return index
 
         LOG_ERROR('[COSMIC] Incorrect player position in a ranked table')
-
-    def __tryPlayCheerupVoiceForFirstPhase(self):
-        if self._period != ARENA_PERIOD.BATTLE:
-            return time_utils.ONE_SECOND
-        periodCtrl = self.sessionProvider.shared.arenaPeriod
-        remainingTime = periodCtrl.getEndTime() - BigWorld.serverTime()
-        if remainingTime <= _TIME_FOR_FIRST_PHASE:
-            playerPosInRankedTable = self.__getPlayerPositionInRankedTable()
-            CosmicBattleSounds.playCheerupVoiceForFirstPhase(playerPosInRankedTable)
-            return _DO_ONCE
-        return time_utils.ONE_SECOND
 
     def __tryPlayCheerupVoiceForSecondPhase(self):
         if self._period != ARENA_PERIOD.BATTLE:
@@ -300,11 +313,13 @@ class CosmicHudView(ViewImpl):
         self._period = period
 
     def showHint(self, hint, data=None):
-        if self._currentGoal is not None and self._currentGoal.type in [AnnouncementTypeEnum.SCANNING, AnnouncementTypeEnum.SCANAVAILABLE, AnnouncementTypeEnum.SCANNING] and not self._currentGoal.ended:
+        if self._currentGoal is not None and self._currentGoal.type in [AnnouncementTypeEnum.SCANNING, AnnouncementTypeEnum.SCANAVAILABLE, AnnouncementTypeEnum.FINALSCANAVAILABLE] and not self._currentGoal.ended:
             _logger.warning('Tried to show hint while scanning event is in progress.')
             return
         else:
             self._currentGoal = getAnnouncementType(hint, data)
+            if self._currentGoal.type is AnnouncementTypeEnum.PREPARETOSCANFINAL:
+                playVoiceover(CosmicBattleSounds.ScanningZone.SCANNING_ZONE_FINAL_PREPARING)
             return
 
     def __startPeriodTimer(self, period):
@@ -316,15 +331,12 @@ class CosmicHudView(ViewImpl):
         if period == ARENA_PERIOD.BATTLE:
             periodCtrl = self.sessionProvider.shared.arenaPeriod
             remainingTime = periodCtrl.getEndTime() - BigWorld.serverTime()
-            if remainingTime > _TIME_FOR_FIRST_PHASE:
-                cd.delayCallback(time_utils.ONE_SECOND, self.__tryPlayCheerupVoiceForFirstPhase)
             if remainingTime > _TIME_FOR_SECOND_PHASE:
                 cd.delayCallback(time_utils.ONE_SECOND, self.__tryPlayCheerupVoiceForSecondPhase)
 
     def __stopPeriodTimer(self, period):
         if period == ARENA_PERIOD.BATTLE:
             self.__callbackDelayer.stopCallback(self.__onSecond)
-            self.__callbackDelayer.stopCallback(self.__tryPlayCheerupVoiceForFirstPhase)
             self.__callbackDelayer.stopCallback(self.__tryPlayCheerupVoiceForSecondPhase)
 
     def __stopCallbackDelayer(self):
@@ -335,6 +347,12 @@ class CosmicHudView(ViewImpl):
         with aimModel.transaction() as model:
             model.setPosx(posx)
             model.setPosy(posy)
+
+    def _onKillStreakChanged(self, killStreak):
+        CosmicBattleSounds.playKillStreak(killStreak)
+        aimModel = self.viewModel.aim
+        with aimModel.transaction() as model:
+            model.setKillStreak(killStreak)
 
     def _onShellsAdded(self, intCD, descriptor, *args):
         _logger.debug('Shell added: %s, %s', str(intCD), descriptor)
@@ -437,7 +455,7 @@ class CosmicHudView(ViewImpl):
 
             def addEquipment(model):
                 model.setReloadTime(item.getTotalTime())
-                model.setAbility(_ABILITY_TYPE_BY_EQUIP_NAME[equipmentName])
+                model.setAbility(ABILITY_TYPE_BY_EQUIP_NAME[equipmentName])
                 model.setReloadTimeLeft(0)
                 model.setIsActive(False)
 
@@ -470,7 +488,7 @@ class CosmicHudView(ViewImpl):
             self._isShootingAbilityActive = False
             abilityModel = self.viewModel.getAbilities()[_AMMO_START_IDX]
             abilityModel.setIsEnabled(True)
-        abilityType = _ABILITY_TYPE_BY_EQUIP_NAME[item.getDescriptor().name]
+        abilityType = ABILITY_TYPE_BY_EQUIP_NAME[item.getDescriptor().name]
         abilityArray = self.viewModel.getAbilities()
         for model in reversed(abilityArray):
             if model.getAbility() == abilityType:
@@ -532,6 +550,11 @@ class CosmicHudView(ViewImpl):
         arenScoreComp = _getArenaScoreComponent()
         return {} if arenScoreComp is None else arenScoreComp.totalScore
 
+    @staticmethod
+    def __getArenaRevenges():
+        arenScoreComp = _getArenaScoreComponent()
+        return {} if arenScoreComp is None else arenScoreComp.revenges
+
     def __onVehicleDeployed(self):
         self._respawnAnnouncement = None
         with self.viewModel.transaction() as model:
@@ -548,11 +571,13 @@ class CosmicHudView(ViewImpl):
         if state == VEHICLE_VIEW_STATE.DESTROY_TIMER:
             self.viewModel.setVehicleOverturned(avatar_getter.isVehicleOverturned())
         elif state == VEHICLE_VIEW_STATE.DEATH_INFO:
+            self.__pickupAbilityCount = 0
             self._respawnAnnouncement = _AnnouncementRespawn()
             with self.viewModel.transaction() as tx:
                 self._updateAnnouncement(tx)
         elif state == VEHICLE_VIEW_STATE.DESTROYED or state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
             self.viewModel.setIsRespawning(True)
+            self._onKillStreakChanged(0)
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
             self.viewModel.setIsRespawning(False)
 
@@ -568,6 +593,7 @@ class CosmicHudView(ViewImpl):
 
     def _onPlayerFeedbackReceived(self, events):
         newMessages = []
+        eventTypes = {event.getBattleEventType() for event in events}
         for event in events:
             eventType = event.getBattleEventType()
             if eventType in SCORE_EVENT_IDS:
@@ -575,12 +601,29 @@ class CosmicHudView(ViewImpl):
                 messageModel.setType(SCORE_EVENT_IDS.get(eventType))
                 messageModel.setMarsPoints(event.getExtra())
                 newMessages.append(messageModel)
-                CosmicBattleSounds.playScoreNotification()
+                if eventType in SCORE_SPECIAL_EVENT_IDS:
+                    if eventType == BATTLE_EVENT_TYPE.COSMIC_PICKUP_ABILITY:
+                        self.__pickupAbilityCount += 1
+                        if self.__pickupAbilityCount >= 3:
+                            CosmicBattleSounds.playSpecialHint()
+                        else:
+                            CosmicBattleSounds.playScoreNotification()
+                    else:
+                        CosmicBattleSounds.playSpecialHint()
+                else:
+                    CosmicBattleSounds.playScoreNotification()
                 if eventType == BATTLE_EVENT_TYPE.COSMIC_PICKUP_ABILITY:
                     CosmicBattleSounds.playAbilityPickup()
-                    playVoiceover(CosmicBattleSounds.ABILITY_PICK_UP_VOICE)
-                if eventType == BATTLE_EVENT_TYPE.COSMIC_KILL:
+                elif eventType == BATTLE_EVENT_TYPE.COSMIC_KILL:
+                    if BATTLE_EVENT_TYPE.COSMIC_REVENGE in eventTypes:
+                        continue
                     playVoiceover(CosmicBattleSounds.ENEMY_KILLED_VOICE)
+                elif eventType == BATTLE_EVENT_TYPE.COSMIC_FIRST_BLOOD:
+                    playVoiceover(CosmicBattleSounds.FIRST_BLOOD)
+                elif eventType == BATTLE_EVENT_TYPE.COSMIC_REVENGE:
+                    playVoiceover(CosmicBattleSounds.REVENGE)
+            if eventType == BATTLE_EVENT_TYPE.MAX_KILL_SERIES:
+                self._onKillStreakChanged(event.getExtra())
 
         with self.viewModel.transaction() as model:
             messages = model.getMessages()

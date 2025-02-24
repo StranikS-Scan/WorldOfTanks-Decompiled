@@ -39,6 +39,7 @@ USER_SETTINGS_CATEGORY_NAMES = ('gui',
  'ambient',
  'music',
  'music_hangar')
+VIDEO_RTPC_EVENT = 'RTPC_ext_video_volume'
 
 class CREW_GENDER_SWITCHES(object):
     GROUP = 'SWITCH_ext_vo_gender'
@@ -445,6 +446,10 @@ class SoundGroups(object):
     def getMaxVolumeFromCategories(self, categoryNames):
         return max((self.__volumeByCategory.get(key, 0.0) for key in categoryNames))
 
+    def updateVideoVolume(self):
+        volumeLevel = self.getMaxVolumeFromCategories(USER_SETTINGS_CATEGORY_NAMES)
+        self.setRTPC(VIDEO_RTPC_EVENT, volumeLevel)
+
     def savePreferences(self):
         ds = Settings.g_instance.userPrefs[Settings.KEY_SOUND_PREFERENCES]
         ds.writeFloat('masterVolume', self.__masterVolume)
@@ -481,6 +486,7 @@ class SoundGroups(object):
                 newVolume = 0.0
             self.setVolume(categoryName, newVolume, updatePrefs=False)
 
+        self.updateVideoVolume()
         return True
 
     def muffleWWISEVolume(self):
@@ -674,4 +680,9 @@ class SoundGroups(object):
         WWISE.WW_setState(stateName, stateValue)
 
     def setRTCPGlobal(self, group, value):
+        if DEBUG_TRACE_SOUND is True:
+            LOG_DEBUG('SOUND: setRTCPGlobal', group, value)
+        if DEBUG_TRACE_STACK is True:
+            import traceback
+            traceback.print_stack()
         WWISE.WW_setRTCPGlobal(group, value)

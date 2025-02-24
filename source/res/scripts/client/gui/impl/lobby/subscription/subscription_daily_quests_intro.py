@@ -7,7 +7,6 @@ from gui.impl.gen.view_models.views.lobby.subscription.subscription_daily_quests
 from gui.impl.pub import ViewImpl, WindowImpl
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SUBSCRIPTION_DAILY_QUESTS_INTRO_SHOWN
-from gui.battle_pass.battle_pass_helpers import showBattlePassDailyQuestsIntro
 
 class SubscriptionDailyQuestsIntro(ViewImpl):
     __slots__ = ()
@@ -31,7 +30,6 @@ class SubscriptionDailyQuestsIntro(ViewImpl):
 
     def _onClose(self):
         self.destroyWindow()
-        showBattlePassDailyQuestsIntro()
 
 
 class SubscriptionDailyQuestsIntroWindow(WindowImpl):

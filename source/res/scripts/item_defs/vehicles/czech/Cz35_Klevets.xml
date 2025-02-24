@@ -11,7 +11,7 @@
   <postProgressionTree>	role_ATSPG_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	46	</forward>
+    <forward>	40	</forward>
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
@@ -1916,13 +1916,13 @@
             <gun>	70	</gun>
           </armor>
           <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <reloadTime>	17	</reloadTime>
+          <reloadTime>	19.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 8 0.34 8 0.40 2 0.60 2 0.66 8 1 8	</maxPitch>
@@ -2488,8 +2488,8 @@
     <detailed>
       <engines>
         <Praga_AXK_X16>
-          <smplEnginePower>	1000	</smplEnginePower>
-          <smplFwMaxSpeed>	46	</smplFwMaxSpeed>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </Praga_AXK_X16>
       </engines>
       <chassis>

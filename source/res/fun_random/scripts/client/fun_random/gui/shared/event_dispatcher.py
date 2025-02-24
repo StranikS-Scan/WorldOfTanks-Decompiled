@@ -26,9 +26,12 @@ def showFunRandomInfoPage(infoPageUrl):
 def showFunRandomSubSelector(uiLoader=IGuiLoader):
     from fun_random.gui.impl.lobby.mode_selector.fun_sub_selector_view import FunModeSubSelectorView
     g_eventBus.handleEvent(ModeSubSelectorEvent(ModeSubSelectorEvent.CHANGE_VISIBILITY, ctx={'visible': True}))
-    contentResId = R.views.lobby.mode_selector.ModeSelectorView()
-    mainSelectorWindow = uiLoader.windowsManager.getViewByLayoutID(contentResId).getParentWindow()
-    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.fun_random.lobby.feature.FunRandomModeSubSelector(), FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=mainSelectorWindow)), scope=EVENT_BUS_SCOPE.LOBBY)
+    modeSelectorResId = R.views.lobby.mode_selector.ModeSelectorView()
+    subSelectorResId = R.views.fun_random.lobby.feature.FunRandomModeSubSelector()
+    if uiLoader.windowsManager.getViewByLayoutID(subSelectorResId) is None:
+        mainSelectorWindow = uiLoader.windowsManager.getViewByLayoutID(modeSelectorResId).getParentWindow()
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(subSelectorResId, FunModeSubSelectorView, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, parent=mainSelectorWindow)), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 @dependency.replace_none_kwargs(uiLoader=IGuiLoader)
@@ -49,3 +52,8 @@ def showFunRandomModeSubSelectorWindow(uiLoader=None):
     else:
         showFunRandomSubSelector()
     return
+
+
+def showFunRandomMapsView():
+    from fun_random.gui.impl.lobby.feature.fun_random_maps_view import FunRandomMapsView
+    g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.fun_random.lobby.feature.FunRandomMapsView(), FunRandomMapsView, ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)

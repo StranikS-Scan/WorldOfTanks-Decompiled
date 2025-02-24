@@ -59,8 +59,8 @@ class ARENAS(object):
     TYPE_COMP7_2_SHORT_DESCRIPTION = '#arenas:type/comp7_2/short_description'
     TYPE_COMP7_1_TIMER_MESSAGE = '#arenas:type/comp7_1/timer_message'
     TYPE_COMP7_2_TIMER_MESSAGE = '#arenas:type/comp7_2/timer_message'
-    TYPE_BOB_NAME = '#arenas:type/bob/name'
-    TYPE_BOB_DESCRIPTION = '#arenas:type/bob/description'
+    TYPE_DOMINATION3_NAME = '#arenas:type/domination3/name'
+    TYPE_DOMINATION3_DESCRIPTION = '#arenas:type/domination3/description'
     C_01_KARELIA_NAME = '#arenas:01_karelia/name'
     C_01_KARELIA_DESCRIPTION = '#arenas:01_karelia/description'
     C_02_MALINOVKA_NAME = '#arenas:02_malinovka/name'
@@ -196,6 +196,8 @@ class ARENAS(object):
     QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
     C_503_KALININGRAD_NAME = '#arenas:503_kaliningrad/name'
     C_503_KALININGRAD_DESCRIPTION = '#arenas:503_kaliningrad/description'
+    H08_MT_HANGAR_NAME = '#arenas:h08_mt_hangar/name'
+    H08_MT_HANGAR_DESCRIPTION = '#arenas:h08_mt_hangar/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -252,8 +254,8 @@ class ARENAS(object):
      TYPE_COMP7_2_SHORT_DESCRIPTION,
      TYPE_COMP7_1_TIMER_MESSAGE,
      TYPE_COMP7_2_TIMER_MESSAGE,
-     TYPE_BOB_NAME,
-     TYPE_BOB_DESCRIPTION,
+     TYPE_DOMINATION3_NAME,
+     TYPE_DOMINATION3_DESCRIPTION,
      C_01_KARELIA_NAME,
      C_01_KARELIA_DESCRIPTION,
      C_02_MALINOVKA_NAME,
@@ -388,7 +390,9 @@ class ARENAS(object):
      QA_CONTENT_01_NAME,
      QA_CONTENT_01_DESCRIPTION,
      C_503_KALININGRAD_NAME,
-     C_503_KALININGRAD_DESCRIPTION)
+     C_503_KALININGRAD_DESCRIPTION,
+     H08_MT_HANGAR_NAME,
+     H08_MT_HANGAR_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

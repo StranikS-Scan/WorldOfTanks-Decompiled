@@ -55,12 +55,13 @@ class DefaultHangarSpaceConfig(object):
 
 class SceneSpaceConfig(object):
 
-    def __init__(self, spaceId=None, waitingMessage=None, waitingBackground=None, spaceIdOverride=None, visibilityMask=None):
+    def __init__(self, spaceId=None, waitingMessage=None, waitingBackground=None, spaceIdOverride=None, visibilityMask=None, customEventMode=False):
         self._waitingMessage = waitingMessage
         self._waitingBackground = waitingBackground
         self._spaceId = spaceId
         self._spaceIdOverride = spaceIdOverride
         self._visibilityMask = visibilityMask
+        self._customEventMode = customEventMode
 
     @property
     def waitingMessage(self):
@@ -72,6 +73,9 @@ class SceneSpaceConfig(object):
 
     def getVisibilityMask(self):
         return self._visibilityMask if self._visibilityMask is not None else getHangarFullVisibilityMask(self.getHangarSpaceId())
+
+    def isCustomEventMode(self):
+        return self._customEventMode
 
     def discardVisibilityMaskOverride(self):
         self._visibilityMask = None
@@ -100,6 +104,7 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self.onCheckSceneChange = Event.Event()
         self.onSpaceUpdated = Event.Event()
         self.hangarSpaceUpdated = False
+        self.customEventModeEnabled = False
         self.currentSceneName = DEFAULT_HANGAR_SCENE
         self._defaultHangars = {}
         self._sceneSpaceParams = {}
@@ -128,6 +133,9 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
     def hangarSpaceUpdate(self, sceneName):
         if sceneName not in self._sceneSpaceParams:
             _logger.error('There is no space config for the key %s.', sceneName)
+        if self.customEventModeEnabled and not self._sceneSpaceParams[sceneName].isCustomEventMode():
+            _logger.debug('Custom event mode is enabled. Skipping hangar space update.')
+            return
         if self.hangarSpaceUpdated and self.currentSceneName != sceneName:
             _logger.error('There is more than one component that requires space change is active!')
             return
@@ -198,7 +206,8 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
                 spaceId = item.readString('space')
                 waitingMessage = item.readString('waitingMessage') or None
                 waitingBackground = item.readString('waitingBackground') or None
-                self._sceneSpaceParams[name] = SceneSpaceConfig(spaceId, waitingMessage, waitingBackground)
+                customEventMode = item.readBool('customEventMode')
+                self._sceneSpaceParams[name] = SceneSpaceConfig(spaceId, waitingMessage, waitingBackground, customEventMode=customEventMode)
 
         return
 

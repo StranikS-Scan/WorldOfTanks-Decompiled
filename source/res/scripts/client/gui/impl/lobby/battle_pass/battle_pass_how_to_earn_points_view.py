@@ -4,6 +4,7 @@ import itertools
 import logging
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import ViewSettings, WindowFlags
+from gui.battle_pass.battle_pass_constants import SUPPORTED_ARENA_BONUS_TYPES, HAS_DAILY_ARENA_BONUS_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_how_to_earn_points_view_model import BattlePassHowToEarnPointsViewModel
@@ -20,11 +21,6 @@ from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
-SUPPORTED_ARENA_BONUS_TYPES = [ARENA_BONUS_TYPE.REGULAR,
- ARENA_BONUS_TYPE.COMP7,
- ARENA_BONUS_TYPE.EPIC_BATTLE,
- ARENA_BONUS_TYPE.RANKED,
- ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO]
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
 
@@ -78,7 +74,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     def __createBattleRoyalGameModel(self):
         viewModel = self.__createViewHeader(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
         self.__createBattleRoyalTable(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, viewModel)
-        self.__createBattleRoyalCardsModel(viewModel)
+        self.__createLimitCard(viewModel)
         return viewModel
 
     @staticmethod
@@ -98,13 +94,13 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             if pointsSolo == 0:
                 cellLabelSolo, cellSoloPoints = self.__createEmptyCell()
             else:
-                cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo, viewModel)
+                cellLabelSolo, previousLevelSolo = self.__createCellName(gameType, pointsSolo, previousLevelSolo)
                 cellSoloPoints.setPoints(pointsSolo.points)
             cellSquadPoints = GameModeCellModel()
             if pointsSquad == 0:
                 cellLabelSquad, cellSquadPoints = self.__createEmptyCell()
             else:
-                cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad, viewModel)
+                cellLabelSquad, previousLevelSquad = self.__createCellName(gameType, pointsSquad, previousLevelSquad)
                 cellSquadPoints.setPoints(pointsSquad.points)
             tableRow = GameModeRowsModel()
             tableRow.getCell().addViewModel(cellLabelSolo)
@@ -114,7 +110,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             viewModel.getTableRows().addViewModel(tableRow)
 
     @staticmethod
-    def __createCellName(gameType, points, previousLevel, viewModel):
+    def __createCellName(gameType, points, previousLevel):
         cell = GameModeCellModel()
         if points.label - previousLevel > 0:
             cell.setText(backport.text(_rBattlePass.howToEarnPoints.rangeLevels.num(gameType)(), startLevel=previousLevel, endLevel=points.label))
@@ -186,11 +182,20 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             self.__createEpicBattleCardsModel(viewModel)
         elif gameType == ARENA_BONUS_TYPE.COMP7:
             self.__createComp7CardsModel(gameType, viewModel)
+        elif gameType == ARENA_BONUS_TYPE.SORTIE_2:
+            self.__createFortBattlesCardsModel(viewModel)
+        elif gameType == ARENA_BONUS_TYPE.FORT_BATTLE_2:
+            self.__createFortBattlesCardsModel(viewModel)
+        elif gameType == ARENA_BONUS_TYPE.VERSUS_AI:
+            self.__createVersusAiCardsModel(viewModel)
+
+    def __createFortBattlesCardsModel(self, viewModel):
+        self.__createLimitCard(viewModel)
 
     def __createRankedCardsModel(self, viewModel, gameType):
         self.__createSpecialVehCard(viewModel, gameType)
         self.__createLimitCard(viewModel)
-        self.__createDailyCard(ARENA_BONUS_TYPE.REGULAR, viewModel)
+        self.__createDailyCard(gameType, viewModel)
 
     def __createEpicBattleCardsModel(self, viewModel):
         self.__createEpicBattlePointsCard(viewModel)
@@ -201,6 +206,13 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def __createRandomCardsModel(self, gameType, viewModel):
         self.__createSpecialVehCard(viewModel, ARENA_BONUS_TYPE.REGULAR)
+        self.__createLimitCard(viewModel)
+        self.__createDailyCard(gameType, viewModel)
+
+    def __createVersusAiCardsModel(self, viewModel):
+        self.__createLimitCard(viewModel)
+
+    def __createDefaultCardsModel(self, gameType, viewModel):
         self.__createLimitCard(viewModel)
         self.__createDailyCard(gameType, viewModel)
 
@@ -237,7 +249,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
             vehicle = self.__itemsCache.items.getItemByCD(specialTanksIntCD)
             pointsDiff = self.__battlePass.getPointsDiffForVehicle(specialTanksIntCD, gameMode=gameType)
             if vehicle is None or pointsDiff.bonus == 0:
-                _logger.warning('No vehicle or points data found for CD: %s', str(specialTanksIntCD))
+                _logger.info('No override vehicle or points data found for CD: %s', str(specialTanksIntCD))
                 continue
             item = VehicleItemModel()
             item.setVehicleType(vehicle.type)
@@ -259,7 +271,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def __onLinkClick(self, args):
         viewModel = args.get('viewId')
-        if int(viewModel) == ARENA_BONUS_TYPE.REGULAR:
+        if int(viewModel) in HAS_DAILY_ARENA_BONUS_TYPES:
             showDailyQuests(subTab=DailyTabs.QUESTS)
         self.destroyWindow()
 

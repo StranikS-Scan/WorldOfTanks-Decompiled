@@ -33,6 +33,9 @@
       <bank>
         <name>	ev_cosmic_vo_gameplay.bnk	</name>
       </bank>
+      <bank>
+        <name>	env_Mountain.bnk	</name>
+      </bank>
     </loadBanks>
     <events>
       <event>
@@ -141,6 +144,14 @@
       </event>
       <event>
         <name>	vo_target_unlocked	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	ev_cosmic_music_pickup	</name>
+        <mod>	ev_cosmic_silence	</mod>
+      </event>
+      <event>
+        <name>	ev_cosmic_music_object_inactive	</name>
         <mod>	ev_cosmic_silence	</mod>
       </event>
     </events>

@@ -8,10 +8,14 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model impor
 
 class ArenaBonusType(IntEnum):
     REGULAR = 1
+    SORTIE_2 = 20
+    FORT_BATTLE_2 = 21
     RANKED = 22
-    BATTLE_ROYALE_SOLO = 29
     EPIC_BATTLE = 27
+    BATTLE_ROYALE_SOLO = 29
+    BATTLE_ROYALE_SQUAD = 30
     COMP7 = 43
+    VERSUS_AI = 50
 
 
 class GameModeModel(ViewModel):

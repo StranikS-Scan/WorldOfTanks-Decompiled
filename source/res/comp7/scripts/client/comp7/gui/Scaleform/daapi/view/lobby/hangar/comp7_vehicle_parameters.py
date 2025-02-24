@@ -14,7 +14,7 @@ from skeletons.gui.shared import IItemsCache
 from CurrentVehicle import g_currentVehicle
 from comp7.gui.Scaleform.daapi.view.lobby.hangar.comp7_vehicle import g_comp7Vehicle
 
-def _vehicleHealthCalcDiff(value, originalValue):
+def _simpleValueDiff(value, originalValue):
     return value - originalValue
 
 
@@ -25,7 +25,8 @@ def _visionRadiusCalcDiff(value, originalValue):
 
 
 _SUPPORTED_MODIFIERS = {'visionRadius': ('circularVisionRadius', _visionRadiusCalcDiff),
- 'vehicleHealth': ('maxHealth', _vehicleHealthCalcDiff)}
+ 'vehicleHealth': ('maxHealth', _simpleValueDiff),
+ 'thermalVisionDistance': ('thermalVisionDistance', _simpleValueDiff)}
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, comp7Controller=None):
@@ -34,6 +35,8 @@ def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, co
         for _, modifier in modifiers:
             if modifier.gameplayImpact == 2 and modifier.param.name in _SUPPORTED_MODIFIERS:
                 paramName, calcDiff = _SUPPORTED_MODIFIERS.get(modifier.param.name)
+                if paramName not in modifiedParams or paramName not in originalParams:
+                    continue
                 section = penalties.get(paramName, [])
                 value = modifiedParams[paramName]
                 originalValue = originalParams[paramName]

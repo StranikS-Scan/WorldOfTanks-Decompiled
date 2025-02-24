@@ -1444,14 +1444,15 @@ class EquipmentsController(MethodsRules, IBattleController):
             return (result, error)
 
     def changeSettingByTag(self, tag, entityName=None, avatar=None):
-        if not avatar_getter.isVehicleAlive(avatar):
+        if not avatar_getter.isVehicleAlive(avatar) or not _DAMAGE_PANEL_EQUIPMENT.hasValue(tag):
             return (False, None)
         else:
-            result, error = True, None
-            for _, item in self._equipments.iteritems():
-                if tag in item.getTags() and _DAMAGE_PANEL_EQUIPMENT.hasValue(tag):
-                    result, error = self.__doChangeSetting(item, entityName, avatar)
-                    break
+            result, error = False, None
+            filteredItems = [ item for item in self._equipments.itervalues() if tag in item.getTags() ]
+            for item in filteredItems:
+                result, error = self.__doChangeSetting(item, entityName, avatar)
+                if result:
+                    return (True, error)
 
             return (result, error)
 

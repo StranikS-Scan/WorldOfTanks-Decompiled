@@ -3,9 +3,9 @@
 from frameworks.wulf import ViewModel
 
 class BattlePassVehicleAwardViewModel(ViewModel):
-    __slots__ = ()
+    __slots__ = ('onClose',)
 
-    def __init__(self, properties=12, commands=0):
+    def __init__(self, properties=13, commands=1):
         super(BattlePassVehicleAwardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getVehicleLevelPoints(self):
@@ -38,47 +38,53 @@ class BattlePassVehicleAwardViewModel(ViewModel):
     def setVehicleLevel(self, value):
         self._setNumber(4, value)
 
+    def getLimitRefreshTimeLeft(self):
+        return self._getNumber(5)
+
+    def setLimitRefreshTimeLeft(self, value):
+        self._setNumber(5, value)
+
     def getVehicleName(self):
-        return self._getString(5)
-
-    def setVehicleName(self, value):
-        self._setString(5, value)
-
-    def getTechName(self):
         return self._getString(6)
 
-    def setTechName(self, value):
+    def setVehicleName(self, value):
         self._setString(6, value)
 
+    def getTechName(self):
+        return self._getString(7)
+
+    def setTechName(self, value):
+        self._setString(7, value)
+
     def getIsPremiumVehicle(self):
-        return self._getBool(7)
-
-    def setIsPremiumVehicle(self, value):
-        self._setBool(7, value)
-
-    def getIsEliteVehicle(self):
         return self._getBool(8)
 
-    def setIsEliteVehicle(self, value):
+    def setIsPremiumVehicle(self, value):
         self._setBool(8, value)
 
-    def getIsPostProgression(self):
+    def getIsEliteVehicle(self):
         return self._getBool(9)
 
-    def setIsPostProgression(self, value):
+    def setIsEliteVehicle(self, value):
         self._setBool(9, value)
 
+    def getIsPostProgression(self):
+        return self._getBool(10)
+
+    def setIsPostProgression(self, value):
+        self._setBool(10, value)
+
     def getChapterID(self):
-        return self._getNumber(10)
+        return self._getNumber(11)
 
     def setChapterID(self, value):
-        self._setNumber(10, value)
+        self._setNumber(11, value)
 
     def getIsBattlePassPurchased(self):
-        return self._getBool(11)
+        return self._getBool(12)
 
     def setIsBattlePassPurchased(self, value):
-        self._setBool(11, value)
+        self._setBool(12, value)
 
     def _initialize(self):
         super(BattlePassVehicleAwardViewModel, self)._initialize()
@@ -87,6 +93,7 @@ class BattlePassVehicleAwardViewModel(ViewModel):
         self._addStringProperty('vehicleType', '')
         self._addStringProperty('vehicleNation', '')
         self._addNumberProperty('vehicleLevel', 0)
+        self._addNumberProperty('limitRefreshTimeLeft', 0)
         self._addStringProperty('vehicleName', '')
         self._addStringProperty('techName', '')
         self._addBoolProperty('isPremiumVehicle', False)
@@ -94,3 +101,4 @@ class BattlePassVehicleAwardViewModel(ViewModel):
         self._addBoolProperty('isPostProgression', False)
         self._addNumberProperty('chapterID', 0)
         self._addBoolProperty('isBattlePassPurchased', False)
+        self.onClose = self._addCommand('onClose')

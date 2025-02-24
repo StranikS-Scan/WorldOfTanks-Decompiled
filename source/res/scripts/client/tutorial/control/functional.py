@@ -3,6 +3,7 @@
 import re
 import Event
 from helpers import dependency
+from skeletons.gui.app_loader import IAppLoader
 from tutorial.control import TutorialProxyHolder, game_vars
 from tutorial.control.context import GlobalStorage
 from tutorial.data import chapter
@@ -59,11 +60,16 @@ class FunctionalCurrentSceneCondition(FunctionalCondition):
 
 
 class FunctionalViewPresentCondition(FunctionalCondition):
+    __appLoader = dependency.descriptor(IAppLoader)
 
     def isConditionOk(self, condition):
         layer = condition.getLayer()
         viewAlias = condition.getViewAlias()
-        result = self._gui.isViewPresent(layer, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        app = self.__appLoader.getApp()
+        if app is not None and app.containerManager is not None:
+            result = app.containerManager.getView(layer, criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias}) is not None
+        else:
+            result = False
         return result if condition.isPositiveState() else not result
 
 
@@ -178,7 +184,7 @@ class FunctionalServiceCondition(FunctionalCondition):
             if not hasattr(service, 'isEnabled'):
                 LOG_ERROR('Service does not implement isEnabled method!', service)
                 return False
-            result = service.isEnabled()
+            result = service.isEnabled() if callable(service.isEnabled) else service.isEnabled
             return result if condition.isPositiveState() else not result
 
 

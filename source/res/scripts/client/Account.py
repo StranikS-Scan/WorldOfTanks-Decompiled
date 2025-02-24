@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, client_bob
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -190,7 +190,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
         self.referralProgram = g_accountRepository.referralProgram
-        self.bob = g_accountRepository.bob
         self.paragons = g_accountRepository.paragons
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
@@ -223,7 +222,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.telecomRentals.setAccount(self)
         self.tradeIn.setAccount(self)
         self.referralProgram.setAccount(self)
-        self.bob.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
@@ -285,7 +283,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomePlayer()
         self.achievements20.onAccountBecomePlayer()
         self.referralProgram.onAccountBecomePlayer()
-        self.bob.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -333,7 +330,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomeNonPlayer()
         self.achievements20.onAccountBecomeNonPlayer()
         self.referralProgram.onAccountBecomeNonPlayer()
-        self.bob.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -360,7 +356,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.setAccount(None)
         self.achievements20.setAccount(None)
         self.referralProgram.setAccount(None)
-        self.bob.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -809,14 +804,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.COMP7)
 
-    def enqueueBob(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_BOB, vehInvID, 0, 0)
-
-    def dequeueBob(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BOB, 0, 0, 0)
-
     def forceEpicDevStart(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_FORCE_EPIC_DEV_START, 0, 0, 0)
@@ -1264,7 +1251,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.resourceWell.synchronize(isFullSync, diff)
             self.achievements20.synchronize(isFullSync, diff)
             self.referralProgram.synchronize(isFullSync, diff)
-            self.bob.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
@@ -1520,7 +1506,6 @@ class _AccountRepository(object):
         self.resourceWell = ResourceWell(self.syncData, self.commandProxy)
         self.winback = Winback(self.commandProxy)
         self.achievements20 = Achievements20(self.syncData, self.commandProxy)
-        self.bob = client_bob.ClientBob(self.syncData)
         self.paragons = Paragons(self.commandProxy)
         self.tradeIn = TradeIn()
         self.giftSystem = GiftSystem(self.syncData, self.commandProxy)

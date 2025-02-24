@@ -7,9 +7,9 @@ from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progressi
 from fun_random.gui.impl.gen.view_models.views.lobby.common.fun_random_progression_state import FunRandomProgressionState
 
 class FunRandomProgressionViewModel(ViewModel):
-    __slots__ = ('onClose', 'onShowInfo')
+    __slots__ = ('onClose', 'onShowInfo', 'onViewSwitch')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=4, commands=3):
         super(FunRandomProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -52,3 +52,4 @@ class FunRandomProgressionViewModel(ViewModel):
         self._addStringProperty('assetsPointer', 'undefined')
         self.onClose = self._addCommand('onClose')
         self.onShowInfo = self._addCommand('onShowInfo')
+        self.onViewSwitch = self._addCommand('onViewSwitch')

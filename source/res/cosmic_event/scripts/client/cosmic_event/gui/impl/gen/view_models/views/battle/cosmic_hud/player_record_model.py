@@ -1,11 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: cosmic_event/scripts/client/cosmic_event/gui/impl/gen/view_models/views/battle/cosmic_hud/player_record_model.py
+from enum import IntEnum
 from frameworks.wulf import ViewModel
+
+class RoverEnum(IntEnum):
+    OLD = 1
+    NEW = 2
+
 
 class PlayerRecordModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(PlayerRecordModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -26,8 +32,22 @@ class PlayerRecordModel(ViewModel):
     def setScore(self, value):
         self._setNumber(2, value)
 
+    def getVehicle(self):
+        return RoverEnum(self._getNumber(3))
+
+    def setVehicle(self, value):
+        self._setNumber(3, value.value)
+
+    def getRevenge(self):
+        return self._getBool(4)
+
+    def setRevenge(self, value):
+        self._setBool(4, value)
+
     def _initialize(self):
         super(PlayerRecordModel, self)._initialize()
         self._addStringProperty('name', '')
         self._addStringProperty('clanAbbrev', '')
         self._addNumberProperty('score', 0)
+        self._addNumberProperty('vehicle', RoverEnum.OLD.value)
+        self._addBoolProperty('revenge', False)

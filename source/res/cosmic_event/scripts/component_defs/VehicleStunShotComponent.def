@@ -1,0 +1,18 @@
+<VehicleStunShotComponent.def>
+  <Properties>
+    <timeDebufFinish>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </timeDebufFinish>
+    <targetID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </targetID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	stunShotComponent	</DefaultKeyName>
+</VehicleStunShotComponent.def>

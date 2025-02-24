@@ -15,12 +15,13 @@ from tutorial.gui.Scaleform.hints.proxy import HintsProxy
 _logger = logging.getLogger(__name__)
 HINT_SHOWN_STATUS = 1
 _MAX_ACTIVE_HINTS = 1
-_DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
+_ONCE_ONLY_HINTS_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
+_DYNAMIC_HINTS_PATH = '{0:>s}/dynamic-hints.xml'.format(settings.DOC_DIRECTORY)
 
 class HintsManager(object):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
-    __slots__ = ('_data', '_gui', '__activeHints', '__postponedHints', '__hintsWithClientTriggers')
+    __slots__ = ('_data', '_gui', '_dynamicHintsData', '__activeHints', '__postponedHints', '__hintsWithClientTriggers')
 
     def __init__(self):
         super(HintsManager, self).__init__()
@@ -72,7 +73,9 @@ class HintsManager(object):
         _logger.debug('Hints are loading')
         shownHints = self.__settingsCore.serverSettings.getOnceOnlyHintsSettings()
         shownHints = [ key for key, value in shownHints.iteritems() if value == HINT_SHOWN_STATUS ]
-        self._data = HintsParser.parse(_DESCRIPTOR_PATH, shownHints)
+        self._data = HintsParser.parse(_ONCE_ONLY_HINTS_PATH, shownHints)
+        self._dynamicHintsData = HintsParser.parse(_DYNAMIC_HINTS_PATH, [])
+        self._data.getHints().update(self._dynamicHintsData.getHints())
 
     def __setTriggeredComponents(self):
         self.__hintsWithClientTriggers = ClientTriggers()
@@ -169,7 +172,7 @@ class HintsManager(object):
         else:
             hints = self._data.hintsForItem(itemID)
             for hint in hints:
-                if hint['hintID'] == hintID:
+                if hint['hintID'] == hintID and hint['itemID'] not in self._dynamicHintsData.getHints():
                     self.__stopSettingsListening()
                     self.__settingsCore.serverSettings.setOnceOnlyHintsSettings({hintID: HINT_SHOWN_STATUS})
                     self.__startSettingsListening()

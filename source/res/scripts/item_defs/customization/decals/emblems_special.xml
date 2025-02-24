@@ -1,7 +1,7 @@
 <emblems_special.xml>
-  <xmlns:ussr>	ussr	</xmlns:ussr>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
   <xmlns:germany>	germany	</xmlns:germany>
-  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:czech0>	usa	</xmlns:czech0>
   <xmlns:china>	china	</xmlns:china>
   <xmlns:france>	france	</xmlns:france>
   <xmlns:uk>	uk	</xmlns:uk>
@@ -9,6 +9,8 @@
   <xmlns:czech>	czech	</xmlns:czech>
   <xmlns:sweden>	sweden	</xmlns:sweden>
   <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
     <season>	ALL	</season>
@@ -4376,21 +4378,6 @@
     <type>	EMBLEM	</type>
   </itemGroup>
   <itemGroup>
-    <userString>	#vehicle_customization:emblem/special	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
-    <tags>	hiddenInUI	</tags>
-    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
-    <decal>
-      <id>	31111	</id>
-      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_0.dds	</texture>
-      <userString>	#vehicle_customization:special_style/BlackFriday	</userString>
-      <mirror>	true	</mirror>
-    </decal>
-    <name>	Black Friday	</name>
-    <type>	EMBLEM	</type>
-  </itemGroup>
-  <itemGroup>
     <name>	Rush ThunderWolf 2024	</name>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -4939,5 +4926,118 @@
       <userString>	#vehicle_customization:BattleBloggers_Emblem_01_2025/name	</userString>
       <description>	#vehicle_customization:BattleBloggers_Emblem_01_2025/description	</description>
     </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Rush_BearThunderstorm_Emblem_2025	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <decal>
+      <id>	31295	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_01_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31296	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_01_Emblem_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_02_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31297	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_01_Emblem_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_01_Emblem_03_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31298	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_02_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31299	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_02_Emblem_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_02_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31300	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_02_Emblem_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_02_Emblem_03_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31301	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_03_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31302	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_03_Emblem_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_02_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31303	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_03_Emblem_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_03_Emblem_03_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31304	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_04_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31305	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_04_Emblem_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_02_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31306	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_04_Emblem_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_04_Emblem_03_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31307	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_05_Emblem_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_01_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_01_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31308	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_05_Emblem_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_02_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_02_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <decal>
+      <id>	31309	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/Rush_BearThunderstorm_05_Emblem_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_05_Emblem_03_2025/description	</description>
+      <type>	emblem	</type>
+    </decal>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <tags>	styleOnly hiddenInUI	</tags>
   </itemGroup>
 </emblems_special.xml>

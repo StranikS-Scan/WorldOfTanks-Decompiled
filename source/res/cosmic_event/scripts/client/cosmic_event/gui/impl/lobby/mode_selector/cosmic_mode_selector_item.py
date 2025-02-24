@@ -45,8 +45,8 @@ class CosmicEventModeSelectorItem(ModeSelectorLegacyItem):
         self.__setData()
         self.viewModel.setName(backport.text(R.strings.mode_selector.mode.cosmic_event.title()))
         if self._cosmicEventBattleCtrl.isBattleAvailable():
-            self._addReward(ModeSelectorRewardID.STYLE_2D)
-            self._addReward(ModeSelectorRewardID.PRIZE)
+            self._addReward(ModeSelectorRewardID.TANKMEN)
+            self._addReward(ModeSelectorRewardID.LOOTBOX)
 
     def _getInfoPageURL(self):
         return GUI_SETTINGS.cosmicInfoPageURL

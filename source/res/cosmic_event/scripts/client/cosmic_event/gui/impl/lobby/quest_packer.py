@@ -9,10 +9,12 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.server_events.formatters import parseComplexToken
-from gui.shared.missions.packers.bonus import BonusUIPacker, TokenBonusUIPacker, getDefaultBonusPackersMap, BACKPORT_TOOLTIP_CONTENT_ID
-from gui.shared.missions.packers.events import DailyQuestUIDataPacker
+from gui.shared.missions.packers.bonus import BonusUIPacker, TokenBonusUIPacker, getDefaultBonusPackersMap, BACKPORT_TOOLTIP_CONTENT_ID, getLocalizedBonusName, CustomizationBonusUIPacker
+from gui.shared.missions.packers.events import DailyQuestUIDataPacker, packQuestBonusModelAndTooltipData
 from gui.shared.utils.functions import makeTooltip
+from gui_lootboxes.gui.bonuses.bonuses_packers import TmanTemplateBonusPacker
 from helpers import dependency
+from gui.server_events.bonuses import CustomizationsBonus
 if typing.TYPE_CHECKING:
     from typing import List, Dict, Callable, TypeVar, Optional
     from gui.server_events.formatters import TokenComplex
@@ -62,7 +64,7 @@ class CosmicTokenBonusUIPacker(TokenBonusUIPacker):
 
     @classmethod
     def __packLootboxToken(cls, model, bonus, *args):
-        iconName = u'cosmic_2024_2'
+        iconName = u'cosmic_2025_2'
         model = cls.__packCosmicTokenCommon(model, bonus, iconName)
         model.setLabel(backport.text(R.strings.quests.bonusName.cosmic_lootbox()))
         return model
@@ -89,14 +91,46 @@ class CosmicTokenBonusUIPacker(TokenBonusUIPacker):
 def getCosmicBonusPacker():
     mapping = getDefaultBonusPackersMap()
     tokensPacker = CosmicTokenBonusUIPacker()
-    mapping.update({'battleToken': tokensPacker})
+    tmanTemplatePacker = CosmicTmanTemplateBonusPacker()
+    customizationPacker = CosmicCustomizationBonusPacker()
+    mapping.update({'battleToken': tokensPacker,
+     'tmanToken': tmanTemplatePacker,
+     'customizations': customizationPacker})
     return BonusUIPacker(mapping)
 
 
 class DailyCosmicQuestUIDataPacker(DailyQuestUIDataPacker):
 
-    def __init__(self, quest):
-        super(DailyCosmicQuestUIDataPacker, self).__init__(quest, self._getBonusPacker)
+    def _packBonuses(self, model):
+        packer = getCosmicBonusPacker()
+        self._tooltipData = {}
+        packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
 
-    def _getBonusPacker(self):
-        return getCosmicBonusPacker()
+
+class CosmicTmanTemplateBonusPacker(TmanTemplateBonusPacker):
+    _WOMAN_ICON = 'cosmic_crew_female'
+    _MAN_ICON = 'cosmic_crew_male'
+
+
+def getLabel(item):
+    labelStr = None
+    localizedLabel = R.strings.quests.bonusName.cosmic.dyn(item.itemTypeName)
+    if localizedLabel.exists():
+        labelStr = backport.text(localizedLabel(), name=item.userName)
+    else:
+        labelStr = getLocalizedBonusName(item.itemTypeName)
+    return labelStr
+
+
+class CosmicCustomizationBonusPacker(CustomizationBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for item in bonus.getCustomizations():
+            if not item:
+                continue
+            label = getLabel(bonus.getC11nItem(item))
+            result.append(cls._packSingleBonus(bonus, item, label if label else ''))
+
+        return result

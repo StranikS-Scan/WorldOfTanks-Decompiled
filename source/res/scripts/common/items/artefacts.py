@@ -214,9 +214,9 @@ class Artefact(BasicItem):
             self.kpi = []
         if IS_CLIENT:
             if section.has_key('tooltipSection'):
-                self.__tooltipSection = intern(section.readString('tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT))
+                self.__tooltipSection = section.readString('tooltipSection', TTC_TOOLTIP_SECTIONS.EQUIPMENT).split()
             else:
-                self.__tooltipSection = TTC_TOOLTIP_SECTIONS.EQUIPMENT
+                self.__tooltipSection = [TTC_TOOLTIP_SECTIONS.EQUIPMENT]
             if section.has_key('archetype'):
                 self.__archetype = intern(section.readString('archetype'))
         if section.has_key('vehicleFilter'):

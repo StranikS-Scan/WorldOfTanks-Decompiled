@@ -40,13 +40,10 @@ class BattlePassCriteriesGroup(RoleCriteriesGroup):
     def update(self, filters):
         super(BattlePassCriteriesGroup, self).update(filters)
         if filters[BattlePassFilterConsts.FILTER_KEY_COMMON]:
-            self.__addGeneralBattlePassCriteria()
             self._criteria |= REQ_CRITERIA.CUSTOM(self.__isCommonProgression)
 
     @classmethod
     def __isCommonProgression(cls, vehicle):
         progress, cap = cls.__battlePassController.getVehicleProgression(vehicle.intCD)
-        return cap > 0 and progress < cap
-
-    def __addGeneralBattlePassCriteria(self):
-        self._criteria |= ~REQ_CRITERIA.VEHICLE.EPIC_BATTLE
+        hasProgression = vehicle.level >= cls.__battlePassController.getMinVehLevelToEarnPoints()
+        return hasProgression and progress < cap

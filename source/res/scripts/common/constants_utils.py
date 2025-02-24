@@ -457,6 +457,7 @@ class AbstractBattleMode(object):
         prb_utils.addModeSelectorItem(self._CLIENT_PRB_ACTION_NAME, self._client_modeSelectorItemsClass, self._personality)
         prb_utils.addSupportedEntryByAction(self._CLIENT_PRB_ACTION_NAME, self._client_prbEntryPointClass, self._personality)
         prb_utils.addSupportedQueues(self._QUEUE_TYPE, self._client_prbEntityClass, self._client_canSelectPrbEntity, self._personality)
+        prb_utils.addDynamicModeSelectorPriorityAbility(self._CLIENT_PRB_ACTION_NAME, self._ARENA_BONUS_TYPE, self._personality)
 
     def registerBannerEntryPointValidatorMethod(self):
         from gui.prb_control import prb_utils

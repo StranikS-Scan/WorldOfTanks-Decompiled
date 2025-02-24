@@ -114,24 +114,25 @@ class SelectBonusPacker(BaseBonusUIPacker):
         model = Pm3RewardItemModel()
         bonusType = bonus.getType()
         model.setName(bonus.getName())
-        model.setValue(str(cls.getValue(bonus)))
         labelResId = R.strings.selectable_reward.tabs.items.dyn(bonusType)()
         if labelResId > 0:
             model.setLabel(backport.text(labelResId))
-        model.setIcon('{}_gift'.format(bonusType))
+        model.setIcon(bonusType)
         model.setBigIcon(bonusType)
         model.setIsShowAnimation(bonus.getIsShowAnimation())
         questId = cls.getId(bonus)
         model.setId(questId)
-        model.setIsChooseReward(bool(cls.__selectableRewardManager.getAvailableSelectableBonuses(partial(cls.__isValidReward, questId))))
+        isAvailableToken = bool(cls.__selectableRewardManager.getAvailableSelectableBonuses(partial(cls.__isValidReward, questId)))
+        model.setValue(str(cls.getValue(bonus, isAvailableToken)))
+        model.setIsChooseReward(isAvailableToken)
         model.setUserName(backport.text(R.strings.personal_missions_3.selectBonus.dyn(bonusType)()))
         return model
 
     @classmethod
-    def getValue(cls, bonus):
+    def getValue(cls, bonus, isAvailableToken):
         giftTokenName = first(bonus.getTokens().keys())
         offer = cls.__offersProvider.getOfferByToken(getOfferTokenByGift(giftTokenName))
-        return bonus.getCount() if offer is None else offer.availableTokens
+        return bonus.getCount() if offer is None or not isAvailableToken else offer.availableTokens
 
     @classmethod
     def getId(cls, bonus):

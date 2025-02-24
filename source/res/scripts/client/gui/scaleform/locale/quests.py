@@ -15,7 +15,6 @@ class QUESTS(object):
     MISSIONS_TAB_MAY21_MARATHON = '#quests:missions/tab/may21_marathon'
     MISSIONS_TAB_BATTLEMATTERS = '#quests:missions/tab/battleMatters'
     MISSIONS_TAB_WINBACK = '#quests:missions/tab/winback'
-    MISSIONS_TAB_BOB = '#quests:missions/tab/bob'
     IGR_TOOLTIP_BATTLESLABEL = '#quests:igr/tooltip/battlesLabel'
     IGR_TOOLTIP_WINSLABEL = '#quests:igr/tooltip/winsLabel'
     POSTBATTLE_PROGRESSRESET = '#quests:postBattle/progressReset'
@@ -950,7 +949,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_5_BATTLESCOUNT = '#quests:details/dossier/5/battlesCount'
     DETAILS_DOSSIER_6_BATTLESCOUNT = '#quests:details/dossier/6/battlesCount'
     DETAILS_DOSSIER_7_BATTLESCOUNT = '#quests:details/dossier/7/battlesCount'
-    DETAILS_DOSSIER_32_BATTLESCOUNT = '#quests:details/dossier/32/battlesCount'
     DETAILS_DOSSIER_9_BATTLESCOUNT = '#quests:details/dossier/9/battlesCount'
     DETAILS_DOSSIER_13_BATTLESCOUNT = '#quests:details/dossier/13/battlesCount'
     DETAILS_DOSSIER_16_BATTLESCOUNT = '#quests:details/dossier/16/battlesCount'
@@ -1039,9 +1037,6 @@ class QUESTS(object):
     MISSIONS_AWARDS_MERGED = '#quests:missions/awards/merged'
     MISSIONS_TAB_LABEL_KURSK = '#quests:missions/tab/label/kursk'
     MISSIONS_TAB_LABEL_MARATHON = '#quests:missions/tab/label/marathon'
-    MISSIONS_TAB_LABEL_BOB = '#quests:missions/tab/label/bob'
-    MISSIONS_TAB_BOB_HEADER = '#quests:missions/tab/bob/header'
-    MISSIONS_TAB_BOB_BODY = '#quests:missions/tab/bob/body'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
@@ -1189,6 +1184,7 @@ class QUESTS(object):
     TOKEN_DEFAULT_POLAND = '#quests:token/default/poland'
     TOKEN_DEFAULT_SWEDEN = '#quests:token/default/sweden'
     TOKEN_DEFAULT_ITALY = '#quests:token/default/italy'
+    TOKEN_DEFAULT_INTUNION = '#quests:token/default/intunion'
     TOKEN_DEFAULT_WOT = '#quests:token/default/wot'
     TOKEN_DEFAULT_LIGHTTANK = '#quests:token/default/lightTank'
     TOKEN_DEFAULT_MEDIUMTANK = '#quests:token/default/mediumTank'
@@ -1755,6 +1751,7 @@ class QUESTS(object):
      TOKEN_DEFAULT_POLAND,
      TOKEN_DEFAULT_SWEDEN,
      TOKEN_DEFAULT_ITALY,
+     TOKEN_DEFAULT_INTUNION,
      TOKEN_DEFAULT_WOT,
      TOKEN_DEFAULT_LIGHTTANK,
      TOKEN_DEFAULT_MEDIUMTANK,
@@ -2247,7 +2244,6 @@ class QUESTS(object):
      DETAILS_DOSSIER_5_BATTLESCOUNT,
      DETAILS_DOSSIER_6_BATTLESCOUNT,
      DETAILS_DOSSIER_7_BATTLESCOUNT,
-     DETAILS_DOSSIER_32_BATTLESCOUNT,
      DETAILS_DOSSIER_9_BATTLESCOUNT,
      DETAILS_DOSSIER_13_BATTLESCOUNT,
      DETAILS_DOSSIER_16_BATTLESCOUNT,

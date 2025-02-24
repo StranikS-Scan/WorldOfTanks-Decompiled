@@ -94,9 +94,6 @@ def getGameControllersConfig(manager):
     from gui.impl.lobby.mode_selector.mode_selector_controller import ModeSelectorController
     from gui.game_control.personal_missions_controller import PersonalMissionsController
     from gui.game_control.hangar_feature_state_controller import HangarFeatureStateController
-    from gui.game_control.bob_controller import BobController as _BobCtrl
-    from gui.game_control.bob_sound_controller import BobSoundController as _BobSoundCtrl
-    from gui.game_control.bob_announcement_controller import BobAnnouncementController as _BobAnnouncementCtrl
     from gui.game_control.paragons_controller import ParagonsController
     from gui.game_control.paragons_reward_controller import ParagonsRewardsShopController
     tracker = GameStateTracker()
@@ -155,9 +152,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
     _config(_interface.IComp7Controller, _Comp7Ctrl())
-    _config(_interface.IBobController, _BobCtrl())
-    _config(_interface.IBobSoundController, _BobSoundCtrl())
-    _config(_interface.IBobAnnouncementController, _BobAnnouncementCtrl())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())

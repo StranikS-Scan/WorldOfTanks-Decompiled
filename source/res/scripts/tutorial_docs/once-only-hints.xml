@@ -964,6 +964,8 @@
       </arrow>
       <update-runtime>	True	</update-runtime>
       <condition>
+        <global-active>	_isPM3Enabled	</global-active>
+        <global-inactive>	cosmicActive	</global-inactive>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	NewCampaignHint	</arguments>
         </class-condition>
@@ -1005,6 +1007,39 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
+    <hint>	ParagonsResearchButtonHint	  <item-id>	MenuTechTree	</item-id>
+      <text>	_(#tutorial:vehicleTechtree/paragons/researchMenuItem)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <condition>
+        <condition-and>
+          <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
+            <arguments>	ParagonsEntryPoint	</arguments>
+          </class-condition>
+          <condition-hint-showed>
+            <hint-id>	ParagonsEntryPointHint	</hint-id>
+            <value>	False	</value>
+          </condition-hint-showed>
+          <view-not-present>
+            <type>	subView	</type>
+            <alias>	lobby.techtree.VehicleTechTree	</alias>
+            <dynamic>	True	</dynamic>
+          </view-not-present>
+          <service>	IParagonsController	  <path>	skeletons.gui.game_control	</path>
+          </service>
+          <global-inactive>	cosmicActive	</global-inactive>
+        </condition-and>
+      </condition>
+      <update-runtime>	True	</update-runtime>
     </hint>
   </hints>
 </once-only-hints.xml>

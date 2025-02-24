@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/indicator_items/thermal_vision.py
 import BigWorld
 from constants import THERMAL_VISION_STATE
-from gui.Scaleform.daapi.view.battle.shared.indicator_items.base import BaseIndicator
+from gui.Scaleform.daapi.view.meta.ThermalVisionIndicatorMeta import ThermalVisionIndicatorMeta
 from gui.Scaleform.genConsts.COMMON_INDICATOR_CONSTS import COMMON_INDICATOR_CONSTS
 from helpers.CallbackDelayer import CallbackDelayer
 _STATES_MAPPING = {THERMAL_VISION_STATE.IDLE: COMMON_INDICATOR_CONSTS.READY,
@@ -12,19 +12,18 @@ _STATES_MAPPING = {THERMAL_VISION_STATE.IDLE: COMMON_INDICATOR_CONSTS.READY,
 _PROGRESS_FORWARD = 0
 _PROGRESS_BACKWARD = 1
 
-class ThermalVisionIndicator(BaseIndicator, CallbackDelayer):
-
-    def __init__(self):
-        super(ThermalVisionIndicator, self).__init__('thermalVisionController')
+class ThermalVisionIndicator(ThermalVisionIndicatorMeta, CallbackDelayer):
 
     def setState(self, state):
         if state in _STATES_MAPPING:
             self.as_setStateS(_STATES_MAPPING[state])
 
     def isValidVehicle(self, vehicle):
-        player = BigWorld.player()
-        isAvatarVehicle = player and player.vehicle and player.playerVehicleID == player.vehicle.id
-        return vehicle.isAlive() and vehicle.typeDescriptor.hasThermalVision and isAvatarVehicle
+        return vehicle and vehicle.isAlive() and vehicle.typeDescriptor.hasThermalVision
+
+    @staticmethod
+    def componentName():
+        pass
 
     def startReloadAnimation(self, startTime, duration):
         self.delayCallback(0, self.__indicatorTimerCallback, startTime, duration, _PROGRESS_FORWARD)

@@ -37,7 +37,7 @@ from messenger.formatters.service_channel_helpers import getRewardsForQuests, EO
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from paragons_common import isParagonsQuestID
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController, IBobController
+from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -980,47 +980,6 @@ class CrewPerksFormatter(AsyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.startswith(cls.__QUEST_PREFIX)
-
-
-class BobTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
-    __TEMPLATE_MESSAGE = 'bobRewardMessage'
-    __bobController = dependency.descriptor(IBobController)
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced:
-            data = message.data or {}
-            completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
-            for qID in completedQuestIDs:
-                messageData = self.__buildMessage(qID, message)
-                if messageData is not None:
-                    messageDataList.append(messageData)
-
-        if messageDataList:
-            callback(messageDataList)
-        callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return cls.__bobController.personalRewardQuestName == questID or questID.startswith(cls.__bobController.teamRewardQuestPrefix) if cls.__bobController.personalRewardQuestName else False
-
-    def __buildMessage(self, questID, message):
-        data = message.data or {}
-        questData = {}
-        rewards = data.get('detailedRewards', {}).get(questID, {})
-        questData.update(rewards)
-        fmt = self._achievesFormatter.formatQuestAchieves(questData, asBattleFormatter=False)
-        if fmt is not None:
-            templateParams = {'achieves': fmt}
-            settings = self._getGuiSettings(message, self.__TEMPLATE_MESSAGE)
-            formatted = g_settings.msgTemplates.format(self.__TEMPLATE_MESSAGE, templateParams)
-            return MessageData(formatted, settings)
-        else:
-            return
 
 
 class ParagonsTokenQuestsSubformatter(SyncTokenQuestsSubFormatter):

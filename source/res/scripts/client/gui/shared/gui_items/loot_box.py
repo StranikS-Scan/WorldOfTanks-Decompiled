@@ -82,7 +82,7 @@ _BONUS_GROUPS = {BonusGroup.VEHICLE: ipTypeGroup.VEHICLE,
  BonusGroup.VEHICLECUSTOMIZATIONS: ipTypeGroup.CUSTOMIZATION,
  BonusGroup.CREW: ipTypeGroup.CREW + ipTypeGroup.CREW_BOOKS + tuple(ipTypeGroup.TMAN_TOKEN) + (ipType.GOODIE_RECERTIFICATIONFORM, ipType.ITEM_CREW_SKIN),
  BonusGroup.BOOSTERS: ipTypeGroup.GOODIE + (ipType.CUSTOM_X5_BATTLE_BONUS,) + ipTypeGroup.BLUEPRINTS,
- BonusGroup.EQUIPMENTS: ipTypeGroup.ITEM + (ipType.DEMOUNT_KITS, ipType.CUSTOM_SEVERAL_SLOTS),
+ BonusGroup.EQUIPMENTS: ipTypeGroup.ITEM + (ipType.DEMOUNT_KITS, ipType.CUSTOM_SEVERAL_SLOTS, ipType.EQUIP_COIN),
  BonusGroup.ACCOUNTCUSTOMIZATIONS: (ipType.ACHIEVEMENT,
                                     ipType.BADGE,
                                     ipType.SINGLE_ACHIEVEMENTS,
@@ -106,6 +106,7 @@ _GROUP_PRIORITIES = [BonusGroup.LOOTBOX_STAGE_ROTATION,
 class ClientLootBoxTags(Enum):
     HIDDEN_COUNT = 'hiddenCount'
     HIDDEN = 'hidden'
+    EXTENDED_TOOLTIP = 'extendedTooltip'
 
 
 def addBonusesToGroup(bonusGroup, bonuses):
@@ -136,6 +137,9 @@ class LootBox(GUIItem):
 
     def isHiddenCount(self):
         return ClientLootBoxTags.HIDDEN_COUNT.value in self.__tags
+
+    def isExtendedTooltip(self):
+        return ClientLootBoxTags.EXTENDED_TOOLTIP.value in self.__tags
 
     def isVisible(self):
         return ClientLootBoxTags.HIDDEN.value not in self.__tags

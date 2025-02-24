@@ -16,20 +16,21 @@ class BackButtonContextKeys(CONST_CONTAINER):
 
 def getBackBtnDescription(exitEvent, previewView, vehicleName=''):
     descriptionLabels = R.strings.menu.viewHeader.backBtn.descrLabel
-    alias = descriptionLabels.hangar
     if previewView == VIEW_ALIAS.LOBBY_RESEARCH:
-        alias = descriptionLabels.research
+        labelPath = descriptionLabels.research
+    elif previewView in VEHICLE_PREVIEW_ALIASES:
+        labelPath = descriptionLabels.preview
+    elif previewView == VIEW_ALIAS.LOBBY_STORAGE:
+        labelPath = descriptionLabels.storage
     elif previewView == WulfPreviewAlias.WULF_TECHTREE:
         nation = exitEvent.ctx[BackButtonContextKeys.NATION]
         blueprintMode = exitEvent.ctx.get(BackButtonContextKeys.BLUEPRINT_MODE, False)
+        labelPath = descriptionLabels.techtree.dyn(nation)
         if blueprintMode:
-            alias = descriptionLabels.techtree.dyn(nation).blueprints
-        else:
-            alias = descriptionLabels.techtree.dyn(nation)
-    elif previewView in VEHICLE_PREVIEW_ALIASES:
-        alias = descriptionLabels.preview
-    ctx = {'tankName': vehicleName}
-    return backport.text(alias(), **ctx)
+            labelPath = labelPath.blueprints
+    else:
+        labelPath = descriptionLabels.hangar
+    return backport.text(labelPath(), tankName=vehicleName)
 
 
 class LoadGuiImplViewEventWithCtx(LoadGuiImplViewEvent):

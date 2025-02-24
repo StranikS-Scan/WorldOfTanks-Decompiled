@@ -15,7 +15,6 @@ class RES_COMMON(object):
     MAPS_ICONS_BATTLEPASS_PROGRESSION_BG = '../maps/icons/battlePass/progression/bg.png'
     MAPS_ICONS_BATTLEROYALE_BATTLERESULT_BG = '../maps/icons/battleRoyale/battleResult/bg.png'
     MAPS_ICONS_BLUEPRINTS_FRAGMENT_CONVERSION_BG = '../maps/icons/blueprints/fragment/conversion/bg.png'
-    MAPS_ICONS_BOB_HANGAR_PRIMETIMEVIEW_BG = '../maps/icons/bob/hangar/primeTimeView/bg.png'
     MAPS_ICONS_COLLECTIONS_INTRO_BG = '../maps/icons/collections/intro/bg.png'
     MAPS_ICONS_CRYSTALSINFO_BG = '../maps/icons/crystalsInfo/bg.png'
     MAPS_ICONS_CUSTOMIZATION_PROGRESSION_STYLES_STAGE_SWITCHER_BG = '../maps/icons/customization/progression_styles/stage_switcher/bg.png'

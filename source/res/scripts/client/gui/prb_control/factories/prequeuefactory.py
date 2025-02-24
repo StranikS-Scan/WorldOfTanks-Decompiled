@@ -16,7 +16,6 @@ from gui.prb_control.entities.epic.pre_queue.entity import EpicEntity, EpicEntry
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
 from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
 from gui.prb_control.entities.comp7.pre_queue.entity import Comp7Entity, Comp7EntryPoint
-from gui.prb_control.entities.bob.pre_queue.entity import BobEntity, BobEntryPoint, BobForcedEntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -30,7 +29,6 @@ registerQueueEntity(QUEUE_TYPE.MAPBOX, MapboxEntity)
 registerQueueEntity(QUEUE_TYPE.MAPS_TRAINING, MapsTrainingEntity)
 registerQueueEntity(QUEUE_TYPE.EVENT_BATTLES, EventBattleEntity)
 registerQueueEntity(QUEUE_TYPE.COMP7, Comp7Entity)
-registerQueueEntity(QUEUE_TYPE.BOB, BobEntity)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANDOM, RandomEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANKED, RankedEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.BOOTCAMP, BootcampEntryPoint)
@@ -39,8 +37,6 @@ registerEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX, MapboxEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.COMP7, Comp7EntryPoint)
-registerEntryPoint(PREBATTLE_ACTION_NAME.BOB, BobEntryPoint)
-registerEntryPoint(PREBATTLE_ACTION_NAME.BOB_FORCED, BobForcedEntryPoint)
 DEFAULT_QUEUE_TYPE_PRIORITIES = {}
 
 class PreQueueFactory(ControlFactory):
@@ -54,7 +50,6 @@ class PreQueueFactory(ControlFactory):
         self.eventBattlesStorage = prequeue_storage_getter(QUEUE_TYPE.EVENT_BATTLES)()
         self.funRandomStorage = prequeue_storage_getter(QUEUE_TYPE.FUN_RANDOM)()
         self.comp7Storage = prequeue_storage_getter(QUEUE_TYPE.COMP7)()
-        self.bobStorage = prequeue_storage_getter(QUEUE_TYPE.BOB)()
         self.versusAIStorage = prequeue_storage_getter(QUEUE_TYPE.VERSUS_AI)()
         self.recentPrbStorage = storage_getter(RECENT_PRB_STORAGE)()
         self.__defaultEntityHandler = DefaultEntityHandler()
@@ -107,8 +102,6 @@ class PreQueueFactory(ControlFactory):
             return self.__createByQueueType(QUEUE_TYPE.FUN_RANDOM)
         elif self.comp7Storage.isModeSelected():
             return Comp7Entity()
-        elif self.bobStorage.isModeSelected():
-            return BobEntity()
         elif self.versusAIStorage is not None and self.versusAIStorage.isModeSelected():
             return self.__createByQueueType(QUEUE_TYPE.VERSUS_AI)
         else:

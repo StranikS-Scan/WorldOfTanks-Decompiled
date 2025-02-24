@@ -190,3 +190,48 @@ def WW_setVolumeThreshold(*args, **kwargs):
 
 def WW_setSoundSystem(*args, **kwargs):
     pass
+
+
+class PySound(object):
+
+    def __init__(self):
+        self.name = property()
+        self.isPlaying = property()
+        self.volume = property()
+        self.matrixProvider = property()
+
+    def play(self):
+        pass
+
+    def stop(self, fadeOut):
+        pass
+
+    def unlink(self):
+        pass
+
+    def restart(self):
+        pass
+
+    def releaseMatrix(self):
+        pass
+
+    def setRTPC(self, name, value):
+        pass
+
+    def setSwitch(self, group, state):
+        pass
+
+    def volume(self):
+        pass
+
+    def setCallback(self, pyCallback):
+        pass
+
+    def invokeCallback(self):
+        pass
+
+    def setPosition(self, position):
+        pass
+
+    def setDirection(self, direction):
+        pass

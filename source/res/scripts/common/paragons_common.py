@@ -30,7 +30,6 @@ PARAGONS_SELECTED_VEHICLE_TOKEN_PREFIX = PARAGONS_SELECTED_REWARD_TOKEN_PREFIX +
 
 class ParagonsEntitlements(Enum):
     V_11 = 'v_11'
-    LOCKED_TECH_TREE = 'locked_tech_tree'
 
     @classmethod
     def all(cls):

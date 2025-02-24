@@ -18,8 +18,6 @@ from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cach
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
 from gui.battle_control.controllers.comp7_prebattle_setup_ctrl import Comp7PrebattleSetupController
 from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
-from gui.battle_control.controllers.bob_ctrl import BattleBobController
-from gui.battle_control.controllers.bob_voip_ctrl import BobVOIPController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
@@ -318,14 +316,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def overrideSettingsController(self):
         return self._repository.getController(BATTLE_CTRL_ID.OVERRIDE_SETTINGS)
 
-    @property
-    def bob(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BOB_CTRL)
-
-    @property
-    def bobVOIPController(self):
-        return self._repository.getController(BATTLE_CTRL_ID.BOB_VOIP_CTRL)
-
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -562,17 +552,6 @@ class Comp7ControllerRepository(ClassicControllersRepository):
         return Comp7AppearanceCacheController(setup)
 
 
-class BobControllersRepository(ClassicControllersRepository):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(BobControllersRepository, cls).create(setup)
-        repository.addArenaController(BattleBobController(setup), setup)
-        repository.addArenaController(BobVOIPController(), setup)
-        return repository
-
-
 for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
     registerBattleControllerRepo(guiType, EpicControllersRepository)
 
@@ -582,4 +561,3 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
-registerBattleControllerRepo(ARENA_GUI_TYPE.BOB, BobControllersRepository)

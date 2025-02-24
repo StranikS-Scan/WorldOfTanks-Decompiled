@@ -76,6 +76,7 @@ class StyleVideoView(ViewImpl):
             SoundGroups.g_instance.playSound2D(BattlePassSounds.VIDEO_RESUME)
         else:
             SoundGroups.g_instance.playSound2D(BattlePassSounds.VIDEO_PAUSE)
+        self.viewModel.setIsWindowAccessible(isWindowAccessible)
 
 
 class StyleVideoViewWindow(LobbyWindow):

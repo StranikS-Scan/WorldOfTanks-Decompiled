@@ -78,6 +78,7 @@ class BattleParams(object):
     SOUND_NOTIFICATIONS = 65
     DIVING_DESTRUCTION_DELAY = 66
     MODE_BATTLE_XP_FACTOR = 67
+    THERMAL_VISION_DISTANCE = 68
     ALL = None
     MAX = None
 

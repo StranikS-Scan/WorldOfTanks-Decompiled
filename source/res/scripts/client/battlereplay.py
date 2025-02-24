@@ -543,18 +543,13 @@ class BattleReplay(object):
             if self.isControllingCamera:
                 return True
         if key == Keys.KEY_SPACE and isDown and not self.__isFinished:
-            if self.__playbackSpeedIdx > 0:
-                self.setPlaybackSpeedIdx(0)
-            else:
-                self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
+            self.togglePause()
             return True
         if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
-            if self.__playbackSpeedIdx > 0:
-                self.setPlaybackSpeedIdx(self.__playbackSpeedIdx - 1)
+            self.changeSpeed(-1)
             return True
         if key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
-            if self.__playbackSpeedIdx < len(self.__playbackSpeedModifiers) - 1:
-                self.setPlaybackSpeedIdx(self.__playbackSpeedIdx + 1)
+            self.changeSpeed(1)
             return True
         if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
             self.__timeWarp(currReplayTime + fastForwardStep)
@@ -597,6 +592,19 @@ class BattleReplay(object):
                 player.inputHandler.ctrl.handleKeyEvent(isDown, key, mods, event)
             return True
         return False
+
+    def changeSpeed(self, step):
+        newId = self.__playbackSpeedIdx + step
+        maxId = len(self.__playbackSpeedModifiers) - 1
+        clampedId = min(max(newId, 0), maxId)
+        if clampedId != self.__playbackSpeedIdx:
+            self.setPlaybackSpeedIdx(clampedId)
+
+    def togglePause(self):
+        if self.__playbackSpeedIdx > 0:
+            self.setPlaybackSpeedIdx(0)
+        else:
+            self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
 
     def handleMouseEvent(self, dx, dy, dz):
         if not (self.isPlaying and self.isClientReady):
@@ -1041,8 +1049,8 @@ class BattleReplay(object):
     def acceptVersionDiffering(self):
         self.__replayCtrl.confirmDlgAccepted()
 
-    def registerWotReplayFileExtension(self):
-        self.__replayCtrl.registerWotReplayFileExtension()
+    def registerReplayFileExtension(self):
+        self.__replayCtrl.registerReplayFileExtension()
 
     def enableAutoRecordingBattles(self, enable, delete=False):
         if self.__isAutoRecordingEnabled == enable:

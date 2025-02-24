@@ -50,6 +50,7 @@
     <_100_162mm_armata_wz_64_W60>	31010	</_100_162mm_armata_wz_64_W60>
     <_130mm_armata_wz_46_m>	31011	</_130mm_armata_wz_46_m>
     <_105mm_armata_wz_64_7x7>	31012	</_105mm_armata_wz_64_7x7>
+    <_122mm_wz_49_48_dualgun>	31013	</_122mm_wz_49_48_dualgun>
     <_105mm_wz_22_24_G1_SH>	35	</_105mm_wz_22_24_G1_SH>
     <_75mm_wz_36_37_G2_SH>	36	</_75mm_wz_36_37_G2_SH>
     <_90mm_armata_wz_46_G3_SH>	37	</_90mm_armata_wz_46_G3_SH>
@@ -2525,6 +2526,64 @@
         </_122mm_UOF-471P_P>
       </shots>
     </_122mm_wz_53>
+    <_122mm_wz_49_48_dualgun>
+      <userString>	#poland_vehicles:_122mm_wz_49_48_dualgun	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	13.2571428571429	</reloadTime>
+      <maxAmmo>	28	</maxAmmo>
+      <aimingTime>	3.42857142857143	</aimingTime>
+      <weight>	4800	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_122mm_PPK_471P>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	254 236	</piercingPower>
+        </_122mm_PPK_471P>
+        <_122mm_PK_3BK10>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1259	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	315 315	</piercingPower>
+        </_122mm_PK_3BK10>
+        <_122mm_PW_471>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1007	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	68 68	</piercingPower>
+        </_122mm_PW_471>
+      </shots>
+    </_122mm_wz_49_48_dualgun>
     <_130mm_R_14_wz_56>
       <userString>	#poland_vehicles:_130mm_R_14_wz_56	</userString>
       <tags></tags>

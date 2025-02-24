@@ -218,7 +218,7 @@ class ProjectionDecalPacker(CustomizationPacker):
             if subcomp.slotId in regions:
                 slotIdx = regions.index(subcomp.slotId)
                 slot.set(intCD, slotIdx, component=subcomp)
-            raise SoftException('Wrong slotId for current outfit')
+            raise SoftException('Wrong slotId for current outfit (slotID: {}, intCD: {})'.format(subcomp.slotId, intCD))
 
     @classmethod
     def invalidate(cls, slot):

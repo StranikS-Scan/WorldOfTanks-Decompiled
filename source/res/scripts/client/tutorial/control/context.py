@@ -132,6 +132,11 @@ class GLOBAL_FLAG(object):
     IS_NEED_TO_SHOW_SPECIALIZATION_SLOT = 'isNeedToShowSpecializationSlot'
     IS_CHANGE_AI_MODE = 'isChangeAIMode'
     PARAGONS_FIRST_RESET = '_ParagonsFirstReset'
+    IS_PM3_ENABLED = '_isPM3Enabled'
+    COSMIC_ACTIVE = 'cosmicActive'
+    BATTLE_PASS_ACTIVE_CHAPTER = '_BattlePassActiveChapter'
+    BATTLE_PASS_PROGRESSION = '_BattlePassProgression'
+    BATTLE_PASS_ENTRY_POINT = '_BattlePassEntryPoint'
     ALL = (MAY_PAWN_PERSONAL_MISSION,
      HAVE_NEW_BADGE,
      HAVE_NEW_SUFFIX_BADGE,
@@ -140,7 +145,14 @@ class GLOBAL_FLAG(object):
      DOGTAGS_ENABLED,
      PERSONAL_RESERVES_AVAILABLE,
      IS_CHANGE_AI_MODE,
-     PARAGONS_FIRST_RESET)
+     PARAGONS_FIRST_RESET,
+     IS_PM3_ENABLED,
+     COSMIC_ACTIVE,
+     PARAGONS_FIRST_RESET,
+     IS_PM3_ENABLED,
+     BATTLE_PASS_ACTIVE_CHAPTER,
+     BATTLE_PASS_PROGRESSION,
+     BATTLE_PASS_ENTRY_POINT)
 
 
 class GlobalStorage(object):

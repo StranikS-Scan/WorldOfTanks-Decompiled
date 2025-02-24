@@ -16,6 +16,7 @@ class VehicleModel(ViewModel):
     SWEDEN = 'sweden'
     POLAND = 'poland'
     ITALY = 'italy'
+    INTUNION = 'intunion'
     LIGHT_TANK = 'lightTank'
     MEDIUM_TANK = 'mediumTank'
     HEAVY_TANK = 'heavyTank'

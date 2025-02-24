@@ -226,6 +226,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         for event, callback in self.__subscriptions:
             event += callback
 
+        self.as_setDataS(self._getData())
         return
 
     def _dispose(self):
@@ -408,6 +409,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'previousBackAlias': self._previousBackAlias,
          'vehicleStrCD': self.__vehicleStrCD,
          'previewBackCb': self._previewBackCb,
+         'bottomPanelTextData': self.__bottomPanelTextData,
          'itemsPack': self.__unmodifiedItemsPack,
          'offers': self.__offers,
          'price': self._price,

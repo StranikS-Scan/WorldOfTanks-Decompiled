@@ -194,11 +194,13 @@ class ArmoryYardBuyBundleView(ViewImpl):
                     bundleType = BUNDLE_TYPES[tag]
                     break
 
-            endLevel = currentTokens + product['tokens']
+            tokensCount = product['tokens']
+            endLevel = currentTokens + tokensCount
             model.setIsWalletAvailable(self.__wallet.isAvailable)
             model.setStartLevel(currentTokens + 1)
             model.setEndLevel(endLevel if maxTokens >= endLevel else maxTokens)
             model.setType(bundleType)
+            model.setLevelCount(tokensCount)
             PriceModelBuilder.fillPriceModel(model.price, product['price'], checkBalanceAvailability=True)
 
     def __fullUpdate(self):

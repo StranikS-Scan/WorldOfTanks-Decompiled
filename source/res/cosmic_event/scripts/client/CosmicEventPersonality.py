@@ -16,6 +16,8 @@ from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.prb_control.prb_utils import initGuiTypes
 from gui.shared.system_factory import registerAwardControllerHandler
 from gui.limited_ui.lui_rules_storage import LuiRules
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.unique_rewards_view import registerHandler, unregisterHandler
+from cosmic_event.gui.impl.lobby.cosmic_lootbox_video.unique_reward_handler import CosmicUniqueRewardHandler
 if TYPE_CHECKING:
     from typing import Tuple, List, Type
     from skeletons.gui.game_control import IGameController
@@ -148,6 +150,7 @@ def preInit():
     battleMode.registerBattleResultsConfig()
     registerAwardControllerHandler(CosmicProgressionTokenQuestsHandler)
     registerAwardControllerHandler(CosmicDailyQuestsHandler)
+    registerHandler(CosmicUniqueRewardHandler)
     from cosmic_event_common.cosmic_constants import registerLootTypes, registerDailyQuestsDecorations
     registerLootTypes(__name__)
     registerDailyQuestsDecorations(__name__)
@@ -174,4 +177,4 @@ def start():
 
 
 def fini():
-    pass
+    unregisterHandler(CosmicUniqueRewardHandler)

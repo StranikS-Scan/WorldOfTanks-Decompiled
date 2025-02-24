@@ -646,16 +646,6 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
     return (formattedBonuses, specialRewardType)
 
 
-def getBobTeamRewardsBonuses(rewards):
-    bonuses = []
-    if rewards:
-        for bonusType, bonusValue in rewards.iteritems():
-            bonus = getNonQuestBonuses(bonusType, bonusValue)
-            bonuses.extend(bonus)
-
-    return bonuses
-
-
 def getRoyaleBonuses(bonuses, size='big'):
     bonuses.sort(key=_keySortOrder)
     alwaysVisibleBonuses = []

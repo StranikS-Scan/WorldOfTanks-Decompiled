@@ -167,8 +167,6 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_30 = '#menu:loading/battleTypes/desc/30'
     LOADING_BATTLETYPES_31 = '#menu:loading/battleTypes/31'
     LOADING_BATTLETYPES_DESC_31 = '#menu:loading/battleTypes/desc/31'
-    LOADING_BATTLETYPES_32 = '#menu:loading/battleTypes/32'
-    LOADING_BATTLETYPES_DESC_32 = '#menu:loading/battleTypes/desc/32'
     LOADING_BATTLETYPES_31000 = '#menu:loading/battleTypes/31000'
     LOADING_BATTLETYPES_DESC_31000 = '#menu:loading/battleTypes/desc/31000'
     LOADING_TEAM1 = '#menu:loading/team1'
@@ -426,6 +424,7 @@ class MENU(object):
     NATIONS_SWEDEN = '#menu:nations/sweden'
     NATIONS_POLAND = '#menu:nations/poland'
     NATIONS_ITALY = '#menu:nations/italy'
+    NATIONS_INTUNION = '#menu:nations/intunion'
     NATIONS_ALL = '#menu:nations/all'
     CAROUSELFILTER_IGR = '#menu:carouselFilter/igr'
     LEVELS_1 = '#menu:levels/1'
@@ -462,6 +461,7 @@ class MENU(object):
     NATION_TREE_TITLE_SWEDEN = '#menu:nation_tree/title/sweden'
     NATION_TREE_TITLE_POLAND = '#menu:nation_tree/title/poland'
     NATION_TREE_TITLE_ITALY = '#menu:nation_tree/title/italy'
+    NATION_TREE_TITLE_INTUNION = '#menu:nation_tree/title/intunion'
     NATION_TREE_BLUEPRINT_TITLE_USSR = '#menu:nation_tree/blueprint_title/ussr'
     NATION_TREE_BLUEPRINT_TITLE_GERMANY = '#menu:nation_tree/blueprint_title/germany'
     NATION_TREE_BLUEPRINT_TITLE_USA = '#menu:nation_tree/blueprint_title/usa'
@@ -473,6 +473,7 @@ class MENU(object):
     NATION_TREE_BLUEPRINT_TITLE_SWEDEN = '#menu:nation_tree/blueprint_title/sweden'
     NATION_TREE_BLUEPRINT_TITLE_POLAND = '#menu:nation_tree/blueprint_title/poland'
     NATION_TREE_BLUEPRINT_TITLE_ITALY = '#menu:nation_tree/blueprint_title/italy'
+    NATION_TREE_BLUEPRINT_TITLE_INTUNION = '#menu:nation_tree/blueprint_title/intunion'
     SERVERSTATS_PLAYERSCOUNT = '#menu:serverStats/playersCount'
     SERVERSTATS_ARENASCOUNT = '#menu:serverStats/arenasCount'
     SERVERSTATS_PLAYERSINARENACOUNT = '#menu:serverStats/playersInArenaCount'
@@ -621,8 +622,8 @@ class MENU(object):
     EXTRAPARAMS_NAME_VEHICLEGUNRELOADTIMERECEIVESHOT = '#menu:extraParams/name/vehicleGunReloadTimeReceiveShot'
     EXTRAPARAMS_NAME_LIMITSFORGUNBOOST = '#menu:extraParams/name/limitsForGunBoost'
     EXTRAPARAMS_NAME_TEMPERATURESTATESCOUNT = '#menu:extraParams/name/temperatureStatesCount'
-    EXTRAPARAMS_NAME_TEMPERATUREHEATINGPERSEC = '#menu:extraParams/name/temperatureHeatingPerSec'
-    EXTRAPARAMS_NAME_TEMPERATURECOOLINGPERSEC = '#menu:extraParams/name/temperatureCoolingPerSec'
+    EXTRAPARAMS_NAME_TEMPERATUREHEATINGTIME = '#menu:extraParams/name/temperatureHeatingTime'
+    EXTRAPARAMS_NAME_TEMPERATURECOOLINGTIME = '#menu:extraParams/name/temperatureCoolingTime'
     EXTRAPARAMS_NAME_TEMPERATURECOOLINGDELAY = '#menu:extraParams/name/temperatureCoolingDelay'
     EXTRAPARAMS_NAME_TEMPERATUREDAMAGEFACTOR = '#menu:extraParams/name/temperatureDamageFactor'
     EXTRAPARAMS_NAME_MINTIMEBETWEENRELOADBOOST = '#menu:extraParams/name/minTimeBetweenReloadBoost'
@@ -767,15 +768,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_DAYS = '#menu:headerButtons/battle/types/mapbox/availability/days'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_HOURS = '#menu:headerButtons/battle/types/mapbox/availability/hours'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_AVAILABILITY_LESSTHANHOUR = '#menu:headerButtons/battle/types/mapbox/availability/lessThanHour'
-    HEADERBUTTONS_BATTLE_TYPES_BOB = '#menu:headerButtons/battle/types/bob'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_DESCR = '#menu:headerButtons/battle/types/bob/descr'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_UNTIL = '#menu:headerButtons/battle/types/bob/availability/until'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_FROZEN = '#menu:headerButtons/battle/types/bob/availability/frozen'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_POSTEVENT = '#menu:headerButtons/battle/types/bob/availability/postEvent'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_TIMELEFT_DAYS = '#menu:headerButtons/battle/types/bob/availability/timeLeft/days'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_TIMELEFT_HOURS = '#menu:headerButtons/battle/types/bob/availability/timeLeft/hours'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_TIMELEFT_MIN = '#menu:headerButtons/battle/types/bob/availability/timeLeft/min'
-    HEADERBUTTONS_BATTLE_TYPES_BOB_AVAILABILITY_TIMELEFT_LESSMIN = '#menu:headerButtons/battle/types/bob/availability/timeLeft/lessMin'
     HEADERBUTTONS_BATTLE_AVAILABLESINCE = '#menu:headerButtons/battle/availableSince'
     HEADERBUTTONS_BATTLE_AVAILABLESINCESOON = '#menu:headerButtons/battle/availableSinceSoon'
     HEADERBUTTONS_BATTLE_AVAILABLEUNTIL = '#menu:headerButtons/battle/availableUntil'
@@ -827,8 +819,6 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_BODY = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_LEVELS_FORSTARTBATTLE = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/levels/forStartBattle'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_EPICBATTLESITUATIONALVEHICLE_LEVELS_WILLBEUNLOCKED = '#menu:headerButtons/fightBtn/tooltip/epicBattleSituationalVehicle/levels/willBeUnlocked'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_HEADER = '#menu:headerButtons/fightBtn/tooltip/bobOnly/header'
-    HEADERBUTTONS_FIGHTBTN_TOOLTIP_BOBONLY_BODY = '#menu:headerButtons/fightBtn/tooltip/bobOnly/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDNOTSET_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedNotSet/header'
@@ -1697,7 +1687,6 @@ class MENU(object):
     CONTEXTMENU_CREATEBATTLEROYALESQUAD = '#menu:contextMenu/createBattleRoyaleSquad'
     CONTEXTMENU_CREATEMAPBOXSQUAD = '#menu:contextMenu/createMapboxSquad'
     CONTEXTMENU_CREATECOMP7SQUAD = '#menu:contextMenu/createComp7Squad'
-    CONTEXTMENU_CREATEBOBSQUAD = '#menu:contextMenu/createBobSquad'
     CONTEXTMENU_INVITE = '#menu:contextMenu/invite'
     CONTEXTMENU_APPEAL = '#menu:contextMenu/appeal'
     CONTEXTMENU_INCORRECTBEHAVIOR = '#menu:contextMenu/incorrectBehavior'
@@ -2193,6 +2182,7 @@ class MENU(object):
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND = '#menu:viewHeader/backBtn/descrLabel/techtree/poland'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY = '#menu:viewHeader/backBtn/descrLabel/techtree/italy'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_INTUNION = '#menu:viewHeader/backBtn/descrLabel/techtree/intunion'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USSR_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/ussr/blueprints'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_GERMANY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/germany/blueprints'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_USA_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/usa/blueprints'
@@ -2204,6 +2194,7 @@ class MENU(object):
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_SWEDEN_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/sweden/blueprints'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_POLAND_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/poland/blueprints'
     VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_ITALY_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/italy/blueprints'
+    VIEWHEADER_BACKBTN_DESCRLABEL_TECHTREE_INTUNION_BLUEPRINTS = '#menu:viewHeader/backBtn/descrLabel/techtree/intunion/blueprints'
     INTERNET_PROVIDER_LOCALPARTNER2_NAME = '#menu:internet_provider/LocalPartner2/name'
     INTERNET_PROVIDER_LOCALPARTNER2_TARIFF = '#menu:internet_provider/LocalPartner2/tariff'
     INTERNET_PROVIDER_LOCALPARTNER3_NAME = '#menu:internet_provider/LocalPartner3/name'
@@ -2403,7 +2394,6 @@ class MENU(object):
      CONTEXTMENU_CREATEBATTLEROYALESQUAD,
      CONTEXTMENU_CREATEMAPBOXSQUAD,
      CONTEXTMENU_CREATECOMP7SQUAD,
-     CONTEXTMENU_CREATEBOBSQUAD,
      CONTEXTMENU_INVITE,
      CONTEXTMENU_APPEAL,
      CONTEXTMENU_INCORRECTBEHAVIOR,
@@ -2465,6 +2455,7 @@ class MENU(object):
      NATIONS_SWEDEN,
      NATIONS_POLAND,
      NATIONS_ITALY,
+     NATIONS_INTUNION,
      NATIONS_ALL)
     TANKMEN_ENUM = (TANKMEN_LIGHTTANK,
      TANKMEN_MEDIUMTANK,
@@ -2845,7 +2836,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_29,
      LOADING_BATTLETYPES_DESC_30,
      LOADING_BATTLETYPES_DESC_31,
-     LOADING_BATTLETYPES_DESC_32,
      LOADING_BATTLETYPES_DESC_31000)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
@@ -2905,8 +2895,6 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_30,
      LOADING_BATTLETYPES_31,
      LOADING_BATTLETYPES_DESC_31,
-     LOADING_BATTLETYPES_32,
-     LOADING_BATTLETYPES_DESC_32,
      LOADING_BATTLETYPES_31000,
      LOADING_BATTLETYPES_DESC_31000)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY,
@@ -3014,7 +3002,8 @@ class MENU(object):
      NATION_TREE_TITLE_CZECH,
      NATION_TREE_TITLE_SWEDEN,
      NATION_TREE_TITLE_POLAND,
-     NATION_TREE_TITLE_ITALY)
+     NATION_TREE_TITLE_ITALY,
+     NATION_TREE_TITLE_INTUNION)
 
     @classmethod
     def contextmenu(cls, key0):

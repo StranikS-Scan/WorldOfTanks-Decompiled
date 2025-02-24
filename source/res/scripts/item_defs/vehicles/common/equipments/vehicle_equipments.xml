@@ -593,4 +593,29 @@
     </kpi>
     <tooltipSection>	crew_mastery	</tooltipSection>
   </ration_italy>
+  <ration_intunion>
+    <id>	65	</id>
+    <userString>	#artefacts:ration_intunion/name	</userString>
+    <description>	#artefacts:ration_intunion/descr	</description>
+    <shortDescriptionSpecial>	#artefacts:ration_intunion/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#artefacts:ration_intunion/long_special	</longDescriptionSpecial>
+    <icon>	ration_intunion	</icon>
+    <price>	20000	</price>
+    <improved>	true	</improved>
+    <tags>	stimulator premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+    <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewLevel	</name>
+        <value>	1.1	</value>
+      </mul>
+    </kpi>
+    <tooltipSection>	crew_mastery	</tooltipSection>
+  </ration_intunion>
 </vehicle_equipments.xml>

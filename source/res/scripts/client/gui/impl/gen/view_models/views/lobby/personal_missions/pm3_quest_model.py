@@ -1,12 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/personal_missions/pm3_quest_model.py
+from enum import Enum
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_part_model import Pm3QuestPartModel
+
+class ResetButtonState(Enum):
+    ENABLED = 'enabled'
+    DISABLED = 'disabled'
+    INVISIBLE = 'invisible'
+
 
 class Pm3QuestModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=7, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(Pm3QuestModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -55,6 +62,18 @@ class Pm3QuestModel(ViewModel):
     def setQuestLevelTo(self, value):
         self._setString(6, value)
 
+    def getIsPauseButtonEnabled(self):
+        return self._getBool(7)
+
+    def setIsPauseButtonEnabled(self, value):
+        self._setBool(7, value)
+
+    def getResetButtonStatus(self):
+        return ResetButtonState(self._getString(8))
+
+    def setResetButtonStatus(self, value):
+        self._setString(8, value.value)
+
     def _initialize(self):
         super(Pm3QuestModel, self)._initialize()
         self._addViewModelProperty('mainQuests', Pm3QuestPartModel())
@@ -64,3 +83,5 @@ class Pm3QuestModel(ViewModel):
         self._addBoolProperty('isFinal', False)
         self._addStringProperty('questLevelFrom', '')
         self._addStringProperty('questLevelTo', '')
+        self._addBoolProperty('isPauseButtonEnabled', False)
+        self._addStringProperty('resetButtonStatus')

@@ -18,7 +18,7 @@ class SmallCardState(Enum):
 class Pm3CardModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(Pm3CardModel, self).__init__(properties=properties, commands=commands)
 
     def getQuestId(self):
@@ -45,9 +45,16 @@ class Pm3CardModel(ViewModel):
     def setIsLast(self, value):
         self._setBool(3, value)
 
+    def getQuestName(self):
+        return self._getString(4)
+
+    def setQuestName(self, value):
+        self._setString(4, value)
+
     def _initialize(self):
         super(Pm3CardModel, self)._initialize()
         self._addNumberProperty('questId', 0)
         self._addStringProperty('state')
         self._addBoolProperty('isSelected', False)
         self._addBoolProperty('isLast', False)
+        self._addStringProperty('questName', '')

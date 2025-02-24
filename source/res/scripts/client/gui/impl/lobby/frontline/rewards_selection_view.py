@@ -3,7 +3,7 @@
 from AccountCommands import RES_SUCCESS
 from frameworks.wulf import WindowFlags
 from gui import SystemMessages
-from gui.battle_pass.rewards_sort import getRewardTypesComparator, getRewardsComparator
+from gui.impl.lobby.common.rewards_sort import getRewardTypesComparator, getRewardsComparator
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.frontline.rewards_selection_view_model import RewardsSelectionViewModel

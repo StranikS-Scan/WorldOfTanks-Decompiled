@@ -18,6 +18,7 @@ class ValidateException(SoftException):
         super(ValidateException, self).__init__(msg)
         self.code = code
         self.itemData = itemData
+        self.msg = msg
 
 
 class ValidationCodes(object):
@@ -53,7 +54,7 @@ class AccountValidator(object):
             try:
                 yield wg_async.wg_await(handler())
             except ValidateException as e:
-                _logger.error('There is exception while validating item %s', e.itemData)
+                _logger.error('There is exception while validating item %s (%s)', e.itemData, e.msg)
                 callback(e.code)
                 return
 

@@ -9,13 +9,13 @@ from account_helpers.settings_core.settings_constants import BattlePassStorageKe
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
+from gui.battle_pass.battle_pass_constants import SUPPORTED_ARENA_BONUS_TYPES
 from gui.battle_pass.sounds import AwardVideoSoundControl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.event_dispatcher import showBattlePassDailyQuestsIntroWindow
 from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.Scaleform.Waiting import Waiting
@@ -104,9 +104,11 @@ def getChaptersOrder(battlePass=None):
     return dict(zip(chapterIDs, GUI_SETTINGS.battlePassChaptersOrder))
 
 
-def getSupportedArenaBonusTypeFor(queueType, isInUnit):
+def getSupportedArenaBonusTypeFor(queueType, isInUnit, isSortie=True):
     if queueType == QUEUE_TYPE.BATTLE_ROYALE:
         arenaBonusType = ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD if isInUnit else ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO
+    elif queueType == QUEUE_TYPE.STRONGHOLD_UNITS:
+        arenaBonusType = ARENA_BONUS_TYPE.SORTIE_2 if isSortie else ARENA_BONUS_TYPE.FORT_BATTLE_2
     else:
         arenaBonusTypeByQueueType = {QUEUE_TYPE.RANDOMS: ARENA_BONUS_TYPE.REGULAR,
          QUEUE_TYPE.RANKED: ARENA_BONUS_TYPE.RANKED,
@@ -120,12 +122,15 @@ def getSupportedArenaBonusTypeFor(queueType, isInUnit):
 def getSupportedCurrentArenaBonusType(queueType=None):
     dispatcher = g_prbLoader.getDispatcher()
     isInUnit = False
+    isSortie = True
     if dispatcher:
         state = dispatcher.getFunctionalState()
         isInUnit = state.isInUnit(state.entityTypeID)
         if queueType is None:
             queueType = dispatcher.getEntity().getQueueType()
-    return getSupportedArenaBonusTypeFor(queueType, isInUnit)
+        if queueType == QUEUE_TYPE.STRONGHOLD_UNITS:
+            isSortie = dispatcher.getEntity().isSortie()
+    return getSupportedArenaBonusTypeFor(queueType, isInUnit, isSortie)
 
 
 def showVideo(videoSource, onVideoClosed=None, isAutoClose=False):
@@ -188,25 +193,6 @@ def getSingleVehicleForCustomization(customization):
         if len(vehicles) == 1:
             return vehicles[0]
     return
-
-
-@replace_none_kwargs(settingsCore=ISettingsCore)
-def isBattlePassDailyQuestsIntroShown(settingsCore=None):
-    return settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN, False)
-
-
-@replace_none_kwargs(settingsCore=ISettingsCore)
-def setBattlePassDailyQuestsIntroShown(settingsCore=None):
-    settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN: True})
-
-
-def showBattlePassDailyQuestsIntro():
-    battlePassController = dependency.instance(IBattlePassController)
-    if not battlePassController.isActive():
-        return
-    if not isBattlePassDailyQuestsIntroShown():
-        showBattlePassDailyQuestsIntroWindow()
-        setBattlePassDailyQuestsIntroShown()
 
 
 def getRecruitNation(recruitInfo):
@@ -285,10 +271,17 @@ def _updateServerSettings(data):
     data[BattlePassStorageKeys.INTRO_SHOWN] = False
     data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
     data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
-    data[BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 
 
 def _isChapterShown(shownChapters, chapter):
     return shownChapters & chapter == 0
+
+
+def fillBattleTypes(model):
+    array = model.getAvailableBattleTypes()
+    for battleType in SUPPORTED_ARENA_BONUS_TYPES:
+        array.addNumber(battleType)
+
+    array.invalidate()

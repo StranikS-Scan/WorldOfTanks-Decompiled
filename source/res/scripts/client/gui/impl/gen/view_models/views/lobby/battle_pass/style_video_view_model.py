@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class StyleVideoViewModel(ViewModel):
     __slots__ = ('onClose', 'onError')
 
-    def __init__(self, properties=2, commands=2):
+    def __init__(self, properties=3, commands=2):
         super(StyleVideoViewModel, self).__init__(properties=properties, commands=commands)
 
     def getChapter(self):
@@ -20,9 +20,16 @@ class StyleVideoViewModel(ViewModel):
     def setLevel(self, value):
         self._setNumber(1, value)
 
+    def getIsWindowAccessible(self):
+        return self._getBool(2)
+
+    def setIsWindowAccessible(self, value):
+        self._setBool(2, value)
+
     def _initialize(self):
         super(StyleVideoViewModel, self)._initialize()
         self._addNumberProperty('chapter', 0)
         self._addNumberProperty('level', 0)
+        self._addBoolProperty('isWindowAccessible', True)
         self.onClose = self._addCommand('onClose')
         self.onError = self._addCommand('onError')

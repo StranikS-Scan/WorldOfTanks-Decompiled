@@ -36,6 +36,7 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
+    from _WWISEStubs import PySound
 _DIRECT_INDICATOR_SWF = 'battleDirectionIndicatorApp.swf'
 _DIRECT_INDICATOR_COMPONENT = 'WGDirectionIndicatorFlash'
 _DIRECT_INDICATOR_MC_NAME = '_root.directionalIndicatorMc'
@@ -479,6 +480,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         else:
             if not immidiate and self.__detectionSoundEvent is not None:
                 self.__playSoundEvent(self.__detectionSoundEvent)
+                self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
             self.as_showS(immidiate)
             if not immidiate:
                 self.__callbackID = BigWorld.callback(GUI_SETTINGS.sixthSenseDuration / 1000.0, self.__showPermanent)
@@ -563,15 +565,16 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.__detectionSoundEventName = soundEventName
             self.__detectionSoundEvent = SoundGroups.g_instance.getSound2D(self.__detectionSoundEventName)
 
-    def __playSoundEvent(self, soundEvent):
+    @staticmethod
+    def __playSoundEvent(soundEvent):
         if soundEvent.isPlaying:
             soundEvent.restart()
-        elif soundEvent.name in SoundGroups.CUSTOM_MP3_EVENTS:
-            if SoundGroups.g_instance.prepareMP3(soundEvent.name):
-                soundEvent.play()
-        else:
+            return
+        if soundEvent.name not in SoundGroups.CUSTOM_MP3_EVENTS:
             soundEvent.play()
-        self.sessionProvider.shared.optionalDevices.soundManager.playLightbulbEffect()
+            return
+        if SoundGroups.g_instance.prepareMP3(soundEvent.name):
+            soundEvent.play()
 
 
 def _isTrackSideDestroyed(side, devices):

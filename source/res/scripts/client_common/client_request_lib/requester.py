@@ -401,15 +401,6 @@ class UILoggingAccessor(BaseAccessor):
         return self._data_source.get_uilogging_session(callback)
 
 
-class BobAccessor(BaseAccessor):
-
-    def get_teams(self, callback):
-        return self._data_source.get_teams(callback)
-
-    def get_team_skills(self, callback, timestamp):
-        return self._data_source.get_team_skills(callback, timestamp)
-
-
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -427,7 +418,6 @@ class Requester(object):
     wgrms = RequestDescriptor(WgrmsAccessor)
     promo_screens = RequestDescriptor(PromoScreensAccessor)
     agate = RequestDescriptor(AgateAccessor)
-    wgbob = RequestDescriptor(BobAccessor)
     craftmachine = RequestDescriptor(CrafmachineAccessor)
     mapbox = RequestDescriptor(MapboxAccessor)
     gifts = RequestDescriptor(GiftSystemAccessor)

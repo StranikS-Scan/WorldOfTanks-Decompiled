@@ -271,5 +271,8 @@ class RewardAnyState(State):
         if machine is not None:
             machine.clearSelf()
             machine.post(StateEvent())
-        showBattlePassBuyWindow()
+        showBattlePassBuyWindow({'destroyCallback': self.__clear})
         return
+
+    def __clear(self):
+        self.__needShowBuy = False

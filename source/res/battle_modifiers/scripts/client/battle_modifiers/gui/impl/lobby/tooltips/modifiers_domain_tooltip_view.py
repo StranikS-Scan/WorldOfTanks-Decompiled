@@ -12,8 +12,9 @@ if typing.TYPE_CHECKING:
 class ModifiersDomainTooltipView(ViewImpl):
     __slots__ = ('__modifiersDomain',)
 
-    def __init__(self, modifiersDomain, *args):
-        settings = ViewSettings(layoutID=R.views.battle_modifiers.lobby.tooltips.ModifiersDomainTooltipView(), model=ModifiersDomainTooltipViewModel(), args=args)
+    def __init__(self, modifiersDomain, *args, **kwargs):
+        layoutID = kwargs.get('layoutID') or R.views.battle_modifiers.lobby.tooltips.ModifiersDomainTooltipView()
+        settings = ViewSettings(layoutID=layoutID, model=ModifiersDomainTooltipViewModel(), args=args)
         super(ModifiersDomainTooltipView, self).__init__(settings)
         self.__modifiersDomain = modifiersDomain
 

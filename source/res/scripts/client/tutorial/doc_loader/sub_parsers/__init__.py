@@ -6,6 +6,7 @@ from functools import partial
 import nations
 import resource_helper
 from gui.Scaleform.genConsts.LAYER_NAMES import LAYER_NAMES
+from gui.impl.lobby.common.view_helpers import getLayoutIDByText
 from items import _xml, vehicles
 from helpers.html import translation
 from tutorial.data import chapter as tutorial_chapter
@@ -75,6 +76,13 @@ def _readCurrentSceneCondition(xmlCtx, section, state):
 def _readViewPresentCondition(xmlCtx, section, state):
     layer = LAYER_NAMES.LAYER_ORDER.index(_xml.readString(xmlCtx, section, 'type'))
     viewAlias = _xml.readString(xmlCtx, section, 'alias')
+    dynamic = _xml.readBool(xmlCtx, section, 'dynamic', default=False)
+    if dynamic:
+        res = getLayoutIDByText(viewAlias)
+        if res.exists():
+            viewAlias = res()
+        else:
+            _xml.raiseWrongXml(xmlCtx, section.name, 'view {} not exists'.format(viewAlias))
     return tut_conditions.ViewPresentCondition(layer, viewAlias, state=state)
 
 

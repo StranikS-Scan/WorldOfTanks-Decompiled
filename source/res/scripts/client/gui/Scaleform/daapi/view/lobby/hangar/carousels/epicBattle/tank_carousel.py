@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/epicBattle/tank_carousel.py
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.tank_carousel import TankCarousel
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.tank_carousel import BattlePassTankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.epicBattle.carousel_data_provider import EpicBattleCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.epicBattle.carousel_filter import EpicBattleCarouselFilter
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
-class EpicBattleTankCarousel(TankCarousel):
+class EpicBattleTankCarousel(BattlePassTankCarousel):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     _DISABLED_FILTERS = ['bonus']
 

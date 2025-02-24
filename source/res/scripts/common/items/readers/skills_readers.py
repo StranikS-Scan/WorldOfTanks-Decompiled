@@ -50,7 +50,7 @@ def _readUISettings(xmlCtx, section, subsectionName):
     kpi = []
     if IS_CLIENT and section.has_key('kpi'):
         kpi = readKpi(xmlCtx, section['kpi'])
-    return SkillUISettings(tooltipSection=_xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.SKILLS), typeName=_xml.readStringWithDefaultValue(xmlCtx, section, 'typeName', SkillTypeName.MAIN), kpi=kpi, descrArgs=_readDescrArgs(xmlCtx, section, 'descr'), params=_readTTCParams(xmlCtx, section, 'params'))
+    return SkillUISettings(tooltipSection=_xml.readStringWithDefaultValue(xmlCtx, section, 'tooltipSection', TTC_TOOLTIP_SECTIONS.SKILLS).split(), typeName=_xml.readStringWithDefaultValue(xmlCtx, section, 'typeName', SkillTypeName.MAIN), kpi=kpi, descrArgs=_readDescrArgs(xmlCtx, section, 'descr'), params=_readTTCParams(xmlCtx, section, 'params'))
 
 
 def _readDescrArgs(xmlCtx, section, subsectionName):

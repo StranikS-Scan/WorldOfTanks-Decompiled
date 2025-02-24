@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.common.base_intro_view_model import Ba
 class BattlePassIntroViewModel(BaseIntroViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=3):
+    def __init__(self, properties=7, commands=3):
         super(BattlePassIntroViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBackground(self):
@@ -15,6 +15,13 @@ class BattlePassIntroViewModel(BaseIntroViewModel):
     def setBackground(self, value):
         self._setResource(5, value)
 
+    def getSubTitle(self):
+        return self._getResource(6)
+
+    def setSubTitle(self, value):
+        self._setResource(6, value)
+
     def _initialize(self):
         super(BattlePassIntroViewModel, self)._initialize()
         self._addResourceProperty('background', R.invalid())
+        self._addResourceProperty('subTitle', R.invalid())

@@ -697,7 +697,7 @@ class CompoundAppearance(CommonTankAppearance, CallbackDelayer):
         self.__updateInsigniaSticker()
 
     def __updateClanSticker(self):
-        if self.vehicleStickers is not None:
+        if self.vehicleStickers is not None and (not self.outfit.style or not self.outfit.style.isClanHidden):
             clanID = self._vehicleInfo.get('clanDBID', 0)
             self.vehicleStickers.setClanID(clanID)
         return

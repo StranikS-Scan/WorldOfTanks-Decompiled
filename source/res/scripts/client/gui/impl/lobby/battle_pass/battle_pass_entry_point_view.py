@@ -18,12 +18,18 @@ from gui.prb_control.formatters.invites import getPreQueueName
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from helpers import dependency
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
+from tutorial.control.context import GLOBAL_FLAG
+
+def entryPointTrigger(toShow):
+    getTutorialGlobalStorage().setValue(GLOBAL_FLAG.BATTLE_PASS_ENTRY_POINT, toShow)
+
 
 class _LastEntryState(object):
 
@@ -212,6 +218,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
 class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
     __battlePass = dependency.descriptor(IBattlePassController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
     __slots__ = ('__isSmall', '__notifications', '__isAttentionTimerStarted')
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -243,6 +250,7 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         super(BattlePassEntryPointView, self)._onLoading(*args, **kwargs)
         self._start()
         self.__notifications.addNotificator(PeriodicNotifier(self.__attentionTickTime, self.__showAttentionAnimation))
+        entryPointTrigger(self.__battlePass.isShowWidgetHint())
 
     def _finalize(self):
         self.__notifications.clearNotification()

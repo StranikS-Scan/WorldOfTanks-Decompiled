@@ -446,7 +446,10 @@ class _QuestGroupWrapper(object):
 
     def getGroupName(self):
         groupID, _ = self.item.getQuestsProgressionInfo()
-        return '' if not groupID else backport.text(R.strings.vehicle_customization.questProgress.dyn(groupID)())
+        if not groupID:
+            return ''
+        res = R.strings.vehicle_customization.questProgress.dyn(groupID)
+        return backport.text(res()) if res.exists() else ''
 
 
 class _ClassicGroupWrapper(object):

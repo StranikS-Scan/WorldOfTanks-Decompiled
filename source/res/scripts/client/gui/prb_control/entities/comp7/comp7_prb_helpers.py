@@ -9,10 +9,12 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.app_loader import sf_lobby
 from gui.prb_control.entities.base.ctx import Comp7PrbAction, PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-from gui.shared import event_dispatcher
+from gui.shared import events, event_dispatcher, g_eventBus, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 @adisp.adisp_process
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
@@ -30,6 +32,19 @@ def selectComp7(comp7Controller=None):
         else:
             event_dispatcher.showComp7WhatsNewScreen(isIntro=True)
         return
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def selectVehicleInComp7Hangar(itemCD, loadHangar=True, itemsCache=None):
+    from CurrentVehicle import g_currentVehicle
+    veh = itemsCache.items.getItemByCD(int(itemCD))
+    if not veh.isInInventory:
+        raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
+    g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID,
+     'prevVehicleInvID': g_currentVehicle.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_currentVehicle.selectVehicle(veh.invID)
+    if loadHangar:
+        selectComp7()
 
 
 @adisp.adisp_process

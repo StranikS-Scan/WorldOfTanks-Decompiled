@@ -10113,4 +10113,121 @@
       <description>	#vehicle_customization:BattleBloggers_01_Decal03_01_2025/description	</description>
     </projection_decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Battle Pass S16	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <projection_decal>
+      <id>	31274	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BattlePassS16_Projection_Decal_01.dds	</texture>
+      <userString>	#vehicle_customization:BattlePass_S16_Projection_Decal_01_2025/name	</userString>
+      <description>	#vehicle_customization:BattlePass_S16_Projection_Decal_01_2025/description	</description>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/holiday/BattlePassS16_Projection_Decal_01_GMM.dds	</glossTexture>
+      <tags>	disableVerticalMirror formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31275	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BattlePassS16_Projection_Decal_02.dds	</texture>
+      <userString>	#vehicle_customization:BattlePass_S16_Projection_Decal_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattlePass_S16_Projection_Decal_02_2025/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31276	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BattlePassS16_Projection_Decal_03.dds	</texture>
+      <userString>	#vehicle_customization:BattlePass_S16_Projection_Decal_03_2025/name	</userString>
+      <description>	#vehicle_customization:BattlePass_S16_Projection_Decal_03_2025/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31277	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BattlePassS16_Projection_Decal_04.dds	</texture>
+      <userString>	#vehicle_customization:BattlePass_S16_Projection_Decal_04_2025/name	</userString>
+      <description>	#vehicle_customization:BattlePass_S16_Projection_Decal_04_2025/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_rect1x6 direction_left_to_right	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	COSM_Decal_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31268	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_Decal_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_Decal_01_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_Decal_01_2025/description	</description>
+      <tags>	formfactor_rect1x6 direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31269	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_Decal_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_Decal_02_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_Decal_02_2025/description	</description>
+      <tags>	formfactor_rect1x2 direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31270	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_LootBox_Decal_01_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_LootBox_Decal_01_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_LootBox_Decal_01_2025/description	</description>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31271	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_LootBox_Decal_02_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_LootBox_Decal_02_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_LootBox_Decal_02_2025/description	</description>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31272	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_LootBox_Decal_03_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_LootBox_Decal_03_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_LootBox_Decal_03_2025/description	</description>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31273	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/COSM_LootBox_Decal_04_2025.dds	</texture>
+      <userString>	#vehicle_customization:COSM_LootBox_Decal_04_2025/name	</userString>
+      <description>	#vehicle_customization:COSM_LootBox_Decal_04_2025/description	</description>
+      <tags>	direction_left_to_right formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
 </projection_decals.xml>

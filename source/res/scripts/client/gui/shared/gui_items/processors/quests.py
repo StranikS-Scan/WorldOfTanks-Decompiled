@@ -81,10 +81,11 @@ class PMQuestSelect(_PMRequest):
 
 class PMDiscard(_PMRequest):
 
-    def __init__(self, personalMission, branch):
+    def __init__(self, personalMission, branch, isNeedConfirm=True):
         quests = [personalMission]
         super(PMDiscard, self).__init__(quests, branch)
-        self.addPlugins([plugins.PMDiscardConfirmator(personalMission), plugins.PMLockedByVehicle(branch, quests)])
+        if isNeedConfirm:
+            self.addPlugins([plugins.PMDiscardConfirmator(personalMission), plugins.PMLockedByVehicle(branch, quests)])
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
@@ -105,6 +106,7 @@ class PMPause(_PMRequest):
         quests = [personalMission]
         self._enable = enable
         super(PMPause, self).__init__(quests, branch)
+        self.addPlugins([plugins.PMLockedByVehicle(branch, quests)])
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))

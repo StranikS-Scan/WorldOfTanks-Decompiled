@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/daily_quests_intro_presenter.py
 from frameworks.wulf import ViewStatus
-from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown, showBattlePassDailyQuestsIntro
 from gui.impl.gen import R
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -48,11 +47,9 @@ class DailyQuestsIntroPresenter(IDailyQuestIntroPresenter):
                 self.__update()
 
     def __update(self, *_):
-        if self.__isDailyQuestView():
-            if not isSubscriptionDailyQuestsIntroShown() and self._lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled():
+        if self.__isDailyQuestView() and not isSubscriptionDailyQuestsIntroShown():
+            if self._lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled():
                 showSubscriptionDailyQuestsIntro()
-            elif self.__battlePassController.isActive() and not isBattlePassDailyQuestsIntroShown():
-                showBattlePassDailyQuestsIntro()
 
     def __isDailyQuestView(self):
         return self.__guiLoader.windowsManager.getViewByLayoutID(self.parentViewLayoutID) is not None

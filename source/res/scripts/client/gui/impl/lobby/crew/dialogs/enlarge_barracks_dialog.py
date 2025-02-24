@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/dialogs/enlarge_barracks_dialog.py
-from adisp import adisp_process, adisp_async
+from adisp import adisp_process
 from base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.dialogs.dialog_template_button import CancelButton, ConfirmButton
@@ -23,7 +23,7 @@ from skeletons.gui.shared import IItemsCache
 from items.item_price import getBerthPackCount
 
 class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
-    __slots__ = ('__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__isDiscount', '__countPacksBerths', '__pricePacksBerths', '__berthCurrency')
+    __slots__ = ('__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__isDiscount', '__countPacksBerths', '__pricePacksBerths', '__berthCurrency', '__isConfirmButtonClicked')
     LAYOUT_ID = R.views.lobby.crew.dialogs.EnlargeBarracksDialog()
     VIEW_MODEL = EnlargeBarracksDialogModel
     itemsCache = dependency.descriptor(IItemsCache)
@@ -32,6 +32,7 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
     def __init__(self):
         self.__countPacksBerths = 1
         self.__prepareBerthInfo()
+        self.__isConfirmButtonClicked = False
         super(EnlargeBarracksDialog, self).__init__()
 
     def createToolTipContent(self, event, contentID):
@@ -44,18 +45,14 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
     def viewModel(self):
         return super(EnlargeBarracksDialog, self).getViewModel()
 
-    @adisp_async
     @adisp_process
-    def _doAction(self, callback):
+    def _doAction(self):
         action = factory.getAction(factory.BUY_BERTHS, self.__pricePacksBerths, self.__countPacksBerths, self.__berthsInPack, self.getParentWindow())
-        result = yield factory.asyncDoAction(action)
-        callback(result)
+        yield factory.asyncDoAction(action)
 
-    @adisp_process
     def _enlargeBarracks(self):
-        result = yield self._doAction()
-        if result:
-            super(EnlargeBarracksDialog, self)._setResult(DialogButtons.SUBMIT)
+        self._doAction()
+        super(EnlargeBarracksDialog, self)._setResult(DialogButtons.SUBMIT)
 
     def _getEvents(self):
         return ((self.viewModel.onBunksCountChange, self.__onBunksCountChange), (self.itemsCache.onSyncCompleted, self.__onCacheResync))
@@ -78,10 +75,11 @@ class EnlargeBarracksDialog(BaseCrewDialogTemplateView):
             vm.currency.setIsEnough(self.__isEnoughMoney())
 
     def _setResult(self, result):
-        if result == DialogButtons.SUBMIT:
+        if result == DialogButtons.SUBMIT and not self.__isConfirmButtonClicked:
             self._enlargeBarracks()
+            self.__isConfirmButtonClicked = True
         else:
-            super(EnlargeBarracksDialog, self)._setResult(result)
+            super(EnlargeBarracksDialog, self)._setResult(DialogButtons.CANCEL)
 
     def _updateViewModel(self, freeBunksCount, allBunksCount):
         with self.viewModel.transaction() as vm:

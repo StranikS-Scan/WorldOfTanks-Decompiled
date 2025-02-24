@@ -8,9 +8,6 @@ import CGF
 from typing import TYPE_CHECKING
 import cosmic_prefabs
 from cosmic_sound import CosmicBattleSounds
-from helpers import dependency
-from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
-from skeletons.gui.battle_session import IBattleSessionProvider
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 if TYPE_CHECKING:
     from typing import Optional
@@ -70,19 +67,20 @@ class _ShieldEffectComponent(_BaseEffectComponent):
     def __init__(self, entity, prefab):
         super(_ShieldEffectComponent, self).__init__(entity, prefab)
         self._gameObject = None
+        self._createVisual()
         return
 
     def _prefabLoaded(self, gameObject):
         _logger.debug('ShieldEffectComponent: prefabLoaded')
         self._gameObject = gameObject
-        self.__activateGameObject()
+        if self._gameObject:
+            self._gameObject.deactivate()
 
     def activate(self):
         _logger.debug('ShieldEffectComponent: activating shield effect.')
-        if self._gameObject is None:
-            self._createVisual()
-        else:
-            self.__activateGameObject()
+        if self._gameObject is not None:
+            self._gameObject.deactivate()
+            self._gameObject.activate()
         return
 
     def clear(self):
@@ -92,16 +90,8 @@ class _ShieldEffectComponent(_BaseEffectComponent):
         self._gameObject = None
         return
 
-    def __activateGameObject(self):
-        _logger.debug('ShieldEffectComponent: activating gameObject: %s', self._gameObject)
-        if self._gameObject:
-            self._gameObject.deactivate()
-            self._gameObject.activate()
-
 
 class VehicleImpulseScheduler(DynamicScriptComponent):
-    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    _dynObjectsCache = dependency.descriptor(IBattleDynamicObjectsCache)
 
     def __init__(self, *_, **__):
         super(VehicleImpulseScheduler, self).__init__(*_, **__)

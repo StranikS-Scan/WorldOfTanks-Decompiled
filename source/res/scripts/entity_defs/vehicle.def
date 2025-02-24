@@ -351,6 +351,10 @@
       <Type>	UINT8	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </botDisplayStatus>
+    <thermalVisionFinishTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </thermalVisionFinishTime>
   </Properties>
   <TempProperties>
     <events></events>
@@ -529,6 +533,7 @@
     </onDetectedByEnemy>
     <onConcealedFromEnemy>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
     </onConcealedFromEnemy>
     <updateVehicleAmmo>
       <Arg>	INT32	</Arg>

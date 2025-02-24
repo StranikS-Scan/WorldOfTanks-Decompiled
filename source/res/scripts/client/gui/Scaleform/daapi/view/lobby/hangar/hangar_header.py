@@ -49,7 +49,7 @@ from shared_utils import first
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController, IEarlyAccessController, IVersusAIController, IWinbackController, IUniversalFlagEntryPointController, IBobController
+from skeletons.gui.game_control import IBattlePassController, IBootcampController, ICollectiveGoalEntryPointController, IResourceWellController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IQuestsController, IBattleRoyaleController, IMapboxController, IEpicBattleMetaGameController, IFunRandomController, IComp7Controller, ILimitedUIController, IArmoryYardController, IEarlyAccessController, IVersusAIController, IWinbackController, IUniversalFlagEntryPointController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -261,6 +261,11 @@ def _getActiveQuestLabel(total, completed):
     return backport.text(R.strings.menu.hangar_header.battle_quests_label.dyn(LABEL_STATE.ACTIVE)(), total=total - completed)
 
 
+def _getQuestLabel(branch, quest):
+    customQuestLabels = {PM_BRANCH.PERSONAL_MISSION_3: quest.getUserName()}
+    return customQuestLabels.get(branch, quest.getInternalID())
+
+
 def getFlagIconAndLabel(totalCountQuests, completedQuests):
     icon = R.images.gui.maps.icons.library.outline.quests_disabled
     label = ''
@@ -319,7 +324,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __armoryYardCtrl = dependency.descriptor(IArmoryYardController)
     __earlyAccessCtrl = dependency.descriptor(IEarlyAccessController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
-    __bobController = dependency.descriptor(IBobController)
     __externalWidgets = {}
 
     def __init__(self):
@@ -475,9 +479,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if versusAIController and versusAIController.isVersusAIPrbActive():
             return {'isVisible': True,
              'quests': self.__getWinbackQuestsToHeaderVO()}
-        if self.__bobController.isValidBattleType():
-            return {'isVisible': True,
-             'quests': []}
         if self.__rankedController.isRankedPrbActive():
             return {'isVisible': True,
              'quests': self.__getRankedQuestsToHeaderVO()}
@@ -615,13 +616,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __getEpicWidget(self):
         return self.__epicController.isEnabled() and self.__epicController.isEpicPrbActive()
 
-    @widgetFunc(HANGAR_ALIASES.BOB_HANGAR_WIDGET)
-    def __getBobWidget(self):
-        isBobActive = self.__bobController.isModeActive()
-        isBobPrbActive = self.__bobController.isValidBattleType()
-        isRegistered = self.__bobController.isRegistered()
-        return isBobActive and isBobPrbActive and isRegistered
-
     def __updateWidget(self):
         alias = self.__getWidgetAlias()
         if not self.__activeWidgets.update(ActiveWidgets.CENTER, alias):
@@ -691,7 +685,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 if pmState == WIDGET_PM_STATE.IN_PROGRESS:
                     personalMissionID = quest.getID()
                     icon = _getPersonalMissionsIcon(vehicle, branch, True, personalMissionID)
-                    label = _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.ACTIVE), current=quest.getInternalID())
+                    label = _ms(MENU.hangarHeaderPersonalMissionsLabel(LABEL_STATE.ACTIVE), current=_getQuestLabel(branch, quest))
                     if not isPM3:
                         tooltip = TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW
                     else:
@@ -997,15 +991,22 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def __getCurrentArenaBonusType(self):
         queueType = None
         isInUnit = False
+        isSortie = True
         if self.prbDispatcher is not None and self.prbEntity is not None:
             state = self.prbDispatcher.getFunctionalState()
             isInUnit = state.isInUnit(state.entityTypeID)
             queueType = self.prbEntity.getQueueType()
-        return getSupportedArenaBonusTypeFor(queueType, isInUnit)
+            if queueType == constants.QUEUE_TYPE.STRONGHOLD_UNITS:
+                isSortie = self.prbEntity.isSortie()
+        return getSupportedArenaBonusTypeFor(queueType, isInUnit, isSortie)
 
     def __updateBattlePassSmallWidget(self):
         currentArenaBonusType = self.__getCurrentArenaBonusType()
-        secondaryPointCanBeAvailable = currentArenaBonusType not in (constants.ARENA_BONUS_TYPE.REGULAR, constants.ARENA_BONUS_TYPE.UNKNOWN, constants.ARENA_BONUS_TYPE.MAPBOX)
+        secondaryPointCanBeAvailable = currentArenaBonusType not in (constants.ARENA_BONUS_TYPE.REGULAR,
+         constants.ARENA_BONUS_TYPE.UNKNOWN,
+         constants.ARENA_BONUS_TYPE.MAPBOX,
+         constants.ARENA_BONUS_TYPE.SORTIE_2,
+         constants.ARENA_BONUS_TYPE.FORT_BATTLE_2)
         isRuleCompleted = self.__limitedUIController.isRuleCompleted(LuiRules.BP_ENTRY)
         isGameModeEnabled = self.__battlePassController.isGameModeEnabled(self.__getCurrentArenaBonusType())
         secondaryEntryPointAvailable = secondaryPointCanBeAvailable and not self.__battlePassController.isDisabled() and isRuleCompleted and isGameModeEnabled

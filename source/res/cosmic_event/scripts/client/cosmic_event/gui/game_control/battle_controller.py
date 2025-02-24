@@ -6,6 +6,7 @@ import Event
 import adisp
 from cosmic_constants import EVENT_STATES
 from cosmic_event.account_helpers.settings_core.settings_disable.cosmic_disable_settings_controller import CosmicDisableSettingsController
+from cosmic_event.cosmic_constants import SELECTED_VEHICLE_ICON_RESOURCE_PATH
 from cosmic_event.gui.gui_constants import SCH_CLIENT_MSG_TYPE
 from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.cosmic_lobby_view_model import LobbyRouteEnum
 from cosmic_event.gui.prb_control import prb_config
@@ -34,6 +35,9 @@ from skeletons.gui.system_messages import ISystemMessages
 from wotdecorators import condition
 from gui.prb_control.dispatcher import g_prbLoader
 from cosmic_event_common import cosmic_constants
+from gui.prb_control.storages import storage_getter, RECENT_PRB_STORAGE
+from tutorial.control.context import GLOBAL_FLAG
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 _logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from helpers.server_settings import ServerSettings
@@ -55,24 +59,17 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
         self.__cosmicEventConfig = None
         self.__disableSettingsCtrl = CosmicDisableSettingsController()
         self.__isPrimeTime = False
+        self.__vehicleSelectedID = 0
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.onCosmicConfigChanged = Event.Event()
         self.onStatusTick = Event.Event()
         self.onLobbyRouteChange = Event.Event()
+        self.onVehicleSelected = Event.Event()
         self.lobbyViewRoute = LobbyRouteEnum.MAIN
+        self.__recentPrbStorage = storage_getter(RECENT_PRB_STORAGE)()
+        self.__inCosmicLobby = False
+        self.__currentEnableState = False
         return
-
-    @property
-    def isCosmicPrbActive(self):
-        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COSMIC_EVENT)
-
-    @property
-    def isEnabled(self):
-        return self._isEnabled()
-
-    def getEventVehicle(self):
-        vehCD = self.__cosmicEventConfig.eventVehicleCD if self.__cosmicEventConfig else None
-        return None if vehCD is None else self.__itemsCache.items.getItemByCD(vehCD)
 
     def init(self):
         super(CosmicEventBattleController, self).init()
@@ -98,6 +95,9 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
 
     def onAvatarBecomePlayer(self):
         super(CosmicEventBattleController, self).onAvatarBecomePlayer()
+        if self.__inCosmicLobby:
+            CosmicHangarSounds.playCosmicPrbExit()
+            self.__inCosmicLobby = False
         self.__disableSettingsCtrl.onAvatarBecomePlayer()
         self.__clear()
 
@@ -109,7 +109,21 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
     def onLobbyInited(self, event):
         super(CosmicEventBattleController, self).onLobbyInited(event)
         self.__disableSettingsCtrl.onLobbyInited(event)
+        self.__currentEnableState = self.isEnabled
+        self.__checkStartedNotificationShowed()
         g_eventBus.addListener(events.CosmicEvent.OPEN_COSMIC, self.__onOpenEventPrb, scope=EVENT_BUS_SCOPE.LOBBY)
+
+    @property
+    def isCosmicPrbActive(self):
+        return False if self.prbEntity is None else bool(self.prbEntity.getModeFlags() & FUNCTIONAL_FLAG.COSMIC_EVENT)
+
+    @property
+    def isEnabled(self):
+        return self._isEnabled()
+
+    @property
+    def selectedVehicleID(self):
+        return self.__vehicleSelectedID
 
     @adisp.adisp_process
     def switchPrb(self):
@@ -126,14 +140,21 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             return
 
     def onPrbEnter(self):
+        self.__inCosmicLobby = True
         CosmicHangarSounds.playCosmicPrbEnter()
         g_eventBus.addListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY, priority=EventPriority.VERY_LOW)
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.COSMIC_ACTIVE, True)
 
     def onPrbLeave(self):
+        self.__inCosmicLobby = False
         CosmicHangarSounds.playCosmicPrbExit()
         g_eventBus.removeListener(events.ViewEventType.LOAD_VIEW, self.__viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.closeEventLobby()
         self.closePostBattleScreen()
+        if self.__recentPrbStorage.queueType == cosmic_constants.QUEUE_TYPE.COSMIC_EVENT:
+            self.__recentPrbStorage.clear()
+        self.lobbyViewRoute = LobbyRouteEnum.MAIN
+        getTutorialGlobalStorage().setValue(GLOBAL_FLAG.COSMIC_ACTIVE, False)
 
     def isAvailable(self):
         return self.isEnabled and not self.isFrozen() and self.getCurrentSeason() is not None
@@ -148,10 +169,18 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
         primeTimeStatus = self.getPrimeTimeStatus()[0]
         return primeTimeStatus != PrimeTimeStatus.AVAILABLE
 
-    def getModeSettings(self):
-        if self.__cosmicEventConfig is None:
-            self.__setCosmicEventConfig(self.__lobbyContext.getServerSettings())
-        return self.__cosmicEventConfig
+    def isCosmicMode(self):
+        prbDispatcher = g_prbLoader.getDispatcher()
+        if prbDispatcher is None:
+            return False
+        else:
+            state = prbDispatcher.getFunctionalState()
+            isInPreQueue = state.isInPreQueue(cosmic_constants.QUEUE_TYPE.COSMIC_EVENT)
+            isInUnit = state.isInUnit(cosmic_constants.PREBATTLE_TYPE.COSMIC_EVENT)
+            return isInUnit or isInPreQueue
+
+    def isVehicleRentQuest(self, questID):
+        return questID == self.getVehicleRentQuestID()
 
     def openQueueView(self):
         from cosmic_event.gui.impl.lobby.queue_view.queue_view import QueueView
@@ -177,6 +206,44 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=contentID, viewClass=CosmicLobbyView, scope=ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
         return
 
+    def selectVehicle(self, id):
+        if not self.__cosmicEventConfig:
+            _logger.error('CosmicEventBattleController:  Invalid cosmic event config')
+            return
+        if not self.__cosmicEventConfig.eventVehicles:
+            _logger.error('CosmicEventBattleController:  Invalid eventVehicles config')
+            return
+        if id not in self.__cosmicEventConfig.eventVehicles:
+            _logger.error('CosmicEventBattleController:  Invalid vehicle id:  %r', id)
+            return
+        if self.__vehicleSelectedID != id:
+            self.__vehicleSelectedID = id
+            self.onVehicleSelected()
+
+    def setLobbyRoute(self, route, notify=False):
+        if self.lobbyViewRoute != route:
+            self.lobbyViewRoute = route
+            if notify:
+                self.onLobbyRouteChange(route)
+
+    def getModeSettings(self):
+        if self.__cosmicEventConfig is None:
+            self.__setCosmicEventConfig(self.__lobbyContext.getServerSettings())
+        return self.__cosmicEventConfig
+
+    def getEventVehicle(self):
+        vehCD = self.getSelectedVehicleCD()
+        return None if vehCD is None else self.__itemsCache.items.getItemByCD(vehCD)
+
+    def getEventVehiclesIntCD(self):
+        return [ data.get('vehCD') for data in self.__cosmicEventConfig.eventVehicles.itervalues() ]
+
+    def getEventVehicles(self):
+        return [ data for data in self.__cosmicEventConfig.eventVehicles.iteritems() ]
+
+    def getAchievements(self):
+        return self.__cosmicEventConfig.achievementIDs
+
     def getTokenProgressionID(self):
         return self.__cosmicEventConfig.rewardSettings.get('rewardToken') if self.__cosmicEventConfig else ''
 
@@ -189,15 +256,23 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
     def getProgressionFinishedToken(self):
         return self.__cosmicEventConfig.progressionFinishedToken if self.__cosmicEventConfig else ''
 
-    def isCosmicMode(self):
-        prbDispatcher = g_prbLoader.getDispatcher()
-        if prbDispatcher is None:
-            return False
+    def getSelectedVehicleCD(self):
+        if not self.__cosmicEventConfig or not self.__vehicleSelectedID:
+            return None
         else:
-            state = prbDispatcher.getFunctionalState()
-            isInPreQueue = state.isInPreQueue(cosmic_constants.QUEUE_TYPE.COSMIC_EVENT)
-            isInUnit = state.isInUnit(cosmic_constants.PREBATTLE_TYPE.COSMIC_EVENT)
-            return isInUnit or isInPreQueue
+            eventVehicles = self.__cosmicEventConfig.eventVehicles
+            return eventVehicles.get(self.__vehicleSelectedID, {}).get('vehCD', None)
+
+    def getResourceIconForSelectedVehicle(self):
+        if not self.__vehicleSelectedID or not self.__cosmicEventConfig or not self.__cosmicEventConfig.eventVehicles:
+            return
+        else:
+            vehInfo = self.__cosmicEventConfig.eventVehicles.get(self.__vehicleSelectedID, {})
+            iconName = vehInfo.get('iconName', None)
+            return None if not iconName else SELECTED_VEHICLE_ICON_RESOURCE_PATH + '.{}()'.format(iconName)
+
+    def getLobbyRoute(self):
+        return self.lobbyViewRoute
 
     def _isEnabled(self):
         return self.getModeSettings().isEnabled
@@ -214,6 +289,7 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             self.__cosmicEventConfig = makeTupleByDict(CosmicEventConfig, settings[COSMIC_EVENT_GAME_PARAMS_KEY])
         else:
             self.__cosmicEventConfig = CosmicEventConfig.defaults()
+        self.__updateSelectedVehicleNameFromConfig()
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:
@@ -238,6 +314,8 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             if isSuspended is not wasSuspended:
                 eventType = EVENT_STATES.SUSPEND if isSuspended else EVENT_STATES.RESUME
                 self.__triggerEventStateNotification(eventType)
+                if eventType is EVENT_STATES.RESUME and not isEventStartedNotificationViewed():
+                    setEventStartedNotificationViewed(True)
             self.__resetTimer()
             self.onCosmicConfigChanged()
             uiLoader = dependency.instance(IGuiLoader)
@@ -253,7 +331,10 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
         return self.getCurrentSeason() or self.getNextSeason()
 
     def __showStartedNotification(self):
-        self.__triggerEventStateNotification(EVENT_STATES.START)
+        wasEnabled = self.__currentEnableState is False and self.isEnabled
+        self.__currentEnableState = self.isEnabled
+        if wasEnabled:
+            self.__triggerEventStateNotification(EVENT_STATES.START)
         setEventStartedNotificationViewed(True)
 
     def __triggerSeasonStateNotification(self):
@@ -277,6 +358,7 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
             self.__serverSettings.onServerSettingsChange -= self.__updateCosmicEventSettings
         self.__serverSettings = None
         self.__cosmicEventConfig = None
+        self.__currentEnableState = False
         return
 
     def __getTimer(self):
@@ -307,14 +389,16 @@ class CosmicEventBattleController(ICosmicEventBattleController, Notifiable, Seas
     def __onOpenEventPrb(self, *_, **__):
         self.switchPrb()
 
-    def getLobbyRoute(self):
-        return self.lobbyViewRoute
+    def __updateSelectedVehicleNameFromConfig(self):
+        if not self.__cosmicEventConfig:
+            return
+        if self.__vehicleSelectedID:
+            return
+        eventVehicles = self.__cosmicEventConfig.eventVehicles
+        if eventVehicles:
+            self.__vehicleSelectedID = list(eventVehicles.keys())[0]
 
-    def setLobbyRoute(self, route, notify=False):
-        if self.lobbyViewRoute != route:
-            self.lobbyViewRoute = route
-            if notify:
-                self.onLobbyRouteChange(route)
-
-    def isVehicleRentQuest(self, questID):
-        return questID == self.getVehicleRentQuestID()
+    def __checkStartedNotificationShowed(self):
+        if self.isEnabled and not isEventStartedNotificationViewed():
+            self.__triggerEventStateNotification(EVENT_STATES.START)
+            setEventStartedNotificationViewed(True)

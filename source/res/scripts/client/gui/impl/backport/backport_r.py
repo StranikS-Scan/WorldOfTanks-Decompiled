@@ -7,18 +7,18 @@ from frameworks import wulf
 _logger = logging.getLogger(__name__)
 INVALID_RESID = u''
 
-def isVaildResId(resId):
+def isValidResId(resId):
     if resId > 0:
         return True
     _logger.warning('Invalid resId')
     if IS_DEVELOPMENT:
         import traceback
-        traceback.print_stack(limit=2)
+        traceback.print_stack(limit=3)
     return False
 
 
 def text(resId, *args, **kwargs):
-    if not isVaildResId(resId):
+    if not isValidResId(resId):
         return INVALID_RESID
     if args:
         try:
@@ -38,7 +38,7 @@ def text(resId, *args, **kwargs):
 
 
 def ntext(resId, n, *args, **kwargs):
-    if not isVaildResId(resId):
+    if not isValidResId(resId):
         return INVALID_RESID
     if args:
         try:
@@ -62,7 +62,7 @@ def msgid(resId):
 
 
 def image(resId):
-    return INVALID_RESID if not isVaildResId(resId) else wulf.getImagePath(resId)
+    return INVALID_RESID if not isValidResId(resId) else wulf.getImagePath(resId)
 
 
 def sound(resId):

@@ -816,7 +816,8 @@ class HangarVehicleAppearance(ScriptGameObject):
         self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__spaceId, self.__vDesc, self.getThisVehicleDossierInsigniaRank(), outfit)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
         self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
-        self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
+        if not outfit.style or not outfit.style.isClanHidden:
+            self._requestClanDBIDForStickers(self.__onClanDBIDRetrieved)
         return
 
     def __updateProjectionDecals(self, outfit):

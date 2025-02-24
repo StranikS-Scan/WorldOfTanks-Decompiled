@@ -293,6 +293,7 @@ class KPI(object):
         VEHICLE_GUN_SHOT_DISPERSION_TURRET_ROTATION = 'vehicleGunShotDispersionTurretRotation'
         VEHICLE_GUN_SHOT_DISPERSION_WHILE_GUN_DAMAGED = 'vehicleGunShotDispersionWhileGunDamaged'
         VEHICLE_GUN_SHOT_FULL_DISPERSION = 'vehicleGunShotFullDispersion'
+        VEHICLE_GUN_DAMAGE = 'vehicleGunDamage'
         VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
         VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
         VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
@@ -338,8 +339,8 @@ class KPI(object):
         WOUNDED_CREW_EFFICIENCY = 'woundedCrewEfficiency'
         VEHICLE_ALLY_RADIO_DISTANCE = 'vehicleAllyRadioDistance'
         TEMPERATURE_STATES_COUNT = 'temperatureStatesCount'
-        TEMPERATURE_HEATING_PER_SEC = 'temperatureHeatingPerSec'
-        TEMPERATURE_COOLING_PER_SEC = 'temperatureCoolingPerSec'
+        TEMPERATURE_HEATING_TIME = 'temperatureHeatingTime'
+        TEMPERATURE_COOLING_TIME = 'temperatureCoolingTime'
         TEMPERATURE_COOLING_DELAY = 'temperatureCoolingDelay'
         TEMPERATURE_DAMAGE_FACTOR = 'temperatureDamageFactor'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
@@ -555,7 +556,8 @@ VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
  'movingAimingDispersion': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION_CHASSIS_MOVEMENT,
  'shotDemaskFactor': KPI.Name.VEHICLE_INVISIBILITY_AFTER_SHOT,
  'lowDamageDispersion': KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND,
- 'lowPenetrationDispersion': KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND}
+ 'lowPenetrationDispersion': KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_LOWER_BOUND,
+ 'avgDamage': KPI.Name.VEHICLE_GUN_DAMAGE}
 CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
  'fireFighting': KPI.Name.CREW_SKILL_FIRE_FIGHTING,
  'camouflage': KPI.Name.CREW_SKILL_CAMOUFLAGE,

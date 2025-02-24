@@ -599,6 +599,8 @@ def __readBonus_rent(bonus, _name, section):
     rent = {}
     if section.has_key('time'):
         rent['time'] = section['time'].asFloat
+    if section.has_key('expires'):
+        rent['expires'] = section['expires'].asString
     if section.has_key('battles'):
         rent['battles'] = section['battles'].asInt
     if section.has_key('wins'):

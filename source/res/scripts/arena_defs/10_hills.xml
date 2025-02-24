@@ -5,8 +5,8 @@
   <estimatedLoad>	0.3	</estimatedLoad>
   <roundLength>	900	</roundLength>
   <boundingBox>
-    <bottomLeft>	-400.0 -400.0	</bottomLeft>
-    <upperRight>	400.0 400.0	</upperRight>
+    <bottomLeft>	-400.000000 -400.000000	</bottomLeft>
+    <upperRight>	400.000000 400.000000	</upperRight>
   </boundingBox>
   <minimap>	spaces/10_hills/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
@@ -190,6 +190,22 @@
       </teamSpawnPoints>
       <controlPoint>	-66.412003 12.933000	</controlPoint>
     </bob>
+    <domination3>
+      <boundingBox>
+        <bottomLeft>	-300.000000 -200.000000	</bottomLeft>
+        <upperRight>	200.000000 300.000000	</upperRight>
+      </boundingBox>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-49.271988 -147.577194	</position>
+        </team1>
+        <team2>
+          <position>	-58.672569 190.070160	</position>
+        </team2>
+      </teamSpawnPoints>
+      <minimap>	spaces/10_hills/mmap_domination3.dds	</minimap>
+      <controlPoint>	-68.674004 17.194000	</controlPoint>
+    </domination3>
   </gameplayTypes>
   <roadMap></roadMap>
 </10_hills.xml>

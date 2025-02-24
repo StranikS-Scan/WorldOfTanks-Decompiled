@@ -63,6 +63,10 @@ def isPotapovQuestBranchTileAndMissionEnabled(gameParams, pqType):
     return isPotapovQuestBranchEnabled(gameParams, pqType.branch) and isPotapovQuestTileEnabled(gameParams, pqType) and isPotapovQuestEnabled(gameParams, pqType.id)
 
 
+def isResetEnabled(gameParams, branch):
+    return gameParams['misc_settings']['isPM3ResetEnabled'] if branch == PQ_BRANCH.PERSONAL_MISSION_3 else True
+
+
 class PQ_STATE():
     NONE = 0
     UNLOCKED = 1

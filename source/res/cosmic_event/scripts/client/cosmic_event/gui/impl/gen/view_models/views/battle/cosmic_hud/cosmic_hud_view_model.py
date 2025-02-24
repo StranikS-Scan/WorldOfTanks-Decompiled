@@ -36,7 +36,7 @@ class ArenaPhaseEnum(Enum):
 class CosmicHudViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=23, commands=0):
         super(CosmicHudViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -195,6 +195,12 @@ class CosmicHudViewModel(ViewModel):
     def setVehicleOverturned(self, value):
         self._setBool(21, value)
 
+    def getSelectedVehicleID(self):
+        return self._getNumber(22)
+
+    def setSelectedVehicleID(self, value):
+        self._setNumber(22, value)
+
     def _initialize(self):
         super(CosmicHudViewModel, self)._initialize()
         self._addViewModelProperty('crosshair', MarkerModel())
@@ -219,3 +225,4 @@ class CosmicHudViewModel(ViewModel):
         self._addBoolProperty('isTargeting', False)
         self._addNumberProperty('abilityDuration', 0)
         self._addBoolProperty('vehicleOverturned', False)
+        self._addNumberProperty('selectedVehicleID', 0)

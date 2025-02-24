@@ -33,3 +33,4 @@ class BATTLE_TYPES(object):
     DOMINATION_30X30 = 'domination30x30'
     EPIC_BATTLE = 'epicbattle'
     COMP7 = 'comp7'
+    DOMINATION3 = 'domination3'

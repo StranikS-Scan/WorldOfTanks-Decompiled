@@ -17,13 +17,13 @@ class _ClanApplicationParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return proxy_data.ClanApplicationItem(section.readInt64('account_id'), section.readInt64('application_id'), section.readInt('active_applications_count'))
 
 
 class _ClanAppActionParser(SectionParser):
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return self._getItemClass()(section.readInt64('account_id'), section.readInt64('application_id'))
 
     def _getItemClass(self):
@@ -53,13 +53,13 @@ class _ClanInviteParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return proxy_data.ClanInviteItem(section.readInt('invite_id'), section.readInt64('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt('active_invites_count'))
 
 
 class _ClanPersonalAppParser(SectionParser):
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return self._createItem(section.readInt64('clan_id'), self._readString('clan_name', section), self._readString('clan_tag', section), section.readInt64('application_id'))
 
     def _createItem(self, cId, cName, cTag, appId):
@@ -86,7 +86,7 @@ class _ClanAppDeclinedParser(_ClanPersonalAppParser):
 
 class _ClanInviteActionParser(SectionParser):
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return self._createItem(section.readInt64('account_id'), section.readInt('invite_id'))
 
     def _createItem(self, account_id, invite_id):
@@ -116,7 +116,7 @@ class _ClanInvitesCreatedParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return proxy_data.ClanInvitesCreatedItem(self.__getItems('account_ids', section), self.__getItems('invite_ids', section))
 
     def __getItems(self, sectionName, section):
@@ -130,7 +130,7 @@ class _ShowPromoParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         data = dict(section)
         data['data'] = dict(section['data'])
         return proxy_data.ShowTeaserItem(PromoDataParser.parseXML(section))
@@ -141,7 +141,7 @@ class _ShowInBrowserParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         url = section.readString('url')
         if not url:
             _logger.error('WGNC show_in_browser item has no URL')
@@ -160,7 +160,7 @@ class _ProxyDataItemsParser(ParsersCollection):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         items = []
         for item in super(_ProxyDataItemsParser, self).parse(section):
             if item is not None:
@@ -174,7 +174,7 @@ class _ReferralBubbleParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, _, parentSection=None):
         return proxy_data.UpdateRefferalBubbleItem()
 
 
@@ -183,7 +183,7 @@ class _SubscriptionStateParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, _, parentSection=None):
         return proxy_data.UpdateSubscriptionStateItem()
 
 
@@ -192,11 +192,20 @@ class _ReferralProgramEnabledChecker(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         isCurrentlyEnabled = isReferralProgramEnabled()
         value = section.asBool
         if value != isCurrentlyEnabled:
             raise ParseError('Referral Program is {}'.format('enabled' if isCurrentlyEnabled else 'disabled'))
+
+
+class _ReferralProgramPointsTypeChecker(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section, parentSection=None):
+        pass
 
 
 class _ReferralProgramPGBFullChecker(SectionParser):
@@ -205,7 +214,10 @@ class _ReferralProgramPGBFullChecker(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
+        isActivePointType = parentSection.readBool(_ReferralProgramPointsTypeChecker().getTagName())
+        if isActivePointType:
+            return
         isCurrentlyFull = self.__referralProgramController.isScoresLimitReached()
         value = section.asBool
         if value != isCurrentlyFull:
@@ -215,9 +227,9 @@ class _ReferralProgramPGBFullChecker(SectionParser):
 class _CheckClientStateParser(ParsersCollection):
 
     def __init__(self):
-        super(_CheckClientStateParser, self).__init__((_ReferralProgramEnabledChecker(), _ReferralProgramPGBFullChecker()))
+        super(_CheckClientStateParser, self).__init__((_ReferralProgramEnabledChecker(), _ReferralProgramPGBFullChecker(), _ReferralProgramPointsTypeChecker()))
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         for _ in super(_CheckClientStateParser, self).parse(section):
             pass
 
@@ -230,7 +242,7 @@ class _ClanNotificationParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         alias = section.readString('alias')
         value = section.readInt('count', 0)
         isIncrement = section.readBool('isIncrement', True)
@@ -244,7 +256,7 @@ class _BecomeRecruiterParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, _, parentSection=None):
         return proxy_data.BecomeRecruiterItem()
 
 
@@ -253,7 +265,7 @@ class _ShowReferralWindowParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         relativeUrl = section.readString('relative_url')
         if not relativeUrl:
             _logger.warning('WGNC show_referral_window item has no relative_url')
@@ -266,7 +278,7 @@ class _PaymentMethodChangeParser(SectionParser):
     def getTagName(self):
         raise NotImplementedError
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         method = section.readString('method')
         if not method:
             _logger.error('WGNC %s item has no method', self.getTagName())
@@ -295,7 +307,7 @@ class _MapboxSurveyAvailableParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return proxy_data.ShowMapboxSurveyAvailableMessage(section.readString('geometry_name'))
 
 
@@ -304,7 +316,7 @@ class _MapboxEventStartedParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, _):
+    def parse(self, _, parentSection=None):
         return proxy_data.ShowMapboxEventStartedMessage()
 
 
@@ -313,7 +325,7 @@ class _MapboxEventEndedParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, _):
+    def parse(self, _, parentSection=None):
         return proxy_data.ShowMapboxEventEndedMessage()
 
 
@@ -322,7 +334,7 @@ class _MapboxRewardReceivedParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         return proxy_data.ShowMapboxRewardReceivedMessage({'rewards': json.loads(section['rewards'].asString),
          'battles': section['battles'].asInt,
          'isFinal': section.readBool('is_last_reward')})
@@ -333,7 +345,7 @@ class _IntegratedAuctionRateErrorParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, _, parentSection=None):
         return proxy_data.ShowAuctionRateErrorMessage()
 
 
@@ -342,7 +354,7 @@ class _IntegratedAuctionBelowCompetitiveRateParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, _, parentSection=None):
         return proxy_data.ShowAuctionBelowCompetitiveRateMessage()
 
 
@@ -351,7 +363,7 @@ class _IntegratedAuctionLostRateParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         messageData = json.loads(section['data'].asString)
         messageData.setdefault('result', 'lost')
         return proxy_data.ShowAuctionResultMessage(messageData=messageData)
@@ -362,7 +374,7 @@ class _IntegratedAuctionResultParser(SectionParser):
     def getTagName(self):
         pass
 
-    def parse(self, section):
+    def parse(self, section, parentSection=None):
         messageData = json.loads(section['data'].asString)
         return proxy_data.ShowAuctionResultMessage(messageData=messageData)
 

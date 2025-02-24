@@ -13,15 +13,13 @@ class PM3VideoSoundControl(IVideoSoundManager):
 
     def __init__(self, videoID=__INTRO_ID):
         self.__videoID = videoID
-        self.__state = None
-        return
+        self.__state = SoundManagerStates.STOPPED
+        self.__sound = self.__getSound()
 
     def start(self):
-        sound = self.__getSound()
-        if sound:
-            self.setVolume()
+        if self.__sound:
             SoundGroups.g_instance.setState(VIDEO.GROUP, VIDEO.PLAY)
-            SoundGroups.g_instance.playSound2D(sound)
+            self.__sound.play()
             self.__state = SoundManagerStates.PLAYING
 
     def stop(self):
@@ -31,16 +29,15 @@ class PM3VideoSoundControl(IVideoSoundManager):
             self.__state = SoundManagerStates.STOPPED
 
     def pause(self):
-        SoundGroups.g_instance.playSound2D(VIDEO.PAUSE)
-        self.__state = SoundManagerStates.PAUSE
+        if self.__sound and self.__sound.isPlaying:
+            SoundGroups.g_instance.playSound2D(VIDEO.PAUSE)
+            self.__state = SoundManagerStates.PAUSE
 
     def unpause(self):
-        SoundGroups.g_instance.playSound2D(VIDEO.RESUME)
-        self.__state = SoundManagerStates.PLAYING
-
-    def setVolume(self):
-        volumeLevel = SoundGroups.g_instance.getMaxVolumeFromCategories(SoundGroups.USER_SETTINGS_CATEGORY_NAMES)
-        SoundGroups.g_instance.setRTPC(VIDEO.RTPC, volumeLevel)
+        if self.__sound and self.__state == SoundManagerStates.PAUSE:
+            SoundGroups.g_instance.playSound2D(VIDEO.RESUME)
+            self.__state = SoundManagerStates.PLAYING
 
     def __getSound(self):
-        return self.__VIDEO_SOUND.get(self.__videoID)
+        soundEvent = self.__VIDEO_SOUND.get(self.__videoID, None)
+        return SoundGroups.g_instance.getSound2D(soundEvent) if soundEvent else None

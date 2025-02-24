@@ -7,7 +7,7 @@ from cosmic_event.gui.impl.gen.view_models.views.lobby.cosmic_lobby_view.scoring
 class PlayerEntry(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(PlayerEntry, self).__init__(properties=properties, commands=commands)
 
     def getPlayerName(self):
@@ -40,11 +40,17 @@ class PlayerEntry(ViewModel):
     def setPlace(self, value):
         self._setNumber(4, value)
 
+    def getVehicle(self):
+        return self._getNumber(5)
+
+    def setVehicle(self, value):
+        self._setNumber(5, value)
+
     def getPlayersScore(self):
-        return self._getArray(5)
+        return self._getArray(6)
 
     def setPlayersScore(self, value):
-        self._setArray(5, value)
+        self._setArray(6, value)
 
     @staticmethod
     def getPlayersScoreType():
@@ -57,4 +63,5 @@ class PlayerEntry(ViewModel):
         self._addNumberProperty('totalPoints', 0)
         self._addBoolProperty('isDeserter', False)
         self._addNumberProperty('place', 1)
+        self._addNumberProperty('vehicle', 1)
         self._addArrayProperty('playersScore', Array())

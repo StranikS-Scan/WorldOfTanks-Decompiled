@@ -174,11 +174,9 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         Waiting.hide('loadPage')
         self.__loadBrowserCallbackID = BigWorld.callback(0.01, self.__loadBrowser)
         g_eventBus.addListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.MissionsEvent.RELOAD_TAB_CONTEXT, self.__onReloadTabContext, EVENT_BUS_SCOPE.LOBBY)
 
     def _dispose(self):
         g_eventBus.removeListener(events.MissionsEvent.ON_TAB_CHANGED, self.__updateBrowserProperties, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.MissionsEvent.RELOAD_TAB_CONTEXT, self.__onReloadTabContext, EVENT_BUS_SCOPE.LOBBY)
         self.__cancelLoadBrowserCallback()
         self.__browserView = None
         super(MissionsMarathonView, self)._dispose()
@@ -208,9 +206,6 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
             else:
                 browser.skipEscape = False
                 browser.useSpecialKeys = True
-
-    def __onReloadTabContext(self, *args):
-        self.reload()
 
 
 class MissionsEventBoardsView(MissionsEventBoardsViewMeta):

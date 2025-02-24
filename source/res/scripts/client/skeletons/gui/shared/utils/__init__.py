@@ -118,7 +118,7 @@ class IItemsRequester(requesters.IRequester):
     def getStockVehicle(self, typeCompDescr):
         raise NotImplementedError
 
-    def getVehicleCopy(self, vehicle, battleModifiers=None):
+    def getVehicleCopy(self, vehicle):
         raise NotImplementedError
 
     def getVehicleCopyByCD(self, typeCompDescr):

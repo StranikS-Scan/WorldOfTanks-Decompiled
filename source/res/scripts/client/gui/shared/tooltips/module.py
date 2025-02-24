@@ -654,7 +654,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     paramsKeyName = self.ROCKET_ACCELERATION_ENGINE_MODULE_PARAM
             elif paramsKeyName == GUI_ITEM_TYPE.TURRET:
                 if vehicle is not None and vehicle.descriptor.hasThermalVision:
-                    highlightPossible = False
+                    highlightPossible = serverSettings.checkThermalVisionHighlights(increase=True)
                     paramsKeyName = self.THERMAL_VISION_TURRET_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             highlightParamsList = self.HIGHLIGHT_MODULE_PARAMS.get(paramsKeyName, []) if paramsKeyName in self.HIGHLIGHT_MODULE_PARAMS else self.HIGHLIGHT_MODULE_PARAMS[self.DEFAULT_PARAM]

@@ -10,7 +10,6 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE_NAMES as _C_NAMES
 from gui.prb_control.storages.local_storage import LocalStorage, RecentPrbStorage
 from gui.prb_control.storages.comp7_storage import Comp7Storage
 from gui.prb_control.storages.maps_training_storage import MapsTrainingStorage
-from gui.prb_control.storages.bob_storage import BobStorage
 from gui.prb_control.storages.prb_storage import TrainingStorage
 from gui.prb_control.storages.ranked_storage import RankedStorage
 from gui.prb_control.storages.epic_storage import EpicStorage
@@ -49,7 +48,6 @@ registerPrbStorage(_makeLegacyName(_P_TYPE.EPIC_TRAINING), TrainingStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.MAPBOX), MapboxStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.MAPS_TRAINING), MapsTrainingStorage())
 registerPrbStorage(makeQueueName(_Q_TYPE.COMP7), Comp7Storage())
-registerPrbStorage(makeQueueName(_Q_TYPE.BOB), BobStorage())
 
 class storage_getter(object):
 

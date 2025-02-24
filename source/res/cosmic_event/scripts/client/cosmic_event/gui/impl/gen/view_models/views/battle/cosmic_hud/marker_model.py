@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class MarkerModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(MarkerModel, self).__init__(properties=properties, commands=commands)
 
     def getPosx(self):
@@ -32,9 +32,16 @@ class MarkerModel(ViewModel):
     def setIsVisible(self, value):
         self._setBool(3, value)
 
+    def getKillStreak(self):
+        return self._getNumber(4)
+
+    def setKillStreak(self, value):
+        self._setNumber(4, value)
+
     def _initialize(self):
         super(MarkerModel, self)._initialize()
         self._addRealProperty('posx', 0.0)
         self._addRealProperty('posy', 0.0)
         self._addRealProperty('scale', 0.0)
         self._addBoolProperty('isVisible', True)
+        self._addNumberProperty('killStreak', 0)

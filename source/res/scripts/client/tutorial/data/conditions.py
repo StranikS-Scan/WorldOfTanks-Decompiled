@@ -189,10 +189,9 @@ class CurrentSceneCondition(ActiveCondition):
 class ViewPresentCondition(ActiveCondition):
 
     def __init__(self, layer, viewAlias, state=CONDITION_STATE.ACTIVE):
-        super(ViewPresentCondition, self).__init__(None, CONDITION_TYPE.VIEW_PRESENT, state)
+        super(ViewPresentCondition, self).__init__('{}_{}'.format(layer, viewAlias), CONDITION_TYPE.VIEW_PRESENT, state)
         self.__layer = layer
         self.__viewAlias = viewAlias
-        return
 
     def getLayer(self):
         return self.__layer

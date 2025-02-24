@@ -5,7 +5,8 @@ from account_helpers.AccountSettings import UNLOCK_VEHICLES_IN_BATTLE_HINTS
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from gui import GUI_NATIONS_ORDER_INDEX
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import isVehLevelUnlockableInBattle
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import HangarCarouselDataProvider, _SUPPLY_ITEMS, _FRONT_SUPPLY_ITEMS
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.basic.carousel_data_provider import _SUPPLY_ITEMS, _FRONT_SUPPLY_ITEMS
+from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.carousel_data_provider import BattlePassCarouselDataProvider
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -14,7 +15,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 
-class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
+class EpicBattleCarouselDataProvider(BattlePassCarouselDataProvider):
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, carouselFilter, itemsCache):
@@ -130,6 +131,9 @@ class EpicBattleCarouselDataProvider(HangarCarouselDataProvider):
         result['xpImgSource'] = ''
         result['debutBoxesImgSource'] = ''
         return result
+
+    def _isBattlePassHidden(self, vehicle):
+        return not self.battlePassController.isVisible()
 
     def _getSupplyIndices(self):
         return [ len(self._vehicles + self.__separatorItems) + idx for idx in _SUPPLY_ITEMS.ALL ]

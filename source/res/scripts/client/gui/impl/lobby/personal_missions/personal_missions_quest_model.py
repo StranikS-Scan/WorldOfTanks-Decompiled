@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions/personal_missions_quest_model.py
+import itertools
 from frameworks.wulf import Array
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_item_part_model import Pm3QuestItemPartModel
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_item_part_progress_model import Pm3QuestItemPartProgressModel
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_part_relation_model import QuestRelationType
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_relation_group_model import Pm3QuestRelationGroupModel
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_part_model import Pm3QuestPartModel
-from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_model import Pm3QuestModel
+from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_quest_model import Pm3QuestModel, ResetButtonState
 from gui.impl.lobby.personal_missions.personal_mission_bonuses_packers import packBonusModelAndTooltipData
 from skeletons.gui.game_control import IPersonalMissionsController
 from gui.server_events.event_items import PersonalMission
@@ -63,7 +64,39 @@ class QuestModelParser(object):
                 self.__updateQuestsPartModel(questModel.addQuests, addQuestsDict, questsProgress, isMain=False, isShowAnimationRewards=isShowAnimationRewards)
             else:
                 self.__clearPm3QuestPartModel(questModel.addQuests)
+            self.__updateResetPauseButtons(self.questInfo, questModel, questsProgress, mainQuestsDict, addQuestsDict)
             return questModel
+
+    def __updateResetPauseButtons(self, quest, questModel, questsProgress, mainQuestsDict, addQuestsDict):
+        if not quest.isAvailable().isValid or not quest.isInProgress() or quest.isFullCompleted() or not quest.isFinal():
+            questModel.setResetButtonStatus(ResetButtonState.INVISIBLE)
+            questModel.setIsPauseButtonEnabled(False)
+            return
+        if quest.isCompleted():
+            self.__setResetPauseButtonsStatus(questModel, questsProgress, addQuestsDict.iteritems())
+            return
+        combinedQuestsDict = itertools.chain(mainQuestsDict.iteritems(), addQuestsDict.iteritems())
+        self.__setResetPauseButtonsStatus(questModel, questsProgress, combinedQuestsDict)
+
+    def __setResetPauseButtonsStatus(self, questModel, questsProgress, questsDict):
+        comQuests = self.__getCumulativeQuests(questsDict)
+        if comQuests:
+            questModel.setIsPauseButtonEnabled(True)
+            isHasCumProgress = any((questName in comQuests and (questProgress.get('value', 0) != 0 or questProgress.get('goal', 0) > questProgress.get('battles', []).count(True) > 0) for questName, questProgress in questsProgress.iteritems()))
+            questModel.setResetButtonStatus(ResetButtonState.ENABLED if isHasCumProgress else ResetButtonState.DISABLED)
+            return
+        questModel.setResetButtonStatus(ResetButtonState.INVISIBLE)
+        questModel.setIsPauseButtonEnabled(False)
+
+    @staticmethod
+    def __getCumulativeQuests(questsDict):
+        cumulativeQuestsNames = []
+        for questName, questConfig in questsDict:
+            description = questConfig.get('description', None)
+            if description.getContainerType() == PMConstants.CONTAINER.HEADER and description.displayType in (PMConstants.DISPLAY_TYPE.BIATHLON, PMConstants.DISPLAY_TYPE.SERIES, PMConstants.DISPLAY_TYPE.LIMITED):
+                cumulativeQuestsNames.append(questName)
+
+        return cumulativeQuestsNames
 
     def __clearPm3QuestPartModel(self, pm3QuestPartModel):
         pm3QuestPartModel.getRewards().clear()

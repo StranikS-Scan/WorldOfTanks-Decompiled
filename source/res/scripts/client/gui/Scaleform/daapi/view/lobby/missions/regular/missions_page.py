@@ -10,7 +10,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from adisp import adisp_async as adispasync, adisp_process
 from gui.limited_ui.lui_rules_storage import LuiRules
-from gui.marathon.bob_event import BobEvent
 from gui.marathon.collective_goal_marathon import COLLECTIVE_GOAL_MARATHON_PREFIX
 from wg_async import wg_async, wg_await
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -29,7 +28,6 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.BATTLE_PASS import BATTLE_PASS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown
 from gui.impl.lobby.subscription.subscription_helpers import isSubscriptionDailyQuestsIntroShown
 from gui.impl import backport
 from gui.impl.gen import R
@@ -43,7 +41,7 @@ from gui.shared.event_dispatcher import showHangar
 from gui.shared.events import MissionsEvent
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv, BattleMattersSoundEnv, BobPageSoundEnv
+from gui.sounds.ambients import BattlePassSoundEnv, LobbySubViewEnv, MarathonPageSoundEnv, MissionsCategoriesSoundEnv, MissionsEventsSoundEnv, MissionsPremiumSoundEnv, BattleMattersSoundEnv
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
@@ -175,8 +173,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_PREMIUM_VIEW_PY_ALIAS:
             return MissionsPremiumSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS:
-            if self.__marathonPrefix == BobEvent.BOB_EVENT_PREFIX:
-                return BobPageSoundEnv
             return MarathonPageSoundEnv
         if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             return MissionsCategoriesSoundEnv
@@ -312,8 +308,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return
 
     def __fireTabChangedEvent(self):
-        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias,
-         'marathonPrefix': self.__marathonPrefix}), EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx={'alias': self.__currentTabAlias}), EVENT_BUS_SCOPE.LOBBY)
         if self.currentTab:
             self.currentTab.markVisited()
 
@@ -444,10 +439,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                     availableDailyQuests = []
                     availableDailyQuests.extend(self.eventsCache.getDailyQuests(includeEpic=True).values())
                     availableDailyQuests.extend(self.eventsCache.getPremiumQuests(lambda q: q.isAvailable().isValid).values())
-                    if availableDailyQuests:
-                        newEventsCount = len(settings.getNewCommonEvents(availableDailyQuests))
-                        if self.battlePass.isActive() and not isBattlePassDailyQuestsIntroShown():
-                            newEventsCount += 1
                     if self.lobbyContext.getServerSettings().isDailyQuestsExtraRewardsEnabled() and not isSubscriptionDailyQuestsIntroShown():
                         newEventsCount += 1
                 elif alias == QUESTS_ALIASES.MAPBOX_VIEW_PY_ALIAS:

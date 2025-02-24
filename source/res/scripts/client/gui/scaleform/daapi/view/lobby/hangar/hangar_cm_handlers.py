@@ -229,7 +229,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                if not vehicle.isOnlyForEpicBattles and not vehicle.isOnlyForBob:
+                if not vehicle.isOnlyForEpicBattles:
                     options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
                 if vehicle.isPostProgressionExists:
                     options.append(self._makeItem(VEHICLE.POST_PROGRESSION, MENU.contextmenu(VEHICLE.POST_PROGRESSION), {'enabled': isNavigationEnabled}))

@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/events_helpers.py
 import operator
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import typing
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11n2dProgressionLinkBtnParams
 from gui.shared.gui_items import GUI_ITEM_TYPE
 import constants
-from battle_pass_common import BattlePassConsts, BATTLE_PASS_RANDOM_QUEST_ID_PREFIX
+from battle_pass_common import BattlePassConsts, BATTLE_PASS_RANDOM_QUEST_ID_PREFIX, NON_CHAPTER_ID, isPostProgressionChapter, getPostProgressionLevel
 from constants import EVENT_TYPE
 from gui.server_events.bonuses import BattleTokensBonus
 from gui.server_events.events_constants import BATTLE_MATTERS_QUEST_ID
@@ -37,12 +37,13 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Iterable, Union
+    from typing import Dict, Iterable, Union
     from gui.server_events.bonuses import BattlePassStyleProgressTokenBonus, TokensBonus
     from gui.server_events.event_items import Quest
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 _AWARDS_PER_PAGE = 3
+_ChapterProgress = namedtuple('_ChapterProgress', ('previousPoints', 'currentPoints', 'previousLevel', 'currentLevel', 'currentLevelPoints', 'maxLevelPoints'))
 
 class BattlePassProgress(object):
     __battlePassController = dependency.descriptor(IBattlePassController)
@@ -51,49 +52,31 @@ class BattlePassProgress(object):
 
     def __init__(self, arenaBonusType, *args, **kwargs):
         self.__arenaBonusType = arenaBonusType
-        self.__chapterID = kwargs.get('bpChapter', 0)
         self.__topPoints = kwargs.get('bpTopPoints', 0)
         self.__pointsAux = kwargs.get('bpNonChapterPointsDiff', 0)
-        self.__pointsTotal = kwargs.get('sumPoints', 0)
         self.__hasBattlePass = kwargs.get('hasBattlePass', False)
         self.__questsProgress = kwargs.get('questsProgress', {})
         self.__battlePassComplete = kwargs.get('battlePassComplete', False)
         self.__availablePoints = kwargs.get('availablePoints', False)
         self.__questPoints = kwargs.get('eventBattlePassPoints', 0)
         self.__bonusCapPoints = kwargs.get('bpBonusPoints', 0)
-        self.__prevLevel = 0
-        self.__currLevel = 0
-        self.__pointsNew = 0
-        self.__pointsMax = 0
+        self.__chaptersInfo = kwargs.get('bpChaptersInfo', {})
+        self.__previousChapterID = NON_CHAPTER_ID
+        self.__currentChapterID = NON_CHAPTER_ID
+        self.__chaptersProgress = {}
         self.__initExtendedData()
 
     @property
-    def chapterID(self):
-        return self.__chapterID
+    def previousChapterID(self):
+        return self.__previousChapterID
 
     @property
-    def bpTopPoints(self):
-        return self.__topPoints
+    def currentChapterID(self):
+        return self.__currentChapterID
 
     @property
     def isApplied(self):
         return self.__battlePassController.isGameModeEnabled(self.__arenaBonusType)
-
-    @property
-    def hasProgress(self):
-        return self.isLevelReached or self.pointsAdd > 0
-
-    @property
-    def isDone(self):
-        return self.isLevelReached or self.isLevelMax
-
-    @property
-    def isLevelReached(self):
-        return self.__currLevel > self.__prevLevel
-
-    @property
-    def isLevelMax(self):
-        return self.__chapterID > 0 and self.__currLevel == self.__battlePassController.getMaxLevelInChapter(self.__chapterID)
 
     @property
     def hasBattlePass(self):
@@ -108,37 +91,12 @@ class BattlePassProgress(object):
         return self.__availablePoints
 
     @property
-    def level(self):
-        return self.__prevLevel + 1
-
-    @property
-    def currentLevel(self):
-        return self.__currLevel
-
-    @property
-    def prevLevel(self):
-        return self.__prevLevel
-
-    @property
-    def currLevel(self):
-        return self.__currLevel
-
-    @property
-    def pointsAdd(self):
-        totalPoints = self.__topPoints + self.__bonusCapPoints + self.__questPoints
-        return self.__pointsAux or (totalPoints if self.__currLevel == self.__prevLevel else self.__pointsNew)
+    def bpTopPoints(self):
+        return self.__topPoints
 
     @property
     def pointsAux(self):
         return self.__pointsAux
-
-    @property
-    def pointsNew(self):
-        return self.__pointsNew
-
-    @property
-    def pointsMax(self):
-        return self.__pointsMax
 
     @property
     def questPoints(self):
@@ -148,27 +106,68 @@ class BattlePassProgress(object):
     def bonusCapPoints(self):
         return self.__bonusCapPoints
 
-    @property
-    def pointsTotal(self):
-        return self.__pointsTotal
+    def getCurrentLevelPoints(self, chapterID):
+        progress = self.__chaptersProgress.get(chapterID)
+        return progress.currentLevelPoints if progress is not None else 0
 
-    @property
-    def awards(self):
-        return self.__battlePassController.getSingleAward(self.chapterID, self.level, self.__getRewardType()) if self.isLevelReached else []
+    def getMaxLevelPoints(self, chapterID):
+        progress = self.__chaptersProgress.get(chapterID)
+        return progress.maxLevelPoints if progress is not None else 0
 
-    def getLevelAwards(self, level):
-        return self.__battlePassController.getSingleAward(self.chapterID, level, self.__getRewardType())
+    def getCurrentLevel(self, chapterID):
+        progress = self.__chaptersProgress.get(chapterID)
+        return progress.currentLevel if progress is not None else 0
+
+    def getPreviousLevel(self, chapterID):
+        progress = self.__chaptersProgress.get(chapterID)
+        return progress.previousLevel if progress is not None else 0
+
+    def getPointsDiff(self, chapterID):
+        progress = self.__chaptersProgress.get(chapterID)
+        if progress is None:
+            return 0
+        else:
+            return progress.currentPoints - progress.previousPoints if progress.currentLevel == progress.previousLevel else progress.currentLevelPoints
+
+    def getLevelAwards(self, chapterID, level):
+        return self.__battlePassController.getSingleAward(chapterID, level, self.__getRewardType(chapterID))
+
+    def hasProgress(self, chapterID):
+        return self.isLevelReached(chapterID) or self.getPointsDiff(chapterID) > 0
+
+    def isLevelReached(self, chapterID):
+        return self.getCurrentLevel(chapterID) > self.getPreviousLevel(chapterID)
+
+    def isLevelMax(self, chapterID):
+        return chapterID > 0 and self.getCurrentLevel(chapterID) == self.__battlePassController.getMaxLevelInChapter(chapterID)
+
+    def isDone(self, chapterID):
+        return self.isLevelReached(chapterID) or self.isLevelMax(chapterID)
 
     def __initExtendedData(self):
-        if not self.__battlePassController.isEnabled() or self.__chapterID == 0:
+        if not self.__battlePassController.isEnabled() or not self.__chaptersInfo:
             return
-        prevPoints = self.__pointsTotal - self.__topPoints - self.__questPoints - self.__bonusCapPoints + self.__pointsAux
-        self.__prevLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, prevPoints)
-        self.__currLevel = self.__battlePassController.getLevelByPoints(self.__chapterID, self.__pointsTotal)
-        self.__pointsNew, self.__pointsMax = self.__battlePassController.getProgressionByPoints(self.__chapterID, self.__pointsTotal, self.__currLevel)
+        for chapterID, pointsInfo in self.__chaptersInfo.iteritems():
+            previousPoints, currentPoints = pointsInfo
+            if not isPostProgressionChapter(chapterID):
+                prevLevel = self.__battlePassController.getLevelByPoints(chapterID, previousPoints)
+                currentLevel = self.__battlePassController.getLevelByPoints(chapterID, currentPoints)
+            else:
+                levelsConfig = self.__battlePassController.getLevelsConfig(chapterID)
+                prevLevel = getPostProgressionLevel(previousPoints, levelsConfig)
+                currentLevel = getPostProgressionLevel(currentPoints, levelsConfig)
+            currentLevelPoints, maxLevelPoints = self.__battlePassController.getProgressionByPoints(chapterID, currentPoints, currentLevel)
+            progress = _ChapterProgress(previousPoints, currentPoints, prevLevel, currentLevel, currentLevelPoints, maxLevelPoints)
+            self.__chaptersProgress.update({chapterID: progress})
+            if self.__battlePassController.getMaxLevelInChapter(chapterID) <= currentLevel:
+                self.__previousChapterID = chapterID
+            self.__currentChapterID = chapterID
 
-    def __getRewardType(self):
-        return BattlePassConsts.REWARD_BOTH if self.__hasBattlePass else BattlePassConsts.REWARD_FREE
+        if not self.__previousChapterID:
+            self.__previousChapterID = self.__currentChapterID
+
+    def __getRewardType(self, chapterID):
+        return BattlePassConsts.REWARD_BOTH if self.__hasBattlePass and not isPostProgressionChapter(chapterID) else BattlePassConsts.REWARD_FREE
 
     @staticmethod
     def __isQuestCompleted(_, previousProgress, currentProgress):

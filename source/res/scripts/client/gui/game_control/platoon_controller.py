@@ -145,6 +145,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
     QUEUE_INFO_UPDATE_DELAY = 5
     DROPDOWN_HALF_WIDTH = 205
     DROPDOWN_Y_OFFSET = 6
+    SQUAD_SIZE_SELECT_PREBATTLE_TYPES = []
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -488,7 +489,7 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
 
     def canSelectSquadSize(self):
         prbType = self.getPrbEntityType()
-        return prbType in [PREBATTLE_TYPE.COMP7]
+        return prbType in self.SQUAD_SIZE_SELECT_PREBATTLE_TYPES
 
     def hasSelectorPopover(self):
         return self.hasWelcomeWindow() or self.canSelectSquadSize() or self.getPermissions().hasSquadArrow()

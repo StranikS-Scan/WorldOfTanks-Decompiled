@@ -839,7 +839,26 @@
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
         <compatibleModels>	A88_M53_55_NY25_3Dst	</compatibleModels>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.788 0.25 1.804	</position>
+        <rotation>	0 -0 1.570796	</rotation>
+        <scale>	0.999989 0.999989 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.788 0.25 1.804	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -1307,7 +1326,6 @@
             </A88_M53_55_NY25_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-0.207073	</xStart>
@@ -1505,7 +1523,6 @@
             </A88_M53_55_NY25_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-0.207071	</xStart>
@@ -2118,7 +2135,6 @@
             </A88_M53_55_NY25_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-0.212199	</xStart>
@@ -2317,7 +2333,6 @@
             </A88_M53_55_NY25_3Dst>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-0.212198	</xStart>
@@ -2713,6 +2728,15 @@
               <anchorShift>	0.336648	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000006 0.236 1.483964	</position>
+              <rotation>	-0 -0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	0 -0.001144 3.69316	</rayStart>
@@ -2883,6 +2907,15 @@
               <showOn>	4352	</showOn>
               <clipAngle>	0.09317	</clipAngle>
               <anchorShift>	0.336648	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <position>	-0.000006 0.236 1.48396	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	gunMantlet	</applyType>
+              <size>	medium	</size>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>
@@ -3682,6 +3715,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.694751	</clipAngle>
           <anchorShift>	0.068016	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.123075 1.337518 -2.042074	</position>
+          <rotation>	-0 -1.570796 1.570796	</rotation>
+          <scale>	0.999984 0.999984 0.999985	</scale>
+          <applyType>	universal	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.732078 1.611 -0.774853	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

@@ -561,7 +561,7 @@ def _migrateTo65(core, data, initialized):
 
 
 def _migrateTo66(core, data, initialized):
-    data['battlePassStorage'][BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
+    pass
 
 
 def _migrateTo67(core, data, initialized):
@@ -1307,6 +1307,26 @@ def _migrateTo133(core, data, initialized):
     data[GUI_START_BEHAVIOR][GuiSettingsBehavior.COMP7_SEASON_STATISTICS_SHOWN] = False
 
 
+def _migrateTo134(core, data, initialized):
+    from account_helpers.AccountSettings import AccountSettings
+    from gui.server_events import recruit_helper
+    for recruitUniqueIDs in AccountSettings.getNotifications('recruitNotifications', set()):
+        recruit_helper.setNewRecruitVisited(recruitUniqueIDs.lstrip('0123456789'))
+
+
+def _migrateTo135(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import GUI_START_BEHAVIOR
+    data[GUI_START_BEHAVIOR][GuiSettingsBehavior.CREW_MENTORING_LICENSE_AWARDS_SHOWN] = False
+
+
+def _migrateTo136(core, data, initialized):
+    data['onceOnlyHints2'][OnceOnlyHints.WOTPLUS_OPT_DEV_HINT] = False
+
+
+def _migrateTo137(core, data, initialized):
+    data['clear']['battlePassStorage'] = data['clear'].get('battlePassStorage', 0) | 134217728
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -1833,6 +1853,22 @@ _versions = ((1,
   False),
  (133,
   _migrateTo133,
+  False,
+  False),
+ (134,
+  _migrateTo134,
+  False,
+  False),
+ (135,
+  _migrateTo135,
+  False,
+  False),
+ (136,
+  _migrateTo136,
+  False,
+  False),
+ (137,
+  _migrateTo137,
   False,
   False))
 

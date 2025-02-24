@@ -16,7 +16,7 @@ class OptionState(Enum):
 class BuyVehicleOptionModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(BuyVehicleOptionModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -35,34 +35,41 @@ class BuyVehicleOptionModel(ViewModel):
     def getTooltipType():
         return BuyVehicleSimpleTooltipModel
 
+    def getName(self):
+        return self._getString(2)
+
+    def setName(self, value):
+        self._setString(2, value)
+
     def getOptionState(self):
-        return OptionState(self._getString(2))
+        return OptionState(self._getString(3))
 
     def setOptionState(self, value):
-        self._setString(2, value.value)
+        self._setString(3, value.value)
 
     def getIcon(self):
-        return self._getResource(3)
+        return self._getResource(4)
 
     def setIcon(self, value):
-        self._setResource(3, value)
+        self._setResource(4, value)
 
     def getTitle(self):
-        return self._getString(4)
+        return self._getString(5)
 
     def setTitle(self, value):
-        self._setString(4, value)
+        self._setString(5, value)
 
     def getIsPriceVisible(self):
-        return self._getBool(5)
+        return self._getBool(6)
 
     def setIsPriceVisible(self, value):
-        self._setBool(5, value)
+        self._setBool(6, value)
 
     def _initialize(self):
         super(BuyVehicleOptionModel, self)._initialize()
         self._addViewModelProperty('price', BuyVehiclePriceModel())
         self._addViewModelProperty('tooltip', BuyVehicleSimpleTooltipModel())
+        self._addStringProperty('name', '')
         self._addStringProperty('optionState')
         self._addResourceProperty('icon', R.invalid())
         self._addStringProperty('title', '')

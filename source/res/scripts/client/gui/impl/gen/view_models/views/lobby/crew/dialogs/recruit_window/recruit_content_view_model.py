@@ -15,7 +15,7 @@ class DropDownState(Enum):
 class RecruitContentViewModel(ViewModel):
     __slots__ = ('onNationChange', 'onVehTypeChange', 'onVehicleChange', 'onSpecializationChange')
 
-    def __init__(self, properties=12, commands=4):
+    def __init__(self, properties=13, commands=4):
         super(RecruitContentViewModel, self).__init__(properties=properties, commands=commands)
 
     def getNationState(self):
@@ -106,6 +106,12 @@ class RecruitContentViewModel(ViewModel):
     def getSpecializationsType():
         return DropDownItemViewModel
 
+    def getIsSlotChanged(self):
+        return self._getBool(12)
+
+    def setIsSlotChanged(self, value):
+        self._setBool(12, value)
+
     def _initialize(self):
         super(RecruitContentViewModel, self)._initialize()
         self._addStringProperty('nationState')
@@ -120,6 +126,7 @@ class RecruitContentViewModel(ViewModel):
         self._addArrayProperty('vehicles', Array())
         self._addStringProperty('selectedSpecialization', '-1')
         self._addArrayProperty('specializations', Array())
+        self._addBoolProperty('isSlotChanged', False)
         self.onNationChange = self._addCommand('onNationChange')
         self.onVehTypeChange = self._addCommand('onVehTypeChange')
         self.onVehicleChange = self._addCommand('onVehicleChange')

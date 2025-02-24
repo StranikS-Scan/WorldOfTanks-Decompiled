@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/TeamInfoComp7Component.py
 import typing
+from script_component.DynamicScriptComponent import DynamicScriptComponent
 import VOIP
+from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
 from constants import REQUEST_COOLDOWN
 from gui.battle_control import avatar_getter
-from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from VOIP.VOIPManager import VOIPManager

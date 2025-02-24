@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 class MemberChangeTankmanModel(TankmanModel):
     __slots__ = ()
 
-    def __init__(self, properties=23, commands=0):
+    def __init__(self, properties=24, commands=0):
         super(MemberChangeTankmanModel, self).__init__(properties=properties, commands=commands)
 
     def getIsInSameVehicle(self):
-        return self._getBool(22)
+        return self._getBool(23)
 
     def setIsInSameVehicle(self, value):
-        self._setBool(22, value)
+        self._setBool(23, value)
 
     def _initialize(self):
         super(MemberChangeTankmanModel, self)._initialize()

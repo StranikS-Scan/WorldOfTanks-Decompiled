@@ -25,7 +25,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewTankChangeKeys, CrewViewKeys
 
 class TankChangeView(BaseCrewView):
     __slots__ = ('__dataProvider', '__filterState', '__tankman', '__vehicle', '__selectedTmanInvID', '_filterPanelWidget')
@@ -121,9 +120,8 @@ class TankChangeView(BaseCrewView):
         return (('inventory', self._onInventoryUpdate), ('inventory.8.compDescr', self._onVehicleUpdated))
 
     def _onClose(self, params=None):
-        self._logClose(params)
         if self.isPersonalFileOpened:
-            self._onBack(False)
+            self._onBack()
         else:
             self._destroySubViews()
 
@@ -168,13 +166,12 @@ class TankChangeView(BaseCrewView):
 
     @args2params(int)
     def _onVehicleSelected(self, vehicleID):
-        self._uiLogger.logClick(CrewTankChangeKeys.CARD)
         vehicle = self.itemsCache.items.getItemByCD(vehicleID)
         if not vehicle:
             return
         else:
             slot = next((slot for slot, tman in vehicle.crew if tman and self.tankman.invID == tman.invID), None)
-            dialogs.showRetrainSingleDialog(self.tankman.invID, vehicleID, targetSlotIdx=slot, isChangeRoleVisible=True, parentViewKey=CrewViewKeys.TANK_CHANGE)
+            dialogs.showRetrainSingleDialog(self.tankman.invID, vehicleID, targetSlotIdx=slot, isChangeRoleVisible=True)
             SoundGroups.g_instance.playSound2D(SOUNDS.CREW_TANK_CLICK)
             return
 
@@ -209,6 +206,7 @@ class TankChangeView(BaseCrewView):
             vm.setIsSelected(self.vehicle.compactDescr == vehicle.compactDescr)
             vm.setIsInInventory(vehicle.isInInventory)
             vm.setIsTrainingAvailable(self.__isValidForTraining(vehicle))
+            vm.setIsWotPlusVehicle(vehicle.isWotPlus)
             vehicleList.addViewModel(vm)
 
         vehicleList.invalidate()

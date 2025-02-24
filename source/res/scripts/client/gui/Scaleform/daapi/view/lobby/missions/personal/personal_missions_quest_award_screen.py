@@ -229,7 +229,8 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
                  'overlayType': item['overlayType'],
                  'isSpecial': item['isSpecial'],
                  'specialAlias': item['specialAlias'],
-                 'specialArgs': item['specialArgs']})
+                 'specialArgs': item['specialArgs'],
+                 'isWulfTooltip': item['isWulfTooltip']})
 
         return result
 

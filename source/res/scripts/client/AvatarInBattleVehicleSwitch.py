@@ -34,7 +34,7 @@ class AvatarInBattleVehicleSwitch(ScriptComponent):
             self.__updateCurrentVehicle()
 
     def __updateAllVehsList(self):
-        self.__sessionProvider.dynamic.comp7PrebattleSetup.setAvailableVehicles(self.vehicleSpawnList)
+        self.__sessionProvider.dynamic.prebattleSetup.setAvailableVehicles(self.vehicleSpawnList)
 
     def __updateCurrentVehicle(self):
-        self.__sessionProvider.dynamic.comp7PrebattleSetup.updateVehicleInfo(self.spawnInfoForVehicle)
+        self.__sessionProvider.dynamic.prebattleSetup.updateVehicleInfo(self.spawnInfoForVehicle)

@@ -79,14 +79,3 @@ class MapboxQuestFlagsGetter(BaseQuestFlagsGetter):
      QuestFlagTypes.MAPBOX,
      QuestFlagTypes.MARATHON,
      QuestFlagTypes.ELEN)
-
-
-class Comp7QuestFlagsGetter(BaseQuestFlagsGetter):
-    _SUPPORTED_FLAGS = (QuestFlagTypes.COMP7, QuestFlagTypes.MARATHON)
-
-
-class Comp7TournamentQuestFlagsGetter(BaseQuestFlagsGetter):
-    _SUPPORTED_FLAGS = (QuestFlagTypes.PERSONAL_MISSIONS,
-     QuestFlagTypes.BATTLE,
-     QuestFlagTypes.MARATHON,
-     QuestFlagTypes.ELEN)

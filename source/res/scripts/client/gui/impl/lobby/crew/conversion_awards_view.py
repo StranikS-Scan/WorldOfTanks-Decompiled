@@ -42,7 +42,7 @@ class ConversionAwardsView(BaseCrewSubView):
             tx.setTitle(locales.title())
             tx.setUnderTitle(locales.underTitle())
             tx.setBottomNote(locales.buttonNote())
-            tx.setButtonTitle(locales.button.submit())
+            tx.setDefaultButtonTitle(locales.button.submit())
             packCompensationData(self.__conversionResult, tx.mainRewards, self.__tooltipData)
 
     def _onLoaded(self, *args, **kwargs):

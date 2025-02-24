@@ -19,7 +19,7 @@ from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, TokensBonus
+    from gui.server_events.bonuses import SimpleBonus, VehicleBlueprintBonus, ItemsBonus, CurrenciesBonus, CustomizationsBonus, BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, TokensBonus
 _logger = logging.getLogger(__name__)
 
 class BonusesHelper(object):
@@ -109,9 +109,16 @@ class _CustomizationSubTypeGetter(_BaseSubTypeGetter):
         if itemType == 'style':
             if c11nItem.isLockedOnVehicle:
                 return _HelperConsts.LOCKED_STYLE
-            if c11nItem.modelsSet:
+            if c11nItem.is3D:
                 return _HelperConsts.STYLE_3D_TYPE
         return itemType
+
+
+class _CurrenciesSubTypeGetter(_BaseSubTypeGetter):
+
+    @staticmethod
+    def getSubType(bonus):
+        return str(bonus.getCode())
 
 
 class _RewardSelectSubTypeGetter(_BaseSubTypeGetter):
@@ -124,6 +131,7 @@ class _RewardSelectSubTypeGetter(_BaseSubTypeGetter):
 _SUB_TYPE_GETTERS_MAP = {'default': _BaseSubTypeGetter,
  'items': _ItemsSubTypeGetter,
  'customizations': _CustomizationSubTypeGetter,
+ 'currencies': _CurrenciesSubTypeGetter,
  'battlePassSelectToken': _RewardSelectSubTypeGetter}
 
 class _BaseValueGetter(object):
@@ -369,6 +377,18 @@ class _RandomQuestTokenTextGetter(_BaseTextGetter):
         return backport.text(R.strings.battle_pass.randomQuestBonus(), vehicle=item.vehicle.shortUserName)
 
 
+class _LootboxTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        box = item.getBox()
+        if box is None:
+            _logger.error('LootBox for token %s is None!', item.tokenID)
+            return ''
+        else:
+            return backport.text(R.strings.battle_pass.lootBoxBonus(), boxName=box.getUserName(), count=item.getCount())
+
+
 class _EquipCoinTextGetter(_BaseTextGetter):
 
     @classmethod
@@ -377,14 +397,23 @@ class _EquipCoinTextGetter(_BaseTextGetter):
         return text_styles.concatStylesToSingleLine(backport.text(R.strings.battle_pass.equipCoinBonus(), count=count), icons.equipCoin())
 
 
+class _CurrenciesTextGetter(_BaseTextGetter):
+
+    @classmethod
+    def getText(cls, item):
+        return i18n.makeString('#quests:bonuses/%s/description' % item.getCode(), value=item.formatValue())
+
+
 _TEXT_GETTERS_MAP = {'default': _BaseTextGetter,
  'crewBooks': _CrewBookTextGetter,
  'crewSkins': _CrewSkinTextGetter,
+ 'currencies': _CurrenciesTextGetter,
  'dossier': _DossierTextGetter,
  'battlePassSelectToken': _SelectTokenTextGetter,
  'styleProgressToken': _StyleProgressTokenTextGetter,
  'tmanToken': _TankmanTokenTextGetter,
  'randomQuestToken': _RandomQuestTokenTextGetter,
+ 'lootBox': _LootboxTextGetter,
  Currency.EQUIP_COIN: _EquipCoinTextGetter}
 
 class _HelperConsts(object):

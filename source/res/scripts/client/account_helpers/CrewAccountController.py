@@ -12,7 +12,15 @@ class CrewAccountController(object):
         self.tankmanIdxSkillsUnlockAnimation = {}
         self.tankmanLearnedSkillsAnimanion = {}
         self.tankmanVeteranAnimanion = {}
+        self._conversionResults = {}
+        self.autoReturnCrewData = {}
         self.__inventory.onStartSynchronize += self.__onStartSynchronizeInventory
+
+    def getAutoReturnCrewData(self, vehicleIntCD):
+        return self.autoReturnCrewData.get(vehicleIntCD, [])
+
+    def setAutoReturnCrewData(self, vehicleIntCD, skipTmanInvIDs):
+        self.autoReturnCrewData[vehicleIntCD] = skipTmanInvIDs
 
     def clearTankmanAnimanions(self, tankmaninvID):
         if tankmaninvID in self.tankmanVeteranAnimanion:
@@ -24,9 +32,12 @@ class CrewAccountController(object):
 
     def getTankmanVeteranAnimanion(self, tankmaninvID):
         tankman = self.__itemsCache.items.getTankman(tankmaninvID)
-        concurrent = not bool(tankman.descriptor.needXpForVeteran)
-        before = self.tankmanVeteranAnimanion.get(tankmaninvID)
-        return before is not None and not before and concurrent
+        if not tankman:
+            return False
+        else:
+            concurrent = not bool(tankman.descriptor.needXpForVeteran)
+            before = self.tankmanVeteranAnimanion.get(tankmaninvID)
+            return before is not None and not before and concurrent
 
     def setLearnedSkillsAnimanion(self, tankmaninvID, learnedSkills):
         skills = self.tankmanLearnedSkillsAnimanion.setdefault(tankmaninvID, [])
@@ -37,6 +48,19 @@ class CrewAccountController(object):
 
     def indexSkillsUnlockAnimation(self, tankmaninvID):
         return self.tankmanIdxSkillsUnlockAnimation.get(tankmaninvID)
+
+    def setConversionResults(self, resultsDict):
+        self._conversionResults = resultsDict
+
+    def getSkillsCrewBooksConversion(self):
+        crewBooks = {}
+        for book in self._conversionResults.get('skillsCrewBooksConversion', []):
+            crewBooks.update({book['compDescr']: book['count']})
+
+        return crewBooks
+
+    def getSkillsCrewBoostersReplacement(self):
+        return self._conversionResults.get('skillsCrewBoostersReplacement', {})
 
     def clear(self):
         self.__inventory.onStartSynchronize -= self.__onStartSynchronizeInventory

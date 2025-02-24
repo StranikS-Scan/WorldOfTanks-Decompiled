@@ -10,12 +10,11 @@ from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextToo
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.container_views.base.components import ComponentBase
 from gui.impl.lobby.crew.tooltips.premium_vehicle_tooltip import PremiumVehicleTooltip
+from gui.impl.lobby.crew.tooltips.specialization_wot_plus_tooltip import SpecializationWotPlusTooltip
 from gui.impl.lobby.crew.utils import convertMoneyToTuple, playRecruitVoiceover, VEHICLE_TAGS_FILTER
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.loggers import CrewTankmanInfoLogger
-from uilogging.crew.logging_constants import CrewPersonalFileKeys
 if typing.TYPE_CHECKING:
     from typing import Any, Callable, Tuple
     from gui.impl.gen.view_models.views.lobby.crew.common.tankman_info_model import TankmanInfoModel
@@ -25,9 +24,8 @@ class TankmanInfoComponent(ComponentBase):
     _itemsCache = dependency.descriptor(IItemsCache)
     _appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, key, parent, logUIEvents=False):
+    def __init__(self, key, parent):
         self._toolTipMgr = self._appLoader.getApp().getToolTipMgr()
-        self._uiLogger = CrewTankmanInfoLogger(logUIEvents)
         super(TankmanInfoComponent, self).__init__(key, parent)
 
     def _getViewModel(self, vm):
@@ -54,6 +52,7 @@ class TankmanInfoComponent(ComponentBase):
         vm.setIsPostProgressionAnimated(BigWorld.player().crewAccountController.getTankmanVeteranAnimanion(self.context.tankman.invID))
         vm.setHasUniqueSound(self.context.voiceoverParams is not None)
         vm.setHasRetrainDiscount(self.context.retrainPrice.isActionPrice())
+        vm.setIsWotPlusNativeVehicle(self.context.tankmanNativeVehicle.isWotPlus)
         return
 
     def _setVehicleInfo(self, vm):
@@ -68,13 +67,13 @@ class TankmanInfoComponent(ComponentBase):
             tooltipId = event.getArgument('tooltipId')
             posX, posY = event.mouse.positionX, event.mouse.positionY
             parent = self.parent.getParentWindow()
-            self._uiLogger.onBeforeTooltipOpened(tooltipId)
             if tooltipId == TooltipConstants.SKILL:
-                args = [str(event.getArgument('skillName')),
+                args = [event.getArgument('skillName'),
+                 event.getArgument('roleName'),
                  self.context.tankmanID,
                  None,
                  False,
-                 True,
+                 '',
                  event.getArgument('isBonus')]
                 self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, posX, posY, parent)
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
@@ -109,17 +108,17 @@ class TankmanInfoComponent(ComponentBase):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.lobby.crew.tooltips.PremiumVehicleTooltip():
             return PremiumVehicleTooltip(vehicleCD=self.context.tankman.vehicleNativeDescr.type.compactDescr)
+        if contentID == R.views.lobby.crew.tooltips.SpecializationWotPlusTooltip():
+            return SpecializationWotPlusTooltip(vehicleCD=self.context.tankman.vehicleNativeDescr.type.compactDescr)
         if contentID == R.views.lobby.common.tooltips.ExtendedTextTooltip():
             text = event.getArgument('text', '')
             stringifyKwargs = event.getArgument('stringifyKwargs', '')
             return ExtendedTextTooltip(text, stringifyKwargs)
 
     def _onRetrain(self):
-        self._uiLogger.logClick(CrewPersonalFileKeys.RETRAIN_BUTTON)
-        self.events.onRetrainClick(self.parent.viewKey)
+        self.events.onRetrainClick()
 
     def _onChangeVehicle(self):
-        self._uiLogger.logClick(CrewPersonalFileKeys.CHANGE_SPECIALIZATION_BUTTON)
         self.events.onChangeVehicleClick(tankmanInvID=self.context.tankman.invID)
 
     def _onPlayUniqueVoice(self):
@@ -127,5 +126,4 @@ class TankmanInfoComponent(ComponentBase):
             return
         else:
             self.__sound = playRecruitVoiceover(self.context.voiceoverParams)
-            self._uiLogger.logClick(CrewPersonalFileKeys.VOICEOVER_BUTTON)
             return

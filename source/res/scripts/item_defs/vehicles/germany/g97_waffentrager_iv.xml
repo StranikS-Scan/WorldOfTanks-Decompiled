@@ -916,6 +916,33 @@
         <clipAngle>	1.55567	</clipAngle>
         <anchorShift>	0.083976	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	1.580181 0.108 -0.888618	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.58 0.108 -0.888618	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0 -0.134 -2.759	</position>
+        <rotation>	-0 -1.570796 1.291544	</rotation>
+        <scale>	0.999998 0.999994 0.999992	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1609,7 +1636,6 @@
             <length>	0.117287	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.10984	</xStart>
@@ -2500,7 +2526,6 @@
             <length>	0.117287	</length>
           </mainSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.10984	</xStart>
@@ -3311,6 +3336,24 @@
           <clipAngle>	1.51985	</clipAngle>
           <anchorShift>	0.058188	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.807 1.327 0.042	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.795 1.364 0.025	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -3950,6 +3993,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.51985	</clipAngle>
           <anchorShift>	0.063989	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.628 1.538 0.062	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.987 1.416474 -0.497496	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

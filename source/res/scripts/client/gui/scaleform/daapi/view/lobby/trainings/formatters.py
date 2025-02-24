@@ -1,21 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/formatters.py
-from gui.Scaleform.locale.MENU import MENU
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.utils.functions import getArenaSubTypeName
-from helpers import i18n
 
 def getRoundLenString(roundLength):
-    return i18n.makeString(MENU.TRAINING_INFO_TIMEOUT_VALUE, roundLength / 60)
+    return backport.text(R.strings.menu.training.info.timeout.value(), roundLength=roundLength / 60)
 
 
 def getTrainingRoomTitle(arenaType):
-    return i18n.makeString(MENU.TRAINING_INFO_TITLE, arenaType.name)
+    return backport.text(R.strings.menu.training.info.title(), arenaName=arenaType.name)
 
 
 def getArenaSubTypeString(arenaTypeID):
     arenaSubTypeName = getArenaSubTypeName(arenaTypeID)
-    return i18n.makeString('#arenas:type/%s/name' % arenaSubTypeName)
+    return backport.text(R.strings.arenas.type.dyn(arenaSubTypeName).name())
 
 
 def getPlayerStateString(state):
-    return i18n.makeString('#menu:training/info/states/state%d' % state)
+    stateStr = 'state{}'.format(state)
+    return backport.text(R.strings.menu.training.info.states.dyn(stateStr)())

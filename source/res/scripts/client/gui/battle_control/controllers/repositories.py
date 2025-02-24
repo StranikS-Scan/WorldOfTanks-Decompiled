@@ -9,19 +9,15 @@ from gui.battle_control.controllers import aiming_sounds_ctrl
 from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, respawn_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, spectator_ctrl, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
-from gui.battle_control.controllers.battle_hints import controller as battle_hints_ctrl
-from gui.battle_control.controllers.appearance_cache_ctrls.comp7_appearance_cache_ctrl import Comp7AppearanceCacheController
-from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_ctrl import AutoShootControllerFactory
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cache_ctrl import EventAppearanceCacheController
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
-from gui.battle_control.controllers.comp7_prebattle_setup_ctrl import Comp7PrebattleSetupController
-from gui.battle_control.controllers.comp7_voip_ctrl import Comp7VOIPController
+from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_ctrl import AutoShootControllerFactory
+from gui.battle_control.controllers.battle_hints import controller as battle_hints_ctrl
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
-from gui.battle_control.controllers.sound_ctrls.comp7_battle_sounds import Comp7BattleSoundController
+from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
 from gui.battle_control.controllers.spam_protection import battle_spam_ctrl
-from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
 from gui.battle_control.controllers.vse_hud_settings_ctrl import vse_hud_settings_ctrl
 from gui.shared.system_factory import registerBattleControllerRepo
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
@@ -313,12 +309,8 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.POINTS_OF_INTEREST_CTRL)
 
     @property
-    def comp7PrebattleSetup(self):
-        return self._repository.getController(BATTLE_CTRL_ID.COMP7_PREBATTLE_SETUP_CTRL)
-
-    @property
-    def comp7VOIPController(self):
-        return self._repository.getController(BATTLE_CTRL_ID.COMP7_VOIP_CTRL)
+    def prebattleSetup(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PREBATTLE_SETUP_CTRL)
 
     @property
     def overrideSettingsController(self):
@@ -542,22 +534,6 @@ class StrongholdControllerRepository(ClassicControllersRepository):
         return repository
 
 
-class Comp7ControllerRepository(ClassicControllersRepository):
-    __slots__ = ()
-
-    @classmethod
-    def create(cls, setup):
-        repository = super(Comp7ControllerRepository, cls).create(setup)
-        repository.addArenaViewController(Comp7PrebattleSetupController(setup), setup)
-        repository.addArenaController(Comp7VOIPController(), setup)
-        repository.addController(Comp7BattleSoundController())
-        return repository
-
-    @staticmethod
-    def _getAppearanceCacheController(setup):
-        return Comp7AppearanceCacheController(setup)
-
-
 class PVEBaseControllerRepository(ClassicControllersRepository):
     __slots__ = ()
 
@@ -573,6 +549,3 @@ for guiType in ARENA_GUI_TYPE.STRONGHOLD_RANGE:
 
 registerBattleControllerRepo(ARENA_GUI_TYPE.EVENT_BATTLES, EventControllerRepository)
 registerBattleControllerRepo(ARENA_GUI_TYPE.MAPS_TRAINING, MapsTrainingControllerRepository)
-registerBattleControllerRepo(ARENA_GUI_TYPE.COMP7, Comp7ControllerRepository)
-registerBattleControllerRepo(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7ControllerRepository)
-registerBattleControllerRepo(ARENA_GUI_TYPE.TRAINING_COMP7, Comp7ControllerRepository)

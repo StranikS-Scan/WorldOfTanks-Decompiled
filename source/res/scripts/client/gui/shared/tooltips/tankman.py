@@ -9,20 +9,25 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.Tankman import getFullUserName, getSpecialIconPath, getSkillBigIconPath, Tankman
+from gui.shared.gui_items.Tankman import getFullUserName, getSpecialIconPath, Tankman
 from gui.shared.tooltips import ToolTipDataField, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData
+from gui.shared.utils.skill_presenter_helper import getSkillBigIconPath
 from helpers import dependency, i18n, time_utils
 from helpers.i18n import makeString
 from items.components.component_constants import EMPTY_STRING
+from items.special_crew import CustomSkills
 from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
-def getSkillIcon(skillName, tankmanSkill):
-    return backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill_with_frame()) if skillName == 'new_skill' else tankmanSkill(skillName=skillName).bigIconPath
+def getSkillIcon(skillName, customCrewName):
+    if skillName == 'new_skill':
+        return backport.image(R.images.gui.maps.icons.tankmen.skills.big.new_skill_with_frame())
+    _, customSkillName = CustomSkills.getCustomSkill(skillName, customCrewName=customCrewName)
+    return getSkillBigIconPath(skillName, customSkillName)
 
 
 class TankmanSkillListField(ToolTipDataField):
@@ -109,14 +114,14 @@ class NotRecruitedTooltipData(BlocksTooltipData):
             blocks.append(formatters.packTextBlockData(text_styles.main(howToGetStr), useHtml=True, padding=formatters.packPadding()))
         freeSkills = item.getFreeSkills()
         if freeSkills:
-            tankmanSkill = item.getTankmanSkill()
+            customCrewName = item.getCrewCustomName()
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_FREESKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, tankmanSkill)) for skillName in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, customCrewName)) for skillName in freeSkills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         skills = item.getEarnedSkills(multiplyNew=True)
         if skills:
-            tankmanSkill = item.getTankmanSkill()
+            customCrewName = item.getCrewCustomName()
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=17 if hasDescr else 18, bottom=10)))
-            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, tankmanSkill)) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ formatters.packImageListIconData(getSkillIcon(skillName, customCrewName)) for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10))
         expiryTime = item.getExpiryTime()
         if expiryTime:
             blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=20 if skills else (17 if hasDescr else 16), bottom=2)))

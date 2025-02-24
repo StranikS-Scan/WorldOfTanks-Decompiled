@@ -18,11 +18,8 @@ from gui.impl.gen.view_models.views.lobby.common.tooltips.simple_icon_tooltip_mo
 from gui.impl.gen.view_models.views.lobby.mode_selector.tooltips.mode_selector_tooltips_constants import ModeSelectorTooltipsConstants
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.common.view_mixins import LobbyHeaderVisibility
 from gui.impl.lobby.common.tooltips.simple_icon_tooltip_view import SimpleIconTooltipView
-from gui.impl.lobby.comp7.tooltips.main_widget_tooltip import MainWidgetTooltip
-from gui.impl.lobby.comp7.tooltips.rank_inactivity_tooltip import RankInactivityTooltip
 from gui.impl.lobby.mode_selector.battle_session_view import BattleSessionView
 from gui.impl.lobby.mode_selector.items import saveBattlePassStateForItems
 from gui.impl.lobby.mode_selector.mode_selector_data_provider import ModeSelectorDataProvider
@@ -62,15 +59,11 @@ _SIMPLE_TOOLTIP_IDS = [ModeSelectorTooltipsConstants.RANKED_CALENDAR_DAY_INFO_TO
  ModeSelectorTooltipsConstants.RANKED_BATTLES_POSITION_TOOLTIP,
  ModeSelectorTooltipsConstants.RANKED_BATTLES_BONUS_TOOLTIP,
  ModeSelectorTooltipsConstants.MAPBOX_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP,
- ModeSelectorTooltipsConstants.COMP7_CALENDAR_DAY_EXTENDED_INFO]
+ ModeSelectorTooltipsConstants.EPIC_BATTLE_CALENDAR_TOOLTIP]
 
 def _getTooltipByContentIdMap():
-    return {R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView(): BattlePassNotStartedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
-     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS),
-     R.views.lobby.comp7.tooltips.MainWidgetTooltip(): MainWidgetTooltip,
-     R.views.lobby.comp7.tooltips.RankInactivityTooltip(): RankInactivityTooltip}
+    return {R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView(): BattlePassCompletedTooltipView,
+     R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView(): partial(BattlePassInProgressTooltipView, battleType=QUEUE_TYPE.RANDOMS)}
 
 
 registerModeSelectorTooltips(_SIMPLE_TOOLTIP_IDS, _getTooltipByContentIdMap())

@@ -8,7 +8,7 @@ from gui.impl.pub import ViewImpl
 class QuickTrainingDiscountTooltip(ViewImpl):
     __slots__ = ('_oldFreeXpBase', '_newFreeXpBase', '_oldXpExchange', '_newXpExchange')
 
-    def __init__(self, oldFreeXpBase, newFreeXpBase, oldXpExchange, newXpExchange):
+    def __init__(self, oldXpExchange, newXpExchange, oldFreeXpBase=1, newFreeXpBase=1):
         self._oldFreeXpBase = oldFreeXpBase
         self._newFreeXpBase = newFreeXpBase
         self._oldXpExchange = oldXpExchange

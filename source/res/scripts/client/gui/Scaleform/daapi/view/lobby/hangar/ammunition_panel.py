@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ammunition_panel.py
-from adisp import adisp_process
+from adisp import adisp_process, adisp_async
 from account_helpers.settings_core.settings_constants import OnceOnlyHints
 from constants import ROLE_TYPE
 from CurrentVehicle import g_currentVehicle
@@ -17,8 +17,9 @@ from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice, getVehicleConsumablesLayoutPrice
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-from gui.shared.gui_items.items_actions.actions import VehicleRepairAction
+from gui.shared.gui_items.items_actions.actions import VehicleRepairAction, BuyAndInstallShells, BuyAndInstallConsumables, VehicleAutoFillLayoutAction
 from gui.shared.gui_items.vehicle_helpers import getRoleMessage
 from helpers import dependency, int2roman
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -51,7 +52,22 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def showRepairDialog(self):
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            yield VehicleRepairAction(vehicle, NeedRepair, NeedRepairMainContent).doAction()
+            result = yield VehicleRepairAction(vehicle, NeedRepair, NeedRepairMainContent).doAction()
+            if result:
+                isAutoLoadFull = vehicle.isAutoLoadFull()
+                isAutoEquipFull = vehicle.isAutoEquipFull()
+                shellsLayoutPrice = getVehicleShellsLayoutPrice(vehicle).price
+                consumablesLayoutPrice = getVehicleConsumablesLayoutPrice(vehicle).price
+                money = self.__itemsCache.items.stats.money
+                shellsAndConsumablesShortage = money.getShortage(shellsLayoutPrice + consumablesLayoutPrice)
+                shellsShortage = money.getShortage(shellsLayoutPrice)
+                consumablesShortage = money.getShortage(consumablesLayoutPrice)
+                if not (isAutoLoadFull or isAutoEquipFull or shellsAndConsumablesShortage):
+                    self.__tryAutoResupplyShellsAndConsumables()
+                elif not (isAutoLoadFull or shellsShortage):
+                    yield self.__tryAutoResupplyShells()
+                elif not (isAutoEquipFull or consumablesShortage):
+                    yield self.__tryAutoResupplyConsumables()
 
     def showCustomization(self):
         isCustomizationTutorial = self.__settingsCore.serverSettings.updateIsHintTutorial(OnceOnlyHints.NEW_C11N_SECTION_HINT)
@@ -69,6 +85,9 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def showChangeNation(self):
         if g_currentVehicle.isPresent() and g_currentVehicle.item.hasNationGroup:
             ItemsActionsFactory.doAction(ItemsActionsFactory.CHANGE_NATION, g_currentVehicle.item.intCD)
+
+    def showEasyTankEquip(self):
+        shared_events.showEasyTankEquipScreen()
 
     def showModuleInfo(self, itemCD):
         if itemCD is not None and int(itemCD) > 0:
@@ -113,7 +132,8 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             if statusId != Vehicle.VEHICLE_STATE.UNDAMAGED:
                 msgString = makeHtmlString('html_templates:vehicleStatus', msgLvl, {'message': msg})
             self.__applyCustomizationNewCounter(vehicle)
-            self.__updateDevices(vehicle)
+            self.__updateMaintenanceWarning(vehicle)
+            self.__highlightEasyTankEquip(vehicle)
             isElite = vehicle.isElite and viewState.isEliteShown()
             self.as_updateVehicleStatusS({'message': msgString,
              'rentAvailable': rentAvailable,
@@ -152,8 +172,43 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     def __moneyUpdateCallback(self, *_):
         self._update(onlyMoneyUpdate=True)
 
-    def __updateDevices(self, vehicle):
+    def __updateMaintenanceWarning(self, vehicle):
         stateWarning = False
         if g_currentVehicle.isPresent():
             stateWarning = vehicle.isBroken
-        self.as_setWarningStateS(stateWarning)
+        self.as_setMaintenanceWarningStateS(stateWarning)
+
+    def __highlightEasyTankEquip(self, vehicle):
+        isHighlight = False
+        if g_currentVehicle.isPresent():
+            isAmmoNotFull, _ = vehicle.isAmmoNotFullInSetups
+            isHighlight = not vehicle.isCrewFull or isAmmoNotFull or not vehicle.hasConsumables
+        self.as_highlightEasyTankEquipS(isHighlight)
+
+    @adisp_async
+    @adisp_process
+    def __tryAutoResupplyShells(self, callback=None):
+        currentVehicle = g_currentVehicle.item
+        action = BuyAndInstallShells(currentVehicle)
+        action.skipConfirm = True
+        result = yield action.doAction()
+        if callback is not None:
+            callback(result)
+        return
+
+    @adisp_async
+    @adisp_process
+    def __tryAutoResupplyConsumables(self, callback=None):
+        currentVehicle = g_currentVehicle.item
+        action = BuyAndInstallConsumables(currentVehicle)
+        action.skipConfirm = True
+        result = yield action.doAction()
+        if callback is not None:
+            callback(result)
+        return
+
+    def __tryAutoResupplyShellsAndConsumables(self):
+        currentVehicle = g_currentVehicle.item
+        action = VehicleAutoFillLayoutAction(currentVehicle)
+        action.skipConfirm = True
+        action.doAction()

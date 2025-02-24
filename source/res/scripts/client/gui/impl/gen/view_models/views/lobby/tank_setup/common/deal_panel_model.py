@@ -7,7 +7,7 @@ class DealPanelModel(PriceModel):
     GENERAL = 'general'
     REPAIR = 'repair'
 
-    def __init__(self, properties=11, commands=3):
+    def __init__(self, properties=13, commands=3):
         super(DealPanelModel, self).__init__(properties=properties, commands=commands)
 
     def getDealType(self):
@@ -52,6 +52,18 @@ class DealPanelModel(PriceModel):
     def setShowEliteXp(self, value):
         self._setBool(10, value)
 
+    def getDemountKitsCount(self):
+        return self._getNumber(11)
+
+    def setDemountKitsCount(self, value):
+        self._setNumber(11, value)
+
+    def getTotalItemsInstalled(self):
+        return self._getNumber(12)
+
+    def setTotalItemsInstalled(self, value):
+        self._setNumber(12, value)
+
     def _initialize(self):
         super(DealPanelModel, self)._initialize()
         self._addStringProperty('dealType', '')
@@ -61,6 +73,8 @@ class DealPanelModel(PriceModel):
         self._addBoolProperty('isDisabled', False)
         self._addNumberProperty('totalItemsInStorage', 0)
         self._addBoolProperty('showEliteXp', False)
+        self._addNumberProperty('demountKitsCount', 0)
+        self._addNumberProperty('totalItemsInstalled', 0)
         self.onDealConfirmed = self._addCommand('onDealConfirmed')
         self.onDealCancelled = self._addCommand('onDealCancelled')
         self.onAutoRenewalChanged = self._addCommand('onAutoRenewalChanged')

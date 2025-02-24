@@ -7,7 +7,7 @@ from gui.impl.dialogs.dialogs import showPerksDropDialog
 from gui.impl.gen import R
 from gui.impl.lobby.crew.container_vews.common.base_personal_case_controller import BasePersonalCaseController
 from gui.impl.lobby.crew.container_vews.personal_file.events import PersonalFileComponentViewEvents
-from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
+from gui.impl.lobby.crew.container_vews.quick_training.quick_training_view import QuickTrainingView
 from gui.shared.event_dispatcher import showQuickTraining, showSkillsTraining, showCrewPostProgressionView
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
 from gui.shared.items_cache import CACHE_SYNC_REASON

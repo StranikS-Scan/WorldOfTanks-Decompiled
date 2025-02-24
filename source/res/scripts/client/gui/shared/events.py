@@ -346,6 +346,7 @@ class LobbyHeaderMenuEvent(LobbySimpleEvent):
     UPDATE_PREBATTLE_CONTROLS = 'updateControlsHeaderMenu'
     TOGGLE_VISIBILITY = 'toggleVisibilityHeaderMenu'
     MENU_CLICK = 'headerMenuClick'
+    DESELECT_HEADER_BUTTONS = 'deselectHeaderButtons'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -637,10 +638,6 @@ class AdventCalendarEvent(HasCtxEvent):
 
 class ProgressiveRewardEvent(HasCtxEvent):
     WIDGET_WAS_SHOWN = 'progressiveWidgetWasShown'
-
-
-class Comp7Event(SharedEvent):
-    OPEN_META = 'openMeta'
 
 
 class ProfilePageEvent(HasCtxEvent):

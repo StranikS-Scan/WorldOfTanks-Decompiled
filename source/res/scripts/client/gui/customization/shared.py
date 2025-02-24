@@ -11,7 +11,8 @@ from gui.customization.constants import CustomizationModes
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.money import Currency, ZERO_MONEY
-from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID
+from items.components.c11n_components import getVehicleAttachmentSlotParams
+from items.components.c11n_constants import CustomizationType, C11N_MASK_REGION, MAX_USERS_PROJECTION_DECALS, ProjectionDecalFormTags, SeasonType, ApplyArea, C11N_GUN_APPLY_REGIONS, UNBOUND_VEH_KEY, EMPTY_ITEM_ID, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from shared_utils import CONST_CONTAINER, isEmpty
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IExchangeRatesWithDiscountsProvider
@@ -507,3 +508,32 @@ class C11nVehicleListHintChecker(object):
     def check(self, _):
         from gui.Scaleform.daapi.view.lobby.customization.shared import vehicleHasSlot
         return not vehicleHasSlot(GUI_ITEM_TYPE.ATTACHMENT)
+
+
+def validateOutfitComponent(vehicleDescr, outfitComponent):
+    for itemType in CustomizationType.STYLE_ONLY_RANGE:
+        typeName = CustomizationTypeNames[itemType].lower()
+        componentsAttrName = '{}s'.format(typeName)
+        itemsComponents = getattr(outfitComponent, componentsAttrName, None)
+        if itemsComponents:
+            _logger.error('StyleOnly items cannot be installed manually: itemType=[%s]; components=[%s].Forbidden components removed.', typeName, itemsComponents)
+            itemsComponents = []
+        setattr(outfitComponent, componentsAttrName, itemsComponents)
+
+    camouflages = []
+    for camoComponent in outfitComponent.camouflages:
+        if camoComponent.id != HIDDEN_CAMOUFLAGE_ID:
+            camouflages.append(camoComponent)
+        _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
+
+    outfitComponent.camouflages = camouflages
+    attachments = []
+    for attachment in outfitComponent.attachments:
+        slotId = attachment.slotId
+        slotParams = getVehicleAttachmentSlotParams(vehicleDescr, slotId)
+        if not slotParams.hiddenForUser:
+            attachments.append(attachment)
+        _logger.error('Hidden Attachment cannot be installed manually. %s removed.', attachment)
+
+    outfitComponent.attachments = attachments
+    return

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import CURRENCY_TO_RESOURCE_TYPE
-from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm
+from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount, ClanReservePresenter, DemountKit, RecertificationForm, MentoringLicense
 from gui.shared.money import Money
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
@@ -38,10 +38,15 @@ def _createRecertificationForm(recertificationFormID, recertificationFormDescrip
     return RecertificationForm(recertificationFormID, recertificationFormDescription, proxy)
 
 
+def _createMentoringLicense(mentoringLicenseID, mentoringLicenseDescription, proxy):
+    return MentoringLicense(mentoringLicenseID, mentoringLicenseDescription, proxy)
+
+
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
  GOODIE_VARIETY.DISCOUNT: _createDiscount,
  GOODIE_VARIETY.DEMOUNT_KIT: _createDemountKit,
- GOODIE_VARIETY.RECERTIFICATION_FORM: _createRecertificationForm}
+ GOODIE_VARIETY.RECERTIFICATION_FORM: _createRecertificationForm,
+ GOODIE_VARIETY.MENTORING_LICENSE: _createMentoringLicense}
 _DISCOUNT_TYPES_MAPPING = {GOODIE_TARGET_TYPE.ON_BUY_VEHICLE: PersonalVehicleDiscount}
 
 class GoodiesCache(IGoodiesCache):
@@ -133,11 +138,7 @@ class GoodiesCache(IGoodiesCache):
         return self.__makeGoodie(discoutID, discountDescription)
 
     def getDemountKit(self, demountKitID=None, currency=None):
-        resourceType = CURRENCY_TO_RESOURCE_TYPE.get(currency, None)
-        if demountKitID is None and resourceType is not None:
-            demountKitID = next((id_ for id_, def_ in self._items.shop.demountKits.iteritems() if def_.resource.resourceType == resourceType), None)
-        description = self._items.shop.demountKits.get(demountKitID, None)
-        return self.__makeGoodie(demountKitID, description)
+        return self.__getGoodieItem(demountKitID, self._items.shop.demountKits, currency)
 
     def getBoosters(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.boosters, criteria)
@@ -149,14 +150,16 @@ class GoodiesCache(IGoodiesCache):
         return self.__getGoodies(self._items.shop.demountKits, criteria)
 
     def getRecertificationForm(self, recertificationFormID=None, currency=None):
-        resourceType = CURRENCY_TO_RESOURCE_TYPE.get(currency, None)
-        if recertificationFormID is None and resourceType is not None:
-            recertificationFormID = next((id_ for id_, def_ in self._items.shop.recertificationForms.iteritems() if def_.resource.resourceType == resourceType), None)
-        description = self._items.shop.recertificationForms.get(recertificationFormID, None)
-        return self.__makeGoodie(recertificationFormID, description)
+        return self.__getGoodieItem(recertificationFormID, self._items.shop.recertificationForms, currency)
 
     def getRecertificationForms(self, criteria=REQ_CRITERIA.EMPTY):
         return self.__getGoodies(self._items.shop.recertificationForms, criteria)
+
+    def getMentoringLicenses(self, criteria=REQ_CRITERIA.EMPTY):
+        return self.__getGoodies(self._items.shop.mentoringLicenses, criteria)
+
+    def getMentoringLicense(self, mentoringLicenseFormID=None, currency=None):
+        return self.__getGoodieItem(mentoringLicenseFormID, self._items.shop.mentoringLicenses, currency)
 
     def getGoodie(self, goodieID=None):
         return self.__makeGoodie(goodieID, self.getGoodieByID(goodieID))
@@ -176,6 +179,13 @@ class GoodiesCache(IGoodiesCache):
     @property
     def _items(self):
         return self.itemsCache.items
+
+    def __getGoodieItem(self, itemID, itemShopRef, currency):
+        resourceType = CURRENCY_TO_RESOURCE_TYPE.get(currency, None)
+        if itemID is None and resourceType is not None:
+            itemID = next((id_ for id_, def_ in itemShopRef.iteritems() if def_.resource.resourceType == resourceType), None)
+        description = itemShopRef.get(itemID, None)
+        return self.__makeGoodie(itemID, description)
 
     def __getGoodies(self, goodies, criteria=REQ_CRITERIA.EMPTY):
         results = {}

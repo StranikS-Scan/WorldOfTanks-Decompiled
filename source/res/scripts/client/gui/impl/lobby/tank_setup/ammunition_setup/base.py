@@ -58,9 +58,7 @@ class BaseAmmunitionSetupView(ViewImpl):
         self._tankSetup.onLoading(**kwargs)
         self._ammunitionPanel = self._createAmmunitionPanel()
         self._ammunitionPanel.onLoading(**kwargs)
-        self._optionalDevicesAssistant = self._createOptionalDevicesAssistantPanel()
-        if self._optionalDevicesAssistant:
-            self._optionalDevicesAssistant.onLoading(**kwargs)
+        self._createOptionalDevicesAssistantPanel()
 
     def _initialize(self, *args, **kwargs):
         super(BaseAmmunitionSetupView, self)._initialize()
@@ -74,8 +72,7 @@ class BaseAmmunitionSetupView(ViewImpl):
         self._removeListeners()
         self._ammunitionPanel.finalize()
         self._tankSetup.finalize()
-        if self._optionalDevicesAssistant:
-            self._optionalDevicesAssistant.finalize()
+        self._removeOptionalDevicesAssistantPanel()
         self._vehItem = None
         super(BaseAmmunitionSetupView, self)._finalize()
         return
@@ -111,6 +108,12 @@ class BaseAmmunitionSetupView(ViewImpl):
 
     def _createOptionalDevicesAssistantPanel(self):
         pass
+
+    def _removeOptionalDevicesAssistantPanel(self):
+        if self._optionalDevicesAssistant:
+            self._optionalDevicesAssistant.finalize()
+            self._optionalDevicesAssistant = None
+        return
 
     def _addListeners(self):
         self._vehItem.onItemUpdated += self._onVehicleItemUpdated

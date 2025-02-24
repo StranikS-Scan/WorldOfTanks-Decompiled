@@ -6,9 +6,10 @@ from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.shared import getSuitableText
 from gui.Scaleform.daapi.view.meta.CustomizationStyleInfoMeta import CustomizationStyleInfoMeta
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from gui.shared.view_helpers.blur_manager import CachedBlur
-from gui.customization.shared import C11nId, getPurchaseMoneyState, isTransactionValid
+from gui.customization.shared import C11nId, getTotalPurchaseInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles
@@ -16,7 +17,6 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items.components.c11n_constants import SeasonType
-from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from vehicle_outfit.outfit import Area
@@ -89,7 +89,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
 
     def updateButton(self, *_):
         if self.__selectedStyle:
-            buttonVO = self.__makeButtonVO(self.__selectedStyle)
+            buttonVO = self.__makeButtonVO()
             self.as_buttonUpdateS(buttonVO)
 
     def onClose(self):
@@ -147,14 +147,13 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
             suitableBlock = text_styles.mainBig(backport.text(R.strings.vehicle_customization.styleInfo.suitableAll()))
         return StyleInfoVO(styleName=styleName, styleInfo=styleInfo, styleInfoBig=styleInfoBig, suitableBlock=suitableBlock, styleParams=styleParams)._asdict()
 
-    def __makeButtonVO(self, style):
+    def __makeButtonVO(self):
         buttonVO = None
         if self.__ctx.isOutfitsModified():
-            stylePrice = style.getBuyPrice().price
-            moneyState = getPurchaseMoneyState(stylePrice)
-            purchaseItem = first(self.__ctx.getPurchaseItems())
+            purchaseItems = self.__ctx.getPurchaseItems()
+            cartInfo = getTotalPurchaseInfo(purchaseItems)
             tooltip = backport.text(R.strings.vehicle_customization.customization.buyDisabled.body())
-            if purchaseItem is not None and purchaseItem.isFromInventory:
+            if cartInfo.totalPrice == ITEM_PRICE_EMPTY:
                 label = backport.text(R.strings.vehicle_customization.commit.apply())
                 if self.__ctx.mode.isOutfitsHasLockedItems():
                     enabled = False
@@ -163,7 +162,7 @@ class CustomizationStyleInfo(CustomizationStyleInfoMeta, CallbackDelayer):
                     enabled = True
             else:
                 label = backport.text(R.strings.vehicle_customization.commit.buy())
-                enabled = isTransactionValid(moneyState, stylePrice)
+                enabled = True
             buttonVO = ButtonVO(enabled=enabled, label=label, disabledTooltip=tooltip, visible=True)._asdict()
         return buttonVO
 

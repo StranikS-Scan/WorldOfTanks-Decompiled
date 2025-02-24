@@ -16,6 +16,7 @@ from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.perks_reset_dialog_model import PerksResetDialogModel
+from gui.impl.lobby.crew.crew_helpers.model_setters import ifWGMAvailableButtonUpdate
 from gui.impl.lobby.crew.crew_sounds import SOUNDS
 from gui.impl.lobby.crew.dialogs.price_cards_content.perks_reset_price_list import PerksResetPriceList
 from gui.impl.pub.dialog_window import DialogButtons
@@ -88,13 +89,17 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
         self._priceListContent = None
         return
 
+    def _getCallbacks(self):
+        return (('cache.mayConsumeWalletResources', self._onConsumeWalletUpdate),)
+
     def _getEvents(self):
         return tuple() if self._isFreePerkReset else ((self._priceListContent.onPriceChange, self._onPriceChange),)
 
     def _onPriceChange(self, index=None):
         submitBtn = self.getButton(DialogButtons.SUBMIT)
         if submitBtn is not None:
-            isDisabled = index is None
+            isWGMAvailable = self._itemsCache.items.stats.mayConsumeWalletResources
+            isDisabled = index is None or not isWGMAvailable
             submitBtn.isDisabled = isDisabled
             if not isDisabled:
                 priceNamed = namedtuple('priceNamed', ['xpReuseFraction', 'xpAmountLoss', 'skillsCountLoss'])
@@ -113,6 +118,12 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
                 else:
                     self._lastSoundEvent = soundEvent = SOUNDS.CREW_RESET_PERK_NO_LOSS
                 SoundGroups.g_instance.playSound2D(soundEvent)
+        return
+
+    def _onConsumeWalletUpdate(self, *_):
+        submitBtn = self.getButton(DialogButtons.SUBMIT)
+        if submitBtn is not None:
+            ifWGMAvailableButtonUpdate(self.viewModel, self._itemsCache, submitBtn, False)
         return
 
     def _setResult(self, result):

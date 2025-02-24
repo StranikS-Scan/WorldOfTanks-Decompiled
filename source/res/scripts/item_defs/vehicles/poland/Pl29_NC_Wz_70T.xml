@@ -94,6 +94,13 @@
       <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <Pl29_NC_Wz_70T_BPXVI_3Dst>
+          <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Hull.model	</exploded>
+        </Pl29_NC_Wz_70T_BPXVI_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -119,6 +126,15 @@
         <rayStart>	-0.746385 0.8016 2.550709	</rayStart>
         <rayEnd>	-0.746385 0.648394 2.422153	</rayEnd>
         <rayUp>	-0.00409 0.642783 -0.766038	</rayUp>
+        <size>	0.28	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <rayStart>	0.746012 0.801583 2.55071	</rayStart>
+        <rayEnd>	0.746012 0.648377 2.422153	</rayEnd>
+        <rayUp>	-0.00409 0.642786 -0.766035	</rayUp>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
         <size>	0.28	</size>
       </slot>
       <slot>
@@ -968,6 +984,66 @@
         <anchorShift>	1.64429	</anchorShift>
       </slot>
       <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15071	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+        <position>	0.762578 1.44263 2.76014	</position>
+        <rotation>	0.692913 -0.000007 3.14158	</rotation>
+        <scale>	0.392888 0.052 0.392888	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.187125	</clipAngle>
+        <anchorShift>	0.04	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+        <position>	-1.50044 1.81402 -0.515669	</position>
+        <rotation>	1.84775 1.56905 -0.000001	</rotation>
+        <scale>	0.395901 0.081532 0.395902	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.914541	</clipAngle>
+        <anchorShift>	0.09	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15073	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+        <position>	1.45976 1.95746 -0.470465	</position>
+        <rotation>	1.84773 -1.56905 -0.000002	</rotation>
+        <scale>	0.371979 0.2 0.371979	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.914541	</clipAngle>
+        <anchorShift>	0.09	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15074	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+        <position>	-0.075104 2.46803 1.04487	</position>
+        <rotation>	0 -0 3.14158	</rotation>
+        <scale>	0.500191 0.10301 0.500194	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.187125	</clipAngle>
+        <anchorShift>	0.09	</anchorShift>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15075	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+        <position>	0.000013 1.71704 -2.76517	</position>
+        <rotation>	3.13985 -0.000002 -0.000009	</rotation>
+        <scale>	0.503679 0.249274 0.503682	</scale>
+        <showOn>	16	</showOn>
+        <clipAngle>	0.187125	</clipAngle>
+        <anchorShift>	0.1	</anchorShift>
+      </slot>
+      <slot>
         <slotType>	attachment	</slotType>
         <slotId>	18000	</slotId>
         <position>	-1.733185 0.289154 -1.156708	</position>
@@ -1012,6 +1088,14 @@
         <applyType>	gunMantlet	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18005	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1054,6 +1138,13 @@
         <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <Pl29_NC_Wz_70T_BPXVI_3Dst>
+            <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Chassis.model	</exploded>
+          </Pl29_NC_Wz_70T_BPXVI_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -1625,6 +1716,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <Pl29_NC_Wz_70T_BPXVI_3Dst>
+              <segmentModelLeft>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/track/segment.model	</segmentModelRight>
+            </Pl29_NC_Wz_70T_BPXVI_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1639,6 +1736,12 @@
             <model>	vehicles/poland/Pl29_NC_Wz_70T/track/segment.model	</model>
             <length>	0.143131	</length>
           </mainSegment>
+          <modelSets>
+            <Pl29_NC_Wz_70T_BPXVI_3Dst>
+              <mainSegmentModel>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/track/segment.model	</mainSegmentModel>
+              <length>	0.143131	</length>
+            </Pl29_NC_Wz_70T_BPXVI_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.145145	</back>
@@ -1831,6 +1934,12 @@
             <model>	vehicles/poland/Pl29_NC_Wz_70T/track/segment.model	</model>
             <length>	0.14313	</length>
           </mainSegment>
+          <modelSets>
+            <Pl29_NC_Wz_70T_BPXVI_3Dst>
+              <mainSegmentModel>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/track/segment.model	</mainSegmentModel>
+              <length>	0.14313	</length>
+            </Pl29_NC_Wz_70T_BPXVI_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.145145	</back>
@@ -2113,6 +2222,15 @@
               <rayUp>	0.16 0 0	</rayUp>
               <size>	0.6	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <rayStart>	-0 -0.002 4.52	</rayStart>
+              <rayEnd>	-0 -0.002 5.12	</rayEnd>
+              <rayUp>	0.13 0 0	</rayUp>
+              <compatibleModels>	Pl29_NC_Wz_70T_BPXVI_3Dst	</compatibleModels>
+              <size>	0.6	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2124,6 +2242,13 @@
             <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <Pl29_NC_Wz_70T_BPXVI_3Dst>
+                <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </Pl29_NC_Wz_70T_BPXVI_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/poland/Pl29_NC_Wz_70T/collision/Gun_03.model	</collisionModelServer>
@@ -2141,6 +2266,13 @@
         <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/poland/Pl29_NC_Wz_70T/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <Pl29_NC_Wz_70T_BPXVI_3Dst>
+            <undamaged>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/poland/Pl29_NC_Wz_70T/_skins/Pl29_NC_Wz_70T_BPXVI_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </Pl29_NC_Wz_70T_BPXVI_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/poland/Pl29_NC_Wz_70T/collision/Turret_01.model	</collisionModelServer>

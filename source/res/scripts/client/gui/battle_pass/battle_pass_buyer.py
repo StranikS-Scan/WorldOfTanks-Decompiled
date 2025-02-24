@@ -23,7 +23,7 @@ class BattlePassBuyer(object):
     @classmethod
     @decorators.adisp_process('buyBattlePass')
     def buyBP(cls, seasonID, chapterID, priceID, onBuyCallback=None):
-        if chapterID not in cls.__battlePass.getChapterIDs():
+        if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
         currency, amount = first(cls.__battlePass.getBattlePassCost(chapterID)[priceID].iteritems())
@@ -40,7 +40,7 @@ class BattlePassBuyer(object):
     @classmethod
     @decorators.adisp_process('buyBattlePass')
     def buyBPWithLevels(cls, seasonID, chapterID, priceID, onBuyCallback=None):
-        if chapterID not in cls.__battlePass.getChapterIDs():
+        if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
         spendMoney = cls.__battlePass.getBattlePassCost(chapterID)[priceID].get(Currency.GOLD)
@@ -58,7 +58,7 @@ class BattlePassBuyer(object):
     @classmethod
     @decorators.adisp_process('buyBattlePassLevels')
     def buyLevels(cls, seasonID, chapterID, levels=0, onBuyCallback=None):
-        if chapterID not in cls.__battlePass.getChapterIDs():
+        if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
             return
         if cls.__battlePass.getChapterState(chapterID) != ChapterState.ACTIVE:

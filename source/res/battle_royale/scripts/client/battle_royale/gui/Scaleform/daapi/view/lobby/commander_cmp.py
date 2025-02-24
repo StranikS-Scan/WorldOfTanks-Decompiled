@@ -12,6 +12,7 @@ from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import isIncorrect
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
+from items.tankmen import ROLES_BY_SKILLS
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.app_loader import IAppLoader
 _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
@@ -53,8 +54,9 @@ class CommanderView(ViewImpl):
                     if window is not None:
                         window.load()
                     return window
+                role = next((role for role in ROLES_BY_SKILLS[tooltipId]), None)
                 args = (tooltipId,
-                 commanderID,
+                 role,
                  None,
                  None,
                  False)
@@ -62,8 +64,8 @@ class CommanderView(ViewImpl):
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(CommanderView, self).createToolTip(event)
 
-    def _initialize(self):
-        super(CommanderView, self)._initialize()
+    def _onLoading(self, *args, **kwargs):
+        super(CommanderView, self)._onLoading(args, kwargs)
         self.__addListeners()
         self.__updateModel()
 

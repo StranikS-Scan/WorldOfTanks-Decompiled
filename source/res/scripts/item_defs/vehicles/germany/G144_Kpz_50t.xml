@@ -1080,6 +1080,33 @@
         <rotation>	0 0 0	</rotation>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.603 0.135 -0.423099	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	0.999991 0.999991 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.603 0.135 -0.423099	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.000002 0.135 -3.014	</position>
+        <rotation>	-0 -1.570796 1.48353	</rotation>
+        <scale>	0.999991 0.999991 0.999992	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1565,7 +1592,6 @@
             </G144_Kpz_50t_3Dst_DRXXI>
           </modelSets>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-2.81512	</xStart>
@@ -2829,6 +2855,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.086909	</clipAngle>
           <anchorShift>	0.07018	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.416999 0.785853 -1.731596	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.781 0.962 0.316	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

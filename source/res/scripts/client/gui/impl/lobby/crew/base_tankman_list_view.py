@@ -49,10 +49,6 @@ class BaseTankmanListView(BaseCrewSoundView):
     def _filterState(self):
         raise NotImplementedError
 
-    @property
-    def _uiLoggingKey(self):
-        raise NotImplementedError
-
     def _onTankmenBufferUpdated(self):
         for tankman in self._tankmenProvider.items():
             _, time = restore_contoller.getTankmenRestoreInfo(tankman)
@@ -81,7 +77,7 @@ class BaseTankmanListView(BaseCrewSoundView):
 
     @args2params(int)
     def _onTankmanRestore(self, tankmanID):
-        dialogs.showRestoreTankmanDialog(tankmanID, NO_VEHICLE_ID, NO_SLOT, parentViewKey=self._uiLoggingKey)
+        dialogs.showRestoreTankmanDialog(tankmanID, NO_VEHICLE_ID, NO_SLOT)
 
     @args2params(int, int)
     def _onLoadCards(self, limit, offset):

@@ -17,7 +17,6 @@ from battle_modifiers_common import BattleParams, BattleModifiers, ModifiersCont
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME, BattlePassConfig
 from collections_common import CollectionsConfig
 from collector_vehicle import CollectorVehicleConsts
-from comp7_ranks_common import Comp7Division
 from constants import BATTLE_NOTIFIER_CONFIG, ClansConfig, Configs, DAILY_QUESTS_CONFIG, DOG_TAGS_CONFIG, MAGNETIC_AUTO_AIM_CONFIG, MISC_GUI_SETTINGS, PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG, PLAYER_SUBSCRIPTIONS_CONFIG, TOURNAMENT_CONFIG, OPTIONAL_DEVICES_USAGE_CONFIG
 from debug_utils import LOG_DEBUG, LOG_NOTE
 from gifts.gifts_common import ClientReqStrategy, GiftEventID, GiftEventState
@@ -575,12 +574,15 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
  'url',
  'respawns',
  'progressionTokenAward',
- 'tournamentsWidget'))):
+ 'tournamentsWidget',
+ 'stpCoinAward',
+ 'dailyBonusSTP'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={})
+        defaults = dict(isEnabled=False, peripheryIDs={}, eventProgression={}, unburnableTitles=(), primeTimes={}, seasons={}, cycleTimes={}, maps=(), battleXP={}, coneVisibility={}, loot={}, defaultAmmo={}, vehiclesSlotsConfig={}, economics={}, url='', respawns={}, progressionTokenAward={}, tournamentsWidget={}, stpCoinAward={}, dailyBonusSTP={})
         defaults.update(kwargs)
+        cls.__packStpCoinAwardConfig(defaults)
         return super(BattleRoyaleConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
@@ -594,6 +596,10 @@ class BattleRoyaleConfig(namedtuple('BattleRoyaleConfig', ('isEnabled',
     @classmethod
     def defaults(cls):
         return cls()
+
+    @classmethod
+    def __packStpCoinAwardConfig(cls, data):
+        data['stpCoinAward'] = {int(bonusType):value for bonusType, value in data['stpCoinAward'].iteritems()}
 
 
 class _TelecomConfig(object):
@@ -680,6 +686,23 @@ class SeniorityAwardsConfig(typing.NamedTuple('SeniorityAwardsConfig', (('enable
         defaults = dict(enabled=False, active=False, endTime=0, reminders=[], clockOnNotification=0, showRewardNotification=False, receivedRewardsToken='', rewardEligibilityToken='', claimRewardToken='', claimVehicleRewardTokenPattern='', vehicleSelectionTokenPattern='', rewardQuestsPrefix='', categories={}, vehicleSelectionQuestPattern='')
         defaults.update(kwargs)
         return super(SeniorityAwardsConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+class EasyTankEquipConfig(typing.NamedTuple('EasyTankEquipConfig', (('enabled', bool), ('minVehicleLevel', int), ('ammunitionReductionFactor', float)))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, minVehicleLevel=1, ammunitionReductionFactor=0.0)
+        defaults.update(kwargs)
+        return super(EasyTankEquipConfig, cls).__new__(cls, **defaults)
 
     def asDict(self):
         return self._asdict()
@@ -1095,90 +1118,6 @@ def settingsBlock(className, fields):
     return SettingsBlock
 
 
-class _Comp7QualificationConfig(settingsBlock('_Comp7QualificationConfig', ('battlesNumber',))):
-    __slots__ = ()
-
-    @classmethod
-    def defaults(cls):
-        return {'battlesNumber': 0}
-
-
-class Comp7Config(settingsBlock('Comp7Config', ('isEnabled',
- 'isShopEnabled',
- 'isTrainingEnabled',
- 'peripheryIDs',
- 'primeTimes',
- 'seasons',
- 'battleModifiersDescr',
- 'cycleTimes',
- 'roleEquipments',
- 'poiEquipments',
- 'numPlayers',
- 'levels',
- 'forbiddenClassTags',
- 'forbiddenVehTypes',
- 'squadRankRestriction',
- 'squadSizes',
- 'createVivoxTeamChannels',
- 'qualification',
- 'maps',
- 'tournaments',
- 'grandTournament',
- 'remainingOfferTokensNotifications',
- 'clientEntitlementsCache',
- 'participantTokens'))):
-    __slots__ = ()
-
-    @classmethod
-    def defaults(cls):
-        return dict(isEnabled=False, isShopEnabled=False, isTrainingEnabled=False, peripheryIDs={}, primeTimes={}, seasons={}, battleModifiersDescr=(), cycleTimes={}, roleEquipments={}, poiEquipments={}, numPlayers=7, levels=[], forbiddenClassTags=set(), forbiddenVehTypes=set(), squadRankRestriction={}, squadSizes=[], createVivoxTeamChannels=False, qualification=makeTupleByDict(_Comp7QualificationConfig, {}), maps=set(), tournaments={}, grandTournament={}, remainingOfferTokensNotifications=[], clientEntitlementsCache={}, participantTokens=())
-
-    @classmethod
-    def _preprocessData(cls, data):
-        qualificationConfig = data.get('qualification')
-        if qualificationConfig is not None:
-            data['qualification'] = makeTupleByDict(_Comp7QualificationConfig, qualificationConfig)
-        return data
-
-
-class Comp7RanksConfig(settingsBlock('Comp7RanksConfig', ('ranks',
- 'ranksOrder',
- 'eliteRankPercent',
- 'divisionsByRank',
- 'divisions',
- 'rankInactivityNotificationThreshold'))):
-    __slots__ = ()
-
-    @classmethod
-    def defaults(cls):
-        return dict(ranks={}, ranksOrder=(), eliteRankPercent=0, divisionsByRank={}, divisions=(), rankInactivityNotificationThreshold=0)
-
-    @classmethod
-    def _preprocessData(cls, data):
-        divisions = data.get('divisions')
-        if divisions:
-            data['divisions'] = cls.__dictDivisionsToComp7Divisions(divisions)
-        divisionsByRank = data.get('divisionsByRank')
-        if divisionsByRank:
-            for rankID, divisions in divisionsByRank.iteritems():
-                data['divisionsByRank'][rankID] = cls.__dictDivisionsToComp7Divisions(divisions)
-
-        return data
-
-    @classmethod
-    def __dictDivisionsToComp7Divisions(cls, divisions):
-        return tuple((Comp7Division(serialIdx, divisionInfo) for serialIdx, divisionInfo in enumerate(divisions)))
-
-
-class Comp7RewardsConfig(settingsBlock('Comp7RewardsConfig', ('main', 'extra'))):
-    __slots__ = ()
-
-    @classmethod
-    def defaults(cls):
-        return {'main': [],
-         'extra': []}
-
-
 class WinbackConfig(namedtuple('WinbackConfig', ('isEnabled',
  'isModeEnabled',
  'isWhatsNewEnabled',
@@ -1249,38 +1188,43 @@ class PreModerationConfig(namedtuple('_PreModerationConfig', ('prebattleDescript
         return self._replace(**dataToUpdate)
 
 
-LOOTBOX_SYSTEM_CONFIG = 'lootbox_system_config'
+class LootBoxSystemEventConfig(namedtuple('_LootBoxSystemEventConfig', ('enabled',
+ 'eventName',
+ 'boxesPriority',
+ 'start',
+ 'finish',
+ 'dailyPurchaseLimit'))):
+    __slots__ = ()
 
-class _LootBoxSystemConfig(object):
-    __slots__ = ('__isEnabled', '__eventName', '__boxesPriority', '__start', '__finish', '__dailyPurchaseLimit')
-
-    def __init__(self, **kwargs):
-        super(_LootBoxSystemConfig, self).__init__()
-        self.__eventName = kwargs.get('eventName', '')
-        self.__boxesPriority = kwargs.get('boxesPriority', tuple())
-        self.__isEnabled = kwargs.get('enabled', False)
-        self.__start = kwargs.get('start', 0)
-        self.__finish = kwargs.get('finish', 0)
-        self.__dailyPurchaseLimit = kwargs.get('dailyPurchaseLimit', 0)
-
-    @property
-    def isEnabled(self):
-        return self.__isEnabled
-
-    @property
-    def eventName(self):
-        return self.__eventName
-
-    @property
-    def boxesPriority(self):
-        return self.__boxesPriority
-
-    @property
-    def dailyPurchaseLimit(self):
-        return self.__dailyPurchaseLimit
+    def __new__(cls, **kwargs):
+        defaults = dict(enabled=False, eventName='', boxesPriority=tuple(), start=0, finish=0, dailyPurchaseLimit=0)
+        defaults.update(kwargs)
+        return super(LootBoxSystemEventConfig, cls).__new__(cls, **defaults)
 
     def getActiveTime(self):
-        return (self.__start, self.__finish)
+        return (self.start, self.finish)
+
+
+LOOTBOX_SYSTEM_CONFIG = 'lootbox_system_config'
+
+class _LootBoxSystemConfig(namedtuple('_LootBoxSystemConfig', ('events', 'mainEntryPoint'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(events={}, mainEntryPoint='')
+        defaults.update(kwargs)
+        cls.__packEventConfigs(defaults)
+        return super(_LootBoxSystemConfig, cls).__new__(cls, **defaults)
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        self.__packEventConfigs(dataToUpdate)
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def __packEventConfigs(cls, dataToUpdate):
+        dataToUpdate['events'] = {eventName:LootBoxSystemEventConfig(eventName=eventName, **event) for eventName, event in dataToUpdate['events'].iteritems()}
 
 
 class _LimitedUIConfig(namedtuple('_LimitedUIConfig', ('enabled', 'rules', 'version'))):
@@ -1474,9 +1418,6 @@ class ServerSettings(object):
         self.__resourceWellConfig = ResourceWellConfig()
         self.__battleMattersConfig = _BattleMattersConfig()
         self.__peripheryRoutingConfig = PeripheryRoutingConfig()
-        self.__comp7Config = Comp7Config()
-        self.__comp7RanksConfig = Comp7RanksConfig()
-        self.__comp7RewardsConfig = Comp7RewardsConfig()
         self.__personalReservesConfig = PersonalReservesConfig()
         self.__playLimitsConfig = PlayLimitsConfig()
         self.__preModerationConfig = PreModerationConfig()
@@ -1492,6 +1433,7 @@ class ServerSettings(object):
         self.__advancedAchievementsConfig = _AdvancedAchievementsConfig()
         self.__schemaManager = getSchemaManager()
         self.__exchangeRatesConfig = _ExchangeRatesConfig()
+        self.__easyTankEquipConfig = EasyTankEquipConfig()
         self.set(serverSettings)
 
     def set(self, serverSettings):
@@ -1563,6 +1505,8 @@ class ServerSettings(object):
             self.__exchangeRatesConfig = makeTupleByDict(_ExchangeRatesConfig, self.__serverSettings['exchange_rates_config'])
         else:
             self.__exchangeRatesConfig = _ExchangeRatesConfig()
+        if Configs.EASY_TANK_EQUIP_CONFIG.value in self.__serverSettings:
+            self.__easyTankEquipConfig = makeTupleByDict(EasyTankEquipConfig, self.__serverSettings[Configs.EASY_TANK_EQUIP_CONFIG.value])
         if BATTLE_PASS_CONFIG_NAME in self.__serverSettings:
             self.__battlePassConfig = BattlePassConfig(self.__serverSettings.get(BATTLE_PASS_CONFIG_NAME, {}))
         else:
@@ -1570,7 +1514,8 @@ class ServerSettings(object):
         if _crystalRewardsConfig.CONFIG_NAME in self.__serverSettings:
             self.__crystalRewardsConfig = makeTupleByDict(_crystalRewardsConfig, self.__serverSettings[_crystalRewardsConfig.CONFIG_NAME])
         self.__updateReactiveCommunicationConfig(self.__serverSettings)
-        self.__updateLootBoxSystemConfig(self.__serverSettings)
+        if LOOTBOX_SYSTEM_CONFIG in self.__serverSettings:
+            self.__lootBoxSystemConfig = makeTupleByDict(_LootBoxSystemConfig, self.__serverSettings[LOOTBOX_SYSTEM_CONFIG])
         if BonusCapsConst.CONFIG_NAME in self.__serverSettings:
             BONUS_CAPS.OVERRIDE_BONUS_CAPS = self.__serverSettings[BonusCapsConst.CONFIG_NAME]
         else:
@@ -1600,21 +1545,6 @@ class ServerSettings(object):
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
         if Configs.PERIPHERY_ROUTING_CONFIG.value in self.__serverSettings:
             self.__peripheryRoutingConfig = makeTupleByDict(PeripheryRoutingConfig, self.__serverSettings[Configs.PERIPHERY_ROUTING_CONFIG.value])
-        if Configs.COMP7_CONFIG.value in self.__serverSettings:
-            LOG_DEBUG(Configs.COMP7_CONFIG.value, self.__serverSettings[Configs.COMP7_CONFIG.value])
-            self.__comp7Config = makeTupleByDict(Comp7Config, self.__serverSettings[Configs.COMP7_CONFIG.value])
-        else:
-            self.__comp7Config = Comp7Config.defaults()
-        if Configs.COMP7_RANKS_CONFIG.value in self.__serverSettings:
-            LOG_DEBUG(Configs.COMP7_RANKS_CONFIG.value, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
-            self.__comp7RanksConfig = makeTupleByDict(Comp7RanksConfig, self.__serverSettings[Configs.COMP7_RANKS_CONFIG.value])
-        else:
-            self.__comp7RanksConfig = Comp7RanksConfig.defaults()
-        if Configs.COMP7_REWARDS_CONFIG.value in self.__serverSettings:
-            LOG_DEBUG(Configs.COMP7_REWARDS_CONFIG.value, self.__serverSettings[Configs.COMP7_REWARDS_CONFIG.value])
-            self.__comp7RewardsConfig = makeTupleByDict(Comp7RewardsConfig, self.__serverSettings[Configs.COMP7_REWARDS_CONFIG.value])
-        else:
-            self.__comp7RewardsConfig = Comp7RewardsConfig.defaults()
         if Configs.PERSONAL_RESERVES_CONFIG.value in self.__serverSettings:
             self.__personalReservesConfig = makeTupleByDict(PersonalReservesConfig, self.__serverSettings[Configs.PERSONAL_RESERVES_CONFIG.value])
         else:
@@ -1699,12 +1629,6 @@ class ServerSettings(object):
             self.__updateUnitAssemblerConfig(serverSettingsDiff)
             configName = Configs.UNIT_ASSEMBLER_CONFIG.value
             self.__serverSettings[configName] = serverSettingsDiff[configName]
-        if Configs.COMP7_CONFIG.value in serverSettingsDiff:
-            self.__updateComp7(serverSettingsDiff)
-        if Configs.COMP7_RANKS_CONFIG.value in serverSettingsDiff:
-            self.__updateComp7PrestigeRanks(serverSettingsDiff)
-        if Configs.COMP7_REWARDS_CONFIG.value in serverSettingsDiff:
-            self.__updateComp7Rewards(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         if 'disabledPMOperations' in serverSettingsDiff:
@@ -1768,11 +1692,13 @@ class ServerSettings(object):
         if Configs.WINBACK_CONFIG.value in serverSettingsDiff:
             self.__updateWinbackConfig(serverSettingsDiff)
         self.__updatePersonalReserves(serverSettingsDiff)
-        self.__updateLootBoxSystemConfig(serverSettingsDiff)
+        if LOOTBOX_SYSTEM_CONFIG in serverSettingsDiff:
+            self.__updateLootBoxSystemConfig(serverSettingsDiff)
         self.__updateLootBoxesTooltipConfig(serverSettingsDiff)
         if Configs.COLLECTIONS_CONFIG.value in serverSettingsDiff:
             self.__updateCollectionsConfig(serverSettingsDiff)
         self.__updateLimitedUIConfig(serverSettingsDiff)
+        self.__updateEasyTankEquipConfig(serverSettingsDiff)
         if Configs.PRESTIGE_CONFIG.value in serverSettingsDiff:
             self.__serverSettings[Configs.PRESTIGE_CONFIG.value] = serverSettingsDiff[Configs.PRESTIGE_CONFIG.value]
             self.__prestigeConfig = PrestigeConfig(self.__serverSettings.get(Configs.PRESTIGE_CONFIG.value, {}))
@@ -1885,18 +1811,6 @@ class ServerSettings(object):
     @property
     def unitAssemblerConfig(self):
         return self.__unitAssemblerConfig
-
-    @property
-    def comp7Config(self):
-        return self.__comp7Config
-
-    @property
-    def comp7RanksConfig(self):
-        return self.__comp7RanksConfig
-
-    @property
-    def comp7RewardsConfig(self):
-        return self.__comp7RewardsConfig
 
     @property
     def telecomConfig(self):
@@ -2022,6 +1936,9 @@ class ServerSettings(object):
 
     def isLootBoxesEnabled(self):
         return self.__getGlobalSetting('isLootBoxesEnabled')
+
+    def isMentoringLicenseEnabled(self):
+        return self.__getGlobalSetting('isMentoringLicenseEnabled')
 
     def isAnonymizerEnabled(self):
         return self.__getGlobalSetting('isAnonymizerEnabled', False)
@@ -2320,6 +2237,9 @@ class ServerSettings(object):
     def getSeniorityAwardsConfig(self):
         return self.__seniorityAwardsConfig
 
+    def getEasyTankEquip(self):
+        return self.__easyTankEquipConfig
+
     def getBattlePassConfig(self):
         return self.__battlePassConfig
 
@@ -2383,18 +2303,6 @@ class ServerSettings(object):
     def __updateUnitAssemblerConfig(self, targetSettings):
         config = targetSettings[Configs.UNIT_ASSEMBLER_CONFIG.value]
         self.__unitAssemblerConfig = self.__unitAssemblerConfig.replace(config)
-
-    def __updateComp7(self, targetSettings):
-        config = targetSettings[Configs.COMP7_CONFIG.value]
-        self.__comp7Config = self.__comp7Config.replace(copy.deepcopy(config))
-
-    def __updateComp7PrestigeRanks(self, targetSettings):
-        config = targetSettings[Configs.COMP7_RANKS_CONFIG.value]
-        self.__comp7RanksConfig = self.__comp7RanksConfig.replace(copy.deepcopy(config))
-
-    def __updateComp7Rewards(self, targetSettings):
-        config = targetSettings[Configs.COMP7_REWARDS_CONFIG.value]
-        self.__comp7RewardsConfig = self.__comp7RewardsConfig.replace(config)
 
     def __updateSquadBonus(self, sourceSettings):
         self.__squadPremiumBonus = self.__squadPremiumBonus.replace(sourceSettings[PremiumConfigs.PREM_SQUAD])
@@ -2471,9 +2379,8 @@ class ServerSettings(object):
     def __updateTournamentsConfig(self, diff):
         self.__tournamentSettings = self.__tournamentSettings.replace(diff[TOURNAMENT_CONFIG])
 
-    def __updateLootBoxSystemConfig(self, settings):
-        if LOOTBOX_SYSTEM_CONFIG in settings:
-            self.__lootBoxSystemConfig = _LootBoxSystemConfig(**settings[LOOTBOX_SYSTEM_CONFIG])
+    def __updateLootBoxSystemConfig(self, diff):
+        self.__lootBoxSystemConfig = self.__lootBoxSystemConfig.replace(diff[LOOTBOX_SYSTEM_CONFIG])
 
     def __updateLootBoxesTooltipConfig(self, settings):
         if Configs.LOOTBOXES_TOOLTIP_CONFIG.value in settings:
@@ -2488,6 +2395,10 @@ class ServerSettings(object):
     def __updateLimitedUIConfig(self, serverSettingsDiff):
         if Configs.LIMITED_UI_CONFIG.value in serverSettingsDiff:
             self.__limitedUIConfig = self.__limitedUIConfig.replace(serverSettingsDiff[Configs.LIMITED_UI_CONFIG.value])
+
+    def __updateEasyTankEquipConfig(self, serverSettingsDiff):
+        if Configs.EASY_TANK_EQUIP_CONFIG.value in serverSettingsDiff:
+            self.__easyTankEquipConfig = self.__easyTankEquipConfig.replace(serverSettingsDiff[Configs.EASY_TANK_EQUIP_CONFIG.value])
 
     def __updateSteamShadeConfig(self, serverSettingsDiff):
         if Configs.STEAM_SHADE_CONFIG.value in serverSettingsDiff:

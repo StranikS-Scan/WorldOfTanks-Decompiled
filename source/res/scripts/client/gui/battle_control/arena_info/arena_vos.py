@@ -28,8 +28,6 @@ _DEFAULT_PLAYER_GROUP = 1
 _DEFAULT_PLAYER_RANK = 0
 _DEFAULT_PHYSICAL_SECTOR = 1
 _DEFAULT_HAS_RESPAWNS = True
-_DEFAULT_ROLE_SKILL_LEVEL = 0
-_DEFAULT_PLAYER_DIVISION = 0
 _BOT_NAME_PLACE_HOLDER = '{0} ({1})'
 _BOT_SUFFIX_BY_STATUS = {BOT_DISPLAY_STATUS.ELITE: R.strings.ingame_gui.bot.elite,
  BOT_DISPLAY_STATUS.BOSS: R.strings.ingame_gui.bot.boss}
@@ -86,43 +84,11 @@ class EPIC_BATTLE_KEYS(object):
         return [EPIC_BATTLE_KEYS.RANK] if not static else []
 
 
-class Comp7Keys(Enum):
-    ROLE_SKILL_LEVEL = 'vehicleRoleSkillLevel'
-    RANK = 'rank'
-    VOIP_CONNECTED = 'voipConnected'
-    IS_QUAL_ACTIVE = 'isQualActive'
-
-    @staticmethod
-    def getKeys(static=True):
-        return [(Comp7Keys.ROLE_SKILL_LEVEL, _DEFAULT_ROLE_SKILL_LEVEL),
-         (Comp7Keys.RANK, (_DEFAULT_PLAYER_RANK, _DEFAULT_PLAYER_DIVISION)),
-         (Comp7Keys.VOIP_CONNECTED, False),
-         (Comp7Keys.IS_QUAL_ACTIVE, False)] if static else []
-
-    @staticmethod
-    def getSortingKeys(static=True):
-        return [Comp7Keys.RANK] if static else []
-
-
-class TournamentComp7Keys(Enum):
-
-    @staticmethod
-    def getKeys(static=True):
-        return [(Comp7Keys.ROLE_SKILL_LEVEL, _DEFAULT_ROLE_SKILL_LEVEL), (Comp7Keys.VOIP_CONNECTED, False)] if static else []
-
-    @staticmethod
-    def getSortingKeys(static=True):
-        return []
-
-
 GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
  ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
  ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS,
- ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys,
- ARENA_GUI_TYPE.COMP7: Comp7Keys,
- ARENA_GUI_TYPE.TOURNAMENT_COMP7: TournamentComp7Keys,
- ARENA_GUI_TYPE.TRAINING_COMP7: Comp7Keys}
+ ARENA_GUI_TYPE.BATTLE_ROYALE: BattleRoyaleKeys}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')

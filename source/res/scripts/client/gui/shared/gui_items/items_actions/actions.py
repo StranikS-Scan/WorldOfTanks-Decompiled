@@ -37,6 +37,7 @@ from gui.shared import event_dispatcher as shared_events
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_dispatcher import showDeconstructionMultDeviceDialog, showDeconstructionDeviceDialog
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items.Tankman import NO_TANKMAN
 from gui.shared.gui_items.fitting_item import canBuyWithGoldExchange
 from gui.shared.gui_items.gui_item_economics import getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors import makeSuccess
@@ -50,7 +51,7 @@ from gui.shared.gui_items.processors.module import ModuleSeller
 from gui.shared.gui_items.processors.module import ModuleUpgradeProcessor
 from gui.shared.gui_items.processors.module import MultipleModulesSeller
 from gui.shared.gui_items.processors.module import getInstallerProcessor
-from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills
+from gui.shared.gui_items.processors.tankman import TankmanFreeToOwnXpConvertor, TankmanRetraining, TankmanUnload, TankmanEquip, TankmanChangePassport, TankmanDismiss, TankmanRestore, TankmanChangeRole, TankmenJunkConverter, TankmanAddSkills, ResetAllTankmenSkills, TransferTankmanXP, TankmanRecruitAndEquip
 from gui.shared.gui_items.processors.veh_post_progression import ChangeVehicleSetupEquipments, DiscardPairsProcessor, PurchasePairProcessor, PurchaseStepsProcessor, SetEquipmentSlotTypeProcessor, SwitchPrebattleAmmoPanelAvailability
 from gui.shared.gui_items.processors.vehicle import OptDevicesInstaller, BuyAndInstallConsumablesProcessor, AutoFillVehicleLayoutProcessor, BuyAndInstallBattleBoostersProcessor, BuyAndInstallShellsProcessor, VehicleRepairer, InstallBattleAbilitiesProcessor
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
@@ -756,6 +757,20 @@ class ConvertJunkTankmenAction(IGUIItemAction):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 
+class TransferTankmanXPAction(IGUIItemAction):
+
+    def __init__(self, sourceID, targetID):
+        super(TransferTankmanXPAction, self).__init__()
+        self._sourceID = sourceID
+        self._targetID = targetID
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TransferTankmanXP(self._sourceID, self._targetID).request()
+        if result:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
 class BuyBoosterAction(CachedItemAction):
 
     def __init__(self, booster, count, currency, doActivation=False):
@@ -910,15 +925,16 @@ class ConvertBlueprintFragmentAction(IGUIItemAction):
 
 class TmanAddSkillsAction(CachedItemAction):
 
-    def __init__(self, tmanInvID, utilizationType, skillNames):
+    def __init__(self, tmanInvID, utilizationType, skillRole, skillNames):
         super(TmanAddSkillsAction, self).__init__()
+        self.__skillRole = skillRole
         self.__skillNames = skillNames
         self.__utilizationType = utilizationType
         self.__tmanInvID = tmanInvID
 
     @decorators.adisp_process('studying')
     def doAction(self):
-        result = yield TankmanAddSkills(self.__tmanInvID, self.__utilizationType, self.__skillNames).request()
+        result = yield TankmanAddSkills(self.__tmanInvID, self.__utilizationType, self.__skillRole, self.__skillNames).request()
         if not result:
             return
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
@@ -1073,6 +1089,24 @@ class TankmanDismissAction(CachedItemAction):
         tankman = self._itemsCache.items.getTankman(self.__tankmanInvID)
         result = yield TankmanDismiss(tankman).request()
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+
+
+class TankmanBuyAndEquipAction(IGUIItemAction):
+    _FREE_INDEX = 0
+
+    def __init__(self, vehicle, slot):
+        super(TankmanBuyAndEquipAction, self).__init__()
+        self.__vehicle = vehicle
+        self.__slot = slot
+
+    @decorators.adisp_process('updating')
+    def doAction(self):
+        result = yield TankmanRecruitAndEquip(self.__vehicle, self.__slot, self._FREE_INDEX).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+            tankmen = self.__vehicle.getTankmanIDBySlotIdx(self.__slot)
+            if result.success and tankmen != NO_TANKMAN:
+                SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.UNLOAD_TANKMAN_SUCCESS, type=SystemMessages.SM_TYPE.Information)
 
 
 class UpgradeOptDeviceAction(AsyncGUIItemAction):

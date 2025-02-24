@@ -1764,6 +1764,63 @@
       </damage>
     </armorSpalls>
   </_122mm_SB-57I>
+  <_122mm_CB-472T>
+    <id>	181	</id>
+    <userString>	#china_vehicles:_122mm_CB-472T	</userString>
+    <icon>	ap	</icon>
+    <price>	794	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_122mm_CB-472T>
+  <_122mm_PO-122T>
+    <id>	182	</id>
+    <userString>	#china_vehicles:_122mm_PO-122T	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	420	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_PO-122T>
+  <_122mm_SB-472T>
+    <id>	183	</id>
+    <userString>	#china_vehicles:_122mm_SB-472T	</userString>
+    <icon>	he_modern	</icon>
+    <price>	569	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	550	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	275	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_SB-472T>
   <_122mm_GM40_AP>
     <id>	123	</id>
     <userString>	#china_vehicles:_122mm_GM40_AP	</userString>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/plugins.py
+import BigWorld
 import logging
 import typing
 from collections import namedtuple
@@ -76,6 +77,7 @@ class ProcessorPlugin(object):
         self.type = pluginType
         self.isAsync = isAsync
         self.isEnabled = isEnabled
+        self.logWarnings = True
 
 
 class SyncValidator(ProcessorPlugin):
@@ -137,6 +139,71 @@ class AwaitConfirmator(ProcessorPlugin):
     @future_async.wg_async
     def _confirm(self, callback):
         callback(makeSuccess())
+
+
+class PreviousCrewValidator(SyncValidator):
+
+    def __init__(self, vehicle):
+        super(PreviousCrewValidator, self).__init__()
+        self.__vehicle = vehicle
+        self.logWarnings = False
+
+    def _validate(self):
+        lastCrewIDs = self.__vehicle.lastCrew
+        if lastCrewIDs is None:
+            return makeError()
+        numTmanAlreadyInCurrentVehicle = 0
+        demobilizedMembersCounter = 0
+        for slotIdx, lastTankmenInvID in enumerate(lastCrewIDs):
+            actualLastTankman = self.itemsCache.items.getTankman(lastTankmenInvID)
+            if not actualLastTankman or actualLastTankman.isDismissed:
+                demobilizedMembersCounter += 1
+                continue
+            if self.__vehicle.descriptor.type.crewRoles[slotIdx][0] != actualLastTankman.role:
+                continue
+            if actualLastTankman and actualLastTankman.isInTank:
+                lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
+                if lastTankmanVehicle.isLocked:
+                    continue
+                if lastTankmanVehicle.invID == self.__vehicle.invID:
+                    numTmanAlreadyInCurrentVehicle += 1
+
+        if demobilizedMembersCounter == len(lastCrewIDs):
+            return makeError('return_unavailable')
+        else:
+            return makeError() if numTmanAlreadyInCurrentVehicle == len(lastCrewIDs) else makeSuccess()
+
+
+class AutoReturnValidator(SyncValidator):
+
+    def __init__(self, vehicle, isEnabled=True):
+        super(AutoReturnValidator, self).__init__(isEnabled)
+        self.vehicle = vehicle
+        self.logWarnings = False
+
+    def getCrewData(self):
+        hasSkipTmans = False
+        curCrewData = []
+        for slot, tmanInvID in enumerate(self.vehicle.lastCrew):
+            tankman = self.itemsCache.items.getTankman(tmanInvID)
+            crewRoles = self.vehicle.descriptor.type.crewRoles
+            if tankman:
+                vehicle = self.itemsCache.items.getVehicle(tankman.vehicleInvID)
+                vehicleInBattle = vehicle and vehicle.isInBattle
+                curCrewData.extend([tankman.vehicleNativeDescr.type.compactDescr,
+                 tankman.role,
+                 tankman.isInTank,
+                 vehicleInBattle])
+                if tankman.role != crewRoles[slot][0] or vehicleInBattle:
+                    hasSkipTmans = True
+
+        return (hasSkipTmans, curCrewData)
+
+    def _validate(self):
+        vehicleIntCD = self.vehicle.intCD
+        cachedCrewData = BigWorld.player().crewAccountController.getAutoReturnCrewData(vehicleIntCD)
+        hasSkipTmans, curCrewData = self.getCrewData()
+        return makeError('return_unavailable') if hasSkipTmans and cachedCrewData == curCrewData else makeSuccess()
 
 
 class VehicleValidator(SyncValidator):

@@ -195,9 +195,11 @@ def fini():
     MusicControllerWWISE.destroy()
     if RSSDownloader.g_downloader is not None:
         RSSDownloader.g_downloader.destroy()
-    ServiceLocator.connectionMgr.onConnected -= onConnected
-    ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
-    MessengerEntry.g_instance.fini()
+    if dependency.isConfigured():
+        ServiceLocator.connectionMgr.onConnected -= onConnected
+        ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
+    if dependency.isConfigured():
+        MessengerEntry.g_instance.fini()
     from helpers import EdgeDetectColorController
     if EdgeDetectColorController.g_instance is not None:
         EdgeDetectColorController.g_instance.destroy()
@@ -209,11 +211,13 @@ def fini():
         TriggersManager.g_manager = None
     if g_replayCtrl is not None:
         g_replayCtrl.unsubscribe()
-    gui_personality.fini()
+    if dependency.isConfigured():
+        gui_personality.fini()
     from predefined_hosts import g_preDefinedHosts
     if g_preDefinedHosts is not None:
         g_preDefinedHosts.fini()
-    SoundGroups.g_instance.stopListeningGUISpaceChanges()
+    if SoundGroups.g_instance is not None:
+        SoundGroups.g_instance.stopListeningGUISpaceChanges()
     dependency.clear()
     if g_replayCtrl is not None:
         g_replayCtrl.destroy()
@@ -221,8 +225,10 @@ def fini():
     voipRespHandler = VOIP.getVOIPManager()
     if voipRespHandler is not None:
         voipRespHandler.destroy()
-    SoundGroups.g_instance.destroy()
-    Settings.g_instance.save()
+    if SoundGroups.g_instance is not None:
+        SoundGroups.g_instance.destroy()
+    if Settings.g_instance is not None:
+        Settings.g_instance.save()
     WebBrowser.destroyExternalCache()
     gameLoading.getLoader().stop()
     if constants.HAS_DEV_RESOURCES:

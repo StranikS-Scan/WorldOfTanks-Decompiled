@@ -1,49 +1,49 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/trainings/TrainingRoomBase.py
 import BigWorld
-import ArenaType
-from account_helpers import isDemonstrator, isDemonstratorExpert
 from adisp import adisp_process
+import ArenaType
+from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages, GUI_SETTINGS
-from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
-from gui.Scaleform.settings import ICONS_SIZES
-from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
+from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.TrainingRoomBaseMeta import TrainingRoomBaseMeta
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.genConsts.BATTLE_TYPES import BATTLE_TYPES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.Scaleform.settings import ICONS_SIZES
+from gui.impl import backport
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx, SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener
 from gui.prb_control.entities.training.legacy.ctx import SetPlayerObserverStateCtx, ChangeArenaVoipCtx, ChangeArenaGuiCtx
 from gui.prb_control.entities.training.legacy.entity import TrainingEntity
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items.prb_items import getPlayersComparator
 from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
-from gui.Scaleform.daapi.view.lobby.trainings.sound_constants import TRAININGS_SOUND_SPACE
 from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared.events import CoolDownEvent
 from gui.shared.formatters import text_styles
 from gui.sounds.ambients import LobbySubViewEnv
+from gui.training_room_external_handlers import getAllTrainingRoomHandlers, getTrainingRoomHandler
+from helpers import dependency
 from helpers import int2roman, i18n
-from gui.impl import backport
+from helpers.statistics import HANGAR_LOADING_STATE
 from messenger.ext import passCensor
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.storage import storage_getter
 from prebattle_shared import decodeRoster
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from skeletons.helpers.statistics import IStatisticsCollector
-from helpers.statistics import HANGAR_LOADING_STATE
-from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
-from gui.shared.events import CoolDownEvent
 BATTLE_TYPES_ICONS = {PREBATTLE_TYPE.TRAINING: BATTLE_TYPES.TRAINING,
  PREBATTLE_TYPE.EPIC_TRAINING: BATTLE_TYPES.EPIC_TRAINING}
 
@@ -338,18 +338,20 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
 
     def _showActionErrorMessage(self, errType=None):
         errors = {PREBATTLE_ERRORS.ROSTER_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_ADDPLAYER, {}),
-         PREBATTLE_ERRORS.PLAYERS_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_SELECTOBSERVER, {'numPlayers': self.__getPlayersMaxCount()}),
-         PREBATTLE_ERRORS.ONSLAUGHT_ROSTER_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_ONSLAUGHTROSTERLIMIT, {'numPlayers': self.__getComp7MaxPlayersInTeam()})}
-        errMsg = errors.get(errType, (SYSTEM_MESSAGES.TRAINING_ERROR_DOACTION, {}))
+         PREBATTLE_ERRORS.PLAYERS_LIMIT: (SYSTEM_MESSAGES.TRAINING_ERROR_SELECTOBSERVER, {'numPlayers': self.__getPlayersMaxCount()})}
+        errMsg = self.__getErrorClientMessageData(errType)
+        if errMsg is None:
+            errMsg = errors.get(errType, (SYSTEM_MESSAGES.TRAINING_ERROR_DOACTION, {}))
         SystemMessages.pushMessage(i18n.makeString(errMsg[0], **errMsg[1]), type=SystemMessages.SM_TYPE.Error)
+        return
 
     def _isObserverModeEnabled(self):
-        if self.__isComp7Arena():
-            accountAttrs = self.itemsCache.items.stats.attributes
-            if not isDemonstrator(accountAttrs) and not isDemonstratorExpert(accountAttrs):
-                return False
-        minCount = self.prbEntity.getSettings().getTeamLimits(1)['minCount']
-        return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
+        observerValidator = getTrainingRoomHandler(self.__trainingArenaGuiType()).getObserverValidator()
+        if observerValidator is not None and not observerValidator():
+            return False
+        else:
+            minCount = self.prbEntity.getSettings().getTeamLimits(1)['minCount']
+            return GUI_SETTINGS.trainingObserverModeEnabled and minCount > 0
 
     def _updateTrainingRoom(self, event):
         self.__changeTrainingRoomSettings(event.ctx.get('settings', None))
@@ -425,23 +427,33 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         return None
 
     def __getAdditionalInfo(self):
-        return PREBATTLE_ALIASES.TRAINING_ADDITIONAL_INFO_COMP7 if self.__isComp7Arena() else ''
+        additionalInfo = getTrainingRoomHandler(self.__trainingArenaGuiType()).getAdditionalInfo()
+        return additionalInfo if additionalInfo is not None else ''
 
     def __battleTypeIcon(self, prebattleType):
-        return BATTLE_TYPES.COMP7 if self.__isComp7Arena() else BATTLE_TYPES_ICONS.get(prebattleType, BATTLE_TYPES.TRAINING)
+        icon = getTrainingRoomHandler(self.__trainingArenaGuiType()).getIcon()
+        return icon if icon is not None else BATTLE_TYPES_ICONS.get(prebattleType, BATTLE_TYPES.TRAINING)
 
     def __getMaxPlayersInTeam(self):
-        if self.__isComp7Arena():
-            return self.__getComp7MaxPlayersInTeam()
-        arenaTypeID = self.prbEntity.getSettings()['arenaTypeID']
-        arenaType = ArenaType.g_cache.get(arenaTypeID)
-        return arenaType.maxPlayersInTeam
+        maxPlayersInTeam = getTrainingRoomHandler(self.__trainingArenaGuiType()).getMaxPlayersInTeam()
+        if maxPlayersInTeam is not None:
+            return maxPlayersInTeam
+        else:
+            arenaTypeID = self.prbEntity.getSettings()['arenaTypeID']
+            arenaType = ArenaType.g_cache.get(arenaTypeID)
+            return arenaType.maxPlayersInTeam
 
-    def __getComp7MaxPlayersInTeam(self):
-        return self.lobbyContext.getServerSettings().comp7Config.numPlayers
+    def __trainingArenaGuiType(self):
+        return None if not isinstance(self.prbEntity, TrainingEntity) else self.prbEntity.getSettings()['arenaGuiType']
 
-    def __isComp7Arena(self):
-        return isinstance(self.prbEntity, TrainingEntity) and self.prbEntity.isComp7Arena()
+    def __getErrorClientMessageData(self, errorType):
+        handlers = getAllTrainingRoomHandlers()
+        for handler in handlers:
+            messageData = handler.getClientMessageData(errorType)
+            if messageData is not None:
+                return messageData
+
+        return
 
     def __swapTeamsInMinimap(self, team):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:

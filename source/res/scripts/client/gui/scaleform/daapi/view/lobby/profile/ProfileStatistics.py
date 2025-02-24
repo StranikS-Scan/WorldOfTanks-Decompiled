@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/profile/ProfileStatistics.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import BattleTypesDropDownItems, makeBattleTypesDropDown
+from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import BattleTypesDropDownItems
 from gui.Scaleform.daapi.view.lobby.profile.profile_statistics_vos import getStatisticsVO
 from gui.Scaleform.daapi.view.lobby.profile.seasons_manager import makeStatisticsSeasonManagers
 from gui.Scaleform.daapi.view.meta.ProfileStatisticsMeta import ProfileStatisticsMeta
@@ -30,8 +30,7 @@ _FRAME_LABELS = {PROFILE_DROPDOWN_KEYS.ALL: 'random',
  PROFILE_DROPDOWN_KEYS.RANKED: 'ranked_15x15',
  PROFILE_DROPDOWN_KEYS.RANKED_10X10: BATTLE_TYPES.RANKED_10X10,
  PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: 'battle_royale',
- PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale',
- PROFILE_DROPDOWN_KEYS.COMP7: 'comp7'}
+ PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: 'battle_royale'}
 
 def _packProviderType(mainType, addValue=None):
     return '%s/%s' % (mainType, str(addValue)) if addValue is not None else mainType
@@ -53,11 +52,11 @@ class ProfileStatistics(ProfileStatisticsMeta):
             self.__ctx = {}
 
         super(ProfileStatistics, self).__init__(*args)
-        self.__seasonsManagers = makeStatisticsSeasonManagers()
+        self._seasonsManagers = makeStatisticsSeasonManagers()
 
     def setSeason(self, seasonId):
-        if self.__seasonsManagers.setSeason(seasonId):
-            self.as_updatePlayerStatsBtnS(self.__seasonsManagers.getPlayersStatsBtnEnabled())
+        if self._seasonsManagers.setSeason(seasonId):
+            self.as_updatePlayerStatsBtnS(self._seasonsManagers.getPlayersStatsBtnEnabled())
             self.invokeUpdate()
 
     def showPlayersStats(self):
@@ -68,7 +67,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         self._setInitData()
 
     def requestDossier(self, bType):
-        self.__seasonsManagers.onBattleTypeSwitched(bType)
+        self._seasonsManagers.onBattleTypeSwitched(bType)
         super(ProfileStatistics, self).requestDossier(bType)
 
     def _populate(self):
@@ -85,14 +84,17 @@ class ProfileStatistics(ProfileStatisticsMeta):
     def _dispose(self):
         super(ProfileStatistics, self)._dispose()
         g_eventBus.handleEvent(ProfileStatisticEvent(ProfileStatisticEvent.DISPOSE), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__seasonsManagers.clear()
+        self._seasonsManagers.clear()
 
     def _setInitData(self, accountDossier=None):
-        self.as_setInitDataS({'dropDownProvider': makeBattleTypesDropDown(accountDossier)})
+        self.as_setInitDataS({'dropDownProvider': self._makeBattleTypesDropDown(accountDossier)})
 
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileStatistics, self)._sendAccountData(targetData, accountDossier)
         self._setInitData(accountDossier)
+        self._setStatisticsVO(targetData, accountDossier)
+
+    def _setStatisticsVO(self, targetData, accountDossier):
         vo = getStatisticsVO(battlesType=self._battlesType, targetData=targetData, accountDossier=accountDossier, isCurrentUser=self._userID is None)
         if self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             vo['showSeasonDropdown'] = False
@@ -104,7 +106,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
         elif self._battlesType in (PROFILE_DROPDOWN_KEYS.RANKED, PROFILE_DROPDOWN_KEYS.RANKED_10X10):
             vo['seasonDropdownAttachToTitle'] = True
             vo['playersStatsLbl'] = backport.text(R.strings.ranked_battles.statistic.playersRaiting())
-        self.__seasonsManagers.addSeasonsDropdown(vo)
+        self._seasonsManagers.addSeasonsDropdown(vo)
         frameLabel = _FRAME_LABELS[self._battlesType]
         self.as_responseDossierS(self._battlesType, vo, frameLabel, '')
         return
@@ -115,7 +117,7 @@ class ProfileStatistics(ProfileStatisticsMeta):
     def _getNecessaryStats(self, accountDossier=None):
         if accountDossier is None:
             accountDossier = self.itemsCache.items.getAccountDossier(self._userID)
-        seasonStats = self.__seasonsManagers.getStats(accountDossier)
+        seasonStats = self._seasonsManagers.getStats(accountDossier)
         if seasonStats:
             return seasonStats
         else:

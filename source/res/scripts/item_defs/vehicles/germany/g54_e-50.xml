@@ -1157,6 +1157,33 @@
         <rotation>	0 0 0	</rotation>
         <attachNode>	HP_light2	</attachNode>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.875278 -0.058558 -0.916	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	0.999996 0.999997 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.875 -0.058558 -0.916	</position>
+        <rotation>	3.141593 0 -1.570796	</rotation>
+        <scale>	0.999996 0.999997 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.362 -0.105601 -3.589926	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.99998 0.99998 0.999981	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1737,7 +1764,6 @@
             <length>	0.159901	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.2232	</xStart>
@@ -1924,7 +1950,6 @@
             <length>	0.159901	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.22321	</xStart>
@@ -2664,7 +2689,6 @@
             <length>	0.159901	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.2232	</xStart>
@@ -2851,7 +2875,6 @@
             <length>	0.159901	</length>
           </secSegment>
           <collisionHull>
-            <bottom></bottom>
             <top>
               <part>
                 <xStart>	-3.22321	</xStart>
@@ -3959,6 +3982,24 @@
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_light1	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.605 1.031 0.165	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0.479 1.028 -0.527	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>
@@ -5110,6 +5151,24 @@
           <position>	0 0 0	</position>
           <rotation>	0 0 0	</rotation>
           <attachNode>	HP_light1	</attachNode>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.614 1.031 0.146	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38002	</slotId>
+          <position>	0.479 1.028 -0.527	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

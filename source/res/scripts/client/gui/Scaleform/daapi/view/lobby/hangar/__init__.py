@@ -14,10 +14,12 @@ from gui.shared import EVENT_BUS_SCOPE
 def getContextMenuHandlers():
     from gui.Scaleform.daapi.view.lobby.hangar import hangar_cm_handlers
     from gui.impl.lobby.crew.widget.crew_widget_cm_handlers import CrewContextMenuHandler
+    from gui.impl.lobby.crew.widget.qt_crew_widget_cm_handlers import QuickTrainingCrewWidgetContextMenuHandler
     from gui.impl.lobby.crew.crew_cm_handlers import CrewTankmanContextMenuHandler
     return ((CONTEXT_MENU_HANDLER_TYPE.VEHICLE, hangar_cm_handlers.VehicleContextMenuHandler),
      (CONTEXT_MENU_HANDLER_TYPE.TECHNICAL_MAINTENANCE, hangar_cm_handlers.TechnicalMaintenanceCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CREW_MEMBER, CrewContextMenuHandler),
+     (CONTEXT_MENU_HANDLER_TYPE.QT_CREW_MEMBER, QuickTrainingCrewWidgetContextMenuHandler),
      (CONTEXT_MENU_HANDLER_TYPE.CREW_TANKMAN, CrewTankmanContextMenuHandler))
 
 
@@ -33,7 +35,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import EpicBattleTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import BattlePassTankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.carousels import MapboxTankCarousel
-    from gui.Scaleform.daapi.view.lobby.hangar.carousels import Comp7TankCarousel
     from gui.Scaleform.daapi.view.lobby.hangar.StrongholdView import StrongholdView, StrongholdAdsView
     from gui.Scaleform.daapi.view.lobby.hangar.BrowserView import BrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.hangar_header import HangarHeader
@@ -59,7 +60,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.TournamentsView import TournamentsView
     from gui.impl.lobby.resource_well.entry_point import ResourceWellEntryPointComponent
     from gui.impl.lobby.personal_reserves.personal_reserves_widget_inject import PersonalReservesWidgetInject
-    from gui.impl.lobby.comp7.main_widget import Comp7MainWidgetComponent
     from gui.Scaleform.daapi.view.lobby.hangar.carousel_event_entry_widget import CarouselEventEntryHolder
     from gui.Scaleform.daapi.view.lobby.hangar.battle_royale_widget import BattleRoyaleHangarWidgetInject
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.stronghold_entry_point import StrongholdEntryPoint
@@ -85,7 +85,6 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.RANKED_TANK_CAROUSEL, RankedTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL, EpicBattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.MAPBOX_TANK_CAROUSEL, MapboxTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.COMP7_TANK_CAROUSEL, Comp7TankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.VEHICLE_PARAMETERS, VehicleParameters, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.RANKED_WIDGET, RankedBattlesHangarWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK, AlertMessageBlock, ScopeTemplates.DEFAULT_SCOPE),
@@ -98,7 +97,6 @@ def getViewSettings():
      ComponentSettings(HANGAR_ALIASES.BATTLEPASS_TANK_CAROUSEL, BattlePassTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.BATTLE_PASSS_ENTRY_POINT, BattlePassEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.LIVE_OPS_WEB_EVENTS_ENTRY_POINT, LiveOpsWebEventsEntryPointComponent, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(HANGAR_ALIASES.COMP7_WIDGET, Comp7MainWidgetComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.SECONDARY_ENTRY_POINT, BattlePassSecondaryEntryPointWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.AMMUNITION_PANEL_INJECT, AmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(HANGAR_ALIASES.CREW_PANEL_INJECT, CrewPanelInject, ScopeTemplates.DEFAULT_SCOPE),

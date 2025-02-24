@@ -10,7 +10,8 @@ from gui.impl.gen.view_models.views.lobby.crew.tooltips.tankman_tooltip_model im
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTankmanRestoreInfo
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME, getTankmanSkill
+from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.tankman_skill import BROTHERHOOD_SKILL_NAME, getTankmanSkill
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers import time_utils
@@ -85,7 +86,7 @@ class TankmanTooltip(ViewImpl):
 
     def _setBonuses(self, vm, tankman, vehicle):
         finalEffVal = 0
-        skill = getTankmanSkill(BROTHERHOOD_SKILL_NAME, tankman=tankman)
+        skill = getTankmanSkill(BROTHERHOOD_SKILL_NAME, tankman.role, tankman=tankman)
         brotherhoodBonus = tankman.vehicleBonuses.get('brotherhood', 0)
         finalEffVal += brotherhoodBonus
         self.__addModifier(vm.getPerks(), brotherhoodBonus, R.images.gui.maps.icons.tankmen.skills.medium.dyn(skill.extensionLessIconName)(), skill.userName)

@@ -13,24 +13,22 @@ from gui.impl.lobby.crew.container_vews.personal_file.components.skill_matrix_co
 from gui.impl.lobby.crew.container_vews.personal_file.context import PersonalFileViewContext
 from gui.impl.lobby.crew.container_vews.personal_file.controller import PersonalFileInteractionController
 from gui.impl.lobby.crew.personal_case import IPersonalTab
-from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
+from gui.impl.pub import ViewImpl
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewViewKeys
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.controllers import InteractionController
     from gui.impl.lobby.container_views.base.components import ComponentBase
 
-class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
-    __slots__ = ('__viewKey', '__isAnimationShowing', '__hasPendingRefresh')
+class PersonalFileView(ContainerBase, IPersonalTab, ViewImpl):
+    __slots__ = ('__isAnimationShowing', '__hasPendingRefresh')
     TITLE = backport.text(R.strings.crew.tankmanContainer.tab.personalFile())
     itemsCache = dependency.descriptor(IItemsCache)
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, layoutID=R.views.lobby.crew.personal_case.PersonalFileView(), **kwargs):
-        self.__viewKey = CrewViewKeys.PERSONAL_FILE
         self.__isAnimationShowing = True
         self.__hasPendingRefresh = False
         settings = ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, PersonalFileViewModel())
@@ -39,10 +37,6 @@ class PersonalFileView(ContainerBase, IPersonalTab, BasePersonalCaseView):
     @property
     def viewModel(self):
         return super(PersonalFileView, self).getViewModel()
-
-    @property
-    def viewKey(self):
-        return self.__viewKey
 
     def onChangeTankman(self, tankmanID):
         if tankmanID != self.context.tankman.invID:

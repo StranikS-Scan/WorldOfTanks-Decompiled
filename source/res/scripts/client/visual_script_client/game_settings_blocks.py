@@ -8,6 +8,7 @@ from visual_script.misc import errorVScript, EDITOR_TYPE
 from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.tunable_event_block import TunableEventBlock
 if not IS_VS_EDITOR:
+    import Windowing
     from helpers import dependency
     from skeletons.account_helpers.settings_core import ISettingsCore
 
@@ -81,3 +82,22 @@ class OnGameSettingsChanged(TunableEventBlock, GameSettingsMeta):
     @TunableEventBlock.eventProcessor
     def _callOutput(self, res):
         self._settings.setValue(res)
+
+
+class OnWindowAccessibilityChanged(Block, GameSettingsMeta):
+
+    def __init__(self, *args, **kwargs):
+        super(OnWindowAccessibilityChanged, self).__init__(*args, **kwargs)
+        self._out = self._makeEventOutputSlot('out')
+        self._isAccessible = self._makeDataOutputSlot('isAccessible', SLOT_TYPE.BOOL, None)
+        return
+
+    def onStartScript(self):
+        Windowing.addWindowAccessibilitynHandler(self._onWindowAccessibilityChanged)
+
+    def onFinishScript(self):
+        Windowing.removeWindowAccessibilityHandler(self._onWindowAccessibilityChanged)
+
+    def _onWindowAccessibilityChanged(self, isWindowAccessible):
+        self._isAccessible.setValue(isWindowAccessible)
+        self._out.call()

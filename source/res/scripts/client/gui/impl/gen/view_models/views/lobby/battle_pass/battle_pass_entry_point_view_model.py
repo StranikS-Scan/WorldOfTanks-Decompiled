@@ -24,7 +24,7 @@ class BPState(Enum):
 class BattlePassEntryPointViewModel(ViewModel):
     __slots__ = ('onClick',)
 
-    def __init__(self, properties=22, commands=1):
+    def __init__(self, properties=23, commands=1):
         super(BattlePassEntryPointViewModel, self).__init__(properties=properties, commands=commands)
 
     def getPrevHasExtra(self):
@@ -69,95 +69,101 @@ class BattlePassEntryPointViewModel(ViewModel):
     def setProgression(self, value):
         self._setReal(6, value)
 
+    def getPrevCycle(self):
+        return self._getNumber(7)
+
+    def setPrevCycle(self, value):
+        self._setNumber(7, value)
+
+    def getCycle(self):
+        return self._getNumber(8)
+
+    def setCycle(self, value):
+        self._setNumber(8, value)
+
     def getBattlePassState(self):
-        return BPState(self._getString(7))
+        return BPState(self._getString(9))
 
     def setBattlePassState(self, value):
-        self._setString(7, value.value)
+        self._setString(9, value.value)
 
     def getIsSmall(self):
-        return self._getBool(8)
-
-    def setIsSmall(self, value):
-        self._setBool(8, value)
-
-    def getTooltipID(self):
-        return self._getNumber(9)
-
-    def setTooltipID(self, value):
-        self._setNumber(9, value)
-
-    def getIsFirstShow(self):
         return self._getBool(10)
 
-    def setIsFirstShow(self, value):
+    def setIsSmall(self, value):
         self._setBool(10, value)
 
+    def getTooltipID(self):
+        return self._getNumber(11)
+
+    def setTooltipID(self, value):
+        self._setNumber(11, value)
+
+    def getIsFirstShow(self):
+        return self._getBool(12)
+
+    def setIsFirstShow(self, value):
+        self._setBool(12, value)
+
     def getAnimState(self):
-        return AnimationState(self._getString(11))
+        return AnimationState(self._getString(13))
 
     def setAnimState(self, value):
-        self._setString(11, value.value)
+        self._setString(13, value.value)
 
     def getAnimStateKey(self):
-        return self._getNumber(12)
+        return self._getNumber(14)
 
     def setAnimStateKey(self, value):
-        self._setNumber(12, value)
+        self._setNumber(14, value)
 
     def getIsProgressionCompleted(self):
-        return self._getBool(13)
+        return self._getBool(15)
 
     def setIsProgressionCompleted(self, value):
-        self._setBool(13, value)
+        self._setBool(15, value)
 
     def getHasBattlePass(self):
-        return self._getBool(14)
+        return self._getBool(16)
 
     def setHasBattlePass(self, value):
-        self._setBool(14, value)
+        self._setBool(16, value)
 
     def getNotChosenRewardCount(self):
-        return self._getNumber(15)
-
-    def setNotChosenRewardCount(self, value):
-        self._setNumber(15, value)
-
-    def getPreviousChapterID(self):
-        return self._getNumber(16)
-
-    def setPreviousChapterID(self, value):
-        self._setNumber(16, value)
-
-    def getChapterID(self):
         return self._getNumber(17)
 
-    def setChapterID(self, value):
+    def setNotChosenRewardCount(self, value):
         self._setNumber(17, value)
 
-    def getSeasonNum(self):
+    def getPreviousChapterID(self):
         return self._getNumber(18)
 
-    def setSeasonNum(self, value):
+    def setPreviousChapterID(self, value):
         self._setNumber(18, value)
 
+    def getChapterID(self):
+        return self._getNumber(19)
+
+    def setChapterID(self, value):
+        self._setNumber(19, value)
+
+    def getSeasonNum(self):
+        return self._getNumber(20)
+
+    def setSeasonNum(self, value):
+        self._setNumber(20, value)
+
     def getBattleType(self):
-        return self._getString(19)
+        return self._getString(21)
 
     def setBattleType(self, value):
-        self._setString(19, value)
+        self._setString(21, value)
 
     def getIsChapterChosen(self):
-        return self._getBool(20)
+        return self._getBool(22)
 
     def setIsChapterChosen(self, value):
-        self._setBool(20, value)
-
-    def getFreePoints(self):
-        return self._getNumber(21)
-
-    def setFreePoints(self, value):
-        self._setNumber(21, value)
+        self._setBool(22, value)
 
     def _initialize(self):
         super(BattlePassEntryPointViewModel, self)._initialize()
@@ -168,6 +174,8 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addNumberProperty('level', 0)
         self._addRealProperty('prevProgression', 0.0)
         self._addRealProperty('progression', -1)
+        self._addNumberProperty('prevCycle', 0)
+        self._addNumberProperty('cycle', 0)
         self._addStringProperty('battlePassState')
         self._addBoolProperty('isSmall', False)
         self._addNumberProperty('tooltipID', 0)
@@ -182,5 +190,4 @@ class BattlePassEntryPointViewModel(ViewModel):
         self._addNumberProperty('seasonNum', 0)
         self._addStringProperty('battleType', '')
         self._addBoolProperty('isChapterChosen', False)
-        self._addNumberProperty('freePoints', 0)
         self.onClick = self._addCommand('onClick')

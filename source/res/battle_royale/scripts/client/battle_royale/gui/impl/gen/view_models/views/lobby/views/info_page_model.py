@@ -8,7 +8,7 @@ from battle_royale.gui.impl.gen.view_models.views.lobby.views.game_mode_model im
 class InfoPageModel(ViewModel):
     __slots__ = ('onOpenVideo', 'onClose')
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=8, commands=2):
         super(InfoPageModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -37,11 +37,29 @@ class InfoPageModel(ViewModel):
     def setIsModeSelector(self, value):
         self._setBool(3, value)
 
+    def getPlatoonTimeToResurrect(self):
+        return self._getNumber(4)
+
+    def setPlatoonTimeToResurrect(self, value):
+        self._setNumber(4, value)
+
+    def getPlatoonRespawnPeriod(self):
+        return self._getNumber(5)
+
+    def setPlatoonRespawnPeriod(self, value):
+        self._setNumber(5, value)
+
+    def getSoloRespawnPeriod(self):
+        return self._getNumber(6)
+
+    def setSoloRespawnPeriod(self, value):
+        self._setNumber(6, value)
+
     def getModesBP(self):
-        return self._getArray(4)
+        return self._getArray(7)
 
     def setModesBP(self, value):
-        self._setArray(4, value)
+        self._setArray(7, value)
 
     @staticmethod
     def getModesBPType():
@@ -53,6 +71,9 @@ class InfoPageModel(ViewModel):
         self._addNumberProperty('startDate', 0)
         self._addNumberProperty('endDate', 0)
         self._addBoolProperty('isModeSelector', False)
+        self._addNumberProperty('platoonTimeToResurrect', 0)
+        self._addNumberProperty('platoonRespawnPeriod', 0)
+        self._addNumberProperty('soloRespawnPeriod', 0)
         self._addArrayProperty('modesBP', Array())
         self.onOpenVideo = self._addCommand('onOpenVideo')
         self.onClose = self._addCommand('onClose')

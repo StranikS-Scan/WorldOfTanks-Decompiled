@@ -6,11 +6,7 @@ from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS
 from items import _xml
 from items.components import component_constants, skills_constants
 from items.components import skills_components
-from items.components.component_constants import EMPTY_STRING
 from items.components.skills_constants import ParamMeasureType, ParamSignType, SkillTypeName
-if IS_CLIENT or IS_WEB:
-    from gui.impl import backport
-    from gui.impl.gen import R
 SkillUISettings = namedtuple('SkillUISettings', ('tooltipSection', 'typeName', 'kpi', 'params', 'descrArgs'))
 SkillDescrsArg = namedtuple('SkillDescrsArg', ('situational', 'name', 'measureType', 'sign', 'value', 'isKpiVisible'))
 TTCParamsArg = namedtuple('TTCParamsArg', ('name', 'situational', 'value'))
@@ -21,25 +17,10 @@ def _readSkillBasics(xmlCtx, section, subsectionName):
     vsePerk = _xml.readIntOrNone(xmlCtx, section, 'vsePerk')
     if IS_CLIENT or IS_WEB:
         uiSettings = _readUISettings(xmlCtx, section, 'UISettings')
-        skillLocales = _readLocales(subsectionName, section)
-        skill = skills_components.BasicSkill(subsectionName, i18n=skillLocales, icon=_xml.readStringWithDefaultValue(xmlCtx, section, 'icon', '{}.png'.format(subsectionName)), vsePerk=vsePerk, uiSettings=uiSettings)
+        skill = skills_components.BasicSkill(subsectionName, vsePerk, uiSettings)
     else:
         skill = skills_components.BasicSkill(subsectionName, vsePerk=vsePerk)
     return (skill, xmlCtx, section)
-
-
-def _readLocales(skillName, section):
-
-    def localeText(locRoot, dynName):
-        if locRoot.isValid():
-            dynStr = locRoot.dyn(dynName)
-            if dynStr.isValid():
-                return backport.text(dynStr())
-        return EMPTY_STRING
-
-    localeRoot = R.strings.crew_perks.dyn(skillName)
-    altRoot = localeRoot.dyn('alt')
-    return skills_components.SkillLocales(section.readString('userString', localeText(localeRoot, 'name')), section.readString('shortDescription', localeText(localeRoot, 'shortDescription')), section.readString('maxLvlDescription', localeText(localeRoot, 'maxLvlDescription')), section.readString('currentLvlDescription', localeText(localeRoot, 'currentLvlDescription')), section.readString('altDescription', localeText(altRoot, 'description')), section.readString('altInfo', localeText(altRoot, 'info')))
 
 
 def _readUISettings(xmlCtx, section, subsectionName):

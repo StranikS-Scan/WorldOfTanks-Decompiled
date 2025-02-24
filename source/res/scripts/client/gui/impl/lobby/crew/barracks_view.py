@@ -21,7 +21,7 @@ from gui.impl.lobby.crew.filter import getTankmanKindSettings, getNationSettings
 from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, TankmenDataProvider, RecruitsDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.widget.crew_banner_widget import CrewBannerWidget
-from gui.impl.lobby.crew.filter.state import FilterState
+from gui.impl.lobby.crew.filter.state import FilterState, Persistor
 from gui.impl.lobby.crew.tooltips.bunks_confirm_discount_tooltip import BunksConfirmDiscountTooltip
 from gui.server_events import recruit_helper
 from gui.server_events.events_dispatcher import showRecruitWindow
@@ -33,8 +33,6 @@ from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.loggers import CrewViewLogger
-from uilogging.crew.logging_constants import CrewViewKeys, CrewNavigationButtons, CrewBarracksKeys, CrewMemberAdditionalInfo
 from wg_async import wg_await, wg_async
 
 class BarracksView(BaseTankmanListView):
@@ -42,7 +40,7 @@ class BarracksView(BaseTankmanListView):
     restore = dependency.descriptor(IRestoreController)
     specialSounds = dependency.descriptor(ISpecialSoundCtrl)
     eventsCache = dependency.descriptor(IEventsCache)
-    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice', '__uiLogger')
+    __slots__ = ('__dataProviders', '__filterState', '__hasFilters', '__filterPanelWidget', '__berthPrice', '__berthsInPack', '__defaultBerthPrice')
 
     def __init__(self, layoutID=R.views.lobby.crew.BarracksView(), *args, **kwargs):
         settings = ViewSettings(layoutID, flags=ViewFlags.LOBBY_SUB_VIEW, model=BarracksViewModel(), args=args, kwargs=kwargs)
@@ -50,12 +48,12 @@ class BarracksView(BaseTankmanListView):
         berths = self.itemsCache.items.stats.tankmenBerthsCount
         self.__berthPrice, self.__berthsInPack = self.itemsCache.items.shop.getTankmanBerthPrice(berths)
         self.__defaultBerthPrice, _ = self.itemsCache.items.shop.defaults.getTankmanBerthPrice(berths)
+        self.__refreshRecruitsForVisit()
         self.__hasFilters = location == BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED
-        self.__filterState = FilterState({FilterState.GROUPS.TANKMANKIND.value: TankmanKind.RECRUIT.value if self.__hasFilters else TankmanKind.TANKMAN.value})
+        self.__filterState = FilterState(initialState={FilterState.GROUPS.TANKMANKIND.value: TankmanKind.RECRUIT.value if self.__hasFilters else TankmanKind.TANKMAN.value}, persistor=Persistor(storageKey='barracks', persistentGroups=[FilterState.GROUPS.TANKMANKIND.value], ignoreDefault=True))
         self.__filterPanelWidget = self.__initFilterPanelWidget()
         self.__bannerWidget = CrewBannerWidget()
         self.__dataProviders = CompoundDataProvider(tankmen=TankmenDataProvider(self.__filterState), recruits=RecruitsDataProvider(self.__filterState))
-        self.__uiLogger = CrewViewLogger(self, CrewViewKeys.BARRACKS)
         super(BarracksView, self).__init__(settings)
 
     def createToolTipContent(self, event, contentID):
@@ -91,7 +89,6 @@ class BarracksView(BaseTankmanListView):
 
     def _onLoading(self, *args, **kwargs):
         super(BarracksView, self)._onLoading(*args, **kwargs)
-        self.__uiLogger.initialize()
         self.setChildView(FilterPanelWidget.LAYOUT_ID(), self.__filterPanelWidget)
         self.setChildView(CrewBannerWidget.LAYOUT_ID(), self.__bannerWidget)
         with self.viewModel.transaction() as tx:
@@ -111,7 +108,6 @@ class BarracksView(BaseTankmanListView):
         self.restore.onTankmenBufferUpdated -= self.__onTankmenBufferUpdated
         self.__dataProviders.unsubscribe()
         super(BarracksView, self)._finalize()
-        self.__uiLogger.finalize()
         self.__filterState = None
         self.__dataProviders = None
         self.__filterPanelWidget = None
@@ -125,6 +121,7 @@ class BarracksView(BaseTankmanListView):
         eventsTuple = super(BarracksView, self)._getEvents()
         return eventsTuple + ((self.viewModel.onResetFilters, self.__onResetFilters),
          (self.viewModel.onBuyBerth, self.__onClickBuyBerth),
+         (self.viewModel.onNewTankmanHovered, self.__onNewTankmanHovered),
          (self.viewModel.onTankmanSelected, self.__onTankmanSelected),
          (self.viewModel.onTankmanRecruit, self.__onTankmanRecruit),
          (self.viewModel.onTankmanDismiss, self.__onTankmanDismiss),
@@ -150,10 +147,6 @@ class BarracksView(BaseTankmanListView):
     def _filterState(self):
         return self.__filterState
 
-    @property
-    def _uiLoggingKey(self):
-        return CrewViewKeys.BARRACKS
-
     def _getCallbacks(self):
         return (('inventory', self.__onInventoryUpdate),
          ('stats.berths', self.__onTankmenBerthsCountUpdate),
@@ -176,7 +169,15 @@ class BarracksView(BaseTankmanListView):
         if len(recruitInfo.getNations()) == 1:
             tm.setNation(recruitInfo.getNations()[0])
         setRecruitTankmanModel(tm, recruitInfo, useOnlyFullSkills=False)
+        recruitID = str(recruitInfo.getRecruitID())
+        newRecruitCount = self.__recruitsForVisit.get(recruitID, 0)
+        if newRecruitCount > 1:
+            self.__recruitsForVisit[recruitID] = newRecruitCount - 1
+        else:
+            self.__recruitsForVisit.pop(recruitID, None)
+        tm.setIsNew(bool(newRecruitCount))
         cardsList.addViewModel(tm)
+        return
 
     def __onInventoryUpdate(self, invDiff):
         if GUI_ITEM_TYPE.TANKMAN in invDiff or GUI_ITEM_TYPE.CREW_SKINS in invDiff:
@@ -219,32 +220,39 @@ class BarracksView(BaseTankmanListView):
     def __onClickBuyBerth(self):
         yield wg_await(dialogs.showEnlargeBarracksDialog())
 
+    @args2params(int, str)
+    def __onNewTankmanHovered(self, index, recruitID):
+        recruit_helper.setNewRecruitVisited(recruitID)
+        with self.viewModel.transaction() as tx:
+            cardsList = tx.getTankmanList()
+            slotIdx = index - self._itemsOffset
+            if len(cardsList) > slotIdx:
+                cardsList[slotIdx].setIsNew(False)
+                cardsList.invalidate()
+        self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, recruit_helper.getNewRecruitsCounter())
+
     @args2params(int)
     def __onTankmanSelected(self, tankmanID):
-        self.__uiLogger.logClick(CrewBarracksKeys.CARD, info=CrewMemberAdditionalInfo.TANKMAN)
         showPersonalCase(tankmanID, previousViewID=self.layoutID)
 
     @args2params(str)
     def __onTankmanRecruit(self, recruitID):
-        self.__uiLogger.logClick(CrewBarracksKeys.CARD, info=CrewMemberAdditionalInfo.RECRUIT)
-        showRecruitWindow(recruitID, parentViewKey=CrewViewKeys.BARRACKS)
+        showRecruitWindow(recruitID)
 
     @args2params(int)
     def __onTankmanDismiss(self, tankmanID):
-        self.__uiLogger.logClick(CrewBarracksKeys.CARD_DISMISS_BUTTON)
-        dialogs.showDismissTankmanDialog(tankmanID, parentViewKey=CrewViewKeys.BARRACKS)
+        dialogs.showDismissTankmanDialog(tankmanID)
 
     @args2params(str)
     def __onPlayTankmanVoiceover(self, recruitID):
         self._onPlayVoiceover(recruitID)
-        self.__uiLogger.logClick(CrewBarracksKeys.CARD_VOICEOVER_BUTTON)
 
     def __initFilterPanelWidget(self):
         widget = FilterPanelWidget(getTankmanKindSettings(), (getVehicleGradeSettings(withLocation=True, labelResId=R.strings.crew.filter.group.details.title(), tooltipDynAccessor=R.strings.crew.filter.tooltip.crewMemberVehicleGrade),
          getVehicleTypeSettings(customTooltipBody=R.strings.crew.filter.tooltip.crewMemberVehicleType.body()),
          getNationSettings(R.strings.crew.filter.tooltip.nation.crewMember.body()),
          getTankmanRoleSettings(),
-         getVehicleTierSettings()), R.strings.crew.filter.popup.default.title(), self.__filterState, title=R.strings.crew.tankmanList.filter.title(), isSearchEnabled=True, hasVehicleFilter=True, panelType=FilterPanelType.BARRACKS, popoverTooltipHeader=R.strings.crew.tankmanList.tooltip.popover.header(), popoverTooltipBody=R.strings.crew.tankmanList.tooltip.popover.body(), searchTooltipBody=backport.text(R.strings.crew.tankmanList.tooltip.searchInput.body(), maxLength=SEARCH_MAX_LENGTH))
+         getVehicleTierSettings()), R.strings.crew.filter.popup.default.title(), self.__filterState, title=R.strings.crew.tankmanList.filter.title(), isSearchEnabled=True, showResetBtn=False, panelType=FilterPanelType.BARRACKS, popoverTooltipHeader=R.strings.crew.tankmanList.tooltip.popover.header(), popoverTooltipBody=R.strings.crew.tankmanList.tooltip.popover.body(), searchTooltipBody=backport.text(R.strings.crew.tankmanList.tooltip.searchInput.body(), maxLength=SEARCH_MAX_LENGTH))
         return widget
 
     def __fillCardList(self):
@@ -257,18 +265,15 @@ class BarracksView(BaseTankmanListView):
             self.__filterPanelWidget.applyStateToModel()
             newRecruitCount = self._recruitsProvider.newItemsCount
             if newRecruitCount:
+                self.__refreshRecruitsForVisit()
                 self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, newRecruitCount)
             self._fillVisibleCards(tx.getTankmanList())
             slotsCount, freeBerthsCount = getBethsSlotsCount()
             tx.berthsAmount.setFrom(freeBerthsCount)
             tx.berthsAmount.setTo(slotsCount)
-            if self._recruitsProvider.itemsCount:
-                self.__setNewRecruitVisited()
 
     def __showHangar(self):
-        self.__uiLogger.logNavigationButtonClick(CrewNavigationButtons.ESC)
         showHangar()
 
-    def __setNewRecruitVisited(self):
-        recruit_helper.setNewRecruitsVisited()
-        self.__filterPanelWidget.updateFilterToggleCounter(TankmanKind.RECRUIT.value, 0)
+    def __refreshRecruitsForVisit(self):
+        self.__recruitsForVisit = recruit_helper.getNewRecruits()

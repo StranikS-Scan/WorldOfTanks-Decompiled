@@ -559,6 +559,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def sendNotificationReply(self, notificationID, purge, actionName):
         self.base.doCmdInt2Str(0, AccountCommands.CMD_NOTIFICATION_REPLY, notificationID, purge, actionName)
 
+    def receiveConversionResults(self, resultsDict):
+        resultsDict = cPickle.loads(resultsDict)
+        self.crewAccountController.setConversionResults(resultsDict)
+
     def handleKeyEvent(self, event):
         return False
 
@@ -720,14 +724,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def dequeueMapbox(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.MAPBOX)
-
-    def enqueueComp7(self, vehInvID):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdIntArr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_ENQUEUE_IN_BATTLE_QUEUE, [QUEUE_TYPE.COMP7, vehInvID])
-
-    def dequeueComp7(self):
-        if not events.isPlayerEntityChanging:
-            self.base.doCmdInt(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_FROM_BATTLE_QUEUE, QUEUE_TYPE.COMP7)
 
     def enqueueMapsTraininig(self, mapGeometryID, vehCompDescr, team):
         if not events.isPlayerEntityChanging:

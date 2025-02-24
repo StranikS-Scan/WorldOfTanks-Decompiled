@@ -35,7 +35,7 @@ from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from shared_utils import findFirst
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IWinbackController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -133,10 +133,6 @@ def createMapboxSquad(cm):
     cm.createSquad(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD)
 
 
-def createComp7Squad(cm):
-    cm.createSquad(PREBATTLE_ACTION_NAME.COMP7_SQUAD)
-
-
 def invite(cm):
     user = cm.usersStorage.getUser(cm.databaseID)
     if cm.prbEntity.getPermissions().canSendInvite():
@@ -159,7 +155,6 @@ registerLobbyContexMenuHandler(USER.CREATE_EVENT_SQUAD, createEventSquad)
 registerLobbyContexMenuHandler(USER.CREATE_BATTLE_ROYALE_SQUAD, createBattleRoyaleSquad)
 registerLobbyContexMenuHandler(USER.INVITE, invite)
 registerLobbyContexMenuHandler(USER.CREATE_MAPBOX_SQUAD, createMapboxSquad)
-registerLobbyContexMenuHandler(USER.CREATE_COMP7_SQUAD, createComp7Squad)
 if not IS_CHINA:
     registerLobbyContexMenuHandler(USER.SET_MUTED, setMuted)
     registerLobbyContexMenuHandler(USER.UNSET_MUTED, unsetMuted)
@@ -174,7 +169,6 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
-    __comp7Ctrl = dependency.descriptor(IComp7Controller)
     __winbackController = dependency.descriptor(IWinbackController)
 
     @prbDispatcherProperty
@@ -311,11 +305,6 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
             if self.__mapboxCtrl.isEnabled() and not self.isSquadAlreadyCreated(PREBATTLE_TYPE.MAPBOX):
                 isOptionEnabled = canCreate and self.__mapboxCtrl.isActive() and self.__mapboxCtrl.isInPrimeTime()
                 options.append(self._makeItem(USER.CREATE_MAPBOX_SQUAD, backport.text(R.strings.menu.contextMenu.createMapboxSquad()), optInitData={'enabled': isOptionEnabled,
-                 'textColor': 13347959}))
-            if self.__comp7Ctrl.isEnabled():
-                primeTimeStatus, _, _ = self.__comp7Ctrl.getPrimeTimeStatus()
-                isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and not self.__comp7Ctrl.isBanned and not self.__comp7Ctrl.isOffline and self.__comp7Ctrl.hasSuitableVehicles() and self.__comp7Ctrl.isQualificationSquadAllowed()
-                options.append(self._makeItem(USER.CREATE_COMP7_SQUAD, MENU.contextmenu(USER.CREATE_COMP7_SQUAD), optInitData={'enabled': canCreate and isEnabled,
                  'textColor': 13347959}))
         return options
 
@@ -558,18 +547,6 @@ class CustomUserCMHandler(BaseUserCMHandler):
     def _excludeOptions(self, options):
         excludedOptions = self.__excludedOptions
         options = [ opt for opt in options if opt['id'] not in excludedOptions ]
-        return options
-
-
-class Comp7LeaderboardCMHandler(BaseUserCMHandler):
-
-    def _generateOptions(self, ctx=None):
-        userCMInfo = self._getUseCmInfo()
-        options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
-        options = self._addFriendshipInfo(options, userCMInfo)
-        options = self._addRemoveFriendInfo(options, userCMInfo)
-        options = self._addChannelInfo(options, userCMInfo)
-        options.append(self._makeItem(USER.COPY_TO_CLIPBOARD, MENU.contextmenu(USER.COPY_TO_CLIPBOARD)))
         return options
 
 

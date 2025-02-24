@@ -860,6 +860,15 @@
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
+    <hint>	CrewBooksMentoringLicenseHint	  <item-id>	CrewBooksMentoringLicenseBtn	</item-id>
+      <text>	_(#crew_books:page/mentoringLicense/hint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+    </hint>
     <hint>	NewC11nSectionHint	  <item-id>	TuningBtn	</item-id>
       <text>	_(#vehicle_customization:customization/hint/newCustomizationSection)	</text>
       <arrow>

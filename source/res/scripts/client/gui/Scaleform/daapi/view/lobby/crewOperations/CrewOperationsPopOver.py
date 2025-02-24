@@ -11,7 +11,9 @@ from gui.prb_control import prb_getters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle, getLowEfficiencyCrew
 from gui.shared.gui_items.items_actions import factory
-from gui.shared.gui_items.processors.tankman import TankmanReturn
+from gui.shared.gui_items.processors.tankman import TankmanAutoReturn, TankmanReturn
+from gui.shared.gui_items.processors.vehicle import VehicleAutoReturnProcessor
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from helpers import dependency
 from helpers import i18n
@@ -65,6 +67,24 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
             self.__unloadCrew()
         return
 
+    def onToggleClick(self, operationName):
+        self.__autoReturnToggleSwitch()
+
+    @decorators.adisp_process('updating')
+    def __autoReturnToggleSwitch(self):
+        result = yield VehicleAutoReturnProcessor(g_currentVehicle.item, not g_currentVehicle.item.isAutoReturn).request()
+        if result.success and g_currentVehicle.item.isAutoReturn:
+            result = yield TankmanAutoReturn(g_currentVehicle.item).request()
+        if not result.success:
+            if result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=NotificationPriorityLevel.MEDIUM)
+
+    @decorators.adisp_process('crewReturning')
+    def __processReturnCrew(self):
+        result = yield TankmanReturn(g_currentVehicle.item).request()
+        if result.userMsg:
+            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority)
+
     def onInventoryUpdate(self, invDiff):
         if GUI_ITEM_TYPE.TANKMAN in invDiff:
             self.__update()
@@ -108,7 +128,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
                 lastTankmanVehicle = self.itemsCache.items.getVehicle(actualLastTankman.vehicleInvID)
                 if lastTankmanVehicle:
                     if lastTankmanVehicle.isLocked:
-                        return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP)
+                        return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP, True)
                     if lastTankmanVehicle.invID != vehicle.invID:
                         isCrewAlreadyInCurrentVehicle = False
                     else:
@@ -119,7 +139,8 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         if demobilizedMembersCounter > 0 and demobilizedMembersCounter == len(lastCrewIDs):
             return self.__getInitCrewOperationObject(OPERATION_RETURN, 'allDemobilized')
         elif isCrewAlreadyInCurrentVehicle:
-            return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces')
+            warningId = 'lockCrew' if 'lockCrew' in vehicle.descriptor.type.tags else ''
+            return self.__getInitCrewOperationObject(OPERATION_RETURN, 'alreadyOnPlaces', warningId=warningId)
         else:
             return self.__getInitCrewOperationObject(OPERATION_RETURN, None, CREW_OPERATIONS.RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP, True) if 0 < demobilizedMembersCounter < len(lastCrewIDs) else self.__getInitCrewOperationObject(OPERATION_RETURN)
 
@@ -146,12 +167,6 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         berthsNeeded = len([ (role, t) for role, t in crew if t is not None ])
         return 0 < berthsNeeded > self.itemsCache.items.freeTankmenBerthsCount()
 
-    @decorators.adisp_process('crewReturning')
-    def __processReturnCrew(self):
-        result = yield TankmanReturn(g_currentVehicle.item).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
-
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):
         context = '#crew_operations:%s'
         cOpId = context % operationId
@@ -163,9 +178,17 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
         else:
             btnLabelText = i18n.makeString(cOpId + '/button/label')
         warningInfo = None
-        if warningId != '':
+        if warningId != '' and warningId != 'lockCrew':
             warningInfo = {'operationAvailable': operationAvailable,
              'tooltipId': warningId}
+        hasToggleBlock = operationId == OPERATION_RETURN
+        toggleBlockErrorText = ''
+        toggleBlockToggleText = ''
+        if hasToggleBlock:
+            if errorId == 'noPrevious' or warningId == 'lockCrew':
+                toggleBlockErrorText = i18n.makeString(cOpId + '/error/' + errorId)
+            else:
+                toggleBlockToggleText = i18n.makeString(cOpId + '/toggle/label')
         return {'id': operationId,
          'iconPath': iconPathContext % (operationId, '.png'),
          'title': i18n.makeString(cOpId + '/title'),
@@ -173,7 +196,12 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
          'error': errorText,
          'warning': warningInfo,
          'btnLabel': btnLabelText,
-         'btnNotificationEnabled': False}
+         'btnNotificationEnabled': False,
+         'hasToggleBlock': hasToggleBlock,
+         'toggleBlockDescription': i18n.makeString(cOpId + '/toggle/description'),
+         'toggleBlockError': toggleBlockErrorText,
+         'toggleBlockToggleLabel': toggleBlockToggleText,
+         'isToggleSelected': g_currentVehicle.item.isAutoReturn}
 
     def __unitMgrOnUnitLeft(self, _, __):
         self._destroy()

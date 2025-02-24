@@ -15,11 +15,8 @@ if typing.TYPE_CHECKING:
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
     from fun_random.helpers.server_settings import FunRandomConfig, FunMetaProgressionConfig
     from fun_random.gui.shared.events import FunEventScope, FunEventType
-    from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
     from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
     from gui.battle_pass.state_machine.delegator import BattlePassRewardLogic
-    from gui.game_control.comp7_controller import _LeaderboardDataProvider
-    from gui.game_control.comp7_weekly_quests_controller import _Comp7WeeklyQuests
     from gui.game_control.epic_meta_game_ctrl import EpicMetaGameSkill
     from gui.game_control.mapbox_controller import ProgressionData
     from gui.game_control.trade_in import TradeInDiscounts
@@ -46,10 +43,10 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.fitting_item import RentalInfoProvider
     from gui.shared.gui_items.gui_item_economics import ItemPrice
     from gui.shared.gui_items.loot_box import LootBox
-    from gui.shared.gui_items.Tankman import TankmanSkill
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.money import Money, CURRENCY_TYPE
     from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
-    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, Comp7Config, WinbackConfig, LiveOpsWebEventsConfig
+    from helpers.server_settings import BattleRoyaleConfig, EpicGameConfig, GiftSystemConfig, RankedBattlesConfig, VehiclePostProgressionConfig, _MapboxConfig, WinbackConfig, LiveOpsWebEventsConfig, EasyTankEquipConfig
     from items.vehicles import VehicleType
     from season_common import GameSeason
     from items.artefacts import Equipment
@@ -58,10 +55,12 @@ if typing.TYPE_CHECKING:
     from gui.entitlements.entitlement_model import AgateEntitlement
     from gui.server_events.event_items import Quest
     from advanced_achievements_client.items import _BaseGuiAchievement
+    from gui.Scaleform.daapi.view.lobby.hangar.controls_helpers import IHangarControlsHelper
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import ILobbyHeaderControlsHelper
-    from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_item import OptionalDevicesAssistantItem
-    from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_model import OptionalDevicesAssistantType
+    from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_item import OptionalDevicesAssistantItem as ODAItem
+    from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset import OptionalDevicesAssistantTypeEnum as ODAType
     from exchange.personal_discounts_constants import ExchangeDiscountInfo, ExchangeRate
+    from constants import QUEUE_TYPE
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -1469,6 +1468,9 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
     def getBRCoinBalance(self, default=None):
         raise NotImplementedError
 
+    def getSTPCoinBalance(self, default=None):
+        raise NotImplementedError
+
     @staticmethod
     def getBrCommanderSkills():
         raise NotImplementedError
@@ -1497,6 +1499,12 @@ class IBattleRoyaleController(IGameController, ISeasonProvider):
 
     @property
     def isTournamentBannerEnabled(self):
+        raise NotImplementedError
+
+    def hasSTPDailyFactor(self, vehicle):
+        raise NotImplementedError
+
+    def getStpCoinsPerPlace(self, place):
         raise NotImplementedError
 
 
@@ -1725,6 +1733,9 @@ class IBattlePassController(IGameController):
     def isRegularProgressionCompleted(self):
         raise NotImplementedError
 
+    def isPostProgressionActive(self):
+        raise NotImplementedError
+
     def getExtraChapterID(self):
         raise NotImplementedError
 
@@ -1743,10 +1754,16 @@ class IBattlePassController(IGameController):
     def getChapterIDs(self):
         raise NotImplementedError
 
+    def getMainChapterIDs(self):
+        raise NotImplementedError
+
     def isExtraChapter(self, chapterID):
         raise NotImplementedError
 
     def isHoliday(self):
+        raise NotImplementedError
+
+    def isAllMainChaptersBought(self):
         raise NotImplementedError
 
     def getHolidayChapterID(self):
@@ -1765,6 +1782,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getCurrentChapterID(self):
+        raise NotImplementedError
+
+    def getPostProgressionChapterID(self):
         raise NotImplementedError
 
     def hasActiveChapter(self):
@@ -1864,6 +1884,9 @@ class IBattlePassController(IGameController):
         raise NotImplementedError
 
     def getLevelProgression(self, chapterID):
+        raise NotImplementedError
+
+    def getCompletedCyclesCount(self, chapterID):
         raise NotImplementedError
 
     def getPerBattlePoints(self, gameMode=ARENA_BONUS_TYPE.REGULAR, vehCompDesc=None):
@@ -2214,6 +2237,7 @@ class IWotPlusController(IGameController):
     onAttendanceUpdated = None
     onIntroShown = None
     onPendingRentChanged = None
+    onEnabledStatusChanged = None
 
     def processSwitchNotifications(self):
         raise NotImplementedError
@@ -2294,7 +2318,13 @@ class IWotPlusController(IGameController):
 class IOptionalDevicesAssistantController(IGameController):
     onConfigChanged = None
 
-    def getPopularOptDevicesList(self, vehicle):
+    def getPopularOptDevicesPresets(self, vehicle, queueType):
+        raise NotImplementedError
+
+    def vehicleHasLoadout(self, vehicle, queueType):
+        return False
+
+    def getTheMostPopularOptDevicesTagsList(self, vehicle):
         raise NotImplementedError
 
 
@@ -2330,73 +2360,70 @@ class IEntitlementsController(IGameController):
         raise NotImplementedError
 
 
-class ILootBoxSystemController(IGameController, IEntitlementsConsumer):
+class ILootBoxSystemController(IGameController):
     onBoxesAvailabilityChanged = None
     onStatusChanged = None
     onBoxesCountChanged = None
-    onBoxesInfoUpdated = None
     onBoxesUpdated = None
 
     @property
-    def eventName(self):
+    def eventNames(self):
         raise NotImplementedError
 
     @property
-    def isConsumesEntitlements(self):
+    def mainEntryPoint(self):
         raise NotImplementedError
 
-    @property
-    def isAvailable(self):
+    def isAvailable(self, eventName):
         raise NotImplementedError
 
-    @property
-    def isActive(self):
+    def isActive(self, eventName):
         raise NotImplementedError
 
-    @property
-    def isEnabled(self):
+    def isEnabled(self, eventName):
         raise NotImplementedError
 
-    @property
-    def boxesPriority(self):
+    def getActiveEvents(self):
+        raise NotImplementedError
+
+    def getBoxesPriority(self, eventName):
         raise NotImplementedError
 
     @property
     def isLootBoxesAvailable(self):
         raise NotImplementedError
 
-    @property
-    def useStats(self):
+    def useStats(self, eventName):
         raise NotImplementedError
 
-    def getStatistics(self, boxID=None):
+    def getStatistics(self, eventName, boxID=None):
         raise NotImplementedError
 
     def resetStatistics(self, boxIDs):
         raise NotImplementedError
 
-    def getSetting(self, setting):
+    def getSetting(self, eventName, setting):
         raise NotImplementedError
 
-    def setSetting(self, setting, value):
+    def setSetting(self, eventName, setting, value):
         raise NotImplementedError
 
-    def getActiveTime(self):
+    def getActiveTime(self, eventName):
         raise NotImplementedError
 
     def getBoxesCountToGuaranteed(self, category):
         raise NotImplementedError
 
-    def getBoxesCount(self, category=None):
+    def getBoxesCount(self, eventName, category=None):
         raise NotImplementedError
 
     def getBoxesIDs(self, boxType):
         raise NotImplementedError
 
-    def getActiveBoxes(self, criteria=None):
+    def getActiveBoxes(self, eventName, criteria=None):
         raise NotImplementedError
 
-    def getBoxes(self, criteria=None):
+    def getBoxes(self, eventName, criteria=None):
         raise NotImplementedError
 
     def getBoxInfo(self, boxID):
@@ -2922,6 +2949,9 @@ class IComp7Controller(IGameController, ISeasonProvider):
     def remainingOfferTokensNotifications(self):
         raise NotImplementedError
 
+    def getRanksConfig(self):
+        raise NotImplementedError
+
     def isEnabled(self):
         raise NotImplementedError
 
@@ -3047,37 +3077,6 @@ class IComp7Controller(IGameController, ISeasonProvider):
 
     def updateEntitlementsCache(self, force=False, retryTimes=None):
         raise NotImplementedError
-
-
-class IComp7ShopController(IGameController):
-    onDataUpdated = None
-    onShopStateChanged = None
-
-    @property
-    def isShopEnabled(self):
-        raise NotImplementedError
-
-    def getProducts(self):
-        raise NotImplementedError
-
-    def buyProduct(self, productCode):
-        raise NotImplementedError
-
-    def hasNewProducts(self, rank):
-        raise NotImplementedError
-
-    def hasNewDiscounts(self, rank):
-        raise NotImplementedError
-
-
-class IComp7WeeklyQuestsController(IGameController):
-    onWeeklyQuestsUpdated = None
-
-    def getQuests(self):
-        raise NotImplementedError()
-
-    def isInHideState(self):
-        raise NotImplementedError()
 
 
 class IHangarSpaceSwitchController(IGameController):
@@ -3399,6 +3398,9 @@ class IHangarGuiController(IGameController):
     def getLobbyHeaderHelper(self):
         raise NotImplementedError
 
+    def getHangarHelper(self):
+        raise NotImplementedError
+
     def getBattleModifiers(self):
         raise NotImplementedError
 
@@ -3711,4 +3713,12 @@ class IFadingController(IGameController):
         raise NotImplementedError
 
     def hide(self, layerID):
+        raise NotImplementedError
+
+
+class IEasyTankEquipController(IGameController):
+    onUpdated = None
+
+    @property
+    def config(self):
         raise NotImplementedError

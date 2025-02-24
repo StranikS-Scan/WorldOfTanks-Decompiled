@@ -72,6 +72,7 @@ class QUESTS(object):
     BONUSES_BPCOIN_DESCRIPTION = '#quests:bonuses/bpcoin/description'
     BONUSES_FREEXP_DESCRIPTION = '#quests:bonuses/freeXP/description'
     BONUSES_EQUIPCOIN_DESCRIPTION = '#quests:bonuses/equipCoin/description'
+    BONUSES_BPTALER_DESCRIPTION = '#quests:bonuses/bptaler/description'
     BONUSES_PREMIUM_PLUS_DESCRIPTION = '#quests:bonuses/premium_plus/description'
     BONUSES_TANKMEN_DESCRIPTION = '#quests:bonuses/tankmen/description'
     BONUSES_ITEM_TANKWOMAN = '#quests:bonuses/item/tankwoman'
@@ -1275,6 +1276,7 @@ class QUESTS(object):
     BONUSNAME_BATTLEPASSPOINTS = '#quests:bonusName/battlePassPoints'
     BONUSNAME_BATTLEPASSPOINTS_PREVIEW = '#quests:bonusName/battlePassPoints/preview'
     BONUSNAME_BRCOIN = '#quests:bonusName/brcoin'
+    BONUSNAME_STPCOIN = '#quests:bonusName/stpcoin'
     BONUSNAME_GOLD_BANK = '#quests:bonusName/gold_bank'
     BONUSNAME_IDLE_CREW_XP = '#quests:bonusName/idle_crew_xp'
     BONUSNAME_EXCLUDED_MAP = '#quests:bonusName/excluded_map'
@@ -1283,6 +1285,7 @@ class QUESTS(object):
     BONUSNAME_ATTENDANCE_REWARD = '#quests:bonusName/attendance_reward'
     BONUSNAME_TOURCOIN = '#quests:bonusName/tourcoin'
     BONUSNAME_INDUSTRIALRESOURCE = '#quests:bonusName/industrialResource'
+    BONUSNAME_BPTALER = '#quests:bonusName/bptaler'
     BONUSNAME_BATTLE_BONUSES = '#quests:bonusName/battle_bonuses'
     BONUSNAME_BADGES = '#quests:bonusName/badges'
     BONUSNAME_ADDITIONAL_BONUSES = '#quests:bonusName/additional_bonuses'
@@ -1727,10 +1730,6 @@ class QUESTS(object):
     DAILYQUESTS_CONDITION_BATTLE_SINGULAR = '#quests:dailyQuests/condition/battle_singular'
     DETAILS_CONDITIONS_CUMULATIVE_DAMAGEDHP = '#quests:details/conditions/cumulative/damagedHp'
     DETAILS_CONDITIONS_CUMULATIVE_COMP7PRESTIGEPOINTS = '#quests:details/conditions/cumulative/comp7PrestigePoints'
-    DAILYQUESTS_COMP7_REWARD = '#quests:dailyQuests/comp7/reward'
-    DAILYQUESTS_COMP7_NEXTTASKS = '#quests:dailyQuests/comp7/nextTasks'
-    DAILYQUESTS_COMP7_QUESTSCOUNTER = '#quests:dailyQuests/comp7/questsCounter'
-    DAILYQUESTS_COMP7_PROGRESSCOUNTER = '#quests:dailyQuests/comp7/progressCounter'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1842,6 +1841,7 @@ class QUESTS(object):
      BONUSNAME_BATTLEPASSPOINTS,
      BONUSNAME_BATTLEPASSPOINTS_PREVIEW,
      BONUSNAME_BRCOIN,
+     BONUSNAME_STPCOIN,
      BONUSNAME_GOLD_BANK,
      BONUSNAME_IDLE_CREW_XP,
      BONUSNAME_EXCLUDED_MAP,
@@ -1850,6 +1850,7 @@ class QUESTS(object):
      BONUSNAME_ATTENDANCE_REWARD,
      BONUSNAME_TOURCOIN,
      BONUSNAME_INDUSTRIALRESOURCE,
+     BONUSNAME_BPTALER,
      BONUSNAME_BATTLE_BONUSES,
      BONUSNAME_BADGES,
      BONUSNAME_ADDITIONAL_BONUSES,

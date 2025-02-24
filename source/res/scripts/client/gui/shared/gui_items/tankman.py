@@ -6,29 +6,28 @@ from copy import copy
 from itertools import chain
 import typing
 from constants import NEW_PERK_SYSTEM as NPS, SkinInvData
-from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDEX, TANKMEN_ROLES_ORDER_DICT, nationCompareByIndex
-from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection, collectKpi
+from gui.shared.gui_items.tankman_skill import getTankmanSkill, BROTHERHOOD_SKILL_NAME, getSkillStates
 from gui.shared.gui_items.gui_item import GUIItem, HasStrCD
 from gui.shared.skill_parameters import SKILLS
 from gui.shared.utils.functions import replaceHyphenToUnderscore
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import dependency, i18n
-from items import ITEM_TYPE_NAMES, special_crew, tankmen, tankmen_cfg, vehicles
+from items import ITEM_TYPE_NAMES, tankmen, tankmen_cfg, vehicles
 from items.artefacts import SkillEquipment
 from items.components import skills_constants
-from items.components.component_constants import EMPTY_STRING
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.components.skills_constants import SKILLS_BY_ROLES, SkillTypeName, UNLEARNABLE_SKILLS
-from items.tankmen import MAX_SKILL_LEVEL, sortTankmanRoles
+from items.components.skills_constants import SKILLS_BY_ROLES, UNLEARNABLE_SKILLS
+from items.tankmen import MAX_SKILL_LEVEL, sortTankmanRoles, SKILLS_BY_ROLES_ORDERED
 from nations import MAP
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from typing import Sequence, List, Tuple, Optional
-    from items.readers.skills_readers import SkillDescrsArg
+    from items.tankmen import TankmanDescr
+    from typing import Sequence, Optional
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewTypes(object):
@@ -43,8 +42,6 @@ class CrewTypes(object):
     CREW_AVAILABLE_SKILLS = (SKILL_50, SKILL_75, SKILL_100)
 
 
-BROTHERHOOD_SKILL_NAME = 'brotherhood'
-COMMANDER_BONUS = 'commander_bonus'
 NO_TANKMAN = -1
 NO_SLOT = -1
 MAX_ROLE_LEVEL = 100
@@ -160,7 +157,7 @@ class Tankman(GUIItem):
         return self._comparator(self, other)
 
     def _buildSkills(self, proxy):
-        return [ getTankmanSkill(skill, self, proxy) for skill in self.descriptor.skills if skill != 'any' ]
+        return [ getTankmanSkill(skill, self.role, self, proxy) for skill in self.descriptor.skills if skill != 'any' ]
 
     def buildBonusSkills(self, proxy, bonusSkillsLevels=None, bonusRoles=None):
         bonusSkills = OrderedDict()
@@ -180,7 +177,7 @@ class Tankman(GUIItem):
                     level = tankmen.MAX_SKILL_LEVEL
                 else:
                     level = self.bonusSkillsLevels[idx]
-                skill = getTankmanSkill(skillName, self, proxy, level=level) if skillName != 'any' else None
+                skill = getTankmanSkill(skillName, role, self, proxy, level=level) if skillName != 'any' else None
                 bonusSkills[role].append(skill)
                 if skill:
                     self._skillsMap[skill.name] = skill
@@ -379,6 +376,10 @@ class Tankman(GUIItem):
         return self.isInTank and self.vehicleDescr.type.compactDescr == self.vehicleNativeDescr.type.compactDescr
 
     @property
+    def isInPremiumTank(self):
+        return False if self.vehicleDescr is None else self.vehicleDescr.type.isPremium and self.vehicleDescr.type.compactDescr != self.vehicleNativeDescr.type.compactDescr
+
+    @property
     def isInSkin(self):
         return self.skinID != NO_CREW_SKIN_ID
 
@@ -418,8 +419,16 @@ class Tankman(GUIItem):
         return self.currentVehicleSkillsEfficiency >= tankmen.MAX_SKILLS_EFFICIENCY
 
     @property
+    def isUntrained(self):
+        return self.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED
+
+    @property
+    def hasLowEfficiencyOnCurrentVehicle(self):
+        return SKILL_EFFICIENCY_UNTRAINED < self.currentVehicleSkillsEfficiency < tankmen.MAX_SKILLS_EFFICIENCY
+
+    @property
     def isMaxSkillEfficiency(self):
-        return self.descriptor.hasMaxEfficiency
+        return self.descriptor.hasMaxEfficiency()
 
     @property
     def isFemale(self):
@@ -440,14 +449,6 @@ class Tankman(GUIItem):
     @property
     def extensionLessIconRank(self):
         return self.iconRank.split('.png')[0]
-
-    @property
-    def iconRole(self):
-        return getRoleIconName(self.descriptor.role)
-
-    @property
-    def extensionLessIconRole(self):
-        return getExtensionLessRoleIconName(self.descriptor.role)
 
     @property
     def firstUserName(self):
@@ -480,10 +481,10 @@ class Tankman(GUIItem):
         if useCombinedRoles:
             availSkills = set()
             for role in self.combinedRoles:
-                availSkills |= tankmen.SKILLS_BY_ROLES.get(role, set())
+                availSkills |= SKILLS_BY_ROLES.get(role, set())
 
         else:
-            availSkills = tankmen.SKILLS_BY_ROLES.get(self.descriptor.role, set())
+            availSkills = SKILLS_BY_ROLES.get(self.descriptor.role, set())
         availSkills -= set(self.descriptor.skills)
         availSkills -= set(skills_constants.UNLEARNABLE_SKILLS)
         return availSkills
@@ -623,7 +624,7 @@ class Tankman(GUIItem):
     def getPossibleSkills(self):
         skillnames = frozenset()
         for role in self.combinedRoles:
-            skillnames |= tankmen.SKILLS_BY_ROLES.get(role, frozenset())
+            skillnames |= SKILLS_BY_ROLES.get(role, frozenset())
 
         skillnames -= set(UNLEARNABLE_SKILLS)
         return skillnames
@@ -631,13 +632,13 @@ class Tankman(GUIItem):
     def getPossibleSkillsByRole(self):
         result = OrderedDict()
         for skill in tankmen.COMMON_SKILLS_ORDERED:
-            result.setdefault('common', []).append(getTankmanSkill(skill, tankman=self))
+            result.setdefault('common', []).append(getTankmanSkill(skill, self.role, tankman=self))
 
         roles = set(self.skillRoles) | set(self.roles())
 
         def fillSkills(currentRole):
             if currentRole in roles:
-                roleSkills = tankmen.SKILLS_BY_ROLES_ORDERED.get(currentRole, [])
+                roleSkills = SKILLS_BY_ROLES_ORDERED.get(currentRole, [])
                 for currentSkill in roleSkills:
                     if currentSkill in tankmen.COMMON_SKILLS:
                         continue
@@ -645,7 +646,7 @@ class Tankman(GUIItem):
                         continue
                     if currentSkill in self._skillsMap:
                         result.setdefault(role, []).append(self._skillsMap[currentSkill])
-                    result.setdefault(role, []).append(getTankmanSkill(currentSkill, tankman=self))
+                    result.setdefault(role, []).append(getTankmanSkill(currentSkill, role, tankman=self))
 
         for role in self.roles():
             fillSkills(role)
@@ -654,26 +655,6 @@ class Tankman(GUIItem):
             if not result.get(role):
                 fillSkills(role)
 
-        return result
-
-    def getFreeSkillsToLearn(self):
-        result = []
-        commonSkills = []
-        tdescr = self.descriptor
-        for skill in tankmen.COMMON_SKILLS:
-            if skill not in tdescr.freeSkills:
-                commonSkills.append(self.__packSkill(getTankmanSkill(skill, tankman=self)))
-
-        result.append({'id': 'common',
-         'skills': commonSkills})
-        roleSkills = tankmen.SKILLS_BY_ROLES.get(tdescr.role, tuple())
-        skills = []
-        for skill in roleSkills:
-            if skill not in tankmen.COMMON_SKILLS and skill not in tdescr.freeSkills and skill not in skills_constants.UNLEARNABLE_SKILLS:
-                skills.append(self.__packSkill(getTankmanSkill(skill)))
-
-        result.append({'id': self.role,
-         'skills': skills})
         return result
 
     def hasSkillToLearn(self):
@@ -740,222 +721,6 @@ class Tankman(GUIItem):
         return 'Tankman<id:%d, nation:%d, vehicleID:%d>' % (self.invID, self.nationID, self.vehicleInvID)
 
 
-class TankmanSkill(GUIItem):
-    __slots__ = ('_name', '_level', '_roleType', '_isEnable', '_isFemale', '_isZero', '_customName', '_tankmanRole', '_isLearnedAsMajor', '_isLearnedAsBonus', '_packer', '_typeName', '_isSkillActive')
-    CUSTOM_NAME_EXT = ''
-
-    def __init__(self, skillName, tankman=None, proxy=None, skillLevel=None):
-        super(TankmanSkill, self).__init__(proxy)
-        self._name = skillName
-        self._level = skillLevel or 0
-        self._typeName = getSkillTypeName(skillName)
-        if tankman is not None:
-            tdescr = tankman.descriptor
-            skills = tdescr.skills
-            self._tankmanRole = tankman.role
-            self._isFemale = tankman.isFemale
-            self._isZero = False
-            skillRole = tankman.role
-            if skillName in skills and skillLevel is None:
-                if skills.index(skillName) == len(skills) - 1:
-                    self._level = tdescr.lastSkillLevel
-                else:
-                    self._level = tankmen.MAX_SKILL_LEVEL
-                self._isZero = skills.index(skillName) < tdescr.freeSkillsNumber
-            else:
-                roles = list(tankmen.ROLES_BY_SKILLS[skillName])
-                bonusSkillsRole = roles[0]
-                bonusSkills = tankman.descriptor.getBonusSkillsForRole(bonusSkillsRole)
-                if skillName in bonusSkills:
-                    skillRole = bonusSkillsRole
-                    idx = bonusSkills.index(skillName)
-                    self._isLearnedAsBonus = True
-                    bonusSkillsLevels = tankman.descriptor.bonusSkillsLevels
-                    if len(bonusSkillsLevels) > idx and self._level != MAX_SKILL_LEVEL:
-                        self._level = bonusSkillsLevels[idx]
-            self._roleType = tankmen.getSkillRoleType(skillName)
-            self._isEnable = self.__getEnabledSkill(tankman)
-            self._isLearnedAsMajor = self.name in tankman.descriptor.earnedSkills or self._isZero
-            self._isLearnedAsBonus = self.name in tankman.descriptor.getPossibleBonusSkills(tankman.bonusRoles())
-            self._isSkillActive = self.isEnable and self.isRelevantForRole(skillRole) and tankman.canUseSkillsInCurrentVehicle
-        else:
-            self._isFemale = False
-            self._isZero = False
-            self._roleType = None
-            self._isEnable = False
-            self._tankmanRole = None
-            self._isLearnedAsMajor = False
-            self._isLearnedAsBonus = False
-            self._isSkillActive = False
-        self._customName = ''
-        if self.CUSTOM_NAME_EXT:
-            customName = '_'.join((self.CUSTOM_NAME_EXT, BROTHERHOOD_SKILL_NAME))
-            if skillName in (BROTHERHOOD_SKILL_NAME, customName):
-                self._customName = customName
-                self._name = BROTHERHOOD_SKILL_NAME
-        return
-
-    def __repr__(self):
-        return 'TankmanSkill<name:%s, level:%d, isEnable:%s>' % (self.name, self.level, self.isEnable)
-
-    def __eq__(self, other):
-        return False if not isinstance(other, TankmanSkill) else self.name == other.name
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __getEnabledSkill(self, tankman):
-        for role in tankman.roles():
-            roleSkills = tankmen.SKILLS_BY_ROLES.get(role, tuple())
-            if self.name in roleSkills:
-                return True
-
-        return False
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def level(self):
-        return self._level
-
-    @property
-    def roleType(self):
-        return self._roleType
-
-    @property
-    def isCommon(self):
-        return self.name in tankmen.COMMON_SKILLS
-
-    @property
-    def typeName(self):
-        return self._typeName
-
-    @property
-    def isEnable(self):
-        return self._isEnable
-
-    @property
-    def isFemale(self):
-        return self._isFemale
-
-    @property
-    def isZero(self):
-        return self._isZero
-
-    @property
-    def isSituational(self):
-        return self._typeName == SkillTypeName.SITUATIONAL
-
-    @property
-    def userName(self):
-        if self._customName:
-            resStr = '_'.join((self._name, self.CUSTOM_NAME_EXT))
-            return backport.text(R.strings.crew_perks.dyn(resStr).name())
-        return getSkillUserName(self.name)
-
-    @property
-    def isLearned(self):
-        return self.isLearnedAsMajor or self.isLearnedAsBonus
-
-    @property
-    def isLearnedAsMajor(self):
-        return self._isLearnedAsMajor
-
-    @property
-    def isLearnedAsBonus(self):
-        return self._isLearnedAsBonus
-
-    @property
-    def description(self):
-        return getSkillUserDescription(self.name)
-
-    @property
-    def shortDescription(self):
-        return getSkillUserDescription(self.name)
-
-    @property
-    def maxLvlDescription(self):
-        return getSkillMaxLvlDescription(self.name)
-
-    @property
-    def currentLvlDescription(self):
-        return getSkillCurrentLvlDescription(self.name)
-
-    @property
-    def altDescription(self):
-        return getSkillAltDescription(self.name)
-
-    @property
-    def altInfo(self):
-        return getSkillAltInfo(self.name)
-
-    @property
-    def icon(self):
-        if self._name == SKILLS_CONSTANTS.TYPE_NEW_SKILL:
-            iconName = '{}.png'.format(self.name)
-        else:
-            iconName = getSkillIconName(self.name)
-        if self._customName:
-            iconName = '{}_{}'.format(self.CUSTOM_NAME_EXT, iconName)
-        return iconName
-
-    @property
-    def extensionLessIconName(self):
-        return self.icon[:-len('.png')]
-
-    @property
-    def bigIconPath(self):
-        root = R.images.gui.maps.icons.tankmen.skills.big.dyn(self.extensionLessIconName)
-        if root.isValid():
-            return backport.image(root())
-        LOG_WARNING('no {} image in gui.maps.icons.tankmen.skills.big'.format(self.icon))
-        return EMPTY_STRING
-
-    @property
-    def isMaxLevel(self):
-        return self._level >= tankmen.MAX_SKILL_LEVEL
-
-    @property
-    def customName(self):
-        return self.CUSTOM_NAME_EXT
-
-    @property
-    def isSkillActive(self):
-        return self._isSkillActive
-
-    def isRelevantForRole(self, role):
-        isBonusRole = self._tankmanRole and self._tankmanRole != role
-        return self.name in SKILLS_BY_ROLES[role] or isBonusRole and self.isLearnedAsBonus
-
-    def updateLevel(self, level):
-        self._level = level
-
-    def setIsSkillActive(self, isSkillActive):
-        self._isSkillActive = isSkillActive
-
-
-class SabatonTankmanSkill(TankmanSkill):
-    __slots__ = ()
-    CUSTOM_NAME_EXT = 'sabaton'
-
-
-class OffspringTankmanSkill(TankmanSkill):
-    __slots__ = ()
-    CUSTOM_NAME_EXT = 'offspring'
-
-
-class YhaTankmanSkill(TankmanSkill):
-    __slots__ = ()
-    CUSTOM_NAME_EXT = 'yha'
-
-
-class WitchesTankmanSkill(TankmanSkill):
-    __slots__ = ()
-    CUSTOM_NAME_EXT = 'witches'
-
-
 class BaseBookConvertingFormatter(object):
     __crewBooks = list()
 
@@ -979,192 +744,6 @@ class BaseBookConvertingFormatter(object):
         self.__crewBooks.sort(key=key)
 
 
-def getTankmanSkill(skillName, tankman=None, proxy=None, skillCustomisation=None, level=None):
-    if tankman is not None:
-        descriptor = tankman.descriptor
-        if special_crew.isSabatonCrew(descriptor):
-            return SabatonTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if special_crew.isOffspringCrew(descriptor):
-            return OffspringTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if special_crew.isYhaCrew(descriptor):
-            return YhaTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if special_crew.isWitchesCrew(descriptor):
-            return WitchesTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-    if skillCustomisation is not None:
-        if skillCustomisation == SabatonTankmanSkill.CUSTOM_NAME_EXT:
-            return SabatonTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if skillCustomisation == OffspringTankmanSkill.CUSTOM_NAME_EXT:
-            return OffspringTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if skillCustomisation == YhaTankmanSkill.CUSTOM_NAME_EXT:
-            return YhaTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-        if skillCustomisation == WitchesTankmanSkill.CUSTOM_NAME_EXT:
-            return WitchesTankmanSkill(skillName, tankman, proxy, skillLevel=level)
-    return TankmanSkill(skillName, tankman, proxy, skillLevel=level)
-
-
-def getFirstUserName(nationID, firstNameID):
-    return i18n.convert(tankmen.getNationConfig(nationID).getFirstName(firstNameID))
-
-
-def getLastUserName(nationID, lastNameID):
-    return i18n.convert(tankmen.getNationConfig(nationID).getLastName(lastNameID))
-
-
-def getFullUserName(nationID, firstNameID, lastNameID):
-    firstUserName = getFirstUserName(nationID, firstNameID)
-    lastUserName = getLastUserName(nationID, lastNameID)
-    return (firstUserName + ' ' + lastUserName).strip()
-
-
-def getRoleUserName(role):
-    skillConf = tankmen.getSkillsConfig()
-    skill = skillConf.getSkill(role)
-    userString = skill.userString
-    return i18n.convert(userString)
-
-
-def getLoreDescr(group, nationID):
-    loreConf = tankmen_cfg.getLoreConfig()
-    key = loreConf.getLoreDescrForGroup(group, MAP[nationID])
-    if key:
-        loc = R.strings.lore.tankman.lore
-        return str(backport.text(loc.dyn(replaceHyphenToUnderscore(key))()))
-
-
-def getRoleWithFeminineUserName(role, isFemale):
-    loc = R.strings.item_types.tankman.roles.female if isFemale else R.strings.item_types.tankman.roles
-    return str(backport.text(loc.dyn(role)()))
-
-
-def getRolePossessiveCaseUserName(role, isFemale):
-    loc = R.strings.item_types.tankman.roles.female.possessiveCase if isFemale else R.strings.item_types.tankman.roles.possessiveCase
-    return str(backport.text(loc.dyn(role)()))
-
-
-def getRoleIconName(role):
-    return tankmen.getSkillsConfig().getSkill(role).icon
-
-
-def getExtensionLessRoleIconName(role):
-    return tankmen.getSkillsConfig().getSkill(role).extensionLessIcon
-
-
-def getRoleMediumIconPath(role):
-    return '../maps/icons/tankmen/roles/medium/%s' % getRoleIconName(role)
-
-
-def getRoleWhiteIconPath(role):
-    return '../maps/icons/tankmen/roles/white/{}'.format(getRoleIconName(role))
-
-
-def getRankUserName(nationID, rankID):
-    return i18n.convert(tankmen.getNationConfig(nationID).getRank(rankID).userString)
-
-
-def getExtensionLessIconName(nationID, iconID):
-    return tankmen.getNationConfig(nationID).getExtensionLessIcon(iconID)
-
-
-def getIconName(nationID, iconID):
-    return tankmen.getNationConfig(nationID).getIcon(iconID)
-
-
-def getDynIconName(iconName):
-    return iconName.replace('-', '_').rsplit('.', 1)[0]
-
-
-def getBigIconPath(nationID, iconID):
-    return __getIconPath(nationID, iconID, 'big')
-
-
-def getSpecialIconPath(nationID, iconID):
-    return __getIconPath(nationID, iconID, 'special')
-
-
-def getBarracksIconPath(nationID, iconID):
-    return __getIconPath(nationID, iconID, 'barracks')
-
-
-def getRankIconName(nationID, rankID):
-    return tankmen.getNationConfig(nationID).getRank(rankID).icon
-
-
-def getSkillIconName(skillName):
-    return i18n.convert(tankmen.getSkillsConfig().getSkill(skillName).icon)
-
-
-def getExtensionLessSkillIconName(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).icon[:-len('.png')]
-
-
-def getSkillBigIconPath(skillName):
-    root = R.images.gui.maps.icons.tankmen.skills.big.dyn(getExtensionLessSkillIconName(skillName))
-    if root.isValid():
-        return backport.image(root())
-    LOG_WARNING('no {} image in gui.maps.icons.tankmen.skills.big'.format(getExtensionLessSkillIconName(skillName)))
-    return EMPTY_STRING
-
-
-def getSkillIconPath(skillName, size='big'):
-    sizeRoot = R.images.gui.maps.icons.tankmen.skills.dyn(size)
-    if not sizeRoot.isValid():
-        LOG_WARNING('no {} size in gui.maps.icons.tankmen.skills'.format(size))
-        return EMPTY_STRING
-    icon = sizeRoot.dyn(getExtensionLessSkillIconName(skillName))
-    if icon.isValid():
-        return backport.image(icon())
-    LOG_WARNING('no {} image in gui.maps.icons.tankmen.skills.{} '.format(getExtensionLessSkillIconName(skillName), size))
-    return EMPTY_STRING
-
-
-def getCrewSkinIconBig(iconID):
-    return backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(iconID)())
-
-
-def getSkillUserName(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).userString
-
-
-def getSkillUserDescription(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).description
-
-
-def getSkillMaxLvlDescription(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).maxLvlDescription
-
-
-def getSkillCurrentLvlDescription(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).currentLvlDescription
-
-
-def getSkillAltDescription(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).altDescription
-
-
-def getSkillAltInfo(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).altInfo
-
-
-def getSkillDescrArgs(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).uiSettings.descrArgs
-
-
-def getSkillSituational(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).situational
-
-
-def getSkillTypeName(skillName):
-    return tankmen.getSkillsConfig().getSkill(skillName).typeName
-
-
-def calculateRoleLevel(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
-    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).roleLevel
-
-
-def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0), skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
-    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills, freeSkills, lastSkillLevel).rankID
-
-
 def __getIconPath(nationID, iconID, iconType):
     iconName = getDynIconName(getExtensionLessIconName(nationID, iconID))
     iconPath = R.images.gui.maps.icons.tankmen.icons.dyn(iconType)
@@ -1181,11 +760,6 @@ def __tankmanHasSkill(tankman, skillName):
 
 def __getPersonalSkillLearningProgress(tankman, skillName):
     return tankman.skillsMap[skillName].level if __tankmanHasSkill(tankman, skillName) else tankmen.NO_SKILL
-
-
-def isSkillLearnt(skillName, vehicle):
-    isCommonSkill = skillName in tankmen.COMMON_SKILLS
-    return __isCommonSkillLearnt(skillName, vehicle) if isCommonSkill else __isPersonalSkillLearnt(skillName, vehicle)
 
 
 def __isCommonSkillLearnt(skillName, vehicle):
@@ -1213,64 +787,24 @@ def __isPersonalSkillLearnt(skillName, vehicle):
     return True
 
 
-def crewMemberRealSkillLevel(vehicle, skillName, commonWithIncrease=True, skipIrrelevantState=False, shouldIncrease=True):
-    shouldIncrease = (skillName not in tankmen.COMMON_SKILLS or commonWithIncrease and skillName != SKILLS.BROTHERHOOD) and shouldIncrease
-    booster = getBattleBooster(vehicle, skillName) if shouldIncrease else None
-    hasBoosterForSkill = booster and skillName == booster.skillName
-    tankmansCantUseBoosterCnt = 0
-    tankmenSkillLevels = []
-    skillRoleType = tankmen.getSkillRoleType(skillName)
-    if skillRoleType is None:
-        return tankmen.NO_SKILL
+def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
+    vehType = vehicles.VehicleDescr(typeID=typeID).type
+    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0]), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=lastSkillLevel))
+    tmanDescr.addXP(freeXpValue)
+    return tmanDescr
+
+
+def _getSkillLevelWithIncrease(booster, skillLevel, tankman):
+    realSkillLevel = skillLevel + tankman.crewLevelIncrease[0]
+    if booster is None:
+        return realSkillLevel
+    elif tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED or skillLevel == tankmen.NO_SKILL:
+        return tankmen.MAX_SKILL_LEVEL
+    elif not tankman.isMaxCurrentVehicleSkillsEfficiency or skillLevel < tankmen.MAX_SKILL_LEVEL:
+        return tankmen.MAX_SKILL_LEVEL + tankman.crewLevelIncrease[0]
     else:
-        isCommonSkill = skillRoleType == tankmen.COMMON_SKILL_ROLE_TYPE
-        for slot, tankman in vehicle.crew:
-            if tankman is None:
-                if isCommonSkill or skillRoleType in vehicle.descriptor.type.crewRoles[slot]:
-                    tankmenSkillLevels.append((slot, tankmen.NO_SKILL, True))
-                continue
-            if not tankman.descriptor.isOwnVehicleOrPremium(vehicle.descriptor.type) and not hasBoosterForSkill:
-                if isCommonSkill or skillRoleType in vehicle.descriptor.type.crewRoles[slot]:
-                    tankmenSkillLevels.append((slot, tankmen.NO_SKILL, True))
-            if skillRoleType in tankman.combinedRoles or isCommonSkill:
-                withoutPerkLvlMul = None
-                if booster:
-                    withoutPerkLvlMul = copy(booster)
-                    withoutPerkLvlMul.perkLevelMultiplier = 1.0
-                skill = getTankmanSkill(skillName, tankman=tankman)
-                bonusSkills = [ s.name for s in sum(tankman.bonusSkills.values(), []) if s and s.isEnable ]
-                isMajorRoleSkill = isCommonSkill or skillRoleType == tankman.role
-                if isMajorRoleSkill:
-                    hasMaxSkillsInRole = len(tankman.skills) == NPS.MAX_MAJOR_PERKS
-                else:
-                    selectedBonusSkillsCount = tankman.descriptor.selectedBonusSkillsCount(skillRoleType)
-                    hasMaxSkillsInRole = selectedBonusSkillsCount == NPS.MAX_BONUS_SKILLS_PER_ROLE
-                personalSkillLevel = tankmanPersonalSkillLevel(tankman, skillName, withoutPerkLvlMul, shouldIncrease, hasMaxSkillsInRole) if skill.isSkillActive or skillName in bonusSkills or skipIrrelevantState else tankmen.NO_SKILL
-                if booster and personalSkillLevel == tankmen.NO_SKILL and hasMaxSkillsInRole:
-                    tankmansCantUseBoosterCnt += 1
-                tankmenSkillLevels.append((slot, personalSkillLevel, skill.isSkillActive or skillName in bonusSkills))
-
-        if booster is not None and tankmansCantUseBoosterCnt != len(tankmenSkillLevels):
-            tankmenSkillLevels = _boostSkill(vehicle.crew, skillName, tankmenSkillLevels, booster)
-        if not vehicle.crew:
-            return tankmen.NO_SKILL
-        if all((hasSkill == tankmen.NO_SKILL for _, hasSkill, _ in tankmenSkillLevels)):
-            return tankmen.NO_SKILL
-        validSkillLevels = [ level for _, level, _ in tankmenSkillLevels if level != tankmen.NO_SKILL ]
-        return sum(validSkillLevels) / float(len(tankmenSkillLevels))
-
-
-def tankmanPersonalSkillLevel(tankman, skillName, booster=None, withIncrease=True, hasMaxSkillsInRole=False):
-    progress = __getPersonalSkillLearningProgress(tankman, skillName)
-    if not (progress == tankmen.NO_SKILL and (booster is None or hasMaxSkillsInRole)):
-        if withIncrease:
-            progress = _getSkillLevelWithIncrease(booster, progress, tankman)
-            if booster is not None:
-                return progress
-        elif progress != tankmen.NO_SKILL:
-            progress = tankman.skillsMap[skillName].level
-        progress *= tankman.skillsEfficiency
-    return progress
+        boostFactor = booster.perkLevelMultiplier or 1
+        return realSkillLevel * boostFactor
 
 
 def _boostSkill(crew, skillName, tankmenSkillLevels, booster):
@@ -1306,17 +840,142 @@ def _boostSkill(crew, skillName, tankmenSkillLevels, booster):
         return [ (slot, tankmen.MAX_SKILL_LEVEL if skillLevel <= 0 else skillLevel, isActive) for slot, skillLevel, isActive in tankmenSkillLevels ]
 
 
-def _getSkillLevelWithIncrease(booster, skillLevel, tankman):
-    realSkillLevel = skillLevel + tankman.crewLevelIncrease[0]
-    if booster is None:
-        return realSkillLevel
-    elif tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED or skillLevel == tankmen.NO_SKILL:
-        return tankmen.MAX_SKILL_LEVEL
-    elif not tankman.isMaxCurrentVehicleSkillsEfficiency or skillLevel < tankmen.MAX_SKILL_LEVEL:
-        return tankmen.MAX_SKILL_LEVEL + tankman.crewLevelIncrease[0]
+def getFirstUserName(nationID, firstNameID):
+    return i18n.convert(tankmen.getNationConfig(nationID).getFirstName(firstNameID))
+
+
+def getLastUserName(nationID, lastNameID):
+    return i18n.convert(tankmen.getNationConfig(nationID).getLastName(lastNameID))
+
+
+def getFullUserName(nationID, firstNameID, lastNameID):
+    firstUserName = getFirstUserName(nationID, firstNameID)
+    lastUserName = getLastUserName(nationID, lastNameID)
+    return (firstUserName + ' ' + lastUserName).strip()
+
+
+def getLoreDescr(group, nationID):
+    loreConf = tankmen_cfg.getLoreConfig()
+    key = loreConf.getLoreDescrForGroup(group, MAP[nationID])
+    if key:
+        loc = R.strings.lore.tankman.lore
+        return str(backport.text(loc.dyn(replaceHyphenToUnderscore(key))()))
+
+
+def getRankUserName(nationID, rankID):
+    return i18n.convert(tankmen.getNationConfig(nationID).getRank(rankID).userString)
+
+
+def getExtensionLessIconName(nationID, iconID):
+    return tankmen.getNationConfig(nationID).getExtensionLessIcon(iconID)
+
+
+def getIconName(nationID, iconID):
+    return tankmen.getNationConfig(nationID).getIcon(iconID)
+
+
+def getDynIconName(iconName):
+    return iconName.replace('-', '_').rsplit('.', 1)[0]
+
+
+def getBigIconPath(nationID, iconID):
+    return __getIconPath(nationID, iconID, 'big')
+
+
+def getSpecialIconPath(nationID, iconID):
+    return __getIconPath(nationID, iconID, 'special')
+
+
+def getBarracksIconPath(nationID, iconID):
+    return __getIconPath(nationID, iconID, 'barracks')
+
+
+def getRankIconName(nationID, rankID):
+    return tankmen.getNationConfig(nationID).getRank(rankID).icon
+
+
+def getCrewSkinIconBig(iconID):
+    return backport.image(R.images.gui.maps.icons.tankmen.icons.big.crewSkins.dyn(iconID)())
+
+
+def calculateRoleLevel(startRoleLevel, freeXpValue=0, typeID=(0, 0)):
+    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID).roleLevel
+
+
+def calculateRankID(startRoleLevel, freeXpValue=0, typeID=(0, 0), skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
+    return __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills, freeSkills, lastSkillLevel).rankID
+
+
+def isSkillLearnt(skillName, vehicle):
+    isCommonSkill = skillName in tankmen.COMMON_SKILLS
+    return __isCommonSkillLearnt(skillName, vehicle) if isCommonSkill else __isPersonalSkillLearnt(skillName, vehicle)
+
+
+def crewMemberRealSkillLevel(vehicle, skillName, commonWithIncrease=True, skipIrrelevantState=False, shouldIncrease=True):
+    shouldIncrease = (skillName not in tankmen.COMMON_SKILLS or commonWithIncrease and skillName != SKILLS.BROTHERHOOD) and shouldIncrease
+    booster = getBattleBooster(vehicle, skillName) if shouldIncrease else None
+    hasBoosterForSkill = booster and skillName == booster.skillName
+    tankmansCantUseBoosterCnt = 0
+    tankmenSkillLevels = []
+    skillRoleType = tankmen.getSkillRoleType(skillName)
+    if skillRoleType is None:
+        return tankmen.NO_SKILL
     else:
-        boostFactor = booster.perkLevelMultiplier or 1
-        return realSkillLevel * boostFactor
+        isCommonSkill = skillRoleType == tankmen.COMMON_SKILL_ROLE_TYPE
+        for slot, tankman in vehicle.crew:
+            if tankman is None:
+                if isCommonSkill or skillRoleType in vehicle.descriptor.type.crewRoles[slot]:
+                    tankmenSkillLevels.append((slot, tankmen.NO_SKILL, True))
+                continue
+            tdescr = tankman.descriptor
+            if not tdescr.isOwnVehicleOrPremium(vehicle.descriptor.type) and not hasBoosterForSkill:
+                if isCommonSkill or skillRoleType in vehicle.descriptor.type.crewRoles[slot]:
+                    tankmenSkillLevels.append((slot, tankmen.NO_SKILL, True))
+            if skillRoleType in tankman.combinedRoles or isCommonSkill:
+                withoutPerkLvlMul = None
+                if booster:
+                    withoutPerkLvlMul = copy(booster)
+                    withoutPerkLvlMul.perkLevelMultiplier = 1.0
+                skillRole = tdescr.role if isCommonSkill else skillRoleType
+                _, _, isRelevant, isSkillActive, _ = getSkillStates(skillName, skillRole, tankman, tdescr)
+                if skipIrrelevantState:
+                    isRelevant = True
+                bonusSkills = [ s.name for s in sum(tankman.bonusSkills.values(), []) if s and s.isEnable ]
+                isMajorRoleSkill = isCommonSkill or skillRoleType == tankman.role
+                if isMajorRoleSkill:
+                    hasMaxSkillsInRole = len(tankman.skills) == NPS.MAX_MAJOR_PERKS
+                else:
+                    selectedBonusSkillsCount = tdescr.selectedBonusSkillsCount(skillRoleType)
+                    hasMaxSkillsInRole = selectedBonusSkillsCount == NPS.MAX_BONUS_SKILLS_PER_ROLE
+                personalSkillLevel = tankmen.NO_SKILL
+                if isMajorRoleSkill and isRelevant or skillName in bonusSkills:
+                    if isSkillActive:
+                        personalSkillLevel = tankmanPersonalSkillLevel(tankman, skillName, withoutPerkLvlMul, shouldIncrease, hasMaxSkillsInRole)
+                if booster and personalSkillLevel == tankmen.NO_SKILL and hasMaxSkillsInRole:
+                    tankmansCantUseBoosterCnt += 1
+                tankmenSkillLevels.append((slot, personalSkillLevel, isSkillActive or skillName in bonusSkills))
+
+        if booster is not None and tankmansCantUseBoosterCnt != len(tankmenSkillLevels):
+            tankmenSkillLevels = _boostSkill(vehicle.crew, skillName, tankmenSkillLevels, booster)
+        if not vehicle.crew:
+            return tankmen.NO_SKILL
+        if all((hasSkill == tankmen.NO_SKILL for _, hasSkill, _ in tankmenSkillLevels)):
+            return tankmen.NO_SKILL
+        validSkillLevels = [ level for _, level, _ in tankmenSkillLevels if level != tankmen.NO_SKILL ]
+        return sum(validSkillLevels) / float(len(tankmenSkillLevels))
+
+
+def tankmanPersonalSkillLevel(tankman, skillName, booster=None, withIncrease=True, hasMaxSkillsInRole=False):
+    progress = __getPersonalSkillLearningProgress(tankman, skillName)
+    if not (progress == tankmen.NO_SKILL and (booster is None or hasMaxSkillsInRole)):
+        if withIncrease:
+            progress = _getSkillLevelWithIncrease(booster, progress, tankman)
+            if booster is not None:
+                return progress
+        elif progress != tankmen.NO_SKILL:
+            progress = tankman.skillsMap[skillName].level
+        progress *= tankman.skillsEfficiency
+    return progress
 
 
 def getBattleBooster(vehicle, skillName):
@@ -1326,10 +985,3 @@ def getBattleBooster(vehicle, skillName):
             boosters = [ booster.descriptor for booster in installedBoosters ]
             return findFirst(lambda a, name=skillName: isinstance(a, SkillEquipment) and a.skillName == name, boosters, default=None)
     return None
-
-
-def __makeFakeTankmanDescr(startRoleLevel, freeXpValue, typeID, skills=(), freeSkills=(), lastSkillLevel=tankmen.MAX_SKILL_LEVEL):
-    vehType = vehicles.VehicleDescr(typeID=typeID).type
-    tmanDescr = tankmen.TankmanDescr(tankmen.generateCompactDescr(tankmen.generatePassport(vehType.id[0]), vehType.id[1], vehType.crewRoles[0][0], startRoleLevel, skills=skills, freeSkills=freeSkills, lastSkillLevel=lastSkillLevel))
-    tmanDescr.addXP(freeXpValue)
-    return tmanDescr

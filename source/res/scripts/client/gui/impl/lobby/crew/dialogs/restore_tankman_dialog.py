@@ -26,7 +26,6 @@ from gui.shared.money import MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewDialogKeys
 
 class RestoreTankmanDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_tankman', '_vehicle', '_vehicleSlotIdx')
@@ -36,7 +35,7 @@ class RestoreTankmanDialog(BaseCrewDialogTemplateView):
     _restoreCtrl = dependency.descriptor(IRestoreController)
 
     def __init__(self, tankmanId, vehicleId, slotIdx, **kwargs):
-        super(RestoreTankmanDialog, self).__init__(loggingKey=CrewDialogKeys.RESTORE_TANKMAN, **kwargs)
+        super(RestoreTankmanDialog, self).__init__(**kwargs)
         self._tankman = self._itemsCache.items.getTankman(tankmanId)
         self._vehicle = self._itemsCache.items.getVehicle(vehicleId)
         self._vehicleSlotIdx = slotIdx

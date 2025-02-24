@@ -10,12 +10,13 @@ from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Dict
 _USAGE_CONFIG_FILE = 'scripts/item_defs/optional_devices_assistance/optional_devices_usage.csv'
+_USAGE_CONFIG_FILE_LEGENDARY = 'scripts/item_defs/optional_devices_assistance/optional_devices_usage_legendary.csv'
 _FALLBACK_CONFIG_FILE = 'scripts/item_defs/optional_devices_assistance/optional_devices_fallback_usage.xml'
 DEFAULT_ROLE = 'NotDefined'
 
-def readOptionalDevicesUsageConfig():
+def readOptionalDevicesUsageConfig(fileName):
     config = {}
-    section = ResMgr.openSection(_USAGE_CONFIG_FILE)
+    section = ResMgr.openSection(fileName)
     reader = csv.reader(StringIO(unicode(section.asString)), delimiter=';')
     next(reader)
     for row in reader:
@@ -36,6 +37,7 @@ def readOptionalDevicesUsageConfig():
         percentage = float(row[4])
         loadouts.append(VehicleLoadout(devices, percentage))
 
+    ResMgr.purge(fileName, True)
     return config
 
 

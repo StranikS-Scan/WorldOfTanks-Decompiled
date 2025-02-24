@@ -12,7 +12,6 @@ from gui.shared.gui_items.items_actions import factory
 from helpers import dependency, time_utils
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewDialogKeys
 
 class DismissTankmanDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_tankman',)
@@ -22,7 +21,7 @@ class DismissTankmanDialog(BaseCrewDialogTemplateView):
     _restoreCtrl = dependency.descriptor(IRestoreController)
 
     def __init__(self, tankmanId, **kwargs):
-        super(DismissTankmanDialog, self).__init__(loggingKey=CrewDialogKeys.DISMISS_TANKMAN, **kwargs)
+        super(DismissTankmanDialog, self).__init__(**kwargs)
         self._tankman = self._itemsCache.items.getTankman(tankmanId)
 
     @property

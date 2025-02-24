@@ -2,18 +2,18 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/notifications/punishment_notification_view.py
 from enum import Enum
 from frameworks.wulf import WindowFlags, ViewSettings
-from gui.impl.pub import ViewImpl
-from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.shared.view_helpers.blur_manager import CachedBlur
-from helpers import i18n, dependency
 from gui.impl import backport
 from gui.impl.dialogs.dialog_template_button import ConfirmButton
 from gui.impl.dialogs.dialog_template_utils import toString
-from gui.impl.gen.resources import R
 from gui.impl.dialogs.widgets.icon_set import IconSet
 from gui.impl.dialogs.widgets.warning_text import WarningText
+from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.lobby.hangar.dialogs.punishment_dialog_model import PunishmentDialogModel
+from gui.impl.pub import ViewImpl
+from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.shared.utils.functions import getArenaShortName, getArenaSubTypeName
+from gui.shared.view_helpers.blur_manager import CachedBlur
+from helpers import i18n, dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 _LOC = R.strings.dialogs.punishmentWindow
@@ -132,17 +132,6 @@ class BanView(PunishmentView):
         super(BanView, self).__init__(layoutID=layoutID, iconResID=_BAN_ICON_RES(), text=backport.text(message(), arenaName=i18n.makeString(arenaName), time=time, mode=mode), title=backport.text(title(), time=duration), reason=_BAN_REASON_TEXT())
 
 
-class Comp7BanView(PunishmentView):
-
-    def __init__(self, arenaTypeID, time, duration, penalty, isQualification, layoutID=None):
-        arenaName = getArenaShortName(arenaTypeID)
-        if isQualification:
-            message = R.strings.dialogs.punishmentWindow.message.ban.comp7.qualification
-        else:
-            message = R.strings.dialogs.punishmentWindow.message.ban.comp7
-        super(Comp7BanView, self).__init__(layoutID=layoutID, iconResID=_BAN_ICON_RES(), text=backport.text(message(), arenaName=i18n.makeString(arenaName), time=time, penalty=penalty), title=backport.text(R.strings.dialogs.punishmentWindow.header.ban(), time=duration), reason=_BAN_REASON_TEXT())
-
-
 class AfkLeaverNotification(LobbyNotificationWindow):
     __slots__ = ('_blur',)
     __appLoader = dependency.descriptor(IAppLoader)
@@ -210,18 +199,3 @@ class BanNotificationWindow(AfkLeaverNotification):
 
     def __eq__(self, other):
         return False if not isinstance(other, BanNotificationWindow) else self.arenaTypeID == other.arenaTypeID and self.time == other.time and self.duration == other.duration
-
-
-class Comp7BanNotificationWindow(AfkLeaverNotification):
-    __slots__ = ('arenaTypeID', 'time', 'duration', 'penalty', 'isQualification')
-
-    def __init__(self, arenaTypeID, time, duration, penalty, isQualification, parent=None):
-        super(Comp7BanNotificationWindow, self).__init__(content=Comp7BanView(arenaTypeID, time, duration, penalty, isQualification), parent=parent)
-        self.arenaTypeID = arenaTypeID
-        self.time = time
-        self.duration = duration
-        self.penalty = penalty
-        self.isQualification = isQualification
-
-    def __eq__(self, other):
-        return False if not isinstance(other, Comp7BanNotificationWindow) else self.arenaTypeID == other.arenaTypeID and self.time == other.time and self.duration == other.duration and self.penalty == other.penalty and self.isQualification == other.isQualification

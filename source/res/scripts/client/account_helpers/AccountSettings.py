@@ -124,7 +124,7 @@ PROFILE_TECHNIQUE = 'profileTechnique'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
-RECRUIT_NOTIFICATIONS = 'recruitNotifications'
+RECRUITS_NOTIFICATIONS = 'recruitsNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 SESSION_STATS_PREV_BATTLE_COUNT = 'sessionStatsPrevBattleCnt'
 UNIT_FILTER = 'UNIT_FILTER'
@@ -159,10 +159,12 @@ LAST_SELECTED_PM_BRANCH = 'lastSelectedPMBranch'
 WHEELED_DEATH_DELAY_COUNT = 'wheeledDeathCounter'
 FREE_CAM_USES_COUNT = 'killCamBattlesCount'
 LAST_BATTLE_PASS_POINTS_SEEN = 'lastBattlePassPointsSeen'
+LAST_BATTLE_PASS_CYCLES_SEEN = 'lastBattlePassCyclesSeen'
 BR_PROGRESSION_POINTS_SEEN = 'brProgressionPointsSeen'
 COMP7_LIGHT_PROGRESSION_POINTS_SEEN = 'comp7LightProgressionPointsSeen'
 IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN = 'isBattlePassExtraStarted'
 IS_BATTLE_PASS_COLLECTION_SEEN = 'isCollectionSeen'
+IS_BATTLE_PASS_START_NOTIFICATION_SEEN = 'isBattlePassStarted'
 CRYSTALS_INFO_SHOWN = 'crystalsInfoShown'
 IS_CUSTOMIZATION_INTRO_VIEWED = 'isCustomizationIntroViewed'
 NPS_STORAGE = 'nps_storage'
@@ -248,7 +250,6 @@ MAPBOX_SURVEYS = 'mapbox_surveys'
 CLAN_NEWS_SEEN = 'clanNewsSeen'
 INTEGRATED_AUCTION_NOTIFICATIONS = 'integratedAuctionNotifications'
 SHOWN_WOT_PLUS_INTRO = 'shownWotPlusIntro'
-SHOWN_OPTIONAL_DEVICES_ASSISTANT_HINT = 'shownOptionalDevicesAssistantHint'
 MINIMAP_SIZE = 'minimapSize'
 COMP7_LIGHT_INTRO_SHOWN = 'comp7LightIntroShown'
 COMP7_UI_SECTION = 'comp7'
@@ -267,6 +268,7 @@ LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
 LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
 LOOT_BOXES_OPEN_ANIMATION_ENABLED = 'lootBoxesOpenAnimationEnabled'
 LOOT_BOXES_HAS_NEW = 'lootBoxesHasNew'
+LOOT_BOXES_SELECTED_BOX = 'lootBoxesSelectedBox'
 LOOT_BOXES_UNIQUE_ID = 'lootBoxesUniqueID'
 LOOT_BOXES_INTRO_VIDEO_SHOWN = 'lootBoxesIntroVideoShown'
 COLLECTIONS_SECTION = 'collections'
@@ -312,6 +314,7 @@ EXCHANGE_GOLD_RATE_DISCOUNT_ANIMATION_SHOWED = 'ExchangeGoldRateDiscountAnimatio
 EXCHANGE_XP_RATE_DISCOUNT_ANIMATION_SHOWED = 'ExchangeXpRateDiscountAnimationShowed'
 VIEWED_MODULES_SECTION = 'mua'
 LIMITED_UI_VERSIONED_RULES = 'luiVersioned'
+TANKMEN_LIST = 'tankmenList'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -328,12 +331,24 @@ class Winback(object):
     BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN = 'battleSelectorSettingsBulletShown'
 
 
+class EasyTankEquip(object):
+    EASY_TANK_EQUIP_SETTINGS = 'easyTankEquipSettings'
+    SHELLS_CARD_SELECTED_PRESET_INDEX = 'shellsCardSelectedPresetIndex'
+    CONSUMABLES_CARD_SELECTED_PRESET_INDEX = 'consumablesCardSelectedPresetIndex'
+    CONSUMABLES_CARD_PRESET_SLOTS_ORDER = 'consumablesCardPresetSlotsOrder'
+
+
 class AdventCalendar(object):
     SETTINGS = 'adventCalendarSettings'
     INTRO_SHOWN = 'adventCalendarIntroShown'
     LAST_HIGHLIGHTED_DOOR = 'adventCalendarLastHighlightedDoor'
     FIRST_ENTRY_NOTIFICATION_SHOWN = 'adventCalendarFirstEntryNotificationShown'
     LAST_DAY_POPUP_SEEN = 'adventCalendarLastDayPopupSeen'
+
+
+class OptionalDevicesAssistant(object):
+    HINT_SHOWN = 'optionalDevicesAssistantHintShown'
+    SELECTED_PRESET = 'optionalDevicesAssistantSelectedPreset'
 
 
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
@@ -829,7 +844,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                PROFILE_TECHNIQUE_MEMBER: {'selectedColumn': 4,
                                           'selectedColumnSorting': 'descending'},
                SPEAKERS_DEVICE: 0,
-               UNIT_FILTER: {GAME.UNIT_FILTER: 2047}},
+               UNIT_FILTER: {GAME.UNIT_FILTER: 2047},
+               TANKMEN_LIST: {}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
@@ -1176,8 +1192,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_CURRENT_AWARDS_BUBBLE_YEAR_REACHED: False,
                 NATION_CHANGE_VIEWED: False,
                 LAST_BATTLE_PASS_POINTS_SEEN: {},
+                LAST_BATTLE_PASS_CYCLES_SEEN: 0,
                 IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN: False,
                 IS_BATTLE_PASS_COLLECTION_SEEN: False,
+                IS_BATTLE_PASS_START_NOTIFICATION_SEEN: False,
                 MODULES_ANIMATION_SHOWN: False,
                 SUBTITLES: True,
                 RANKED_YEAR_POSITION: None,
@@ -1209,7 +1227,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                              6,
                                              7]),
                 SHOWN_WOT_PLUS_INTRO: False,
-                SHOWN_OPTIONAL_DEVICES_ASSISTANT_HINT: False,
+                OptionalDevicesAssistant.HINT_SHOWN: False,
+                OptionalDevicesAssistant.SELECTED_PRESET: 0,
                 OPT_DEVICE_TAB_VISITED: {},
                 BattleMatters.BATTLE_MATTERS_SETTINGS: {BattleMatters.BATTLES_COUNT_WITHOUT_PROGRESS: 0,
                                                         BattleMatters.QUEST_IDX_FOR_LAST_UPDATED_PROGRESS: 0,
@@ -1217,15 +1236,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN_FOR_SEASON: 0,
+                ROYALE_INTRO_VIDEO_SHOWN: False,
                 COMP7_LIGHT_PROGRESSION_POINTS_SEEN: 0,
                 COMP7_LIGHT_INTRO_SHOWN: False,
                 ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON: 0,
-                LOOTBOX_SYSTEM: {LOOT_BOXES_UNIQUE_ID: 0,
-                                 LOOT_BOXES_WAS_STARTED: False,
-                                 LOOT_BOXES_WAS_FINISHED: False,
-                                 LOOT_BOXES_INTRO_VIDEO_SHOWN: False,
-                                 LOOT_BOXES_HAS_NEW: False,
-                                 LOOT_BOXES_OPEN_ANIMATION_ENABLED: True},
+                LOOTBOX_SYSTEM: {},
                 CUSTOM_SHOP_SETTINGS: {},
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
@@ -1252,6 +1267,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                         UNSEEN_ADVANCED_ACHIEVEMENTS: {},
                                         SEEN_TROPHIES_ADVANCED_ACHIEVEMENTS: {},
                                         MAIN_ADVANCED_ACHIEVEMENTS_PAGE_VISITED: False},
+                EasyTankEquip.EASY_TANK_EQUIP_SETTINGS: {EasyTankEquip.SHELLS_CARD_SELECTED_PRESET_INDEX: 0,
+                                                         EasyTankEquip.CONSUMABLES_CARD_SELECTED_PRESET_INDEX: 0,
+                                                         EasyTankEquip.CONSUMABLES_CARD_PRESET_SLOTS_ORDER: [0, 1, 2]},
                 AdventCalendar.SETTINGS: {AdventCalendar.INTRO_SHOWN: False,
                                           AdventCalendar.LAST_HIGHLIGHTED_DOOR: -1,
                                           AdventCalendar.FIRST_ENTRY_NOTIFICATION_SHOWN: False,
@@ -1278,7 +1296,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
-                     RECRUIT_NOTIFICATIONS: set(),
+                     RECRUITS_NOTIFICATIONS: {},
                      PROGRESSIVE_REWARD_VISITED: False,
                      VIEWED_OFFERS: set(),
                      OFFERS_DISABLED_MSG_SEEN: False,
@@ -1469,7 +1487,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 82
+    version = 85
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2208,6 +2226,25 @@ class AccountSettings(object):
                             del counters['isCollectibleVehiclesVisited']
                         accSettings.write(NEW_SHOP_TABS, _pack(counters))
 
+            if currVersion < 83:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if 'shownOptionalDevicesAssistantHint' in keySettings.keys():
+                        keySettings.deleteSection('shownOptionalDevicesAssistantHint')
+
+            if currVersion < 84:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    easyTankEquipKey = EasyTankEquip.EASY_TANK_EQUIP_SETTINGS
+                    easyTankEquipSettings = DEFAULT_VALUES[KEY_SETTINGS][easyTankEquipKey].copy()
+                    accSettings.write(easyTankEquipKey, _pack(easyTankEquipSettings))
+
+            if currVersion < 85:
+                for key, section in _filterAccountSection(ads):
+                    keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if LOOTBOX_SYSTEM in keySettings.keys():
+                        keySettings.write(LOOTBOX_SYSTEM, _pack({}))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2320,8 +2357,8 @@ class AccountSettings(object):
         AccountSettings._setValue(name, value, KEY_COUNTERS)
 
     @staticmethod
-    def getNotifications(name):
-        return AccountSettings._getValue(name, KEY_NOTIFICATIONS)
+    def getNotifications(name, default=None):
+        return AccountSettings._getValue(name, KEY_NOTIFICATIONS, default=default)
 
     @staticmethod
     def setNotifications(name, value):

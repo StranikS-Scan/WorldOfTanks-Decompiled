@@ -1,13 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/stored_sorting.py
 import typing
-from constants import ARENA_BONUS_TYPE
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import STATS_REGULAR_SORTING, STATS_COMP7_SORTING
-from gui.shared.system_factory import collectBattleResultsStatsSorting, registerBattleResultsStatsSorting
+from account_helpers.AccountSettings import STATS_REGULAR_SORTING
+from gui.shared.system_factory import collectBattleResultsStatsSorting
 from soft_exception import SoftException
-__all__ = ('STATS_REGULAR_SORTING', 'STATS_COMP7_SORTING', 'writeStatsSorting', 'readStatsSorting')
-registerBattleResultsStatsSorting(ARENA_BONUS_TYPE.COMP7, STATS_COMP7_SORTING)
+__all__ = ('STATS_REGULAR_SORTING', 'writeStatsSorting', 'readStatsSorting')
 _DEFAULT_SORTING_KEY = STATS_REGULAR_SORTING
 
 def writeStatsSorting(bonusType, iconType, sortDirection):

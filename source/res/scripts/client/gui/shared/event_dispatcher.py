@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import logging
 from operator import attrgetter
-import typing
 from BWUtil import AsyncReturn
 import Steam
 import adisp
+import typing
+from shared_utils import first
 from CurrentVehicle import HeroTankPreviewAppearance
 from advanced_achievements_client.constants import TROPHIES_ACHIEVEMENT_ID
 from constants import GameSeasonType, RentType
@@ -26,7 +27,6 @@ from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
-from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.MAPBOX_ALIASES import MAPBOX_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
@@ -37,7 +37,6 @@ from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.template_settings.default_dialog_template_settings import DisplayFlags
-from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.impl.lobby.account_completion.utils.decorators import waitShowOverlay
 from gui.impl.lobby.common.congrats.common_congrats_view import CongratsWindow
@@ -63,9 +62,8 @@ from helpers import dependency
 from helpers.aop import pointcutable
 from items import ITEM_TYPES, parseIntCompactDescr, vehicles as vehicles_core
 from nations import NAMES
-from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IBoostersController, IComp7Controller, IHangarSpaceSwitchController
+from skeletons.gui.game_control import IBrowserController, IClanNotificationController, ICollectionsSystemController, IHeroTankController, IMarathonEventsController, IReferralProgramController, IResourceWellController, IBoostersController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -75,9 +73,9 @@ from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
-    from enum import Enum
     from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
     from gui.impl.lobby.crew.widget.crew_widget import BuildedMessage
+    from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -116,10 +114,6 @@ def showRankedAwardWindow(awardsSequence, rankedInfo, notificationMgr=None):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME), ctx={}), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showComp7PrimeTimeWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(HANGAR_ALIASES.COMP7_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedBattleIntro():
@@ -320,16 +314,6 @@ def showMapsBlacklistView():
     g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=R.views.lobby.excluded_maps.ExcludedMapsView(), viewClass=MapsBlacklistView, scope=ScopeTemplates.LOBBY_SUB_SCOPE)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showCrewNpsWelcome():
-    from gui.impl.lobby.crew.crew_intro_view import CrewIntroWindow
-    CrewIntroWindow().load()
-
-
-def showNpsIntroView(**kwargs):
-    from gui.impl.lobby.crew.nps_intro_view import NpsIntroWindow
-    NpsIntroWindow(**kwargs).load()
-
-
 def showDailyExpPageView(exitEvent=None):
     from gui.impl.lobby.account_dashboard.daily_experience_view import DailyExperienceView
     viewId = R.views.lobby.account_dashboard.DailyExperienceView()
@@ -415,6 +399,17 @@ def showHangar():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+def animateHangar(isShow):
+    appLoader = dependency.instance(IAppLoader)
+    app = appLoader.getApp()
+    if app is not None and app.containerManager is not None:
+        viewKey = ViewKey(VIEW_ALIAS.LOBBY_HANGAR)
+        hangar = app.containerManager.getViewByKey(viewKey)
+        if hangar is not None:
+            hangar.animateHangarSubItems(isShow)
+    return
+
+
 def showBarracks(location=None, nationID=None, tankType=None, role=None):
     from gui.impl.lobby.crew.barracks_view import BarracksView
     uiLoader = dependency.instance(IGuiLoader)
@@ -440,6 +435,11 @@ def showConversionAwardsView(**kwargs):
 def showJunkTankmen():
     from gui.impl.lobby.crew.junk_tankmen_view import JunkTankmenWindow
     JunkTankmenWindow().load()
+
+
+def showMentoringLicenseAwards(numItems):
+    from gui.impl.lobby.crew.mentoring_license_awards_view import MentoringLicenseAwardsWindow
+    MentoringLicenseAwardsWindow(numItems=numItems).load()
 
 
 def showBadges(backViewName=''):
@@ -795,6 +795,11 @@ def showChangeCrewMember(slotIdx, vehicleInvID, parentLayoutID=None):
     return
 
 
+def showMentorAssignment(**kwargs):
+    from gui.impl.lobby.crew.mentor_assigment_view import MentorAssigmentWindow
+    MentorAssigmentWindow(**kwargs).load()
+
+
 def showSkillsTraining(tankmanInvID, role, callback):
     from gui.impl.lobby.crew.container_vews.skills_training.skills_training_view import SkillsTrainingWindow
     uiLoader = dependency.instance(IGuiLoader)
@@ -821,7 +826,7 @@ def showQuickTraining(tankmanInvID=NO_TANKMAN, vehicleInvID=NO_VEHICLE_ID, previ
     contentResId = R.views.lobby.crew.QuickTrainingView()
     quickTrainingView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
     if quickTrainingView is None:
-        from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
+        from gui.impl.lobby.crew.container_vews.quick_training.quick_training_view import QuickTrainingView
         g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(layoutID=contentResId, viewClass=QuickTrainingView, scope=ScopeTemplates.LOBBY_SUB_SCOPE), tankmanInvID=tankmanInvID, vehicleInvID=vehicleInvID, previousViewID=previousViewID), scope=EVENT_BUS_SCOPE.LOBBY)
     else:
         quickTrainingView.bringToFront()
@@ -1454,13 +1459,6 @@ def showActiveTestConfirmDialog(startTime, finishTime, link, parent=None):
     raise AsyncReturn(isOK)
 
 
-def showBattlePassDailyQuestsIntroWindow(parent=None):
-    from gui.impl.lobby.battle_pass.battle_pass_daily_quests_intro_view import BattlePassDailyQuestsIntroWindow
-    window = BattlePassDailyQuestsIntroWindow(parent=parent if parent is not None else getParentWindow())
-    window.load()
-    return
-
-
 def showBattlePassRewardsSelectionWindow(chapterID=0, level=0, onRewardsReceivedCallback=None, onCloseCallback=None):
     from gui.impl.lobby.battle_pass.rewards_selection_view import RewardsSelectionWindow
     window = RewardsSelectionWindow(chapterID, level, onRewardsReceivedCallback, onCloseCallback)
@@ -1485,11 +1483,6 @@ def showFrontlineConfirmDialog(skillsInteractor, vehicleType='', isBuy=True):
     from gui.impl.dialogs import dialogs
     result = yield wg_await(dialogs.showSingleDialogWithResultData(wrappedViewClass=ReservesConfirmDialog, layoutID=ReservesConfirmDialog.LAYOUT_ID, skillsInteractor=skillsInteractor, vehicleType=vehicleType, isBuy=isBuy))
     raise AsyncReturn(result)
-
-
-def showBlankGiftWindow(itemCD, count):
-    from gui.impl.lobby.blank_gift.awards_view import BlankGiftWindow
-    BlankGiftWindow(itemCD, count).load()
 
 
 def showNewLevelWindow(pLevel=1, cLevel=2, pXp=50, cXp=70, boosterFlXP=30, originalFlXP=10, rank=1):
@@ -1807,18 +1800,18 @@ def showResetAllPerksDialog():
 
 
 @wg_async
-def showTokenRecruitDialog(ctx, parentViewKey=None):
+def showTokenRecruitDialog(ctx):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import TokenRecruitDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=TokenRecruitDialog.LAYOUT_ID, wrappedViewClass=TokenRecruitDialog))
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, layoutID=TokenRecruitDialog.LAYOUT_ID, wrappedViewClass=TokenRecruitDialog))
     raise AsyncReturn(result)
 
 
 @wg_async
-def showTankwomanRecruitAwardDialog(ctx, parentViewKey=None):
+def showTankwomanRecruitAwardDialog(ctx):
     from gui.impl.dialogs import dialogs
     from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog import QuestRecruitDialog
-    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, parentViewKey=parentViewKey, layoutID=QuestRecruitDialog.LAYOUT_ID, wrappedViewClass=QuestRecruitDialog))
+    result = yield wg_await(dialogs.showSingleDialogWithResultData(ctx=ctx, layoutID=QuestRecruitDialog.LAYOUT_ID, wrappedViewClass=QuestRecruitDialog))
     raise AsyncReturn(result)
 
 
@@ -2042,113 +2035,6 @@ def closeViewsWithFlags(ignoreViews, viewFlags):
             view.destroyWindow()
 
 
-def showComp7MetaRootView(tabId=None, *args, **kwargs):
-    from gui.impl.lobby.comp7.meta_view.meta_root_view import MetaRootView
-    uiLoader = dependency.instance(IGuiLoader)
-    contentResId = R.views.lobby.comp7.MetaRootView()
-    metaView = uiLoader.windowsManager.getViewByLayoutID(contentResId)
-    if metaView is None:
-        g_eventBus.handleEvent(events.Comp7Event(events.Comp7Event.OPEN_META), scope=EVENT_BUS_SCOPE.LOBBY)
-        event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, MetaRootView, ScopeTemplates.LOBBY_SUB_SCOPE), tabId=tabId, *args, **kwargs)
-        g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-    elif tabId is not None:
-        metaView.switchPage(tabId)
-    return
-
-
-def showComp7NoVehiclesScreen():
-    from gui.impl.lobby.comp7.no_vehicles_screen import NoVehiclesScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.comp7.NoVehiclesScreen(), NoVehiclesScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-def showComp7IntroScreen():
-    from gui.impl.lobby.comp7.intro_screen import IntroScreen
-    event = events.LoadGuiImplViewEvent(GuiImplViewLoadParams(R.views.lobby.comp7.IntroScreen(), IntroScreen, ScopeTemplates.LOBBY_SUB_SCOPE))
-    g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7WhatsNewScreen(notificationMgr=None):
-    from gui.impl.lobby.comp7.whats_new_view import WhatsNewViewWindow
-    notificationMgr.append(WindowNotificationCommand(WhatsNewViewWindow()))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7RanksRewardsScreen(quest, periodicQuests, notificationMgr=None):
-    from gui.impl.lobby.comp7.rewards_screen import RanksRewardsWindow
-    window = RanksRewardsWindow(quest=quest, periodicQuests=periodicQuests)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7TokensRewardsScreen(quest, notificationMgr=None):
-    from gui.impl.lobby.comp7.rewards_screen import TokensRewardsWindow
-    window = TokensRewardsWindow(quest=quest)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7QualificationRewardsScreen(quests, notificationMgr=None):
-    from gui.impl.lobby.comp7.rewards_screen import QualificationRewardsWindow
-    window = QualificationRewardsWindow(quests=quests)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7YearlyRewardsScreen(bonuses, showSeasonResults=True, notificationMgr=None):
-    from gui.impl.lobby.comp7.rewards_screen import YearlyRewardsWindow
-    window = YearlyRewardsWindow(bonuses=bonuses, showSeasonResults=showSeasonResults)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showComp7YearlyRewardsSelectionWindow():
-    from gui.impl.lobby.comp7.rewards_selection_screen import Comp7RewardsSelectionWindow, Comp7SelectableRewardType
-    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.YEARLY)
-    window.load()
-
-
-def showComp7WeeklyQuestsRewardsSelectionWindow():
-    from gui.impl.lobby.comp7.rewards_selection_screen import Comp7RewardsSelectionWindow, Comp7SelectableRewardType
-    window = Comp7RewardsSelectionWindow(Comp7SelectableRewardType.WEEKLY_QUESTS)
-    window.load()
-
-
-def showComp7AllRewardsSelectionWindow():
-    from gui.impl.lobby.comp7.rewards_selection_screen import Comp7RewardsSelectionWindow
-    window = Comp7RewardsSelectionWindow()
-    window.load()
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
-def showComp7SelectedRewardsScreen(bonuses, notificationMgr=None):
-    from gui.impl.lobby.comp7.rewards_screen import SelectedRewardsWindow
-    window = SelectedRewardsWindow(bonuses=bonuses)
-    notificationMgr.append(WindowNotificationCommand(window))
-
-
-@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController, comp7Ctrl=IComp7Controller)
-def showComp7SeasonStatisticsScreen(seasonNumber=None, force=False, notificationMgr=None, comp7Ctrl=None):
-    from gui.impl.lobby.comp7.season_statistics import SeasonStatisticsWindow
-    if not seasonNumber:
-        seasonInfo = comp7Ctrl.getPreviousSeason()
-        if not seasonInfo:
-            _logger.error('Could not show Season Statistic view, no season info.')
-            return
-        seasonNumber = comp7Ctrl.getPreviousSeason().getNumber()
-    window = SeasonStatisticsWindow(seasonNumber=seasonNumber, saveViewing=not force)
-    if force:
-        window.load()
-    else:
-        notificationMgr.append(WindowNotificationCommand(window))
-
-
-def showComp7PurchaseDialog(productCode, parent=None):
-    from gui.impl.lobby.comp7.dialogs.purchase_dialog import PurchaseDialogWindow
-    if not PurchaseDialogWindow.getInstances():
-        PurchaseDialogWindow(productCode, parent).load()
-
-
 @dependency.replace_none_kwargs(guiLoader=IGuiLoader, collections=ICollectionsSystemController)
 def showCollectionWindow(collectionId, page=None, backCallback=None, backBtnText='', parent=None, guiLoader=None, collections=None):
     if not collections.isEnabled():
@@ -2326,24 +2212,32 @@ def showExchangeFreeXPWindow(ctx=None, doBlur=True):
     return
 
 
-@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller, spaceSwitchController=IHangarSpaceSwitchController)
-def showComp7ShopPage(selectComp7Hangar=None, comp7Ctrl=None, spaceSwitchController=None):
-    if not comp7Ctrl.isComp7PrbActive():
-        spaceSwitchController.onSpaceUpdated += checkSpaceAndShowShop
-        selectComp7Hangar()
-        return
-    showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+def showEasyTankEquipScreen(*args, **kwargs):
+    from gui.impl.lobby.easy_tank_equip.easy_tank_equip_view import EasyTankEquipView
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.lobby.tanksetup.EasyTankEquipView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        animateHangar(False)
+        g_eventBus.handleEvent(events.LoadGuiImplViewEvent(GuiImplViewLoadParams(contentResId, EasyTankEquipView, ScopeTemplates.LOBBY_SUB_SCOPE), *args, **kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
-@dependency.replace_none_kwargs(comp7Ctrl=IComp7Controller, spaceSwitchController=IHangarSpaceSwitchController)
-def checkSpaceAndShowShop(comp7Ctrl, spaceSwitchController):
-    if not comp7Ctrl.isComp7PrbActive():
-        return
-    spaceSwitchController.onSpaceUpdated -= checkSpaceAndShowShop
-    showComp7MetaRootView(tabId=MetaRootViews.SHOP)
+@wg_async
+def showExchangeToApplyEasyTankEquipDialog(price, availableGoldAmount, parent=None):
+    from gui.impl.dialogs import dialogs
+    from gui.impl.lobby.easy_tank_equip.dialogs.easy_tank_equip_exchange_dialog import ExchangeToApplyEasyTankEquip
+    result = yield wg_await(dialogs.showSingleDialog(layoutID=R.views.lobby.tanksetup.dialogs.ExchangeToApplyEasyTankEquip(), parent=parent, wrappedViewClass=ExchangeToApplyEasyTankEquip, price=price, availableGoldAmount=availableGoldAmount))
+    raise AsyncReturn(result)
 
 
 def showCustomizationRarityAwardScreen(element, isFirstEntry):
     from gui.impl.lobby.customization.customization_rarity_reward_screen.customization_rarity_reward_screen import CustomizationRarityRewardWindow
     window = CustomizationRarityRewardWindow(element, isFirstEntry)
     window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showSteamUnlockAwardsWindow(rewards, notificationMgr=None):
+    from gui.impl.lobby.steam_unlock.steam_unlock_awards_view import SteamUnlockAwardsWindow
+    window = SteamUnlockAwardsWindow(rewards=rewards)
+    notificationMgr.append(WindowNotificationCommand(window))

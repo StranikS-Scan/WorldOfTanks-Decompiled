@@ -24,9 +24,9 @@ class BasePersonalCaseController(InteractionController):
         event_dispatcher.showTankChange(tankmanInvID=tankmanInvID, previousViewID=self.view.getParentView().currentTabId)
 
     @wg_async
-    def _onRetrainClick(self, viewKey):
+    def _onRetrainClick(self):
         currVehicle = self.context.tankmanCurrentVehicle
         nativeVehicle = self.context.tankmanNativeVehicle
         vehCD = currVehicle.intCD if currVehicle else nativeVehicle.intCD
-        yield wg_await(showRetrainSingleDialog(self.context.tankmanID, vehCD, targetSlotIdx=self.context.tankman.vehicleSlotIdx if self.context.tankman.isInTank else None, parentViewKey=viewKey))
+        yield wg_await(showRetrainSingleDialog(self.context.tankmanID, vehCD, targetSlotIdx=self.context.tankman.vehicleSlotIdx if self.context.tankman.isInTank else None))
         return

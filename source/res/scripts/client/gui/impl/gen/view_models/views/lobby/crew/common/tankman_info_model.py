@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.crew.components.component_base_model i
 class TankmanInfoModel(ComponentBaseModel):
     __slots__ = ('onPlayUniqueVoice', 'onChangeVehicle', 'onRetrain')
 
-    def __init__(self, properties=16, commands=3):
+    def __init__(self, properties=17, commands=3):
         super(TankmanInfoModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -103,6 +103,12 @@ class TankmanInfoModel(ComponentBaseModel):
     def setHasRetrainDiscount(self, value):
         self._setBool(15, value)
 
+    def getIsWotPlusNativeVehicle(self):
+        return self._getBool(16)
+
+    def setIsWotPlusNativeVehicle(self, value):
+        self._setBool(16, value)
+
     def _initialize(self):
         super(TankmanInfoModel, self)._initialize()
         self._addViewModelProperty('nativeVehicle', VehicleModel())
@@ -120,6 +126,7 @@ class TankmanInfoModel(ComponentBaseModel):
         self._addBoolProperty('hasPostProgression', False)
         self._addBoolProperty('hasUniqueSound', False)
         self._addBoolProperty('hasRetrainDiscount', False)
+        self._addBoolProperty('isWotPlusNativeVehicle', False)
         self.onPlayUniqueVoice = self._addCommand('onPlayUniqueVoice')
         self.onChangeVehicle = self._addCommand('onChangeVehicle')
         self.onRetrain = self._addCommand('onRetrain')

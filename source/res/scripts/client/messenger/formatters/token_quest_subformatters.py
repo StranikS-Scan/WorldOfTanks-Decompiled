@@ -11,13 +11,11 @@ import personal_missions
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
 from chat_shared import SYS_MESSAGE_TYPE
-from comp7_common import Comp7QuestType, qualificationQuestIDBySeasonNumber
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
 from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.comp7 import comp7_quest_helpers, comp7_shared, comp7_i18n_helpers
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
@@ -31,11 +29,11 @@ from helpers import dependency
 from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, SeniorityAwardsQuestAchievesFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, SeniorityAwardsQuestAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IWotPlusController, IComp7Controller
+from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.system_messages import ISystemMessages
@@ -917,104 +915,6 @@ class WotPlusAttendanceRewardsFormatterTestSMViewer(WotPlusAttendanceRewardsForm
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID == 'test_attendance_reward'
-
-
-class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
-    __PERIODIC_REWARD_MESSAGE_TEMPLATE = 'comp7PeriodicRewardMessage'
-    __REGULAR_REWARD_MESSAGE_TEMPLATE = 'comp7RegularRewardMessage'
-    __QUALIFICATION_REWARD_MESSAGE_TEMPLATE = 'comp7QualificationRewardMessage'
-    __R_SYS_MESSAGES = R.strings.comp7.system_messages
-    __RANK_NAME_KEYS = ('sixth', 'fifth', 'fourth', 'third', 'second', 'first')
-    __comp7Ctrl = dependency.descriptor(IComp7Controller)
-
-    def __init__(self):
-        super(Comp7RewardsFormatter, self).__init__()
-        self.__questTypeFormatters = {Comp7QuestType.PERIODIC: self.__formatPeriodicRewardMessage,
-         Comp7QuestType.RANKS: self.__formatRegularRewardMessage,
-         Comp7QuestType.TOKENS: self.__formatTokensRewardMessage}
-
-    def format(self, message, *_):
-        if message.data:
-            messageData = []
-            settings = self._getGuiSettings(message)
-            completedIDs = self.getQuestOfThisGroup(message.data.get('completedQuestIDs', set()))
-            if self.__getQualificationQuestID() in completedIDs:
-                formattedMessage = self.__formatQualificationRewardMessage(message, completedIDs)
-                messageData.append(MessageData(formattedMessage, settings))
-            for questID in completedIDs:
-                questType = comp7_quest_helpers.getComp7QuestType(questID)
-                formattedMessage = None
-                formatter = self.__questTypeFormatters.get(questType)
-                if formatter is not None:
-                    formattedMessage = formatter(message, questID)
-                if formattedMessage is not None:
-                    messageData.append(MessageData(formattedMessage, settings))
-
-            if messageData:
-                return messageData
-        return [MessageData(None, None)]
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        actualSeasonNumber = cls.__comp7Ctrl.getActualSeasonNumber()
-        return comp7_quest_helpers.isComp7Quest(questID, actualSeasonNumber)
-
-    def __formatPeriodicRewardMessage(self, message, questID):
-        division = comp7_quest_helpers.parseComp7PeriodicQuestID(questID)
-        rank = comp7_shared.getRankEnumValue(division)
-        rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
-        if not rewardsData:
-            return None
-        else:
-            formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False, processCustomizations=False, processTokens=False)
-            formattedMessage = g_settings.msgTemplates.format(self.__PERIODIC_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.periodicReward.title()),
-             'body': backport.text(self.__R_SYS_MESSAGES.periodicReward.body(), rank=comp7_i18n_helpers.getRankLocale(rank), rewards=formattedRewards)})
-            return formattedMessage
-
-    def __formatRegularRewardMessage(self, message, questID):
-        rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
-        return self.__formatRegularMessage(message, rewardsData, 'regularReward')
-
-    def __formatTokensRewardMessage(self, message, questID):
-        rewardsData = message.data.get('detailedRewards', {}).get(questID, {})
-        dossierData = rewardsData.get('dossier', {})
-        popUpRecords = message.data.get('popUpRecords', set())
-        popUps = self._getDossierPopUps(dossierData, popUpRecords)
-        if popUps:
-            rewardsData.update({'popUpRecords': popUps})
-        return self.__formatRegularMessage(message, rewardsData, 'tokenWeeklyReward')
-
-    def __formatRegularMessage(self, message, rewardsData, rewardType):
-        if not rewardsData:
-            return None
-        else:
-            formattedRewards = self._achievesFormatter.formatQuestAchieves(rewardsData, asBattleFormatter=False)
-            return g_settings.msgTemplates.format(self.__REGULAR_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).title()),
-             'body': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).body(), at=TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)), rewards=formattedRewards)})
-
-    def __formatQualificationRewardMessage(self, message, questIDs):
-        ranksQuests = set([ q for q in questIDs if comp7_quest_helpers.getComp7QuestType(q) == Comp7QuestType.RANKS ])
-        questIDs -= ranksQuests
-        sortedQuests = sorted(list(ranksQuests))
-        detailedRewards = message.data.get('detailedRewards', {})
-        mergedRewards = getMergedBonusesFromDicts([ detailedRewards.get(qID, {}) for qID in sortedQuests ])
-        formattedRewards = Comp7QualificationRewardsFormatter.formatQuestAchieves(mergedRewards, False)
-        rankNames = self.__getQualificationRanks(ranksQuests)
-        return g_settings.msgTemplates.format(self.__QUALIFICATION_REWARD_MESSAGE_TEMPLATE, ctx={'title': backport.text(self.__R_SYS_MESSAGES.qualificationReward.title()),
-         'body': backport.text(self.__R_SYS_MESSAGES.qualificationReward.body(), maxRank=rankNames[-1], ranks=backport.text(R.strings.comp7.listSeparator()).join(rankNames), rewards=formattedRewards)})
-
-    def __getQualificationRanks(self, quests):
-        ranks = list({comp7_quest_helpers.parseComp7RanksQuestID(questID).rank for questID in quests})
-        ranks.sort(reverse=True)
-        return [ self.__getRankName(r) for r in ranks ]
-
-    def __getRankName(self, rankIndex):
-        rankKey = self.__RANK_NAME_KEYS[rankIndex - 1]
-        return backport.text(R.strings.comp7.rank.dyn(rankKey)())
-
-    def __getQualificationQuestID(self):
-        actualSeasonNumber = self.__comp7Ctrl.getActualSeasonNumber()
-        return qualificationQuestIDBySeasonNumber(actualSeasonNumber) if actualSeasonNumber else None
 
 
 class WinbackRewardFormatterBase(ServiceChannelFormatter, TokenQuestsSubFormatter):

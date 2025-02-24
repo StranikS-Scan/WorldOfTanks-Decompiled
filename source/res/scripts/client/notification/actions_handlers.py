@@ -5,12 +5,13 @@ import BigWorld
 import typing
 from adisp import adisp_process
 from CurrentVehicle import g_currentVehicle
-from constants import PREBATTLE_TYPE, PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, ARENA_BONUS_TYPE
+from battle_pass_common import isPostProgressionChapter
+from constants import PREBATTLE_TYPE, PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattlePassPointsProductsUrl, getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getIntegratedAuctionUrl, getPlayerSeniorityAwardsUrl
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
@@ -22,17 +23,15 @@ from gui.customization.constants import CustomizationModeSource, CustomizationMo
 from gui.impl import backport
 from gui.impl.auxiliary.crew_books_helper import crewBooksViewedCache
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.enums import MetaRootViews
 from gui.impl.lobby.achievements.profile_utils import createAdvancedAchievementsCatalogInitAchievementIDs
-from gui.lootbox_system.common import ViewID, Views
+from gui.lootbox_system.base.common import ViewID, Views
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.prb_control import prbDispatcherProperty, prbInvitesProperty
-from gui.prb_control.entities.comp7 import comp7_prb_helpers
 from gui.prestige.prestige_helpers import showPrestigeOnboardingWindow, showPrestigeVehicleStats
 from gui.ranked_battles import ranked_helpers
-from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showComp7BanWindow, showBanWindow, showPenaltyWindow, showWarningWindow
+from gui.server_events.events_dispatcher import showMissionsBattlePass, showMissionsMapboxProgression, showPersonalMission, showBanWindow, showPenaltyWindow, showWarningWindow
 from gui.shared import EVENT_BUS_SCOPE, actions, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showComp7MetaRootView, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView, showComp7WeeklyQuestsRewardsSelectionWindow
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBlueprintsSalePage, showCollectionAwardsWindow, showCollectionWindow, showCollectionsMainPage, showDelayedReward, showEpicBattlesAfterBattleWindow, showProgressiveRewardWindow, showRankedYearAwardWindow, showResourceWellProgressionWindow, showShop, showSteamConfirmEmailOverlay, showWinbackSelectRewardView, showWotPlusIntroView, showBarracks, showSeniorityRewardVehiclesWindow, showAdvancedAchievementsView, showTrophiesView, showAdvancedAchievementsCatalogView, showExchangeGoldWindow, showExchangeFreeXPWindow, showCrewPostProgressionView
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import ClaimRewardForPostProgression
 from gui.shared.notifications import NotificationPriorityLevel
@@ -47,7 +46,7 @@ from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, 
 from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IComp7Controller, IHangarSpaceSwitchController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController
 from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -822,47 +821,6 @@ class _OpenBarracksHandler(NavigationDisabledActionHandler):
         showBarracks()
 
 
-class _OpenComp7ShopHandler(NavigationDisabledActionHandler):
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-    __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
-    __customizationService = dependency.descriptor(ICustomizationService)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        if not self.__comp7Controller.isComp7PrbActive():
-            self.__spaceSwitchController.onSpaceUpdated += self.__onSpaceUpdated
-            comp7_prb_helpers.selectComp7()
-            return
-        elif self.__customizationService.getCtx() is not None:
-            self.__customizationService.onVisibilityChanged += self.__onC11nVisibilityChanged
-            shared_events.showHangar()
-            return
-        else:
-            self.__goToShop()
-            return
-
-    def __onC11nVisibilityChanged(self, isC11nVisible):
-        if not isC11nVisible:
-            self.__customizationService.onVisibilityChanged -= self.__onC11nVisibilityChanged
-            self.__goToShop()
-
-    def __onSpaceUpdated(self):
-        if not self.__comp7Controller.isComp7PrbActive():
-            return
-        self.__spaceSwitchController.onSpaceUpdated -= self.__onSpaceUpdated
-        self.__goToShop()
-
-    def __goToShop(self):
-        showComp7MetaRootView(tabId=MetaRootViews.SHOP)
-
-
 class _OpenConfirmEmailHandler(NavigationDisabledActionHandler):
     __wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
 
@@ -946,7 +904,10 @@ class _OpenLootBoxSystemHandler(NavigationDisabledActionHandler):
         pass
 
     def doAction(self, model, entityID, action):
-        Views.load(ViewID.MAIN)
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData and 'eventName' in savedData:
+            Views.load(ViewID.MAIN, eventName=savedData['eventName'])
 
 
 class _LootBoxSystemAutoOpenHandler(NavigationDisabledActionHandler):
@@ -982,6 +943,7 @@ class _OpenProgressiveRewardView(NavigationDisabledActionHandler):
 
 
 class _OpenBattlePassProgressionView(NavigationDisabledActionHandler):
+    __battlePass = dependency.descriptor(IBattlePassController)
 
     @classmethod
     def getNotType(cls):
@@ -996,7 +958,11 @@ class _OpenBattlePassProgressionView(NavigationDisabledActionHandler):
         savedData = notification.getSavedData()
         hideWebBrowserOverlay()
         if savedData is not None:
-            showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), savedData.get('chapterID'))
+            chapterID = savedData.get('chapterID')
+            if not isPostProgressionChapter(chapterID):
+                showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), chapterID)
+            else:
+                showMissionsBattlePass(R.views.lobby.battle_pass.PostProgressionView())
         else:
             showMissionsBattlePass()
         return
@@ -1095,20 +1061,6 @@ class _OpenDelayedReward(NavigationDisabledActionHandler):
         showDelayedReward()
 
 
-class _OpenBattlePassPointsShop(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showShop(getBattlePassPointsProductsUrl())
-
-
 class _OpenChapterChoiceView(_OpenBattlePassProgressionView):
 
     @classmethod
@@ -1185,20 +1137,6 @@ class _OpenCustomizationStylesSection(NavigationDisabledActionHandler):
         if styleID:
             style = self.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, styleID)
             self.__customizationService.showCustomization(modeId=CustomizationModes.STYLE_3D if style.is3D else CustomizationModes.STYLE_2D, tabId=CustomizationTabs.STYLES_3D if style.is3D else CustomizationTabs.STYLES_2D, itemCD=style.intCD)
-
-
-class _OpenBondEquipmentSelection(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.COMP7_OFFER_TOKENS
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        showComp7WeeklyQuestsRewardsSelectionWindow()
 
 
 class _OpenIntegratedAuction(NavigationDisabledActionHandler):
@@ -1545,10 +1483,7 @@ class _OpenPunishmentWindowHandler(ActionHandler):
         if savedData is not None:
             penaltyType = savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PENALTY_TYPE]
             if penaltyType == PENALTY_TYPES.BAN:
-                if savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_BONUS_TYPE] == ARENA_BONUS_TYPE.COMP7:
-                    showComp7BanWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_PENALTY], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.COMP7_IS_QUALIFICATION], force=True)
-                else:
-                    showBanWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION], force=True)
+                showBanWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.BAN_DURATION], force=True)
             if penaltyType == PENALTY_TYPES.PENALTY:
                 showPenaltyWindow(savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TYPE_ID], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.ARENA_TIME], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.PUNISHMENT_REASON], savedData[FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA.IS_AFK_VIOLATION], force=True)
             if penaltyType == PENALTY_TYPES.WARNING:
@@ -1586,7 +1521,7 @@ class _OpenXpExchangeWindow(NavigationDisabledActionHandler):
         showExchangeFreeXPWindow()
 
 
-_AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
+_AVAILABLE_HANDLERS = [ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
  AcceptPrbInviteHandler,
@@ -1631,7 +1566,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenMapboxProgression,
  _OpenMapboxSurvey,
  _OpenDelayedReward,
- _OpenBattlePassPointsShop,
  _OpenChapterChoiceView,
  _OpenEpicBattlesAfterBattleWindow,
  _OpenResourceWellProgressionStartWindow,
@@ -1654,17 +1588,15 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenAdvancedAchievementsScreen,
  _OpenWotPlusIntroView,
  _OpenBarracksHandler,
- _OpenComp7ShopHandler,
  _OpenPrestigeVehicleStats,
  _OpenPrestigeOnboardingWindow,
  _OpenSeniorityAwardsVehicleSelection,
  _OpenSeniorityAwardsPersonalVehicleSelection,
  _OpenPunishmentWindowHandler,
- _OpenBondEquipmentSelection,
  _OpenXpExchangeWindow,
  _OpenGoldExchangeWindow,
  _OpenCrewPostProgression,
- _ClaimRewardPostProgression)
+ _ClaimRewardPostProgression]
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

@@ -113,6 +113,9 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
     def setMarkerRenderInfo(self, markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale):
         self.__canvas.markerSetRenderInfo(markerID, minScale, bounds, innerBounds, cullDistance, markerBoundsScale)
 
+    def setMarkerCullPlanarEnabled(self, markerID, enabled):
+        self.__canvas.markerSetCullPlanarEnabled(markerID, enabled)
+
     def setMarkerLocationOffset(self, markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart):
         self.__canvas.markerSetLocationOffset(markerID, minYOffset, maxYOffset, distanceForMinYOffset, maxBoost, boostStart)
 

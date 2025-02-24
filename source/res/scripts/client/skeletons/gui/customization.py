@@ -25,7 +25,7 @@ class ICustomizationService(object):
     def fini(self):
         raise NotImplementedError
 
-    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
+    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None, prevVehicleInvID=None):
         raise NotImplementedError
 
     def closeCustomization(self):

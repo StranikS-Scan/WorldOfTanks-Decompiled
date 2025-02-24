@@ -5,7 +5,6 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from BonusCaps import BonusCapsConst
 from constants import DAILY_QUESTS_CONFIG
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
-from gui.impl.lobby.comp7.comp7_weekly_quests_widget import Comp7WeeklyQuestsWidgetView
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.server_events.events_helpers import isDailyQuestsEnable
@@ -16,13 +15,11 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.server_settings import serverSettingsChangeListener
-from skeletons.gui.game_control import IPromoController, ILimitedUIController, IHangarGuiController, IComp7Controller, IComp7WeeklyQuestsController
+from skeletons.gui.game_control import IPromoController, ILimitedUIController, IHangarGuiController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
-    from typing import Optional, Type, Union, List
-    from gui.game_control.comp7_controller import Comp7Controller
-    from gui.game_control.comp7_weekly_quests_controller import Comp7WeeklyQuestsController
+    from typing import Optional, Type, List
 
 class BaseQuestsWidgetComponent(object):
     injectQuestsWidgetViewType = DailyQuestsWidgetView
@@ -48,6 +45,10 @@ class BaseQuestsWidgetComponent(object):
         self.__removeListeners()
         self._injector = None
         return
+
+    @classmethod
+    def shouldComponentBeActive(cls):
+        return True
 
     def updateQuestsVisibility(self, *_):
         if self.__isQueueEnabled():
@@ -150,30 +151,8 @@ class BaseQuestsWidgetComponent(object):
             view.getViewModel().onDisappear -= injector.destroyQuestsWidgetView
 
 
-class Comp7QuestWidgetComponent(BaseQuestsWidgetComponent):
-    injectQuestsWidgetViewType = Comp7WeeklyQuestsWidgetView
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-    __comp7WeeklyQuestsCtrl = dependency.descriptor(IComp7WeeklyQuestsController)
-
-    @classmethod
-    def shouldComponentBeActive(cls):
-        return cls.__comp7Controller.isComp7PrbActive() and not cls.__comp7WeeklyQuestsCtrl.isInHideState()
-
-    def _injectAndSetVisibilityOfWidgetView(self):
-        injector = self._injector
-        view = injector.createInjectView()
-        view.setVisible(not self._shouldHide())
-        view.getViewModel().onDisappear += self._injector.destroyQuestsWidgetView
-
-    def _hasIncompleteQuests(self):
-        return True if super(Comp7QuestWidgetComponent, self)._hasIncompleteQuests() else not self.__comp7WeeklyQuestsCtrl.isInHideState()
-
-    def _onSyncCompleted(self):
-        self._executeShowOrHide()
-
-
 class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
-    componentTypes = [Comp7QuestWidgetComponent]
+    COMPONENT_TYPES = []
 
     def __init__(self):
         self.__component = None
@@ -233,7 +212,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
 
     @classmethod
     def __getActiveComponentType(cls):
-        for componentType in cls.componentTypes:
+        for componentType in cls.COMPONENT_TYPES:
             if componentType.shouldComponentBeActive():
                 return componentType
 

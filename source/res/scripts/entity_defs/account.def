@@ -332,6 +332,11 @@
       <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
       </VariableLengthHeaderSize>
     </receiveNotification>
+    <receiveConversionResults>
+      <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
+    </receiveConversionResults>
   </ClientMethods>
   <BaseMethods>
     <onEnqueued>

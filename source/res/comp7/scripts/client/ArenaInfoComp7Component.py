@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/ArenaInfoComp7Component.py
+from script_component.DynamicScriptComponent import DynamicScriptComponent
+from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
 from gui.battle_control import avatar_getter
-from gui.battle_control.arena_info.arena_vos import Comp7Keys
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.arena_info.settings import ARENA_LISTENER_SCOPE as _SCOPE
 from helpers import dependency
-from script_component.DynamicScriptComponent import DynamicScriptComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class ArenaInfoComp7Component(DynamicScriptComponent, IArenaVehiclesController):

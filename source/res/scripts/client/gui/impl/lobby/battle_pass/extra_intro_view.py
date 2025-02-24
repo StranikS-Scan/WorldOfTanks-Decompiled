@@ -49,7 +49,7 @@ class ExtraIntroView(ViewImpl):
 
     def __onSubmit(self):
         self.__settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN: True})
-        if self.__chapterID in self.__battlePassController.getChapterIDs():
+        if self.__chapterID in self.__battlePassController.getMainChapterIDs():
             showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView(), self.__chapterID)
         else:
             showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())

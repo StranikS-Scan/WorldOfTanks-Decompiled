@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/VehicleDescrCrew.py
 from typing import Tuple, List, Set, Dict, Iterator
-from constants import PerkData, SkillProcessorArgs, GroupSkillProcessorArgs, CHANCE_TO_HIT_SUFFIX_FACTOR, CrewContextArgs
+from constants import CrewContextArgs, GroupSkillProcessorArgs, PerkData, SkillProcessorArgs
 from debug_utils import *
 from items.artefacts import SkillEquipment
 from items.combined_crew_skill import CombinedCrewSkill
@@ -15,7 +15,7 @@ if IS_CLIENT:
     from items import perks
 _DO_DEBUG_LOG = False
 CREW_CONTEXT_FORCE_UPDATE_INDEX = -29222
-_ADDITIVE_FACTORS = frozenset([ ten + CHANCE_TO_HIT_SUFFIX_FACTOR for ten in vehicles.TANKMAN_EXTRA_NAMES ] + ['circularVisionRadiusB'])
+_ADDITIVE_FACTORS = frozenset(['circularVisionRadiusB'])
 _COMPLEX_FACTORS = frozenset(('circularVisionRadius', 'circularVisionRadiusB'))
 
 class VehicleDescrCrew(object):
@@ -296,10 +296,10 @@ class VehicleDescrCrew(object):
             ccs = self._findBestTankmanForSkill(skillData, skillName)
             self.lastUsedLevels[skillName] = ccs.level
             skillToBoost.discard(skillName)
-            callSkillProcessor(skillName, SkillProcessorArgs(level=ccs.tankmanLevel, levelIncrease=ccs.levelIncrease, skillsEfficiency=ccs.skillsEfficiency, isActive=ccs.isTankmanActive, isFire=isFire, skillConfig=skillConfig, hasActiveTankmanForBooster=self._hasActiveTankmanForBooster(skillData)))
+            callSkillProcessor(skillName, SkillProcessorArgs(level=ccs.tankmanLevel, levelIncrease=ccs.levelIncrease, skillsEfficiency=ccs.skillsEfficiency, isActive=ccs.isTankmanActive, isFire=isFire, skillConfig=skillConfig, hasActiveTankmanForBooster=self._hasActiveTankmanForBooster(skillData), isBoostedSkill=skillName in self._boostedSkills))
 
         for skillName in skillToBoost:
-            callSkillProcessor(skillName, SkillProcessorArgs(level=0, levelIncrease=0, skillsEfficiency=1, isActive=False, isFire=isFire, skillConfig=getSkill(skillName), hasActiveTankmanForBooster=False))
+            callSkillProcessor(skillName, SkillProcessorArgs(level=0, levelIncrease=0, skillsEfficiency=1, isActive=False, isFire=isFire, skillConfig=getSkill(skillName), hasActiveTankmanForBooster=False, isBoostedSkill=True))
 
         return
 

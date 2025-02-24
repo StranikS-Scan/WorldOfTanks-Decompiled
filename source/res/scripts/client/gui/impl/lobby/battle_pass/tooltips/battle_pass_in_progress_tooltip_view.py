@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/tooltips/battle_pass_in_progress_tooltip_view.py
 from collections import OrderedDict
-from battle_pass_common import BattlePassConsts
+from battle_pass_common import BattlePassConsts, isPostProgressionChapter
 import constants
 from frameworks.wulf import ViewSettings, Array
 from gui.impl.gen import R
@@ -57,11 +57,16 @@ class BattlePassInProgressTooltipView(ViewImpl):
 
                 curLevel = self.__battlePass.getCurrentLevel()
                 chapterID = self.__battlePass.getCurrentChapterID()
+                if isPostProgressionChapter(chapterID):
+                    curLevel = curLevel % len(self.__battlePass.getLevelsConfig(chapterID))
                 curPoints, limitPoints = self.__battlePass.getLevelProgression(chapterID)
                 expireTime = self.__battlePass.getChapterRemainingTime(chapterID)
                 if self.__battlePass.isHoliday():
                     expireTime = self.__battlePass.getSeasonTimeLeft()
-                isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID)
+                if not isPostProgressionChapter(chapterID):
+                    isBattlePassPurchased = self.__battlePass.isBought(chapterID=chapterID)
+                else:
+                    isBattlePassPurchased = self.__battlePass.isAllMainChaptersBought()
                 model.setLevel(curLevel)
                 model.setChapter(chapterID)
                 model.setCurrentPoints(curPoints)

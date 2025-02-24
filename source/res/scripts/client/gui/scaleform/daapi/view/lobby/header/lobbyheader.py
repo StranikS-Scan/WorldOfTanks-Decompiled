@@ -2,21 +2,23 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/LobbyHeader.py
 from __future__ import absolute_import, division
 import math
+import weakref
+from collections import namedtuple
 from itertools import chain
-from enum import Enum
 import BigWorld
 import WWISE
 import typing
-from account_helpers.AccountSettings import ACTIVE_TEST_PARTICIPATION_CONFIRMED, AccountSettings, KNOWN_SELECTOR_BATTLES, LAST_SHOP_ACTION_COUNTER_MODIFICATION, NEW_LOBBY_TAB_COUNTER, NEW_SHOP_TABS, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION, RECRUIT_NOTIFICATIONS, SHOWN_WOT_PLUS_INTRO
+from adisp import adisp_async, adisp_process
 from builtins import object, str
+from enum import Enum
 from past.utils import old_div
+from shared_utils import CONST_CONTAINER, BitmaskHelper
 import constants
-import weakref
 import wg_async as future_async
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
 from SoundGroups import g_instance as SoundGroupsInstance
-from adisp import adisp_async, adisp_process
+from account_helpers.AccountSettings import ACTIVE_TEST_PARTICIPATION_CONFIRMED, AccountSettings, KNOWN_SELECTOR_BATTLES, LAST_SHOP_ACTION_COUNTER_MODIFICATION, NEW_LOBBY_TAB_COUNTER, NEW_SHOP_TABS, OVERRIDEN_HEADER_COUNTER_ACTION_ALIASES, QUESTS, QUEST_DELTAS, QUEST_DELTAS_COMPLETION, RECRUITS_NOTIFICATIONS, SHOWN_WOT_PLUS_INTRO
 from constants import EPlatoonButtonState, PREBATTLE_TYPE, PREMIUM_TYPE
 from debug_utils import LOG_ERROR
 from exchange.personal_discounts_constants import EXCHANGE_RATE_GOLD_NAME, EXCHANGE_RATE_FREE_XP_NAME
@@ -26,7 +28,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
-from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getComp7BattlesOnlyVehicleTooltipData, getEpicBattlesOnlyVehicleTooltipData, getPreviewTooltipData
+from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getEpicBattlesOnlyVehicleTooltipData, getPreviewTooltipData
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getTabCounter
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyGoldUrl, getBuyPremiumUrl, isSubscriptionEnabled, getShopRootUrl
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl
@@ -43,11 +45,13 @@ from gui.Scaleform.locale.PLATOON import PLATOON
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES, TOOLTIP_TYPES
+from gui.clans.clan_cache import g_clanCache
 from gui.clans.clan_helpers import isClansTabReplaceStrongholds, isStrongholdsEnabled
 from gui.game_control.ServerStats import STATS_TYPE
 from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.impl import backport
+from gui.impl.auxiliary.junk_tankman_helper import JunkTankmanHelper
 from gui.impl.gen import R
 from gui.impl.lobby.exchange.exchange_rates_helper import isGoldExchangeRateDiscountViewed, isExperienceTranslationRateDiscountViewed, setDiscountViewed
 from gui.limited_ui.lui_rules_storage import LUI_RULES
@@ -60,9 +64,9 @@ from gui.prb_control.settings import REQUEST_TYPE
 from gui.server_events import recruit_helper, settings as quest_settings
 from gui.server_events.events_helpers import isDailyQuest
 from gui.shared import event_dispatcher as shared_events, events, g_eventBus
-from gui.clans.clan_cache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import hideWebBrowserOverlay, showActiveTestConfirmDialog, showModeSelectorWindow, showShop, showStorage, showSubscriptionsPage, showWotPlusIntroView, showBarracks, showHangar
+from gui.shared.system_factory import collectLobbyHeaderTabs
 from gui.shared.events import FullscreenModeSelectorEvent, PlatoonDropdownEvent
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
@@ -75,11 +79,10 @@ from gui.tournament.tournament_helpers import showTournaments, isTournamentEnabl
 from helpers import dependency, i18n, isPlayerAccount, time_utils
 from predefined_hosts import PING_STATUSES, g_preDefinedHosts
 from renewable_subscription_common.settings_constants import WotPlusState
-from shared_utils import CONST_CONTAINER, BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IChinaController, IClanNotificationController, IComp7Controller, IEpicBattleMetaGameController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IAchievementsController, IHangarGuiController, IExchangeRatesWithDiscountsProvider
+from skeletons.gui.game_control import IAnonymizerController, IBadgesController, IBattleRoyaleController, IBoostersController, IChinaController, IClanNotificationController, IEpicBattleMetaGameController, IGameSessionController, IIGRController, ILimitedUIController, IMapboxController, IMapsTrainingController, IPlatoonController, IRankedBattlesController, IServerStatsController, ISteamCompletionController, IWalletController, IAchievements20Controller, IAchievementsController, IHangarGuiController, IExchangeRatesWithDiscountsProvider
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader
@@ -93,7 +96,6 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 from uilogging.wot_plus.loggers import WotPlusHeaderLogger
-from gui.impl.auxiliary.junk_tankman_helper import JunkTankmanHelper
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
     from gui.platform.wgnp.steam_account.statuses import SteamAccEmailStatus
@@ -107,6 +109,7 @@ _SHORT_VALUE_THRESHOLD_2 = 10000000
 _SHORT_VALUE_FMT_PATTERN = MENU.HANGAR_HEADER_MILLION
 HEADER_BUTTONS_COUNTERS_CHANGED_EVENT = 'lobbyHeaderButtonsCountersChanged'
 _DASHBOARD_SUPPRESSED_VIEWS = [VIEW_ALIAS.BADGES_PAGE]
+_EXT_FIGHT_BUTTON_TOOLTIP_GETTERS = []
 
 def _getShortCurrencyValue(value, formatter):
     if value >= _SHORT_VALUE_THRESHOLD_2:
@@ -144,6 +147,12 @@ class LobbyHeaderVisibilityAction(Enum):
     ENTER = 0
     EXIT = 1
 
+
+LobbyHeaderTabInfo = namedtuple('LobbyHeaderTabInfo', ('wulfAlias',
+ 'label',
+ 'tooltip',
+ 'showFunction',
+ 'conditionFunction'))
 
 class _DisabledLobbyHeaderViewLifecycleHandler(IViewLifecycleHandler):
 
@@ -288,7 +297,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     __loginManager = dependency.descriptor(ILoginManager)
     wgnpSteamAccCtrl = dependency.descriptor(IWGNPSteamAccRequestController)
     steamRegistrationCtrl = dependency.descriptor(ISteamCompletionController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __achievements20Controller = dependency.descriptor(IAchievements20Controller)
     __limitedUICtrl = dependency.descriptor(ILimitedUIController)
@@ -311,6 +319,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__buttonsToExcludeCached = None
         self._wotPlusUILogger = WotPlusHeaderLogger()
         self.__luiRulesUpdaters = self.__getLuiRulesUpdaters()
+        self.__externalTabs = collectLobbyHeaderTabs()
+        self.__externalTabsWulfToTab = self.__getExternalTabsWulfToTab(self.__externalTabs)
         return
 
     @property
@@ -587,9 +597,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.anonymizerController.onStateChanged += self.__updateAnonymizedState
         self.clanNotificationCtrl.onClanNotificationUpdated += self.__updateStrongholdCounter
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.__updateMapbox
-        self.__comp7Controller.onBanUpdated += self.__updateComp7
-        self.__comp7Controller.onOfflineStatusUpdated += self.__updateComp7
-        self.__comp7Controller.onQualificationStateUpdated += self.__updateComp7
         self.__achievements20Controller.onUpdate += self.__onProfileVisited
         JunkTankmanHelper().onShowNoveltyUpdated += self.__onShowNoveltyUpdated
         self.__advAchmntCtrl.onUnseenAchievementsUpdate += self.__updateUnseenAchievementsCounter
@@ -610,6 +617,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, self.__onCounterChanged, scope=EVENT_BUS_SCOPE.DEFAULT)
         self.addListener(events.ExchangeRatesDiscountsEvent.ON_PERSONAL_DISCOUNT_VIEWED, self.__onPersonalDiscountViewed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyHeaderMenuEvent.DESELECT_HEADER_BUTTONS, self.__deselectHeaderButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.__setCredits)
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setGold)
         g_clientUpdateManager.addCurrencyCallback(Currency.CRYSTAL, self.__setCrystal)
@@ -648,7 +656,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(PlatoonDropdownEvent.NAME, self.__platoonDropdown)
         self.addListener(FullscreenModeSelectorEvent.NAME, self.__onFullScreenModeSelector)
         self._addWGNPListeners()
-        self.addListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         rulesIDs = list(self.__luiRulesUpdaters.keys())
         self.__limitedUICtrl.startObserves(rulesIDs, self.__onLuiRuleCompleted)
@@ -662,6 +669,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          LUI_RULES.PersonalMissionOperations: self.__updateMissionsTabCounter,
          LUI_RULES.storage: self.__updateStorageTabCounter,
          LUI_RULES.AdvancedAchievements: self.__updateProfileTabCounter}
+
+    def __getExternalTabsWulfToTab(self, externalTabs):
+        return {tabInfo.wulfAlias:alias for alias, tabInfo in externalTabs.items()}
 
     def __onLuiRuleCompleted(self, ruleID, *_):
         updater = self.__luiRulesUpdaters.get(ruleID)
@@ -679,6 +689,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(HEADER_BUTTONS_COUNTERS_CHANGED_EVENT, self.__onCounterChanged, scope=EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.ExchangeRatesDiscountsEvent.ON_PERSONAL_DISCOUNT_VIEWED, self.__onPersonalDiscountViewed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyHeaderMenuEvent.DESELECT_HEADER_BUTTONS, self.__deselectHeaderButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.anonymizerController.onStateChanged -= self.__updateAnonymizedState
         self.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         self.gameSession.onPremiumTypeChanged -= self._onPremiumTypeChanged
@@ -706,9 +717,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.badgesController.onUpdated -= self.__updateBadge
         self.boosters.onBoostersDataUpdate -= self.__updateBoosters
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.__updateMapbox
-        self.__comp7Controller.onBanUpdated -= self.__updateComp7
-        self.__comp7Controller.onOfflineStatusUpdated -= self.__updateComp7
-        self.__comp7Controller.onQualificationStateUpdated -= self.__updateComp7
         self.__achievements20Controller.onUpdate -= self.__onProfileVisited
         self.__advAchmntCtrl.onUnseenAchievementsUpdate -= self.__updateUnseenAchievementsCounter
         self.__exchangeRatesProvider.goldToCredits.onUpdated -= self.__onGoldRatesDiscountChanged
@@ -741,7 +749,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(PlatoonDropdownEvent.NAME, self.__platoonDropdown)
         self.removeListener(FullscreenModeSelectorEvent.NAME, self.__onFullScreenModeSelector)
         self._removeWGNPListeners()
-        self.removeListener(events.Comp7Event.OPEN_META, self.__onComp7MetaOpened, scope=EVENT_BUS_SCOPE.LOBBY)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         rulesIDs = list(self.__luiRulesUpdaters.keys())
         self.__limitedUICtrl.stopObserves(rulesIDs, self.__onLuiRuleCompleted)
@@ -785,13 +792,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if len(serverShortName) > _MAX_HEADER_SERVER_NAME_LEN:
             serverShortName = _SERVER_NAME_PREFIX % serverShortName[:_MAX_HEADER_SERVER_NAME_LEN]
         self.as_setServerS(serverShortName, TOOLTIPS_CONSTANTS.SETTINGS_BUTTON, TOOLTIP_TYPES.SPECIAL)
-
-    def __updateComp7(self):
-        self._updatePrebattleControls()
-
-    def __onComp7MetaOpened(self, *_):
-        for alias in self.TABS.ALL():
-            self.as_doDeselectHeaderButtonS(alias)
 
     def __updatePlayerInfoPanel(self, clanInfo, diff=None):
         if not isPlayerAccount():
@@ -1018,6 +1018,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             showBarracks()
         elif alias == self.TABS.HANGAR:
             showHangar()
+        elif alias in self.__externalTabs:
+            self.__externalTabs[alias].showFunction()
         else:
             event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(alias))
             if event is not None:
@@ -1045,8 +1047,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onViewAddedToContainer(self, _, pyEntity):
         if pyEntity.layer is WindowLayer.SUB_VIEW:
-            alias = self._WULF_TO_TAB.get(pyEntity.alias, pyEntity.alias)
-            if alias in self.TABS.ALL():
+            pyAlias = pyEntity.alias
+            alias = self._WULF_TO_TAB.get(pyAlias, self.__externalTabsWulfToTab.get(pyAlias, pyAlias))
+            if alias in self.TABS.ALL() or alias in self.__externalTabs:
                 self.__setCurrentScreen(alias)
             elif self.__currentScreen is not None and alias in self.DESELECT_TAB_ALIASES:
                 self.as_doDeselectHeaderButtonS(self.__currentScreen)
@@ -1128,6 +1131,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__updateAccountAttrs()
             self._updateHangarMenuData()
             return
+
+    def __deselectHeaderButtons(self, *_):
+        for alias in self.TABS.ALL():
+            self.as_doDeselectHeaderButtonS(alias)
 
     def __onToggleVisibilityMenu(self, event):
         state = event.ctx['state']
@@ -1340,6 +1347,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if tournamentsData is not None:
             tabDataProvider.append(tournamentsData)
         tabDataProvider.append(self._updateStrongholdsSelector())
+        for alias, tabInfo in self.__externalTabs.items():
+            if tabInfo.conditionFunction(self):
+                tabDataProvider.extend([{'label': backport.text(tabInfo.label),
+                  'value': alias,
+                  'tooltip': tabInfo.tooltip}])
+
         return tabDataProvider
 
     def _updateHangarMenuData(self):
@@ -1460,7 +1473,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateTabCounter(self.TABS.STRONGHOLD, self.clanNotificationCtrl.newsCounter)
 
     def __updateTabCounter(self, alias, counter=None):
-        if alias not in self.TABS.ALL():
+        if alias not in self.TABS.ALL() and alias not in self.__externalTabs:
             return
         else:
             ruleID = self._TAB_ALIAS_TO_RULE_ID.get(alias)
@@ -1553,7 +1566,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__updateNavButtonsState(not disable)
 
     def __onAccountSettingsChanging(self, key, _):
-        if key == RECRUIT_NOTIFICATIONS:
+        if key == RECRUITS_NOTIFICATIONS:
             self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
 
     def __removeClanIconFromMemory(self):
@@ -1639,15 +1652,23 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 tooltip = makeTooltip(body=backport.text(R.strings.tooltips.hangar.startBtn.vehicleToHeavy.body()))
             elif g_currentVehicle.isOnlyForEpicBattles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
                 tooltip = getEpicBattlesOnlyVehicleTooltipData(pValidation)
-            elif g_currentVehicle.isOnlyForComp7Battles() and (g_currentVehicle.isUnsuitableToQueue() or g_currentVehicle.isDisabledInRent()):
-                tooltip = getComp7BattlesOnlyVehicleTooltipData(pValidation)
-            elif g_currentPreviewVehicle.isPresent():
+            else:
+                tooltip = self.__findExtensionTooltip(pValidation)
+            if tooltip is None and g_currentPreviewVehicle.isPresent():
                 tooltip = getPreviewTooltipData()
         if not tooltip and controlsHelper is not None:
             tooltip, isSpecial = controlsHelper.getFightControlTooltipData(pValidation, isInSquad, self.__isFightBtnDisabled, isNavigationEnabled)
         self.as_setFightBtnTooltipS(tooltip, isSpecial)
         self.as_setFightButtonS(selectedItem.getFightButtonLabel(pFuncState, pInfo))
         self.as_setFightButtonHighlightS(selectedItem.getFightButtonHighlight(isNewbie))
+        return
+
+    def __findExtensionTooltip(self, pValidation):
+        for getter in _EXT_FIGHT_BUTTON_TOOLTIP_GETTERS:
+            tooltip = getter(pValidation)
+            if tooltip is not None:
+                return tooltip
+
         return
 
 

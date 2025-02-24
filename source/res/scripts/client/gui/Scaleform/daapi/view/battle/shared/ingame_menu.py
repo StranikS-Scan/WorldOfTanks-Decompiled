@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ingame_menu.py
-import BigWorld
 import constants
 import BattleReplay
 from adisp import adisp_process
@@ -27,8 +26,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IServerStatsController
 from gui.Scaleform.locale.MENU import MENU
-from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow, showComp7LeaverAliveWindow
-from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from gui.Scaleform.daapi.view.battle.shared.premature_leave import showLeaverAliveWindow, showExitWindow, showLeaverReplayWindow
 
 class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
     serverStats = dependency.descriptor(IServerStatsController)
@@ -152,8 +150,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
 
     @staticmethod
     def _showLeaverAliveWindow(isPlayerIGR):
-        player = BigWorld.player()
-        return showComp7LeaverAliveWindow() if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.COMP7) else showLeaverAliveWindow(isPlayerIGR)
+        return showLeaverAliveWindow(isPlayerIGR)
 
     @staticmethod
     def __isPlayerIGR(playerInfo):

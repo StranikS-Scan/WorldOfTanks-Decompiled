@@ -21,6 +21,16 @@ class OnAppearPrefabSpawnComponent(object):
     prefab = ComponentProperty(type=CGFMetaTypes.STRING, editorName='prefab', value='', annotations={'path': '*.prefab'})
 
 
+@registerComponent
+class SequenceSnapshotComponent(object):
+    domain = CGF.DomainOption.DomainClient
+
+
+@registerComponent
+class SequencePauseComponent(object):
+    domain = CGF.DomainOption.DomainClient
+
+
 @autoregister(presentInAllWorlds=True, domain=CGF.DomainOption.DomainClient)
 class PrefabSpawnerManager(CGF.ComponentManager):
 

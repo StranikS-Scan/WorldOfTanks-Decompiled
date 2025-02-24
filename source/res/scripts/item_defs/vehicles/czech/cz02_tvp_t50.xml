@@ -1135,7 +1135,35 @@
         <slotId>	18000	</slotId>
         <position>	0 0 0	</position>
         <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
         <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.571166 0.250366 -0.817	</position>
+        <rotation>	-0 -0 1.518436	</rotation>
+        <scale>	0.999997 0.999997 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	1.573621 0.25002 -0.817	</position>
+        <rotation>	-0 3.141593 1.518436	</rotation>
+        <scale>	1 1 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	-0.2245 -0.154148 -3.828311	</position>
+        <rotation>	-0 -1.570796 1.570796	</rotation>
+        <scale>	0.999997 0.999997 0.999998	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
       </slot>
     </customizationSlots>
     <customization>
@@ -3896,6 +3924,24 @@
           <clipAngle>	0.32733	</clipAngle>
           <anchorShift>	-0.006165	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.757235 1.035 -0.320222	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.044 0.918 0.890235	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -4808,6 +4854,24 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.32733	</clipAngle>
           <anchorShift>	-0.09	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.485697 0.885433 -1.09	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.11 0.877 0.890235	</position>
+          <rotation>	-0 0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
         </slot>
       </customizationSlots>
       <customization>

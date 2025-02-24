@@ -389,6 +389,8 @@ class BATTLE_RESULTS(object):
     PRESTIGE_TITLE = '#battle_results:prestige/title'
     PRESTIGE_COMMON_DESCRIPTION = '#battle_results:prestige/common/description'
     PRESTIGE_MAX_DESCRIPTION = '#battle_results:prestige/max/description'
+    BATTLERESULT_TEAM_PRESTIGEPOINTS_HEADER = '#battle_results:battleResult/team/prestigePoints/header'
+    BATTLERESULT_TEAM_PRESTIGEPOINTS_BODY = '#battle_results:battleResult/team/prestigePoints/body'
     TEAM_STATS_PARAMETER_SHOTS = '#battle_results:team/stats/parameter/shots'
     TEAM_STATS_PARAMETER_HITS = '#battle_results:team/stats/parameter/hits'
     TEAM_STATS_PARAMETER_EXPLOSIONHITS = '#battle_results:team/stats/parameter/explosionHits'

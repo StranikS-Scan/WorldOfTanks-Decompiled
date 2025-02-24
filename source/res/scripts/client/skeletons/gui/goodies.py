@@ -77,3 +77,9 @@ class IGoodiesCache(IBoostersStateProvider):
 
     def getRecertificationForms(self, criteria=None):
         raise NotImplementedError
+
+    def getMentoringLicense(self, mentoringLicenseID=None, currency=None):
+        raise NotImplementedError
+
+    def getMentoringLicenses(self, criteria=None):
+        raise NotImplementedError

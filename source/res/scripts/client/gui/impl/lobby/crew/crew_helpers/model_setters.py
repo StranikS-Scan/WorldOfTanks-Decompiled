@@ -9,18 +9,22 @@ from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_list_model import CrewSkillListModel
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_model import CrewSkillModel
+from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_progression_model import SkillProgressionModel
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanCardState, TankmanKind, TankmanLocation, TankmanRole
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
 from gui.impl.lobby.crew.dialogs.recruit_window.recruit_dialog_utils import getIconBackground
 from gui.shared.gui_items.Tankman import SKILL_EFFICIENCY_UNTRAINED
+from gui.shared.gui_items.tankman_skill import getTankmanSkill
 from helpers import dependency, time_utils
 from items.tankmen import MAX_SKILLS_EFFICIENCY, MAX_SKILL_LEVEL
 from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.shared import IItemsCache
 from skill_formatters import SkillLvlFormatter
 if TYPE_CHECKING:
+    from typing import Optional, List
+    from frameworks.wulf import Array
     from gui.shared.gui_items.Tankman import Tankman
 BARRACK_RECRUIT_BG_DYN = R.images.gui.maps.icons.tankmen.windows.recruits.barracks
 
@@ -60,7 +64,7 @@ def setTankmanModel(tm, tman, tmanNativeVeh, tmanVeh=None):
         return
 
 
-def setTmanSkillsModel(sm, tman, useOnlyFull=False, possibleSkillsLevels=None, fillBonusSkills=True, isRecruit=False, compVeh=None, skillWrapper=None):
+def setTmanSkillsModel(sm, tman, useOnlyFull=False, possibleSkillsLevels=None, fillBonusSkills=True, isRecruit=False, compVeh=None, customCrewName=''):
     if tman is None:
         sm.setSkillsEfficiency(0)
         sm.getMajorSkills().clear()
@@ -73,7 +77,7 @@ def setTmanSkillsModel(sm, tman, useOnlyFull=False, possibleSkillsLevels=None, f
             sm.setSkillsEfficiency(MAX_SKILLS_EFFICIENCY)
         else:
             sm.setSkillsEfficiency(tman.currentVehicleSkillsEfficiency)
-        setTmanMajorSkillsModel(sm.getMajorSkills(), tman, useOnlyFull, possibleSkillsLevels, skillWrapper, isRecruit=isRecruit)
+        setTmanMajorSkillsModel(sm.getMajorSkills(), tman, useOnlyFull, possibleSkillsLevels, customCrewName, isRecruit)
         if fillBonusSkills:
             setTmanBonusSkillsModel(sm.getBonusSkills(), tman)
         if possibleSkillsLevels is None:
@@ -93,12 +97,12 @@ def setTmanSkillsModel(sm, tman, useOnlyFull=False, possibleSkillsLevels=None, f
     return
 
 
-def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevels=None, skillWrapper=None, isRecruit=False):
+def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevels=None, customCrewName='', isRecruit=False):
     listVM.clear()
     notFullEarnedSkillMdl = None
     for skill in tman.skills:
-        if skillWrapper:
-            skill = skillWrapper(skill.name, skillLevel=skill.level)
+        if customCrewName:
+            skill = getTankmanSkill(skill.name, tman.role, tman, level=skill.level, customCrewName=customCrewName)
         skillVM = getCrewWidgetTmanSkillModelNPS(tman, skill, tman.role)
         if isRecruit:
             skillVM.setIsIrrelevant(False)
@@ -107,7 +111,7 @@ def setTmanMajorSkillsModel(listVM, tman, useOnlyFull=False, possibleSkillsLevel
         notFullEarnedSkillMdl = skillVM
 
     for _ in xrange(tman.newFreeSkillsCount):
-        listVM.addViewModel(getNewSkillCrewWidgetTmanSkillModelNPS(level=100.0))
+        listVM.addViewModel(getNewSkillCrewWidgetTmanSkillModelNPS(MAX_SKILL_LEVEL, True))
 
     if notFullEarnedSkillMdl:
         listVM.addViewModel(notFullEarnedSkillMdl)
@@ -170,14 +174,15 @@ def getCrewWidgetTmanSkillModelNPS(tman, skill, role, level=None):
     skillVM = CrewSkillModel()
     skillLevel = level if level and level > skill.level else skill.level
     skillModelSetup(skillVM, skill=skill, role=role, tankman=tman, skillLevel=skillLevel)
-    skillVM.setCustomName(skill.customName)
+    skillVM.setCustomName(skill.crewCustomName)
     return skillVM
 
 
-def getNewSkillCrewWidgetTmanSkillModelNPS(level=None):
+def getNewSkillCrewWidgetTmanSkillModelNPS(level=None, isZero=False):
     skillVM = CrewSkillModel()
     skillVM.setName(CrewConstants.NEW_SKILL)
     skillVM.setIconName(CrewConstants.NEW_SKILL)
+    skillVM.setIsZero(isZero)
     if level:
         skillVM.setLevel(level)
     return skillVM
@@ -209,9 +214,9 @@ def setRecruitTankmanModel(tm, recruitInfo, specialSoundCtrl=None, useOnlyFullSk
     tm.setHasVoiceover(bool(recruitInfo.getSpecialVoiceTag(specialSoundCtrl)))
     tm.setLocation(TankmanLocation.INBARRACKS)
     tman = recruitInfo.getFakeTankman()
-    tankmanSkill = recruitInfo.getTankmanSkill()
+    customCrewName = recruitInfo.getCrewCustomName()
     skills = tm.skills
-    setTmanSkillsModel(skills, tman, useOnlyFull=useOnlyFullSkills, isRecruit=True, skillWrapper=tankmanSkill)
+    setTmanSkillsModel(skills, tman, useOnlyFull=useOnlyFullSkills, isRecruit=True, customCrewName=customCrewName)
     newSkillsCount, lastSkillLevel = getTmanNewSkillCount(tman, useOnlyFull=useOnlyFullSkills)
     if tman.earnedSkillsCount + newSkillsCount <= 0:
         lastSkillLevel = SkillLvlFormatter()
@@ -229,3 +234,41 @@ def setTankmanRestoreInfo(vm, itemsCache=None):
     vm.setPaidPeriod(billableDays)
     vm.setRecoverPrice(restoreCost.get(restoreCost.getCurrency(), 0))
     vm.setMembersBuffer(restoreLimit)
+
+
+def ifWGMAvailableButtonUpdate(vm, itemsCache, button, checkIsPriceSelected):
+    isWGMAvailable = itemsCache.items.stats.mayConsumeWalletResources
+    priceSelected = vm.getIsPriceSelected() if checkIsPriceSelected else True
+    button.isDisabled = not (priceSelected and isWGMAvailable)
+    vm.getButtons().invalidate()
+
+
+def setSkillProgressionModel(vm, tankman, skillIndex, isZero):
+    currentXp = 0
+    discountXpCost = 0
+    fullPriceXpCost = 0
+    isLocked = False
+    skillProgress = MAX_SKILL_LEVEL if isZero else 0
+    tankmanDescriptor = tankman.descriptor
+    if not isZero:
+        levelIndex = skillIndex - tankman.freeSkillsCount
+        discountXpCost = tankmanDescriptor.skillUpXpCost(levelIndex + 1)
+        fullPriceXpCost = tankmanDescriptor.skillUpXpCost(skillIndex + 1)
+        prevSkillFullXpCost = 0 if not levelIndex else tankmanDescriptor.getXpCostForSkillsLevels(MAX_SKILL_LEVEL, levelIndex)
+        currSkillFullXpCost = tankmanDescriptor.getXpCostForSkillsLevels(MAX_SKILL_LEVEL, levelIndex + 1)
+        if 0 <= skillIndex < len(tankman.skillsLevels):
+            skillProgress = tankman.skillsLevels[skillIndex]
+        else:
+            isLocked = True
+        tankmanTotalXp = tankmanDescriptor.totalXP()
+        if not isLocked and tankmanTotalXp > 0:
+            currentXp = discountXpCost
+            if tankmanTotalXp < currSkillFullXpCost:
+                currentXp = tankmanTotalXp - prevSkillFullXpCost
+    vm.setCurrentXpValue(currentXp)
+    vm.setTotalXpValue(fullPriceXpCost)
+    vm.setSkillProgress(skillProgress)
+    vm.setDiscountValue(discountXpCost)
+    vm.setZeroSkillsCount(tankman.freeSkillsCount)
+    vm.setIsLocked(isLocked)
+    vm.setIsMaxSkillLevel(skillProgress == MAX_SKILL_LEVEL)

@@ -9,7 +9,7 @@ from skeletons.gui.game_control import IPlatoonController
 from frameworks.wulf import ViewSettings
 from gui.impl.pub import ViewImpl
 from gui.impl.lobby.platoon.view.platoon_search_view import SearchView
-from gui.impl.gen.view_models.views.lobby.platoon.platoon_dropdown_model import PlatoonDropdownModel, Type
+from gui.impl.gen.view_models.views.lobby.platoon.platoon_dropdown_model import PlatoonDropdownModel
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_filter_subview import TiersFilterSubview
 from gui.impl.lobby.platoon.view.subview.platoon_tiers_limit_subview import TiersLimitSubview
 from gui.impl.lobby.premacc.squad_bonus_tooltip_content import SquadBonusTooltipContent
@@ -23,13 +23,12 @@ _logger = logging.getLogger(__name__)
 strButtons = R.strings.platoon.buttons
 
 class WelcomeView(ViewImpl):
-    _squadType = Type.RANDOM
     __platoonCtrl = dependency.descriptor(IPlatoonController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     _layoutID = R.views.lobby.platoon.PlatoonDropdown()
 
-    def __init__(self):
-        settings = ViewSettings(layoutID=self._layoutID, model=PlatoonDropdownModel())
+    def __init__(self, layoutID=None):
+        settings = ViewSettings(layoutID=layoutID or self._layoutID, model=PlatoonDropdownModel())
         self.__tiersLimitSubview = TiersLimitSubview()
         self.__tiersLimitSubview.setShowCallback(self.__showSettingsCallback)
         self.__tiersFilterSubview = TiersFilterSubview()
@@ -45,12 +44,11 @@ class WelcomeView(ViewImpl):
         return
 
     def _onLoading(self, *args, **kwargs):
-        self.viewModel.setType(self._squadType)
         self._addListeners()
         self.setChildView(self.__tiersLimitSubview.layoutID, self.__tiersLimitSubview)
         self.setChildView(self.__tiersFilterSubview.layoutID, self.__tiersFilterSubview)
         self._initButtons()
-        self.__setBattleTypeRelatedProps()
+        self._setBattleTypeRelatedProps()
 
     @property
     def viewModel(self):
@@ -58,7 +56,7 @@ class WelcomeView(ViewImpl):
 
     def update(self, updateTiersLimitSubview=True):
         self.__updateFindButton()
-        self.__setBattleTypeRelatedProps()
+        self._setBattleTypeRelatedProps()
         if updateTiersLimitSubview:
             self.__tiersLimitSubview.update()
         self.__tiersFilterSubview.update()
@@ -133,7 +131,7 @@ class WelcomeView(ViewImpl):
         else:
             return SquadBonusTooltipContent(bonusState=getPlatoonBonusState(False)) if contentID == R.views.lobby.premacc.tooltips.SquadBonusTooltip() else super(WelcomeView, self).createToolTipContent(event=event, contentID=contentID)
 
-    def __setBattleTypeRelatedProps(self):
+    def _setBattleTypeRelatedProps(self):
         queueType = self.__platoonCtrl.getQueueType()
         backgrounds = R.images.gui.maps.icons.platoon.dropdown_backgrounds
         battleType = R.strings.menu.headerButtons.battle.types
@@ -149,9 +147,6 @@ class WelcomeView(ViewImpl):
             elif queueType == QUEUE_TYPE.BATTLE_ROYALE:
                 battleTypeStr = battleType.battleRoyale()
                 bgImage = backgrounds.battle_royale()
-            elif queueType == QUEUE_TYPE.COMP7:
-                battleTypeStr = battleType.comp7()
-                bgImage = backgrounds.comp7()
         model.setBattleType(backport.text(battleTypeStr))
         model.setBackgroundImage(backport.image(bgImage))
 

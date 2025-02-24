@@ -26,7 +26,8 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE, checkForTags
-from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME, NO_TANKMAN
+from gui.shared.gui_items.Tankman import Tankman, NO_TANKMAN
+from gui.shared.gui_items.tankman_skill import BROTHERHOOD_SKILL_NAME
 from gui.shared.gui_items.customization.slots import ProjectionDecalSlot, BaseCustomizationSlot, EmblemSlot, AttachmentSlot
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.gui_item import HasStrCD
@@ -38,7 +39,7 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import i18n, time_utils, dependency
 from items import customizations, filterIntCDsByItemType, getTypeInfoByName, getTypeOfCompactDescr, tankmen, vehicles
 from items.components.c11n_constants import HIDDEN_CAMOUFLAGE_ID, EMPTY_ITEM_ID, ApplyArea, ItemTags, SeasonType
-from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL
+from items.tankmen import MAX_SKILLS_EFFICIENCY_XP, MAX_SKILL_LEVEL, NO_SLOT
 from items.vehicles import getItemByCompactDescr, getVehicleType
 from nation_change.nation_change_helpers import hasNationGroup, iterVehTypeCDsInNationGroup
 from post_progression_common import TankSetupGroupsId
@@ -1504,6 +1505,10 @@ class Vehicle(FittingItem):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER)
 
     @property
+    def isAutoReturn(self):
+        return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_RETURN) and self._lastCrew is not None
+
+    @property
     def isFavorite(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.GROUP_0)
 
@@ -1587,10 +1592,10 @@ class Vehicle(FittingItem):
         return not self.isOnlyForEventBattles and not self.isInBattle and self.isInInventory and not self.isLocked and not locked and not self.isBroken and not self.isOutfitLocked and not self.isDisabled
 
     def isAutoLoadFull(self):
-        return self.shells.installed == self.shells.layout if self.isAutoLoad else True
+        return self.shells.installed.getStorage == self.shells.layout.getStorage if self.isAutoLoad else True
 
     def isAutoEquipFull(self):
-        return self.consumables.installed == self.consumables.layout if self.isAutoEquip else True
+        return self.consumables.installed.getStorage == self.consumables.layout.getStorage if self.isAutoEquip else True
 
     def mayPurchase(self, money):
         if self.isOnlyForEventBattles:
@@ -2226,3 +2231,12 @@ def getBattlesLeft(vehicle):
 
 def getLowEfficiencyCrew(vehicle):
     return [ (slotID, tankman.invID) for slotID, tankman in vehicle.crew if tankman and not tankman.isMaxCurrentVehicleSkillsEfficiency ]
+
+
+def getTankmanIndex(vehicle, slotIdx):
+    crew = vehicle.crew
+    for index, slot in enumerate(crew):
+        if slot and slot[0] == slotIdx:
+            return index
+
+    return NO_SLOT

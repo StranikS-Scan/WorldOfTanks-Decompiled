@@ -30,9 +30,10 @@ class DecalMap(object):
         for tsName, tset in config['textureSets'].iteritems():
             self.__textureSets[tsName] = {}
             for mName, material in tset.iteritems():
-                self.__textureSets[tsName][mName] = [ self.__texMap[texName] for texName in material ]
+                self.__textureSets[tsName][mName] = [ (self.__texMap[texName] if texName is not None else None) for texName in material ]
 
         self._initGroups(config)
+        return
 
     def _initGroups(self, config, scaleFactor=1.0):
         if not BigWorld.isDynamicDecalEnabled():

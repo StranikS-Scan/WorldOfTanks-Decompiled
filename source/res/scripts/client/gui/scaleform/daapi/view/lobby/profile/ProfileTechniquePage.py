@@ -62,7 +62,7 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
         storedData['isInHangarSelected'] = value
         AccountSettings.setFilter(storageId, storedData)
         if self._data is not None:
-            self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(self._data), '', self.getEmptyScreenLabel())
+            self.as_responseDossierS(self._battlesType, self._getTechniqueListVehicles(self._data), '', self._getEmptyScreenLabel())
         return
 
     def requestData(self, vehicleId):

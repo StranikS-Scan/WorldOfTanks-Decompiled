@@ -14,7 +14,6 @@ from gui.prb_control.entities.random.pre_queue.entity import RandomEntity, Rando
 from gui.prb_control.entities.ranked.pre_queue.entity import RankedEntity, RankedEntryPoint
 from gui.prb_control.entities.mapbox.pre_queue.entity import MapboxEntity, MapboxEntryPoint
 from gui.prb_control.entities.event.pre_queue.entity import EventBattleEntity, EventBattleEntryPoint
-from gui.prb_control.entities.comp7.pre_queue.entity import Comp7Entity, Comp7EntryPoint
 from gui.prb_control.items import FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG as _FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -25,14 +24,12 @@ registerQueueEntity(QUEUE_TYPE.RANKED, RankedEntity)
 registerQueueEntity(QUEUE_TYPE.MAPBOX, MapboxEntity)
 registerQueueEntity(QUEUE_TYPE.MAPS_TRAINING, MapsTrainingEntity)
 registerQueueEntity(QUEUE_TYPE.EVENT_BATTLES, EventBattleEntity)
-registerQueueEntity(QUEUE_TYPE.COMP7, Comp7Entity)
 registerQueueEntity(QUEUE_TYPE.WINBACK, WinbackEntity)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANDOM, RandomEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.RANKED, RankedEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPBOX, MapboxEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.MAPS_TRAINING, MapsTrainingEntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.EVENT_BATTLE, EventBattleEntryPoint)
-registerEntryPoint(PREBATTLE_ACTION_NAME.COMP7, Comp7EntryPoint)
 registerEntryPoint(PREBATTLE_ACTION_NAME.WINBACK, WinbackEntryPoint)
 
 class PreQueueFactory(ControlFactory):
@@ -94,8 +91,8 @@ class PreQueueFactory(ControlFactory):
             return EventBattleEntity()
         elif self.funRandomStorage is not None and self.funRandomStorage.isModeSelected():
             return self.__createByQueueType(QUEUE_TYPE.FUN_RANDOM)
-        elif self.comp7Storage.isModeSelected():
-            return Comp7Entity()
+        elif self.comp7Storage is not None and self.comp7Storage.isModeSelected():
+            return self.__createByQueueType(QUEUE_TYPE.COMP7)
         else:
             lastBattleQueueType = self.recentPrbStorage.queueType
             if lastBattleQueueType == QUEUE_TYPE.WINBACK and not self.winbackStorage.isModeAvailable():

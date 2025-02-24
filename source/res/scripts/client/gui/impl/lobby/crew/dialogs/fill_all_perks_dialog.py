@@ -12,8 +12,6 @@ from items.components.skills_constants import ORDERED_ROLES
 from items.tankmen_cfg import getAutoFillConfig
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew_nps.loggers import CrewNpsDialogLogger
-from uilogging.crew_nps.logging_constants import CrewNpsDialogKeys, CrewNpsViewKeys
 
 class FillAllPerksDialog(BaseCrewDialogTemplateWithBlurView):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -23,9 +21,6 @@ class FillAllPerksDialog(BaseCrewDialogTemplateWithBlurView):
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, **kwargs):
-        kwargs.setdefault('parentViewKey', CrewNpsViewKeys.BARRACKS)
-        kwargs.setdefault('loggingKey', CrewNpsDialogKeys.FILL_ALL_PERKS)
-        kwargs.setdefault('loggerClass', CrewNpsDialogLogger)
         super(FillAllPerksDialog, self).__init__(**kwargs)
         self.__appliedForBarracks = False
         self.__toolTipMgr = self.__appLoader.getApp().getToolTipMgr()
@@ -39,7 +34,8 @@ class FillAllPerksDialog(BaseCrewDialogTemplateWithBlurView):
             tooltipId = event.getArgument('tooltipId')
             if tooltipId == TooltipConstants.SKILL:
                 skillName = str(event.getArgument('skillName'))
-                args = [skillName, None, None]
+                roleName = str(event.getArgument('roleName'))
+                args = [skillName, roleName, None]
                 self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(FillAllPerksDialog, self).createToolTip(event)

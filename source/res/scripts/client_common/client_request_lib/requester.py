@@ -424,6 +424,21 @@ class ClanSupplyAccessor(BaseAccessor):
         return self._data_source.purchase_progression_stage(callback, region_number, expected_price)
 
 
+class ServerReplaysAccessor(BaseAccessor):
+
+    def get_best_replays(self, callback, *args, **kwargs):
+        return self._data_source.get_best_replays(callback, *args, **kwargs)
+
+    def get_top_replays(self, callback, *args, **kwargs):
+        return self._data_source.get_top_replays(callback, *args, **kwargs)
+
+    def get_replay_link(self, callback, *args, **kwargs):
+        return self._data_source.get_replay_link(callback, *args, **kwargs)
+
+    def post_find_replay(self, callback, *args, **kwargs):
+        return self._data_source.post_find_replay(callback, *args, **kwargs)
+
+
 class Requester(object):
     available_data_sources = {'stagings': StagingDataAccessor,
      'fake': FakeDataAccessor,
@@ -447,6 +462,7 @@ class Requester(object):
     uilogging = RequestDescriptor(UILoggingAccessor)
     wot_shop = RequestDescriptor(WotShopAccessor)
     clan_supply = RequestDescriptor(ClanSupplyAccessor)
+    server_replays = RequestDescriptor(ServerReplaysAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):

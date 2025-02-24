@@ -31,6 +31,7 @@ class ShopLogItemStates(Enum):
     WITHOUT_CREW = 'without_crew'
     WITH_SLOT = 'with_slot'
     WITH_AMMO = 'with_ammo'
+    WITH_EQUIPMENT = 'with_equipment'
 
 
 class ShopCloseItemStates(Enum):

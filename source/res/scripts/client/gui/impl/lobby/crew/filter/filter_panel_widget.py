@@ -17,13 +17,13 @@ if typing.TYPE_CHECKING:
 
 class FilterPanelWidget(ViewImpl):
     LAYOUT_ID = R.views.lobby.crew.widgets.FilterPanelWidget
-    __slots__ = ('__state', '__mainFilterSettings', '__popoverTitle', '__isSearchEnabled', '__hasVehicleFilter', '__searchString', '__popoverGroupSettings', '__amountInfo', '__title', '__panelType', '__popoverTooltipHeader', '__popoverTooltipBody', '__searchTooltipBody', '__searchTooltipHeader', '__searchPlaceholder', '__hasDiscountAlert', '__popoverView', 'onPopoverTooltipCreated')
+    __slots__ = ('__state', '__mainFilterSettings', '__popoverTitle', '__isSearchEnabled', '__showResetBtn', '__searchString', '__popoverGroupSettings', '__amountInfo', '__title', '__panelType', '__popoverTooltipHeader', '__popoverTooltipBody', '__searchTooltipBody', '__searchTooltipHeader', '__searchPlaceholder', '__hasDiscountAlert', '__popoverView', 'onPopoverTooltipCreated')
 
     def __init__(self, mainFilterSettings, popoverGroupSettings, popoverTitle, state, **kwargs):
         settings = ViewSettings(self.LAYOUT_ID(), flags=ViewFlags.LOBBY_SUB_VIEW, model=FilterPanelWidgetModel())
         self.__state = state
         self.__isSearchEnabled = kwargs.get('isSearchEnabled', False)
-        self.__hasVehicleFilter = kwargs.get('hasVehicleFilter', False)
+        self.__showResetBtn = kwargs.get('showResetBtn', True)
         self.__mainFilterSettings = mainFilterSettings
         self.__popoverGroupSettings = popoverGroupSettings
         self.__popoverTitle = popoverTitle
@@ -92,7 +92,7 @@ class FilterPanelWidget(ViewImpl):
 
     def createPopOver(self, event):
         if event.contentID == R.views.lobby.crew.popovers.FilterPopoverView():
-            content = FilterPopoverView(self.__popoverTitle, self.__popoverGroupSettings, self.__onPopoverStateUpdated, self.__state, self.__hasVehicleFilter, self.hasAppliedFilters)
+            content = FilterPopoverView(self.__popoverTitle, self.__popoverGroupSettings, self.__onPopoverStateUpdated, self.__state, self.__showResetBtn, self.hasAppliedFilters)
             window = PopOverWindow(event, content, self.getParentWindow(), WindowLayer.TOP_WINDOW)
             window.onStatusChanged += self.__onPopoverStatusChanged
             window.load()

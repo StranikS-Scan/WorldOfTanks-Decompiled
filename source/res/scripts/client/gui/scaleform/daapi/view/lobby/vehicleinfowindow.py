@@ -10,8 +10,8 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.shared.formatters import getRoleTextWithLabel
 from gui.shared.items_parameters import formatters
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, SHOT_DISPERSION_ANGLE, AVG_DAMAGE_PER_SECOND, CONTINUOUS_SHOTS_PER_MINUTE, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, RELOAD_TIME_SECS_PROP_NAME, TWIN_GUN_RELOAD_TIME
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import i18n, dependency
-from items import tankmen
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from nation_change_helpers.client_nation_change_helper import getChangeNationTooltip
@@ -83,7 +83,6 @@ class VehicleInfoWindow(VehicleInfoMeta):
         else:
             params = vehicle.getParams()
             tankmenParams = list()
-            skillsConfig = tankmen.getSkillsConfig()
             for slotIdx, tankman in vehicle.crew:
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
                 tankmanLabel = ''
@@ -93,7 +92,7 @@ class VehicleInfoWindow(VehicleInfoMeta):
                         skinItem = self._itemsCache.items.getCrewSkin(tankman.skinID)
                         lastUserName = i18n.makeString(skinItem.getLastName())
                     tankmanLabel = '%s %s' % (tankman.rankUserName, lastUserName)
-                tankmenParams.append({'tankmanType': i18n.convert(skillsConfig.getSkill(role).userString),
+                tankmenParams.append({'tankmanType': getRoleUserName(role),
                  'value': tankmanLabel})
 
             roleStr = getRoleTextWithLabel(vehicle.role, vehicle.roleLabel)

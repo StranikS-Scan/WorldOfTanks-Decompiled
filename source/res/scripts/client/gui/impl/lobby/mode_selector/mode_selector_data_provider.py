@@ -15,7 +15,6 @@ from gui.impl.lobby.mode_selector.items.spec_mode_selector_item import SpecModeS
 from gui.impl.lobby.mode_selector.items.battle_royale_mode_selector_item import BattleRoyaleModeSelectorItem
 from gui.impl.lobby.mode_selector.items.strongholds_mode_selector_item import StrongholdsModeSelectorItem
 from gui.impl.lobby.mode_selector.items.trainings_mode_selector_item import TrainingsModeSelectorItem
-from gui.impl.lobby.mode_selector.items.comp7_mode_selector_item import Comp7ModeSelectorItem
 from gui.impl.lobby.mode_selector.items.winback_mode_selector_item import WinbackModeSelectorItem
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
@@ -33,7 +32,6 @@ registerModeSelectorItem(PREBATTLE_ACTION_NAME.TRAININGS_LIST, TrainingsModeSele
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.MAPBOX, MapboxModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.EPIC, EpicModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.BATTLE_ROYALE, BattleRoyaleModeSelectorItem)
-registerModeSelectorItem(PREBATTLE_ACTION_NAME.COMP7, Comp7ModeSelectorItem)
 registerModeSelectorItem(PREBATTLE_ACTION_NAME.WINBACK, WinbackModeSelectorItem)
 
 class ModeSelectorDataProvider(IGlobalListener):

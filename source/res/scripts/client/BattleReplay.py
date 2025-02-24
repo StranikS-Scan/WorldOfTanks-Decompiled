@@ -24,11 +24,11 @@ from AvatarInfo import AvatarInfo
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui import GUI_CTRL_MODE_FLAG
-from gui.shared.system_factory import registerReplayModeTag, collectReplayModeTag
+from gui.shared.system_factory import collectReplayModeTag
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
-from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, ARENA_GUI_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
+from constants import ARENA_PERIOD, ARENA_BONUS_TYPE, INBATTLE_CONFIGS, NULL_ENTITY_ID
 from helpers import dependency
 from gui.app_loader import settings
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -63,7 +63,6 @@ _IGNORED_SWITCHING_CTRL_MODES = (CTRL_MODE_NAME.SNIPER,
  CTRL_MODE_NAME.MAP_CASE_EPIC,
  CTRL_MODE_NAME.MAP_CASE_ARCADE_EPIC_MINEFIELD,
  CTRL_MODE_NAME.TWIN_GUN)
-registerReplayModeTag(ARENA_GUI_TYPE.COMP7, 'Onslaught')
 
 class CallbackDataNames(object):
     APPLY_ZOOM = 'applyZoom'
@@ -207,6 +206,7 @@ class BattleReplay(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
     appLoader = dependency.descriptor(IAppLoader)
+    predefinedVehicleID = 0
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -783,7 +783,9 @@ class BattleReplay(object):
                     self.bindToVehicleForServerSideReplay(player.playerVehicleID)
                     player.updateVehicleHealth(player.playerVehicleID, 0, 0, 1, 0)
                     if otherVehicles:
-                        if self.__lastObservedVehicleID not in BigWorld.entities.keys():
+                        if BattleReplay.predefinedVehicleID in BigWorld.entities.keys():
+                            self.bindToVehicleForServerSideReplay(BattleReplay.predefinedVehicleID)
+                        elif self.predefinedVehicleID not in BigWorld.entities.keys():
                             self.bindToVehicleForServerSideReplay(otherVehicles[-1].id)
                         else:
                             self.bindToVehicleForServerSideReplay(self.__lastObservedVehicleID)
@@ -831,6 +833,8 @@ class BattleReplay(object):
          'regionCode': constants.AUTH_REALM,
          'serverSettings': self.__serverSettings,
          'hasMods': self.__replayCtrl.hasMods}
+        if not BigWorld.IS_CONSUMER_CLIENT_BUILD:
+            arenaInfo['branchURL'], arenaInfo['lastChangedRevision'] = self.__getBranchAndRevision()
         self.__replayCtrl.setArenaInfoStr(json.dumps(_JSON_Encode(arenaInfo)))
         self.__replayCtrl.recPlayerVehicleName = vehicleName
         self.__replayCtrl.recMapName = arenaName

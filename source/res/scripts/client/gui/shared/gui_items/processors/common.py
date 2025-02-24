@@ -2,20 +2,18 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import logging
 import copy
-from string import lower
 import time
 import BigWorld
 from BWUtil import AsyncReturn
 from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
 from exchange.personal_discounts_helper import getDiscountsRequiredForExchange
 from gui import SystemMessages
+from gui.customization.shared import validateOutfitComponent
 from gui.game_control.exchange_rates_with_discounts import getCurrentTime
 from gui.impl.lobby.exchange.exchange_rates_helper import createSystemExchangeNotification
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.notifications import NotificationPriorityLevel
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
-from items.components.c11n_components import getVehicleAttachmentSlotParams
 from skeletons.gui.shared import IItemsCache
 from gui.impl.gen import R
 from gui.impl import backport
@@ -178,38 +176,10 @@ class OutfitApplier(Processor):
         requestData = []
         for outfit, season in self.outfitData:
             component = outfit.pack()
-            self.__validateOutfitComponent(self.vehicle.descriptor, component)
+            validateOutfitComponent(self.vehicle.descriptor, component)
             requestData.append((component.makeCompDescr(), season))
 
         BigWorld.player().shop.buyAndEquipOutfit(self.vehicle.invID, requestData, lambda code: self._response(code, callback))
-
-    def __validateOutfitComponent(self, vehicleDescr, outfitComponent):
-        for itemType in CustomizationType.STYLE_ONLY_RANGE:
-            typeName = lower(CustomizationTypeNames[itemType])
-            componentsAttrName = '{}s'.format(typeName)
-            itemsComponents = getattr(outfitComponent, componentsAttrName, None)
-            if itemsComponents:
-                _logger.error('StyleOnly items cannot be installed manually: itemType=[%s]; components=[%s].Forbidden components removed.', typeName, itemsComponents)
-                itemsComponents = []
-            setattr(outfitComponent, componentsAttrName, itemsComponents)
-
-        camouflages = []
-        for camoComponent in outfitComponent.camouflages:
-            if camoComponent.id != HIDDEN_CAMOUFLAGE_ID:
-                camouflages.append(camoComponent)
-            _logger.error('Hidden Camouflage cannot be installed manually. %s removed.', camoComponent)
-
-        outfitComponent.camouflages = camouflages
-        attachments = []
-        for attachment in outfitComponent.attachments:
-            slotId = attachment.slotId
-            slotParams = getVehicleAttachmentSlotParams(vehicleDescr, slotId)
-            if not slotParams.hiddenForUser:
-                attachments.append(attachment)
-            _logger.error('Hidden Attachment cannot be installed manually. %s removed.', attachment)
-
-        outfitComponent.attachments = attachments
-        return
 
 
 class CustomizationsBuyer(Processor):

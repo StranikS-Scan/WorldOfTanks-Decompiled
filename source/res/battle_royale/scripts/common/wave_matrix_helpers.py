@@ -3,7 +3,7 @@
 import heapq
 import random
 from math import sqrt
-from death_zones_helpers import zoneIdFrom, idxFrom
+from death_zones_helpers import zoneIdFrom, idxFrom, getZoneCenterFromIdFor
 from debug_utils import LOG_DEBUG_DEV
 
 class WaveMatrix(object):
@@ -61,6 +61,13 @@ class WaveMatrix(object):
     def randomSafeCell(self):
         idx = heapq.nsmallest(1, random.sample(xrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])[0]
         return idxFrom(idx, self.size)
+
+    def randomNSafeCells(self, arenaTypeID, cellCount):
+        safeCells = heapq.nsmallest(cellCount, random.sample(xrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])
+        for idx, safeCell in enumerate(safeCells):
+            safeCells[idx] = getZoneCenterFromIdFor(self.size, arenaTypeID, safeCell)
+
+        return safeCells
 
 
 def createCenterWaweMatrix(weight):

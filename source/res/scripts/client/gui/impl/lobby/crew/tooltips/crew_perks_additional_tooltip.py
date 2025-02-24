@@ -5,27 +5,31 @@ from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import BoosterType
+from gui.impl.lobby.crew.crew_helpers.model_setters import setSkillProgressionModel
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Tankman import getTankmanSkill, isSkillLearnt, SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
+from gui.shared.gui_items.Tankman import isSkillLearnt, SKILL_EFFICIENCY_UNTRAINED, getBattleBooster
+from gui.shared.gui_items.tankman_skill import getTankmanSkill
 from gui.shared.tooltips.advanced import SKILL_MOVIES
 from helpers import dependency
 from items.components import perks_constants
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Tankman import Tankman, TankmanSkill
+    from gui.shared.gui_items.Tankman import Tankman
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewPerksAdditionalTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillBooster')
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillBooster', '_skillIdx')
 
-    def __init__(self, skillName=None, tankmanId=None):
+    def __init__(self, skillName, skillRole, tankmanId=None, skillIdx=-1):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksAdditionalTooltip())
         settings.model = CrewPerksAdditionalTooltipModel()
         self._skillName = skillName
         self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
         self._tankmanVehicle = self._getVehicle()
-        self._skill = getTankmanSkill(self._skillName, tankman=self._tankman)
+        self._skill = getTankmanSkill(self._skillName, skillRole, tankman=self._tankman)
+        self._skillIdx = skillIdx
         self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
         super(CrewPerksAdditionalTooltip, self).__init__(settings)
         return
@@ -51,6 +55,11 @@ class CrewPerksAdditionalTooltip(ViewImpl):
             isDisabled = self._tankman and self._tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED and self._getBoosterType() == BoosterType.NONE
             vm.setIsDisabled(isDisabled)
             vm.setIsIrrelevant(self._isIrrelevant())
+            if self._skillIdx > -1:
+                isZero = self._skill.name in self._tankman.freeSkillsNames
+                if self._skill.skillRole == self._tankman.role and not isZero:
+                    vm.setShowSkillProgression(True)
+                    setSkillProgressionModel(vm=vm.skillProgression, tankman=self._tankman, skillIndex=self._skillIdx, isZero=isZero)
         return
 
     def _getVehicle(self):
@@ -67,13 +76,4 @@ class CrewPerksAdditionalTooltip(ViewImpl):
         return BoosterType.NONE
 
     def _isIrrelevant(self):
-        if not self._tankman:
-            return False
-        role = self._tankman.role
-        for bonusRole, bonusSkills in self._tankman.bonusSkills.iteritems():
-            for bonusSkill in bonusSkills:
-                if bonusSkill and self._skill.name == bonusSkill.name:
-                    role = bonusRole
-                    break
-
-        return not self._skill.isEnable or not self._skill.isRelevantForRole(role)
+        return False if not self._tankman else not self._skill.isEnable or not self._skill.isRelevant

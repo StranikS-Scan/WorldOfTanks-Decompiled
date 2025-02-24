@@ -11,6 +11,7 @@ class CURRENCIES_CONSTANTS(object):
     XP_COST = 'xp'
     FREE_XP = 'freeXP'
     BRCOIN = 'brcoin'
+    STPCOIN = 'stpcoin'
     EQUIP_COIN = 'equipCoin'
     ERROR = 'error'
     WDR_COIN = 'wdrcoin'

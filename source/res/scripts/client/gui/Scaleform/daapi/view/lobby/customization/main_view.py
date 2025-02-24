@@ -210,6 +210,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.__viewCtx = ctx or {}
         self.__initAnchorsPositionsCallback = None
         self.__selectedSlot = C11nId()
+        self.__onVehicleLoadFinishedEvent = Event()
         self.__locateCameraToStyleInfo = False
         self.__carouselArrowsHintShown = False
         self.__billPopoverButtonsCallbacks = {BillPopoverButtons.CUSTOMIZATION_CLEAR: self.__onCustomizationClear,
@@ -276,6 +277,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         entity = self.hangarSpace.getVehicleEntity()
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
+        self.__onVehicleLoadFinishedEvent.clear()
 
     def __onVehicleChanged(self):
         self.__closed = False
@@ -297,7 +299,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
 
     def __onVehicleLoadFinished(self):
         self.__onVehicleLoadFinishedEvent()
-        self.__onVehicleLoadFinishedEvent = Event()
+        self.__onVehicleLoadFinishedEvent.clear()
         if self.__ctx.c11nCameraManager is None:
             _logger.warning('Missing customization camera manager')
             return
@@ -591,7 +593,10 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
             return
         else:
             entity = self.hangarSpace.getVehicleEntity()
-            if entity is None or entity.appearance is None or not entity.isVehicleLoaded:
+            if entity is None or not entity.isVehicleLoaded:
+                self.__onVehicleLoadFinishedEvent += lambda : self.__locateCameraOnAnchor(slotId, forceRotate)
+                return
+            if entity.appearance is None:
                 return
             self.__updateAnchorsData()
             anchorParams = self.__ctx.mode.getAnchorParams(slotId)
@@ -787,7 +792,6 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         self.__setHeaderInitData()
         self.__setSeasonData()
         self.__ctx.refreshOutfit()
-        self.__onVehicleLoadFinishedEvent = Event()
         self.as_selectSeasonS(SEASON_TYPE_TO_IDX[self.__ctx.season])
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True,
          'setIdle': True,
@@ -828,6 +832,7 @@ class MainView(LobbySubView, CustomizationMainViewMeta, LobbyHeaderVisibility):
         if entity and entity.appearance:
             entity.appearance.loadState.unsubscribe(self.__onVehicleLoadFinished, self.__onVehicleLoadStarted)
             entity.appearance.turretRotator.onTurretRotated -= self.__onTurretAndGunRotated
+        self.__onVehicleLoadFinishedEvent = None
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
         self.resumeLobbyHeader(self.key)
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,

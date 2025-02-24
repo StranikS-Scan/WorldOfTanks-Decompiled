@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/status_notifications/components.py
 import logging
-from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES
 _logger = logging.getLogger(__name__)
 
 class StatusNotificationContainer(object):
@@ -27,27 +26,6 @@ class StatusNotificationContainer(object):
 
     def __onItemUpdated(self):
         self.__updateCallback(self.getItemsData())
-
-
-class Comp7StatusNotificationContainer(StatusNotificationContainer):
-    _COMP7_TIMER_ROLE_EFFECTS_PRIORITY = (BATTLE_NOTIFICATIONS_TIMER_TYPES.STUN, BATTLE_NOTIFICATIONS_TIMER_TYPES.COMP7_AOE_HEAL, BATTLE_NOTIFICATIONS_TIMER_TYPES.COMP7_AOE_INSPIRE)
-
-    def getItemsData(self):
-        items = [ item for item in self._items if item.isVisible() ]
-        items.sort(key=self.typeIDPriority)
-        return [ item.getVO() for item in items ]
-
-    def typeIDPriority(self, item):
-        typeID = item.getViewTypeID()
-        if typeID == StatusNotificationsGroup.GROUP_VIEW_ITEM_ID:
-            return -3
-        aoeTimer = typeID in (BATTLE_NOTIFICATIONS_TIMER_TYPES.COMP7_AOE_HEAL, BATTLE_NOTIFICATIONS_TIMER_TYPES.COMP7_AOE_INSPIRE)
-        if aoeTimer and item.isSourceVehicle():
-            return -2
-        try:
-            return self._COMP7_TIMER_ROLE_EFFECTS_PRIORITY.index(typeID)
-        except ValueError:
-            return -1
 
 
 class StatusNotificationItem(object):

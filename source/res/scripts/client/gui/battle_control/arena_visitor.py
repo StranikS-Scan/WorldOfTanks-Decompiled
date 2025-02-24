@@ -313,12 +313,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isStrongholdRange(self):
         return self._guiType in _GUI_TYPE.STRONGHOLD_RANGE
 
-    def isComp7Battle(self):
-        return self._guiType == _GUI_TYPE.COMP7
-
-    def isComp7Training(self):
-        return self._guiType == _GUI_TYPE.TRAINING_COMP7
-
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 

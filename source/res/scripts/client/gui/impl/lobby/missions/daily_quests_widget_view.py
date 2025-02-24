@@ -20,7 +20,6 @@ from gui.shared.events import LobbySimpleEvent
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.server_events.events_helpers import dailyQuestsSortFunc, EventInfoModel
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
@@ -43,10 +42,9 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher, IGlobalListe
     __slots__ = ('__parentId', '__tooltipEnabled', '__layout', '__visitedQuests', '__markVisitedCallbackID')
     eventsCache = dependency.descriptor(IEventsCache)
     __gui = dependency.descriptor(IGuiLoader)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
 
-    def __init__(self):
-        settings = ViewSettings(R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.VIEW, DailyQuestsWidgetViewModel())
+    def __init__(self, layoutID=None, model=None):
+        settings = ViewSettings(layoutID or R.views.lobby.missions.DailyQuestsWidget(), ViewFlags.VIEW, (model or DailyQuestsWidgetViewModel)())
         super(DailyQuestsWidgetView, self).__init__(settings)
         self.__parentId = None
         self.__tooltipEnabled = True
@@ -121,7 +119,6 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher, IGlobalListe
         else:
             with self.getViewModel().transaction() as tx:
                 tx.setCountdown(newCountdownVal)
-                tx.setIsComp7Hangar(False)
                 modelQuests = tx.getQuests()
                 modelQuests.clear()
                 modelQuests.reserve(len(quests))

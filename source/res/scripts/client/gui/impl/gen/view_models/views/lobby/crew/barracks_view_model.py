@@ -6,9 +6,9 @@ from gui.impl.gen.view_models.views.lobby.crew.common.range_model import RangeMo
 from gui.impl.gen.view_models.views.lobby.crew.tankman_model import TankmanModel
 
 class BarracksViewModel(ViewModel):
-    __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar')
+    __slots__ = ('onResetFilters', 'onBuyBerth', 'onTankmanSelected', 'onTankmanRecruit', 'onTankmanDismiss', 'onPlayTankmanVoiceover', 'onTankmanRestore', 'onLoadCards', 'showHangar', 'onNewTankmanHovered')
 
-    def __init__(self, properties=7, commands=9):
+    def __init__(self, properties=7, commands=10):
         super(BarracksViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -77,3 +77,4 @@ class BarracksViewModel(ViewModel):
         self.onTankmanRestore = self._addCommand('onTankmanRestore')
         self.onLoadCards = self._addCommand('onLoadCards')
         self.showHangar = self._addCommand('showHangar')
+        self.onNewTankmanHovered = self._addCommand('onNewTankmanHovered')

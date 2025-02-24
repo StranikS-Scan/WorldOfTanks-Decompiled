@@ -4966,6 +4966,26 @@
     <historical>	1	</historical>
     <priceGroup>	emblems 50g notInShop	</priceGroup>
     <vehicleFilter>
+      <exclude>
+        <vehicles>	usa:A174_T57_58_Rush_Ep1	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1131	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_860.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_860	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	onslaught_spring	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <vehicleFilter>
       <include>
         <levels>	8 9 10	</levels>
       </include>

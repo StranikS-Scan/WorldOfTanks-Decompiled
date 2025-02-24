@@ -24,8 +24,7 @@ def getContextMenuHandlers():
     return ((CONTEXT_MENU_HANDLER_TYPE.BATTLE_RESULTS_USER, user_cm_handlers.UserVehicleCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.BASE_USER, user_cm_handlers.BaseUserCMHandler),
      (CONTEXT_MENU_HANDLER_TYPE.UNIT_USER, UnitUserCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler),
-     (CONTEXT_MENU_HANDLER_TYPE.COMP_LEADERBOARD_USER, user_cm_handlers.Comp7LeaderboardCMHandler))
+     (CONTEXT_MENU_HANDLER_TYPE.CUSTOM_USER, user_cm_handlers.CustomUserCMHandler))
 
 
 def getViewSettings():
@@ -33,7 +32,7 @@ def getViewSettings():
     from gui.impl.lobby.battle_pass.battle_pass_browser_view import BattlePassBrowserView
     from gui.impl.lobby.battle_pass.battle_pass_video_browser_view import BattlePassVideoBrowserView
     from gui.impl.lobby.blueprints.blueprints_exchange_view import BlueprintsExchangeView
-    from gui.impl.lobby.lootbox_system.intro_browser_view import LootBoxSystemIntroBrowserView
+    from gui.impl.lobby.lootbox_system.base.intro_browser_view import LootBoxSystemIntroBrowserView
     from gui.impl.lobby.resource_well.resource_well_browser_view import ResourceWellBrowserView
     from gui.Scaleform.daapi.view.battle_results_window import BattleResultsWindow
     from gui.Scaleform.daapi.view.dialogs.CheckBoxDialog import CheckBoxDialog

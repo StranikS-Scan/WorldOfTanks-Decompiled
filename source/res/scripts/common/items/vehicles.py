@@ -14,7 +14,7 @@ import persistent_data_cache_common as pdc
 from Math import Vector2, Vector3
 from backports.functools_lru_cache import lru_cache
 from collections import namedtuple, defaultdict
-from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, CHANCE_TO_HIT_SUFFIX_FACTOR, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, SHELL_MECHANICS_TYPE, TrackBreakMode, HighExplosiveImpact, RandomizationType, INFINITE_SHELL_TAG, FORCE_FINITE_SHELL_TAG
+from constants import ACTION_LABEL_TO_TYPE, ROLE_LABEL_TO_TYPE, ROLE_TYPE, DamageAbsorptionLabelToType, ROLE_LEVELS, ROLE_TYPE_TO_LABEL, VEHICLE_HEALTH_DECIMALS, IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT, IS_UE_EDITOR, IS_BOT, IS_WEB, IS_PROCESS_REPLAY, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, VEHICLE_CLASSES, ShootImpulseApplicationPoint, SHELL_MECHANICS_TYPE, TrackBreakMode, HighExplosiveImpact, RandomizationType, INFINITE_SHELL_TAG, FORCE_FINITE_SHELL_TAG
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from functools import partial
 from items import ItemsPrices
@@ -132,10 +132,6 @@ def _makeExtraNames(tankmanNames):
 
 
 DEVICE_TANKMAN_NAMES_TO_VEHICLE_EXTRA_NAMES = _makeExtraNames(VEHICLE_DEVICE_TYPE_NAMES + VEHICLE_TANKMAN_TYPE_NAMES)
-TANKMAN_EXTRA_NAMES = []
-for t in VEHICLE_TANKMAN_TYPE_NAMES:
-    TANKMAN_EXTRA_NAMES.extend(DEVICE_TANKMAN_NAMES_TO_VEHICLE_EXTRA_NAMES[t])
-
 PREMIUM_IGR_TAGS = frozenset(('premiumIGR',))
 MAX_OPTIONAL_DEVICES_SLOTS = 4
 NUM_SHELLS_SLOTS = 3
@@ -296,9 +292,6 @@ def vehicleAttributeFactors():
      'chassis/dirtReleaseRateFactor': 1.0,
      'chassis/maxDirtFactor': 1.0,
      'mutualHidingTimeFactor': 1.0}
-    for ten in TANKMAN_EXTRA_NAMES:
-        factors[ten + CHANCE_TO_HIT_SUFFIX_FACTOR] = 0.0
-
     return factors
 
 

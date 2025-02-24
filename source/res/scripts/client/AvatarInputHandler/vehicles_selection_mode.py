@@ -228,7 +228,7 @@ class VehiclesSelectionControlMode(IControlMode):
         return isDown
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
-        prbCtrl = self.__guiSessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.__guiSessionProvider.dynamic.prebattleSetup
         return True if (prbCtrl is None or prbCtrl.isSelectionConfirmed()) and keys_handlers.processAmmoSelection(key) else None
 
     def handleMouseEvent(self, dx, dy, dz):

@@ -711,5 +711,26 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, method='POST', post_data={'region_number': region_number,
          'expected_price': expected_price})
 
+    def __prepare_jwt_header(self, jwt_token):
+        return {'Authorization': 'Bearer {}'.format(jwt_token)} if jwt_token else None
+
+    def get_best_replays(self, callback, jwt_token, **kwargs):
+        url = '/api/v1/replays'
+        get_data = {'limit': 50}
+        get_data.update(kwargs)
+        return self._request_data(callback, url, method='GET', get_data=get_data, headers=self.__prepare_jwt_header(jwt_token))
+
+    def get_top_replays(self, callback, jwt_token):
+        url = '/api/v1/replays/best'
+        return self._request_data(callback, url, method='GET', headers=self.__prepare_jwt_header(jwt_token))
+
+    def get_replay_link(self, callback, jwt_token, replay_id):
+        url = '/api/v1/replays/{}/link'.format(replay_id)
+        return self._request_data(callback, url, method='GET', headers=self.__prepare_jwt_header(jwt_token))
+
+    def post_find_replay(self, callback, jwt_token, replay_name):
+        url = '/api/v1/replays/signed_link'
+        return self._request_data(callback, url, get_data={'replay_name': replay_name}, method='GET', headers=self.__prepare_jwt_header(jwt_token))
+
     def _get_formatted_language_code(self):
         return self.client_lang.replace('_', '-')

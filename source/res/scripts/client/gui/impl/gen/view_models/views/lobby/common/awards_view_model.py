@@ -6,11 +6,11 @@ from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.common.reward_item_model import RewardItemModel
 
 class AwardsViewModel(ViewModel):
-    __slots__ = ('onAnimationEnded', 'onClose')
+    __slots__ = ('onAnimationEnded', 'onRedirect', 'onClose')
     CLOSE_REASON_CANCEL = 'cancel'
     CLOSE_REASON_CONFIRM = 'confirm'
 
-    def __init__(self, properties=8, commands=2):
+    def __init__(self, properties=9, commands=3):
         super(AwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -59,11 +59,17 @@ class AwardsViewModel(ViewModel):
     def setBottomNote(self, value):
         self._setResource(6, value)
 
-    def getButtonTitle(self):
+    def getDefaultButtonTitle(self):
         return self._getResource(7)
 
-    def setButtonTitle(self, value):
+    def setDefaultButtonTitle(self, value):
         self._setResource(7, value)
+
+    def getRedirectButtonTitle(self):
+        return self._getResource(8)
+
+    def setRedirectButtonTitle(self, value):
+        self._setResource(8, value)
 
     def _initialize(self):
         super(AwardsViewModel, self)._initialize()
@@ -74,6 +80,8 @@ class AwardsViewModel(ViewModel):
         self._addResourceProperty('subTitle', R.invalid())
         self._addResourceProperty('underTitle', R.invalid())
         self._addResourceProperty('bottomNote', R.invalid())
-        self._addResourceProperty('buttonTitle', R.invalid())
+        self._addResourceProperty('defaultButtonTitle', R.invalid())
+        self._addResourceProperty('redirectButtonTitle', R.invalid())
         self.onAnimationEnded = self._addCommand('onAnimationEnded')
+        self.onRedirect = self._addCommand('onRedirect')
         self.onClose = self._addCommand('onClose')

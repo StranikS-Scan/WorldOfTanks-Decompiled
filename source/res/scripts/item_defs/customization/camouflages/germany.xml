@@ -8842,4 +8842,42 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G73_E50_Ausf_M	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	917	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_3dstyles.dds	</texture>
+      <description>	#vehicle_customization:camouflage/G73_E50_Ausf_M_BPXVI_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/G73_E50_Ausf_M_BPXVI_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	43 47 51 255	</c0>
+          <c1>	119 128 89 255	</c1>
+          <c2>	76 89 76 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	-0.698132	</HULL>
+        <TURRET>	-0.15708	</TURRET>
+        <GUN>	-0.007679	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
 </germany.xml>

@@ -18,14 +18,14 @@ class SkillType(Enum):
 class SkillSelectItemModel(SkillSimpleModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(SkillSelectItemModel, self).__init__(properties=properties, commands=commands)
 
     def getState(self):
-        return SkillState(self._getString(3))
+        return SkillState(self._getString(4))
 
     def setState(self, value):
-        self._setString(3, value.value)
+        self._setString(4, value.value)
 
     def _initialize(self):
         super(SkillSelectItemModel, self)._initialize()

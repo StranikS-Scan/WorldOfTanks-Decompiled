@@ -25,10 +25,12 @@ RETRAIN_TANKMAN = 'retrainTankman'
 CHANGE_ROLE_TANKMAN = 'changeRoleTankman'
 UNLOAD_TANKMAN = 'unloadTankman'
 EQUIP_TANKMAN = 'equipTankman'
+BUY_AND_EQUIP_TANKMAN = 'buyAndEquipTankman'
 CHANGE_TANKMAN_PASSPORT = 'changeTankmanPassport'
 DISMISS_TANKMAN = 'dismissTankman'
 RESTORE_TANKMAN = 'restoreTankman'
 CONVERT_JUNK_TANKMEN = 'convertJunkTankmen'
+TRANSFER_TANKMAN_XP = 'transferTankmanXp'
 CHANGE_NATION = 'changeNation'
 INSTALL_BATTLE_ABILITIES = 'installBattleAbilities'
 FRONTLINE_INSTALL_RESERVES = 'frontlineInstallReserves'
@@ -68,10 +70,12 @@ _ACTION_MAP = {SELL_ITEM: actions.SellItemAction,
  CHANGE_ROLE_TANKMAN: actions.TankmanChangeRoleAction,
  UNLOAD_TANKMAN: actions.TankmanUnloadAction,
  EQUIP_TANKMAN: actions.TankmanEquipAction,
+ BUY_AND_EQUIP_TANKMAN: actions.TankmanBuyAndEquipAction,
  CHANGE_TANKMAN_PASSPORT: actions.TankmanChangePassportAction,
  DISMISS_TANKMAN: actions.TankmanDismissAction,
  RESTORE_TANKMAN: actions.TankmanRestoreAction,
  CONVERT_JUNK_TANKMEN: actions.ConvertJunkTankmenAction,
+ TRANSFER_TANKMAN_XP: actions.TransferTankmanXPAction,
  CHANGE_NATION: actions.ChangeVehicleNationAction,
  INSTALL_BATTLE_ABILITIES: actions.InstallBattleAbilities,
  FRONTLINE_INSTALL_RESERVES: actions.FrontlineInstallReserves,

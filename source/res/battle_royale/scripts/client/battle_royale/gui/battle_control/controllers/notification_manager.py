@@ -83,7 +83,7 @@ class RespawnMessage(CallbackDelayer):
 
     @property
     def timeLeft(self):
-        return int(self._calculate())
+        return self._calculate()
 
     def __startDelayTimer(self):
         self.__delayCallbackID = BigWorld.callback(self.delay, self.__onDelayFinished)
@@ -91,7 +91,7 @@ class RespawnMessage(CallbackDelayer):
     def __onDelayFinished(self):
         self.__delayCallbackID = None
         self.__endTime = self.time + BigWorld.serverTime()
-        self.time = int(self._calculate())
+        self.time = self._calculate()
         self.__panel.sendMessage(self.messageVO)
         self.__setMsgCallback()
         return
@@ -121,7 +121,7 @@ class RespawnMessage(CallbackDelayer):
         floatLength = self._calculate()
         if not floatLength:
             return 0
-        intLength = max(int(floatLength), 0)
+        intLength = max(int(round(floatLength)), 0)
         self.__panel.sendMessageTime(intLength)
         return floatLength
 

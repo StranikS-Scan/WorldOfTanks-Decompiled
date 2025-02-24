@@ -19,7 +19,7 @@ class ExternalCache(BaseExternalCache):
         super(ExternalCache, self).__init__(cacheName, workersLimit)
         self._cdnRootUrl = ''
 
-    def get(self, cdnRelativePath):
+    def get(self, cdnRelativePath, appName=None):
         if not self._cdnRootUrl:
             return None
         else:

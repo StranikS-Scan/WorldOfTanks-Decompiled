@@ -8,9 +8,8 @@ from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
-_DropdownData = namedtuple('_DropdownData', ('useSelf', 'funcName', 'params'))
+DropdownData = namedtuple('DropdownData', ('useSelf', 'funcName', 'params'))
 
 class ProfileSection(ProfileSectionMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -26,37 +25,30 @@ class ProfileSection(ProfileSectionMeta):
         self._selectedData = args[3]
         self._data = None
         self._dossier = None
+        self._battleTypeHandlers = {}
         self.__needUpdate = False
-        self.__battleTypeHandlers = {}
         self.__initHandlers()
         return
 
     def __initHandlers(self):
-        self.__battleTypeHandlers = {PROFILE_DROPDOWN_KEYS.ALL: _DropdownData(True, '_getTotalStatsBlock', {}),
-         PROFILE_DROPDOWN_KEYS.TEAM: _DropdownData(False, 'getTeam7x7Stats', {}),
-         PROFILE_DROPDOWN_KEYS.STATICTEAM: _DropdownData(False, 'getRated7x7Stats', {}),
-         PROFILE_DROPDOWN_KEYS.HISTORICAL: _DropdownData(False, 'getHistoricalStats', {}),
-         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: _DropdownData(True, '_receiveFortDossier', {}),
-         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: _DropdownData(False, 'getFortSortiesStats', {}),
-         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: _DropdownData(False, 'getFortBattlesStats', {}),
-         PROFILE_DROPDOWN_KEYS.COMPANY: _DropdownData(False, 'getCompanyStats', {}),
-         PROFILE_DROPDOWN_KEYS.CLAN: _DropdownData(False, 'getGlobalMapStats', {}),
-         PROFILE_DROPDOWN_KEYS.FALLOUT: _DropdownData(False, 'getFalloutStats', {}),
-         PROFILE_DROPDOWN_KEYS.RANKED: _DropdownData(False, 'getRankedStats', {}),
-         PROFILE_DROPDOWN_KEYS.RANKED_10X10: _DropdownData(False, 'getRanked10x10Stats', {}),
-         PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: _DropdownData(False, 'getEpicRandomStats', {}),
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: _DropdownData(False, 'getBattleRoyaleSoloStats', {}),
-         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: _DropdownData(False, 'getBattleRoyaleSquadStats', {})}
-        for archiveName in COMP7_ARCHIVE_NAMES:
-            dropdownKey = getDropdownKeyByArchiveName(archiveName)
-            self.__battleTypeHandlers[dropdownKey] = _DropdownData(False, 'getComp7Stats', {'archive': archiveName})
-
-        for season in COMP7_SEASON_NUMBERS:
-            dropdownKey = getDropdownKeyBySeason(season)
-            self.__battleTypeHandlers[dropdownKey] = _DropdownData(False, 'getComp7Stats', {'season': season})
+        self._battleTypeHandlers = {PROFILE_DROPDOWN_KEYS.ALL: DropdownData(True, '_getTotalStatsBlock', {}),
+         PROFILE_DROPDOWN_KEYS.TEAM: DropdownData(False, 'getTeam7x7Stats', {}),
+         PROFILE_DROPDOWN_KEYS.STATICTEAM: DropdownData(False, 'getRated7x7Stats', {}),
+         PROFILE_DROPDOWN_KEYS.HISTORICAL: DropdownData(False, 'getHistoricalStats', {}),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: DropdownData(True, '_receiveFortDossier', {}),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: DropdownData(False, 'getFortSortiesStats', {}),
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: DropdownData(False, 'getFortBattlesStats', {}),
+         PROFILE_DROPDOWN_KEYS.COMPANY: DropdownData(False, 'getCompanyStats', {}),
+         PROFILE_DROPDOWN_KEYS.CLAN: DropdownData(False, 'getGlobalMapStats', {}),
+         PROFILE_DROPDOWN_KEYS.FALLOUT: DropdownData(False, 'getFalloutStats', {}),
+         PROFILE_DROPDOWN_KEYS.RANKED: DropdownData(False, 'getRankedStats', {}),
+         PROFILE_DROPDOWN_KEYS.RANKED_10X10: DropdownData(False, 'getRanked10x10Stats', {}),
+         PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: DropdownData(False, 'getEpicRandomStats', {}),
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO: DropdownData(False, 'getBattleRoyaleSoloStats', {}),
+         PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD: DropdownData(False, 'getBattleRoyaleSquadStats', {})}
 
     def __getData(self, battleType, obj):
-        data = self.__battleTypeHandlers.get(battleType)
+        data = self._battleTypeHandlers.get(battleType)
         if data is None:
             raise SoftException('ProfileSection: Unknown battle type: ' + self._battlesType)
         return getattr(self, data.funcName)(obj, **data.params) if data.useSelf else getattr(obj, data.funcName)(**data.params)
@@ -123,6 +115,31 @@ class ProfileSection(ProfileSectionMeta):
         return {'description': i18n.makeString(i18key),
          'icon': icon}
 
+    @classmethod
+    def _makeBattleTypesDropDown(cls, accountDossier, forVehiclesPage=False):
+        dropDownProvider = BattleTypesDropDownItems()
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.ALL)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
+        if BATTLE_ROYALE_STATS_ENABLED:
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO)
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED_10X10)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FALLOUT)
+        if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.HISTORICAL)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.TEAM)
+        if accountDossier is not None and accountDossier.getRated7x7Stats().getVehicles():
+            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.STATICTEAM)
+        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.CLAN)
+        if dependency.instance(ILobbyContext).getServerSettings().isStrongholdsEnabled():
+            if forVehiclesPage:
+                dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES)
+                dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)
+            else:
+                dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS)
+        return dropDownProvider
+
 
 class BattleTypesDropDownItems(list):
 
@@ -135,29 +152,3 @@ class BattleTypesDropDownItems(list):
     def __addEntry(self, key, label):
         self.append({'key': key,
          'label': label})
-
-
-def makeBattleTypesDropDown(accountDossier, forVehiclesPage=False):
-    dropDownProvider = BattleTypesDropDownItems()
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.ALL)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM)
-    if BATTLE_ROYALE_STATS_ENABLED:
-        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SOLO)
-        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.BATTLE_ROYALE_SQUAD)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.RANKED_10X10)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FALLOUT)
-    if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
-        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.HISTORICAL)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.TEAM)
-    if accountDossier is not None and accountDossier.getRated7x7Stats().getVehicles():
-        dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.STATICTEAM)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.CLAN)
-    if dependency.instance(ILobbyContext).getServerSettings().isStrongholdsEnabled():
-        if forVehiclesPage:
-            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES)
-            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES)
-        else:
-            dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.FORTIFICATIONS)
-    dropDownProvider.addByKey(PROFILE_DROPDOWN_KEYS.COMP7)
-    return dropDownProvider

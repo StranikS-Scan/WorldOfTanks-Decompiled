@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/shared.py
 import logging
-from collections import namedtuple, Counter
 import struct
+from collections import namedtuple, Counter
 import typing
 import BigWorld
 import Math
@@ -16,9 +16,9 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization.constants import CustomizationModes
 from gui.customization.shared import QUANTITY_LIMITED_CUSTOMIZATION_TYPES, appliedToFromSlotsIds, C11nId, PurchaseItem, AdditionalPurchaseGroups, getAvailableRegions, EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, EDITABLE_STYLE_IRREMOVABLE_TYPES, C11N_ITEM_TYPE_MAP
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from gui.shared.formatters import icons, text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
@@ -31,6 +31,7 @@ from helpers.i18n import makeString as _ms
 from items import parseIntCompactDescr
 from items.components.c11n_components import getItemSlotType
 from items.components.c11n_constants import SeasonType, ProjectionDecalFormTags, CustomizationType
+from items.customizations import CustomizationOutfit
 from items.vehicles import VEHICLE_CLASS_TAGS
 from serializable_types.customizations.projection_decal import ProjectionDecalComponent
 from shared_utils import first
@@ -828,3 +829,41 @@ def addPartsToOutfit(season, outfit, intCDs=None):
 
 def removePartsFromOutfit(season, outfit, intCDs=None):
     return outfit if outfit.style is None else Outfit(component=outfit.style.removePartrsFromOutfit(season, outfit.pack(), outfit.vehicleCD, intCDs=intCDs), vehicleCD=outfit.vehicleCD)
+
+
+@dependency.replace_none_kwargs(customizationService=ICustomizationService)
+def getStyledModeRequestData(requestData, style, vehicle, purchaseItems=None, stylesDiffsCache=None, styleProgressionLevel=None, customizationService=None):
+    if purchaseItems is None:
+        purchaseItems = []
+    vehicleCD = vehicle.descriptor.makeCompactDescr()
+    if style is not None:
+        baseStyleOutfits = {}
+        modifiedStyleOutfits = {}
+        for season in SeasonType.COMMON_SEASONS:
+            diff = stylesDiffsCache.getDiffs(style).get(season) if stylesDiffsCache else None
+            baseStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD)
+            modifiedStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
+
+        removeUnselectedItemsFromEditableStyle(modifiedStyleOutfits, baseStyleOutfits, purchaseItems)
+        for season in SeasonType.COMMON_SEASONS:
+            if style.isProgressive:
+                modifiedStyleOutfits[season] = customizationService.removeAdditionalProgressionData(outfit=modifiedStyleOutfits[season], style=style, vehCD=vehicleCD, season=season)
+            modifiedStyleOutfits[season] = removePartsFromOutfit(season, baseStyleOutfits[season]).diff(removePartsFromOutfit(season, modifiedStyleOutfits[season]))
+
+        styleOutfitComponent = CustomizationOutfit(styleId=style.id, styleProgressionLevel=styleProgressionLevel, serial_number=style.serialNumber)
+        styleOutfit = Outfit(vehicleCD=vehicleCD, component=styleOutfitComponent)
+        for season in SeasonType.REGULAR:
+            outfit = modifiedStyleOutfits.get(season, Outfit(vehicleCD=vehicleCD))
+            modifiedStyleOutfits[season] = styleOutfit.adjust(outfit)
+
+        for outfit, seasonType in requestData:
+            if seasonType == SeasonType.ALL:
+                modifiedStyleOutfits[seasonType] = modifiedStyleOutfits[seasonType].adjust(outfit)
+
+        requestData = [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]
+    else:
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD)
+            requestData.append((outfit, season))
+
+    return requestData

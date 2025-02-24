@@ -88,4 +88,8 @@ class DropSkill(GoodieTarget):
     pass
 
 
+class XpTransfer(GoodieTarget):
+    pass
+
+
 GoodieTargetType = TypeVar('GoodieTargetType', bound=GoodieTarget)

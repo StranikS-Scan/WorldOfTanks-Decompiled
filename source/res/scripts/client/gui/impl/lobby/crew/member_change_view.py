@@ -16,7 +16,7 @@ from gui.impl.lobby.crew.crew_helpers.model_setters import setRecruitTankmanMode
 from gui.impl.lobby.crew.filter import getTankmanKindSettings, getTankmanLocationSettings, getTankmanRoleSettings, getVehicleTierSettings, getVehicleTypeSettings
 from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, RecruitsChangeDataProvider, TankmenChangeDataProvider
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
-from gui.impl.lobby.crew.filter.state import FilterState
+from gui.impl.lobby.crew.filter.state import FilterState, Persistor
 from gui.impl.lobby.crew.utils import discountPercent
 from gui.impl.lobby.hangar.sub_views.vehicle_params_view import VehicleSkillPreviewParamsView
 from gui.server_events.events_dispatcher import showRecruitWindow
@@ -28,8 +28,6 @@ from helpers import dependency
 from skeletons.gui.game_control import IRestoreController, ISpecialSoundCtrl
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IShopRequester
-from uilogging.crew.loggers import CrewMemberChangeLogger
-from uilogging.crew.logging_constants import CrewMemberAdditionalInfo, CrewMemberChangeKeys, CrewViewKeys, LAYOUT_ID_TO_ITEM
 from PlayerEvents import g_playerEvents
 from AccountCommands import LOCK_REASON
 
@@ -49,14 +47,12 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__tankman = None
         self.__filterPanelWidget = None
         self.__updateTankmanData(slotIdx)
-        self.__filterState = FilterState(self._getDefaultFilters())
+        self.__filterState = FilterState(initialState=self._getDefaultFilters(), isWotPlus=self.__currentVehicle.isWotPlus, persistor=Persistor(storageKey='memberChange', persistentGroups=[FilterState.GROUPS.LOCATION.value]))
         self.__dataProviders = self._createDataProvider()
         self.__requiredNation = self.__currentVehicle.nationName
         self.__paramsView = None
         self.__hasFilters = False
-        previousViewID = kwargs.get('previousViewID')
-        self.__uiTooltipLogger = CrewMemberChangeLogger()
-        super(MemberChangeView, self).__init__(settings, parentViewKey=LAYOUT_ID_TO_ITEM.get(previousViewID))
+        super(MemberChangeView, self).__init__(settings)
         return
 
     @property
@@ -72,17 +68,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         return self.__filterState
 
     @property
-    def _uiLoggingKey(self):
-        return CrewViewKeys.MEMBER_CHANGE
-
-    @property
     def viewModel(self):
         return super(MemberChangeView, self).getViewModel()
-
-    def createToolTip(self, event):
-        if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            self.__uiTooltipLogger.onBeforeTooltipOpened(event.getArgument('tooltipId', None))
-        return super(MemberChangeView, self).createToolTip(event)
 
     def selectSlot(self, slotIdx):
         self._onChangeSlotIdx(slotIdx)
@@ -114,7 +101,6 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
          (self.__filterState.onStateChanged, self._onFilterStateUpdated),
          (self.__dataProviders.onDataChanged, self._onDataChanged),
          (self.itemsCache.onSyncCompleted, self._onItemsCacheSyncCompleted),
-         (self.__filterPanelWidget.onPopoverTooltipCreated, self._onPopoverTooltipCreated),
          (g_playerEvents.onVehicleLockChanged, self._onVehicleLockChanged))
 
     def _getCallbacks(self):
@@ -182,7 +168,6 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         super(MemberChangeView, self)._onLoading(*args, **kwargs)
         self.__dataProviders.subscribe()
         self.__dataProviders.update()
-        self.__uiTooltipLogger.initialize()
         if self.__dataProviders.itemsCount < 1:
             self.__filterState.reinit({})
 
@@ -199,12 +184,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__paramsView = None
         self.__dataProviders = None
         self.__paramsView = None
-        self.__uiTooltipLogger.finalize()
         return
-
-    def _onPopoverTooltipCreated(self, event, window):
-        if event.contentID == R.views.lobby.crew.tooltips.DismissedToggleTooltip():
-            self.__uiTooltipLogger.logDismissedTooltip(window)
 
     def _onItemsCacheSyncCompleted(self, reason, _):
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC:
@@ -222,9 +202,8 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         self.__dataProviders.update()
 
     def _onClose(self, params=None):
-        self._logClose(params)
         if self.__currentVehicle.hasCrew and self.isPersonalFileOpened:
-            self._onBack(False)
+            self._onBack()
         else:
             self._destroySubViews()
 
@@ -256,7 +235,6 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
         newTankman = self.itemsCache.items.getTankman(tankmanID)
         if not newTankman or newTankman.isDismissed:
             return
-        self._uiLogger.logClick(CrewMemberChangeKeys.CARD, info=CrewMemberAdditionalInfo.TANKMAN)
         if newTankman.role == self.__requiredRole:
             self.__equipTankman(newTankman)
         else:
@@ -264,17 +242,15 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     @args2params(str)
     def _onPlayRecruitVoiceover(self, recruitID):
-        self._uiLogger.logClick(CrewMemberChangeKeys.CARD_VOICEOVER_BUTTON)
         self._onPlayVoiceover(recruitID)
 
     @args2params(str)
     def _onRecruitSelected(self, recruitID):
-        self._uiLogger.logClick(CrewMemberChangeKeys.CARD, info=CrewMemberAdditionalInfo.RECRUIT)
-        showRecruitWindow(recruitID, vehicleSlotToUnpack=self.__slotIdx, vehicle=self.__currentVehicle, parentViewKey=CrewViewKeys.MEMBER_CHANGE)
+        showRecruitWindow(recruitID, vehicleSlotToUnpack=self.__slotIdx, vehicle=self.__currentVehicle)
 
     @args2params(int)
     def _onTankmanRestore(self, tankmanID):
-        dialogs.showRestoreTankmanDialog(tankmanID, self.__currentVehicle.invID, self.__slotIdx, parentViewKey=self._uiLoggingKey)
+        dialogs.showRestoreTankmanDialog(tankmanID, self.__currentVehicle.invID, self.__slotIdx)
 
     def _onRecruitNewTankman(self):
         dialogs.showRecruitNewTankmanDialog(self.__currentVehicle.intCD, self.__slotIdx, putInTank=True)
@@ -306,7 +282,7 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
             factory.doAction(factory.EQUIP_TANKMAN, newTankman.invID, self.__currentVehicle.invID, int(self.__slotIdx))
 
     def __changeRoleAndEquipConfirm(self, newTankman):
-        dialogs.showRetrainSingleDialog(newTankman.invID, self.__currentVehicle.intCD, targetSlotIdx=int(self.__slotIdx), parentViewKey=CrewViewKeys.MEMBER_CHANGE)
+        dialogs.showRetrainSingleDialog(newTankman.invID, self.__currentVehicle.intCD, targetSlotIdx=int(self.__slotIdx))
 
     def __createTankmanModelByTankman(self, tankman):
         tm = MemberChangeTankmanModel()

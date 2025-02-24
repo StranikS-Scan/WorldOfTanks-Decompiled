@@ -73,8 +73,7 @@ class GameSessionController(IGameSessionController, IGlobalListener, Notifiable)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     _DEFAULT_TIME_KEY = 'DEFAULT'
-    _QUEUE_TYPE_TO_CONFIG_TIME_KEY = {constants.QUEUE_TYPE.EPIC: constants.ARENA_BONUS_TYPE_IDS[constants.ARENA_BONUS_TYPE.EPIC_BATTLE],
-     constants.QUEUE_TYPE.COMP7: constants.ARENA_BONUS_TYPE_IDS[constants.ARENA_BONUS_TYPE.COMP7]}
+    _QUEUE_TYPE_TO_CONFIG_TIME_KEY = {constants.QUEUE_TYPE.EPIC: constants.ARENA_BONUS_TYPE_IDS[constants.ARENA_BONUS_TYPE.EPIC_BATTLE]}
 
     def init(self):
         self.__timeTillKickNotifier = AcyclicNotifier(self.__getClosestTimeTillKickNotification, self.__notifyTimeTillKick)

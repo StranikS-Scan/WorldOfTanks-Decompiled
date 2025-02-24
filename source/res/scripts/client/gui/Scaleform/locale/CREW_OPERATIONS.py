@@ -21,6 +21,8 @@ class CREW_OPERATIONS(object):
     RETURN_TITLE = '#crew_operations:return/title'
     RETURN_DESCRIPTION = '#crew_operations:return/description'
     RETURN_BUTTON_LABEL = '#crew_operations:return/button/label'
+    RETURN_TOGGLE_LABEL = '#crew_operations:return/toggle/label'
+    RETURN_TOGGLE_DESCRIPTION = '#crew_operations:return/toggle/description'
     RETURN_ERROR_NOPREVIOUS = '#crew_operations:return/error/noPrevious'
     RETURN_ERROR_ALLDEMOBILIZED = '#crew_operations:return/error/allDemobilized'
     RETURN_ERROR_ALREADYONPLACES = '#crew_operations:return/error/alreadyOnPlaces'

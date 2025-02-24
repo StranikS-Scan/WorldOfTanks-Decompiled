@@ -5,19 +5,17 @@ from debug_utils import LOG_ERROR
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import i18n
-from items.tankmen import getSkillsConfig
 from prebattle_shared import LIMIT_DEFAULTS
 
 def getAbsenceCrewList():
     crewList = ''
     vehicle = g_currentVehicle.item
     crewRoles = vehicle.descriptor.type.crewRoles
-    skillsConfig = getSkillsConfig()
     for slotIdx, tman in vehicle.crew:
         if tman is None:
-            skill = skillsConfig.getSkill(crewRoles[slotIdx][0])
-            userString = i18n.makeString(skill.userString).lower()
+            userString = getRoleUserName(crewRoles[slotIdx][0]).lower()
             crewList += (', ' if crewList else '') + userString
 
     return crewList

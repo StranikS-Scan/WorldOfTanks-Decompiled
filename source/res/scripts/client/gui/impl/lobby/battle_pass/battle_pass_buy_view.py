@@ -9,7 +9,7 @@ from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltip
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
-from gui.battle_pass.battle_pass_helpers import chaptersWithLogoBg, fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground
+from gui.battle_pass.battle_pass_helpers import fillBattlePassCompoundPrice, getChapterType, getCompoundPriceDefaultID, isSeasonWithAdditionalBackground, chaptersWithLogoBg, getDefaultChaptersView
 from gui.battle_pass.battle_pass_package import generatePackages
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl.gen import R
@@ -51,7 +51,7 @@ class BattlePassBuyViewStates(object):
 g_BPBuyViewStates = BattlePassBuyViewStates()
 
 class BattlePassBuyView(ViewImpl):
-    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID')
+    __slots__ = ('__packages', '__selectedPackage', '__tooltipItems', '__backCallback', '__backBtnDescrLabel', '__tooltipWindow', '__packageID', '__selectedChapterID')
     __battlePass = dependency.descriptor(IBattlePassController)
     __wallet = dependency.descriptor(IWalletController)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -67,6 +67,10 @@ class BattlePassBuyView(ViewImpl):
         self.__tooltipItems = {}
         self.__tooltipWindow = None
         self.__packageID = None
+        if self.__battlePass.isHoliday():
+            self.__selectedChapterID = self.__battlePass.getHolidayChapterID()
+        else:
+            self.__selectedChapterID = None if ctx is None else ctx.get('selectedChapterID')
         super(BattlePassBuyView, self).__init__(settings)
         return
 
@@ -91,14 +95,15 @@ class BattlePassBuyView(ViewImpl):
         self.__packages = generatePackages(battlePass=self.__battlePass)
         self.__setGeneralFields()
         self.__setPackages()
-        if self.__battlePass.isHoliday():
-            self.__selectedPackage = self.__packages[self.__battlePass.getHolidayChapterID()]
+        if self.__selectedChapterID is not None:
+            self.__selectedPackage = self.__packages[self.__selectedChapterID]
             self.__setConfirmModel()
             self.__showConfirm()
         elif g_BPBuyViewStates.chapterID != WINDOW_IS_NOT_OPENED:
             self.__choosePackage({'packageID': g_BPBuyViewStates.getPackageID()})
         g_BPBuyViewStates.reset()
         switchHangarOverlaySoundFilter(on=True)
+        return
 
     def _finalize(self):
         g_eventBus.removeListener(BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
@@ -148,16 +153,16 @@ class BattlePassBuyView(ViewImpl):
         return
 
     def __onBackClick(self):
-        if not self.__battlePass.isHoliday() and self.viewModel.getState() == self.viewModel.CONFIRM_STATE:
+        if not self.__battlePass.isHoliday() and self.viewModel.getState() == self.viewModel.CONFIRM_STATE and self.__selectedChapterID is None:
             self.__showBuy()
         elif self.__backCallback is not None:
             self.__backCallback()
             self.destroyWindow()
         elif self.__isBattlePassOpen():
             if self.__battlePass.isHoliday() and self.__battlePass.isCompleted():
-                showMissionsBattlePass(R.views.lobby.battle_pass.PostProgressionView())
+                showMissionsBattlePass(R.views.lobby.battle_pass.HolidayFinalView())
             elif not self.__battlePass.getCurrentChapterID():
-                showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+                showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
             self.destroyWindow()
         else:
             self.destroyWindow()
@@ -309,13 +314,13 @@ class BattlePassBuyView(ViewImpl):
         if not (ctrl.isEnabled() and ctrl.isActive()):
             showHangar()
             return
-        if len(ctrl.getChapterIDs()) != self.viewModel.packages.getItemsLength():
+        if len(ctrl.getMainChapterIDs()) != self.viewModel.packages.getItemsLength():
             self.__packages = generatePackages(battlePass=ctrl)
             self.__setPackages()
         isValidState = not self.__packageID or ctrl.isChapterExists(self.__packageID) and (not ctrl.isExtraChapter(self.__packageID) or ctrl.getChapterRemainingTime(self.__packageID) > 0)
-        allBought = all((ctrl.isBought(chID) for chID in ctrl.getChapterIDs()))
+        allBought = ctrl.isAllMainChaptersBought()
         if not isValidState or allBought:
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
             self.destroyWindow()
             return
         self.__updateState()
@@ -340,7 +345,7 @@ class BattlePassBuyView(ViewImpl):
             self.destroyWindow()
 
     def __onAwardCloseDuringPurchase(self, *_):
-        if self.viewStatus not in (ViewStatus.DESTROYING, ViewStatus.DESTROYED) and all((self.__battlePass.isBought(chapterID) for chapterID in self.__battlePass.getChapterIDs())):
+        if self.viewStatus not in (ViewStatus.DESTROYING, ViewStatus.DESTROYED) and self.__battlePass.isAllMainChaptersBought():
             self.destroyWindow()
 
 

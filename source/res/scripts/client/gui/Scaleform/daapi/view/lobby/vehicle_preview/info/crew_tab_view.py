@@ -14,6 +14,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import T
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.tabs.crew_tab_model import CrewTabModel
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.tabs.tankman_preview_model import TankmanPreviewModel
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getRoleBySkillName
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
@@ -25,6 +26,7 @@ from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from web.web_client_api.common import ItemPackTypeGroup, ItemPackType, ItemPackEntry
 if typing.TYPE_CHECKING:
+    from typing import Optional
     from gui.shared.gui_items.Vehicle import Vehicle
 DOG = 'dog'
 
@@ -55,8 +57,10 @@ class CrewTabView(ViewImpl):
             tooltipId = event.getArgument('tooltipId')
             if tooltipId == TooltipConstants.SKILL:
                 skillName = str(event.getArgument('skillName'))
+                roleName = str(event.getArgument('roleName'))
                 skillLevel = crewMemberRealSkillLevel(self._vehicle, skillName)
                 args = [skillName,
+                 roleName,
                  None,
                  skillLevel,
                  None,
@@ -114,6 +118,7 @@ class CrewTabView(ViewImpl):
         vm.headerModel.setTitle(title)
         vm.headerModel.setSkillName(skillName)
         vm.headerModel.setIconName(skillIcon)
+        vm.headerModel.setRoleName(getRoleBySkillName(skillName))
         vm.headerModel.setSkillCustomName(customName)
 
     def _fillTankmen(self, vm):

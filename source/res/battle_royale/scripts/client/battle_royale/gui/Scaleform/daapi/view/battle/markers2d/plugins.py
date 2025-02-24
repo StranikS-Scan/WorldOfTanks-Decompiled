@@ -38,7 +38,6 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
         super(BattleRoyaleVehicleMarkerPlugin, self).__init__(parentObj, clazz)
         self.__markersStatesExtended = defaultdict(list)
         self.__cache = {}
-        self.__isCurrentObserverFPV = False
         brSettings = getBattleRoyaleSettings()
         self.__observerMarkersVisibilityDistance = brSettings.observerBotMarkersVisibilityDistance
 
@@ -235,14 +234,14 @@ class BattleRoyaleVehicleMarkerPlugin(VehicleMarkerPlugin):
                 vehicle.updateStunInfo()
             player = BigWorld.player()
             isObserverFPV = player.isObserverFPV
-            if player.observerSeesAll() and self.__isCurrentObserverFPV != isObserverFPV:
+            if player.observerSeesAll():
                 for vInfo in self.sessionProvider.getArenaDP().getVehiclesInfoIterator():
                     marker = self._markers.get(vInfo.vehicleID)
                     if marker is not None:
+                        self._setMarkerPlanarCullEnabled(marker.getMarkerID(), not isObserverFPV)
                         cullDistance = self._getCullDistanceForVehicle(vInfo)
                         self._setMarkerRenderInfoWithArguments(marker.getMarkerID(), cullDistance=cullDistance)
 
-                self.__isCurrentObserverFPV = isObserverFPV
             return
 
     def _onUpdateObservedVehicleData(self, vehicleID, _):

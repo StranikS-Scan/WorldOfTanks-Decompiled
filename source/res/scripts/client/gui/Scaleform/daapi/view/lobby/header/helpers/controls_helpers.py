@@ -3,14 +3,11 @@
 from __future__ import absolute_import
 import typing
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
+from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import TOOLTIP_TYPES
+from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getEventTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.prb_control.settings import PRE_QUEUE_RESTRICTION
-from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import TOOLTIP_TYPES
-from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import getComp7FightBtnTooltipData, getEventTooltipData, getMapboxFightBtnTooltipData, getMapsTrainingTooltipData, getRandomTooltipData, getRankedFightBtnTooltipData
 from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 
@@ -93,24 +90,6 @@ class MapsTrainingLobbyHeaderHelper(DefaultLobbyHeaderHelper):
     @classmethod
     def _getDisabledFightTooltipData(cls, prbValidation, isInSquad):
         return (getMapsTrainingTooltipData(), False)
-
-
-class Comp7LobbyHeaderHelper(DefaultLobbyHeaderHelper):
-    __slots__ = ()
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    @classmethod
-    def _getDisabledFightTooltipData(cls, prbValidation, isInSquad):
-        return (getComp7FightBtnTooltipData(prbValidation, isInSquad), False)
-
-    @classmethod
-    def _getOutSquadTooltipData(cls, prbValidation):
-        resRoot = R.strings.platoon.headerButton.tooltips.comp7Squad
-        if prbValidation.restriction == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
-            resRoot = R.strings.menu.headerButtons.fightBtn.tooltip.comp7BanIsSet
-        if not cls.__comp7Controller.isQualificationSquadAllowed():
-            resRoot = R.strings.platoon.headerButton.tooltips.comp7QualificationSquad
-        return (makeTooltip(backport.text(resRoot.header()), backport.text(resRoot.body())), TOOLTIP_TYPES.COMPLEX)
 
 
 class EventLobbyHeaderHelper(DefaultLobbyHeaderHelper):

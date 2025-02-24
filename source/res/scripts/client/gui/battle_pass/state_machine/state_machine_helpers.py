@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_pass/state_machine/state_machine_helpers.py
 import logging
 import typing
-from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassConsts, BattlePassRewardReason, BattlePassState, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName
+from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_TOKEN_3D_STYLE, BattlePassRewardReason, BattlePassState, getBattlePassPassEntitlementName, getBattlePassShopEntitlementName, isPostProgressionChapter
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift, getStyleInfoForChapter, makeChapterMediaName
 from gui.impl.gen import R
 from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent
@@ -20,7 +20,7 @@ _logger.addHandler(logging.NullHandler())
 def isProgressionComplete(_, battlePass=None):
     isCompleteState = battlePass.getState() == BattlePassState.COMPLETED
     isAllChosen = battlePass.getNotChosenRewardCount() == 0
-    isAllChaptersBought = all((battlePass.isBought(chapterID=chapter) for chapter, _ in enumerate(battlePass.getChapterConfig(), BattlePassConsts.MINIMAL_CHAPTER_NUMBER)))
+    isAllChaptersBought = battlePass.isAllMainChaptersBought()
     return isCompleteState and isAllChosen and isAllChaptersBought
 
 
@@ -68,6 +68,8 @@ def packStartEvent(rewards, data, packageRewards, eventMethod, battlePass=None):
         newLevel = data['newLevel']
         chapter = data['chapter']
         prevLevel = data['prevLevel']
+        if isPostProgressionChapter(chapter):
+            return
         data.update({'needVideo': needToShowVideo(chapter, newLevel, battlePass=battlePass)})
         isFinalLevel = battlePass.isFinalLevel(chapter, newLevel)
         isRareLevel = False
@@ -90,7 +92,8 @@ def multipleBattlePassPurchasedEventMethod(rewards, data, packageRewards, battle
     if battlePass.isDisabled():
         return
     else:
-        chapterID = battlePass.getCurrentChapterID()
+        currentChapterID = battlePass.getCurrentChapterID()
+        chapterID = currentChapterID if not isPostProgressionChapter(currentChapterID) else None
         showMissionsBattlePass(R.views.lobby.battle_pass.BattlePassProgressionsView() if chapterID else None, chapterID)
         battlePass.getRewardLogic().startRewardFlow(rewards, data, packageRewards)
         return

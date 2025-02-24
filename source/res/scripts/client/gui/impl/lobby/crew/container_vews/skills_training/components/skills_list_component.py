@@ -17,7 +17,7 @@ if typing.TYPE_CHECKING:
     from typing import Any, Callable, Tuple
     from gui.impl.gen.view_models.views.lobby.crew.skills_training_view_model import SkillsTrainingViewModel
     from gui.impl.gen.view_models.views.lobby.crew.skills_list_model import SkillsListModel
-    from gui.shared.gui_items.Tankman import TankmanSkill
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
 
 class SkillsListComponent(ComponentBase):
     __slots__ = ('__toolTipMgr',)
@@ -33,6 +33,7 @@ class SkillsListComponent(ComponentBase):
             if tooltipId == TooltipConstants.SKILL_ALT:
                 positionX = event.getArgument('positionX', event.mouse.positionX)
                 args = [str(event.getArgument('skillName')),
+                 self.context.role,
                  self.context.tankman.invID,
                  None,
                  False,
@@ -75,16 +76,16 @@ class SkillsListComponent(ComponentBase):
         role = self.context.role
         commonSkills = skillsByRoles[COMMON_ROLE]
         regularSkills = skillsByRoles[role]
-        irrelevantSkills = [ skill for skill in self.context.tankman.skills if not skill.isRelevantForRole(role) ]
+        irrelevantSkills = [ skill for skill in self.context.tankman.skills if not skill.isRelevant ]
         self.__fillSkillsList(commonSkillsList, commonSkills)
         self.__fillSkillsList(regularSkillsList, regularSkills)
         self.__fillSkillsList(irrelevantSkillsList, irrelevantSkills)
 
     def __fillBonusSkillsList(self, skillsByRoles, regularSkillsList):
         bonusSkills = skillsByRoles[self.context.role]
-        self.__fillSkillsList(regularSkillsList, bonusSkills)
+        self.__fillSkillsList(regularSkillsList, bonusSkills, checkIrrelevant=False)
 
-    def __fillSkillsList(self, skillsListVM, skills):
+    def __fillSkillsList(self, skillsListVM, skills, checkIrrelevant=True):
         tankman = self.context.tankman
         bonusSlotsLevels = self.context.tankman.bonusSlotsLevels
         for skill in skills:
@@ -99,7 +100,7 @@ class SkillsListComponent(ComponentBase):
             elif isSelected:
                 idx = self.context.selectedSkills.index(skill.name)
                 level, isZero = self.context.availableSkillsData[idx]
-            skillModelSetup(skillVM, skill=skill, tankman=tankman, role=self.context.role, skillLevel=level, isZero=isZero)
+            skillModelSetup(skillVM, skill=skill, tankman=tankman, role=self.context.role, skillLevel=level, isZero=isZero, checkIrrelevant=checkIrrelevant)
             skillVM.setIsSelected(isSelected)
             skillVM.setUserName(skill.userName)
             skillVM.setIsLearned(skill.isLearnedAsMajor if self.context.isMajorQualification else skill.isLearnedAsBonus)

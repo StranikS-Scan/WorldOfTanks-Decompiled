@@ -1778,13 +1778,13 @@
       <rotationSpeed>	20	</rotationSpeed>
       <reloadTime>	9.5	</reloadTime>
       <maxAmmo>	40	</maxAmmo>
-      <aimingTime>	2.4	</aimingTime>
+      <aimingTime>	2.5	</aimingTime>
       <weight>	2000	</weight>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	90	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
       <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.1	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -1795,7 +1795,7 @@
         <rate>	24	</rate>
       </clip>
       <autoreload>
-        <reloadTime>	9.5 11.5 14.5	</reloadTime>
+        <reloadTime>	10 12 16	</reloadTime>
       </autoreload>
       <shots>
         <_105mm_58_AP_T>
@@ -1803,14 +1803,14 @@
           <speed>	1030	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	218 199	</piercingPower>
+          <piercingPower>	226 207	</piercingPower>
         </_105mm_58_AP_T>
         <_105mm_58_HVAP_T>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1320	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	265 249	</piercingPower>
+          <piercingPower>	272 255	</piercingPower>
         </_105mm_58_HVAP_T>
         <_105mm_58_HE_T>
           <defaultPortion>	0.0	</defaultPortion>

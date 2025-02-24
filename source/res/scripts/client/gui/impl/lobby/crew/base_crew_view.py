@@ -15,8 +15,6 @@ from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showPersonalCase, showChangeCrewMember
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT
 from gui.shared.gui_items.Vehicle import NO_VEHICLE_ID
-from uilogging.crew.loggers import CrewBringToFrontViewLogger
-from uilogging.crew.logging_constants import CrewNavigationButtons, LAYOUT_ID_TO_ITEM
 if TYPE_CHECKING:
     from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
 IS_FROM_ESCAPE_PARAM = 'isFromEscape'
@@ -31,21 +29,19 @@ class BaseCrewSubView(BaseCrewSoundView):
     _COMMON_SOUND_SPACE = CREW_SOUND_OVERLAY_SPACE
 
 
-class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
-    __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_currentViewKey', '_previousViewID', '_uiLogger')
+class BaseCrewWidgetView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
+    __slots__ = ('_isHangar', '_crewWidget', '_currentViewID', '_previousViewID')
 
-    def __init__(self, settings, parentViewKey=None):
+    def __init__(self, settings, **kwargs):
         self._isHangar = bool(self.gui.windowsManager.findWindows(lambda window: getattr(window.content, 'alias', None) == VIEW_ALIAS.LOBBY_HANGAR))
         self._crewWidget = None
         self._currentViewID = settings.kwargs.get('currentViewID', settings.layoutID)
         self._previousViewID = settings.kwargs.get('previousViewID')
-        self._currentViewKey = None
-        self._uiLogger = CrewBringToFrontViewLogger(self, settings.layoutID, parentViewKey if parentViewKey else LAYOUT_ID_TO_ITEM.get(settings.kwargs.get('previousViewID')))
-        super(BaseCrewView, self).__init__(settings)
+        super(BaseCrewWidgetView, self).__init__(settings)
         return
 
-    def onBringToFront(self, otherWindow):
-        self._uiLogger.onBringToFront(otherWindow)
+    def onBringToFront(self, _):
+        pass
 
     @property
     def isPersonalFileOpened(self):
@@ -66,7 +62,7 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
 
     @property
     def viewModel(self):
-        return super(BaseCrewView, self).getViewModel()
+        return super(BaseCrewWidgetView, self).getViewModel()
 
     def widgetAutoSelectSlot(self, **kwargs):
         slotIDX = kwargs.get('slotIDX', NO_SLOT)
@@ -93,18 +89,17 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
         return (NO_SLOT, None)
 
     def _subscribe(self):
-        super(BaseCrewView, self)._subscribe()
+        super(BaseCrewWidgetView, self)._subscribe()
         self.startGlobalListening()
 
     def _unsubscribe(self):
-        super(BaseCrewView, self)._unsubscribe()
+        super(BaseCrewWidgetView, self)._unsubscribe()
         self.stopGlobalListening()
 
     def _finalize(self):
-        super(BaseCrewView, self)._finalize()
+        super(BaseCrewWidgetView, self)._finalize()
         self.resumeLobbyHeader(self.uniqueID)
         self._crewWidget = None
-        self._uiLogger.finalize()
         return
 
     def _setWidgets(self, **kwargs):
@@ -112,40 +107,34 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
 
     def _onLoading(self, *args, **kwargs):
         self._setWidgets(**kwargs)
-        self._uiLogger.initialize()
-        super(BaseCrewView, self)._onLoading()
-        self._updateViewModel()
+        super(BaseCrewWidgetView, self)._onLoading()
+
+    def _isCrewWidgetButtonBarVisible(self):
+        return self._isHangar
 
     def _setCrewWidget(self, **kwargs):
-        from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
+        crewWidgetClass, crewWidgetLayoutDynAccessor = self._getCrewWidgetBaseData()
         tankmanInvID = kwargs.get('tankmanInvID', NO_TANKMAN)
         vehicleInvID = kwargs.get('vehicleInvID', NO_VEHICLE_ID)
         slotIdx = kwargs.get('slotIdx', NO_SLOT)
         previousViewID = kwargs.get('previousViewID', None)
-        self._crewWidget = CrewWidget(tankmanInvID, vehicleInvID, slotIdx, self._currentViewID, previousViewID, self._isHangar)
+        self._crewWidget = crewWidgetClass(tankmanInvID, vehicleInvID, slotIdx, self._currentViewID, previousViewID, self._isCrewWidgetButtonBarVisible())
         if slotIdx == NO_SLOT:
             slotIdx, _, __ = self._crewWidget.getWidgetData()
-        self.setChildView(CrewWidget.LAYOUT_DYN_ACCESSOR(), self._crewWidget)
+        self.setChildView(crewWidgetLayoutDynAccessor, self._crewWidget)
         self._crewWidget.updateSlotIdx(slotIdx)
         return
 
-    def _updateViewModel(self):
-        with self.viewModel.transaction() as vm:
-            self._fillViewModel(vm)
-
-    def _fillViewModel(self, vm):
-        vm.setIsButtonBarVisible(self._isHangar)
-        self._setBackButtonLabel(vm)
-
-    def _setBackButtonLabel(self, vm):
-        vm.setBackButtonLabel(R.strings.crew.common.navigation.toPersonalFile())
+    def _getCrewWidgetBaseData(self):
+        from gui.impl.lobby.crew.widget.crew_widget import CrewWidget
+        return (CrewWidget, CrewWidget.LAYOUT_DYN_ACCESSOR())
 
     def _onLoaded(self, *args, **kwargs):
         self.suspendLobbyHeader(self.uniqueID)
-        super(BaseCrewView, self)._onLoaded(*args, **kwargs)
+        super(BaseCrewWidgetView, self)._onLoaded(*args, **kwargs)
 
     def _getEvents(self):
-        eventsTuple = super(BaseCrewView, self)._getEvents()
+        eventsTuple = super(BaseCrewWidgetView, self)._getEvents()
         return eventsTuple + ((self.viewModel.onClose, self._onClose),
          (self.viewModel.onBack, self._onBack),
          (self.viewModel.onHangar, self._onHangar),
@@ -190,29 +179,16 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
         for window in windows:
             window.destroy()
 
-    @property
-    def _backButtonLogingKey(self):
-        return CrewNavigationButtons.TO_PERSONAL_FILE
-
     def _onWidgetSlotClick(self, tankmanInvID, slotIdx):
         if tankmanInvID == NO_TANKMAN:
             self._onEmptySlotClick(tankmanInvID, slotIdx)
         else:
             self._onTankmanSlotClick(tankmanInvID, slotIdx)
 
-    def _logClose(self, params=None):
-        if isinstance(params, dict) and params.get(IS_FROM_ESCAPE_PARAM, False):
-            self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.ESC)
-        else:
-            self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.CLOSE)
-
     def _onClose(self, params=None):
-        self._logClose(params)
         self.destroyWindow()
 
-    def _onBack(self, logClick=True):
-        if logClick:
-            self._uiLogger.logNavigationButtonClick(self._backButtonLogingKey)
+    def _onBack(self):
         slotIDX, _, tankman = self._crewWidget.getWidgetData()
         if tankman:
             tankmanID = tankman.invID
@@ -224,7 +200,6 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
         self.destroyWindow()
 
     def _onHangar(self):
-        self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.TO_GARAGE)
         if self._isHangar:
             self._destroySubViews()
         else:
@@ -252,3 +227,21 @@ class BaseCrewView(BaseCrewSoundView, LobbyHeaderVisibility, IGlobalListener):
     def _onVehicleLockChanged(self, _, lockReason):
         if lockReason[0] in (LOCK_REASON.PREBATTLE, LOCK_REASON.UNIT):
             self._destroySubViews()
+
+
+class BaseCrewView(BaseCrewWidgetView):
+
+    def _onLoading(self, *args, **kwargs):
+        super(BaseCrewView, self)._onLoading(*args, **kwargs)
+        self._updateViewModel()
+
+    def _updateViewModel(self):
+        with self.viewModel.transaction() as vm:
+            self._fillViewModel(vm)
+
+    def _fillViewModel(self, vm):
+        vm.setIsButtonBarVisible(self._isHangar)
+        self._setBackButtonLabel(vm)
+
+    def _setBackButtonLabel(self, vm):
+        vm.setBackButtonLabel(R.strings.crew.common.navigation.toPersonalFile())

@@ -4,7 +4,7 @@ from functools import partial
 import BigWorld
 import account_helpers
 from CurrentVehicle import g_currentVehicle
-from constants import ARENA_GUI_TYPE, PREBATTLE_STATE, PREBATTLE_TYPE
+from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
@@ -13,13 +13,11 @@ from gui.prb_control.entities.base import cooldown
 from gui.prb_control.entities.base.legacy.ctx import SetPlayerStateCtx
 from gui.prb_control.entities.base.legacy.entity import LegacyEntryPoint, LegacyIntroEntryPoint, LegacyIntroEntity, LegacyEntity
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import BaseVehiclesWatcher
-from gui.prb_control.entities.comp7.pre_queue.vehicles_watcher import Comp7VehiclesWatcher
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx, SetPlayerObserverStateCtx
 from gui.prb_control.entities.training.legacy.limits import TrainingLimits
 from gui.prb_control.entities.training.legacy.permissions import TrainingPermissions, TrainingIntroPermissions
 from gui.prb_control.entities.training.legacy.requester import TrainingListRequester
-from gui.prb_control.entities.comp7.limits import Comp7TrainingLimits
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
@@ -28,6 +26,7 @@ from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTI
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType, LoadGuiImplViewEvent
+from gui.training_room_external_handlers import getTrainingRoomHandler
 from prebattle_shared import decodeRoster
 
 class TrainingEntryPoint(LegacyEntryPoint):
@@ -237,11 +236,11 @@ class TrainingEntity(LegacyEntity):
         super(TrainingEntity, self).prb_onPlayerStateChanged(pID, roster)
 
     def prb_onPropertyUpdated(self, propertyName):
-        if propertyName == 'state':
-            propertyValue = prb_getters.getClientPrebattle().properties[propertyName]
-            if self.isComp7Arena() and propertyValue == PREBATTLE_STATE.IDLE:
-                self.__enterTrainingRoom()
+        checker = getTrainingRoomHandler(self.getSettings()['arenaGuiType']).getPrebattlePropertyChecker()
+        if checker is not None and checker(propertyName):
+            self.__enterTrainingRoom()
         super(TrainingEntity, self).prb_onPropertyUpdated(propertyName)
+        return
 
     def changeSettings(self, ctx, callback=None):
         if ctx.getRequestType() != REQUEST_TYPE.CHANGE_SETTINGS:
@@ -345,9 +344,6 @@ class TrainingEntity(LegacyEntity):
         self.__updateTrainingLimits()
         self._validateStatusIfModeChanged()
 
-    def isComp7Arena(self):
-        return self.getSettings()['arenaGuiType'] in (ARENA_GUI_TYPE.COMP7, ARENA_GUI_TYPE.TRAINING_COMP7)
-
     def _validateStatusIfModeChanged(self):
         self.storage.arenaGuiType = self.getSettings()['arenaGuiType']
         if self.storage.isObserver:
@@ -380,10 +376,14 @@ class TrainingEntity(LegacyEntity):
             return
 
     def __onPlayerReady(self, result):
-        if result or self.isComp7Arena():
+        playerReadyHandler = getTrainingRoomHandler(self.getSettings()['arenaGuiType']).getPlayerReadyHandler()
+        if playerReadyHandler is not None:
+            playerReadyHandler()
+        elif result:
             g_eventDispatcher.loadTrainingRoom()
         else:
             g_eventDispatcher.loadHangar()
+        return
 
     def __onSettingChanged(self, code, record='', errorCode=None, callback=None):
         if code < 0:
@@ -408,7 +408,9 @@ class TrainingEntity(LegacyEntity):
         self._setPlayerReady(SetPlayerStateCtx(True, waitingID='prebattle/player_ready'), self.__onPlayerReady)
 
     def __updateVehiclesWatcher(self):
-        watcherType = BaseVehiclesWatcher if not self.isComp7Arena() else Comp7VehiclesWatcher
+        watcherType = getTrainingRoomHandler(self.getSettings()['arenaGuiType']).getVehicleWatcherType()
+        if watcherType is None:
+            watcherType = BaseVehiclesWatcher
         if type(self.__watcher) is watcherType:
             return
         else:
@@ -419,5 +421,8 @@ class TrainingEntity(LegacyEntity):
             return
 
     def __updateTrainingLimits(self):
-        limits = TrainingLimits if not self.isComp7Arena() else Comp7TrainingLimits
+        limits = getTrainingRoomHandler(self.getSettings()['arenaGuiType']).getPrebattleLimits()
+        if limits is None:
+            limits = TrainingLimits
         self.setLimits(limits(self))
+        return

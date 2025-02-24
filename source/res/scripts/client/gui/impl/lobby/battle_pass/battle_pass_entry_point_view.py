@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/battle_pass/battle_pass_entry_point_view.py
-from PlayerEvents import g_playerEvents
-from battle_pass_common import BattlePassState, CurrencyBP, getPresentLevel
+from battle_pass_common import BattlePassState, CurrencyBP, getPresentLevel, isPostProgressionChapter
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.view.meta.BattlePassEntryPointMeta import BattlePassEntryPointMeta
 from gui.battle_pass.battle_pass_helpers import getSupportedCurrentArenaBonusType
@@ -10,7 +9,6 @@ from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_entry_point_vi
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.pub import ViewImpl
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
@@ -23,6 +21,7 @@ from helpers.events_handler import EventsHandler
 from helpers.time_utils import MS_IN_SECOND
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 
 class _LastEntryState(object):
@@ -37,9 +36,11 @@ class _LastEntryState(object):
         self.progress = 0
         self.state = None
         self.rewardsCount = 0
+        self.currentLevel = 0
+        self.cycle = 0
         return
 
-    def update(self, isFirstShow=True, isBought=False, hasExtra=False, isHoliday=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0):
+    def update(self, isFirstShow=True, isBought=False, hasExtra=False, isHoliday=False, chapterID=0, level=0, progress=0, state=None, rewardsCount=0, currentLevel=0, cycle=0):
         self.isFirstShow = isFirstShow
         self.isBought = isBought
         self.hasExtra = hasExtra
@@ -49,6 +50,8 @@ class _LastEntryState(object):
         self.progress = progress
         self.state = state
         self.rewardsCount = rewardsCount
+        self.currentLevel = currentLevel
+        self.cycle = cycle
 
 
 _g_entryLastState = _LastEntryState()
@@ -102,6 +105,13 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
 
     @property
     def level(self):
+        currentLevel = self.__battlePass.getCurrentLevel()
+        if isPostProgressionChapter(self.chapterID):
+            currentLevel = currentLevel % len(self.__battlePass.getLevelsConfig(self.chapterID))
+        return currentLevel
+
+    @property
+    def currentLevel(self):
         return self.__battlePass.getCurrentLevel()
 
     @property
@@ -109,17 +119,24 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return self.__battlePass.hasActiveChapter()
 
     @property
+    def cycle(self):
+        return self.__battlePass.getCompletedCyclesCount(self.chapterID)
+
+    @property
     def isBought(self):
         chapterID = self.chapterID
-        if chapterID and self.__battlePass.isBought(chapterID=chapterID):
-            return True
-        chapterIDs = self.__battlePass.getChapterIDs()
-        return all((self.__battlePass.isBought(chapterID=chapter) for chapter in chapterIDs))
+        if isPostProgressionChapter(chapterID):
+            return False
+        return True if chapterID and self.__battlePass.isBought(chapterID=chapterID) else self.__battlePass.isAllMainChaptersBought()
 
     @property
     def isCompleted(self):
-        chapterIDs = self.__battlePass.getChapterIDs()
+        chapterIDs = self.__battlePass.getMainChapterIDs()
         return all((self.__battlePass.isChapterCompleted(chapter) for chapter in chapterIDs))
+
+    @property
+    def isPostProgressionActive(self):
+        return self.__battlePass.isPostProgressionActive()
 
     @property
     def isPaused(self):
@@ -164,8 +181,14 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def _updateData(self, *_):
         pass
 
+    def _onChapterChanged(self, *_):
+        self._updateData()
+
+    def _onPointsUpdated(self, *_):
+        self._updateData()
+
     def _saveLastState(self, isNotChosenRewardCount):
-        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.isHoliday, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount)
+        _g_entryLastState.update(False, self.isBought, self.hasExtra, self.isHoliday, self.chapterID, self.level, self.progress, self.battlePassState, isNotChosenRewardCount, self.currentLevel, self.cycle)
 
     @staticmethod
     def _onClick():
@@ -175,13 +198,12 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return ((events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY),)
 
     def _getEvents(self):
-        return ((self.__battlePass.onPointsUpdated, self._updateData),
+        return ((self.__battlePass.onPointsUpdated, self._onPointsUpdated),
          (self.__battlePass.onBattlePassIsBought, self._updateData),
          (self.__battlePass.onSeasonStateChanged, self._updateData),
          (self.__battlePass.onExtraChapterExpired, self._updateData),
          (self.__battlePass.onBattlePassSettingsChange, self._updateData),
-         (self.__battlePass.onChapterChanged, self._updateData),
-         (g_playerEvents.onClientUpdated, self.__onClientUpdated))
+         (self.__battlePass.onChapterChanged, self._onChapterChanged))
 
     def _addListeners(self):
         self.startGlobalListening()
@@ -192,7 +214,7 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def _getTooltip(self):
         if self.isPaused:
             return R.invalid()
-        if self.isCompleted:
+        if self.isCompleted and self.isHoliday:
             return R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView()
         return R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView() if not self.chapterID and not self.isHoliday else R.views.lobby.battle_pass.tooltips.BattlePassInProgressTooltipView()
 
@@ -209,13 +231,10 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
     def __onAwardViewClose(self, _):
         self._updateData()
 
-    def __onClientUpdated(self, diff, _):
-        if self.isCompleted and CurrencyBP.BIT.value in diff.get('cache', {}).get('dynamicCurrencies', {}):
-            self._updateData()
-
 
 class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
     __battlePass = dependency.descriptor(IBattlePassController)
+    __gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__isSmall', '__notifications', '__isAttentionTimerStarted')
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -232,11 +251,8 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         return super(BattlePassEntryPointView, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if not self.isHoliday:
-            if contentID == R.views.lobby.battle_pass.tooltips.BattlePassNotStartedTooltipView():
-                return BattlePassNotStartedTooltipView()
-            if contentID == R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView():
-                return BattlePassNoChapterTooltipView()
+        if not self.isHoliday and contentID == R.views.lobby.battle_pass.tooltips.BattlePassNoChapterTooltipView():
+            return BattlePassNoChapterTooltipView()
         return BattlePassCompletedTooltipView() if contentID == R.views.lobby.battle_pass.tooltips.BattlePassCompletedTooltipView() else BattlePassInProgressTooltipView()
 
     def setIsSmall(self, value):
@@ -263,7 +279,17 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
         super(BattlePassEntryPointView, self)._removeListeners()
 
     def _updateData(self, *_):
-        self.__updateViewModel()
+        awardViews = self.__gui.windowsManager.findViews(lambda view: view.layoutID == R.views.lobby.battle_pass.BattlePassAwardsView())
+        if not awardViews:
+            self.__updateViewModel()
+
+    def _onChapterChanged(self, *_):
+        if self.chapterID != _g_entryLastState.chapterID:
+            self._updateData()
+
+    def _onPointsUpdated(self, *_):
+        if self.progress != _g_entryLastState.progress or self.currentLevel != _g_entryLastState.currentLevel:
+            self._updateData()
 
     def __attentionTickTime(self):
         return ATTENTION_TIMER_DELAY
@@ -306,7 +332,8 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
             tx.setNotChosenRewardCount(isNotChosenRewardCount)
             tx.setIsProgressionCompleted(self.isCompleted)
             tx.setIsChapterChosen(self.isChapterChosen)
-            tx.setFreePoints(self.freePoints)
+            tx.setPrevCycle(_g_entryLastState.cycle)
+            tx.setCycle(self.cycle)
             tx.setHasBattlePass(self.isBought)
             tx.setAnimState(self.__getAnimationState())
             tx.setIsFirstShow(_g_entryLastState.isFirstShow)
@@ -319,13 +346,13 @@ class BattlePassEntryPointView(ViewImpl, BaseBattlePassEntryPointView):
     def __getAnimationState(self):
         animState = AnimationState.NORMAL
         lastState = _g_entryLastState
-        if self.battlePassState == BattlePassState.COMPLETED and lastState.state != BattlePassState.COMPLETED:
+        if self.battlePassState == BattlePassState.COMPLETED and lastState.state != BattlePassState.COMPLETED and self.isHoliday:
             animState = AnimationState.PROGRESSION_COMPLETED
         elif self.chapterID and self.chapterID != lastState.chapterID and not self.isHoliday:
             animState = AnimationState.NEW_CHAPTER
         elif not self.chapterID and not self.isHoliday:
             animState = AnimationState.CHAPTER_NOT_CHOSEN
-        elif self.level and self.level != lastState.level:
+        elif self.currentLevel != lastState.currentLevel:
             animState = AnimationState.NEW_LEVEL
         elif self.isBought and not lastState.isBought:
             animState = AnimationState.BUY_BATTLE_PASS

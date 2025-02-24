@@ -32,6 +32,10 @@ class GenericOptionalDevice(Enum):
     IMPROVED_CONFIGURATION = 15
     RADIO_COMMUNICATION = 16
     COMMANDERS_VIEW = 17
+    MODERNIZED_EXTRA_HEALTH_RESERVE_ANTIFRAGMENTATION_LINING = 18
+    MODERNIZED_TURBOCHARGER_ROTATION_MECHANISM = 19
+    MODERNIZED_AIM_DRIVES_AIMING_STABILIZER = 20
+    MODERNIZED_IMPROVED_SIGHTS_ENHANCED_AIM_DRIVES = 21
 
 
 EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP = {'stereoscope': GenericOptionalDevice.STEREOSCOPE,
@@ -50,7 +54,12 @@ EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP = {'stereoscope': GenericOptionalD
  'additInvisibilityDevice': GenericOptionalDevice.ADDIT_INVISIBILITY_DEVICE,
  'improvedConfiguration': GenericOptionalDevice.IMPROVED_CONFIGURATION,
  'radioCommunication': GenericOptionalDevice.RADIO_COMMUNICATION,
- 'commandersView': GenericOptionalDevice.COMMANDERS_VIEW}
+ 'commandersView': GenericOptionalDevice.COMMANDERS_VIEW,
+ 'modernizedExtraHealthReserveAntifragmentationLining': GenericOptionalDevice.MODERNIZED_EXTRA_HEALTH_RESERVE_ANTIFRAGMENTATION_LINING,
+ 'modernizedAimDrivesAimingStabilizer': GenericOptionalDevice.MODERNIZED_AIM_DRIVES_AIMING_STABILIZER,
+ 'modernizedTurbochargerRotationMechanism': GenericOptionalDevice.MODERNIZED_TURBOCHARGER_ROTATION_MECHANISM,
+ 'modernizedImprovedSightsEnhancedAimDrives': GenericOptionalDevice.MODERNIZED_IMPROVED_SIGHTS_ENHANCED_AIM_DRIVES}
+GENERIC_OPTIONAL_DEVICE_MAP_TO_EQUIPMENT_NAME = {v:k for k, v in EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.iteritems()}
 
 def _readOptionalDevicesUsage(section):
     tempConfig = {}
@@ -87,7 +96,7 @@ def _getVehicleTypeCompDescr(vehicleName):
 
 def convertServerDiffToRichTypes(configDict):
     updateConfig = configDict.get(OptionalDevicesUsageConst.UPDATE, {})
-    for vehicle, loadoutList in updateConfig.items():
+    for vehicle, loadoutList in updateConfig.iteritems():
         newLoadoutList = []
         for loadout in loadoutList:
             devicesList = map(GenericOptionalDevice, loadout[0])

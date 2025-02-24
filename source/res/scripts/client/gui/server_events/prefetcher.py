@@ -118,7 +118,7 @@ class TokenImagesSubRequester(SubRequester):
                 continue
             for token in itertools.chain(_getTokensFromAccountReqs(quest), _getTokensFromBonuses(quest)):
                 styleID = token.styleID
-                if token.isDisplayable and styleID not in tickets:
+                if token.isDisplayable and styleID not in _DEFAULT_TOKENS_STYLES and styleID not in tickets:
                     tickets.append(styleID)
 
         return itertools.product(tickets, TOKEN_SIZES.ALL())

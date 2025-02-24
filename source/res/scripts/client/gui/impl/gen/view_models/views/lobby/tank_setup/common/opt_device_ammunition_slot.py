@@ -6,34 +6,34 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.specializations_mode
 class OptDeviceAmmunitionSlot(BaseAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=16, commands=0):
         super(OptDeviceAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     @property
     def specializations(self):
-        return self._getViewModel(11)
+        return self._getViewModel(12)
 
     @staticmethod
     def getSpecializationsType():
         return SpecializationsModel
 
     def getActiveSpecsMask(self):
-        return self._getNumber(12)
+        return self._getNumber(13)
 
     def setActiveSpecsMask(self, value):
-        self._setNumber(12, value)
+        self._setNumber(13, value)
 
     def getIsIncompatible(self):
-        return self._getBool(13)
+        return self._getBool(14)
 
     def setIsIncompatible(self, value):
-        self._setBool(13, value)
+        self._setBool(14, value)
 
     def getLevel(self):
-        return self._getNumber(14)
+        return self._getNumber(15)
 
     def setLevel(self, value):
-        self._setNumber(14, value)
+        self._setNumber(15, value)
 
     def _initialize(self):
         super(OptDeviceAmmunitionSlot, self)._initialize()

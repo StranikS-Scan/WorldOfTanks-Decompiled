@@ -11,7 +11,6 @@ from adisp import adisp_process
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHAIN_BONUS_NAME, BATTLE_PASS_Q_CHAIN_TOKEN_PREFIX, BATTLE_PASS_RANDOM_QUEST_BONUS_NAME, BATTLE_PASS_RANDOM_QUEST_TOKEN_PREFIX, BATTLE_PASS_SELECT_BONUS_NAME, BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME, BATTLE_PASS_TOKEN_3D_STYLE, BATTLE_PASS_TOKEN_PREFIX
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
-from comp7_common import COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_REGEXP
 from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, MODERNIZED_DEVICES_TOKEN_PREFIX, STYLE_3D_PROGRESS_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dog_tags_common.components_config import componentConfigAdapter as dogTagComponentConfig
@@ -40,7 +39,7 @@ from gui.game_control.links import URLMacros
 from gui.impl import backport
 from gui.impl.backport import TooltipData
 from gui.impl.gen import R
-from gui.lootbox_system.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT, LOOTBOX_RANDOM_NATIONAL_BROCHURE, LOOTBOX_RANDOM_NATIONAL_GUIDE, LOOTBOX_RANDOM_NATIONAL_CREW_BOOK
+from gui.lootbox_system.base.common import LOOTBOX_RANDOM_NATIONAL_BLUEPRINT, LOOTBOX_RANDOM_NATIONAL_BROCHURE, LOOTBOX_RANDOM_NATIONAL_GUIDE, LOOTBOX_RANDOM_NATIONAL_CREW_BOOK
 from gui.selectable_reward.constants import FEATURE_TO_PREFIX, SELECTABLE_BONUS_NAME
 from gui.server_events.awards_formatters import AWARDS_SIZES, BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
 from gui.server_events.events_helpers import parseC11nProgressToken
@@ -48,7 +47,7 @@ from gui.server_events.formatters import parseComplexToken
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, getItemTypeID
-from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUserName
+from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel
 from gui.shared.gui_items.Vehicle import getIconResourceName, getWotPlusExclusiveVehicleTypeUserName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
@@ -57,6 +56,7 @@ from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money, ZERO_MONEY
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID, getVehicleCDForIntelligence, getVehicleCDForNational, makeIntelligenceCD, makeNationalCD
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import dependency, getLocalizedData, i18n, time_utils
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_DAY
@@ -70,8 +70,7 @@ from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import ICollectionsSystemController, IWotPlusController
-from skeletons.gui.game_control import IWinbackController
+from skeletons.gui.game_control import ICollectionsSystemController, ILootBoxSystemController, IWinbackController, IWotPlusController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -98,7 +97,6 @@ _CUSTOMIZATION_BONUSES = frozenset(['camouflage',
  'personal_number'])
 _META_BONUS_BROWSER_VIEW_TYPE = {'internal': VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB,
  'overlay': VIEW_ALIAS.WEB_VIEW_TRANSPARENT}
-COMP7_TOKEN_WEEKLY_REWARD_NAME = 'comp7TokenWeeklyReward'
 _logger = logging.getLogger(__name__)
 
 def _getAchievement(block, record, value):
@@ -417,6 +415,9 @@ class CurrenciesBonus(IntegralBonus):
           'itemSource': self.getIconBySize(AWARDS_SIZES.SMALL),
           'tooltip': self.getTooltip()}]
 
+    def formattedList(self):
+        return [i18n.makeString('#quests:bonuses/%s/description' % self._code, value=self.formatValue())]
+
     def getCode(self):
         return self._code
 
@@ -653,21 +654,6 @@ class BattlePassTokensBonus(TokensBonus):
         return False
 
 
-class Comp7TokenWeeklyRewardBonus(TokensBonus):
-
-    def __init__(self, name, value, isCompensation=False, ctx=None):
-        super(Comp7TokenWeeklyRewardBonus, self).__init__(name, value, isCompensation, ctx)
-        self._name = COMP7_TOKEN_WEEKLY_REWARD_NAME
-
-    def isShowInGUI(self):
-        return False
-
-    def getTooltip(self):
-        header = TOOLTIPS.getAwardHeader(self.getName())
-        body = TOOLTIPS.getAwardBody(self.getName())
-        return makeTooltip(header or None, body or None)
-
-
 class BattlePassSelectTokensBonus(TokensBonus):
 
     def __init__(self, value, isCompensation=False, ctx=None):
@@ -827,6 +813,7 @@ class BattlePassStyleProgressTokenBonus(TokensBonus):
 
 class LootBoxTokensBonus(TokensBonus):
     itemsCache = dependency.descriptor(IItemsCache)
+    lootBoxSystem = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__('lootBox', value, isCompensation, ctx)
@@ -852,18 +839,21 @@ class LootBoxTokensBonus(TokensBonus):
         return makeTooltip(header=self.getBox().getUserName())
 
     def getIconBySize(self, size):
-        iconName = RES_ICONS.getBonusIcon(size, '{}_{}'.format(self.getName(), self.getBox().getCategory()))
-        if iconName is None:
-            iconName = RES_ICONS.getBonusIcon(size, 'lootBox_default')
-        return iconName
+        boxIcon = '../maps/icons/quests/bonuses/{}/{}_{}.png'.format(size, self.getName(), self.getBox().getCategory())
+        if boxIcon not in RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_ALL_ENUM:
+            boxIcon = RES_ICONS.getBonusIcon(size, 'lootBox_default')
+        return boxIcon
 
     def formattedList(self):
         result = []
         for tokenID, tokenVal in self._value.iteritems():
             lootBox = self.itemsCache.items.tokens.getLootBoxByTokenID(tokenID)
             if lootBox is not None:
-                result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'lootBox', {'lootBoxType': lootBox.getType(),
-                 'value': tokenVal['count']}))
+                if lootBox.getType() in self.lootBoxSystem.getActiveEvents():
+                    result.append(i18n.makeString('#lootbox_system:helpers/lootBoxBonus', boxName=lootBox.getUserName(), count=tokenVal['count']))
+                else:
+                    result.append(makeHtmlString('html_templates:lobby/quests/bonuses', 'lootBox', {'lootBoxType': lootBox.getType(),
+                     'value': tokenVal['count']}))
 
         return result
 
@@ -1222,8 +1212,6 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(ResourceBonus(name, {tID: tValue}, RESOURCE_TOKEN_PREFIX, isCompensation, ctx))
         if tID.startswith(CUSTOMIZATION_PROGRESS_PREFIX):
             result.append(C11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
-        if COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_REGEXP.match(tID):
-            result.append(Comp7TokenWeeklyRewardBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(EXCHANGE_RATE_GOLD_NAME):
             accumulatedRewards[EXCHANGE_RATE_GOLD_NAME][tID] = tValue
         if tID.startswith(EXCHANGE_RATE_FREE_XP_NAME):
@@ -1430,6 +1418,9 @@ class GoodiesBonus(SimpleBonus):
     def getRecertificationForms(self):
         return self._getGoodies(self.goodiesCache.getRecertificationForm)
 
+    def getMentoringLicenses(self):
+        return self._getGoodies(self.goodiesCache.getMentoringLicense)
+
     def _getGoodies(self, goodieGetter):
         goodies = {}
         if self._value is not None:
@@ -1504,6 +1495,16 @@ class GoodiesBonus(SimpleBonus):
                  'name': form.userName,
                  'description': form.shortDescription})
 
+        for item, count in self.getMentoringLicenses().iteritems():
+            if item is not None:
+                result.append({'id': item.intCD,
+                 'type': 'goodie/{}'.format(item.itemTypeName),
+                 'value': count,
+                 'icon': {AWARDS_SIZES.SMALL: item.iconInfo,
+                          AWARDS_SIZES.BIG: item.bigIcon},
+                 'name': item.userName,
+                 'description': item.shortDescription})
+
         return result
 
     def getWrappedLootBoxesBonusList(self):
@@ -1536,6 +1537,9 @@ class GoodiesBonus(SimpleBonus):
 
         for recertificationForm, count in self.getRecertificationForms().iteritems():
             result.append(backport.text(R.strings.quests.bonuses.items.name(), name=recertificationForm.userName, count=count))
+
+        for item, count in self.getMentoringLicenses().iteritems():
+            result.append(backport.text(R.strings.quests.bonuses.items.name(), name=item.userName, count=count))
 
         return result
 
@@ -3049,7 +3053,7 @@ def getBonuses(quest, name, value, isCompensation=False, ctx=None):
          'chainID': quest.getChainID(),
          'campaignID': quest.getCampaignID(),
          'areTokensPawned': False})
-    return _initFromTree(key, name, value, isCompensation, ctx=ctx)
+    return _initFromTree(key, name, value, isCompensation=isCompensation, ctx=ctx)
 
 
 def getServiceBonuses(name, value, isCompensation=False):

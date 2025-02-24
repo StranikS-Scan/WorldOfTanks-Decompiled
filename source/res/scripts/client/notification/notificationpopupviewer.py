@@ -78,10 +78,15 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
     def _getSettings(self):
         return g_settings.lobby.serviceChannel
 
+    def __incrementOrDecrementNotifiedMessagesCount(self, notification):
+        if notification.isNotify() and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
+            self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
+        else:
+            self._model.decrementNotifiedMessagesCount(*notification.getCounterInfo())
+
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if notification.isNotify() and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
-                self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
+            self.__incrementOrDecrementNotifiedMessagesCount(notification)
             if NotificationMVC.g_instance.getAlertController().isAlertShowing():
                 self.__pendingMessagesQueue.append(notification)
             elif self.__pendingMessagesQueue or self.__isLocked(notification):
@@ -101,6 +106,8 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
             self.as_updateMessageS(self.__getPopUpVO(notification))
         elif isStateChanged:
             self.__onNotificationReceived(notification)
+        if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
+            self.__incrementOrDecrementNotifiedMessagesCount(notification)
 
     def __onNotificationRemoved(self, typeID, entityID, groupID, countOnce):
         self._model.decrementNotifiedMessagesCount(groupID, typeID, entityID, countOnce)

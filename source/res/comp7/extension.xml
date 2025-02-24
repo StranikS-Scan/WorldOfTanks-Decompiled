@@ -6,6 +6,7 @@
     <StaticComponents>
       <ArenaComp7Component></ArenaComp7Component>
       <AccountComp7Component></AccountComp7Component>
+      <PrebattleComp7Component></PrebattleComp7Component>
     </StaticComponents>
     <DynamicComponents>
       <TeamInfoComp7Component></TeamInfoComp7Component>
@@ -18,4 +19,14 @@
       <VehicleHealController></VehicleHealController>
     </DynamicComponents>
   </Components>
+  <Entities>
+    <ClientServerEntities>
+      <Comp7Lighting></Comp7Lighting>
+      <ApplicationPoint></ApplicationPoint>
+    </ClientServerEntities>
+    <ServerOnlyEntities>
+      <Comp7Mgr></Comp7Mgr>
+      <Comp7UnitMgr></Comp7UnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
 </extension.xml>

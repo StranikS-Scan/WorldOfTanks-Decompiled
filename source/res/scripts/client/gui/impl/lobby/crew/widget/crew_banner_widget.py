@@ -10,18 +10,15 @@ from gui.shared.gui_items.items_actions.actions import ResetAllTankmenSkillsActi
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew_nps.loggers import CrewBannerWidgetLogger
 from wg_async import wg_await, wg_async
 
 class CrewBannerWidget(ViewImpl):
     LAYOUT_ID = R.views.lobby.crew.widgets.CrewBannerWidget
     lobbyContext = dependency.descriptor(ILobbyContext)
     itemsCache = dependency.descriptor(IItemsCache)
-    __slots__ = ('__bannerLogger',)
 
     def __init__(self):
         settings = ViewSettings(self.LAYOUT_ID(), flags=ViewFlags.VIEW, model=CrewBannerWidgetModel())
-        self.__bannerLogger = CrewBannerWidgetLogger()
         super(CrewBannerWidget, self).__init__(settings)
 
     @property
@@ -41,14 +38,12 @@ class CrewBannerWidget(ViewImpl):
 
     @wg_async
     def __onFill(self):
-        self.__bannerLogger.logFillButtonClick()
         result = yield wg_await(showFillAllPerksDialog())
         if result and result.result[0]:
             FillAllTankmenSkillsAction(result.result[1]).doAction()
 
     @wg_async
     def __onReset(self):
-        self.__bannerLogger.logResetButtonClick()
         result = yield wg_await(showResetAllPerksDialog())
         if result.result[0]:
             ResetAllTankmenSkillsAction().doAction()

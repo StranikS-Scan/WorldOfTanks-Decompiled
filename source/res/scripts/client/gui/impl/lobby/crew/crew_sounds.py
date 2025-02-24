@@ -24,6 +24,7 @@ class SOUNDS(CONST_CONTAINER):
     CREW_PERK_UPGRADE = 'crew_perks_upgrade'
     CREW_CHANGE_ROLE = 'crew_change_qualification'
     CONVERSION_AWARD = 'gui_reward_screen_general'
+    MENTORING_LICENSE_AWARD = 'gui_reward_screen_general'
 
 
 CREW_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_BARRAKS}, exitStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_HANGAR}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='hangar_crew_enter', exitEvent='hangar_crew_exit')

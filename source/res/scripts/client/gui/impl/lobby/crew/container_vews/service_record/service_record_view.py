@@ -13,23 +13,19 @@ from gui.impl.lobby.crew.container_vews.common.tankman_info_component import Tan
 from gui.impl.lobby.crew.container_vews.service_record.context import ServiceRecordViewContext
 from gui.impl.lobby.crew.container_vews.service_record.controller import ServiceRecordInteractionController
 from gui.impl.lobby.crew.personal_case import IPersonalTab
-from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.impl.pub import ViewImpl
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.dossier.achievements.abstract import isRareAchievement
-from uilogging.crew.logging_constants import CrewViewKeys
 if typing.TYPE_CHECKING:
     from typing import List, Type
     from gui.impl.lobby.container_views.base.controllers import InteractionController
     from gui.impl.lobby.container_views.base.components import ComponentBase
 
-class ServiceRecordView(ContainerBase, IPersonalTab, BasePersonalCaseView):
-    __slots__ = ('__viewKey',)
+class ServiceRecordView(ContainerBase, IPersonalTab, ViewImpl):
     TITLE = backport.text(R.strings.crew.tankmanContainer.tab.serviceRecord())
-    _UI_LOGGING_KEY = CrewViewKeys.SERVICE_RECORD
 
     def __init__(self, layoutID=R.views.lobby.crew.personal_case.ServiceRecordView(), **kwargs):
-        self.__viewKey = CrewViewKeys.SERVICE_RECORD
         settings = ViewSettings(layoutID, ViewFlags.LOBBY_TOP_SUB_VIEW, ServiceRecordViewModel())
         super(ServiceRecordView, self).__init__(settings, **kwargs)
 
@@ -45,10 +41,6 @@ class ServiceRecordView(ContainerBase, IPersonalTab, BasePersonalCaseView):
     @property
     def viewModel(self):
         return super(ServiceRecordView, self).getViewModel()
-
-    @property
-    def viewKey(self):
-        return self.__viewKey
 
     def onChangeTankman(self, tankmanID):
         if hasattr(self, 'interactionCtrl'):

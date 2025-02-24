@@ -26,7 +26,6 @@ _EPIC_BATTLE_TIPS_PATTERN = '^(epicTip\\d+)'
 _EPIC_RANDOM_TIPS_PATTERN = '^(epicRandom\\d+)'
 _RANKED_BATTLES_TIPS_PATTERN = '^(ranked\\d+)'
 _BATTLE_ROYALE_TIPS_PATTERN = '^(battleRoyale\\d+$)'
-_COMP7_TIPS_PATTERN = '^(comp7\\d+$)'
 _WINBACK_TIPS_PATTERN = '^(winback\\d+$)'
 _MAPBOX_TIPS_PATTERN = '^(mapbox\\d+)'
 _DEV_MAPS_PATTERN = '^(devMaps\\d+)'
@@ -135,15 +134,6 @@ class _EpicRandomTipsCriteria(TipsCriteria):
         return _epicRandomTips
 
 
-class _Comp7TipsCriteria(TipsCriteria):
-
-    def _getTargetList(self):
-        return _comp7Tips
-
-    def _getArenaGuiType(self):
-        return ARENA_GUI_TYPE.COMP7
-
-
 class _WinbackTipsCriteria(TipsCriteria):
 
     def _getTargetList(self):
@@ -216,9 +206,6 @@ class ExactTipsCriteria(TipsCriteria):
 registerBattleTipCriteria(ARENA_GUI_TYPE.EVENT_BATTLES, _EventTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.RANKED, _RankedTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleTipsCriteria)
-registerBattleTipCriteria(ARENA_GUI_TYPE.COMP7, _Comp7TipsCriteria)
-registerBattleTipCriteria(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7TipsCriteria)
-registerBattleTipCriteria(ARENA_GUI_TYPE.TRAINING_COMP7, _Comp7TipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.WINBACK, _WinbackTipsCriteria)
 registerBattleTipCriteria(ARENA_GUI_TYPE.MAPBOX, _MapboxTipsCriteria)
 registerBattleTipsCriteria(ARENA_GUI_TYPE.EPIC_RANGE, _EpicBattleTipsCriteria)
@@ -518,7 +505,6 @@ _rankedTips = readTips(_RANKED_BATTLES_TIPS_PATTERN)
 _epicBattleTips = readTips(_EPIC_BATTLE_TIPS_PATTERN)
 _epicRandomTips = readTips(_EPIC_RANDOM_TIPS_PATTERN)
 _battleRoyaleTips = readTips(_BATTLE_ROYALE_TIPS_PATTERN)
-_comp7Tips = readTips(_COMP7_TIPS_PATTERN)
 _winbackTips = readTips(_WINBACK_TIPS_PATTERN)
 _mapboxTips = readTips(_MAPBOX_TIPS_PATTERN)
 _devMapsTips = readTips(_DEV_MAPS_PATTERN)

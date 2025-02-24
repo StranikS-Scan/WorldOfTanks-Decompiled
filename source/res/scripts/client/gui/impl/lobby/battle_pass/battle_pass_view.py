@@ -13,6 +13,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.battle_pass_progressions_view import BattlePassProgressionsView
 from gui.impl.lobby.battle_pass.chapter_choice_view import ChapterChoiceView
 from gui.impl.lobby.battle_pass.intro_view import IntroView
+from gui.impl.lobby.battle_pass.holiday_final_view import HolidayFinalView
 from gui.impl.lobby.battle_pass.post_progression_view import PostProgressionView
 from gui.server_events.events_dispatcher import showMissionsBattlePass
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
@@ -27,6 +28,7 @@ _R_VIEWS = R.views.lobby.battle_pass
 _VIEWS = {_R_VIEWS.BattlePassIntroView(): IntroView,
  _R_VIEWS.ChapterChoiceView(): ChapterChoiceView,
  _R_VIEWS.BattlePassProgressionsView(): BattlePassProgressionsView,
+ _R_VIEWS.HolidayFinalView(): HolidayFinalView,
  _R_VIEWS.PostProgressionView(): PostProgressionView}
 _INTRO_VIDEO_SHOWN = BattlePassStorageKeys.INTRO_VIDEO_SHOWN
 _EXTRA_VIDEO_SHOWN = BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN
@@ -154,7 +156,7 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         return _VIEWS[layoutID](chapterID=chapterID)
 
     def __needTakeDefault(self, layoutID, chapterID):
-        return layoutID not in _VIEWS or not _hasTrueInBPStorage(_INTRO_SHOWN) or layoutID == _R_VIEWS.BattlePassProgressionsView() and chapterID and not self.__battlePass.isChapterExists(chapterID)
+        return layoutID not in _VIEWS or not _hasTrueInBPStorage(_INTRO_SHOWN) or layoutID == _R_VIEWS.BattlePassProgressionsView() and chapterID and not self.__battlePass.isChapterExists(chapterID) or self.__battlePass.hasExtra() and not self.__introVideoManager.isExtraVideoShown
 
     def __needReload(self, layoutID):
         return self._injectView is None or self._injectView.layoutID != layoutID or self._injectView.layoutID == _R_VIEWS.BattlePassProgressionsView()
@@ -168,6 +170,8 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
         isPaused = self.__battlePass.isPaused()
         if self.__isDummyVisible and not isPaused:
             self.updateState()
+        elif not self.__isDummyVisible and not isPaused and self._injectView.layoutID == _R_VIEWS.ChapterChoiceView():
+            self.__introVideoManager.showIntroVideoIfNeeded()
         self.__setDummyVisible(isPaused)
 
     def __getActualViewImplLayoutID(self, chapterID):
@@ -178,9 +182,11 @@ class BattlePassViewsHolderComponent(InjectComponentAdaptor, MissionsBattlePassV
 
         if not _hasTrueInBPStorage(_INTRO_SHOWN):
             return _R_VIEWS.BattlePassIntroView()
+        if not isExtraActiveFirstTime() and ctrl.isPostProgressionActive():
+            return _R_VIEWS.PostProgressionView()
         if not isExtraActiveFirstTime() and (ctrl.hasActiveChapter() or ctrl.isChapterExists(chapterID)):
             return _R_VIEWS.BattlePassProgressionsView()
-        return _R_VIEWS.PostProgressionView() if ctrl.isHoliday() and self.__battlePass.isCompleted() else _R_VIEWS.ChapterChoiceView()
+        return _R_VIEWS.HolidayFinalView() if ctrl.isHoliday() and self.__battlePass.isCompleted() else _R_VIEWS.ChapterChoiceView()
 
     def __setDummyVisible(self, isVisible):
         self.__isDummyVisible = isVisible

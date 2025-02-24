@@ -16,8 +16,14 @@ class AmmunitionPanelMeta(BaseDAAPIComponent):
     def showChangeNation(self):
         self._printOverrideError('showChangeNation')
 
-    def as_setWarningStateS(self, stateWarning):
-        return self.flashObject.as_setWarningState(stateWarning) if self._isDAAPIInited() else None
+    def showEasyTankEquip(self):
+        self._printOverrideError('showEasyTankEquip')
+
+    def as_setMaintenanceWarningStateS(self, stateWarning):
+        return self.flashObject.as_setMaintenanceWarningState(stateWarning) if self._isDAAPIInited() else None
+
+    def as_highlightEasyTankEquipS(self, isHighlight):
+        return self.flashObject.as_highlightEasyTankEquip(isHighlight) if self._isDAAPIInited() else None
 
     def as_updateVehicleStatusS(self, data):
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None

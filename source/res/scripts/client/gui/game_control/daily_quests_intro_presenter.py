@@ -2,13 +2,12 @@
 # Embedded file name: scripts/client/gui/game_control/daily_quests_intro_presenter.py
 from account_helpers.AccountSettings import Winback
 from frameworks.wulf import ViewStatus
-from gui.battle_pass.battle_pass_helpers import isBattlePassDailyQuestsIntroShown, showBattlePassDailyQuestsIntro, setBattlePassDailyQuestsIntroShown
 from gui.impl.gen import R
 from gui.shared import event_dispatcher
 from gui.winback.winback_helpers import getWinbackSetting, setWinbackSetting
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IBattlePassController, IWinbackController, IDailyQuestIntroPresenter
+from skeletons.gui.game_control import IBattlePassController, IDailyQuestIntroPresenter, IWinbackController
 from skeletons.gui.impl import IGuiLoader
 
 class DailyQuestsIntroPresenter(IDailyQuestIntroPresenter):
@@ -48,13 +47,9 @@ class DailyQuestsIntroPresenter(IDailyQuestIntroPresenter):
                 self.__update()
 
     def __update(self, *_):
-        if self.__isDailyQuestView():
-            if self.__winbackController.isProgressionAvailable() and not self.__isWinbackIntroShown():
-                self.__showWinbackIntroScreen()
-                if self.__battlePassController.isActive():
-                    setBattlePassDailyQuestsIntroShown()
-            elif self.__battlePassController.isActive() and not isBattlePassDailyQuestsIntroShown():
-                showBattlePassDailyQuestsIntro()
+        needToShowWinback = self.__isDailyQuestView() and self.__winbackController.isProgressionAvailable() and not self.__isWinbackIntroShown()
+        if needToShowWinback:
+            self.__showWinbackIntroScreen()
 
     def __isDailyQuestView(self):
         return self.__guiLoader.windowsManager.getViewByLayoutID(self.parentViewLayoutID) is not None

@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.statistics_mo
 class HasBoxesViewModel(ViewModel):
     __slots__ = ('onInfoOpen', 'onBoxesOpen', 'onBuyBoxes', 'onAnimationStateChanged', 'onOpeningOptionChanged', 'onBoxOptionChanged', 'onClose', 'onResetError')
 
-    def __init__(self, properties=11, commands=8):
+    def __init__(self, properties=12, commands=8):
         super(HasBoxesViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -46,10 +46,10 @@ class HasBoxesViewModel(ViewModel):
         return int
 
     def getSelectedBoxOption(self):
-        return self._getNumber(4)
+        return self._getString(4)
 
     def setSelectedBoxOption(self, value):
-        self._setNumber(4, value)
+        self._setString(4, value)
 
     def getSelectedOpeningOption(self):
         return self._getNumber(5)
@@ -87,19 +87,26 @@ class HasBoxesViewModel(ViewModel):
     def setUseStats(self, value):
         self._setBool(10, value)
 
+    def getIsShopVisible(self):
+        return self._getBool(11)
+
+    def setIsShopVisible(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(HasBoxesViewModel, self)._initialize()
         self._addViewModelProperty('statistics', StatisticsModel())
         self._addStringProperty('eventName', '')
         self._addArrayProperty('boxesInfo', Array())
         self._addArrayProperty('openingOptions', Array())
-        self._addNumberProperty('selectedBoxOption', 0)
+        self._addStringProperty('selectedBoxOption', '')
         self._addNumberProperty('selectedOpeningOption', 0)
         self._addBoolProperty('isAnimationActive', False)
         self._addBoolProperty('isAwaitingResponse', False)
         self._addBoolProperty('isError', False)
         self._addBoolProperty('useExternal', False)
         self._addBoolProperty('useStats', True)
+        self._addBoolProperty('isShopVisible', False)
         self.onInfoOpen = self._addCommand('onInfoOpen')
         self.onBoxesOpen = self._addCommand('onBoxesOpen')
         self.onBuyBoxes = self._addCommand('onBuyBoxes')

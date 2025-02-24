@@ -313,6 +313,10 @@ class ShopCommonStats(IShopCommonStats):
     def recertificationForms(self):
         return self.getGoodiesByVariety(GOODIE_VARIETY.RECERTIFICATION_FORM)
 
+    @property
+    def mentoringLicenses(self):
+        return self.getGoodiesByVariety(GOODIE_VARIETY.MENTORING_LICENSE)
+
     def getPremiumPacketCost(self, days):
         return self.premiumCost.get(days)
 

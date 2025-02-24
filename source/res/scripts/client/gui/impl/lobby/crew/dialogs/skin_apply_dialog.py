@@ -13,7 +13,6 @@ from gui.shared.gui_items.processors.tankman import CrewSkinEquip
 from gui.shared.utils import decorators
 from helpers import dependency, i18n
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewDialogKeys, CrewViewKeys
 
 class SkinApplyDialog(BaseCrewDialogTemplateView):
     __slots__ = ('_crewSkinID', '_tankManInvID')
@@ -22,7 +21,7 @@ class SkinApplyDialog(BaseCrewDialogTemplateView):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, crewSkinID, tankManInvID):
-        super(SkinApplyDialog, self).__init__(loggingKey=CrewDialogKeys.SKIN_APPLY, parentViewKey=CrewViewKeys.PERSONAL_DATA)
+        super(SkinApplyDialog, self).__init__()
         self._crewSkinID = crewSkinID
         self._tankManInvID = tankManInvID
 

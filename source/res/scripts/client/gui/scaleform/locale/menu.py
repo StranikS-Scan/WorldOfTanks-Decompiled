@@ -154,6 +154,7 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
     LOADING_BATTLETYPES_23 = '#menu:loading/battleTypes/23'
     LOADING_BATTLETYPES_DESC_23 = '#menu:loading/battleTypes/desc/23'
+    LOADING_BATTLETYPES_SUBTITLE_23 = '#menu:loading/battleTypes/subTitle/23'
     LOADING_BATTLETYPES_24 = '#menu:loading/battleTypes/24'
     LOADING_BATTLETYPES_DESC_24 = '#menu:loading/battleTypes/desc/24'
     LOADING_BATTLETYPES_25 = '#menu:loading/battleTypes/25'
@@ -738,12 +739,6 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_MAPBOXSQUAD = '#menu:headerButtons/battle/types/mapboxSquad'
     HEADERBUTTONS_BATTLE_TYPES_COMP7SQUAD = '#menu:headerButtons/battle/types/comp7Squad'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX = '#menu:headerButtons/battle/types/mapbox'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7 = '#menu:headerButtons/battle/types/comp7'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7_DESCR = '#menu:headerButtons/battle/types/comp7/descr'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_FROZEN = '#menu:headerButtons/battle/types/comp7/extra/frozen'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_FINISHED = '#menu:headerButtons/battle/types/comp7/extra/finished'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_ENDSIN = '#menu:headerButtons/battle/types/comp7/extra/endsIn'
-    HEADERBUTTONS_BATTLE_TYPES_COMP7_EXTRA_STARTSAT = '#menu:headerButtons/battle/types/comp7/extra/startsAt'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FROZEN = '#menu:headerButtons/battle/types/mapbox/extra/frozen'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_FINISHED = '#menu:headerButtons/battle/types/mapbox/extra/finished'
     HEADERBUTTONS_BATTLE_TYPES_MAPBOX_EXTRA_ENDSIN = '#menu:headerButtons/battle/types/mapbox/extra/endsIn'
@@ -1544,6 +1539,7 @@ class MENU(object):
     HANGAR_AMMUNITIONPANEL_MAITENANCEBTN = '#menu:hangar/ammunitionPanel/maitenanceBtn'
     HANGAR_AMMUNITIONPANEL_TUNINGBTN = '#menu:hangar/ammunitionPanel/tuningBtn'
     HANGAR_AMMUNITIONPANEL_NATIONCHANGEBTN = '#menu:hangar/ammunitionPanel/nationChangeBtn'
+    HANGAR_AMMUNITIONPANEL_EASYTANKEQUIPBTN = '#menu:hangar/ammunitionPanel/easyTankEquipBtn'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_TITLE = '#menu:hangar/ammunitionPanel/technicalMaitenance/title'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_REPAIR_LABEL = '#menu:hangar/ammunitionPanel/technicalMaitenance/repair/label'
     HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_REPAIR_CHECKBOXAUTO = '#menu:hangar/ammunitionPanel/technicalMaitenance/repair/checkboxAuto'
@@ -2280,6 +2276,7 @@ class MENU(object):
     CONTEXTMENU_CREWWIDGETSENDTOTOBARRACKS = '#menu:contextMenu/crewWidgetSendToToBarracks'
     CONTEXTMENU_CREWWIDGETDISMISS = '#menu:contextMenu/crewWidgetDismiss'
     CONTEXTMENU_CREWWIDGETQUICKTRAINING = '#menu:contextMenu/crewWidgetQuickTraining'
+    CONTEXTMENU_MENTORASSIGNMENT = '#menu:contextMenu/mentorAssignment'
     CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION = '#menu:contextMenu/crewWidgetChangeSpecialization'
     CONTEXTMENU_ENUM = (CONTEXTMENU_EXCHANGE,
      CONTEXTMENU_VEHICLEINFO,
@@ -2380,6 +2377,7 @@ class MENU(object):
      CONTEXTMENU_CREWWIDGETSENDTOTOBARRACKS,
      CONTEXTMENU_CREWWIDGETDISMISS,
      CONTEXTMENU_CREWWIDGETQUICKTRAINING,
+     CONTEXTMENU_MENTORASSIGNMENT,
      CONTEXTMENU_CREWWIDGETCHANGESPECIALIZATION)
     NATIONS_ENUM = (NATIONS_TITLE,
      NATIONS_USSR,
@@ -2828,6 +2826,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_22,
      LOADING_BATTLETYPES_23,
      LOADING_BATTLETYPES_DESC_23,
+     LOADING_BATTLETYPES_SUBTITLE_23,
      LOADING_BATTLETYPES_24,
      LOADING_BATTLETYPES_DESC_24,
      LOADING_BATTLETYPES_25,

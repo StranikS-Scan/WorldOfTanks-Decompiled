@@ -377,6 +377,7 @@ class SYSTEM_MESSAGES(object):
     RETURN_CREW_VEHICLE_NEED_REPAIR = '#system_messages:return_crew/vehicle_need_repair'
     RETURN_CREW_VEHICLE_LOCKED = '#system_messages:return_crew/vehicle_locked'
     RETURN_CREW_FORBIDDEN = '#system_messages:return_crew/FORBIDDEN'
+    RETURN_CREW_RETURN_UNAVAILABLE = '#system_messages:return_crew/return_unavailable'
     RETRAINING_TANKMAN_SUCCESS = '#system_messages:retraining_tankman/success'
     RETRAINING_TANKMAN_FINANCIAL_SUCCESS_CREDITS = '#system_messages:retraining_tankman/financial_success_credits'
     RETRAINING_TANKMAN_FINANCIAL_SUCCESS_GOLD = '#system_messages:retraining_tankman/financial_success_gold'
@@ -527,6 +528,7 @@ class SYSTEM_MESSAGES(object):
     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR = '#system_messages:vehicle_tmenxp_accelerator/vehicle_need_repair'
     VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED = '#system_messages:vehicle_tmenxp_accelerator/vehicle_locked'
     VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR = '#system_messages:vehicle_tmenxp_accelerator/server_error'
+    VEHICLE_AUTO_RETURN_SERVER_ERROR = '#system_messages:vehicle_auto_return/server_error'
     VEHICLE_REPAIR_SUCCESS = '#system_messages:vehicle_repair/success'
     VEHICLE_REPAIR_NOT_ENOUGH_CREDITS = '#system_messages:vehicle_repair/not_enough_credits'
     VEHICLE_REPAIR_CREDITS_ERROR = '#system_messages:vehicle_repair/credits_error'
@@ -706,6 +708,9 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTERS_APPLY_NOT_ENOUGH_MONEY = '#system_messages:battleBoosters_apply/not_enough_money'
     BATTLEBOOSTERS_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:battleBoosters_apply/wallet_not_available'
     BATTLEABILITIES_APPLY_ERROR = '#system_messages:battleAbilities_apply/error'
+    EASYTANKEQUIP_APPLY_ERROR = '#system_messages:easyTankEquip_apply/error'
+    EASYTANKEQUIP_APPLY_NOT_ENOUGH_MONEY = '#system_messages:easyTankEquip_apply/not_enough_money'
+    EASYTANKEQUIP_APPLY_WALLET_NOT_AVAILABLE = '#system_messages:easyTankEquip_apply/wallet_not_available'
     REQUEST_ISINCOOLDOWN = '#system_messages:request/isInCoolDown'
     PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS = '#system_messages:prebattle/request/name/CHANGE_SETTINGS'
     PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP = '#system_messages:prebattle/request/name/CHANGE_ARENA_VOIP'
@@ -1395,6 +1400,10 @@ class SYSTEM_MESSAGES(object):
     SKILLSCREWBOOSTERSCONVERSION_TITLE = '#system_messages:skillsCrewBoostersConversion/title'
     SKILLSCREWBOOSTERSCONVERSION_TEXT = '#system_messages:skillsCrewBoostersConversion/text'
     SKILLSCREWBOOSTERSCONVERSION_ITEM = '#system_messages:skillsCrewBoostersConversion/item'
+    TANKMAN_TANKMANTOREMOVE = '#system_messages:tankman/tankmanToRemove'
+    TRANSFERXP_SERVER_ERROR = '#system_messages:transferXP/server_error'
+    EASYTANKEQUIP_SWITCH_PAUSE_ON_BODY = '#system_messages:easyTankEquip/switch_pause_on/body'
+    EASYTANKEQUIP_SWITCH_PAUSE_OFF_BODY = '#system_messages:easyTankEquip/switch_pause_off/body'
     UNIT_NOTIFICATION_DIVISIONTYPE_ENUM = (UNIT_NOTIFICATION_DIVISIONTYPE_MIDDLE, UNIT_NOTIFICATION_DIVISIONTYPE_CHAMPION, UNIT_NOTIFICATION_DIVISIONTYPE_ABSOLUTE)
     UNIT_ERRORS_ENUM = (UNIT_ERRORS_ALREADY_JOINED_UNIT,
      UNIT_ERRORS_CANT_CHANGE_DIVISION,
@@ -1896,6 +1905,7 @@ class SYSTEM_MESSAGES(object):
      RETURN_CREW_VEHICLE_NEED_REPAIR,
      RETURN_CREW_VEHICLE_LOCKED,
      RETURN_CREW_FORBIDDEN,
+     RETURN_CREW_RETURN_UNAVAILABLE,
      RETRAINING_TANKMAN_SUCCESS,
      RETRAINING_TANKMAN_FINANCIAL_SUCCESS_CREDITS,
      RETRAINING_TANKMAN_FINANCIAL_SUCCESS_GOLD,
@@ -2046,6 +2056,7 @@ class SYSTEM_MESSAGES(object):
      VEHICLE_TMENXP_ACCELERATOR_VEHICLE_NEED_REPAIR,
      VEHICLE_TMENXP_ACCELERATOR_VEHICLE_LOCKED,
      VEHICLE_TMENXP_ACCELERATOR_SERVER_ERROR,
+     VEHICLE_AUTO_RETURN_SERVER_ERROR,
      VEHICLE_REPAIR_SUCCESS,
      VEHICLE_REPAIR_NOT_ENOUGH_CREDITS,
      VEHICLE_REPAIR_CREDITS_ERROR,
@@ -2225,6 +2236,9 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTERS_APPLY_NOT_ENOUGH_MONEY,
      BATTLEBOOSTERS_APPLY_WALLET_NOT_AVAILABLE,
      BATTLEABILITIES_APPLY_ERROR,
+     EASYTANKEQUIP_APPLY_ERROR,
+     EASYTANKEQUIP_APPLY_NOT_ENOUGH_MONEY,
+     EASYTANKEQUIP_APPLY_WALLET_NOT_AVAILABLE,
      REQUEST_ISINCOOLDOWN,
      PREBATTLE_REQUEST_NAME_CHANGE_SETTINGS,
      PREBATTLE_REQUEST_NAME_CHANGE_ARENA_VOIP,
@@ -2913,7 +2927,11 @@ class SYSTEM_MESSAGES(object):
      UNIT_ERROR_WGSHEVENT_COMMON,
      SKILLSCREWBOOSTERSCONVERSION_TITLE,
      SKILLSCREWBOOSTERSCONVERSION_TEXT,
-     SKILLSCREWBOOSTERSCONVERSION_ITEM)
+     SKILLSCREWBOOSTERSCONVERSION_ITEM,
+     TANKMAN_TANKMANTOREMOVE,
+     TRANSFERXP_SERVER_ERROR,
+     EASYTANKEQUIP_SWITCH_PAUSE_ON_BODY,
+     EASYTANKEQUIP_SWITCH_PAUSE_OFF_BODY)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):

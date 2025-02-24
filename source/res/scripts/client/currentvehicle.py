@@ -5,6 +5,7 @@ import BigWorld
 from constants import CustomizationInvData
 from gui.SystemMessages import pushMessagesFromResult
 from items.components.c11n_constants import SeasonType, ItemTags
+from gui.easy_tank_equip.easy_tank_equip_helpers import isAvailableForVehicle
 from Event import Event, EventManager
 from adisp import adisp_process
 from gui import g_tankActiveCamouflage
@@ -316,6 +317,10 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isEquipmentLocked(self):
         return not self.isPresent() or self.item.isEquipmentLocked
+
+    def isEasyTankEquipEnabled(self):
+        isItemLocked = self.isUnsuitableToQueue() or self.item.isInPrebattle or self.item.isInBattle
+        return self.isPresent() and isAvailableForVehicle(self.item) and not isItemLocked
 
     def selectVehicle(self, vehInvID=0, callback=None, waitingOverlapsUI=False):
         vehicle = self.itemsCache.items.getVehicle(vehInvID)

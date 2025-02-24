@@ -2,22 +2,23 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/tankman.py
 import logging
 import BigWorld
-from gui import SystemMessages
-from gui import makeHtmlString
-from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui import SystemMessages, makeHtmlString
+from gui.SystemMessages import CURRENCY_TO_SM_TYPE, SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showConversionAwardsView
 from gui.shared.formatters import formatPrice, formatPriceValue
 from gui.shared.gui_items import Tankman
-from gui.shared.gui_items.Tankman import NO_SLOT, getTankmanSkill, BaseBookConvertingFormatter
-from gui.shared.gui_items.processors import Processor, ItemProcessor, GroupedRequestProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins
-from gui.shared.money import Money, Currency
+from gui.shared.gui_items.Tankman import BaseBookConvertingFormatter, NO_SLOT, getTankmanSkill
+from gui.shared.gui_items.processors import GroupedRequestProcessor, ItemProcessor, Processor, makeError, makeI18nError, makeI18nSuccess, makeSuccess, plugins
+from gui.shared.gui_items.processors.plugins import AutoReturnValidator
+from gui.shared.money import Currency, Money
 from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import dependency
-from items import tankmen, makeIntCompactDescrByID
-from items.tankmen import SKILL_INDICES, getSkillsConfig
+from items import makeIntCompactDescrByID, tankmen
+from items.tankmen import SKILL_INDICES
 from skeletons.gui.game_control import IRestoreController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
@@ -103,7 +104,7 @@ class TankmanTokenRecruit(Processor):
     def _successHandler(self, code, ctx=None):
         html = makeHtmlString(path='html_templates:lobby/processors/system_messages', key='recruit', ctx={'fullName': self.recruitInfo.getFullUserName(),
          'rank': Tankman.getRankUserName(self.nationID, self.recruitInfo.getRankID()),
-         'role': getSkillsConfig().getSkill(self.role).userString,
+         'role': getRoleUserName(self.role),
          'vehicleName': self.vehicleName,
          'roleLevel': self.recruitInfo.getRoleLevel()})
         return makeSuccess(html, msgType=SM_TYPE.Information, auxData=ctx)
@@ -223,20 +224,44 @@ class TankmanUnload(GroupedRequestProcessor):
 
 class TankmanReturn(Processor):
 
-    def __init__(self, vehicle):
-        self.__prefix = 'return_crew'
+    def __init__(self, vehicle, validators=None):
         self.__vehicle = vehicle
-        super(TankmanReturn, self).__init__((plugins.VehicleValidator(self.__vehicle, False, prop={'isLocked': True}), plugins.VehicleCrewLockedValidator(vehicle)))
+        validators = validators or ()
+        super(TankmanReturn, self).__init__((plugins.VehicleValidator(self.__vehicle, False, prop={'isLocked': True}), plugins.VehicleCrewLockedValidator(self.__vehicle), plugins.PreviousCrewValidator(self.__vehicle)) + validators)
+
+    @property
+    def vehicle(self):
+        return self.__vehicle
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__prefix), type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='return_crew/success', type=SM_TYPE.Information)
 
-    def _errorHandler(self, code, errStr='', ctx=None):
-        return makeI18nError(sysMsgKey='{}/{}'.format(self.__prefix, errStr), defaultSysMsgKey='{}/server_error'.format(self.__prefix))
+    def _errorHandler(self, code, errStr='', ctx=None, **kwargs):
+        if errStr == 'return_unavailable':
+            kwargs.update({'msgPriority': NotificationPriorityLevel.MEDIUM,
+             'type': SM_TYPE.Information})
+        return makeI18nError(sysMsgKey='return_crew/{}'.format(errStr), defaultSysMsgKey='return_crew/server_error', **kwargs)
 
     def _request(self, callback):
         _logger.debug('Make server request to return crew. VehicleItem: %s', self.__vehicle)
-        BigWorld.player().inventory.returnCrew(self.__vehicle.invID, lambda code: self._response(code, callback))
+        BigWorld.player().inventory.returnCrew(self.__vehicle.invID, lambda code, errStr: self._response(code, callback, errStr))
+
+
+class TankmanAutoReturn(TankmanReturn):
+
+    def __init__(self, vehicle, validators=None):
+        self.validator = AutoReturnValidator(vehicle)
+        validators = validators or ()
+        super(TankmanAutoReturn, self).__init__(vehicle, (self.validator,) + validators)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        hasSkipTmans, curCrewData = self.validator.getCrewData()
+        if hasSkipTmans:
+            BigWorld.player().crewAccountController.setAutoReturnCrewData(self.vehicle.intCD, curCrewData)
+        return makeError() if not errStr else super(TankmanAutoReturn, self)._errorHandler(code, errStr, ctx)
+
+    def _successHandler(self, code, ctx=None):
+        return makeSuccess()
 
 
 class ResetAllTankmenSkills(Processor):
@@ -301,8 +326,9 @@ class TankmanFreeToOwnXpConvertor(GroupedRequestProcessor):
 
 class TankmanAddSkills(ItemProcessor):
 
-    def __init__(self, tmanInvID, utilizationType, skillNames):
+    def __init__(self, tmanInvID, utilizationType, skillsRole, skillNames):
         self.skillNames = skillNames
+        self.skillsRole = skillsRole
         self.utilizationType = utilizationType
         tankman = self.itemsCache.items.getTankman(tmanInvID)
         super(TankmanAddSkills, self).__init__(tankman, (plugins.TankmanAddSkillsValidator(tankman.descriptor, utilizationType, skillNames),))
@@ -311,7 +337,7 @@ class TankmanAddSkills(ItemProcessor):
         return makeI18nError(sysMsgKey='{}/{}'.format(self.__getSysMsgKey(), errStr), defaultSysMsgKey='{}/server_error'.format(self.__getSysMsgKey()))
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__getSysMsgKey()), type=SM_TYPE.Information, skill=', '.join((getTankmanSkill(skillName, self.item).userName for skillName in self.skillNames)))
+        return makeI18nSuccess(sysMsgKey='{}/success'.format(self.__getSysMsgKey()), type=SM_TYPE.Information, skill=', '.join((getTankmanSkill(skillName, self.skillsRole, self.item).userName for skillName in self.skillNames)))
 
     def _request(self, callback):
         BigWorld.player().inventory.addTankmanSkills(self.item.invID, self.utilizationType, self.skillNames, lambda code: self._response(code, callback))
@@ -332,7 +358,7 @@ class TankmanAddSkill(ItemProcessor):
         return makeI18nError(sysMsgKey='add_tankman_skill/{}'.format(errStr), defaultSysMsgKey='add_tankman_skill/server_error')
 
     def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess(sysMsgKey='add_tankman_skill/success', skill=getTankmanSkill(self.skillName, self.item).userName, type=SM_TYPE.Information)
+        return makeI18nSuccess(sysMsgKey='add_tankman_skill/success', skill=getTankmanSkill(self.skillName, self.item.role, self.item).userName, type=SM_TYPE.Information)
 
     def _request(self, callback):
         _logger.debug('Make server request to add tankman skill: %s, %s', self.item, self.skillName)
@@ -458,3 +484,21 @@ class TankmenJunkConverter(Processor, BaseBookConvertingFormatter):
     def _request(self, callback):
         _logger.debug('Make server request to convert junk tankmen ')
         BigWorld.player().inventory.convertJunkTankmen(lambda code, ctx: self._response(code, callback, ctx=ctx))
+
+
+class TransferTankmanXP(Processor, BaseBookConvertingFormatter):
+
+    def __init__(self, sourceID, targetID):
+        self.sourceID = sourceID
+        self.targetID = targetID
+        super(TransferTankmanXP, self).__init__()
+
+    def _request(self, callback):
+        _logger.debug('Make server request to transfer xp from %s to %s', self.sourceID, self.targetID)
+        BigWorld.player().inventory.transferTankmenXp(self.sourceID, self.targetID, lambda code: self._response(code, callback))
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='transferXP/server_error')
+
+    def _successHandler(self, code, ctx=None):
+        SystemMessages.pushMessage(backport.text(R.strings.system_messages.tankman.tankmanToRemove()), type=SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM)

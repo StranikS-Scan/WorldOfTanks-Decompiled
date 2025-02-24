@@ -557,8 +557,6 @@ class DIALOGS(object):
     PUNISHMENTWINDOW_MESSAGE_WARNING = '#dialogs:punishmentWindow/message/warning'
     PUNISHMENTWINDOW_MESSAGE_PENALTY = '#dialogs:punishmentWindow/message/penalty'
     PUNISHMENTWINDOW_MESSAGE_BAN = '#dialogs:punishmentWindow/message/ban'
-    PUNISHMENTWINDOW_MESSAGE_BAN_COMP7_QUALIFICATION = '#dialogs:punishmentWindow/message/ban/comp7/qualification'
-    PUNISHMENTWINDOW_MESSAGE_BAN_COMP7 = '#dialogs:punishmentWindow/message/ban/comp7'
     PUNISHMENTWINDOW_INFO = '#dialogs:punishmentWindow/info'
     PUNISHMENTWINDOW_CANCEL = '#dialogs:punishmentWindow/cancel'
     PUNISHMENTWINDOW_REASON_DESERTER = '#dialogs:punishmentWindow/reason/deserter'
@@ -960,11 +958,6 @@ class DIALOGS(object):
     PERKLEARNCONFIRM_TITLE = '#dialogs:perkLearnConfirm/title'
     PERKLEARNCONFIRM_DESC = '#dialogs:perkLearnConfirm/desc'
     PERKLEARNCONFIRM_LEARN = '#dialogs:perkLearnConfirm/learn'
-    COMP7_DESERTER_TITLE = '#dialogs:comp7/deserter/title'
-    COMP7_DESERTER_MSGTITLE = '#dialogs:comp7/deserter/msgTitle'
-    COMP7_DESERTER_MESSAGE = '#dialogs:comp7/deserter/message'
-    COMP7_DESERTER_SUBMIT = '#dialogs:comp7/deserter/submit'
-    COMP7_DESERTER_CANCEL = '#dialogs:comp7/deserter/cancel'
     EQUIPMENTUPGRADE_CONFIRMBUTTON = '#dialogs:equipmentUpgrade/confirmButton'
     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON = '#dialogs:equipmentUpgrade/getMoreCurrencyButton'
     EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY = '#dialogs:equipmentUpgrade/getMoreCurrencyButtonTooltip/body'
@@ -998,7 +991,6 @@ class DIALOGS(object):
     PERKSRESET_DISCOUNTTOOLTIP_BODY = '#dialogs:perksReset/discountTooltip/body'
     RETRAIN_TITLE_SINGLE_SIMPLE = '#dialogs:retrain/title/single/simple'
     RETRAIN_TITLE_SINGLE_COMPLEX = '#dialogs:retrain/title/single/complex'
-    RETRAIN_WARNING_PREMIUMVEHICLE = '#dialogs:retrain/warning/premiumVehicle'
     RETRAIN_WARNING_IRRELEVANTPERK = '#dialogs:retrain/warning/irrelevantPerk'
     RETRAIN_WARNING_IRRELEVANTPERKANDPREM = '#dialogs:retrain/warning/irrelevantPerkAndPrem'
     RETRAIN_PRICECARD_FREE_TITLE = '#dialogs:retrain/priceCard/free/title'
@@ -1019,6 +1011,7 @@ class DIALOGS(object):
     RETRAIN_DISCOUNTTOOLTIP_BODY = '#dialogs:retrain/discountTooltip/body'
     RECRUIT_TITLE = '#dialogs:recruit/title'
     RECRUIT_WARNING_PREMIUMVEHICLE = '#dialogs:recruit/warning/premiumVehicle'
+    RECRUIT_WARNING_SLOTCHANGED = '#dialogs:recruit/warning/slotChanged'
     RECRUIT_SUBMIT = '#dialogs:recruit/submit'
     RECRUIT_CANCEL = '#dialogs:recruit/cancel'
     RECRUIT_VOICEOVERTEXT = '#dialogs:recruit/voiceoverText'
@@ -1614,8 +1607,6 @@ class DIALOGS(object):
      PUNISHMENTWINDOW_MESSAGE_WARNING,
      PUNISHMENTWINDOW_MESSAGE_PENALTY,
      PUNISHMENTWINDOW_MESSAGE_BAN,
-     PUNISHMENTWINDOW_MESSAGE_BAN_COMP7_QUALIFICATION,
-     PUNISHMENTWINDOW_MESSAGE_BAN_COMP7,
      PUNISHMENTWINDOW_INFO,
      PUNISHMENTWINDOW_CANCEL,
      PUNISHMENTWINDOW_REASON_DESERTER,
@@ -2017,11 +2008,6 @@ class DIALOGS(object):
      PERKLEARNCONFIRM_TITLE,
      PERKLEARNCONFIRM_DESC,
      PERKLEARNCONFIRM_LEARN,
-     COMP7_DESERTER_TITLE,
-     COMP7_DESERTER_MSGTITLE,
-     COMP7_DESERTER_MESSAGE,
-     COMP7_DESERTER_SUBMIT,
-     COMP7_DESERTER_CANCEL,
      EQUIPMENTUPGRADE_CONFIRMBUTTON,
      EQUIPMENTUPGRADE_GETMORECURRENCYBUTTON,
      EQUIPMENTUPGRADE_GETMORECURRENCYBUTTONTOOLTIP_BODY,
@@ -2055,7 +2041,6 @@ class DIALOGS(object):
      PERKSRESET_DISCOUNTTOOLTIP_BODY,
      RETRAIN_TITLE_SINGLE_SIMPLE,
      RETRAIN_TITLE_SINGLE_COMPLEX,
-     RETRAIN_WARNING_PREMIUMVEHICLE,
      RETRAIN_WARNING_IRRELEVANTPERK,
      RETRAIN_WARNING_IRRELEVANTPERKANDPREM,
      RETRAIN_PRICECARD_FREE_TITLE,
@@ -2076,6 +2061,7 @@ class DIALOGS(object):
      RETRAIN_DISCOUNTTOOLTIP_BODY,
      RECRUIT_TITLE,
      RECRUIT_WARNING_PREMIUMVEHICLE,
+     RECRUIT_WARNING_SLOTCHANGED,
      RECRUIT_SUBMIT,
      RECRUIT_CANCEL,
      RECRUIT_VOICEOVERTEXT,

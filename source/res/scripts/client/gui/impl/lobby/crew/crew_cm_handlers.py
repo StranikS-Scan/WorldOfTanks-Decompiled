@@ -3,7 +3,6 @@
 from gui.impl.lobby.crew.widget.crew_widget_cm_handlers import CrewContextMenuHandler, CREW
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewViewKeys
 VISIBLE_OPTIONS = (CREW.PERSONAL_FILE,
  CREW.DISMISS,
  CREW.QUICK_TRAINING,
@@ -20,8 +19,7 @@ class CrewTankmanContextMenuHandler(CrewContextMenuHandler):
         tankmanID = int(ctx.tankmanID)
         self._slotIdx = int(ctx.slotIdx)
         self._tankmanID = tankmanID
-        self._vehicle = self.itemsCache.items.getVehicle(self.itemsCache.items.getTankman(tankmanID).vehicleInvID)
+        self._tankman = self.itemsCache.items.getTankman(tankmanID)
+        self._vehicle = self.itemsCache.items.getVehicle(self._tankman.vehicleInvID)
         self._previousViewID = None
-        self._uiLogger.setParentViewKey(CrewViewKeys.BARRACKS)
-        self._parentViewKey = CrewViewKeys.BARRACKS
         return

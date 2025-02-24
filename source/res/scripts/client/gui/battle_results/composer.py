@@ -142,48 +142,9 @@ class MapsTrainingStatsComposer(IBattleResultStatsCtrl):
             MapsTrainingStatsComposer._fromNotifications.remove(arenaUniqueID)
 
 
-class Comp7StatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(Comp7StatsComposer, self).__init__(reusable, templates.COMP7_COMMON_STATS_BLOCK.clone(), templates.COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
-        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
-
-    @staticmethod
-    def _getBattlePassBlock():
-        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
-
-
-class TournamentComp7StatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(TournamentComp7StatsComposer, self).__init__(reusable, templates.TOURNAMENT_COMP7_COMMON_STATS_BLOCK.clone(), templates.TOURNAMENT_COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
-        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
-
-    @staticmethod
-    def _getBattlePassBlock():
-        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
-
-
-class TrainingComp7StatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(TrainingComp7StatsComposer, self).__init__(reusable, templates.TRAINING_COMP7_COMMON_STATS_BLOCK.clone(), templates.TRAINING_COMP7_PERSONAL_STATS_BLOCK.clone(), templates.COMP7_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-        self._block.addNextComponent(templates.PROGRESSIVE_REWARD_VO.clone())
-        self._block.addNextComponent(templates.EFFICIENCY_TITLE_WITH_SKILLS_VO.clone())
-
-    @staticmethod
-    def _getBattlePassBlock():
-        return templates.COMP7_BATTLE_PASS_PROGRESS_STATS_BLOCK
-
-
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.EPIC_BATTLE, EpicStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.CYBERSPORT, CyberSportStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.FORT_BATTLE_2, StrongholdBattleStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.SORTIE_2, StrongholdSortieBattleStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.RANKED, RankedBattlesStatsComposer)
 registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.MAPS_TRAINING, MapsTrainingStatsComposer)
-registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.COMP7, Comp7StatsComposer)
-registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, TournamentComp7StatsComposer)
-registerBattleResultStatsCtrl(ARENA_BONUS_TYPE.TRAINING_COMP7, TrainingComp7StatsComposer)

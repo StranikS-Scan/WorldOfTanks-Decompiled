@@ -268,7 +268,7 @@ class VehiclesDataProvider(FilterableItemsDataProvider):
         criteria |= ~REQ_CRITERIA.VEHICLE.IS_CREW_LOCKED
         criteria |= ~getRentCriteria()
         criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
-        criteria |= ~REQ_CRITERIA.VEHICLE.SECRET
+        criteria |= ~REQ_CRITERIA.CUSTOM(lambda item: item.isSecret and item.inventoryCount <= 0)
         criteria |= ~REQ_CRITERIA.VEHICLE.MODE_HIDDEN
         criteria |= REQ_CRITERIA.VEHICLE.ACTIVE_OR_MAIN_IN_NATION_GROUP
         if self.tankman:
@@ -350,6 +350,10 @@ class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider
         self.__dismissedTankmen = None
         return
 
+    @property
+    def _locationStateKey(self):
+        return ToggleGroupType.VEHICLEGRADE.value
+
     def _getFiltersList(self):
         return [self._getFilterByVehicleTypeCriteria(),
          self._getFilterByVehicleTierCriteria(),
@@ -395,7 +399,7 @@ class TankmenDataProvider(_TankmenSortCriteriaMixin, FilterableItemsDataProvider
         return REQ_CRITERIA.TANKMAN.NATION(value) if value else None
 
     def _getFilterByLocationCriteria(self):
-        locations = self._state[ToggleGroupType.VEHICLEGRADE.value]
+        locations = self._state[self._locationStateKey]
         if not locations & {TankmanLocation.INBARRACKS.value, TankmanLocation.INTANK.value}:
             return None
         else:
@@ -530,6 +534,10 @@ class TankmenChangeDataProvider(_BonusSkillsMixin, TankmenDataProvider):
         self.role = role
         super(TankmenChangeDataProvider, self).reinit(bonusRoles=bonusRoles)
 
+    @property
+    def _locationStateKey(self):
+        return ToggleGroupType.LOCATION.value
+
     def _getWrapper(self):
         return _TankmanBonusSkillsWrapper
 
@@ -549,7 +557,7 @@ class TankmenChangeDataProvider(_BonusSkillsMixin, TankmenDataProvider):
         return criteria
 
     def _getFilterByLocationCriteria(self):
-        locations = self._state[ToggleGroupType.LOCATION.value]
+        locations = self._state[self._locationStateKey]
         locations = locations - {'tankman', 'recruit'}
         if not locations:
             return None
@@ -748,3 +756,43 @@ class DocumentsDataProvider(FilterableItemsDataProvider):
         random.seed(self.__seed)
         items = [ self.Document(icon, random.choice(firstnames), random.choice(lastnames)) for icon in icons ]
         return filter(criteria, items)
+
+
+class MentorDataProvider(TankmenDataProvider):
+    __slots__ = ('__tankmanID', '__nation')
+
+    def __init__(self, state, tankmanID, nation):
+        self.__tankmanID = tankmanID
+        self.__nation = nation
+        super(MentorDataProvider, self).__init__(state)
+
+    def reinit(self, tankmanID=None):
+        self.__tankmanID = tankmanID
+        super(MentorDataProvider, self).reinit()
+
+    @property
+    def _locationStateKey(self):
+        return ToggleGroupType.LOCATION.value
+
+    def _getFiltersList(self):
+        return [self._getFilterByTankmanRoleCriteria(),
+         self._getFilterByVehicleTypeCriteria(),
+         self._getFilterByVehicleTierCriteria(),
+         self._getFilterByLocationCriteria()]
+
+    def _itemsGetter(self, criteria, initial=False):
+        items = self._getInventoryTankmen()
+        items = filter(criteria, items)
+        return items
+
+    def _getSortKeyCriteria(self):
+        criteria = REQ_CRITERIA.CUSTOM(lambda item: -item.descriptor.totalXP())
+        criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.fullUserName)
+        return criteria
+
+    def _getInitialFilterCriteria(self):
+        criteria = super(MentorDataProvider, self)._getInitialFilterCriteria()
+        criteria |= REQ_CRITERIA.TANKMAN.NATION(self.__nation)
+        criteria |= REQ_CRITERIA.CUSTOM(lambda item: item.invID != self.__tankmanID and item.descriptor.totalXP() > 0)
+        criteria |= REQ_CRITERIA.TANKMAN.IS_LOCK_CREW(isLocked=False)
+        return criteria

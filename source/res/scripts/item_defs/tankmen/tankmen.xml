@@ -1,30 +1,10 @@
 <tankmen.xml>
   <roles>
-    <commander>
-      <userString>	#item_types:tankman/roles/commander	</userString>
-      <description></description>
-      <icon>	commander.png	</icon>
-    </commander>
-    <radioman>
-      <userString>	#item_types:tankman/roles/radioman	</userString>
-      <description></description>
-      <icon>	radioman.png	</icon>
-    </radioman>
-    <driver>
-      <userString>	#item_types:tankman/roles/driver	</userString>
-      <description></description>
-      <icon>	driver.png	</icon>
-    </driver>
-    <gunner>
-      <userString>	#item_types:tankman/roles/gunner	</userString>
-      <description></description>
-      <icon>	gunner.png	</icon>
-    </gunner>
-    <loader>
-      <userString>	#item_types:tankman/roles/loader	</userString>
-      <description></description>
-      <icon>	loader.png	</icon>
-    </loader>
+    <commander></commander>
+    <radioman></radioman>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
   </roles>
   <skills>
     <repair>
@@ -238,13 +218,13 @@
             <situationalParam>	false	</situationalParam>
             <paramName>	equipmentPreparationTime	</paramName>
             <measureType>	percents	</measureType>
-            <value>	-0.001	</value>
+            <value>	-0.0015	</value>
           </arg>
         </descr>
         <kpi>
           <mul>
             <name>	equipmentPreparationTime	</name>
-            <value>	0.9	</value>
+            <value>	0.85	</value>
           </mul>
         </kpi>
       </UISettings>
@@ -446,7 +426,7 @@
             <situationalParam>	false	</situationalParam>
             <paramName>	vehicleHEShellDamageResistance	</paramName>
             <measureType>	percents	</measureType>
-            <value>	-0.0010	</value>
+            <value>	-0.0015	</value>
           </arg>
           <arg>
             <situationalParam>	false	</situationalParam>
@@ -459,7 +439,7 @@
         <kpi>
           <mul>
             <name>	vehicleHEShellDamageResistance	</name>
-            <value>	0.9	</value>
+            <value>	0.85	</value>
           </mul>
           <mul>
             <name>	vehicleFallingDamageResistance	</name>

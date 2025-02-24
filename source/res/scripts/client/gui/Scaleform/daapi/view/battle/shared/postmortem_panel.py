@@ -8,7 +8,7 @@ import BigWorld
 import WWISE
 from aih_constants import CTRL_MODE_NAME
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import ATTACK_REASON_INDICES, ATTACK_REASON
+from constants import ATTACK_REASON_INDICES, ATTACK_REASON, ARENA_BONUS_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.components_packer import unpack_component, pack_component
@@ -135,7 +135,7 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
                 pass
             elif equipment is not None:
-                if not self.sessionProvider.arenaVisitor.gui.isComp7Battle() and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+                if not self.sessionProvider.arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.COMP7 and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
                     entityID = 0
                 code = '_'.join((code, equipment.messagePostfix))
         elif postfix:

@@ -422,7 +422,7 @@ class IPointsOfInterestController(IBattleController):
         raise NotImplementedError
 
 
-class IComp7PrebattleSetupController(IArenaLoadController, IArenaPeriodController, ViewComponentsController):
+class IPrebattleSetupController(IArenaLoadController, IArenaPeriodController, ViewComponentsController):
     onVehiclesListUpdated = None
     onVehicleChanged = None
     onBattleStarted = None
@@ -468,33 +468,6 @@ class IComp7PrebattleSetupController(IArenaLoadController, IArenaPeriodControlle
         raise NotImplementedError
 
     def isVehicleStateIndicatorAllowed(self):
-        raise NotImplementedError
-
-
-class IComp7VOIPController(IArenaLoadController):
-    __slots__ = ()
-
-    @property
-    def isVoipSupported(self):
-        raise NotImplementedError
-
-    @property
-    def isVoipEnabled(self):
-        raise NotImplementedError
-
-    @property
-    def isTeamChannelAvailable(self):
-        raise NotImplementedError
-
-    @property
-    def isJoined(self):
-        raise NotImplementedError
-
-    @property
-    def isTeamVoipEnabled(self):
-        raise NotImplementedError
-
-    def toggleChannelConnection(self):
         raise NotImplementedError
 
 

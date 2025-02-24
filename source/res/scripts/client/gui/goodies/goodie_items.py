@@ -755,5 +755,80 @@ class RecertificationForm(_Goodie):
         return self.itemTypeName
 
 
+class MentoringLicense(_Goodie):
+
+    def __init__(self, goodieID, goodieDescription, stateProvider=None):
+        super(MentoringLicense, self).__init__(goodieID, goodieDescription, stateProvider)
+        self.__sellPrices = ITEM_PRICES_EMPTY
+
+    @property
+    def userName(self):
+        return backport.text(R.strings.mentoring_license.userName())
+
+    @property
+    def description(self):
+        pass
+
+    def getFormattedValue(self, formatter=None):
+        pass
+
+    @property
+    def icon(self):
+        return backport.image(R.images.gui.maps.shop.artefacts.c_180x135.mentoring_license())
+
+    @property
+    def bigIcon(self):
+        return backport.image(R.images.gui.maps.icons.mentoring_license.common_80x80())
+
+    @property
+    def iconInfo(self):
+        return backport.image(R.images.gui.maps.icons.mentoring_license.common_48x48())
+
+    @property
+    def itemTypeID(self):
+        return GUI_ITEM_TYPE.MENTORING_LICENSE
+
+    @property
+    def itemTypeName(self):
+        return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
+
+    def getOverlayType(self, vehicle=None):
+        pass
+
+    @property
+    def nationID(self):
+        return nations.NONE_INDEX
+
+    @property
+    def isForSale(self):
+        return False
+
+    def getSellPrice(self):
+        return self.__sellPrices.itemPrice
+
+    @property
+    def intCD(self):
+        return self._goodieID
+
+    @property
+    def shortDescription(self):
+        return backport.text(R.strings.mentoring_license.storage.description())
+
+    @property
+    def longDescription(self):
+        return backport.text(R.strings.mentoring_license.dialogue.description())
+
+    def formattedShortDescription(self, formatter):
+        description = self.shortDescription
+        return description.format(**formatter)
+
+    @property
+    def inventoryCount(self):
+        return self.count
+
+    def getFullNameForResource(self):
+        return self.itemTypeName
+
+
 GoodieType = typing.TypeVar('GoodieType', bound=_Goodie)
 BoostersType = typing.TypeVar('BoostersType', bound=BoosterUICommon)

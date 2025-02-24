@@ -7,6 +7,7 @@ from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.trophy_device_confirm_view import TrophyDeviceUpgradeConfirmView
 from gui.impl.lobby.blueprints.blueprints_conversion_view import BlueprintsConversionView
 from gui.impl.lobby.crew.crew_helpers.tankman_helpers import isPremiumRetrainWarning
+from gui.impl.lobby.crew.dialogs.mentor_assignment_dialog import MentorAssignmentDialog
 from gui.impl.lobby.crew.dialogs.skills_training_confirm_dialog import SkillsTrainingConfirmDialog
 from gui.impl.lobby.crew.free_skill_confirmation_dialog import FreeSkillConfirmationDialog
 from gui.impl.lobby.dialogs.exchange_with_items import ExchangeToBuyItems, ExchangeToUpgradeDevice
@@ -160,20 +161,20 @@ def showRetrainMassiveDialog(tankmenIds, vehicleCD):
 
 
 @wg_async
-def showRetrainSingleDialog(tankmanId, vehicleCD, targetRole=None, targetSlotIdx=None, isChangeRoleVisible=False, beforeActions=None, parentViewKey=None):
+def showRetrainSingleDialog(tankmanId, vehicleCD, targetRole=None, targetSlotIdx=None, isChangeRoleVisible=False, beforeActions=None):
     from gui.impl.lobby.crew.dialogs.retrain_single_dialog import RetrainSingleDialog
     if isPremiumRetrainWarning([tankmanId], vehicleCD):
         result = yield wg_await(showRetrainPremiumVehicleDialog(vehicleCD))
         if not result.result:
             raise AsyncReturn(result)
-    result = yield wg_await(showSingleDialog(layoutID=RetrainSingleDialog.LAYOUT_ID, wrappedViewClass=RetrainSingleDialog, tankmanId=tankmanId, vehicleCD=vehicleCD, targetRole=targetRole, targetSlotIdx=targetSlotIdx, isChangeRoleVisible=isChangeRoleVisible, beforeActions=beforeActions, parentViewKey=parentViewKey))
+    result = yield wg_await(showSingleDialog(layoutID=RetrainSingleDialog.LAYOUT_ID, wrappedViewClass=RetrainSingleDialog, tankmanId=tankmanId, vehicleCD=vehicleCD, targetRole=targetRole, targetSlotIdx=targetSlotIdx, isChangeRoleVisible=isChangeRoleVisible, beforeActions=beforeActions))
     raise AsyncReturn(result)
 
 
 @wg_async
-def showRetrainPremiumVehicleDialog(vehicleCD, isMassive=False, parentViewKey=None):
+def showRetrainPremiumVehicleDialog(vehicleCD, isMassive=False):
     from gui.impl.lobby.crew.dialogs.retrain_premium_vehicle_dialog import RetrainPremiumVehicleDialog
-    result = yield wg_await(showSingleDialog(layoutID=RetrainPremiumVehicleDialog.LAYOUT_ID, wrappedViewClass=RetrainPremiumVehicleDialog, vehicleCD=vehicleCD, isMassive=isMassive, parentViewKey=parentViewKey))
+    result = yield wg_await(showSingleDialog(layoutID=RetrainPremiumVehicleDialog.LAYOUT_ID, wrappedViewClass=RetrainPremiumVehicleDialog, vehicleCD=vehicleCD, isMassive=isMassive))
     raise AsyncReturn(result)
 
 
@@ -213,20 +214,26 @@ def showSkinApplyDialog(crewSkinID, tankManInvID):
 
 
 @wg_async
-def showDismissTankmanDialog(tankmanId, parentViewKey=None):
+def showDismissTankmanDialog(tankmanId):
     from gui.impl.lobby.crew.dialogs.dismiss_tankman_dialog import DismissTankmanDialog
-    result = yield wg_await(showSingleDialog(layoutID=DismissTankmanDialog.LAYOUT_ID, wrappedViewClass=DismissTankmanDialog, tankmanId=tankmanId, parentViewKey=parentViewKey))
+    result = yield wg_await(showSingleDialog(layoutID=DismissTankmanDialog.LAYOUT_ID, wrappedViewClass=DismissTankmanDialog, tankmanId=tankmanId))
     raise AsyncReturn(result)
 
 
 @wg_async
-def showRestoreTankmanDialog(tankmanId, vehicleId, slotIdx, parentViewKey=None):
+def showRestoreTankmanDialog(tankmanId, vehicleId, slotIdx):
     from gui.impl.lobby.crew.dialogs.restore_tankman_dialog import RestoreTankmanDialog
-    result = yield wg_await(showSingleDialog(layoutID=RestoreTankmanDialog.LAYOUT_ID, wrappedViewClass=RestoreTankmanDialog, tankmanId=tankmanId, vehicleId=vehicleId, slotIdx=slotIdx, parentViewKey=parentViewKey))
+    result = yield wg_await(showSingleDialog(layoutID=RestoreTankmanDialog.LAYOUT_ID, wrappedViewClass=RestoreTankmanDialog, tankmanId=tankmanId, vehicleId=vehicleId, slotIdx=slotIdx))
     raise AsyncReturn(result)
 
 
 @wg_async
-def showSkillsTrainingConfirmDialog(tankman, skillsList, availableSkillsData):
-    result = yield wg_await(showSingleDialogWithResultData(layoutID=SkillsTrainingConfirmDialog.LAYOUT_ID, wrappedViewClass=SkillsTrainingConfirmDialog, tankman=tankman, skillsList=skillsList, availableSkillsData=availableSkillsData))
+def showSkillsTrainingConfirmDialog(tankman, skillsRole, skillsList, availableSkillsData):
+    result = yield wg_await(showSingleDialogWithResultData(layoutID=SkillsTrainingConfirmDialog.LAYOUT_ID, wrappedViewClass=SkillsTrainingConfirmDialog, tankman=tankman, skillsRole=skillsRole, skillsList=skillsList, availableSkillsData=availableSkillsData))
+    raise AsyncReturn(result)
+
+
+@wg_async
+def showMentorAssignmentConfirmDialog(sourceTmanId, targetTmanId):
+    result = yield wg_await(showSingleDialog(layoutID=MentorAssignmentDialog.LAYOUT_ID, wrappedViewClass=MentorAssignmentDialog, sourceTmanId=sourceTmanId, targetTmanId=targetTmanId))
     raise AsyncReturn(result)

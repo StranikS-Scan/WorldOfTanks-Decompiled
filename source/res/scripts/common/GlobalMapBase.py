@@ -68,6 +68,9 @@ class GlobalMapBase(OpsUnpacker):
             s += '\n battleUnits(%s)' % len(self.battleUnits)
         return s
 
+    def __str__(self):
+        return self.__repr__
+
     def _persist(self):
         pass
 
@@ -143,7 +146,7 @@ class GlobalMapBase(OpsUnpacker):
             self.pack()
         except Exception as e:
             LOG_CURRENT_EXCEPTION()
-            LOG_DEBUG_DEV('GlobalMapBase.self: %s' % repr(self))
+            LOG_DEBUG_DEV('GlobalMapBase.self: ', self)
             raise e
 
     def _addBattle(self, battleID, peripheryID, createTime, startTime, localizedData):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/skeletons/gui/battle_session.py
 import typing
 if typing.TYPE_CHECKING:
-    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IComp7PrebattleSetupController, IComp7VOIPController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController
+    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController, IPrebattleSetupController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
 
 class ISharedControllersLocator(object):
@@ -216,11 +216,7 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
-    def comp7PrebattleSetup(self):
-        raise NotImplementedError
-
-    @property
-    def comp7VOIPController(self):
+    def prebattleSetup(self):
         raise NotImplementedError
 
     @property

@@ -18,7 +18,7 @@ from gui.impl.lobby.crew.filter.data_providers import CompoundDataProvider, Crew
 from gui.impl.lobby.crew.filter.filter_panel_widget import FilterPanelWidget
 from gui.impl.lobby.crew.filter.state import FilterState
 from gui.impl.lobby.crew.personal_case import IPersonalTab
-from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
+from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.crew_skin import localizedFullName, CrewSkin, GenderRestrictionsLocales
 from gui.shared.gui_items.processors.tankman import CrewSkinUnequip
@@ -29,12 +29,11 @@ from items.components.crew_skins_constants import CREW_SKIN_PROPERTIES_MASKS, TA
 from skeletons.gui.game_control import IPlatoonController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewPersonalDataKeys
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
 
-class PersonalDataView(IPersonalTab, BasePersonalCaseView):
+class PersonalDataView(IPersonalTab, ViewImpl):
     __slots__ = ('tankmanID', 'filterPanelWidget', '__filterState', '__tankman')
     TITLE = backport.text(R.strings.crew.tankmanContainer.tab.personalData())
     itemsCache = dependency.descriptor(IItemsCache)
@@ -139,13 +138,11 @@ class PersonalDataView(IPersonalTab, BasePersonalCaseView):
     def __onCardSelected(self, cardID, isSkin):
         tankman = self.itemsCache.items.getTankman(self.tankmanID)
         if isSkin:
-            self.uiLogger.logClick(CrewPersonalDataKeys.SKIN_CARD)
             if tankman.skinID != cardID:
                 showSkinApplyDialog(cardID, self.tankmanID)
             else:
                 self.__unEquipCrewSkin()
         else:
-            self.uiLogger.logClick(CrewPersonalDataKeys.DOCUMENT_CARD)
             docsProvider = self.__dataProviders['documents']
             cardData = None
             for item in docsProvider.items():

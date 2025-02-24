@@ -6,19 +6,17 @@ from collections import namedtuple
 import typing
 from enum import Enum
 import nations
-from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN
+from account_helpers.AccountSettings import AccountSettings, IS_BATTLE_PASS_COLLECTION_SEEN, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LAST_BATTLE_PASS_POINTS_SEEN, LAST_BATTLE_PASS_CYCLES_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
-from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX
+from battle_pass_common import BattlePassConsts, BattlePassTankmenSource, HOLIDAY_SEASON_OFFSET, TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX, isPostProgressionChapter
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
 from gui import GUI_SETTINGS
-from gui.Scaleform.genConsts.SKILLS_CONSTANTS import SKILLS_CONSTANTS as SKILLS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.recruit_helper import getRecruitInfo
-from gui.shared.event_dispatcher import showBattlePassDailyQuestsIntroWindow
 from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
@@ -52,6 +50,7 @@ class ChapterType(str, Enum):
     COMMON = 'common'
     EXTRA = 'extra'
     HOLIDAY = 'holiday'
+    POST_PROGRESSION = 'postProgression'
 
 
 _BATTLE_PASS_PRICE_CURRENCY_PRIORITY = (Currency.GOLD,)
@@ -60,7 +59,9 @@ _BATTLE_PASS_PRICE_CURRENCY_PRIORITY = (Currency.GOLD,)
 def getChapterType(chapterID, battlePass=None):
     if battlePass.isHoliday():
         return ChapterType.HOLIDAY
-    return ChapterType.EXTRA if battlePass.isExtraChapter(chapterID) else ChapterType.COMMON
+    if battlePass.isExtraChapter(chapterID):
+        return ChapterType.EXTRA
+    return ChapterType.POST_PROGRESSION if isPostProgressionChapter(chapterID) else ChapterType.COMMON
 
 
 def isBattlePassActiveSeason():
@@ -146,8 +147,8 @@ def chaptersWithLogoBg():
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
-def getChaptersNumbers(battlePass=None):
-    return {chapterID:chapterNum for chapterNum, chapterID in enumerate(sorted(battlePass.getChapterIDs()), 1)}
+def getMainChaptersNumbers(battlePass=None):
+    return {chapterID:chapterNum for chapterNum, chapterID in enumerate(sorted(battlePass.getMainChapterIDs()), 1)}
 
 
 def getSupportedArenaBonusTypeFor(queueType, isInUnit):
@@ -185,11 +186,11 @@ def getTankmanFirstNationGroup(tankmanGroupName):
 
 
 def makeProgressionStyleMediaName(chapterID, styleLevel):
-    return '{}_{}{}_{}{}'.format(BattlePassMediaPatterns.STYLE, BattlePassMediaPatterns.CHAPTER, getChaptersNumbers()[chapterID], BattlePassMediaPatterns.LEVEL, styleLevel)
+    return '{}_{}{}_{}{}'.format(BattlePassMediaPatterns.STYLE, BattlePassMediaPatterns.CHAPTER, getMainChaptersNumbers()[chapterID], BattlePassMediaPatterns.LEVEL, styleLevel)
 
 
 def makeChapterMediaName(chapterID, part=''):
-    mediaName = '{}_{}{}'.format(BattlePassMediaPatterns.MEDIA, BattlePassMediaPatterns.CHAPTER, getChaptersNumbers().get(chapterID, 0))
+    mediaName = '{}_{}{}'.format(BattlePassMediaPatterns.MEDIA, BattlePassMediaPatterns.CHAPTER, getMainChaptersNumbers().get(chapterID, 0))
     return '{}_{}{}'.format(mediaName, BattlePassMediaPatterns.PART, part) if part else mediaName
 
 
@@ -266,25 +267,6 @@ def getSingleVehicleForCustomization(customization):
     return
 
 
-@replace_none_kwargs(settingsCore=ISettingsCore)
-def isBattlePassDailyQuestsIntroShown(settingsCore=None):
-    return settingsCore.serverSettings.getBPStorage().get(BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN, False)
-
-
-@replace_none_kwargs(settingsCore=ISettingsCore)
-def setBattlePassDailyQuestsIntroShown(settingsCore=None):
-    settingsCore.serverSettings.saveInBPStorage({BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN: True})
-
-
-def showBattlePassDailyQuestsIntro():
-    battlePassController = dependency.instance(IBattlePassController)
-    if not battlePassController.isActive():
-        return
-    if not isBattlePassDailyQuestsIntroShown():
-        showBattlePassDailyQuestsIntroWindow()
-        setBattlePassDailyQuestsIntroShown()
-
-
 def getRecruitNation(recruitInfo):
     nation = first(recruitInfo.getNations())
     return INDICES.get(nation, 0)
@@ -304,11 +286,8 @@ def getDataByTankman(tankman):
     nation = getRecruitNation(tankman)
     iconName = tankman.getIconByNation(nation)
     tankmanName = tankman.getFullUserNameByNation(nation)
-    skills = tankman.getAllKnownSkills()
-    newSkillCount, _ = tankman.getNewSkillCount(onlyFull=True)
+    skills = tankman.getAllKnownSkills(True)
     groupName = tankman.getGroupName()
-    if newSkillCount > 0:
-        skills += [SKILLS.TYPE_NEW_SKILL] * (newSkillCount - skills.count(SKILLS.TYPE_NEW_SKILL))
     return (iconName,
      tankmanName,
      skills,
@@ -368,6 +347,11 @@ def getFinalTankmen(chapterID, awardType, battlePass=None):
     return [ getTankmanInfo(bonus) for bonus in characterBonuses ]
 
 
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getDefaultChaptersView(battlePass=None):
+    return R.views.lobby.battle_pass.PostProgressionView() if battlePass.isPostProgressionActive() else R.views.lobby.battle_pass.ChapterChoiceView()
+
+
 @replace_none_kwargs(settingsCore=ISettingsCore, battlePass=IBattlePassController)
 def updateBuyAnimationFlag(chapterID, settingsCore=None, battlePass=None):
     settings = settingsCore.serverSettings
@@ -398,13 +382,14 @@ def _updateClientSettings():
     AccountSettings.setSettings(LAST_BATTLE_PASS_POINTS_SEEN, {})
     AccountSettings.setSettings(IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, False)
     AccountSettings.setSettings(IS_BATTLE_PASS_COLLECTION_SEEN, False)
+    AccountSettings.setSettings(IS_BATTLE_PASS_START_NOTIFICATION_SEEN, False)
+    AccountSettings.setSettings(LAST_BATTLE_PASS_CYCLES_SEEN, 0)
 
 
 def _updateServerSettings(data):
     data[BattlePassStorageKeys.INTRO_SHOWN] = False
     data[BattlePassStorageKeys.INTRO_VIDEO_SHOWN] = False
     data[BattlePassStorageKeys.BUY_ANIMATION_WAS_SHOWN] = 0
-    data[BattlePassStorageKeys.DAILY_QUESTS_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_INTRO_SHOWN] = False
     data[BattlePassStorageKeys.EXTRA_CHAPTER_VIDEO_SHOWN] = False
 

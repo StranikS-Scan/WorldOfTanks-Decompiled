@@ -9,7 +9,6 @@ from chat_commands_consts import _PERSONAL_MESSAGE_MUTE_DURATION, BATTLE_CHAT_CO
 from constants import ARENA_BONUS_TYPE
 from frameworks.wulf import WindowLayer
 from gui import GUI_CTRL_MODE_FLAG
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
@@ -33,7 +32,6 @@ _CALLOUT_MESSAGES_BLOCK_DURATION = 15
 _HINT_TIMEOUT = 10
 _DELAY_FOR_OPENING_RADIAL_MENU = 0.2
 _CONSUMERS_LOCKS = (BATTLE_VIEW_ALIASES.FULL_STATS,
- VIEW_ALIAS.COMP7_BATTLE_PAGE,
  'chat',
  BATTLE_VIEW_ALIASES.BR_SELECT_RESPAWN,
  BATTLE_VIEW_ALIASES.BATTLE_ROYALE_WINNER_CONGRATS,

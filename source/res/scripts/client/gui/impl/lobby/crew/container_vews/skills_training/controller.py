@@ -86,7 +86,7 @@ class SkillsTrainingInteractionController(InteractionController):
 
     @wg_async
     def __showConfirm(self):
-        busy, result = yield wg_await(showSkillsTrainingConfirmDialog(self.context.tankman, self.context.selectedSkills, self.context.availableSkillsData))
+        busy, result = yield wg_await(showSkillsTrainingConfirmDialog(self.context.tankman, self.context.role, self.context.selectedSkills, self.context.availableSkillsData))
         if busy:
             raise AsyncReturn(SingleDialogResult(True, False))
         confirmResult, isClosed = result
@@ -99,7 +99,7 @@ class SkillsTrainingInteractionController(InteractionController):
         raise AsyncReturn(SingleDialogResult(False, True))
 
     def __train(self):
-        factory.doAction(factory.ADD_SKILLS_TANKMAN, self.context.tankman.invID, skills_constants.SkillUtilization.MAJOR_SKILL if self.context.isMajorQualification else skills_constants.SkillUtilization.BONUS_SKILL, self.context.selectedSkills)
+        factory.doAction(factory.ADD_SKILLS_TANKMAN, self.context.tankman.invID, skills_constants.SkillUtilization.MAJOR_SKILL if self.context.isMajorQualification else skills_constants.SkillUtilization.BONUS_SKILL, self.context.role, self.context.selectedSkills)
         BigWorld.player().crewAccountController.setLearnedSkillsAnimanion(self.context.tankman.invID, self.context.selectedSkills)
         self.__clearSelection()
 

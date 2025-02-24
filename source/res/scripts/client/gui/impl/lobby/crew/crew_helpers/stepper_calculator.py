@@ -1,112 +1,116 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/crew_helpers/stepper_calculator.py
+from math import ceil
 from helpers import dependency
-from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL, _MAX_FREE_XP as MAX_FREE_XP
+from items.tankmen import MAX_SKILL_LEVEL
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getSkillsLevelsForXp
 from skeletons.gui.shared import IItemsCache
-from skill_formatters import SkillLvlFormatter
 
 class FreeXpStepperCalculator(object):
-    availableFreeXp = property(lambda self: self.itemsCache.items.stats.freeXP)
-    exchangeRate = property(lambda self: self.itemsCache.items.shop.freeXPToTManXPRate)
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self):
-        self.__lastSkillsCount = 0
-        self.__possibleSkillsCount = 0
-        self.__availableSkillsCount = 0
-        self.__lastSkillLevel = SkillLvlFormatter()
-        self.__possibleSkillLevel = SkillLvlFormatter()
-        self.__lastPossibleStateXpCost = 0
+    def __init__(self, exchangeRate):
+        self._currentTankman = None
+        self._exchangeRate = exchangeRate
+        self._currentSkillsCount = 0
+        self._currentSkillLevel = 0
+        self._possibleSkillsCount = 0
+        self._possibleSkillLevel = 0
+        self._aquiringPersonalXpAmount = 0
+        return
 
-    def setAvailableSkillsCount(self, availableSkillsCount):
-        self.__availableSkillsCount = availableSkillsCount
+    def setCurrentTankman(self, tankman):
+        self._currentTankman = tankman
+        self.setInitialPossibleValues()
 
-    def setState(self, lastSkillsCount, possibleSkillsCount, lastSkillLevel, possibleSkillLevel):
-        self.__lastSkillsCount = lastSkillsCount
-        self.__lastSkillLevel = lastSkillLevel
-        if self.__lastSkillsCount > self.__availableSkillsCount or self.__lastSkillsCount == self.__availableSkillsCount and self.__lastSkillLevel == MAX_SKILL_LEVEL:
-            self.__lastSkillsCount = self.__availableSkillsCount
-            self.__lastSkillLevel = SkillLvlFormatter(MAX_SKILL_LEVEL)
-        self.__possibleSkillsCount = possibleSkillsCount if possibleSkillsCount > 0 else self.__lastSkillsCount
-        self.__possibleSkillLevel = possibleSkillLevel if possibleSkillLevel.isSkillLvl else self.__lastSkillLevel
-        if self.__possibleSkillsCount > self.__availableSkillsCount or self.__possibleSkillsCount == self.__availableSkillsCount and self.__possibleSkillLevel == MAX_SKILL_LEVEL:
-            self.__possibleSkillsCount = self.__availableSkillsCount
-            self.__possibleSkillLevel = SkillLvlFormatter(MAX_SKILL_LEVEL)
-        self.__lastPossibleStateXpCost = FreeXpStepperCalculator._getXpCostImpl(self.__possibleSkillLevel, self.__possibleSkillsCount)
-
-    def getMaxAvailbleStateCostXp(self):
-        lastSkillsLevelsXpCost = FreeXpStepperCalculator._getXpCostImpl(self.__lastSkillLevel, self.__lastSkillsCount)
-        targetSkillsLevelsXpCost = FreeXpStepperCalculator._getXpCostImpl(SkillLvlFormatter(MAX_SKILL_LEVEL if self.__availableSkillsCount else 0), self.__availableSkillsCount)
-        return self._getTargetFreeXp(targetSkillsLevelsXpCost - lastSkillsLevelsXpCost)
-
-    def getLevelDownXpState(self):
-        if not self.__possibleSkillsCount:
-            possibleSkillLevel = self.__lastSkillLevel
-            possibleSkillsCount = self.__lastSkillsCount
+    def setInitialPossibleValues(self):
+        if self._currentTankman is None:
+            return
         else:
-            possibleSkillLevel = self.__possibleSkillLevel
-            possibleSkillsCount = self.__possibleSkillsCount
-            if self.__possibleSkillLevel == 0:
-                possibleSkillLevel = SkillLvlFormatter(MAX_SKILL_LEVEL, self.__possibleSkillLevel.residualXp, self.__possibleSkillLevel.lvlCostXp)
-                possibleSkillsCount = self.__possibleSkillsCount - 1
-            possibleSkillLevel -= 1
-        targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp) + possibleSkillLevel.residualXp
+            skillsCount, lastSkillLevel = self._currentTankman.descriptor.getTotalSkillsProgress(withFree=False)
+            self._currentSkillsCount = self._possibleSkillsCount = skillsCount
+            self._currentSkillLevel = self._possibleSkillLevel = lastSkillLevel
+            self._aquiringPersonalXpAmount = 0
+            return
 
-    def getLevelUpXpState(self):
-        if not self.__possibleSkillsCount:
-            possibleSkillLevel = self.__lastSkillLevel
-            possibleSkillsCount = self.__lastSkillsCount
+    def setManualInputPossibleValues(self, possibleCount, possibleLevel):
+        if possibleCount > 0 and possibleLevel >= 0 and (possibleCount != self._possibleSkillsCount or possibleLevel != self._possibleSkillLevel):
+            self._possibleSkillsCount = possibleCount
+            self._possibleSkillLevel = possibleLevel
+
+    def setAquiringPersonalXp(self, value):
+        if self._currentTankman is None:
+            return
         else:
-            possibleSkillLevel = self.__possibleSkillLevel
-            possibleSkillsCount = self.__possibleSkillsCount
-            if possibleSkillLevel == MAX_SKILL_LEVEL:
-                possibleSkillLevel = SkillLvlFormatter(0, self.__possibleSkillLevel.residualXp, self.__possibleSkillLevel.lvlCostXp)
-                possibleSkillsCount = self.__possibleSkillsCount + 1
-            possibleSkillLevel += 1
-        targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp)
+            self._aquiringPersonalXpAmount = value
+            skillsCount, lastSkillLevel = self._currentTankman.descriptor.getTotalSkillsProgress(withFree=False, extraXP=value)
+            self._possibleSkillsCount = skillsCount
+            self._possibleSkillLevel = lastSkillLevel
+            return
 
-    def getSkillDownXpState(self):
-        possibleSkillsCount = self.__possibleSkillsCount - int(not self.__possibleSkillLevel.intSkillLvl) if self.__possibleSkillsCount else self.__lastSkillsCount
-        possibleSkillLevel = SkillLvlFormatter(0) if self.__possibleSkillsCount else self.__lastSkillLevel
-        targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp) + possibleSkillLevel.residualXp
+    def getLevelUpXpCost(self):
+        if not self._currentTankman:
+            return 0
+        if self._possibleSkillLevel == MAX_SKILL_LEVEL - 1:
+            self._possibleSkillsCount += 1
+            self._possibleSkillLevel = 0
+        else:
+            self._possibleSkillLevel += 1
+        return self._countResultAndConvertToFreeXp()
 
-    def getSkillUpXpState(self):
-        possibleSkillsCount = self.__possibleSkillsCount + 1 if self.__possibleSkillsCount else self.__lastSkillsCount
-        possibleSkillLevel = SkillLvlFormatter(0) if self.__possibleSkillsCount else self.__lastSkillLevel
-        targetTmanXp = self.getStepXpCost(possibleSkillsCount, possibleSkillLevel)
-        return self._getTargetFreeXp(targetTmanXp)
+    def getLevelDownXpCost(self):
+        if not self._currentTankman:
+            return 0
+        if self._possibleSkillsCount > self._currentSkillsCount:
+            if self._possibleSkillLevel == 0:
+                self._possibleSkillsCount -= 1
+                self._possibleSkillLevel = MAX_SKILL_LEVEL - 1
+            else:
+                self._possibleSkillLevel -= 1
+        elif self._possibleSkillLevel > max(self._currentSkillLevel, 1):
+            self._possibleSkillLevel -= 1
+        else:
+            return 1
+        return self._countResultAndConvertToFreeXp()
 
-    def _getTargetFreeXp(self, targetTmanXp):
-        return self._checkAvailableXp(self._convertToFreeXP(min(targetTmanXp, MAX_FREE_XP), self.exchangeRate), self.availableFreeXp)
+    def getSkillUpXpCost(self):
+        if not self._currentTankman:
+            return 0
+        if self._possibleSkillsCount + 1 <= self._currentTankman.maxSkillsCount:
+            self._possibleSkillsCount += 1
+            self._possibleSkillLevel = 0
+        elif self._possibleSkillsCount == self._currentTankman.maxSkillsCount:
+            self._possibleSkillLevel = MAX_SKILL_LEVEL
+        return self._countResultAndConvertToFreeXp()
 
-    def getStepXpCost(self, targetSkillsCount, targetSkillLevel):
-        if targetSkillsCount < self.__lastSkillsCount or targetSkillsCount == self.__lastSkillsCount and targetSkillLevel <= self.__lastSkillLevel:
-            targetSkillsCount = self.__lastSkillsCount
-            targetSkillLevel = self.__lastSkillLevel
-        elif targetSkillsCount > self.__availableSkillsCount or targetSkillsCount == self.__availableSkillsCount and targetSkillLevel == MAX_SKILL_LEVEL:
-            targetSkillsCount = self.__availableSkillsCount
-            targetSkillLevel = SkillLvlFormatter(MAX_SKILL_LEVEL if self.__availableSkillsCount else 0)
-        return FreeXpStepperCalculator._getStepXpCost(self.__lastPossibleStateXpCost, targetSkillsCount, targetSkillLevel)
+    def getSkillDownXpCost(self):
+        if not self._currentTankman:
+            return 0
+        if self._possibleSkillLevel > 0 and self._possibleSkillsCount != self._currentSkillsCount:
+            self._possibleSkillLevel = 0
+        elif self._possibleSkillsCount - 1 > self._currentSkillsCount:
+            self._possibleSkillsCount -= 1
+        return self._countResultAndConvertToFreeXp()
 
-    @staticmethod
-    def _getXpCostImpl(skillLevel, skillsCount):
-        return TankmanDescr.getXpCostForSkillsLevels(skillLevel.intSkillLvl, skillsCount) + skillLevel.residualXp
+    def getMaxPossibleValue(self):
+        maxCost = self._currentTankman.descriptor.getXpCostForSkillsLevels(MAX_SKILL_LEVEL, self._currentTankman.maxSkillsCount)
+        freeXpMaxPossibleValue = self.__convertToFreeXp(maxCost)
+        return min(freeXpMaxPossibleValue, self.itemsCache.items.stats.freeXP)
 
-    @staticmethod
-    def _getStepXpCost(lastSkillsLevelsXpCost, targetSkillsCount, targetSkillLevel):
-        targetSkillsLevelsXpCost = FreeXpStepperCalculator._getXpCostImpl(targetSkillLevel, targetSkillsCount)
-        return targetSkillsLevelsXpCost - lastSkillsLevelsXpCost
+    def _countResultAndConvertToFreeXp(self):
+        cost = self._currentTankman.descriptor.getXpCostForSkillsLevels(self._possibleSkillLevel, self._possibleSkillsCount)
+        freeXpCost = self.__convertToFreeXp(cost)
+        availableFreeXp = self.itemsCache.items.stats.freeXP
+        if freeXpCost > availableFreeXp:
+            skillsCount, skillLevel = getSkillsLevelsForXp(self._currentTankman, availableFreeXp * self._exchangeRate)
+            self._possibleSkillsCount = skillsCount
+            self._possibleSkillLevel = int(ceil(skillLevel.formattedSkillLvl))
+            return availableFreeXp
+        return freeXpCost
 
-    @staticmethod
-    def _convertToFreeXP(tmanXP, exchangeRate):
-        targetFreeXp = tmanXP / exchangeRate
-        if tmanXP % exchangeRate != 0:
+    def __convertToFreeXp(self, value):
+        value -= self._currentTankman.descriptor.totalXP() + self._aquiringPersonalXpAmount
+        targetFreeXp = max(value, 1) / self._exchangeRate
+        if value % self._exchangeRate != 0:
             targetFreeXp += 1
         return targetFreeXp
-
-    @staticmethod
-    def _checkAvailableXp(targetFreeXp, availableFreeXp):
-        return min(targetFreeXp, availableFreeXp)

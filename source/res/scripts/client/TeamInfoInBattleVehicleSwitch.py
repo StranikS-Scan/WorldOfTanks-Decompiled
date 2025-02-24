@@ -36,13 +36,13 @@ class TeamInfoInBattleVehicleSwitch(ScriptComponent):
     def __setPositions(self):
         if self.positions:
             self.__positionsSet = True
-            ctrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
+            ctrl = self.__sessionProvider.dynamic.prebattleSetup
             if ctrl is not None:
                 ctrl.updateSpawnPoints(self.positions)
         return
 
     def __updateStatuses(self, statuses):
-        ctrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
+        ctrl = self.__sessionProvider.dynamic.prebattleSetup
         if ctrl is not None:
             ctrl.updateConfirmationStatuses(statuses)
         return

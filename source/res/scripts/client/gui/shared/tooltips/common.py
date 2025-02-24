@@ -37,7 +37,6 @@ from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
-from gui.impl.lobby.battle_pass.tooltips.battle_pass_not_started_tooltip_view import BattlePassNotStartedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.lobby.subscription.wot_plus_tooltip import WotPlusTooltip
@@ -1282,6 +1281,9 @@ class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
         elif self._btnType == CURRENCIES_CONSTANTS.BRCOIN:
             brCoin = self.battleRoyaleController.getBRCoinBalance(0)
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(brCoin))
+        elif self._btnType == CURRENCIES_CONSTANTS.STPCOIN:
+            stpCoin = self.battleRoyaleController.getSTPCoinBalance(0)
+            valueStr = text_styles.bpcoin(backport.getIntegralFormat(stpCoin))
         elif self._btnType == CURRENCIES_CONSTANTS.EQUIP_COIN:
             valueStr = text_styles.bpcoin(backport.getIntegralFormat(self.itemsCache.items.stats.equipCoin))
         return valueStr
@@ -1437,12 +1439,6 @@ class _BattlePassMixedContentTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, *args, **kwargs):
         return DecoratedTooltipWindow(self.__viewImpl(), useDecorator=False) if TOOLTIPS_CONSTANTS.BATTLE_PASS_AS3_TOOLTIP_CALL in args else self.__viewImpl()
-
-
-class BattlePassNotStartedTooltipWindowData(_BattlePassMixedContentTooltipData):
-
-    def __init__(self, context):
-        super(BattlePassNotStartedTooltipWindowData, self).__init__(context, TOOLTIPS_CONSTANTS.BATTLE_PASS_NOT_STARTED, BattlePassNotStartedTooltipView)
 
 
 class BattlePassNoChapterTooltipWindowData(_BattlePassMixedContentTooltipData):

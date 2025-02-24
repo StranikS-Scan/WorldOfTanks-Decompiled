@@ -1,109 +1,125 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/battle_pass/post_progression_view_model.py
 from enum import IntEnum
+from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.awards_widget_model import AwardsWidgetModel
-from gui.impl.gen.view_models.views.lobby.battle_pass.battle_pass_buy_rewards_view_model import BattlePassBuyRewardsViewModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_simple_model import ChapterSimpleModel
+from gui.impl.gen.view_models.views.lobby.battle_pass.level_model import LevelModel
 
-class ChapterStates(IntEnum):
-    ACTIVE = 0
-    PAUSED = 1
-    COMPLETED = 2
-    NOTSTARTED = 3
+class PostProgressionStatus(IntEnum):
+    LOCKED = 0
+    UNLOCKED = 1
+    PAUSED = 2
 
 
 class PostProgressionViewModel(ViewModel):
-    __slots__ = ('showRewards', 'onTakeRewardsClick', 'showTankmen', 'onBackClick', 'onPreviewVehicle', 'showVehicle', 'showBuy', 'onClose')
-    BUY_STATE = 'buyState'
-    REWARDS_STATE = 'rewardsState'
-    TANKMEN_STATE = 'tankmenState'
-    SELECTABLE_REWARDS_STATE = 'selectableRewardsState'
-    FINAL_STATE = 'finalState'
+    __slots__ = ('onOpenPointsInfo', 'onOpenInfoPage', 'onOpenChaptersSelection', 'onOpenChaptersBuyView', 'onOpenProgressionView', 'onClose', 'onProgressAchieved', 'onCycleCompleted')
 
-    def __init__(self, properties=10, commands=8):
+    def __init__(self, properties=12, commands=8):
         super(PostProgressionViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
-    def rewards(self):
-        return self._getViewModel(0)
-
-    @staticmethod
-    def getRewardsType():
-        return BattlePassBuyRewardsViewModel
-
-    @property
     def awardsWidget(self):
-        return self._getViewModel(1)
+        return self._getViewModel(0)
 
     @staticmethod
     def getAwardsWidgetType():
         return AwardsWidgetModel
 
-    def getState(self):
-        return self._getString(2)
+    def getPreviousLevel(self):
+        return self._getNumber(1)
 
-    def setState(self, value):
-        self._setString(2, value)
-
-    def getNotChosenRewardCount(self):
-        return self._getNumber(3)
-
-    def setNotChosenRewardCount(self, value):
-        self._setNumber(3, value)
-
-    def getIsChooseRewardsEnabled(self):
-        return self._getBool(4)
-
-    def setIsChooseRewardsEnabled(self, value):
-        self._setBool(4, value)
-
-    def getIsSpecialVoiceTankmen(self):
-        return self._getBool(5)
-
-    def setIsSpecialVoiceTankmen(self, value):
-        self._setBool(5, value)
-
-    def getChapterID(self):
-        return self._getNumber(6)
-
-    def setChapterID(self, value):
-        self._setNumber(6, value)
+    def setPreviousLevel(self, value):
+        self._setNumber(1, value)
 
     def getCurrentLevel(self):
-        return self._getNumber(7)
+        return self._getNumber(2)
 
     def setCurrentLevel(self, value):
+        self._setNumber(2, value)
+
+    def getPreviousLevelPoints(self):
+        return self._getNumber(3)
+
+    def setPreviousLevelPoints(self, value):
+        self._setNumber(3, value)
+
+    def getCurrentLevelPoints(self):
+        return self._getNumber(4)
+
+    def setCurrentLevelPoints(self, value):
+        self._setNumber(4, value)
+
+    def getPreviousCyclesCompletedCount(self):
+        return self._getNumber(5)
+
+    def setPreviousCyclesCompletedCount(self, value):
+        self._setNumber(5, value)
+
+    def getCyclesCompletedCount(self):
+        return self._getNumber(6)
+
+    def setCyclesCompletedCount(self, value):
+        self._setNumber(6, value)
+
+    def getEndDate(self):
+        return self._getNumber(7)
+
+    def setEndDate(self, value):
         self._setNumber(7, value)
 
-    def getChapterState(self):
-        return ChapterStates(self._getNumber(8))
+    def getChapterID(self):
+        return self._getNumber(8)
 
-    def setChapterState(self, value):
-        self._setNumber(8, value.value)
+    def setChapterID(self, value):
+        self._setNumber(8, value)
 
-    def getIsSeasonEndingSoon(self):
-        return self._getBool(9)
+    def getLevels(self):
+        return self._getArray(9)
 
-    def setIsSeasonEndingSoon(self, value):
-        self._setBool(9, value)
+    def setLevels(self, value):
+        self._setArray(9, value)
+
+    @staticmethod
+    def getLevelsType():
+        return LevelModel
+
+    def getChapters(self):
+        return self._getArray(10)
+
+    def setChapters(self, value):
+        self._setArray(10, value)
+
+    @staticmethod
+    def getChaptersType():
+        return ChapterSimpleModel
+
+    def getPostProgressionStatus(self):
+        return PostProgressionStatus(self._getNumber(11))
+
+    def setPostProgressionStatus(self, value):
+        self._setNumber(11, value.value)
 
     def _initialize(self):
         super(PostProgressionViewModel, self)._initialize()
-        self._addViewModelProperty('rewards', BattlePassBuyRewardsViewModel())
         self._addViewModelProperty('awardsWidget', AwardsWidgetModel())
-        self._addStringProperty('state', 'buyState')
-        self._addNumberProperty('notChosenRewardCount', 0)
-        self._addBoolProperty('isChooseRewardsEnabled', True)
-        self._addBoolProperty('isSpecialVoiceTankmen', True)
-        self._addNumberProperty('chapterID', 0)
+        self._addNumberProperty('previousLevel', 0)
         self._addNumberProperty('currentLevel', 0)
-        self._addNumberProperty('chapterState')
-        self._addBoolProperty('isSeasonEndingSoon', False)
-        self.showRewards = self._addCommand('showRewards')
-        self.onTakeRewardsClick = self._addCommand('onTakeRewardsClick')
-        self.showTankmen = self._addCommand('showTankmen')
-        self.onBackClick = self._addCommand('onBackClick')
-        self.onPreviewVehicle = self._addCommand('onPreviewVehicle')
-        self.showVehicle = self._addCommand('showVehicle')
-        self.showBuy = self._addCommand('showBuy')
+        self._addNumberProperty('previousLevelPoints', 0)
+        self._addNumberProperty('currentLevelPoints', 0)
+        self._addNumberProperty('previousCyclesCompletedCount', 0)
+        self._addNumberProperty('cyclesCompletedCount', 0)
+        self._addNumberProperty('endDate', 0)
+        self._addNumberProperty('chapterID', 0)
+        self._addArrayProperty('levels', Array())
+        self._addArrayProperty('chapters', Array())
+        self._addNumberProperty('postProgressionStatus')
+        self.onOpenPointsInfo = self._addCommand('onOpenPointsInfo')
+        self.onOpenInfoPage = self._addCommand('onOpenInfoPage')
+        self.onOpenChaptersSelection = self._addCommand('onOpenChaptersSelection')
+        self.onOpenChaptersBuyView = self._addCommand('onOpenChaptersBuyView')
+        self.onOpenProgressionView = self._addCommand('onOpenProgressionView')
         self.onClose = self._addCommand('onClose')
+        self.onProgressAchieved = self._addCommand('onProgressAchieved')
+        self.onCycleCompleted = self._addCommand('onCycleCompleted')

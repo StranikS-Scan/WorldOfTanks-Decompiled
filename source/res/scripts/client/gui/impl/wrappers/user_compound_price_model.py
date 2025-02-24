@@ -12,7 +12,7 @@ from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
-    from typing import Dict, Tuple, Optional, Union
+    from typing import Dict, Tuple, Optional, Union, Iterable
     Price = Union[Money, Dict]
 
 class UserCompoundPriceModel(CompoundPriceModel):
@@ -73,7 +73,7 @@ class PriceModelBuilder(object):
     @classmethod
     def fillPriceItemModel(cls, array, price, checkBalanceAvailability=False):
         array.reserve(len(price))
-        for name, value in price.iteritems():
+        for name, value in cls._getCurrencyIterator(price):
             priceItemModel = cls._createPriceItemModel(name, value)
             array.addViewModel(priceItemModel)
 
@@ -85,6 +85,10 @@ class PriceModelBuilder(object):
         priceItemModel.setName(name)
         priceItemModel.setValue(value)
         return priceItemModel
+
+    @classmethod
+    def _getCurrencyIterator(cls, price):
+        return price.iteritems()
 
 
 class BuyPriceModelBuilder(PriceModelBuilder):
@@ -104,7 +108,7 @@ class BuyPriceModelBuilder(PriceModelBuilder):
     @classmethod
     def fillPriceItemModel(cls, array, price, balance=None, checkBalanceAvailability=False):
         array.reserve(len(price))
-        for name, value in price.iteritems():
+        for name, value in cls._getCurrencyIterator(price):
             priceItemModel = cls._createPriceItemModel(name, value, balance, checkBalanceAvailability=checkBalanceAvailability)
             array.addViewModel(priceItemModel)
 

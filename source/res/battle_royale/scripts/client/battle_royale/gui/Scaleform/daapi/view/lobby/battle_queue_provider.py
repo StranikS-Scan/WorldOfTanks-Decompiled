@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/battle_queue_provider.py
-from battle_royale.gui.constants import BattleRoyaleSubMode
 import constants
+from battle_royale.gui.constants import BattleRoyaleSubMode
+from gui.Scaleform.daapi.view.lobby.battle_queue import RandomQueueProvider
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.Scaleform.daapi.view.lobby.battle_queue import RandomQueueProvider
 from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import BattleType
+from gui.prb_control import prb_getters
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 _SUBMODE_ID_TO_BATTLE_TYPE = {BattleRoyaleSubMode.SOLO_MODE_ID: BattleType.SOLO,
@@ -32,4 +33,7 @@ class BattleRoyaleQueueProvider(RandomQueueProvider):
     def getAdditionalParams(self):
         battleType = _SUBMODE_ID_TO_BATTLE_TYPE[self.__battleRoyaleController.getCurrentSubModeID()].value
         iconPath = backport.image(R.images.battle_royale.gui.maps.icons.battleQueue.battleType.dyn(battleType)())
-        return {'battleTypeIconPath': iconPath}
+        guiType = prb_getters.getArenaGUIType(queueType=self._queueType)
+        titleRes = R.strings.menu.loading.battleTypes.subTitle.num(guiType)
+        return {'battleTypeIconPath': iconPath,
+         'subTitle': backport.text(titleRes()) if titleRes.exists() else ''}

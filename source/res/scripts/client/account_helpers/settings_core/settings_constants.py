@@ -324,6 +324,7 @@ class GuiSettingsBehavior(CONST_CONTAINER):
     IS_PRESTIGE_ONBOARDING_VIEWED = 'isPrestigeOnboardingViewed'
     PRESTIGE_FIRST_ENTRY_NOTIFICATION_SHOWN = 'prestigeFirstEntryNotificationShown'
     CLAN_SUPPLY_INTRO_SHOWN = 'clanSupplyIntroShown'
+    CREW_MENTORING_LICENSE_AWARDS_SHOWN = 'crewMentoringLicenseAwardsShown'
 
 
 class OnceOnlyHints(CONST_CONTAINER):
@@ -390,6 +391,7 @@ class OnceOnlyHints(CONST_CONTAINER):
     FL_SCENARIO_HINT_SMALL = 'FrontlineScenariosHintSmallSizes'
     BATTLE_ROYALE_DYNAMIC_PLATOON_SUB_MODE_HINT = 'BattleRoyaleDynamicPlatoonSubModeHint'
     CREW_BOOKS_POST_PROGRESSION_HINT = 'CrewBooksPostProgressionHint'
+    CREW_BOOKS_MENTORING_LICENSE_HINT = 'CrewBooksMentoringLicenseHint'
     ACHIEVEMENTS_HANGAR_HINT = 'AchievementsHangarHint'
     ACHIEVEMENTS_PROFILE_HINT = 'AchievementsProfileHint'
     ACHIEVEMENTS_PROFILE_HINT_SMALL = 'AchievementsProfileHintSmallSize'
@@ -487,7 +489,6 @@ class BattlePassStorageKeys(CONST_CONTAINER):
     INTRO_VIDEO_SHOWN = 'introVideoShown'
     BUY_ANIMATION_WAS_SHOWN = 'buyAnimationWasShown'
     FLAGS_VERSION = 'flagsVersion'
-    DAILY_QUESTS_INTRO_SHOWN = 'dailyQuestsIntroShown'
     EXTRA_CHAPTER_INTRO_SHOWN = 'extraChapterIntroShown'
     EXTRA_CHAPTER_VIDEO_SHOWN = 'extraChapterVideoShown'
     FLAGS_VERSION_HOLIDAY = 'flagsVersionHoliday'

@@ -12,26 +12,26 @@ class AnimationType(Enum):
 class TankmanSkillModel(SkillExtendedModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(TankmanSkillModel, self).__init__(properties=properties, commands=commands)
 
     def getIsDisabled(self):
-        return self._getBool(8)
-
-    def setIsDisabled(self, value):
-        self._setBool(8, value)
-
-    def getIsLocked(self):
         return self._getBool(9)
 
-    def setIsLocked(self, value):
+    def setIsDisabled(self, value):
         self._setBool(9, value)
 
+    def getIsLocked(self):
+        return self._getBool(10)
+
+    def setIsLocked(self, value):
+        self._setBool(10, value)
+
     def getAnimationType(self):
-        return AnimationType(self._getString(10))
+        return AnimationType(self._getString(11))
 
     def setAnimationType(self, value):
-        self._setString(10, value.value)
+        self._setString(11, value.value)
 
     def _initialize(self):
         super(TankmanSkillModel, self)._initialize()

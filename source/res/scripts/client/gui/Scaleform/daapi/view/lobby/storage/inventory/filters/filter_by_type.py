@@ -177,6 +177,8 @@ class FiltrableRegularCategoryByTypeTabView(FiltrableInventoryCategoryByTypeTabV
         for itemType in self._getItemTypeIDs():
             if itemType == GUI_ITEM_TYPE.DEMOUNT_KIT:
                 items.update(self._goodiesCache.getDemountKits(REQ_CRITERIA.DEMOUNT_KIT.IN_ACCOUNT | REQ_CRITERIA.DEMOUNT_KIT.IS_ENABLED))
+            if itemType == GUI_ITEM_TYPE.MENTORING_LICENSE:
+                items.update(self._goodiesCache.getMentoringLicenses(REQ_CRITERIA.MENTORING_LICENSE.IN_ACCOUNT | REQ_CRITERIA.MENTORING_LICENSE.IS_ENABLED))
             if itemType == GUI_ITEM_TYPE.RECERTIFICATION_FORM:
                 if SwitchState.DISABLED.value == self._lobbyContext.getServerSettings().recertificationFormState():
                     continue

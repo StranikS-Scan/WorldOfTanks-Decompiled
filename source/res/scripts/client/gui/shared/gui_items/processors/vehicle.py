@@ -11,6 +11,7 @@ from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
+from gui.customization.shared import validateOutfitComponent
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import formatPrice, text_styles, getStyle, getBWFormatter
@@ -19,7 +20,7 @@ from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ItemPrice, getVehicleBattleBoostersLayoutPrice, getVehicleConsumablesLayoutPrice, getVehicleOptionalDevicesLayoutPrice, getVehicleShellsLayoutPrice
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins as proc_plugs, makeSuccess
-from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage
+from gui.shared.gui_items.processors.messages.items_processor_messages import ItemBuyProcessorMessage, BattleAbilitiesApplyProcessorMessage, LayoutApplyProcessorMessage, BattleBoostersApplyProcessorMessage, OptDevicesApplyProcessorMessage, ConsumablesApplyProcessorMessage, ShellsApplyProcessorMessage, EasyTankEquipApplyProcessorMessage, OptDeviceRemoveProcessorMessage
 from gui.shared.gui_items.vehicle_equipment import EMPTY_ITEM
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency, ZERO_MONEY
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -39,7 +40,7 @@ _logger = logging.getLogger(__name__)
 _SEASON_RENT_DURATION_KEY = {RentType.SEASON_RENT: 'season',
  RentType.SEASON_CYCLE_RENT: 'cycle'}
 
-def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
+def getSumPrice(result, vehicle, crewType, buyShells, consumables):
     if crewType != -1:
         tankmenCount = len(vehicle.crew)
         itemsCache = dependency.instance(IItemsCache)
@@ -48,6 +49,9 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:
             result += shell.buyPrices.itemPrice.price * shell.count
+
+    for consumable in consumables:
+        result += consumable.getBuyPrice().price
 
     return result
 
@@ -98,8 +102,9 @@ class VehicleReceiveProcessor(ItemProcessor):
 
 class VehicleBuyer(VehicleReceiveProcessor):
 
-    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1, showNotEnoughSlotMsg=True):
+    def __init__(self, vehicle, buySlot, buyShell=False, crewType=-1, showNotEnoughSlotMsg=True, consumables=None):
         self.buySlot = buySlot
+        self.consumables = consumables or []
         self.showNotEnoughSlotMsg = showNotEnoughSlotMsg
         super(VehicleBuyer, self).__init__(vehicle, buyShell=buyShell, crewType=crewType)
 
@@ -110,7 +115,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
          proc_plugs.CollectibleVehiclesValidator(self.item.intCD))
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell)
+        return getSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell, self.consumables)
 
     @dependency.replace_none_kwargs(itemsCache=IItemsCache)
     def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
@@ -130,24 +135,29 @@ class VehicleBuyer(VehicleReceiveProcessor):
         allCurrencies = self.price.getSetCurrencies(byWeight=True)
         return SM_TYPE.PurchaseForGoldAndCredits if mainCurrency == Currency.CREDITS and Currency.GOLD in allCurrencies else CURRENCY_TO_SM_TYPE.get(mainCurrency, SM_TYPE.Information)
 
+    def _getApplyingConsumables(self):
+        consumablesInfo = [ item.defaultLayoutValue for item in self.consumables ]
+        return list(chain.from_iterable(consumablesInfo))
+
     def _request(self, callback):
         _logger.debug('Make request to buy vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
-        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self._getApplyingConsumables(), self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
 class VehicleRenter(VehicleReceiveProcessor):
 
-    def __init__(self, vehicle, rentID, buyShell=False, crewType=-1):
+    def __init__(self, vehicle, rentID, buyShell=False, crewType=-1, consumables=None):
         self.rentPackageID = rentID
         self.rentPrice = self.__getRentPrice(rentID, vehicle)
         self.rentPackage = vehicle.getRentPackage(rentID)
+        self.consumables = consumables or []
         super(VehicleRenter, self).__init__(vehicle, buyShell, crewType)
 
     def _getPluginsList(self):
         return (proc_plugs.MoneyValidator(self.price), proc_plugs.VehicleFreeLimitConfirmator(self.item, self.crewType))
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(self.rentPrice, self.item, self.crewType, self.buyShell)
+        return getSumPrice(self.rentPrice, self.item, self.crewType, self.buyShell, self.consumables)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if not errStr:
@@ -172,9 +182,13 @@ class VehicleRenter(VehicleReceiveProcessor):
             buyOption = ''
         return makeI18nSuccess('vehicle_rent/success', vehName=self.item.userName, rentPackageName=rentPackageName, price=formatPrice(self.price), type=self._getSysMsgType(), buyOption=buyOption)
 
+    def _getApplyingConsumables(self):
+        consumablesInfo = [ item.defaultLayoutValue for item in self.consumables ]
+        return list(chain.from_iterable(consumablesInfo))
+
     def _request(self, callback):
         _logger.debug('Make request to rent vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
-        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, self.rentPackageID, lambda code: self._response(code, callback, ctx={'rentID': self.rentPackageID}))
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self._getApplyingConsumables(), self.buyCrew, self.crewType, self.rentPackageID, lambda code: self._response(code, callback, ctx={'rentID': self.rentPackageID}))
 
     def _getSysMsgType(self):
         return CURRENCY_TO_SM_TYPE.get(self.rentPrice.getCurrency(byWeight=False), SM_TYPE.Information)
@@ -190,7 +204,7 @@ class VehicleRenter(VehicleReceiveProcessor):
 class VehicleRestoreProcessor(VehicleBuyer):
 
     def _getPrice(self):
-        return getCrewAndShellsSumPrice(self.item.restorePrice, self.item, self.crewType, self.buyShell)
+        return getSumPrice(self.item.restorePrice, self.item, self.crewType, self.buyShell, self.consumables)
 
     def _errorHandler(self, code, errStr='', ctx=None, itemsCache=None):
         if not errStr:
@@ -210,14 +224,14 @@ class VehicleRestoreProcessor(VehicleBuyer):
 
     def _request(self, callback):
         _logger.debug('Make request to restore vehicle: %s, %s, %s, %s', self.item, self.crewType, self.buyShell, self.price)
-        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
+        BigWorld.player().shop.buyVehicle(self.item.nationID, self.item.innationID, self.buyShell, self._getApplyingConsumables(), self.buyCrew, self.crewType, -1, lambda code: self._response(code, callback))
 
 
 class VehicleTradeInProcessorBase(VehicleBuyer):
 
-    def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1):
+    def __init__(self, vehicleToBuy, vehicleToTradeOff, buySlot, buyShell=False, crewType=-1, consumables=None):
         self.itemToTradeOff = vehicleToTradeOff
-        super(VehicleTradeInProcessorBase, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType)
+        super(VehicleTradeInProcessorBase, self).__init__(vehicleToBuy, buySlot, buyShell=buyShell, crewType=crewType, consumables=consumables)
 
     def _getPluginsList(self):
         return (proc_plugs.VehicleValidator(self.itemToTradeOff, setAll=True), proc_plugs.VehicleSellValidator(self.itemToTradeOff), proc_plugs.MoneyValidator(self.price))
@@ -237,7 +251,7 @@ class VehicleTradeInProcessorBase(VehicleBuyer):
 
     def _request(self, callback):
         _logger.debug('Make request to trade-in vehicle: %s, %s, %s, %s, %s, %s', self.item, self.itemToTradeOff, self.buyShell, self.buyCrew, self.crewType, self.price)
-        self._getBuyingFunc()(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self.buyCrew, self.crewType, lambda code: self._response(code, callback))
+        self._getBuyingFunc()(self.itemToTradeOff.invID, self.item.nationID, self.item.innationID, self.buyShell, self._getApplyingConsumables(), self.buyCrew, self.crewType, lambda code: self._response(code, callback))
 
     def _getBuyingFunc(self):
         raise NotImplementedError
@@ -248,7 +262,7 @@ class VehicleTradeInProcessor(VehicleTradeInProcessorBase):
 
     def _getPrice(self):
         price = self.__tradeIn.getTradeInPrice(self.item).price
-        return getCrewAndShellsSumPrice(price, self.item, self.crewType, self.buyShell)
+        return getSumPrice(price, self.item, self.crewType, self.buyShell, self.consumables)
 
     def _getBuyingFunc(self):
         return BigWorld.player().shop.tradeInVehicle
@@ -631,6 +645,18 @@ class VehicleAutoStyleEquipProcessor(VehicleSettingsProcessor):
         super(VehicleAutoStyleEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION, value, source=source)
 
 
+class VehicleAutoReturnProcessor(VehicleSettingsProcessor):
+
+    def __init__(self, vehicle, value):
+        super(VehicleAutoReturnProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_RETURN, value)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError(sysMsgKey='vehicle_auto_return/server_error')
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess(sysMsgKey='vehicle_auto_return/success' + str(self._value), type=SM_TYPE.Information)
+
+
 class VehicleRepairer(ItemProcessor):
 
     def __init__(self, vehicle):
@@ -775,6 +801,140 @@ class BuyAndInstallConsumablesProcessor(Processor):
         currentBoosters = [ (item.defaultLayoutValue if item is not None else (0, 0)) for item in self._vehicle.battleBoosters.installed ]
         layout.extend(currentBoosters)
         return [ v for v in chain.from_iterable(layout) ]
+
+
+class EasyTankEquipApplyProcessor(Processor):
+
+    def __init__(self, currentVehicle, copyVehicle, optDevicesData=None, shellsData=None, eqsData=None, styleData=None):
+        super(EasyTankEquipApplyProcessor, self).__init__()
+        optDevicesData = optDevicesData or {}
+        shellsData = shellsData or {}
+        eqsData = eqsData or {}
+        styleData = styleData or {}
+        self.__currentVehicle = currentVehicle
+        self.__copyVehicle = copyVehicle
+        self.__optDevicesLayout = optDevicesData.get('optDevices', [])
+        self.__demountByDemountKit = optDevicesData.get('demountByDemountKit', [])
+        self.__demountForFree = optDevicesData.get('demountForFree', [])
+        self.__shellsLayout = shellsData.get('shells', [])
+        self.__eqsLayout = eqsData.get('eqs', [])
+        self.__styleData = styleData.get('styleData', {})
+        buyingPrice = ZERO_MONEY
+        for data in [optDevicesData,
+         shellsData,
+         eqsData,
+         styleData]:
+            buyingPrice += data.get('price', ZERO_MONEY)
+
+        addPlugins = [proc_plugs.MoneyValidator(buyingPrice, byCurrencyError=False),
+         proc_plugs.VehicleValidator(self.__currentVehicle, False, prop={'isBroken': True,
+          'isLocked': True}),
+         proc_plugs.OptionalDevicesInstallValidator(self.__currentVehicle),
+         proc_plugs.DismountForDemountKitValidator(self.__currentVehicle, self.__demountByDemountKit),
+         proc_plugs.FreeToDemountValidator(self.__demountForFree)]
+        self.addPlugins(addPlugins)
+
+    def _request(self, callback):
+        BigWorld.player().inventory.easyTankEquipApply(self.__getEasyTankEquipData(), lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
+
+    def _successHandler(self, code, ctx=None):
+        messages = []
+        if ctx:
+            messages.extend(self.__successHandlerForShells(ctx.get('shells')))
+            messages.extend(self.__successHandlerForEqs(ctx.get('eqs')))
+            messages.extend(self.__successHandlerForDemountedOptDevices(ctx.get('demountedOptDevices')))
+            messages.extend(self.__successHandlerForOptDevices(ctx.get('optDevices')))
+            messages.extend(self.__successHandlerForStyle(ctx.get('style')))
+        return makeSuccess(auxData=messages)
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return EasyTankEquipApplyProcessorMessage().makeErrorMsg(errStr)
+
+    def __successHandlerForShells(self, shells):
+        if not shells:
+            return []
+        messages = []
+        totalPrice = ZERO_MONEY
+        for shellsCtx in shells:
+            for cd, price, count in shellsCtx:
+                money = Money.makeFromMoneyTuple(price)
+                messages.append(ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, responsePrice=money).makeSuccessMsg())
+                totalPrice += money
+
+        if totalPrice:
+            messages.append(ShellsApplyProcessorMessage(self.__currentVehicle, totalPrice).makeSuccessMsg())
+        return messages
+
+    def __successHandlerForEqs(self, eqs):
+        if not eqs:
+            return []
+        return [ ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(cd), count, responsePrice=Money.makeFromMoneyTuple(price)).makeSuccessMsg() for eqsCtx in eqs for cd, price, count in eqsCtx ]
+
+    def __successHandlerForDemountedOptDevices(self, demountedOptDevices):
+        if not demountedOptDevices:
+            return []
+        return [ OptDeviceRemoveProcessorMessage(self.itemsCache.items.getItemByCD(optDevice), removalPrice=Money.makeMoney(price), useDemountKit=useDemountKit).makeSuccessMsg() for demountedOptDevicesCtx in demountedOptDevices for optDevice, price, useDemountKit in demountedOptDevicesCtx ]
+
+    def __successHandlerForOptDevices(self, optDevices):
+        if not optDevices:
+            return []
+        return [ ItemBuyProcessorMessage(self.itemsCache.items.getItemByCD(optDevice), 1, responsePrice=Money.makeMoney(price)).makeSuccessMsg() for optDevicesCtx in optDevices for optDevice, price in optDevicesCtx ]
+
+    def __successHandlerForStyle(self, style):
+        messages = []
+        if style:
+            for styleCtx in style:
+                for itemId, cost in styleCtx:
+                    item = self.itemsCache.items.getItemByCD(itemId)
+                    price = Money.makeFromMoneyTuple(cost)
+                    sysMsgType = CURRENCY_TO_SM_TYPE.get(price.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold)
+                    styleItemType = backport.text(R.strings.item_types.customization.style())
+                    msgCtx = {'itemType': styleItemType,
+                     'itemName': item.userName,
+                     'count': backport.getIntegralFormat(1),
+                     'money': formatPrice(price, useStyle=True)}
+                    msg = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.buyOne(), **msgCtx)
+                    messages.append(makeSuccess(userMsg=msg, msgType=sysMsgType))
+
+        if self.__styleData:
+            msg = backport.text(R.strings.messenger.serviceChannelMessages.sysMsg.customization.change())
+            messages.append(makeSuccess(userMsg=msg, msgType=SM_TYPE.Information))
+        return messages
+
+    def __getEasyTankEquipData(self):
+        return (self.__currentVehicle.invID,
+         self.__getOptDevicesForDemountKit(),
+         self.__getOptDevicesFreeDemount(),
+         self.__getApplyingOptDevices(),
+         self.__getApplyingShells(),
+         self.__getApplyingConsumables(),
+         self.__getApplyingStyle())
+
+    def __getOptDevicesForDemountKit(self):
+        return [ optDevice.intCD for optDevice in self.__demountByDemountKit ]
+
+    def __getOptDevicesFreeDemount(self):
+        return [ optDevice.intCD for optDevice in self.__demountForFree ]
+
+    def __getApplyingOptDevices(self):
+        return [ optDevice.intCD for optDevice in self.__optDevicesLayout ]
+
+    def __getApplyingShells(self):
+        shellsInfo = [ shell.defaultLayoutValue for shell in self.__shellsLayout ]
+        return list(chain.from_iterable(shellsInfo))
+
+    def __getApplyingConsumables(self):
+        consumablesInfo = [ (eq.defaultLayoutValue if eq is not None else (0, 0)) for eq in self.__eqsLayout ]
+        return list(chain.from_iterable(consumablesInfo))
+
+    def __getApplyingStyle(self):
+        styleData = []
+        for season, outfit in self.__styleData.items():
+            component = outfit.pack()
+            validateOutfitComponent(self.__copyVehicle.descriptor, component)
+            styleData.append((component.makeCompDescr(), season))
+
+        return styleData
 
 
 class BuyAndInstallShellsProcessor(Processor):

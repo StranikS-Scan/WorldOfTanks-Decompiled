@@ -21,66 +21,66 @@ class BoosterType(Enum):
 class CrewPerksTooltipModel(SkillExtendedModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(CrewPerksTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getSkillType(self):
-        return self._getString(8)
+        return self._getString(9)
 
     def setSkillType(self, value):
-        self._setString(8, value)
+        self._setString(9, value)
 
     def getRealLevel(self):
-        return self._getReal(9)
+        return self._getReal(10)
 
     def setRealLevel(self, value):
-        self._setReal(9, value)
+        self._setReal(10, value)
 
     def getIsAdvancedTooltipEnable(self):
-        return self._getBool(10)
-
-    def setIsAdvancedTooltipEnable(self, value):
-        self._setBool(10, value)
-
-    def getIsGroupSkill(self):
         return self._getBool(11)
 
-    def setIsGroupSkill(self, value):
+    def setIsAdvancedTooltipEnable(self, value):
         self._setBool(11, value)
 
-    def getIsAnyMemberWithLowEfficiency(self):
+    def getIsGroupSkill(self):
         return self._getBool(12)
 
-    def setIsAnyMemberWithLowEfficiency(self, value):
+    def setIsGroupSkill(self, value):
         self._setBool(12, value)
 
-    def getIsAnyMemberUntrained(self):
+    def getIsAnyMemberWithLowEfficiency(self):
         return self._getBool(13)
 
-    def setIsAnyMemberUntrained(self, value):
+    def setIsAnyMemberWithLowEfficiency(self, value):
         self._setBool(13, value)
 
+    def getIsAnyMemberUntrained(self):
+        return self._getBool(14)
+
+    def setIsAnyMemberUntrained(self, value):
+        self._setBool(14, value)
+
     def getBoosters(self):
-        return self._getArray(14)
+        return self._getArray(15)
 
     def setBoosters(self, value):
-        self._setArray(14, value)
+        self._setArray(15, value)
 
     @staticmethod
     def getBoostersType():
         return CrewPerksTooltipBoosterModel
 
     def getEfficiency(self):
-        return self._getReal(15)
+        return self._getReal(16)
 
     def setEfficiency(self, value):
-        self._setReal(15, value)
+        self._setReal(16, value)
 
     def getBoosterType(self):
-        return BoosterType(self._getString(16))
+        return BoosterType(self._getString(17))
 
     def setBoosterType(self, value):
-        self._setString(16, value.value)
+        self._setString(17, value.value)
 
     def _initialize(self):
         super(CrewPerksTooltipModel, self)._initialize()

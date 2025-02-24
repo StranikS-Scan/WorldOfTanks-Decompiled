@@ -8,6 +8,7 @@ import BigWorld
 import constants
 from Event import Event
 from constants import RENEWABLE_SUBSCRIPTION_CONFIG
+from gui.prb_control import prbEntityProperty
 from items.vehicles import getItemByCompactDescr
 from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
 from renewable_subscription_common.settings_constants import RS_PDATA_KEY, IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState, RS_ENABLED
@@ -84,6 +85,7 @@ class WotPlusController(IWotPlusController):
         self.onAttendanceUpdated = Event()
         self.onIntroShown = Event()
         self.onPendingRentChanged = Event()
+        self.onEnabledStatusChanged = Event()
         return
 
     def init(self):
@@ -218,6 +220,7 @@ class WotPlusController(IWotPlusController):
     def setWotPlusStateDev(self, state):
         self._state = WotPlusState(state)
         self._userSubscriptionsFetchController.reset()
+        self.onEnabledStatusChanged(self.isEnabled())
         self.onDataChanged(self._cache)
 
     @ifAccount
@@ -312,7 +315,10 @@ class WotPlusController(IWotPlusController):
     def _resolveSubscriptionAndSteamState(self, clearCache=False):
         self._state = WotPlusState.ACTIVE if self.isEnabled() else WotPlusState.INACTIVE
         self._hasSteamSubscription = False
-        if not self.isEnabled() or constants.IS_CHINA:
+        if constants.IS_CHINA or constants.IS_CT:
+            _logger.warning('Subscriptions are not available for the current realm: %s', constants.CURRENT_REALM)
+            return
+        if not self.isEnabled():
             return
         fetchResult = yield wg_await(self._userSubscriptionsFetchController.getSubscriptions(clearCache))
         userSubscriptions = fetchResult.products
@@ -337,6 +343,7 @@ class WotPlusController(IWotPlusController):
             itemDiff[PIGGY_BANK_PDATA_KEY] = diff[PIGGY_BANK_PDATA_KEY]
         if itemDiff:
             synchronizeDicts(itemDiff, self._cache)
+            self.onEnabledStatusChanged(self.isEnabled())
             yield wg_await(self._resolveSubscriptionAndSteamState(clearCache=RS_ENABLED in itemDiff))
             self.onDataChanged(itemDiff)
 
@@ -351,6 +358,10 @@ class WotPlusController(IWotPlusController):
 
 class WotPlusHintChecker(object):
 
+    @prbEntityProperty
+    def prbEntity(self):
+        return None
+
     def check(self, aliasId):
         lobbyContext = dependency.instance(ILobbyContext)
         if not lobbyContext.getServerSettings().isOptionalDevicesAssistantEnabled():
@@ -358,5 +369,4 @@ class WotPlusHintChecker(object):
         wotPlusCtrl = dependency.instance(IWotPlusController)
         optDevicesAssistantCtrl = dependency.instance(IOptionalDevicesAssistantController)
         selectedVehicle = g_currentVehicle.item
-        _, __, resultItems = optDevicesAssistantCtrl.getPopularOptDevicesList(selectedVehicle)
-        return wotPlusCtrl.isEnabled() and bool(resultItems)
+        return wotPlusCtrl.isEnabled() and optDevicesAssistantCtrl.vehicleHasLoadout(selectedVehicle, self.prbEntity.getQueueType())

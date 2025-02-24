@@ -94,6 +94,14 @@ class _SimpleEffect(object):
         self.effectDescr = _parseEffectSubsection(dataSection[self._SECTION_NAME], 'effect')
 
 
+class _PrefabEffect(object):
+    _SECTION_NAME = None
+
+    def __init__(self, dataSection):
+        super(_PrefabEffect, self).__init__()
+        self.effectPrefabPath = dataSection[self._SECTION_NAME].readString('prefab')
+
+
 class _TeamRelatedEffect(object):
     _ENEMY_SUB_NAME = 'enemy'
     _ALLY_SUB_NAME = 'ally'
@@ -169,6 +177,14 @@ class _PrefabsReader(object):
     def __init__(self, dataSection):
         super(_PrefabsReader, self).__init__()
         self.__prefabs = dataSection[self._SECTION_NAME].readStrings('prefab')
+
+
+class _StPatrickLootEffect(_PrefabEffect):
+    _SECTION_NAME = 'StPatrickLootEffect'
+
+
+class _VehicleRespawnEffect(_PrefabEffect):
+    _SECTION_NAME = 'VehicleRespawn'
 
 
 class _VehicleRespawnEffects(_PrefabsReader):
@@ -327,6 +343,8 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         self.__botDeliveryEffect = None
         self.__botClingDeliveryEffect = None
         self.__vehicleRespawnEffects = None
+        self.__stPatrickLootEffect = None
+        self.__vehicleRespawnEffect = None
         self.__botDeliveryMarker = None
         self.__dropPlane = None
         self.__airDrop = None
@@ -348,6 +366,9 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
             self.__botDeliveryMarker = _BattleRoyaleBotDeliveryMarkerArea(dataSection)
             self.__minesEffects = _MinesEffects(plantEffect=_MinesPlantEffect(dataSection), idleEffect=_MinesIdleEffect(dataSection), destroyEffect=_MinesDestroyEffect(dataSection), placeMinesEffect='minesDecalEffect', blowUpEffectName='minesBlowUpEffect', activationEffect=None)
             self.__berserkerEffects = _BerserkerEffects(turretEffect=_BerserkerTurretEffect(dataSection), hullEffect=_BerserkerHullEffect(dataSection), transformPath=dataSection.readString('berserkerTransformPath'))
+            self.__vehicleRespawnEffect = _VehicleRespawnEffect(dataSection)
+            self.__stPatrickLootEffect = _StPatrickLootEffect(dataSection)
+            CGF.cacheGameObjects([self.__vehicleRespawnEffect.effectPrefabPath, self.__stPatrickLootEffect.effectPrefabPath], False)
             self.__fireCircleEffects = _FireCircleEffects(dataSection)
             self.__vehicleRespawnEffects = _VehicleRespawnEffects(dataSection)
             precacheCandidates = set()
@@ -402,6 +423,9 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
         paths = self.__vehicleRespawnEffects.prefabs
         return str() if not paths else paths[0]
 
+    def getStPatrickLootEffect(self):
+        return self.__stPatrickLootEffect
+
     def clear(self):
         pass
 
@@ -420,59 +444,6 @@ class _BattleRoyaleDynObjects(_CommonForBattleRoyaleAndEpicBattleDynObjects):
 
     def __onResourcesLoaded(self, resourceRefs):
         self.__resourcesCache = resourceRefs
-
-
-class _Comp7DynObjects(DynObjectsBase):
-    _AOE_HEAL_KEY = 'aoeHeal'
-    __ALL_KEYS = (_AOE_HEAL_KEY,)
-    _SPAWNPOINT_VISUAL_PATH_KEY = 'spawnPointVisualPath'
-
-    def __init__(self):
-        super(_Comp7DynObjects, self).__init__()
-        self.__prefabPaths = {}
-        self.__cachedPrefabs = set()
-        self.__spawnPointConfig = None
-        self.__pointsOfInterestConfig = None
-        return
-
-    def init(self, dataSection):
-        if self._initialized:
-            return
-        for prefabKey in self.__ALL_KEYS:
-            self.__prefabPaths[prefabKey] = self.__readPrefab(dataSection, prefabKey)
-
-        self.__spawnPointConfig = _SpawnPointsConfig.createFromXML(dataSection['spawnPointsConfig'])
-        self.__pointsOfInterestConfig = _PointsOfInterestConfig.createFromXML(dataSection['pointOfInterest'])
-        self.__cachedPrefabs.update(set(self.__prefabPaths.values()))
-        self.__cachedPrefabs.update(set(self.__pointsOfInterestConfig.getPrefabs()))
-        CGF.cacheGameObjects(list(self.__cachedPrefabs), False)
-        super(_Comp7DynObjects, self).init(dataSection)
-
-    def clear(self):
-        if self.__cachedPrefabs:
-            CGF.clearGameObjectsCache(list(self.__cachedPrefabs))
-            self.__cachedPrefabs.clear()
-        self.__spawnPointConfig = None
-        self.__pointsOfInterestConfig = None
-        self._initialized = False
-        return
-
-    def destroy(self):
-        self.clear()
-        self.__prefabPaths.clear()
-
-    def getAoeHealPrefab(self):
-        return self.__prefabPaths[self._AOE_HEAL_KEY]
-
-    def getSpawnPointsConfig(self):
-        return self.__spawnPointConfig
-
-    def getPointOfInterestConfig(self):
-        return self.__pointsOfInterestConfig
-
-    @staticmethod
-    def __readPrefab(dataSection, key):
-        return dataSection[key].readString('prefab')
 
 
 class _SpawnPointsConfig(object):
@@ -552,9 +523,6 @@ registerDynObjCache(ARENA_GUI_TYPE.BATTLE_ROYALE, _BattleRoyaleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_BATTLE, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EPIC_TRAINING, _EpicBattleDynObjects)
 registerDynObjCache(ARENA_GUI_TYPE.EVENT_BATTLES, _EpicBattleDynObjects)
-registerDynObjCache(ARENA_GUI_TYPE.COMP7, _Comp7DynObjects)
-registerDynObjCache(ARENA_GUI_TYPE.TOURNAMENT_COMP7, _Comp7DynObjects)
-registerDynObjCache(ARENA_GUI_TYPE.TRAINING_COMP7, _Comp7DynObjects)
 _FEATURES_CONF_STORAGES = {'KillCamEffectDynObjects': _KillCamEffectDynObjects}
 
 class BattleDynamicObjectsCache(IBattleDynamicObjectsCache):

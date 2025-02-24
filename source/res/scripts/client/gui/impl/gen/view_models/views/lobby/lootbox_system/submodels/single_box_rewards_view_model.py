@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.bonus_model import Bonu
 class SingleBoxRewardsViewModel(ViewModel):
     __slots__ = ('onOpen', 'onGoBack', 'onPreview', 'onBuyBoxes', 'onAnimationStateChanged', 'onVideoPlaying', 'onClose')
 
-    def __init__(self, properties=11, commands=7):
+    def __init__(self, properties=12, commands=7):
         super(SingleBoxRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -80,6 +80,12 @@ class SingleBoxRewardsViewModel(ViewModel):
     def setIsWindowAccessible(self, value):
         self._setBool(10, value)
 
+    def getIsShopVisible(self):
+        return self._getBool(11)
+
+    def setIsShopVisible(self, value):
+        self._setBool(11, value)
+
     def _initialize(self):
         super(SingleBoxRewardsViewModel, self)._initialize()
         self._addViewModelProperty('bonuses', UserListModel())
@@ -93,6 +99,7 @@ class SingleBoxRewardsViewModel(ViewModel):
         self._addBoolProperty('isAnimationActive', False)
         self._addBoolProperty('isAwaitingResponse', False)
         self._addBoolProperty('isWindowAccessible', False)
+        self._addBoolProperty('isShopVisible', False)
         self.onOpen = self._addCommand('onOpen')
         self.onGoBack = self._addCommand('onGoBack')
         self.onPreview = self._addCommand('onPreview')

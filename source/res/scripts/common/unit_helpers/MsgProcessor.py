@@ -18,17 +18,17 @@ class ClanBattleMgrMsgProcessor(OpsUnpacker):
         self._unit = unit
 
     def _setRound(self, isBattleRound):
-        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setRound: %r' % isBattleRound)
+        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setRound: ', isBattleRound)
         extras = self._unit._extras
         extras['isBattleRound'] = int(isBattleRound)
 
     def _setResults(self, result):
-        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setResults: res=%r' % result)
+        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setResults: res=', result)
         extras = self._unit._extras
         extras['battleResultList'].append(result)
 
     def _setEnemyReady(self, enemyReady):
-        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setEnemyReady: enemyReady=%r' % enemyReady)
+        LOG_DEBUG_DEV('ClanBattleMgrMsgProcessor._setEnemyReady: enemyReady=', enemyReady)
         extras = self._unit._extras
         extras['isEnemyReadyForBattle'] = enemyReady
 

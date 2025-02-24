@@ -88,6 +88,11 @@
       <params>	messages	</params>
     </rule>
     <rule>
+      <pattern>	gui/vehicle_messages_panel\.xml$	</pattern>
+      <type>	includeByPath	</type>
+      <params>	messages	</params>
+    </rule>
+    <rule>
       <pattern>	gui/player_messages_panel\.xml$	</pattern>
       <type>	includeByPath	</type>
       <params>	messages	</params>

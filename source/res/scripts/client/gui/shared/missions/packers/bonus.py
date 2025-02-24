@@ -36,7 +36,7 @@ BACKPORT_TOOLTIP_CONTENT_ID = R.views.common.tooltip_window.backport_tooltip_con
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Callable
     from frameworks.wulf.view.array import Array
-    from gui.goodies.goodie_items import BoosterUICommon, RecertificationForm, Booster
+    from gui.goodies.goodie_items import BoosterUICommon, RecertificationForm, Booster, MentoringLicense
     from gui.server_events.bonuses import CustomizationsBonus, CrewSkinsBonus, TokensBonus, SimpleBonus, ItemsBonus, DossierBonus, VehicleBlueprintBonus, CrewBooksBonus, GoodiesBonus, TankmenBonus, VehiclesBonus, DogTagComponentBonus, BattlePassPointsBonus, CurrenciesBonus
     from gui.shared.gui_items.fitting_item import FittingItem
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -406,6 +406,11 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
                 continue
             result.append(cls._packRecertificationFormsBonus(bonus, form, count))
 
+        for item, count in sorted(bonus.getMentoringLicenses().iteritems()):
+            if item is None or not count:
+                continue
+            result.append(cls._packMentorLicensesBonus(bonus, item, count))
+
         return result
 
     @classmethod
@@ -419,6 +424,10 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
     @classmethod
     def _packRecertificationFormsBonus(cls, bonus, form, count):
         return cls._packIconBonusModel(bonus, form.itemTypeName, count, form.userName)
+
+    @classmethod
+    def _packMentorLicensesBonus(cls, bonus, item, count):
+        return cls._packIconBonusModel(bonus, item.itemTypeName, count, item.userName)
 
     @classmethod
     def _packIconBonusModel(cls, bonus, icon, count, label):
@@ -442,6 +451,9 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
         for form in sorted(bonus.getRecertificationForms().iterkeys()):
             tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, specialArgs=[form.intCD]))
 
+        for item in sorted(bonus.getMentoringLicenses().iterkeys()):
+            tooltipData.append(TooltipData(tooltip=TOOLTIPS_CONSTANTS.MENTOR_LICENSE, isSpecial=False, specialAlias=None, specialArgs=[item.intCD], isWulfTooltip=True))
+
         return tooltipData
 
     @classmethod
@@ -454,6 +466,9 @@ class GoodiesBonusUIPacker(BaseBonusUIPacker):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         for _ in sorted(bonus.getRecertificationForms().iterkeys()):
+            tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
+
+        for _ in sorted(bonus.getMentoringLicenses().iterkeys()):
             tooltipData.append(BACKPORT_TOOLTIP_CONTENT_ID)
 
         return tooltipData

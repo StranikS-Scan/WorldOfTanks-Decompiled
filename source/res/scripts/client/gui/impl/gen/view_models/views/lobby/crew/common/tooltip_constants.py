@@ -17,6 +17,8 @@ class TooltipConstants(ViewModel):
     VEHICLE_PREVIEW_CREW_MEMBER = 'vehiclePreviewCrewMember'
     VEHICLE_CREW_MEMBER_IN_HANGAR = 'vehicleCrewMemberInHangar'
     UNIQUE_VOICEOVER_WITCHES = 'witches'
+    MENTOR_ASSIGNMENT = 'MentorAssignment'
+    MENTOR_FULLY_TRAINED = 'fullyTrainedMentor'
 
     def __init__(self, properties=0, commands=0):
         super(TooltipConstants, self).__init__(properties=properties, commands=commands)

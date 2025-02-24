@@ -5,7 +5,7 @@ from constants import ARENA_GUI_TYPE
 from gui.battle_control.arena_info import settings
 from soft_exception import SoftException
 from gui.shared.system_factory import registerSquadFinder, collectSquadFinder
-from unit_roster_config import SquadRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster, Comp7Roster
+from unit_roster_config import SquadRoster, EventRoster, EpicRoster, BattleRoyaleRoster, MapBoxRoster
 
 class ISquadFinder(object):
     __slots__ = ()
@@ -136,14 +136,6 @@ class TeamScopeNumberingFinder(_SquadFinder):
                     yield (vehicleID, squadIndices[prebattleID])
 
 
-class Comp7TeamScopeNumberingFinder(TeamScopeNumberingFinder):
-    __slots__ = ()
-
-    @classmethod
-    def _getSquadRange(cls):
-        return xrange(2, 8)
-
-
 class ContinuousNumberingFinder(_SquadFinder):
     __slots__ = ('_squadIndices',)
 
@@ -183,7 +175,6 @@ registerSquadFinder(ARENA_GUI_TYPE.EPIC_BATTLE, TeamScopeNumberingFinder, EpicRo
 registerSquadFinder(ARENA_GUI_TYPE.BATTLE_ROYALE, TeamScopeNumberingFinder, BattleRoyaleRoster)
 registerSquadFinder(ARENA_GUI_TYPE.MAPBOX, TeamScopeNumberingFinder, MapBoxRoster)
 registerSquadFinder(ARENA_GUI_TYPE.FALLOUT_MULTITEAM, ContinuousNumberingFinder, SquadRoster)
-registerSquadFinder(ARENA_GUI_TYPE.COMP7, Comp7TeamScopeNumberingFinder, Comp7Roster)
 
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()

@@ -15,6 +15,7 @@ class Type(Enum):
     CRYSTAL = 'crystal'
     FREEXP = 'freeXP'
     CUSTOMIZATIONS = 'customizations'
+    ATTACHMENT = 'attachment'
     EXPERIMENTALEQUIPMENT = 'experimental_equipment'
     COMPONENTS = 'equipCoin'
     IMPROVEDEQUIPMENT = 'improved_equipment'

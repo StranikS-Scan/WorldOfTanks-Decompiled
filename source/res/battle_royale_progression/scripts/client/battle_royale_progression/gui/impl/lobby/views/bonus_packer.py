@@ -2,6 +2,7 @@
 # Embedded file name: battle_royale_progression/scripts/client/battle_royale_progression/gui/impl/lobby/views/bonus_packer.py
 import typing
 from battle_royale_progression.skeletons.game_controller import IBRProgressionOnTokensController
+from battle_royale.gui.constants import STP_COIN
 from gui.battle_pass.battle_pass_bonuses_packers import getBattlePassBonusPacker
 from gui.impl import backport
 from gui.impl.backport import createTooltipData
@@ -9,10 +10,12 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.server_events.formatters import COMPLEX_TOKEN
-from gui.shared.missions.packers.bonus import SimpleBonusUIPacker, getLocalizedBonusName, TokenBonusUIPacker
+from gui.shared.missions.packers.bonus import SimpleBonusUIPacker, getLocalizedBonusName, TokenBonusUIPacker, BattlePassPointsBonusPacker
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
+from constants import LOOTBOX_TOKEN_PREFIX
+from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import CurrenciesBonus
 
@@ -58,14 +61,63 @@ class CurrenciesBonusUIPacker(SimpleBonusUIPacker):
         model.setLabel(label)
         model.setUserName(label)
         model.setBigIcon(bonus.getName())
+        model.setTooltipContentId(str(cls.getContentId(bonus)[0]))
         return model
 
     @classmethod
     def _getBonusModel(cls):
         return RewardItemModel()
 
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [R.views.battle_royale.lobby.tooltips.ProxyCurrencyTooltipView()] if bonus.getCode() == STP_COIN else super(CurrenciesBonusUIPacker, cls)._getContentId(bonus)
+
+
+class BRLootBoxPacker(SimpleBonusUIPacker):
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        lootbox = cls.__itemsCache.items.tokens.getLootBoxByTokenID(bonus.getTokens().keys()[0])
+        count = bonus.getCount()
+        if lootbox is None or count <= 0:
+            return
+        else:
+            model = cls._getBonusModel()
+            model.setIsCompensation(bonus.isCompensation())
+            model.setName(LOOTBOX_TOKEN_PREFIX.split(':')[0])
+            model.setUserName(lootbox.getUserName())
+            model.setValue(str(count))
+            model.setIcon(lootbox.getType())
+            model.setBigIcon(lootbox.getType())
+            model.setOverlayType(lootbox.getCategory())
+            model.setLabel(lootbox.getUserName())
+            return model
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        return [R.views.event_lootboxes.lobby.event_lootboxes.tooltips.EntryPointTooltip()]
+
+
+class BRBattlePassPointsBonusPacker(BattlePassPointsBonusPacker):
+
+    @classmethod
+    def _getBonusModel(cls):
+        return RewardItemModel()
+
+    @classmethod
+    def _packSingleBonus(cls, bonus, label):
+        model = super(BRBattlePassPointsBonusPacker, cls)._packSingleBonus(bonus, label)
+        model.setUserName(getLocalizedBonusName(bonus.getName()))
+        return model
+
 
 BR_PROGRESSION_TOKEN = 'BRProgressionToken'
+BR_LOOTBOX_TOKEN = 'BRLootboxToken'
 
 class BRTokenBonusUIPacker(TokenBonusUIPacker):
     _brProgressionController = dependency.descriptor(IBRProgressionOnTokensController)
@@ -74,6 +126,8 @@ class BRTokenBonusUIPacker(TokenBonusUIPacker):
     def _getTokenBonusType(cls, tokenID, complexToken):
         if tokenID.startswith(cls._brProgressionController.progressionToken):
             return BR_PROGRESSION_TOKEN
+        if tokenID.startswith(LOOTBOX_TOKEN_PREFIX):
+            return BR_LOOTBOX_TOKEN
         super(BRTokenBonusUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
 
     @classmethod
@@ -81,6 +135,15 @@ class BRTokenBonusUIPacker(TokenBonusUIPacker):
         pakers = super(BRTokenBonusUIPacker, cls)._getTooltipsPackers()
         pakers.update({BR_PROGRESSION_TOKEN: cls.__getBRProgressionTooltip})
         return pakers
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        bonusTokens = bonus.getTokens()
+        for token in bonusTokens:
+            if token.startswith(LOOTBOX_TOKEN_PREFIX):
+                return BRLootBoxPacker.getContentId(bonus)
+
+        return super(BRTokenBonusUIPacker, cls)._getContentId(bonus)
 
     @classmethod
     def __getBRProgressionTooltip(cls, *_):
@@ -91,8 +154,13 @@ class BRTokenBonusUIPacker(TokenBonusUIPacker):
     def _getTokenBonusPackers(cls):
         tokenBonusPackers = super(BRTokenBonusUIPacker, cls)._getTokenBonusPackers()
         complexPaker = tokenBonusPackers.get(COMPLEX_TOKEN)
-        tokenBonusPackers.update({BR_PROGRESSION_TOKEN: complexPaker})
+        tokenBonusPackers.update({BR_PROGRESSION_TOKEN: complexPaker,
+         BR_LOOTBOX_TOKEN: BRLootBoxPacker()})
         return tokenBonusPackers
+
+    @classmethod
+    def _packToken(cls, bonusPacker, bonus, *args):
+        return bonusPacker.pack(bonus)[0] if isinstance(bonusPacker, BRLootBoxPacker) else super(BRTokenBonusUIPacker, cls)._packToken(bonusPacker, bonus, *args)
 
 
 def getBonusPacker():
@@ -103,5 +171,6 @@ def getBonusPacker():
      Currency.CREDITS: currencyBonusUIPacker,
      Currency.CRYSTAL: currencyBonusUIPacker,
      'token': tokenBonusPacker,
-     'battleToken': tokenBonusPacker})
+     'battleToken': tokenBonusPacker,
+     'battlePassPoints': BRBattlePassPointsBonusPacker()})
     return packer

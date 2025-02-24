@@ -16,9 +16,9 @@ class RewardReason(Enum):
 
 
 class BattlePassAwardsViewModel(CommonViewModel):
-    __slots__ = ('onBuyClick', 'onClose')
+    __slots__ = ('onBuyClick', 'onClose', 'onShowPostProgression')
 
-    def __init__(self, properties=15, commands=3):
+    def __init__(self, properties=16, commands=4):
         super(BattlePassAwardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -97,6 +97,12 @@ class BattlePassAwardsViewModel(CommonViewModel):
     def setIsExtra(self, value):
         self._setBool(14, value)
 
+    def getIsPostProgressionUnlocked(self):
+        return self._getBool(15)
+
+    def setIsPostProgressionUnlocked(self, value):
+        self._setBool(15, value)
+
     def _initialize(self):
         super(BattlePassAwardsViewModel, self)._initialize()
         self._addViewModelProperty('mainRewards', UserListModel())
@@ -110,5 +116,7 @@ class BattlePassAwardsViewModel(CommonViewModel):
         self._addBoolProperty('seasonStopped', False)
         self._addArrayProperty('wideRewardsIDs', Array())
         self._addBoolProperty('isExtra', False)
+        self._addBoolProperty('isPostProgressionUnlocked', False)
         self.onBuyClick = self._addCommand('onBuyClick')
         self.onClose = self._addCommand('onClose')
+        self.onShowPostProgression = self._addCommand('onShowPostProgression')

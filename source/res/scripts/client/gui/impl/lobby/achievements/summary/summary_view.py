@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/achievements/summary/summary_view.py
 import typing
+from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ACHIEVEMENTS_VISITED
 from achievements20.WTRStageChecker import WTRStageChecker
@@ -119,7 +120,10 @@ class SummaryView(SubModelPresenter):
         return
 
     def _getEvents(self):
-        return ((self.viewModel.onAchievementsSettings, self.__onAchievementsSettings), (self.viewModel.otherPlayerInfo.onOpenProfile, self.__openClanStatistic), (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
+        return ((self.viewModel.onAchievementsSettings, self.__onAchievementsSettings),
+         (self.viewModel.otherPlayerInfo.onOpenProfile, self.__openClanStatistic),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
+         (g_playerEvents.onDossiersResync, self.__dossierResyncHandler))
 
     def _getListeners(self):
         return ((events.Achievements20Event.LAYOUT_CHANGED, self.__onAchievementLayoutChanged, EVENT_BUS_SCOPE.LOBBY), (events.Achievements20Event.CLOSE_EDIT_VIEW, self.__onEditViewClose, EVENT_BUS_SCOPE.LOBBY))
@@ -168,6 +172,7 @@ class SummaryView(SubModelPresenter):
                     statisticModel.setAdditionalValue(str(additionalStats.get(statisticItem, 0)))
                     statistic.addViewModel(statisticModel)
 
+                statistic.invalidate()
         return
 
     def __fillStatistic(self):
@@ -269,6 +274,10 @@ class SummaryView(SubModelPresenter):
             model.setIsSuccessfullyEdited(False)
             model.setIsEditOpened(True)
         showAchievementEditView()
+
+    def __dossierResyncHandler(self, *_):
+        self.__dossier = self.__itemsCache.items.getAccountDossier(self.__userId)
+        self.__updatePage()
 
     def __getEditState(self):
         if not isEditingEnabled():

@@ -21,6 +21,7 @@ _WOT_CLIENT_PARAM_NAME = 'wot_client_param'
 _WOT_RESOURCE_CUSTOM_SCHEME = 'wotdata'
 _WEB_CACHE_FOLDER = 'web_cache'
 _WEB_MANIFEST_KEY = 'webManifestURL'
+_EXTENDED_LOGGING = False
 _g_webCache = None
 
 def initExternalCache():
@@ -725,8 +726,11 @@ class EventListener(object):
     def onResourceLoadComplete(self, method, url):
         _logger.debug('completed %s %s', method, url)
 
-    def onResourceLoadError(self, method, url):
-        _logger.warn('failed %s %s', method, url)
+    def onResourceLoadError(self, method, url, status, statusStr, error, requestHeaders, responseHeaders):
+        _logger.warn('failed %s %s (status %d (%s)\terror %d)', method, url, status, statusStr, error)
+        if _EXTENDED_LOGGING:
+            from pprint import pformat
+            _logger.warn('headers:\n\trequest:\n%s\n\tresponse:\n%s', pformat(requestHeaders), pformat(responseHeaders))
 
     def onWhitelistMiss(self, isMainFrame, failedURL, httpStatusCode=None):
         if isMainFrame:

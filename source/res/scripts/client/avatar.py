@@ -62,7 +62,7 @@ from avatar_components.avatar_postmortem_component import AvatarPostmortemCompon
 from avatar_components.visual_script_controller import VisualScriptController
 from avatar_helpers import AvatarSyncData
 from battle_results_shared import AVATAR_PRIVATE_STATS, listToDict
-from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO, ARENA_GUI_TYPE
+from constants import ARENA_PERIOD, AIMING_MODE, VEHICLE_SETTING, DEVELOPMENT_INFO
 from constants import DEFAULT_VECTOR_3
 from constants import DROWN_WARNING_LEVEL
 from constants import DUAL_GUN, DUALGUN_CHARGER_STATUS, DUALGUN_CHARGER_ACTION_TYPE
@@ -75,9 +75,9 @@ from gui.app_loader import settings as app_settings
 from gui.battle_control import BattleSessionSetup
 from gui.battle_control import event_dispatcher as gui_event_dispatcher
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, CANT_SHOOT_ERROR, DestroyTimerViewState, DeathZoneTimerViewState, TIMER_VIEW_STATE, ENTITY_IN_FOCUS_TYPE
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.game_loading.resources.consts import Milestones
 from gui.prb_control.formatters import messages
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.sounds.epic_sound_constants import EPIC_SOUND
 from gui.wgnc import g_wgncProvider
 from gui.shared.gui_items.marker_items import DEFAULT_MARKER
@@ -921,7 +921,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if app is None:
             return False
         else:
-            return not app.hasGuiControlModeConsumers(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER) if self.arenaGuiType in ARENA_GUI_TYPE.COMP7_RANGE and self.arena.period <= ARENA_PERIOD.PREBATTLE else not self.isForcedGuiControlMode()
+            return not app.hasGuiControlModeConsumers(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER) if self.hasBonusCap(_CAPS.COMP7) and self.arena.period <= ARENA_PERIOD.PREBATTLE else not self.isForcedGuiControlMode()
 
     def set_playerVehicleID(self, *args):
         LOG_DEBUG('[INIT_STEPS] Avatar.set_playerVehicleID')

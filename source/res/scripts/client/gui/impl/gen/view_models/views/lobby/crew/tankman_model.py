@@ -41,7 +41,7 @@ class TankmanInfo(Enum):
 class TankmanModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=22, commands=0):
+    def __init__(self, properties=23, commands=0):
         super(TankmanModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -182,6 +182,12 @@ class TankmanModel(ViewModel):
     def setDisableReason(self, value):
         self._setResource(21, value)
 
+    def getIsNew(self):
+        return self._getBool(22)
+
+    def setIsNew(self, value):
+        self._setBool(22, value)
+
     def _initialize(self):
         super(TankmanModel, self)._initialize()
         self._addViewModelProperty('vehicleInfo', VehicleInfoModel())
@@ -206,3 +212,4 @@ class TankmanModel(ViewModel):
         self._addBoolProperty('hasPostProgression', False)
         self._addResourceProperty('disableIcon', R.invalid())
         self._addResourceProperty('disableReason', R.invalid())
+        self._addBoolProperty('isNew', False)

@@ -231,3 +231,26 @@ class RecertificationFormsCMHandler(ContextMenu):
         if label in (CMLabel.SELL, CMLabel.BUY_MORE):
             optionData.enabled = False
         return optionData
+
+
+class MentoringLicensesCMHandler(ContextMenu):
+    __sqGen = SequenceIDGenerator()
+
+    @option(__sqGen.next(), CMLabel.INFORMATION)
+    def showInfo(self):
+        shared_events.showGoodieInfo(self._id)
+
+    @option(__sqGen.next(), CMLabel.SELL)
+    @adisp_process
+    def sell(self):
+        raise NotImplementedError
+
+    @option(__sqGen.next(), CMLabel.BUY_MORE)
+    def buy(self):
+        raise NotImplementedError
+
+    def _getOptionCustomData(self, label):
+        optionData = super(MentoringLicensesCMHandler, self)._getOptionCustomData(label)
+        if label in (CMLabel.SELL, CMLabel.BUY_MORE):
+            optionData.enabled = False
+        return optionData

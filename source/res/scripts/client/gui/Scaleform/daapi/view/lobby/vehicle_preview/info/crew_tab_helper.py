@@ -13,6 +13,7 @@ from shared_utils import first
 from web.web_client_api.common import ItemPackType
 from items.tankmen import MAX_SKILL_LEVEL
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.gui_items.Vehicle import Vehicle
 GIRL_EMPTY = 'girl-empty'
 
@@ -115,7 +116,7 @@ def getCustomTitle(skill, role, forOne):
 
 
 NEW_SKILL_ICON = 'preview_new_skill_trained'
-_SimpleSkill = namedtuple('_SimpleSkill', ('name', 'customName', 'userName', 'extensionLessIconName'))
+_SimpleSkill = namedtuple('_SimpleSkill', ('name', 'crewCustomName', 'userName', 'extensionLessIconName'))
 _SIMPLE_SKILL = _SimpleSkill(CrewConstants.NEW_SKILL, '', CrewConstants.NEW_SKILL, NEW_SKILL_ICON)
 
 def getCustomHeader(customCrew):
@@ -131,7 +132,7 @@ def getCustomHeader(customCrew):
         firstSkill = first(notEmptySkills)[0]
         icon = firstSkill.extensionLessIconName
         skillName = firstSkill.name
-        customName = firstSkill.customName
+        customName = firstSkill.crewCustomName
         notEmptySkillsLen = len(notEmptySkills)
         if notEmptySkillsLen == 1:
             role = first((tMan.role for tMan in crew if tMan.hasNewSkill)) if firstSkill.name == CrewConstants.NEW_SKILL else first((tMan.role for tMan in crew if tMan.skills))

@@ -5,36 +5,17 @@ from account_helpers import gameplay_ctx
 from constants import PREBATTLE_TYPE, Configs
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.TrainingWindowMeta import TrainingWindowMeta
-from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.prb_control import prbEntityProperty
 from gui.prb_control.prb_getters import getTrainingBattleRoundLimits
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getArenaImage
 from helpers import dependency
-from helpers import i18n
 from gui.impl import backport
 from gui.impl.gen import R
-from skeletons.gui.game_control import IComp7Controller
+from gui.training_room_external_handlers import getAllTrainingRoomHandlers, getTrainingRoomHandler
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-
-@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def isComp7Arena(arena, settings, comp7Controller=None):
-    if not comp7Controller.isTrainingEnabled() or settings.isDevBattle:
-        return False
-    comp7Config = comp7Controller.getModeSettings()
-    return arena.geometryID in comp7Config.maps
-
-
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def getComp7Data(lobbyContext=None):
-    return {'size': lobbyContext.getServerSettings().comp7Config.numPlayers,
-     'canChangeArenaTime': False,
-     'additionalInfo': PREBATTLE_ALIASES.TRAINING_ADDITIONAL_INFO_COMP7}
-
-
-_ARENA_TYPE_FILTERS = {'comp7': isComp7Arena}
-_ARENA_TYPE_DATA_GETTERS = {'comp7': getComp7Data}
+CONFIG_KEYS_FOR_UPDATE = {Configs.PRE_MODERATION_CONFIG.value}
 
 class ArenasCache(object):
     __lobbyCtx = dependency.descriptor(ILobbyContext)
@@ -69,9 +50,9 @@ class ArenasCache(object):
                  'icon': getArenaImage(arenaType.geometryName),
                  'canChangeArenaTime': not self.__isEpic,
                  'alertText': ''}
-                dataGetter = _ARENA_TYPE_DATA_GETTERS.get(arenaType.gameplayName)
-                if dataGetter is not None:
-                    dataItem.update(dataGetter())
+                arenaData = self.__getHandlerForArenaTypeName(arenaType.gameplayName).getArenaData()
+                if arenaData is not None:
+                    dataItem.update(arenaData)
                 cache.append(dataItem)
             except Exception:
                 LOG_ERROR('There is error while reading arenas cache', arenaTypeID, arenaType)
@@ -84,21 +65,28 @@ class ArenasCache(object):
     def __getArenaTypeName(self, arena):
         if arena.gameplayName == 'ctf':
             return ''
-        arenaGameplayName = '#arenas:type/%s/%s/name' % (arena.gameplayName, arena.geometryName)
-        return i18n.makeString(arenaGameplayName) if i18n.doesTextExist(arenaGameplayName) else i18n.makeString('#arenas:type/%s/name' % arena.gameplayName)
+        arenaGameplayName = R.strings.arenas.type.dyn(arena.gameplayName).dyn(arena.geometryName)
+        return backport.text(arenaGameplayName) if arenaGameplayName.exists() else backport.text(R.strings.arenas.type.dyn(arena.gameplayName).name())
 
     def __isArenaSuitableForTraining(self, arena):
         if arena.explicitRequestOnly:
             return False
         else:
-            arenaTypeFilter = _ARENA_TYPE_FILTERS.get(arena.gameplayName)
+            arenaTypeFilter = self.__getHandlerForArenaTypeName(arena.gameplayName).getArenaFilter()
             return arenaTypeFilter(arena, self.__settings) if arenaTypeFilter is not None and not self.__isEpic else gameplay_ctx.isCreationEnabled(arena.gameplayName, self.__isEpic)
+
+    def __getHandlerForArenaTypeName(self, arenaTypeName):
+        handlers = getAllTrainingRoomHandlers()
+        for handler in handlers:
+            if handler.isEnabledForGuiTypeName(arenaTypeName):
+                return handler
+
+        return getTrainingRoomHandler()
 
 
 class TrainingSettingsWindow(TrainingWindowMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
-    __INFLUENCING_CONFIG_KEYS = {Configs.PRE_MODERATION_CONFIG.value, Configs.COMP7_CONFIG.value}
 
     def __init__(self, ctx=None):
         super(TrainingSettingsWindow, self).__init__()
@@ -172,7 +160,7 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         self.as_setDataS(self.getInfo(), self.__arenasCache.cache)
 
     def __onServerSettingsChange(self, diff):
-        if self.__INFLUENCING_CONFIG_KEYS.intersection(diff.keys()):
+        if CONFIG_KEYS_FOR_UPDATE.intersection(diff.keys()):
             self.__arenasCache.build()
             self.__updateVO()
 

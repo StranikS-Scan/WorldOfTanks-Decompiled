@@ -14,36 +14,35 @@ from helpers import dependency
 from items import tankmen
 from items.components import perks_constants
 from items.components.skills_constants import UNLEARNABLE_SKILLS
-from items.tankmen import MAX_SKILLS_EFFICIENCY, MAX_SKILL_LEVEL, getSkillsConfig
+from items.tankmen import MAX_SKILLS_EFFICIENCY, MAX_SKILL_LEVEL
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Tankman import Tankman, TankmanSkill
-    from items.readers.skills_readers import SkillDescrsArg
+    from gui.shared.gui_items.Tankman import Tankman
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from gui.shared.gui_items.Vehicle import Vehicle
 
 class CrewPerksTooltip(ViewImpl):
     _itemsCache = dependency.descriptor(IItemsCache)
     _itemsFactory = dependency.descriptor(IGuiItemsFactory)
-    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_descrArgs', '_skillLevel', '_skillBooster', '_showAdditionalInfo', '_isTmanTrainedVeh', '_isFakeSkill', '_isFakeSkillLvl', '_isCmpSkill', '_skillLevelWithoutEff', '_isBonus', '_isIrrelevant', '_isUntrained')
+    __slots__ = ('_skillName', '_tankman', '_tankmanVehicle', '_skill', '_skillLevel', '_skillBooster', '_showAdditionalInfo', '_isTmanTrainedVeh', '_isFakeSkill', '_isFakeSkillLvl', '_isCmpSkill', '_skillLevelWithoutEff', '_isBonus', '_isIrrelevant', '_isUntrained')
 
-    def __init__(self, skillName, tankmanId, skillLevel=None, showAdditionalInfo=True, *args, **kwargs):
+    def __init__(self, skillName, skillRole, tankmanId, skillLevel=None, showAdditionalInfo=True, *args, **kwargs):
         settings = ViewSettings(R.views.lobby.crew.tooltips.CrewPerksTooltip(), args=args, kwargs=kwargs)
         settings.model = CrewPerksTooltipModel()
-        skillCustomisation = kwargs.get('skillCustomisation', None)
+        crewCustomName = kwargs.get('crewCustomName', '')
         self._skillName = skillName
         self._showAdditionalInfo = showAdditionalInfo
         self._isBonus = kwargs.get('isBonus', None)
-        self._tankman = self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
-        self._tankmanVehicle = self._getVehicle()
+        self._tankman = self._getTankman(tankmanId, **kwargs)
+        self._tankmanVehicle = self._getVehicle(**kwargs)
         self._isTmanTrainedVeh = not self._tankmanVehicle or self._tankman.descriptor.isOwnVehicleOrPremium(self._tankmanVehicle.descriptor.type)
         self._skillBooster = getBattleBooster(self._tankmanVehicle, self._skillName)
-        self._skill = getTankmanSkill(self._skillName, tankman=self._tankman, skillCustomisation=skillCustomisation)
+        self._skill = getTankmanSkill(self._skillName, skillRole, tankman=self._tankman, customCrewName=crewCustomName)
         self._isUntrained = self._tankman.currentVehicleSkillsEfficiency == SKILL_EFFICIENCY_UNTRAINED if self._tankman else False
         self._isIrrelevant = self._getIsIrrelevant()
         if self._skill.isLearnedAsMajor and self._skill.isLearnedAsBonus and self._isBonus:
             self._skill.setIsSkillActive(not self._isIrrelevant and self._isUntrained)
-        self._descrArgs = getSkillsConfig().getSkill(self._skillName).uiSettings.descrArgs
         self._skillLevelWithoutEff = 0
         self._isFakeSkill = False
         self._isFakeSkillLvl = False
@@ -61,8 +60,18 @@ class CrewPerksTooltip(ViewImpl):
         super(CrewPerksTooltip, self)._onLoading(*args, **kwargs)
         self._fillModel()
 
-    def _getVehicle(self):
-        if self._tankman is None:
+    def _getTankman(self, tankmanId, **kwargs):
+        tankman = kwargs.get('tankman', None)
+        if tankman is not None:
+            return tankman
+        else:
+            return self._itemsCache.items.getTankman(int(tankmanId)) if tankmanId else None
+
+    def _getVehicle(self, **kwargs):
+        vehicle = kwargs.get('vehicle', None)
+        if vehicle is not None:
+            return vehicle
+        elif self._tankman is None:
             return
         else:
             return self._itemsCache.items.getVehicle(self._tankman.vehicleInvID) if self._tankman.isInTank else None
@@ -75,7 +84,7 @@ class CrewPerksTooltip(ViewImpl):
                 role = self._getBonusRole() or self._tankman.role
             else:
                 role = self._getBonusRole() if self._isBonus else self._tankman.role
-            return not self._skill.isEnable or role and not self._skill.isRelevantForRole(role)
+            return not self._skill.isEnable or role and not self._skill.isRelevant
 
     def _getBonusRole(self):
         for bonusRole, bonusSkills in self._tankman.bonusSkills.iteritems():
@@ -144,7 +153,7 @@ class CrewPerksTooltip(ViewImpl):
     def fillCurrentLvlInfo(self, vm):
         boosters = vm.getBoosters()
         boosters.clear()
-        skillParams = getSkillParams(self._tankman, self._tankmanVehicle, self._skillBooster, self._skill, self._skillName, self._skillLevel, self._isFakeSkill, self._isIrrelevant)
+        skillParams = getSkillParams(self._tankman, self._tankmanVehicle, self._skillBooster, self._skill, self._skillName, self._skillLevel, self._isFakeSkill, self._isIrrelevant, self._isBonus)
         keyArgs = skillParams.get('keyArgs', {})
         kpiArgs = skillParams.get('kpiArgs', [])
         for kpiValue, kpiText, impact in kpiArgs:
@@ -186,7 +195,7 @@ class CrewPerksTooltip(ViewImpl):
         if self._tankman.isMaxCurrentVehicleSkillsEfficiency and skillBooster:
             self._skillLevel = MAX_SKILL_LEVEL
             return True
-        skilledTman = getTmanWithSkill(self._tankman, self._tankmanVehicle, self._skill, self._itemsFactory)
+        skilledTman = getTmanWithSkill(self._tankman, self._tankmanVehicle, self._skill, self._itemsFactory, isBonus=self._isBonus)
         if not skilledTman:
             return False
         self._isFakeSkill = True

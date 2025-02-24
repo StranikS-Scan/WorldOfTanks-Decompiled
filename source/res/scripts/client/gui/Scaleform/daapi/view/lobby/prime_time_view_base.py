@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prime_time_view_base.py
 import time
+import typing
 import constants
 from adisp import adisp_process
 from gui import GUI_SETTINGS
@@ -30,9 +31,10 @@ def _emptyFmt(*_):
     pass
 
 
-def _makeServerString(serverInfo, isServerNameShort=False):
+def makeServerString(serverInfo, isServerNameShort=False, customTextId=None):
+    textId = customTextId if customTextId else R.strings.menu.primeTime.server
     server = text_styles.neutral(text_styles.concatStylesToSingleLine(serverInfo.getShortName() if isServerNameShort else serverInfo.getName(), ' (', text_styles.neutral(serverInfo.getPingValue()), makePingStatusIcon(serverInfo.getPingStatus()), ')'))
-    return backport.text(R.strings.menu.primeTime.server(), server=server)
+    return backport.text(textId(), server=server)
 
 
 class ServerListItemPresenter(object):
@@ -234,7 +236,7 @@ class PrimeTimeViewBase(LobbySubView, PrimeTimeMeta, Notifiable, IPreQueueListen
         raise NotImplementedError
 
     def _getServerText(self, serverList, serverInfo, isServerNameShort=False):
-        return _makeServerString(serverInfo, isServerNameShort) if len(serverList) == 1 else backport.text(R.strings.menu.primeTime.servers())
+        return makeServerString(serverInfo, isServerNameShort) if len(serverList) == 1 else backport.text(R.strings.menu.primeTime.servers())
 
     def _getStatusText(self):
         resSection = self._RES_ROOT.statusText

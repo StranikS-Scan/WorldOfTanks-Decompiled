@@ -7,15 +7,17 @@ from battle_modifiers_common import BattleModifiers, BattleParams, getGlobalModi
 from constants import QUEUE_TYPE, ARENA_GUI_TYPE, ARENA_BONUS_TYPE, IS_DEVELOPMENT
 from gui.hangar_presets.hangar_gui_helpers import ifComponentInPreset
 from gui.Scaleform.genConsts.HANGAR_CONSTS import HANGAR_CONSTS
-from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.quest_flags_getters import DefaultQuestFlagsGetter, RankedQuestFlagsGetter, MapboxQuestFlagsGetter, Comp7QuestFlagsGetter, Comp7TournamentQuestFlagsGetter
-from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper, EventLobbyHeaderHelper, RankedLobbyHeaderHelper, MapboxLobbyHeaderHelper, MapsTrainingLobbyHeaderHelper, Comp7LobbyHeaderHelper
+from gui.Scaleform.daapi.view.lobby.hangar.controls_helpers import DefaultHangarHelper, RandomHangarHelper
+from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.quest_flags_getters import DefaultQuestFlagsGetter, RankedQuestFlagsGetter, MapboxQuestFlagsGetter
+from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import DefaultLobbyHeaderHelper, EventLobbyHeaderHelper, RankedLobbyHeaderHelper, MapboxLobbyHeaderHelper, MapsTrainingLobbyHeaderHelper
 from helpers import dependency
-from skeletons.gui.game_control import IComp7Controller, IRankedBattlesController, IMapboxController
+from skeletons.gui.game_control import IRankedBattlesController, IMapboxController
 if typing.TYPE_CHECKING:
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
     from gui.periodic_battles.models import AlertData
     from gui.prb_control.entities.base.entity import BasePrbEntity
     from gui.prb_control.entities.base.legacy.entity import BaseLegacyEntity
+    from gui.Scaleform.daapi.view.lobby.hangar.controls_helpers import IHangarControlsHelper
     from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.quest_flags_getters import IQuestFlagsGetter
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import ILobbyHeaderControlsHelper
 
@@ -50,6 +52,9 @@ class IPresetsGetter(object):
         raise NotImplementedError
 
     def getLobbyHeaderHelper(self):
+        raise NotImplementedError
+
+    def getHangarHelper(self):
         raise NotImplementedError
 
     def getSuggestedBonusType(self):
@@ -97,6 +102,10 @@ class EmptyPresetsGetter(IPresetsGetter):
         return None
 
     @classmethod
+    def getDefaultHangarHelper(cls):
+        return None
+
+    @classmethod
     def getDefaultSuggestedBonusType(cls):
         return ARENA_BONUS_TYPE.UNKNOWN
 
@@ -134,6 +143,9 @@ class EmptyPresetsGetter(IPresetsGetter):
     def getLobbyHeaderHelper(self):
         return self.getDefaultLobbyHeaderHelper()
 
+    def getHangarHelper(self):
+        return self.getDefaultHangarHelper()
+
     def getSuggestedBonusType(self):
         return self.getDefaultSuggestedBonusType()
 
@@ -147,6 +159,7 @@ class BasePresetsGetter(EmptyPresetsGetter):
     _BONUS_TYPES = (ARENA_BONUS_TYPE.UNKNOWN,)
     _QUEST_FLAGS_GETTER = None
     _LOBBY_HEADER_HELPER = None
+    _HANGAR_HELPER = None
 
     def __init__(self, config):
         self._config = config
@@ -177,6 +190,9 @@ class BasePresetsGetter(EmptyPresetsGetter):
     def getLobbyHeaderHelper(self):
         return self._LOBBY_HEADER_HELPER
 
+    def getHangarHelper(self):
+        return self._HANGAR_HELPER
+
     def getSuggestedBonusType(self):
         return self._BONUS_TYPES[0]
 
@@ -193,6 +209,7 @@ class DefaultPresetsGetter(BasePresetsGetter):
     _BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
     _QUEST_FLAGS_GETTER = DefaultQuestFlagsGetter
     _LOBBY_HEADER_HELPER = DefaultLobbyHeaderHelper
+    _HANGAR_HELPER = DefaultHangarHelper
 
     def __init__(self, config):
         super(DefaultPresetsGetter, self).__init__(config)
@@ -200,6 +217,11 @@ class DefaultPresetsGetter(BasePresetsGetter):
 
     def getPreset(self):
         return self._config.presets.get(self._presetName)
+
+
+class RandomPresetsGetter(DefaultPresetsGetter):
+    __slots__ = ()
+    _HANGAR_HELPER = RandomHangarHelper
 
 
 class EventPresetsGetter(DefaultPresetsGetter):
@@ -243,22 +265,6 @@ class MapsTrainingPresetsGetter(DefaultPresetsGetter):
     _LOBBY_HEADER_HELPER = MapsTrainingLobbyHeaderHelper
 
 
-class Comp7PresetsGetter(DefaultPresetsGetter):
-    __slots__ = ()
-    _QUEUE_TYPE = QUEUE_TYPE.COMP7
-    _BONUS_TYPES = (ARENA_BONUS_TYPE.COMP7,)
-    _QUEST_FLAGS_GETTER = Comp7QuestFlagsGetter
-    _LOBBY_HEADER_HELPER = Comp7LobbyHeaderHelper
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    @classmethod
-    def getBattleModifiers(cls):
-        return BattleModifiers(cls.__comp7Controller.battleModifiers)
-
-    def getHangarAlertBlock(self):
-        return self.__comp7Controller.getAlertBlock()
-
-
 class WinbackPresetsGetter(DefaultPresetsGetter):
     __slots__ = ()
     _QUEUE_TYPE = QUEUE_TYPE.WINBACK
@@ -269,6 +275,7 @@ class RandomNP2PresetsGetter(DefaultPresetsGetter):
     __slots__ = ()
     _QUEUE_TYPE = QUEUE_TYPE.RANDOM_NP2
     _BONUS_TYPES = (ARENA_BONUS_TYPE.RANDOM_NP2,)
+    _HANGAR_HELPER = RandomHangarHelper
 
 
 class SpecBattlePresetsGetter(DefaultPresetsGetter):
@@ -279,7 +286,7 @@ class SpecBattlePresetsGetter(DefaultPresetsGetter):
      'flagsGetter',
      'lobbyHelper'])
     _DEFAULT_GUI_SETTINGS = _SpecGuiSettings(ARENA_BONUS_TYPE.UNKNOWN, EmptyPresetsGetter.getDefaultBattleModifiers, DefaultQuestFlagsGetter, DefaultLobbyHeaderHelper)
-    _GUI_TYPE_TO_SETTINGS = {ARENA_GUI_TYPE.TOURNAMENT_COMP7: _SpecGuiSettings(ARENA_BONUS_TYPE.TOURNAMENT_COMP7, Comp7PresetsGetter.getBattleModifiers, Comp7TournamentQuestFlagsGetter, DefaultLobbyHeaderHelper)}
+    _GUI_TYPE_TO_SETTINGS = {}
 
     def __init__(self, config, guiType=ARENA_GUI_TYPE.RANDOM):
         super(SpecBattlePresetsGetter, self).__init__(config)

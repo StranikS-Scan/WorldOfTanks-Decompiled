@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/dialogs/retrain_single_dialog.py
 import BigWorld
-from typing import TYPE_CHECKING, Any, Optional
+from typing import Any, Optional
 import SoundGroups
 from base_crew_dialog_template_view import BaseCrewDialogTemplateView
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -17,6 +17,7 @@ from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import T
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.retrain_role_model import RetrainRoleModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.retrain_single_dialog_model import RetrainSingleDialogModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.role_change_model import DisableState
+from gui.impl.lobby.crew.crew_helpers.model_setters import ifWGMAvailableButtonUpdate
 from gui.impl.lobby.crew.crew_sounds import SOUNDS
 from gui.impl.lobby.crew.dialogs.price_cards_content.retrain_single_price_list import RetrainSinglePriceList
 from gui.impl.pub.dialog_window import DialogButtons
@@ -30,10 +31,6 @@ from helpers import dependency
 from items.tankmen import TankmanDescr
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew5075.loggers import Crew5075DialogLogger
-from uilogging.crew5075.logging_constants import Crew5075DialogKeys
-if TYPE_CHECKING:
-    pass
 _LOC = R.strings.dialogs.retrain
 
 class RetrainSingleDialog(BaseCrewDialogTemplateView):
@@ -65,8 +62,7 @@ class RetrainSingleDialog(BaseCrewDialogTemplateView):
         self._originalTargetSlotIdx = targetSlotIdx or self.__getSlotByVehicleRole(self._targetRole, self._vehicle)
         self._targetSlotIdx = self._originalTargetSlotIdx
         self._priceListContent = RetrainSinglePriceList(tankmanId, vehicleCD, self._targetRole)
-        kwargs.setdefault('loggerClass', Crew5075DialogLogger)
-        super(RetrainSingleDialog, self).__init__(loggingKey=Crew5075DialogKeys.RETRAIN_SINGLE, **kwargs)
+        super(RetrainSingleDialog, self).__init__(**kwargs)
         return
 
     @property
@@ -87,10 +83,16 @@ class RetrainSingleDialog(BaseCrewDialogTemplateView):
         return super(RetrainSingleDialog, self).createToolTip(event)
 
     def _getCallbacks(self):
-        return (('inventory.1.compDescr', self._onVehiclesInventoryUpdate),)
+        return (('inventory.1.compDescr', self._onVehiclesInventoryUpdate), ('cache.mayConsumeWalletResources', self._onConsumeWalletUpdate))
 
     def _getEvents(self):
         return ((self._priceListContent.onPriceChange, self._onPriceChange), (self.viewModel.onRoleCheckChanged, self._onRoleChanged), (self.viewModel.onRoleSelected, self._onRoleSelected))
+
+    def _onConsumeWalletUpdate(self, *_):
+        submitBtn = self.getButton(DialogButtons.SUBMIT)
+        if submitBtn is not None:
+            ifWGMAvailableButtonUpdate(self.viewModel, self._itemsCache, submitBtn, True)
+        return
 
     def _onRoleChanged(self):
         isChecked = not self.viewModel.roleChange.getIsChecked()
@@ -114,7 +116,8 @@ class RetrainSingleDialog(BaseCrewDialogTemplateView):
     def _onPriceChange(self, index=None):
         submitBtn = self.getButton(DialogButtons.SUBMIT)
         if submitBtn is not None:
-            submitBtn.isDisabled = index is None
+            isWGMAvailable = self._itemsCache.items.stats.mayConsumeWalletResources
+            submitBtn.isDisabled = index is None or not isWGMAvailable
         with self.viewModel.transaction() as vm:
             self._updateTankmanAfter(vm)
             vm.setIsPriceSelected(index is not None)
@@ -273,8 +276,7 @@ class RetrainSingleDialog(BaseCrewDialogTemplateView):
         return countSlots
 
     def __hasIrrelevantPerk(self):
-        tankman = self.__getTankmanWithTargetRole()
-        return any((not skill.isRelevantForRole(tankman.descriptor.role) for skill in self._tankman.skills))
+        return any((not skill.isRelevant for skill in self._tankman.skills))
 
     def __getTankmanWithTargetRole(self):
         tmanDescr = TankmanDescr(self._tankman.strCD)

@@ -70,7 +70,8 @@ __all__ = ('standard',
  'creamBold',
  'creamTitle',
  'lightGray',
- 'lightBlue')
+ 'lightBlue',
+ 'bptaler')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -118,6 +119,10 @@ def mainBig(text):
 
 def neutral(text):
     return _formatText('neutralText', text)
+
+
+def stPatrick(text):
+    return _formatText('stPatrickText', text)
 
 
 def neutralBig(text):
@@ -321,6 +326,10 @@ def bpcoin(text):
 
 
 def brcoin(text):
+    return _formatText('creditsText', text)
+
+
+def stpcoin(text):
     return _formatText('creditsText', text)
 
 
@@ -536,6 +545,10 @@ def lightGray(text):
 
 def lightBlue(text):
     return _formatText('lightBlue', text)
+
+
+def bptaler(text):
+    return _formatText('bptalerText', text)
 
 
 def getRawStyles(names):

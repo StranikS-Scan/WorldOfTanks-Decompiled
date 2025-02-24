@@ -197,6 +197,12 @@ class BonusExtractor(object):
                 devices[invisDeviceIndex], devices[camoNetIndex] = devices[camoNetIndex], devices[invisDeviceIndex]
 
 
+class EasyTankEquipBonusExtractor(BonusExtractor):
+
+    def _getCopyVehicle(self, vehicle):
+        return self.itemsCache.items.getLayoutsVehicleCopy(vehicle)
+
+
 class TankSetupBonusExtractor(BonusExtractor):
 
     def _getCopyVehicle(self, vehicle):

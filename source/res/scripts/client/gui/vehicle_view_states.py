@@ -50,6 +50,12 @@ class IVehicleViewState(object):
     def getCustomizationTooltip(self):
         raise NotImplementedError
 
+    def isEasyTankEquipEnabled(self):
+        raise NotImplementedError
+
+    def isEasyTankEquipVisible(self):
+        raise NotImplementedError
+
 
 class NoPresentViewState(IVehicleViewState):
 
@@ -96,14 +102,21 @@ class NoPresentViewState(IVehicleViewState):
     def getCustomizationTooltip(self):
         pass
 
+    def isEasyTankEquipEnabled(self):
+        return False
+
+    def isEasyTankEquipVisible(self):
+        return False
+
 
 class SelectedViewState(IVehicleViewState):
-    __slots__ = ('_locked', '_isInHangar', '_isBroken', '_isDisabledInRent', '_isOnlyForEventBattles', '_isOutfitLocked', '_isCustomizationEnabled', '_isEliteShown', '_isLevelShown', '_isRoleShown', '_isMaintenanceVisible', '_isCustomizationVisible')
+    __slots__ = ('_locked', '_isInHangar', '_isBroken', '_isDisabledInRent', '_isOnlyForEventBattles', '_isOutfitLocked', '_isCustomizationEnabled', '_isEliteShown', '_isLevelShown', '_isRoleShown', '_isMaintenanceVisible', '_isCustomizationVisible', '_isEasyTankEquipEnabled', '_isEasyTankEquipVisible')
 
     def __init__(self, vehicle):
         super(SelectedViewState, self).__init__()
         self._isEliteShown = self._isLevelShown = self._isRoleShown = True
         self._isMaintenanceVisible = self._isCustomizationVisible = True
+        self._isEasyTankEquipVisible = True
         self._resolveVehicleState(vehicle)
         self._resolvePrbState()
 
@@ -157,6 +170,12 @@ class SelectedViewState(IVehicleViewState):
     def isOutfitLocked(self):
         return self._isOutfitLocked
 
+    def isEasyTankEquipEnabled(self):
+        return self._isEasyTankEquipEnabled
+
+    def isEasyTankEquipVisible(self):
+        return self._isEasyTankEquipVisible
+
     def _resolveVehicleState(self, vehicle):
         self._isInHangar = vehicle.isInHangar() and not vehicle.isDisabled()
         self._isBroken = vehicle.isBroken()
@@ -164,6 +183,7 @@ class SelectedViewState(IVehicleViewState):
         self._isOnlyForEventBattles = vehicle.isOnlyForEventBattles()
         self._isOutfitLocked = vehicle.isOutfitLocked()
         self._isCustomizationEnabled = vehicle.isCustomizationEnabled()
+        self._isEasyTankEquipEnabled = vehicle.isEasyTankEquipEnabled()
 
     def _resolvePrbState(self):
         self._locked = False

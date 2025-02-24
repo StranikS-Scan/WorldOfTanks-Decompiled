@@ -52,6 +52,7 @@ class _Reward(_Enum):
     RADIO = 'RadioCommunication'
     ROT_MECHANISM = 'RotationMechanism'
     SIGHTS = 'Sights'
+    SIGHTS_ENHANCED_AIM_DRIVES = 'SightsEnhancedAimDrives'
     STEREOSCOPE = 'Stereoscope'
     TANK_RAMMER = 'TankRammer'
     TURBOCHARGER = 'Turbocharger'
@@ -105,7 +106,10 @@ _REWARDS_ORDER = {_RewardType.TROPHY: (_Reward.TURBOCHARGER,
                               _Reward.TURBOCHARGER,
                               _Reward.SIGHTS,
                               _Reward.ADDIT_INVISIBILITY_DEVICE),
- _RewardType.MODERNIZED_DEVICE: (_Reward.AIM_DRIVES_AIM_STABILIZER, _Reward.HEALTH_RESERVE_ANTI_FRAGMENTATION, _Reward.TURBOCHARGER_ROT_MECHANISM)}
+ _RewardType.MODERNIZED_DEVICE: (_Reward.AIM_DRIVES_AIM_STABILIZER,
+                                 _Reward.HEALTH_RESERVE_ANTI_FRAGMENTATION,
+                                 _Reward.TURBOCHARGER_ROT_MECHANISM,
+                                 _Reward.SIGHTS_ENHANCED_AIM_DRIVES)}
 _BASE_PATTERN = '(basic|enhanced|improved|trophy|modernized)*([a-z]+)'
 _REWARD_NAME_EXTRACTOR = re.compile(_BASE_PATTERN + '(_+\\w+\\d*|\\d*)*', re.I)
 _REWARD_BATTLE_BOOSTER_EXTRACTOR = re.compile(_BASE_PATTERN + '(battleBooster*)', re.I)

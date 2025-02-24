@@ -18,6 +18,7 @@ if typing.TYPE_CHECKING:
     from gui.hangar_presets.hangar_gui_config import HangarGuiPreset
     from gui.periodic_battles.models import AlertData
     from gui.Scaleform.daapi.view.lobby.hangar.Hangar import Hangar
+    from gui.Scaleform.daapi.view.lobby.hangar.controls_helpers import IHangarControlsHelper
     from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.quest_flags_getters import IQuestFlagsGetter
     from gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import ILobbyHeaderControlsHelper
 
@@ -71,6 +72,9 @@ class HangarGuiController(IHangarGuiController, IPrbListener):
 
     def getLobbyHeaderHelper(self):
         return self.__getCurrentPresetGetter(defaultQueueType=QUEUE_TYPE.RANDOMS).getLobbyHeaderHelper()
+
+    def getHangarHelper(self):
+        return self.__getCurrentPresetGetter(defaultQueueType=QUEUE_TYPE.RANDOMS).getHangarHelper()
 
     def getBattleModifiers(self):
         return self.__getCurrentPresetGetter().getBattleModifiers()

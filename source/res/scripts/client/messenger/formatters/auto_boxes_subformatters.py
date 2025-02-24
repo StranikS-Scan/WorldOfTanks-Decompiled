@@ -6,8 +6,8 @@ from adisp import adisp_async, adisp_process
 from dossiers2.ui.achievements import BADGES_BLOCK
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.lootbox_system.awards import preformatRewardsInfo
-from gui.lootbox_system.common import TEXT_RESOURCE_PREFIX, NotificationPathPart, getTextResource
+from gui.lootbox_system.base.awards import preformatRewardsInfo
+from gui.lootbox_system.base.common import TEXT_RESOURCE_PREFIX, NotificationPathPart, getTextResource, DEFAULT_EVENT_NAME
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.dossier import getAchievementFactory
@@ -259,7 +259,6 @@ class LunarNYEnvelopeAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
 
 class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
     __MESSAGE_TEMPLATE = 'LootBoxSystemAutoOpenMessage'
-    __DEFAULT_NAME = 'lootbox_system'
     __BREAK = R.strings.lootbox_system.helpers.doubleBreakLine()
 
     @adisp_async
@@ -277,7 +276,7 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
                     openedBoxesIDs -= eventBoxes
 
             if openedBoxesIDs:
-                messages.append(self.__getMessage(message, openedBoxesIDs, self.__DEFAULT_NAME))
+                messages.append(self.__getMessage(message, openedBoxesIDs, DEFAULT_EVENT_NAME))
             callback(messages)
         else:
             callback([MessageData(None, None)])
@@ -285,7 +284,7 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
 
     @classmethod
     def getBoxesOfThisGroup(cls, data):
-        return {boxId for boxId, info in data.iteritems() if info.get('relatedFeature') == cls.__DEFAULT_NAME}
+        return {boxId for boxId, info in data.iteritems() if info.get('relatedFeature') == DEFAULT_EVENT_NAME}
 
     def __getEventNames(self, data):
         eventsBoxes = {}
@@ -297,9 +296,9 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
 
     def __getMessage(self, message, openedBoxes, eventName):
         textPathParts = [NotificationPathPart.MAIN, NotificationPathPart.AUTOOPEN]
-        header = backport.text(getTextResource(textPathParts + [NotificationPathPart.HEADER])())
-        description = backport.text(getTextResource(textPathParts + [NotificationPathPart.TEXT])())
-        countRes = getTextResource(textPathParts + [NotificationPathPart.COUNT])
+        header = backport.text(getTextResource(textPathParts + [NotificationPathPart.HEADER], eventName)())
+        description = backport.text(getTextResource(textPathParts + [NotificationPathPart.TEXT], eventName)())
+        countRes = getTextResource(textPathParts + [NotificationPathPart.COUNT], eventName)
         boxes = sum((message.data[boxId]['count'] for boxId in openedBoxes))
         count = backport.text(self.__BREAK) + backport.text(countRes(), boxes=text_styles.credits(boxes)) if countRes.exists() else ''
         boxesCounts = {bID:message.data[bID]['count'] for bID in openedBoxes}

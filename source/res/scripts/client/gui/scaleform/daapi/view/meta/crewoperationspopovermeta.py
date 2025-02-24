@@ -7,5 +7,8 @@ class CrewOperationsPopOverMeta(SmartPopOverView):
     def invokeOperation(self, operationName):
         self._printOverrideError('invokeOperation')
 
+    def onToggleClick(self, operationName):
+        self._printOverrideError('onToggleClick')
+
     def as_updateS(self, data):
         return self.flashObject.as_update(data) if self._isDAAPIInited() else None

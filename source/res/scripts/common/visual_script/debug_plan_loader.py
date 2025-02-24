@@ -32,7 +32,7 @@ if IS_DEVELOPMENT:
 
         def regContext--- This code section failed: ---
 
-  31       0	SETUP_LOOP        '87'
+  31       0	SETUP_LOOP        '89'
            3	LOAD_FAST         'self'
            6	LOAD_ATTR         '__contextAll'
            9	GET_ITER          ''
@@ -61,15 +61,16 @@ if IS_DEVELOPMENT:
           63	POP_TOP           ''
 
   36      64	LOAD_GLOBAL       'LOG_DEBUG_DEV'
-          67	LOAD_CONST        'VSContext %s was registered'
+
+  37      67	LOAD_CONST        'VSContext '
           70	LOAD_GLOBAL       'type'
           73	LOAD_FAST         'context'
           76	CALL_FUNCTION_1   ''
           79	LOAD_ATTR         '__name__'
-          82	BINARY_MODULO     ''
-          83	CALL_FUNCTION_1   ''
-          86	POP_TOP           ''
-        87_0	COME_FROM         '0'
+          82	LOAD_CONST        ' was registered'
+          85	CALL_FUNCTION_3   ''
+          88	POP_TOP           ''
+        89_0	COME_FROM         '0'
 
 Syntax error at or near 'POP_BLOCK' token at offset 38
 
@@ -78,7 +79,7 @@ Syntax error at or near 'POP_BLOCK' token at offset 38
                 if ctx() == context:
                     self.__contextDestroyed(context)
                     self.__contextAll.remove(ctx)
-                    LOG_DEBUG_DEV('VSContext %s was unregistered' % type(context).__name__)
+                    LOG_DEBUG_DEV('VSContext ', type(context).__name__, ' was unregistered')
                     break
 
         def startPlan(self, planName, contextName, aspect, params={}):

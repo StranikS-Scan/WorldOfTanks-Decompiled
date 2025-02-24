@@ -41,6 +41,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     STORAGE_OPTIONAL_DEVICE_ITEM = 'storageOptionalDeviceItem'
     STORAGE_OPTIONAL_MODERNIZED_DEVICE_ITEM = 'storageOptionalModernizedDeviceItem'
     STORAGE_RECERTIFICATION_FORM_ITEM = 'storageRecertificationFormItem'
+    STORAGE_MENTORING_LICENSE_ITEM = 'storageMentoringLicenseItem'
     TANK_SETUP_OPTIONAL_DEVICE_ITEM = 'tankSetupOptionalDeviceItem'
     TANK_SETUP_MODULE_ITEM = 'tankSetupModuleItem'
     TANK_SETUP_CONSUMABLE_ITEM = 'tankSetupConsumableItem'
@@ -60,4 +61,5 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     POST_PROGRESSION_VEHICLE = 'postProgressionVehicle'
     BR_BATTLE_RESULT_CONTEXT_MENU = 'brBattleResultContextMenu'
     CREW_MEMBER = 'crewMember'
+    QT_CREW_MEMBER = 'quickTrainingCrewMember'
     CREW_TANKMAN = 'crewTankman'

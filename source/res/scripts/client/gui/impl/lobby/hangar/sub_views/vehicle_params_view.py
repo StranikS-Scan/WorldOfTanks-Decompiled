@@ -419,6 +419,47 @@ class VehicleSkillPreviewParamsView(VehicleParamsView):
         return True
 
 
+class EasyTankEquipVehicleParamsView(VehicleParamsView):
+
+    def __init__(self, vehicle, changedVehicle, *args, **kwargs):
+        super(EasyTankEquipVehicleParamsView, self).__init__(*args, **kwargs)
+        self._vehicle = vehicle
+        self._changedVehicle = changedVehicle
+
+    def _getTooltipID(self):
+        return TOOLTIPS_CONSTANTS.EASY_TANK_EQUIP_VEHICLE_ADVANCED_PARAMETERS
+
+    def _getAdvancedParamTooltip(self, _):
+        return TOOLTIPS_CONSTANTS.EASY_TANK_EQUIP_VEHICLE_ADVANCED_PARAMETERS
+
+    def _finalize(self):
+        self._vehicle = None
+        self._changedVehicle = None
+        super(EasyTankEquipVehicleParamsView, self)._finalize()
+        return
+
+    def _onCacheResync(self, *_):
+        pass
+
+    def _onIgrTypeChanged(self):
+        pass
+
+    def _isExtraParamEnabled(self):
+        return True
+
+    def _isAdditionalValueEnabled(self):
+        return True
+
+    def _getVehicle(self):
+        return self._vehicle
+
+    def _getChangedVehicle(self):
+        return self._changedVehicle
+
+    def _getComparator(self):
+        return params_helper.previewVehiclesComparator(self._getChangedVehicle(), self._getVehicle(), withSituational=True)
+
+
 class VehicleParamsComponent(InjectComponentAdaptor):
 
     def _makeInjectView(self):

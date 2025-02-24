@@ -315,13 +315,6 @@ class MapboxArenaDescription(ArenaWithLabelDescription):
         return not replayCtrl.isPlaying
 
 
-class Comp7BattlesDescription(ArenaWithLabelDescription):
-
-    def isInvitationEnabled(self):
-        replayCtrl = BattleReplay.g_replayCtrl
-        return not replayCtrl.isPlaying
-
-
 registerArenaDescrs(ARENA_GUI_TYPE.RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.EPIC_RANDOM, ArenaWithBasesDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.TRAINING, ArenaWithBasesDescription)
@@ -331,9 +324,6 @@ for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
 
 registerArenaDescrs(ARENA_GUI_TYPE.BATTLE_ROYALE, BattleRoyaleDescription)
 registerArenaDescrs(ARENA_GUI_TYPE.MAPBOX, MapboxArenaDescription)
-registerArenaDescrs(ARENA_GUI_TYPE.COMP7, Comp7BattlesDescription)
-registerArenaDescrs(ARENA_GUI_TYPE.TOURNAMENT_COMP7, Comp7BattlesDescription)
-registerArenaDescrs(ARENA_GUI_TYPE.TRAINING_COMP7, Comp7BattlesDescription)
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui

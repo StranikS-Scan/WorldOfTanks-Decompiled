@@ -169,7 +169,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         feedBackCtrl = self.__sessionProvider.shared.feedback
         if feedBackCtrl is not None:
             feedBackCtrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
-        prbCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.__sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted += self.__onBattleStarted
             self.__updateContextAvailability()
@@ -216,7 +216,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         feedBackCtrl = self.__sessionProvider.shared.feedback
         if feedBackCtrl is not None:
             feedBackCtrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
-        prbCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.__sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted -= self.__onBattleStarted
         self.__soundManager.onComponentDisposed()
@@ -301,7 +301,7 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
         self.as_setVisibleS(self.__isVisible())
 
     def __updateContextAvailability(self):
-        prebattleCtrl = self.__sessionProvider.dynamic.comp7PrebattleSetup
+        prebattleCtrl = self.__sessionProvider.dynamic.prebattleSetup
         if prebattleCtrl is not None:
             self.__isAllowedByContext = prebattleCtrl.isVehicleStateIndicatorAllowed()
         else:

@@ -12,26 +12,26 @@ class BattleBooster(Enum):
 class SkillModel(SkillSimpleModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(SkillModel, self).__init__(properties=properties, commands=commands)
 
     def getIsZero(self):
-        return self._getBool(3)
-
-    def setIsZero(self, value):
-        self._setBool(3, value)
-
-    def getIsIrrelevant(self):
         return self._getBool(4)
 
-    def setIsIrrelevant(self, value):
+    def setIsZero(self, value):
         self._setBool(4, value)
 
+    def getIsIrrelevant(self):
+        return self._getBool(5)
+
+    def setIsIrrelevant(self, value):
+        self._setBool(5, value)
+
     def getBattleBooster(self):
-        return BattleBooster(self._getString(5))
+        return BattleBooster(self._getString(6))
 
     def setBattleBooster(self, value):
-        self._setString(5, value.value)
+        self._setString(6, value.value)
 
     def _initialize(self):
         super(SkillModel, self)._initialize()

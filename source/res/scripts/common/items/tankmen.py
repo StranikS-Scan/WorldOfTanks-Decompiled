@@ -582,24 +582,20 @@ class TankmanDescr(object):
             if residualXp > 0:
                 return bisectLE(_g_levelXpCosts, residualXp)
 
-    @property
-    def canUseFreeXp(self):
-        return not self.hasMaxEfficiency or not self.isMaxSkillXp()
-
-    @property
-    def hasMaxEfficiency(self):
-        return self.skillsEfficiencyXP == MAX_SKILLS_EFFICIENCY_XP
+    def hasMaxEfficiency(self, extraXp=0):
+        return self.skillsEfficiencyXP + extraXp >= MAX_SKILLS_EFFICIENCY_XP
 
     @property
     def needEfficiencyXP(self):
         return MAX_SKILLS_EFFICIENCY_XP - self.skillsEfficiencyXP
 
     @property
+    def needXpForMaxSkills(self):
+        return _g_skillXpCosts[self.maxSkillsCount] - self.totalXP()
+
+    @property
     def needXpForVeteran(self):
-        totalXP = self.totalXP()
-        needSkillsXP = _g_skillXpCosts[self.maxSkillsCount] - totalXP
-        needXP = self.needEfficiencyXP + needSkillsXP
-        return needXP
+        return self.needEfficiencyXP + self.needXpForMaxSkills
 
     def isMaxSkillXp(self, extraXP=0):
         totalXP = self.totalXP() + extraXP
@@ -681,22 +677,29 @@ class TankmanDescr(object):
         lastEarnedSkillXP = _g_levelXpCosts[lastEarnedSkillLevel] << self.earnedSkillsCount
         return _g_skillXpCosts[numFullSkills] + lastEarnedSkillXP + self.freeXP
 
-    def addXP(self, xp, truncateXP=True):
+    def addXP(self, xp, truncateXP=True, isCheckForEfficiency=True):
         tmpXP = xp
-        if self.skillsEfficiencyXP < MAX_SKILLS_EFFICIENCY_XP:
-            xpToAdd = min(tmpXP, MAX_SKILLS_EFFICIENCY_XP - self.skillsEfficiencyXP)
-            self.skillsEfficiencyXP += xpToAdd
-            tmpXP -= xpToAdd
-        if tmpXP <= 0:
-            return
+        if isCheckForEfficiency:
+            if self.skillsEfficiencyXP < MAX_SKILLS_EFFICIENCY_XP:
+                xpToAdd = min(tmpXP, MAX_SKILLS_EFFICIENCY_XP - self.skillsEfficiencyXP)
+                self.skillsEfficiencyXP += xpToAdd
+                tmpXP -= xpToAdd
+            if tmpXP <= 0:
+                return
         self.freeXP += tmpXP
         if truncateXP:
             self.truncateXP()
         self.__levelUpLastSkill()
 
-    def checkRestrictionsByVehicleTags(self):
-        if 'lockCrewSkills' in self.__vehicleTags:
-            raise SoftException('Changing tankmans skills is forbidden for current vehicle.')
+    def checkSkillsRestrictionsByVehicleTags(self):
+        self.checkRestrictionsByVehicleTags('lockCrewSkills', 'Changing tankmans skills is forbidden for current vehicle.')
+
+    def checkCrewRestrictionsByVehicleTags(self):
+        self.checkRestrictionsByVehicleTags('lockCrew', 'Crew cannot be changed on this tank.')
+
+    def checkRestrictionsByVehicleTags(self, restrictionType, errorMessage):
+        if restrictionType in self.__vehicleTags:
+            raise SoftException(errorMessage)
 
     @property
     def roleLevel(self):

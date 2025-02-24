@@ -5,5 +5,4 @@ from gui.Scaleform.daapi.view.lobby.hangar.carousels.ranked.tank_carousel import
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.epicBattle.tank_carousel import EpicBattleTankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.battle_pass.tank_carousel import BattlePassTankCarousel
 from gui.Scaleform.daapi.view.lobby.hangar.carousels.mapbox.tank_carousel import MapboxTankCarousel
-from gui.Scaleform.daapi.view.lobby.hangar.carousels.comp7.tank_carousel import Comp7TankCarousel
-__all__ = ('TankCarousel', 'RankedTankCarousel', 'EpicBattleTankCarousel', 'BattlePassTankCarousel', 'MapboxTankCarousel', 'Comp7TankCarousel')
+__all__ = ('TankCarousel', 'RankedTankCarousel', 'EpicBattleTankCarousel', 'BattlePassTankCarousel', 'MapboxTankCarousel')

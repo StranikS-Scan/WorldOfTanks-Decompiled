@@ -23,4 +23,3 @@ class USER(object):
     VEHICLE_PREVIEW = 'vehiclePreview'
     END_REFERRAL_COMPANY = 'endReferralCompany'
     CREATE_MAPBOX_SQUAD = 'createMapboxSquad'
-    CREATE_COMP7_SQUAD = 'createComp7Squad'

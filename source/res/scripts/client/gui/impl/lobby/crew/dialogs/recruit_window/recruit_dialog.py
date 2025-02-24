@@ -21,25 +21,26 @@ from skeletons.gui.game_control import ISpecialSoundCtrl
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from sound_gui_manager import CommonSoundSpaceSettings
+from gui.server_events import recruit_helper
 from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 from gui.sounds.filters import States, StatesGroup
-from uilogging.crew.logging_constants import CrewDialogKeys
 from wg_async import AsyncEvent, wg_await, BrokenPromiseError, AsyncReturn, wg_async
 from gui.shared.gui_items.Tankman import NO_TANKMAN
 
 class BaseRecruitDialog(BaseCrewDialogTemplateView):
-    __slots__ = ('_selectedNation', '_selectedVehType', '_selectedVehicle', '_selectedSpecialization', '_recruitContent')
+    __slots__ = ('_selectedNation', '_selectedVehType', '_selectedVehicle', '_selectedSpecialization', '_recruitContent', '_isSlotChanged')
     _eventsCache = dependency.descriptor(IEventsCache)
     LAYOUT_ID = R.views.lobby.crew.dialogs.RecruitDialog()
     VIEW_MODEL = RecruitDialogTemplateViewModel
 
     def __init__(self, **kwargs):
-        super(BaseRecruitDialog, self).__init__(loggingKey=CrewDialogKeys.RECRUIT, **kwargs)
+        super(BaseRecruitDialog, self).__init__(**kwargs)
         self._selectedNation = NO_DATA_VALUE
         self._selectedVehType = NO_DATA_VALUE
         self._selectedVehicle = NO_DATA_VALUE
         self._selectedSpecialization = NO_DATA_VALUE
         self._recruitContent = None
+        self._isSlotChanged = False
         return
 
     @property
@@ -50,11 +51,12 @@ class BaseRecruitDialog(BaseCrewDialogTemplateView):
         self.addButton(ConfirmButton(R.strings.dialogs.recruitWindow.submit(), isDisabled=True))
         self.addButton(CancelButton(R.strings.dialogs.recruitWindow.cancel()))
 
-    def _onRecruitContentChanged(self, nation, vehType, vehicle, specialization):
+    def _onRecruitContentChanged(self, nation, vehType, vehicle, specialization, isSlotChanged):
         self._selectedNation = nation
         self._selectedVehType = vehType
         self._selectedVehicle = vehicle
         self._selectedSpecialization = specialization
+        self._isSlotChanged = isSlotChanged
         submitBtn = self.getButton(DialogButtons.SUBMIT)
         if submitBtn is not None:
             submitBtn.isDisabled = any((v == NO_DATA_VALUE for v in (nation,
@@ -124,7 +126,7 @@ class TokenRecruitDialog(BaseRecruitDialog):
         super(TokenRecruitDialog, self)._setResult(result)
 
     def _submit(self):
-        tankmen = self.__vehicle.getTankmanIDBySlotIdx(self.__vehicleSlotToUnpack) if self.__vehicle else NO_TANKMAN
+        tankmen = self.__vehicle.getTankmanIDBySlotIdx(self.__vehicleSlotToUnpack) if self.__vehicle and not self._isSlotChanged else NO_TANKMAN
         if tankmen != NO_TANKMAN:
             self._unloadOldTankman()
         else:
@@ -132,14 +134,17 @@ class TokenRecruitDialog(BaseRecruitDialog):
 
     @decorators.adisp_process('updating')
     def _unpackTokenRecruit(self):
+        recruit_helper.removeRecruitForVisit(self.__tokenName)
         _, _, vehTypeID = vehicles.parseIntCompactDescr(int(self._selectedVehicle))
         res = yield TankmanTokenRecruit(int(self._selectedNation), int(vehTypeID), self._selectedSpecialization, self.__tokenName, self.__tokenData).request()
         if res.userMsg:
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
         if res.success:
-            if self.__vehicleSlotToUnpack != -1:
+            if self.__vehicleSlotToUnpack != -1 and not self._isSlotChanged:
                 tmn = self._itemsCache.items.getTankman(res.auxData)
                 self._equipTankman(tmn)
+        else:
+            recruit_helper.setNewRecruitVisited(self.__tokenName)
 
     @decorators.adisp_process('unloading')
     def _unloadOldTankman(self):
@@ -214,12 +219,16 @@ class QuestRecruitDialog(BaseRecruitDialog):
 
     @decorators.adisp_process('updating')
     def _unpackQuestRecruit(self):
+        missionIDs = str(self.__mission.getID())
+        recruit_helper.removeRecruitForVisit(missionIDs)
         _, _, vehTypeID = vehicles.parseIntCompactDescr(int(self._selectedVehicle))
         res = yield PMGetTankwomanReward(self.__mission, int(self._selectedNation), int(vehTypeID), self._selectedSpecialization).request()
         if res.userMsg:
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
         if res.success and self.__vehicleSlotToUnpack != -1:
             self._waitForInventoryUpdate()
+        else:
+            recruit_helper.setNewRecruitVisited(missionIDs)
 
     @wg_async
     def _waitForInventoryUpdate(self):

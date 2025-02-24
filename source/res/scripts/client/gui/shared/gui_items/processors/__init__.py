@@ -30,7 +30,7 @@ def makeI18nError(sysMsgKey='', defaultSysMsgKey='', auxData=None, *args, **kwar
     localKey = '#system_messages:{}'.format(sysMsgKey)
     if localKey not in SYSTEM_MESSAGES.ALL_ENUM and defaultSysMsgKey:
         localKey = '#system_messages:{}'.format(defaultSysMsgKey)
-    return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData)
+    return makeError(i18n.makeString(localKey, *args, **kwargs), kwargs.get('type', SM_TYPE.Error), auxData, msgPriority=kwargs.get('msgPriority', None))
 
 
 class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'itemCount'])):
@@ -92,7 +92,8 @@ class Processor(object):
             else:
                 pres = plugin.validate()
             if not pres.success:
-                _logger.warning('Request validation failed, processor: %s, validator: %s (%s)', self.__class__.__name__, plugin.__class__.__name__, str(plugin.__dict__))
+                if plugin.logWarnings:
+                    _logger.warning('Request validation failed, processor: %s, validator: %s (%s)', self.__class__.__name__, plugin.__class__.__name__, str(plugin.__dict__))
                 callback(self._errorHandler(self.PLUGIN_RES_CODE, pres.errorMsg, pres.ctx))
                 return
 

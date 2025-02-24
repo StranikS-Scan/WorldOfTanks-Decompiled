@@ -24,12 +24,11 @@ from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName,
 from gui.shared.gui_items.processors.common import VehicleChangeNation
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import getVehTypeIconName
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import int2roman
 from helpers.dependency import descriptor
-from helpers.i18n import convert
 from helpers.server_settings import serverSettingsChangeListener
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID
-from items.tankmen import getSkillsConfig
 from nation_change.nation_change_helpers import iterVehTypeCDsInNationGroup
 from post_progression_common import SERVER_SETTINGS_KEY, SWITCH_LAYOUT_CAPACITY
 from skeletons.gui.app_loader import IAppLoader
@@ -162,7 +161,6 @@ class NationChangeScreen(ViewImpl):
         crewListVM.clear()
         roles = guiVh.descriptor.type.crewRoles
         crew = sortCrew(guiVh.crew, roles)
-        skillsConfig = getSkillsConfig()
         isDogInCrew = 'dog' in guiVh.tags
         iconsSmall = self.__icons.tankmen.icons.barracks
         for slotIdx, tankman in crew:
@@ -178,7 +176,7 @@ class NationChangeScreen(ViewImpl):
                 role = roles[slotIdx][0]
                 tankmanVM.setImage(self.__icons.tankmen.icons.barracks.silhouette_mask())
                 tankmanVM.setIsSimpleTooltip(True)
-                tankmanVM.setSimpleTooltipHeader(convert(skillsConfig.getSkill(role).userString))
+                tankmanVM.setSimpleTooltipHeader(getRoleUserName(role))
                 tankmanVM.setSimpleTooltipBody(guiVh.longUserName)
             R.strings.multinational_vehicles.changeScreen.title.header()
             crewListVM.addViewModel(tankmanVM)

@@ -23,14 +23,14 @@ FIRST_ELEMENT = 0
 _logger = logging.getLogger(__name__)
 
 class RecruitContent(object):
-    __slots__ = ('__viewModel', '__selectedNationID', '__selectedNation', '__selectedVehType', '__selectedVehicle', '__selectedSpecialization', 'onRecruitContentChanged', '__isFemale', '__predefinedNations', '__predefinedRoles', '__predefinedVehicle', '__predefinedVehicleType')
+    __slots__ = ('__viewModel', '__selectedNationID', '__selectedNation', '__selectedVehType', '__selectedVehicle', '__selectedSpecialization', 'onRecruitContentChanged', '__isFemale', '__predefinedNations', '__predefinedRoles', '__vehIntCD', '__slotSpecialization', '__isSlotChanged')
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, predefinedData, model=None):
         super(RecruitContent, self).__init__()
         self.__viewModel = model
         self.__selectedNation = NO_DATA_VALUE
-        self.__selectedNationID = NO_DATA_VALUE
+        self.__selectedNationID = None
         self.__selectedVehType = NO_DATA_VALUE
         self.__selectedVehicle = NO_DATA_VALUE
         self.__selectedSpecialization = NO_DATA_VALUE
@@ -38,9 +38,10 @@ class RecruitContent(object):
         self.__isFemale = None
         self.__predefinedNations = None
         self.__predefinedRoles = None
-        self.__predefinedVehicle = None
-        self.__predefinedVehicleType = None
-        self.__setPredefinedTankman(predefinedData)
+        self.__vehIntCD = None
+        self.__slotSpecialization = None
+        self.__isSlotChanged = False
+        self.__processPredefinedData(predefinedData)
         return
 
     @property
@@ -59,52 +60,54 @@ class RecruitContent(object):
         self.viewModel.onVehTypeChange -= self.__onVehTypeChange
         self.viewModel.onNationChange -= self.__onNationChange
 
-    def __fillDataFields(self):
-        self.__fillNations()
-        self.__fillVehTypes()
-        self.__fillVehicles()
-        self.__fillRoles()
-
     def onLoading(self):
-        self.__fillDataFields()
-        self.__updateDropDownsStates()
-        self.__onRecruitContentChanged()
+        self.__updateModelAndFireCahangedEvent()
 
-    def __setPredefinedTankman(self, predefinedData):
+    def __fillModel(self):
+        if self.__vehIntCD is not None:
+            self.__isSlotChanged = int(self.__selectedVehicle) != self.__vehIntCD or self.__slotSpecialization != self.__selectedSpecialization
+        with self.viewModel.transaction() as tx:
+            tx.setIsSlotChanged(self.__isSlotChanged)
+            self.__fillNations()
+            self.__fillVehTypes()
+            self.__fillVehicles()
+            self.__fillRoles()
+            self.__updateSelectedValues()
+            self.__updateDropDownsStates()
+        return
+
+    def __processPredefinedData(self, predefinedData):
         self.__isFemale = predefinedData.get('isFemale', False)
         slotToUnpack = predefinedData.get('slotToUnpack')
         if slotToUnpack != -1:
             vehicle = predefinedData.get('predefinedVehicle')
-            self.__predefinedVehicle = ((vehicle.intCD, vehicle),)
-            self.__predefinedVehicleType = (vehicle.type,)
-            self.__predefinedNations = (vehicle.nationName,)
-            self.__predefinedRoles = (vehicle.descriptor.type.crewRoles[slotToUnpack][FIRST_ELEMENT],)
-            self.__fillDataFields()
-        else:
-            predefinedNations = predefinedData.get('predefinedNations')
-            if predefinedNations:
-                self.__predefinedNations = predefinedNations
-                self.__fillNations()
-            predefinedRoles = predefinedData.get('predefinedRoles')
-            if predefinedRoles:
-                self.__predefinedRoles = predefinedRoles
-                self.__fillRoles()
-        self.__refillValue()
-        self.__updateDropDownsStates()
+            self.__vehIntCD = vehicle.intCD
+            self.__selectedVehicle = vehicle.intCD
+            self.__selectedVehType = vehicle.type
+            self.__selectedNation = vehicle.nationName
+            self.__selectedNationID = vehicle.nationID
+            self.__selectedSpecialization = vehicle.descriptor.type.crewRoles[slotToUnpack][FIRST_ELEMENT]
+            self.__slotSpecialization = self.__selectedSpecialization
+        predefinedNations = predefinedData.get('predefinedNations')
+        if predefinedNations:
+            self.__predefinedNations = predefinedNations
+            self.__selectedNation = self.__choosePredefined(self.__predefinedNations, self.__selectedNation)
+            self.__selectedNationID = INDICES.get(self.__selectedNation) if self.__selectedNation else None
+        predefinedRoles = predefinedData.get('predefinedRoles')
+        if predefinedRoles:
+            self.__predefinedRoles = predefinedRoles
+            self.__selectedSpecialization = self.__choosePredefined(self.__predefinedRoles, self.__selectedSpecialization)
+        return
 
     def __fillNations(self):
-        with self.viewModel.transaction() as tx:
-            nations = tx.getNations()
-            nations.clear()
-            nationsList = getSortedItems(self.__getNationsList(), GUI_NATIONS)
-            for name in nationsList:
-                model = DropDownItemViewModel()
-                model.setId(name)
-                model.setLabel(backport.text(R.strings.nations.dyn(name)()))
-                nations.addViewModel(model)
-
-            if len(nationsList) == 1:
-                self.__onNationChange({'id': nationsList[FIRST_ELEMENT]})
+        nations = self.viewModel.getNations()
+        nations.clear()
+        nationsList = getSortedItems(self.__getNationsList(), GUI_NATIONS)
+        for name in nationsList:
+            model = DropDownItemViewModel()
+            model.setId(name)
+            model.setLabel(backport.text(R.strings.nations.dyn(name)()))
+            nations.addViewModel(model)
 
     def __getNationsList(self):
         filteredNations = set(GUI_NATIONS)
@@ -113,18 +116,14 @@ class RecruitContent(object):
         return list(filteredNations)
 
     def __fillVehTypes(self):
-        with self.viewModel.transaction() as tx:
-            vehTypes = tx.getVehTypes()
-            vehTypes.clear()
-            vehTypeList = getSortedItems(self.__getVehTypeList(), VEHICLE_TYPES_ORDER)
-            for name in vehTypeList:
-                model = DropDownItemViewModel()
-                model.setId(name)
-                model.setLabel(capitalizeText(backport.text(R.strings.menu.classes.dyn(replaceHyphenToUnderscore(name))())))
-                vehTypes.addViewModel(model)
-
-            if len(vehTypeList) == 1:
-                self.__onVehTypeChange({'id': vehTypeList[FIRST_ELEMENT]})
+        vehTypes = self.viewModel.getVehTypes()
+        vehTypes.clear()
+        vehTypeList = getSortedItems(self.__getVehTypeList(), VEHICLE_TYPES_ORDER)
+        for name in vehTypeList:
+            model = DropDownItemViewModel()
+            model.setId(name)
+            model.setLabel(capitalizeText(backport.text(R.strings.menu.classes.dyn(replaceHyphenToUnderscore(name))())))
+            vehTypes.addViewModel(model)
 
     def __getVehTypeList(self):
         nationVehTypes = self._itemsCache.items.getVehicles(self.__getClassesCriteria(self.__selectedNationID)).values()
@@ -134,26 +133,20 @@ class RecruitContent(object):
             filteredVehTypes = filteredVehTypes.intersection(vehTypesByRole)
             if not filteredVehTypes and self.__selectedNation != NO_DATA_VALUE:
                 _logger.warning("Couldn't get vehTypes intersections with predefinedRoles: %s Check Token settings", self.__predefinedRoles)
-        if self.__predefinedVehicleType:
-            filteredVehTypes = filteredVehTypes.intersection(set(self.__predefinedVehicleType))
         return list(filteredVehTypes)
 
     def __fillVehicles(self):
-        with self.viewModel.transaction() as tx:
-            vehs = tx.getVehicles()
-            vehs.clear()
-            nationVehicleList = self.__getVehicleList()
-            for intCD, vehicle in nationVehicleList:
-                model = VehicleItemViewModel()
-                model.setId(intCD)
-                model.setName(vehicle.descriptor.type.shortUserString)
-                model.setType(replaceHyphenToUnderscore(vehicle.type))
-                model.setIsElite(vehicle.isPremium)
-                model.setIsIGR(vehicle.isPremiumIGR)
-                vehs.addViewModel(model)
-
-            if len(nationVehicleList) == 1:
-                self.__onVehicleChange({'id': nationVehicleList[FIRST_ELEMENT][FIRST_ELEMENT]})
+        vehs = self.viewModel.getVehicles()
+        vehs.clear()
+        nationVehicleList = self.__getVehicleList()
+        for intCD, vehicle in nationVehicleList:
+            model = VehicleItemViewModel()
+            model.setId(intCD)
+            model.setName(vehicle.descriptor.type.shortUserString)
+            model.setType(replaceHyphenToUnderscore(vehicle.type))
+            model.setIsElite(vehicle.isPremium)
+            model.setIsIGR(vehicle.isPremiumIGR)
+            vehs.addViewModel(model)
 
     def __getVehicleList(self):
         vehiclesCriteria = self.__getVehicleTypeCriteria(self.__selectedNationID, self.__selectedVehType)
@@ -164,26 +157,20 @@ class RecruitContent(object):
             filteredVehicles = filteredVehicles.intersection(vehiclesByRole)
             if not filteredVehicles and self.__selectedVehType != NO_DATA_VALUE:
                 _logger.warning("Couldn't get vehicles intersections with predefinedRoles: %s Check Token settings", self.__predefinedRoles)
-        if self.__predefinedVehicle:
-            filteredVehicles = filteredVehicles.intersection(set(self.__predefinedVehicle))
         return sorted(filteredVehicles, key=lambda x: (x[1].level, x[1].shortUserName))
 
     def __fillRoles(self):
-        with self.viewModel.transaction() as tx:
-            specializations = tx.getSpecializations()
-            specializations.clear()
-            rolesList = getSortedItems(self.__getRolesList(), ORDERED_ROLES)
-            for name in rolesList:
-                model = DropDownItemViewModel()
-                model.setId(name)
-                if self.__isFemale:
-                    model.setLabel(backport.text(R.strings.item_types.tankman.roles.female.dyn(name)()))
-                else:
-                    model.setLabel(backport.text(R.strings.item_types.tankman.roles.dyn(name)()))
-                specializations.addViewModel(model)
-
-            if len(rolesList) == 1:
-                self.__onSpecializationChange({'id': rolesList[FIRST_ELEMENT]})
+        specializations = self.viewModel.getSpecializations()
+        specializations.clear()
+        rolesList = getSortedItems(self.__getRolesList(), ORDERED_ROLES)
+        for name in rolesList:
+            model = DropDownItemViewModel()
+            model.setId(name)
+            if self.__isFemale:
+                model.setLabel(backport.text(R.strings.item_types.tankman.roles.female.dyn(name)()))
+            else:
+                model.setLabel(backport.text(R.strings.item_types.tankman.roles.dyn(name)()))
+            specializations.addViewModel(model)
 
     def __getRolesList(self):
         _, _, vehTypeID = vehicles.parseIntCompactDescr(int(self.__selectedVehicle))
@@ -195,16 +182,14 @@ class RecruitContent(object):
                 return list(self.__predefinedRoles)
         return list(filteredRoles)
 
-    def __onRecruitContentChanged(self):
-        self.onRecruitContentChanged(self.__selectedNationID, self.__selectedVehType, self.__selectedVehicle, self.__selectedSpecialization)
-
-    def __updateDataFields(self):
-        self.__refillValue()
-        self.__updateDropDownsStates()
-        self.__onRecruitContentChanged()
+    def __updateModelAndFireCahangedEvent(self):
+        self.__fillModel()
+        self.onRecruitContentChanged(self.__selectedNationID, self.__selectedVehType, self.__selectedVehicle, self.__selectedSpecialization, self.__isSlotChanged)
 
     def __onNationChange(self, args):
         selectedId = self.__getIdFromArgs(args)
+        if not self.__isSingleValue(self.__predefinedRoles):
+            self.__selectedSpecialization = NO_DATA_VALUE
         if selectedId is not None and selectedId != NO_DATA_VALUE:
             if self.__isSingleValue(self.__predefinedNations):
                 self.__selectedNation = self.__predefinedNations[FIRST_ELEMENT]
@@ -212,19 +197,12 @@ class RecruitContent(object):
             else:
                 self.__selectedNation = selectedId
                 self.__selectedNationID = INDICES.get(selectedId)
-            self.__selectedVehType = NO_DATA_VALUE
-            self.__selectedVehicle = NO_DATA_VALUE
-            if not self.__isSingleValue(self.__predefinedRoles):
-                self.__selectedSpecialization = NO_DATA_VALUE
-            self.__fillVehTypes()
         else:
             self.__selectedNation = NO_DATA_VALUE
             self.__selectedNationID = None
-            self.__selectedVehType = NO_DATA_VALUE
-            self.__selectedVehicle = NO_DATA_VALUE
-            if not self.__isSingleValue(self.__predefinedRoles):
-                self.__selectedSpecialization = NO_DATA_VALUE
-        self.__updateDataFields()
+        self.__selectedVehType = NO_DATA_VALUE
+        self.__selectedVehicle = NO_DATA_VALUE
+        self.__updateModelAndFireCahangedEvent()
         return
 
     def __onVehTypeChange(self, args):
@@ -234,13 +212,12 @@ class RecruitContent(object):
             self.__selectedVehicle = NO_DATA_VALUE
             if not self.__isSingleValue(self.__predefinedRoles):
                 self.__selectedSpecialization = NO_DATA_VALUE
-            self.__fillVehicles()
         else:
             self.__selectedVehType = NO_DATA_VALUE
             self.__selectedVehicle = NO_DATA_VALUE
             if not self.__isSingleValue(self.__predefinedRoles):
                 self.__selectedSpecialization = NO_DATA_VALUE
-        self.__updateDataFields()
+        self.__updateModelAndFireCahangedEvent()
         return
 
     def __onVehicleChange(self, args):
@@ -249,19 +226,18 @@ class RecruitContent(object):
             self.__selectedVehicle = selectedId
             if not self.__isSingleValue(self.__predefinedRoles):
                 self.__selectedSpecialization = NO_DATA_VALUE
-            self.__fillRoles()
         else:
             self.__selectedVehicle = NO_DATA_VALUE
             if not self.__isSingleValue(self.__predefinedRoles):
                 self.__selectedSpecialization = NO_DATA_VALUE
-        self.__updateDataFields()
+        self.__updateModelAndFireCahangedEvent()
         return
 
     def __onSpecializationChange(self, args):
         selectedId = self.__getIdFromArgs(args)
         if selectedId is not None:
             self.__selectedSpecialization = selectedId
-        self.__updateDataFields()
+        self.__updateModelAndFireCahangedEvent()
         return
 
     def __getIdFromArgs(self, args=None):
@@ -277,21 +253,22 @@ class RecruitContent(object):
         return DropDownState.NORMAL if isPrevSelected else DropDownState.DISABLED
 
     def __updateDropDownsStates(self):
-        with self.viewModel.transaction() as tx:
-            tx.setNationState(self.__getDropDownState(self.__isSingleValue(self.__predefinedNations), True))
-            tx.setVehTypeState(self.__getDropDownState(self.__isSingleValue(self.__predefinedVehicleType), self.__selectedNation != NO_DATA_VALUE))
-            tx.setVehicleState(self.__getDropDownState(self.__isSingleValue(self.__predefinedVehicle), self.__selectedVehType != NO_DATA_VALUE))
-            tx.setSpecializationState(self.__getDropDownState(self.__isSingleValue(self.__predefinedRoles), self.__selectedVehicle != NO_DATA_VALUE))
+        self.viewModel.setNationState(self.__getDropDownState(self.__isSingleValue(self.__predefinedNations), True))
+        self.viewModel.setVehTypeState(self.__getDropDownState(False, self.__selectedNation != NO_DATA_VALUE))
+        self.viewModel.setVehicleState(self.__getDropDownState(False, self.__selectedVehType != NO_DATA_VALUE))
+        self.viewModel.setSpecializationState(self.__getDropDownState(self.__isSingleValue(self.__predefinedRoles), self.__selectedVehicle != NO_DATA_VALUE))
 
-    def __refillValue(self):
-        with self.viewModel.transaction() as tx:
-            tx.setSelectedNation(str(self.__selectedNation))
-            tx.setSelectedVehType(str(self.__selectedVehType))
-            tx.setSelectedVehicle(str(self.__selectedVehicle))
-            tx.setSelectedSpecialization(str(self.__selectedSpecialization))
+    def __updateSelectedValues(self):
+        self.viewModel.setSelectedNation(str(self.__selectedNation))
+        self.viewModel.setSelectedVehType(str(self.__selectedVehType))
+        self.viewModel.setSelectedVehicle(str(self.__selectedVehicle))
+        self.viewModel.setSelectedSpecialization(str(self.__selectedSpecialization))
 
     def __isSingleValue(self, lst):
         return lst is not None and len(lst) == 1
+
+    def __choosePredefined(self, predefinedList, defaultValue):
+        return predefinedList[0] if len(predefinedList) == 1 else defaultValue
 
     def __getNationsCriteria(self):
         rqc = REQ_CRITERIA

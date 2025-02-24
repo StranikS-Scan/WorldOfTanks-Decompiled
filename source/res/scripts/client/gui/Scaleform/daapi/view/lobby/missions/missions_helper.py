@@ -1001,26 +1001,15 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         return self._getAwards(extended=extended)
 
     def _getStatusFields(self, isAvailable, errorMsg):
-        quest = self.event
-        statusTooltipData = None
         if not isAvailable:
             return self._getUnavailableStatusFields(errorMsg)
-        elif quest.isFullCompleted():
-            return self._getFullCompleteStatusFields()
-        elif quest.isInProgress():
-            return self._getProgressStatusFields()
-        elif quest.isCompleted():
-            return self._getCompleteStatusFields()
         else:
-            statusLabel = None
-            status = MISSIONS_STATES.NONE
-            addBottomStatusText = self.__getAddBottomInfo()
-            showIcon = False
-            return {'showIcon': showIcon,
-             'addBottomStatusText': addBottomStatusText,
-             'statusLabel': statusLabel,
-             'status': status,
-             'statusTooltipData': statusTooltipData}
+            statusData = self._getQuestCompletionStatusFields()
+            return statusData if statusData else {'showIcon': False,
+             'addBottomStatusText': self.__getAddBottomInfo(),
+             'statusLabel': None,
+             'status': MISSIONS_STATES.NONE,
+             'statusTooltipData': None}
 
     def _getUnavailableStatusFields(self, errorMsg):
         if errorMsg == 'noVehicle':
@@ -1039,14 +1028,8 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         if self.event.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_2:
             bodyTooltip = TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLEALLIANCE_BODY
         bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(bodyTooltip, vehType=_ms(MENU.classesShort(self.event.getQuestClassifier().classificationAttr)), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))}
-        if self.event.isInProgress():
-            statusData = self._getProgressStatusFields()
-            statusData.update(addBottomStatusText=addBottomStatusText)
-            statusData.update(bottomStatusTooltipData=bottomStatusTooltipData)
-            statusData.update(showIcon=True)
-            return statusData
-        if self.event.isMainCompleted():
-            statusData = self._getCompleteStatusFields()
+        statusData = self._getQuestCompletionStatusFields()
+        if statusData:
             statusData.update(addBottomStatusText=addBottomStatusText)
             statusData.update(bottomStatusTooltipData=bottomStatusTooltipData)
             statusData.update(showIcon=True)
@@ -1056,6 +1039,15 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
          'addBottomStatusText': addBottomStatusText,
          'status': MISSIONS_STATES.NOT_AVAILABLE,
          'bottomStatusTooltipData': bottomStatusTooltipData}
+
+    def _getQuestCompletionStatusFields(self):
+        quest = self.event
+        if quest.isFullCompleted():
+            return self._getFullCompleteStatusFields()
+        elif quest.isInProgress():
+            return self._getProgressStatusFields()
+        else:
+            return self._getCompleteStatusFields() if quest.isMainCompleted() else None
 
     def _getUnlockedStatusFields(self):
         quest = self.event

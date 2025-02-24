@@ -61,6 +61,8 @@ BATTLE_RESULTS_STATS_SORTING = 57
 LOOTBOX_AUTOOPEN_SUBFORMATTERS = 58
 EQUIPMENT_TRIGGERS = 59
 LOW_PRIORITY_WULF_WINDOWS = 60
+TRAINING_ROOM_EXTERNAL_HANDLERS = 61
+LOBBY_HEADER_TAB = 62
 
 class _CollectEventsManager(object):
 
@@ -392,9 +394,11 @@ def collectMessengerClientFormatter(msgType):
     return __collectEM.handleEvent((MESSENGER_CLIENT_FORMATTERS, msgType), ctx={}).get('formatter')
 
 
-def registerMessengerServerFormatter(msgType, formatter):
+def registerMessengerServerFormatter(msgType, formatter, replace=False):
 
     def onCollect(ctx):
+        if not replace:
+            pass
         ctx['formatter'] = formatter
 
     __collectEM.addListener((MESSENGER_SERVER_FORMATTERS, msgType), onCollect)
@@ -912,3 +916,27 @@ def registerLowPriorityWulfWindows(layoutsID):
 
 def collectLowPriorityWindows():
     return __collectEM.handleEvent(LOW_PRIORITY_WULF_WINDOWS, ctx=[])
+
+
+def registerTrainingRoomExternalHandler(guiType, handler):
+
+    def onCollect(ctx):
+        ctx['trainingRoomHandlers'][guiType] = handler
+
+    __collectEM.addListener(TRAINING_ROOM_EXTERNAL_HANDLERS, onCollect)
+
+
+def collectTrainingRoomExternalHandlers():
+    return __collectEM.handleEvent(TRAINING_ROOM_EXTERNAL_HANDLERS, {'trainingRoomHandlers': {}})['trainingRoomHandlers']
+
+
+def registerLobbyHeaderTab(alias, tabInfo):
+
+    def onCollect(ctx):
+        ctx['tabs'][alias] = tabInfo
+
+    __collectEM.addListener(LOBBY_HEADER_TAB, onCollect)
+
+
+def collectLobbyHeaderTabs():
+    return __collectEM.handleEvent(LOBBY_HEADER_TAB, {'tabs': {}})['tabs']

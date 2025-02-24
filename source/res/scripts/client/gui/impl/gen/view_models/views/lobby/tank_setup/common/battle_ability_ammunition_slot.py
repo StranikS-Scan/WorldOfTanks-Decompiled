@@ -6,20 +6,20 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.base_ammunition_slot
 class BattleAbilityAmmunitionSlot(BaseAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=13, commands=0):
+    def __init__(self, properties=14, commands=0):
         super(BattleAbilityAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getLevel(self):
-        return self._getNumber(11)
+        return self._getNumber(12)
 
     def setLevel(self, value):
-        self._setNumber(11, value)
+        self._setNumber(12, value)
 
     def getRank(self):
-        return self._getResource(12)
+        return self._getResource(13)
 
     def setRank(self, value):
-        self._setResource(12, value)
+        self._setResource(13, value)
 
     def _initialize(self):
         super(BattleAbilityAmmunitionSlot, self)._initialize()

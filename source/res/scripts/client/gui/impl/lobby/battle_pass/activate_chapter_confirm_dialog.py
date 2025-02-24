@@ -36,6 +36,7 @@ class ChapterConfirm(ViewImpl):
         with self.viewModel.transaction() as model:
             model.setPrevChapter(self.__prevChapterID)
             model.setNextChapter(self.__nextChapterID)
+            model.setIsSwitchFromPostProgressionToExtraChapter(self.__battlePass.isPostProgressionActive() and self.__battlePass.isExtraChapter(self.__nextChapterID))
 
 
 class ActivateChapterConfirmDialog(DialogTemplateView):

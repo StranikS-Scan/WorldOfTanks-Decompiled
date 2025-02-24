@@ -8,16 +8,17 @@ from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import 
 from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_model import SkillModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.skills_training_confirm_dialog_model import SkillsTrainingConfirmDialogModel
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillSimpleModelSetup
-from gui.shared.gui_items.Tankman import getTankmanSkill
+from gui.shared.gui_items.tankman_skill import getTankmanSkill
 
 class SkillsTrainingConfirmDialog(DialogTemplateView):
-    __slots__ = ('__tankman', '__skillsList', '__availableSkillsData', '__isClosed')
+    __slots__ = ('__tankman', '__skillsRole', '__skillsList', '__availableSkillsData', '__isClosed')
     LAYOUT_ID = R.views.lobby.crew.dialogs.SkillsTrainingConfirmDialog()
     VIEW_MODEL = SkillsTrainingConfirmDialogModel
 
-    def __init__(self, tankman, skillsList, availableSkillsData, **kwargs):
+    def __init__(self, tankman, skillsRole, skillsList, availableSkillsData, **kwargs):
         super(SkillsTrainingConfirmDialog, self).__init__(**kwargs)
         self.__tankman = tankman
+        self.__skillsRole = skillsRole
         self.__skillsList = skillsList
         self.__availableSkillsData = availableSkillsData
         self.__isClosed = False
@@ -34,7 +35,7 @@ class SkillsTrainingConfirmDialog(DialogTemplateView):
         with self.viewModel.transaction() as vm:
             skillsListVM = vm.getSkillsList()
             for idx, skillName in enumerate(self.__skillsList):
-                skill = getTankmanSkill(skillName, tankman=self.__tankman)
+                skill = getTankmanSkill(skillName, self.__skillsRole, self.__tankman)
                 skillVM = SkillModel()
                 level, isZero = self.__availableSkillsData[idx]
                 skillSimpleModelSetup(skillVM, skill=skill, skillLevel=level, skillName=skillName)

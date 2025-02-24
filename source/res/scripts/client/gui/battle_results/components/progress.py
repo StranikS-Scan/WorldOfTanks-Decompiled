@@ -7,7 +7,7 @@ from collections import namedtuple
 import typing
 import BigWorld
 import personal_missions
-from battle_pass_common import BattlePassConsts
+from battle_pass_common import BattlePassConsts, isPostProgressionChapter
 from constants import EVENT_TYPE, NEW_PERK_SYSTEM as NPS
 from dog_tags_common.components_config import componentConfigAdapter as cca
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, getProgressionPostBattleInfo, parseEventID, getC11n2dProgressionLinkBtnParams
@@ -293,42 +293,50 @@ class BattlePassProgressBlock(base.StatsBlock):
         bpp = reusable.battlePassProgress
         if not bpp.hasProgress:
             return
-        isNewPoints = bpp.pointsNew > 0 or bpp.questPoints > 0 or bpp.bonusCapPoints > 0 or bpp.bpTopPoints > 0
-        isNewLevel = bpp.currLevel > bpp.prevLevel
-        if isNewPoints or isNewLevel:
-            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgressPoints(bpp, bpp.currLevel)))
-        for lvl in xrange(bpp.prevLevel, bpp.currLevel):
-            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, lvl)))
+        isNewPoints = bpp.pointsAux > 0 or bpp.questPoints > 0 or bpp.bonusCapPoints > 0 or bpp.bpTopPoints > 0
+        if isNewPoints:
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassPoints(bpp)))
+        if bpp.previousChapterID:
+            chapterID = bpp.previousChapterID
+            for lvl in xrange(bpp.getPreviousLevel(chapterID), bpp.getCurrentLevel(chapterID)):
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, lvl, chapterID)))
 
-        if bpp.pointsAux or bpp.pointsNew and bpp.pointsMax != bpp.pointsNew:
-            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, bpp.currLevel)))
+        if bpp.previousChapterID != bpp.currentChapterID and bpp.currentChapterID:
+            chapterID = bpp.currentChapterID
+            for lvl in xrange(bpp.getPreviousLevel(chapterID), bpp.getCurrentLevel(chapterID)):
+                self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, lvl, chapterID)))
+
+        chapterID = bpp.currentChapterID
+        levelProgressPresents = bpp.getCurrentLevelPoints(chapterID) and bpp.getCurrentLevelPoints(chapterID) != bpp.getMaxLevelPoints(chapterID)
+        if bpp.pointsAux or levelProgressPresents:
+            self.addComponent(self.getNextComponentIndex(), base.DirectStatsItem(*self.__formatBattlePassProgress(bpp, bpp.getCurrentLevel(chapterID), chapterID)))
 
     @classmethod
-    def __formatBattlePassProgress(cls, progress, level):
-        return ('', {'awards': cls.__makeProgressAwards(progress, level),
-          'questInfo': cls.__makeProgressQuestInfo(progress, level),
+    def __formatBattlePassProgress(cls, progress, level, chapter):
+        return ('', {'awards': cls.__makeProgressAwards(progress, chapter, level),
+          'questInfo': cls.__makeProgressQuestInfo(progress, chapter, level),
           'questType': EVENT_TYPE.BATTLE_QUEST,
-          'progressList': cls.__makeProgressList(progress, level),
-          'questState': {'statusState': cls.__getMissionState(progress.isDone)},
+          'progressList': cls.__makeProgressList(progress, chapter, level),
+          'questState': {'statusState': cls.__getMissionState(progress.isDone(chapterID=chapter))},
           'linkBtnTooltip': '' if progress.isApplied else backport.text(R.strings.battle_pass.progression.error()),
           'linkBtnEnabled': progress.isApplied})
 
     @classmethod
-    def __formatBattlePassProgressPoints(cls, progress, level):
+    def __formatBattlePassPoints(cls, progress):
         return ('', {'awards': [],
-          'questInfo': cls.__makeProgressPointsInfo(progress),
+          'questInfo': cls.__makePointsInfo(progress),
           'questType': EVENT_TYPE.BATTLE_QUEST,
-          'progressList': cls.__makeProgressListPoints(progress),
-          'questState': {'statusState': cls.__getMissionState(progress.isDone)},
+          'progressList': cls.__makePointsList(progress),
+          'questState': {'statusState': MISSIONS_STATES.IN_PROGRESS},
           'linkBtnTooltip': '' if progress.isApplied else backport.text(R.strings.battle_pass.progression.error()),
           'linkBtnEnabled': progress.isApplied})
 
     @staticmethod
-    def __makeProgressAwards(progress, level):
+    def __makeProgressAwards(progress, chapter, level):
         nothing = []
-        if level >= progress.currLevel:
+        if level >= progress.getCurrentLevel(chapter):
             return nothing
-        awards = progress.getLevelAwards(level + 1)
+        awards = progress.getLevelAwards(chapter, level + 1)
         if not awards:
             return nothing
         awardsList = QuestsBonusComposer(BattlePassTextBonusesPacker()).getPreformattedBonuses(awards)
@@ -341,24 +349,31 @@ class BattlePassProgressBlock(base.StatsBlock):
         return [makeUnavailableBlockData().getDict()]
 
     @classmethod
-    def __makeProgressQuestInfo(cls, progress, level):
-        isFreePoints = progress.pointsAux and not progress.isLevelMax or progress.isLevelMax and level == progress.currLevel
-        chapterID = progress.chapterID
-        return {'status': cls.__getMissionState(isDone=level < progress.currLevel),
+    def __makeProgressQuestInfo(cls, progress, chapterID, level):
+        isFreePoints = progress.pointsAux and not progress.isLevelMax(chapterID) or progress.isLevelMax(chapterID) and level == progress.getCurrentLevel(chapterID)
+        isProgressDone = level < progress.getCurrentLevel(chapterID)
+        if isFreePoints:
+            title = backport.text(_POST_BATTLE_RES.title.free())
+        elif not isPostProgressionChapter(chapterID):
+            title = backport.text(_POST_BATTLE_RES.title(), level=level + 1, chapter=cls.__getChapterName(chapterID))
+        else:
+            level %= len(cls.__battlePass.getLevelsConfig(chapterID))
+            title = backport.text(_POST_BATTLE_RES.title.postProgression(), level=level + 1)
+        return {'status': cls.__getMissionState(isDone=isProgressDone),
          'questID': BattlePassConsts.FAKE_QUEST_ID,
          'rendererType': QUESTS_ALIASES.RENDERER_TYPE_QUEST,
          'eventType': EVENT_TYPE.BATTLE_QUEST,
-         'maxProgrVal': progress.pointsMax,
+         'maxProgrVal': progress.getMaxLevelPoints(chapterID),
          'tooltip': TOOLTIPS.QUESTS_RENDERER_LABEL,
-         'description': backport.text(_POST_BATTLE_RES.title.free() if isFreePoints else _POST_BATTLE_RES.title(), level=level + 1, chapter=cls.__getChapterName(chapterID)),
-         'currentProgrVal': progress.pointsNew,
+         'description': title,
+         'currentProgrVal': progress.getCurrentLevelPoints(chapterID),
          'tasksCount': -1,
-         'progrBarType': cls.__getProgressBarType(not progress.isDone),
+         'progrBarType': cls.__getProgressBarType(not progress.isDone(chapterID)),
          'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID and not cls.__battlePass.isChapterCompleted(chapterID) else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
 
     @classmethod
-    def __makeProgressPointsInfo(cls, progress):
-        chapterID = progress.chapterID
+    def __makePointsInfo(cls, progress):
+        chapterID = progress.previousChapterID
         return {'status': '',
          'questID': BattlePassConsts.FAKE_QUEST_ID,
          'eventType': EVENT_TYPE.BATTLE_QUEST,
@@ -368,17 +383,20 @@ class BattlePassProgressBlock(base.StatsBlock):
          'linkTooltip': TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS if chapterID and not cls.__battlePass.isChapterCompleted(chapterID) else TOOLTIPS.QUESTS_LINKBTN_BATTLEPASS_SELECT}
 
     @classmethod
-    def __makeProgressList(cls, progress, level):
+    def __makeProgressList(cls, progress, chapter, level):
+        isCurrentChapterLevel = level == progress.getCurrentLevel(chapter)
+        isMaxChapterLevel = progress.isLevelMax(chapter)
+        isFreePoints = progress.pointsAux and not isMaxChapterLevel or isMaxChapterLevel and isCurrentChapterLevel
         progressLevel = {'description': cls._getDescription(progress),
-         'maxProgrVal': progress.pointsMax,
-         'progressDiff': '+ {}'.format(progress.pointsAdd),
-         'progressDiffTooltip': cls._getProgressDiffTooltip(progress),
-         'currentProgrVal': progress.pointsNew,
+         'maxProgrVal': progress.getMaxLevelPoints(chapter),
+         'progressDiff': '+ {}'.format(progress.getPointsDiff(chapter) if not isFreePoints else progress.pointsAux),
+         'progressDiffTooltip': cls._getProgressDiffTooltip(progress, chapter),
+         'currentProgrVal': progress.getCurrentLevelPoints(chapter),
          'progrBarType': cls.__getProgressBarType(not progress.pointsAux)}
-        return [progressLevel] if not progress.isDone or progress.pointsAux and not progress.isLevelMax or level == progress.currLevel else []
+        return [progressLevel] if not progress.isDone(chapter) or progress.pointsAux and not isMaxChapterLevel or isCurrentChapterLevel else []
 
     @classmethod
-    def __makeProgressListPoints(cls, progress):
+    def __makePointsList(cls, progress):
         progressList = []
         if progress.bpTopPoints > 0:
             description = backport.text(_POST_BATTLE_RES.progress.points.battle())
@@ -420,11 +438,11 @@ class BattlePassProgressBlock(base.StatsBlock):
         return text
 
     @staticmethod
-    def _getProgressDiffTooltip(progress):
+    def _getProgressDiffTooltip(progress, chapterID):
         if progress.pointsAux:
             text = backport.text(_POST_BATTLE_RES.progress.pointsAux.tooltip(), points=progress.pointsAux)
         else:
-            text = backport.text(_POST_BATTLE_RES.progress.tooltip(), points=progress.pointsAdd)
+            text = backport.text(_POST_BATTLE_RES.progress.tooltip(), points=progress.getPointsDiff(chapterID))
         return text
 
     @staticmethod
@@ -434,21 +452,6 @@ class BattlePassProgressBlock(base.StatsBlock):
     @staticmethod
     def __getProgressBarType(needShow):
         return formatters.PROGRESS_BAR_TYPE.SIMPLE if needShow else formatters.PROGRESS_BAR_TYPE.NONE
-
-
-class Comp7BattlePassProgressBlock(BattlePassProgressBlock):
-
-    @staticmethod
-    def _getDescription(progress):
-        if progress.pointsAux:
-            text = backport.text(_POST_BATTLE_RES.progress.pointsAux())
-        else:
-            text = backport.text(_POST_BATTLE_RES.comp7.progress())
-        return text
-
-    @staticmethod
-    def _getProgressDiffTooltip(progress):
-        return backport.text(_POST_BATTLE_RES.comp7.progress.tooltip(), points=progress.pointsAdd)
 
 
 class QuestsProgressBlock(base.StatsBlock):

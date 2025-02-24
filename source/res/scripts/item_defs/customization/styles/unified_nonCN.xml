@@ -3736,57 +3736,6 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
-    <priceGroup>	styles 1500g notInShop	</priceGroup>
-    <vehicleFilter>
-      <include>
-        <nations>	uk	</nations>
-      </include>
-    </vehicleFilter>
-    <style>
-      <id>	1023	</id>
-      <texture>	gui/maps/vehicles/styles/gb_ht_line.png	</texture>
-      <userString>	#vehicle_customization:special_style/gb_ht_line	</userString>
-      <tags>	progression_required c11n2D	</tags>
-      <description>	#vehicle_customization:special_style/gb_ht_line_desc	</description>
-      <longDescriptionSpecial>	#vehicle_customization:special_style/gb_ht_line_desc/long	</longDescriptionSpecial>
-      <outfits>
-        <outfit>
-          <season>	ALL	</season>
-          <camouflages>
-            <item>
-              <id>	1	</id>
-              <appliedTo>	4368	</appliedTo>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-            </item>
-          </camouflages>
-          <paints>
-            <item>
-              <id>	518	</id>
-              <appliedTo>	30583	</appliedTo>
-            </item>
-          </paints>
-          <projection_decals>
-            <item>
-              <id>	1163	</id>
-              <tags>	formfactor_rect1x2 cover	</tags>
-            </item>
-          </projection_decals>
-        </outfit>
-      </outfits>
-      <itemFilters>
-        <projection_decal>
-          <include>
-            <itemGroupName>	Progression Decals	</itemGroupName>
-          </include>
-        </projection_decal>
-      </itemFilters>
-    </style>
-  </itemGroup>
-  <itemGroup>
-    <userString>	#vehicle_customization:styles/special_styles	</userString>
-    <season>	ALL	</season>
-    <historical>	1	</historical>
     <priceGroup>	styles 1750g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>

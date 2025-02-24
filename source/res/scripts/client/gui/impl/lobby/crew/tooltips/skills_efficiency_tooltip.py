@@ -31,7 +31,7 @@ class SkillsEfficiencyTooltip(ViewImpl):
     def _fillModel(self):
         tankman = self.itemsCache.items.getTankman(self.tankmanID)
         with self.viewModel.transaction() as vm:
-            if tankman and tankman.currentVehicleSkillsEfficiency >= self.skillEfficiency:
+            if tankman and not self.skillEfficiency:
                 vm.setPercent(tankman.currentVehicleSkillsEfficiency)
                 vm.setCurrentXP(tankman.skillsEfficiencyXP)
             else:

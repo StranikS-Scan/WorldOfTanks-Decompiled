@@ -16,9 +16,9 @@ from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.customization.shared import isVehicleCanBeCustomized
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.lobby.comp7.comp7_quest_helpers import hasAvailableWeeklyQuestsOfferGiftTokens
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
+from gui.server_events.recruit_helper import getNewRecruitsCounter
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -37,7 +37,7 @@ from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, IComp7Controller, ILootBoxSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController
+from skeletons.gui.game_control import IBattlePassController, ICollectionsSystemController, ILootBoxSystemController, IMapboxController, IResourceWellController, ISeniorityAwardsController
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
@@ -248,7 +248,7 @@ class RecruitReminderMessageDecorator(MessageDecorator):
 
     def __init__(self, entityID, message, savedData, msgPrLevel=NotificationPriorityLevel.LOW):
         entity = g_settings.msgTemplates.format('RecruitReminder', ctx={'text': message}, data={'savedData': savedData})
-        settings = NotificationGuiSettings(isNotify=True, priorityLevel=msgPrLevel)
+        settings = NotificationGuiSettings(isNotify=getNewRecruitsCounter() > 0, priorityLevel=msgPrLevel)
         super(RecruitReminderMessageDecorator, self).__init__(entityID, entity, settings)
 
     def isShouldCountOnlyOnce(self):
@@ -262,6 +262,11 @@ class RecruitReminderMessageDecorator(MessageDecorator):
 
     def getSavedData(self):
         return self._vo['message'].get('savedData', {})
+
+    def update(self, formatted):
+        _NotificationDecorator.update(self, formatted)
+        settings = NotificationGuiSettings(isNotify=getNewRecruitsCounter() > 0, priorityLevel=self.getPriorityLevel)
+        super(RecruitReminderMessageDecorator, self)._make(formatted, settings)
 
 
 class EmailConfirmationReminderMessageDecorator(MessageDecorator):
@@ -425,65 +430,6 @@ class C2DProgressionStyleDecorator(C11nMessageDecorator):
 
     def _getVehicle(self):
         return g_currentVehicle.item if self.itemsCache is not None and self.itemsCache.isSynced() else None
-
-
-class Comp7BondEquipmentDecorator(MessageDecorator):
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    def __init__(self, entityID, notificationType, savedData, model, template, priority, useCounterOnce=True, isNotify=True):
-        self.__notificationType = notificationType
-        self.__useCounterOnce = useCounterOnce
-        entity = g_settings.msgTemplates.format(template, ctx={'title': savedData['title']})
-        settings = NotificationGuiSettings(isNotify=isNotify, priorityLevel=priority, groupID=self.getGroup())
-        super(Comp7BondEquipmentDecorator, self).__init__(entityID, entity=entity, settings=settings, model=model)
-        self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
-
-    def getType(self):
-        return self.__notificationType
-
-    def getGroup(self):
-        return NotificationGroup.OFFER
-
-    def getSavedData(self):
-        return self._entity.get('linkageData')
-
-    def isShouldCountOnlyOnce(self):
-        return self.__useCounterOnce
-
-    @staticmethod
-    def isPinned():
-        return True
-
-    def clear(self):
-        self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
-        super(Comp7BondEquipmentDecorator, self).clear()
-
-    def _make(self, entity=None, settings=None):
-        self.__updateEntityButtons()
-        super(Comp7BondEquipmentDecorator, self)._make(entity, settings)
-
-    def __onItemsSyncCompleted(self, *_):
-        if self._model is not None:
-            self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
-        return
-
-    def __updateEntityButtons(self):
-        if self._entity is None:
-            return
-        else:
-            buttonsLayout = self._entity.get('buttonsLayout')
-            if not buttonsLayout:
-                return
-            state = self.__getButtonState()
-            self._entity.setdefault('buttonsStates', {}).update({'submit': state})
-            return
-
-    def __getButtonState(self):
-        state = NOTIFICATION_BUTTON_STATE.VISIBLE
-        if hasAvailableWeeklyQuestsOfferGiftTokens():
-            state |= NOTIFICATION_BUTTON_STATE.ENABLED
-        return state
 
 
 class PrbInviteDecorator(_NotificationDecorator):
@@ -1258,8 +1204,11 @@ class SeniorityAwardsDecorator(MessageDecorator):
 class LootBoxSystemDecorator(MessageDecorator):
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
-    def __init__(self, entityID, message, model):
-        super(LootBoxSystemDecorator, self).__init__(entityID, self.__makeEntity(message), self.__makeSettings(), model)
+    def __init__(self, entityID, message, savedData, model):
+        super(LootBoxSystemDecorator, self).__init__(entityID, self.__makeEntity(message, savedData), self.__makeSettings(), model)
+
+    def getSavedData(self):
+        return self._entity.get('savedData', {})
 
     def _getEvents(self):
         return ((self.__lootBoxes.onStatusChanged, self.__update), (self.__lootBoxes.onBoxesAvailabilityChanged, self.__update))
@@ -1268,8 +1217,8 @@ class LootBoxSystemDecorator(MessageDecorator):
         self.__updateEntityButtons()
         super(LootBoxSystemDecorator, self)._make(formatted, settings)
 
-    def __makeEntity(self, message):
-        return g_settings.msgTemplates.format('LootBoxSystemStartSysMessage', ctx=message)
+    def __makeEntity(self, message, savedData):
+        return g_settings.msgTemplates.format('LootBoxSystemStartSysMessage', ctx=message, data={'savedData': savedData})
 
     def __makeSettings(self):
         return NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM)

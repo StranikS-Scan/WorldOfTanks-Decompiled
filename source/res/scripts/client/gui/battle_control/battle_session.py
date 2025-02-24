@@ -8,6 +8,7 @@ import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import adisp_async
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG
 from gui import g_tankActiveCamouflage
 from gui.battle_control import arena_visitor
@@ -176,7 +177,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if self.__isReplayPlaying or self.__arenaVisitor.gui.isTrainingBattle() or self.__arenaVisitor.gui.isMapsTraining() or self.__arenaVisitor.gui.isComp7Training():
+        if self.__isReplayPlaying or self.__arenaVisitor.gui.isTrainingBattle() or self.__arenaVisitor.gui.isMapsTraining() or self.__arenaVisitor.getArenaBonusType() == ARENA_BONUS_TYPE.TRAINING_COMP7:
             return BattleExitResult(False, None)
         else:
             vInfo = self.__arenaDP.getVehicleInfo()
@@ -337,7 +338,7 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.startVehicleVisual(vProxy, isImmediate)
         ctrl = self.__dynamicRepo.battleField
         if ctrl is not None:
-            vehSwitchCtrl = self.__dynamicRepo.comp7PrebattleSetup
+            vehSwitchCtrl = self.__dynamicRepo.prebattleSetup
             vHealth = vehSwitchCtrl.getVehicleHealth(vProxy) if vehSwitchCtrl is not None else vProxy.health
             ctrl.setVehicleVisible(vehicleID, vHealth)
         ctrl = self.__sharedRepo.vehicleState

@@ -49,6 +49,7 @@
     <W_2_57D>	52	</W_2_57D>
     <W_2_58D>	53	</W_2_58D>
     <SGT_3Cz_M_OSP3>	54	</SGT_3Cz_M_OSP3>
+    <W-53M2>	55	</W-53M2>
     <SGT_3Cz_M_7x7>	502	</SGT_3Cz_M_7x7>
     <GTD_2T6x2_7x7>	503	</GTD_2T6x2_7x7>
     <Development_Engine>	65000	</Development_Engine>
@@ -271,6 +272,23 @@
       <rpm_min>	306	</rpm_min>
       <rpm_max>	2280	</rpm_max>
     </W_12_5_P>
+    <W-53M2>
+      <userString>	#poland_vehicles:W-53M2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1100	</weight>
+      <maxHealth>	275	</maxHealth>
+      <maxRegenHealth>	138	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </W-53M2>
     <W_48>
       <userString>	#poland_vehicles:W_48	</userString>
       <tags>	diesel	</tags>
@@ -478,8 +496,8 @@
       <maxRegenHealth>	73	</maxRegenHealth>
       <repairCost>	7	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	374	</rpm_min>
-      <rpm_max>	2601	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2901	</rpm_max>
     </Maybach_HL_120>
     <Maybach_HL_157_P6>
       <userString>	#poland_vehicles:Maybach_HL_157_P6	</userString>
@@ -518,16 +536,16 @@
       <tags>	gasoline	</tags>
       <level>	7	</level>
       <price>	34000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	600	</power>
       <weight>	800	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	129	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	343	</rpm_min>
-      <rpm_max>	2701	</rpm_max>
+      <rpm_min>	700	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
     </Maybach_HL_157>
     <Maybach_HL_157_P>
       <userString>	#poland_vehicles:Maybach_HL_157_P	</userString>
@@ -606,8 +624,8 @@
       <maxRegenHealth>	52	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	468	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </J_V12_M>
     <Maybach_HL_120_TR>
       <userString>	#poland_vehicles:Maybach_HL_120_TR	</userString>
@@ -638,8 +656,8 @@
       <maxRegenHealth>	22	</maxRegenHealth>
       <repairCost>	1	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2015	</rpm_max>
+      <rpm_min>	337	</rpm_min>
+      <rpm_max>	2024	</rpm_max>
     </PLInz235>
     <PLInz155>
       <userString>	#poland_vehicles:PLInz155	</userString>
@@ -654,8 +672,8 @@
       <maxRegenHealth>	39	</maxRegenHealth>
       <repairCost>	2	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	337	</rpm_min>
-      <rpm_max>	2024	</rpm_max>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2033	</rpm_max>
     </PLInz155>
     <PLInz_RWA>
       <userString>	#poland_vehicles:PLInz_RWA	</userString>
@@ -670,8 +688,8 @@
       <maxRegenHealth>	62	</maxRegenHealth>
       <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
     </PLInz_RWA>
     <MT_50_T>
       <userString>	#poland_vehicles:MT_50_T	</userString>

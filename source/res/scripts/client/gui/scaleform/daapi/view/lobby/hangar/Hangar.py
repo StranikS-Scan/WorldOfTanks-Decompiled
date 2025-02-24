@@ -14,6 +14,7 @@ from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTION
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME
 from constants import Configs, DOG_TAGS_CONFIG, RENEWABLE_SUBSCRIPTION_CONFIG
 from frameworks.wulf import ViewStatus, WindowFlags, WindowLayer, WindowStatus
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -26,12 +27,14 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.HANGAR_CONSTS import HANGAR_CONSTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.easy_tank_equip.easy_tank_equip_helpers import isAvailableForVehicle
 from gui.game_control.links import URLMacros
 from gui.game_loading.resources.consts import Milestones
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.hangar_presets.hangar_gui_helpers import ifComponentAvailable
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.marathon.marathon_event import MarathonEvent
 from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
@@ -42,8 +45,11 @@ from gui.resource_well.resource_well_helpers import isResourceWellRewardVehicle
 from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.processors.tankman import TankmanAutoReturn
 from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
+from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.sounds.filters import States, StatesGroup
@@ -57,7 +63,7 @@ from nation_change_helpers.client_nation_change_helper import getChangeNationToo
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IHangarGuiController, IIGRController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IHangarGuiController, IIGRController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, IWotPlusController, ILimitedUIController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -68,6 +74,7 @@ from sound_gui_manager import CommonSoundSpaceSettings
 from tutorial.control.context import GLOBAL_FLAG
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Window, View
+    from gui.Scaleform.daapi.view.lobby.hangar.controls_helpers import IHangarControlsHelper
 _logger = logging.getLogger(__name__)
 _HELP_LAYOUT_RESTRICTED_LAYERS = (WindowLayer.TOP_SUB_VIEW,
  WindowLayer.FULLSCREEN_WINDOW,
@@ -109,6 +116,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
 
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
@@ -216,6 +224,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         nextTick(partial(self.fireEvent, LobbySimpleEvent(LobbySimpleEvent.CLOSE_HELPLAYOUT), EVENT_BUS_SCOPE.LOBBY))
         self.as_closeHelpLayoutS()
 
+    def animateHangarSubItems(self, isShow):
+        self.as_animateHangarViewsS(isShow)
+
     def _populate(self):
         LobbySelectableView._populate(self)
         self.__hangarGuiCtrl.holdHangar(self)
@@ -265,6 +276,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarEvent.UPDATE_ALERT_MESSAGE, self.__updateAlertMessage, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.HangarEvent.UPDATE_PREBATTLE_ENTITY, self.__onEntityUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__limitedUIController.startObserve(LUI_RULES.EasyTankEquipEntryPoint, self.__updateEasyTankEquipState)
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_UI_READY)
         g_playerEvents.onLoadingMilestoneReached(Milestones.HANGAR_UI_READY)
         self._offersBannerController.showBanners()
@@ -286,6 +298,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.removeListener(events.HangarEvent.UPDATE_PREBATTLE_ENTITY, self.__onEntityUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(AmmunitionPanelViewEvent.SECTION_SELECTED, self.__onOptDeviceClick, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(AmmunitionPanelViewEvent.CLOSE_VIEW, self.__oAmmunitionPanelViewClose, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.__limitedUIController.stopObserve(LUI_RULES.EasyTankEquipEntryPoint, self.__updateEasyTankEquipState)
         self.itemsCache.onSyncCompleted -= self.onCacheResync
         self.__lootBoxes.onStatusChanged -= self.__onLootBoxesStatusChanged
         g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
@@ -381,10 +394,23 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __onBattleRoyaleSpaceLoaded(self, showAnimation):
         self.as_setBattleRoyaleSpaceLoadedS(showAnimation)
 
+    @decorators.adisp_process('crewReturning')
+    def __returnCrew(self):
+        currentVehicle = g_currentVehicle.item
+        if currentVehicle and currentVehicle.isAutoReturn:
+            if currentVehicle.isInBattle or currentVehicle.isAwaitingBattle or currentVehicle.isInPrebattle:
+                return
+            result = yield TankmanAutoReturn(currentVehicle).request()
+            if not result.success and result.userMsg:
+                SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType, priority=NotificationPriorityLevel.MEDIUM)
+
     def __updateCrew(self):
         if self.crewWidget is not None:
             self.crewWidget.updateTankmen()
         return
+
+    def __updateEasyTankEquipState(self, *_):
+        self.__updateState()
 
     def __onWaitingShown(self, _):
         self.closeHelpLayout()
@@ -494,6 +520,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__isVehicleReadyForC11n = True
         self.__checkVehicleCameraState()
         self.__updateState()
+        self.__returnCrew()
 
     def __onIgrTypeChanged(self, *args):
         self.__updateVehicleInResearchPanel()
@@ -503,33 +530,39 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateState(self, force=False):
         state = g_currentVehicle.getViewState()
-        isBattleRoyaleMode = self.battleRoyaleController.isBattleRoyaleMode()
-        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n and not isBattleRoyaleMode
+        isPresent = g_currentVehicle.isPresent()
+        needToShowRepairButton = isPresent and g_currentVehicle.item.isBroken
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n and self.__isVehicleCameraReadyForC11n and not self.battleRoyaleController.isBattleRoyaleMode()
+        isCustomizationVisible = state.isCustomizationVisible() and not needToShowRepairButton
         if isC11nEnabled:
             customizationTooltip = makeTooltip(_ms(backport.text(R.strings.tooltips.hangar.tuning.header())), _ms(backport.text(R.strings.tooltips.hangar.tuning.body())))
         else:
             customizationTooltip = makeTooltip(_ms(backport.text(R.strings.tooltips.hangar.tuning.disabled.header())), _ms(backport.text(R.strings.tooltips.hangar.tuning.disabled.body())))
-        changeNationVisibility = g_currentVehicle.isPresent() and g_currentVehicle.item.hasNationGroup
-        isNationChangeAvailable = g_currentVehicle.isPresent() and g_currentVehicle.item.isNationChangeAvailable
+        changeNationVisibility = isPresent and g_currentVehicle.item.hasNationGroup and not needToShowRepairButton
+        isNationChangeAvailable = isPresent and g_currentVehicle.item.isNationChangeAvailable
         changeNationTooltip = getChangeNationTooltip(g_currentVehicle.item)
         changeNationIsNew = not AccountSettings.getSettings(NATION_CHANGE_VIEWED)
         isMaintenanceEnabled = state.isMaintenanceEnabled()
-        isEquipmentEnabled = g_currentVehicle.isPresent() and not g_currentVehicle.isEquipmentLocked()
+        isMaintenanceVisible = state.isMaintenanceVisible() and needToShowRepairButton
+        isEquipmentEnabled = isPresent and not g_currentVehicle.isEquipmentLocked()
         if isMaintenanceEnabled and isEquipmentEnabled:
             maintenanceTooltip = TOOLTIPS.HANGAR_MAINTENANCE
         else:
             maintenanceTooltip = TOOLTIPS.HANGAR_MAINTENANCE_DISABLED
-        self.as_setupAmmunitionPanelS({'maintenanceEnabled': isMaintenanceEnabled,
-         'maintenanceTooltip': maintenanceTooltip,
-         'maintenanceVisible': state.isMaintenanceVisible(),
-         'customizationEnabled': isC11nEnabled,
-         'customizationTooltip': customizationTooltip,
-         'customizationVisible': state.isCustomizationVisible(),
-         'changeNationVisible': changeNationVisibility,
-         'changeNationEnable': isNationChangeAvailable,
-         'changeNationTooltip': changeNationTooltip,
-         'changeNationIsNew': changeNationIsNew})
+        hangarHelper = self.__hangarGuiCtrl.getHangarHelper()
+        easyTankEquipSetupData = hangarHelper.getEasyTankEquipSetupData(state, needToShowRepairButton, isAvailableForVehicle(g_currentVehicle.item))._asdict() if hangarHelper else {}
+        ammunitionPanelSetupData = {'maintenance': self._packBtn(isMaintenanceVisible, isMaintenanceEnabled, maintenanceTooltip),
+         'customization': self._packBtn(isCustomizationVisible, isC11nEnabled, customizationTooltip),
+         'changeNation': self._packBtn(changeNationVisibility, isNationChangeAvailable, changeNationTooltip, changeNationIsNew),
+         'easyTankEquip': self._packBtn(**easyTankEquipSetupData)}
+        self.as_setupAmmunitionPanelS(ammunitionPanelSetupData)
         self.__hangarGuiCtrl.updateChangeableComponents(state.isUIShown(), force)
+
+    def _packBtn(self, visible=False, enabled=False, tooltip='', isNew=False):
+        return {'visible': visible,
+         'enabled': enabled,
+         'tooltip': tooltip,
+         'isNew': isNew}
 
     def __onEntityChanged(self):
         self.__updateState(force=True)
@@ -576,6 +609,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__updateState()
         if Configs.PRESTIGE_CONFIG.value in diff:
             self.__updatePrestigeProgressWidget()
+        if Configs.EASY_TANK_EQUIP_CONFIG.value in diff:
+            self.__updateState()
 
     def __onSettingsChanged(self, diff):
         if SETTINGS_SECTIONS.UI_STORAGE in diff:
@@ -595,7 +630,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if self.hangarSpace.spaceLoading():
             _logger.warning('Optional Device click was not handled (ctx=%s). HangarSpace is currently loading.', ctx)
         elif not self.__isUnitJoiningInProgress:
-            self.as_showSwitchToAmmunitionS()
+            self.animateHangarSubItems(False)
             shared_events.showAmmunitionSetupView(**ctx)
 
     def __oAmmunitionPanelViewClose(self, _):

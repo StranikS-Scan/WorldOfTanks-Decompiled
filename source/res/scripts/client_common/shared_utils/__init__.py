@@ -11,7 +11,7 @@ import typing
 import BigWorld
 from adisp import adisp_async
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Type, TypeVar, Union
+    from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Type, TypeVar, Union
     T = TypeVar('T')
     R = TypeVar('R')
 _logger = logging.getLogger(__name__)
@@ -78,6 +78,10 @@ def first(sequence, default=None):
 
 def safeIndexOf(item, collection, default=None):
     return collection.index(item) if item in collection else default
+
+
+def safeCall(function, *args, **kwargs):
+    return function(*args, **kwargs) if callable(function) else None
 
 
 def notImplementedCall(taskID, onNotImplementedCall=None):

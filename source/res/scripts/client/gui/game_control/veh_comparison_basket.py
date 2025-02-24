@@ -62,7 +62,7 @@ def getCrewSkills(vehicle):
     currentSkills = {}
     for idx, tankman in vehicle.crew:
         if tankman is not None:
-            skillList = [ skill.name for skill in tankman.skills if skill.isRelevantForRole(tankman.role) ]
+            skillList = [ skill.name for skill in tankman.skills if skill.isRelevant ]
             skillList += [ skill.name for skill in sum(tankman.bonusSkills.values(), []) if skill ]
             currentSkills[idx] = (tankman.role, skillList)
         currentSkills[idx] = (vehicle.descriptor.type.crewRoles[idx][0], [])

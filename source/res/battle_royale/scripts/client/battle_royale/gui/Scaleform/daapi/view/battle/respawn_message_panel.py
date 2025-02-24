@@ -65,7 +65,7 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
     def updateRespawnTime(self, timeLeft):
         bonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
         isSquadMode = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
-        if timeLeft > 0:
+        if timeLeft > 0.0:
             if isSquadMode:
                 _logger.debug('formatRespawnActivatedSquadMessage %s', timeLeft)
                 message = formatRespawnActivatedSquadMessage(timeLeft, self.RESPAWN_DELAY_BEFORE_SHOW)
@@ -76,13 +76,13 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
                 self.__addMessage(message)
 
     def updateTeammateRespawnTime(self, teammateTimeLeft):
-        if teammateTimeLeft > 0:
+        if teammateTimeLeft > 0.0:
             _logger.debug('formatStayInCoverMessage %s', teammateTimeLeft)
             message = formatStayInCoverMessage(teammateTimeLeft, RESPAWNING_TIMER_DELAY)
             self.__addMessage(message)
 
     def updateBlockToResurrectTime(self, blockTime):
-        if blockTime > 0:
+        if blockTime > 0.0:
             _logger.debug('formatAllyInBattleMessage %s', blockTime)
             message = formatAllyInBattleMessage(blockTime, self.RESPAWN_DELAY_BEFORE_SHOW)
             self.__addMessage(message)
@@ -208,7 +208,7 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
     def __addMessage(self, message):
         if self.notificationManager():
             if message.msgType in (MessageType.respActivatedMsg, MessageType.allyInBattleMsg, MessageType.stayInCoverMsg):
-                message.showBefore = BigWorld.serverTime() + message.time + message.delay
+                message.showBefore = BigWorld.serverTime() + message.time
             else:
                 message.showBefore = BigWorld.serverTime() + ONE_MINUTE
             self.notificationManager().addRespawnMessage(message)

@@ -1,15 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/tank_setup/sub_views/optional_devices_assistant_model.py
-from enum import Enum, IntEnum
+from enum import Enum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_item import OptionalDevicesAssistantItem
-
-class OptionalDevicesAssistantType(IntEnum):
-    NORMAL = 0
-    LINKED = 1
-    NODATA = 2
-
+from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset import OptionalDevicesAssistantPreset
+from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_preset_model_type import OptionalDevicesAssistantPresetModelType
 
 class OptionalDevicesAssistantItemType(Enum):
     STEREOSCOPE = 'stereoscope'
@@ -29,46 +24,60 @@ class OptionalDevicesAssistantItemType(Enum):
     COATEDOPTICS = 'coatedOptics'
     AIMINGSTABILIZER = 'aimingStabilizer'
     IMPROVEDCONFIGURATION = 'improvedConfiguration'
+    MODERNIZEDEXTRAHEALTHRESERVEANTIFRAGMENTATIONLINING = 'modernizedExtraHealthReserveAntifragmentationLining'
+    MODERNIZEDTURBOCHARGERROTATIONMECHANISM = 'modernizedTurbochargerRotationMechanism'
+    MODERNIZEDAIMDRIVESAIMINGSTABILIZER = 'modernizedAimDrivesAimingStabilizer'
+    MODERNIZEDIMPROVEDSIGHTSENHANCEDAIMDRIVES = 'modernizedImprovedSightsEnhancedAimDrives'
+
+
+class OptionalDevicesAssistantStateEnum(Enum):
+    VISIBLE = 'visible'
+    HIDDEN = 'hidden'
+    NOTSUITABLEVEHICLE = 'notSuitableVehicle'
+    NODATAATALL = 'noDataAtAll'
 
 
 class OptionalDevicesAssistantModel(ViewModel):
-    __slots__ = ('onHintShown',)
+    __slots__ = ('onHintShown', 'onPresetSelected')
 
-    def __init__(self, properties=4, commands=1):
+    def __init__(self, properties=4, commands=2):
         super(OptionalDevicesAssistantModel, self).__init__(properties=properties, commands=commands)
 
-    def getOptionalDevicesResultType(self):
-        return OptionalDevicesAssistantType(self._getNumber(0))
-
-    def setOptionalDevicesResultType(self, value):
-        self._setNumber(0, value.value)
-
-    def getSourceVehicleCompDescr(self):
-        return self._getNumber(1)
-
-    def setSourceVehicleCompDescr(self, value):
-        self._setNumber(1, value)
-
-    def getOptionalDevicesAssistantItems(self):
-        return self._getArray(2)
-
-    def setOptionalDevicesAssistantItems(self, value):
-        self._setArray(2, value)
+    @property
+    def selectedPreset(self):
+        return self._getViewModel(0)
 
     @staticmethod
-    def getOptionalDevicesAssistantItemsType():
-        return OptionalDevicesAssistantItem
+    def getSelectedPresetType():
+        return OptionalDevicesAssistantPresetModelType
+
+    def getOptionalDevicesAssistantPresets(self):
+        return self._getArray(1)
+
+    def setOptionalDevicesAssistantPresets(self, value):
+        self._setArray(1, value)
+
+    @staticmethod
+    def getOptionalDevicesAssistantPresetsType():
+        return OptionalDevicesAssistantPreset
 
     def getIsHintShown(self):
-        return self._getBool(3)
+        return self._getBool(2)
 
     def setIsHintShown(self, value):
-        self._setBool(3, value)
+        self._setBool(2, value)
+
+    def getState(self):
+        return OptionalDevicesAssistantStateEnum(self._getString(3))
+
+    def setState(self, value):
+        self._setString(3, value.value)
 
     def _initialize(self):
         super(OptionalDevicesAssistantModel, self)._initialize()
-        self._addNumberProperty('optionalDevicesResultType')
-        self._addNumberProperty('sourceVehicleCompDescr', 0)
-        self._addArrayProperty('optionalDevicesAssistantItems', Array())
+        self._addViewModelProperty('selectedPreset', OptionalDevicesAssistantPresetModelType())
+        self._addArrayProperty('optionalDevicesAssistantPresets', Array())
         self._addBoolProperty('isHintShown', False)
+        self._addStringProperty('state', OptionalDevicesAssistantStateEnum.HIDDEN.value)
         self.onHintShown = self._addCommand('onHintShown')
+        self.onPresetSelected = self._addCommand('onPresetSelected')

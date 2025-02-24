@@ -32,17 +32,17 @@ class VehicleBRRespawnComponent(DynamicScriptComponent):
 
     def __updateResurrectTime(self, resurrectTime):
         spawnCtrl = self.sessionProvider.dynamic.spawn
-        respawnTime = int(resurrectTime - BigWorld.serverTime()) if resurrectTime else 0
+        respawnTime = resurrectTime - BigWorld.serverTime() if resurrectTime else 0.0
         spawnCtrl.updateRespawnTimer(respawnTime)
 
     def __updateTeammateResurrectTime(self, teammateResurrectTime):
         spawnCtrl = self.sessionProvider.dynamic.spawn
-        respawnTime = int(teammateResurrectTime - BigWorld.serverTime()) if teammateResurrectTime else 0
+        respawnTime = teammateResurrectTime - BigWorld.serverTime() if teammateResurrectTime else 0.0
         spawnCtrl.updateTeammateRespawnTime(respawnTime)
 
     def __updateTimeBlockToResurrect(self):
         spawnCtrl = self.sessionProvider.dynamic.spawn
-        blockTime = int(self.timeBlockToResurrect - BigWorld.serverTime()) if self.timeBlockToResurrect else 0
+        blockTime = self.timeBlockToResurrect - BigWorld.serverTime() if self.timeBlockToResurrect else 0.0
         spawnCtrl.updateBlockToResurrectTimer(blockTime)
 
     def checkCurrentVehicle(self):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/widget/crew_widget.py
 from collections import OrderedDict
 from itertools import chain
-from typing import TYPE_CHECKING, NamedTuple
+from typing import TYPE_CHECKING, NamedTuple, Generator
 import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
@@ -21,7 +21,7 @@ from gui.impl.backport.backport_pop_over import BackportPopOverContent, createPo
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.button_model import ButtonType
-from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_model import CrewWidgetModel
+from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_model import CrewWidgetModel, SlotSizeMode
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_slot_model import CrewWidgetSlotModel
 from gui.impl.gen.view_models.views.lobby.crew.common.toggle_button_model import ToggleState
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
@@ -31,9 +31,10 @@ from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel, setTmanMajorSkillsModel, setTmanBonusSkillsModel
 from gui.impl.lobby.crew.crew_helpers.skill_formatters import SkillLvlFormatter
-from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount, getSkillsLevelsForXp
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.pub import ViewImpl
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared.gui_items import GUI_ITEM_TYPE, checkForTags
 from gui.shared.gui_items.Tankman import NO_TANKMAN, NO_SLOT, SKILL_EFFICIENCY_UNTRAINED, getTankmanSkill, Tankman
 from gui.shared.gui_items.Vehicle import getIconResourceName, getLowEfficiencyCrew, NO_VEHICLE_ID, VEHICLE_TAGS
@@ -48,13 +49,10 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.loggers import CrewWidgetLogger
-from uilogging.crew.logging_constants import CrewWidgetKeys
 from wg_async import wg_async, wg_await
 if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_tankman_model import CrewWidgetTankmanModel
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_model import CrewSkillModel
-    from gui.impl.lobby.crew.quick_training_view import QuickTrainingView
     from typing import Union
 BuildedMessage = NamedTuple('BuildedMessage', [('text', str),
  ('iconFrom', DynAccessor),
@@ -63,9 +61,11 @@ BuildedMessage = NamedTuple('BuildedMessage', [('text', str),
  ('vehToCD', DynAccessor)])
 DOG = 'dog'
 
-class CrewWidget(ViewImpl):
-    __slots__ = ('__toolTipMgr', '__currentViewID', '__previousViewID', '__currentTankman', '__currentVehicle', 'onSlotClick', '__currentSlotIdx', 'onChangeCrewClick', 'onSlotTrySelect', '__isButtonBarVisible', '__uiLogger')
+class CrewWidget(ViewImpl, IGlobalListener):
+    __slots__ = ('__toolTipMgr', '__currentViewID', '__previousViewID', '__currentTankman', '__currentVehicle', 'onSlotClick', '__currentSlotIdx', 'onChangeCrewClick', 'onSlotTrySelect', '__isButtonBarVisible')
     LAYOUT_DYN_ACCESSOR = R.views.lobby.crew.widgets.CrewWidget
+    PREBATTLE_TYPE_TO_SLOT_MODE = {}
+    DEFAULT_SLOT_MODE = SlotSizeMode.DEFAULT
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     wotPlusCtrl = dependency.descriptor(IWotPlusController)
@@ -78,7 +78,6 @@ class CrewWidget(ViewImpl):
         self.onSlotTrySelect = Event.Event()
         self.onSlotClick = Event.Event()
         self.onChangeCrewClick = Event.Event()
-        self.__uiLogger = CrewWidgetLogger(currentViewID)
         super(CrewWidget, self).__init__(settings)
         self.__toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         self.__currentViewID = currentViewID
@@ -137,11 +136,11 @@ class CrewWidget(ViewImpl):
     def updateDisableState(self, isDisabled):
         self.viewModel.setIsDisabled(isDisabled)
 
-    def updateInteractiveTankmen(self):
-        pass
-
     def updateVmSlotsData(self, vmSlotsList):
         pass
+
+    def onPrbEntitySwitched(self):
+        self.__setSlotMode()
 
     @property
     def viewModel(self):
@@ -153,21 +152,21 @@ class CrewWidget(ViewImpl):
 
     def setCurrentViewID(self, value):
         self.__currentViewID = value
-        self.__uiLogger.updateParentViewKey(value)
         with self.viewModel.transaction() as vm:
             vm.setCurrentLayoutID(self.__currentViewID)
 
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
-            self.__uiLogger.onBeforeTooltipOpened(tooltipId)
             if tooltipId == TooltipConstants.SKILL:
                 args = [event.getArgument('skillName'),
+                 event.getArgument('roleName'),
                  int(event.getArgument('tankmanID')),
                  None,
                  True,
                  None,
-                 event.getArgument('isBonus')]
+                 event.getArgument('isBonus'),
+                 int(event.getArgument('skillIndex'))]
                 self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
             if tooltipId == TooltipConstants.TANKMAN:
@@ -227,7 +226,7 @@ class CrewWidget(ViewImpl):
             contextMenuArgs = {'tankmanID': tankmanID,
              'slotIdx': event.getArgument('slotIdx'),
              'previousViewID': self.__currentViewID}
-            contextMenuData = createContextMenuData(CONTEXT_MENU_HANDLER_TYPE.CREW_MEMBER, contextMenuArgs)
+            contextMenuData = createContextMenuData(self._getContextMenuType(), contextMenuArgs)
             window = BackportContextMenuWindow(contextMenuData, self.getParentWindow())
             window.load()
             return window
@@ -240,14 +239,18 @@ class CrewWidget(ViewImpl):
     def getSlotIdxByTankmanID(self, tankmanID):
         return self.__getSlotIdxByTankmanID(tankmanID)
 
+    @staticmethod
+    def _getContextMenuType():
+        return CONTEXT_MENU_HANDLER_TYPE.CREW_MEMBER
+
     def _onLoading(self, *args, **kwargs):
         super(CrewWidget, self)._onLoading(*args, **kwargs)
-        self.__uiLogger.initialize()
         with self.viewModel.transaction() as vm:
             vm.setCurrentLayoutID(self.__currentViewID)
             if self.__previousViewID is not None:
                 vm.setPreviousLayoutID(self.__previousViewID)
         self.__updateWidgetModel()
+        self.startGlobalListening()
         return
 
     def _getCallbacks(self):
@@ -270,13 +273,12 @@ class CrewWidget(ViewImpl):
 
     def _finalize(self):
         super(CrewWidget, self)._finalize()
-        self.__uiLogger.finalize()
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.stopGlobalListening()
 
     def _updateButtonsBar(self, vmButtonsBar, isCrewEmpty=True):
         vmButtonsBar.setIsVisible(self.__isButtonBarVisible)
         vmButtonsBar.crewOperations.setType(ButtonType.CREWOPERATIONS)
-        vmButtonsBar.crewOperations.setIsAutoReturnOn(False)
         vmButtonsBar.crewBooks.setType(ButtonType.CREWBOOKS)
         vmButtonsBar.crewBooks.setIsDisabled(isCrewEmpty)
         self.__updateCrewBooksAmount(vmButtonsBar.crewBooks)
@@ -289,11 +291,15 @@ class CrewWidget(ViewImpl):
             vmButtonsBar.acceleratedTraining.setState(ToggleState.HIDDEN)
             vmButtonsBar.wotPlus.setState(ToggleState.HIDDEN)
         else:
+            vmButtonsBar.crewOperations.setIsAutoReturnOn(self.__currentVehicle.isAutoReturn)
             self.__updateCrewBooksDiscount(vmButtonsBar.crewBooks)
             isXPToTman = self.__currentVehicle.isXPToTman if self.__currentVehicle else False
             vmButtonsBar.acceleratedTraining.setState(ToggleState.ON if isXPToTman else (ToggleState.OFF if self.__currentVehicle.isElite else ToggleState.DISABLED))
             self.__updateWotPlusButtonModel(vmButtonsBar.wotPlus)
         return
+
+    def _getTankmanSkillProgress(self, tman):
+        return getTmanNewSkillCount(tman)
 
     def _getLastSkillLevelFormat(self, lastSkillLevel):
         return lastSkillLevel.intSkillLvl
@@ -306,6 +312,11 @@ class CrewWidget(ViewImpl):
                 self.__updateWidgetModelByTankman(vm)
             else:
                 self._updateButtonsBar(vm.buttonsBar)
+        self.__setSlotMode()
+
+    def __setSlotMode(self):
+        mode = self.PREBATTLE_TYPE_TO_SLOT_MODE.get(self.prbEntity.getEntityType(), self.DEFAULT_SLOT_MODE)
+        self.viewModel.setSlotSizeMode(mode)
 
     def __updateWidgetModelByVehicle(self, vm):
         isCrewEmpty, lessMastered = self.__findTmanData()
@@ -391,14 +402,12 @@ class CrewWidget(ViewImpl):
         slotIdx = int(args.get('slotIdx'))
         self.updateSlotIdx(slotIdx)
         self.onChangeCrewClick(self.__currentVehicle.invID, slotIdx, self.__currentViewID)
-        self.__uiLogger.logClick(CrewWidgetKeys.CHANGE_TANKMAN_BUTTON)
 
     def __onSlotClick(self, args):
         tankmanID = int(args.get('tankmanID'))
         slotIdx = int(args.get('slotIdx'))
         self.updateSlotIdx(slotIdx)
         self.onSlotClick(tankmanID, slotIdx)
-        self.__uiLogger.logClick(CrewWidgetKeys.TANKMAN_SLOT)
 
     def __onServerSettingsChange(self, diff):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
@@ -463,7 +472,7 @@ class CrewWidget(ViewImpl):
             vmTankman.setIsLessMastered(isLessMastered)
             vmTankman.setSkillsEfficiency(tmanSkillsEfficiency)
             setTmanSkillsModel(vmTankman.skills, tman, fillBonusSkills=tman.isInTank)
-            newSkillsCount, lastSkillLevel = getTmanNewSkillCount(tman)
+            newSkillsCount, lastSkillLevel = self._getTankmanSkillProgress(tman)
             if tman.earnedSkillsCount + newSkillsCount <= 0:
                 lastSkillLevel = SkillLvlFormatter()
             vmTankman.setLastSkillLevel(self._getLastSkillLevelFormat(lastSkillLevel))
@@ -499,7 +508,6 @@ class CrewWidget(ViewImpl):
     def __onCrewBooksClick(self):
         from gui.shared.event_dispatcher import showQuickTraining
         showQuickTraining(vehicleInvID=self.__currentVehicle.invID, previousViewID=self.currentViewID)
-        self.__uiLogger.logClick(CrewWidgetKeys.QUIK_TRAINING_BUTTON)
 
     @wg_async
     def __onAcceleratedTrainingClick(self):
@@ -507,7 +515,6 @@ class CrewWidget(ViewImpl):
         vehicle = self.__currentVehicle
         if vehicle:
             wasActive = vehicle.isXPToTman
-            self.__uiLogger.logClick(CrewWidgetKeys.ACCELERATE_BUTTON)
 
             def toggleCallback():
                 self.__onAccelerateCrewTrainingConfirmed(vehicle, wasActive)
@@ -605,21 +612,6 @@ class QuickTrainingCrewWidget(CrewWidget):
         self._cachePossibleSkillsEfficiency = None
         return
 
-    def updateInteractiveTankmen(self):
-        qtView = self.gui.windowsManager.getViewByLayoutID(self.currentViewID)
-        with self.viewModel.transaction() as vm:
-            vmSlots = vm.getSlots()
-            for vmSlot in vmSlots:
-                if vmSlot.tankman is None:
-                    continue
-                tman = self.itemsCache.items.getTankman(vmSlot.tankman.getTankmanID())
-                if tman is None:
-                    continue
-                vmSlot.tankman.setIsInteractive(qtView.canTmanBeSelected(tman))
-
-            vmSlots.invalidate()
-        return
-
     def clearPossibleSkillsLevelCache(self):
         self._cachePossibleSkillsLevels = None
         self._cachePossibleSkillsEfficiency = None
@@ -638,6 +630,10 @@ class QuickTrainingCrewWidget(CrewWidget):
             self.__updatePossibleSkillsEfficiency(vmSlots)
             vmSlots.invalidate()
 
+    @staticmethod
+    def _getContextMenuType():
+        return CONTEXT_MENU_HANDLER_TYPE.QT_CREW_MEMBER
+
     def _finalize(self):
         super(QuickTrainingCrewWidget, self)._finalize()
         self._cachePossibleSkillsLevels = None
@@ -647,6 +643,9 @@ class QuickTrainingCrewWidget(CrewWidget):
     def _updateButtonsBar(self, vmButtonsBar, isCrewEmpty=True):
         super(QuickTrainingCrewWidget, self)._updateButtonsBar(vmButtonsBar, isCrewEmpty)
         vmButtonsBar.crewBooks.setIsDisabled(True)
+
+    def _getTankmanSkillProgress(self, tman):
+        return getSkillsLevelsForXp(tman)
 
     def _getLastSkillLevelFormat(self, lastSkillLevel):
         return lastSkillLevel.formattedSkillLvl
@@ -672,9 +671,9 @@ class QuickTrainingCrewWidget(CrewWidget):
             if vmSlot.tankman is None or possibleSkillsLevels and len(possibleSkillsLevels) <= slotIDX:
                 continue
             tman = self.itemsCache.items.getTankman(vmSlot.tankman.getTankmanID())
-            setTmanSkillsModel(vmSlot.tankman.possibleSkills, tman, fillBonusSkills=tman.isInTank if tman else False, possibleSkillsLevels=None if possibleSkillsLevels is None else possibleSkillsLevels[vmSlot.getSlotIdx()])
+            setTmanSkillsModel(vmSlot.tankman.possibleSkills, tman, fillBonusSkills=tman.isInTank if tman else False, possibleSkillsLevels=None if possibleSkillsLevels is None else possibleSkillsLevels[slotIDX])
             if self._cachePossibleSkillsEfficiency is not None:
-                possSkillsEff = self._cachePossibleSkillsEfficiency[vmSlot.getSlotIdx()]
+                possSkillsEff = self._cachePossibleSkillsEfficiency[slotIDX]
                 if possSkillsEff != CrewConstants.DONT_SHOW_LEVEL:
                     vmSlot.tankman.possibleSkills.setSkillsEfficiency(possSkillsEff)
             if possibleSkillsLevels is None:
@@ -682,7 +681,7 @@ class QuickTrainingCrewWidget(CrewWidget):
                 vmSlot.tankman.setLastPossibleSkillLevel(-1)
                 vmSlot.tankman.setHasPossibleProgress(False)
                 continue
-            currSkillsCount, possibleSkillsCount, currSkillsLvl, possibleLastSkillLevel = possibleSkillsLevels[vmSlot.getSlotIdx()]
+            currSkillsCount, possibleSkillsCount, currSkillsLvl, possibleLastSkillLevel = possibleSkillsLevels[slotIDX]
             progressLvl = possibleLastSkillLevel - currSkillsLvl if possibleSkillsCount == currSkillsCount and currSkillsLvl.isSkillLvl and currSkillsLvl < MAX_SKILL_LEVEL else possibleLastSkillLevel
             vmSlot.tankman.setPossibleSkillsAmount(max(possibleSkillsCount - currSkillsCount, 0))
             vmSlot.tankman.setLastPossibleSkillLevel(progressLvl.formattedSkillLvl)
@@ -707,7 +706,7 @@ class SkillsTrainingCrewWidget(CrewWidget):
                         for skillName in selectedSkills:
                             for skillVM in listVM:
                                 if skillVM.getName() == CrewConstants.NEW_SKILL:
-                                    skill = getTankmanSkill(skillName, tankman=tankman)
+                                    skill = getTankmanSkill(skillName, role, tankman=tankman)
                                     skillVM.setName(skillName)
                                     skillVM.setIconName(skill.extensionLessIconName)
                                     break

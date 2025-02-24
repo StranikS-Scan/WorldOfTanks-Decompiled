@@ -1697,4 +1697,42 @@
       </tilingSettings>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	poland:Pl29_NC_Wz_70T	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	918	</id>
+      <texture>	vehicles/russian/Camouflage/bp2025_3dstyles.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Pl29_NC_Wz_70T_BPXVI_3Dst/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Pl29_NC_Wz_70T_BPXVI_3Dst/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	43 47 51 255	</c0>
+          <c1>	119 128 89 255	</c1>
+          <c2>	76 89 76 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <rotation>
+        <HULL>	-0.174533	</HULL>
+        <TURRET>	-1.745329	</TURRET>
+        <GUN>	-1.413717	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
 </poland.xml>

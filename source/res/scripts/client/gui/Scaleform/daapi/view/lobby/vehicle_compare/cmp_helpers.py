@@ -1,21 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
+import typing
+from constants import NEW_PERK_SYSTEM as NPS
 from frameworks.wulf import WindowLayer
-from helpers import dependency
-from items import tankmen
-from items.tankmen import SKILLS_BY_ROLES, ROLES_BY_SKILLS
-from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import Tankman, BROTHERHOOD_SKILL_NAME
+from gui.shared.gui_items.Tankman import Tankman
+from gui.shared.gui_items.tankman_skill import BROTHERHOOD_SKILL_NAME
+from helpers import dependency
+from items import tankmen
 from items.components.c11n_components import SeasonType
+from items.tankmen import SKILLS_BY_ROLES, ROLES_BY_SKILLS
+from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from constants import NEW_PERK_SYSTEM as NPS
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.customization.c11n_items import Camouflage
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_view import VehicleCompareConfiguratorMain
 MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,

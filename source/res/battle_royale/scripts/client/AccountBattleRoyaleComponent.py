@@ -22,3 +22,7 @@ class AccountBattleRoyaleComponent(BaseAccountExtensionComponent):
     def dequeueBattleRoyale(self):
         if not events.isPlayerEntityChanging:
             self.base.doCmdInt3(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_DEQUEUE_BATTLE_ROYALE, 0, 0, 0)
+
+    def setStpCoin(self, amount, callback=None):
+        _logger.debug("set StPatrick coin amount: '%r'", amount)
+        self.entity._doCmdIntStr(brc.CMD_BATTLE_ROYALE_OPERATE_STPCOIN, amount, '', callback)

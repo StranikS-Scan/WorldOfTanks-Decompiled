@@ -16,7 +16,6 @@ from gui.shared.gui_items.items_actions import factory
 from helpers import dependency
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.logging_constants import CrewDialogKeys, CrewViewKeys
 
 class DocumentChangeDialog(BaseCrewDialogTemplateView):
     __slots__ = ('__tankmanInvID', '__initialData', '__firstNamesList', '__lastNamesList', '__firstNameIdx', '__lastNameIdx')
@@ -26,7 +25,7 @@ class DocumentChangeDialog(BaseCrewDialogTemplateView):
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, tankmanInvID, ctx=None):
-        super(DocumentChangeDialog, self).__init__(loggingKey=CrewDialogKeys.DOCUMENT_CHANGE, parentViewKey=CrewViewKeys.PERSONAL_DATA)
+        super(DocumentChangeDialog, self).__init__()
         self.__tankmanInvID = tankmanInvID
         self.__initialData = ctx
         self.__firstNamesList = []

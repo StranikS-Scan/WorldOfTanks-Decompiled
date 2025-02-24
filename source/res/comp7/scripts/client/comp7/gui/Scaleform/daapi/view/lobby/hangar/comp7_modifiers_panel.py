@@ -28,7 +28,7 @@ class Comp7ModifiersPanelInject(InjectComponentAdaptor):
 class Comp7ModifiersPanel(ViewImpl):
 
     def __init__(self, flags=ViewFlags.VIEW):
-        settings = ViewSettings(R.views.lobby.comp7.SeasonModifier())
+        settings = ViewSettings(R.views.comp7.lobby.SeasonModifier())
         settings.flags = flags
         settings.model = ViewModel()
         super(Comp7ModifiersPanel, self).__init__(settings)

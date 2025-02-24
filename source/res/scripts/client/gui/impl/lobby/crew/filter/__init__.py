@@ -12,7 +12,6 @@ from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 if typing.TYPE_CHECKING:
     from typing import Iterable, Optional
     from gui.impl.gen_utils import DynAccessor
-VEHICLE_FILTER = 'vehicle'
 VEHICLE_LOCATION_IN_HANGAR = 'in_hangar'
 GRADE_PREMIUM = 'premium'
 GRADE_ELITE = 'elite'
@@ -83,9 +82,11 @@ def getTankmanKindSettings(labelResId=R.invalid(), options=None, dismissedToolti
     return FilterGroupSettings(toggleID=ToggleGroupType.TANKMANKIND.value, toggleType=ToggleGroupType.TANKMANKIND, labelResId=labelResId, toggles=toggles)
 
 
-def getTankmanLocationSettings():
-    toggles = _getTankmanLocationToggles() + [ _createTankmanKindToggle(kind.value) for kind in (TankmanKind.RECRUIT, TankmanKind.TANKMAN) ]
-    return FilterGroupSettings(toggleID=ToggleGroupType.LOCATION.value, labelResId=R.invalid(), toggleType=ToggleGroupType.LOCATION, toggles=toggles)
+def getTankmanLocationSettings(withTankmanKind=True, labelResId=R.invalid()):
+    toggles = _getTankmanLocationToggles()
+    if withTankmanKind:
+        toggles += [ _createTankmanKindToggle(kind.value) for kind in (TankmanKind.RECRUIT, TankmanKind.TANKMAN) ]
+    return FilterGroupSettings(toggleID=ToggleGroupType.LOCATION.value, labelResId=labelResId, toggleType=ToggleGroupType.LOCATION, toggles=toggles)
 
 
 def getVehicleLocationSettings():

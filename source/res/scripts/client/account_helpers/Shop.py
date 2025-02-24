@@ -233,7 +233,7 @@ class Shop(object):
                 callback(AccountCommands.RES_NON_PLAYER, {})
             return
         elif itemTypeIdx == _VEHICLE:
-            self.buyVehicle(nationIdx, itemShopID, False, True, 0, -1, callback)
+            self.buyVehicle(nationIdx, itemShopID, False, None, True, 0, -1, callback)
             return
         else:
             count = int(round(count))
@@ -276,7 +276,7 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_AND_EQUIP_TMAN, self.__getCacheRevision(), vehInvID, slot, tmanCostTypeIdx, proxy)
             return
 
-    def buyVehicle(self, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, rentPeriod, callback):
+    def buyVehicle(self, nationIdx, innationIdx, buyShells, consumablesLayout, recruitCrew, tmanCostTypeIdx, rentPeriod, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -297,10 +297,15 @@ class Shop(object):
              flags,
              tmanCostTypeIdx,
              rentPeriod]
+            if consumablesLayout is not None:
+                arr.append(len(consumablesLayout))
+                arr += consumablesLayout
+            else:
+                arr.append(0)
             self.__account._doCmdIntArr(AccountCommands.CMD_BUY_VEHICLE, arr, proxy)
             return
 
-    def tradeInVehicle(self, vehInvID, nationIdx, innationIdx, buyShells, recruitCrew, tmanCostTypeIdx, callback):
+    def tradeInVehicle(self, vehInvID, nationIdx, innationIdx, buyShells, consumablesLayout, recruitCrew, tmanCostTypeIdx, callback):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER, {})
@@ -321,6 +326,11 @@ class Shop(object):
              typeCompDescr,
              flags,
              tmanCostTypeIdx]
+            if consumablesLayout is not None:
+                arr.append(len(consumablesLayout))
+                arr += consumablesLayout
+            else:
+                arr.append(0)
             self.__account._doCmdIntArr(AccountCommands.CMD_VEHICLE_TRADE_IN, arr, proxy)
             return
 

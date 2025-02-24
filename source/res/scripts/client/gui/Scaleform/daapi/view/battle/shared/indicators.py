@@ -590,7 +590,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
-        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted += self.__onBattleStarted
             self.__updateContextAvailability()
@@ -607,7 +607,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
-        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted -= self.__onBattleStarted
         self._switchTimeTable.clear()
@@ -738,7 +738,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.as_setVisibleS(self.__isAllowedByContext and self.__isEnabled)
 
     def __updateContextAvailability(self):
-        prebattleCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prebattleCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prebattleCtrl is not None:
             self.__isAllowedByContext = prebattleCtrl.isVehicleStateIndicatorAllowed()
         else:
@@ -1137,7 +1137,7 @@ class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
             crosshairCtrl.onCrosshairPositionChanged += self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged += self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
-        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted += self.__onBattleStarted
             self.__updateContextAvailability()
@@ -1159,7 +1159,7 @@ class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
             crosshairCtrl.onCrosshairPositionChanged -= self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairScaleChanged -= self.__onCrosshairPositionChanged
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
-        prbCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prbCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prbCtrl is not None:
             prbCtrl.onBattleStarted -= self.__onBattleStarted
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -1174,7 +1174,7 @@ class RocketAcceleratorIndicator(RocketAcceleratorIndicatorMeta):
         self.__updateVisibility()
 
     def __updateContextAvailability(self):
-        prebattleCtrl = self.sessionProvider.dynamic.comp7PrebattleSetup
+        prebattleCtrl = self.sessionProvider.dynamic.prebattleSetup
         if prebattleCtrl is not None:
             self.__isAllowedByContext = prebattleCtrl.isVehicleStateIndicatorAllowed()
         else:

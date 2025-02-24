@@ -8,6 +8,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_simple_model import SkillSimpleModel
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
 from gui.impl.gen.view_models.views.lobby.vehicle_compare.compare_skills_panel_view_model import CompareSkillsPanelViewModel
+from gui.impl.lobby.crew.crew_helpers.skill_helpers import getRoleBySkillName
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillSimpleModelSetup, ModelProps
 from gui.impl.lobby.crew.tooltips.veh_cmp_skills_tooltip import VehCmpSkillsTooltip
 from gui.impl.pub import ViewImpl
@@ -30,7 +31,8 @@ def compareLevelGetter(vehicle, skillName, **__):
 
 propsGetters = {ModelProps.NAME: None,
  ModelProps.ICON_NAME: compareIconGetter,
- ModelProps.LEVEL: compareLevelGetter}
+ ModelProps.LEVEL: compareLevelGetter,
+ ModelProps.ROLE_NAME: getRoleBySkillName}
 
 class CompareSkillsPanelView(ViewImpl):
     __slots__ = ('__toolTipMgr', '__cmpConf')
@@ -52,7 +54,10 @@ class CompareSkillsPanelView(ViewImpl):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
             if tooltipId == TooltipConstants.SKILL:
-                args = [str(event.getArgument('skillName')), None, event.getArgument('level')]
+                args = [str(event.getArgument('skillName')),
+                 event.getArgument('roleName'),
+                 None,
+                 event.getArgument('level')]
                 self.__toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
         return super(CompareSkillsPanelView, self).createToolTip(event)

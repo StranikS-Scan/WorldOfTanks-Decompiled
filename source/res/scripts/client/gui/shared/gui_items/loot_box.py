@@ -4,7 +4,7 @@ from enum import Enum
 from typing import TYPE_CHECKING
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.lootbox_system.common import getTextResource
+from gui.lootbox_system.base.common import getTextResource
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
@@ -82,8 +82,8 @@ class LootBox(GUIItem):
         return self.__id
 
     def getUserName(self):
-        if self.__lootBoxSystem.isEnabled and self.__lootBoxSystem.eventName == self.__type:
-            name = getTextResource('common/boxCategory/lowerCase'.split('/') + [self.__category])
+        if self.__type in self.__lootBoxSystem.eventNames and self.__lootBoxSystem.isEnabled(self.__type):
+            name = getTextResource('common/boxCategory/lowerCase'.split('/') + [self.__category], self.__type)
             return backport.text(name() if name.exists() else R.strings.lootbox_system.common.boxCategory.lowerCase.default())
         return backport.text(R.strings.lootboxes.type.dyn(self.__type)())
 

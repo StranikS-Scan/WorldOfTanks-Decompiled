@@ -494,10 +494,14 @@ class KillCamMode(KillModeBase):
         availability, simulationData = super(KillCamMode, self)._checkSimulationAvailability()
         if availability is not SimulationAvailability.AVAILABLE:
             return (availability, None)
-        elif avatar.arenaExtraData.get('isRandomEventsAllowed', False):
-            _logger.info('Skip DeathCam scene because Random Events are not supported')
-            return (SimulationAvailability.NOT_SUPPORTED_MODE, None)
-        elif not self.killCamCtrl:
+        if avatar.arenaExtraData.get('isRandomEventsAllowed', False):
+            postmortemSettings = avatar.arenaExtraData.get('postmortemSettings', {})
+            killcamConfig = postmortemSettings.get('config', {}).get('killcam', {})
+            isAllowedForRandomEvents = killcamConfig.get('isAllowedForRandomEvents', False)
+            if not isAllowedForRandomEvents:
+                _logger.info('Skip DeathCam scene because Random Events are not supported')
+                return (SimulationAvailability.NOT_SUPPORTED_MODE, None)
+        if not self.killCamCtrl:
             _logger.warning("DeathCam is enabled but can't find killCamCtrl")
             return (SimulationAvailability.NOT_SUPPORTED_MODE, None)
         if 'VehicleRespawnComponent' in vehicle.dynamicComponents:

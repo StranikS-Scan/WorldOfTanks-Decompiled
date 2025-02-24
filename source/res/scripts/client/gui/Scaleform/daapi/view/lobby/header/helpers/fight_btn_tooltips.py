@@ -13,7 +13,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, int2roman
+from helpers import i18n
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
 _STR_PATH = R.strings.menu.headerButtons.fightBtn.tooltip
@@ -131,18 +131,6 @@ def getEpicBattlesOnlyVehicleTooltipData(result):
         return makeTooltip(header, body)
 
 
-def getComp7BattlesOnlyVehicleTooltipData(result):
-    state = result.restriction
-    if state in (PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED,
-     UNIT_RESTRICTION.VEHICLE_WRONG_MODE,
-     PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER,
-     PREBATTLE_RESTRICTION.VEHICLE_TELECOM_RENTALS_IS_OVER,
-     PREBATTLE_RESTRICTION.VEHICLE_WOT_PLUS_EXCLUSIVE_UNAVAILABLE):
-        header = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.header())
-        body = backport.text(R.strings.menu.headerButtons.fightBtn.tooltip.comp7BattleOnly.body())
-        return makeTooltip(header, body)
-
-
 def getEventTooltipData():
     header = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_HEADER)
     body = i18n.makeString(TOOLTIPS.EVENT_SQUAD_DISABLE_BODY, tankName='')
@@ -202,41 +190,6 @@ def getMapboxFightBtnTooltipData(result, isInSquad):
         header = backport.text(strPath.mapboxVehLevel.header())
         levels = backport.text(strPath.mapboxVehLevel.levelSubStr(), levels=toRomanRangeString(result.ctx['levels']))
         body = backport.text(strPath.mapboxVehLevel.body(), levelSubStr=levels)
-    else:
-        return getRandomTooltipData(result, isInSquad)
-    return makeTooltip(header, body)
-
-
-def getComp7FightBtnTooltipData(result, isInSquad):
-    state = result.restriction
-    resShortCut = R.strings.menu.headerButtons.fightBtn.tooltip
-    if state == PRE_QUEUE_RESTRICTION.MODE_OFFLINE:
-        header = backport.text(resShortCut.comp7Offline.header())
-        body = backport.text(resShortCut.comp7Offline.body())
-    elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_SET:
-        header = backport.text(resShortCut.comp7NotSet.header())
-        body = backport.text(resShortCut.comp7NotSet.body())
-    elif state == PRE_QUEUE_RESTRICTION.MODE_NOT_AVAILABLE:
-        header = backport.text(resShortCut.comp7Disabled.header())
-        body = backport.text(resShortCut.comp7Disabled.body())
-    elif state == PRE_QUEUE_RESTRICTION.BAN_IS_SET:
-        header = backport.text(resShortCut.comp7BanIsSet.header())
-        body = backport.text(resShortCut.comp7BanIsSet.body())
-    elif state == PRE_QUEUE_RESTRICTION.QUALIFICATION_RESULTS_PROCESSING:
-        header = backport.text(resShortCut.comp7RatingCalculation.header())
-        body = backport.text(resShortCut.comp7RatingCalculation.body())
-    elif state == PRE_QUEUE_RESTRICTION.LIMIT_NO_SUITABLE_VEHICLES:
-        romanLevels = list(map(int2roman, result.ctx['levels']))
-        delimiter = backport.text(resShortCut.comp7VehLevel.delimiter())
-        vehicleLevelsStr = delimiter.join(romanLevels)
-        header = backport.text(resShortCut.comp7VehLevel.header())
-        body = backport.text(resShortCut.comp7VehLevel.body(), levels=vehicleLevelsStr)
-    elif state == PRE_QUEUE_RESTRICTION.SHOP_PAGE_OPENED:
-        header = None
-        body = i18n.makeString(TOOLTIPS.HANGAR_STARTBTN_PREVIEW_BODY)
-    elif state == PRE_QUEUE_RESTRICTION.MODE_IS_IN_PREANNOUNCE:
-        header = backport.text(resShortCut.comp7Preannounce.header())
-        body = backport.text(resShortCut.comp7Preannounce.body())
     else:
         return getRandomTooltipData(result, isInSquad)
     return makeTooltip(header, body)

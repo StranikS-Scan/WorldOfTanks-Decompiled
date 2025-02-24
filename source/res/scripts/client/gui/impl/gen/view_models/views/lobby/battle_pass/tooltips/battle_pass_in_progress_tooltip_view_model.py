@@ -11,6 +11,7 @@ class ChapterType(Enum):
     COMMON = 'common'
     EXTRA = 'extra'
     HOLIDAY = 'holiday'
+    POST_PROGRESSION = 'postProgression'
 
 
 class BattlePassInProgressTooltipViewModel(ViewModel):

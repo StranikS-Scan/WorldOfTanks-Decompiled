@@ -18,6 +18,7 @@ from gui.Scaleform.daapi.view.lobby.veh_post_progression.veh_post_progression_ve
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
 from gui.battle_pass.rewards_sort import getRewardsComparator
+from gui.impl.lobby.easy_tank_equip.easy_tank_equip_vehicle import g_easyTankEquipCopyVehicle
 from gui.server_events import recruit_helper
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import factories, loadDossier
@@ -26,10 +27,9 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.utils.requesters.blueprints_requester import getFragmentNationID
 from helpers import dependency
-from items import vehicles
 from rent_common import RENT_TYPE_TO_DURATION
 from shared_utils import first
-from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IComp7Controller, IHangarGuiController
+from skeletons.gui.game_control import IRankedBattlesController, IBattlePassController, IHangarGuiController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.server_events import IEventsCache
@@ -610,6 +610,22 @@ class PostProgressionParamContext(TankSetupParamContext):
 
     def getBonusExtractor(self, vehicle, bonuses, paramName):
         return bonus_helper.PostProgressionBonusExtractor(vehicle, bonuses, paramName)
+
+
+class EasyTankEquipParamContext(HangarParamContext):
+
+    def __init__(self):
+        super(EasyTankEquipParamContext, self).__init__()
+        self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
+
+    def getComparator(self):
+        return params_helper.previewVehiclesComparator(g_easyTankEquipCopyVehicle.item, g_currentVehicle.item)
+
+    def buildItem(self, *args, **kwargs):
+        return g_easyTankEquipCopyVehicle.item
+
+    def getBonusExtractor(self, vehicle, bonuses, paramName):
+        return bonus_helper.EasyTankEquipBonusExtractor(vehicle, bonuses, paramName)
 
 
 class HangarContext(ToolTipContext):
@@ -1353,27 +1369,3 @@ class BattlePassGiftTokenContext(ToolTipContext):
 
     def getParams(self):
         return {'isOfferEnabled': self.__battlePassController.isOfferEnabled() and self.__hasOffer}
-
-
-class Comp7RoleSkillBattleContext(ToolTipContext):
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    def __init__(self):
-        super(Comp7RoleSkillBattleContext, self).__init__(TOOLTIP_COMPONENT.FULL_STATS)
-
-    def buildItem(self, roleName):
-        return self.__comp7Controller.getRoleEquipment(roleName)
-
-    def getStartLevel(self, roleName):
-        return self.__comp7Controller.getEquipmentStartLevel(roleName)
-
-
-class Comp7RoleSkillLobbyContext(ToolTipContext):
-
-    def __init__(self):
-        super(Comp7RoleSkillLobbyContext, self).__init__(TOOLTIP_COMPONENT.HANGAR)
-
-    def buildItem(self, equipmentName):
-        cache = vehicles.g_cache
-        equipmentID = cache.equipmentIDs().get(equipmentName)
-        return cache.equipments().get(equipmentID) if equipmentID is not None else None

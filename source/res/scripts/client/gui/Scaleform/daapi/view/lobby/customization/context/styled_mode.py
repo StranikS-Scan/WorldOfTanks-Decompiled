@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from adisp import adisp_async, adisp_process
 from constants import CLIENT_COMMAND_SOURCES
 from gui.Scaleform.daapi.view.lobby.customization.context.customization_mode import CustomizationMode
-from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, removeUnselectedItemsFromEditableStyle, removePartsFromOutfit
+from gui.Scaleform.daapi.view.lobby.customization.shared import OutfitInfo, customizationSlotIdToUid, CustomizationSlotUpdateVO, getStylePurchaseItems, removeItemFromEditableStyle, fitOutfit, getCurrentVehicleAvailableRegionsMap, getEditableStyleOutfitDiff, getStyledModeRequestData
 from gui.customization.shared import C11nId, PurchaseItem
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import CustomizationsSeller, OutfitApplier
@@ -220,39 +220,7 @@ class StyledMode(CustomizationMode):
 
     def _getRequestData(self, purchaseItems):
         requestData = super(StyledMode, self)._getRequestData(purchaseItems)
-        style = self.__modifiedStyle
-        vehicleCD = g_currentVehicle.item.descriptor.makeCompactDescr()
-        if style is not None:
-            baseStyleOutfits = {}
-            modifiedStyleOutfits = {}
-            for season in SeasonType.COMMON_SEASONS:
-                diff = self._ctx.stylesDiffsCache.getDiffs(style).get(season)
-                baseStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD)
-                modifiedStyleOutfits[season] = style.getOutfit(season, vehicleCD=vehicleCD, diff=diff)
-
-            removeUnselectedItemsFromEditableStyle(modifiedStyleOutfits, baseStyleOutfits, purchaseItems)
-            for season in SeasonType.COMMON_SEASONS:
-                if style.isProgressive:
-                    modifiedStyleOutfits[season] = self._service.removeAdditionalProgressionData(outfit=modifiedStyleOutfits[season], style=style, vehCD=vehicleCD, season=season)
-                modifiedStyleOutfits[season] = removePartsFromOutfit(season, baseStyleOutfits[season]).diff(removePartsFromOutfit(season, modifiedStyleOutfits[season]))
-
-            styleOutfitComponent = CustomizationOutfit(styleId=style.id, styleProgressionLevel=self.getStyleProgressionLevel(), serial_number=style.serialNumber)
-            styleOutfit = Outfit(vehicleCD=vehicleCD, component=styleOutfitComponent)
-            for season in SeasonType.REGULAR:
-                outfit = modifiedStyleOutfits.get(season, Outfit(vehicleCD=vehicleCD))
-                modifiedStyleOutfits[season] = styleOutfit.adjust(outfit)
-
-            for outfit, seasonType in requestData:
-                if seasonType == SeasonType.ALL:
-                    modifiedStyleOutfits[seasonType] = modifiedStyleOutfits[seasonType].adjust(outfit)
-
-            requestData = [ (outfit, season) for season, outfit in modifiedStyleOutfits.iteritems() ]
-        else:
-            for season in SeasonType.COMMON_SEASONS:
-                outfit = self._service.getEmptyOutfitWithNationalEmblems(vehicleCD)
-                requestData.append((outfit, season))
-
-        return requestData
+        return getStyledModeRequestData(requestData, self.__modifiedStyle, g_currentVehicle.item, purchaseItems=purchaseItems, stylesDiffsCache=self._ctx.stylesDiffsCache, styleProgressionLevel=self.getStyleProgressionLevel())
 
     @adisp_async
     @adisp_process

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/mode_selector/mode_selector_normal_card_model.py
 from enum import IntEnum
 from frameworks.wulf import Array
+from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_base_widget_model import ModeSelectorBaseWidgetModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_card_model import ModeSelectorCardModel
 from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_performance_model import ModeSelectorPerformanceModel
@@ -16,7 +17,7 @@ class BattlePassState(IntEnum):
 class ModeSelectorNormalCardModel(ModeSelectorCardModel):
     __slots__ = ()
 
-    def __init__(self, properties=21, commands=0):
+    def __init__(self, properties=22, commands=0):
         super(ModeSelectorNormalCardModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -93,6 +94,12 @@ class ModeSelectorNormalCardModel(ModeSelectorCardModel):
     def setBattlePassState(self, value):
         self._setNumber(20, value.value)
 
+    def getExternalPath(self):
+        return self._getResource(21)
+
+    def setExternalPath(self, value):
+        self._setResource(21, value)
+
     def _initialize(self):
         super(ModeSelectorNormalCardModel, self)._initialize()
         self._addViewModelProperty('widget', ModeSelectorBaseWidgetModel())
@@ -106,3 +113,4 @@ class ModeSelectorNormalCardModel(ModeSelectorCardModel):
         self._addStringProperty('timeLeft', '')
         self._addArrayProperty('rewardList', Array())
         self._addNumberProperty('battlePassState')
+        self._addResourceProperty('externalPath', R.invalid())

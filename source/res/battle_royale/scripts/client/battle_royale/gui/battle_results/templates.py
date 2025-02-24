@@ -43,36 +43,28 @@ _PERSONAL_VO_META = base.DictMeta({'financialBalance': {},
  'financialBalancePrem': {},
  'stats': [],
  'rewards': {},
- 'battlePass': {}})
+ 'battlePass': {},
+ 'bonusStpCoinFactor': 0})
+_BONUS_STP_COIN_FACTOR_VO_META = base.PropertyMeta((('bonusStpCoinFactor', 0, 'bonusStpCoinFactor'),))
+_BONUS_STP_COIN_FACTOR_VO_META.bind(components.BattleRoyaleBonusStpCoinFactorBlock)
 _PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('vehicleName', '', 'vehicleName'), ('vehicleType', '', 'vehicleType'), ('isObserver', '', 'isObserver')))
 _PERSONAL_VEHICLE_VO_META.bind(components.BattleRoyalePersonalVehicleBlock)
 _FINANCIAL_BLOCK_VO_META = base.PropertyMeta((('credits', 0, 'credits'),
  ('xp', 0, 'xp'),
  ('crystal', 0, 'crystal'),
- ('brcoin', 0, 'brcoin')))
+ ('stpcoin', 0, 'stpcoin')))
 _FINANCIAL_BLOCK_VO_META.bind(components.BattleRoyaleFinancialBlock)
 _FINANCIAL_PREM_BLOCK_VO_META = base.PropertyMeta((('credits', 0, 'credits'),
  ('xp', 0, 'xp'),
  ('crystal', 0, 'crystal'),
- ('brcoin', 0, 'brcoin')))
+ ('stpcoin', 0, 'stpcoin')))
 _FINANCIAL_PREM_BLOCK_VO_META.bind(components.BattleRoyaleFinancialPremBlock)
 _STAT_ITEM_VO_META = base.PropertyMeta((('type', '', 'type'),
  ('value', 0, 'value'),
  ('maxValue', 0, 'maxValue'),
  ('wreathImage', R.invalid(), 'wreathImage')))
 _STAT_ITEM_VO_META.bind(components.BattleRoyaleStatsItemBlock)
-_BATTLE_PASS_VO_META = base.PropertyMeta((('currentLevel', 1, 'currentLevel'),
- ('maxPoints', 0, 'maxPoints'),
- ('earnedPoints', 0, 'earnedPoints'),
- ('currentLevelPoints', 0, 'currentLevelPoints'),
- ('isDone', 0, 'isDone'),
- ('hasBattlePass', 0, 'hasBattlePass'),
- ('battlePassComplete', 0, 'battlePassComplete'),
- ('chapterID', 0, 'chapterID'),
- ('pointsTotal', 0, 'pointsTotal'),
- ('bpTopPoints', 0, 'bpTopPoints'),
- ('pointsAux', 0, 'pointsAux'),
- ('availablePoints', 0, 'availablePoints')))
+_BATTLE_PASS_VO_META = base.PropertyMeta((('bpTopPoints', 0, 'bpTopPoints'),))
 _BATTLE_PASS_VO_META.bind(components.BattlePassBlock)
 _REWARDS_VO_META = base.PropertyMeta((('achievements', [], 'achievements'),
  ('bonuses', [], 'bonuses'),
@@ -86,6 +78,7 @@ BR_PERSONAL_STATS_BLOCK.addNextComponent(components.BattleRoyaleFinancialPremBlo
 BR_PERSONAL_STATS_BLOCK.addNextComponent(components.BattleRoyaleStatsBlock(base.ListMeta(), 'stats'))
 BR_PERSONAL_STATS_BLOCK.addNextComponent(components.BattleRoyaleRewardsBlock(_REWARDS_VO_META, 'rewards'))
 BR_PERSONAL_STATS_BLOCK.addNextComponent(components.BattlePassBlock(_BATTLE_PASS_VO_META, 'battlePass', _RECORD.PERSONAL))
+BR_PERSONAL_STATS_BLOCK.addNextComponent(components.BattleRoyaleBonusStpCoinFactorBlock(_BONUS_STP_COIN_FACTOR_VO_META))
 TEAM_ITEM_VO_META = base.PropertyMeta((('isPersonal', False, 'isPersonal'),
  ('isPersonalSquad', False, 'isPersonalSquad'),
  ('squadIdx', 0, 'squadIdx'),

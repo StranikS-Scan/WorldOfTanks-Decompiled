@@ -3,7 +3,6 @@
 import itertools
 from collections import defaultdict
 import BigWorld
-from constants import ARENA_BONUS_TYPE
 from gui import GUI_NATIONS
 from gui.shared.utils import mapTextureToTheMemory, removeTextureFromMemory
 from shared_utils import findFirst, CONST_CONTAINER
@@ -252,7 +251,7 @@ class EventSettings(object):
      EVENT_TYPE.CLASS: ('vehicles_classes', 'class', VEHICLE_TYPES_ORDER),
      EVENT_TYPE.TEAMS: ('teams', 'team', None),
      EVENT_TYPE.ROLE: ('roles', 'role', None)}
-    __CUSTOM_UI_BATTLE_TYPES = (ARENA_BONUS_TYPE.COMP7,)
+    _CUSTOM_UI_BATTLE_TYPES = []
     EVENT_DAYS_LEFT_TO_START = 5
     EVENT_FINISHED_DURATION = 5 * time_utils.ONE_DAY
     EVENT_STARTED_DURATION_PERCENTAGE = 0.1
@@ -470,7 +469,7 @@ class EventSettings(object):
         return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_PROMO_REWARD_BLANK)
 
     def hasCustomUI(self):
-        return self.__battleType in self.__CUSTOM_UI_BATTLE_TYPES
+        return self.__battleType in self._CUSTOM_UI_BATTLE_TYPES
 
     def __requestImage(self, url):
         bwPlayer = BigWorld.player()
@@ -1273,35 +1272,6 @@ class LeaderBoard(object):
                         return False
 
         return True
-
-
-class Comp7LeaderBoard(LeaderBoard):
-    __CUSTOM_EXPECTED_FIELDS_META = ['elite_rank_position_threshold', 'elite_rank_points_threshold', 'master_rank_position_threshold']
-    EXPECTED_FIELDS_META = LeaderBoard.EXPECTED_FIELDS_META + __CUSTOM_EXPECTED_FIELDS_META
-
-    def __init__(self):
-        super(Comp7LeaderBoard, self).__init__()
-        self.__lastEliteUserPosition = None
-        self.__lastEliteUserRating = None
-        self.__lastMasterRankPositionThreshold = None
-        return
-
-    def setData(self, rawData, leaderboardID, infoType, leaderboardType):
-        result = super(Comp7LeaderBoard, self).setData(rawData, leaderboardID, infoType, leaderboardType)
-        meta = rawData['meta']
-        self.__lastEliteUserPosition = meta['elite_rank_position_threshold']
-        self.__lastEliteUserRating = meta['elite_rank_points_threshold']
-        self.__lastMasterRankPositionThreshold = meta['master_rank_position_threshold'] or 0
-        return result
-
-    def getRecordsCount(self):
-        return self.__lastMasterRankPositionThreshold
-
-    def getLastEliteUserPosition(self):
-        return self.__lastEliteUserPosition
-
-    def getLastEliteUserRating(self):
-        return self.__lastEliteUserRating
 
 
 class InfoItem(object):

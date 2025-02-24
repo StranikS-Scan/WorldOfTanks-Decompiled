@@ -66,7 +66,7 @@ class AwardsView(ViewImpl):
             vm.setBackground(R.images.gui.maps.icons.epicBattles.backgrounds.reward_selection())
             vm.setTitle(locales.subTitle1() if self.__countBonuses(bonuses) > 1 else locales.subTitle2())
             vm.setSubTitle(locales.title())
-            vm.setButtonTitle(locales.acceptButton())
+            vm.setDefaultButtonTitle(locales.acceptButton())
         packBonusModelAndTooltipData(rewards, self.viewModel.mainRewards, self.viewModel.additionalRewards, self.__tooltipItems)
 
     def _getEvents(self):

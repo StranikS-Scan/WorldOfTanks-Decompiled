@@ -9,7 +9,6 @@ from web.web_client_api.platform import PlatformWebApi
 from web.web_client_api.quests import QuestsWebApi
 from web.web_client_api.loot_boxes_system import LootBoxSystemWebApi
 from web.web_client_api.ranked_battles import RankedBattlesWebApi
-from web.web_client_api.comp7 import Comp7WebApi
 from web.web_client_api.request import RequestWebApi
 from web.web_client_api.seniority_awards import SeniorityAwardsWebApi
 from web.web_client_api.sound import SoundWebApi, SoundStateWebApi, HangarSoundWebApi
@@ -20,6 +19,7 @@ from web.web_client_api.ui import NotificationWebApi, OpenWindowWebApi, OpenTabW
 from web.web_client_api.frontline import FrontLineWebApi
 from web.web_client_api.blueprints_convert_sale import BlueprintsConvertSaleWebApi
 from web.web_client_api.uilogging import UILoggingWebApi
+from web.web_client_api.battle_royale import StPatrickWebApi
 
 class _OpenTabWebApi(OpenTabWebApi):
 
@@ -36,5 +36,29 @@ class _OpenTabWebApi(OpenTabWebApi):
         return (lambda : showShop(backUrl)) if backUrl is not None else None
 
 
+_SHOP_HANDLERS = [CloseWindowWebApi,
+ OpenWindowWebApi,
+ NotificationWebApi,
+ _OpenTabWebApi,
+ RequestWebApi,
+ ShopWebApi,
+ SoundWebApi,
+ SoundStateWebApi,
+ HangarSoundWebApi,
+ UtilWebApi,
+ FrontLineWebApi,
+ HeroTankWebApi,
+ BattlePassWebApi,
+ ClansWebApi,
+ RankedBattlesWebApi,
+ BlueprintsConvertSaleWebApi,
+ PlatformWebApi,
+ QuestsWebApi,
+ UILoggingWebApi,
+ SeniorityAwardsWebApi,
+ PersonalExchangeRatesDiscountsWebApi,
+ LootBoxSystemWebApi,
+ StPatrickWebApi]
+
 def createShopWebHandlers():
-    return webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, _OpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, FrontLineWebApi, HeroTankWebApi, BattlePassWebApi, ClansWebApi, RankedBattlesWebApi, Comp7WebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, QuestsWebApi, UILoggingWebApi, SeniorityAwardsWebApi, PersonalExchangeRatesDiscountsWebApi, LootBoxSystemWebApi)
+    return webApiCollection(*_SHOP_HANDLERS)

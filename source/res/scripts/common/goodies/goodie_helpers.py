@@ -6,7 +6,7 @@ from copy import deepcopy
 from GoodieConditions import MaxVehicleLevel
 from GoodieDefinition import GoodieDefinition
 from GoodieResources import Gold, Credits, Experience, CrewExperience, FreeExperience, FrontlineExperience
-from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill
+from GoodieTargets import BuyPremiumAccount, BuySlot, PostBattle, BuyGoldTankmen, BuyVehicle, EpicMeta, DemountOptionalDevice, EpicPostBattle, DropSkill, XpTransfer
 from goodie_multiple_resources import FreeXpCrewXpMultiResourceList, FreeXpMainXpMultiResourceList
 from Goodies import GoodieException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -36,7 +36,8 @@ _TARGETS = {GOODIE_TARGET_TYPE.ON_BUY_PREMIUM: BuyPremiumAccount,
  GOODIE_TARGET_TYPE.ON_EPIC_META: EpicMeta,
  GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE: DemountOptionalDevice,
  GOODIE_TARGET_TYPE.EPIC_POST_BATTLE: EpicPostBattle,
- GOODIE_TARGET_TYPE.ON_DROP_SKILL: DropSkill}
+ GOODIE_TARGET_TYPE.ON_DROP_SKILL: DropSkill,
+ GOODIE_TARGET_TYPE.XP_TRANSFER: XpTransfer}
 RESOURCES = {GOODIE_RESOURCE_TYPE.GOLD: Gold,
  GOODIE_RESOURCE_TYPE.CREDITS: Credits,
  GOODIE_RESOURCE_TYPE.XP: Experience,
@@ -62,7 +63,8 @@ GOODIE_TARGET_TO_TEXT = {BuyPremiumAccount: 'premium',
  EpicMeta: 'epic_meta',
  DemountOptionalDevice: 'demount_optional_device',
  EpicPostBattle: 'epic_post_battle',
- DropSkill: 'drop_skill'}
+ DropSkill: 'drop_skill',
+ XpTransfer: 'xp_transfer'}
 GOODIE_TEXT_TO_CONDITION = {'max_vehicle_level': GOODIE_CONDITION_TYPE.MAX_VEHICLE_LEVEL}
 GOODIE_TEXT_TO_RESOURCE = {'credits': GOODIE_RESOURCE_TYPE.CREDITS,
  'experience': GOODIE_RESOURCE_TYPE.XP,
@@ -80,7 +82,8 @@ GOODIE_TEXT_TO_TARGET = {'premium': GOODIE_TARGET_TYPE.ON_BUY_PREMIUM,
  'epic_meta': GOODIE_TARGET_TYPE.ON_EPIC_META,
  'demount_optional_device': GOODIE_TARGET_TYPE.ON_DEMOUNT_OPTIONAL_DEVICE,
  'epic_post_battle': GOODIE_TARGET_TYPE.EPIC_POST_BATTLE,
- 'drop_skill': GOODIE_TARGET_TYPE.ON_DROP_SKILL}
+ 'drop_skill': GOODIE_TARGET_TYPE.ON_DROP_SKILL,
+ 'xp_transfer': GOODIE_TARGET_TYPE.XP_TRANSFER}
 CURRENCY_TO_RESOURCE_TYPE = {'gold': GOODIE_RESOURCE_TYPE.GOLD,
  'credits': GOODIE_RESOURCE_TYPE.CREDITS}
 CURRENCY_TO_RESOURCE = {k:RESOURCES[v] for k, v in CURRENCY_TO_RESOURCE_TYPE.iteritems()}

@@ -22,6 +22,10 @@ def configure(config):
     return _g_manager
 
 
+def isConfigured():
+    return _g_manager is not None
+
+
 def replaceInstance(class_, obj, finalizer=None):
     _g_manager.replaceInstance(class_, obj, finalizer)
 

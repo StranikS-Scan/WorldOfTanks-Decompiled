@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/__init__.py
+from shared_utils import CONST_CONTAINER
 from typing import TYPE_CHECKING
 import constants
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
-from shared_utils import CONST_CONTAINER
 from skeletons.festivity_factory import IFestivityFactory
 if TYPE_CHECKING:
     from helpers.dependency import DependencyManager
@@ -66,9 +66,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.mapbox_controller import MapboxController
     from gui.game_control.overlay import OverlayController as _OverlayController
     from gui.game_control.account_completion import SteamCompletionController as _SteamCompletionController, DemoAccCompletionController as _DemoAccCompletionController
-    from gui.game_control.comp7_controller import Comp7Controller as _Comp7Ctrl
-    from gui.game_control.comp7_shop_controller import Comp7ShopController
-    from gui.game_control.comp7_weekly_quests_controller import Comp7WeeklyQuestsController
     from gui.game_control.veh_post_progression_controller import VehiclePostProgressionController
     from gui.game_control.wot_plus_controller import WotPlusController
     from gui.game_control.optional_devices_assistant_controller import OptionalDevicesAssistantController
@@ -79,6 +76,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.rts_battles_controller import RTSBattlesController
     from gui.game_control.resource_well_controller import ResourceWellController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
+    from gui.game_control.extension_stubs.comp7_controller import Comp7Controller
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.game_control.lootbox_system_controller import LootBoxSystemController
     from gui.entitlements.entitlements_controller import EntitlementsController
@@ -93,6 +91,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.achievements_earning_controller import Achievements20EarningController
     from gui.game_control.exchange_rates_with_discounts import ExchangeRatesWithDiscountsProvider
     from gui.game_control.fading_controller import FadingController
+    from gui.game_control.easy_tank_equip_controller import EasyTankEquipController as _EasyTankEquipController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -103,6 +102,7 @@ def getGameControllersConfig(manager):
         method = manager.replaceInstance if replace else manager.addInstance
         method(interface, controller, finalizer='fini')
 
+    _config(_interface.IEasyTankEquipController, _EasyTankEquipController())
     _config(_interface.ISeniorityAwardsController, _SeniorityAwardsController())
     _config(_interface.IFestivityController, manager.getService(IFestivityFactory).getController())
     _config(_interface.IReloginController, _Relogin())
@@ -147,9 +147,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IMapboxController, MapboxController())
     _config(_interface.IEventBattlesController, EventBattlesController())
     _config(_interface.IFunRandomController, FunRandomController())
-    _config(_interface.IComp7Controller, _Comp7Ctrl())
-    _config(_interface.IComp7ShopController, Comp7ShopController())
-    _config(_interface.IComp7WeeklyQuestsController, Comp7WeeklyQuestsController())
+    _config(_interface.IComp7Controller, Comp7Controller())
     _config(_interface.ISeasonsController, _Seasons())
     _config(_interface.IBadgesController, _Badges())
     _config(_interface.IAnonymizerController, _Anonymizer())

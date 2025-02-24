@@ -18,14 +18,12 @@ from gui.impl.lobby.crew.tooltips.bonus_perks_tooltip import BonusPerksTooltip
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.lobby.crew.tooltips.qualification_tooltip import QualificationTooltip
 from gui.shared.gui_items.artefacts import TAG_CREW_BATTLE_BOOSTER
-from gui.shared.gui_items.Tankman import TankmanSkill
 from helpers import dependency
 from items.tankmen import SKILLS_BY_ROLES, COMMON_SKILLS
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.loggers import CrewTankmanInfoLogger, CrewTooltipLogger
-from uilogging.crew.logging_constants import CrewPersonalFileKeys, CrewViewKeys
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
     from frameworks.wulf import ViewEvent
     from gui.impl.gen.view_models.views.lobby.crew.personal_case.personal_file_view_model import PersonalFileViewModel
     from gui.impl.gen.view_models.views.lobby.crew.personal_case.skills_matrix_model import SkillsMatrixModel
@@ -35,9 +33,7 @@ class SkillMatrixComponent(ComponentBase):
     itemsCache = dependency.descriptor(IItemsCache)
     appLoader = dependency.descriptor(IAppLoader)
 
-    def __init__(self, key, parent, logUIEvents=False):
-        self._uiLogger = CrewTankmanInfoLogger(logUIEvents)
-        self._uiTooltipLogger = CrewTooltipLogger(CrewViewKeys.PERSONAL_FILE, {TooltipConstants.SKILL: CrewPersonalFileKeys.MATRIX_SKILL_TOOLTIP})
+    def __init__(self, key, parent):
         self._toolTipMgr = self.appLoader.getApp().getToolTipMgr()
         self.__isOnFocus = True
         super(SkillMatrixComponent, self).__init__(key, parent)
@@ -45,15 +41,17 @@ class SkillMatrixComponent(ComponentBase):
     def createToolTip(self, event):
         if event.contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
             tooltipId = event.getArgument('tooltipId')
-            self._uiTooltipLogger.onBeforeTooltipOpened(tooltipId)
             if tooltipId == TooltipConstants.SKILL:
                 skillName = event.getArgument('skillName')
-                args = [str(skillName),
+                roleName = event.getArgument('roleName')
+                args = [skillName,
+                 roleName,
                  self.context.tankmanID,
                  None,
                  True,
                  None,
-                 event.getArgument('isBonus')]
+                 event.getArgument('isBonus'),
+                 int(event.getArgument('skillIndex'))]
                 self._toolTipMgr.onCreateWulfTooltip(TOOLTIPS_CONSTANTS.CREW_PERK_GF, args, event.mouse.positionX, event.mouse.positionY, parent=self.parent.getParentWindow())
                 return TOOLTIPS_CONSTANTS.CREW_PERK_GF
             if tooltipId == TooltipConstants.DIRECTIVE:
@@ -81,7 +79,7 @@ class SkillMatrixComponent(ComponentBase):
 
     def _getSkillAnimationType(self, tankmanSkillModel, index, isBonus=False):
         animationType = AnimationType.NONE
-        if self.context.skillAnimationsSkipped or tankmanSkillModel.getIsLocked():
+        if self.context.skillAnimationsSkipped or tankmanSkillModel.getIsLocked() or tankmanSkillModel.getIsIrrelevant():
             return animationType
         else:
             currentAnimationType = tankmanSkillModel.getAnimationType()
@@ -182,11 +180,9 @@ class SkillMatrixComponent(ComponentBase):
                 vm.setDirectiveName(booster.name)
 
     def _onIncrease(self):
-        self._uiLogger.logClick(CrewPersonalFileKeys.MATRIX_INCREASE_BUTTON)
         self.events.onIncreaseClick()
 
     def _onReset(self):
-        self.events.logClick(CrewPersonalFileKeys.MATRIX_RESET_BUTTON)
         self.events.onResetClick(self.context.tankmanID)
 
     def _onSkillClick(self, kwargs):

@@ -8,6 +8,7 @@ from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import crewMemberRealSkillLevel
 from items import utils, tankmen
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
     from items.vehicles import VehicleDescriptor
 
 class _KpiDict(object):
@@ -118,7 +119,7 @@ def kpiFromCrewSkills(vehicle):
                 if bonusSkill and bonusSkill.name != 'any' and bonusSkill.level != tankmen.NO_SKILL and bonusSkill.isSkillActive:
                     level = crewMemberRealSkillLevel(vehicle, bonusSkill.name)
                     if level != tankmen.NO_SKILL:
-                        skills[bonusSkill.name] = crewMemberRealSkillLevel(vehicle, bonusSkill.name)
+                        skills[bonusSkill.name] = level
 
     for eq in vehicle.battleBoosters.installed.getItems():
         if eq.isCrewBooster() and eq.isAffectsOnVehicle(vehicle):

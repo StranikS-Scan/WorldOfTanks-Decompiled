@@ -1,9 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/crew/common/crew_widget_model.py
+from enum import IntEnum
 from frameworks.wulf import Array
 from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.views.lobby.crew.common.buttons_bar_model import ButtonsBarModel
 from gui.impl.gen.view_models.views.lobby.crew.common.crew_widget_slot_model import CrewWidgetSlotModel
+
+class SlotSizeMode(IntEnum):
+    DEFAULT = 0
+    COMPACT = 1
+
 
 class CrewWidgetModel(ViewModel):
     __slots__ = ('onSlotClick', 'onChangeCrewClick', 'onDogMoreInfoClick')
@@ -83,11 +89,11 @@ class CrewWidgetModel(ViewModel):
     def setIsCrewLocked(self, value):
         self._setBool(10, value)
 
-    def getIsComp7Hangar(self):
-        return self._getBool(11)
+    def getSlotSizeMode(self):
+        return SlotSizeMode(self._getNumber(11))
 
-    def setIsComp7Hangar(self, value):
-        self._setBool(11, value)
+    def setSlotSizeMode(self, value):
+        self._setNumber(11, value.value)
 
     def _initialize(self):
         super(CrewWidgetModel, self)._initialize()
@@ -102,7 +108,7 @@ class CrewWidgetModel(ViewModel):
         self._addNumberProperty('currentLayoutID', 0)
         self._addNumberProperty('previousLayoutID', 0)
         self._addBoolProperty('isCrewLocked', False)
-        self._addBoolProperty('isComp7Hangar', False)
+        self._addNumberProperty('slotSizeMode')
         self.onSlotClick = self._addCommand('onSlotClick')
         self.onChangeCrewClick = self._addCommand('onChangeCrewClick')
         self.onDogMoreInfoClick = self._addCommand('onDogMoreInfoClick')

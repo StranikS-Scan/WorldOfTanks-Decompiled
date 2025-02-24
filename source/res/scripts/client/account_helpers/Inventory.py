@@ -186,6 +186,10 @@ class Inventory(object):
         self.__account._doCmdInt(AccountCommands.CMD_CONVERT_JUNK_TANKMEN, 0, proxy)
         return
 
+    def transferTankmenXp(self, sourceTmanID, targetTmanID, callback):
+        proxy = self.getCallbackProxy(callback)
+        self.__account._doCmdInt2(AccountCommands.CMD_TRANSFER_TMAN_XP, sourceTmanID, targetTmanID, proxy)
+
     def equip(self, vehInvID, itemCompDescr, callback):
         if self.__ignore:
             if callback is not None:
@@ -340,7 +344,10 @@ class Inventory(object):
                 callback(AccountCommands.RES_NON_PLAYER, [])
             return
         else:
-            proxy = self.getCallbackProxy(callback)
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr)
+            else:
+                proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_RETURN_CREW, vehInvID, 0, 0, proxy)
             return
 
@@ -554,6 +561,9 @@ class Inventory(object):
     def fillAllTankmenSkills(self, fillInBarracks=False, callback=None):
         self.__account._doCmdInt(AccountCommands.CMD_FILL_ALL_TMEN_SKILLS, int(fillInBarracks), callback)
 
+    def addMentoringLicense(self, nLicences=1, callback=None):
+        self.__account._doCmdInt(AccountCommands.CMD_ADD_MENTORING_LICENSE, nLicences, callback)
+
     def equipOptDevsSequence(self, vehInvID, devices, callback):
         if self.__ignore:
             if callback is not None:
@@ -570,6 +580,15 @@ class Inventory(object):
             return
         else:
             self.__account.shop.waitForSync(partial(self.__destroyModernizedOptDev, vehInvID, deviceCompDescr, callback))
+            return
+
+    def easyTankEquipApply(self, easyTankEquipData, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER, '', {})
+            return
+        else:
+            self.__account.shop.waitForSync(partial(self.__easyTankEquipApplyOnShopSynced, easyTankEquipData, callback))
             return
 
     def getCallbackProxy(self, callback):
@@ -848,4 +867,50 @@ class Inventory(object):
         else:
             proxy = self.getCallbackProxy(callback)
             self.__commandsProxy.perform(AccountCommands.CMD_SET_CUSTOM_ROLE_SLOT, shopRev, vehInvID, slotID, proxy)
+            return
+
+    def __easyTankEquipApplyOnShopSynced(self, easyTankEquipData, callback, resultID, shopRev):
+        if resultID < 0:
+            if callback is not None:
+                callback(resultID, '', {})
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
+            else:
+                proxy = None
+            vehInvID, optDevicesForDemountKit, optDevicesFreeDemount, optDevicesLayout, shellsLayout, eqsLayout, styleData = easyTankEquipData
+            intArr = [shopRev, vehInvID]
+            strArr = []
+            if optDevicesForDemountKit is not None:
+                intArr.append(len(optDevicesForDemountKit))
+                intArr += optDevicesForDemountKit
+            else:
+                intArr.append(0)
+            if optDevicesFreeDemount is not None:
+                intArr.append(len(optDevicesFreeDemount))
+                intArr += optDevicesFreeDemount
+            else:
+                intArr.append(0)
+            if optDevicesLayout is not None:
+                intArr.append(len(optDevicesLayout))
+                intArr += optDevicesLayout
+            else:
+                intArr.append(0)
+            if shellsLayout is not None:
+                intArr.append(len(shellsLayout))
+                intArr += shellsLayout
+            else:
+                intArr.append(0)
+            if eqsLayout is not None:
+                intArr.append(len(eqsLayout))
+                intArr += eqsLayout
+            else:
+                intArr.append(0)
+            if styleData is not None:
+                for styleDescr, season in styleData:
+                    intArr.append(season)
+                    strArr.append(styleDescr)
+
+            self.__commandsProxy.perform(AccountCommands.CMD_EASY_TANK_EQUIP_APPLY, intArr, strArr, proxy)
             return

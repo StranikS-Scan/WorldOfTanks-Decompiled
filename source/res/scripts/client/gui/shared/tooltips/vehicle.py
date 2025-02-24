@@ -20,7 +20,7 @@ from gui.shared.gui_items.gui_item_economics import getMinRentItemPrice, ItemPri
 from gui.shared.formatters import text_styles, moneyWithIcon, getItemPricesVO
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
-from gui.shared.gui_items.Tankman import Tankman, getRoleUserName, CrewTypes, NO_TANKMAN
+from gui.shared.gui_items.Tankman import Tankman, CrewTypes, NO_TANKMAN
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
 from gui.shared.gui_items.fitting_item import RentalInfoProvider
@@ -34,6 +34,7 @@ from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makeCompoundPriceBlock, CURRENCY_SETTINGS
 from gui.shared.utils import MAX_STEERING_LOCK_ANGLE, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHOT_DISPERSION_ANGLE, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_SPEED_MODE_SPEED, ROCKET_ACCELERATION_SPEED_LIMITS, DUAL_ACCURACY_COOLING_DELAY, TWIN_GUN_SWITCH_FIRE_MODE_TIME, RELOAD_TIME_SECS_PROP_NAME, TWIN_GUN_RELOAD_TIME
 from gui.impl.lobby.crew.tooltips.vehicle_params_tooltip_view import BaseVehicleParamsTooltipView, BaseVehicleAdvancedParamsTooltipView, VehicleAdvancedParamsTooltipView, VehicleAvgParamsTooltipView
+from gui.shared.utils.role_presenter_helper import getRoleUserName
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from items.components.skills_constants import ORDERED_ROLES

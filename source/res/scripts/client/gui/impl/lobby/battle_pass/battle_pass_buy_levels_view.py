@@ -8,6 +8,7 @@ from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltip
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator
+from gui.battle_pass.battle_pass_helpers import getDefaultChaptersView
 from gui.battle_pass.battle_pass_package import PackageAnyLevels
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.impl import backport
@@ -204,13 +205,13 @@ class BattlePassBuyLevelView(ViewImpl):
 
     def __onExtraChapterExpired(self):
         if self.__battlePass.isExtraChapter(self.__chapterID):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
             self.destroyWindow()
 
     def __onBattlePassSettingsChange(self, *_):
         ctrl = self.__battlePass
         if not (ctrl.isEnabled() and ctrl.isVisible() and ctrl.isChapterExists(self.__chapterID)):
-            showMissionsBattlePass(R.views.lobby.battle_pass.ChapterChoiceView())
+            showMissionsBattlePass(getDefaultChaptersView(battlePass=self.__battlePass))
             self.destroyWindow()
 
 

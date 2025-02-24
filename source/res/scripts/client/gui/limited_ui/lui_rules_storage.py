@@ -39,7 +39,6 @@ LUI_RULES = Enumeration('Limited UI rules', ['store',
  'PersonalReservesHangarHint',
  'ModernizedSetupTabHint',
  'OfferBannerWindow',
- 'Comp7EntryPoint',
  'BattlePassEntry',
  'ProgressiveItemsReward',
  'DailyMissions',
@@ -57,7 +56,8 @@ LUI_RULES = Enumeration('Limited UI rules', ['store',
  'BREntryPoint',
  'WDRNewbieReward',
  'LiveOpsWebEventsEntryPoint',
- 'AdvancedAchievements'])
+ 'AdvancedAchievements',
+ 'EasyTankEquipEntryPoint'])
 _POSTPONED_RULES_DELAY = 5.0
 _SERVER_SETTINGS_BLOCK_BITS = 32
 

@@ -32,6 +32,7 @@ from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from vehicle_outfit.outfit import Outfit, Area
+from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import currentHangarIsBattleRoyale
 from gui.shared.gui_items.processors.common import CustomizationsBuyer, CustomizationsSeller
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.decorators import adisp_process
@@ -239,7 +240,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         return
 
     @adisp.adisp_process
-    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
+    def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None, prevVehicleInvID=None):
         if self.__customizationCtx is None:
             lobbyHeaderNavigationPossible = yield self.__lobbyContext.isHeaderNavigationPossible()
             if not lobbyHeaderNavigationPossible:
@@ -249,7 +250,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
          'season': season,
          'modeId': modeId,
          'tabId': tabId,
-         'itemCD': itemCD}
+         'itemCD': itemCD,
+         'prevVehicleInvID': prevVehicleInvID}
         shouldSelectVehicle = False
         if self.hangarSpace.space is not None:
             self.hangarSpace.space.turretAndGunAngles.set(gunPitch=self.__GUN_PITCH_ANGLE, turretYaw=self.__TURRET_YAW_ANGLE)
@@ -319,6 +321,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             if cameraManager:
                 if cameraManager.getCurrentCameraName() == CUSTOMIZATION_CAMERA_NAME:
                     cameraManager.switchToTank()
+            self.__checkAvailabilityForHangar(self.__showCustomizationKwargs.get('prevVehicleInvID'))
         self.__destroyCtx()
         self.onVisibilityChanged(False)
         return
@@ -653,3 +656,11 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def __onSyncCompleted(self):
         self.__updateProgressionQuests()
+
+    def __checkAvailabilityForHangar(self, previousVehicle):
+        if currentHangarIsBattleRoyale():
+            if previousVehicle is not None:
+                BigWorld.callback(0.0, makeCallbackWeak(g_currentVehicle.selectVehicle, vehInvID=previousVehicle))
+            else:
+                g_currentVehicle.selectNoVehicle()
+        return

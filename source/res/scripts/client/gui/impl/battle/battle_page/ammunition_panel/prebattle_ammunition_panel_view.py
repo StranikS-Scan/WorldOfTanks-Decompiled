@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/battle/battle_page/ammunition_panel/prebattle_ammunition_panel_view.py
-from account_helpers.settings_core.settings_constants import CONTROLS
 from typing import TYPE_CHECKING
 import CommandMapping
 from Event import Event, EventManager
+from account_helpers.settings_core.settings_constants import CONTROLS
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.battle.battle_page.ammunition_panel.ammunition_panel import PrebattleAmmunitionPanel
 from gui.impl.battle.battle_page.ammunition_panel.groups_controller import COMMAND_MAPPING
@@ -11,15 +11,13 @@ from gui.impl.common.ammunition_panel.ammunition_groups_controller import GROUPS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.battle.battle_page.prebattle_ammunition_panel_view_model import PrebattleAmmunitionPanelViewModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
-from gui.impl.pub import SimpleToolTipWindow, ViewImpl
+from gui.impl.pub import ViewImpl
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
-from gui.shared.tooltips.comp7_tooltips import getRoleEquipmentTooltipParts
 from gui.shared.tooltips.consumables_panel import makeShellTooltip, buildEquipmentSlotTooltipTextBySlotInfo
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IComp7Controller
 if TYPE_CHECKING:
     from typing import Optional
     from frameworks.wulf import ViewEvent, View
@@ -151,27 +149,3 @@ class PrebattleAmmunitionPanelView(ViewImpl):
     def __onSettingsApplied(self, diff):
         if CONTROLS.KEYBOARD in diff:
             self.__ammunitionPanel.updateSectionsWithKeySettings()
-
-
-class Comp7PrebattleAmmunitionPanelView(PrebattleAmmunitionPanelView):
-    __slots__ = ()
-    __comp7Controller = dependency.descriptor(IComp7Controller)
-
-    def createToolTip(self, event):
-        if event.contentID in _R_SIMPLE_TOOLTIPS:
-            window = SimpleToolTipWindow(event, self.getParentWindow())
-            if window is not None:
-                window.load()
-                window.move(event.mouse.positionX, event.mouse.positionY)
-                return window
-        return super(Comp7PrebattleAmmunitionPanelView, self).createToolTip(event)
-
-    def updateViewVehicle(self, vehicle, fullUpdate=True):
-        super(Comp7PrebattleAmmunitionPanelView, self).updateViewVehicle(vehicle, fullUpdate)
-        roleSkill, body = getRoleEquipmentTooltipParts(vehicle)
-        if not roleSkill:
-            return
-        with self.viewModel.transaction() as tx:
-            tx.roleSkillSlot.setRoleSkill(roleSkill.name)
-            tx.roleSkillSlot.setTooltipHeader(roleSkill.userString)
-            tx.roleSkillSlot.setTooltipBody(body or '')

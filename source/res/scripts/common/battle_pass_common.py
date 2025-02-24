@@ -58,7 +58,10 @@ BATTLE_PASS_STYLE_PROGRESS_BONUS_NAME = 'styleProgressToken'
 BATTLE_PASS_Q_CHAIN_BONUS_NAME = 'battlePassQuestChainToken'
 BATTLE_PASS_RANDOM_QUEST_BONUS_NAME = 'randomQuestToken'
 NON_VEH_CD = 0
+NON_CHAPTER_ID = 0
 MAX_NON_CHAPTER_POINTS = 1000000
+MAX_POST_PROGRESSION_POINTS = 1000000
+MAX_POST_PROGRESSION_LEVEL = 10000
 BATTLE_PASS_TOKEN_LIFETIME = 4320
 HOLIDAY_SEASON_OFFSET = 1000
 BATTLE_PASS_COST_CURRENCIES = {'gold'}
@@ -67,6 +70,7 @@ BP_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bp'
 BP_HOLIDAY_TANKMEN_ENTITLEMENT_TAG_PREFIX = 'tankmen_bph'
 BP_TANKMAN_QUEST_CHAIN_TOKEN_POSTFIX = '_bp_chain'
 TANKMAN_QUEST_CHAIN_ENTITLEMENT_POSTFIX = '_qch'
+BATTLE_PASS_TICKETS_EVENT = 'battlePass'
 
 class BattlePassTankmenSource(object):
     FREE = 'free_progression'
@@ -93,6 +97,7 @@ class FinalReward(str, Enum):
 @unique
 class CurrencyBP(Enum):
     BIT = 'bpbit'
+    TALER = 'bptaler'
 
 
 class BattlePassRewardReason(object):
@@ -252,15 +257,27 @@ def getLevel(curPoints, levelPoints, prevLevel=0):
     return prevLevel + 1 if curPoints >= levelPoints[prevLevel] and curPoints < levelPoints[prevLevel + 1] else bisect.bisect_right(levelPoints, curPoints, prevLevel)
 
 
+def getPostProgressionLevel(curPoints, cyclePoints, prevLevel=0):
+    levelsInCycle = len(cyclePoints)
+    if not levelsInCycle:
+        return prevLevel
+    pointsPerCycle = cyclePoints[-1]
+    cyclesDone, pointsInCurrentCycle = curPoints / pointsPerCycle, curPoints % pointsPerCycle
+    levelInCurrentCycle = bisect.bisect_right(cyclePoints, pointsInCurrentCycle)
+    currentLevelByPoints = cyclesDone * levelsInCycle + levelInCurrentCycle
+    return max(prevLevel, currentLevelByPoints)
+
+
 def getMaxAvalable3DStyleProgressInChapter(seasonID, chapter, tokensIds):
     level = 0
-    prefixStyleTokenInChapter = '{}{}:{}'.format(BATTLE_PASS_TOKEN_3D_STYLE, seasonID, chapter)
-    for token in tokensIds:
-        if token.startswith(prefixStyleTokenInChapter):
-            _, _, _, _, levelStyle = token.split(':')
-            levelStyle = int(levelStyle)
-            if levelStyle > level:
-                level = levelStyle
+    if not isPostProgressionChapter(chapter):
+        prefixStyleTokenInChapter = '{}{}:{}'.format(BATTLE_PASS_TOKEN_3D_STYLE, seasonID, chapter)
+        for token in tokensIds:
+            if token.startswith(prefixStyleTokenInChapter):
+                _, _, _, _, levelStyle = token.split(':')
+                levelStyle = int(levelStyle)
+                if levelStyle > level:
+                    level = levelStyle
 
     return level
 
@@ -273,6 +290,18 @@ def getPresentLevel(rawLevel):
     return rawLevel + 1
 
 
+def isPostProgressionChapter(chapterID):
+    return chapterID and chapterID % 10 == 0
+
+
+def getPostProgressionChapterID(seasonNum):
+    return seasonNum * 10
+
+
+def getPostProgressionLevelInCycleForRewards(cycleLength, level):
+    return (level - 1) % cycleLength + 1
+
+
 class BattlePassConfig(object):
     REWARD_IDX = 0
     TAGS_IDX = 1
@@ -283,12 +312,16 @@ class BattlePassConfig(object):
         self._rewards = config.get('rewards', {})
         self._regularChapterIds = set()
         self._extraChapterIds = set()
+        self._mainChapterIds = set()
         if not self.chapters:
             return
         for chapterID, chapterData in self.chapters.iteritems():
             if chapterData['extra']:
                 self._extraChapterIds.add(chapterID)
-            self._regularChapterIds.add(chapterID)
+            if not isPostProgressionChapter(chapterID):
+                self._regularChapterIds.add(chapterID)
+
+        self._mainChapterIds = self._regularChapterIds | self._extraChapterIds
 
     @property
     def mode(self):
@@ -342,6 +375,18 @@ class BattlePassConfig(object):
     def isHoliday(self):
         return len(self.chapters) == 1
 
+    @property
+    def isPostProgressionPresent(self):
+        return not self.isHoliday
+
+    @property
+    def postProgressionChapterID(self):
+        return getPostProgressionChapterID(self.seasonNum)
+
+    @property
+    def postProgressionCycleLength(self):
+        return len(self.getChapterLevels(self.postProgressionChapterID))
+
     def getRewardTypes(self, chapterID):
         if chapterID not in self.chapters:
             LOG_ERROR('BattlePass wrong chapter={}, exists: {}'.format(chapterID, self.chapters))
@@ -353,16 +398,23 @@ class BattlePassConfig(object):
         return self.getChapter(chapterID).get('levels', (0,))
 
     def getMaxChapterLevel(self, chapterID):
+        if isPostProgressionChapter(chapterID):
+            return MAX_POST_PROGRESSION_LEVEL
         return len(self.getChapterLevels(chapterID)) if chapterID else 0
 
     def getMaxChapterPoints(self, chapterID):
+        if isPostProgressionChapter(chapterID):
+            return MAX_POST_PROGRESSION_POINTS
         return self.getChapterLevels(chapterID)[-1] if chapterID else MAX_NON_CHAPTER_POINTS
 
     def getRegularChapterIds(self):
         return self._regularChapterIds
 
+    def getMainChapterIds(self):
+        return self._mainChapterIds
+
     def getBattlePassCost(self, chapterID):
-        return self.chapters.get(chapterID, {}).get('battlePassCost', {'gold': 0})
+        return self.chapters.get(chapterID, {}).get('battlePassCost', {'priceA': {'gold': 0}})
 
     def getSpecialTankmen(self):
         return self._season.get('specialTankmen', {})
@@ -451,6 +503,9 @@ class BattlePassConfig(object):
         return self.getRewardByType(chapterID, level, BattlePassConsts.REWARD_PAID)
 
     def getRewardByType(self, chapterID, level, rewardType):
+        if isPostProgressionChapter(chapterID):
+            cycleLength = self.postProgressionCycleLength
+            level = getPostProgressionLevelInCycleForRewards(cycleLength, level)
         return self.getChapterRewards(chapterID, rewardType).get(level, ({}, tuple()))[BattlePassConfig.REWARD_IDX]
 
     def getChapterBorders(self, chapterID):

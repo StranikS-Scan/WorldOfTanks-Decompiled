@@ -83,11 +83,6 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     REFERRAL_PROGRAMM = 'referralProgram'
     EPIC_RANK_UNLOCK = 'epicRankUnlock'
     RANKED_SELECTABLE_REWARD = 'rankedSelectableReward'
-    COMP7_SELECTOR_INFO = 'comp7SelectorInfo'
-    COMP7_SELECTOR_UNAVAILABLE_INFO = 'comp7SelectorUnavailableInfo'
-    COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
-    COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
-    COMP7_SELECTABLE_REWARD = 'comp7SelectableReward'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -123,6 +118,7 @@ class TOOLTIP_COMPONENT(CONST_CONTAINER):
     BATTLE_PASS = 'battlePass'
     EPIC_BATTLE = 'epicBattle'
     RECERTIFICATION_FORM = 'recertificationForm'
+    MENTOR_LICENSE = 'mentorLicense'
     FULL_STATS = 'fullStats'
 
 

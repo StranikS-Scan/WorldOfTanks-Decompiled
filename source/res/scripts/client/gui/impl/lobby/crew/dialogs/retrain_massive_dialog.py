@@ -3,7 +3,6 @@
 from typing import TYPE_CHECKING
 import BigWorld
 import SoundGroups
-from constants import VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG, VEHICLE_WOT_PLUS_TAG, VEHICLE_PREMIUM_TAG
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.customization.shared import getPurchaseGoldForCredits, getPurchaseMoneyState, MoneyForPurchase
 from gui.impl.auxiliary.tankman_operations import ITEM_PRICE_FREE, packRetrainTankman
@@ -18,6 +17,7 @@ from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.dialog_tankman_model import DialogTankmanModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.retrain_massive_dialog_model import RetrainMassiveDialogModel
+from gui.impl.lobby.crew.crew_helpers.model_setters import ifWGMAvailableButtonUpdate
 from gui.impl.lobby.crew.crew_sounds import SOUNDS
 from gui.impl.lobby.crew.dialogs.price_cards_content.retrain_massive_price_list import RetrainMassivePriceList
 from gui.impl.pub.dialog_window import DialogButtons
@@ -75,15 +75,22 @@ class RetrainMassiveDialog(BaseCrewDialogTemplateView):
         return super(RetrainMassiveDialog, self).createToolTip(event)
 
     def _getCallbacks(self):
-        return (('inventory.1.compDescr', self._onVehiclesInventoryUpdate),)
+        return (('inventory.1.compDescr', self._onVehiclesInventoryUpdate), ('cache.mayConsumeWalletResources', self._onConsumeWalletUpdate))
 
     def _getEvents(self):
         return ((self._priceListContent.onPriceChange, self._onPriceChange),)
 
+    def _onConsumeWalletUpdate(self, *_):
+        submitBtn = self.getButton(DialogButtons.SUBMIT)
+        if submitBtn is not None:
+            ifWGMAvailableButtonUpdate(self.viewModel, self._itemsCache, submitBtn, True)
+        return
+
     def _onPriceChange(self, index=None):
         submitBtn = self.getButton(DialogButtons.SUBMIT)
         if submitBtn is not None:
-            submitBtn.isDisabled = index is None
+            isWGMAvailable = self._itemsCache.items.stats.mayConsumeWalletResources
+            submitBtn.isDisabled = index is None or not isWGMAvailable
         with self.viewModel.transaction() as vm:
             vm.setIsPriceSelected(index is not None)
             self._updateTankmen(vm)
@@ -106,16 +113,8 @@ class RetrainMassiveDialog(BaseCrewDialogTemplateView):
         self._updateViewModel()
         super(RetrainMassiveDialog, self)._onLoading(*args, **kwargs)
 
-    def _getWarning(self):
-        tagList = [VEHICLE_NO_CREW_TRANSFER_PENALTY_TAG,
-         VEHICLE_WOT_PLUS_TAG,
-         VEHICLE_PREMIUM_TAG,
-         VEHICLE_TAGS.PREMIUM_IGR]
-        return R.strings.dialogs.retrain.warning.premiumVehicle() if any((tag in self._vehicle.descriptor.type.tags for tag in tagList)) else R.invalid()
-
     def _initModel(self):
         with self.viewModel.transaction() as vm:
-            vm.setWarning(self._getWarning())
             tankmenVL = vm.getTankmen()
             tankmenVL.clear()
             for _, tankman in enumerate(self._tankmen):
@@ -144,14 +143,16 @@ class RetrainMassiveDialog(BaseCrewDialogTemplateView):
             if skillEfficienciesAfter is None or isApplicableForTankmen is None:
                 tankmanModel.setSkillEfficiency(currentVehicleSkillsEfficiency)
                 tankmanModel.setIsSelected(False)
-            skillEfficiencyAfter = skillEfficienciesAfter[idx]
-            isRetrainUseless = isApplicableForTankmen[idx]
-            tankmanModel.setSkillEfficiency(tankman.currentVehicleSkillsEfficiency if isRetrainUseless else skillEfficiencyAfter)
-            tankmanModel.setIsSelected(not isRetrainUseless)
-            if not isRetrainUseless:
-                self._selectedTankmenIds.append(tankman.invID)
-                if skillEfficiencyAfter != currentVehicleSkillsEfficiency:
-                    SoundGroups.g_instance.playSound2D(SOUNDS.CREW_PERK_UPGRADE)
+            else:
+                skillEfficiencyAfter = skillEfficienciesAfter[idx]
+                isRetrainUseless = isApplicableForTankmen[idx]
+                tankmanModel.setSkillEfficiency(tankman.currentVehicleSkillsEfficiency if isRetrainUseless else skillEfficiencyAfter)
+                tankmanModel.setIsSelected(not isRetrainUseless)
+                if not isRetrainUseless:
+                    self._selectedTankmenIds.append(tankman.invID)
+                    if skillEfficiencyAfter != currentVehicleSkillsEfficiency:
+                        SoundGroups.g_instance.playSound2D(SOUNDS.CREW_PERK_UPGRADE)
+            tankmanModel.setPrevSkillEfficiency(tankman.currentVehicleSkillsEfficiency)
 
         tankmenVL.invalidate()
         return

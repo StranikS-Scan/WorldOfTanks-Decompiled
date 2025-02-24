@@ -6,6 +6,7 @@ from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.impl.gen import R
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.info_page_model import InfoPageModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.game_mode_model import GameModeModel
+from battle_royale.gui.Scaleform.daapi.view.lobby.respawn_ability import RespawnAbility
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_rows_model import GameModeRowsModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.game_mode_cell_model import GameModeCellModel
 from gui.impl import backport
@@ -13,6 +14,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyWindow
 from battle_royale.gui.shared.tooltips.helper import fillProgressionPointsTableModel
 from helpers import dependency
+from helpers.time_utils import ONE_MINUTE
 from skeletons.gui.game_control import IBattleRoyaleController
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from constants import ARENA_BONUS_TYPE
@@ -42,6 +44,7 @@ class InfoPage(ViewImpl):
     def __updateModel(self):
         with self.viewModel.transaction() as tx:
             self.__fillSeasonDateModel(tx)
+            self.__fillPlatoonTooltipData(tx)
             tx.setIsModeSelector(self._isModeSelector)
             fillProgressionPointsTableModel(tx.modesSH, self.__battleRoyaleCtrl.getProgressionPointsTableData(), _rBattleRoyale)
             if self.__battlePassCtrl.isEnabled() and self.__battlePassCtrl.isVisible():
@@ -67,6 +70,16 @@ class InfoPage(ViewImpl):
             viewModel.setStartDate(currentSeason.getStartDate())
             viewModel.setEndDate(currentSeason.getEndDate())
         return
+
+    @staticmethod
+    def __fillPlatoonTooltipData(viewModel):
+        respawnData = RespawnAbility()
+        platoonTimeToResurrect = respawnData.getPlatoonTimeToResurrect()
+        platoonRespawnPeriod = respawnData.getPlatoonRespawnPeriod() / ONE_MINUTE
+        soloRespawnPeriod = respawnData.getSoloRespawnPeriod() / ONE_MINUTE
+        viewModel.setPlatoonTimeToResurrect(platoonTimeToResurrect)
+        viewModel.setPlatoonRespawnPeriod(platoonRespawnPeriod)
+        viewModel.setSoloRespawnPeriod(soloRespawnPeriod)
 
     def __createBattlePassTable(self):
         viewModel = GameModeModel()

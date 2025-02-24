@@ -198,4 +198,4 @@ class PackageAnyLevels(BattlePassPackage):
 
 @replace_none_kwargs(battlePass=IBattlePassController)
 def generatePackages(battlePass=None):
-    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getChapterIDs())))
+    return OrderedDict(sorted(((chapterID, BattlePassPackage(chapterID)) for chapterID in battlePass.getMainChapterIDs())))

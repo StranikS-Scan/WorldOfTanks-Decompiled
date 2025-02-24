@@ -1,21 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/skills_components.py
 from typing import Optional
-from items.components import component_constants
 from items.components import legacy_stuff
 from items.components import skills_constants
-from items.components.shared_components import I18nComponent
 from items.components.skills_constants import SkillTypeName
 from perks_constants import StubPerkIDs
 
 class BasicSkill(legacy_stuff.LegacyStuff):
-    __slots__ = ('__name', '__i18n', '__icon', '__vsePerk', '__uiSettings')
+    __slots__ = ('__name', '__vsePerk', '__uiSettings')
 
-    def __init__(self, name, i18n=None, icon=None, vsePerk=None, uiSettings=None):
+    def __init__(self, name, vsePerk=None, uiSettings=None):
         super(BasicSkill, self).__init__()
         self.__name = name
-        self.__i18n = i18n
-        self.__icon = icon
         self.__vsePerk = vsePerk
         self.__uiSettings = uiSettings
 
@@ -25,66 +21,6 @@ class BasicSkill(legacy_stuff.LegacyStuff):
     @property
     def name(self):
         return self.__name
-
-    @property
-    def i18n(self):
-        return self.__i18n
-
-    @property
-    def userString(self):
-        if self.__i18n is not None:
-            return self.__i18n.userString
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def description(self):
-        if self.__i18n is not None:
-            return self.__i18n.description
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def maxLvlDescription(self):
-        if self.__i18n is not None:
-            return self.__i18n.maxLvlDescription
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def currentLvlDescription(self):
-        if self.__i18n is not None:
-            return self.__i18n.currentLvlDescription
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def altDescription(self):
-        if self.__i18n is not None:
-            return self.__i18n.altDescription
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def altInfo(self):
-        if self.__i18n is not None:
-            return self.__i18n.altInfo
-        else:
-            return component_constants.EMPTY_STRING
-            return
-
-    @property
-    def icon(self):
-        return self.__icon
-
-    @property
-    def extensionLessIcon(self):
-        return self.__icon.split('.png')[0]
 
     @property
     def vsePerk(self):
@@ -122,11 +58,11 @@ class ExtendedSkill(BasicSkill):
     __slots__ = ('_setOfParameters',)
 
     def __init__(self, basicSkill, *args):
-        super(ExtendedSkill, self).__init__(basicSkill.name, i18n=basicSkill.i18n, icon=basicSkill.icon, vsePerk=basicSkill.vsePerk, uiSettings=basicSkill.uiSettings)
+        super(ExtendedSkill, self).__init__(basicSkill.name, vsePerk=basicSkill.vsePerk, uiSettings=basicSkill.uiSettings)
         self._setOfParameters = args
 
     def recreate(self, *args):
-        return self.__class__(BasicSkill(self.name, self.i18n, self.icon, self.vsePerk, self.uiSettings), *args)
+        return self.__class__(BasicSkill(self.name, self.vsePerk, self.uiSettings), *args)
 
 
 class BrotherhoodSkill(ExtendedSkill):
@@ -244,30 +180,3 @@ class SkillsConfig(legacy_stuff.LegacyStuff):
 
     def getSkill(self, name):
         return getattr(self, name, BasicSkill('unknown'))
-
-
-class SkillLocales(I18nComponent):
-    __slots__ = ('__maxLvlDescription', '__currentLvlDescription', '__altDescription', '__altInfo')
-
-    def __init__(self, userName='', description='', maxLvlDescription='', currentLvlDescription='', altDescription='', altInfo=''):
-        super(SkillLocales, self).__init__(userName, description, description)
-        self.__maxLvlDescription = maxLvlDescription
-        self.__currentLvlDescription = currentLvlDescription
-        self.__altDescription = altDescription
-        self.__altInfo = altInfo
-
-    @property
-    def maxLvlDescription(self):
-        return self.__maxLvlDescription
-
-    @property
-    def currentLvlDescription(self):
-        return self.__currentLvlDescription
-
-    @property
-    def altDescription(self):
-        return self.__altDescription
-
-    @property
-    def altInfo(self):
-        return self.__altInfo

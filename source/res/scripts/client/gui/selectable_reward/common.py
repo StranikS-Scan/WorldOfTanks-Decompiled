@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/selectable_reward/common.py
 import logging
-from functools import partial
 import typing
+from functools import partial
 from adisp import adisp_process
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import TooltipData
@@ -167,15 +167,6 @@ class BattlePassSelectableRewardManager(SelectableRewardManager):
     def getTabTooltipData(cls, selectableBonus):
         tokenID = selectableBonus.getValue().keys()[0]
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[cls._getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
-
-
-class Comp7SelectableRewardManager(SelectableRewardManager):
-    _FEATURE = Features.COMP7
-
-    @classmethod
-    def getTabTooltipData(cls, selectableBonus):
-        tokenID = selectableBonus.getValue().keys()[0]
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.COMP7_SELECTABLE_REWARD, specialArgs=[cls._getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
 
 
 class RankedSelectableRewardManager(SelectableRewardManager):

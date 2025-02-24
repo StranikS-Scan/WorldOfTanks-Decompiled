@@ -16,16 +16,15 @@ from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstan
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.dialog_tankman_model import DialogTankmanModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.price_card_model import PriceCardModel, CardType, CardState
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillModelSetup
-from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.gui_item_economics import ItemPrice
 from gui.shared.money import Currency, Money, MONEY_ZERO_CREDITS, MONEY_ZERO_GOLD
 from helpers import dependency
 from items.tankmen import TankmanDescr, MAX_SKILL_LEVEL, MAX_SKILLS_EFFICIENCY
-from skeletons.gui.lobby_context import ILobbyContext
 if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_list_model import CrewSkillListModel
     from gui.impl.gen.view_models.views.lobby.crew.dialogs.dialog_tankman_base_model import DialogTankmanBaseModel
     from gui.shared.gui_items import Tankman
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
 _DEFAULT_TITLE_LOC = R.strings.dialogs.priceCard
 _RESET_LOC = R.strings.dialogs.perksReset.priceCard
 _RETRAIN_LOC = R.strings.dialogs.retrain.priceCard

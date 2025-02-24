@@ -12,7 +12,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tankman_container_tab_model import TankmanContainerTabModel
 from gui.impl.gen.view_models.views.lobby.crew.tankman_container_view_model import TankmanContainerViewModel
 from gui.impl.lobby.crew.personal_case import IPersonalTab
-from gui.impl.lobby.crew.personal_case.base_personal_case_view import BasePersonalCaseView
 from gui.impl.lobby.crew.personal_case.personal_data_view import PersonalDataView
 from gui.impl.lobby.crew.container_vews.personal_file.personal_file_view import PersonalFileView
 from gui.impl.lobby.crew.container_vews.service_record.service_record_view import ServiceRecordView
@@ -25,8 +24,6 @@ from helpers import dependency
 from nations import NAMES
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
-from uilogging.crew.loggers import CrewMetricsLoggerWithParent
-from uilogging.crew.logging_constants import CrewViewKeys, LAYOUT_ID_TO_ITEM, CrewNavigationButtons, TABS_LOGGING_KEYS
 from CurrentVehicle import g_currentVehicle
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -58,7 +55,6 @@ class TankmanContainerView(BaseCrewView):
         self._createdTabs = []
         self._isAnimationEnabled = False
         self.paramsView = None
-        self._uiLogger = CrewMetricsLoggerWithParent()
         self._isContentVisible = True
         return
 
@@ -80,11 +76,6 @@ class TankmanContainerView(BaseCrewView):
     def currentTabId(self):
         return self._activeTab
 
-    def onBringToFront(self, otherWindow):
-        tab = self.getChildView(self._activeTab)
-        if isinstance(tab, BasePersonalCaseView):
-            tab.uiLogger.onBringToFront(otherWindow)
-
     def toggleContentVisibility(self, isVisible):
         self._isContentVisible = isVisible
 
@@ -101,8 +92,7 @@ class TankmanContainerView(BaseCrewView):
 
     def _onLoading(self, *args, **kwargs):
         super(TankmanContainerView, self)._onLoading(*args, **kwargs)
-        self.__createTab(self._activeTab, LAYOUT_ID_TO_ITEM.get(self._previousViewID))
-        self._uiLogger.setParentViewKey(LAYOUT_ID_TO_ITEM.get(self._activeTab))
+        self.__createTab(self._activeTab)
 
     def _fillViewModel(self, vm):
         super(TankmanContainerView, self)._fillViewModel(vm)
@@ -145,13 +135,10 @@ class TankmanContainerView(BaseCrewView):
         if self._isAnimationEnabled and isinstance(params, dict) and params.get(IS_FROM_ESCAPE_PARAM, False):
             self.__stopAnimations()
             return
-        self._logClose(params)
         self._destroySubViews()
 
-    def _onBack(self, logClick=True):
+    def _onBack(self):
         self._destroySubViews()
-        if logClick:
-            self._uiLogger.logNavigationButtonClick(CrewNavigationButtons.TO_BARRACKS)
 
     def _onFocus(self, focused):
         tab = self.getChildView(self._activeTab)
@@ -205,13 +192,11 @@ class TankmanContainerView(BaseCrewView):
     def __changeTab(self, tabID):
         if tabID == self._activeTab:
             return
-        self._uiLogger.setParentViewKey(LAYOUT_ID_TO_ITEM.get(tabID))
-        self._uiLogger.logClick(TABS_LOGGING_KEYS.get(tabID, CrewViewKeys.HANGAR), CrewViewKeys.PERSONAL_FILE)
         self.__stopAnimations()
-        self.__createTab(tabID, LAYOUT_ID_TO_ITEM.get(self._activeTab))
+        self.__createTab(tabID)
         with self.viewModel.transaction() as vm:
             vm.setCurrentTabId(tabID)
-        self.onTabChanged(tabID, prevTabKey=LAYOUT_ID_TO_ITEM.get(self._activeTab))
+        self.onTabChanged(tabID)
         self._activeTab = tabID
         self._crewWidget.setCurrentViewID(tabID)
 
@@ -227,9 +212,9 @@ class TankmanContainerView(BaseCrewView):
         if isinstance(tab, IPersonalTab):
             tab.onStopAnimations()
 
-    def __createTab(self, tabId, parentViewKey=None):
+    def __createTab(self, tabId):
         if tabId in self._createdTabs:
             return
         viewCls = TABS[tabId]
-        self.setChildView(tabId, viewCls(parentView=self, tankmanID=self._tankmanInvID, parentViewKey=parentViewKey))
+        self.setChildView(tabId, viewCls(parentView=self, tankmanID=self._tankmanInvID))
         self._createdTabs.append(tabId)

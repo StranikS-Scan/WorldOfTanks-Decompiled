@@ -82,9 +82,12 @@ class ExchangeContent(ExchangeDiscountView):
         self._viewModel.exchangeRate.onSelectedValueUpdated -= self.__onSelectedAmountChanged
         super(ExchangeContent, self)._removeListeners()
 
+    def _getAvailableGoldAmount(self):
+        return getCurrencyValueFromType(CurrencyType.GOLD)
+
     @replaceNoneKwargsModel
     def _updateDiscountInfo(self, model=None):
-        allGold = getCurrencyValueFromType(CurrencyType.GOLD)
+        allGold = self._getAvailableGoldAmount()
         maxGold, maxResource = handleUserValuesInput(selectedGold=allGold, selectedCurrency=0, exchangeProvider=self._exchangeRate)
         model.exchangeRate.setMaxResourceAmountForExchange(maxResource)
         model.exchangeRate.setMaxGoldAmountForExchange(maxGold)

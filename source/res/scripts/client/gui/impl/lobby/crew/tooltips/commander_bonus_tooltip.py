@@ -5,7 +5,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_tooltip_model import CrewPerksTooltipModel
 from gui.impl.pub import ViewImpl
-from gui.shared.gui_items.Tankman import COMMANDER_BONUS
+from gui.shared.gui_items.tankman_skill import COMMANDER_BONUS
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from items.components.skills_constants import SkillTypeName

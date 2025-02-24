@@ -36,7 +36,7 @@ from gui.shared.missions.packers.events import getEventUIDataPacker, packQuestBo
 from gui.shared.utils import decorators
 from helpers import dependency, time_utils
 from shared_utils import first, findFirst
-from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController, IComp7Controller
+from skeletons.gui.game_control import IGameSessionController, IBattlePassController, IWinbackController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -73,7 +73,6 @@ class DailyQuestsView(ViewImpl):
     lobbyContext = dependency.descriptor(ILobbyContext)
     battlePassController = dependency.descriptor(IBattlePassController)
     __winbackController = dependency.descriptor(IWinbackController)
-    __comp7Controller = dependency.descriptor(IComp7Controller)
     __slots__ = ('__tooltipData', '__proxyMissionsPage', '__winbackData')
 
     def __init__(self, layoutID=R.views.lobby.missions.Daily()):
@@ -167,7 +166,7 @@ class DailyQuestsView(ViewImpl):
             self._updateModel(tx)
             self._updateCountDowns(tx)
             tx.setPremMissionsTabDiscovered(settings.getDQSettings().premMissionsTabDiscovered)
-        self.__updateCommonData()
+        self._updateCommonData()
 
     def _finalize(self):
         self.__proxyMissionsPage = None
@@ -263,7 +262,7 @@ class DailyQuestsView(ViewImpl):
         with self.viewModel.transaction() as tx:
             self._updateModel(tx)
             self._markVisited(tx.getCurrentTabIdx(), tx)
-        self.__updateCommonData()
+        self._updateCommonData()
 
     def _onServerSettingsChanged(self, diff=None):
         diff = diff or {}
@@ -368,8 +367,12 @@ class DailyQuestsView(ViewImpl):
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self._onServerSettingsChanged),
          (self.battlePassController.onBattlePassSettingsChange, self.__updateBattlePassData),
-         (self.__comp7Controller.onComp7ConfigChanged, self.__updateComp7Data),
          (self.__winbackController.onConfigUpdated, self.__onWinbackConfigUpdated))
+
+    def _updateCommonData(self, *_):
+        self.__updateDailyType()
+        self.__updateBattlePassData()
+        self.__updateOffersData()
 
     def __onBuyPremiumBtn(self):
         showShop(getBuyPremiumUrl())
@@ -453,12 +456,6 @@ class DailyQuestsView(ViewImpl):
 
         missionVisitedArray.invalidate()
 
-    def __updateCommonData(self, *_):
-        self.__updateDailyType()
-        self.__updateBattlePassData()
-        self.__updateComp7Data()
-        self.__updateOffersData()
-
     def __updateDailyType(self, *_):
         if self.__winbackData:
             self.viewModel.setDailyType(DailyTypes.WINBACK)
@@ -471,9 +468,6 @@ class DailyQuestsView(ViewImpl):
         if self.__winbackData:
             self.viewModel.winbackProgression.setIsBattlePassActive(isBattlePassActive)
 
-    def __updateComp7Data(self, *_):
-        self.viewModel.setIsComp7Active(self.__comp7Controller.isEnabled())
-
     def __updateOffersData(self, *_):
         offersState = self.__getWinbackOffersState()
         self.viewModel.setOffersState(offersState)
@@ -485,7 +479,7 @@ class DailyQuestsView(ViewImpl):
         self.__updateWinbackData()
         with self.viewModel.transaction() as tx:
             self._updateWinbackProgressionModel(tx)
-        self.__updateCommonData()
+        self._updateCommonData()
 
     def __updateWinbackData(self):
         if self.__winbackData:

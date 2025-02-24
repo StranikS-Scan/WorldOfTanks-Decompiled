@@ -3,6 +3,8 @@
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.constants.date_time_formats import DateTimeFormatsEnum
+from gui.shared.formatters.date_time import getRegionalDateTime
 from gui.shared.gui_items.Vehicle import getUserName
 from items.vehicles import getVehicleType
 from messenger.formatters.service_channel import GeneralFormatter
@@ -24,38 +26,44 @@ class WotPlusUnlockedAwardFormatter(GeneralFormatter):
         return []
 
 
-class WotPlusUnlockedFormatter(GeneralFormatter):
+class _WotPlusDateTimeFormatter(GeneralFormatter):
+
+    def _getConvertedDateTime(self, dTime):
+        return getRegionalDateTime(dTime or 0, DateTimeFormatsEnum.SHORTDATE)
+
+
+class WotPlusUnlockedFormatter(_WotPlusDateTimeFormatter):
 
     def __init__(self):
         super(WotPlusUnlockedFormatter, self).__init__('WotPlusUnlockMessage')
 
     def getText(self, message, *args):
         expiryTime = message.get('expiryTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self.getConvertedDateTime(expiryTime))
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self._getConvertedDateTime(expiryTime))
 
 
-class WotPlusRenewedFormatter(GeneralFormatter):
+class WotPlusRenewedFormatter(_WotPlusDateTimeFormatter):
 
     def __init__(self):
         super(WotPlusRenewedFormatter, self).__init__('WotPlusRenewMessage')
 
     def getTitle(self, message, *args):
         renewTime = message.data.get('renewTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.renewMessage.title(), time=self.getConvertedDateTime(renewTime))
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.renewMessage.title(), time=self._getConvertedDateTime(renewTime))
 
     def getText(self, message, *args):
         expiryTime = message.data.get('expiryTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self.getConvertedDateTime(expiryTime))
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.nextDateOfRenewal(), time=self._getConvertedDateTime(expiryTime))
 
 
-class WotPlusExpiredFormatter(GeneralFormatter):
+class WotPlusExpiredFormatter(_WotPlusDateTimeFormatter):
 
     def __init__(self):
         super(WotPlusExpiredFormatter, self).__init__('WotPlusExpireMessage')
 
     def getTitle(self, message, *args):
         timeOfExpiry = message.data.get('expiryTime', 0)
-        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.expireMessage.title(), time=self.getConvertedDateTime(timeOfExpiry))
+        return backport.text(R.strings.messenger.serviceChannelMessages.wotPlus.expireMessage.title(), time=self._getConvertedDateTime(timeOfExpiry))
 
 
 class PassiveXpActivatedFormatter(GeneralFormatter):

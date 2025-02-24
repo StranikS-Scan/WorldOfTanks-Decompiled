@@ -236,8 +236,8 @@ class RewardAnyState(State):
                 return
             if data is None:
                 data = {'reason': BattlePassRewardReason.PURCHASE_BATTLE_PASS_LEVELS}
-            data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('reason'))
-            data['exitCallback'] = self.__onAwardExit
+            data['callback'] = partial(self.__onAwardClose, data.get('chapter'), data.get('newLevel'), data.get('reason'))
+            data['exitCallback'] = partial(self.__onAwardExit, data.get('chapter'), data.get('newLevel'))
             data['showBuyCallback'] = self.__onShowBuy
             chapter = machine.getChosenStyleChapter()
             if chapter is not None:
@@ -261,35 +261,30 @@ class RewardAnyState(State):
             self.__needShowBuy = False
             return
 
-    def __onAwardClose(self, chapterID, reason):
+    def __onAwardClose(self, chapterID, newLevel, reason):
         if self.__battlePass.isDisabled():
             return
         else:
             view = None
             if reason == BattlePassRewardReason.PURCHASE_BATTLE_PASS:
                 if self.__battlePass.isHoliday() and self.__battlePass.isCompleted():
-                    view = R.views.lobby.battle_pass.PostProgressionView()
+                    view = R.views.lobby.battle_pass.HolidayFinalView()
                 else:
                     view = R.views.lobby.battle_pass.BattlePassProgressionsView()
-            else:
-                chapterID = self.__battlePass.getCurrentChapterID()
-                currentLevel = self.__battlePass.getCurrentLevel()
-                if self.__battlePass.isFinalLevel(chapterID, currentLevel) and not self.__needShowBuy:
-                    if not self.__battlePass.isHoliday():
-                        view = R.views.lobby.battle_pass.ChapterChoiceView()
-                    else:
-                        view = R.views.lobby.battle_pass.PostProgressionView()
+            elif self.__battlePass.isFinalLevel(chapterID, newLevel) and not self.__needShowBuy:
+                if self.__battlePass.isHoliday():
+                    view = R.views.lobby.battle_pass.HolidayFinalView()
+                else:
+                    view = R.views.lobby.battle_pass.ChapterChoiceView()
             if view is not None:
                 showMissionsBattlePass(view, chapterID)
             return
 
-    def __onAwardExit(self):
+    def __onAwardExit(self, chapterID, newLevel):
         machine = self.getMachine()
         if machine is not None:
             machine.post(StateEvent())
-            chapterID = self.__battlePass.getCurrentChapterID()
-            currentLevel = self.__battlePass.getCurrentLevel()
-            if self.__battlePass.isFinalLevel(chapterID, currentLevel):
+            if self.__battlePass.isFinalLevel(chapterID, newLevel):
                 machine.clearSelf()
         return
 

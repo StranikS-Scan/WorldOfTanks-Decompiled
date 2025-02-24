@@ -14,7 +14,7 @@ from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Tankman import TankmanSkill
+    from gui.shared.gui_items.tankman_skill import TankmanSkill
 
 class FreeSkillConfirmationDialog(BaseCrewDialogTemplateView):
     __appLoader = dependency.descriptor(IAppLoader)

@@ -9,8 +9,8 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.dialogs import dialogs
 from gui.impl.dialogs.gf_builders import ConfirmCancelDialogBuilder
-from gui.lootbox_system.awards import preformatRewardsInfo
-from gui.lootbox_system.common import getTextResource
+from gui.lootbox_system.base.awards import preformatRewardsInfo
+from gui.lootbox_system.base.common import getTextResource
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeSuccess, makeError, plugins
@@ -81,16 +81,21 @@ class LootBoxSystemOpenProcessor(LootBoxOpenProcessor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         pathParts = 'serviceChannelMessages/server_error'.split('/')
-        header = backport.text(getTextResource(pathParts)())
+        eventName = self._getLootBox().getType()
+        header = backport.text(getTextResource(pathParts, eventName)())
         if errStr not in ('DISABLED', 'COOLDOWN'):
             errStr = 'FAILURE'
-            header = backport.text(getTextResource(pathParts + [errStr])())
-        SystemMessages.pushMessage(text=backport.text(getTextResource(pathParts + [errStr])()) if errStr != 'FAILURE' else '', type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': header})
+            header = backport.text(getTextResource(pathParts + [errStr], eventName)())
+        SystemMessages.pushMessage(text=backport.text(getTextResource(pathParts + [errStr], eventName)()) if errStr != 'FAILURE' else '', type=SystemMessages.SM_TYPE.ErrorHeader, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': header})
         g_eventBus.handleEvent(events.LootBoxSystemEvent(events.LootBoxSystemEvent.OPENING_ERROR), scope=EVENT_BUS_SCOPE.LOBBY)
         return super(LootBoxSystemOpenProcessor, self)._errorHandler(code, errStr, ctx)
 
     def _successHandler(self, code, ctx=None):
-        header = backport.text(getTextResource('serviceChannelMessages/multipleOpen'.split('/'))()) if self._getCount() > 1 else backport.text(R.strings.lootbox_system.serviceChannelMessages.open(), boxName=self._getLootBox().getUserName())
+        eventName = self._getLootBox().getType()
+        if self._getCount() > 1:
+            header = backport.text(getTextResource('serviceChannelMessages/multipleOpen'.split('/'), eventName)())
+        else:
+            header = backport.text(getTextResource('serviceChannelMessages/open'.split('/'), eventName)(), boxName=self._getLootBox().getUserName())
         rewardsList = ctx.get('bonus', [])
         for rewards in rewardsList:
             preformatRewardsInfo(rewards)
@@ -117,8 +122,8 @@ class LootBoxGetInfoProcessor(Processor):
 class ResetLootBoxSystemStatisticsProcessor(Processor):
 
     def __init__(self, boxIDs):
-        super(ResetLootBoxSystemStatisticsProcessor, self).__init__([self.__buildConfirmator()])
         self.__boxIDs = boxIDs
+        super(ResetLootBoxSystemStatisticsProcessor, self).__init__([self.__buildConfirmator()])
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeError('#lootbox_system:serviceChannelMessages/statisticReset/server_error/text', msgType=SystemMessages.SM_TYPE.LootBoxSystemResetStatsError)
@@ -126,14 +131,14 @@ class ResetLootBoxSystemStatisticsProcessor(Processor):
     def _request(self, callback):
         BigWorld.player().tokens.resetLootBoxStatistics(self.__boxIDs, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
 
-    @staticmethod
-    def __buildConfirmator():
+    def __buildConfirmator(self):
+        eventName = self.itemsCache.items.tokens.getLootBoxByID(self.__boxIDs[0]).getType()
         descriptionPath = 'confirmResetLootBoxStatistics/description'.split('/')
         builder = ConfirmCancelDialogBuilder()
         builder.setLayer(WindowLayer.OVERLAY)
         builder.setDimmerAlpha(0.8)
         builder.setTitle(backport.text(R.strings.lootbox_system.confirmResetLootBoxStatistics.title()))
-        builder.setDescription(backport.text(getTextResource(descriptionPath)()))
+        builder.setDescription(backport.text(getTextResource(descriptionPath, eventName)()))
         builder.setConfirmButtonLabel(R.strings.lootbox_system.confirmResetLootBoxStatistics.submit())
         builder.setCancelButtonLabel(R.strings.lootbox_system.confirmResetLootBoxStatistics.cancel())
         return plugins.AsyncDialogConfirmator(dialogs.showSimple, builder.build())
